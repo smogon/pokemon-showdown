@@ -2865,7 +2865,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const ability = target.getAbility();
 				if (ability.id === 'neutralizinggas') continue;
 				if (ability.flags['cantsuppress']) continue;
-				// Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
+				// Flash Fire should not clear its condition
 				if (target.volatiles[ability.id]) continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
@@ -3443,64 +3443,68 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	protosynthesis: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			((this.effect as any).onWeatherChange as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onWeatherChange(pokemon) {
 			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
-				pokemon.addVolatile('protosynthesis');
-			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster && !this.field.isWeather('sunnyday')) {
-				pokemon.removeVolatile('protosynthesis');
+				if (!this.effectState.bestStat) {
+					this.effectState.bestStat = pokemon.getBestStat(false, true);
+					this.add('-activate', pokemon, 'ability: Protosynthesis');
+					this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
+				}
+				return;
+			}
+			if (!this.effectState.fromBooster) {
+				delete this.effectState.bestStat;
+				this.add('-end', pokemon, 'Protosynthesis');
+			}
+			if (!this.effectState.bestStat && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				this.effectState.fromBooster = true;
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'ability: Protosynthesis', '[fromitem]');
+				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			}
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['protosynthesis'];
-			this.add('-end', pokemon, 'Protosynthesis', '[silent]');
+		onUpdate(pokemon) {
+			// don't run between when a Pokemon switches in and the resulting SwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
+			((this.effect as any).onWeatherChange as (p: Pokemon) => void).call(this, pokemon);
 		},
-		condition: {
-			noCopy: true,
-			onStart(pokemon, source, effect) {
-				if (effect?.name === 'Booster Energy') {
-					this.effectState.fromBooster = true;
-					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
-				} else {
-					this.add('-activate', pokemon, 'ability: Protosynthesis');
-				}
-				this.effectState.bestStat = pokemon.getBestStat(false, true);
-				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('protosynthesis')) return;
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.bestStat === 'atk') {
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifyDefPriority: 6,
-			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('protosynthesis')) return;
+			}
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (this.effectState.bestStat === 'def') {
 				this.debug('Protosynthesis def boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpAPriority: 5,
-			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('protosynthesis')) return;
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (this.effectState.bestStat === 'spa') {
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpDPriority: 6,
-			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('protosynthesis')) return;
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.effectState.bestStat === 'spd') {
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('protosynthesis')) return;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.bestStat === 'spe') {
 				this.debug('Protosynthesis spe boost');
-				return this.chainModify(1.5);
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Protosynthesis');
-			},
+				return this.chainModify([5325, 4096]);
+			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Protosynthesis",
@@ -3580,63 +3584,67 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	quarkdrive: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+			((this.effect as any).onTerrainChange as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
-				pokemon.addVolatile('quarkdrive');
-			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
-				pokemon.removeVolatile('quarkdrive');
+				if (!this.effectState.bestStat) {
+					this.effectState.bestStat = pokemon.getBestStat(false, true);
+					this.add('-activate', pokemon, 'ability: Quark Drive');
+					this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
+				}
+				return;
+			}
+			if (!this.effectState.fromBooster) {
+				delete this.effectState.bestStat;
+				this.add('-end', pokemon, 'Quark Drive');
+			}
+			if (!this.effectState.bestStat && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				this.effectState.fromBooster = true;
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'ability: Quark Drive', '[fromitem]');
+				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			}
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['quarkdrive'];
-			this.add('-end', pokemon, 'Quark Drive', '[silent]');
+		onUpdate(pokemon) {
+			// don't run between when a Pokemon switches in and the resulting SwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
+			((this.effect as any).onTerrainChange as (p: Pokemon) => void).call(this, pokemon);
 		},
-		condition: {
-			noCopy: true,
-			onStart(pokemon, source, effect) {
-				if (effect?.name === 'Booster Energy') {
-					this.effectState.fromBooster = true;
-					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
-				} else {
-					this.add('-activate', pokemon, 'ability: Quark Drive');
-				}
-				this.effectState.bestStat = pokemon.getBestStat(false, true);
-				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('quarkdrive')) return;
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.bestStat === 'atk') {
 				this.debug('Quark Drive atk boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifyDefPriority: 6,
-			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('quarkdrive')) return;
+			}
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (this.effectState.bestStat === 'def') {
 				this.debug('Quark Drive def boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpAPriority: 5,
-			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('quarkdrive')) return;
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (this.effectState.bestStat === 'spa') {
 				this.debug('Quark Drive spa boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpDPriority: 6,
-			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('quarkdrive')) return;
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.effectState.bestStat === 'spd') {
 				this.debug('Quark Drive spd boost');
 				return this.chainModify([5325, 4096]);
-			},
-			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('quarkdrive')) return;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.bestStat === 'spe') {
 				this.debug('Quark Drive spe boost');
-				return this.chainModify(1.5);
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Quark Drive');
-			},
+				return this.chainModify([5325, 4096]);
+			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Quark Drive",
@@ -5103,20 +5111,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	truant: {
 		onStart(pokemon) {
-			pokemon.removeVolatile('truant');
+			this.effectState.truantTurn = false;
 			if (pokemon.activeTurns && (pokemon.moveThisTurnResult !== undefined || !this.queue.willMove(pokemon))) {
-				pokemon.addVolatile('truant');
+				this.effectState.truantTurn = true;
 			}
 		},
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
-			if (pokemon.removeVolatile('truant')) {
+			if (this.effectState.truantTurn) {
 				this.add('cant', pokemon, 'ability: Truant');
+				this.effectState.truantTurn = false;
 				return false;
 			}
-			pokemon.addVolatile('truant');
+			this.effectState.truantTurn = true;
 		},
-		condition: {},
 		flags: {},
 		name: "Truant",
 		rating: -1,
@@ -5158,20 +5166,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	unburden: {
 		onAfterUseItem(item, pokemon) {
 			if (pokemon !== this.effectState.target) return;
-			pokemon.addVolatile('unburden');
+			this.effectState.unburdened = true;
 		},
 		onTakeItem(item, pokemon) {
-			pokemon.addVolatile('unburden');
+			this.effectState.unburdened = true;
 		},
-		onEnd(pokemon) {
-			pokemon.removeVolatile('unburden');
-		},
-		condition: {
-			onModifySpe(spe, pokemon) {
-				if (!pokemon.item && pokemon.hasAbility('unburden')) {
-					return this.chainModify(2);
-				}
-			},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.unburdened && !pokemon.item) {
+				return this.chainModify(2);
+			}
 		},
 		flags: {},
 		name: "Unburden",
