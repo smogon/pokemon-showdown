@@ -43,7 +43,7 @@ sendChatMessage(message: string) {
 */
 
 import Autolinker from 'autolinker';
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 interface EmoticonEntry {
   _id: string; // emoticon name
@@ -69,9 +69,9 @@ interface IgnoreEmotesData {
 }
 
 // Get typed MongoDB collections
-const EmoticonDB = MongoDB<EmoticonEntry>('emoticons');
-const EmoticonConfigDB = MongoDB<EmoticonConfigDocument>('emoticonconfig');
-const IgnoreEmotesDB = MongoDB<IgnoreEmotesDocument>('ignoreemotes');
+const EmoticonDB = ImpulseDB<EmoticonEntry>('emoticons');
+const EmoticonConfigDB = ImpulseDB<EmoticonConfigDocument>('emoticonconfig');
+const IgnoreEmotesDB = ImpulseDB<IgnoreEmotesDocument>('ignoreemotes');
 
 let emoticons: { [key: string]: string } = { "spGun": "https://i.ibb.co/78y8mKv/spGun.jpg" };
 let emoteRegex: RegExp = new RegExp("spGun", "g");
