@@ -30,8 +30,8 @@ const IconsDB = ImpulseDB<IconDocument>('usericons');
 
 async function updateIcons(): Promise<void> {
   try {
-    // Fetch all icon documents from MongoDB - using find() for all documents
-    const iconDocs = await IconsDB.find({});
+    // Fetch all icon documents from MongoDB with projection for only needed fields
+    const iconDocs = await IconsDB.find({}, { projection: { _id: 1, url: 1, size: 1 } });
     
     let newCss = '/* ICONS START */\n';
     
@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
         size,
         createdAt: now,
         updatedAt: now,
-      } as any);
+      });
       
       await updateIcons();
       
@@ -128,14 +128,13 @@ export const commands: Chat.ChatCommands = {
       
       const userId = toID(name);
       
-      // Use findById() - most efficient for _id lookups
-      const existingIcon = await IconsDB.findById(userId);
-      if (!existingIcon) {
+      // Use exists() for efficient check before update
+      if (!await IconsDB.exists({ _id: userId })) {
         return this.errorReply('This user does not have an icon. Use /icon set to create one.');
       }
       
-      // Build update object
-      const updateFields: Partial<IconDocument> = {
+      // Build update object with $set operator
+      const updateFields: any = {
         updatedAt: new Date(),
       };
       
@@ -156,8 +155,11 @@ export const commands: Chat.ChatCommands = {
       
       await updateIcons();
       
-      // Fetch updated document using findById()
-      const updatedIcon = await IconsDB.findById(userId);
+      // Fetch updated document using findOne() with projection
+      const updatedIcon = await IconsDB.findOne(
+        { _id: userId },
+        { projection: { url: 1, size: 1 } }
+      );
       const size = updatedIcon?.size || DEFAULT_ICON_SIZE;
       const url = updatedIcon?.url || imageUrl;
       const sizeDisplay = size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
@@ -206,8 +208,8 @@ export const commands: Chat.ChatCommands = {
       
       const page = parseInt(target) || 1;
       
-      // Use findWithPagination() - optimized for paginated results
-      const result = await IconsDB.findWithPagination({}, {
+      // Use findPaginated() - optimized for paginated results
+      const result = await IconsDB.findPaginated({}, {
         page,
         limit: 20,
         sort: { _id: 1 }
@@ -217,9 +219,9 @@ export const commands: Chat.ChatCommands = {
         return this.sendReply('No custom icons have been set.');
       }
       
-      let output = `<div class="ladder pad"><h2>Custom Icons (Page ${result.page}/${result.pages})</h2><table style="width: 100%"><tr><th>User</th><th>Icon</th><th>Size</th><th>Created</th></tr>`;
+      let output = `<div class="ladder pad"><h2>Custom Icons (Page ${result.page}/${result.totalPages})</h2><table style="width: 100%"><tr><th>User</th><th>Icon</th><th>Size</th><th>Created</th></tr>`;
       
-      for (const icon of result.data) {
+      for (const icon of result.docs) {
         const created = icon.createdAt ? icon.createdAt.toLocaleDateString() : 'Unknown';
         const size = icon.size || DEFAULT_ICON_SIZE;
         output += `<tr><td>${icon._id}</td><td><img src="${icon.url}" width="32" height="32"></td><td>${size}px</td><td>${created}</td></tr>`;
@@ -227,12 +229,12 @@ export const commands: Chat.ChatCommands = {
       
       output += `</table></div>`;
       
-      if (result.pages > 1) {
+      if (result.totalPages > 1) {
         output += `<div class="pad"><center>`;
-        if (result.page > 1) {
+        if (result.hasPrev) {
           output += `<button class="button" name="send" value="/icon list ${result.page - 1}">Previous</button> `;
         }
-        if (result.page < result.pages) {
+        if (result.hasNext) {
           output += `<button class="button" name="send" value="/icon list ${result.page + 1}">Next</button>`;
         }
         output += `</center></div>`;
@@ -245,8 +247,11 @@ export const commands: Chat.ChatCommands = {
       const userId = toID(target);
       if (!userId) return this.parse('/help icon');
       
-      // Use findById() - most efficient for _id lookups
-      const icon = await IconsDB.findById(userId);
+      // Use findOne() with projection for only needed fields
+      const icon = await IconsDB.findOne(
+        { _id: userId },
+        { projection: { url: 1, size: 1, createdAt: 1, updatedAt: 1 } }
+      );
       if (!icon) {
         return this.sendReply(`${target} does not have a custom icon.`);
       }
@@ -272,7 +277,7 @@ export const commands: Chat.ChatCommands = {
       const entries = target.split(',').map(s => s.trim()).filter(Boolean);
       if (entries.length === 0) return this.errorReply('No icons to set. Format: /icon setmany user1:url1:size1, user2:url2:size2');
       
-      const documents: any[] = [];
+      const documents: IconDocument[] = [];
       const now = new Date();
       
       for (const entry of entries) {
@@ -325,10 +330,11 @@ export const commands: Chat.ChatCommands = {
       
       const searchTerm = toID(target);
       
-      // Use find() with regex filter for searching
-      const icons = await IconsDB.find({
-        _id: { $regex: searchTerm, $options: 'i' } as any
-      });
+      // Use find() with regex filter and projection for searching
+      const icons = await IconsDB.find(
+        { _id: { $regex: searchTerm, $options: 'i' } as any },
+        { projection: { _id: 1, url: 1, size: 1 } }
+      );
       
       if (icons.length === 0) {
         return this.sendReply(`No icons found matching "${target}".`);
@@ -348,8 +354,8 @@ export const commands: Chat.ChatCommands = {
     async count(target, room, user) {
       this.checkCan('globalban');
       
-      // Use count() - most efficient way to get document count
-      const total = await IconsDB.count({});
+      // Use countDocuments() - most efficient way to get document count
+      const total = await IconsDB.countDocuments({});
       this.sendReply(`There are currently ${total} custom icon(s) set.`);
     },
   },
