@@ -106,10 +106,19 @@ function escapeRegExp(str: string): string {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"); // eslint-disable-line no-useless-escape
 }
 
+function buildEmoteRegex(): void {
+  const emoteArray = Object.keys(emoticons).map(emote => escapeRegExp(emote));
+  if (emoteArray.length > 0) {
+    emoteRegex = new RegExp(`(${emoteArray.join('|')})`, 'g');
+  } else {
+    emoteRegex = new RegExp("^$", "g"); // Never matches
+  }
+}
+
 async function loadEmoticons(): Promise<void> {
   try {
-    // Load emoticons from MongoDB
-    const emoticonDocs = await EmoticonDB.find({});
+    // Load emoticons from MongoDB - use projection to only get needed fields
+    const emoticonDocs = await EmoticonDB.find({}, { projection: { _id: 1, url: 1 } });
     if (emoticonDocs.length > 0) {
       emoticons = {};
       for (const doc of emoticonDocs) {
@@ -117,27 +126,24 @@ async function loadEmoticons(): Promise<void> {
       }
     }
 
-    // Load config (emote size)
-    const config = await EmoticonConfigDB.findById('config');
+    // Load config (emote size) - use findOne directly
+    const config = await EmoticonConfigDB.findOne({ _id: 'config' });
     if (config) {
       emoteSize = config.emoteSize;
     }
 
-    // Load ignore emotes
-    const ignoreEmotesDocs = await IgnoreEmotesDB.find({ ignored: true });
+    // Load ignore emotes - use projection to only get _id field
+    const ignoreEmotesDocs = await IgnoreEmotesDB.find(
+      { ignored: true },
+      { projection: { _id: 1 } }
+    );
     Impulse.ignoreEmotes = {};
     for (const doc of ignoreEmotesDocs) {
       Impulse.ignoreEmotes[doc._id] = true;
     }
 
-    // Build regex
-    const emoteArray: string[] = [];
-    for (const emote in emoticons) {
-      emoteArray.push(escapeRegExp(emote));
-    }
-    if (emoteArray.length > 0) {
-      emoteRegex = new RegExp(`(${emoteArray.join('|')})`, 'g');
-    }
+    // Build regex once
+    buildEmoteRegex();
   } catch (e) {
     console.error('Error loading emoticons:', e);
   }
@@ -148,8 +154,10 @@ async function saveEmoteSize(size: number): Promise<void> {
     await EmoticonConfigDB.upsert(
       { _id: 'config' },
       {
-        emoteSize: size,
-        lastUpdated: new Date(),
+        $set: {
+          emoteSize: size,
+          lastUpdated: new Date(),
+        }
       }
     );
     emoteSize = size;
@@ -159,7 +167,6 @@ async function saveEmoteSize(size: number): Promise<void> {
 }
 
 async function addEmoticon(name: string, url: string, user: User): Promise<void> {
-  // Use atomic insert
   await EmoticonDB.insertOne({
     _id: name,
     url: url,
@@ -168,31 +175,13 @@ async function addEmoticon(name: string, url: string, user: User): Promise<void>
   });
 
   emoticons[name] = url;
-
-  // Rebuild regex
-  const emoteArray: string[] = [];
-  for (const emote in emoticons) {
-    emoteArray.push(escapeRegExp(emote));
-  }
-  emoteRegex = new RegExp(`(${emoteArray.join('|')})`, 'g');
+  buildEmoteRegex();
 }
 
 async function deleteEmoticon(name: string): Promise<void> {
-  // Use atomic delete
   await EmoticonDB.deleteOne({ _id: name });
-
   delete emoticons[name];
-
-  // Rebuild regex
-  const emoteArray: string[] = [];
-  for (const emote in emoticons) {
-    emoteArray.push(escapeRegExp(emote));
-  }
-  if (emoteArray.length > 0) {
-    emoteRegex = new RegExp(`(${emoteArray.join('|')})`, 'g');
-  } else {
-    emoteRegex = new RegExp("^$", "g"); // Never matches
-  }
+  buildEmoteRegex();
 }
 
 function parseEmoticons(message: string, room?: Room): string | false {
@@ -244,7 +233,7 @@ export const commands: Chat.ChatCommands = {
       if (!targetSplit[1]) return this.parse("/emoticonshelp");
       if (targetSplit[0].length > 10) return this.errorReply("Emoticons may not be longer than 10 characters.");
       
-      // Check if emoticon already exists
+      // Check if emoticon already exists using atomic exists check
       const exists = await EmoticonDB.exists({ _id: targetSplit[0] });
       if (exists) return this.errorReply(`${targetSplit[0]} is already an emoticon.`);
 
@@ -262,7 +251,7 @@ export const commands: Chat.ChatCommands = {
       this.checkCan('globalban');
       if (!target) return this.parse("/emoticonshelp");
       
-      // Check if emoticon exists
+      // Check if emoticon exists using atomic exists check
       const exists = await EmoticonDB.exists({ _id: target });
       if (!exists) return this.errorReply("That emoticon does not exist.");
 
@@ -315,12 +304,14 @@ export const commands: Chat.ChatCommands = {
     async ignore(target, room, user) {
       if (Impulse.ignoreEmotes[user.id]) return this.errorReply('You are already ignoring emoticons.');
       
-      // Use atomic upsert
+      // Use atomic upsert with $set operator
       await IgnoreEmotesDB.upsert(
         { _id: user.id },
         {
-          ignored: true,
-          lastUpdated: new Date(),
+          $set: {
+            ignored: true,
+            lastUpdated: new Date(),
+          }
         }
       );
       
@@ -363,7 +354,8 @@ export const commands: Chat.ChatCommands = {
     },
 
     async count(target, room, user) {
-      const count = await EmoticonDB.count({});
+      // Use countDocuments instead of find().length
+      const count = await EmoticonDB.countDocuments({});
       this.sendReply(`There are currently ${count} emoticon(s) available.`);
     },
 
@@ -386,7 +378,8 @@ export const commands: Chat.ChatCommands = {
     async info(target, room, user) {
       if (!target) return this.errorReply('Usage: /emoticon info <name>');
       
-      const emote = await EmoticonDB.findById(target);
+      // Use findOne instead of findById for consistency
+      const emote = await EmoticonDB.findOne({ _id: target });
       if (!emote) return this.errorReply(`Emoticon "${target}" does not exist.`);
       
       let buf = ``;
