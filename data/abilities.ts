@@ -2860,13 +2860,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
-				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) continue;
 				const ability = target.getAbility();
-				if (ability.id === 'neutralizinggas') continue;
-				if (ability.flags['cantsuppress']) continue;
-				// Flash Fire should not clear its condition
-				if (target.volatiles[ability.id]) continue;
+				if (ability.id === 'neutralizinggas' || ability.flags['cantsuppress']) continue;
+				// Can't suppress a Tatsugiri inside of Dondozo already
+				// Flash Fire (and gen9dlc1 protosynthesis/quark drive) should not clear its condition
+				if (target.volatiles['commanding'] || target.volatiles[ability.id]) continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
