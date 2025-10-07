@@ -5,6 +5,7 @@
 */
 
 import { FS } from '../../lib';
+import '../utils';
 
 const AVATAR_PATH = 'config/avatars/';
 const STAFF_ROOM_ID = 'staff';
