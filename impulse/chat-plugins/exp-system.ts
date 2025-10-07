@@ -7,7 +7,7 @@
 if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
 */
 
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
@@ -52,8 +52,8 @@ interface ExpConfigDocument {
 }
 
 // Get typed MongoDB collections
-const ExpDB = MongoDB<ExpDocument>('expdata');
-const ExpConfigDB = MongoDB<ExpConfigDocument>('expconfig');
+const ExpDB = ImpulseDB<ExpDocument>('expdata');
+const ExpConfigDB = ImpulseDB<ExpConfigDocument>('expconfig');
 
 export class ExpSystem {
   private static cooldowns: CooldownData = {};
