@@ -8,6 +8,7 @@ Impulse.NewsManager.onUserConnect(user);
 */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
+import '../utils';
 
 interface NewsEntry {
   _id?: any; // MongoDB automatically generates this
