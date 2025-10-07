@@ -70,6 +70,7 @@ try {
 }
 
 import { FS, Repl } from '../lib';
+import { ImpulseDB } from '../impulse/impulse-db';
 
 /*********************************************************
  * Set up most of our globals
@@ -101,6 +102,9 @@ function setupGlobals() {
 			}
 		});
 	}
+
+	// Make Impulse namespace global
+	global.Impulse = {};
 
 	const { Dex } = require('../sim/dex');
 	global.Dex = Dex;
@@ -141,6 +145,36 @@ function setupGlobals() {
 }
 setupGlobals();
 
+/**************
+* Impulse DB
+***************/
+async function initializeDatabase() {
+	if (!Config.impulsedb?.uri) {
+		Monitor.warn('ImpulseDB: MongoDB URI not configured. Database features disabled.');
+		return false;
+	}
+	try {
+		await ImpulseDB.init({
+			uri: Config.impulsedb.uri,
+			dbName: Config.impulsedb.dbName || 'impulse',
+			options: {
+				maxPoolSize: Config.impulsedb.maxPoolSize || 100,
+				minPoolSize: Config.impulsedb.minPoolSize || 5,
+			},
+		});
+
+		Monitor.notice('ImpulseDB: Successfully connected to MongoDB');
+		return true;
+	} catch (err: any) {
+		Monitor.crashlog(err, 'ImpulseDB initialization failed');
+		return false;
+	}
+}
+
+/*********************
+* ImpulseDB Ends
+**********************/
+
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', (err: Error) => {
@@ -163,7 +197,7 @@ export function listen(port: number, bindAddress: string, workerCount: number) {
 	Sockets.listen(port, bindAddress, workerCount);
 }
 
-if (require.main === module) {
+/*if (require.main === module) {
 	// Launch the server directly when app.js is the main module. Otherwise,
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
@@ -175,6 +209,35 @@ if (require.main === module) {
 		}
 	}
 	Sockets.listen(port);
+}*/
+if (require.main === module) {
+	initializeDatabase()
+		.then(dbReady => {
+			if (dbReady) {
+				Monitor.notice('ImpulseDB: Database ready');
+			}
+			
+			let port;
+			for (const arg of process.argv) {
+				if (/^[0-9]+$/.test(arg)) {
+					port = parseInt(arg);
+					break;
+				}
+			}
+			Sockets.listen(port);
+		})
+		.catch(err => {
+			Monitor.crashlog(err, 'Database initialization');
+			// Start server anyway
+			let port;
+			for (const arg of process.argv) {
+				if (/^[0-9]+$/.test(arg)) {
+					port = parseInt(arg);
+					break;
+				}
+			}
+			Sockets.listen(port);
+		});
 }
 
 /*********************************************************
@@ -198,6 +261,34 @@ Repl.start('app', cmd => eval(cmd));
 if (Config.startuphook) {
 	process.nextTick(Config.startuphook);
 }
+
+/******************
+* ImpulseDB Graceful Shutdown
+*******************/
+process.on('SIGTERM', async () => {
+	Monitor.notice('Received SIGTERM, shutting down gracefully...');
+	try {
+		await ImpulseDB.close();
+		Monitor.notice('ImpulseDB: Connection closed');
+	} catch (err: any) {
+		Monitor.warn('ImpulseDB: Error closing: ' + err.message);
+	}
+	process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+	Monitor.notice('Received SIGINT, shutting down gracefully...');
+	try {
+		await ImpulseDB.close();
+		Monitor.notice('ImpulseDB: Connection closed');
+	} catch (err: any) {
+		Monitor.warn('ImpulseDB: Error closing: ' + err.message);
+	}
+	process.exit(0);
+});
+/******************
+* ImpulseDB Graceful Shutdown Ends
+*******************/
 
 if (Config.ofemain) {
 	// Create a heapdump if the process runs out of memory.
