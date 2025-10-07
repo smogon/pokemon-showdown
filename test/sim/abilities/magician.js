@@ -98,4 +98,26 @@ describe('Magician', () => {
 		assert.equal(battle.p2.active[0].item, 'tr68');
 		assert.equal(battle.p2.active[1].item, '');
 	});
+
+	it(`should steal a restore-on-hit berry that activates on being hit`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['dragonrage'] },
+		], [
+			{ species: 'wynaut', item: 'sitrusberry', level: 10, moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0], 'Magician should steal berries that would be consumed when hit, such as Sitrus Berry.');
+		assert.false.holdsItem(battle.p2.active[0], 'Opponent should not have Sitrus Berry after it was stolen.');
+	});
+
+	it('should not steal from a Sticky Hold target', () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'skarmory', ability: 'stickyhold', item: 'leftovers', moves: ['tackle'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p2.active[0], 'Sticky Hold should prevent theft');
+		assert.false.holdsItem(battle.p1.active[0], 'Magician should not steal from Sticky Hold');
+	});
 });
