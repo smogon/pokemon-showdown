@@ -10,6 +10,7 @@
  */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
+import '../utils';
 
 interface SeenDocument {
 	_id: string; // userid
