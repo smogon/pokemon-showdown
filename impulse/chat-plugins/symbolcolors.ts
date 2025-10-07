@@ -6,6 +6,7 @@
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
+import '../utils';
 
 const STAFF_ROOM_ID = 'staff';
 
