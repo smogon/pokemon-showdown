@@ -528,7 +528,7 @@
                 "teraTypes": ["Flying"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Imprisoner",
                 "movepool": ["Imprison", "Knock Off", "Poison Jab", "Protect"],
                 "abilities": ["Poison Touch"],
                 "teraTypes": ["Flying"]
@@ -1382,7 +1382,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Chilling Reception", "Flamethrower", "Future Sight", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Scald", "Slack Off", "Surf", "Thunder Wave", "Trick Room"],
+                "movepool": ["Chilly Reception", "Flamethrower", "Future Sight", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Scald", "Slack Off", "Surf", "Thunder Wave", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dragon", "Fairy", "Poison", "Steel"]
             },
@@ -2043,13 +2043,13 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Alluring Voice", "Grass Knot", "Nasty Plot", "Protect", "Thunderbolt"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Volt Absorb"],
                 "teraTypes": ["Fairy", "Flying", "Grass"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["Discharge", "Encore", "Protect", "Super Fang"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Volt Absorb"],
                 "teraTypes": ["Flying"]
             }
         ]
@@ -4457,7 +4457,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Bleakwind Storm", "Focus Blast", "Grass Knot", "Nasty Plot", "Protect"],
-                "abilities": ["Prankster"],
+                "abilities": ["Regenerator"],
                 "teraTypes": ["Fighting", "Flying", "Grass"]
             }
         ]

@@ -635,6 +635,11 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
+		if (!['M', 'F'].includes(set.gender)) set.gender = '';
+		if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+			set.gender = species.gender || set.gender;
+		}
+
 		const { outOfBattleSpecies, tierSpecies } = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
@@ -1087,12 +1092,8 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (!set.gender) {
-				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
-					set.gender = species.gender || ['M', 'F'][Math.floor(Math.random() * 2)];
-				} else {
-					set.gender = 'N';
-				}
+			if (this.gen > 5 && !ruleTable.has('obtainablemisc')) {
+				set.gender ||= 'N';
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
@@ -2796,7 +2797,7 @@ export class TeamValidator {
 			// Pokemon that cannot be sent from Pokemon GO to Let's Go can only access Let's Go moves through HOME
 			// It can only obtain a chain of four level up moves and cannot have TM moves
 			const pokemonGoData = dex.species.getPokemonGoData(checkedSpecies.id);
-			if (pokemonGoData.LGPERestrictiveMoves) {
+			if (pokemonGoData?.LGPERestrictiveMoves) {
 				let levelUpMoveCount = 0;
 				const restrictiveMovesToID = [];
 				for (const moveName of setSources.restrictiveMoves) {

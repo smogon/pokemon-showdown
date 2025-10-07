@@ -264,6 +264,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Good Vibes Only',
 		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
+	Cassiopeia: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -432,12 +438,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],
 		signatureMove: 'Augur of Ebrietas',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Ghost',
-	},
-	Hecate: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
 	},
 	HiZo: {
 		species: 'Zoroark-Hisui', ability: 'Justified', item: 'Heavy-Duty Boots', gender: 'M',
