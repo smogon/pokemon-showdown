@@ -71,6 +71,7 @@ try {
 
 import { FS, Repl } from '../lib';
 import { ImpulseDB } from '../impulse/impulse-db';
+import '../impulse/utils';
 
 /*********************************************************
  * Set up most of our globals
