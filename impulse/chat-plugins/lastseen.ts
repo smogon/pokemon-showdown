@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 interface SeenDocument {
 	_id?: any;
@@ -17,14 +17,13 @@ interface SeenDocument {
 	lastSeen: Date;
 }
 
+const SeenDB = ImpulseDB<SeenDocument>('seen');
+
 /**
  * Update user's last seen timestamp
  * Uses atomic upsert for race-condition safety
  */
 export function trackSeen(userid: string): void {
-	if (!MongoDB.isConnected()) return;
-	
-	const SeenDB = MongoDB<SeenDocument>('seen');
 	
 	// Atomic upsert - no race conditions, single database operation
 	void SeenDB.upsert(
@@ -43,10 +42,7 @@ Impulse.Seen = trackSeen;
 /**
  * Get user's last seen timestamp
  */
-async function getLastSeen(userid: string): Promise<Date | null> {
-	if (!MongoDB.isConnected()) return null;
-	
-	const SeenDB = MongoDB<SeenDocument>('seen');
+async function getLastSeen(userid: string): Promise<Date | null> {	
 	const doc = await SeenDB.findOne({ userid: userid });
 	
 	return doc?.lastSeen || null;
@@ -56,9 +52,6 @@ async function getLastSeen(userid: string): Promise<Date | null> {
  * Check if user has any seen data
  */
 async function hasSeen(userid: string): Promise<boolean> {
-	if (!MongoDB.isConnected()) return false;
-	
-	const SeenDB = MongoDB<SeenDocument>('seen');
 	return SeenDB.exists({ userid: userid });
 }
 
@@ -66,21 +59,14 @@ async function hasSeen(userid: string): Promise<boolean> {
  * Get recently seen users (for leaderboards, etc.)
  */
 async function getRecentUsers(limit: number = 50): Promise<SeenDocument[]> {
-	if (!MongoDB.isConnected()) return [];
-	
-	const SeenDB = MongoDB<SeenDocument>('seen');
 	return SeenDB.findSorted({}, { lastSeen: -1 }, limit);
 }
 
 /**
  * Clean up old seen data (users not seen in X days)
  */
-async function cleanupOldSeen(daysOld: number = 365): Promise<number> {
-	if (!MongoDB.isConnected()) return 0;
-	
-	const cutoffDate = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);
-	const SeenDB = MongoDB<SeenDocument>('seen');
-	
+async function cleanupOldSeen(daysOld: number = 365): Promise<number> {	
+	const cutoffDate = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);	
 	return SeenDB.deleteMany({ lastSeen: { $lt: cutoffDate } });
 }
 
