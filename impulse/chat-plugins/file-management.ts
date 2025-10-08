@@ -643,16 +643,225 @@ export const commands: Chat.ChatCommands = {
     }
   },
 
+  async gitstash(target, room, user) {
+    this.canUseConsole();
+    
+    const [action, ...pathParts] = target.split(/\s+/);
+    const startPath = pathParts.join(' ').trim() || './';
+    const validActions = ['save', 'pop', 'list', 'show', 'drop', 'clear'];
+    
+    // Default to list if no action provided
+    const stashAction = action ? action.toLowerCase() : 'list';
+    
+    if (!validActions.includes(stashAction)) {
+      return this.errorReply(
+        `Invalid action. Valid actions: ${validActions.join(', ')}\n` +
+        `Usage: /gitstash [action] [path]`
+      );
+    }
+    
+    try {
+      // Find the git repository root
+      const gitRoot = await findGitRoot(startPath);
+      if (!gitRoot) {
+        return this.errorReply(`No git repository found in or above: ${startPath}`);
+      }
+
+      let command = '';
+      let actionTitle = '';
+      
+      switch (stashAction) {
+        case 'save':
+          command = 'git stash push -u';
+          actionTitle = 'STASH SAVE';
+          this.sendReply('Stashing changes...');
+          break;
+        case 'pop':
+          command = 'git stash pop';
+          actionTitle = 'STASH POP';
+          this.sendReply('Applying and removing latest stash...');
+          break;
+        case 'list':
+          command = 'git stash list';
+          actionTitle = 'STASH LIST';
+          break;
+        case 'show':
+          command = 'git stash show -p';
+          actionTitle = 'STASH SHOW';
+          break;
+        case 'drop':
+          command = 'git stash drop';
+          actionTitle = 'STASH DROP';
+          this.sendReply('Dropping latest stash...');
+          break;
+        case 'clear':
+          command = 'git stash clear';
+          actionTitle = 'STASH CLEAR';
+          this.sendReply('Clearing all stashes...');
+          break;
+      }
+      
+      const { stdout, stderr } = await execAsync(command, { cwd: gitRoot });
+      
+      // Handle empty stash list
+      if (stashAction === 'list' && !stdout.trim()) {
+        return this.sendReply('No stashes found.');
+      }
+      
+      let resultMessage = '<div class="infobox">';
+      resultMessage += `<strong>[GIT ${actionTitle}]</strong><br>`;
+      resultMessage += `<strong>Repository Root:</strong> ${Chat.escapeHTML(gitRoot)}<br>`;
+      resultMessage += `<strong>Executed From:</strong> ${Chat.escapeHTML(startPath)}<br><br>`;
+      
+      if (stdout) {
+        // For list action, format nicely
+        if (stashAction === 'list') {
+          const stashes = stdout.trim().split('\n');
+          resultMessage += `<strong>Stashes (${stashes.length}):</strong><br>`;
+          resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; overflow-x: auto;">';
+          resultMessage += Chat.escapeHTML(stdout);
+          resultMessage += '</pre>';
+        } else {
+          resultMessage += '<strong>Output:</strong><br>';
+          resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; max-height: 400px; overflow: auto;">';
+          resultMessage += Chat.escapeHTML(stdout);
+          resultMessage += '</pre>';
+        }
+      }
+      
+      if (stderr) {
+        resultMessage += '<br><strong>Info:</strong><br>';
+        resultMessage += '<pre style="background: #2d2d2d; color: #ffd700; padding: 10px; border-radius: 4px; overflow-x: auto;">';
+        resultMessage += Chat.escapeHTML(stderr);
+        resultMessage += '</pre>';
+      }
+      
+      // Add helpful tips based on action
+      if (stashAction === 'save') {
+        resultMessage += '<br><small>💡 Use <code>/gitstash pop</code> to restore these changes later</small>';
+      } else if (stashAction === 'list' && stdout.trim()) {
+        resultMessage += '<br><small>💡 Use <code>/gitstash pop</code> to restore the latest stash</small>';
+      }
+      
+      resultMessage += '</div>';
+      
+      this.sendReplyBox(resultMessage);
+      notifyStaff(`Git stash ${stashAction}`, gitRoot, user);
+      
+    } catch (err: any) {
+      const errorMsg = err.message || err.toString();
+      
+      // Handle common errors
+      if (errorMsg.includes('No stash entries found') || errorMsg.includes('No local changes')) {
+        if (stashAction === 'pop' || stashAction === 'drop') {
+          return this.sendReply('No stashes to restore. Use /gitstash list to see available stashes.');
+        } else if (stashAction === 'save') {
+          return this.sendReply('No local changes to stash. Working tree is clean.');
+        }
+      }
+      
+      this.errorReply(`Git stash ${stashAction} failed: ` + errorMsg);
+      notifyStaff(`Git stash ${stashAction} failed`, startPath, user, errorMsg);
+    }
+  },
+
+  async pm2logs(target, room, user) {
+    this.canUseConsole();
+    
+    // Parse parameters: [process name/id] [number of lines]
+    const params = target.trim().split(/\s+/);
+    const processName = params[0] || '';
+    const lines = parseInt(params[1]) || 100;
+    
+    if (lines > 1000) {
+      return this.errorReply('Maximum 1000 lines allowed.');
+    }
+    
+    try {
+      // If no process name specified, show list of PM2 processes
+      if (!processName) {
+        const { stdout } = await execAsync('pm2 jlist');
+        const processes = JSON.parse(stdout);
+        
+        if (processes.length === 0) {
+          return this.sendReply('No PM2 processes found.');
+        }
+        
+        let processList = '<div class="infobox">';
+        processList += '<strong>[PM2 PROCESSES]</strong><br><br>';
+        processList += '<table style="border-collapse: collapse; width: 100%;">';
+        processList += '<tr><th style="text-align: left; padding: 5px; border-bottom: 1px solid #ccc;">Name</th>';
+        processList += '<th style="text-align: left; padding: 5px; border-bottom: 1px solid #ccc;">ID</th>';
+        processList += '<th style="text-align: left; padding: 5px; border-bottom: 1px solid #ccc;">Status</th>';
+        processList += '<th style="text-align: left; padding: 5px; border-bottom: 1px solid #ccc;">Uptime</th></tr>';
+        
+        for (const proc of processes) {
+          const uptime = Math.floor((Date.now() - proc.pm2_env.pm_uptime) / 1000);
+          const uptimeStr = uptime < 60 ? `${uptime}s` : 
+                           uptime < 3600 ? `${Math.floor(uptime / 60)}m` : 
+                           `${Math.floor(uptime / 3600)}h`;
+          const statusColor = proc.pm2_env.status === 'online' ? 'green' : 'red';
+          
+          processList += '<tr>';
+          processList += `<td style="padding: 5px;">${Chat.escapeHTML(proc.name)}</td>`;
+          processList += `<td style="padding: 5px;">${proc.pm_id}</td>`;
+          processList += `<td style="padding: 5px; color: ${statusColor};">${Chat.escapeHTML(proc.pm2_env.status)}</td>`;
+          processList += `<td style="padding: 5px;">${uptimeStr}</td>`;
+          processList += '</tr>';
+        }
+        
+        processList += '</table><br>';
+        processList += '<small>Usage: <code>/pm2logs [process name/id] [lines]</code></small>';
+        processList += '</div>';
+        
+        return this.sendReplyBox(processList);
+      }
+      
+      // Get logs for specific process
+      this.sendReply(`Fetching last ${lines} lines of logs for: ${processName}`);
+      
+      const { stdout } = await execAsync(`pm2 logs ${processName} --nostream --lines ${lines} --raw`);
+      
+      if (!stdout.trim()) {
+        return this.sendReply(`No logs found for process: ${processName}`);
+      }
+      
+      let resultMessage = '<div class="infobox">';
+      resultMessage += '<strong>[PM2 LOGS]</strong><br>';
+      resultMessage += `<strong>Process:</strong> ${Chat.escapeHTML(processName)}<br>`;
+      resultMessage += `<strong>Lines:</strong> ${lines}<br><br>`;
+      resultMessage += '<details open><summary><strong>Show/Hide Logs</strong></summary>';
+      resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; max-height: 400px; overflow: auto; font-size: 12px;">';
+      resultMessage += Chat.escapeHTML(stdout);
+      resultMessage += '</pre>';
+      resultMessage += '</details>';
+      resultMessage += '</div>';
+      
+      this.sendReplyBox(resultMessage);
+      notifyStaff("PM2 logs viewed", processName, user, `${lines} lines`);
+      
+    } catch (err: any) {
+      const errorMsg = err.message || err.toString();
+      
+      if (errorMsg.includes('Process or Namespace') || errorMsg.includes('not found')) {
+        return this.errorReply(`Process not found: ${processName}. Use /pm2logs to see available processes.`);
+      }
+      
+      this.errorReply('PM2 logs failed: ' + errorMsg);
+      notifyStaff("PM2 logs failed", processName || 'list', user, errorMsg);
+    }
+  },
+
   githelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
       `<div><b><center>Git Integration Commands</center></b><br>` +
       `<ul>` +
-      `<li><code>/gitpull [path]</code> - Pull latest changes from remote repository<br>` +
-      `<small>⚠️ Will fail with detailed error if merge conflicts occur</small></li>` +
+      `<li><code>/gitpull [path]</code> - Pull latest changes from remote repository</li>` +
       `<li><code>/gitstatus [path]</code> - Show git status, branch, remote, and latest commit</li>` +
       `<li><code>/gitcommit [path], [commit message]</code> - Stage and commit all changes</li>` +
       `<li><code>/gitpush [path]</code> - Push commits to remote repository</li>` +
+      `<li><code>/gitstash [action] [path]</code> - Manage stashed changes (save/pop/list/show/drop/clear)</li>` +
       `</ul>` +
       `<small>All commands require Console/Owner permission.</small><br>` +
       `<small>Path is optional - defaults to current directory (./).</small><br>` +
@@ -662,9 +871,28 @@ export const commands: Chat.ChatCommands = {
       `2. <code>/gitcommit ./, Your message</code> - Commit your changes<br>` +
       `3. <code>/gitpull</code> - Pull latest from remote<br>` +
       `4. <code>/gitpush</code> - Push your commits<br><br>` +
+      `<strong>Stash Workflow:</strong><br>` +
+      `• <code>/gitstash save</code> - Temporarily save uncommitted changes<br>` +
+      `• <code>/gitstash list</code> - View saved stashes<br>` +
+      `• <code>/gitstash pop</code> - Restore and remove latest stash<br>` +
+      `• <code>/gitstash show</code> - Preview latest stash changes<br><br>` +
       `<strong>If merge conflicts occur:</strong><br>` +
       `• Abort: Run <code>git merge --abort</code> manually<br>` +
       `• Or resolve conflicts manually and commit<br>` +
+      `</div>`
+    );
+  },
+
+  pm2help(target, room, user) {
+    if (!this.runBroadcast()) return;
+    this.sendReplyBox(
+      `<div><b><center>PM2 Commands</center></b><br>` +
+      `<ul>` +
+      `<li><code>/pm2logs</code> - List all PM2 processes</li>` +
+      `<li><code>/pm2logs [process name/id]</code> - Show last 100 lines of logs</li>` +
+      `<li><code>/pm2logs [process name/id] [lines]</code> - Show last N lines (max 1000)</li>` +
+      `</ul>` +
+      `<small>All commands require Console/Owner permission.</small>` +
       `</div>`
     );
   },
@@ -680,6 +908,7 @@ export const commands: Chat.ChatCommands = {
       `<li><code>/filedelete confirm, [path]</code> OR <code>/fd confirm, [path]</code> - Delete file</li>` +
       `<li><code>/filelist [directory]</code> OR <code>/fl [directory]</code> - List directory contents</li>` +
       `<li><code>/githelp</code> - View git integration commands</li>` +
+      `<li><code>/pm2help</code> - View PM2 management commands</li>` +
       `</ul>` +
       `<small>All commands require Console/Owner permission.</small>` +
       `</div>`
