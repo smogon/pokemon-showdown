@@ -1034,6 +1034,7 @@ width: 324px;
 width: 200px;
 }
 
+/* Rooms */
 .ps-room {
 	position: absolute;
 	display: block;
@@ -1535,6 +1536,495 @@ p.or:after {
 	position: relative;
 	left: 0;
 	top: 0;
+}
+
+/* Battle */
+	
+.ps-room .battle-userlist {
+	left: 641px;
+}
+.ps-room .battle-log {
+	position: absolute;
+	top: 0;
+	left: 640px;
+	right: 0;
+	bottom: 40px;
+	height: auto;
+	width: auto;
+
+	word-wrap: break-word;
+	border-right: 0;
+	border-top: 0;
+	border-bottom: 0;
+}
+.ps-room .battle-log-add {
+	position: absolute;
+	bottom: 0;
+	left: 640px;
+	right: 0;
+	top: auto;
+	min-height: 36px;
+	height: auto;
+	width: auto;
+
+	padding: 3px 4px 0 4px;
+	border-right: 0;
+	border-bottom: 0;
+}
+.ps-room .battle {
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	top: 0;
+	left: 0;
+	transform-origin: top left;
+	-webkit-transform-origin: top left;
+}
+.ps-room .foehint {
+	transform-origin: top left;
+	-webkit-transform-origin: top left;
+}
+.ps-room .battle-controls {
+	position: absolute;
+	top: 370px;
+	left: 0;
+	width: 640px;
+	background: #f5f2e9;
+}
+.ps-room .ally-pokemon {
+	position: absolute;
+	top: 280px;
+	left: 0;
+	width: 640px;
+	background: #f5f2e9;
+}
+.battle-chat-toggle {
+	display: none;
+}
+.tiny-layout.ps-room .battle-controls {
+	left: 0;
+	right: 0;
+	width: auto;
+}
+.tiny-layout .movecontrols, .tiny-layout .shiftcontrols, .tiny-layout .switchcontrols {
+	max-width: 330px;
+	margin: 0 auto;
+}
+.timerbutton {
+	float: right;
+}
+.timerbutton-on,
+.timerbutton-on:hover {
+	color: #b7433a;
+	border-color: #b7433a;
+}
+.timerbutton-on:hover {
+	border-color: #9e3a31;
+}
+.timerbutton-critical,
+.timerbutton-critical:hover {
+	color: #ffffff;
+	font-weight: bold;
+	border-color: #d75c4e;
+	background: #d75c4e;
+	text-shadow: none;
+}
+.dark .timerbutton-on,
+.dark .timerbutton-on:hover {
+	color: #d75c4e;
+	border-color: #d75c4e;
+}
+.dark .timerbutton-critical,
+.dark .timerbutton-critical:hover {
+	color: #ffffff;
+	font-weight: bold;
+	border-color: #d75c4e;
+	background: #d75c4e;
+	text-shadow: none;
+}
+
+.battle-controls p {
+	margin: 2px 0 8px 0;
+	padding: 0 8px;
+}
+.battle-controls .whatdo {
+	margin-top: -2px;
+	padding: 0 8px;
+	font-size: 9pt;
+	color: #6e5745;
+}
+.battle-controls .whatdo small {
+	padding: 1px 2px;
+	border: 1px solid #8f785b;
+	border-radius: 4px;
+}
+.battle-controls .whatdo small.weak {
+	color: #bba47a;
+	border-color: #bba47a;
+}
+.battle-controls .whatdo small.critical {
+	color: #b7433a;
+	border-color: #b7433a;
+}
+.small-layout .battle-userlist,
+.small-layout .battle-log,
+.small-layout .battle-log-add {
+	display: none;
+}
+.small-layout .battle-chat-toggle {
+	display: block;
+	position: absolute;
+	top: 4px;
+	left: 151px;
+	font-size: 14px;
+	padding: 3px 6px;
+}
+.small-layout .battle-chat-toggle[name=showChat] {
+	left: auto;
+	right: 6px;
+}
+.small-layout.showing-chat .battle,
+.small-layout.showing-chat .battle-controls {
+	display: none;
+}
+.small-layout.showing-chat .battle-userlist,
+.small-layout.showing-chat .battle-log,
+.small-layout.showing-chat .battle-log-add {
+	left: 0;
+	display: block;
+}
+.allyTeam button,
+.shiftselect button,
+.moveselect button,
+.switchselect button {
+	background: transparent;
+	border: 0;
+	font-weight: bold;
+	font-style: italic;
+	color: #6e5745;
+	font-size: 12pt;
+	display: block;
+	margin: 0;
+	padding: 9px 7px 0 7px;
+}
+.shiftselect button {
+	color: #5b7952;
+	cursor: default;
+}
+.moveselect button {
+	color: #8f785b;
+	cursor: default;
+}
+.switchselect button {
+	color: #5b7952;
+	cursor: default;
+}
+.allyparty button,
+.switchmenu button {
+	position: relative;
+	display: block;
+	float: left;
+	width: 102px;
+	min-height: 30px;
+	margin-right: 4px;
+	font: 9pt Verdana, sans-serif;
+	padding: 5px 5px 5px 0;
+	white-space: pre;
+	overflow: hidden;
+}
+.allyparty button .picon,
+.switchmenu button .picon {
+	float: left;
+	margin: -6px -3px -6px -4px;
+	opacity: 0.8;
+}
+
+.allyparty button .hpbar,
+.switchmenu button .hpbar {
+	position: absolute;
+	display: block;
+	border: 1px solid #8f785b;
+	background: #e8e3d3;
+	height: 2px;
+	bottom: 2px; left: 4px; right: 2px;
+	border-radius: 2px;
+	opacity: .8;
+}
+
+.allyparty button .hpbar span,
+.switchmenu button .hpbar span {
+	display: block;
+	height: 1px;
+	background: #7b9f6d;
+	border-top: 1px solid #a3c586;
+	border-radius: 1px;
+}
+
+.allyparty button .hpbar-yellow span,
+.switchmenu button .hpbar-yellow span {
+	border-top-color: #f3c49f;
+	background-color: #e89f4b;
+}
+
+.allyparty button .hpbar-red span,
+.switchmenu button .hpbar-red span {
+	border-top-color: #d75c4e;
+	background-color: #b7433a;
+}
+
+.allyparty button .status,
+.switchmenu button .status {
+	position: absolute;
+	display: block;
+	right: 2px;
+	bottom: 1px;
+	width: 5px;
+	height: 5px;
+	padding: 0;
+	border-radius: 2px;
+	border: 1px solid #bba47a;
+	opacity: 1.0;
+}
+.status {
+	color: white;
+	border-radius: 3px;
+	padding: 0 2px;
+}
+.status.brn {
+	background: #d75c4e;
+}
+.status.psn, .status.tox {
+	background: #4b3a32;
+}
+.status.par {
+	background: #e89f4b;
+}
+.status.slp {
+	background: #8f785b;
+}
+.status.frz {
+	background: #5f9fa4;
+}
+
+.movebutton {
+	float: left;
+	display: block;
+	width: 155px;
+	margin-right: 4px;
+	height: 40px;
+	font: 10pt/100% Verdana, sans-serif;
+	position: relative;
+	padding:  6px 4px 0 4px;
+}
+.movebutton small {
+	color: #6e5745;
+}
+.movebutton small.type {
+	padding-top: 3px;
+	float: left;
+	font-size: 8pt;
+}
+.movebutton small.pp {
+	padding-top: 2px;
+	float: right;
+	font-size: 8pt;
+}
+.megaevo-box {
+	clear: both;
+	padding-top: 10px;
+	text-align: center;
+}
+.megaevo {
+	display: inline-block;
+	vertical-align: middle;
+	width: 180px;
+	margin: 2px;
+	padding: 2px;
+	text-align: center;
+
+	cursor: pointer;
+	border: 1px solid #8f785b;
+	border-radius: 3px;
+	color: #4b3a32;
+	background: transparent;
+	font-size: 10pt;
+	font-weight: bold;
+}
+.megaevo:hover {
+	border-color: #6e5745;
+	background: #e8e3d3;
+	color: #2a3d2c;
+}
+.dark .megaevo {
+	color: #f5f2e9;
+	border-color: #8f785b;
+}
+.dark .megaevo:hover {
+	color: #fceb83;
+	background: #4b3a32;
+	border-color: #bba47a;
+}
+.megaevo:has(:checked),
+.dark .megaevo:has(:checked) {
+	text-shadow: -1px -1px 0 #FFF, 1px 1px 0 #FFF, -1px 1px 0 #FFF, 1px -1px 0 #FFF;
+	color: black;
+  background-image: linear-gradient(120deg,
+		hsl(0, 100%, 75%) 0%,
+		hsl(36, 100%, 75%) 10%,
+		hsl(64, 100%, 75%) 20%,
+		hsl(118, 100%, 83%) 30%,
+		hsl(179, 100%, 80%) 40%,
+		hsl(188, 100%, 79%) 50%,
+		hsl(212, 100%, 77%) 60%,
+		hsl(260, 100%, 77%) 70%,
+		hsl(284, 100%, 76%) 80%,
+		hsl(308, 100%, 76%) 90%,
+		hsl(0, 100%, 75%) 100%
+	);
+}
+.movewarning {
+	clear: both;
+	display: block;
+	font-size: 10pt;
+	padding: 8px 0 5px;
+}
+.allyparty,
+.switchmenu,
+.movemenu {
+	display: block;
+	margin-right: -10px;
+	padding-left: 4px;
+}
+.allyparty button,
+.switchmenu button,
+.movebutton {
+	position: relative;
+	outline: none;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(255,255,255,.4);
+	border-radius: 5px;
+	margin-top: 4px;
+	box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 -1px 2px rgba(255,255,255,1);
+
+	/* default colors */
+	color: #2a3d2c;
+	border: solid 1px #8f785b;
+	background: #e8e3d3;
+	background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+}
+.allyparty button:hover,
+.switchmenu button:hover,
+.movebutton:hover {
+	background: #d8d3c3;
+	background: linear-gradient(to bottom, #e8e3d3, #d8d3c3);
+	border-color: #6e5745;
+}
+.allyparty button:active,
+.switchmenu button:active,
+.movebutton:active,
+.switchmenu button.pressed,
+.movebutton.pressed {
+	background: linear-gradient(to bottom, #d8d3c3, #e8e3d3);
+}
+
+.allyparty button.disabled,
+.allyparty button:disabled,
+.switchmenu button.disabled,
+.switchmenu button:disabled,
+.movebutton:disabled {
+	cursor: default;
+	background: #F5F2E9 !important;
+	border-color: #BBA47A !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+	color: #8f785b !important;
+}
+
+@media (max-height:570px) and (min-width: 440px) {
+.controls {
+		position: absolute;
+		bottom: 10px;
+		left: 0;
+		right: 0;
+		width: auto;
+		background: #2a3d2c;
+		background: rgba(42, 61, 44, .85);
+		color: #f5f2e9;
+		padding: 4px 8px;
+}
+.battle-controls .whatdo {
+		color: #f5f2e9;
+}
+.battle-controls .whatdo small.weak {
+		color: #fceb83;
+		border-color: #fceb83;
+}
+.battle-controls .whatdo small.critical {
+		color: #ff9a8d;
+		border-color: #ff9a8d;
+}
+.battle-controls .movecontrols, .battle-controls .shiftcontrols, .battle-controls .switchcontrols {
+		max-width: 640px;
+}
+.movemenu {
+		display: none;
+		padding: 0 75px 0 85px;
+}
+.allyparty,
+.switchmenu {
+		display: none;
+		max-width: 325px;
+		padding: 0 75px 0 85px;
+		margin: 0 0 0 auto;
+}
+.moveselect {
+		position: absolute;
+		left: 20px;
+		bottom: 20px;
+}
+.allyTeam,
+.switchselect {
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+}
+.shiftselect {
+		position: absolute;
+		right: 150px;
+		bottom: 20px;
+}
+.moveselect button, .switchselect button, .shiftselect button {
+		padding: 4px 8px;
+		border-radius: 6px;
+		background: #e8e3d3;
+}
+.megaevo-box {
+		text-align: left;
+}
+
+.battle-controls .whatdo {
+		padding-bottom: 50px;
+}
+.battle-controls .move-controls .whatdo,
+.battle-controls .switch-controls .whatdo {
+		padding-bottom: 5px;
+}
+.move-controls .movemenu,
+.switch-controls .switchmenu {
+		display: block;
+		margin-right: 0;
+}
+.move-controls .moveselect button,
+.switch-controls .switchselect button,
+.shiftselect button {
+		background: #bba47a;
+}
+.controls .timer {
+		float: right;
+		margin-top: -25px;
+}
 }
 
 /*****************************
