@@ -135,33 +135,6 @@ class NewsManager {
 
 Impulse.NewsManager = NewsManager;
 
-export const pages: Chat.PageTable = {
-  async newsarchive(args, user) {
-    const allNews = await NewsManager.getAllNews();
-    
-    if (!allNews.length) {
-      return `<div class="pad"><h2>No news available.</h2></div>`;
-    }
-
-    const newsHTML = allNews.map((entry, index) => {
-      return `
-        <div class="infobox" style="margin: 10px 0;">
-          <h3>${index + 1}. ${entry.title}</h3>
-          <p>${entry.desc}</p>
-          <small><em>Posted by ${Impulse.nameColor(entry.postedBy, true, false)} on ${entry.postTime}</em></small>
-        </div>
-      `;
-    }).join('');
-
-    return `
-      <div class="pad">
-        <h2>News Archive</h2>
-        ${newsHTML}
-      </div>
-    `;
-  },
-};
-
 export const commands: Chat.ChatCommands = {
   servernews: {
     '': 'view',
@@ -232,11 +205,6 @@ export const commands: Chat.ChatCommands = {
       this.modlog('DELETENEWS', null, trimmedTitle, { by: user.id });
     },
     
-    async archive(target, room, user) {
-      if (!this.runBroadcast()) return;
-      return this.parse('/join view-newsarchive');
-    },
-    
     async count(target, room, user) {
       const count = await NewsManager.getNewsCount();
       this.sendReplyBox(`There ${count === 1 ? 'is' : 'are'} currently <strong>${count}</strong> news ${count === 1 ? 'item' : 'items'}.`);
@@ -265,7 +233,6 @@ export const commands: Chat.ChatCommands = {
       `<li><code>/servernews add [title], [desc]</code> - Adds news</li>` +
       `<li><code>/servernews update [title], [new desc]</code> - Updates existing news</li>` +
       `<li><code>/servernews delete [title]</code> - Deletes news with [title]</li>` +
-      `<li><code>/servernews archive</code> - View all news items in archive format</li>` +
       `<li><code>/servernews count</code> - Shows total number of news items</li>` +
       `<li><code>/servernews cleanup [days]</code> - Delete news older than [days] (default: 90)</li>` +
       `</ul>` +
