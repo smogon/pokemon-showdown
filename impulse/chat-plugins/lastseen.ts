@@ -122,10 +122,6 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help seen');
 		
-		if (!MongoDB.isConnected()) {
-			return this.errorReply('Seen system is not available (MongoDB not connected).');
-		}
-		
 		const targetUser = Users.get(target);
 		if (targetUser?.connected) {
 			return this.sendReplyBox(
@@ -162,10 +158,6 @@ export const commands: Chat.ChatCommands = {
 	async recentseen(target, room, user) {
 		this.checkCan('globalban');
 		
-		if (!MongoDB.isConnected()) {
-			return this.errorReply('Seen system is not available (MongoDB not connected).');
-		}
-		
 		const limit = parseInt(target) || 25;
 		if (limit > 100) return this.errorReply('Maximum limit is 100 users.');
 		
@@ -192,10 +184,6 @@ export const commands: Chat.ChatCommands = {
 	
 	async cleanupseen(target, room, user) {
 		this.checkCan('globalban');
-		
-		if (!MongoDB.isConnected()) {
-			return this.errorReply('Seen system is not available (MongoDB not connected).');
-		}
 		
 		const days = parseInt(target) || 365;
 		if (days < 30) {
