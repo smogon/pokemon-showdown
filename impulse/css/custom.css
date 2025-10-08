@@ -262,10 +262,6 @@ border-color: #b7433a;
 background: linear-gradient(to bottom, #e89f4b, #d75c4e);
 }
 
-.dark .pm-window h3.pm-notifying:hover {
-background: linear-gradient(to bottom, #e89f4b, #d75c4e);
-}
-
 .pm-window h3 .closebutton,
 .pm-window h3 .minimizebutton {
 float: right;
@@ -330,21 +326,6 @@ border-color: #2a3d2c;
 background: linear-gradient(to bottom, #6e5745, #5b7952);
 color: #fceb83;
 text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.dark .pm-window h3 {
-background: linear-gradient(to bottom, #2a3d2c, #5b7952);
-color: #bba47a;
-}
-
-.dark .pm-window h3:hover {
-color: #fceb83;
-}
-
-.dark .pm-window.focused h3,
-.dark .pm-window.focused h3:hover {
-background: linear-gradient(to bottom, #5b7952, #4b3a32);
-color: #fceb83;
 }
 
 /* CHALLENGES - Earthy theme */
@@ -901,15 +882,6 @@ font-weight: 600;
 transition: all 0.2s ease;
 }
 
-.dark .userlist,
-.dark .pm-buttonbar button,
-.dark .chat-log-add,
-.dark .pm-window h3,
-.dark .pm-log,
-.dark .newsentry {
-border-color: #5b7952;
-}
-
 .userlist-minimized {
 height: 21px;
 bottom: auto;
@@ -1037,7 +1009,6 @@ width: 324px;
 
 .rightmenu .menugroup .button {
 width: 200px;
-}
 }
 
 /*********************************************************
@@ -1641,19 +1612,6 @@ p.or:after {
 	background: #d75c4e;
 	text-shadow: none;
 }
-.dark .timerbutton-on,
-.dark .timerbutton-on:hover {
-	color: #d75c4e;
-	border-color: #d75c4e;
-}
-.dark .timerbutton-critical,
-.dark .timerbutton-critical:hover {
-	color: #ffffff;
-	font-weight: bold;
-	border-color: #d75c4e;
-	background: #d75c4e;
-	text-shadow: none;
-}
 
 .battle-controls p {
 	margin: 2px 0 8px 0;
@@ -1871,17 +1829,8 @@ p.or:after {
 	background: #e8e3d3;
 	color: #2a3d2c;
 }
-.dark .megaevo {
-	color: #f5f2e9;
-	border-color: #8f785b;
-}
-.dark .megaevo:hover {
-	color: #fceb83;
-	background: #4b3a32;
-	border-color: #bba47a;
-}
-.megaevo:has(:checked),
-.dark .megaevo:has(:checked) {
+
+.megaevo:has(:checked) {
 	text-shadow: -1px -1px 0 #FFF, 1px 1px 0 #FFF, -1px 1px 0 #FFF, 1px -1px 0 #FFF;
 	color: black;
   background-image: linear-gradient(120deg,
@@ -2686,9 +2635,7 @@ p.or:after {
 	right: 8px;
 	z-index: 2;
 }
-.dark .teambuilder-clipboard-data {
-	color: #2a3d2c;
-}
+
 .teambuilder-clipboard-data:hover {
 	border: 1px solid #bba47a;
 }
@@ -2762,10 +2709,6 @@ p.or:after {
 		background: #f5f2e9;
 		color: #2a3d2c;
 	}
-	.dark .teambuilder-results {
-		background: #2a3d2c;
-		color: #f5f2e9;
-	}
 }
 @media (max-width:639px) {
 	.teambuilder-results {
@@ -2773,10 +2716,6 @@ p.or:after {
 		overflow-y: visible;
 		background: #f5f2e9;
 		color: #2a3d2c;
-	}
-	.dark .teambuilder-results {
-		background: #2a3d2c;
-		color: #f5f2e9;
 	}
 }
 
@@ -3068,190 +3007,3 @@ p.or:after {
 	color: #2a3d2c;
 }
 
-/*********************************************************
- * Dark mode!
- *********************************************************/
-
-.dark .header {
-	background: rgba(42, 61, 44, .30);
-}
-
-.dark .ps-room.ps-room-light,
-.dark .tournament-box,
-.dark .tournament-status,
-.dark .tournament-toggle,
-.dark .pm-log-add {
-	background: rgba(42, 61, 44, .70);
-	color: #e8e3d3;
-	border-color: #6e5745;
-}
-
-.dark .pm-log {
-	background: rgba(42, 61, 44, .85);
-	color: #e8e3d3;
-	backdrop-filter: blur(4px);
-}
-
-.dark .userlist-maximized {
-	background: #4b3a32;
-	color: #e8e3d3;
-}
-.dark .ps-room.ps-room-opaque,
-.dark .battle-log-add,
-.dark .battle-controls {
-	background: #4b3a32;
-	color: #e8e3d3;
-}
-.dark .userlist-minimized,
-.dark .pm-buttonbar button {
-	background: #4b3a32;
-	color: #8cd3d6;
-}
-.dark .userlist-minimized .userlist-count:hover,
-.dark .userlist-maximized .userlist-count:hover,
-.dark .pm-buttonbar button:hover {
-	background: #6e5745;
-}
-
-.dark .moveselect button {
-	color: #e89f4b;
-}
-.dark .switchselect button {
-	color: #8cd3d6;
-}
-.dark .whatdo {
-	color: #bba47a;
-}
-
-.dark .chat-log {
-	background: rgba(42, 61, 44, .5);
-	color: #e8e3d3;
-	backdrop-filter: blur(4px);
-}
-
-.dark .userbar .username {
-	color: #e8e3d3;
-	text-shadow: 1px 1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000;
-}
-
-/* popups */
-
-.dark .ps-popup {
-	background: #2a3d2c;
-	color: #e8e3d3;
-	border-color: #6e5745;
-
-	box-shadow: 2px 2px 3px rgba(0,0,0,.5), inset 0.5px 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.dark .usergroup {
-	color: #bba47a;
-}
-
-.dark .changeform i {
-	border-color: #bba47a;
-	color: #bba47a;
-	background: rgba(42, 61, 44, .5);
-}
-.dark .changeform i:hover {
-	border-color: #fceb83;
-	color: #fceb83;
-}
-
-.dark .ps-overlay {
-	background: rgba(75, 58, 50, .5);
-}
-
-/* semi-generic */
-
-.dark .select, .dark .team {
-	border-color: #8f785b;
-	box-shadow: none;
-	background: linear-gradient(to bottom, #6e5745, #4b3a32);
-	color: #f5f2e9;
-}
-.dark .select:hover, .dark .team.team-hover {
-	border-color: #bba47a;
-	background: #FFFFFF;
-	color: #f5f2e9;
-	background: linear-gradient(to bottom, #8f785b, #6e5745);
-}
-.dark .select:active, .dark .team:active {
-	border-color: #bba47a;
-	box-shadow: none;
-	background: linear-gradient(to bottom, #4b3a32, #6e5745);
-}
-.dark .select:disabled {
-	border-color: #8f785b;
-	background: linear-gradient(to bottom, rgba(110, 87, 69, 0.6), rgba(75, 58, 50, 0.6));
-	color: #8f785b;
-	box-shadow: none;
-}
-.dark .select:after {
-	color: #f5f2e9;
-}
-.dark .select:disabled:after {
-	color: #8f785b;
-}
-
-/* main menu */
-
-.dark .pm-window.focused h3,
-.dark .pm-window.focused .pm-log,
-.dark .pm-window.focused .pm-log-add {
-	border-color: #fceb83;
-}
-
-/* chat */
-
-.dark .userlist strong,
-.dark .userlist span {
-	text-shadow: 1px 1px 0 #222222;
-}
-.dark .userlist li {
-	border-bottom-color: #4b3a32;
-}
-.dark .userlist li button:hover {
-	background: #4b3a32;
-}
-.dark .userlist li button:active {
-	background: #2a3d2c;
-}
-
-.dark .highlighted {
-	background: rgba(252, 235, 131, 0.25);
-}
-.dark .message-pm {
-	color: #e89f4b;
-}
-.dark .revealed {
-	background: rgba(123, 159, 109, 0.18);
-}
-.dark .chat.mine {
-	background: rgba(245, 242, 233, 0.08);
-}
-
-/* teambuilder */
-
-.dark .folderpane {
-	border-left-color: #4b3a32;
-}
-
-.dark .folderlist .foldersep:before,
-.dark .folderlistafter:before,
-.dark .folderlistbefore:before,
-.dark .folderpane h3,
-.dark .folderpane .text,
-.dark .folder .selectFolder,
-.dark .folderhack1,
-.dark .folderhack2 {
-	background: #4b3a32;
-	color: #e8e3d3;
-}
-
-.dark .folder .selectFolder:hover {
-	background: #6e5745;
-}
-.dark .folderpane i {
-	color: #e8e3d3;
-}
