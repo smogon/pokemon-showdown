@@ -247,17 +247,8 @@ animation: pulse 2s infinite;
 text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.dark .pm-window h3.pm-notifying {
-background: linear-gradient(to bottom, #d75c4e, #b7433a);
-color: #ffffff;
-}
-
 .pm-window h3.pm-notifying:hover {
 border-color: #b7433a;
-background: linear-gradient(to bottom, #e89f4b, #d75c4e);
-}
-
-.dark .pm-window h3.pm-notifying:hover {
 background: linear-gradient(to bottom, #e89f4b, #d75c4e);
 }
 
@@ -325,21 +316,6 @@ border-color: #2a3d2c;
 background: linear-gradient(to bottom, #6e5745, #5b7952);
 color: #fceb83;
 text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.dark .pm-window h3 {
-background: linear-gradient(to bottom, #2a3d2c, #5b7952);
-color: #bba47a;
-}
-
-.dark .pm-window h3:hover {
-color: #fceb83;
-}
-
-.dark .pm-window.focused h3,
-.dark .pm-window.focused h3:hover {
-background: linear-gradient(to bottom, #5b7952, #4b3a32);
-color: #fceb83;
 }
 
 /* CHALLENGES - Earthy theme */
@@ -894,15 +870,6 @@ border-right: 1px solid #5b7952;
 border-bottom: 1px solid #5b7952;
 font-weight: 600;
 transition: all 0.2s ease;
-}
-
-.dark .userlist,
-.dark .pm-buttonbar button,
-.dark .chat-log-add,
-.dark .pm-window h3,
-.dark .pm-log,
-.dark .newsentry {
-border-color: #5b7952;
 }
 
 .userlist-minimized {
