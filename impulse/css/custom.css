@@ -571,33 +571,6 @@ border-color: #b7433a;
 width: 180px;
 }
 
-/* LADDER - Earthy theme */
-.ladder table, .ladder td, .ladder th {
-border-collapse: collapse;
-border: 1px solid #5b7952;
-}
-
-.ladder td, .ladder th {
-padding: 3px 5px;
-}
-
-.ladder th {
-text-align: left;
-font-size: 9pt;
-background: linear-gradient(to bottom, #e8e3d3, #bba47a);
-color: #2a3d2c;
-font-weight: 700;
-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.ladder span {
-color: #5b7952;
-}
-
-.hidden {
-display: none;
-}
-
 /* ROOM LIST - Earthy theme */
 .roomlisttop {
 max-width: 480px;
@@ -1009,7 +982,6 @@ width: 324px;
 
 .rightmenu .menugroup .button {
 width: 200px;
-}
 }
 
 /*********************************************************
