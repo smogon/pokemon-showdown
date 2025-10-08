@@ -152,7 +152,19 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	
-	seenhelp: [`/seen [user] - Shows when the user last connected on the server.`],
+	seenhelp(target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			`<div><b><center>Seen Commands</center></b><br>` +
+			`<ul>` +
+			`<li><code>/seen [user]</code> - Shows when the user last connected on the server</li>` +
+			`<li><code>/recentseen [limit]</code> - Shows recently seen users</li>` +
+			`<li><code>/cleanupseen [days]</code> - Delete seen records older than X days (default: 365)</li>` +
+			`</ul>` +
+			`<small>Recentseen requires Global Ban (@). Cleanupseen requires Administrator (~).</small>` +
+			`</div>`
+		);
+	},
 	
 	// Admin commands
 	async recentseen(target, room, user) {
@@ -179,9 +191,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply('Error retrieving recent seen data: ' + err.message);
 		}
 	},
-	
-	recentseenhelp: [`/recentseen [limit] - Shows recently seen users. Requires: @`],
-	
+
 	async cleanupseen(target, room, user) {
 		this.checkCan('globalban');
 		
@@ -197,8 +207,6 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply('Error cleaning up seen data: ' + err.message);
 		}
 	},
-	
-	cleanupseenhelp: [`/cleanupseen [days] - Delete seen records older than X days (default: 365). Requires: &`],
 
    clearall(target, room, user) {
       if (room?.battle) {
@@ -222,9 +230,11 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
          `<div><b><center>Clearall Commands</center></b><br>` +
          `<ul>` +
-         `<li><code>/clearall </code> - Clear all messages from a chatroom (Requires: # and higher)</li><br>` +
-         `<li><code>/globalclearall </code> - clear all messages from all chatrooms (Requires: ~)</li>` +
-         `</ul></div>`
+         `<li><code>/clearall</code> - Clear all messages from a chatroom</li>` +
+         `<li><code>/globalclearall</code> - Clear all messages from all chatrooms</li>` +
+         `</ul>` +
+         `<small>Clearall requires Room Owner (#). Globalclearall requires Administrator (~).</small>` +
+         `</div>`
       );
    },
 };
