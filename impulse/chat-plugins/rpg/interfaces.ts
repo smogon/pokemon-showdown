@@ -159,6 +159,27 @@ interface Badge {
 	};
 }
 
+/** Represents a single story objective or quest (main or side). */
+interface Quest {
+    /** The unique ID for the quest (e.g., 'mq01_oaks_parcel'). */
+    id: string;
+    /** The title displayed to the player (e.g., "Professor Oak's Parcel"). */
+    title: string;
+    /** The description of the objective shown in the quest log. */
+    description: string;
+    
+    /** The story flags required to be true before this quest can be started. */
+    prerequisites: string[];
+    /** The story flags that will be set to true upon completion of this quest. */
+    completionFlags: string[];
+
+    /** Optional rewards for completing the quest. */
+    rewards?: {
+        money?: number;
+        items?: { id: string; quantity: number }[];
+    };
+}
+
 /** Represents the entire save file for a player. */
 interface PlayerData {
 	/** The player's user ID. */
@@ -192,6 +213,8 @@ interface PlayerData {
 	storyFlags: Record<string, boolean>;
 	/** A list of earned gym badge IDs. */
 	gymBadges: string[];
+    /** A log of the player's quests and their status. */
+    questLog: Record<string, 'active' | 'completed'>;
 	/** Total time played, in seconds. */
 	timePlayedInSeconds: number;
 }
