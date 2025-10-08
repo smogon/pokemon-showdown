@@ -594,13 +594,79 @@ export const commands: Chat.ChatCommands = {
       notifyStaff("Git commit created", gitRoot, user, `Message: ${message}`);
       
     } catch (err: any) {
+      const errorMsg = err.message || err.toString();
+      
       // Check if error is because there's nothing to commit
-      if (err.message.includes('nothing to commit')) {
+      if (errorMsg.includes('nothing to commit')) {
         this.sendReply('Nothing to commit - working tree clean.');
         return;
       }
-      this.errorReply('Git commit failed: ' + err.message);
-      notifyStaff("Git commit failed", startPath, user, err.message);
+      
+      // Check if error is due to missing git identity
+      if (errorMsg.includes('Author identity unknown') || errorMsg.includes('Please tell me who you are')) {
+        let errorMessage = '<div class="message-error">';
+        errorMessage += '<strong>❌ Git Identity Not Configured</strong><br><br>';
+        errorMessage += '⚠️ <strong>Git needs to know your identity to make commits!</strong><br><br>';
+        errorMessage += '<strong>To fix this, use:</strong><br>';
+        errorMessage += '<code>/gitconfig [name], [email]</code><br><br>';
+        errorMessage += '<strong>Example:</strong><br>';
+        errorMessage += '<code>/gitconfig John Doe, john@example.com</code><br><br>';
+        errorMessage += '<small>This will configure git globally on the server.</small>';
+        errorMessage += '</div>';
+        
+        this.sendReplyBox(errorMessage);
+        return;
+      }
+      
+      this.errorReply('Git commit failed: ' + errorMsg);
+      notifyStaff("Git commit failed", startPath, user, errorMsg);
+    }
+  },
+
+  async gitconfig(target, room, user) {
+    this.canUseConsole();
+    
+    const [name, ...emailParts] = target.split(',');
+    const userName = name.trim();
+    const userEmail = emailParts.join(',').trim();
+    
+    if (!userName || !userEmail) {
+      return this.errorReply(
+        'Usage: /gitconfig [name], [email]\n' +
+        'Example: /gitconfig John Doe, john@example.com'
+      );
+    }
+    
+    // Basic email validation
+    if (!userEmail.includes('@') || !userEmail.includes('.')) {
+      return this.errorReply('Invalid email format. Please provide a valid email address.');
+    }
+    
+    try {
+      this.sendReply('Configuring git identity...');
+      
+      // Set git config globally
+      await execAsync(`git config --global user.name "${userName.replace(/"/g, '\\"')}"`);
+      await execAsync(`git config --global user.email "${userEmail.replace(/"/g, '\\"')}"`);
+      
+      // Verify configuration
+      const { stdout: nameCheck } = await execAsync('git config --global user.name');
+      const { stdout: emailCheck } = await execAsync('git config --global user.email');
+      
+      let resultMessage = '<div class="infobox">';
+      resultMessage += '<strong>[GIT CONFIG] ✅</strong><br><br>';
+      resultMessage += '<strong>Git identity configured successfully!</strong><br><br>';
+      resultMessage += `<strong>Name:</strong> ${Chat.escapeHTML(nameCheck.trim())}<br>`;
+      resultMessage += `<strong>Email:</strong> ${Chat.escapeHTML(emailCheck.trim())}<br><br>`;
+      resultMessage += '<small>✅ You can now make commits using /gitcommit</small>';
+      resultMessage += '</div>';
+      
+      this.sendReplyBox(resultMessage);
+      notifyStaff("Git config set", "global", user, `${userName} <${userEmail}>`);
+      
+    } catch (err: any) {
+      this.errorReply('Git config failed: ' + err.message);
+      notifyStaff("Git config failed", "global", user, err.message);
     }
   },
 
