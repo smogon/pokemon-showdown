@@ -169,6 +169,7 @@ export const commands: Chat.ChatCommands = {
 	// Admin commands
 	async recentseen(target, room, user) {
 		this.checkCan('globalban');
+		if (!this.runBroadcast()) return;
 		
 		const limit = parseInt(target) || 25;
 		if (limit > 100) return this.errorReply('Maximum limit is 100 users.');
@@ -194,6 +195,7 @@ export const commands: Chat.ChatCommands = {
 
 	async cleanupseen(target, room, user) {
 		this.checkCan('globalban');
+		if (!this.runBroadcast()) return;
 		
 		const days = parseInt(target) || 365;
 		if (days < 30) {
