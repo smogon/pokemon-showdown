@@ -1000,3 +1000,571 @@ width: 324px;
 .rightmenu .menugroup .button {
 width: 200px;
 }
+
+/* Dark Theme */
+
+.dark .roomlisttop {
+	max-width: 480px;
+	margin-bottom: 10px;
+}
+
+.dark .roomcounters {
+	max-width: 480px;
+	margin: 8px 0 15px 0;
+	text-align: center;
+}
+
+@media (max-width: 382px) {
+	.dark .roomcounters {
+		margin: 38px 0 15px 0;
+	}
+}
+
+.dark .roomcounters button {
+	margin: 0 auto;
+	width: 120px;
+	height: 60px;
+	padding: 3px 8px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 10pt;
+	position: relative;
+	border: 2px solid #6e5745;
+	color: #e8e3d3;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+	font-weight: 700;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.dark .roomcounters button:hover {
+	border-color: #8f785b;
+	color: #fceb83;
+	background: linear-gradient(to bottom, #6e5745, #4b3a32);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	transform: translateY(-1px);
+}
+
+.dark .roomcounters button strong {
+	display: block;
+	font-size: 18pt;
+	font-weight: normal;
+}
+
+.dark .roomcounters .usercount {
+	display: block;
+	width: 49px;
+	height: 63px;
+	position: absolute;
+	left: -30px;
+	bottom: -5px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .usercount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta.gif) center no-repeat;
+}
+
+.dark .roomcounters .battlecount {
+	display: block;
+	width: 46px;
+	height: 76px;
+	position: absolute;
+	right: -30px;
+	bottom: -10px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta-pirouette.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .battlecount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta-pirouette.gif) center no-repeat;
+}
+
+.dark .roomlist {
+	max-width: 480px;
+	text-align: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.dark .roomlist .subrooms {
+	font-size: 8pt;
+	padding-left: 20px;
+	margin: -5px 0 4px;
+	color: #7b9f6d;
+}
+
+.dark .roomlist .subrooms i.fa-level-up {
+	margin-right: 5px;
+}
+
+.dark .roomlist .subrooms a.blocklink {
+	display: inline-block;
+	margin: 0;
+	vertical-align: middle;
+	font-size: 8pt;
+	color: #7b9f6d;
+	font-weight: 600;
+}
+
+.dark .roomlist .subrooms a.blocklink:hover {
+	color: #a3c586;
+}
+
+.dark .menugroup .button {
+	box-sizing: border-box;
+	font-size: 12pt;
+	font-weight: 600;
+	display: inline-block;
+	padding: 5px 7px 3px 7px;
+	width: 200px;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+	/* Dark theme default colors */
+	color: #f5f2e9;
+	border: 2px solid #6e5745;
+	background: linear-gradient(to bottom, #8f785b, #6e5745);
+}
+
+.dark .menugroup .button.big {
+	width: 230px;
+	height: 50px;
+	padding: 0;
+	font-size: 14pt;
+}
+
+.dark .menugroup .button.big small {
+	display: block;
+	font-size: 9pt;
+}
+
+.dark .menugroup .button:hover {
+	background: linear-gradient(to bottom, #bba47a, #8f785b);
+	border-color: #8f785b;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .menugroup .button:active {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: linear-gradient(to bottom, #6e5745, #8f785b);
+	border-color: #8f785b;
+	transform: translateY(0px);
+}
+
+.dark .menugroup .button.disabled,
+.dark .menugroup .button.disabled:hover,
+.dark .menugroup .button.disabled:active {
+	cursor: default;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	border-color: #6e5745;
+	color: #8f785b;
+	text-shadow: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	transform: none;
+}
+
+/* COLORED MENU BUTTONS - Dark variations */
+.dark .button.mainmenu1 {
+	background: linear-gradient(to bottom, #8f785b, #6e5745);
+	border-color: #4b3a32;
+}
+
+.dark .button.mainmenu1:hover {
+	background: linear-gradient(to bottom, #bba47a, #8f785b);
+	border-color: #6e5745;
+}
+
+.dark .button.mainmenu1:active {
+	background: linear-gradient(to bottom, #8f785b, #bba47a);
+	border-color: #6e5745;
+}
+
+.dark .button.mainmenu2 {
+	background: linear-gradient(to bottom, #7b9f6d, #5b7952);
+	border-color: #2a3d2c;
+}
+
+.dark .button.mainmenu2:hover {
+	background: linear-gradient(to bottom, #a3c586, #7b9f6d);
+	border-color: #5b7952;
+}
+
+.dark .button.mainmenu2:active {
+	background: linear-gradient(to bottom, #7b9f6d, #a3c586);
+	border-color: #5b7952;
+}
+
+.dark .button.mainmenu3 {
+	background: linear-gradient(to bottom, #5f9fa4, #3f6b70);
+	border-color: #2a3d2c;
+	color: #f5f2e9;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark .button.mainmenu3:hover {
+	background: linear-gradient(to bottom, #8cd3d6, #5f9fa4);
+	border-color: #3f6b70;
+	color: #ffffff;
+}
+
+.dark .button.mainmenu3:active {
+	background: linear-gradient(to bottom, #5f9fa4, #8cd3d6);
+	border-color: #3f6b70;
+}
+
+.dark .button.mainmenu4 {
+	background: linear-gradient(to bottom, #d75c4e, #b7433a);
+	border-color: #4b3a32;
+}
+
+.dark .button.mainmenu4:hover {
+	background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+	border-color: #b7433a;
+}
+
+.dark .button.mainmenu4:active {
+	background: linear-gradient(to bottom, #d75c4e, #e89f4b);
+	border-color: #b7433a;
+}
+
+.dark .button.mainmenu5 {
+    background: linear-gradient(to bottom, #4b3a32, #3f6b70);
+    border-color: #2a3d2c;
+    color: #e8e3d3;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+}
+
+.dark .button.mainmenu5:hover {
+    background: linear-gradient(to bottom, #6e5745, #5b7952);
+    border-color: #4b3a32;
+    color: #ffffff;
+}
+
+.dark .button.mainmenu5:active {
+    background: linear-gradient(to bottom, #5b7952, #6e5745);
+    border-color: #4b3a32;
+}
+
+
+.dark .button.mainmenu6 {
+	background: linear-gradient(to bottom, #5b7952, #2a3d2c);
+	border-color: #1c281e;
+}
+
+.dark .button.mainmenu6:hover {
+	background: linear-gradient(to bottom, #7b9f6d, #5b7952);
+	border-color: #2a3d2c;
+}
+
+.dark .button.mainmenu6:active {
+	background: linear-gradient(to bottom, #5b7952, #7b9f6d);
+	border-color: #2a3d2c;
+}
+
+.dark .rightmenu .menugroup .button {
+	width: 180px;
+}
+
+.dark .userlist {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 145px;
+	height: auto;
+	border-right: 1px solid #4b3a32;
+	background: rgba(28, 40, 30, 0.9);
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.dark .pm-buttonbar {
+	height: 21px;
+}
+
+.dark .pm-buttonbar button {
+	float: left;
+	font: 8pt Verdana, sans-serif;
+	height: 21px;
+	background: #1c281e;
+	color: #8cd3d6;
+	border: 0;
+	border-right: 1px solid #4b3a32;
+	border-bottom: 1px solid #4b3a32;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.dark .userlist-minimized {
+	height: 21px;
+	bottom: auto;
+	overflow: hidden;
+	background: #1c281e;
+	border-bottom: 1px solid #4b3a32;
+}
+
+.dark .userlist-maximized {
+	height: auto;
+	bottom: 0;
+	overflow: auto;
+	background: #1c281e;
+}
+
+.dark .userlist-minimized .userlist-count,
+.dark .userlist-maximized .userlist-count {
+	cursor: pointer;
+	font-weight: 600;
+	color: #bba47a;
+}
+
+.dark .userlist-minimized .userlist-count:hover,
+.dark .userlist-maximized .userlist-count:hover,
+.dark .pm-buttonbar button:hover {
+	background: #2a3d2c;
+	color: #f5f2e9;
+	text-shadow: none;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist,
+.dark .tournament-wrapper.hasuserlist {
+	left: 146px;
+}
+
+.dark .userlist li {
+	display: block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	height: 20px;
+	font: 10pt Verdana, sans-serif;
+	white-space: nowrap;
+}
+
+.dark .userlist li em.group {
+	font-style: normal;
+	font-size: 8pt;
+	color: #8cd3d6;
+	display: block;
+	float: left;
+	text-align: center;
+	padding: 1px 0 0 1px;
+	width: 14px;
+	font-weight: 600;
+}
+
+.dark .userlist li button {
+	box-sizing: border-box;
+	display: block;
+	overflow: hidden;
+	height: auto;
+	background: transparent;
+	border: 0;
+	padding: 1px 0;
+	margin: 0;
+	width: 100%;
+	white-space: nowrap;
+	font: 9pt Verdana, sans-serif;
+	text-align: left;
+	color: #d8d3c3;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+/* Remove Firefox's magic padding */
+.dark .userlist li button::-moz-focus-inner {
+	padding: 0;
+}
+
+.dark .userlist li button:hover {
+	background: rgba(75, 58, 50, 0.3);
+	color: #f5f2e9;
+}
+
+.dark .userlist li button:active {
+	background: rgba(91, 121, 82, 0.2);
+}
+
+.dark .userlist li.cur {
+	background: transparent;
+	border-left: 3px solid #fceb83;
+}
+
+.dark .userlist li.cur button,
+.dark .userlist li.cur button:hover {
+	background: transparent;
+	margin: 0 0 0 -1px;
+	color: #fceb83;
+	font-weight: 700;
+}
+
+.dark div[class="maintabbarbottom"] {
+	border: 2px solid #6e5745;
+	background: #1c281e;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* HEADER BUTTONS - Ultra-dark Earthy theme */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur {
+	border: 2px solid #6e5745;
+	color: #e8e3d3;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+/* HEADER BUTTONS HOVER - Lighter earthy green */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:hover,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur:hover {
+	border-color: #8f785b;
+	color: #fceb83;
+	background: linear-gradient(to bottom, #6e5745, #4b3a32);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* REGULAR BUTTONS in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button {
+	color: #bba47a;
+	font-weight: 700;
+	text-shadow: none;
+	transition: all 0.2s ease;
+}
+
+/* REGULAR BUTTONS HOVER in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button:hover {
+	color: #fceb83;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* NOTIFICATION BUTTONS - Still vibrant */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying {
+	background: linear-gradient(to bottom, #d75c4e, #b7433a);
+	border: 2px solid #d75c4e;
+	color: #ffffff;
+	box-shadow: 0 0 12px rgba(183, 67, 58, 0.7);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	animation: pulse 2s infinite;
+}
+
+/* NOTIFICATION BUTTONS HOVER */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying:hover {
+	background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+	border-color: #e89f4b;
+	color: #ffffff;
+	box-shadow: 0 0 16px rgba(232, 159, 75, 0.9);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	transform: translateY(-1px);
+}
+
+/* Focus states for accessibility */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:focus {
+	outline: 3px solid #bba47a;
+	outline-offset: 2px;
+}
+
+.dark .chat-log {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 40px;
+	font-size: 10pt;
+	background: rgba(18, 26, 20, 0.9);
+	color: #e8e3d3;
+	overflow: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	word-wrap: break-word;
+}
+
+.dark .chat-log-add {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	min-height: 36px;
+	padding: 3px 4px 0 4px;
+	border-top: 1px solid #4b3a32;
+	background: rgba(18, 26, 20, 0.95);
+}
+
+.dark .chat-log .notice,
+.dark .chat-log .chat,
+.dark .pm-log .chat {
+	padding: 3px 0 3px 0;
+	font-size: 9pt;
+}
+
+.dark .chat-log .chat.mine,
+.dark .pm-log .chat.mine {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: rgba(245, 242, 233, 0.04);
+}
+
+.dark .chat em {
+	padding: 0 4px 0 3px;
+	font-style: normal;
+}
+
+.dark .chat small {
+	font-weight: normal;
+	font-size: 8pt;
+	color: #5b7952;
+}
+
+.dark .chat .message-announce small {
+	color: #7b9f6d;
+}
+
+.dark .chat.timer {
+	color: #8f785b;
+}
+
+.dark .debug {
+	display: none;
+}
+
+.dark .highlighted {
+	background: rgba(252, 235, 131, 0.15);
+}
+
+.dark .chat.highlighted {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.dark .revealed {
+	background-color: rgba(123, 159, 109, 0.1);
+}
+
+.dark .message-pm {
+	color: #e89f4b;
+}
+
+.dark .message-pm .pmnote {
+	cursor: pointer;
+}
+
+.dark .chat-log .inner,
+.dark .pm-log .inner {
+	padding: 4px 8px 6px 8px;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist {
+	left: 146px;
+}
