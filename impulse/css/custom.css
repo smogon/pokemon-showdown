@@ -1033,6 +1033,7 @@ width: 324px;
 .rightmenu .menugroup .button {
 width: 200px;
 }
+
 .ps-room {
 	position: absolute;
 	display: block;
@@ -1253,6 +1254,287 @@ p.or:after {
 .select.preselected,
 .select:disabled.preselected {
 	color: #2a3d2c;
+}
+
+
+/* Tournaments */
+
+.tournaments-info > ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tournament-wrapper {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2em;
+	line-height: 2em;
+	text-align: center;
+	border-bottom: 1px #6e5745 solid;
+}
+.tournament-wrapper.active {
+	display: block;
+}
+.tournament-wrapper.active + .chat-log {
+	top: 2.4em;
+}
+
+.tournament-title {
+	font-weight: bold;
+	cursor: pointer;
+}
+.tournament-title:hover {
+	background: rgba(245, 242, 233, 0.85);
+}
+.dark .tournament-title:hover {
+	background: rgba(42, 61, 44, 0.85);
+}
+
+.tournament-status, .tournament-toggle {
+	position: absolute;
+	top: 0;
+	padding: 0 0.5em;
+	font-weight: normal;
+	font-size: 80%;
+	background-color: rgba(245, 242, 233, 0.85);
+	border-right: 1px #6e5745 solid;
+}
+.tournament-status {
+	left: 0;
+}
+.tournament-toggle {
+	right: 0;
+	border-left: 1px #6e5745 solid;
+}
+
+.tournament-box {
+	position: absolute;
+	top: 2em;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	line-height: 1em;
+	border-bottom: 1px #6e5745 solid;
+	border-right: 1px #6e5745 solid;
+	background-color: rgba(245, 242, 233, 0.85);
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.15s;
+	-webkit-transition: max-height 0.15s;
+	touch-action: none;
+}
+
+.tournament-bracket {
+	max-height: 200px;
+	padding: 10px;
+	overflow: hidden;
+	font-size: 8pt;
+	touch-action: none;
+}
+
+.tournament-bracket-overflowing {
+	height: 200px;
+	padding: 0;
+	position: relative;
+	left: 0;
+	top: 0;
+	touch-action: none;
+}
+
+
+.tournament-popout-link {
+	position: absolute;
+	bottom: 0.5em;
+	right: 0.5em;
+}
+.tournament-popout-bracket {
+	/* Actual max-width and -height setting is in client-chat-tournament.js (BracketPopup)
+	max-width: 80%;
+	max-height: 80%;*/
+	max-width: inherit !important;
+	position: relative !important;
+	left: 0;
+	top: 0;
+	overflow: hidden;
+	padding: 0;
+	font-size: 8pt;
+	text-align: center;
+}
+.tournament-popout-bracket > *[class^='tournament-bracket-'] {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.tournament-popout-bracket > .buttonbar {
+	position: absolute;
+	right: 0.5em;
+	bottom: 0;
+}
+
+.tournament-bracket-table {
+	margin: 0 auto;
+	empty-cells: hide;
+	border-bottom: 1px #6e5745 solid;
+	border-collapse: collapse;
+}
+.tournament-bracket-table td, .tournament-bracket-table th {
+	border: 1px #6e5745 solid;
+	padding: 5px;
+}
+.tournament-bracket-table td {
+	white-space: nowrap;
+}
+.tournament-bracket-table .empty,
+.tournament-bracket-table .tournament-bracket-table-cell-null {
+	border-width: 0;
+}
+.tournament-bracket-table-cell-result-win {
+	background-color: rgba(123, 159, 109, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-table-cell-result-draw {
+	background-color: rgba(232, 159, 75, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-table-cell-result-loss {
+	background-color: rgba(183, 67, 58, 0.7);
+	color: #f5f2e9;
+}
+
+.tournament-bracket-tree {
+	text-align: center;
+}
+.tournament-bracket-tree-link {
+	fill: none;
+	stroke: #6e5745;
+}
+.tournament-bracket-tree-link-active {
+	stroke: #fceb83;
+	stroke-width: 3px;
+}
+.tournament-bracket-tree-abbreviated {
+	fill: #8f785b;
+}
+.tournament-bracket-tree-node rect {
+	/* Note: Due to SVG limitations, dimensions and border radii are in client-chat-tournament.js (nodeSize) */
+	fill: rgba(143, 120, 91, 0.7);
+	stroke: rgba(75, 58, 50, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-tree-node a rect {
+	fill: rgba(91, 121, 82, 0.7);
+	stroke: rgba(42, 61, 44, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-tree-node a:hover rect {
+	fill: rgba(123, 159, 109, 0.7);
+	stroke: rgba(91, 121, 82, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-tree-node-match-available rect,
+.tournament-bracket-tree-node-match-challenging rect {
+	fill: rgba(215, 92, 78, 0.7);
+	stroke: rgba(183, 67, 58, 0.7);
+	color: #f5f2e9;
+}
+.tournament-bracket-tree-node rect.tournament-bracket-tree-win {
+	fill: rgba(123, 159, 109, 0.7);
+	stroke: rgba(91, 121, 82, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-tree-node rect.tournament-bracket-tree-loss,
+.tournament-bracket-tree-node rect.tournament-bracket-tree-draw {
+	fill: rgba(143, 120, 91, 0.7);
+	stroke: rgba(110, 87, 69, 0.7);
+	color: #2a3d2c;
+}
+.tournament-bracket-tree-node text, .tournament-bracket-tree-node {
+	font-size: 8.5pt;
+	text-anchor: middle;
+	font-weight: bold;
+}
+.tournament-bracket-tree-node a {
+	color: #5b7952;
+}
+.tournament-bracket-tree-node a text, .tournament-bracket-tree-node a:hover text {
+	fill: #5b7952;
+}
+.tournament-bracket-tree-team-win {
+	font-weight: bold;
+}
+.tournament-bracket-tree-team-loss, .tournament-bracket-tree-team-draw, .tournament-bracket-tree-score {
+	font-weight: normal;
+}
+
+.tournament-tools {
+	padding: 10px;
+	display: none;
+	border-top: 1px #6e5745 solid;
+}
+.tournament-tools.active {
+	display: block;
+}
+.tournament-team {
+	padding-bottom: 5px;
+}
+.tournament-challenge-user,
+.tournament-challenged-message,
+.tournament-challenging-message,
+.tournament-challengeby {
+	font-size: 9pt;
+	padding-bottom: 5px;
+}
+.tournament-tools .button {
+	font-size: 9pt;
+}
+
+.tournament-join,
+.tournament-leave,
+.tournament-validate {
+	display: none;
+}
+.tournament-join.active,
+.tournament-leave.active,
+.tournament-validate.active {
+	display: inline;
+}
+
+.tournament-nomatches,
+.tournament-challenge,
+.tournament-challengeby,
+.tournament-challenging,
+.tournament-challenged {
+	display: none;
+}
+.tournament-nomatches.active,
+.tournament-challenge.active,
+.tournament-challengeby.active,
+.tournament-challenging.active,
+.tournament-challenged.active {
+	display: block;
+}
+
+.tournament-message-create,
+.tournament-message-start,
+.tournament-message-forceend,
+.tournament-message-end-winner {
+	font-weight: bold;
+}
+.tournament-message-end-bracket {
+	font-weight: normal !important;
+	max-height: 400px;
+	overflow: hidden;
+	text-align: center;
+}
+.tournament-message-end-bracket-overflowing {
+	height: 400px;
+	position: relative;
+	left: 0;
+	top: 0;
 }
 
 /*****************************
