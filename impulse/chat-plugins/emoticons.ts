@@ -28,7 +28,8 @@ sendChatMessage(message: string) {
 					}
 					curUser.sendTo(this.room, `${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|/html ${emoticons}`);
 	  			}
-				this.room.log.log.push(`${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|${message}`);
+				// CHANGED: Store HTML in log so rejoining users see emoticons
+				this.room.log.log.push(`${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|/html ${emoticons}`);
 				this.room.game?.onLogMessage?.(message, this.user);
 			}
 			else {
@@ -40,6 +41,12 @@ sendChatMessage(message: string) {
 		}
 	}
 * @license MIT
+* 
+* KNOWN BEHAVIOR:
+* - Users who have enabled "ignore emoticons" will still see emoticons in chat history
+*   when they rejoin a room. This is because chat history is stored with parsed HTML.
+* - New messages will correctly respect their ignore preference.
+* - This is a limitation of storing emoticons in history without client-side modifications.
 */
 
 import Autolinker from 'autolinker';
@@ -317,7 +324,7 @@ export const commands: Chat.ChatCommands = {
       );
       
       Impulse.ignoreEmotes[user.id] = true;
-      this.sendReply('You are now ignoring emoticons.');
+      this.sendReply('You are now ignoring emoticons. Note: You may still see emoticons in chat history when rejoining rooms.');
     },
 
     async unignore(target, room, user) {
@@ -409,7 +416,7 @@ export const commands: Chat.ChatCommands = {
 			  `<li><code>/emoticon del/delete/remove/rem [name]</code> - Removes an emoticon</li>` +
 			  `<li><code>/emoticon toggle</code> - Enables or disables emoticons in the current room depending on if they are already active</li>` +
 			  `<li><code>/emoticon view/list</code> - Displays the list of emoticons</li>` +
-			  `<li><code>/emoticon ignore</code> - Ignores emoticons in chat messages</li>` +
+			  `<li><code>/emoticon ignore</code> - Ignores emoticons in chat messages (Note: history may still show emoticons)</li>` +
 			  `<li><code>/emoticon unignore</code> - Unignores emoticons in chat messages</li>` +
 			  `<li><code>/emoticon size [size]</code> - Sets the size of emoticons (16-256px)</li>` +
 			  `<li><code>/emoticon search [query]</code> - Search for emoticons by name</li>` +
