@@ -38,6 +38,7 @@ declare global {
 			Verifier: any;
 			toID: (item: any) => ID;
 			__version: {head: string, origin?: string, tree?: string};
+			Impulse: any;
 		}
 	}
 	var Config: ConfigType;
@@ -56,4 +57,5 @@ declare global {
 	var Users: typeof UsersType.Users;
 	var Verifier: typeof VerifierType;
 	var toID: typeof DexType.toID;
+	var Impulse: any;
 }
