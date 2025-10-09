@@ -30,28 +30,28 @@ function notifyStaff(action: string, file: string, user: User, info = "") {
   let message = "";
   
   if (action === "Uploaded file") {
-    message = `${user.name} uploaded ${file} to GitHub Gist.`;
+    message = `<username>${user.name}</username> uploaded ${Chat.escapeHTML(file)} to GitHub Gist.`;
   } else if (action === "Upload failed") {
-    message = `${user.name} failed to upload ${file}. Error: ${info}`;
+    message = `<username>${user.name}</username> failed to upload ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "Saved file from Gist") {
-    message = `${user.name} retrieved ${file} from the server.`;
+    message = `<username>${user.name}</username> retrieved ${Chat.escapeHTML(file)} from the server.`;
   } else if (action === "File save failed") {
-    message = `${user.name} failed to save ${file}. Error: ${info}`;
+    message = `<username>${user.name}</username> failed to save ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "Deleted file") {
-    message = `${user.name} deleted ${file} from the server.`;
+    message = `<username>${user.name}</username> deleted ${Chat.escapeHTML(file)} from the server.`;
   } else if (action === "File deletion failed") {
-    message = `${user.name} failed to delete ${file}. Error: ${info}`;
+    message = `<username>${user.name}</username> failed to delete ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "Listed directory") {
-    message = `${user.name} listed directory ${file}.`;
+    message = `<username>${user.name}</username> listed directory ${Chat.escapeHTML(file)}.`;
   } else if (action === "Directory listing failed") {
-    message = `${user.name} failed to list directory ${file}. Error: ${info}`;
+    message = `<username>${user.name}</username> failed to list directory ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "PM2 logs viewed") {
-    message = `${user.name} viewed PM2 logs for ${file} (${info}).`;
+    message = `<username>${user.name}</username> viewed PM2 logs for ${Chat.escapeHTML(file)} (${Chat.escapeHTML(info)}).`;
   } else if (action === "PM2 logs failed") {
-    message = `${user.name} failed to view PM2 logs for ${file}. Error: ${info}`;
+    message = `<username>${user.name}</username> failed to view PM2 logs for ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
   }
 
-  staffRoom.add(`|c|&|${message}`).update();
+  staffRoom.addRaw(`<div class="infobox">${message}</div>`).update();
 }
 
 function notifyUserBox(
