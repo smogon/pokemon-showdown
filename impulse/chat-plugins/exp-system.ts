@@ -1,32 +1,54 @@
 /**
- * Pokemon Showdown - Experience System
+ * Pokemon Showdown - Experience & Currency System
  * 
- * A comprehensive leveling and progression system for Pokemon Showdown servers.
- * Users earn experience points (EXP) through chat activity and progress through levels.
+ * A comprehensive leveling and economy system for Pokemon Showdown servers.
+ * Users earn experience points (EXP) and currency through chat activity and progress through levels.
  * 
- * Features:
+ * EXP System Features:
  * - Automatic EXP earning through chat messages (with cooldown)
  * - Progressive leveling system with exponential scaling
  * - Leaderboard system showing top users
  * - Double EXP events with configurable duration
  * - Admin moderation tools (give/take/reset EXP)
  * - Level-up notifications with popup alerts
- * - MongoDB-based persistent storage
+ * - Full transaction history tracking
+ * 
+ * Currency System Features:
+ * - Customizable currency name (easily changeable)
+ * - Automatic currency earning through chat activity
+ * - Currency leaderboard
+ * - Admin moderation tools (give/take/reset currency)
+ * - Transaction history tracking
+ * - Persistent currency name stored in database
  * 
  * Integration:
  * This system is automatically integrated with the chat system.
  * See server/chat.ts line 693 for the integration point:
  *   if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
  * 
+ * You can also add currency earning in the same way:
+ *   if (this.user.registered) Impulse.CurrencySystem.addCurrency(this.user.id, CURRENCY_EARN_RATE);
+ * 
  * Database Collections:
  * - expdata: Stores user EXP and level data
- * - expconfig: Stores system configuration (double EXP settings)
+ * - expconfig: Stores EXP system configuration (double EXP settings)
+ * - exphistory: Stores EXP transaction history
+ * - currencydata: Stores user currency balances
+ * - currencyconfig: Stores currency configuration (currency name)
+ * - currencyhistory: Stores currency transaction history
  * 
  * Configuration:
- * - DEFAULT_EXP: Starting experience (0)
- * - MIN_LEVEL_EXP: Experience required for level 1 (10)
- * - MULTIPLIER: Level difficulty scaling factor (1.5)
- * - EXP_COOLDOWN: Cooldown between EXP gains in ms (30000 = 30 seconds)
+ * EXP System:
+ *   - DEFAULT_EXP: Starting experience (0)
+ *   - MIN_LEVEL_EXP: Experience required for level 1 (10)
+ *   - MULTIPLIER: Level difficulty scaling factor (1.5)
+ *   - EXP_COOLDOWN: Cooldown between EXP gains in ms (30000 = 30 seconds)
+ * 
+ * Currency System:
+ *   - DEFAULT_CURRENCY: Starting currency amount (0)
+ *   - CURRENCY_UNIT: Currency name (default: "Coins", easily changeable via /currency setname)
+ *   - CURRENCY_EARN_RATE: How much currency earned per message (5)
+ *   - CURRENCY_COOLDOWN: Cooldown between currency gains in ms (60000 = 1 minute)
  * 
  * @author Prince Sky
  * @license MIT
@@ -1143,6 +1165,261 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/exp toggledouble [duration]</code> - Toggle double EXP with optional duration (e.g., "2 hours", "1 day", "30 minutes"). Use "off" to disable (requires @)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Note: All staff actions are logged to EXP history and modlog.</small>` +
+        `</div>`
+      );
+    },
+  },
+
+  currency: {
+    '': 'balance',
+    async balance(target, room, user) {
+      if (!target) target = user.name;
+      if (!this.runBroadcast()) return;
+      const userid = toID(target);
+      const currency = await CurrencySystem.readCurrency(userid);
+      
+      this.sendReplyBox(
+        `<b>${Impulse.nameColor(target, true, true)}</b> has <b>${currency} ${CurrencySystem.getCurrencyName()}</b>`
+      );
+    },
+
+    async stats(target, room, user) {
+      if (!this.runBroadcast()) return;
+      const userid = target ? toID(target) : user.id;
+      const targetName = target || user.name;
+      
+      const currency = await CurrencySystem.readCurrency(userid);
+      const rank = await CurrencySystem.getUserRank(userid);
+      const totalUsers = await CurrencyDB.countDocuments({});
+      const percentile = rank > 0 ? Math.floor((1 - rank / totalUsers) * 100) : 0;
+      
+      this.sendReplyBox(
+        `<div class="ladder" style="max-width: 400px;">` +
+        `<h3 style="margin: 5px 0;">${Impulse.nameColor(targetName, true, true)}'s ${CurrencySystem.getCurrencyName()} Statistics</h3>` +
+        `<table style="width: 100%; border-collapse: collapse;">` +
+        `<tr><td style="padding: 4px;"><b>Balance:</b></td><td style="padding: 4px; text-align: right;">${currency} ${CurrencySystem.getCurrencyName()}</td></tr>` +
+        (rank > 0 ? 
+          `<tr><td style="padding: 4px;"><b>Rank:</b></td><td style="padding: 4px; text-align: right;">#${rank} / ${totalUsers}</td></tr>` +
+          `<tr><td style="padding: 4px;"><b>Percentile:</b></td><td style="padding: 4px; text-align: right;">Top ${percentile}%</td></tr>` 
+          : ''
+        ) +
+        `</table>` +
+        `</div>`
+      );
+    },
+
+    async history(target, room, user) {
+      const userid = target ? toID(target) : user.id;
+      const targetName = target || user.name;
+      
+      const history = await CurrencySystem.getCurrencyHistory(userid, 15);
+      
+      if (!history.length) {
+        return this.sendReply(`No ${CurrencySystem.getCurrencyName()} history found for ${targetName}.`);
+      }
+      
+      let output = `<div class="ladder pad" style="max-width: 600px;">`;
+      output += `<h3>${Impulse.nameColor(targetName, true, true)}'s ${CurrencySystem.getCurrencyName()} History (Last ${history.length} changes)</h3>`;
+      output += `<div style="max-height: 300px; overflow-y: auto;">`;
+      output += `<table style="width: 100%; border-collapse: collapse;">`;
+      output += `<tr style="background: #f0f0f0;"><th>Date</th><th>Amount</th><th>Reason</th><th>By</th></tr>`;
+      
+      for (const entry of history) {
+        const date = new Date(entry.timestamp).toLocaleString();
+        const amountColor = entry.amount >= 0 ? 'green' : 'red';
+        const amountText = entry.amount >= 0 ? `+${entry.amount}` : entry.amount;
+        
+        output += `<tr style="border-bottom: 1px solid #ddd;">`;
+        output += `<td style="padding: 5px; font-size: 0.9em;">${date}</td>`;
+        output += `<td style="padding: 5px; color: ${amountColor}; font-weight: bold;">${amountText} ${CurrencySystem.getCurrencyName()}</td>`;
+        output += `<td style="padding: 5px;">${Chat.escapeHTML(entry.reason)}</td>`;
+        output += `<td style="padding: 5px;">${Impulse.nameColor(entry.by, false, true)}</td>`;
+        output += `</tr>`;
+      }
+      
+      output += `</table></div></div>`;
+      this.sendReply(`|raw|${output}`);
+    },
+
+    async give(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply(`Usage: /currency give [user], [amount], [reason]`);
+      const parts = target.split(',').map(p => p.trim());
+      if (parts.length < 2) return this.sendReply(`Usage: /currency give [user], [amount], [reason]`);
+
+      const targetUser = Users.get(parts[0]);
+      const amount = parseInt(parts[1], 10);
+      const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
+
+      if (!targetUser) {
+        return this.errorReply(`User "${parts[0]}" not found.`);
+      }
+      if (isNaN(amount) || amount <= 0) {
+        return this.errorReply(`Please specify a valid positive amount.`);
+      }
+
+      await CurrencySystem.addCurrency(targetUser.id, amount, reason, user.id);
+      const newCurrency = await CurrencySystem.readCurrency(targetUser.id);
+      
+      // Log to history
+      await CurrencySystem.logCurrencyChange(targetUser.id, amount, reason, user.id);
+      
+      this.sendReplyBox(
+        `${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CurrencySystem.getCurrencyName()} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
+        `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
+      );
+      
+      this.modlog('GIVECURRENCY', targetUser, `${amount} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
+      if (targetUser.connected) {
+        targetUser.popup(
+          `|html|You received <b>${amount} ${CurrencySystem.getCurrencyName()}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
+          `Reason: ${reason}<br>` +
+          `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
+        );
+      }
+    },
+
+    async take(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply(`Usage: /currency take [user], [amount], [reason]`);
+      const parts = target.split(',').map(p => p.trim());
+      if (parts.length < 2) return this.sendReply(`Usage: /currency take [user], [amount], [reason]`);
+
+      const targetUser = Users.get(parts[0]);
+      const amount = parseInt(parts[1], 10);
+      const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
+
+      if (!targetUser) {
+        return this.errorReply(`User "${parts[0]}" not found.`);
+      }
+      if (isNaN(amount) || amount <= 0) {
+        return this.errorReply(`Please specify a valid positive amount.`);
+      }
+
+      const oldCurrency = await CurrencySystem.readCurrency(targetUser.id);
+      await CurrencySystem.takeCurrency(targetUser.id, amount, reason, user.id);
+      const newCurrency = await CurrencySystem.readCurrency(targetUser.id);
+      
+      if (oldCurrency === newCurrency && oldCurrency < amount) {
+        return this.errorReply(`${targetUser.name} doesn't have enough ${CurrencySystem.getCurrencyName()} (has ${oldCurrency}, needs ${amount}).`);
+      }
+      
+      // Log to history (negative amount)
+      await CurrencySystem.logCurrencyChange(targetUser.id, -amount, reason, user.id);
+      
+      this.sendReplyBox(
+        `${Impulse.nameColor(user.name, true, true)} took ${amount} ${CurrencySystem.getCurrencyName()} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
+        `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
+      );
+      
+      this.modlog('TAKECURRENCY', targetUser, `${amount} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
+      if (targetUser.connected) {
+        targetUser.popup(
+          `|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CurrencySystem.getCurrencyName()}</b> from you.<br>` +
+          `Reason: ${reason}<br>` +
+          `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
+        );
+      }
+    },
+
+    async reset(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply(`Usage: /currency reset [user], [reason]`);
+      const parts = target.split(',').map(p => p.trim());
+      const targetUser = Users.get(parts[0]);
+      const reason = parts.slice(1).join(',').trim() || 'No reason specified.';
+
+      if (!targetUser) {
+        return this.errorReply(`User "${parts[0]}" not found.`);
+      }
+
+      await CurrencySystem.writeCurrency(targetUser.id, DEFAULT_CURRENCY);
+      this.sendReplyBox(
+        `${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s ${CurrencySystem.getCurrencyName()} to ${DEFAULT_CURRENCY} (${reason}).`
+      );
+      
+      this.modlog('RESETCURRENCY', targetUser, `${DEFAULT_CURRENCY} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
+      if (targetUser.connected) {
+        targetUser.popup(
+          `|html|Your ${CurrencySystem.getCurrencyName()} has been reset to <b>${DEFAULT_CURRENCY}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
+          `Reason: ${reason}`
+        );
+      }
+    },
+
+    async resetall(target, room, user) {
+      this.checkCan('bypassall');
+      const reason = target.trim() || 'No reason specified.';
+
+      await CurrencySystem.resetAllCurrency();
+      this.sendReplyBox(
+        `All user ${CurrencySystem.getCurrencyName()} has been reset to ${DEFAULT_CURRENCY} (${reason}).`
+      );
+      
+      this.modlog('RESETCURRENCYALL', null, `all ${CurrencySystem.getCurrencyName()} to ${DEFAULT_CURRENCY}`, { by: user.id, reason });
+      if (room) {
+        room.add(
+          `|html|<center><div class="broadcast-blue">` +
+          `<b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CurrencySystem.getCurrencyName()} to <b>${DEFAULT_CURRENCY}</b>.<br>` +
+          `Reason: ${reason}` +
+          `</div></center>`
+        );
+        room.update();
+      }
+    },
+
+    async setname(target, room, user) {
+      this.checkCan('bypassall');
+      if (!target) return this.sendReply(`Usage: /currency setname [new name]`);
+      
+      const newName = target.trim();
+      if (newName.length < 1 || newName.length > 20) {
+        return this.errorReply('Currency name must be between 1 and 20 characters.');
+      }
+
+      const oldName = CurrencySystem.getCurrencyName();
+      await CurrencySystem.setCurrencyName(newName);
+      
+      this.sendReplyBox(
+        `${Impulse.nameColor(user.name, true, true)} changed the currency name from "${oldName}" to "${newName}".`
+      );
+      
+      this.modlog('SETCURRENCYNAME', null, `from "${oldName}" to "${newName}"`, { by: user.id });
+      if (room) {
+        room.add(
+          `|html|<div class="broadcast-green">` +
+          `Currency name has been changed from <b>${oldName}</b> to <b>${newName}</b> by ${Impulse.nameColor(user.name, true, true)}.` +
+          `</div>`
+        );
+        room.update();
+      }
+    },
+
+    async ladder(target, room, user) {
+      if (!this.runBroadcast()) return;
+      return this.parse(`/join view-currencyladder`);
+    },
+
+    async help(target, room, user) {
+      if (!this.runBroadcast()) return;
+      this.sendReplyBox(
+        `<div><b><center>Currency System Commands By ${Impulse.nameColor('Prince Sky', true, false)}</center></b><br>` +
+        `<h4 style="margin: 8px 0;">User Commands:</h4>` +
+        `<ul style="margin: 5px 0;">` +
+        `<li><code>/currency balance [user]</code> (or <code>/currency</code>) - Check your or another user's currency balance</li>` +
+        `<li><code>/currency stats [user]</code> - View detailed currency statistics including rank and percentile</li>` +
+        `<li><code>/currency history [user]</code> - View your currency transaction history</li>` +
+        `<li><code>/currency ladder</code> - View the top 100 users with the most currency</li>` +
+        `</ul>` +
+        `<h4 style="margin: 8px 0;">Staff Commands:</h4>` +
+        `<ul style="margin: 5px 0;">` +
+        `<li><code>/currency give [user], [amount], [reason]</code> - Give currency to a user (requires @)</li>` +
+        `<li><code>/currency take [user], [amount], [reason]</code> - Take currency from a user (requires @)</li>` +
+        `<li><code>/currency reset [user], [reason]</code> - Reset a user's currency to ${DEFAULT_CURRENCY} (requires @)</li>` +
+        `<li><code>/currency resetall [reason]</code> - Reset all users' currency to ${DEFAULT_CURRENCY} (requires ~)</li>` +
+        `<li><code>/currency setname [new name]</code> - Change the currency name (requires ~)</li>` +
+        `</ul>` +
+        `<small style="opacity: 0.8;">Current currency name: <b>${CurrencySystem.getCurrencyName()}</b> | All staff actions are logged to history and modlog.</small>` +
         `</div>`
       );
     },
