@@ -9,6 +9,7 @@ import { ImpulseDB } from '../../impulse/impulse-db';
 import '../utils';
 
 const STAFF_ROOM_ID = 'staff';
+const SYMBOL_COLOR_LOG_PATH = 'logs/symbolcolors.txt';
 
 interface SymbolColorDocument {
 	_id: string; // userid
@@ -19,6 +20,16 @@ interface SymbolColorDocument {
 
 // Get typed MongoDB collection for symbol colors
 const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
+
+async function logSymbolColorAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+	try {
+		const timestamp = new Date().toISOString();
+		const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+		await FS(SYMBOL_COLOR_LOG_PATH).append(logEntry);
+	} catch (err) {
+		console.error('Error writing to symbol color log:', err);
+	}
+}
 
 async function updateSymbolColors(): Promise<void> {
 	try {
@@ -84,6 +95,9 @@ export const commands: Chat.ChatCommands = {
 			
 			await updateSymbolColors();
 			
+			// Log the action
+			await logSymbolColorAction('SET', user.name, userId, `Color: ${color}`);
+			
 			this.sendReply(`|raw|You have given ${Impulse.nameColor(name, true, false)} a symbol color: <span style="color: ${color}">■</span>`);
 
 			const targetUser = Users.get(userId);
@@ -109,17 +123,26 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid color format. Please use hex format (e.g., #FF5733 or #F73)');
 			}
 			
+			// Get old color before updating for logging
+			const oldSymbolColor = await SymbolColorsDB.findOne(
+				{ _id: userId },
+				{ projection: { color: 1 } }
+			);
+			
+			if (!oldSymbolColor) {
+				return this.errorReply('This user does not have a symbol color. Use /symbolcolor set to create one.');
+			}
+			
 			// Use atomic updateOne with $set - checks existence and updates in one operation
 			const result = await SymbolColorsDB.updateOne(
 				{ _id: userId },
 				{ $set: { color, updatedAt: new Date() } }
 			);
 			
-			if (result.matchedCount === 0) {
-				return this.errorReply('This user does not have a symbol color. Use /symbolcolor set to create one.');
-			}
-			
 			await updateSymbolColors();
+			
+			// Log the action
+			await logSymbolColorAction('UPDATE', user.name, userId, `Old: ${oldSymbolColor.color}, New: ${color}`);
 			
 			this.sendReply(`|raw|You have updated ${Impulse.nameColor(name, true, false)}'s symbol color to: <span style="color: ${color}">■</span>`);
 
@@ -138,14 +161,23 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('globalban');
 			const userId = toID(target);
 			
-			// Use deleteOne() and check result - single atomic operation
-			const result = await SymbolColorsDB.deleteOne({ _id: userId });
+			// Get symbol color details before deletion for logging
+			const symbolColor = await SymbolColorsDB.findOne(
+				{ _id: userId },
+				{ projection: { color: 1 } }
+			);
 			
-			if (result.deletedCount === 0) {
+			if (!symbolColor) {
 				return this.errorReply(`${target} does not have a symbol color.`);
 			}
 			
+			// Use deleteOne() and check result - single atomic operation
+			const result = await SymbolColorsDB.deleteOne({ _id: userId });
+			
 			await updateSymbolColors();
+			
+			// Log the action
+			await logSymbolColorAction('DELETE', user.name, userId, `Removed color: ${symbolColor.color}`);
 			
 			this.sendReply(`You removed ${target}'s symbol color.`);
 
@@ -265,6 +297,11 @@ export const commands: Chat.ChatCommands = {
 			try {
 				const result = await SymbolColorsDB.insertMany(documents, { ordered: false });
 				await updateSymbolColors();
+				
+				// Log the bulk action
+				const userList = documents.map(d => d._id).join(', ');
+				await logSymbolColorAction('SETMANY', user.name, `${result.insertedCount} users`, `Users: ${userList}`);
+				
 				this.sendReply(`|raw|Successfully set ${result.insertedCount} custom symbol color(s).`);
 				
 				const staffRoom = Rooms.get(STAFF_ROOM_ID);
@@ -275,8 +312,11 @@ export const commands: Chat.ChatCommands = {
 				// Handle duplicate key errors gracefully
 				if (err.code === 11000 && err.result?.insertedCount) {
 					await updateSymbolColors();
+					const userList = documents.map(d => d._id).join(', ');
+					await logSymbolColorAction('SETMANY PARTIAL', user.name, `${err.result.insertedCount} users`, `Users: ${userList}, Some duplicates skipped`);
 					this.sendReply(`|raw|Successfully set ${err.result.insertedCount} custom symbol color(s). Some users already had colors.`);
 				} else {
+					await logSymbolColorAction('SETMANY FAILED', user.name, `${documents.length} users`, `Error: ${err.message || err}`);
 					this.errorReply(`Error setting symbol colors: ${err.message || err}`);
 				}
 			}
@@ -316,6 +356,46 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`There are currently ${total} custom symbol color(s) set.`);
 		},
 
+		async logs(this: CommandContext, target: string, room: Room, user: User) {
+			this.checkCan('globalban');
+			
+			try {
+				const logContent = await FS(SYMBOL_COLOR_LOG_PATH).readIfExists();
+				
+				if (!logContent) {
+					return this.sendReply('No symbol color logs found.');
+				}
+				
+				const lines = logContent.trim().split('\n');
+				const numLines = parseInt(target) || 50;
+				
+				if (numLines < 1 || numLines > 500) {
+					return this.errorReply('Please specify a number between 1 and 500.');
+				}
+				
+				// Get the last N lines and reverse to show latest first
+				const recentLines = lines.slice(-numLines).reverse();
+				
+				let output = `<div class="ladder pad"><h2>Symbol Color Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+				output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+				
+				// Add each log entry with a horizontal line separator
+				for (let i = 0; i < recentLines.length; i++) {
+					output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+					if (i < recentLines.length - 1) {
+						output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+					}
+				}
+				
+				output += `</div></div>`;
+				
+				this.sendReply(`|raw|${output}`);
+			} catch (err) {
+				console.error('Error reading symbol color logs:', err);
+				return this.errorReply('Failed to read symbol color logs.');
+			}
+		},
+
 		''(target, room, user) {
 			this.parse('/symbolcolorhelp');
 		},
@@ -334,6 +414,7 @@ export const commands: Chat.ChatCommands = {
 			`<li><code>/symbolcolor view [username]</code> - View details about a user's symbol color</li>` +
 			`<li><code>/symbolcolor search [term]</code> - Search for symbol colors by username</li>` +
 			`<li><code>/symbolcolor count</code> - Show total number of custom symbol colors</li>` +
+			`<li><code>/symbolcolor logs [number]</code> - View recent symbol color log entries (default: 50, max: 500)</li>` +
 			`</ul>` +
 			`<small>All commands except view require @ or higher permission.</small>`
 		);
