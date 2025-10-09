@@ -11302,6 +11302,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     heightm: 4,
     eggGroups: ["Monster"],
   },
+  sparky: {
+    num: -1645,
+    name: "Sparky",
+    types: ["Electric"],
+    baseStats: { hp: 60, atk: 45, def: 70, spa: 45, spd: 90, spe: 95 },
+    abilities: { 0: "Run Away", 1: "Pickup", h: "Volt Absorb" },
+    heightm: 0.4,
+    weightkg: 3.9,
+    color: "White",
+    eggGroups: ["Field", "Fairy"],
+  },
   // End of Custom Pokemon
   bulbasaur: {
     num: 1,
