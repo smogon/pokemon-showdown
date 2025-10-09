@@ -7,8 +7,11 @@
 Impulse.NewsManager.onUserConnect(user);
 */
 
+import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
 import '../utils';
+
+const NEWS_LOG_PATH = 'logs/news.txt';
 
 interface NewsEntry {
   _id?: any; // MongoDB automatically generates this
@@ -21,6 +24,16 @@ interface NewsEntry {
 
 // Get typed MongoDB collection
 const NewsDB = ImpulseDB<NewsEntry>('news');
+
+async function logNewsAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+    await FS(NEWS_LOG_PATH).append(logEntry);
+  } catch (err) {
+    console.error('Error writing to news log:', err);
+  }
+}
 
 class NewsManager {
   static async generateNewsDisplay(): Promise<string[]> {
@@ -167,8 +180,11 @@ export const commands: Chat.ChatCommands = {
       }
       
       await NewsManager.addNews(trimmedTitle, trimmedDesc, user);
+      
+      // Log the action
+      await logNewsAction('ADD', user.name, trimmedTitle, `Description: ${trimmedDesc.substring(0, 100)}${trimmedDesc.length > 100 ? '...' : ''}`);
+      
       this.sendReply(`You have added news with title "${trimmedTitle}"`);
-      this.modlog('ADDNEWS', null, trimmedTitle, { by: user.id });
     },
     
     async update(target, room, user) {
@@ -180,13 +196,20 @@ export const commands: Chat.ChatCommands = {
       const trimmedTitle = title.trim();
       const newDesc = descParts.join(',').trim();
       
+      // Get old description before updating for logging
+      const oldNews = await NewsManager.getNewsByTitle(trimmedTitle);
+      
       const result = await NewsManager.updateNews(trimmedTitle, newDesc);
       if (result?.includes("doesn't exist")) {
         return this.errorReply(result);
       }
       
+      // Log the action
+      const oldDescPreview = oldNews?.desc ? oldNews.desc.substring(0, 50) : 'N/A';
+      const newDescPreview = newDesc.substring(0, 50);
+      await logNewsAction('UPDATE', user.name, trimmedTitle, `Old: ${oldDescPreview}..., New: ${newDescPreview}...`);
+      
       this.sendReply(`You've updated news with title "${trimmedTitle}"`);
-      this.modlog('UPDATENEWS', null, trimmedTitle, { by: user.id });
     },
     
     remove: 'delete',
@@ -195,14 +218,21 @@ export const commands: Chat.ChatCommands = {
       if (!target) return this.parse('/help servernewshelp');
       
       const trimmedTitle = target.trim();
+      
+      // Get news details before deletion for logging
+      const newsItem = await NewsManager.getNewsByTitle(trimmedTitle);
+      
       const result = await NewsManager.deleteNews(trimmedTitle);
       
       if (result?.includes("doesn't exist")) {
         return this.errorReply(result);
       }
       
+      // Log the action
+      const details = newsItem ? `Posted by: ${newsItem.postedBy}, Date: ${newsItem.postTime}` : 'Details unavailable';
+      await logNewsAction('DELETE', user.name, trimmedTitle, details);
+      
       this.sendReply(`You've removed news with title "${trimmedTitle}"`);
-      this.modlog('DELETENEWS', null, trimmedTitle, { by: user.id });
     },
     
     async count(target, room, user) {
@@ -219,8 +249,51 @@ export const commands: Chat.ChatCommands = {
       }
       
       const deletedCount = await NewsManager.deleteOldNews(days);
+      
+      // Log the action
+      await logNewsAction('CLEANUP', user.name, `${deletedCount} items`, `Removed news older than ${days} days`);
+      
       this.sendReply(`Deleted ${deletedCount} news item(s) older than ${days} days.`);
-      this.modlog('CLEANUPNEWS', null, `${deletedCount} items older than ${days} days`, { by: user.id });
+    },
+
+    async logs(target, room, user) {
+      this.checkCan('globalban');
+      
+      try {
+        const logContent = await FS(NEWS_LOG_PATH).readIfExists();
+        
+        if (!logContent) {
+          return this.sendReply('No news logs found.');
+        }
+        
+        const lines = logContent.trim().split('\n');
+        const numLines = parseInt(target) || 50;
+        
+        if (numLines < 1 || numLines > 500) {
+          return this.errorReply('Please specify a number between 1 and 500.');
+        }
+        
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
+        
+        let output = `<div class="ladder pad"><h2>News Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
+        output += `</div></div>`;
+        
+        this.sendReply(`|raw|${output}`);
+      } catch (err) {
+        console.error('Error reading news logs:', err);
+        return this.errorReply('Failed to read news logs.');
+      }
     },
   },
 
@@ -235,8 +308,9 @@ export const commands: Chat.ChatCommands = {
       `<li><code>/servernews delete [title]</code> - Deletes news with [title]</li>` +
       `<li><code>/servernews count</code> - Shows total number of news items</li>` +
       `<li><code>/servernews cleanup [days]</code> - Delete news older than [days] (default: 90)</li>` +
+      `<li><code>/servernews logs [number]</code> - View recent news log entries (default: 50, max: 500)</li>` +
       `</ul>` +
-      `<small>Commands add, update, and delete require @ or higher permission. Command cleanup requires ~ permission.</small>` +
+      `<small>Commands add, update, delete, and logs require @ or higher permission. Command cleanup requires ~ permission.</small>` +
       `</div>`
     );
   },
