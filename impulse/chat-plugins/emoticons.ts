@@ -50,8 +50,11 @@ sendChatMessage(message: string) {
 */
 
 import Autolinker from 'autolinker';
+import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
 import '../utils';
+
+const EMOTICON_LOG_PATH = 'logs/emoticons.txt';
 
 interface EmoticonEntry {
   _id: string; // emoticon name
@@ -85,6 +88,16 @@ let emoticons: { [key: string]: string } = { "spGun": "https://i.ibb.co/78y8mKv/
 let emoteRegex: RegExp = new RegExp("spGun", "g");
 let emoteSize: number = 32;
 Impulse.ignoreEmotes = {} as IgnoreEmotesData;
+
+async function logEmoticonAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+    await FS(EMOTICON_LOG_PATH).append(logEntry);
+  } catch (err) {
+    console.error('Error writing to emoticon log:', err);
+  }
+}
 
 function getEmoteSize(): string {
   return emoteSize.toString();
@@ -247,8 +260,10 @@ export const commands: Chat.ChatCommands = {
 
       await addEmoticon(targetSplit[0], targetSplit[1], user);
 
+      // Log the action
+      await logEmoticonAction('ADD', user.name, targetSplit[0], `URL: ${targetSplit[1]}`);
+
       this.sendReply(`|raw|The emoticon ${Chat.escapeHTML(targetSplit[0])} has been added: <img src="${targetSplit[1]}" width="40" height="40">`);
-      this.modlog('ADDEMOTICON', null, targetSplit[0]);
     },
 
     delete: "del",
@@ -259,28 +274,36 @@ export const commands: Chat.ChatCommands = {
       this.checkCan('globalban');
       if (!target) return this.parse("/emoticonshelp");
       
-      // Check if emoticon exists using atomic exists check
-      const exists = await EmoticonDB.exists({ _id: target });
-      if (!exists) return this.errorReply("That emoticon does not exist.");
+      // Get emoticon details before deletion for logging
+      const emote = await EmoticonDB.findOne({ _id: target });
+      if (!emote) return this.errorReply("That emoticon does not exist.");
 
       await deleteEmoticon(target);
 
+      // Log the action
+      await logEmoticonAction('DELETE', user.name, target, `URL: ${emote.url}, Added by: ${emote.addedBy}`);
+
       this.sendReply("That emoticon has been removed.");
-      this.modlog('DELETEEMOTICON', null, target);
     },
 
-    toggle(target, room, user) {
+    async toggle(target, room, user) {
       room = this.requireRoom();
       this.checkCan('roommod');
       if (!room.disableEmoticons) {
         room.disableEmoticons = true;
         Rooms.global.writeChatRoomData();
-        this.modlog('EMOTES', null, 'disabled emoticons');
+        
+        // Log the action
+        await logEmoticonAction('TOGGLE', user.name, room.roomid, 'Disabled emoticons');
+        
         this.privateModAction(`(${user.name} disabled emoticons in this room.)`);
       } else {
         room.disableEmoticons = false;
         Rooms.global.writeChatRoomData();
-        this.modlog('EMOTES', null, 'enabled emoticons');
+        
+        // Log the action
+        await logEmoticonAction('TOGGLE', user.name, room.roomid, 'Enabled emoticons');
+        
         this.privateModAction(`(${user.name} enabled emoticons in this room.)`);
       }
     },
@@ -346,9 +369,13 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply('Size must be a number between 16 and 256.');
       }
 
+      const oldSize = emoteSize;
       await saveEmoteSize(size);
+      
+      // Log the action
+      await logEmoticonAction('SIZE', user.name, 'Global', `Changed from ${oldSize}px to ${size}px`);
+      
       this.sendReply(`Emoticon size has been set to ${size}px.`);
-      this.modlog('EMOTESIZE', null, `${size}px`);
     },
 
     async list(target, room, user) {
@@ -406,6 +433,46 @@ export const commands: Chat.ChatCommands = {
       this.parse(randomEmote);
     },
 
+    async logs(target, room, user) {
+      this.checkCan('globalban');
+      
+      try {
+        const logContent = await FS(EMOTICON_LOG_PATH).readIfExists();
+        
+        if (!logContent) {
+          return this.sendReply('No emoticon logs found.');
+        }
+        
+        const lines = logContent.trim().split('\n');
+        const numLines = parseInt(target) || 50;
+        
+        if (numLines < 1 || numLines > 500) {
+          return this.errorReply('Please specify a number between 1 and 500.');
+        }
+        
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
+        
+        let output = `<div class="ladder pad"><h2>Emoticon Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
+        output += `</div></div>`;
+        
+        this.sendReply(`|raw|${output}`);
+      } catch (err) {
+        console.error('Error reading emoticon logs:', err);
+        return this.errorReply('Failed to read emoticon logs.');
+      }
+    },
+
 	  help(target, room, user) {
 		  if (!this.runBroadcast()) return;
 		  this.sendReplyBox(
@@ -422,10 +489,11 @@ export const commands: Chat.ChatCommands = {
 			  `<li><code>/emoticon search [query]</code> - Search for emoticons by name</li>` +
 			  `<li><code>/emoticon info [name]</code> - View detailed information about an emoticon</li>` +
 			  `<li><code>/emoticon count</code> - Shows total number of emoticons</li>` +
+			  `<li><code>/emoticon logs [number]</code> - View recent emoticon log entries (default: 50, max: 500)</li>` +
 			  `<li><code>/randemote</code> - Randomly sends an emote from the emoticon list</li>` +
 			  `<li><code>/emoticon help</code> - Displays this help command</li>` +
 			  `</ul>` +
-			  `<small>Commands add, del, toggle, and size require appropriate permissions (@ for add/del/size, # for toggle).</small>` +
+			  `<small>Commands add, del, toggle, size, and logs require appropriate permissions (@ for add/del/size/logs, # for toggle).</small>` +
 			  `</div>`
 		  );
 	  },
