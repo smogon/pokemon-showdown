@@ -12,6 +12,7 @@ import '../utils';
 //const backgroundColor = 'rgba(248, 187, 217, 0.3)';
 const STAFF_ROOM_ID = 'staff';
 const DEFAULT_ICON_SIZE = 24;
+const ICON_LOG_PATH = 'logs/icons.txt';
 
 interface IconData {
   url: string;
@@ -28,6 +29,16 @@ interface IconDocument {
 
 // Get typed MongoDB collection for icons
 const IconsDB = ImpulseDB<IconDocument>('usericons');
+
+async function logIconAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+    await FS(ICON_LOG_PATH).append(logEntry);
+  } catch (err) {
+    console.error('Error writing to icon log:', err);
+  }
+}
 
 async function updateIcons(): Promise<void> {
   try {
@@ -106,6 +117,9 @@ export const commands: Chat.ChatCommands = {
       
       await updateIcons();
       
+      // Log the action
+      await logIconAction('SET', user.name, userId, `URL: ${imageUrl}, Size: ${size}px`);
+      
       const sizeDisplay = size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
       this.sendReply(`|raw|You have given ${Impulse.nameColor(name, true, false)} an icon${sizeDisplay}.`);
       
@@ -139,13 +153,19 @@ export const commands: Chat.ChatCommands = {
         updatedAt: new Date(),
       };
       
-      if (imageUrl) updateFields.url = imageUrl;
+      const logDetails: string[] = [];
+      
+      if (imageUrl) {
+        updateFields.url = imageUrl;
+        logDetails.push(`URL: ${imageUrl}`);
+      }
       if (sizeStr) {
         const parsedSize = parseInt(sizeStr);
         if (isNaN(parsedSize) || parsedSize < 1 || parsedSize > 100) {
           return this.errorReply('Invalid size. Please use a number between 1 and 100 pixels.');
         }
         updateFields.size = parsedSize;
+        logDetails.push(`Size: ${parsedSize}px`);
       }
       
       // Use updateOne() with $set operator
@@ -155,6 +175,9 @@ export const commands: Chat.ChatCommands = {
       );
       
       await updateIcons();
+      
+      // Log the action
+      await logIconAction('UPDATE', user.name, userId, logDetails.join(', '));
       
       // Fetch updated document using findOne() with projection
       const updatedIcon = await IconsDB.findOne(
@@ -187,9 +210,19 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply(`${target} does not have an icon.`);
       }
       
+      // Get icon details before deletion for logging
+      const icon = await IconsDB.findOne(
+        { _id: userId },
+        { projection: { url: 1, size: 1 } }
+      );
+      
       // Use deleteOne() for single document deletion
       await IconsDB.deleteOne({ _id: userId });
       await updateIcons();
+      
+      // Log the action
+      const iconDetails = icon ? `Removed: ${icon.url} (${icon.size || DEFAULT_ICON_SIZE}px)` : 'Icon removed';
+      await logIconAction('DELETE', user.name, userId, iconDetails);
       
       this.sendReply(`You removed ${target}'s icon.`);
       
@@ -313,6 +346,11 @@ export const commands: Chat.ChatCommands = {
       try {
         await IconsDB.insertMany(documents);
         await updateIcons();
+        
+        // Log the bulk action
+        const userList = documents.map(d => d._id).join(', ');
+        await logIconAction('SETMANY', user.name, `${documents.length} users`, `Users: ${userList}`);
+        
         this.sendReply(`|raw|Successfully set ${documents.length} custom icon(s).`);
         
         const staffRoom = Rooms.get(STAFF_ROOM_ID);
@@ -320,6 +358,7 @@ export const commands: Chat.ChatCommands = {
           staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} bulk set ${documents.length} custom icons.</div>`).update();
         }
       } catch (err) {
+        await logIconAction('SETMANY FAILED', user.name, `${documents.length} users`, `Error: ${err}`);
         this.errorReply(`Error setting icons: ${err}`);
       }
     },
@@ -359,6 +398,46 @@ export const commands: Chat.ChatCommands = {
       const total = await IconsDB.countDocuments({});
       this.sendReply(`There are currently ${total} custom icon(s) set.`);
     },
+
+    async logs(target, room, user) {
+      this.checkCan('globalban');
+      
+      try {
+        const logContent = await FS(ICON_LOG_PATH).readIfExists();
+        
+        if (!logContent) {
+          return this.sendReply('No icon logs found.');
+        }
+        
+        const lines = logContent.trim().split('\n');
+        const numLines = parseInt(target) || 50;
+        
+        if (numLines < 1 || numLines > 500) {
+          return this.errorReply('Please specify a number between 1 and 500.');
+        }
+        
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
+        
+        let output = `<div class="ladder pad"><h2>Icon Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
+        output += `</div></div>`;
+        
+        this.sendReply(`|raw|${output}`);
+      } catch (err) {
+        console.error('Error reading icon logs:', err);
+        return this.errorReply('Failed to read icon logs.');
+      }
+    },
   },
   
   iconhelp(target, room, user) {
@@ -374,6 +453,7 @@ export const commands: Chat.ChatCommands = {
       `<li><code>/icon view [username]</code> - View details about a user's icon</li>` +
       `<li><code>/icon search [term]</code> - Search for icons by username</li>` +
       `<li><code>/icon count</code> - Show total number of custom icons</li>` +
+      `<li><code>/icon logs [number]</code> - View recent icon log entries (default: 50, max: 500)</li>` +
       `</ul>` +
       `<small>All commands except view require @ or higher permission.</small>` +
       `</div>`
