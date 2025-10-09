@@ -430,4 +430,4 @@ export const commands: Chat.ChatCommands = {
   },
   
   filemanager: 'fmhelp',
-};
+};								
