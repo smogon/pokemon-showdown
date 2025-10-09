@@ -391,6 +391,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText; } = {
 		"desc": "On switch-in, all opposing Pokémon have their stat changes inverted. Stat boosts become drops, and stat drops become boosts.",
 		"shortDesc": "Opponents' stat changes are inverted on switch-in."
 	},
+	ancienttrungnology: {
+		name: "Ancient Trungnology",
+		shortDesc: "The user's Sp. Atk is tripled.",
+	},
 	// End of Custom Abilities
 	noability: {
 		name: "No Ability",

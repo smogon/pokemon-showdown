@@ -11291,6 +11291,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Green",
     eggGroups: ["Undiscovered"],
   },
+  bigtrungus: {
+    num: -1644,
+    name: "Big Trungus",
+    types: ["Normal", "Ground"],
+    gender: "M",
+    baseStats: { hp: 135, atk: 135, def: 99, spa: 23, spd: 99, spe: 99 },
+    abilities: { 0: "Rock Head", 1: "Cud Chew", H: "Ancient Trungnology" },
+    weightkg: 2500,
+    heightm: 4,
+    eggGroups: ["Monster"],
+  },
   // End of Custom Pokemon
   bulbasaur: {
     num: 1,

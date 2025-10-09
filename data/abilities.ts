@@ -1243,6 +1243,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: -1082,
 	},
+	ancienttrungnology: {
+		name: "Ancient Trungnology",
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.chainModify(3);
+		},
+		flags: {},
+		rating: 5,
+		num: -1083,
+	},
 	// End of Custom Abilities
 	noability: {
 		isNonstandard: "Past",
