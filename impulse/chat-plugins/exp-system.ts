@@ -55,7 +55,6 @@
  */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
-import '../utils';
 
 // EXP System Configuration
 const DEFAULT_EXP = 0;

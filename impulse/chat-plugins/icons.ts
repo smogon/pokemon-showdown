@@ -6,7 +6,6 @@
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
-import '../utils';
 
 // Change this to match your server's userlist color.
 //const backgroundColor = 'rgba(248, 187, 217, 0.3)';

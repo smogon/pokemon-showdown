@@ -5,7 +5,6 @@
 */
 
 import { FS } from '../../lib';
-import '../utils';
 
 const AVATAR_PATH = 'config/avatars/';
 const AVATAR_LOG_PATH = 'logs/avatars.txt';
