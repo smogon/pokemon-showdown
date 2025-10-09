@@ -273,67 +273,6 @@ export const commands: Chat.ChatCommands = {
     }
   },
 
-	async gitlog(target, room, user) {
-    this.canUseConsole();
-    
-    const lines = parseInt(target.trim()) || 10;
-    
-    if (lines > 50) {
-      return this.errorReply('Maximum 50 commits allowed.');
-    }
-    
-    if (lines < 1) {
-      return this.errorReply('Number of commits must be at least 1.');
-    }
-    
-    try {
-      // Find the git repository root from current directory
-      const gitRoot = await findGitRoot('./');
-      if (!gitRoot) {
-        return this.errorReply(`No git repository found in current directory.`);
-      }
-
-      // Get commit log with formatting
-      const { stdout: log } = await execAsync(
-        `git log -${lines} --pretty=format:"%h | %an | %ar | %s" --abbrev-commit`,
-        { cwd: gitRoot }
-      );
-      
-      if (!log.trim()) {
-        return this.sendReply('No commits found in this repository.');
-      }
-      
-      // Get current branch for context
-      const { stdout: branch } = await execAsync('git branch --show-current', { cwd: gitRoot });
-      
-      let resultMessage = '<div class="infobox">';
-      resultMessage += '<strong>[GIT LOG]</strong><br>';
-      resultMessage += `<strong>Repository Root:</strong> ${Chat.escapeHTML(gitRoot)}<br>`;
-      resultMessage += `<strong>Branch:</strong> ${Chat.escapeHTML(branch.trim())}<br>`;
-      resultMessage += `<strong>Showing Last ${lines} Commits:</strong><br><br>`;
-      
-      resultMessage += '<details open><summary><strong>Commit History (Click to collapse)</strong></summary>';
-      resultMessage += '<div style="overflow-x: auto;">';
-      resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; font-size: 12px; white-space: pre; overflow-x: auto;">';
-      resultMessage += '<span style="color: #4ec9b0; font-weight: bold;">Hash    | Author          | Time        | Message</span>\n';
-      resultMessage += '─'.repeat(100) + '\n';
-      resultMessage += Chat.escapeHTML(log);
-      resultMessage += '</pre>';
-      resultMessage += '</div>';
-      resultMessage += '</details>';
-      
-      resultMessage += '<br><small>💡 Use <code>/gitshow [hash]</code> to see details of a specific commit (coming soon)</small>';
-      resultMessage += '</div>';
-      
-      this.sendReplyBox(resultMessage);
-      notifyStaff("Git log viewed", gitRoot, user, `${lines} commits`);
-      
-    } catch (err: any) {
-      this.errorReply('Git log failed: ' + err.message);
-      notifyStaff("Git log failed", './', user, err.message);
-    }
-  },
-
   async gitdiff(target, room, user) {
     this.canUseConsole();
     
@@ -535,7 +474,6 @@ export const commands: Chat.ChatCommands = {
       `<ul>` +
       `<li><code>/gitpull</code> - Pull latest changes from remote repository</li>` +
       `<li><code>/gitstatus</code> - Show git status, branch, remote, and latest commit</li>` +
-      `<li><code>/gitlog [number]</code> - Show last N commits (default 10, max 50)</li>` +
       `<li><code>/gitdiff [file]</code> - Show uncommitted changes (all files or specific file)</li>` +
       `<li><code>/gitstash [action]</code> - Manage stashed changes (save/pop/list/show/drop/clear)</li>` +
       `</ul>` +
@@ -546,8 +484,7 @@ export const commands: Chat.ChatCommands = {
       `2. <code>/gitdiff</code> - Review your uncommitted changes<br>` +
       `3. <code>/gitstash save</code> - Stash any local changes (if needed)<br>` +
       `4. <code>/gitpull</code> - Pull latest from remote<br>` +
-      `5. <code>/gitlog 5</code> - Review what was pulled<br>` +
-      `6. <code>/gitstash pop</code> - Restore your stashed changes (if needed)<br><br>` +
+      `5. <code>/gitstash pop</code> - Restore your stashed changes (if needed)<br><br>` +
       `<strong>Stash Actions:</strong><br>` +
       `• <code>/gitstash save</code> - Temporarily save uncommitted changes<br>` +
       `• <code>/gitstash list</code> - View saved stashes<br>` +
@@ -556,7 +493,6 @@ export const commands: Chat.ChatCommands = {
       `• <code>/gitstash drop</code> - Delete latest stash<br>` +
       `• <code>/gitstash clear</code> - Delete all stashes<br><br>` +
       `<strong>Examples:</strong><br>` +
-      `• <code>/gitlog 20</code> - Show last 20 commits<br>` +
       `• <code>/gitdiff config/config.ts</code> - Show changes in specific file<br>` +
       `• <code>/gitdiff</code> - Show all uncommitted changes<br><br>` +
       `<strong>If merge conflicts occur:</strong><br>` +
