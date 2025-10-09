@@ -742,7 +742,8 @@ export class CommandContext extends MessageContext {
 					}
 					curUser.sendTo(this.room, `${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|/html ${emoticons}`);
 	  			}
-				this.room.log.log.push(`${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|${message}`);
+				// CHANGED: Store HTML in log so rejoining users see emoticons
+				this.room.log.log.push(`${(this.room.type === 'chat' ? `|c:|${(~~(Date.now() / 1000))}|` : `|c|`)}${this.user.getIdentity(this.room)}|/html ${emoticons}`);
 				this.room.game?.onLogMessage?.(message, this.user);
 			}
 			else {
