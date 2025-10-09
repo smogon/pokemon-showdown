@@ -395,7 +395,7 @@ export const commands: Chat.ChatCommands = {
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Avatar Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
-        output += `<div style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 11px;">`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
         // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
