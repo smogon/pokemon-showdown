@@ -1,11 +1,36 @@
-/*
-* Pokemon Showdown
-* Experience System
-* Instructions:
-* Add this code in server/chat.ts
-* In parse function//Output the message
-if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
-*/
+/**
+ * Pokemon Showdown - Experience System
+ * 
+ * A comprehensive leveling and progression system for Pokemon Showdown servers.
+ * Users earn experience points (EXP) through chat activity and progress through levels.
+ * 
+ * Features:
+ * - Automatic EXP earning through chat messages (with cooldown)
+ * - Progressive leveling system with exponential scaling
+ * - Leaderboard system showing top users
+ * - Double EXP events with configurable duration
+ * - Admin moderation tools (give/take/reset EXP)
+ * - Level-up notifications with popup alerts
+ * - MongoDB-based persistent storage
+ * 
+ * Integration:
+ * This system is automatically integrated with the chat system.
+ * See server/chat.ts line 693 for the integration point:
+ *   if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
+ * 
+ * Database Collections:
+ * - expdata: Stores user EXP and level data
+ * - expconfig: Stores system configuration (double EXP settings)
+ * 
+ * Configuration:
+ * - DEFAULT_EXP: Starting experience (0)
+ * - MIN_LEVEL_EXP: Experience required for level 1 (10)
+ * - MULTIPLIER: Level difficulty scaling factor (1.5)
+ * - EXP_COOLDOWN: Cooldown between EXP gains in ms (30000 = 30 seconds)
+ * 
+ * @author Prince Sky
+ * @license MIT
+ */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
 import '../utils';
@@ -37,24 +62,40 @@ interface CooldownData {
   [userid: string]: number;
 }
 
-// MongoDB Document Interfaces
+/**
+ * MongoDB Document Interfaces
+ */
+
+/** User experience data document */
 interface ExpDocument {
   _id: string; // userid
-  exp: number;
-  level: number;
-  lastUpdated: Date;
+  exp: number; // Total experience points
+  level: number; // Current level (derived from exp)
+  lastUpdated: Date; // Last time exp was modified
 }
 
+/** System configuration document */
 interface ExpConfigDocument {
-  _id: string; // 'config'
-  doubleExp: boolean;
-  doubleExpEndTime: number | null;
-  lastUpdated: Date;
+  _id: string; // Always 'config'
+  doubleExp: boolean; // Whether double EXP is currently active
+  doubleExpEndTime: number | null; // Timestamp when double EXP ends (null if indefinite)
+  lastUpdated: Date; // Last time config was modified
+}
+
+/** EXP history tracking document */
+interface ExpHistoryDocument {
+  _id?: string;
+  userid: string;
+  amount: number; // Amount of EXP added/removed (negative for removal)
+  reason: string;
+  by: string; // Staff member who performed the action
+  timestamp: Date;
 }
 
 // Get typed MongoDB collections
 const ExpDB = ImpulseDB<ExpDocument>('expdata');
 const ExpConfigDB = ImpulseDB<ExpConfigDocument>('expconfig');
+const ExpHistoryDB = ImpulseDB<ExpHistoryDocument>('exphistory');
 
 export class ExpSystem {
   private static cooldowns: CooldownData = {};
@@ -350,6 +391,56 @@ export class ExpSystem {
     // Use MongoDB sort and limit
     const docs = await ExpDB.find({}, { sort: { exp: -1 }, limit });
     return docs.map(doc => [doc._id, doc.exp]);
+  }
+
+  /**
+   * Get user's rank on the leaderboard
+   * @param userid - User ID to get rank for
+   * @returns Rank number (1-based, 1 = highest EXP)
+   */
+  static async getUserRank(userid: string): Promise<number> {
+    const id = toID(userid);
+    const userDoc = await ExpDB.findOne({ _id: id });
+    if (!userDoc) return 0;
+    
+    // Count how many users have more exp
+    const higherRanked = await ExpDB.countDocuments({ exp: { $gt: userDoc.exp } });
+    return higherRanked + 1;
+  }
+
+  /**
+   * Log EXP change to history
+   * @param userid - User who received/lost EXP
+   * @param amount - Amount of EXP (negative for removal)
+   * @param reason - Reason for the change
+   * @param by - Staff member who performed the action
+   */
+  static async logExpChange(userid: string, amount: number, reason: string, by: string): Promise<void> {
+    try {
+      await ExpHistoryDB.insertOne({
+        userid: toID(userid),
+        amount,
+        reason,
+        by: toID(by),
+        timestamp: new Date()
+      });
+    } catch (error) {
+      console.error('[ExpSystem] Error logging exp change:', error);
+    }
+  }
+
+  /**
+   * Get user's EXP history
+   * @param userid - User ID to get history for
+   * @param limit - Maximum number of entries to return
+   * @returns Array of history entries
+   */
+  static async getExpHistory(userid: string, limit: number = 10): Promise<ExpHistoryDocument[]> {
+    const id = toID(userid);
+    return await ExpHistoryDB.find(
+      { userid: id },
+      { sort: { timestamp: -1 }, limit }
+    );
   }
 
   static getLevel(exp: number): number {
