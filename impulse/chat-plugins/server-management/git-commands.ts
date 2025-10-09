@@ -9,7 +9,7 @@
 
 import { exec } from "child_process";
 import { promisify } from "util";
-import { FS } from "../../lib";
+import { FS } from "../../../lib";
 import '../utils';
 
 const execAsync = promisify(exec);
