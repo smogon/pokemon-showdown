@@ -136,68 +136,87 @@ export class ExpSystem {
       return await this.readExp(id);
     }
 
-    // Get current exp and level for level-up detection
-    const currentDoc = await ExpDB.findOne({ _id: id });
-    const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
-    const currentLevel = this.getLevel(currentExp);
+    // Get old level for notification comparison
+    const oldDoc = await ExpDB.findOne({ _id: id });
+    const oldLevel = oldDoc ? oldDoc.level : 0;
     
     const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
-    const newExp = currentExp + gainedAmount;
-    const newLevel = this.getLevel(newExp);
     
-    // Use atomic findOneAndUpdate with upsert for race-condition safety
-    // This ensures the operation is atomic even with concurrent requests
-    await ExpDB.findOneAndUpdate(
+    // Atomic increment - MongoDB handles concurrent $inc operations correctly
+    const result = await ExpDB.findOneAndUpdate(
       { _id: id },
       { 
         $inc: { exp: gainedAmount },
-        $set: { level: newLevel, lastUpdated: new Date() },
-        $setOnInsert: { _id: id }
+        $setOnInsert: { _id: id, level: 0 },
+        $set: { lastUpdated: new Date() }
       },
       { upsert: true, returnDocument: 'after' }
     );
+    
+    if (!result) throw new Error('Failed to update exp');
+    
+    // Calculate level from the ACTUAL final exp value (after atomic update)
+    const actualLevel = this.getLevel(result.exp);
+    
+    // Update level if it changed
+    if (actualLevel !== result.level) {
+      await ExpDB.updateOne(
+        { _id: id },
+        { $set: { level: actualLevel } }
+      );
+      
+      // Notify if leveled up
+      if (actualLevel > oldLevel) {
+        await this.notifyLevelUp(id, actualLevel, oldLevel);
+      }
+    }
     
     if (!by) {
       this.cooldowns[id] = Date.now();
     }
     
-    // Check if user leveled up
-    if (newLevel > currentLevel) {
-      await this.notifyLevelUp(id, newLevel, currentLevel);
-    }
-    
-    return newExp;
+    return result.exp; // Return actual value from DB
   }
 
   static async addExpRewards(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
     const id = toID(userid);
     
-    // Get current exp and level for level-up detection
-    const currentDoc = await ExpDB.findOne({ _id: id });
-    const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
-    const currentLevel = this.getLevel(currentExp);
+    // Get old level for notification comparison
+    const oldDoc = await ExpDB.findOne({ _id: id });
+    const oldLevel = oldDoc ? oldDoc.level : 0;
     
     const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
-    const newExp = currentExp + gainedAmount;
-    const newLevel = this.getLevel(newExp);
     
-    // Use atomic operation
-    await ExpDB.findOneAndUpdate(
+    // Atomic increment - MongoDB handles concurrent $inc operations correctly
+    const result = await ExpDB.findOneAndUpdate(
       { _id: id },
       { 
         $inc: { exp: gainedAmount },
-        $set: { level: newLevel, lastUpdated: new Date() },
-        $setOnInsert: { _id: id }
+        $setOnInsert: { _id: id, level: 0 },
+        $set: { lastUpdated: new Date() }
       },
       { upsert: true, returnDocument: 'after' }
     );
     
-    // Check if user leveled up
-    if (newLevel > currentLevel) {
-      await this.notifyLevelUp(id, newLevel, currentLevel);
+    if (!result) throw new Error('Failed to update exp');
+    
+    // Calculate level from the ACTUAL final exp value (after atomic update)
+    const actualLevel = this.getLevel(result.exp);
+    
+    // Update level if it changed
+    if (actualLevel !== result.level) {
+      await ExpDB.updateOne(
+        { _id: id },
+        { $set: { level: actualLevel } }
+      );
+      
+      // Notify if leveled up
+      if (actualLevel > oldLevel) {
+        await this.notifyLevelUp(id, actualLevel, oldLevel);
+      }
     }
     
-    return newExp;
+    return result.exp; // Return actual value from DB
   }
 
   // New method to handle level-up notifications
