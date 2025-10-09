@@ -438,14 +438,6 @@ export class ExpSystem {
     }
 
     room.add(`|html|${message}`).update();
-    
-    if (user) {
-      const status = DOUBLE_EXP ? 'enabled' : 'disabled';
-      const duration = DOUBLE_EXP_END_TIME 
-        ? `until ${formatTime(new Date(DOUBLE_EXP_END_TIME))} UTC`
-        : 'No duration specified';
-      //this.modlog('TOGGLEDOUBLEEXP', null, `${status} - ${duration}`, { by: user.id });
-    }
   }
 
   static async grantExp() {
@@ -1007,8 +999,6 @@ export const commands: Chat.ChatCommands = {
         `${Impulse.nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
         `New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
       );
-      
-      this.modlog('GIVEEXP', targetUser, `${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|You received <b>${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
@@ -1047,8 +1037,6 @@ export const commands: Chat.ChatCommands = {
         `${Impulse.nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
         `New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
       );
-      
-      this.modlog('TAKEEXP', targetUser, `${amount} ${EXP_UNIT}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${EXP_UNIT}</b> from you.<br>` +
@@ -1073,8 +1061,6 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s EXP to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
       );
-      
-      this.modlog('RESETEXP', targetUser, `${DEFAULT_EXP} ${EXP_UNIT}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|Your ${EXP_UNIT} has been reset to <b>${DEFAULT_EXP}</b> (Level 0) by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
@@ -1091,8 +1077,6 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `All user EXP has been reset to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
       );
-      
-      this.modlog('RESETEXPALL', null, `all EXP to ${DEFAULT_EXP} ${EXP_UNIT}`, { by: user.id, reason });
       if (room) {
         room.add(
           `|html|<center><div class="broadcast-blue">` +
@@ -1164,11 +1148,21 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/exp resetall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP} (requires ~)</li>` +
         `<li><code>/exp toggledouble [duration]</code> - Toggle double EXP with optional duration (e.g., "2 hours", "1 day", "30 minutes"). Use "off" to disable (requires @)</li>` +
         `</ul>` +
-        `<small style="opacity: 0.8;">Note: All staff actions are logged to EXP history and modlog.</small>` +
+        `<small style="opacity: 0.8;">Note: All staff actions are logged to EXP history.<br>` +
+        `<b>Aliases:</b> /explevel, /expstats, /exphistory, /expladder, /expgive, /exptake, /expreset</small>` +
         `</div>`
       );
     },
   },
+
+  // Short aliases for EXP commands
+  explevel: 'exp level',
+  expstats: 'exp stats',
+  exphistory: 'exp history',
+  expladder: 'exp ladder',
+  expgive: 'exp give',
+  exptake: 'exp take',
+  expreset: 'exp reset',
 
   currency: {
     '': 'balance',
@@ -1268,8 +1262,6 @@ export const commands: Chat.ChatCommands = {
         `${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CurrencySystem.getCurrencyName()} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
         `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
       );
-      
-      this.modlog('GIVECURRENCY', targetUser, `${amount} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|You received <b>${amount} ${CurrencySystem.getCurrencyName()}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
@@ -1311,8 +1303,6 @@ export const commands: Chat.ChatCommands = {
         `${Impulse.nameColor(user.name, true, true)} took ${amount} ${CurrencySystem.getCurrencyName()} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
         `New Balance: ${newCurrency} ${CurrencySystem.getCurrencyName()}`
       );
-      
-      this.modlog('TAKECURRENCY', targetUser, `${amount} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CurrencySystem.getCurrencyName()}</b> from you.<br>` +
@@ -1337,8 +1327,6 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s ${CurrencySystem.getCurrencyName()} to ${DEFAULT_CURRENCY} (${reason}).`
       );
-      
-      this.modlog('RESETCURRENCY', targetUser, `${DEFAULT_CURRENCY} ${CurrencySystem.getCurrencyName()}`, { by: user.id, reason });
       if (targetUser.connected) {
         targetUser.popup(
           `|html|Your ${CurrencySystem.getCurrencyName()} has been reset to <b>${DEFAULT_CURRENCY}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
@@ -1355,8 +1343,6 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `All user ${CurrencySystem.getCurrencyName()} has been reset to ${DEFAULT_CURRENCY} (${reason}).`
       );
-      
-      this.modlog('RESETCURRENCYALL', null, `all ${CurrencySystem.getCurrencyName()} to ${DEFAULT_CURRENCY}`, { by: user.id, reason });
       if (room) {
         room.add(
           `|html|<center><div class="broadcast-blue">` +
@@ -1383,8 +1369,6 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `${Impulse.nameColor(user.name, true, true)} changed the currency name from "${oldName}" to "${newName}".`
       );
-      
-      this.modlog('SETCURRENCYNAME', null, `from "${oldName}" to "${newName}"`, { by: user.id });
       if (room) {
         room.add(
           `|html|<div class="broadcast-green">` +
@@ -1419,9 +1403,30 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/currency resetall [reason]</code> - Reset all users' currency to ${DEFAULT_CURRENCY} (requires ~)</li>` +
         `<li><code>/currency setname [new name]</code> - Change the currency name (requires ~)</li>` +
         `</ul>` +
-        `<small style="opacity: 0.8;">Current currency name: <b>${CurrencySystem.getCurrencyName()}</b> | All staff actions are logged to history and modlog.</small>` +
+        `<small style="opacity: 0.8;">Current currency name: <b>${CurrencySystem.getCurrencyName()}</b> | All staff actions are logged to history.<br>` +
+        `<b>Aliases:</b> /bal, /balance, /money, /givemoney, /takemoney, /currencystats, /currencyhistory, /currencyladder, /setcurrencyname</small>` +
         `</div>`
       );
     },
   },
+
+  // Short aliases for currency commands
+  bal: 'currency balance',
+  balance: 'currency balance',
+  money: 'currency balance',
+  coins: 'currency balance',
+  currencystats: 'currency stats',
+  moneystats: 'currency stats',
+  currencyhistory: 'currency history',
+  moneyhistory: 'currency history',
+  currencyladder: 'currency ladder',
+  moneyladder: 'currency ladder',
+  balladder: 'currency ladder',
+  givemoney: 'currency give',
+  givecurrency: 'currency give',
+  takemoney: 'currency take',
+  takecurrency: 'currency take',
+  resetmoney: 'currency reset',
+  resetcurrency: 'currency reset',
+  setcurrencyname: 'currency setname',
 };
