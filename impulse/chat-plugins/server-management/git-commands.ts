@@ -273,7 +273,7 @@ export const commands: Chat.ChatCommands = {
     }
   },
 
-  async gitlog(target, room, user) {
+	async gitlog(target, room, user) {
     this.canUseConsole();
     
     const lines = parseInt(target.trim()) || 10;
@@ -313,11 +313,13 @@ export const commands: Chat.ChatCommands = {
       resultMessage += `<strong>Showing Last ${lines} Commits:</strong><br><br>`;
       
       resultMessage += '<details open><summary><strong>Commit History (Click to collapse)</strong></summary>';
-      resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px;">';
-      resultMessage += '<strong style="color: #4ec9b0;">Hash   | Author          | Time        | Message</strong>\n';
-      resultMessage += '─'.repeat(80) + '\n';
+      resultMessage += '<div style="overflow-x: auto;">';
+      resultMessage += '<pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; font-size: 12px; white-space: pre; overflow-x: auto;">';
+      resultMessage += '<span style="color: #4ec9b0; font-weight: bold;">Hash    | Author          | Time        | Message</span>\n';
+      resultMessage += '─'.repeat(100) + '\n';
       resultMessage += Chat.escapeHTML(log);
       resultMessage += '</pre>';
+      resultMessage += '</div>';
       resultMessage += '</details>';
       
       resultMessage += '<br><small>💡 Use <code>/gitshow [hash]</code> to see details of a specific commit (coming soon)</small>';
