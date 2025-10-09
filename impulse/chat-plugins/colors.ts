@@ -101,22 +101,37 @@ function HSLToRGB(H: number, S: number, L: number): RGB {
   return { R: R1 + m, G: G1 + m, B: B1 + m };
 }
 
-function updateColor(): void {
-  FS('impulse-db/customcolors.json').writeUpdate(() => JSON.stringify(customColors));
-  let newCss: string = '/* COLORS START */\n';
-  for (const name in customColors) {
-    newCss += generateCSS(name, customColors[name]);
-  }
-  newCss += '/* COLORS END */\n';
+async function updateColor(): Promise<void> {
+  try {
+    // Write custom colors to JSON
+    FS('impulse-db/customcolors.json').writeUpdate(() => JSON.stringify(customColors));
+    
+    // Generate new CSS
+    let newCss: string = '/* COLORS START */\n';
+    for (const name in customColors) {
+      newCss += generateCSS(name, customColors[name]);
+    }
+    newCss += '/* COLORS END */\n';
 
-  const file: string[] = FS('config/custom.css').readIfExistsSync().split('\n');
-  const start: number = file.indexOf('/* COLORS START */');
-  const end: number = file.indexOf('/* COLORS END */');
-  if (start !== -1 && end !== -1) {
-    file.splice(start, (end - start) + 1);
+    // Read existing CSS file
+    const fileContent = await FS('config/custom.css').readIfExists();
+    const file: string[] = fileContent ? fileContent.split('\n') : [];
+    
+    // Remove old color section if it exists
+    const start: number = file.indexOf('/* COLORS START */');
+    const end: number = file.indexOf('/* COLORS END */');
+    if (start !== -1 && end !== -1) {
+      file.splice(start, (end - start) + 1);
+    }
+    
+    // Write updated CSS
+    FS('config/custom.css').writeUpdate(() => file.join('\n') + newCss);
+    
+    // Trigger CSS reload on the server
+    Impulse.reloadCSS();
+  } catch (e: any) {
+    console.error('Error updating colors:', e);
   }
-  FS('config/custom.css').writeUpdate(() => file.join('\n') + newCss);
-  Impulse.reloadCSS();
 }
 
 function generateCSS(name: string, color: string): string {
@@ -126,36 +141,48 @@ function generateCSS(name: string, color: string): string {
   return css;
 }
 
+function validateHexColor(color: string): boolean {
+  // Check if color is a valid hex format (#XXX or #XXXXXX)
+  return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
+}
+
 export const commands: Chat.ChatCommands = {
   customcolor: {
     ''(target, room, user) {
       this.parse(`/customcolorhelp`);
     },
     
-    set(target: string, room: ChatRoom, user: User): void {
+    async set(target: string, room: ChatRoom, user: User): Promise<void> {
       this.checkCan('globalban');
       const targets: string[] = target.split(',').map(t => t.trim());
       if (!targets[1]) return this.parse('/customcolorhelp');
+      
       const targetId = toID(targets[0]);
       if (targetId.length > 19) return this.errorReply("Usernames are not this long...");
-      this.sendReply(`|raw|You have given <b><font color="${targets[1]}">${Chat.escapeHTML(targets[0])}</font></b> a custom color.`);
-      this.modlog(`CUSTOMCOLOR`, targets[0], `gave color ${targets[1]}`);
-      customColors[targetId] = targets[1];
-      updateColor();
+      
+      const color = targets[1];
+      if (!validateHexColor(color)) {
+        return this.errorReply("Invalid hex color format. Use #RGB or #RRGGBB format.");
+      }
+      
+      this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(targets[0])}</font></b> a custom color.`);
+      this.modlog(`CUSTOMCOLOR`, targets[0], `gave color ${color}`);
+      customColors[targetId] = color;
+      await updateColor();
 
       const staffRoom = Rooms.get(STAFF_ROOM_ID);
       if (staffRoom) {
-        staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} set custom color for ${Impulse.nameColor(targets[0], true, false)} to ${targets[1]}.</div>`).update();
+        staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} set custom color for ${Impulse.nameColor(targets[0], true, false)} to ${color}.</div>`).update();
       }
     },
 
-    delete(target, room, user) {
+    async delete(target, room, user): Promise<void> {
       this.checkCan('globalban');
       if (!target) return this.parse('/customcolorhelp');
       const targetId: string = toID(target);
       if (!customColors[targetId]) return this.errorReply(`/customcolor - ${target} does not have a custom color.`);
       delete customColors[targetId];
-      updateColor();
+      await updateColor();
       this.sendReply(`You removed ${target}'s custom color.`);
       this.modlog(`CUSTOMCOLOR`, target, `removed custom color`);
       const targetUser: User | null = Users.get(target);
@@ -173,12 +200,18 @@ export const commands: Chat.ChatCommands = {
       if (!this.runBroadcast()) return;
       const targets: string[] = target.split(',').map(t => t.trim());
       if (!targets[1]) return this.parse('/customcolorhelp');
-      return this.sendReplyBox(`<b><font size="3" color="${targets[1]}">${Chat.escapeHTML(targets[0])}</font></b>`);
+      
+      const color = targets[1];
+      if (!validateHexColor(color)) {
+        return this.errorReply("Invalid hex color format. Use #RGB or #RRGGBB format.");
+      }
+      
+      return this.sendReplyBox(`<b><font size="3" color="${color}">${Chat.escapeHTML(targets[0])}</font></b>`);
     },
 
-    reload(target: string, room: ChatRoom, user: User): void {
+    async reload(target: string, room: ChatRoom, user: User): Promise<void> {
       this.checkCan('globalban');
-      updateColor();
+      await updateColor();
       this.privateModAction(`(${user.name} has reloaded custom colours.)`);
     },
   },
@@ -201,8 +234,8 @@ export const commands: Chat.ChatCommands = {
    '!hex': true,
    hex(target, room, user) {
       if (!this.runBroadcast()) return;
-		const targetUser: string = target ? target : user.name;
-		const color: string = nameColor(targetUser);
-		this.sendReplyBox(`The hex code of ${Impulse.nameColor(targetUser, true, true)} is: <font color="${color}"><b>${color}</b></font>`);
-	},
+      const targetUser: string = target ? target : user.name;
+      const color: string = nameColor(targetUser);
+      this.sendReplyBox(`The hex code of ${Impulse.nameColor(targetUser, true, true)} is: <font color="${color}"><b>${color}</b></font>`);
+   },
 };
