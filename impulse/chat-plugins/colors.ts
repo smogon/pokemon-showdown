@@ -19,6 +19,8 @@ interface CustomColors {
   [userid: string]: string;
 }
 
+const COLOR_LOG_PATH = 'logs/colors.txt';
+
 // Usage: Impulse.reloadCSS();
 function reloadCSS(): void {
   const cssPath = 'impulse'; // Default value if Config.serverid is not provided.
@@ -47,6 +49,16 @@ try {
 
 const colorCache: Record<string, string> = {};
 const STAFF_ROOM_ID = 'staff';
+
+async function logColorAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+    await FS(COLOR_LOG_PATH).append(logEntry);
+  } catch (err) {
+    console.error('Error writing to color log:', err);
+  }
+}
 
 function nameColor(name: string): string {
   const id = toID(name);
@@ -165,10 +177,13 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply("Invalid hex color format. Use #RGB or #RRGGBB format.");
       }
       
-      this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(targets[0])}</font></b> a custom color.`);
-      this.modlog(`CUSTOMCOLOR`, targets[0], `gave color ${color}`);
       customColors[targetId] = color;
       await updateColor();
+      
+      // Log the action
+      await logColorAction('SET', user.name, targetId, `Color: ${color}`);
+      
+      this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(targets[0])}</font></b> a custom color.`);
 
       const staffRoom = Rooms.get(STAFF_ROOM_ID);
       if (staffRoom) {
@@ -181,10 +196,15 @@ export const commands: Chat.ChatCommands = {
       if (!target) return this.parse('/customcolorhelp');
       const targetId: string = toID(target);
       if (!customColors[targetId]) return this.errorReply(`/customcolor - ${target} does not have a custom color.`);
+      
+      const oldColor = customColors[targetId];
       delete customColors[targetId];
       await updateColor();
+      
+      // Log the action
+      await logColorAction('DELETE', user.name, targetId, `Removed color: ${oldColor}`);
+      
       this.sendReply(`You removed ${target}'s custom color.`);
-      this.modlog(`CUSTOMCOLOR`, target, `removed custom color`);
       const targetUser: User | null = Users.get(target);
       if (targetUser && targetUser.connected) {
         targetUser.popup(`${user.name} removed your custom color.`);
@@ -212,7 +232,51 @@ export const commands: Chat.ChatCommands = {
     async reload(target: string, room: ChatRoom, user: User): Promise<void> {
       this.checkCan('globalban');
       await updateColor();
+      
+      // Log the reload action
+      await logColorAction('RELOAD', user.name, 'N/A', 'CSS reloaded');
+      
       this.privateModAction(`(${user.name} has reloaded custom colours.)`);
+    },
+
+    async logs(target, room, user) {
+      this.checkCan('globalban');
+      
+      try {
+        const logContent = await FS(COLOR_LOG_PATH).readIfExists();
+        
+        if (!logContent) {
+          return this.sendReply('No color logs found.');
+        }
+        
+        const lines = logContent.trim().split('\n');
+        const numLines = parseInt(target) || 50;
+        
+        if (numLines < 1 || numLines > 500) {
+          return this.errorReply('Please specify a number between 1 and 500.');
+        }
+        
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
+        
+        let output = `<div class="ladder pad"><h2>Color Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
+        output += `</div></div>`;
+        
+        this.sendReply(`|raw|${output}`);
+      } catch (err) {
+        console.error('Error reading color logs:', err);
+        return this.errorReply('Failed to read color logs.');
+      }
     },
   },
 
@@ -225,6 +289,7 @@ export const commands: Chat.ChatCommands = {
          `<li><code>/customcolor delete [user]</code> - Deletes a user's custom color</li>` +
          `<li><code>/customcolor reload</code> - Reloads colors</li>` +
          `<li><code>/customcolor preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color</li>` +
+         `<li><code>/customcolor logs [number]</code> - View recent color log entries (default: 50, max: 500)</li>` +
          `</ul>` +
          `<small>All commands except preview require @ or higher permission.</small>` +
          `</div>`
