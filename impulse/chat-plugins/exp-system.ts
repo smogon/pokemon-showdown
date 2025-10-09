@@ -35,6 +35,7 @@
 import { ImpulseDB } from '../../impulse/impulse-db';
 import '../utils';
 
+// EXP System Configuration
 const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
 Impulse.expUnit = EXP_UNIT;
@@ -44,6 +45,14 @@ const MULTIPLIER = 1.5;
 let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
 const EXP_COOLDOWN = 30000;
+
+// Currency System Configuration
+const DEFAULT_CURRENCY = 0;
+let CURRENCY_UNIT = `Coins`; // Easily changeable currency name
+Impulse.currencyUnit = CURRENCY_UNIT;
+
+const CURRENCY_EARN_RATE = 5; // How much currency earned per chat message (with cooldown)
+const CURRENCY_COOLDOWN = 60000; // 1 minute cooldown for earning currency
 
 const formatTime = (date: Date) => {
   return date.toISOString().replace('T', ' ').slice(0, 19);
@@ -92,10 +101,37 @@ interface ExpHistoryDocument {
   timestamp: Date;
 }
 
+/** User currency data document */
+interface CurrencyDocument {
+  _id: string; // userid
+  currency: number; // Total currency amount
+  lastUpdated: Date; // Last time currency was modified
+}
+
+/** Currency history tracking document */
+interface CurrencyHistoryDocument {
+  _id?: string;
+  userid: string;
+  amount: number; // Amount of currency added/removed (negative for removal)
+  reason: string;
+  by: string; // Staff member who performed the action or 'system' for auto-earn
+  timestamp: Date;
+}
+
+/** Currency configuration document */
+interface CurrencyConfigDocument {
+  _id: string; // Always 'config'
+  currencyName: string; // The display name for the currency
+  lastUpdated: Date;
+}
+
 // Get typed MongoDB collections
 const ExpDB = ImpulseDB<ExpDocument>('expdata');
 const ExpConfigDB = ImpulseDB<ExpConfigDocument>('expconfig');
 const ExpHistoryDB = ImpulseDB<ExpHistoryDocument>('exphistory');
+const CurrencyDB = ImpulseDB<CurrencyDocument>('currencydata');
+const CurrencyHistoryDB = ImpulseDB<CurrencyHistoryDocument>('currencyhistory');
+const CurrencyConfigDB = ImpulseDB<CurrencyConfigDocument>('currencyconfig');
 
 export class ExpSystem {
   private static cooldowns: CooldownData = {};
@@ -548,6 +584,238 @@ ExpSystem.init();
 
 Impulse.ExpSystem = ExpSystem;
 
+/**
+ * Currency System Class
+ * Manages user currency (coins, credits, etc.)
+ */
+export class CurrencySystem {
+  private static currencyCooldowns: CooldownData = {};
+
+  /**
+   * Load currency configuration from database
+   */
+  private static async loadCurrencyConfig(): Promise<void> {
+    try {
+      const config = await CurrencyConfigDB.findOne({ _id: 'config' });
+      if (config) {
+        CURRENCY_UNIT = config.currencyName;
+        Impulse.currencyUnit = CURRENCY_UNIT;
+      }
+    } catch (error) {
+      console.error('[CurrencySystem] Error loading currency config:', error);
+    }
+  }
+
+  /**
+   * Save currency configuration to database
+   */
+  private static async saveCurrencyConfig(): Promise<void> {
+    try {
+      await CurrencyConfigDB.upsert(
+        { _id: 'config' },
+        {
+          _id: 'config',
+          currencyName: CURRENCY_UNIT,
+          lastUpdated: new Date(),
+        }
+      );
+    } catch (error) {
+      console.error('[CurrencySystem] Error saving currency config:', error);
+    }
+  }
+
+  /**
+   * Check if user is on cooldown for earning currency
+   */
+  private static isOnCooldown(userid: string): boolean {
+    const lastEarn = this.currencyCooldowns[userid] || 0;
+    return Date.now() - lastEarn < CURRENCY_COOLDOWN;
+  }
+
+  /**
+   * Read a user's current currency amount
+   */
+  static async readCurrency(userid: string): Promise<number> {
+    const id = toID(userid);
+    const doc = await CurrencyDB.findOne({ _id: id });
+    return doc ? doc.currency : DEFAULT_CURRENCY;
+  }
+
+  /**
+   * Write (set) a user's currency to a specific amount
+   */
+  static async writeCurrency(userid: string, amount: number): Promise<void> {
+    const id = toID(userid);
+    await CurrencyDB.upsert(
+      { _id: id },
+      {
+        _id: id,
+        currency: amount,
+        lastUpdated: new Date(),
+      }
+    );
+  }
+
+  /**
+   * Check if a user has at least a certain amount of currency
+   */
+  static async hasCurrency(userid: string, amount: number): Promise<boolean> {
+    const id = toID(userid);
+    const doc = await CurrencyDB.findOne({ _id: id, currency: { $gte: amount } });
+    return doc !== null;
+  }
+
+  /**
+   * Add currency to a user (with optional cooldown)
+   * @param userid - User ID
+   * @param amount - Amount of currency to add
+   * @param reason - Reason for the addition
+   * @param by - Staff member ID or 'system' for auto-earn (bypasses cooldown if not system)
+   * @returns Final currency amount
+   */
+  static async addCurrency(userid: string, amount: number, reason: string = 'Auto-earn', by: string = 'system'): Promise<number> {
+    const id = toID(userid);
+    
+    // Check cooldown only for system auto-earn
+    if (by === 'system' && this.isOnCooldown(id)) {
+      return await this.readCurrency(id);
+    }
+
+    // Atomic increment
+    const result = await CurrencyDB.findOneAndUpdate(
+      { _id: id },
+      { 
+        $inc: { currency: amount },
+        $setOnInsert: { _id: id },
+        $set: { lastUpdated: new Date() }
+      },
+      { upsert: true, returnDocument: 'after' }
+    );
+    
+    if (!result) throw new Error('Failed to update currency');
+    
+    // Update cooldown
+    if (by === 'system') {
+      this.currencyCooldowns[id] = Date.now();
+    }
+    
+    return result.currency;
+  }
+
+  /**
+   * Remove currency from a user
+   * @param userid - User ID
+   * @param amount - Amount to remove
+   * @param reason - Reason for removal
+   * @param by - Staff member ID or 'system'
+   * @returns Final currency amount (or current amount if insufficient funds)
+   */
+  static async takeCurrency(userid: string, amount: number, reason: string = 'Purchase', by: string = 'system'): Promise<number> {
+    const id = toID(userid);
+    
+    // Atomic decrement only if user has enough
+    const result = await CurrencyDB.findOneAndUpdate(
+      { _id: id, currency: { $gte: amount } },
+      { 
+        $inc: { currency: -amount },
+        $set: { lastUpdated: new Date() }
+      },
+      { returnDocument: 'after' }
+    );
+    
+    if (result) {
+      return result.currency;
+    }
+    
+    // User doesn't have enough currency
+    const doc = await CurrencyDB.findOne({ _id: id });
+    return doc ? doc.currency : DEFAULT_CURRENCY;
+  }
+
+  /**
+   * Log currency change to history
+   */
+  static async logCurrencyChange(userid: string, amount: number, reason: string, by: string): Promise<void> {
+    try {
+      await CurrencyHistoryDB.insertOne({
+        userid: toID(userid),
+        amount,
+        reason,
+        by: toID(by),
+        timestamp: new Date()
+      });
+    } catch (error) {
+      console.error('[CurrencySystem] Error logging currency change:', error);
+    }
+  }
+
+  /**
+   * Get user's currency history
+   */
+  static async getCurrencyHistory(userid: string, limit: number = 10): Promise<CurrencyHistoryDocument[]> {
+    const id = toID(userid);
+    return await CurrencyHistoryDB.find(
+      { userid: id },
+      { sort: { timestamp: -1 }, limit }
+    );
+  }
+
+  /**
+   * Get richest users by currency
+   */
+  static async getRichestUsers(limit: number = 100): Promise<[string, number][]> {
+    const docs = await CurrencyDB.find({}, { sort: { currency: -1 }, limit });
+    return docs.map(doc => [doc._id, doc.currency]);
+  }
+
+  /**
+   * Get user's rank on the currency leaderboard
+   */
+  static async getUserRank(userid: string): Promise<number> {
+    const id = toID(userid);
+    const userDoc = await CurrencyDB.findOne({ _id: id });
+    if (!userDoc) return 0;
+    
+    const higherRanked = await CurrencyDB.countDocuments({ currency: { $gt: userDoc.currency } });
+    return higherRanked + 1;
+  }
+
+  /**
+   * Reset all users' currency to 0
+   */
+  static async resetAllCurrency(): Promise<void> {
+    await CurrencyDB.deleteMany({});
+  }
+
+  /**
+   * Set the currency name
+   */
+  static async setCurrencyName(name: string): Promise<void> {
+    CURRENCY_UNIT = name;
+    Impulse.currencyUnit = name;
+    await this.saveCurrencyConfig();
+  }
+
+  /**
+   * Get the current currency name
+   */
+  static getCurrencyName(): string {
+    return CURRENCY_UNIT;
+  }
+
+  /**
+   * Initialize the currency system
+   */
+  static async init(): Promise<void> {
+    await this.loadCurrencyConfig();
+  }
+}
+
+// Initialize the CurrencySystem
+CurrencySystem.init();
+
+Impulse.CurrencySystem = CurrencySystem;
+
 export const pages: Chat.PageTable = {
   async expladder(args, user) {
     const richest = await ExpSystem.getRichestUsers(100);
@@ -570,6 +838,28 @@ export const pages: Chat.PageTable = {
     const output = Impulse.generateThemedTable(
       `Exp Ladder`,
       ['Rank', 'User', 'EXP', 'Level', 'Next Level At'],
+      data
+    );
+    return `${output}`;
+  },
+
+  async currencyladder(args, user) {
+    const richest = await CurrencySystem.getRichestUsers(100);
+    if (!richest.length) {
+      return `<div class="pad"><h2>No users have any ${CURRENCY_UNIT} yet.</h2></div>`;
+    }
+
+    const data = richest.map(([userid, currency], index) => {
+      return [
+        (index + 1).toString(),
+        Impulse.nameColor(userid, true, true),
+        `${currency} ${CURRENCY_UNIT}`,
+      ];
+    });
+
+    const output = Impulse.generateThemedTable(
+      `${CURRENCY_UNIT} Ladder`,
+      ['Rank', 'User', CURRENCY_UNIT],
       data
     );
     return `${output}`;
