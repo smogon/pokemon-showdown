@@ -374,7 +374,7 @@ export const commands: Chat.ChatCommands = {
       this.sendReply(`There are currently ${count} custom avatar(s) set.`);
     },
 
-    async logs(target, room, user) {
+	  async logs(target, room, user) {
       this.checkCan('bypassall');
       
       try {
@@ -391,12 +391,20 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines
-        const recentLines = lines.slice(-numLines);
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
         
-        let output = `<div class="ladder pad"><h2>Avatar Logs (Last ${recentLines.length} entries)</h2>`;
-        output += `<div style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 11px; white-space: pre-wrap;">`;
-        output += Chat.escapeHTML(recentLines.join('\n'));
+        let output = `<div class="ladder pad"><h2>Avatar Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
         output += `</div></div>`;
         
         this.sendReply(`|raw|${output}`);
