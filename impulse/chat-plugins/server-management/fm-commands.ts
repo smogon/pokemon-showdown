@@ -9,10 +9,10 @@
 */
 
 import * as https from "https";
-import { FS } from "../../lib";
+import { FS } from "../../../lib";
 import { exec } from "child_process";
 import { promisify } from "util";
-import '../utils';
+import '../../../impulse/utils';
 
 const execAsync = promisify(exec);
 const GITHUB_API_URL = "https://api.github.com/gists";
