@@ -551,9 +551,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			// Blanket Ability Bans
 			'Arena Trap', 'Moody', 'Shadow Tag',
 			// Items
-			'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+			'Bright Powder', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Razor Fang', 'Smooth Rock',
 			// Moves
-			'Shed Tail', 'Last Respects',
+			'Baton Pass', 'Shed Tail', 'Last Respects',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
