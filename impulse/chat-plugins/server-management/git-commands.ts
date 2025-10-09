@@ -18,18 +18,36 @@ function notifyStaff(action: string, file: string, user: User, info = "") {
   const staffRoom = Rooms.get("staff");
   if (!staffRoom) return;
 
-  const safeFile = Chat.escapeHTML(file);
-  const safeUser = Chat.escapeHTML(user.id);
+  let message = "";
+  
+  if (action === "Git pull executed - Already up to date") {
+    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(file)} - Already up to date.`;
+  } else if (action === "Git pull executed - Pulled new changes") {
+    message = `<username>${user.name}</username> pulled new changes from ${Chat.escapeHTML(file)}.`;
+  } else if (action === "Git pull executed - Pull completed") {
+    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(file)}.`;
+  } else if (action === "Git pull FAILED - MERGE CONFLICT") {
+    message = `<username>${user.name}</username> git pull FAILED on ${Chat.escapeHTML(file)} - MERGE CONFLICT (${Chat.escapeHTML(info)}).`;
+  } else if (action === "Git pull failed") {
+    message = `<username>${user.name}</username> git pull failed on ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
+  } else if (action === "Git status checked") {
+    message = `<username>${user.name}</username> checked git status on ${Chat.escapeHTML(file)}.`;
+  } else if (action === "Git status failed") {
+    message = `<username>${user.name}</username> git status failed. Error: ${Chat.escapeHTML(info)}`;
+  } else if (action === "Git diff viewed") {
+    message = `<username>${user.name}</username> viewed git diff on ${Chat.escapeHTML(file)} (${Chat.escapeHTML(info)}).`;
+  } else if (action === "Git diff failed") {
+    message = `<username>${user.name}</username> git diff failed. Error: ${Chat.escapeHTML(info)}`;
+  } else if (action.startsWith("Git stash ")) {
+    const stashAction = action.replace("Git stash ", "");
+    if (stashAction.includes("failed")) {
+      message = `<username>${user.name}</username> git stash ${stashAction}. Error: ${Chat.escapeHTML(info)}`;
+    } else {
+      message = `<username>${user.name}</username> executed git stash ${stashAction} on ${Chat.escapeHTML(file)}.`;
+    }
+  }
 
-  const message =
-    '<div class="infobox">' +
-    '<strong>[GIT MANAGEMENT]</strong> ' + action + '<br>' +
-    '<strong>Location:</strong> ' + safeFile + '<br>' +
-    '<strong>User:</strong> <username>' + safeUser + '</username><br>' +
-    (info ? Chat.escapeHTML(info) : '') +
-    '</div>';
-
-  staffRoom.addRaw(message).update();
+  staffRoom.addRaw(`<div class="infobox">${message}</div>`).update();
 }
 
 async function findGitRoot(startPath: string): Promise<string | null> {
@@ -159,9 +177,9 @@ export const commands: Chat.ChatCommands = {
       
       this.sendReplyBox(resultMessage);
       
-      const logMessage = isAlreadyUpToDate ? 'Already up to date' : 
-                        hasChanges ? `Pulled new changes` : 'Pull completed';
-      notifyStaff(`Git pull executed - ${logMessage}`, gitRoot, user);
+      const logMessage = isAlreadyUpToDate ? 'Git pull executed - Already up to date' : 
+                        hasChanges ? `Git pull executed - Pulled new changes` : 'Git pull executed - Pull completed';
+      notifyStaff(logMessage, gitRoot, user);
       
     } catch (err: any) {
       const errorMsg = err.message || err.toString();
