@@ -9,7 +9,6 @@ Impulse.NewsManager.onUserConnect(user);
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
-import '../utils';
 
 const NEWS_LOG_PATH = 'logs/news.txt';
 

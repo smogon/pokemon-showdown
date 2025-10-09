@@ -6,7 +6,6 @@
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
-import '../utils';
 
 const STAFF_ROOM_ID = 'staff';
 const SYMBOL_COLOR_LOG_PATH = 'logs/symbolcolors.txt';
