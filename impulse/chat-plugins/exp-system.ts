@@ -134,6 +134,11 @@ export class ExpSystem {
     return Date.now() - lastExp < EXP_COOLDOWN;
   }
 
+  /**
+   * Write (set) a user's EXP to a specific amount
+   * @param userid - User ID
+   * @param amount - Amount of EXP to set
+   */
   static async writeExp(userid: string, amount: number): Promise<void> {
     const id = toID(userid);
     const level = this.getLevel(amount);
@@ -150,12 +155,23 @@ export class ExpSystem {
     );
   }
 
+  /**
+   * Read a user's current EXP
+   * @param userid - User ID
+   * @returns Current EXP amount (defaults to 0 if user not found)
+   */
   static async readExp(userid: string): Promise<number> {
     const id = toID(userid);
     const doc = await ExpDB.findOne({ _id: id });
     return doc ? doc.exp : DEFAULT_EXP;
   }
 
+  /**
+   * Check if a user has at least a certain amount of EXP
+   * @param userid - User ID
+   * @param amount - Minimum EXP amount to check for
+   * @returns True if user has at least the specified amount
+   */
   static async hasExp(userid: string, amount: number): Promise<boolean> {
     const id = toID(userid);
     // More efficient: query directly instead of fetching full document
@@ -163,6 +179,12 @@ export class ExpSystem {
     return doc !== null;
   }
 
+  /**
+   * Check if a user has at least a certain level
+   * @param userid - User ID
+   * @param level - Minimum level to check for
+   * @returns True if user has at least the specified level
+   */
   static async hasLevel(userid: string, level: number): Promise<boolean> {
     const id = toID(userid);
     // More efficient: query directly instead of fetching and calculating
@@ -170,6 +192,15 @@ export class ExpSystem {
     return doc !== null;
   }
   
+  /**
+   * Add EXP to a user (with cooldown protection)
+   * Uses atomic MongoDB operations to handle concurrent requests safely.
+   * @param userid - User ID
+   * @param amount - Amount of EXP to add (will be doubled if DOUBLE_EXP is active)
+   * @param reason - Optional reason for the EXP gain
+   * @param by - Optional staff member ID (bypasses cooldown if provided)
+   * @returns Final EXP amount after addition
+   */
   static async addExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
     const id = toID(userid);
     
@@ -219,6 +250,15 @@ export class ExpSystem {
     return result.exp; // Return actual value from DB
   }
 
+  /**
+   * Add EXP rewards to a user (no cooldown)
+   * Similar to addExp but intended for reward systems.
+   * @param userid - User ID
+   * @param amount - Amount of EXP to add (will be doubled if DOUBLE_EXP is active)
+   * @param reason - Optional reason for the reward
+   * @param by - Optional staff member ID
+   * @returns Final EXP amount after addition
+   */
   static async addExpRewards(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
     const id = toID(userid);
     
@@ -260,7 +300,13 @@ export class ExpSystem {
     return result.exp; // Return actual value from DB
   }
 
-  // New method to handle level-up notifications
+  /**
+   * Send level-up notification to user
+   * Displays a popup with the new level and optional rewards.
+   * @param userid - User ID
+   * @param newLevel - The level the user just reached
+   * @param oldLevel - The user's previous level
+   */
   static async notifyLevelUp(userid: string, newLevel: number, oldLevel: number): Promise<void> {
     const user = Users.get(userid);
     if (!user || !user.connected) return;
@@ -352,6 +398,15 @@ export class ExpSystem {
     });
   }
 
+  /**
+   * Remove EXP from a user
+   * Uses atomic operations and only removes if user has enough EXP.
+   * @param userid - User ID
+   * @param amount - Amount of EXP to remove
+   * @param reason - Optional reason for removal
+   * @param by - Optional staff member ID
+   * @returns Final EXP amount after removal
+   */
   static async takeExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
     const id = toID(userid);
     
@@ -382,6 +437,10 @@ export class ExpSystem {
     return doc ? doc.exp : DEFAULT_EXP;
   }
 
+  /**
+   * Reset all users' EXP to 0
+   * WARNING: This deletes all EXP data. Use with extreme caution.
+   */
   static async resetAllExp(): Promise<void> {
     // Efficient bulk delete operation
     await ExpDB.deleteMany({});
@@ -443,6 +502,12 @@ export class ExpSystem {
     );
   }
 
+  /**
+   * Calculate level from EXP amount
+   * Uses exponential scaling based on MULTIPLIER constant.
+   * @param exp - Experience points
+   * @returns Calculated level (0 if below MIN_LEVEL_EXP)
+   */
   static getLevel(exp: number): number {
     if (exp < MIN_LEVEL_EXP) return 0;
     let level = 1;
@@ -455,6 +520,11 @@ export class ExpSystem {
     return level - 1;
   }
 
+  /**
+   * Calculate total EXP required to reach a specific level
+   * @param level - Target level
+   * @returns Total EXP needed to reach that level
+   */
   static getExpForNextLevel(level: number): number {
     if (level <= 0) return MIN_LEVEL_EXP;
     let totalExp = MIN_LEVEL_EXP;
@@ -464,7 +534,10 @@ export class ExpSystem {
     return totalExp;
   }
 
-  // Initialize config on startup
+  /**
+   * Initialize the EXP system on server startup
+   * Loads configuration from database.
+   */
   static async init(): Promise<void> {
     await this.loadExpConfig();
   }
@@ -523,6 +596,75 @@ export const commands: Chat.ChatCommands = {
       );
     },
 
+    async stats(target, room, user) {
+      if (!this.runBroadcast()) return;
+      const userid = target ? toID(target) : user.id;
+      const targetName = target || user.name;
+      
+      const currentExp = await ExpSystem.readExp(userid);
+      const currentLevel = ExpSystem.getLevel(currentExp);
+      const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
+      const expNeeded = nextLevelExp - currentExp;
+      const expProgress = currentExp - ExpSystem.getExpForNextLevel(currentLevel);
+      const expForCurrentLevel = nextLevelExp - ExpSystem.getExpForNextLevel(currentLevel);
+      const progressPercent = Math.floor((expProgress / expForCurrentLevel) * 100);
+      
+      // Get rank and total users
+      const rank = await ExpSystem.getUserRank(userid);
+      const totalUsers = await ExpDB.countDocuments({});
+      const percentile = rank > 0 ? Math.floor((1 - rank / totalUsers) * 100) : 0;
+      
+      this.sendReplyBox(
+        `<div class="ladder" style="max-width: 400px;">` +
+        `<h3 style="margin: 5px 0;">${Impulse.nameColor(targetName, true, true)}'s Statistics</h3>` +
+        `<table style="width: 100%; border-collapse: collapse;">` +
+        `<tr><td style="padding: 4px;"><b>Level:</b></td><td style="padding: 4px; text-align: right;">${currentLevel}</td></tr>` +
+        `<tr><td style="padding: 4px;"><b>Total EXP:</b></td><td style="padding: 4px; text-align: right;">${currentExp} ${EXP_UNIT}</td></tr>` +
+        `<tr><td style="padding: 4px;"><b>Progress:</b></td><td style="padding: 4px; text-align: right;">${progressPercent}% to Level ${currentLevel + 1}</td></tr>` +
+        `<tr><td style="padding: 4px;"><b>EXP Needed:</b></td><td style="padding: 4px; text-align: right;">${expNeeded} ${EXP_UNIT}</td></tr>` +
+        (rank > 0 ? 
+          `<tr><td style="padding: 4px;"><b>Rank:</b></td><td style="padding: 4px; text-align: right;">#${rank} / ${totalUsers}</td></tr>` +
+          `<tr><td style="padding: 4px;"><b>Percentile:</b></td><td style="padding: 4px; text-align: right;">Top ${percentile}%</td></tr>` 
+          : ''
+        ) +
+        `</table>` +
+        `</div>`
+      );
+    },
+
+    async history(target, room, user) {
+      const userid = target ? toID(target) : user.id;
+      const targetName = target || user.name;
+      
+      const history = await ExpSystem.getExpHistory(userid, 15);
+      
+      if (!history.length) {
+        return this.sendReply(`No EXP history found for ${targetName}.`);
+      }
+      
+      let output = `<div class="ladder pad" style="max-width: 600px;">`;
+      output += `<h3>${Impulse.nameColor(targetName, true, true)}'s EXP History (Last ${history.length} changes)</h3>`;
+      output += `<div style="max-height: 300px; overflow-y: auto;">`;
+      output += `<table style="width: 100%; border-collapse: collapse;">`;
+      output += `<tr style="background: #f0f0f0;"><th>Date</th><th>Amount</th><th>Reason</th><th>By</th></tr>`;
+      
+      for (const entry of history) {
+        const date = new Date(entry.timestamp).toLocaleString();
+        const amountColor = entry.amount >= 0 ? 'green' : 'red';
+        const amountText = entry.amount >= 0 ? `+${entry.amount}` : entry.amount;
+        
+        output += `<tr style="border-bottom: 1px solid #ddd;">`;
+        output += `<td style="padding: 5px; font-size: 0.9em;">${date}</td>`;
+        output += `<td style="padding: 5px; color: ${amountColor}; font-weight: bold;">${amountText} ${EXP_UNIT}</td>`;
+        output += `<td style="padding: 5px;">${Chat.escapeHTML(entry.reason)}</td>`;
+        output += `<td style="padding: 5px;">${Impulse.nameColor(entry.by, false, true)}</td>`;
+        output += `</tr>`;
+      }
+      
+      output += `</table></div></div>`;
+      this.sendReply(`|raw|${output}`);
+    },
+
     async give(target, room, user) {
       this.checkCan('globalban');
       if (!target) return this.sendReply(`Usage: /exp give [user], [amount], [reason]`);
@@ -544,6 +686,10 @@ export const commands: Chat.ChatCommands = {
       const newExp = await ExpSystem.readExp(targetUser.id);
       const newLevel = ExpSystem.getLevel(newExp);
       const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
+      
+      // Log the change to history
+      const actualAmount = DOUBLE_EXP ? amount * 2 : amount;
+      await ExpSystem.logExpChange(targetUser.id, actualAmount, reason, user.id);
       
       this.sendReplyBox(
         `${Impulse.nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
@@ -581,6 +727,9 @@ export const commands: Chat.ChatCommands = {
       const newExp = await ExpSystem.readExp(targetUser.id);
       const newLevel = ExpSystem.getLevel(newExp);
       const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
+      
+      // Log the change to history (negative amount)
+      await ExpSystem.logExpChange(targetUser.id, -amount, reason, user.id);
       
       this.sendReplyBox(
         `${Impulse.nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
@@ -688,16 +837,22 @@ export const commands: Chat.ChatCommands = {
       if (!this.runBroadcast()) return;
       this.sendReplyBox(
         `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, false)}</center></b><br>` +
-        `<ul>` +
-        `<li><code>/exp level [user]</code> (Or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level</li>` +
-        `<li><code>/exp give [user], [amount], [reason]</code> - Give a specified amount of EXP to a user</li>` +
-        `<li><code>/exp take [user], [amount], [reason]</code> - Take a specified amount of EXP from a user</li>` +
-        `<li><code>/exp reset [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}</li>` +
-        `<li><code>/exp resetall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP}</li>` +
+        `<h4 style="margin: 8px 0;">User Commands:</h4>` +
+        `<ul style="margin: 5px 0;">` +
+        `<li><code>/exp level [user]</code> (or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level</li>` +
+        `<li><code>/exp stats [user]</code> - View detailed statistics including rank, percentile, and progress to next level</li>` +
+        `<li><code>/exp history [user]</code> - View your EXP change history (admin actions, rewards, etc.)</li>` +
         `<li><code>/exp ladder</code> - View the top 100 users with the most EXP and their levels</li>` +
-        `<li><code>/exp toggledouble [duration]</code> - Toggle double EXP with optional duration (e.g., "2 hours", "1 day", "30 minutes"). Use "off" to disable</li>` +
         `</ul>` +
-        `<small>Commands give, take, reset, and toggledouble require @ or higher permission. Command resetall requires ~ permission.</small>` +
+        `<h4 style="margin: 8px 0;">Staff Commands:</h4>` +
+        `<ul style="margin: 5px 0;">` +
+        `<li><code>/exp give [user], [amount], [reason]</code> - Give a specified amount of EXP to a user (requires @)</li>` +
+        `<li><code>/exp take [user], [amount], [reason]</code> - Take a specified amount of EXP from a user (requires @)</li>` +
+        `<li><code>/exp reset [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP} (requires @)</li>` +
+        `<li><code>/exp resetall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP} (requires ~)</li>` +
+        `<li><code>/exp toggledouble [duration]</code> - Toggle double EXP with optional duration (e.g., "2 hours", "1 day", "30 minutes"). Use "off" to disable (requires @)</li>` +
+        `</ul>` +
+        `<small style="opacity: 0.8;">Note: All staff actions are logged to EXP history and modlog.</small>` +
         `</div>`
       );
     },
