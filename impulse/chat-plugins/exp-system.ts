@@ -31,7 +31,7 @@ const CONFIG = {
   MAX_LEVEL: 1000,
   REWARD_COOLDOWN_DAYS: 30, // 30 days between reward requests
   LEVELUP_BONUS_PERCENTAGE: 0.05, // 5% of required exp as bonus
-  MAX_LEVELUP_BONUS_LEVEL: 50, // Only give bonus up to level 50
+  MAX_LEVELUP_BONUS_LEVEL: 15, // Only give bonus up to level 50
 } as const;
 
 // Reward configuration - easily customizable
