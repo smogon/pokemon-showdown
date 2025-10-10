@@ -97,18 +97,18 @@ export const commands: Chat.ChatCommands = {
       // Get current commit before pull (for comparison)
       let beforeCommit = '';
       try {
-        const { stdout: before } = await execAsync('git rev-parse HEAD', { cwd: gitRoot });
+        const { stdout: before } = await execAsync('sudo git rev-parse HEAD', { cwd: gitRoot });
         beforeCommit = before.trim();
       } catch {
         // Ignore if we can't get it
       }
       
-      const { stdout, stderr } = await execAsync('git pull', { cwd: gitRoot });
+      const { stdout, stderr } = await execAsync('sudo git pull', { cwd: gitRoot });
       
       // Get current commit after pull
       let afterCommit = '';
       try {
-        const { stdout: after } = await execAsync('git rev-parse HEAD', { cwd: gitRoot });
+        const { stdout: after } = await execAsync('sudo git rev-parse HEAD', { cwd: gitRoot });
         afterCommit = after.trim();
       } catch {
         // Ignore if we can't get it
@@ -145,7 +145,7 @@ export const commands: Chat.ChatCommands = {
         try {
           // Get the commit log of what was pulled
           const { stdout: log } = await execAsync(
-            `git log ${beforeCommit}..${afterCommit} --oneline --decorate`,
+            `sudo git log ${beforeCommit}..${afterCommit} --oneline --decorate`,
             { cwd: gitRoot }
           );
           if (log.trim()) {
@@ -162,7 +162,7 @@ export const commands: Chat.ChatCommands = {
         // Get file change statistics
         try {
           const { stdout: diffStat } = await execAsync(
-            `git diff --stat ${beforeCommit}..${afterCommit}`,
+            `sudo git diff --stat ${beforeCommit}..${afterCommit}`,
             { cwd: gitRoot }
           );
           if (diffStat.trim()) {
@@ -195,7 +195,7 @@ export const commands: Chat.ChatCommands = {
         try {
           const gitRoot = await findGitRoot('./');
           if (gitRoot) {
-            const { stdout: conflictList } = await execAsync('git diff --name-only --diff-filter=U', { cwd: gitRoot });
+            const { stdout: conflictList } = await execAsync('sudo git diff --name-only --diff-filter=U', { cwd: gitRoot });
             conflictedFiles = conflictList.trim().split('\n').filter(Boolean);
           }
         } catch {
@@ -218,7 +218,7 @@ export const commands: Chat.ChatCommands = {
         
         conflictMessage += '<strong>To Resolve:</strong><br>';
         conflictMessage += '1. <strong>Option A - Abort the merge:</strong><br>';
-        conflictMessage += '   Run manually: <code>git merge --abort</code><br>';
+        conflictMessage += '   Run manually: <code>sudo git merge --abort</code><br>';
         conflictMessage += '   This will cancel the pull and restore your previous state.<br><br>';
         
         conflictMessage += '2. <strong>Option B - Fix conflicts manually:</strong><br>';
@@ -258,18 +258,18 @@ export const commands: Chat.ChatCommands = {
       }
 
       // Get git status
-      const { stdout: status } = await execAsync('git status', { cwd: gitRoot });
+      const { stdout: status } = await execAsync('sudo git status', { cwd: gitRoot });
       
       // Get current branch
-      const { stdout: branch } = await execAsync('git branch --show-current', { cwd: gitRoot });
+      const { stdout: branch } = await execAsync('sudo git branch --show-current', { cwd: gitRoot });
       
       // Get latest commit
-      const { stdout: commit } = await execAsync('git log -1 --oneline', { cwd: gitRoot });
+      const { stdout: commit } = await execAsync('sudo git log -1 --oneline', { cwd: gitRoot });
       
       // Get remote URL
       let remoteUrl = 'Not configured';
       try {
-        const { stdout: remote } = await execAsync('git remote get-url origin', { cwd: gitRoot });
+        const { stdout: remote } = await execAsync('sudo git remote get-url origin', { cwd: gitRoot });
         remoteUrl = remote.trim();
       } catch {
         // Remote not configured, use default message
@@ -308,7 +308,7 @@ export const commands: Chat.ChatCommands = {
       }
 
       // Build the git diff command
-      let command = 'git diff';
+      let command = 'sudo git diff';
       if (filePath) {
         command += ` -- ${filePath}`;
       }
@@ -324,7 +324,7 @@ export const commands: Chat.ChatCommands = {
       }
       
       // Get stats about the changes
-      let statsCommand = 'git diff --stat';
+      let statsCommand = 'sudo git diff --stat';
       if (filePath) {
         statsCommand += ` -- ${filePath}`;
       }
@@ -393,30 +393,30 @@ export const commands: Chat.ChatCommands = {
       
       switch (action) {
         case 'save':
-          command = 'git stash push -u';
+          command = 'sudo git stash push -u';
           actionTitle = 'STASH SAVE';
           this.sendReply('Stashing changes...');
           break;
         case 'pop':
-          command = 'git stash pop';
+          command = 'sudo git stash pop';
           actionTitle = 'STASH POP';
           this.sendReply('Applying and removing latest stash...');
           break;
         case 'list':
-          command = 'git stash list';
+          command = 'sudo git stash list';
           actionTitle = 'STASH LIST';
           break;
         case 'show':
-          command = 'git stash show -p';
+          command = 'sudo git stash show -p';
           actionTitle = 'STASH SHOW';
           break;
         case 'drop':
-          command = 'git stash drop';
+          command = 'sudo git stash drop';
           actionTitle = 'STASH DROP';
           this.sendReply('Dropping latest stash...');
           break;
         case 'clear':
-          command = 'git stash clear';
+          command = 'sudo git stash clear';
           actionTitle = 'STASH CLEAR';
           this.sendReply('Clearing all stashes...');
           break;
@@ -518,7 +518,7 @@ export const commands: Chat.ChatCommands = {
       `• <code>/gitdiff config/config.ts</code> - Show changes in specific file<br>` +
       `• <code>/gitdiff</code> - Show all uncommitted changes<br><br>` +
       `<strong>If merge conflicts occur:</strong><br>` +
-      `• Abort: Run <code>git merge --abort</code> manually in terminal<br>` +
+      `• Abort: Run <code>sudo git merge --abort</code> manually in terminal<br>` +
       `• Or resolve conflicts manually and commit via terminal<br><br>` +
       `<small><strong>Note:</strong> For committing and pushing changes, use git commands directly in your VPS terminal to avoid conflicts.</small>` +
       `</div>`
