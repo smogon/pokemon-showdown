@@ -413,24 +413,26 @@ export const commands: Chat.ChatCommands = {
       }
     },
   },
+  ca: 'customavatar',
    
   customavatarhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
       `<div><b><center>Custom Avatar Commands</center></b><br>` +
       `<ul>` +
-      `<li><code>/customavatar set [username], [image url]</code> - Sets a user's personal avatar</li>` +
-      `<li><code>/customavatar delete [username]</code> - Removes a user's personal avatar</li>` +
-      `<li><code>/customavatar list [page]</code> - Lists all custom avatars with pagination</li>` +
-      `<li><code>/customavatar view [username]</code> - View details about a user's custom avatar</li>` +
-      `<li><code>/customavatar search [term]</code> - Search for custom avatars by username</li>` +
-      `<li><code>/customavatar count</code> - Show total number of custom avatars</li>` +
-      `<li><code>/customavatar logs [number]</code> - View recent avatar log entries (default: 50, max: 500)</li>` +
+      `<li><code>/customavatar set [username], [image url]</code> OR <code>/ca set [username], [image url]</code> - Sets a user's personal avatar</li>` +
+      `<li><code>/customavatar delete [username]</code> OR <code>/ca delete [username]</code> - Removes a user's personal avatar</li>` +
+      `<li><code>/customavatar list [page]</code> OR <code>/ca list [page]</code> - Lists all custom avatars with pagination</li>` +
+      `<li><code>/customavatar view [username]</code> OR <code>/ca view [username]</code> - View details about a user's custom avatar</li>` +
+      `<li><code>/customavatar search [term]</code> OR <code>/ca search [term]</code> - Search for custom avatars by username</li>` +
+      `<li><code>/customavatar count</code> OR <code>/ca count</code> - Show total number of custom avatars</li>` +
+      `<li><code>/customavatar logs [number]</code> OR <code>/ca logs [number]</code> - View recent avatar log entries (default: 50, max: 500)</li>` +
       `</ul>` +
       `<small>All commands except view require ~ or higher permission.</small>` +
       `<br><small>Note: This integrates with the main avatar system. Users can view their avatars with <code>/avatars</code>.</small>` +
       `<br><small>Maximum file size: 5MB. Supported formats: JPG, PNG, GIF.</small>` +
       `</div>`
     );
-  },	
+  },
+  cahelp: 'customavatarhelp',
 };
