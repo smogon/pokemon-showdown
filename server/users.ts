@@ -405,7 +405,6 @@ export class User extends Chat.MessageContext {
 		blockInvites: boolean,
 		punishment: boolean,
 		lock: boolean,
-		news: boolean,
 	};
 
 	lastMessage: string;
@@ -508,7 +507,6 @@ export class User extends Chat.MessageContext {
 			blockInvites: false,
 			punishment: false,
 			lock: false,
-			news: false,
 		};
 
 		this.autoconfirmed = '';
@@ -876,7 +874,6 @@ export class User extends Chat.MessageContext {
 			Rooms.global.checkAutojoin(user);
 			Rooms.global.rejoinGames(user);
 			Chat.loginfilter(user, this, userType);
-			Impulse.NewsManager.onUserConnect(user);
 			return true;
 		}
 
@@ -893,7 +890,6 @@ export class User extends Chat.MessageContext {
 		Rooms.global.checkAutojoin(this);
 		Rooms.global.rejoinGames(this);
 		Chat.loginfilter(this, null, userType);
-		Impulse.NewsManager.onUserConnect(this);
 		return true;
 	}
 	forceRename(name: string, registered: boolean, isForceRenamed = false) {

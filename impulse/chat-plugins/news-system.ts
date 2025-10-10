@@ -11,6 +11,7 @@
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
 import { Users } from '../../server/users';
+import { User } from '../../server/users';
 
 const NEWS_LOG_PATH = 'logs/news.txt';
 
@@ -55,7 +56,7 @@ class NewsManager {
   
   static async onUserConnect(user: User): Promise<void> {
     // Prevent showing news twice to the same user
-    if (user.notified.news) {
+    if (user.newsShown) {
       return;
     }
     
@@ -67,7 +68,7 @@ class NewsManager {
     const news = await this.generateNewsDisplay();
     if (news.length) {
       user.send(`|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
-      user.notified.news = true;
+      user.newsShown = true;
     }
   }
   
@@ -88,7 +89,7 @@ class NewsManager {
     // Reset news flag for all connected users so they can see the new news
     for (const connectedUser of Users.users.values()) {
       if (connectedUser.connected) {
-        connectedUser.notified.news = false;
+        connectedUser.newsShown = false;
       }
     }
     
@@ -152,12 +153,39 @@ class NewsManager {
 
 Impulse.NewsManager = NewsManager;
 
-export const handlers: Chat.Handlers = {
-	onDisconnect(user: User) {
-		// Reset news flag when user disconnects so they see news on next connection
-		user.notified.news = false;
-	},
+// Add news flag to User prototype
+declare module '../../server/users' {
+	interface User {
+		newsShown?: boolean;
+	}
+}
+
+// Override User's onDisconnect method to reset news flag
+const originalOnDisconnect = Users.User.prototype.onDisconnect;
+Users.User.prototype.onDisconnect = function(connection: any) {
+	// Reset news flag when user disconnects so they see news on next connection
+	this.newsShown = false;
+	
+	// Call the original onDisconnect method
+	return originalOnDisconnect.call(this, connection);
 };
+
+// Override User's rename method to show news on successful login
+const originalRename = Users.User.prototype.rename;
+Users.User.prototype.rename = function(name: string, token: string, registered: boolean, connection: any) {
+	// Store the original result before we modify the behavior
+	const result = originalRename.call(this, name, token, registered, connection);
+	
+	// If rename was successful, show news (with duplicate prevention built into onUserConnect)
+	// This handles both first-time connections and reconnections (merges)
+	if (result === true) {
+		void Impulse.NewsManager.onUserConnect(this);
+	}
+	
+	return result;
+};
+
+export const handlers: Chat.Handlers = {};
 
 export const commands: Chat.ChatCommands = {
   servernews: {
