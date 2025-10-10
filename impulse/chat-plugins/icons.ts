@@ -73,6 +73,7 @@ async function updateIcons(): Promise<void> {
 
 export const commands: Chat.ChatCommands = {
   usericon: 'icon',
+  ic: 'icon',
   icon: {
     ''(target, room, user) {
       this.parse(`/iconhelp`);
@@ -454,8 +455,10 @@ export const commands: Chat.ChatCommands = {
       `<li><code>/icon count</code> - Show total number of custom icons</li>` +
       `<li><code>/icon logs [number]</code> - View recent icon log entries (default: 50, max: 500)</li>` +
       `</ul>` +
-      `<small>All commands except view require @ or higher permission.</small>` +
+      `<small>All commands except view require @ or higher permission.<br>` +
+      `Aliases: /usericon, /ic</small>` +
       `</div>`
     );
   },
+  ichelp: 'iconhelp',
 };
