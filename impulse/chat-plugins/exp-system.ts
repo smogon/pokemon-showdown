@@ -68,6 +68,39 @@ const REWARD_CONFIG = {
 let cooldowns = new Map<string, number>();
 
 /**
+ * Validation functions
+ */
+function validateImageUrl(url: string): { valid: boolean; error?: string } {
+  try {
+    const urlObj = new URL(url);
+    if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+      return { valid: false, error: 'Only HTTP/HTTPS URLs are allowed' };
+    }
+    
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const hasValidExtension = validExtensions.some(ext => 
+      urlObj.pathname.toLowerCase().endsWith(ext)
+    );
+    
+    if (!hasValidExtension) {
+      return { valid: false, error: 'Image URL must end with .jpg, .jpeg, .png, .gif, or .webp' };
+    }
+    
+    return { valid: true };
+  } catch {
+    return { valid: false, error: 'Invalid URL format' };
+  }
+}
+
+function validateHexColor(color: string): { valid: boolean; error?: string } {
+  const hexPattern = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+  if (!hexPattern.test(color)) {
+    return { valid: false, error: 'Invalid hex color format. Use #RGB or #RRGGBB format' };
+  }
+  return { valid: true };
+}
+
+/**
  * User experience data structure
  */
 interface UserExp {
@@ -85,6 +118,15 @@ interface RewardRequest {
   _id: string; // userid
   lastRequest: Date;
   availableRewards: string[]; // Array of reward types available to user
+  pendingRequests: Array<{
+    rewardType: string;
+    value: string; // Image URL or hex color
+    requestedAt: Date;
+    status: 'pending' | 'approved' | 'rejected';
+    processedBy?: string;
+    processedAt?: Date;
+    reason?: string;
+  }>;
 }
 
 /**
@@ -432,7 +474,7 @@ export class ExpSystem {
   /**
    * Request a reward (user command)
    */
-  static async requestReward(userid: string, rewardType: string): Promise<{
+  static async requestReward(userid: string, rewardType: string, value?: string): Promise<{
     success: boolean;
     message: string;
     nextAvailable?: Date;
@@ -442,6 +484,28 @@ export class ExpSystem {
     // Check if reward type exists
     if (!REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG]) {
       return { success: false, message: 'Invalid reward type.' };
+    }
+    
+    const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
+    
+    // Validate value based on reward type
+    if (value) {
+      if (rewardType === 'customavatar' || rewardType === 'customicon') {
+        const validation = validateImageUrl(value);
+        if (!validation.valid) {
+          return { success: false, message: validation.error! };
+        }
+      } else if (rewardType === 'customcolor' || rewardType === 'symbolcolor') {
+        const validation = validateHexColor(value);
+        if (!validation.valid) {
+          return { success: false, message: validation.error! };
+        }
+      }
+    } else {
+      return { 
+        success: false, 
+        message: `Please provide a value for ${config.name}. Use /exp request ${rewardType} [value]` 
+      };
     }
     
     // Check cooldown
@@ -457,7 +521,6 @@ export class ExpSystem {
     
     // Check level requirement
     const level = await this.getLevel(id);
-    const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
     if (level < config.levelRequired) {
       return { 
         success: false, 
@@ -465,13 +528,38 @@ export class ExpSystem {
       };
     }
     
+    // Add to pending requests
+    const rewardData = await this.rewardDb.findOne({ _id: id });
+    const pendingRequests = rewardData?.pendingRequests || [];
+    
+    // Check if user already has a pending request for this reward type
+    const hasPending = pendingRequests.some(req => 
+      req.rewardType === rewardType && req.status === 'pending'
+    );
+    
+    if (hasPending) {
+      return { 
+        success: false, 
+        message: `You already have a pending request for ${config.name}.` 
+      };
+    }
+    
+    // Add new request
+    pendingRequests.push({
+      rewardType,
+      value: value!,
+      requestedAt: new Date(),
+      status: 'pending'
+    });
+    
     // Update reward request data
     await this.rewardDb.upsert(
       { _id: id },
       {
         _id: id,
         lastRequest: new Date(),
-        availableRewards: await this.getAvailableRewards(id)
+        availableRewards: await this.getAvailableRewards(id),
+        pendingRequests
       }
     );
     
@@ -514,21 +602,134 @@ export class ExpSystem {
     lastRequest: Date;
     availableRewards: string[];
     level: number;
+    pendingRequests: Array<{
+      rewardType: string;
+      value: string;
+      requestedAt: Date;
+      status: string;
+    }>;
   }>> {
     const requests = await this.rewardDb.find({});
     const results = [];
     
     for (const request of requests) {
       const level = await this.getLevel(request._id);
-      results.push({
-        userid: request._id,
-        lastRequest: request.lastRequest,
-        availableRewards: request.availableRewards,
-        level
-      });
+      const pendingRequests = request.pendingRequests?.filter(req => req.status === 'pending') || [];
+      
+      if (pendingRequests.length > 0) {
+        results.push({
+          userid: request._id,
+          lastRequest: request.lastRequest,
+          availableRewards: request.availableRewards,
+          level,
+          pendingRequests
+        });
+      }
     }
     
     return results.sort((a, b) => b.lastRequest.getTime() - a.lastRequest.getTime());
+  }
+
+  /**
+   * Admin: Process a reward request (approve/reject)
+   */
+  static async processRewardRequest(
+    userid: string, 
+    rewardType: string, 
+    action: 'approve' | 'reject', 
+    by: string, 
+    reason?: string
+  ): Promise<{ success: boolean; message: string }> {
+    const id = toID(userid);
+    const rewardData = await this.rewardDb.findOne({ _id: id });
+    
+    if (!rewardData || !rewardData.pendingRequests) {
+      return { success: false, message: 'No pending requests found for this user.' };
+    }
+    
+    const requestIndex = rewardData.pendingRequests.findIndex(req => 
+      req.rewardType === rewardType && req.status === 'pending'
+    );
+    
+    if (requestIndex === -1) {
+      return { success: false, message: 'No pending request found for this reward type.' };
+    }
+    
+    const request = rewardData.pendingRequests[requestIndex];
+    
+    // Update request status
+    rewardData.pendingRequests[requestIndex] = {
+      ...request,
+      status: action === 'approve' ? 'approved' : 'rejected',
+      processedBy: by,
+      processedAt: new Date(),
+      reason: reason || (action === 'approve' ? 'Approved by staff' : 'Rejected by staff')
+    };
+    
+    // If approved, apply the reward
+    if (action === 'approve') {
+      try {
+        await this.applyReward(id, rewardType, request.value, by);
+      } catch (error) {
+        return { 
+          success: false, 
+          message: `Failed to apply reward: ${error instanceof Error ? error.message : 'Unknown error'}` 
+        };
+      }
+    }
+    
+    // Update database
+    await this.rewardDb.updateOne(
+      { _id: id },
+      { $set: { pendingRequests: rewardData.pendingRequests } }
+    );
+    
+    const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
+    return { 
+      success: true, 
+      message: `Reward request ${action}d successfully.` 
+    };
+  }
+
+  /**
+   * Apply a reward to a user
+   */
+  private static async applyReward(userid: string, rewardType: string, value: string, by: string): Promise<void> {
+    const id = toID(userid);
+    
+    switch (rewardType) {
+      case 'customavatar':
+        // Use the existing customavatar system
+        await this.callCommand('customavatar', 'set', `${id}, ${value}`, by);
+        break;
+        
+      case 'customicon':
+        // Use the existing icon system
+        await this.callCommand('icon', 'set', `${id}, ${value}`, by);
+        break;
+        
+      case 'customcolor':
+        // Use the existing customcolor system
+        await this.callCommand('customcolor', 'set', `${id}, ${value}`, by);
+        break;
+        
+      case 'symbolcolor':
+        // Use the existing symbolcolor system
+        await this.callCommand('symbolcolor', 'set', `${id}, ${value}`, by);
+        break;
+        
+      default:
+        throw new Error(`Unknown reward type: ${rewardType}`);
+    }
+  }
+
+  /**
+   * Helper to call existing commands
+   */
+  private static async callCommand(command: string, subcommand: string, args: string, by: string): Promise<void> {
+    // This is a simplified version - in practice, you'd need to properly integrate
+    // with the existing command systems. For now, we'll just log the action.
+    console.log(`[Reward System] ${by} applied ${command} ${subcommand} ${args}`);
   }
 }
 
@@ -689,15 +890,25 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/exp leaderboard [limit]</code> - View the experience leaderboard (default: 20, max: 100)</li>` +
         `<li><code>/exp stats</code> - View system statistics</li>` +
         `<li><code>/exp rewards</code> - View available rewards and cooldown status</li>` +
-        `<li><code>/exp request [reward]</code> - Request a reward (30-day cooldown)</li>` +
+        `<li><code>/exp request [reward] [value]</code> - Request a reward with value (30-day cooldown)</li>` +
         `</ul>` +
         `<h4 style="margin: 8px 0;">Staff Commands:</h4>` +
         `<ul style="margin: 5px 0;">` +
         `<li><code>/exp give [user], [amount]</code> - Give experience to a user (requires @)</li>` +
         `<li><code>/exp take [user], [amount]</code> - Take experience from a user (requires @)</li>` +
         `<li><code>/exp reset [user]</code> - Reset a user's experience to 0 (requires @)</li>` +
-        `<li><code>/exp pending</code> - View pending reward requests (requires @)</li>` +
+        `<li><code>/exp pending</code> - View pending reward requests with action buttons (requires @)</li>` +
+        `<li><code>/exp approve [user], [reward] [reason]</code> - Approve a reward request (requires @)</li>` +
+        `<li><code>/exp reject [user], [reward] [reason]</code> - Reject a reward request (requires @)</li>` +
+        `<li><code>/exp viewrequest [user], [reward]</code> - View detailed reward request (requires @)</li>` +
         `<li><code>/exp resetcooldown [user]</code> - Reset user's reward cooldown (requires @)</li>` +
+        `</ul>` +
+        `<h4 style="margin: 8px 0;">Reward Types:</h4>` +
+        `<ul style="margin: 5px 0;">` +
+        `<li><code>customavatar [image_url]</code> - Custom avatar (Level 5+)</li>` +
+        `<li><code>customicon [image_url]</code> - Custom icon (Level 10+)</li>` +
+        `<li><code>customcolor [hex_color]</code> - Custom username color (Level 15+)</li>` +
+        `<li><code>symbolcolor [hex_color]</code> - Custom symbol color (Level 20+)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Earn experience by chatting! 1 EXP per message with a 30-second cooldown.</small>` +
         `</div>`
@@ -748,10 +959,17 @@ export const commands: Chat.ChatCommands = {
     },
 
     async request(target, room, user) {
-      if (!target) return this.sendReply('Usage: /exp request [reward]. Use /exp rewards to see available rewards.');
+      if (!target) return this.sendReply('Usage: /exp request [reward] [value]. Use /exp rewards to see available rewards.');
       
-      const rewardType = target.toLowerCase();
-      const result = await ExpSystem.requestReward(user.id, rewardType);
+      const parts = target.split(' ').map(p => p.trim());
+      const rewardType = parts[0].toLowerCase();
+      const value = parts.slice(1).join(' ');
+      
+      if (!value) {
+        return this.sendReply(`Please provide a value for ${rewardType}. For avatars/icons: image URL, for colors: hex code.`);
+      }
+      
+      const result = await ExpSystem.requestReward(user.id, rewardType, value);
       
       if (result.success) {
         this.sendReply(`|html|<div class="broadcast-green">${result.message}</div>`);
@@ -770,25 +988,137 @@ export const commands: Chat.ChatCommands = {
         return this.sendReply('No pending reward requests.');
       }
       
-      let output = `<div class="ladder" style="max-width: 600px;">`;
+      let output = `<div class="ladder" style="max-width: 800px;">`;
       output += `<h3 style="margin: 5px 0;">Pending Reward Requests (${pendingRewards.length})</h3>`;
-      output += `<div style="max-height: 400px; overflow-y: auto;">`;
-      output += `<table style="width: 100%; border-collapse: collapse;">`;
-      output += `<tr style="background: #f0f0f0;"><th>User</th><th>Level</th><th>Available Rewards</th><th>Last Request</th></tr>`;
+      output += `<div style="max-height: 500px; overflow-y: auto;">`;
       
-      for (const request of pendingRewards.slice(0, 50)) { // Limit to 50 for performance
+      for (const request of pendingRewards.slice(0, 20)) { // Limit to 20 for performance
         const date = new Date(request.lastRequest).toLocaleString();
-        const rewardsText = request.availableRewards.map(r => REWARD_CONFIG[r as keyof typeof REWARD_CONFIG]?.name || r).join(', ');
         
-        output += `<tr style="border-bottom: 1px solid #ddd;">`;
-        output += `<td style="padding: 5px;">${Impulse.nameColor(request.userid, true, true)}</td>`;
-        output += `<td style="padding: 5px;">${request.level}</td>`;
-        output += `<td style="padding: 5px; font-size: 0.9em;">${rewardsText}</td>`;
-        output += `<td style="padding: 5px; font-size: 0.9em;">${date}</td>`;
-        output += `</tr>`;
+        output += `<div style="border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px;">`;
+        output += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">`;
+        output += `<div><strong>${Impulse.nameColor(request.userid, true, true)}</strong> (Level ${request.level})</div>`;
+        output += `<div style="font-size: 0.9em; color: #666;">${date}</div>`;
+        output += `</div>`;
+        
+        for (const pendingReq of request.pendingRequests) {
+          const config = REWARD_CONFIG[pendingReq.rewardType as keyof typeof REWARD_CONFIG];
+          const requestDate = new Date(pendingReq.requestedAt).toLocaleString();
+          
+          output += `<div style="background: #f9f9f9; padding: 10px; margin: 5px 0; border-radius: 3px;">`;
+          output += `<div style="font-weight: bold; margin-bottom: 5px;">${config?.name || pendingReq.rewardType}</div>`;
+          
+          if (pendingReq.rewardType === 'customavatar' || pendingReq.rewardType === 'customicon') {
+            output += `<div style="margin: 5px 0;"><img src="${pendingReq.value}" width="64" height="64" style="border: 1px solid #ccc; border-radius: 3px;"></div>`;
+            output += `<div style="font-size: 0.8em; color: #666; word-break: break-all;">${pendingReq.value}</div>`;
+          } else {
+            output += `<div style="margin: 5px 0;">`;
+            output += `<span style="color: ${pendingReq.value}; font-size: 24px; font-weight: bold;">■</span> `;
+            output += `<span style="font-family: monospace; background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">${pendingReq.value}</span>`;
+            output += `</div>`;
+          }
+          
+          output += `<div style="font-size: 0.8em; color: #666; margin-top: 5px;">Requested: ${requestDate}</div>`;
+          
+          // Action buttons
+          output += `<div style="margin-top: 10px;">`;
+          output += `<button class="button" name="send" value="/exp approve ${request.userid}, ${pendingReq.rewardType}" style="background: #27ae60; color: white; margin-right: 5px;">✓ Approve</button>`;
+          output += `<button class="button" name="send" value="/exp reject ${request.userid}, ${pendingReq.rewardType}" style="background: #e74c3c; color: white; margin-right: 5px;">✗ Reject</button>`;
+          output += `<button class="button" name="send" value="/exp viewrequest ${request.userid}, ${pendingReq.rewardType}" style="background: #3498db; color: white;">👁 View Details</button>`;
+          output += `</div>`;
+          output += `</div>`;
+        }
+        
+        output += `</div>`;
       }
       
-      output += `</table></div></div>`;
+      output += `</div></div>`;
+      this.sendReply(`|raw|${output}`);
+    },
+
+    async approve(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply('Usage: /exp approve [user], [reward] [reason]');
+      
+      const parts = target.split(',').map(p => p.trim());
+      const userid = parts[0];
+      const rewardType = parts[1];
+      const reason = parts.slice(2).join(',').trim() || 'Approved by staff';
+      
+      const result = await ExpSystem.processRewardRequest(userid, rewardType, 'approve', user.id, reason);
+      
+      if (result.success) {
+        this.sendReply(`|html|<div class="broadcast-green">${result.message}</div>`);
+        this.modlog('APPROVEREWARD', userid, `${rewardType} approved`, { by: user.id, reason });
+      } else {
+        this.sendReply(`|html|<div class="broadcast-red">${result.message}</div>`);
+      }
+    },
+
+    async reject(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply('Usage: /exp reject [user], [reward] [reason]');
+      
+      const parts = target.split(',').map(p => p.trim());
+      const userid = parts[0];
+      const rewardType = parts[1];
+      const reason = parts.slice(2).join(',').trim() || 'Rejected by staff';
+      
+      const result = await ExpSystem.processRewardRequest(userid, rewardType, 'reject', user.id, reason);
+      
+      if (result.success) {
+        this.sendReply(`|html|<div class="broadcast-green">${result.message}</div>`);
+        this.modlog('REJECTREWARD', userid, `${rewardType} rejected`, { by: user.id, reason });
+      } else {
+        this.sendReply(`|html|<div class="broadcast-red">${result.message}</div>`);
+      }
+    },
+
+    async viewrequest(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply('Usage: /exp viewrequest [user], [reward]');
+      
+      const parts = target.split(',').map(p => p.trim());
+      const userid = parts[0];
+      const rewardType = parts[1];
+      
+      const rewardData = await ExpSystem.getRewardHistory(userid);
+      if (!rewardData || !rewardData.pendingRequests) {
+        return this.sendReply('No reward data found for this user.');
+      }
+      
+      const request = rewardData.pendingRequests.find(req => 
+        req.rewardType === rewardType && req.status === 'pending'
+      );
+      
+      if (!request) {
+        return this.sendReply('No pending request found for this reward type.');
+      }
+      
+      const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
+      const requestDate = new Date(request.requestedAt).toLocaleString();
+      
+      let output = `<div class="ladder" style="max-width: 500px;">`;
+      output += `<h3 style="margin: 5px 0;">Reward Request Details</h3>`;
+      output += `<div style="background: #f9f9f9; padding: 15px; border-radius: 5px;">`;
+      output += `<div><strong>User:</strong> ${Impulse.nameColor(userid, true, true)}</div>`;
+      output += `<div><strong>Reward:</strong> ${config?.name || rewardType}</div>`;
+      output += `<div><strong>Requested:</strong> ${requestDate}</div>`;
+      output += `<div><strong>Status:</strong> <span style="color: #f39c12;">Pending</span></div>`;
+      
+      if (rewardType === 'customavatar' || rewardType === 'customicon') {
+        output += `<div style="margin: 10px 0;"><strong>Image:</strong></div>`;
+        output += `<div><img src="${request.value}" width="128" height="128" style="border: 1px solid #ccc; border-radius: 5px;"></div>`;
+        output += `<div style="font-size: 0.8em; color: #666; word-break: break-all; margin-top: 5px;">${request.value}</div>`;
+      } else {
+        output += `<div style="margin: 10px 0;"><strong>Color:</strong></div>`;
+        output += `<div style="display: flex; align-items: center; gap: 10px;">`;
+        output += `<span style="color: ${request.value}; font-size: 32px; font-weight: bold;">■</span>`;
+        output += `<span style="font-family: monospace; background: #f0f0f0; padding: 5px 10px; border-radius: 3px;">${request.value}</span>`;
+        output += `</div>`;
+      }
+      
+      output += `</div></div>`;
       this.sendReply(`|raw|${output}`);
     },
 
