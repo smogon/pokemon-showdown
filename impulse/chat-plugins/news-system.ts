@@ -10,6 +10,7 @@
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
+import { Users } from '../../server/users';
 
 const NEWS_LOG_PATH = 'logs/news.txt';
 
@@ -53,6 +54,11 @@ class NewsManager {
   }
   
   static async onUserConnect(user: User): Promise<void> {
+    // Prevent showing news twice to the same user
+    if (user.notified.news) {
+      return;
+    }
+    
     const hasNews = await NewsDB.exists({});
     if (!hasNews) {
       return;
@@ -61,6 +67,7 @@ class NewsManager {
     const news = await this.generateNewsDisplay();
     if (news.length) {
       user.send(`|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
+      user.notified.news = true;
     }
   }
   
@@ -77,6 +84,14 @@ class NewsManager {
     };
     
     await NewsDB.insertOne(newsEntry);
+    
+    // Reset news flag for all connected users so they can see the new news
+    for (const connectedUser of Users.users.values()) {
+      if (connectedUser.connected) {
+        connectedUser.notified.news = false;
+      }
+    }
+    
     return `Added Server News: ${title}`;
   }
   
@@ -136,6 +151,13 @@ class NewsManager {
 }
 
 Impulse.NewsManager = NewsManager;
+
+export const handlers: Chat.Handlers = {
+	onDisconnect(user: User) {
+		// Reset news flag when user disconnects so they see news on next connection
+		user.notified.news = false;
+	},
+};
 
 export const commands: Chat.ChatCommands = {
   servernews: {

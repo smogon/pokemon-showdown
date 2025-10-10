@@ -405,6 +405,7 @@ export class User extends Chat.MessageContext {
 		blockInvites: boolean,
 		punishment: boolean,
 		lock: boolean,
+		news: boolean,
 	};
 
 	lastMessage: string;
@@ -507,6 +508,7 @@ export class User extends Chat.MessageContext {
 			blockInvites: false,
 			punishment: false,
 			lock: false,
+			news: false,
 		};
 
 		this.autoconfirmed = '';
