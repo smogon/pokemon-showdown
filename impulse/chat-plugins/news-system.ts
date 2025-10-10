@@ -4,8 +4,8 @@
 * Refactored By @PrinceSky-Git
 *
  * Integration:
- * This system automatically integrates by overriding the User's handleRename method
- * to call NewsManager.onUserConnect for successful renames without requiring manual calls.
+ * This system integrates with server/users.ts at line 877:
+ *   Impulse.NewsManager.onUserConnect(user);
 */
 
 import { FS } from '../../lib';
@@ -136,20 +136,6 @@ class NewsManager {
 }
 
 Impulse.NewsManager = NewsManager;
-
-// Override the User's handleRename method to automatically call NewsManager.onUserConnect
-const originalHandleRename = Users.User.prototype.handleRename;
-Users.User.prototype.handleRename = function(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
-	// Call the original handleRename method
-	const result = originalHandleRename.call(name, userid, newlyRegistered, userType);
-	
-	// If the rename was successful, call NewsManager.onUserConnect
-	if (result) {
-		Impulse.NewsManager.onUserConnect(user);
-	}
-	
-	return result;
-};
 
 export const commands: Chat.ChatCommands = {
   servernews: {
