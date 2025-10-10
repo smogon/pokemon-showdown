@@ -384,8 +384,7 @@ Users.User.prototype.getIdentity = function(room: BasicRoom | null = null) {
       }
       const roomGroup = room.auth.get(this);
       if (roomGroup === this.tempGroup || roomGroup === ' ') {
-        // Wrap custom symbol in em.group for symbolcolor compatibility
-        return `<em class="group groupsymbol">${customSymbol}</em>` + this.name;
+        return customSymbol + this.name;
       }
       return roomGroup + this.name;
     }
@@ -393,8 +392,7 @@ Users.User.prototype.getIdentity = function(room: BasicRoom | null = null) {
       const mutedSymbol = (punishgroups.muted?.symbol || '!');
       return mutedSymbol + this.name;
     }
-    // Wrap custom symbol in em.group for symbolcolor compatibility
-    return `<em class="group groupsymbol">${customSymbol}</em>` + this.name;
+    return customSymbol + this.name;
   }
   
   return originalGetIdentity.call(this, room);
