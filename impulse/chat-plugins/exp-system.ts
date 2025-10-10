@@ -22,16 +22,15 @@
 import { ImpulseDB } from '../../impulse/impulse-db';
 import { FS } from '../../lib';
 
-// Configuration
 const CONFIG = {
   EXP_PER_MESSAGE: 1,
-  COOLDOWN_MS: 30000, // 30 seconds
+  COOLDOWN_MS: 30000,
   BASE_LEVEL_EXP: 20,
   LEVEL_MULTIPLIER: 1.2,
   MAX_LEVEL: 1000,
-  REWARD_COOLDOWN_DAYS: 30, // 30 days between reward requests
-  LEVELUP_BONUS_PERCENTAGE: 0.05, // 5% of required exp as bonus
-  MAX_LEVELUP_BONUS_LEVEL: 15, // Only give bonus up to level 50
+  REWARD_COOLDOWN_DAYS: 30,
+  LEVELUP_BONUS_PERCENTAGE: 0.05,
+  MAX_LEVELUP_BONUS_LEVEL: 15,
 } as const;
 
 // Reward configuration - easily customizable
@@ -73,10 +72,8 @@ const REWARD_CONFIG = {
   },
 } as const;
 
-// Global state
 let cooldowns = new Map<string, number>();
 
-// Logging
 const REWARD_LOG_PATH = 'logs/rewards.txt';
 const STAFF_ROOM_ID = 'staff';
 
@@ -90,9 +87,6 @@ async function logRewardAction(action: string, staff: string, target: string, de
   }
 }
 
-/**
- * Validation functions
- */
 function validateImageUrl(url: string): { valid: boolean; error?: string } {
   try {
     const urlObj = new URL(url);
@@ -128,7 +122,6 @@ function validateCustomSymbol(symbol: string): { valid: boolean; error?: string 
     return { valid: false, error: 'Custom symbol must be a single character' };
   }
   
-  // Check for potentially problematic characters
   const forbiddenChars = ['@', '#', '!', '~', '&', '%', '+', '^', '`', '|', '\\', '/', '?', '=', '<', '>', ':', ';', '"', "'", ' ', '\t', '\n', '\r'];
   if (forbiddenChars.includes(symbol)) {
     return { valid: false, error: 'Symbol contains forbidden characters. Use letters, numbers, or safe symbols' };
@@ -150,27 +143,21 @@ function validateCustomAnimation(animation: string): { valid: boolean; error?: s
   return { valid: true };
 }
 
-/**
- * User experience data structure
- */
 interface UserExp {
-  _id: string; // userid
+  _id: string;
   exp: number;
   level: number;
   lastUpdated: Date;
   totalMessages: number;
 }
 
-/**
- * Reward request tracking
- */
 interface RewardRequest {
-  _id: string; // userid
+  _id: string;
   lastRequest: Date;
-  availableRewards: string[]; // Array of reward types available to user
+  availableRewards: string[];
   pendingRequests: Array<{
     rewardType: string;
-    value: string; // Image URL or hex color
+    value: string;
     requestedAt: Date;
     status: 'pending' | 'approved' | 'rejected';
     processedBy?: string;
@@ -179,34 +166,21 @@ interface RewardRequest {
   }>;
 }
 
-/**
- * Experience System Class
- */
 export class ExpSystem {
   private static db = ImpulseDB<UserExp>('userexp');
   private static rewardDb = ImpulseDB<RewardRequest>('rewardrequests');
 
-  /**
-   * Add experience to a user
-   * @param userid - User ID
-   * @param amount - Amount of EXP to add
-   * @param bypassCooldown - Skip cooldown check (for admin actions)
-   * @returns Final EXP amount
-   */
   static async addExp(userid: string, amount: number = CONFIG.EXP_PER_MESSAGE, bypassCooldown: boolean = false): Promise<number> {
     const id = toID(userid);
     
-    // Check cooldown unless bypassed
     if (!bypassCooldown && this.isOnCooldown(id)) {
       return await this.getExp(id);
     }
 
-    // Check if user exists first
     const existingUser = await this.db.findOne({ _id: id });
     
     let result;
     if (existingUser) {
-      // User exists - increment exp and totalMessages
       result = await this.db.findOneAndUpdate(
         { _id: id },
         {
@@ -219,7 +193,6 @@ export class ExpSystem {
         { returnDocument: 'after' }
       );
     } else {
-      // User doesn't exist - create new document
       result = await this.db.findOneAndUpdate(
         { _id: id },
         {
@@ -237,7 +210,6 @@ export class ExpSystem {
 
     if (!result) throw new Error('Failed to update user experience');
 
-    // Calculate and update level if needed
     const newLevel = this.calculateLevel(result.exp);
     if (newLevel !== result.level) {
       await this.db.updateOne(
@@ -245,13 +217,11 @@ export class ExpSystem {
         { $set: { level: newLevel } }
       );
       
-      // Notify level up
       if (newLevel > result.level) {
         await this.notifyLevelUp(id, newLevel, result.level);
       }
     }
 
-    // Update cooldown
     if (!bypassCooldown) {
       cooldowns.set(id, Date.now());
     }
@@ -259,35 +229,23 @@ export class ExpSystem {
     return result.exp;
   }
 
-  /**
-   * Get user's current experience
-   */
   static async getExp(userid: string): Promise<number> {
     const id = toID(userid);
     const user = await this.db.findOne({ _id: id });
     return user?.exp || 0;
   }
 
-  /**
-   * Get user's current level
-   */
   static async getLevel(userid: string): Promise<number> {
     const exp = await this.getExp(userid);
     return this.calculateLevel(exp);
   }
 
-  /**
-   * Get user's total messages
-   */
   static async getTotalMessages(userid: string): Promise<number> {
     const id = toID(userid);
     const user = await this.db.findOne({ _id: id });
     return user?.totalMessages || 0;
   }
 
-  /**
-   * Calculate level from experience points
-   */
   static calculateLevel(exp: number): number {
     if (exp < CONFIG.BASE_LEVEL_EXP) return 0;
     
@@ -304,9 +262,6 @@ export class ExpSystem {
     return Math.min(level - 1, CONFIG.MAX_LEVEL);
   }
 
-  /**
-   * Calculate experience needed for next level
-   */
   static getExpForNextLevel(currentLevel: number): number {
     if (currentLevel < 0) return CONFIG.BASE_LEVEL_EXP;
     
@@ -321,28 +276,20 @@ export class ExpSystem {
     return totalExp;
   }
 
-  /**
-   * Check if user is on cooldown
-   */
   private static isOnCooldown(userid: string): boolean {
     const lastExp = cooldowns.get(userid) || 0;
     return Date.now() - lastExp < CONFIG.COOLDOWN_MS;
   }
 
-  /**
-   * Notify user of level up
-   */
   private static async notifyLevelUp(userid: string, newLevel: number, oldLevel: number): Promise<void> {
     const user = Users.get(userid);
     if (!user || !user.connected) return;
 
-    // Calculate bonus exp for levelup
     let bonusExp = 0;
     if (newLevel <= CONFIG.MAX_LEVELUP_BONUS_LEVEL) {
       const requiredExp = this.getExpForNextLevel(newLevel - 1) - this.getExpForNextLevel(newLevel - 2);
       bonusExp = Math.floor(requiredExp * CONFIG.LEVELUP_BONUS_PERCENTAGE);
       
-      // Add bonus exp (bypass cooldown for levelup bonus)
       if (bonusExp > 0) {
         await this.addExp(userid, bonusExp, true);
       }
@@ -362,9 +309,6 @@ export class ExpSystem {
     );
   }
 
-  /**
-   * Get leaderboard data
-   */
   static async getLeaderboard(limit: number = 50): Promise<Array<{userid: string, exp: number, level: number}>> {
     const users = await this.db.find(
       {},
@@ -382,9 +326,6 @@ export class ExpSystem {
     }));
   }
 
-  /**
-   * Get user rank
-   */
   static async getUserRank(userid: string): Promise<number> {
     const id = toID(userid);
     const user = await this.db.findOne({ _id: id });
@@ -394,18 +335,12 @@ export class ExpSystem {
     return higherRanked + 1;
   }
 
-  /**
-   * Admin: Give experience to user
-   */
   static async giveExp(userid: string, amount: number, by: string): Promise<number> {
     const id = toID(userid);
-    
-    // Check if user exists first
     const existingUser = await this.db.findOne({ _id: id });
     
     let result;
     if (existingUser) {
-      // User exists - increment exp
       result = await this.db.findOneAndUpdate(
         { _id: id },
         {
@@ -415,7 +350,6 @@ export class ExpSystem {
         { returnDocument: 'after' }
       );
     } else {
-      // User doesn't exist - create new document
       result = await this.db.findOneAndUpdate(
         { _id: id },
         {
@@ -433,7 +367,6 @@ export class ExpSystem {
 
     if (!result) throw new Error('Failed to give experience');
 
-    // Update level
     const newLevel = this.calculateLevel(result.exp);
     if (newLevel !== result.level) {
       await this.db.updateOne(
@@ -445,9 +378,6 @@ export class ExpSystem {
     return result.exp;
   }
 
-  /**
-   * Admin: Take experience from user
-   */
   static async takeExp(userid: string, amount: number, by: string): Promise<number> {
     const id = toID(userid);
     const result = await this.db.findOneAndUpdate(
@@ -464,7 +394,6 @@ export class ExpSystem {
       return user?.exp || 0;
     }
 
-    // Update level
     const newLevel = this.calculateLevel(result.exp);
     if (newLevel !== result.level) {
       await this.db.updateOne(
@@ -476,9 +405,6 @@ export class ExpSystem {
     return result.exp;
   }
 
-  /**
-   * Admin: Reset user experience
-   */
   static async resetExp(userid: string, by: string): Promise<void> {
     const id = toID(userid);
     await this.db.updateOne(
@@ -494,9 +420,6 @@ export class ExpSystem {
     );
   }
 
-  /**
-   * Get system statistics
-   */
   static async getStats(): Promise<{
     totalUsers: number;
     totalExp: number;
@@ -526,9 +449,6 @@ export class ExpSystem {
     };
   }
 
-  /**
-   * Get available rewards for a user based on their level
-   */
   static async getAvailableRewards(userid: string): Promise<string[]> {
     const level = await this.getLevel(userid);
     const availableRewards: string[] = [];
@@ -542,9 +462,6 @@ export class ExpSystem {
     return availableRewards;
   }
 
-  /**
-   * Check if user can request a reward (cooldown check)
-   */
   static async canRequestReward(userid: string): Promise<{ canRequest: boolean; nextAvailable?: Date }> {
     const id = toID(userid);
     const rewardData = await this.rewardDb.findOne({ _id: id });
@@ -564,9 +481,6 @@ export class ExpSystem {
     return { canRequest: false, nextAvailable };
   }
 
-  /**
-   * Request a reward (user command)
-   */
   static async requestReward(userid: string, rewardType: string, value?: string): Promise<{
     success: boolean;
     message: string;
@@ -574,14 +488,12 @@ export class ExpSystem {
   }> {
     const id = toID(userid);
     
-    // Check if reward type exists
     if (!REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG]) {
       return { success: false, message: 'Invalid reward type.' };
     }
     
     const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
     
-    // Validate value based on reward type
     if (value) {
       if (rewardType === 'customavatar' || rewardType === 'customicon') {
         const validation = validateImageUrl(value);
@@ -611,7 +523,6 @@ export class ExpSystem {
       };
     }
     
-    // Check cooldown
     const cooldownCheck = await this.canRequestReward(id);
     if (!cooldownCheck.canRequest) {
       const daysLeft = Math.ceil((cooldownCheck.nextAvailable!.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
@@ -622,7 +533,6 @@ export class ExpSystem {
       };
     }
     
-    // Check level requirement
     const level = await this.getLevel(id);
     if (level < config.levelRequired) {
       return { 
@@ -631,11 +541,9 @@ export class ExpSystem {
       };
     }
     
-    // Add to pending requests
     const rewardData = await this.rewardDb.findOne({ _id: id });
     const pendingRequests = rewardData?.pendingRequests || [];
     
-    // Check if user already has a pending request for this reward type
     const hasPending = pendingRequests.some(req => 
       req.rewardType === rewardType && req.status === 'pending'
     );
@@ -647,7 +555,6 @@ export class ExpSystem {
       };
     }
     
-    // Add new request
     pendingRequests.push({
       rewardType,
       value: value!,
@@ -655,7 +562,6 @@ export class ExpSystem {
       status: 'pending'
     });
     
-    // Update reward request data
     await this.rewardDb.upsert(
       { _id: id },
       {
@@ -672,24 +578,18 @@ export class ExpSystem {
     };
   }
 
-  /**
-   * Get user's reward request history
-   */
   static async getRewardHistory(userid: string): Promise<RewardRequest | null> {
     const id = toID(userid);
     return await this.rewardDb.findOne({ _id: id });
   }
 
-  /**
-   * Admin: Reset user's reward cooldown
-   */
   static async resetRewardCooldown(userid: string, by: string): Promise<void> {
     const id = toID(userid);
     await this.rewardDb.updateOne(
       { _id: id },
       {
         $set: {
-          lastRequest: new Date(0), // Set to epoch to allow immediate request
+          lastRequest: new Date(0),
           availableRewards: await this.getAvailableRewards(id)
         }
       },
@@ -697,9 +597,6 @@ export class ExpSystem {
     );
   }
 
-  /**
-   * Admin: Get all pending reward requests
-   */
   static async getPendingRewards(): Promise<Array<{
     userid: string;
     lastRequest: Date;
@@ -733,9 +630,6 @@ export class ExpSystem {
     return results.sort((a, b) => b.lastRequest.getTime() - a.lastRequest.getTime());
   }
 
-  /**
-   * Admin: Process a reward request (approve/reject)
-   */
   static async processRewardRequest(
     userid: string, 
     rewardType: string, 
@@ -760,7 +654,6 @@ export class ExpSystem {
     
     const request = rewardData.pendingRequests[requestIndex];
     
-    // Update request status
     rewardData.pendingRequests[requestIndex] = {
       ...request,
       status: action === 'approve' ? 'approved' : 'rejected',
@@ -769,7 +662,6 @@ export class ExpSystem {
       reason: reason || (action === 'approve' ? 'Approved by staff' : 'Rejected by staff')
     };
     
-    // If approved, apply the reward
     if (action === 'approve') {
       try {
         await this.applyReward(id, rewardType, request.value, by);
@@ -785,7 +677,6 @@ export class ExpSystem {
       await logRewardAction('REJECT', by, id, `${rewardType}: ${request.value} | Reason: ${reason || 'No reason specified'}`);
     }
     
-    // Update database
     await this.rewardDb.updateOne(
       { _id: id },
       { $set: { pendingRequests: rewardData.pendingRequests } }
@@ -798,40 +689,31 @@ export class ExpSystem {
     };
   }
 
-  /**
-   * Apply a reward to a user
-   */
   private static async applyReward(userid: string, rewardType: string, value: string, by: string): Promise<void> {
     const id = toID(userid);
     
     switch (rewardType) {
       case 'customavatar':
-        // Use the existing customavatar system
         await this.callCommand('customavatar', 'set', `${id}, ${value}`, by);
         break;
         
       case 'customicon':
-        // Use the existing icon system
         await this.callCommand('icon', 'set', `${id}, ${value}`, by);
         break;
         
       case 'customcolor':
-        // Use the existing customcolor system
         await this.callCommand('customcolor', 'set', `${id}, ${value}`, by);
         break;
         
       case 'symbolcolor':
-        // Use the existing symbolcolor system
         await this.callCommand('symbolcolor', 'set', `${id}, ${value}`, by);
         break;
         
       case 'customsymbol':
-        // Use the existing customsymbol system
         await this.callCommand('customsymbol', 'set', `${id}, ${value}`, by);
         break;
         
       case 'customanimation':
-        // Use the existing customanimation system
         await this.callCommand('customanimation', 'set', `${id}, ${value}`, by);
         break;
         
@@ -840,25 +722,15 @@ export class ExpSystem {
     }
   }
 
-  /**
-   * Helper to call existing commands
-   */
+  // Simplified helper - integrate with existing command systems in production
   private static async callCommand(command: string, subcommand: string, args: string, by: string): Promise<void> {
-    // This is a simplified version - in practice, you'd need to properly integrate
-    // with the existing command systems. For now, we'll just log the action.
     console.log(`[Reward System] ${by} applied ${command} ${subcommand} ${args}`);
   }
 }
 
-// Initialize the system
 ExpSystem.addExp = ExpSystem.addExp.bind(ExpSystem);
-
-// Export for global access
 Impulse.ExpSystem = ExpSystem;
 
-/**
- * Chat Commands
- */
 export const commands: Chat.ChatCommands = {
   exp: {
     '': 'level',
@@ -1111,7 +983,8 @@ export const commands: Chat.ChatCommands = {
       output += `<h3 style="margin: 5px 0;">Pending Reward Requests (${pendingRewards.length})</h3>`;
       output += `<div style="max-height: 500px; overflow-y: auto;">`;
       
-      for (const request of pendingRewards.slice(0, 20)) { // Limit to 20 for performance
+      // Limit to 20 for performance
+      for (const request of pendingRewards.slice(0, 20)) {
         const date = new Date(request.lastRequest).toLocaleString();
         
         output += `<div style="border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px;">`;
@@ -1143,7 +1016,6 @@ export const commands: Chat.ChatCommands = {
           
           output += `<div style="font-size: 0.8em; color: #666; margin-top: 5px;">Requested: ${requestDate}</div>`;
           
-          // Action buttons
           output += `<div style="margin-top: 10px;">`;
           output += `<button class="button" name="send" value="/exp approve ${request.userid}, ${pendingReq.rewardType}" style="background: #27ae60; color: white; margin-right: 5px;">✓ Approve</button>`;
           output += `<button class="button" name="send" value="/exp reject ${request.userid}, ${pendingReq.rewardType}" style="background: #e74c3c; color: white; margin-right: 5px;">✗ Reject</button>`;
@@ -1284,13 +1156,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Reward System Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
@@ -1309,9 +1179,6 @@ export const commands: Chat.ChatCommands = {
   },
 };
 
-/**
- * Pages
- */
 export const pages: Chat.PageTable = {
   async expladder(args, user) {
     const leaderboard = await ExpSystem.getLeaderboard(100);
