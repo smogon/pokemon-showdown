@@ -295,22 +295,24 @@ export const commands: Chat.ChatCommands = {
       }
     },
   },
+  svn: 'servernews',
 
   servernewshelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
       `<div><b><center>Server News Commands</center></b><br>` +
       `<ul>` +
-      `<li><code>/servernews view</code> - Views current server news (latest 3 items)</li>` +
-      `<li><code>/servernews add [title], [desc]</code> - Adds news</li>` +
-      `<li><code>/servernews update [title], [new desc]</code> - Updates existing news</li>` +
-      `<li><code>/servernews delete [title]</code> - Deletes news with [title]</li>` +
-      `<li><code>/servernews count</code> - Shows total number of news items</li>` +
-      `<li><code>/servernews cleanup [days]</code> - Delete news older than [days] (default: 90)</li>` +
-      `<li><code>/servernews logs [number]</code> - View recent news log entries (default: 50, max: 500)</li>` +
+      `<li><code>/servernews view</code> OR <code>/svn view</code> - Views current server news (latest 3 items)</li>` +
+      `<li><code>/servernews add [title], [desc]</code> OR <code>/svn add [title], [desc]</code> - Adds news</li>` +
+      `<li><code>/servernews update [title], [new desc]</code> OR <code>/svn update [title], [new desc]</code> - Updates existing news</li>` +
+      `<li><code>/servernews delete [title]</code> OR <code>/svn delete [title]</code> - Deletes news with [title]</li>` +
+      `<li><code>/servernews count</code> OR <code>/svn count</code> - Shows total number of news items</li>` +
+      `<li><code>/servernews cleanup [days]</code> OR <code>/svn cleanup [days]</code> - Delete news older than [days] (default: 90)</li>` +
+      `<li><code>/servernews logs [number]</code> OR <code>/svn logs [number]</code> - View recent news log entries (default: 50, max: 500)</li>` +
       `</ul>` +
       `<small>Commands add, update, delete, and logs require @ or higher permission. Command cleanup requires ~ permission.</small>` +
       `</div>`
     );
   },
+  svnhelp: 'servernewshelp',
 };
