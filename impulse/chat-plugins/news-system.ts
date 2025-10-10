@@ -1,10 +1,11 @@
 /*
 * Pokemon Showdown
-* News System
-* Instructions:
-* Add this code inside server/users.ts
-* handleRename function
-Impulse.NewsManager.onUserConnect(user);
+* News
+* Refactored By @PrinceSky-Git
+*
+ * Integration:
+ * This system integrates with server/users.ts at line 877:
+ *   Impulse.NewsManager.onUserConnect(user);
 */
 
 import { FS } from '../../lib';
@@ -13,7 +14,7 @@ import { ImpulseDB } from '../../impulse/impulse-db';
 const NEWS_LOG_PATH = 'logs/news.txt';
 
 interface NewsEntry {
-  _id?: any; // MongoDB automatically generates this
+  _id?: any;
   title: string;
   postedBy: string;
   desc: string;
@@ -21,7 +22,6 @@ interface NewsEntry {
   timestamp: number;
 }
 
-// Get typed MongoDB collection
 const NewsDB = ImpulseDB<NewsEntry>('news');
 
 async function logNewsAction(action: string, staff: string, target: string, details?: string): Promise<void> {
@@ -36,7 +36,6 @@ async function logNewsAction(action: string, staff: string, target: string, deta
 
 class NewsManager {
   static async generateNewsDisplay(): Promise<string[]> {
-    // Use find with sort and limit options for efficient sorted queries
     const news = await NewsDB.find(
       {},
       {
@@ -54,10 +53,9 @@ class NewsManager {
   }
   
   static async onUserConnect(user: User): Promise<void> {
-    // More efficient: check if any news exists first before fetching
     const hasNews = await NewsDB.exists({});
     if (!hasNews) {
-      return; // Don't send anything if no news exists
+      return;
     }
     
     const news = await this.generateNewsDisplay();
@@ -78,13 +76,11 @@ class NewsManager {
       timestamp: now.getTime()
     };
     
-    // Use insertOne for atomic insert
     await NewsDB.insertOne(newsEntry);
     return `Added Server News: ${title}`;
   }
   
   static async deleteNews(title: string): Promise<string | null> {
-    // Use atomic deleteOne and check deletedCount
     const result = await NewsDB.deleteOne({ title });
     
     if (result.deletedCount === 0) {
@@ -95,7 +91,6 @@ class NewsManager {
   }
   
   static async updateNews(title: string, newDesc: string): Promise<string | null> {
-    // Atomic update operation with $set and check modifiedCount
     const result = await NewsDB.updateOne(
       { title },
       { $set: { desc: newDesc } }
@@ -109,7 +104,6 @@ class NewsManager {
   }
   
   static async getAllNews(): Promise<NewsEntry[]> {
-    // Fetch all news sorted by timestamp descending
     return await NewsDB.find(
       {},
       { sort: { timestamp: -1 } }
@@ -117,12 +111,10 @@ class NewsManager {
   }
   
   static async getNewsByTitle(title: string): Promise<NewsEntry | null> {
-    // Efficient single document lookup
     return await NewsDB.findOne({ title });
   }
   
   static async getRecentNews(limit: number = 5): Promise<NewsEntry[]> {
-    // Get most recent N news items
     return await NewsDB.find(
       {},
       {
@@ -133,14 +125,12 @@ class NewsManager {
   }
   
   static async deleteOldNews(daysOld: number = 90): Promise<number> {
-    // Delete news older than specified days and return deletedCount
     const cutoffTimestamp = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
     const result = await NewsDB.deleteMany({ timestamp: { $lt: cutoffTimestamp } });
     return result.deletedCount || 0;
   }
   
   static async getNewsCount(): Promise<number> {
-    // Efficient count operation
     return await NewsDB.countDocuments({});
   }
 }
@@ -172,7 +162,6 @@ export const commands: Chat.ChatCommands = {
       const trimmedTitle = title.trim();
       const trimmedDesc = descParts.join(',').trim();
       
-      // Check if news with this title already exists using exists()
       const existing = await NewsDB.exists({ title: trimmedTitle });
       if (existing) {
         return this.errorReply(`News with title "${trimmedTitle}" already exists. Use /servernews update to modify it.`);
@@ -180,7 +169,6 @@ export const commands: Chat.ChatCommands = {
       
       await NewsManager.addNews(trimmedTitle, trimmedDesc, user);
       
-      // Log the action
       await logNewsAction('ADD', user.name, trimmedTitle, `Description: ${trimmedDesc.substring(0, 100)}${trimmedDesc.length > 100 ? '...' : ''}`);
       
       this.sendReply(`You have added news with title "${trimmedTitle}"`);
@@ -195,7 +183,6 @@ export const commands: Chat.ChatCommands = {
       const trimmedTitle = title.trim();
       const newDesc = descParts.join(',').trim();
       
-      // Get old description before updating for logging
       const oldNews = await NewsManager.getNewsByTitle(trimmedTitle);
       
       const result = await NewsManager.updateNews(trimmedTitle, newDesc);
@@ -203,7 +190,6 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply(result);
       }
       
-      // Log the action
       const oldDescPreview = oldNews?.desc ? oldNews.desc.substring(0, 50) : 'N/A';
       const newDescPreview = newDesc.substring(0, 50);
       await logNewsAction('UPDATE', user.name, trimmedTitle, `Old: ${oldDescPreview}..., New: ${newDescPreview}...`);
@@ -218,7 +204,6 @@ export const commands: Chat.ChatCommands = {
       
       const trimmedTitle = target.trim();
       
-      // Get news details before deletion for logging
       const newsItem = await NewsManager.getNewsByTitle(trimmedTitle);
       
       const result = await NewsManager.deleteNews(trimmedTitle);
@@ -227,7 +212,6 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply(result);
       }
       
-      // Log the action
       const details = newsItem ? `Posted by: ${newsItem.postedBy}, Date: ${newsItem.postTime}` : 'Details unavailable';
       await logNewsAction('DELETE', user.name, trimmedTitle, details);
       
@@ -249,7 +233,6 @@ export const commands: Chat.ChatCommands = {
       
       const deletedCount = await NewsManager.deleteOldNews(days);
       
-      // Log the action
       await logNewsAction('CLEANUP', user.name, `${deletedCount} items`, `Removed news older than ${days} days`);
       
       this.sendReply(`Deleted ${deletedCount} news item(s) older than ${days} days.`);
@@ -272,13 +255,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>News Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
