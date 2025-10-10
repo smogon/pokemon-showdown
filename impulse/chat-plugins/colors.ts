@@ -278,22 +278,24 @@ export const commands: Chat.ChatCommands = {
       }
     },
   },
+  cc: 'customcolor',
 
    customcolorhelp(target, room, user) {
       if (!this.runBroadcast()) return;
       this.sendReplyBox(
          `<div><b><center>Custom Color Commands</center></b><br>` +
          `<ul>` +
-         `<li><code>/customcolor set [user], [hex]</code> - Gives [user] a custom color of [hex]</li>` +
-         `<li><code>/customcolor delete [user]</code> - Deletes a user's custom color</li>` +
-         `<li><code>/customcolor reload</code> - Reloads colors</li>` +
-         `<li><code>/customcolor preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color</li>` +
-         `<li><code>/customcolor logs [number]</code> - View recent color log entries (default: 50, max: 500)</li>` +
+         `<li><code>/customcolor set [user], [hex]</code> OR <code>/cc set [user], [hex]</code> - Gives [user] a custom color of [hex]</li>` +
+         `<li><code>/customcolor delete [user]</code> OR <code>/cc delete [user]</code> - Deletes a user's custom color</li>` +
+         `<li><code>/customcolor reload</code> OR <code>/cc reload</code> - Reloads colors</li>` +
+         `<li><code>/customcolor preview [user], [hex]</code> OR <code>/cc preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color</li>` +
+         `<li><code>/customcolor logs [number]</code> OR <code>/cc logs [number]</code> - View recent color log entries (default: 50, max: 500)</li>` +
          `</ul>` +
          `<small>All commands except preview require @ or higher permission.</small>` +
          `</div>`
       );
    },
+   cchelp: 'customcolorhelp',
   
    '!hex': true,
    hex(target, room, user) {
