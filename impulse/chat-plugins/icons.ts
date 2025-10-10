@@ -1,14 +1,12 @@
 /*
 * Pokemon Showdown
 * Custom Icons
-* @license MIT
+* Refactored By @PrinceSky-Git
 */
 
 import { FS } from '../../lib';
 import { ImpulseDB } from '../../impulse/impulse-db';
 
-// Change this to match your server's userlist color.
-//const backgroundColor = 'rgba(248, 187, 217, 0.3)';
 const STAFF_ROOM_ID = 'staff';
 const DEFAULT_ICON_SIZE = 24;
 const ICON_LOG_PATH = 'logs/icons.txt';
@@ -19,14 +17,13 @@ interface IconData {
 }
 
 interface IconDocument {
-  _id: string; // userid
+  _id: string;
   url: string;
   size: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Get typed MongoDB collection for icons
 const IconsDB = ImpulseDB<IconDocument>('usericons');
 
 async function logIconAction(action: string, staff: string, target: string, details?: string): Promise<void> {
@@ -41,7 +38,6 @@ async function logIconAction(action: string, staff: string, target: string, deta
 
 async function updateIcons(): Promise<void> {
   try {
-    // Fetch all icon documents from MongoDB with projection for only needed fields
     const iconDocs = await IconsDB.find({}, { projection: { _id: 1, url: 1, size: 1 } });
     
     let newCss = '/* ICONS START */\n';
@@ -89,12 +85,10 @@ export const commands: Chat.ChatCommands = {
       const userId = toID(name);
       if (userId.length > 19) return this.errorReply('Usernames are not this long...');
       
-      // Use exists() - most efficient way to check existence
       if (await IconsDB.exists({ _id: userId })) {
         return this.errorReply('This user already has an icon. Remove it first with /icon delete [user].');
       }
       
-      // Parse size parameter
       let size = DEFAULT_ICON_SIZE;
       if (sizeStr) {
         const parsedSize = parseInt(sizeStr);
@@ -106,7 +100,6 @@ export const commands: Chat.ChatCommands = {
       
       const now = new Date();
       
-      // Use insertOne() for single document insert
       await IconsDB.insertOne({
         _id: userId,
         url: imageUrl,
@@ -116,8 +109,6 @@ export const commands: Chat.ChatCommands = {
       });
       
       await updateIcons();
-      
-      // Log the action
       await logIconAction('SET', user.name, userId, `URL: ${imageUrl}, Size: ${size}px`);
       
       const sizeDisplay = size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
@@ -143,12 +134,10 @@ export const commands: Chat.ChatCommands = {
       
       const userId = toID(name);
       
-      // Use exists() for efficient check before update
       if (!await IconsDB.exists({ _id: userId })) {
         return this.errorReply('This user does not have an icon. Use /icon set to create one.');
       }
       
-      // Build update object with $set operator
       const updateFields: any = {
         updatedAt: new Date(),
       };
@@ -168,18 +157,14 @@ export const commands: Chat.ChatCommands = {
         logDetails.push(`Size: ${parsedSize}px`);
       }
       
-      // Use updateOne() with $set operator
       await IconsDB.updateOne(
         { _id: userId },
         { $set: updateFields }
       );
       
       await updateIcons();
-      
-      // Log the action
       await logIconAction('UPDATE', user.name, userId, logDetails.join(', '));
       
-      // Fetch updated document using findOne() with projection
       const updatedIcon = await IconsDB.findOne(
         { _id: userId },
         { projection: { url: 1, size: 1 } }
@@ -205,22 +190,18 @@ export const commands: Chat.ChatCommands = {
       this.checkCan('globalban');
       const userId = toID(target);
       
-      // Use exists() for efficient check before delete
       if (!await IconsDB.exists({ _id: userId })) {
         return this.errorReply(`${target} does not have an icon.`);
       }
       
-      // Get icon details before deletion for logging
       const icon = await IconsDB.findOne(
         { _id: userId },
         { projection: { url: 1, size: 1 } }
       );
       
-      // Use deleteOne() for single document deletion
       await IconsDB.deleteOne({ _id: userId });
       await updateIcons();
       
-      // Log the action
       const iconDetails = icon ? `Removed: ${icon.url} (${icon.size || DEFAULT_ICON_SIZE}px)` : 'Icon removed';
       await logIconAction('DELETE', user.name, userId, iconDetails);
       
@@ -242,7 +223,6 @@ export const commands: Chat.ChatCommands = {
       
       const page = parseInt(target) || 1;
       
-      // Use findPaginated() - optimized for paginated results
       const result = await IconsDB.findPaginated({}, {
         page,
         limit: 20,
@@ -281,7 +261,6 @@ export const commands: Chat.ChatCommands = {
       const userId = toID(target);
       if (!userId) return this.parse('/help icon');
       
-      // Use findOne() with projection for only needed fields
       const icon = await IconsDB.findOne(
         { _id: userId },
         { projection: { url: 1, size: 1, createdAt: 1, updatedAt: 1 } }
@@ -307,7 +286,7 @@ export const commands: Chat.ChatCommands = {
     async setmany(target, room, user) {
       this.checkCan('globalban');
       
-      // Parse bulk input: userid1:url1:size1, userid2:url2:size2, ...
+      // Format: userid1:url1:size1, userid2:url2:size2, ...
       const entries = target.split(',').map(s => s.trim()).filter(Boolean);
       if (entries.length === 0) return this.errorReply('No icons to set. Format: /icon setmany user1:url1:size1, user2:url2:size2');
       
@@ -342,12 +321,10 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply('No valid icons to set.');
       }
       
-      // Use insertMany() for bulk inserts - much more efficient than multiple insertOne()
       try {
         await IconsDB.insertMany(documents);
         await updateIcons();
         
-        // Log the bulk action
         const userList = documents.map(d => d._id).join(', ');
         await logIconAction('SETMANY', user.name, `${documents.length} users`, `Users: ${userList}`);
         
@@ -370,7 +347,6 @@ export const commands: Chat.ChatCommands = {
       
       const searchTerm = toID(target);
       
-      // Use find() with regex filter and projection for searching
       const icons = await IconsDB.find(
         { _id: { $regex: searchTerm, $options: 'i' } as any },
         { projection: { _id: 1, url: 1, size: 1 } }
@@ -394,7 +370,6 @@ export const commands: Chat.ChatCommands = {
     async count(target, room, user) {
       this.checkCan('globalban');
       
-      // Use countDocuments() - most efficient way to get document count
       const total = await IconsDB.countDocuments({});
       this.sendReply(`There are currently ${total} custom icon(s) set.`);
     },
@@ -416,13 +391,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Icon Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
