@@ -40,9 +40,26 @@ async function applyCustomSymbol(userid: string): Promise<void> {
   );
   
   if (symbolDoc) {
-    user.tempGroup = symbolDoc.symbol as GroupSymbol;
+    // Store the original group before applying custom symbol
+    if (!(user as any).originalGroup) {
+      (user as any).originalGroup = user.tempGroup;
+    }
+    // Store custom symbol without affecting actual group/rank
+    (user as any).customSymbol = symbolDoc.symbol;
     user.updateIdentity();
   }
+}
+
+async function removeCustomSymbol(userid: string): Promise<void> {
+  const user = Users.get(userid);
+  if (!user) return;
+  
+  // Remove custom symbol and restore original group if it was stored
+  delete (user as any).customSymbol;
+  if ((user as any).originalGroup) {
+    delete (user as any).originalGroup;
+  }
+  user.updateIdentity();
 }
 
 export const commands: Chat.ChatCommands = {
@@ -164,12 +181,8 @@ export const commands: Chat.ChatCommands = {
       // Delete the custom symbol
       await CustomSymbolDB.deleteOne({ _id: userId });
       
-      // Reset user's symbol if online
-      const targetUser = Users.get(userId);
-      if (targetUser) {
-        targetUser.tempGroup = ' ' as GroupSymbol;
-        targetUser.updateIdentity();
-      }
+      // Remove custom symbol from user if online
+      await removeCustomSymbol(userId);
       
       // Log the action
       const symbolDetails = symbolDoc ? `Removed Symbol: ${symbolDoc.symbol}` : 'Symbol removed';
@@ -177,6 +190,7 @@ export const commands: Chat.ChatCommands = {
       
       this.sendReply(`You removed ${target}'s custom symbol.`);
       
+      const targetUser = Users.get(userId);
       if (targetUser?.connected) {
         targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} has removed your custom symbol.<br /><center>Refresh to see the changes.</center>`);
       }
