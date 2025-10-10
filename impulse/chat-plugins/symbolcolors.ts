@@ -1,7 +1,7 @@
 /*
 * Pokemon Showdown
 * Symbol Colors
-* @license MIT
+* Refactored By @PrinceSky-Git
 */
 
 import { FS } from '../../lib';
@@ -11,13 +11,12 @@ const STAFF_ROOM_ID = 'staff';
 const SYMBOL_COLOR_LOG_PATH = 'logs/symbolcolors.txt';
 
 interface SymbolColorDocument {
-	_id: string; // userid
-	color: string; // hex color
+	_id: string;
+	color: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-// Get typed MongoDB collection for symbol colors
 const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
 
 async function logSymbolColorAction(action: string, staff: string, target: string, details?: string): Promise<void> {
@@ -32,7 +31,6 @@ async function logSymbolColorAction(action: string, staff: string, target: strin
 
 async function updateSymbolColors(): Promise<void> {
 	try {
-		// Fetch all symbol color documents from MongoDB
 		const symbolColorDocs = await SymbolColorsDB.find({});
 		
 		let newCss = '/* SYMBOLCOLORS START */\n';
@@ -72,19 +70,16 @@ export const commands: Chat.ChatCommands = {
 			const userId = toID(name);
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
 			
-			// Validate hex color format
 			if (!/^#[0-9A-Fa-f]{6}$/.test(color) && !/^#[0-9A-Fa-f]{3}$/.test(color)) {
 				return this.errorReply('Invalid color format. Please use hex format (e.g., #FF5733 or #F73)');
 			}
 			
-			// Use exists() - most efficient way to check existence
 			if (await SymbolColorsDB.exists({ _id: userId })) {
 				return this.errorReply('This user already has a symbol color. Remove it first with /symbolcolor delete [user].');
 			}
 			
 			const now = new Date();
 			
-			// Use insertOne() for single document insert
 			await SymbolColorsDB.insertOne({
 				_id: userId,
 				color,
@@ -93,8 +88,6 @@ export const commands: Chat.ChatCommands = {
 			});
 			
 			await updateSymbolColors();
-			
-			// Log the action
 			await logSymbolColorAction('SET', user.name, userId, `Color: ${color}`);
 			
 			this.sendReply(`|raw|You have given ${Impulse.nameColor(name, true, false)} a symbol color: <span style="color: ${color}">■</span>`);
@@ -117,12 +110,10 @@ export const commands: Chat.ChatCommands = {
 			
 			const userId = toID(name);
 			
-			// Validate hex color format
 			if (!/^#[0-9A-Fa-f]{6}$/.test(color) && !/^#[0-9A-Fa-f]{3}$/.test(color)) {
 				return this.errorReply('Invalid color format. Please use hex format (e.g., #FF5733 or #F73)');
 			}
 			
-			// Get old color before updating for logging
 			const oldSymbolColor = await SymbolColorsDB.findOne(
 				{ _id: userId },
 				{ projection: { color: 1 } }
@@ -132,15 +123,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('This user does not have a symbol color. Use /symbolcolor set to create one.');
 			}
 			
-			// Use atomic updateOne with $set - checks existence and updates in one operation
 			const result = await SymbolColorsDB.updateOne(
 				{ _id: userId },
 				{ $set: { color, updatedAt: new Date() } }
 			);
 			
 			await updateSymbolColors();
-			
-			// Log the action
 			await logSymbolColorAction('UPDATE', user.name, userId, `Old: ${oldSymbolColor.color}, New: ${color}`);
 			
 			this.sendReply(`|raw|You have updated ${Impulse.nameColor(name, true, false)}'s symbol color to: <span style="color: ${color}">■</span>`);
@@ -160,7 +148,6 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('globalban');
 			const userId = toID(target);
 			
-			// Get symbol color details before deletion for logging
 			const symbolColor = await SymbolColorsDB.findOne(
 				{ _id: userId },
 				{ projection: { color: 1 } }
@@ -170,12 +157,9 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${target} does not have a symbol color.`);
 			}
 			
-			// Use deleteOne() and check result - single atomic operation
 			const result = await SymbolColorsDB.deleteOne({ _id: userId });
 			
 			await updateSymbolColors();
-			
-			// Log the action
 			await logSymbolColorAction('DELETE', user.name, userId, `Removed color: ${symbolColor.color}`);
 			
 			this.sendReply(`You removed ${target}'s symbol color.`);
@@ -195,7 +179,6 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('globalban');
 			const page = parseInt(target) || 1;
 			
-			// Use findPaginated() - optimized helper method for pagination
 			const result = await SymbolColorsDB.findPaginated({}, {
 				page,
 				limit: 20,
@@ -233,7 +216,6 @@ export const commands: Chat.ChatCommands = {
 			const userId = toID(target);
 			if (!userId) return this.parse('/help symbolcolor');
 			
-			// Use findOne() with projection to only fetch needed fields
 			const symbolColor = await SymbolColorsDB.findOne(
 				{ _id: userId },
 				{ projection: { _id: 1, color: 1, createdAt: 1, updatedAt: 1 } }
@@ -258,7 +240,6 @@ export const commands: Chat.ChatCommands = {
 		async setmany(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('globalban');
 			
-			// Parse bulk input: userid1:color1, userid2:color2, ...
 			const entries = target.split(',').map(s => s.trim()).filter(Boolean);
 			if (entries.length === 0) {
 				return this.errorReply('No symbol colors to set. Format: /symbolcolor setmany user1:#FF5733, user2:#00FF00');
@@ -274,7 +255,6 @@ export const commands: Chat.ChatCommands = {
 				const userId = toID(name);
 				if (userId.length > 19) continue;
 				
-				// Validate hex color format
 				if (!/^#[0-9A-Fa-f]{6}$/.test(color) && !/^#[0-9A-Fa-f]{3}$/.test(color)) {
 					continue;
 				}
@@ -291,13 +271,11 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('No valid symbol colors to set.');
 			}
 			
-			// Use insertMany() with ordered: false for best performance
 			// ordered: false allows MongoDB to continue inserting even if some fail
 			try {
 				const result = await SymbolColorsDB.insertMany(documents, { ordered: false });
 				await updateSymbolColors();
 				
-				// Log the bulk action
 				const userList = documents.map(d => d._id).join(', ');
 				await logSymbolColorAction('SETMANY', user.name, `${result.insertedCount} users`, `Users: ${userList}`);
 				
@@ -308,7 +286,6 @@ export const commands: Chat.ChatCommands = {
 					staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} bulk set ${result.insertedCount} custom symbol colors.</div>`).update();
 				}
 			} catch (err: any) {
-				// Handle duplicate key errors gracefully
 				if (err.code === 11000 && err.result?.insertedCount) {
 					await updateSymbolColors();
 					const userList = documents.map(d => d._id).join(', ');
@@ -327,7 +304,6 @@ export const commands: Chat.ChatCommands = {
 			
 			const searchTerm = toID(target);
 			
-			// Use find() with regex filter - only fetch needed fields with projection
 			const symbolColors = await SymbolColorsDB.find(
 				{ _id: { $regex: searchTerm, $options: 'i' } as any },
 				{ projection: { _id: 1, color: 1 }, limit: 50 }
@@ -350,7 +326,6 @@ export const commands: Chat.ChatCommands = {
 		async count(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('globalban');
 			
-			// Use estimatedDocumentCount() - faster than countDocuments() for total count
 			const total = await SymbolColorsDB.estimatedDocumentCount();
 			this.sendReply(`There are currently ${total} custom symbol color(s) set.`);
 		},
@@ -372,13 +347,11 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply('Please specify a number between 1 and 500.');
 				}
 				
-				// Get the last N lines and reverse to show latest first
 				const recentLines = lines.slice(-numLines).reverse();
 				
 				let output = `<div class="ladder pad"><h2>Symbol Color Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
 				output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
 				
-				// Add each log entry with a horizontal line separator
 				for (let i = 0; i < recentLines.length; i++) {
 					output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
 					if (i < recentLines.length - 1) {
