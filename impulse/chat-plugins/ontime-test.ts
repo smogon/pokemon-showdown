@@ -20,27 +20,15 @@ interface OntimeDocument {
 const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
 const ONTIME_LEADERBOARD_SIZE = 100;
 
-// Augment the existing User class to include our custom property
-declare module '../../server/users' {
-	interface User {
-		lastLoginTime: number;
-	}
-}
 
 // --- Integration Hooks ---
 
-// 1. Hook into the User constructor to add lastLoginTime on creation
-const originalUserInit = Users.User.prototype.init;
-Users.User.prototype.init = function (...args: any[]) {
-	originalUserInit.apply(this, args);
-	this.lastLoginTime = Date.now();
-};
-
-// 2. Hook into the onDisconnect method to save ontime when a user leaves
+// 1. Hook into the onDisconnect method to save ontime when a user leaves
 const originalOnDisconnect = Users.User.prototype.onDisconnect;
 Users.User.prototype.onDisconnect = function (connection: Connection) {
-	if (this.named && this.lastLoginTime) {
-		const sessionTime = Date.now() - this.lastLoginTime;
+	// Only save ontime for named users who are fully disconnecting
+	if (this.named && this.connections.length === 1) {
+		const sessionTime = Date.now() - this.lastConnected;
 		if (sessionTime > 0) {
 			void OntimeDB.updateOne(
 				{_id: this.id},
@@ -52,10 +40,13 @@ Users.User.prototype.onDisconnect = function (connection: Connection) {
 	originalOnDisconnect.call(this, connection);
 };
 
-// 3. Hook into the merge method to preserve login time when a guest logs in
+// 2. Hook into the merge method to preserve the original session start time when a guest logs in
 const originalMerge = Users.User.prototype.merge;
 Users.User.prototype.merge = function (oldUser: User) {
-	this.lastLoginTime = oldUser.lastLoginTime;
+	// When merging, keep the earliest connection time to preserve the full session duration
+	if (oldUser.lastConnected < this.lastConnected) {
+		this.lastConnected = oldUser.lastConnected;
+	}
 	originalMerge.call(this, oldUser);
 };
 
@@ -70,7 +61,11 @@ function convertTime(time: number): {h: number, m: number, s: number} {
 }
 
 function displayTime(t: {h: number, m: number, s: number}): string {
-	return `${t.h.toLocaleString()} ${t.h === 1 ? "hour" : "hours"}, ${t.m.toLocaleString()} ${t.m === 1 ? "minute" : "minutes"}, and ${t.s.toLocaleString()} ${t.s === 1 ? "second" : "seconds"}`;
+	const parts = [];
+	if (t.h > 0) parts.push(`${t.h.toLocaleString()} ${t.h === 1 ? "hour" : "hours"}`);
+	if (t.m > 0) parts.push(`${t.m.toLocaleString()} ${t.m === 1 ? "minute" : "minutes"}`);
+	if (t.s > 0) parts.push(`${t.s.toLocaleString()} ${t.s === 1 ? "second" : "seconds"}`);
+	return parts.join(', ') || '0 seconds';
 }
 
 
@@ -92,32 +87,47 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			let currentOntime = 0;
-			if (targetUser?.connected && targetUser.lastLoginTime) {
-				currentOntime = Date.now() - targetUser.lastLoginTime;
+			if (targetUser?.connected && targetUser.lastConnected) {
+				currentOntime = Date.now() - targetUser.lastConnected;
 			}
 
-			const output = `${Impulse.nameColor(targetId, true)}'s total ontime is <strong>${displayTime(convertTime(totalOntime + currentOntime))}</strong>. ${targetUser?.connected ? `Current ontime: <strong>${displayTime(convertTime(currentOntime))}</strong>.` : `Currently not online.`}`;
+			const output = `${Impulse.nameColor(targetId, true)}'s total ontime is <strong>${displayTime(convertTime(totalOntime + currentOntime))}</strong>. ${targetUser?.connected ? `Current session ontime: <strong>${displayTime(convertTime(currentOntime))}</strong>.` : `Currently not online.`}`;
 			this.sendReplyBox(output);
 		},
 
 		async ladder(target, room, user) {
 			if (!this.runBroadcast()) return;
 
-			const ontimeData = await OntimeDB.find({}, {sort: {ontime: -1}, limit: ONTIME_LEADERBOARD_SIZE});
+			// Fetch top users from DB
+			const ontimeData = await OntimeDB.find({}, {sort: {ontime: -1}, limit: 100});
+			const ontimeMap = new Map(ontimeData.map(d => [d._id, d.ontime]));
 
-			if (!ontimeData.length) return this.sendReplyBox("Ontime ladder is empty.");
-
-			const ladder = ontimeData.map((entry, index) => {
-				let currentOntime = 0;
-				const targetUser = Users.get(entry._id);
-				if (targetUser?.connected && targetUser.lastLoginTime) {
-					currentOntime = Date.now() - targetUser.lastLoginTime;
+			// Add currently online users who might not be in the top DB results yet
+			for (const u of Users.users.values()) {
+				if (u.connected && u.named && !ontimeMap.has(u.id)) {
+					ontimeMap.set(u.id, 0);
 				}
-				const totalOntime = entry.ontime + currentOntime;
-				return `<tr><td>${index + 1}</td><td>${Impulse.nameColor(entry._id, true)}</td><td>${displayTime(convertTime(totalOntime))}</td></tr>`;
+			}
+
+			const ladderData = [...ontimeMap.entries()].map(([userid, ontime]) => {
+				let currentOntime = 0;
+				const targetUser = Users.get(userid);
+				if (targetUser?.connected && targetUser.lastConnected) {
+					currentOntime = Date.now() - targetUser.lastConnected;
+				}
+				return {name: userid, time: ontime + currentOntime};
+			});
+
+
+			if (!ladderData.length) return this.sendReplyBox("Ontime ladder is empty.");
+
+			ladderData.sort((a, b) => b.time - a.time);
+
+			const ladder = ladderData.slice(0, ONTIME_LEADERBOARD_SIZE).map((entry, index) => {
+				return `<tr><td style="text-align:center">${index + 1}</td><td>${Impulse.nameColor(entry.name, true)}</td><td>${displayTime(convertTime(entry.time))}</td></tr>`;
 			}).join('');
 
-			return this.sendReply(`|raw|<div class="ladder"><table><tr><th>Rank</th><th>User</th><th>Ontime</th></tr>${ladder}</table></div>`);
+			return this.sendReply(`|raw|<div class="ladder"><table><tr><th>Rank</th><th>User</th><th>Total Ontime</th></tr>${ladder}</table></div>`);
 		},
 	},
 
