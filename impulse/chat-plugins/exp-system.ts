@@ -70,13 +70,6 @@ const REWARD_CONFIG = {
     command: 'customcolor',
     adminCommand: 'setcolor',
   },
-  customanimation: {
-    name: 'Custom Animation',
-    description: 'Set a custom animation effect',
-    levelRequired: 30,
-    command: 'customanimation',
-    adminCommand: 'setanimation',
-  },
 } as const;
 
 // Global state
@@ -991,7 +984,6 @@ export const commands: Chat.ChatCommands = {
         `<li><code>customicon [image_url]</code> - Custom icon (Level 15+)</li>` +
         `<li><code>customavatar [image_url]</code> - Custom avatar (Level 20+)</li>` +
         `<li><code>customcolor [hex_color]</code> - Custom username color (Level 25+)</li>` +
-        `<li><code>customanimation [animation]</code> - Custom animation effect (Level 30+)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Earn experience by chatting! 1 EXP per message with a 30-second cooldown.</small>` +
         `</div>`
@@ -1098,10 +1090,6 @@ export const commands: Chat.ChatCommands = {
             output += `<div style="margin: 5px 0;">`;
             output += `<span style="font-size: 32px; font-weight: bold; background: #f0f0f0; padding: 5px 10px; border-radius: 3px; display: inline-block;">${pendingReq.value}</span>`;
             output += `</div>`;
-          } else if (pendingReq.rewardType === 'customanimation') {
-            output += `<div style="margin: 5px 0;">`;
-            output += `<span style="font-family: monospace; background: #f0f0f0; padding: 5px 10px; border-radius: 3px; display: inline-block; animation: ${pendingReq.value} 2s ease-in-out infinite;">${pendingReq.value}</span>`;
-            output += `</div>`;
           } else {
             output += `<div style="margin: 5px 0;">`;
             output += `<span style="color: ${pendingReq.value}; font-size: 24px; font-weight: bold;">■</span> `;
@@ -1205,12 +1193,6 @@ export const commands: Chat.ChatCommands = {
         output += `<div style="margin: 10px 0;"><strong>Symbol:</strong></div>`;
         output += `<div style="display: flex; align-items: center; gap: 10px;">`;
         output += `<span style="font-size: 48px; font-weight: bold; background: #f0f0f0; padding: 10px 15px; border-radius: 5px; display: inline-block;">${request.value}</span>`;
-        output += `<span style="font-family: monospace; background: #e0e0e0; padding: 5px 10px; border-radius: 3px;">${request.value}</span>`;
-        output += `</div>`;
-      } else if (rewardType === 'customanimation') {
-        output += `<div style="margin: 10px 0;"><strong>Animation:</strong></div>`;
-        output += `<div style="display: flex; align-items: center; gap: 10px;">`;
-        output += `<span style="font-family: monospace; background: #f0f0f0; padding: 10px 15px; border-radius: 5px; display: inline-block; animation: ${request.value} 2s ease-in-out infinite;">${request.value}</span>`;
         output += `<span style="font-family: monospace; background: #e0e0e0; padding: 5px 10px; border-radius: 3px;">${request.value}</span>`;
         output += `</div>`;
       } else {
