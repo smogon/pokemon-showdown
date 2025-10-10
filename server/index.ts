@@ -145,8 +145,6 @@ function setupGlobals() {
 }
 setupGlobals();
 
-import '../impulse/custom-symbol-integration';
-
 /**************
 * Impulse DB
 ***************/
