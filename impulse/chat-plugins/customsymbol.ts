@@ -365,3 +365,35 @@ export const commands: Chat.ChatCommands = {
 export const loginfilter: Chat.LoginFilter = user => {
   applyCustomSymbol(user.id);
 };
+
+// Hook into User.getIdentity to display custom symbols
+const originalGetIdentity = Users.User.prototype.getIdentity;
+Users.User.prototype.getIdentity = function(room: BasicRoom | null = null) {
+  const customSymbol = (this as any).customSymbol;
+  
+  if (customSymbol) {
+    const punishgroups = Config.punishgroups || { locked: null, muted: null };
+    if (this.locked || this.namelocked) {
+      const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
+      return lockedSymbol + this.name;
+    }
+    if (room) {
+      if (room.isMuted(this)) {
+        const mutedSymbol = (punishgroups.muted?.symbol || '!');
+        return mutedSymbol + this.name;
+      }
+      const roomGroup = room.auth.get(this);
+      if (roomGroup === this.tempGroup || roomGroup === ' ') {
+        return customSymbol + this.name;
+      }
+      return roomGroup + this.name;
+    }
+    if (this.semilocked) {
+      const mutedSymbol = (punishgroups.muted?.symbol || '!');
+      return mutedSymbol + this.name;
+    }
+    return customSymbol + this.name;
+  }
+  
+  return originalGetIdentity.call(this, room);
+};
