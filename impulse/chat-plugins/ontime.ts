@@ -144,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 			}).join('');
 
 			let buf = `|raw|`;
-			buf += `<div class="ladder" style="max-width: 98%;">`;
+			buf += `<div class="ladder" style="max-width: 100%;">`;
 			buf += `<div style="max-height: 370px; overflow-y: auto;">`;
 			buf += `<table>`;
 			buf += `<tr><th>Rank</th><th>User</th><th>Total Ontime</th></tr>`;
