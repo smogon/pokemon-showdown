@@ -27,7 +27,7 @@ import '../utils';
 const CONFIG = {
   EXP_PER_MESSAGE: 1,
   COOLDOWN_MS: 30000, // 30 seconds
-  BASE_LEVEL_EXP: 100,
+  BASE_LEVEL_EXP: 35,
   LEVEL_MULTIPLIER: 1.2,
   MAX_LEVEL: 1000,
   REWARD_COOLDOWN_DAYS: 30, // 30 days between reward requests
