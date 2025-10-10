@@ -141,11 +141,11 @@ Impulse.NewsManager = NewsManager;
 const originalHandleRename = Users.User.prototype.handleRename;
 Users.User.prototype.handleRename = function(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
 	// Call the original handleRename method
-	const result = originalHandleRename.call(this, name, userid, newlyRegistered, userType);
+	const result = originalHandleRename.call(name, userid, newlyRegistered, userType);
 	
 	// If the rename was successful, call NewsManager.onUserConnect
 	if (result) {
-		Impulse.NewsManager.onUserConnect(this);
+		Impulse.NewsManager.onUserConnect(user);
 	}
 	
 	return result;
