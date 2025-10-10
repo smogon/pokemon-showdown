@@ -18,6 +18,7 @@ interface OntimeDocument {
 }
 
 const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
+const ONTIME_LEADERBOARD_SIZE = 100;
 
 // Augment the existing User class to include our custom property
 declare module '../../server/users' {
