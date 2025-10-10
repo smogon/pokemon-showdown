@@ -200,25 +200,39 @@ export class ExpSystem {
       return await this.getExp(id);
     }
 
-    // Atomic update with upsert
-    const result = await this.db.findOneAndUpdate(
-      { _id: id },
-      {
-        $inc: { 
-          exp: amount,
-          totalMessages: 1
+    // Check if user exists first
+    const existingUser = await this.db.findOne({ _id: id });
+    
+    let result;
+    if (existingUser) {
+      // User exists - increment exp and totalMessages
+      result = await this.db.findOneAndUpdate(
+        { _id: id },
+        {
+          $inc: { 
+            exp: amount,
+            totalMessages: 1
+          },
+          $set: { lastUpdated: new Date() }
         },
-        $setOnInsert: {
-          _id: id,
-          exp: 0,
-          level: 0,
-          totalMessages: 0,
-          lastUpdated: new Date()
+        { returnDocument: 'after' }
+      );
+    } else {
+      // User doesn't exist - create new document
+      result = await this.db.findOneAndUpdate(
+        { _id: id },
+        {
+          $setOnInsert: {
+            _id: id,
+            exp: amount,
+            level: 0,
+            totalMessages: 1,
+            lastUpdated: new Date()
+          }
         },
-        $set: { lastUpdated: new Date() }
-      },
-      { upsert: true, returnDocument: 'after' }
-    );
+        { upsert: true, returnDocument: 'after' }
+      );
+    }
 
     if (!result) throw new Error('Failed to update user experience');
 
@@ -371,21 +385,37 @@ export class ExpSystem {
    */
   static async giveExp(userid: string, amount: number, by: string): Promise<number> {
     const id = toID(userid);
-    const result = await this.db.findOneAndUpdate(
-      { _id: id },
-      {
-        $inc: { exp: amount },
-        $setOnInsert: {
-          _id: id,
-          exp: 0,
-          level: 0,
-          totalMessages: 0,
-          lastUpdated: new Date()
+    
+    // Check if user exists first
+    const existingUser = await this.db.findOne({ _id: id });
+    
+    let result;
+    if (existingUser) {
+      // User exists - increment exp
+      result = await this.db.findOneAndUpdate(
+        { _id: id },
+        {
+          $inc: { exp: amount },
+          $set: { lastUpdated: new Date() }
         },
-        $set: { lastUpdated: new Date() }
-      },
-      { upsert: true, returnDocument: 'after' }
-    );
+        { returnDocument: 'after' }
+      );
+    } else {
+      // User doesn't exist - create new document
+      result = await this.db.findOneAndUpdate(
+        { _id: id },
+        {
+          $setOnInsert: {
+            _id: id,
+            exp: amount,
+            level: 0,
+            totalMessages: 0,
+            lastUpdated: new Date()
+          }
+        },
+        { upsert: true, returnDocument: 'after' }
+      );
+    }
 
     if (!result) throw new Error('Failed to give experience');
 
