@@ -145,7 +145,7 @@ function setupGlobals() {
 }
 setupGlobals();
 
-import '../impulse/chat-plugins/custom-symbol-integration';
+import '../impulse/custom-symbol-integration';
 
 /**************
 * Impulse DB
