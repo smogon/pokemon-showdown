@@ -874,6 +874,7 @@ export class User extends Chat.MessageContext {
 			Rooms.global.checkAutojoin(user);
 			Rooms.global.rejoinGames(user);
 			Chat.loginfilter(user, this, userType);
+			Impulse.NewsManager.onUserConnect(user);
 			return true;
 		}
 
