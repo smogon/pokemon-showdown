@@ -30,6 +30,8 @@ const CONFIG = {
   LEVEL_MULTIPLIER: 1.2,
   MAX_LEVEL: 1000,
   REWARD_COOLDOWN_DAYS: 30, // 30 days between reward requests
+  LEVELUP_BONUS_PERCENTAGE: 0.05, // 5% of required exp as bonus
+  MAX_LEVELUP_BONUS_LEVEL: 50, // Only give bonus up to level 50
 } as const;
 
 // Reward configuration - easily customizable
@@ -334,12 +336,25 @@ export class ExpSystem {
     const user = Users.get(userid);
     if (!user || !user.connected) return;
 
+    // Calculate bonus exp for levelup
+    let bonusExp = 0;
+    if (newLevel <= CONFIG.MAX_LEVELUP_BONUS_LEVEL) {
+      const requiredExp = this.getExpForNextLevel(newLevel - 1) - this.getExpForNextLevel(newLevel - 2);
+      bonusExp = Math.floor(requiredExp * CONFIG.LEVELUP_BONUS_PERCENTAGE);
+      
+      // Add bonus exp (bypass cooldown for levelup bonus)
+      if (bonusExp > 0) {
+        await this.addExp(userid, bonusExp, true);
+      }
+    }
+
     user.popup(
       `|html|<div style="text-align: center; padding: 15px;">` +
       `<h2 style="color: #2ecc71; margin: 0 0 10px 0;">🎉 Level Up! 🎉</h2>` +
       `<div style="font-size: 1.3em; margin: 10px 0;">` +
       `<b style="color: #e74c3c;">Level ${oldLevel}</b> → <b style="color: #e74c3c;">Level ${newLevel}</b>` +
       `</div>` +
+      (bonusExp > 0 ? `<div style="margin: 10px 0; color: #f39c12; font-weight: bold;">+${bonusExp} bonus EXP!</div>` : '') +
       `<div style="margin: 10px 0; font-style: italic; color: #7f8c8d;">` +
       `Keep chatting to reach even higher levels!` +
       `</div>` +
