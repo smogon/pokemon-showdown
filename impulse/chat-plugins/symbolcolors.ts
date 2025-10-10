@@ -41,8 +41,8 @@ async function updateSymbolColors(): Promise<void> {
 			const userid = doc._id;
 			const color = doc.color;
 			
-			newCss += `[id$="-userlist-user-${userid}"] button > em.group {\n color: ${color}; \n}\n` +
-				`\n[class$="chatmessage-${userid}"] strong small, .groupsymbol {\n color: ${color}; \n}\n`;
+			newCss += `[id$="-userlist-user-${userid}"] button > em.group, [id$="-userlist-user-${userid}"] em.group {\n color: ${color}; \n}\n` +
+				`\n[class$="chatmessage-${userid}"] strong small, .groupsymbol, [class$="chatmessage-${userid}"] .groupsymbol {\n color: ${color}; \n}\n`;
 		}
 		
 		newCss += '/* SYMBOLCOLORS END */\n';
