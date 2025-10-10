@@ -4,8 +4,8 @@
 * Refactored By @PrinceSky-Git
 *
  * Integration:
- * This system integrates with server/users.ts at line 1220:
- *   if (this.named) Impulse.Seen(this.id);
+ * This system automatically integrates by overriding the User's onDisconnect method
+ * to track seen status for named users without requiring manual calls.
 */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
@@ -31,6 +31,18 @@ export function trackSeen(userid: string): void {
 }
 
 Impulse.Seen = trackSeen;
+
+// Override the User's onDisconnect method to automatically track seen status
+const originalOnDisconnect = Users.User.prototype.onDisconnect;
+Users.User.prototype.onDisconnect = function(connection: Connection) {
+	// Automatically track seen status for named users
+	if (this.named) {
+		Impulse.Seen(this.id);
+	}
+	
+	// Call the original onDisconnect method
+	return originalOnDisconnect.call(this, connection);
+};
 
 async function getLastSeen(userid: string): Promise<Date | null> {
 	const doc = await SeenDB.findOne(
