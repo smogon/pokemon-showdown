@@ -20,27 +20,15 @@ interface OntimeDocument {
 const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
 const ONTIME_LEADERBOARD_SIZE = 100;
 
-// Augment the existing User class to include our custom property
-declare module '../../server/users' {
-	interface User {
-		lastLoginTime: number;
-	}
-}
-
 // --- Integration Hooks ---
 
 // 1. Hook into the onDisconnect method to save ontime when a user leaves
 const originalOnDisconnect = Users.User.prototype.onDisconnect;
-Users.User.prototype.onDisconnect = function (connection: Connection) {
-	// Check if this is the last connection BEFORE it's removed
+Users.User.prototype.onDisconnect = function (this: User, connection: Connection) {
 	const isLastConnection = this.connections.length === 1;
-
-	// Run the original disconnect logic first to update user state
 	originalOnDisconnect.call(this, connection);
 
-	// Now, the user state is fully updated (this.connected is false, this.lastDisconnected is set)
 	if (this.named && isLastConnection) {
-		// Use the accurate timestamps set by the core User class
 		const sessionTime = this.lastDisconnected - this.lastConnected;
 		if (sessionTime > 0) {
 			void OntimeDB.updateOne(
@@ -52,14 +40,15 @@ Users.User.prototype.onDisconnect = function (connection: Connection) {
 	}
 };
 
-// 2. Hook into the merge method to preserve the original session start time when a guest logs in
+// 2. Hook into the merge method to preserve the session start time
 const originalMerge = Users.User.prototype.merge;
-Users.User.prototype.merge = function (oldUser: User) {
-	// When merging, keep the earliest connection time to preserve the full session duration
-	if (oldUser.lastConnected < this.lastConnected) {
-		this.lastConnected = oldUser.lastConnected;
-	}
+Users.User.prototype.merge = function (this: User, oldUser: User) {
+	const oldUserLastConnected = oldUser.lastConnected;
 	originalMerge.call(this, oldUser);
+
+	if (oldUserLastConnected < this.lastConnected) {
+		this.lastConnected = oldUserLastConnected;
+	}
 };
 
 
@@ -103,7 +92,8 @@ export const commands: Chat.ChatCommands = {
 				currentOntime = Date.now() - targetUser.lastConnected;
 			}
 
-			let buf = `${Impulse.nameColor(targetId, true)}'s total ontime is <strong>${displayTime(convertTime(totalOntime + currentOntime))}</strong>. `;
+			let buf = ``;
+			buf += `${Impulse.nameColor(targetId, true)}'s total ontime is <strong>${displayTime(convertTime(totalOntime + currentOntime))}</strong>. `;
 			buf += targetUser?.connected ? `Current session ontime: <strong>${displayTime(convertTime(currentOntime))}</strong>.` : `Currently not online.`;
 			this.sendReplyBox(buf);
 		},
@@ -129,38 +119,33 @@ export const commands: Chat.ChatCommands = {
 				return {name: userid, time: ontime + currentOntime};
 			});
 
-
 			if (!ladderData.length) return this.sendReplyBox("Ontime ladder is empty.");
 
 			ladderData.sort((a, b) => b.time - a.time);
 
-			const tableRows = ladderData.slice(0, ONTIME_LEADERBOARD_SIZE).map((entry, index) => {
-				let row = `<tr>`;
-				row += `<td style="text-align:center">${index + 1}</td>`;
-				row += `<td>${Impulse.nameColor(entry.name, true)}</td>`;
-				row += `<td>${displayTime(convertTime(entry.time))}</td>`;
-				row += `</tr>`;
-				return row;
-			}).join('');
+			const tableData = ladderData.slice(0, ONTIME_LEADERBOARD_SIZE).map((entry, index) => {
+				return [
+					`${index + 1}`,
+					Impulse.nameColor(entry.name, true),
+					displayTime(convertTime(entry.time)),
+				];
+			});
 
-			let buf = `|raw|`;
-			buf += `<div class="ladder" style="max-width: 100%;">`;
-			buf += `<div style="max-height: 370px; overflow-y: auto;">`;
-			buf += `<table>`;
-			buf += `<tr><th>Rank</th><th>User</th><th>Total Ontime</th></tr>`;
-			buf += tableRows;
-			buf += `</table>`;
-			buf += `</div>`;
-			buf += `</div>`;
+			const table = Impulse.generateThemedTable(
+				`Ontime Leaderboard`,
+				['Rank', 'User', 'Total Ontime'],
+				tableData
+			);
 			
-			return this.sendReply(buf);
+			return this.sendReply(`|raw|${table}`);
 		},
 	},
 
 	ontimehelp() {
 		this.runBroadcast();
-		let buf = `"/ontime [target]" - Checks a user's online time on the server. If no target is provided, it defaults to the user who used the command.<br />` +
-			`"/ontime ladder" - Displays the ontime leaderboard.`;
+		let buf = ``;
+		buf += `"/ontime [target]" - Checks a user's online time on the server. If no target is provided, it defaults to the user who used the command.<br />`;
+		buf += `"/ontime ladder" - Displays the ontime leaderboard.`;
 		this.sendReplyBox(buf);
 	},
 };
