@@ -1,7 +1,7 @@
 /*
 * Pokemon Showdown
 * Custom Avatars
-* @license MIT
+* Refactored By @PrinceSky-Git
 */
 
 import { FS } from '../../lib';
@@ -10,10 +10,9 @@ const AVATAR_PATH = 'config/avatars/';
 const AVATAR_LOG_PATH = 'logs/avatars.txt';
 const STAFF_ROOM_ID = 'staff';
 const VALID_EXTENSIONS = ['.jpg', '.png', '.gif'];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const FETCH_TIMEOUT = 10000; // 10 seconds
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const FETCH_TIMEOUT = 10000;
 
-// Get avatar base URL from config or use default
 function getAvatarBaseUrl(): string {
   return Config.avatarurl || 'https://impulse-server.fun/avatars/';
 }
@@ -30,7 +29,6 @@ async function logAvatarAction(action: string, staff: string, target: string, de
 
 async function downloadImage(imageUrl: string, name: string, extension: string): Promise<{ success: boolean; error?: string }> {
   try {
-    // Validate URL format
     let url: URL;
     try {
       url = new URL(imageUrl);
@@ -38,12 +36,10 @@ async function downloadImage(imageUrl: string, name: string, extension: string):
       return { success: false, error: 'Invalid URL format' };
     }
 
-    // Only allow http/https protocols
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       return { success: false, error: 'Only HTTP/HTTPS URLs are allowed' };
     }
 
-    // Fetch with timeout
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
     
@@ -68,7 +64,6 @@ async function downloadImage(imageUrl: string, name: string, extension: string):
       return { success: false, error: 'URL does not point to an image' };
     }
     
-    // Check content length header
     const contentLength = response.headers.get('content-length');
     if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
       return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
@@ -76,21 +71,16 @@ async function downloadImage(imageUrl: string, name: string, extension: string):
     
     const buffer = await response.arrayBuffer();
     
-    // Double-check actual size
     if (buffer.byteLength > MAX_FILE_SIZE) {
       return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
     }
     
-    // Validate image magic bytes
     const uint8 = new Uint8Array(buffer);
     if (!isValidImage(uint8, extension)) {
       return { success: false, error: 'File content does not match extension or is corrupted' };
     }
     
-    // Ensure directory exists
     await FS(AVATAR_PATH).parentDir().mkdirp();
-    
-    // Write file
     await FS(AVATAR_PATH + name + extension).write(Buffer.from(buffer));
     return { success: true };
   } catch (err) {
@@ -103,13 +93,10 @@ function isValidImage(bytes: Uint8Array, extension: string): boolean {
   if (bytes.length < 4) return false;
   
   if (extension === '.png') {
-    // PNG magic bytes: 89 50 4E 47
     return bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47;
   } else if (extension === '.jpg') {
-    // JPEG magic bytes: FF D8 FF
     return bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF;
   } else if (extension === '.gif') {
-    // GIF magic bytes: 47 49 46 (GIF)
     return bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46;
   }
   return false;
@@ -119,7 +106,6 @@ function getExtension(filename: string): string {
   const lastDot = filename.lastIndexOf('.');
   if (lastDot === -1) return '';
   
-  // Only get extension from the last part (ignore query parameters)
   const questionMark = filename.indexOf('?', lastDot);
   const ext = questionMark !== -1 
     ? filename.slice(lastDot, questionMark).toLowerCase()
@@ -129,7 +115,6 @@ function getExtension(filename: string): string {
 }
 
 async function deleteAllUserAvatarFiles(userId: string): Promise<void> {
-  // Delete all possible extensions for this user
   for (const ext of VALID_EXTENSIONS) {
     try {
       await FS(AVATAR_PATH + userId + ext).unlinkIfExists();
@@ -156,10 +141,8 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply('Image URL must end with .jpg, .png, or .gif extension.');
       }
 
-      // Delete all existing avatar files for this user (any extension)
       await deleteAllUserAvatarFiles(userId);
 
-      // Download the new image
       this.sendReply('Downloading avatar...');
       const avatarFilename = userId + ext;
       const result = await downloadImage(processedUrl, userId, ext);
@@ -169,18 +152,14 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply(`Failed to download avatar: ${result.error}`);
       }
 
-      // Use the new avatar system API to add the personal avatar
       if (!Users.Avatars.addPersonal(userId, avatarFilename)) {
-        // Clean up the downloaded file if avatar system fails
         await FS(AVATAR_PATH + avatarFilename).unlinkIfExists();
         await logAvatarAction('SET FAILED', user.name, userId, 'Avatar system rejected');
         return this.errorReply(`Failed to set avatar in the system. User may already have this avatar.`);
       }
 
-      // Save the avatars immediately
       Users.Avatars.save(true);
 
-      // Log the successful action
       await logAvatarAction('SET', user.name, userId, `Filename: ${avatarFilename}, URL: ${processedUrl}`);
 
       this.sendReply(`|raw|${name}'s avatar was successfully set. Avatar:<p><img src='${getAvatarBaseUrl()}${avatarFilename}' width='80' height='80'></p>`);
@@ -188,7 +167,6 @@ export const commands: Chat.ChatCommands = {
       const targetUser = Users.get(userId);
       if (targetUser) {
         targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} set your custom avatar.<p><img src='${getAvatarBaseUrl()}${avatarFilename}' width='80' height='80'></p><p>Use <code>/avatars</code> to see your custom avatars!</p>`);
-        // Update the user's current avatar
         targetUser.avatar = avatarFilename;
       }
       
@@ -204,33 +182,27 @@ export const commands: Chat.ChatCommands = {
       
       if (!userId) return this.errorReply('Invalid username.');
       
-      // Check if user has any custom avatars
       const userAvatars = Users.Avatars.avatars[userId];
       if (!userAvatars || !userAvatars.allowed.length) {
         return this.errorReply(`${target} does not have a custom avatar.`);
       }
 
-      // Get the personal avatar (first in the allowed array)
       const personalAvatar = userAvatars.allowed[0];
       if (!personalAvatar || personalAvatar.startsWith('#')) {
         return this.errorReply(`${target} does not have a personal avatar.`);
       }
 
       try {
-        // Remove from the avatar system first
         Users.Avatars.removeAllowed(userId, personalAvatar);
         Users.Avatars.save(true);
         
-        // Delete all avatar files for this user
         await deleteAllUserAvatarFiles(userId);
         
-        // Log the action
         await logAvatarAction('DELETE', user.name, userId, `Removed: ${personalAvatar}`);
         
         const targetUser = Users.get(userId);
         if (targetUser) {
           targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} has deleted your custom avatar.`);
-          // Reset to default avatar
           targetUser.avatar = 1;
         }
         
@@ -253,7 +225,6 @@ export const commands: Chat.ChatCommands = {
       const avatarsData = Users.Avatars.avatars;
       const customAvatars: [string, string][] = [];
       
-      // Filter users with custom avatars (personal avatars that aren't default #IDs)
       for (const userid in avatarsData) {
         const userAvatar = avatarsData[userid];
         if (userAvatar.allowed.length && userAvatar.allowed[0] && !userAvatar.allowed[0].startsWith('#')) {
@@ -265,7 +236,6 @@ export const commands: Chat.ChatCommands = {
         return this.sendReply('No custom avatars have been set.');
       }
       
-      // Sort alphabetically
       customAvatars.sort((a, b) => a[0].localeCompare(b[0]));
       
       const page = parseInt(target) || 1;
@@ -373,7 +343,7 @@ export const commands: Chat.ChatCommands = {
       this.sendReply(`There are currently ${count} custom avatar(s) set.`);
     },
 
-	  async logs(target, room, user) {
+    async logs(target, room, user) {
       this.checkCan('bypassall');
       
       try {
@@ -390,13 +360,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Avatar Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
