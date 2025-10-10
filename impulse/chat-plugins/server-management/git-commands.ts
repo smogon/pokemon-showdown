@@ -10,6 +10,7 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import { FS } from "../../../lib";
+import '../../../impulse/utils';
 
 const execAsync = promisify(exec);
 
@@ -17,24 +18,28 @@ function notifyStaff(action: string, file: string, user: User, info = "") {
   const staffRoom = Rooms.get("staff");
   if (!staffRoom) return;
 
+  // Extract just the directory name from the full path
+  const path = require('path');
+  const dirName = path.basename(file);
+
   let message = "";
   
   if (action === "Git pull executed - Already up to date") {
-    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(file)} - Already up to date.`;
+    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(dirName)} - Already up to date.`;
   } else if (action === "Git pull executed - Pulled new changes") {
-    message = `<username>${user.name}</username> pulled new changes from ${Chat.escapeHTML(file)}.`;
+    message = `<username>${user.name}</username> pulled new changes from ${Chat.escapeHTML(dirName)}.`;
   } else if (action === "Git pull executed - Pull completed") {
-    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(file)}.`;
+    message = `<username>${user.name}</username> executed git pull on ${Chat.escapeHTML(dirName)}.`;
   } else if (action === "Git pull FAILED - MERGE CONFLICT") {
-    message = `<username>${user.name}</username> git pull FAILED on ${Chat.escapeHTML(file)} - MERGE CONFLICT (${Chat.escapeHTML(info)}).`;
+    message = `<username>${user.name}</username> git pull FAILED on ${Chat.escapeHTML(dirName)} - MERGE CONFLICT (${Chat.escapeHTML(info)}).`;
   } else if (action === "Git pull failed") {
-    message = `<username>${user.name}</username> git pull failed on ${Chat.escapeHTML(file)}. Error: ${Chat.escapeHTML(info)}`;
+    message = `<username>${user.name}</username> git pull failed on ${Chat.escapeHTML(dirName)}. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "Git status checked") {
-    message = `<username>${user.name}</username> checked git status on ${Chat.escapeHTML(file)}.`;
+    message = `<username>${user.name}</username> checked git status on ${Chat.escapeHTML(dirName)}.`;
   } else if (action === "Git status failed") {
     message = `<username>${user.name}</username> git status failed. Error: ${Chat.escapeHTML(info)}`;
   } else if (action === "Git diff viewed") {
-    message = `<username>${user.name}</username> viewed git diff on ${Chat.escapeHTML(file)} (${Chat.escapeHTML(info)}).`;
+    message = `<username>${user.name}</username> viewed git diff on ${Chat.escapeHTML(dirName)} (${Chat.escapeHTML(info)}).`;
   } else if (action === "Git diff failed") {
     message = `<username>${user.name}</username> git diff failed. Error: ${Chat.escapeHTML(info)}`;
   } else if (action.startsWith("Git stash ")) {
@@ -42,7 +47,7 @@ function notifyStaff(action: string, file: string, user: User, info = "") {
     if (stashAction.includes("failed")) {
       message = `<username>${user.name}</username> git stash ${stashAction}. Error: ${Chat.escapeHTML(info)}`;
     } else {
-      message = `<username>${user.name}</username> executed git stash ${stashAction} on ${Chat.escapeHTML(file)}.`;
+      message = `<username>${user.name}</username> executed git stash ${stashAction} on ${Chat.escapeHTML(dirName)}.`;
     }
   }
 
