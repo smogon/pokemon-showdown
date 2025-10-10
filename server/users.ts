@@ -891,6 +891,7 @@ export class User extends Chat.MessageContext {
 		Rooms.global.checkAutojoin(this);
 		Rooms.global.rejoinGames(this);
 		Chat.loginfilter(this, null, userType);
+		Impulse.NewsManager.onUserConnect(this);
 		return true;
 	}
 	forceRename(name: string, registered: boolean, isForceRenamed = false) {
