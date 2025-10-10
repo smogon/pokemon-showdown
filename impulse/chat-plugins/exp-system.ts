@@ -29,6 +29,39 @@ const CONFIG = {
   BASE_LEVEL_EXP: 100,
   LEVEL_MULTIPLIER: 1.2,
   MAX_LEVEL: 1000,
+  REWARD_COOLDOWN_DAYS: 30, // 30 days between reward requests
+} as const;
+
+// Reward configuration - easily customizable
+const REWARD_CONFIG = {
+  customavatar: {
+    name: 'Custom Avatar',
+    description: 'Set a custom avatar image',
+    levelRequired: 5,
+    command: 'customavatar',
+    adminCommand: 'setavatar',
+  },
+  customicon: {
+    name: 'Custom Icon',
+    description: 'Set a custom icon',
+    levelRequired: 10,
+    command: 'customicon',
+    adminCommand: 'seticon',
+  },
+  customcolor: {
+    name: 'Custom Color',
+    description: 'Set a custom username color',
+    levelRequired: 15,
+    command: 'customcolor',
+    adminCommand: 'setcolor',
+  },
+  symbolcolor: {
+    name: 'Symbol Color',
+    description: 'Set a custom symbol color',
+    levelRequired: 20,
+    command: 'symbolcolor',
+    adminCommand: 'setsymbolcolor',
+  },
 } as const;
 
 // Global state
@@ -46,10 +79,20 @@ interface UserExp {
 }
 
 /**
+ * Reward request tracking
+ */
+interface RewardRequest {
+  _id: string; // userid
+  lastRequest: Date;
+  availableRewards: string[]; // Array of reward types available to user
+}
+
+/**
  * Experience System Class
  */
 export class ExpSystem {
   private static db = ImpulseDB<UserExp>('userexp');
+  private static rewardDb = ImpulseDB<RewardRequest>('rewardrequests');
 
   /**
    * Add experience to a user
@@ -347,6 +390,146 @@ export class ExpSystem {
       topLevel: stats.topLevel
     };
   }
+
+  /**
+   * Get available rewards for a user based on their level
+   */
+  static async getAvailableRewards(userid: string): Promise<string[]> {
+    const level = await this.getLevel(userid);
+    const availableRewards: string[] = [];
+    
+    for (const [rewardType, config] of Object.entries(REWARD_CONFIG)) {
+      if (level >= config.levelRequired) {
+        availableRewards.push(rewardType);
+      }
+    }
+    
+    return availableRewards;
+  }
+
+  /**
+   * Check if user can request a reward (cooldown check)
+   */
+  static async canRequestReward(userid: string): Promise<{ canRequest: boolean; nextAvailable?: Date }> {
+    const id = toID(userid);
+    const rewardData = await this.rewardDb.findOne({ _id: id });
+    
+    if (!rewardData) {
+      return { canRequest: true };
+    }
+    
+    const lastRequest = new Date(rewardData.lastRequest);
+    const cooldownMs = CONFIG.REWARD_COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
+    const nextAvailable = new Date(lastRequest.getTime() + cooldownMs);
+    
+    if (Date.now() >= nextAvailable.getTime()) {
+      return { canRequest: true };
+    }
+    
+    return { canRequest: false, nextAvailable };
+  }
+
+  /**
+   * Request a reward (user command)
+   */
+  static async requestReward(userid: string, rewardType: string): Promise<{
+    success: boolean;
+    message: string;
+    nextAvailable?: Date;
+  }> {
+    const id = toID(userid);
+    
+    // Check if reward type exists
+    if (!REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG]) {
+      return { success: false, message: 'Invalid reward type.' };
+    }
+    
+    // Check cooldown
+    const cooldownCheck = await this.canRequestReward(id);
+    if (!cooldownCheck.canRequest) {
+      const daysLeft = Math.ceil((cooldownCheck.nextAvailable!.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+      return { 
+        success: false, 
+        message: `You can request another reward in ${daysLeft} days.`,
+        nextAvailable: cooldownCheck.nextAvailable
+      };
+    }
+    
+    // Check level requirement
+    const level = await this.getLevel(id);
+    const config = REWARD_CONFIG[rewardType as keyof typeof REWARD_CONFIG];
+    if (level < config.levelRequired) {
+      return { 
+        success: false, 
+        message: `You need to be level ${config.levelRequired} to request ${config.name}. You are currently level ${level}.` 
+      };
+    }
+    
+    // Update reward request data
+    await this.rewardDb.upsert(
+      { _id: id },
+      {
+        _id: id,
+        lastRequest: new Date(),
+        availableRewards: await this.getAvailableRewards(id)
+      }
+    );
+    
+    return { 
+      success: true, 
+      message: `Your request for ${config.name} has been submitted! An admin will process it shortly.` 
+    };
+  }
+
+  /**
+   * Get user's reward request history
+   */
+  static async getRewardHistory(userid: string): Promise<RewardRequest | null> {
+    const id = toID(userid);
+    return await this.rewardDb.findOne({ _id: id });
+  }
+
+  /**
+   * Admin: Reset user's reward cooldown
+   */
+  static async resetRewardCooldown(userid: string, by: string): Promise<void> {
+    const id = toID(userid);
+    await this.rewardDb.updateOne(
+      { _id: id },
+      {
+        $set: {
+          lastRequest: new Date(0), // Set to epoch to allow immediate request
+          availableRewards: await this.getAvailableRewards(id)
+        }
+      },
+      { upsert: true }
+    );
+  }
+
+  /**
+   * Admin: Get all pending reward requests
+   */
+  static async getPendingRewards(): Promise<Array<{
+    userid: string;
+    lastRequest: Date;
+    availableRewards: string[];
+    level: number;
+  }>> {
+    const requests = await this.rewardDb.find({});
+    const results = [];
+    
+    for (const request of requests) {
+      const level = await this.getLevel(request._id);
+      results.push({
+        userid: request._id,
+        lastRequest: request.lastRequest,
+        availableRewards: request.availableRewards,
+        level
+      });
+    }
+    
+    return results.sort((a, b) => b.lastRequest.getTime() - a.lastRequest.getTime());
+  }
 }
 
 // Initialize the system
@@ -505,16 +688,124 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/exp</code> or <code>/exp level [user]</code> - Check your or another user's level and experience</li>` +
         `<li><code>/exp leaderboard [limit]</code> - View the experience leaderboard (default: 20, max: 100)</li>` +
         `<li><code>/exp stats</code> - View system statistics</li>` +
+        `<li><code>/exp rewards</code> - View available rewards and cooldown status</li>` +
+        `<li><code>/exp request [reward]</code> - Request a reward (30-day cooldown)</li>` +
         `</ul>` +
         `<h4 style="margin: 8px 0;">Staff Commands:</h4>` +
         `<ul style="margin: 5px 0;">` +
         `<li><code>/exp give [user], [amount]</code> - Give experience to a user (requires @)</li>` +
         `<li><code>/exp take [user], [amount]</code> - Take experience from a user (requires @)</li>` +
         `<li><code>/exp reset [user]</code> - Reset a user's experience to 0 (requires @)</li>` +
+        `<li><code>/exp pending</code> - View pending reward requests (requires @)</li>` +
+        `<li><code>/exp resetcooldown [user]</code> - Reset user's reward cooldown (requires @)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Earn experience by chatting! 1 EXP per message with a 30-second cooldown.</small>` +
         `</div>`
       );
+    },
+
+    async rewards(target, room, user) {
+      if (!this.runBroadcast()) return;
+      
+      const userid = target ? toID(target) : user.id;
+      const targetName = target || user.name;
+      
+      const level = await ExpSystem.getLevel(userid);
+      const availableRewards = await ExpSystem.getAvailableRewards(userid);
+      const cooldownCheck = await ExpSystem.canRequestReward(userid);
+      
+      let cooldownText = '';
+      if (cooldownCheck.canRequest) {
+        cooldownText = '<span style="color: #27ae60;">Available now!</span>';
+      } else {
+        const daysLeft = Math.ceil((cooldownCheck.nextAvailable!.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        cooldownText = `<span style="color: #e74c3c;">${daysLeft} days remaining</span>`;
+      }
+      
+      let rewardsList = '';
+      for (const [rewardType, config] of Object.entries(REWARD_CONFIG)) {
+        const isAvailable = availableRewards.includes(rewardType);
+        const status = isAvailable ? 
+          (level >= config.levelRequired ? '<span style="color: #27ae60;">✓ Available</span>' : '<span style="color: #e74c3c;">✗ Level too low</span>') :
+          '<span style="color: #95a5a6;">✗ Not available</span>';
+        
+        rewardsList += `<tr><td style="padding: 4px;">${config.name}</td><td style="padding: 4px;">Level ${config.levelRequired}</td><td style="padding: 4px;">${status}</td></tr>`;
+      }
+      
+      this.sendReplyBox(
+        `<div class="ladder" style="max-width: 500px;">` +
+        `<h3 style="margin: 5px 0;">${Impulse.nameColor(targetName, true, true)}'s Rewards</h3>` +
+        `<div style="margin: 10px 0;"><b>Current Level:</b> ${level} | <b>Next Request:</b> ${cooldownText}</div>` +
+        `<table style="width: 100%; border-collapse: collapse; margin-top: 10px;">` +
+        `<tr style="background: #f0f0f0;"><th style="padding: 4px;">Reward</th><th style="padding: 4px;">Level Required</th><th style="padding: 4px;">Status</th></tr>` +
+        rewardsList +
+        `</table>` +
+        `<div style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">` +
+        `Use <code>/exp request [reward]</code> to request a reward. 30-day cooldown between requests.` +
+        `</div>` +
+        `</div>`
+      );
+    },
+
+    async request(target, room, user) {
+      if (!target) return this.sendReply('Usage: /exp request [reward]. Use /exp rewards to see available rewards.');
+      
+      const rewardType = target.toLowerCase();
+      const result = await ExpSystem.requestReward(user.id, rewardType);
+      
+      if (result.success) {
+        this.sendReply(`|html|<div class="broadcast-green">${result.message}</div>`);
+      } else {
+        this.sendReply(`|html|<div class="broadcast-red">${result.message}</div>`);
+      }
+    },
+
+    async pending(target, room, user) {
+      this.checkCan('globalban');
+      if (!this.runBroadcast()) return;
+      
+      const pendingRewards = await ExpSystem.getPendingRewards();
+      
+      if (!pendingRewards.length) {
+        return this.sendReply('No pending reward requests.');
+      }
+      
+      let output = `<div class="ladder" style="max-width: 600px;">`;
+      output += `<h3 style="margin: 5px 0;">Pending Reward Requests (${pendingRewards.length})</h3>`;
+      output += `<div style="max-height: 400px; overflow-y: auto;">`;
+      output += `<table style="width: 100%; border-collapse: collapse;">`;
+      output += `<tr style="background: #f0f0f0;"><th>User</th><th>Level</th><th>Available Rewards</th><th>Last Request</th></tr>`;
+      
+      for (const request of pendingRewards.slice(0, 50)) { // Limit to 50 for performance
+        const date = new Date(request.lastRequest).toLocaleString();
+        const rewardsText = request.availableRewards.map(r => REWARD_CONFIG[r as keyof typeof REWARD_CONFIG]?.name || r).join(', ');
+        
+        output += `<tr style="border-bottom: 1px solid #ddd;">`;
+        output += `<td style="padding: 5px;">${Impulse.nameColor(request.userid, true, true)}</td>`;
+        output += `<td style="padding: 5px;">${request.level}</td>`;
+        output += `<td style="padding: 5px; font-size: 0.9em;">${rewardsText}</td>`;
+        output += `<td style="padding: 5px; font-size: 0.9em;">${date}</td>`;
+        output += `</tr>`;
+      }
+      
+      output += `</table></div></div>`;
+      this.sendReply(`|raw|${output}`);
+    },
+
+    async resetcooldown(target, room, user) {
+      this.checkCan('globalban');
+      if (!target) return this.sendReply('Usage: /exp resetcooldown [user]');
+      
+      const targetUser = Users.get(target);
+      if (!targetUser) return this.errorReply(`User "${target}" not found.`);
+      
+      await ExpSystem.resetRewardCooldown(targetUser.id, user.id);
+      
+      this.sendReplyBox(
+        `Reset ${Impulse.nameColor(targetUser.name, true, true)}'s reward cooldown. They can now request rewards immediately.`
+      );
+      
+      this.modlog('RESETREWARDCOOLDOWN', targetUser, 'cooldown reset', { by: user.id });
     },
   },
 };
