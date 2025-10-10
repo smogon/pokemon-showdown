@@ -3,7 +3,8 @@
 * Ontime Commands
 *
 * This file contains commands that keep track of users' activity.
-* It cleanly integrates with server/users.ts without manual modification.
+* It cleanly integrates with server/users.ts without manual modification
+* and excludes bot users from ontime tracking.
 *
 * @license MIT
 * @author PrinceSky-Git
@@ -28,7 +29,8 @@ Users.User.prototype.onDisconnect = function (this: User, connection: Connection
 	const isLastConnection = this.connections.length === 1;
 	originalOnDisconnect.call(this, connection);
 
-	if (this.named && isLastConnection) {
+	// MODIFICATION: Check if the user is a public bot before saving ontime
+	if (this.named && isLastConnection && !this.isPublicBot) {
 		const sessionTime = this.lastDisconnected - this.lastConnected;
 		if (sessionTime > 0) {
 			void OntimeDB.updateOne(
@@ -40,7 +42,7 @@ Users.User.prototype.onDisconnect = function (this: User, connection: Connection
 	}
 };
 
-// 2. Hook into the merge method to preserve the session start time
+// 2. Hook into the merge method to preserve the original session start time when a guest logs in
 const originalMerge = Users.User.prototype.merge;
 Users.User.prototype.merge = function (this: User, oldUser: User) {
 	const oldUserLastConnected = oldUser.lastConnected;
@@ -80,6 +82,12 @@ export const commands: Chat.ChatCommands = {
 
 			const targetId = toID(target) || user.id;
 			const targetUser = Users.get(targetId);
+			
+			// MODIFICATION: Add a check for bots
+			if (targetUser?.isPublicBot) {
+				return this.sendReplyBox(`${Impulse.nameColor(targetId, true)} is a bot and does not have its ontime tracked.`);
+			}
+
 			const ontimeDoc = await OntimeDB.findOne({_id: targetId});
 			const totalOntime = ontimeDoc?.ontime || 0;
 
@@ -105,7 +113,8 @@ export const commands: Chat.ChatCommands = {
 			const ontimeMap = new Map(ontimeData.map(d => [d._id, d.ontime]));
 
 			for (const u of Users.users.values()) {
-				if (u.connected && u.named && !ontimeMap.has(u.id)) {
+				// MODIFICATION: Don't add bots to the ladder
+				if (u.connected && u.named && !ontimeMap.has(u.id) && !u.isPublicBot) {
 					ontimeMap.set(u.id, 0);
 				}
 			}
