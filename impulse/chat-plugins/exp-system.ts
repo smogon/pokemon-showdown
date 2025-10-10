@@ -35,40 +35,40 @@ const CONFIG = {
 
 // Reward configuration - easily customizable
 const REWARD_CONFIG = {
-  customavatar: {
-    name: 'Custom Avatar',
-    description: 'Set a custom avatar image',
+  customsymbol: {
+    name: 'Custom Symbol',
+    description: 'Set a custom group symbol',
     levelRequired: 5,
-    command: 'customavatar',
-    adminCommand: 'setavatar',
-  },
-  customicon: {
-    name: 'Custom Icon',
-    description: 'Set a custom icon',
-    levelRequired: 10,
-    command: 'customicon',
-    adminCommand: 'seticon',
-  },
-  customcolor: {
-    name: 'Custom Color',
-    description: 'Set a custom username color',
-    levelRequired: 15,
-    command: 'customcolor',
-    adminCommand: 'setcolor',
+    command: 'customsymbol',
+    adminCommand: 'setsymbol',
   },
   symbolcolor: {
     name: 'Symbol Color',
     description: 'Set a custom symbol color',
-    levelRequired: 20,
+    levelRequired: 10,
     command: 'symbolcolor',
     adminCommand: 'setsymbolcolor',
   },
-  customsymbol: {
-    name: 'Custom Symbol',
-    description: 'Set a custom group symbol',
+  customicon: {
+    name: 'Custom Icon',
+    description: 'Set a custom icon',
+    levelRequired: 15,
+    command: 'customicon',
+    adminCommand: 'seticon',
+  },
+  customavatar: {
+    name: 'Custom Avatar',
+    description: 'Set a custom avatar image',
+    levelRequired: 20,
+    command: 'customavatar',
+    adminCommand: 'setavatar',
+  },
+  customcolor: {
+    name: 'Custom Color',
+    description: 'Set a custom username color',
     levelRequired: 25,
-    command: 'customsymbol',
-    adminCommand: 'setsymbol',
+    command: 'customcolor',
+    adminCommand: 'setcolor',
   },
 } as const;
 
@@ -956,11 +956,11 @@ export const commands: Chat.ChatCommands = {
         `</ul>` +
         `<h4 style="margin: 8px 0;">Reward Types:</h4>` +
         `<ul style="margin: 5px 0;">` +
-        `<li><code>customavatar [image_url]</code> - Custom avatar (Level 5+)</li>` +
-        `<li><code>customicon [image_url]</code> - Custom icon (Level 10+)</li>` +
-        `<li><code>customcolor [hex_color]</code> - Custom username color (Level 15+)</li>` +
-        `<li><code>symbolcolor [hex_color]</code> - Custom symbol color (Level 20+)</li>` +
-        `<li><code>customsymbol [symbol]</code> - Custom group symbol (Level 25+)</li>` +
+        `<li><code>customsymbol [symbol]</code> - Custom group symbol (Level 5+)</li>` +
+        `<li><code>symbolcolor [hex_color]</code> - Custom symbol color (Level 10+)</li>` +
+        `<li><code>customicon [image_url]</code> - Custom icon (Level 15+)</li>` +
+        `<li><code>customavatar [image_url]</code> - Custom avatar (Level 20+)</li>` +
+        `<li><code>customcolor [hex_color]</code> - Custom username color (Level 25+)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Earn experience by chatting! 1 EXP per message with a 30-second cooldown.</small>` +
         `</div>`
