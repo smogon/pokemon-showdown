@@ -399,23 +399,25 @@ export const commands: Chat.ChatCommands = {
 			this.parse('/symbolcolorhelp');
 		},
 	},
+	sc: 'symbolcolor',
 
 	symbolcolorhelp(target: string, room: ChatRoom | null, user: User) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`<b>Custom Symbol Color Commands:</b><br>` +
 			`<ul>` +
-			`<li><code>/symbolcolor set [username], [hex color]</code> - Gives [user] a symbol color (e.g., #FF5733)</li>` +
-			`<li><code>/symbolcolor update [username], [hex color]</code> - Updates an existing symbol color</li>` +
-			`<li><code>/symbolcolor delete [username]</code> - Removes a user's symbol color</li>` +
-			`<li><code>/symbolcolor setmany [user1:#color1, user2:#color2, ...]</code> - Bulk set multiple symbol colors</li>` +
-			`<li><code>/symbolcolor list [page]</code> - Lists all custom symbol colors with pagination</li>` +
-			`<li><code>/symbolcolor view [username]</code> - View details about a user's symbol color</li>` +
-			`<li><code>/symbolcolor search [term]</code> - Search for symbol colors by username</li>` +
-			`<li><code>/symbolcolor count</code> - Show total number of custom symbol colors</li>` +
-			`<li><code>/symbolcolor logs [number]</code> - View recent symbol color log entries (default: 50, max: 500)</li>` +
+			`<li><code>/symbolcolor set [username], [hex color]</code> OR <code>/sc set [username], [hex color]</code> - Gives [user] a symbol color (e.g., #FF5733)</li>` +
+			`<li><code>/symbolcolor update [username], [hex color]</code> OR <code>/sc update [username], [hex color]</code> - Updates an existing symbol color</li>` +
+			`<li><code>/symbolcolor delete [username]</code> OR <code>/sc delete [username]</code> - Removes a user's symbol color</li>` +
+			`<li><code>/symbolcolor setmany [user1:#color1, user2:#color2, ...]</code> OR <code>/sc setmany [user1:#color1, user2:#color2, ...]</code> - Bulk set multiple symbol colors</li>` +
+			`<li><code>/symbolcolor list [page]</code> OR <code>/sc list [page]</code> - Lists all custom symbol colors with pagination</li>` +
+			`<li><code>/symbolcolor view [username]</code> OR <code>/sc view [username]</code> - View details about a user's symbol color</li>` +
+			`<li><code>/symbolcolor search [term]</code> OR <code>/sc search [term]</code> - Search for symbol colors by username</li>` +
+			`<li><code>/symbolcolor count</code> OR <code>/sc count</code> - Show total number of custom symbol colors</li>` +
+			`<li><code>/symbolcolor logs [number]</code> OR <code>/sc logs [number]</code> - View recent symbol color log entries (default: 50, max: 500)</li>` +
 			`</ul>` +
 			`<small>All commands except view require @ or higher permission.</small>`
 		);
 	},
+	schelp: 'symbolcolorhelp',
 };
