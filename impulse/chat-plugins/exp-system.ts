@@ -1,23 +1,13 @@
-/**
- * Pokemon Showdown - Modern Experience System
- * 
- * A streamlined and efficient leveling system for Pokemon Showdown servers.
- * Features a clean API, atomic operations, and modern database integration.
- * 
- * Key Features:
- * - Simple leveling system with configurable scaling
- * - Atomic MongoDB operations for data consistency
- * - Clean command interface
- * - Efficient leaderboard system
- * - Admin moderation tools
- * 
- * Integration:
- * This system integrates with server/chat.ts at line 693:
- *   if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
- * 
- * @author PrinceSky-Git
- * @license MIT
- */
+/*
+* Pokemon Showdown
+* Experiance System
+*
+* Integration:
+* This system integrates with server/chat.ts at line 693:
+*   if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
+* 
+* @author PrinceSky-Git
+*/
 
 import { ImpulseDB } from '../../impulse/impulse-db';
 import { FS } from '../../lib';
