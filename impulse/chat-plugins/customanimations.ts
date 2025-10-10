@@ -13,12 +13,6 @@ const ANIMATION_LOG_PATH = 'logs/customanimations.txt';
 interface CustomAnimationDocument {
   _id: string; // userid
   animation: string; // Animation name/key
-  duration?: number; // Animation duration in seconds
-  delay?: number; // Animation delay in seconds
-  iteration?: string; // Animation iteration count
-  direction?: string; // Animation direction
-  fillMode?: string; // Animation fill mode
-  timingFunction?: string; // Animation timing function
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,71 +20,55 @@ interface CustomAnimationDocument {
 // Get typed MongoDB collection for custom animations
 const CustomAnimationDB = ImpulseDB<CustomAnimationDocument>('customanimations');
 
-// Predefined animations
+// Simple predefined animations
 const PREDEFINED_ANIMATIONS = {
   pulse: {
     name: 'Pulse',
     description: 'Gentle pulsing effect',
     keyframes: '0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }',
-    duration: 2,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'pulse 2s infinite'
   },
   bounce: {
     name: 'Bounce',
     description: 'Bouncing effect',
     keyframes: '0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); }',
-    duration: 1,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'bounce 1s infinite'
   },
   glow: {
     name: 'Glow',
     description: 'Glowing effect',
     keyframes: '0% { box-shadow: 0 0 5px rgba(0,255,0,0.5); } 50% { box-shadow: 0 0 20px rgba(0,255,0,0.8); } 100% { box-shadow: 0 0 5px rgba(0,255,0,0.5); }',
-    duration: 2,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'glow 2s infinite'
   },
   shake: {
     name: 'Shake',
     description: 'Shaking effect',
     keyframes: '0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); } 20%, 40%, 60%, 80% { transform: translateX(2px); }',
-    duration: 0.5,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'shake 0.5s infinite'
   },
   rotate: {
     name: 'Rotate',
     description: 'Rotating effect',
     keyframes: '0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); }',
-    duration: 3,
-    iteration: 'infinite',
-    timingFunction: 'linear'
+    css: 'rotate 3s infinite linear'
   },
   fade: {
     name: 'Fade',
     description: 'Fading effect',
     keyframes: '0%, 100% { opacity: 1; } 50% { opacity: 0.5; }',
-    duration: 2,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'fade 2s infinite'
   },
   slide: {
     name: 'Slide',
     description: 'Sliding effect',
     keyframes: '0% { transform: translateX(-100%); } 100% { transform: translateX(100%); }',
-    duration: 2,
-    iteration: 'infinite',
-    timingFunction: 'ease-in-out'
+    css: 'slide 2s infinite'
   },
   rainbow: {
     name: 'Rainbow',
     description: 'Rainbow color cycling',
     keyframes: '0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); }',
-    duration: 3,
-    iteration: 'infinite',
-    timingFunction: 'linear'
+    css: 'rainbow 3s infinite linear'
   }
 } as const;
 
@@ -120,24 +98,19 @@ async function updateAnimations(): Promise<void> {
     for (const doc of animationDocs) {
       const userid = doc._id;
       const animation = doc.animation;
-      const duration = doc.duration || PREDEFINED_ANIMATIONS[animation as keyof typeof PREDEFINED_ANIMATIONS]?.duration || 2;
-      const delay = doc.delay || 0;
-      const iteration = doc.iteration || PREDEFINED_ANIMATIONS[animation as keyof typeof PREDEFINED_ANIMATIONS]?.iteration || 'infinite';
-      const direction = doc.direction || 'normal';
-      const fillMode = doc.fillMode || 'both';
-      const timingFunction = doc.timingFunction || PREDEFINED_ANIMATIONS[animation as keyof typeof PREDEFINED_ANIMATIONS]?.timingFunction || 'ease-in-out';
+      const animationInfo = PREDEFINED_ANIMATIONS[animation as keyof typeof PREDEFINED_ANIMATIONS];
       
-      // Apply to userlist
-      newCss += `[id$="-userlist-user-${userid}"] {\n`;
-      newCss += `  animation: ${animation} ${duration}s ${timingFunction} ${delay}s ${iteration} ${direction};\n`;
-      newCss += `  animation-fill-mode: ${fillMode};\n`;
-      newCss += `}\n`;
-      
-      // Apply to chat messages
-      newCss += `[class$="chatmessage-${userid}"] {\n`;
-      newCss += `  animation: ${animation} ${duration}s ${timingFunction} ${delay}s ${iteration} ${direction};\n`;
-      newCss += `  animation-fill-mode: ${fillMode};\n`;
-      newCss += `}\n`;
+      if (animationInfo) {
+        // Apply to userlist
+        newCss += `[id$="-userlist-user-${userid}"] {\n`;
+        newCss += `  animation: ${animationInfo.css};\n`;
+        newCss += `}\n`;
+        
+        // Apply to chat messages
+        newCss += `[class$="chatmessage-${userid}"] {\n`;
+        newCss += `  animation: ${animationInfo.css};\n`;
+        newCss += `}\n`;
+      }
     }
     
     newCss += '/* CUSTOM ANIMATIONS END */\n';
@@ -168,7 +141,7 @@ export const commands: Chat.ChatCommands = {
     async set(target, room, user) {
       this.checkCan('globalban');
       const parts = target.split(',').map(s => s.trim());
-      const [name, animation, ...options] = parts;
+      const [name, animation] = parts;
       
       if (!name || !animation) return this.parse('/help animation');
       
@@ -179,14 +152,6 @@ export const commands: Chat.ChatCommands = {
       if (!PREDEFINED_ANIMATIONS[animation as keyof typeof PREDEFINED_ANIMATIONS]) {
         return this.errorReply(`Invalid animation. Available: ${Object.keys(PREDEFINED_ANIMATIONS).join(', ')}`);
       }
-      
-      // Parse options
-      const duration = options.find(opt => opt.startsWith('duration:'))?.split(':')[1];
-      const delay = options.find(opt => opt.startsWith('delay:'))?.split(':')[1];
-      const iteration = options.find(opt => opt.startsWith('iteration:'))?.split(':')[1];
-      const direction = options.find(opt => opt.startsWith('direction:'))?.split(':')[1];
-      const fillMode = options.find(opt => opt.startsWith('fill:'))?.split(':')[1];
-      const timingFunction = options.find(opt => opt.startsWith('timing:'))?.split(':')[1];
       
       const now = new Date();
       
@@ -199,12 +164,6 @@ export const commands: Chat.ChatCommands = {
       await CustomAnimationDB.insertOne({
         _id: userId,
         animation,
-        duration: duration ? parseFloat(duration) : undefined,
-        delay: delay ? parseFloat(delay) : undefined,
-        iteration: iteration || undefined,
-        direction: direction || undefined,
-        fillMode: fillMode || undefined,
-        timingFunction: timingFunction || undefined,
         createdAt: now,
         updatedAt: now,
       });
@@ -230,7 +189,7 @@ export const commands: Chat.ChatCommands = {
     async update(target, room, user) {
       this.checkCan('globalban');
       const parts = target.split(',').map(s => s.trim());
-      const [name, animation, ...options] = parts;
+      const [name, animation] = parts;
       
       if (!name || !animation) return this.parse('/help animation');
       
@@ -246,31 +205,10 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply(`Invalid animation. Available: ${Object.keys(PREDEFINED_ANIMATIONS).join(', ')}`);
       }
       
-      // Parse options
-      const duration = options.find(opt => opt.startsWith('duration:'))?.split(':')[1];
-      const delay = options.find(opt => opt.startsWith('delay:'))?.split(':')[1];
-      const iteration = options.find(opt => opt.startsWith('iteration:'))?.split(':')[1];
-      const direction = options.find(opt => opt.startsWith('direction:'))?.split(':')[1];
-      const fillMode = options.find(opt => opt.startsWith('fill:'))?.split(':')[1];
-      const timingFunction = options.find(opt => opt.startsWith('timing:'))?.split(':')[1];
-      
-      // Build update object
-      const updateFields: any = {
-        animation,
-        updatedAt: new Date(),
-      };
-      
-      if (duration) updateFields.duration = parseFloat(duration);
-      if (delay) updateFields.delay = parseFloat(delay);
-      if (iteration) updateFields.iteration = iteration;
-      if (direction) updateFields.direction = direction;
-      if (fillMode) updateFields.fillMode = fillMode;
-      if (timingFunction) updateFields.timingFunction = timingFunction;
-      
       // Update the animation
       await CustomAnimationDB.updateOne(
         { _id: userId },
-        { $set: updateFields }
+        { $set: { animation, updatedAt: new Date() } }
       );
       
       await updateAnimations();
@@ -344,12 +282,13 @@ export const commands: Chat.ChatCommands = {
         return this.sendReply('No custom animations have been set.');
       }
       
-      let output = `<div class="ladder pad"><h2>Custom Animations (Page ${result.page}/${result.totalPages})</h2><table style="width: 100%"><tr><th>User</th><th>Animation</th><th>Duration</th><th>Created</th></tr>`;
+      let output = `<div class="ladder pad"><h2>Custom Animations (Page ${result.page}/${result.totalPages})</h2><table style="width: 100%"><tr><th>User</th><th>Animation</th><th>CSS</th><th>Created</th></tr>`;
       
       for (const doc of result.docs) {
         const created = doc.createdAt ? doc.createdAt.toLocaleDateString() : 'Unknown';
-        const duration = doc.duration || PREDEFINED_ANIMATIONS[doc.animation as keyof typeof PREDEFINED_ANIMATIONS]?.duration || 2;
-        output += `<tr><td>${doc._id}</td><td><strong>${doc.animation}</strong></td><td>${duration}s</td><td>${created}</td></tr>`;
+        const animationInfo = PREDEFINED_ANIMATIONS[doc.animation as keyof typeof PREDEFINED_ANIMATIONS];
+        const css = animationInfo?.css || 'unknown';
+        output += `<tr><td>${doc._id}</td><td><strong>${doc.animation}</strong></td><td><code>${css}</code></td><td>${created}</td></tr>`;
       }
       
       output += `</table></div>`;
@@ -375,7 +314,7 @@ export const commands: Chat.ChatCommands = {
       // Get animation document
       const animationDoc = await CustomAnimationDB.findOne(
         { _id: userId },
-        { projection: { animation: 1, duration: 1, delay: 1, iteration: 1, direction: 1, fillMode: 1, timingFunction: 1, createdAt: 1, updatedAt: 1 } }
+        { projection: { animation: 1, createdAt: 1, updatedAt: 1 } }
       );
       
       if (!animationDoc) {
@@ -390,12 +329,7 @@ export const commands: Chat.ChatCommands = {
         `<strong>Custom Animation for ${target}:</strong><br />` +
         `<strong>Animation:</strong> ${animationDoc.animation} (${animationInfo?.name || 'Unknown'})<br />` +
         `<strong>Description:</strong> ${animationInfo?.description || 'No description'}<br />` +
-        `<strong>Duration:</strong> ${animationDoc.duration || animationInfo?.duration || 2}s<br />` +
-        `<strong>Delay:</strong> ${animationDoc.delay || 0}s<br />` +
-        `<strong>Iteration:</strong> ${animationDoc.iteration || animationInfo?.iteration || 'infinite'}<br />` +
-        `<strong>Direction:</strong> ${animationDoc.direction || 'normal'}<br />` +
-        `<strong>Fill Mode:</strong> ${animationDoc.fillMode || 'both'}<br />` +
-        `<strong>Timing:</strong> ${animationDoc.timingFunction || animationInfo?.timingFunction || 'ease-in-out'}<br />` +
+        `<strong>CSS:</strong> <code>animation: ${animationInfo?.css || 'unknown'};</code><br />` +
         `<strong>Created:</strong> ${created}<br />` +
         `<strong>Last Updated:</strong> ${updated}`
       );
@@ -414,10 +348,8 @@ export const commands: Chat.ChatCommands = {
       this.sendReplyBox(
         `<strong>Animation Preview: ${animationInfo.name}</strong><br />` +
         `<strong>Description:</strong> ${animationInfo.description}<br />` +
-        `<strong>Duration:</strong> ${animationInfo.duration}s<br />` +
-        `<strong>Iteration:</strong> ${animationInfo.iteration}<br />` +
-        `<strong>Timing:</strong> ${animationInfo.timingFunction}<br />` +
-        `<div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc; display: inline-block; animation: ${animation} ${animationInfo.duration}s ${animationInfo.timingFunction} infinite;">` +
+        `<strong>CSS:</strong> <code>animation: ${animationInfo.css};</code><br />` +
+        `<div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc; display: inline-block; animation: ${animationInfo.css};">` +
         `Preview: ${user.name}` +
         `</div>`
       );
@@ -426,14 +358,14 @@ export const commands: Chat.ChatCommands = {
     async available(target, room, user) {
       if (!this.runBroadcast()) return;
       
-      let output = `<div class="ladder pad"><h2>Available Animations</h2><table style="width: 100%"><tr><th>Key</th><th>Name</th><th>Description</th><th>Duration</th><th>Preview</th></tr>`;
+      let output = `<div class="ladder pad"><h2>Available Animations</h2><table style="width: 100%"><tr><th>Key</th><th>Name</th><th>Description</th><th>CSS</th><th>Preview</th></tr>`;
       
       for (const [key, animation] of Object.entries(PREDEFINED_ANIMATIONS)) {
         output += `<tr>`;
         output += `<td><strong>${key}</strong></td>`;
         output += `<td>${animation.name}</td>`;
         output += `<td>${animation.description}</td>`;
-        output += `<td>${animation.duration}s</td>`;
+        output += `<td><code>${animation.css}</code></td>`;
         output += `<td><button class="button" name="send" value="/animation preview ${key}">Preview</button></td>`;
         output += `</tr>`;
       }
@@ -452,18 +384,19 @@ export const commands: Chat.ChatCommands = {
       // Search for usernames containing the search term
       const animations = await CustomAnimationDB.find(
         { _id: { $regex: searchTerm, $options: 'i' } as any },
-        { projection: { _id: 1, animation: 1, duration: 1 } }
+        { projection: { _id: 1, animation: 1 } }
       );
       
       if (animations.length === 0) {
         return this.sendReply(`No custom animations found matching "${target}".`);
       }
       
-      let output = `<div class="ladder pad"><h2>Search Results for "${target}"</h2><table style="width: 100%"><tr><th>User</th><th>Animation</th><th>Duration</th></tr>`;
+      let output = `<div class="ladder pad"><h2>Search Results for "${target}"</h2><table style="width: 100%"><tr><th>User</th><th>Animation</th><th>CSS</th></tr>`;
       
       for (const doc of animations) {
-        const duration = doc.duration || PREDEFINED_ANIMATIONS[doc.animation as keyof typeof PREDEFINED_ANIMATIONS]?.duration || 2;
-        output += `<tr><td>${doc._id}</td><td><strong>${doc.animation}</strong></td><td>${duration}s</td></tr>`;
+        const animationInfo = PREDEFINED_ANIMATIONS[doc.animation as keyof typeof PREDEFINED_ANIMATIONS];
+        const css = animationInfo?.css || 'unknown';
+        output += `<tr><td>${doc._id}</td><td><strong>${doc.animation}</strong></td><td><code>${css}</code></td></tr>`;
       }
       
       output += `</table></div>`;
@@ -523,8 +456,8 @@ export const commands: Chat.ChatCommands = {
     this.sendReplyBox(
       `<div><b><center>Custom Animation Commands</center></b><br>` +
       `<ul>` +
-      `<li><code>/animation set [username], [animation] [options]</code> - Gives [user] a custom animation</li>` +
-      `<li><code>/animation update [username], [animation] [options]</code> - Updates an existing custom animation</li>` +
+      `<li><code>/animation set [username], [animation]</code> - Gives [user] a custom animation</li>` +
+      `<li><code>/animation update [username], [animation]</code> - Updates an existing custom animation</li>` +
       `<li><code>/animation delete [username]</code> - Removes a user's custom animation</li>` +
       `<li><code>/animation list [page]</code> - Lists all custom animations with pagination</li>` +
       `<li><code>/animation view [username]</code> - View details about a user's custom animation</li>` +
@@ -544,15 +477,6 @@ export const commands: Chat.ChatCommands = {
       `<li><code>fade</code> - Fading effect</li>` +
       `<li><code>slide</code> - Sliding effect</li>` +
       `<li><code>rainbow</code> - Rainbow color cycling</li>` +
-      `</ul>` +
-      `<h4>Options:</h4>` +
-      `<ul>` +
-      `<li><code>duration:X</code> - Animation duration in seconds</li>` +
-      `<li><code>delay:X</code> - Animation delay in seconds</li>` +
-      `<li><code>iteration:X</code> - Number of iterations (infinite, 1, 2, etc.)</li>` +
-      `<li><code>direction:X</code> - Animation direction (normal, reverse, alternate, alternate-reverse)</li>` +
-      `<li><code>fill:X</code> - Animation fill mode (none, forwards, backwards, both)</li>` +
-      `<li><code>timing:X</code> - Timing function (ease, linear, ease-in, ease-out, ease-in-out)</li>` +
       `</ul>` +
       `<small>All commands except view, preview, and available require @ or higher permission.<br>` +
       `Aliases: /customanimation, /ca</small>` +
