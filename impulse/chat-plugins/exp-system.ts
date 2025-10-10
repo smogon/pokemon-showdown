@@ -15,13 +15,12 @@
  * This system integrates with server/chat.ts at line 693:
  *   if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
  * 
- * @author Modern Implementation
+ * @author PrinceSky-Git
  * @license MIT
  */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
 import { FS } from '../../lib';
-import '../utils';
 
 // Configuration
 const CONFIG = {
