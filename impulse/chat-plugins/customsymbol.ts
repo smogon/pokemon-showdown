@@ -1,7 +1,7 @@
 /*
 * Pokemon Showdown
-* Custom Symbols
-* @license MIT
+* Custom Symbol
+* @author PrinceSky-Git
 */
 
 import { FS } from '../../lib';
@@ -11,13 +11,12 @@ const STAFF_ROOM_ID = 'staff';
 const SYMBOL_LOG_PATH = 'logs/customsymbol.txt';
 
 interface CustomSymbolDocument {
-  _id: string; // userid
+  _id: string;
   symbol: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Get typed MongoDB collection for custom symbols
 const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
 
 async function logSymbolAction(action: string, staff: string, target: string, details?: string): Promise<void> {
@@ -40,11 +39,9 @@ async function applyCustomSymbol(userid: string): Promise<void> {
   );
   
   if (symbolDoc) {
-    // Store the original group before applying custom symbol
     if (!(user as any).originalGroup) {
       (user as any).originalGroup = user.tempGroup;
     }
-    // Store custom symbol without affecting actual group/rank
     (user as any).customSymbol = symbolDoc.symbol;
     user.updateIdentity();
   }
@@ -54,7 +51,6 @@ async function removeCustomSymbol(userid: string): Promise<void> {
   const user = Users.get(userid);
   if (!user) return;
   
-  // Remove custom symbol and restore original group if it was stored
   delete (user as any).customSymbol;
   if ((user as any).originalGroup) {
     delete (user as any).originalGroup;
@@ -80,19 +76,16 @@ export const commands: Chat.ChatCommands = {
       const userId = toID(name);
       if (userId.length > 19) return this.errorReply('Usernames are not this long...');
       
-      // Validate symbol (should be a single character)
       if (symbol.length !== 1) {
         return this.errorReply('Symbol must be a single character.');
       }
       
-      // Check if user already has a custom symbol
       if (await CustomSymbolDB.exists({ _id: userId })) {
         return this.errorReply('This user already has a custom symbol. Remove it first with /symbol delete [user] or use /symbol update [user], [symbol].');
       }
       
       const now = new Date();
       
-      // Insert the custom symbol document
       await CustomSymbolDB.insertOne({
         _id: userId,
         symbol,
@@ -100,10 +93,8 @@ export const commands: Chat.ChatCommands = {
         updatedAt: now,
       });
       
-      // Apply symbol to user if online
       await applyCustomSymbol(userId);
       
-      // Log the action
       await logSymbolAction('SET', user.name, userId, `Symbol: ${symbol}`);
       
       this.sendReply(`|raw|You have given ${Impulse.nameColor(name, true, false)} the custom symbol: ${symbol}`);
@@ -128,26 +119,21 @@ export const commands: Chat.ChatCommands = {
       
       const userId = toID(name);
       
-      // Check if user has a custom symbol
       if (!await CustomSymbolDB.exists({ _id: userId })) {
         return this.errorReply('This user does not have a custom symbol. Use /symbol set to create one.');
       }
       
-      // Validate symbol
       if (symbol.length !== 1) {
         return this.errorReply('Symbol must be a single character.');
       }
       
-      // Update the symbol
       await CustomSymbolDB.updateOne(
         { _id: userId },
         { $set: { symbol, updatedAt: new Date() } }
       );
       
-      // Apply symbol to user if online
       await applyCustomSymbol(userId);
       
-      // Log the action
       await logSymbolAction('UPDATE', user.name, userId, `New Symbol: ${symbol}`);
       
       this.sendReply(`|raw|You have updated ${Impulse.nameColor(name, true, false)}'s custom symbol to: ${symbol}`);
@@ -167,24 +153,19 @@ export const commands: Chat.ChatCommands = {
       this.checkCan('globalban');
       const userId = toID(target);
       
-      // Check if user has a custom symbol
       if (!await CustomSymbolDB.exists({ _id: userId })) {
         return this.errorReply(`${target} does not have a custom symbol.`);
       }
       
-      // Get symbol details before deletion for logging
       const symbolDoc = await CustomSymbolDB.findOne(
         { _id: userId },
         { projection: { symbol: 1 } }
       );
       
-      // Delete the custom symbol
       await CustomSymbolDB.deleteOne({ _id: userId });
       
-      // Remove custom symbol from user if online
       await removeCustomSymbol(userId);
       
-      // Log the action
       const symbolDetails = symbolDoc ? `Removed Symbol: ${symbolDoc.symbol}` : 'Symbol removed';
       await logSymbolAction('DELETE', user.name, userId, symbolDetails);
       
@@ -206,7 +187,6 @@ export const commands: Chat.ChatCommands = {
       
       const page = parseInt(target) || 1;
       
-      // Use findPaginated() for paginated results
       const result = await CustomSymbolDB.findPaginated({}, {
         page,
         limit: 20,
@@ -244,7 +224,6 @@ export const commands: Chat.ChatCommands = {
       const userId = toID(target);
       if (!userId) return this.parse('/help symbol');
       
-      // Get symbol document
       const symbolDoc = await CustomSymbolDB.findOne(
         { _id: userId },
         { projection: { symbol: 1, createdAt: 1, updatedAt: 1 } }
@@ -272,7 +251,6 @@ export const commands: Chat.ChatCommands = {
       
       const searchTerm = toID(target);
       
-      // Search for usernames containing the search term
       const symbols = await CustomSymbolDB.find(
         { _id: { $regex: searchTerm, $options: 'i' } as any },
         { projection: { _id: 1, symbol: 1 } }
@@ -316,13 +294,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Custom Symbol Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
@@ -361,12 +337,10 @@ export const commands: Chat.ChatCommands = {
   },
 };
 
-// Apply custom symbols on user login
 export const loginfilter: Chat.LoginFilter = user => {
   applyCustomSymbol(user.id);
 };
 
-// Hook into User.getIdentity to display custom symbols
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function(room: BasicRoom | null = null) {
   const customSymbol = (this as any).customSymbol;

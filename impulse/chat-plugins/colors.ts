@@ -1,7 +1,7 @@
 /*
 * Pokemon Showdown
 * Custom Colors
-* @license MIT
+* Refactored By @PrinceSky-Git
 */
 
 import * as crypto from 'crypto';
@@ -19,11 +19,11 @@ interface CustomColors {
 }
 
 const COLOR_LOG_PATH = 'logs/colors.txt';
+const STAFF_ROOM_ID = 'staff';
 
-// Usage: Impulse.reloadCSS();
 function reloadCSS(): void {
-  const cssPath = 'impulse'; // Default value if Config.serverid is not provided.
-  const serverId = Config.serverid || cssPath; // Use Config.serverid if available.
+  const cssPath = 'impulse';
+  const serverId = Config.serverid || cssPath;
   const url = `https://play.pokemonshowdown.com/customcss.php?server=${serverId}`;
   const req = https.get(url, (res) => {
     console.log(`CSS reload response: ${res.statusCode}`);
@@ -47,7 +47,6 @@ try {
 }
 
 const colorCache: Record<string, string> = {};
-const STAFF_ROOM_ID = 'staff';
 
 async function logColorAction(action: string, staff: string, target: string, details?: string): Promise<void> {
   try {
@@ -63,14 +62,14 @@ function nameColor(name: string): string {
   const id = toID(name);
   if (customColors[id]) return customColors[id];
   if (colorCache[id]) return colorCache[id];
-  // Generate MD5 hash of the username
+  
   const hash: string = crypto.createHash('md5').update(id).digest('hex');
-  const H: number = parseInt(hash.substr(4, 4), 16) % 360; // Hue: 0 to 360
-  const S: number = (parseInt(hash.substr(0, 4), 16) % 50) + 40; // Saturation: 40 to 89
-  let L: number = Math.floor(parseInt(hash.substr(8, 4), 16) % 20 + 30); // Lightness: 30 to 49
-  // Initial HSL to RGB conversion
+  const H: number = parseInt(hash.substr(4, 4), 16) % 360;
+  const S: number = (parseInt(hash.substr(0, 4), 16) % 50) + 40;
+  let L: number = Math.floor(parseInt(hash.substr(8, 4), 16) % 20 + 30);
+  
   let { R, G, B } = HSLToRGB(H, S, L);
-  // Luminance adjustments
+  
   const lum: number = R * R * R * 0.2126 + G * G * G * 0.7152 + B * B * B * 0.0722;
   let HLmod: number = (lum - 0.2) * -150;
   if (HLmod > 18) HLmod = (HLmod - 18) * 2.5;
@@ -81,9 +80,9 @@ function nameColor(name: string): string {
     HLmod += (15 - Hdist) / 3;
   }
   L += HLmod;
-  // Final HSL to RGB conversion
+  
   let { R: r, G: g, B: b } = HSLToRGB(H, S, L);
-  // Convert RGB to HEX format
+  
   const toHex = (x: number): string => {
     const hex: string = Math.round(x * 255).toString(16);
     return hex.length === 1 ? '0' + hex : hex;
@@ -114,31 +113,25 @@ function HSLToRGB(H: number, S: number, L: number): RGB {
 
 async function updateColor(): Promise<void> {
   try {
-    // Write custom colors to JSON
     FS('impulse-db/customcolors.json').writeUpdate(() => JSON.stringify(customColors));
     
-    // Generate new CSS
     let newCss: string = '/* COLORS START */\n';
     for (const name in customColors) {
       newCss += generateCSS(name, customColors[name]);
     }
     newCss += '/* COLORS END */\n';
 
-    // Read existing CSS file
     const fileContent = await FS('config/custom.css').readIfExists();
     const file: string[] = fileContent ? fileContent.split('\n') : [];
     
-    // Remove old color section if it exists
     const start: number = file.indexOf('/* COLORS START */');
     const end: number = file.indexOf('/* COLORS END */');
     if (start !== -1 && end !== -1) {
       file.splice(start, (end - start) + 1);
     }
     
-    // Write updated CSS
     FS('config/custom.css').writeUpdate(() => file.join('\n') + newCss);
     
-    // Trigger CSS reload on the server
     Impulse.reloadCSS();
   } catch (e: any) {
     console.error('Error updating colors:', e);
@@ -153,7 +146,6 @@ function generateCSS(name: string, color: string): string {
 }
 
 function validateHexColor(color: string): boolean {
-  // Check if color is a valid hex format (#XXX or #XXXXXX)
   return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 }
 
@@ -179,7 +171,6 @@ export const commands: Chat.ChatCommands = {
       customColors[targetId] = color;
       await updateColor();
       
-      // Log the action
       await logColorAction('SET', user.name, targetId, `Color: ${color}`);
       
       this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(targets[0])}</font></b> a custom color.`);
@@ -200,7 +191,6 @@ export const commands: Chat.ChatCommands = {
       delete customColors[targetId];
       await updateColor();
       
-      // Log the action
       await logColorAction('DELETE', user.name, targetId, `Removed color: ${oldColor}`);
       
       this.sendReply(`You removed ${target}'s custom color.`);
@@ -232,7 +222,6 @@ export const commands: Chat.ChatCommands = {
       this.checkCan('globalban');
       await updateColor();
       
-      // Log the reload action
       await logColorAction('RELOAD', user.name, 'N/A', 'CSS reloaded');
       
       this.privateModAction(`(${user.name} has reloaded custom colours.)`);
@@ -255,13 +244,11 @@ export const commands: Chat.ChatCommands = {
           return this.errorReply('Please specify a number between 1 and 500.');
         }
         
-        // Get the last N lines and reverse to show latest first
         const recentLines = lines.slice(-numLines).reverse();
         
         let output = `<div class="ladder pad"><h2>Color Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
         output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
         
-        // Add each log entry with a horizontal line separator
         for (let i = 0; i < recentLines.length; i++) {
           output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
           if (i < recentLines.length - 1) {
@@ -280,28 +267,28 @@ export const commands: Chat.ChatCommands = {
   },
   cc: 'customcolor',
 
-   customcolorhelp(target, room, user) {
-      if (!this.runBroadcast()) return;
-      this.sendReplyBox(
-         `<div><b><center>Custom Color Commands</center></b><br>` +
-         `<ul>` +
-         `<li><code>/customcolor set [user], [hex]</code> OR <code>/cc set [user], [hex]</code> - Gives [user] a custom color of [hex]</li>` +
-         `<li><code>/customcolor delete [user]</code> OR <code>/cc delete [user]</code> - Deletes a user's custom color</li>` +
-         `<li><code>/customcolor reload</code> OR <code>/cc reload</code> - Reloads colors</li>` +
-         `<li><code>/customcolor preview [user], [hex]</code> OR <code>/cc preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color</li>` +
-         `<li><code>/customcolor logs [number]</code> OR <code>/cc logs [number]</code> - View recent color log entries (default: 50, max: 500)</li>` +
-         `</ul>` +
-         `<small>All commands except preview require @ or higher permission.</small>` +
-         `</div>`
-      );
-   },
-   cchelp: 'customcolorhelp',
+  customcolorhelp(target, room, user) {
+    if (!this.runBroadcast()) return;
+    this.sendReplyBox(
+      `<div><b><center>Custom Color Commands</center></b><br>` +
+      `<ul>` +
+      `<li><code>/customcolor set [user], [hex]</code> OR <code>/cc set [user], [hex]</code> - Gives [user] a custom color of [hex]</li>` +
+      `<li><code>/customcolor delete [user]</code> OR <code>/cc delete [user]</code> - Deletes a user's custom color</li>` +
+      `<li><code>/customcolor reload</code> OR <code>/cc reload</code> - Reloads colors</li>` +
+      `<li><code>/customcolor preview [user], [hex]</code> OR <code>/cc preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color</li>` +
+      `<li><code>/customcolor logs [number]</code> OR <code>/cc logs [number]</code> - View recent color log entries (default: 50, max: 500)</li>` +
+      `</ul>` +
+      `<small>All commands except preview require @ or higher permission.</small>` +
+      `</div>`
+    );
+  },
+  cchelp: 'customcolorhelp',
   
-   '!hex': true,
-   hex(target, room, user) {
-      if (!this.runBroadcast()) return;
-      const targetUser: string = target ? target : user.name;
-      const color: string = nameColor(targetUser);
-      this.sendReplyBox(`The hex code of ${Impulse.nameColor(targetUser, true, true)} is: <font color="${color}"><b>${color}</b></font>`);
-   },
+  '!hex': true,
+  hex(target, room, user) {
+    if (!this.runBroadcast()) return;
+    const targetUser: string = target ? target : user.name;
+    const color: string = nameColor(targetUser);
+    this.sendReplyBox(`The hex code of ${Impulse.nameColor(targetUser, true, true)} is: <font color="${color}"><b>${color}</b></font>`);
+  },
 };
