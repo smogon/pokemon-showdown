@@ -20,6 +20,7 @@
  */
 
 import { ImpulseDB } from '../../impulse/impulse-db';
+import { FS } from '../../lib';
 import '../utils';
 
 // Configuration
@@ -62,10 +63,31 @@ const REWARD_CONFIG = {
     command: 'symbolcolor',
     adminCommand: 'setsymbolcolor',
   },
+  customsymbol: {
+    name: 'Custom Symbol',
+    description: 'Set a custom group symbol',
+    levelRequired: 25,
+    command: 'customsymbol',
+    adminCommand: 'setsymbol',
+  },
 } as const;
 
 // Global state
 let cooldowns = new Map<string, number>();
+
+// Logging
+const REWARD_LOG_PATH = 'logs/rewards.txt';
+const STAFF_ROOM_ID = 'staff';
+
+async function logRewardAction(action: string, staff: string, target: string, details?: string): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${action} | Staff: ${staff} | Target: ${target}${details ? ` | ${details}` : ''}\n`;
+    await FS(REWARD_LOG_PATH).append(logEntry);
+  } catch (err) {
+    console.error('Error writing to reward log:', err);
+  }
+}
 
 /**
  * Validation functions
@@ -97,6 +119,20 @@ function validateHexColor(color: string): { valid: boolean; error?: string } {
   if (!hexPattern.test(color)) {
     return { valid: false, error: 'Invalid hex color format. Use #RGB or #RRGGBB format' };
   }
+  return { valid: true };
+}
+
+function validateCustomSymbol(symbol: string): { valid: boolean; error?: string } {
+  if (symbol.length !== 1) {
+    return { valid: false, error: 'Custom symbol must be a single character' };
+  }
+  
+  // Check for potentially problematic characters
+  const forbiddenChars = ['@', '#', '!', '~', '&', '%', '+', '^', '`', '|', '\\', '/', '?', '=', '<', '>', ':', ';', '"', "'", ' ', '\t', '\n', '\r'];
+  if (forbiddenChars.includes(symbol)) {
+    return { valid: false, error: 'Symbol contains forbidden characters. Use letters, numbers, or safe symbols' };
+  }
+  
   return { valid: true };
 }
 
@@ -500,6 +536,11 @@ export class ExpSystem {
         if (!validation.valid) {
           return { success: false, message: validation.error! };
         }
+      } else if (rewardType === 'customsymbol') {
+        const validation = validateCustomSymbol(value);
+        if (!validation.valid) {
+          return { success: false, message: validation.error! };
+        }
       }
     } else {
       return { 
@@ -670,12 +711,16 @@ export class ExpSystem {
     if (action === 'approve') {
       try {
         await this.applyReward(id, rewardType, request.value, by);
+        await logRewardAction('APPROVE', by, id, `${rewardType}: ${request.value} | Reason: ${reason || 'No reason specified'}`);
       } catch (error) {
+        await logRewardAction('APPROVE FAILED', by, id, `${rewardType}: ${request.value} | Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return { 
           success: false, 
           message: `Failed to apply reward: ${error instanceof Error ? error.message : 'Unknown error'}` 
         };
       }
+    } else {
+      await logRewardAction('REJECT', by, id, `${rewardType}: ${request.value} | Reason: ${reason || 'No reason specified'}`);
     }
     
     // Update database
@@ -716,6 +761,11 @@ export class ExpSystem {
       case 'symbolcolor':
         // Use the existing symbolcolor system
         await this.callCommand('symbolcolor', 'set', `${id}, ${value}`, by);
+        break;
+        
+      case 'customsymbol':
+        // Use the existing customsymbol system
+        await this.callCommand('customsymbol', 'set', `${id}, ${value}`, by);
         break;
         
       default:
@@ -902,6 +952,7 @@ export const commands: Chat.ChatCommands = {
         `<li><code>/exp reject [user], [reward] [reason]</code> - Reject a reward request (requires @)</li>` +
         `<li><code>/exp viewrequest [user], [reward]</code> - View detailed reward request (requires @)</li>` +
         `<li><code>/exp resetcooldown [user]</code> - Reset user's reward cooldown (requires @)</li>` +
+        `<li><code>/exp logs [number]</code> - View reward system logs (requires @)</li>` +
         `</ul>` +
         `<h4 style="margin: 8px 0;">Reward Types:</h4>` +
         `<ul style="margin: 5px 0;">` +
@@ -909,6 +960,7 @@ export const commands: Chat.ChatCommands = {
         `<li><code>customicon [image_url]</code> - Custom icon (Level 10+)</li>` +
         `<li><code>customcolor [hex_color]</code> - Custom username color (Level 15+)</li>` +
         `<li><code>symbolcolor [hex_color]</code> - Custom symbol color (Level 20+)</li>` +
+        `<li><code>customsymbol [symbol]</code> - Custom group symbol (Level 25+)</li>` +
         `</ul>` +
         `<small style="opacity: 0.8;">Earn experience by chatting! 1 EXP per message with a 30-second cooldown.</small>` +
         `</div>`
@@ -1011,6 +1063,10 @@ export const commands: Chat.ChatCommands = {
           if (pendingReq.rewardType === 'customavatar' || pendingReq.rewardType === 'customicon') {
             output += `<div style="margin: 5px 0;"><img src="${pendingReq.value}" width="64" height="64" style="border: 1px solid #ccc; border-radius: 3px;"></div>`;
             output += `<div style="font-size: 0.8em; color: #666; word-break: break-all;">${pendingReq.value}</div>`;
+          } else if (pendingReq.rewardType === 'customsymbol') {
+            output += `<div style="margin: 5px 0;">`;
+            output += `<span style="font-size: 32px; font-weight: bold; background: #f0f0f0; padding: 5px 10px; border-radius: 3px; display: inline-block;">${pendingReq.value}</span>`;
+            output += `</div>`;
           } else {
             output += `<div style="margin: 5px 0;">`;
             output += `<span style="color: ${pendingReq.value}; font-size: 24px; font-weight: bold;">■</span> `;
@@ -1110,6 +1166,12 @@ export const commands: Chat.ChatCommands = {
         output += `<div style="margin: 10px 0;"><strong>Image:</strong></div>`;
         output += `<div><img src="${request.value}" width="128" height="128" style="border: 1px solid #ccc; border-radius: 5px;"></div>`;
         output += `<div style="font-size: 0.8em; color: #666; word-break: break-all; margin-top: 5px;">${request.value}</div>`;
+      } else if (rewardType === 'customsymbol') {
+        output += `<div style="margin: 10px 0;"><strong>Symbol:</strong></div>`;
+        output += `<div style="display: flex; align-items: center; gap: 10px;">`;
+        output += `<span style="font-size: 48px; font-weight: bold; background: #f0f0f0; padding: 10px 15px; border-radius: 5px; display: inline-block;">${request.value}</span>`;
+        output += `<span style="font-family: monospace; background: #e0e0e0; padding: 5px 10px; border-radius: 3px;">${request.value}</span>`;
+        output += `</div>`;
       } else {
         output += `<div style="margin: 10px 0;"><strong>Color:</strong></div>`;
         output += `<div style="display: flex; align-items: center; gap: 10px;">`;
@@ -1136,6 +1198,46 @@ export const commands: Chat.ChatCommands = {
       );
       
       this.modlog('RESETREWARDCOOLDOWN', targetUser, 'cooldown reset', { by: user.id });
+    },
+
+    async logs(target, room, user) {
+      this.checkCan('globalban');
+      
+      try {
+        const logContent = await FS(REWARD_LOG_PATH).readIfExists();
+        
+        if (!logContent) {
+          return this.sendReply('No reward logs found.');
+        }
+        
+        const lines = logContent.trim().split('\n');
+        const numLines = parseInt(target) || 50;
+        
+        if (numLines < 1 || numLines > 500) {
+          return this.errorReply('Please specify a number between 1 and 500.');
+        }
+        
+        // Get the last N lines and reverse to show latest first
+        const recentLines = lines.slice(-numLines).reverse();
+        
+        let output = `<div class="ladder pad"><h2>Reward System Logs (Last ${recentLines.length} entries - Latest First)</h2>`;
+        output += `<div style="max-height: 370px; overflow: auto; font-family: monospace; font-size: 11px;">`;
+        
+        // Add each log entry with a horizontal line separator
+        for (let i = 0; i < recentLines.length; i++) {
+          output += `<div style="padding: 8px 0;">${Chat.escapeHTML(recentLines[i])}</div>`;
+          if (i < recentLines.length - 1) {
+            output += `<hr style="border: 0; border-top: 1px solid #ccc; margin: 0;">`;
+          }
+        }
+        
+        output += `</div></div>`;
+        
+        this.sendReply(`|raw|${output}`);
+      } catch (err) {
+        console.error('Error reading reward logs:', err);
+        return this.errorReply('Failed to read reward logs.');
+      }
     },
   },
 };
