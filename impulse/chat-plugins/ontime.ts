@@ -1,18 +1,11 @@
 /*
 * Pokemon Showdown
-* Ontime Commands
-*
-* This file contains commands that keep track of users' activity.
-* It cleanly integrates with server/users.ts without manual modification
-* and excludes bot users from ontime tracking.
-*
-* @license MIT
-* @author PrinceSky-Git
+* Ontime
+* Refactored By @PrinceSky-Git
 */
 
 import {ImpulseDB} from '../../impulse/impulse-db';
 
-// Define the structure of our ontime records in the database
 interface OntimeDocument {
 	_id: string;
 	ontime: number;
@@ -21,15 +14,11 @@ interface OntimeDocument {
 const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
 const ONTIME_LEADERBOARD_SIZE = 100;
 
-// --- Integration Hooks ---
-
-// 1. Hook into the onDisconnect method to save ontime when a user leaves
 const originalOnDisconnect = Users.User.prototype.onDisconnect;
 Users.User.prototype.onDisconnect = function (this: User, connection: Connection) {
 	const isLastConnection = this.connections.length === 1;
 	originalOnDisconnect.call(this, connection);
 
-	// MODIFICATION: Check if the user is a public bot before saving ontime
 	if (this.named && isLastConnection && !this.isPublicBot) {
 		const sessionTime = this.lastDisconnected - this.lastConnected;
 		if (sessionTime > 0) {
@@ -42,7 +31,6 @@ Users.User.prototype.onDisconnect = function (this: User, connection: Connection
 	}
 };
 
-// 2. Hook into the merge method to preserve the original session start time when a guest logs in
 const originalMerge = Users.User.prototype.merge;
 Users.User.prototype.merge = function (this: User, oldUser: User) {
 	const oldUserLastConnected = oldUser.lastConnected;
@@ -52,9 +40,6 @@ Users.User.prototype.merge = function (this: User, oldUser: User) {
 		this.lastConnected = oldUserLastConnected;
 	}
 };
-
-
-// --- Helper Functions ---
 
 function convertTime(time: number): {h: number, m: number, s: number} {
 	const seconds = Math.floor((time / 1000) % 60);
@@ -71,9 +56,6 @@ function displayTime(t: {h: number, m: number, s: number}): string {
 	return parts.join(', ') || '0 seconds';
 }
 
-
-// --- Chat Commands ---
-
 export const commands: Chat.ChatCommands = {
 	ontime: {
 		'': 'check',
@@ -83,7 +65,6 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target) || user.id;
 			const targetUser = Users.get(targetId);
 			
-			// MODIFICATION: Add a check for bots
 			if (targetUser?.isPublicBot) {
 				return this.sendReplyBox(`${Impulse.nameColor(targetId, true)} is a bot and does not have its ontime tracked.`);
 			}
@@ -113,7 +94,6 @@ export const commands: Chat.ChatCommands = {
 			const ontimeMap = new Map(ontimeData.map(d => [d._id, d.ontime]));
 
 			for (const u of Users.users.values()) {
-				// MODIFICATION: Don't add bots to the ladder
 				if (u.connected && u.named && !ontimeMap.has(u.id) && !u.isPublicBot) {
 					ontimeMap.set(u.id, 0);
 				}
