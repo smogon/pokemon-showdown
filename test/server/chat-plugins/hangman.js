@@ -1,15 +1,13 @@
 'use strict';
 
-const { Hangman } = require('../../../dist/server/chat-plugins/hangman');
 const { makeUser, destroyUser } = require('../../users-utils');
 const assert = require('../../assert');
 
-function createHangman(creator, word, hint) {
-	return new Hangman(Rooms.lobby, creator, word, hint);
-}
-
 describe("Hangman", () => {
+	let Hangman = null;
+
 	before(function () {
+		Hangman = require('../../../dist/server/chat-plugins/hangman').Hangman;
 		this.creator = makeUser('dawoblefet');
 		this.guesser = makeUser('mathy');
 	});
@@ -18,6 +16,10 @@ describe("Hangman", () => {
 		destroyUser(this.creator);
 		destroyUser(this.guesser);
 	});
+
+	function createHangman(creator, word, hint) {
+		return new Hangman(Rooms.lobby, creator, word, hint);
+	}
 
 	it("should reject impossible guesses", function () {
 		const game = createHangman(this.creator, "Wynaut", "Why write unit tests?");

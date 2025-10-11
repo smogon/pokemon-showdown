@@ -9,7 +9,7 @@
  */
 
 import { SQL, Utils, FS } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -34,6 +34,18 @@ const PUNISHMENTS = [
 	'NOTE', 'MAFIAHOSTBAN', 'MAFIAUNHOSTBAN', 'MAFIAGAMEBAN', 'MAFIAUNGAMEBAN', 'GIVEAWAYBAN', 'GIVEAWAYUNBAN',
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
+
+const PM = SQL('modlog', module, {
+	file: MODLOG_DB_PATH,
+	extension: 'server/modlog/transactions.js',
+	sqliteOptions: Config.modlogsqliteoptions,
+	onError: (error, data, isParent) => {
+		if (!isParent) return;
+		Monitor.crashlog(error, 'A modlog SQLite query', {
+			query: JSON.stringify(data),
+		});
+	},
+});
 
 export type ModlogID = RoomID | 'global' | 'all';
 interface SQLQuery {
@@ -84,8 +96,8 @@ export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
-	readyPromise: Promise<void> | null;
-	private databaseReady: boolean;
+	readyPromise: null | Promise<void>;
+	databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
@@ -94,50 +106,29 @@ export class Modlog {
 	renameQuery: SQL.Statement | null = null;
 	globalPunishmentsSearchQuery: SQL.Statement | null = null;
 
-	constructor(databasePath: string, options: Partial<SQL.Options>) {
+	constructor() {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		if (!options.onError) {
-			options.onError = (error, data, isParent) => {
-				if (!isParent) return;
-				Monitor.crashlog(error, 'A modlog SQLite query', {
-					query: JSON.stringify(data),
-				});
-			};
-		}
-		this.database = SQL(module, {
-			file: databasePath,
-			extension: 'server/modlog/transactions.js',
-			...options,
-		});
+		this.database = PM;
+		this.readyPromise = null;
+	}
 
-		if (Config.usesqlite) {
-			if (this.database.isParentProcess) {
-				this.database.spawn(global.Config?.subprocessescache?.modlog ?? 1);
-			} else {
-				global.Monitor = {
-					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
-						const repr = JSON.stringify([error.name, error.message, source, details]);
-						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-					},
-				};
-				process.on('uncaughtException', err => {
-					Monitor.crashlog(err, 'A modlog database process');
-				});
-				process.on('unhandledRejection', err => {
-					Monitor.crashlog(err as Error, 'A modlog database process');
-				});
-			}
-		}
-
+	setup() {
+		this.databaseReady = false;
 		this.readyPromise = this.setupDatabase().then(result => {
-			this.databaseReady = result;
+			this.databaseReady = true;
+			this.readyPromise = null;
+		}, () => {
 			this.readyPromise = null;
 		});
 	}
 
+	restart() {
+		restart();
+	}
+
 	async setupDatabase() {
-		if (!Config.usesqlite) return false;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) throw new Error(`SQLite is disabled.`);
 		await this.database.exec("PRAGMA foreign_keys = ON;");
 		await this.database.exec(`PRAGMA case_sensitive_like = true;`);
 
@@ -213,7 +204,7 @@ export class Modlog {
 	}
 
 	async writeSQL(entries: Iterable<ModlogEntry>) {
-		if (!Config.usesqlite) return;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return;
 		if (!this.databaseReady) {
 			this.queuedEntries.push(...entries);
 			return;
@@ -244,7 +235,7 @@ export class Modlog {
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
-		if (!Config.usesqlite) return;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return;
 		if (oldID === newID) return;
 
 		// rename SQL modlogs
@@ -475,4 +466,39 @@ export class Modlog {
 	}
 }
 
-export const mainModlog = new Modlog(MODLOG_DB_PATH, { sqliteOptions: Config.modlogsqliteoptions });
+export const mainModlog = new Modlog();
+
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A modlog database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A modlog database process');
+	});
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (!Config.usesqlite || !Config.usesqlitemodlog) {
+		return;
+	}
+	PM.spawn(processCount['modlog'] ?? 1);
+	mainModlog.setup();
+}
+
+export function restart() {
+	void PM.respawn();
+	mainModlog.setup();
+}
+
+export function destroy() {
+	// No need to destroy the PM under normal circumstances, since
+	// hotpatching uses PM.respawn()
+	void PM.destroy();
+}
