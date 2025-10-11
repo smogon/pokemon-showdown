@@ -132,9 +132,31 @@ export const commands: Chat.ChatCommands = {
 
 	ontimehelp() {
 		this.runBroadcast();
-		let buf = ``;
-		buf += `"/ontime [target]" - Checks a user's online time on the server. If no target is provided, it defaults to the user who used the command.<br />`;
-		buf += `"/ontime ladder" - Displays the ontime leaderboard.`;
-		this.sendReplyBox(buf);
+		
+		const commands = [
+			{
+				command: '/ontime [target]',
+				description: 'Checks a user\'s online time on the server. If no target is provided, it defaults to the user who used the command.',
+			},
+			{
+				command: '/ontime ladder',
+				description: 'Displays the ontime leaderboard showing top 100 users by total time spent online.',
+			},
+		];
+
+		const tableData = commands.map(cmd => {
+			return [
+				`<code>${cmd.command}</code>`,
+				cmd.description,
+			];
+		});
+
+		const helpTable = Impulse.generateThemedTable(
+			`Ontime Command Help`,
+			['Command', 'Description'],
+			tableData
+		);
+		
+		return this.sendReply(`|raw|${helpTable}`);
 	},
 };
