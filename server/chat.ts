@@ -829,6 +829,8 @@ export class CommandContext extends MessageContext {
 				return prefix + message.slice(4);
 			} else if (message.startsWith(`|c|~|/`)) {
 				return prefix + message.slice(5);
+			} else if (message.startsWith(`|c|${sender.getIdentity()}|/raw `)) {
+				return prefix + message.slice(`|c|${sender.getIdentity()}|`.length);
 			} else if (message.startsWith(`|c|~|`)) {
 				return prefix + `/text ` + message.slice(5);
 			}
