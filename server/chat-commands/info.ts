@@ -587,6 +587,11 @@ export const commands: Chat.ChatCommands = {
 
 		const { dex, format, targets } = this.splitFormat(target, true, true);
 
+		const prefix = (
+			this.pmTarget ?
+				`|pm|${user.getIdentity()}|${this.pmTarget.getIdentity()}|` :
+				`|c|${user.getIdentity()}|`
+		) + '/raw ';
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -642,7 +647,7 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `|c|${user.getIdentity()}|/raw ${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -711,7 +716,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `|c|${user.getIdentity()}|/raw ${Chat.getDataItemHTML(item)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(item.gen),
@@ -743,7 +748,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `|c|${user.getIdentity()}|/raw ${Chat.getDataMoveHTML(move)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
@@ -849,7 +854,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `|c|${user.getIdentity()}|/raw ${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
@@ -863,7 +868,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
-				buffer += `|c|${user.getIdentity()}|/raw <font size="1">${Object.entries(details).map(([detail, value]) => (
+				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
 					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
@@ -1983,7 +1988,12 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		return this.sendReply(`|c|${user.getIdentity()}|/raw ${buf.join("")}`);
+		const prefix = (
+			this.pmTarget ?
+				`|pm|${user.getIdentity()}|${this.pmTarget.getIdentity()}|` :
+				`|c|${user.getIdentity()}|`
+		) + '/raw ';
+		return this.sendReply(`${prefix}${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,
