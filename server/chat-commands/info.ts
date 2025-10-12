@@ -587,11 +587,7 @@ export const commands: Chat.ChatCommands = {
 
 		const { dex, format, targets } = this.splitFormat(target, true, true);
 
-		const prefix = (
-			this.pmTarget ?
-				`|pm|${user.getIdentity()}|${this.pmTarget.getIdentity()}|` :
-				`|c|${user.getIdentity()}|`
-		) + '/raw ';
+		const prefix = `|c|${user.getIdentity()}|/raw `;
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -1988,12 +1984,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		const prefix = (
-			this.pmTarget ?
-				`|pm|${user.getIdentity()}|${this.pmTarget.getIdentity()}|` :
-				`|c|${user.getIdentity()}|`
-		) + '/raw ';
-		return this.sendReply(`${prefix}${buf.join("")}`);
+		return this.sendReply(`|c|${user.getIdentity()}|/raw ${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,
