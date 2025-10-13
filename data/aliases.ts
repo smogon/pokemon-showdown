@@ -645,7 +645,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	alcremiemintcream: "Alcremie",
 	alcremiesaltedcream: "Alcremie",
 	alcremielemoncream: "Alcremie",
-	alcremiesaltedcream: "Alcremie",
 	alcremierubyswirl: "Alcremie",
 	alcremiecaramelswirl: "Alcremie",
 	alcremierainbowswirl: "Alcremie",
