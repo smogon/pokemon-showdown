@@ -1,6 +1,6 @@
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	venusaurmega: {
-		isNonstandard: null
+		isNonstandard: null,
 	},
 	charizardmegax: {
 		isNonstandard: null,
