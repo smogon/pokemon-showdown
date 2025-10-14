@@ -3368,7 +3368,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Pink",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
-		cosmeticFormes: ["Mew-Christmas"],
+		cosmeticFormes: ["Mew-Christmas", "Mew-Shadow"],
 	},
 	chikorita: {
 		num: 152,
