@@ -1123,8 +1123,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: 'Sheer Willpower',
 		onModifyMovePriority: 1,
 		onModifyMove(move, source, target) {
-			if (move.self?.volatileStatus !== "mustrecharge")
+			if (move.flags['recharge']) {
 				delete move.self?.volatileStatus;
+				delete move.flags['recharge'];
+			}
 			if (!move.flags['charge']) return;
 			move.onTryMove = (attacker, defender, move) => {
 				if (attacker.removeVolatile(move.id)) {
