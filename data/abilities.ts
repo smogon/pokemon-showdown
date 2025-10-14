@@ -1123,6 +1123,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: 'Sheer Willpower',
 		onModifyMovePriority: 1,
 		onModifyMove(move, source, target) {
+			if (move.self?.volatileStatus !== "mustrecharge")
+				delete move.self?.volatileStatus;
 			if (!move.flags['charge']) return;
 			move.onTryMove = (attacker, defender, move) => {
 				if (attacker.removeVolatile(move.id)) {
@@ -1136,9 +1138,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			this.add('-ability', source, 'Sheer Willpower');
 			this.add('-message', `${source.name}'s ${move.name} hits instantly!`);
-			
-			if (move.self?.volatileStatus !== "mustrecharge") return;
-			delete move.self?.volatileStatus;
+
+
 		},
 		flags: {},
 		rating: 4.5,

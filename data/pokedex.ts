@@ -19274,6 +19274,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Green",
     prevo: "Bronzor",
     evoLevel: 33,
+    nfe: true,
     evos: ["Bronzolord"],
     eggGroups: ["Mineral"],
   },
