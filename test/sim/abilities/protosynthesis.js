@@ -18,9 +18,9 @@ describe('Protosynthesis', () => {
 		]]);
 
 		const tail = battle.p1.active[0];
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd');
+		assert.equal(tail.abilityState.bestStat, 'spd');
 		battle.makeChoices();
-		assert(!tail.volatiles['protosynthesis'], `Scream Tail's SpD should stop being boosted when Sun ends`);
+		assert(!tail.abilityState.bestStat, `Scream Tail's SpD should stop being boosted when Sun ends`);
 	});
 
 	it(`should take stat stages and no other modifiers into account when determining the best stat`, () => {
@@ -33,7 +33,7 @@ describe('Protosynthesis', () => {
 		battle.makeChoices();
 		const moon = battle.p1.active[0];
 		assert.equal(moon.boosts.atk, -1);
-		assert.equal(moon.volatiles['protosynthesis'].bestStat, 'spd');
+		assert.equal(moon.abilityState.bestStat, 'spd');
 	});
 
 	it(`should not activate while Desolate Land is active`, () => {
@@ -44,7 +44,7 @@ describe('Protosynthesis', () => {
 		]]);
 
 		const moon = battle.p1.active[0];
-		assert(!moon.volatiles['protosynthesis']);
+		assert(!moon.abilityState.bestStat);
 	});
 
 	it(`should be activated by Booster Energy when Sunny Day is not active`, () => {
@@ -55,15 +55,15 @@ describe('Protosynthesis', () => {
 		]]);
 
 		const tail = battle.p1.active[0];
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun`);
-		assert.equal(tail.volatiles['protosynthesis'].fromBooster, undefined, `Scream Tail's Protosynthesis should not have been activated by Booster Energy in Sun`);
+		assert.equal(tail.abilityState.bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun`);
+		assert.equal(tail.abilityState.fromBooster, undefined, `Scream Tail's Protosynthesis should not have been activated by Booster Energy in Sun`);
 		// change to rain
 		battle.makeChoices();
-		assert(tail.volatiles['protosynthesis'].fromBooster, `Scream Tail's Protosynthesis should have been activated by Booster Energy in Rain`);
+		assert(tail.abilityState.fromBooster, `Scream Tail's Protosynthesis should have been activated by Booster Energy in Rain`);
 		// change to sun and back
 		battle.makeChoices('move sunnyday', 'auto');
 		battle.makeChoices();
-		assert(!!tail.volatiles['protosynthesis'], `Scream Tail's Protosynthesis activated by Booster Energy should still be active when Sun ends`);
+		assert(!!tail.abilityState.bestStat, `Scream Tail's Protosynthesis activated by Booster Energy should still be active when Sun ends`);
 	});
 
 	it(`should not be prevented from activating if the user holds Utility Umbrella`, () => {
@@ -74,7 +74,7 @@ describe('Protosynthesis', () => {
 		]]);
 
 		const tail = battle.p1.active[0];
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
+		assert.equal(tail.abilityState.bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
 	});
 
 	it(`should be deactiviated by weather suppressing abilities`, () => {
@@ -88,7 +88,7 @@ describe('Protosynthesis', () => {
 		const tail = battle.p1.active[0];
 		battle.makeChoices('move splash', 'switch 2');
 
-		assert(!tail.volatiles['protosynthesis'], `Scream Tail should not have remained boosted by Protosynthesis because a weather supressing ability started even though Sun was active`);
+		assert(!tail.abilityState.bestStat, `Scream Tail should not have remained boosted by Protosynthesis because a weather supressing ability started even though Sun was active`);
 	});
 
 	it(`should not activate if weather is suppressed`, () => {
@@ -101,7 +101,7 @@ describe('Protosynthesis', () => {
 		const tail = battle.p1.active[0];
 		battle.makeChoices('move splash', 'move sunnyday');
 
-		assert.equal(tail.volatiles['protosynthesis'], undefined, `Scream Tail should not have been boosted by Protosynthesis because a weather supressing ability was active when Sun started`);
+		assert.equal(tail.abilityState.bestStat, undefined, `Scream Tail should not have been boosted by Protosynthesis because a weather supressing ability was active when Sun started`);
 	});
 
 	it(`should activate when weather supression ends`, () => {
@@ -116,7 +116,7 @@ describe('Protosynthesis', () => {
 		battle.makeChoices('move splash', 'move sunnyday');
 		battle.makeChoices('move splash', 'switch 2');
 
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail should have been boosted by Protosynthesis because a weather supressing ability ended while Sun was active`);
+		assert.equal(tail.abilityState.bestStat, 'spd', `Scream Tail should have been boosted by Protosynthesis because a weather supressing ability ended while Sun was active`);
 	});
 
 	it(`should have its boost nullified by Neutralizing Gas`, () => {
@@ -149,6 +149,21 @@ describe('Protosynthesis', () => {
 
 		battle.makeChoices('switch 2', 'auto');
 		const dittoMoon = battle.p1.active[0];
-		assert(!dittoMoon.volatiles['protosynthesis']);
+		assert(!dittoMoon.abilityState.bestStat);
+	});
+
+	it(`should activate right after weather changes`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['sleeptalk'] },
+			{ species: 'Roaring Moon', item: 'boosterenergy', ability: 'protosynthesis', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+		]]);
+
+		const roaringMoon = battle.p1.active[1];
+		assert(roaringMoon.abilityState.fromBooster);
+		assert.equal(roaringMoon.abilityState.bestStat, 'atk');
+		assert.equal(battle.field.weather, 'sunnyday');
 	});
 });

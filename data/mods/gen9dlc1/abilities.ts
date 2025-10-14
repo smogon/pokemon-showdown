@@ -12,12 +12,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onWeatherChange(pokemon) {
 			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
-				pokemon.addVolatile('protosynthesis');
-			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster && this.field.weather !== 'sunnyday') {
+				pokemon.addVolatile('protosynthesis', pokemon, this.field.getWeather());
+				return;
+			}
+			if (!pokemon.volatiles['protosynthesis']?.fromBooster && this.field.weather !== 'sunnyday') {
 				// Protosynthesis will not deactivite if Sun is suppressed, hence the direct ID check (isWeather respects suppression)
 				pokemon.removeVolatile('protosynthesis');
 			}
+			const item = pokemon.getItem();
+			if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				pokemon.addVolatile('protosynthesis', pokemon, item);
+			}
 		},
+		// Implement as a condition so that it doesn't get suppressed by Neutralizing Gas
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
@@ -67,6 +75,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	quarkdrive: {
 		inherit: true,
+		onTerrainChange(pokemon) {
+			if (this.field.isTerrain('electricterrain')) {
+				pokemon.addVolatile('quarkdrive', pokemon, this.field.getTerrain());
+				return;
+			}
+			if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
+				pokemon.removeVolatile('quarkdrive');
+			}
+			const item = pokemon.getItem();
+			if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				pokemon.addVolatile('quarkdrive', pokemon, item);
+			}
+		},
+		// Implement as a condition so that it doesn't get suppressed by Neutralizing Gas
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
