@@ -1043,6 +1043,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1882,
 		gen: 9,
 	},
+	cleverfeather: {
+		name: "Clever Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 569,
+		gen: 5,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -2219,6 +2228,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	geniusfeather: {
+		name: "Genius Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 568,
+		gen: 5,
+	},
 	gengarite: {
 		name: "Gengarite",
 		spritenum: 588,
@@ -2529,6 +2547,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 14,
 		gen: 4,
 		isPokeball: true,
+	},
+	healtheather: {
+		name: "Health Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 565,
+		gen: 5,
 	},
 	hearthflamemask: {
 		name: "Hearthflame Mask",
@@ -3922,6 +3949,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 266,
 		gen: 4,
 	},
+	musclefeather: {
+		name: "Muscle Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 566,
+		gen: 5,
+	},
 	mysticwater: {
 		name: "Mystic Water",
 		spritenum: 300,
@@ -4497,6 +4533,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isPokeball: true,
 	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 571,
+		gen: 5,
+	},
 	primariumz: {
 		name: "Primarium Z",
 		spritenum: 652,
@@ -4813,6 +4858,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 534,
 		gen: 6,
 		isNonstandard: "Past",
+	},
+	resistfeather: {
+		name: "Resist Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 567,
+		gen: 5,
 	},
 	repeatball: {
 		name: "Repeat Ball",
@@ -5771,6 +5825,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1116,
 		gen: 8,
+	},
+	swiftfeather: {
+		name: "Swift Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 570,
+		gen: 5,
 	},
 	syrupyapple: {
 		name: "Syrupy Apple",

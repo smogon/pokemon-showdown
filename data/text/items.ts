@@ -288,6 +288,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 
 		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
 	},
+	cleverfeather: {
+		name: "Clever Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's Special Defense stat.",
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
@@ -673,6 +677,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Gardevoirite",
 		shortDesc: "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
 	},
+	geniusfeather: {
+		name: "Genius Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's Sp. Atk stat.",
+	},
 	gengarite: {
 		name: "Gengarite",
 		shortDesc: "If held by a Gengar, this item allows it to Mega Evolve in battle.",
@@ -775,6 +783,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	healball: {
 		name: "Heal Ball",
 		shortDesc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
+	},
+	healthfeather: {
+		name: "Health Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's HP stat.",
 	},
 	hearthflamemask: {
 		name: "Hearthflame Mask",
@@ -1207,6 +1219,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Muscle Band",
 		shortDesc: "Holder's physical attacks have 1.1x power.",
 	},
+	musclefeather: {
+		name: "Muscle Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's Attack stat.",
+	},
 	mysticwater: {
 		name: "Mystic Water",
 		shortDesc: "Holder's Water-type attacks have 1.2x power.",
@@ -1388,6 +1404,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Premier Ball",
 		shortDesc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		shortDesc: "Though this feather is beautiful, it's just a regular feather and has no effect.",
+	},
 	primariumz: {
 		name: "Primarium Z",
 		shortDesc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
@@ -1489,6 +1509,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	redorb: {
 		name: "Red Orb",
 		shortDesc: "If held by a Groudon, this item triggers its Primal Reversion in battle.",
+	},
+	resistfeather: {
+		name: "Resist Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's Defense stat.",
 	},
 	repeatball: {
 		name: "Repeat Ball",
@@ -1790,6 +1814,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	sweetapple: {
 		name: "Sweet Apple",
 		shortDesc: "Evolves Applin into Appletun when used.",
+	},
+	swiftfeather: {
+		name: "Swift Feather",
+		shortDesc: "An item to be used on a Pokémon. This feather slightly increases base points for a Pokémon's Speed stat.",
 	},
 	syrupyapple: {
 		name: "Syrupy Apple",
