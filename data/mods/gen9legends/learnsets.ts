@@ -1946,6 +1946,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     mewtwo: {
+        inherit: true,
         learnset: {
             aerialace: ["9M"],
             agility: ["9M"],
@@ -6792,6 +6793,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     floetteeternal: {
+        inherit: true,
         learnset: {
             calmmind: ["9M"],
             charm: ["9L26"],
@@ -8538,6 +8540,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     xerneas: {
+        inherit: true,
         learnset: {
             bodyslam: ["9M"],
             calmmind: ["9M"],
@@ -8573,6 +8576,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     yveltal: {
+        inherit: true,
         learnset: {
             airslash: ["9L35"],
             bodyslam: ["9M"],
@@ -8606,6 +8610,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     zygarde: {
+        inherit: true,
         learnset: {
             bite: ["9L1"],
             bodyslam: ["9M"],
@@ -8644,6 +8649,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
 	zygarde10: {
+        inherit: true,
         learnset: {
             coreenforcer: ["9S6"],
             landswrath: ["9S6"],
@@ -8652,6 +8658,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         },
     },
     diancie: {
+        inherit: true,
         learnset: {
             amnesia: ["9L7"],
             bodyslam: ["9M"],
@@ -8689,6 +8696,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     hoopa: {
+        inherit: true,
         learnset: {
             brickbreak: ["9M"],
             calmmind: ["9M"],
@@ -8728,6 +8736,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         }
     },
     volcanion: {
+        inherit: true,
         learnset: {
             bodyslam: ["9M"],
             brickbreak: ["9M"],
