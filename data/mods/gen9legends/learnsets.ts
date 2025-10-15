@@ -6737,7 +6737,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             workup: ["9L8"],
         }
     },
-    flabb: {
+    flabebe: {
         learnset: {
             calmmind: ["9M"],
             charm: ["9L26"],
@@ -6791,7 +6791,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             wish: ["9L20"],
         }
     },
-    floette5: {
+    floetteeternal: {
         learnset: {
             calmmind: ["9M"],
             charm: ["9L26"],
@@ -6799,11 +6799,11 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             doubleteam: ["9M"],
             drainingkiss: ["9L18"],
             endure: ["9M"],
-            energyball: ["9L40"],
+            energyball: ["9L40", "9S0"],
             fairywind: ["9L1"],
-            gigadrain: ["9M"],
+            gigadrain: ["9M", "9S0"],
             hyperbeam: ["9M"],
-            lightofruin: ["9L50"],
+            lightofruin: ["9L50", "9S0"],
             lightscreen: ["9M"],
             magicalleaf: ["9L22"],
             metronome: ["9M"],
@@ -6815,7 +6815,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             solarbeam: ["9L54"],
             substitute: ["9M"],
             swift: ["9M"],
-            synthesis: ["9L33"],
+            synthesis: ["9L33", "9S0"],
             tackle: ["9L1"],
             vinewhip: ["9L1"],
             wish: ["9L20"],
@@ -8546,14 +8546,14 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             endure: ["9M"],
             flashcannon: ["9M"],
             focusblast: ["9M"],
-            geomancy: ["9L55"],
+            geomancy: ["9L55", "9S6"],
             gigaimpact: ["9L85"],
-            hornleech: ["9L35"],
+            hornleech: ["9L35", "9S6"],
             hyperbeam: ["9M"],
             hypervoice: ["9M"],
             lightscreen: ["9L5"],
-            megahorn: ["9L70"],
-            moonblast: ["9L60"],
+            megahorn: ["9L70", "9S6"],
+            moonblast: ["9L60", "9S6"],
             nightslash: ["9L20"],
             outrage: ["9L80"],
             playrough: ["9M"],
@@ -8576,7 +8576,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
         learnset: {
             airslash: ["9L35"],
             bodyslam: ["9M"],
-            darkpulse: ["9L40"],
+            darkpulse: ["9L40", "9S6"],
             doubleteam: ["9L1"],
             dragonclaw: ["9M"],
             dragonrush: ["9L65"],
@@ -8587,13 +8587,13 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             gust: ["9L1"],
             healblock: ["9M"],
             heatwave: ["9M"],
-            hurricane: ["9L70"],
+            hurricane: ["9L70", "9S6"],
             hyperbeam: ["9L85"],
             hypervoice: ["9M"],
-            oblivionwing: ["9L55"],
+            oblivionwing: ["9L55", "9S6"],
             phantomforce: ["9L60"],
             protect: ["9M"],
-            psychic: ["9L45"],
+            psychic: ["9L45", "9S6"],
             rockslide: ["9M"],
             shadowball: ["9M"],
             shadowclaw: ["9M"],
@@ -8643,7 +8643,14 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
             zenheadbutt: ["9M"],
         }
     },
-	zygarde10: {},
+	zygarde10: {
+        learnset: {
+            coreenforcer: ["9S6"],
+            landswrath: ["9S6"],
+            thousandarrows: ["9S6"],
+            thousandwaves: ["9S6"],
+        },
+    },
     diancie: {
         learnset: {
             amnesia: ["9L7"],
