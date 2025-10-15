@@ -547,13 +547,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Miraidon', 'Mewtwo', 'Necrozma-Dusk-Mane',
 			'Necrozma-Dawn-Wings', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin', 'Porygon-Z', 'Rayquaza', 'Regieleki', 'Reshiram', 'Roaring Moon', 'Shaymin-Sky', 'Sneasler',
 			'Solgaleo', 'Spectrier', 'Terapagos', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
-			'Zekrom',
-			// Blanket Ability Bans
-			'Arena Trap', 'Moody', 'Shadow Tag',
-			// Items
-			'Bright Powder', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Razor Fang', 'Smooth Rock',
-			// Moves
-			'Baton Pass', 'Shed Tail', 'Last Respects',
+			'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Bright Powder', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Razor Fang', 'Smooth Rock', 'Baton Pass', 'Shed Tail', 'Last Respects',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
