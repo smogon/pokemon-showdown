@@ -563,7 +563,7 @@ export class DexSpecies {
 				const isLetsGo = (
 					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
-						species.name !== 'Pikachu-Alola'))
+						species.name !== 'Pikachu-Alola' && species.gen <= 7))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
