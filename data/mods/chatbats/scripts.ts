@@ -282,6 +282,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 			return pokemon.teraType;
-		}
+		},
 	},
 };

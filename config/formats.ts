@@ -3262,8 +3262,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					return false;
 				}
 				return pokemon.teraType;
-			}
-		}
+			},
+		},
 	},
 	{
 		name: "[Gen 9] Baby Random Battle",
