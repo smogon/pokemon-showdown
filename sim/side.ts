@@ -173,7 +173,7 @@ export class Side {
 	/**
 	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
 	 *
-	 * Use BattleActions.canDynamaxNow() to check if a side can dynamax instead of this property because only one
+	 * Use BattleActions.canDynamax() to check if a side can dynamax instead of this property because only one
 	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
 	 */
 	dynamaxUsed: boolean;
@@ -729,7 +729,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 		const ultra = (event === 'ultra');
-		if (ultra && !pokemon.canUltraBurst) {
+		if (ultra && !this.battle.actions.canUltraBurst(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
 		}
 		if (ultra && this.choice.ultra && !mixandmega) {

@@ -1868,7 +1868,7 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
-			this.battle.ruleTable.has('+pokemontag:future')) &&
+			this.battle.ruleTable.has('+pokemontag:future')) && !this.battle.ruleTable.has('megarayquazaclause') &&
 			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
@@ -1945,9 +1945,11 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.side.terastallizationUsed || pokemon.getItem().megaStone || pokemon.getItem().zMove) {
-			return false;
-		}
+		if (pokemon.side.terastallizationUsed) return false;
+
+		const item = pokemon.getItem();
+		if (item.megaStone || item.isPrimalOrb || item.zMove) return false;
+
 		if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
 			return false;
 		}

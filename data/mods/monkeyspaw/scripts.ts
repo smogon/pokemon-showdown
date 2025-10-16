@@ -158,7 +158,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
-				if (side.canDynamaxNow()) {
+				if (this.actions.canDynamax(side)) {
 					if (this.turn === 1) {
 						this.addSplit(side.id, ['-candynamax', side.id]);
 					} else {
@@ -485,40 +485,37 @@ export const Scripts: ModdedBattleScriptsData = {
 		inherit: true,
 		canMegaEvo(pokemon) {
 			// @ts-expect-error
-			if (!pokemon.side.wishesRemaining) return null;
+			if (!pokemon.side.wishesRemaining) return false;
 			// @ts-expect-error
-			if (!pokemon.side.wishes['life']) return null;
+			if (!pokemon.side.wishes['life']) return false;
 			return 'yes';
 		},
 		canMegaEvoX(pokemon) {
 			// @ts-expect-error
-			if (!pokemon.side.wishesRemaining) return null;
+			if (!pokemon.side.wishesRemaining) return false;
 			// @ts-expect-error
-			if (!pokemon.side.wishes['power']) return null;
+			if (!pokemon.side.wishes['power']) return false;
 			return 'yes';
 		},
 		canMegaEvoY(pokemon) {
 			// @ts-expect-error
-			if (!pokemon.side.wishesRemaining) return null;
+			if (!pokemon.side.wishesRemaining) return false;
 			// @ts-expect-error
-			if (!pokemon.side.wishes['luck']) return null;
+			if (!pokemon.side.wishes['luck']) return false;
 			return 'yes';
 		},
 		canTerastallize(pokemon) {
 			// @ts-expect-error
-			if (!pokemon.side.wishesRemaining) return null;
+			if (!pokemon.side.wishesRemaining) return false;
 			// @ts-expect-error
-			if (!pokemon.side.wishes['knowledge']) return null;
+			if (!pokemon.side.wishes['knowledge']) return false;
 			return 'Stellar';
 		},
 		// wish for life (dead teammate is revived, but that teammate has permanent slow start)
 		runMegaEvo(pokemon) {
-			if (!pokemon.canMegaEvo) return false;
+			if (!this.canMegaEvo(pokemon)) return false;
 
-			// Limit one wish for life per side
-			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvo = null;
-			}
+			pokemon.side.megaEvoUsed = true;
 			// @ts-expect-error
 			pokemon.side.wishesRemaining--;
 			// @ts-expect-error
@@ -535,12 +532,11 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// wish for power (+2 prominent stat/defense, -2 every other stat)
 		runMegaEvoX(pokemon) {
-			if (!pokemon.canMegaEvoX) return false;
+			if (!this.canMegaEvoX(pokemon)) return false;
 
 			// Limit one wish for life per side
-			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvoX = null;
-			}
+			// @ts-expect-error
+			pokemon.side.megaEvoXUsed = true;
 			// @ts-expect-error
 			pokemon.side.wishesRemaining--;
 			// @ts-expect-error
@@ -573,12 +569,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// wish for luck (serene grace + focus energy but confused)
 		runMegaEvoY(pokemon) {
-			if (!pokemon.canMegaEvoY) return false;
+			if (!this.canMegaEvoY(pokemon)) return false;
 
-			// Limit one wish for life per side
-			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvoY = null;
-			}
+			// @ts-expect-error
+			pokemon.side.megaEvoYUsed = true;
 			// @ts-expect-error
 			pokemon.side.wishesRemaining--;
 			// @ts-expect-error
@@ -598,12 +592,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// wish for knowledge
 		terastallize(pokemon) {
-			if (!pokemon.canTerastallize) return;
+			if (!this.canTerastallize(pokemon)) return false;
 
 			// limit one wish for knowledge per side
-			for (const ally of pokemon.side.pokemon) {
-				ally.canTerastallize = null;
-			}
+			pokemon.side.terastallizationUsed = true;
 			// @ts-expect-error
 			pokemon.side.wishesRemaining--;
 			// @ts-expect-error
@@ -622,6 +614,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			this.battle.runEvent('AfterTerastallization', pokemon);
+			return true;
 		},
 		// one more wish
 	},
@@ -634,5 +627,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			life: 1,
 			knowledge: 1,
 		},
+		megaEvoXUsed: false,
+		megaEvoYUsed: false,
 	},
 };
