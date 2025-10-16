@@ -268,9 +268,9 @@ export class Pokemon {
 	weighthg: number;
 	speed: number;
 
-	canMegaEvo: string | null | undefined;
-	canMegaEvoX: string | null | undefined;
-	canMegaEvoY: string | null | undefined;
+	canMegaEvo: string | false | null | undefined;
+	canMegaEvoX: string | false | null | undefined;
+	canMegaEvoY: string | false | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	/**
