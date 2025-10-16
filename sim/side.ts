@@ -168,6 +168,7 @@ export class Side {
 
 	pokemonLeft: number;
 	megaEvoUsed: boolean;
+	ultraBurstUsed: boolean;
 	zMoveUsed: boolean;
 	/**
 	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
@@ -234,6 +235,7 @@ export class Side {
 		this.totalFainted = 0;
 
 		this.megaEvoUsed = false;
+		this.ultraBurstUsed = false;
 		this.zMoveUsed = false;
 		this.dynamaxUsed = this.battle.gen !== 8;
 		this.terastallizationUsed = this.battle.gen !== 9;

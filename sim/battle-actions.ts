@@ -1886,7 +1886,7 @@ export class BattleActions {
 	}
 
 	canUltraBurst(pokemon: Pokemon) {
-		if (pokemon.side.zMoveUsed) return false;
+		if (pokemon.side.ultraBurstUsed) return false;
 		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'ultranecroziumz') {
 			return "Necrozma-Ultra";
@@ -1901,7 +1901,11 @@ export class BattleActions {
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
-		pokemon.side.megaEvoUsed = true;
+		if (speciesid === 'Necrozma-Ultra') {
+			pokemon.side.ultraBurstUsed = true;
+		} else {
+			pokemon.side.megaEvoUsed = true;
+		}
 
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;

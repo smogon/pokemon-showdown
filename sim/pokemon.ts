@@ -268,7 +268,6 @@ export class Pokemon {
 	weighthg: number;
 	speed: number;
 
-	canUltraBurst: string | null | undefined;
 	teraType: string;
 	baseTypes: string[];
 	terastallized?: string;
