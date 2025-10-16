@@ -395,13 +395,17 @@ export class Learnset {
 		this.encounters = data.encounters || undefined;
 		this.species = species;
 
-		if (this.eventData) {
-			for (const event of this.eventData) {
-				if (event.source === 'gen8legends') {
-					event.pokeball = 'strangeball';
+		const eventData = Utils.deepClone(this.eventData);
+		let update = false;
+		if (eventData) {
+			for (const eventInfo of eventData) {
+				if (eventInfo.source === 'gen8legends') {
+					eventInfo.pokeball = 'strangeball';
+					update = true;
 				}
 			}
 		}
+		if (update) this.eventData = Utils.deepFreeze(eventData);
 	}
 }
 
@@ -566,9 +570,9 @@ export class DexSpecies {
 			}
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
-					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
-						species.name !== 'Pikachu-Alola' && species.gen <= 7))
+					species.gen <= 7 && (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme || species.isMega || (['Alola', 'Starter'].includes(species.forme) &&
+						species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}

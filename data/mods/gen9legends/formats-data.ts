@@ -2021,6 +2021,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	aegislash: {
 		isNonstandard: null,
 	},
+	aegislashblade: {
+	},
 	spritzee: {
 		isNonstandard: null,
 	},
@@ -2126,7 +2128,25 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	pumpkaboo: {
 		isNonstandard: null,
 	},
+	pumpkaboosmall: {
+		isNonstandard: null,
+	},
+	pumpkaboolarge: {
+		isNonstandard: null,
+	},
+	pumpkaboosuper: {
+		isNonstandard: null,
+	},
 	gourgeist: {
+		isNonstandard: null,
+	},
+	gourgeistsmall: {
+		isNonstandard: null,
+	},
+	gourgeistlarge: {
+		isNonstandard: null,
+	},
+	gourgeistsuper: {
 		isNonstandard: null,
 	},
 	bergmite: {
