@@ -397,6 +397,14 @@ export class Learnset {
 		this.eventData = data.eventData || undefined;
 		this.encounters = data.encounters || undefined;
 		this.species = species;
+
+		if (this.eventData) {
+			for (const event of this.eventData) {
+				if (event.source === 'gen8legends') {
+					event.pokeball = 'strangeball';
+				}
+			}
+		}
 	}
 }
 
