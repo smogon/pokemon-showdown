@@ -1932,7 +1932,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	greninjamega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	bunnelby: {
 		isNonstandard: null,
