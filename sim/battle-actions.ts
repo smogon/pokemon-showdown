@@ -1481,8 +1481,8 @@ export class BattleActions {
 	getMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.moves.get(move);
 		if (move.name === 'Struggle') return move;
-		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
-			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
+		if (pokemon.gigantamax && pokemon.baseSpecies.canGigantamax && move.category !== 'Status') {
+			const gMaxMove = this.dex.moves.get(pokemon.baseSpecies.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
 		const maxMove = this.dex.moves.get(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
@@ -1494,8 +1494,8 @@ export class BattleActions {
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
-			if (pokemon.gigantamax && pokemon.canGigantamax) {
-				const gMaxMove = this.dex.getActiveMove(pokemon.canGigantamax);
+			if (pokemon.gigantamax && pokemon.baseSpecies.canGigantamax) {
+				const gMaxMove = this.dex.getActiveMove(pokemon.baseSpecies.canGigantamax);
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
@@ -1861,6 +1861,8 @@ export class BattleActions {
 	// ==================================================================
 
 	canMegaEvo(pokemon: Pokemon) {
+		if (pokemon.side.megaEvoUsed) return false;
+
 		const species = pokemon.baseSpecies;
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
@@ -1871,7 +1873,8 @@ export class BattleActions {
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
-		// Temporary hardcode until generation shift
+		if (!item.megaStone) return false;
+		// FIXME: Temporary hardcode until generation shift
 		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaEvolves === species.name) {
 			return item.megaStone;
 		}
@@ -1879,55 +1882,81 @@ export class BattleActions {
 		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
 			return item.megaStone;
 		}
-		return null;
+		return false;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {
+		if (pokemon.side.zMoveUsed) return false;
 		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'ultranecroziumz') {
 			return "Necrozma-Ultra";
 		}
-		return null;
+		return false;
 	}
 
 	runMegaEvo(pokemon: Pokemon) {
-		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (pokemon.side.megaEvoUsed) return false;
+
+		const speciesid = this.canMegaEvo(pokemon) || this.canUltraBurst(pokemon);
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
-
-		// Limit one mega evolution
-		const wasMega = pokemon.canMegaEvo;
-		for (const ally of pokemon.side.pokemon) {
-			if (wasMega) {
-				ally.canMegaEvo = false;
-			} else {
-				ally.canUltraBurst = null;
-			}
-		}
+		pokemon.side.megaEvoUsed = true;
 
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
 
 	// Let's Go
-	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	canMegaEvoX(pokemon: Pokemon): string | false {
+		return false;
+	}
+	canMegaEvoY(pokemon: Pokemon): string | false {
+		return false;
+	}
+	runMegaEvoX(pokemon: Pokemon) {
+		return this.canMegaEvoX(pokemon) ? this.runMegaEvo(pokemon) : false;
+	}
+	runMegaEvoY(pokemon: Pokemon) {
+		return this.canMegaEvoY(pokemon) ? this.runMegaEvo(pokemon) : false;
+	}
+
+	canDynamax(side: Side): boolean {
+		if (side.dynamaxUsed) return false;
+		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
+		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
+		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][side.n]) return false;
+		// if (this.battle.gameType === 'multitriples' && this.battle.turn % 3 !== [1, 1, 2, 2, 0, 0][this.side.n]) {
+		//		return false;
+		// }
+		return true;
+	}
+
+	runDynamax(pokemon: Pokemon) {
+		if (!this.canDynamax(pokemon.side)) return false;
+		pokemon.addVolatile('dynamax');
+		pokemon.side.dynamaxUsed = true;
+		if (pokemon.side.allySide) pokemon.side.allySide.dynamaxUsed = true;
+		return true;
+	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
-			return null;
+		if (pokemon.side.terastallizationUsed || pokemon.getItem().megaStone || pokemon.getItem().zMove) {
+			return false;
+		}
+		if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
+			return false;
 		}
 		return pokemon.teraType;
 	}
 
 	terastallize(pokemon: Pokemon) {
+		if (!this.canTerastallize(pokemon)) return false;
+
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
 			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
-			return;
+			return false;
 		}
 
 		if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
@@ -1937,9 +1966,7 @@ export class BattleActions {
 		const type = pokemon.teraType;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
-		for (const ally of pokemon.side.pokemon) {
-			ally.canTerastallize = null;
-		}
+		pokemon.side.terastallizationUsed = true;
 		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
@@ -1959,6 +1986,7 @@ export class BattleActions {
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
+		return true;
 	}
 
 	// #endregion

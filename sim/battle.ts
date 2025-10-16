@@ -1739,7 +1739,7 @@ export class Battle {
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
-				if (side.canDynamaxNow()) {
+				if (this.actions.canDynamax(side)) {
 					if (this.turn === 1) {
 						this.addSplit(side.id, ['-candynamax', side.id]);
 					} else {
@@ -2719,9 +2719,7 @@ export class Battle {
 			this.actions.runMegaEvoY?.(action.pokemon);
 			break;
 		case 'runDynamax':
-			action.pokemon.addVolatile('dynamax');
-			action.pokemon.side.dynamaxUsed = true;
-			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
+			this.actions.runDynamax(action.pokemon);
 			break;
 		case 'terastallize':
 			this.actions.terastallize(action.pokemon);

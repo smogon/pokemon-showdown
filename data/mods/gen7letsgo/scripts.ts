@@ -22,41 +22,25 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		canMegaEvo(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
+			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle) || false;
 		},
 		canMegaEvoX(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle);
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle) || false;
 		},
 		canMegaEvoY(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle);
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle) || false;
 		},
 		runMegaEvo(pokemon) {
-			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
+			const speciesid = this.canMegaEvo(pokemon) || this.canMegaEvoX(pokemon) || this.canMegaEvoY(pokemon);
 			if (!speciesid) return false;
 
 			pokemon.formeChange(speciesid, null, true);
 			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
 			pokemon.formeRegression = true;
-
-			// Limit one mega evolution
-			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvo = false;
-				ally.canMegaEvoX = false;
-				ally.canMegaEvoY = false;
-			}
+			pokemon.side.megaEvoUsed = true;
 
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
-		},
-		runMegaEvoX(pokemon) {
-			if (!pokemon.canMegaEvoX) return false;
-			pokemon.canMegaEvoY = false;
-			return this.runMegaEvo(pokemon);
-		},
-		runMegaEvoY(pokemon) {
-			if (!pokemon.canMegaEvoY) return false;
-			pokemon.canMegaEvoX = false;
-			return this.runMegaEvo(pokemon);
 		},
 	},
 	/**
