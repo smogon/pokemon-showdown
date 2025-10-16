@@ -1982,7 +1982,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	floetteeternal: {
 		isNonstandard: null,
 	},
-	floetteeternalmega: {
+	floettemega: {
 		isNonstandard: null,
 	},
 	florges: {
