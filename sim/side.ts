@@ -719,10 +719,10 @@ export class Side {
 		if (mega && !this.battle.actions.canMegaEvo(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
-		if (megax && !this.battle.actions.canMegaEvoX(pokemon)) {
+		if (megax && !this.battle.actions.canMegaEvoX?.(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve X`);
 		}
-		if (megay && !this.battle.actions.canMegaEvoY(pokemon)) {
+		if (megay && !this.battle.actions.canMegaEvoY?.(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve Y`);
 		}
 		if ((mega || megax || megay) && this.choice.mega && !mixandmega) {

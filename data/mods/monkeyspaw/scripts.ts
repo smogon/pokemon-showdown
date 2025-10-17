@@ -532,7 +532,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// wish for power (+2 prominent stat/defense, -2 every other stat)
 		runMegaEvoX(pokemon) {
-			if (!this.canMegaEvoX(pokemon)) return false;
+			if (!this.canMegaEvoX!(pokemon)) return false;
 
 			// Limit one wish for life per side
 			// @ts-expect-error
@@ -569,7 +569,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// wish for luck (serene grace + focus energy but confused)
 		runMegaEvoY(pokemon) {
-			if (!this.canMegaEvoY(pokemon)) return false;
+			if (!this.canMegaEvoY!(pokemon)) return false;
 
 			// @ts-expect-error
 			pokemon.side.megaEvoYUsed = true;
