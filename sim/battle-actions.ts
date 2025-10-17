@@ -1938,7 +1938,7 @@ export class BattleActions {
 		if (pokemon.side.terastallizationUsed) return false;
 
 		const item = pokemon.getItem();
-		if (item.megaStone || item.isPrimalOrb || item.zMove) return false;
+		if (item.megaStone || this.canMegaEvo(pokemon) || item.isPrimalOrb || item.zMove) return false;
 
 		if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
 			return false;
