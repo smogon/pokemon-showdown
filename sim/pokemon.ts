@@ -1088,8 +1088,8 @@ export class Pokemon {
 
 		if (!lockedMove) {
 			if (this.battle.actions.canMegaEvo(this)) data.canMegaEvo = true;
-			if (this.battle.actions.canMegaEvoX(this)) data.canMegaEvoX = true;
-			if (this.battle.actions.canMegaEvoY(this)) data.canMegaEvoY = true;
+			if (this.battle.actions.canMegaEvoX?.(this)) data.canMegaEvoX = true;
+			if (this.battle.actions.canMegaEvoY?.(this)) data.canMegaEvoY = true;
 			if (this.battle.actions.canUltraBurst(this)) data.canUltraBurst = true;
 			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;

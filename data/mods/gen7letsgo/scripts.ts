@@ -31,7 +31,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle) || false;
 		},
 		runMegaEvo(pokemon) {
-			const speciesid = this.canMegaEvo(pokemon) || this.canMegaEvoX(pokemon) || this.canMegaEvoY(pokemon);
+			const speciesid = this.canMegaEvo(pokemon) || this.canMegaEvoX?.(pokemon) || this.canMegaEvoY?.(pokemon);
 			if (!speciesid) return false;
 
 			pokemon.formeChange(speciesid, null, true);
@@ -41,6 +41,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
+		},
+		runMegaEvoX(pokemon: Pokemon) {
+			return this.canMegaEvoX!(pokemon) ? this.runMegaEvo(pokemon) : false;
+		},
+		runMegaEvoY(pokemon: Pokemon) {
+			return this.canMegaEvoY!(pokemon) ? this.runMegaEvo(pokemon) : false;
 		},
 	},
 	/**

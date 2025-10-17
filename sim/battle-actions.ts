@@ -1895,8 +1895,6 @@ export class BattleActions {
 	}
 
 	runMegaEvo(pokemon: Pokemon) {
-		if (pokemon.side.megaEvoUsed) return false;
-
 		const speciesid = this.canMegaEvo(pokemon) || this.canUltraBurst(pokemon);
 		if (!speciesid) return false;
 
@@ -1912,18 +1910,10 @@ export class BattleActions {
 	}
 
 	// Let's Go
-	canMegaEvoX(pokemon: Pokemon): string | false {
-		return false;
-	}
-	canMegaEvoY(pokemon: Pokemon): string | false {
-		return false;
-	}
-	runMegaEvoX(pokemon: Pokemon) {
-		return this.canMegaEvoX(pokemon) ? this.runMegaEvo(pokemon) : false;
-	}
-	runMegaEvoY(pokemon: Pokemon) {
-		return this.canMegaEvoY(pokemon) ? this.runMegaEvo(pokemon) : false;
-	}
+	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 
 	canDynamax(side: Side): boolean {
 		if (side.dynamaxUsed) return false;
