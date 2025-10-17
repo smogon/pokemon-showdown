@@ -45,7 +45,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	cherrimsunshine: {
 		inherit: true,
-		baseStats: {hp: 70, atk: 90, def: 70, spa: 87, spd: 117, spe: 85},
+		baseStats: { hp: 70, atk: 90, def: 70, spa: 87, spd: 117, spe: 85 },
 	},
 	mimejr: {
 		inherit: true,
@@ -119,8 +119,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		forme: "Legend",
 		types: ["Normal"],
 		gender: "N",
-		baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
-		abilities: {0: "Multitype"},
+		baseStats: { hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120 },
+		abilities: { 0: "Multitype" },
 		heightm: 3.2,
 		weightkg: 320,
 		color: "White",
