@@ -936,7 +936,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 			if (pokemon.canMegaEvo) {
-				pokemon.canMegaEvo = null;
+				pokemon.canMegaEvo = false;
 			} else {
 				pokemon.canUltraBurst = null;
 			}
