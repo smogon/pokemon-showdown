@@ -162,7 +162,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 		const css: { [k: string]: string | { [k: string]: string } } = { class: "broadcast-blue" };
 		if (this.game === 'BDSP') css.style = { background: '#aa66a9', color: '#fff' };
 		if (this.game === 'SV') css.style = { background: '#CD5C5C', color: '#fff' };
-		if (this.game === 'Z-A') css.style = { background: '#9BC53B', color: '#fff' };
+		if (this.game === 'Z-A') css.style = { background: '#10a14f', color: '#fff' };
 		return css;
 	}
 
