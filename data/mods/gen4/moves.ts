@@ -905,7 +905,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	knockoff: {
 		inherit: true,
 		onAfterHit(target, source, move) {
-			if (!target.item || target.itemKnockedOff) return;
+			if (!target.item) return;
 			if (target.ability === 'multitype') return;
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
@@ -1699,6 +1699,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	switcheroo: {
 		inherit: true,
 		onTryHit(target, source, move) {
+			if (target.itemKnockedOff || source.itemKnockedOff) return false;
 			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},
@@ -1832,6 +1833,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	trick: {
 		inherit: true,
 		onTryHit(target, source, move) {
+			if (target.itemKnockedOff || source.itemKnockedOff) return false;
 			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},
