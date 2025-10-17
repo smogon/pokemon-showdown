@@ -190,7 +190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
-			if (target?.item && !target.itemKnockedOff) {
+			if (target?.item) {
 				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
@@ -537,16 +537,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
-	},
-	unburden: {
-		inherit: true,
-		condition: {
-			onModifySpe(spe, pokemon) {
-				if ((!pokemon.item || pokemon.itemKnockedOff) && !pokemon.ignoringAbility()) {
-					return this.chainModify(2);
-				}
-			},
-		},
 	},
 	vitalspirit: {
 		inherit: true,
