@@ -4526,6 +4526,6 @@ export const roomSettings: Chat.SettingsHandler = room => ({
 	],
 });
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/mafia (custom|add|overwrite)idea');
-});
+}

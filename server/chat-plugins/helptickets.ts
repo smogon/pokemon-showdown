@@ -1,6 +1,6 @@
 import { FS, Utils, Net, ProcessManager } from '../../lib';
 import { getCommonBattles } from '../chat-commands/info';
-import { checkRipgrepAvailability } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import type { Punishment } from '../punishments';
 import type { PartialModlogEntry, ModlogID } from '../modlog';
 import { runPunishments } from './helptickets-auto';
@@ -520,7 +520,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage("Helpticket logs are currently disabled.");
 		}
 		const results = [];
-		if (await checkRipgrepAvailability()) {
+		if (await ConfigLoader.checkRipgrepAvailability()) {
 			const searchString = search.length > 1 ?
 				// regex escaped to handle things like searching for arrays or objects
 				// (JSON.stringify accounts for " strings are wrapped in and stuff. generally ensures that searching is easier.)
@@ -3026,10 +3026,10 @@ export const handlers: Chat.Handlers = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register(
 		'/ht resolve ', '/helpticket resolve ',
 		'/requesthelp resolve ', '/helprequest resolve ',
 		'/ht submit ', '/helpticket submit ',
 	);
-});
+}

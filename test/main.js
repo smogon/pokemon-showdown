@@ -48,14 +48,18 @@ try {
 require('../dist/lib/repl').Repl.start = noop;
 
 // Start the server.
-// NOTE: This used "server" before when we needed "server"
-require('../dist/server');
+const server = require('../dist/server');
 
-LoginServer.disabled = true;
-Ladders.disabled = true;
+// Preload so that sim tests have access to Dex ASAP
+const { Dex } = require('../dist/sim/dex');
+global.Dex = Dex;
+global.toID = Dex.toID;
 
-before('initialization', function () {
+before('initialization', async function () {
 	this.timeout(0); // Remove timeout limitation
+	await server.readyPromise;
+	LoginServer.disabled = true;
+	Ladders.disabled = true;
 	process.on('unhandledRejection', err => {
 		// I'd throw the err, but we have a heisenbug on our hands and I'd
 		// rather not have it screw with Travis in the interim

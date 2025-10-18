@@ -767,6 +767,6 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/filter (add|remove) ');
-});
+}

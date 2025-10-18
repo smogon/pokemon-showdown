@@ -704,45 +704,46 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+// (should handle restarts and also hotpatches)
+export function start() {
 	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
-});
 
-// convert from old format (should handle restarts and also hotpatches)
-for (const room of Rooms.rooms.values()) {
-	if (room.getMinorActivityQueue(true)) {
-		for (const poll of room.getMinorActivityQueue(true)!) {
-			if (!poll.activityid) {
-				// @ts-expect-error old format
-				poll.activityid = poll.activityId;
-				// @ts-expect-error old format
-				delete poll.activityId;
+	// convert from old format
+	for (const room of Rooms.rooms.values()) {
+		if (room.getMinorActivityQueue(true)) {
+			for (const poll of room.getMinorActivityQueue(true)!) {
+				if (!poll.activityid) {
+					// @ts-expect-error old format
+					poll.activityid = poll.activityId;
+					// @ts-expect-error old format
+					delete poll.activityId;
+				}
+				if (!poll.activityNumber) {
+					// @ts-expect-error old format
+					poll.activityNumber = poll.pollNumber;
+					// @ts-expect-error old format
+					delete poll.pollNumber;
+				}
+				room.saveSettings();
 			}
-			if (!poll.activityNumber) {
+		}
+		if (room.settings.minorActivity) {
+			if (!room.settings.minorActivity.activityid) {
 				// @ts-expect-error old format
-				poll.activityNumber = poll.pollNumber;
+				room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
 				// @ts-expect-error old format
-				delete poll.pollNumber;
+				delete room.settings.minorActivity.activityId;
+			}
+			if (typeof room.settings.minorActivity.activityNumber !== 'number') {
+				// @ts-expect-error old format
+				room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
+					// @ts-expect-error old format
+					room.settings.minorActivity.announcementNumber;
 			}
 			room.saveSettings();
 		}
-	}
-	if (room.settings.minorActivity) {
-		if (!room.settings.minorActivity.activityid) {
-			// @ts-expect-error old format
-			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
-			// @ts-expect-error old format
-			delete room.settings.minorActivity.activityId;
+		if (room.settings.minorActivity?.activityid === 'poll') {
+			room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 		}
-		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
-			// @ts-expect-error old format
-			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
-				// @ts-expect-error old format
-				room.settings.minorActivity.announcementNumber;
-		}
-		room.saveSettings();
-	}
-	if (room.settings.minorActivity?.activityid === 'poll') {
-		room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 	}
 }

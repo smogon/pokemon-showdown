@@ -648,15 +648,8 @@ export const commands: Chat.ChatCommands = {
 				const oldPlugins = Chat.plugins;
 				Chat.destroy();
 
-				const processManagers = ProcessManager.processManagers;
-				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
-						void manager.destroy();
-					}
-				}
-				void Chat.PM.destroy();
-
 				global.Chat = require('../chat').Chat;
+				Chat.start(Config.subprocessescache);
 				global.Tournaments = require('../tournaments').Tournaments;
 
 				this.sendReply("Reloading chat plugins...");
@@ -821,22 +814,23 @@ export const commands: Chat.ChatCommands = {
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
 			} else if (target === 'modlog') {
+				if (!Config.usesqlite) {
+					throw new Chat.ErrorMessage(`The moderator log is not available because SQLite is disabled.`);
+				}
+				if (!Config.usesqlitemodlog) {
+					throw new Chat.ErrorMessage(`The moderator log is not available because of the server configuration.`);
+				}
 				if (lock['modlog']) {
 					throw new Chat.ErrorMessage(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
+				if (Rooms.Modlog.readyPromise) {
+					throw new Chat.ErrorMessage(`There is already a hotpatch in progress.`);
+				}
 				this.sendReply("Hotpatching modlog...");
 
-				void Rooms.Modlog.database.destroy();
-				const { mainModlog } = require('../modlog');
-				if (mainModlog.readyPromise) {
-					this.sendReply("Waiting for the new SQLite database to be ready...");
-					await mainModlog.readyPromise;
-				} else {
-					this.sendReply("The new SQLite database is ready!");
-				}
-				Rooms.Modlog.destroyAllSQLite();
-
-				Rooms.Modlog = mainModlog;
+				void Rooms.Modlog.restart();
+				// eslint-disable-next-line @typescript-eslint/await-thenable
+				await Rooms.Modlog.readyPromise;
 				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
@@ -1547,7 +1541,7 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = SQL(module, {
+		const database = SQL('evalsql', module, {
 			file: `./databases/${db}.db`,
 			onError(err) {
 				return { err: err.message, stack: err.stack };

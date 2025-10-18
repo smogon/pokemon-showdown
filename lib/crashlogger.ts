@@ -21,6 +21,17 @@ const logPath = path.resolve(
 let lastCrashLog = 0;
 let transport: any;
 
+function appendCause(error: any) {
+	let stack = ``;
+	if (typeof error.cause === 'string') {
+		stack += `\n\n[cause]: ${error.cause}\n`;
+	} else {
+		stack += `\n\n[cause]: ${(error.cause as Error).message}\n`;
+		stack += `  ${(error.cause as Error)?.stack}`;
+	}
+	return stack;
+}
+
 /**
  * Logs when a crash happens to console, then e-mails those who are configured
  * to receive them.
@@ -34,6 +45,9 @@ export function crashlogger(
 	const datenow = Date.now();
 
 	let stack = (typeof error === 'string' ? error : (error as Error)?.stack) || '';
+	if ((error as any)?.cause) {
+		stack += appendCause(error as Error);
+	}
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {

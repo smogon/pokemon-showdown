@@ -6,11 +6,18 @@
 
 'use strict';
 const assert = require('assert').strict;
-const Responder = require('../../../dist/server/chat-plugins/responder').AutoResponder;
-const room = Rooms.createChatRoom('etheria');
-const Help = new Responder(room);
 
 describe('Autoresponder', () => {
+	let Responder = null;
+	let room = null;
+	let Help = null;
+
+	before(() => {
+		Responder = require('../../../dist/server/chat-plugins/responder').AutoResponder;
+		room = Rooms.createChatRoom('etheria');
+		Help = new Responder(room);
+	});
+
 	it('should only return true on added regexes', () => {
 		Help.data.pairs.catra = [];
 		Help.data.pairs.catra.push(Help.stringRegex(`Hey & Adora`));

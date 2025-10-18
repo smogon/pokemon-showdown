@@ -336,6 +336,6 @@ export const handlers: Chat.Handlers = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/(queue|set|replace)daily(at | )');
-});
+}
