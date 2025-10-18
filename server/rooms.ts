@@ -35,6 +35,7 @@ import { type ScavengerGameTemplate } from './chat-plugins/scavenger-games';
 import { type RepeatedPhrase } from './chat-plugins/repeats';
 import {
 	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
+	start as startBattleProcesses,
 } from "./room-battle";
 import { BestOfGame } from './room-battle-bestof';
 import { RoomGame, SimpleRoomGame, RoomGamePlayer } from './room-game';
@@ -44,6 +45,7 @@ import { RoomAuth } from './user-groups';
 import { type PartialModlogEntry, mainModlog } from './modlog';
 import { Replays } from './replays';
 import * as crypto from 'crypto';
+import type { SubProcessesConfig } from './config-loader';
 
 /*********************************************************
  * the Room object.
@@ -1300,7 +1302,11 @@ export class GlobalRoomState {
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
+	}
+
+	start(processCount: SubProcessesConfig) {
 		void this.loadBattles();
+		startBattleProcesses(processCount);
 	}
 
 	async serializeBattleRoom(room: Room) {
@@ -1371,12 +1377,15 @@ export class GlobalRoomState {
 	battlesLoading = false;
 	async loadBattles() {
 		this.battlesLoading = true;
+		// FIXME: There's nobody to receive this message yet.
+		/*
 		for (const u of Users.users.values()) {
 			u.send(
 				`|pm|~|${u.getIdentity()}|/uhtml restartmsg,` +
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
+		*/
 		const startTime = Date.now();
 		let count = 0;
 		let input;
