@@ -16440,7 +16440,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     forme: "Prime",
     types: ["Water", "Ground"],
     genderRatio: { M: 0.875, F: 0.125 },
-    baseStats: { hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 80 },
+    baseStats: { hp: 120, atk: 130, def: 110, spa: 105, spd: 110, spe: 80 },
     abilities: { 0: "Torrent", 1: "Regenerator", H: "Damp" },
     heightm: 1.5,
     weightkg: 81.9,
