@@ -24,8 +24,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	eco: {
-		transfer: 'transfermoney',
-		async transfermoney(target, room, user) {
+		async transfer(target, room, user) {
 			if (!target) return this.parse('/help eco');
 	
 			const [targetStr, amountStr] = target.split(',').map(s => s.trim());
@@ -65,8 +64,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		give: 'givemoney',
-		async givemoney(target, room, user) {
+		async give(target, room, user) {
 			this.checkCan('roomowner');
 
 			const [targetStr, amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
@@ -104,8 +102,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		take: 'takemoney',
-		async takemoney(target, room, user) {
+		async take(target, room, user) {
 			this.checkCan('roomowner');
 
 			const [targetStr, amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
@@ -148,8 +145,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		history: 'transactionhistory',
-		async transactionhistory(target, room, user) {
+		async history(target, room, user) {
 			if (!this.runBroadcast()) return;
 
 			let targetUserid = toID(target);
@@ -225,8 +221,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		logs: 'recentlogs',
-		async recentlogs(target, room, user) {
+		async logs(target, room, user) {
 			this.checkCan('roomowner');
 
 			const recentTransactions = await Economy.getTransactionHistory('', 50);
@@ -281,8 +276,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReplyBox(buf);
 		},
-
-		clearlogs: 'clearlogs',
+		
 		async clearlogs(target, room, user) {
 			this.checkCan('roomowner');
 
@@ -301,8 +295,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`Successfully cleared ${deletedCount} transaction log entries older than ${days} day(s).`);
 		},
 
-		stats: 'economystats',
-		async economystats() {
+		async stats() {
 			if (!this.runBroadcast()) return;
 
 			const stats = await Economy.getStats();
@@ -316,8 +309,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		ladder: 'leaderboard',
-		async leaderboard(target, room, user) {
+		async ladder(target, room, user) {
 			if (!this.runBroadcast()) return;
 
 			let [pageStr, limitStr] = target.split(',').map(s => s.trim());
@@ -345,8 +337,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		reset: 'reseteconomy',
-		async reseteconomy(target, room, user) {
+		async reset(target, room, user) {
 			this.checkCan('roomowner');
 
 			const targetUserid = toID(target);
