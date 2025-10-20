@@ -4,6 +4,8 @@
 */
 
 import { Economy } from '../../economy';
+import { nameColor } from '../../colors';
+Impulse.nameColor = nameColor;
 
 export const commands: Chat.ChatCommands = {
 	bal: 'balance',
