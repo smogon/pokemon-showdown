@@ -284,7 +284,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMove: { boost: { atk: 1 } },
+		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
 		desc: "Encore + Rain Dance",
 		shortDesc: "Encore + Rain Dance",
@@ -1602,5 +1602,45 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		shortDesc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
 		desc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
+	},
+	lootbox: {
+		num: -1015,
+		accuracy: 10,
+		basePower: 0,
+		category: "Physical",
+		name: "Loot Box",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			const rand = this.random(8);
+			if (rand < 2) {
+				pokemon.addVolatile('healing');
+				move.basePower = 0;
+			} else if (rand < 4) {
+				move.basePower = 60;
+			} else if (rand < 6) {
+				move.basePower = 120;
+			} else {
+				move.basePower = 150;
+				move.recoil = [1, 3];
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+			this.add('-anim', source, 'Mind Blown', target);
+		},
+		onHit(pokemon, target) {
+			if (pokemon.volatiles['healing']) {
+				this.heal(Math.ceil(pokemon.maxhp * 0.5), source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cute",
 	},
 };
