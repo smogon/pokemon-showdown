@@ -384,5 +384,5 @@ export const commands: Chat.ChatCommands = {
 			`);
 		}
 	},
-	eco: 'economy',
+	economy: 'eco',
 };
