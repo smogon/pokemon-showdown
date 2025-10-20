@@ -227,103 +227,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`|html|${tableHtml}`);
 		},
-
-		async logs(target, room, user) {
-			this.checkCan('roomowner');
-			
-			const recentTransactions = await Economy.getTransactionHistory('', 50);
-
-			if (!recentTransactions.length) {
-				return this.sendReplyBox(`<h3><center>Recent Economy Logs (Last 50)</center></h3><hr />No recent transactions found.`);
-			}
-
-			const headerRow = ["Type", "Amount", "Details", "Date"];
-			const dataRows = recentTransactions.map(t => {
-				const date = new Date(t.timestamp).toLocaleString();
-				let typeColor = '';
-				let details = '';
-				let amountDisplay = Economy.formatMoney(t.amount);
-
-				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
-				const toDisplayName = Users.getExact(t.to)?.name || t.to;
-
-				const fromColor = Impulse.nameColor(fromDisplayName);
-				const toColor = Impulse.nameColor(toDisplayName);
-
-				switch (t.type) {
-					case 'transfer':
-						typeColor = 'blue';
-						details = `TRANSFER: ${fromColor} sent to ${toColor}`;
-						break;
-					case 'give':
-						typeColor = 'green';
-						//details = `GIVE: ${fromColor} gave to ${toColor}`;
-						break;
-					case 'take':
-						typeColor = 'red';
-						//details = `TAKE: ${fromColor} took from ${toColor}`;
-						break;
-					case 'shop':
-						typeColor = 'orange';
-						details = `SHOP: ${fromColor} spent`;
-						break;
-					case 'reward':
-						typeColor = 'purple';
-						details = `REWARD: ${toColor} received`;
-						break;
-				}
-
-				const reason = t.reason ? ` (${t.reason})` : '';
-				let amountSign = '';
-				switch (t.type) {
-					case 'transfer':
-						amountSign = '';
-						break;
-					case 'give':
-					case 'reward':
-						amountSign = '+ ';
-						break;
-					case 'take':
-					case 'shop':
-						amountSign = '- ';
-						break;
-				}
-
-				return [
-					t.type.toUpperCase(),
-					`<span style="color: ${typeColor};">${amountSign}${amountDisplay}</span>`,
-					`${details}${reason}`,
-					date,
-				];
-			});
-
-			const tableHtml = generateThemedTable(
-				"Recent Economy Logs (Last 50)",
-				headerRow,
-				dataRows
-			);
-
-			this.sendReply(`|html|${tableHtml}`);
-		},
 		
-		async clearlogs(target, room, user) {
-			this.checkCan('roomowner');
-
-			const days = parseInt(target.trim());
-			if (isNaN(days) || days < 1) {
-				return this.errorReply("The number of days must be a positive integer.");
-			}
-
-			const cutoffDate = new Date();
-			cutoffDate.setDate(cutoffDate.getDate() - days);
-
-			const { deletedCount } = await Economy.TransactionDB.deleteMany({
-				timestamp: { $lt: cutoffDate },
-			});
-
-			this.sendReplyBox(`Successfully cleared ${deletedCount} transaction log entries older than ${days} day(s).`);
-		},
-
 		async stats() {
 			if (!this.runBroadcast()) return;
 
@@ -412,8 +316,6 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`<strong>Economy Commands: (alias: economy)</strong><br />` +
 				`/balance [user] - Shows a user's current balance. Aliases: /bal, /money, /atm<br />` +
 				`/eco history [user] - Shows the last 50 transactions for a user. Staff (# or higher) can view other users' history. (Default: yourself)<br />` +
-				`/eco logs - Shows the last 50 global economy transactions. Requires: # (Room Owner or higher)<br />` +
-				`/eco clearlogs [days] - Clears transaction logs older than the specified number of days. Requires: # (Room Owner or higher)<br />` +
 				`/eco stats - Shows global economy statistics and total money in circulation.<br />` +
 				`/eco ladder [page], [limit] - Shows the economy leaderboard. Max limit is 50.<br />` +
 				`/eco transfer [user], [amount] - Transfers money to another user. Use /help eco for details.<br />` +
