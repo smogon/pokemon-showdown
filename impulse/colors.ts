@@ -92,7 +92,7 @@ export const clearColorCache = () => {
 	Object.keys(colorCache).forEach(key => delete colorCache[key]);
 };
 
-const nameColor = (name: string, bold = false, userGroup = false, room: Room | null = null): string => {
+export const nameColor = (name: string, bold = false, userGroup = false, room: Room | null = null): string => {
 	const userId = toID(name);
 	const symbol = userGroup && Users.globalAuth.get(userId) ? `<font color=#948A88>${Users.globalAuth.get(userId)}</font>` : '';
 	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
