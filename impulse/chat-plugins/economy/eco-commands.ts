@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* Economy Commands
+*/
+
 import { Economy } from '../../economy';
 
 export const commands: Chat.ChatCommands = {
@@ -168,7 +173,7 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(buf);
 			}
 
-			buf += `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th style="width: 10%">Type</th><th style="width: 20%">Amount</th><th style="width: 45%">Details/Reason</th><th style="width: 25%">Date</th></tr>`;
+			buf += `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th style="width: 10%">Type</th><th style="width: 20%">Amount</th><th style="width: 40%">Details</th><th style="width: 30%">Date</th></tr>`;
 
 			history.forEach(t => {
 				const date = new Date(t.timestamp).toLocaleString();
@@ -224,7 +229,7 @@ export const commands: Chat.ChatCommands = {
 		async recentlogs(target, room, user) {
 			this.checkCan('roomowner');
 
-			const recentTransactions = await Economy.TransactionDB.find({}, { sort: { timestamp: -1 }, limit: 50 });
+			const recentTransactions = await Economy.getTransactionHistory('', 50);
 
 			let buf = `<h3><center>Recent Economy Logs (Last 50)</center></h3>`;
 			
