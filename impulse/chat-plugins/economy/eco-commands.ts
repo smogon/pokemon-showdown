@@ -5,6 +5,7 @@
 
 import { Economy } from '../../economy';
 import { nameColor } from '../../colors';
+import { generateThemedTable } from '../../utils';
 Impulse.nameColor = nameColor;
 
 export const commands: Chat.ChatCommands = {
@@ -156,24 +157,19 @@ export const commands: Chat.ChatCommands = {
 			if (targetUserid && !staffCheck) {
 				return this.errorReply("You can only view your own transaction history. Use `/eco history`.");
 			}
-			
+	
 			targetUserid = targetUserid || user.id;
-			
+	
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
 
 			const history = await Economy.getTransactionHistory(targetUserid);
-
-			let buf = `<h3><center>Transaction History for ${targetNameColor}</center></h3>`;
-			
 			if (!history.length) {
-				buf += `<hr />No transactions found for ${targetUserid}.`;
-				return this.sendReplyBox(buf);
+				return this.sendReplyBox(`<h3><center>Transaction History for ${targetNameColor}</center></h3><hr />No transactions found for ${targetUserid}.`)
 			}
 
-			buf += `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th style="width: 10%">Type</th><th style="width: 20%">Amount</th><th style="width: 50%">Details</th><th style="width: 20%">Date</th></tr>`;
-
-			history.forEach(t => {
+			const headerRow = ["Type", "Amount", "Details", "Date"];
+			const dataRows = history.map(t => {
 				const date = new Date(t.timestamp).toLocaleString();
 				let typeColor = '';
 				let details = '';
@@ -188,34 +184,48 @@ export const commands: Chat.ChatCommands = {
 				switch (t.type) {
 					case 'transfer':
 						typeColor = t.from === targetUserid ? 'red' : 'green';
+						details = t.from === targetUserid ? `Sent to ${toColor}` : `Received from ${fromColor}`;
 						amountDisplay = t.from === targetUserid ? `- ${amountDisplay}` : `+ ${amountDisplay}`;
 						break;
 					case 'give':
 						typeColor = 'green';
+						details = `Given by ${fromColor}`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 					case 'take':
 						typeColor = 'red';
+						details = `Taken by ${fromColor}`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'shop':
 						typeColor = 'red';
+						details = `Spent on shop item`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'reward':
 						typeColor = 'green';
+						details = `Reward`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 				}
 
 				const reason = t.reason ? ` (${t.reason})` : '';
 
-				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${reason}</td><td>${date}</td></tr>`;
+				return [
+					t.type.toUpperCase(),
+					`<span style="color: ${typeColor};">${amountDisplay}</span>`,
+					`${reason}`,
+					date,
+				];
 			});
-			
-			buf += `</table></div>`;
 
-			this.sendReplyBox(buf);
+			const tableHtml = generateThemedTable(
+				`Transaction History for ${targetNameColor}`,
+				headerRow,
+				dataRows
+			);
+
+			this.sendReplyBox(tableHtml);
 		},
 
 		async logs(target, room, user) {
@@ -310,28 +320,34 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 
 			let [pageStr, limitStr] = target.split(',').map(s => s.trim());
-			
+	
 			let page = parseInt(pageStr);
 			if (isNaN(page) || page < 1) page = 1;
 
 			let limit = parseInt(limitStr);
 			if (isNaN(limit) || limit < 1 || limit > 50) limit = 50;
-			
+	
 			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
-			let buf = `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th colspan="3">Economy Leaderboard - Page ${page} of ${totalPages}</th></tr>`;
-			buf += `<tr><th style="width: 10%">#</th><th style="width: 40%">User</th><th style="width: 50%">Balance</th></tr>`;
-
-			docs.forEach((u, i) => {
+			const headerRow = ["#", "User", "Balance"];
+			const dataRows = docs.map((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
 				const userName = Users.getExact(u._id)?.name || u._id;
 				const userNameColor = Impulse.nameColor(userName);
-				buf += `<tr><td>${rank}</td><td>${userNameColor}</td><td>${Economy.formatMoney(u.balance)}</td></tr>`;
+				return [
+					rank.toString(),
+					userNameColor,
+					Economy.formatMoney(u.balance),
+				];
 			});
 
-			buf += `</table></div>`;
+			const tableHtml = generateThemedTable(
+				`Economy Leaderboard - Page ${page} of ${totalPages}`,
+				headerRow,
+				dataRows
+			);
 
-			this.sendReplyBox(buf);
+			this.sendReplyBox(tableHtml);
 		},
 
 		async reset(target, room, user) {
