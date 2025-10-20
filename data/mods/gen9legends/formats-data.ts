@@ -99,7 +99,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	raichualola: {
-		isNonstandard: "Unobtainable",
+		tier: "OU",
 	},
 	sandshrew: {
 		isNonstandard: "Past",
@@ -2165,25 +2165,25 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	xerneas: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	xerneasneutral: {
 		isNonstandard: "Custom", // can't be used in battle
 	},
 	yveltal: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	zygarde: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	zygarde10: {
 		tier: "OU",
 	},
 	zygardecomplete: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	zygardemega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	diancie: {
 		isNonstandard: "Unobtainable",
