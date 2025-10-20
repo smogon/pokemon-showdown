@@ -171,14 +171,14 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(buf);
 			}
 
-			buf += `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th style="width: 10%">Type</th><th style="width: 20%">Amount</th><th style="width: 40%">Details</th><th style="width: 30%">Date</th></tr>`;
+			buf += `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th style="width: 10%">Type</th><th style="width: 20%">Amount</th><th style="width: 50%">Details</th><th style="width: 20%">Date</th></tr>`;
 
 			history.forEach(t => {
 				const date = new Date(t.timestamp).toLocaleString();
 				let typeColor = '';
 				let details = '';
 				let amountDisplay = Economy.formatMoney(t.amount);
-				
+
 				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
 				const toDisplayName = Users.getExact(t.to)?.name || t.to;
 
@@ -203,19 +203,19 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'shop':
 						typeColor = 'red';
-						details = `Spent on shop item: ${t.reason}`;
+						details = `Spent on shop item`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'reward':
 						typeColor = 'green';
-						details = `Reward: ${t.reason}`;
+						details = `Reward`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 				}
 
-				const reason = t.reason ? `(${t.reason})` : '';
+				const reason = t.reason ? ` (${t.reason})` : '';
 
-				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${details} ${reason}</td><td>${date}</td></tr>`;
+				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${details}${reason}</td><td>${date}</td></tr>`;
 			});
 
 			buf += `</table></div>`;
@@ -322,12 +322,12 @@ export const commands: Chat.ChatCommands = {
 			let limit = parseInt(limitStr);
 			if (isNaN(limit) || limit < 1 || limit > 50) limit = 50;
 			
-			const { results, totalPages } = await Economy.getLeaderboard(page, limit);
+			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
 			let buf = `<div class="ladder-table" style="max-height: 480px; overflow-y: auto;"><table style="width: 100%; max-width: 100%;"><tr><th colspan="3">Economy Leaderboard - Page ${page} of ${totalPages}</th></tr>`;
 			buf += `<tr><th style="width: 10%">#</th><th style="width: 40%">User</th><th style="width: 50%">Balance</th></tr>`;
 
-			results.forEach((u, i) => {
+			docs.forEach((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
 				const userName = Users.getExact(u._id)?.name || u._id;
 				const userNameColor = Impulse.nameColor(userName);
