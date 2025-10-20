@@ -159,7 +159,7 @@ const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
-const MAX_PLUGIN_LOADING_DEPTH = 3;
+const MAX_PLUGIN_LOADING_DEPTH = 10;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
@@ -2089,6 +2089,7 @@ export const Chat = new class {
 		this.loadPlugin(Tournaments, 'tournaments');
 
 		this.loadPluginDirectory('dist/server/chat-plugins');
+		this.loadPluginDirectory('dist/impulse/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
