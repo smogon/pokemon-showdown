@@ -22,7 +22,7 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = await Economy.getUser(targetUserid);
 
 		const moneyDisplay = Economy.formatMoney(targetUser.balance);
-		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${Economy.CURRENCY.name}`);
+		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${Economy.CURRENCY.name}.`);
 	},
 
 	eco: {
@@ -56,13 +56,13 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Transfer failed: ${result.error}`);
 			}
 	
-			this.sendReplyBox(`You successfully transferred ${Economy.formatMoney(amount)} to ${targetUserid}. Your new balance is ${Economy.formatMoney(result.fromBalance!)}.`);
+			this.sendReplyBox(`You successfully transferred ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} to ${targetUserid}. Your new balance is ${Economy.formatMoney(result.fromBalance!)} ${Economy.CURRENCY.name}.`);
 			
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const fromNameColor = Impulse.nameColor(user.name, false, true);
 				const toBalanceDisplay = Economy.formatMoney(result.toBalance!);
-				targetSocket.popup(`You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay}.`);
+				targetSocket.popup(`|html|You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay} ${Economy.CURRENCY.name}.`);
 			}
 		},
 
@@ -94,13 +94,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
-			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} to ${targetNameColor}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
+			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} to ${targetNameColor}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const giverNameColor = Impulse.nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`You have been given ${Economy.formatMoney(amount)} by ${giverNameColor}. Your new balance is ${newBalanceDisplay}. (Reason: ${reason})`);
+				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${Economy.CURRENCY.name}. Your new balance is ${newBalanceDisplay} ${Economy.CURRENCY.name}. (Reason: ${reason})`);
 			}
 		},
 
@@ -137,13 +137,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
-			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} from ${targetNameColor}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
+			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from ${targetNameColor}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const takerNameColor = Impulse.nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`${takerNameColor} has taken ${Economy.formatMoney(amount)} from you. Your new balance is ${newBalanceDisplay}. (Reason: ${reason})`);
+				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from you. (Reason: ${reason})`);
 			}
 		},
 
@@ -217,7 +217,7 @@ export const commands: Chat.ChatCommands = {
 
 				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${details}${reason}</td><td>${date}</td></tr>`;
 			});
-
+			
 			buf += `</table></div>`;
 
 			this.sendReplyBox(buf);
@@ -356,13 +356,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
-			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)}.`);
+			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)} ${Economy.CURRENCY.name}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const resetterNameColor = Impulse.nameColor(user.name, false, true);
 				const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
-				targetSocket.popup(`Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay}.`);
+				targetSocket.popup(`|html|Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay} ${Economy.CURRENCY.name}.`);
 			}
 		},
 
