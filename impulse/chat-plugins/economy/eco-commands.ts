@@ -15,7 +15,7 @@ export const commands: Chat.ChatCommands = {
 		const targetUserid = toID(target) || user.id;
 		
 		const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
-		const targetNameColor = Impulse.nameColor(targetDisplayName);
+		const targetNameColor = Impulse.nameColor(targetDisplayName, true, false);
 
 		const targetUser = await Economy.getUser(targetUserid);
 
