@@ -1301,7 +1301,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
 		}
 	}
-	async getLog(): Promise<string[] | void> {
+	async getInputLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
 		void this.stream.write('>requestlog');
 		const logPromise = new Promise<string[]>((resolve, reject) => {

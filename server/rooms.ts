@@ -1311,14 +1311,15 @@ export class GlobalRoomState {
 
 	async serializeBattleRoom(room: Room) {
 		if (!room.battle || room.battle.ended) return null;
+		if (room.battle.gameid === 'bestof') return null;
 		room.battle.frozen = true;
-		const log = await room.battle.getLog();
+		const inputLog = await room.battle.getInputLog();
 		const players = room.battle.players.map(p => p.id).filter(Boolean);
-		if (!players.length || !log?.length) return null; // shouldn't happen???
+		if (!players.length || !inputLog?.length) return null; // shouldn't happen???
 		// players can be empty right after `/importinputlog`
 		return {
 			roomid: room.roomid,
-			inputLog: log.join('\n'),
+			inputLog: inputLog.join('\n'),
 			players,
 			title: room.title,
 			rated: room.battle.rated,
@@ -1339,6 +1340,7 @@ export class GlobalRoomState {
 			rated: Number(rated),
 			players: [],
 			delayedTimer: timer.active,
+			isBestOfSubBattle: true, // not technically true but prevents a crash
 		});
 		if (!room?.battle) return false; // shouldn't happen???
 		if (timer) { // json blob of settings
