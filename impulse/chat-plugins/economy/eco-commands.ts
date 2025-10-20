@@ -189,12 +189,12 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'give':
 						typeColor = 'green';
-						details = `Given by ${fromColor}`;
+						//details = `Given by ${fromColor}`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 					case 'take':
 						typeColor = 'red';
-						details = `Taken by ${fromColor}`;
+						//details = `Taken by ${fromColor}`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'shop':
@@ -214,7 +214,7 @@ export const commands: Chat.ChatCommands = {
 				return [
 					t.type.toUpperCase(),
 					`<span style="color: ${typeColor};">${amountDisplay}</span>`,
-					`${reason}`,
+					`${details}${reason}`,
 					date,
 				];
 			});
@@ -257,11 +257,11 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'give':
 						typeColor = 'green';
-						details = `GIVE: ${fromColor} gave to ${toColor}`;
+						//details = `GIVE: ${fromColor} gave to ${toColor}`;
 						break;
 					case 'take':
 						typeColor = 'red';
-						details = `TAKE: ${fromColor} took from ${toColor}`;
+						//details = `TAKE: ${fromColor} took from ${toColor}`;
 						break;
 					case 'shop':
 						typeColor = 'orange';
@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 				return [
 					t.type.toUpperCase(),
 					`<span style="color: ${typeColor};">${amountSign}${amountDisplay}</span>`,
-					`$${reason}`,
+					`${details}${reason}`,
 					date,
 				];
 			});
