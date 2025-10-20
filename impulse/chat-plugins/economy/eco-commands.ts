@@ -188,34 +188,29 @@ export const commands: Chat.ChatCommands = {
 				switch (t.type) {
 					case 'transfer':
 						typeColor = t.from === targetUserid ? 'red' : 'green';
-						details = t.from === targetUserid ? `Sent to ${toColor}` : `Received from ${fromColor}`;
 						amountDisplay = t.from === targetUserid ? `- ${amountDisplay}` : `+ ${amountDisplay}`;
 						break;
 					case 'give':
 						typeColor = 'green';
-						details = `Given by ${fromColor}`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 					case 'take':
 						typeColor = 'red';
-						details = `Taken by ${fromColor}`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'shop':
 						typeColor = 'red';
-						details = `Spent on shop item`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'reward':
 						typeColor = 'green';
-						details = `Reward`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 				}
 
 				const reason = t.reason ? ` (${t.reason})` : '';
 
-				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${details}${reason}</td><td>${date}</td></tr>`;
+				buf += `<tr><td>${t.type.toUpperCase()}</td><td style="color: ${typeColor};">${amountDisplay}</td><td>${reason}</td><td>${date}</td></tr>`;
 			});
 			
 			buf += `</table></div>`;
