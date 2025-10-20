@@ -90,6 +90,9 @@ function setupGlobals() {
 	global.Dex = Dex;
 	global.toID = Dex.toID;
 
+	const { Chat } = require('./chat');
+	global.Chat = Chat;
+
 	const { Rooms } = require('./rooms');
 	global.Rooms = Rooms;
 	// We initialize the global room here because roomlogs.ts needs the Rooms global
@@ -103,9 +106,6 @@ function setupGlobals() {
 
 	const { Ladders } = require('./ladders');
 	global.Ladders = Ladders;
-
-	const { Chat } = require('./chat');
-	global.Chat = Chat;
 
 	const { Users } = require('./users');
 	global.Users = Users;
