@@ -3,7 +3,7 @@
 * Color Module
 */
 import * as crypto from 'crypto';
-import { ImpulseDB } from '../impulse-db';
+import { ImpulseDB } from './impulse-db';
 
 interface RGB { R: number; G: number; B: number; }
 interface CustomColors { [userid: string]: string; }
