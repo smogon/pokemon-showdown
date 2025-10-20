@@ -225,7 +225,7 @@ export const commands: Chat.ChatCommands = {
 				dataRows
 			);
 
-			this.sendReplyBox(tableHtml);
+			this.sendReply(`|html|${tableHtml}`);
 		},
 
 		async logs(target, room, user) {
@@ -313,7 +313,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `<strong>Total Users:</strong> ${totalUsers}<br />`;
 			buf += `<strong>Total Money in Circulation:</strong> ${Economy.formatMoney(totalMoney.totalBalance)}`;
 			
-			this.sendReplyBox(buf);
+			this.sendReply(buf);
 		},
 
 		async ladder(target, room, user) {
@@ -329,7 +329,7 @@ export const commands: Chat.ChatCommands = {
 	
 			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
-			const headerRow = ["#", "User", "Balance"];
+			const headerRow = ["Rank", "User", "Balance"];
 			const dataRows = docs.map((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
 				const userName = Users.getExact(u._id)?.name || u._id;
@@ -347,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 				dataRows
 			);
 
-			this.sendReplyBox(tableHtml);
+			this.sendReply(`|html|${tableHtml}`);
 		},
 
 		async reset(target, room, user) {
