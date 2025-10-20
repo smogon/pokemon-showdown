@@ -106,6 +106,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	yard: "Charizard-Mega-Y",
 	zardy: "Charizard-Mega-Y",
 	mdia: "Diancie-Mega",
+	floetteeternalmega: "Floette-Mega",
+	megafloetteeternal: "Floette-Mega",
 	megagard: "Gardevoir-Mega",
 	megacross: "Heracross-Mega",
 	megadoom: "Houndoom-Mega",
@@ -132,6 +134,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	mbro: "Slowbro-Mega",
 	megabro: "Slowbro-Mega",
 	megasaur: "Venusaur-Mega",
+	megazygardecomplete: "Zygarde-Mega",
+	zygardecompletemega: "Zygarde-Mega",
 
 	// Pokéstar Studios --- 1st ordered alphabetically by species, 2nd by alias
 	blackdoor: "Pokestar Black Door",
