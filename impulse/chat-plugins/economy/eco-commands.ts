@@ -230,29 +230,19 @@ export const commands: Chat.ChatCommands = {
 
 		async logs(target, room, user) {
 			this.checkCan('roomowner');
-
+			
 			const recentTransactions = await Economy.getTransactionHistory('', 50);
 
-			let buf = `<h3><center>Recent Economy Logs (Last 50)</center></h3>`;
-			
 			if (!recentTransactions.length) {
-				buf += `<hr />No recent transactions found.`;
-				return this.sendReplyBox(buf);
+				return this.sendReplyBox(`<h3><center>Recent Economy Logs (Last 50)</center></h3><hr />No recent transactions found.`);
 			}
 
-			const formatTime = (date: Date) => {
-				const h = date.getHours().toString().padStart(2, '0');
-				const m = date.getMinutes().toString().padStart(2, '0');
-				const s = date.getSeconds().toString().padStart(2, '0');
-				return `${h}:${m}:${s}`;
-			};
-
-			recentTransactions.forEach(t => {
-				const time = formatTime(t.timestamp);
-				const date = t.timestamp.toLocaleDateString();
-				const amountDisplay = Economy.formatMoney(t.amount);
-				const reason = t.reason ? ` (Reason: ${t.reason})` : '';
-				let log = ``;
+			const headerRow = ["Type", "Amount", "Details", "Date"];
+			const dataRows = recentTransactions.map(t => {
+				const date = new Date(t.timestamp).toLocaleString();
+				let typeColor = '';
+				let details = '';
+				let amountDisplay = Economy.formatMoney(t.amount);
 
 				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
 				const toDisplayName = Users.getExact(t.to)?.name || t.to;
@@ -262,26 +252,58 @@ export const commands: Chat.ChatCommands = {
 
 				switch (t.type) {
 					case 'transfer':
-						log = `[${date} ${time}] TRANSFER: ${fromColor} sent ${amountDisplay} to ${toColor}.`;
+						typeColor = 'blue';
+						details = `TRANSFER: ${fromColor} sent to ${toColor}`;
 						break;
 					case 'give':
-						log = `[${date} ${time}] GIVE: ${fromColor} gave ${amountDisplay} to ${toColor}.${reason}`;
+						typeColor = 'green';
+						details = `GIVE: ${fromColor} gave to ${toColor}`;
 						break;
 					case 'take':
-						log = `[${date} ${time}] TAKE: ${fromColor} took ${amountDisplay} from ${toColor}.${reason}`;
+						typeColor = 'red';
+						details = `TAKE: ${fromColor} took from ${toColor}`;
 						break;
 					case 'shop':
-						log = `[${date} ${time}] SHOP: ${fromColor} spent ${amountDisplay}.${reason}`;
+						typeColor = 'orange';
+						details = `SHOP: ${fromColor} spent`;
 						break;
 					case 'reward':
-						log = `[${date} ${time}] REWARD: ${toColor} received ${amountDisplay}.${reason}`;
+						typeColor = 'purple';
+						details = `REWARD: ${toColor} received`;
 						break;
 				}
 
-				buf += log + `<hr>`;
+				const reason = t.reason ? ` (${t.reason})` : '';
+				let amountSign = '';
+				switch (t.type) {
+					case 'transfer':
+						amountSign = '';
+						break;
+					case 'give':
+					case 'reward':
+						amountSign = '+ ';
+						break;
+					case 'take':
+					case 'shop':
+						amountSign = '- ';
+						break;
+				}
+
+				return [
+					t.type.toUpperCase(),
+					`<span style="color: ${typeColor};">${amountSign}${amountDisplay}</span>`,
+					`$${reason}`,
+					date,
+				];
 			});
 
-			this.sendReplyBox(buf);
+			const tableHtml = generateThemedTable(
+				"Recent Economy Logs (Last 50)",
+				headerRow,
+				dataRows
+			);
+
+			this.sendReply(`|html|${tableHtml}`);
 		},
 		
 		async clearlogs(target, room, user) {
