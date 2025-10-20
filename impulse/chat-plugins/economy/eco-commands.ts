@@ -313,17 +313,19 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				"/balance [user] - Shows a user's current balance. Aliases: /bal, /money, /atm",
-				"/eco history [user] - Shows the last 50 transactions for a user. Staff (# or higher) can view other users' history. (Default: yourself)",
-				"/eco stats - Shows global economy statistics and total money in circulation.",
-				"/eco ladder [page], [limit] - Shows the economy leaderboard. Max limit is 50.",
-				"/eco transfer [user], [amount] - Transfers money to another user. Use /help eco for details.",
-				"/eco give [user], [amount], [reason] - Gives a user money. Requires: # (Room Owner or higher). Use /help eco for details.",
-				"/eco take [user], [amount], [reason] - Takes money from a user. Requires: # (Room Owner or higher). Use /help eco for details.",
-				"/eco reset [user] - Resets a user's economy data (balance and transactions). Requires: # (Room Owner or higher). Use /help eco for details."
+				{cmd: "/balance [user]", desc: "Shows a user's current balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>"},
+				{cmd: "/eco history [user]", desc: "Shows the last 50 transactions for a user. Staff (# or higher) can view other users' history. (Default: yourself)"},
+				{cmd: "/eco stats", desc: "Shows global economy statistics and total money in circulation."},
+				{cmd: "/eco ladder [page], [limit]", desc: "Shows the economy leaderboard. Max limit is 50."},
+				{cmd: "/eco transfer [user], [amount]", desc: "Transfers money to another user. Use /help eco for details."},
+				{cmd: "/eco give [user], [amount], [reason]", desc: "Gives a user money. Requires: # (Room Owner or higher). Use /help eco for details."},
+				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: # (Room Owner or higher). Use /help eco for details."},
+				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: # (Room Owner or higher). Use /help eco for details."}
 			];
-			const html = `<strong>Economy Commands: (alias: economy)</strong><br /><ul>` +
-				helpList.map(cmd => `<li>${cmd}</li>`).join('') +
+			const html = `<strong>Economy Commands: (alias: economy)</strong><br /><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({cmd, desc}) =>
+					`<li><b>${cmd}</b> - ${desc}</li><hr>`
+								).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
