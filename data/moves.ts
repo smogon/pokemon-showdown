@@ -10688,6 +10688,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 140,
 		category: "Special",
 		isNonstandard: "Past",
+		tags: ["Past Unobtainable"],
 		name: "Light of Ruin",
 		pp: 5,
 		priority: 0,

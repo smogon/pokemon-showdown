@@ -54,6 +54,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
 	},
+	pokestar: {
+		name: "Pokestar",
+		speciesFilter: species => species.tags.includes("Pokestar"),
+	},
 
 	// Move tags
 	// ---------
@@ -271,6 +275,14 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	past: {
 		name: "Past",
 		genericFilter: thing => thing.isNonstandard === 'Past',
+	},
+	truepast: {
+		name: "True Past",
+		genericFilter: thing => !!thing.tags?.includes("True Past"),
+	},
+	pastunobtainable: {
+		name: "Past Unobtainable",
+		genericFilter: thing => !!thing.tags?.includes("Past Unobtainable"),
 	},
 	future: {
 		name: "Future",
