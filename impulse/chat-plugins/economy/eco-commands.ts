@@ -330,12 +330,19 @@ export const commands: Chat.ChatCommands = {
 			const stats = await Economy.getStats();
 			const { totalMoney, totalUsers } = stats;
 
-			let buf = `<h3><center>Economy Statistics</center></h3>`;
-			buf += `<hr />`;
-			buf += `<strong>Total Users:</strong> ${totalUsers}<br />`;
-			buf += `<strong>Total Money in Circulation:</strong> ${Economy.formatMoney(totalMoney.totalBalance)}`;
-			
-			this.sendReply(buf);
+			const headerRow = ["Total Users", "Total Money in Circulation"];
+			const dataRows = [[
+				totalUsers.toString(),
+				Economy.formatMoney(totalMoney.totalBalance)
+			]];
+
+			const tableHtml = generateThemedTable(
+				"Economy Statistics",
+				headerRow,
+				dataRows
+			);
+
+			this.sendReplyBox(`|html|${tableHtml}`);
 		},
 
 		async ladder(target, room, user) {
