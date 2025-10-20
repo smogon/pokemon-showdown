@@ -322,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: & (Leader or higher)."},
 				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: & (Leader or higher)."}
 			];
-			const html = `<strong>Economy Commands: (alias: economy)</strong><br /><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<strong>Economy Commands: (/economy or /eco)</strong><br /><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}) =>
 					`<li><b>${cmd}</b> - ${desc}</li><hr>`
 								).join('') +
