@@ -340,8 +340,7 @@ export const commands: Chat.ChatCommands = {
 
 		'': 'help',
 		help() {
-			if (!this.runBroadcast()) return;
-			
+			if (!this.runBroadcast()) return;			
 			this.sendReplyBox(`
 				<strong>Economy Commands: (alias: economy)</strong><br />
 				/balance [user] - Shows a user's current balance. Aliases: /bal, /money, /atm<br />
