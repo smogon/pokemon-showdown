@@ -1,8 +1,3 @@
-/*
-* Pokemon Showdown
-* Economy Commands
-* @author PrinceSky-Git
-*/
 import { Economy } from '../../economy';
 
 export const commands: Chat.ChatCommands = {
@@ -13,10 +8,14 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		const targetUserid = toID(target) || user.id;
+		
+		const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
+		const targetNameColor = Impulse.nameColor(targetDisplayName);
+
 		const targetUser = await Economy.getUser(targetUserid);
 
 		const moneyDisplay = Economy.formatMoney(targetUser.balance);
-    this.sendReplyBox(`${targetUserid} has ${moneyDisplay}`);
+		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay}`);
 	},
 
 	eco: {
@@ -55,7 +54,9 @@ export const commands: Chat.ChatCommands = {
 			
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
-				targetSocket.popup(`You received a transfer of ${Economy.formatMoney(amount)} from ${user.name}. Your new balance is ${Economy.formatMoney(result.toBalance!)}.`);
+				const fromNameColor = Impulse.nameColor(user.name, false, true);
+				const toBalanceDisplay = Economy.formatMoney(result.toBalance!);
+				targetSocket.popup(`You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay}.`);
 			}
 		},
 
@@ -86,11 +87,15 @@ export const commands: Chat.ChatCommands = {
 				timestamp: new Date(),
 			});
 
-			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} to ${targetUserid}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
+			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
+			const targetNameColor = Impulse.nameColor(targetDisplayName);
+			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} to ${targetNameColor}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
-				targetSocket.popup(`You have been given ${Economy.formatMoney(amount)} by ${user.name}. Your new balance is ${Economy.formatMoney(updatedUser.balance)}. (Reason: ${reason})`);
+				const giverNameColor = Impulse.nameColor(user.name, false, true);
+				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
+				targetSocket.popup(`You have been given ${Economy.formatMoney(amount)} by ${giverNameColor}. Your new balance is ${newBalanceDisplay}. (Reason: ${reason})`);
 			}
 		},
 
@@ -126,11 +131,15 @@ export const commands: Chat.ChatCommands = {
 				timestamp: new Date(),
 			});
 
-			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} from ${targetUserid}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
+			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
+			const targetNameColor = Impulse.nameColor(targetDisplayName);
+			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} from ${targetNameColor}. ${targetUserid}'s new balance is ${Economy.formatMoney(updatedUser.balance)}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
-				targetSocket.popup(`${user.name} has taken ${Economy.formatMoney(amount)} from you. Your new balance is ${Economy.formatMoney(updatedUser.balance)}. (Reason: ${reason})`);
+				const takerNameColor = Impulse.nameColor(user.name, false, true);
+				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
+				targetSocket.popup(`${takerNameColor} has taken ${Economy.formatMoney(amount)} from you. Your new balance is ${newBalanceDisplay}. (Reason: ${reason})`);
 			}
 		},
 
@@ -146,10 +155,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			
 			targetUserid = targetUserid || user.id;
+			
+			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
+			const targetNameColor = Impulse.nameColor(targetDisplayName);
 
 			const history = await Economy.getTransactionHistory(targetUserid);
 
-			let buf = `<h3><center>Transaction History for ${targetUserid}</center></h3>`;
+			let buf = `<h3><center>Transaction History for ${targetNameColor}</center></h3>`;
 			
 			if (!history.length) {
 				buf += `<hr />No transactions found for ${targetUserid}.`;
@@ -163,21 +175,27 @@ export const commands: Chat.ChatCommands = {
 				let typeColor = '';
 				let details = '';
 				let amountDisplay = Economy.formatMoney(t.amount);
+				
+				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
+				const toDisplayName = Users.getExact(t.to)?.name || t.to;
+
+				const fromColor = Impulse.nameColor(fromDisplayName);
+				const toColor = Impulse.nameColor(toDisplayName);
 
 				switch (t.type) {
 					case 'transfer':
 						typeColor = t.from === targetUserid ? 'red' : 'green';
-						details = t.from === targetUserid ? `Sent to ${t.to}` : `Received from ${t.from}`;
+						details = t.from === targetUserid ? `Sent to ${toColor}` : `Received from ${fromColor}`;
 						amountDisplay = t.from === targetUserid ? `- ${amountDisplay}` : `+ ${amountDisplay}`;
 						break;
 					case 'give':
 						typeColor = 'green';
-						details = `Given by ${t.from}`;
+						details = `Given by ${fromColor}`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 					case 'take':
 						typeColor = 'red';
-						details = `Taken by ${t.from}`;
+						details = `Taken by ${fromColor}`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'shop':
@@ -229,21 +247,27 @@ export const commands: Chat.ChatCommands = {
 				const reason = t.reason ? ` (Reason: ${t.reason})` : '';
 				let log = ``;
 
+				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
+				const toDisplayName = Users.getExact(t.to)?.name || t.to;
+
+				const fromColor = Impulse.nameColor(fromDisplayName);
+				const toColor = Impulse.nameColor(toDisplayName);
+
 				switch (t.type) {
 					case 'transfer':
-						log = `[${date} ${time}] TRANSFER: ${t.from} sent ${amountDisplay} to ${t.to}.`;
+						log = `[${date} ${time}] TRANSFER: ${fromColor} sent ${amountDisplay} to ${toColor}.`;
 						break;
 					case 'give':
-						log = `[${date} ${time}] GIVE: ${t.from} gave ${amountDisplay} to ${t.to}.${reason}`;
+						log = `[${date} ${time}] GIVE: ${fromColor} gave ${amountDisplay} to ${toColor}.${reason}`;
 						break;
 					case 'take':
-						log = `[${date} ${time}] TAKE: ${t.from} took ${amountDisplay} from ${t.to}.${reason}`;
+						log = `[${date} ${time}] TAKE: ${fromColor} took ${amountDisplay} from ${toColor}.${reason}`;
 						break;
 					case 'shop':
-						log = `[${date} ${time}] SHOP: ${t.from} spent ${amountDisplay}.${reason}`;
+						log = `[${date} ${time}] SHOP: ${fromColor} spent ${amountDisplay}.${reason}`;
 						break;
 					case 'reward':
-						log = `[${date} ${time}] REWARD: ${t.to} received ${amountDisplay}.${reason}`;
+						log = `[${date} ${time}] REWARD: ${toColor} received ${amountDisplay}.${reason}`;
 						break;
 				}
 
@@ -306,7 +330,9 @@ export const commands: Chat.ChatCommands = {
 
 			results.forEach((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
-				buf += `<tr><td>${rank}</td><td>${u._id}</td><td>${Economy.formatMoney(u.balance)}</td></tr>`;
+				const userName = Users.getExact(u._id)?.name || u._id;
+				const userNameColor = Impulse.nameColor(userName);
+				buf += `<tr><td>${rank}</td><td>${userNameColor}</td><td>${Economy.formatMoney(u.balance)}</td></tr>`;
 			});
 
 			buf += `</table></div>`;
@@ -330,11 +356,15 @@ export const commands: Chat.ChatCommands = {
 
 			await Economy.resetUser(targetUserid);
 
-			this.sendReplyBox(`Economy data for ${targetUserid} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)}.`);
+			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
+			const targetNameColor = Impulse.nameColor(targetDisplayName);
+			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
-				targetSocket.popup(`Your economy data has been reset by ${user.name}. Your new balance is ${Economy.formatMoney(Economy.CONFIG.startingBalance)}.`);
+				const resetterNameColor = Impulse.nameColor(user.name, false, true);
+				const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
+				targetSocket.popup(`Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay}.`);
 			}
 		},
 
@@ -356,4 +386,5 @@ export const commands: Chat.ChatCommands = {
 			`);
 		}
 	},
+	eco: 'economy',
 };
