@@ -220,6 +220,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Huge Power" },
 	},
 
+	// Cassiopeia
+	mewtwo: {
+		inherit: true,
+		abilities: { 0: "Hacking" },
+	},
+	mewtwomegax: {
+		inherit: true,
+		abilities: { 0: "Hacking" },
+	},
+
 	// chaos
 	ironjugulis: {
 		inherit: true,
@@ -394,16 +404,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110 },
 		abilities: { 0: "Mensis Cage" },
-	},
-
-	// Hecate
-	mewtwo: {
-		inherit: true,
-		abilities: { 0: "Hacking" },
-	},
-	mewtwomegax: {
-		inherit: true,
-		abilities: { 0: "Hacking" },
 	},
 
 	// HiZo

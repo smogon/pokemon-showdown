@@ -201,13 +201,13 @@ export const commands: Chat.ChatCommands = {
 	],
 };
 
-process.nextTick(() => {
-	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate|edit|htmledit) ');
-});
-
 // should handle restarts and also hotpatches
-for (const room of Rooms.rooms.values()) {
-	if (room.settings.minorActivity?.activityid === 'announcement') {
-		room.setMinorActivity(new Announcement(room, room.settings.minorActivity), true);
+export function start() {
+	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate|edit|htmledit) ');
+
+	for (const room of Rooms.rooms.values()) {
+		if (room.settings.minorActivity?.activityid === 'announcement') {
+			room.setMinorActivity(new Announcement(room, room.settings.minorActivity), true);
+		}
 	}
 }
