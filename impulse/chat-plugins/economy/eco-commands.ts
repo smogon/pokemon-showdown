@@ -22,7 +22,7 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = await Economy.getUser(targetUserid);
 
 		const moneyDisplay = Economy.formatMoney(targetUser.balance);
-		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay}`);
+		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${Economy.CURRENCY.name}`);
 	},
 
 	eco: {
