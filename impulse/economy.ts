@@ -67,7 +67,8 @@ export const transferMoney = async (from: string, to: string, amount: number, re
 export const logTransaction = (txn: Transaction): Promise<void> => TransactionsDB.insertOne(txn);
 
 export const getTransactionHistory = (userid: string, limit = 50): Promise<Transaction[]> => 
-	TransactionsDB.find({ $or: [{ from: userid }, { to: userid }] }, { sort: { timestamp: -1 }, limit });
+	userid ? TransactionsDB.find({ $or: [{ from: userid }, { to: userid }] }, { sort: { timestamp: -1 }, limit })
+	       : TransactionsDB.find({}, { sort: { timestamp: -1 }, limit });
 
 export const formatMoney = (amount: number | undefined | null): string => 
 	`${CURRENCY.symbol}${(amount ?? 0).toLocaleString()}`;
