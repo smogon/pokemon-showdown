@@ -369,18 +369,18 @@ export const commands: Chat.ChatCommands = {
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;			
-			this.sendReplyBox(`
-				<strong>Economy Commands: (alias: economy)</strong><br />
-				/balance [user] - Shows a user's current balance. Aliases: /bal, /money, /atm<br />
-				/eco history [user] - Shows the last 50 transactions for a user. Staff (# or higher) can view other users' history. (Default: yourself)<br />
-				/eco logs - Shows the last 50 global economy transactions. Requires: # (Room Owner or higher)<br />
-				/eco clearlogs [days] - Clears transaction logs older than the specified number of days. Requires: # (Room Owner or higher)<br />
-				/eco stats - Shows global economy statistics and total money in circulation.<br />
-				/eco ladder [page], [limit] - Shows the economy leaderboard. Max limit is 50.<br />
-				/eco transfer [user], [amount] - Transfers money to another user. Use /help eco for details.<br />
-				/eco give [user], [amount], [reason] - Gives a user money. Requires: # (Room Owner or higher). Use /help eco for details.<br />
-				/eco take [user], [amount], [reason] - Takes money from a user. Requires: # (Room Owner or higher). Use /help eco for details.<br />
-				/eco reset [user] - Resets a user's economy data (balance and transactions). Requires: # (Room Owner or higher). Use /help eco for details.
+			this.sendReplyBox(
+				`<strong>Economy Commands: (alias: economy)</strong><br />` +
+				`/balance [user] - Shows a user's current balance. Aliases: /bal, /money, /atm<br />` +
+				`/eco history [user] - Shows the last 50 transactions for a user. Staff (# or higher) can view other users' history. (Default: yourself)<br />` +
+				`/eco logs - Shows the last 50 global economy transactions. Requires: # (Room Owner or higher)<br />` +
+				`/eco clearlogs [days] - Clears transaction logs older than the specified number of days. Requires: # (Room Owner or higher)<br />` +
+				`/eco stats - Shows global economy statistics and total money in circulation.<br />` +
+				`/eco ladder [page], [limit] - Shows the economy leaderboard. Max limit is 50.<br />` +
+				`/eco transfer [user], [amount] - Transfers money to another user. Use /help eco for details.<br />` +
+				`/eco give [user], [amount], [reason] - Gives a user money. Requires: # (Room Owner or higher). Use /help eco for details.<br />` +
+				`/eco take [user], [amount], [reason] - Takes money from a user. Requires: # (Room Owner or higher). Use /help eco for details.<br />` +
+				`/eco reset [user] - Resets a user's economy data (balance and transactions). Requires: # (Room Owner or higher). Use /help eco for details.
 			`);
 		}
 	},
