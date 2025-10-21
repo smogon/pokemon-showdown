@@ -3,6 +3,8 @@ import { RoundRobin } from './generator-round-robin';
 import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
+import { Economy, CURRENCY } from '../../impulse/economy';
+import { nameColor } from '../../impulse/colors';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -1167,7 +1169,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-	onTournamentEnd() {
+	/*onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 			format: this.name,
@@ -1183,6 +1185,79 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
 			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
 			// to trim down multiple at once
+			while (settings.recentTours.length > settings.recentToursLength) {
+				settings.recentTours.pop();
+			}
+			this.room.saveSettings();
+		}
+		this.remove();
+	}
+}*/
+	onTournamentEnd() {
+		const update = {
+			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
+			format: this.name,
+			generator: this.generator.name,
+			bracketData: this.getBracketData(),
+		};
+		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+
+		// --- Reward Distribution --- (async IIFE)
+		void (async () => {
+			try {
+				const rewardConfig = Config.tournamentRewards;
+				if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
+					const playerCount = this.players.length;
+					let multiplier = 1;
+				
+					if (playerCount > 4) {
+						multiplier = 1 + ((playerCount - 4) * 0.2);
+					}
+				
+					const baseRewards = rewardConfig.rewards.map(reward => Math.floor(reward * multiplier));
+					const results = this.generator.getResults() as TournamentPlayer[][];
+
+					// Check if this is a single elimination tournament
+					const isSingleElimination = this.generator.name?.toLowerCase().includes('singleelimination');
+
+					const rewardMessages: string[] = [];
+					const places = ['winner', 'runner-up'];
+					const CURRENCYNAME = CURRENCY.name;
+
+					// Determine how many places to reward
+					// Single elimination: only winner (place 0)
+					// Other formats: winner and runner-up (places 0 and 1)
+					const maxPlace = isSingleElimination ? 1 : Math.min(baseRewards.length, results.length);
+					
+					for (let place = 0; place < maxPlace; place++) {
+						for (const player of results[place]) {
+							const userId = typeof player === 'string' ? toID(player) : player.id;
+							const userName = typeof player === 'string' ? player : player.name;
+							await Economy.updateBalance(userId, baseRewards[place]);
+							rewardMessages.push(
+								`<strong>${nameColor(userName, true, true)}</strong> (${places[place]}) has earned <span style="font-weight:bold;">${Economy.formatMoney(baseRewards[place])} ${CURRENCYNAME}</span> for their performance!`
+							);
+						}
+					}
+					if (rewardMessages.length) {
+						this.room.add(
+							`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
+						);
+						this.room.update();
+					}
+				}
+			} catch (err) {
+				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
+			}
+		})();
+		// --- End Reward Distribution ---
+
+		const settings = this.room.settings.tournaments;
+		if (settings?.recentToursLength) {
+			if (!settings.recentTours) settings.recentTours = [];
+			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
 			while (settings.recentTours.length > settings.recentToursLength) {
 				settings.recentTours.pop();
 			}
