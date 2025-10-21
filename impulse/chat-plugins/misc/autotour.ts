@@ -309,7 +309,7 @@ export const commands: Chat.ChatCommands = {
 			const roomid = room!.roomid;
 			const config = autotourConfig[roomid] || {roomid, ...defaultRoomConfig};
 			const colorName = nameColor(user.name, true, true);
-			const formatsHtml = `<div style="max-width:100%;overflow-x:auto;white-space:nowrap;">${config.formats.join(', ') || '(none)'}</div>`;
+			const formatsHtml = `<div style="max-width:300px;overflow-x:auto;white-space:nowrap;">${config.formats.join(', ') || '(none)'}</div>`;
 			const rows = [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
 				[`<b>Owner:</b>`, colorName],
