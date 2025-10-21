@@ -35,7 +35,7 @@ import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 // ExpSystem
-import { ExpSystem } from '../../impulse/chat-plugins/misc/exp-system';
+import { ExpSystem } from '../impulse/chat-plugins/misc/exp-system';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
