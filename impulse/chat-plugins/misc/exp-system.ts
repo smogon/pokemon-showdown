@@ -10,11 +10,11 @@ import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-const DEFAULT_EXP = 9;
+const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
 
 const MIN_LEVEL_EXP = 10;
-const MULTIPLIER = 1.1;
+const MULTIPLIER = 1.2;
 let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
 const EXP_COOLDOWN = 30000;
@@ -142,9 +142,7 @@ export class ExpSystem {
       { 
         $inc: { exp: gainedAmount },
         $set: { level: newLevel, lastUpdated: new Date() },
-        // Ensure newly created documents start at DEFAULT_EXP so $inc results
-        // match the calculations above (currentExp + gainedAmount).
-        $setOnInsert: { _id: id, exp: DEFAULT_EXP }
+        $setOnInsert: { _id: id }
       },
       { upsert: true, returnDocument: 'after' }
     );
@@ -176,8 +174,7 @@ export class ExpSystem {
       { 
         $inc: { exp: gainedAmount },
         $set: { level: newLevel, lastUpdated: new Date() },
-        // Same initialization for reward-based upserts
-        $setOnInsert: { _id: id, exp: DEFAULT_EXP }
+        $setOnInsert: { _id: id }
       },
       { upsert: true, returnDocument: 'after' }
     );
