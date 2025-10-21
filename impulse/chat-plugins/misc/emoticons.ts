@@ -229,7 +229,6 @@ export const commands: Chat.ChatCommands = {
 				{cmd: "/emoticon unignore", desc: "Show emoticons"},
 				{cmd: "/emoticon size [px]", desc: "Set size of emoticons. Requires: &."},
 				{cmd: "/emoticon info [name]", desc: "Info about emoticon"},
-				{cmd: "/emoticon stats", desc: "Statistics. Requires: &."},
 				{cmd: "<small>Note: History may show emoticons even if ignored</small>", desc: ""},
 			];
 			const html = `<center><strong>Emoticon Commands:<br>Alias: /emote, /emotes, /emoticons</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
