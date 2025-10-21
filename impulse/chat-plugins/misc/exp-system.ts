@@ -3,7 +3,7 @@
 * Exp System Commands
 * Instructions: Add this line in chat.ts output message.
 * Note: You need to import ExpSystem in chat.ts
-if (this.user && this.user.registered) void ExpSystem.addExp(this.user.id, 1);
+if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
 */
 
 import { ImpulseDB } from '../../impulse-db';
