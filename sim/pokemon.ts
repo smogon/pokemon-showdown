@@ -124,6 +124,8 @@ export class Pokemon {
 	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;
+	// Gens 3-4 only
+	itemKnockedOff: boolean;
 
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
@@ -254,6 +256,7 @@ export class Pokemon {
 	truantTurn: boolean;
 	bondTriggered: boolean;
 	// Gen 9 only
+	heroMessageDisplayed: boolean;
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	syrupTriggered: boolean;
@@ -266,9 +269,9 @@ export class Pokemon {
 	weighthg: number;
 	speed: number;
 
-	canMegaEvo: string | null | undefined;
-	canMegaEvoX: string | null | undefined;
-	canMegaEvoY: string | null | undefined;
+	canMegaEvo: string | false | null | undefined;
+	canMegaEvoX: string | false | null | undefined;
+	canMegaEvoY: string | false | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	/**
@@ -419,6 +422,7 @@ export class Pokemon {
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;
+		this.itemKnockedOff = false;
 
 		this.trapped = false;
 		this.maybeTrapped = false;
@@ -468,6 +472,7 @@ export class Pokemon {
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
 		this.bondTriggered = false;
+		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
@@ -864,7 +869,6 @@ export class Pokemon {
 
 	ignoringItem(isFling = false) {
 		if (this.getItem().isPrimalOrb) return false;
-		if (this.itemState.knockedOff) return true; // Gen 3-4
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
@@ -1743,7 +1747,7 @@ export class Pokemon {
 	}
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
-		if (!this.item || this.itemState.knockedOff) return false;
+		if (!this.item) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -1760,7 +1764,7 @@ export class Pokemon {
 			this.battle.add('-enditem', this, item, '[eat]');
 
 			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
-			this.battle.runEvent('EatItem', this, null, null, item);
+			this.battle.runEvent('EatItem', this, source, sourceEffect, item);
 
 			if (RESTORATIVE_BERRIES.has(item.id)) {
 				switch (this.pendingStaleness) {
@@ -1787,7 +1791,7 @@ export class Pokemon {
 
 	useItem(source?: Pokemon, sourceEffect?: Effect) {
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
-		if (!this.item || this.itemState.knockedOff) return false;
+		if (!this.item) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -1826,9 +1830,10 @@ export class Pokemon {
 	}
 
 	takeItem(source?: Pokemon) {
-		if (!this.item || this.itemState.knockedOff) return false;
+		if (!this.item) return false;
 		if (!source) source = this;
-		if (this.battle.gen === 4) {
+		if (this.battle.gen <= 4) {
+			if (source.itemKnockedOff) return false;
 			if (toID(this.ability) === 'multitype') return false;
 			if (toID(source.ability) === 'multitype') return false;
 		}
@@ -1847,8 +1852,6 @@ export class Pokemon {
 
 	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
-		if (this.itemState.knockedOff && !(effect?.id === 'recycle')) return false;
-		delete this.itemState.knockedOff;
 		if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';

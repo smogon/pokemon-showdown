@@ -15,7 +15,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			return false;
 		},
-		shortDesc: "Fire-/Ice-type moves against this Pokemon deal 1/2 damage. Burn immune.",
+		shortDesc: "-50% damage from Fire and Ice. Burn immune.",
 	},
 	callillumise: {
 		onDamagePriority: -30,
@@ -31,7 +31,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Volbeat calls upon Illumise for aid!`);
 			// Define new moves
-			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
+			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'quiverdance'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -86,7 +86,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Illumise calls upon Volbeat for aid!`);
 			// Define new moves
-			const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
+			const newMoves = ['victorydance', 'lunge', 'mightycleave', 'earthquake'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -115,9 +115,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.formeChange('Volbeat', null, true);
 			this.heal(pokemon.maxhp);
 			// sets new ability
-			pokemon.setAbility('Swarm', null, null, true);
+			pokemon.setAbility('Dancer', null, null, true);
 			pokemon.baseAbility = pokemon.ability;
-			this.add('-ability', pokemon, 'Swarm');
+			this.add('-ability', pokemon, 'Dancer');
 		},
 		flags: {
 			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1,
@@ -141,6 +141,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				delete this.effectState.shortfuse;
 				this.actions.useMove('explosion', pokemon);
 			}
+			this.checkFainted();
 		},
 		flags: {
 			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
@@ -148,7 +149,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Short Fuse",
 		rating: 5,
 		num: -102,
-		shortDesc: "When this Pokemon would be KOed, it instead uses Explosion.",
+		shortDesc: "If KO'd, use Explosion instead.",
 	},
 	hydroelectricdam: {
 		// Copied from the code for Sand Spit
@@ -159,7 +160,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Hydroelectric Dam",
 		rating: 5,
 		num: -103,
-		shortDesc: "When this Pokemon is hit by an attack, the effect of Rain Dance begins.",
+		shortDesc: "Starts Rain Dance when hit by an attack.",
 	},
 	frozenarmor: {
 		onTryHit(target, source, move) {
@@ -187,7 +188,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Frozen Armor",
 		rating: 5,
 		num: -105,
-		shortDesc: "Incoming attacks have their BP reduced by 20. This Pokemon transforms into Calyrex-Ice below 50% HP.",
+		shortDesc: "-20 BP on attacks targeting Glastrier, at 50% HP become Calyrex-Ice.",
 	},
 	flipflop: {
 		onDamagingHitOrder: 1,
@@ -213,7 +214,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Flip Flop",
 		rating: 5,
 		num: -104,
-		shortDesc: "When hit by a contact move, the attacker’s stat changes are inverted.",
+		shortDesc: "When hit by contact move, invert attacker’s stat boosts.",
 	},
 
 	grasspelt: {
@@ -256,6 +257,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(2);
 			}
 		},
+		// this ability is supposed to just add Aqua Ring (the volatile) to the Pokemon on switch in
+		flags: { cantsuppress: 1 },
 		name: "Aqua Veil",
 		rating: 5,
 		num: -106,
@@ -332,7 +335,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "King of the Hill",
 		rating: 5,
 		num: -108,
-		shortDesc: "Mountaineer + Sharpness. Prevents opposing Pokemon from ignoring hazard damage.",
+		shortDesc: "Mountaineer + Sharpness. Opponent cannot ignore hazard damage.",
 	},
 	// stockpile on hit
 	omnivore: {
@@ -346,7 +349,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Omnivore",
 		rating: 5,
 		num: -109,
-		shortDesc: "This Pokemon gains a Stockpile charge upon being hit by a damaging attack.",
+		shortDesc: "Gain Stockpile charge when hit by attack.",
 	},
 	// disguise clone
 	pseudowoodo: {
@@ -389,13 +392,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {
-			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
 			breakable: 1, notransform: 1,
 		},
 		name: "Pseudowoodo",
 		rating: 5,
 		num: -110,
-		shortDesc: "The first hit it takes is blocked, and it takes 1/8 HP damage instead and becomes Rock type.",
+		shortDesc: "Disguise. Becomes Rock type when it breaks.",
 	},
 	magicguard: {
 		onDamage(damage, target, source, effect) {
@@ -505,7 +508,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		rating: 4.5,
-		shortDesc: "This Pokemon's type changes to the type of the move it is using.",
+		shortDesc: "Gen 8 Protean.",
 	},
 	berserk: {
 		onUpdate(pokemon) {
@@ -601,13 +604,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Moves ignore charge/recharge turns.",
 	},
 	biogenesis: {
-		onSwitchInPriority: -1,
+		onSwitchInPriority: 1,
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.m.didRandomMoves) return;
 			const moves = this.dex.moves.all();
 			const newMoves = [];
 			while (newMoves.length < 8) {
 				const newMove = this.sample(moves);
+				if (newMove.basePower === 1) continue;
+				if (newMove.isMax === true) continue;
+				if (newMove.isNonstandard === "Gigantamax") continue;
 				if (newMoves.map(x => x.id).includes(newMove.id)) continue;
 				newMoves.push(newMove);
 			}
@@ -649,7 +655,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
-			breakable: 1, notransform: 1 },
+			breakable: 1, notransform: 1, cantsuppress: 1 },
 		name: "Biogenesis",
 		rating: 5,
 		num: -112,
@@ -677,16 +683,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: 288,
 	},
 	hailmary: {
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Hail Mary');
+		},
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				this.add('-ability', pokemon, 'Hail Mary');
+				this.debug('hail mary spe boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifyAtkPriority: 5,
-		onModifyAtk(atk) {
+		onModifyAtk(atk, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				return this.modify(atk, 1.5);
+				this.debug('hail mary atk boost');
+				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyAccuracyPriority: -1,
@@ -711,6 +721,93 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Brain Freeze",
 		rating: 5,
 		num: -114,
-		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
+		shortDesc: "If Snowscape or target is Frostbitten, attacks auto Crit.",
+	},
+	neutralizinggas: {
+		inherit: true,
+		onStart(pokemon) {
+			// this makes Neutralizing Gas properly show as activated in the client when Typhlosion Mega evolves
+			this.add('-ability', pokemon, 'Neutralizing Gas');
+		},
+	},
+	terawheel: {
+		onStart(pokemon) {
+			pokemon.canTerastallize = null;
+		},
+		// copied from SSB High Performance Computing
+		onResidualOrder: 6,
+		onResidual(source) {
+			const type = this.sample(this.dex.types.names().filter(i => i !== source.getTypes()[0]));
+			if (source.setType(type)) {
+				this.add('-start', source, 'typechange', type, '[from] ability: Tera Wheel');
+			}
+		},
+		flags: {},
+		name: "Tera Wheel",
+		rating: 5,
+		num: -115,
+		shortDesc: "End of turn: this Pokemon switches to a random type (including Stellar).",
+	},
+	download: {
+		inherit: true,
+		onUpdate(pokemon) {
+			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+				pokemon.setAbility('Drought', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Drought');
+			}
+			if (pokemon.species.name === 'Genesect-Chill' && pokemon.terastallized) {
+				pokemon.setAbility('Snow Warning', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Snow Warning');
+			}
+			if (pokemon.species.name === 'Genesect-Douse' && pokemon.terastallized) {
+				pokemon.setAbility('Drizzle', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Drizzle');
+			}
+			if (pokemon.species.name === 'Genesect-Shock' && pokemon.terastallized) {
+				pokemon.setAbility('Electric Surge', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Electric Surge');
+			}
+		},
+		shortDesc: "Download + Gets weather setting move when Tera.",
+	},
+	battlerage: {
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({ atk: 1 });
+		},
+		flags: {},
+		name: "Battle Rage",
+		rating: 5,
+		num: -116,
+		shortDesc: "+1 Atk when hit by an attack.",
+	},
+	terrainshift: {
+		onStart(source) {
+			if (source.hp >= source.maxhp) {
+				source.setType("Electric");
+				this.field.setTerrain('electricterrain');
+				this.add('-start', source, 'typechange', 'Electric', '[silent]');
+			} else if (source.hp >= (2 * source.maxhp) / 3) {
+				source.setType("Fairy");
+				this.field.setTerrain('mistyterrain');
+				this.add('-start', source, 'typechange', 'Fairy', '[silent]');
+			} else if (source.hp >= source.maxhp / 3) {
+				source.setType("Grass");
+				this.field.setTerrain('grassyterrain');
+				this.add('-start', source, 'typechange', 'Grass', '[silent]');
+			} else {
+				source.setType("Psychic");
+				this.field.setTerrain('psychicterrain');
+				this.add('-start', source, 'typechange', 'Psychic', '[silent]');
+			}
+		},
+		flags: {},
+		name: "Terrain Shift",
+		rating: 5,
+		num: -117,
+		shortDesc: "Sets terrain depending on HP value.",
 	},
 };
