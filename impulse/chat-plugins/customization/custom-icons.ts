@@ -212,7 +212,7 @@ export const commands: Chat.ChatCommands = {
 				helpList.map(({cmd, desc}, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
-				`</ul><small>Requires &+ permission. Aliases: /usericon, /ic</small>`;
+				`</ul>`;
 			this.sendReplyBox(html);
 		},
 	},
