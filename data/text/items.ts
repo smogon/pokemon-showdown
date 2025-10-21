@@ -1464,6 +1464,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Premier Ball",
 		shortDesc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		shortDesc: "Though this feather is beautiful, it's just a regular feather and has no effect.",
+	},
 	primariumz: {
 		name: "Primarium Z",
 		shortDesc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
