@@ -3,9 +3,11 @@
 * Economy Commands
 */
 
-import { Economy } from '../../economy';
+import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
 import { generateThemedTable } from '../../utils';
+
+const CURRENCYNAME = CURRENCY.name;
 
 export const commands: Chat.ChatCommands = {
 	bal: 'balance',
@@ -243,7 +245,7 @@ export const commands: Chat.ChatCommands = {
 	
 			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
-			const headerRow = ["Rank", "User", "Balance"];
+			const headerRow = ["Rank", "User", "" + CURRENCYNAME + ""];
 			const dataRows = docs.map((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
 				const userName = Users.getExact(u._id)?.name || u._id;
@@ -294,14 +296,14 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/balance [user]", desc: "Shows a user's current balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>"},
+				{cmd: "/balance [user]", desc: "Shows a user's " + CURRENCYNAME + " balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>"},
 				{cmd: "/eco history [user]", desc: "Shows the last 50 transactions for a user. Staff & can view other users' history. (Default: yourself)"},
-				{cmd: "/eco stats", desc: "Shows global economy statistics and total money in circulation."},
+				{cmd: "/eco stats", desc: "Shows global economy statistics and total " + CURRENCYNAME + " in circulation."},
 				{cmd: "/eco ladder [page], [limit]", desc: "Shows the economy leaderboard. Max limit is 50."},
-				{cmd: "/eco transfer [user], [amount]", desc: "Transfers money to another user."},
-				{cmd: "/eco give [user], [amount], [reason]", desc: "Gives a user money. Requires: &"},
-				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: &"},
-				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: &"}
+				{cmd: "/eco transfer [user], [amount]", desc: "Transfers " + CURRENCYNAME + " to another user."},
+				{cmd: "/eco give [user], [amount], [reason]", desc: "Gives a user " + CURRENCYNAME + ". Requires: &."},
+				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes " + CURRENCYNAME + " from a user. Requires: &."},
+				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (" + CURRENCYNAME + " and transactions). Requires: &."}
 			];
 			const html = `<center><strong>Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
