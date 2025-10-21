@@ -139,7 +139,7 @@ function setupGlobals() {
 */
 async function initializeDatabase() {
 	if (!Config.impulsedb?.uri) {
-		Monitor.warn('ImpulseDB: MongoDB URI not configured. Database features disabled.');
+		console.log('ImpulseDB: MongoDB URI not configured. Database features disabled.');
 		return false;
 	}
 	try {
@@ -151,10 +151,10 @@ async function initializeDatabase() {
 				minPoolSize: Config.impulsedb.minPoolSize || 5,
 			},
 		});
-		Monitor.notice('ImpulseDB: Successfully connected to MongoDB');
+		console.log('ImpulseDB: Successfully connected to MongoDB');
 		return true;
 	} catch (err: any) {
-		Monitor.crashlog(err, 'ImpulseDB initialization failed');
+		console.log(err, 'ImpulseDB initialization failed');
 		return false;
 	}
 }
