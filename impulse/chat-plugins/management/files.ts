@@ -268,13 +268,13 @@ export const commands: Chat.ChatCommands = {
 	filehelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/fileread [path]", desc: "Reads and displays the contents of a file. Requires: ~ and whitelist"},
-			{cmd: "/filedelete [path]", desc: "Deletes a file. Requires: ~ and whitelist"},
-			{cmd: "/filemove [source], [destination]", desc: "Moves a file. Requires: ~ and whitelist"},
-			{cmd: "/filecopy [source], [destination]", desc: "Copies a file. Requires: ~ and whitelist"},
-			{cmd: "/filerename [source], [destination]", desc: "Renames a file. Requires: ~ and whitelist"},
-			{cmd: "/fileupload [path]", desc: "Uploads a file to GitHub Gist. Requires: ~ and whitelist"},
-			{cmd: "/filesave [path], [GitHub/Gist raw URL]", desc: "Downloads and saves a file from URL. Requires: ~ and whitelist"},
+			{cmd: "/fileread [path]", desc: "Reads and displays the contents of a file. Requires: Whitelisted User."},
+			{cmd: "/filedelete [path]", desc: "Deletes a file. Requires: Whitelisted User."},
+			{cmd: "/filemove [source], [destination]", desc: "Moves a file. Requires: Whitelisted User."},
+			{cmd: "/filecopy [source], [destination]", desc: "Copies a file. Requires: Whitelisted User."},
+			{cmd: "/filerename [source], [destination]", desc: "Renames a file. Requires: Whitelisted User."},
+			{cmd: "/fileupload [path]", desc: "Uploads a file to GitHub Gist. Requires: Whitelisted User."},
+			{cmd: "/filesave [path], [GitHub/Gist raw URL]", desc: "Downloads and saves a file from URL. Requires: Whitelisted User."},
 		];
 		const html = `<center><strong>File Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({cmd, desc}, i) =>
