@@ -24,7 +24,7 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = await Economy.getUser(targetUserid);
 
 		const moneyDisplay = Economy.formatMoney(targetUser.balance);
-		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${Economy.CURRENCY.name}.`);
+		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${CURRENCYNAME}.`);
 	},
 
 	eco: {
@@ -58,13 +58,13 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Transfer failed: ${result.error}`);
 			}
 	
-			this.sendReplyBox(`You successfully transferred ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} to ${targetUserid}. Your new balance is ${Economy.formatMoney(result.fromBalance!)} ${Economy.CURRENCY.name}.`);
+			this.sendReplyBox(`You successfully transferred ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ${targetUserid}. Your new balance is ${Economy.formatMoney(result.fromBalance!)} ${CURRENCYNAME}.`);
 			
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const fromNameColor = nameColor(user.name, false, true);
 				const toBalanceDisplay = Economy.formatMoney(result.toBalance!);
-				targetSocket.popup(`|html|You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay} ${Economy.CURRENCY.name}.`);
+				targetSocket.popup(`|html|You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay} ${CURRENCYNAME}.`);
 			}
 		},
 
@@ -88,13 +88,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} to ${targetNameColor}.`);
+			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ${targetNameColor}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const giverNameColor = nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${Economy.CURRENCY.name}. Your new balance is ${newBalanceDisplay} ${Economy.CURRENCY.name}.`);
+				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${CURRENCYNAME}. Your new balance is ${newBalanceDisplay} ${CURRENCYNAME}.`);
 			}
 		},
 
@@ -123,13 +123,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from ${targetNameColor}.`);
+			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} ${CURRENCYNAME} from ${targetNameColor}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const takerNameColor = nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from you.`);
+				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${CURRENCYNAME} from you.`);
 			}
 		},
 
@@ -283,13 +283,13 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)} ${Economy.CURRENCY.name}.`);
+			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)} ${CURRENCYNAME}.`);
 
 			const targetSocket = Users.get(targetUserid);
 			if (targetSocket) {
 				const resetterNameColor = nameColor(user.name, false, true);
 				const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
-				targetSocket.popup(`|html|Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay} ${Economy.CURRENCY.name}.`);
+				targetSocket.popup(`|html|Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay} ${CURRENCYNAME}.`);
 			}
 		},
 
