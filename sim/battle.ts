@@ -2095,7 +2095,7 @@ export class Battle {
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
 			switch (effect.id) {
 			case 'partiallytrapped':
-				this.add('-damage', target, target.getHealth, '[from] ' + this.effectState.sourceEffect.fullname, '[partiallytrapped]');
+				this.add('-damage', target, target.getHealth, '[from] ' + target.volatiles['partiallytrapped'].sourceEffect.fullname, '[partiallytrapped]');
 				break;
 			case 'powder':
 				this.add('-damage', target, target.getHealth, '[silent]');
@@ -2652,7 +2652,7 @@ export class Battle {
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
 				pokemon.details = pokemon.getUpdatedDetails();
-				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.setAbility(species.abilities['0'], null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 
 				const behemothMove: { [k: string]: string } = {
@@ -3068,7 +3068,7 @@ export class Battle {
 	}
 
 	hint(hint: string, once?: boolean, side?: Side) {
-		if (this.hints.has(hint)) return;
+		if (this.hints.has(side ? `${side.id}|${hint}` : hint)) return;
 
 		if (side) {
 			this.addSplit(side.id, ['-hint', hint]);
@@ -3076,7 +3076,7 @@ export class Battle {
 			this.add('-hint', hint);
 		}
 
-		if (once) this.hints.add(hint);
+		if (once) this.hints.add(side ? `${side.id}|${hint}` : hint);
 	}
 
 	addSplit(side: SideID, secret: Part[], shared?: Part[]) {

@@ -294,6 +294,6 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/repeat(html|faq)?(bymessages)? ');
-});
+}
