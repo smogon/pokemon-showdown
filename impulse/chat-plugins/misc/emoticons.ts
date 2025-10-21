@@ -171,7 +171,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const tableHTML = generateThemedTable('Available Emoticons', [], rows);
-			this.sendReplyBox(`<center><details><summary>Click to view emoticons</summary>${tableHTML}</details></center>`);
+			this.sendReply(`html|${tableHTML}`);
 		},
 
 		async ignore(target, room, user) {
@@ -215,7 +215,7 @@ export const commands: Chat.ChatCommands = {
 			];
 
 			const tableHTML = generateThemedTable(`Emoticon: ${Chat.escapeHTML(target)}`, [], rows);
-			this.sendReplyBox(tableHTML);
+			this.sendReply(`|html|${tableHTML}`);
 		},
 
 		help() {
