@@ -4,7 +4,8 @@ import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
 import { Economy, CURRENCY } from '../../impulse/economy';
-import { nameColor } from '../../impulse/colors';
+// commented out doesn't look good on broadcast green.
+//import { nameColor } from '../../impulse/colors';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -1279,7 +1280,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 							
 							await Economy.updateBalance(userId, amount);
 							rewardMessages.push(
-								`<strong>${nameColor(userName, true, true)}</strong> (${places[place] || `place ${place + 1}`}) has earned <span style="font-weight:bold;">${Economy.formatMoney(amount)} ${CURRENCYNAME}</span> for their performance!`
+								`<strong>${userName}</strong> (${places[place] || `place ${place + 1}`}) has earned <span style="font-weight:bold;">${Economy.formatMoney(amount)} ${CURRENCYNAME}</span> for their performance!`
 							);
 						}
 					}
