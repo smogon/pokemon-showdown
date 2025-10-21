@@ -23,8 +23,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
 			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) || this.data.Items[i].megaStone) {
-				if (['mewtwonitex', 'mewtwonitey', 'diancite',
-					'delphoxite', 'chesnaughtite'].includes(i)) continue;
+				if (['blazikenite', 'swampertite', 'sceptilite'].includes(i)) continue;
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
