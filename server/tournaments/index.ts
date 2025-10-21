@@ -1203,97 +1203,97 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 
 		// --- Reward Distribution --- (async IIFE)
-void (async () => {
-		try {
+		void (async () => {
+			try {
 				const rewardConfig = Config.tournamentRewards;
 				if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
-						const playerCount = this.players.length;
-						let multiplier = 1;
+					const playerCount = this.players.length;
+					let multiplier = 1;
 
 						if (playerCount > 4) {
 								multiplier = 1 + ((playerCount - 4) * 0.2);
 						}
 
-						const baseRewards = rewardConfig.rewards.map(reward => Math.floor(reward * multiplier));
-						const results = this.generator.getResults() as TournamentPlayer[][];
+					const baseRewards = rewardConfig.rewards.map(reward => Math.floor(reward * multiplier));
+					const results = this.generator.getResults() as TournamentPlayer[][];
 
-						// Determine whether this is a true single-elimination tournament.
-						// Use the generator's maxSubtrees property (defined by Elimination) rather
-						// than string-matching on the generator name.
-						let isSingleElimination = false;
-						if ((this.generator as any).maxSubtrees !== undefined) {
-								// For Elimination generator, maxSubtrees == 1 -> single elimination
-								isSingleElimination = (this.generator as any).maxSubtrees === 1;
-						}
+					// Determine whether this is a true single-elimination tournament.
+					// Use the generator's maxSubtrees property (defined by Elimination) rather
+					// than string-matching on the generator name.
+					let isSingleElimination = false;
+					if ((this.generator as any).maxSubtrees !== undefined) {
+						// For Elimination generator, maxSubtrees == 1 -> single elimination
+						isSingleElimination = (this.generator as any).maxSubtrees === 1;
+					}
 
-						const rewardMessages: string[] = [];
-						const places = ['winner', 'runner-up'];
-						const CURRENCYNAME = CURRENCY.name;
+					const rewardMessages: string[] = [];
+					const places = ['winner', 'runner-up'];
+					const CURRENCYNAME = CURRENCY.name;
 
-						// Determine how many places to reward
-						// Single elimination: only winner (place 0)
-						// Other formats: reward up to the number of configured rewards and actual places
-						const maxPlace = isSingleElimination ? 1 : Math.min(baseRewards.length, results.length);
+					// Determine how many places to reward
+					// Single elimination: only winner (place 0)
+					// Other formats: reward up to the number of configured rewards and actual places
+					const maxPlace = isSingleElimination ? 1 : Math.min(baseRewards.length, results.length);
 
-						for (let place = 0; place < maxPlace; place++) {
-								const placeResults = results[place];
-								if (!placeResults || !placeResults.length) continue;
+					for (let place = 0; place < maxPlace; place++) {
+						const placeResults = results[place];
+						if (!placeResults || !placeResults.length) continue;
 
-								for (const player of placeResults) {
-										// Guard against null/undefined/unfilled bracket nodes.
-										if (!player) {
-												// Log the unexpected case for visibility (won't crash)
-												Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
-												continue;
-										}
+						for (const player of placeResults) {
+							// Guard against null/undefined/unfilled bracket nodes.
+							if (!player) {
+								// Log the unexpected case for visibility (won't crash)
+								Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
+								continue;
+							}
 
-										// player may be a TournamentPlayer instance or a string (depending on generator)
-										let userId: ID | '' = '';
-										let userName = '(unknown)';
+							// player may be a TournamentPlayer instance or a string (depending on generator)
+							let userId: ID | '' = '';
+							let userName = '(unknown)';
 
-										if (typeof player === 'string') {
-												userId = toID(player) as ID;
-												userName = player;
-										} else {
-												// If the TournamentPlayer has no associated User (setPlayerUser was called with null),
-												// it may still have an id or name. Prefer player.id, but fall back to player.name.
-												if (player.id) {
-														userId = player.id as ID;
-												} else if (player.name) {
-														userId = toID(player.name) as ID;
-												} else {
-														userId = '';
-												}
-												userName = player.name || String(userId) || '(unfilled)';
-										}
-
-										// If userId is empty, skip awarding to avoid creating an economy record with empty id.
-										if (!userId) {
-												Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
-												continue;
-										}
-
-										// Safely index into baseRewards (baseRewards[place] should exist because of maxPlace)
-										const amount = baseRewards[place] ?? 0;
-										if (amount <= 0) continue;
-
-										await Economy.updateBalance(userId, amount);
-										rewardMessages.push(
-												`<strong>${nameColor(userName, true, true)}</strong> (${places[place] || `place ${place + 1}`}) has earned <span style="font-weight:bold;">${Economy.formatMoney(amount)} ${CURRENCYNAME}</span> for their performance!`
-										);
+							if (typeof player === 'string') {
+								userId = toID(player) as ID;
+								userName = player;
+							} else {
+								// If the TournamentPlayer has no associated User (setPlayerUser was called with null),
+								// it may still have an id or name. Prefer player.id, but fall back to player.name.
+								if (player.id) {
+									userId = player.id as ID;
+								} else if (player.name) {
+									userId = toID(player.name) as ID;
+								} else {
+									userId = '';
 								}
+								userName = player.name || String(userId) || '(unfilled)';
+							}
+
+							// If userId is empty, skip awarding to avoid creating an economy record with empty id.
+							if (!userId) {
+								Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
+								continue;
+							}
+
+							// Safely index into baseRewards (baseRewards[place] should exist because of maxPlace)
+							const amount = baseRewards[place] ?? 0;
+							if (amount <= 0) continue;
+							
+							await Economy.updateBalance(userId, amount);
+							rewardMessages.push(
+								`<strong>${nameColor(userName, true, true)}</strong> (${places[place] || `place ${place + 1}`}) has earned <span style="font-weight:bold;">${Economy.formatMoney(amount)} ${CURRENCYNAME}</span> for their performance!`
+							);
 						}
-						if (rewardMessages.length) {
-								this.room.add(
-										`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
-								);
-								this.room.update();
-						}
+					}
+					if (rewardMessages.length) {
+						this.room.add(
+							`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
+						);
+						this.room.update();
+					}
 				}
-		} catch (err) {
+			} catch (err) {
 				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
-		}
-})();
+			}
+		})();
 
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
