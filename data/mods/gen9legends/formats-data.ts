@@ -2167,6 +2167,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	xerneas: {
 		tier: "Uber",
 	},
+	xerneasactive: {
+		isNonstandard: null,
+	},
 	yveltal: {
 		tier: "Uber",
 	},
