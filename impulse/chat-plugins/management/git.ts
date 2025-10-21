@@ -72,22 +72,18 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	gitstatushelp: [`/gitstatus - Shows the current git status. Requires: ~`],
-
-	git() {
-		return this.parse(`/help git`);
-	},
-	help() {
+	
+	async githelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/gitpull", desc: "Pulls the latest changes from git repository. Requires: ~"},
 			{cmd: "/gitstatus", desc: "Shows the current git status. Requires: ~"},
 		];
 		const html = `<center><strong>Git Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}) =>
-				`<li><b>${cmd}</b> - ${desc}</li><hr>`
+			helpList.map(({cmd, desc}, i) =>
+				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
 			`</ul>`;
 		this.sendReplyBox(html);
 	},
-	githelp: 'help',
 };
