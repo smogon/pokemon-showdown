@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 				{cmd: "/icon delete [user]", desc: "Remove icon. Requires: &."},
 				{cmd: "/icon list [page]", desc: "List icons. Requires: &."},
       ];
-			const html = `<center><strong>Custom Icon Commands:</strong><b>Alias: /ic</center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
