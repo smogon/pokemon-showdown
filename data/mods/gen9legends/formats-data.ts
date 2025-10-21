@@ -402,10 +402,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	staryu: {
-		tier: "OU",
+		tier: "LC",
 	},
 	starmie: {
-		tier: "LC",
+		tier: "OU",
 	},
 	starmiemega: {
 		tier: "OU",
@@ -1668,7 +1668,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	trubbish: {
-		tier: "OU",
+		tier: "LC",
 	},
 	garbodor: {
 		tier: "OU",
