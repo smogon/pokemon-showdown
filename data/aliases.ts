@@ -88,6 +88,9 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
+	zaou: "[Gen 9] Legends Z-A OU",
+	legendsou: "[Gen 9] Legends Z-A OU",
+	plzaou: "[Gen 9] Legends Z-A OU",
 	omotm: "[Gen 9] Pokebilities",
 	lcotm: "[Gen 9] Tera Override",
 
@@ -330,6 +333,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gourgeistxl: "Gourgeist-Super",
 	gourgeisth: "Gourgeist-Super",
 	gourgeisthuge: "Gourgeist-Super",
+	gourgeistjumbo: "Gourgeist-Super",
 	ashgreninja: "Greninja-Ash",
 	greninjabattlebond: "Greninja-Bond",
 	pdon: "Groudon-Primal",
