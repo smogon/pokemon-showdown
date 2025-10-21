@@ -134,7 +134,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|Emoticon ${Chat.escapeHTML(name)} added: <img src="${url}" width="40" height="40">`);
 		},
 
-		delete(target, room, user) {
+		async delete(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
