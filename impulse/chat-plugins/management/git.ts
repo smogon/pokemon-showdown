@@ -76,8 +76,8 @@ export const commands: Chat.ChatCommands = {
 	async githelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/gitpull", desc: "Pulls the latest changes from git repository. Requires: ~"},
-			{cmd: "/gitstatus", desc: "Shows the current git status. Requires: ~"},
+			{cmd: "/gitpull", desc: "Pulls the latest changes from git repository. Requires: ~."},
+			{cmd: "/gitstatus", desc: "Shows the current git status. Requires: ~."},
 		];
 		const html = `<center><strong>Git Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({cmd, desc}, i) =>
