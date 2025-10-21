@@ -142,7 +142,9 @@ export class ExpSystem {
       { 
         $inc: { exp: gainedAmount },
         $set: { level: newLevel, lastUpdated: new Date() },
-        $setOnInsert: { _id: id }
+        // Ensure newly created documents start at DEFAULT_EXP so $inc results
+        // match the calculations above (currentExp + gainedAmount).
+        $setOnInsert: { _id: id, exp: DEFAULT_EXP }
       },
       { upsert: true, returnDocument: 'after' }
     );
@@ -174,7 +176,8 @@ export class ExpSystem {
       { 
         $inc: { exp: gainedAmount },
         $set: { level: newLevel, lastUpdated: new Date() },
-        $setOnInsert: { _id: id }
+        // Same initialization for reward-based upserts
+        $setOnInsert: { _id: id, exp: DEFAULT_EXP }
       },
       { upsert: true, returnDocument: 'after' }
     );
