@@ -77,7 +77,6 @@ describe('Dex data', () => {
 					const battleEntry = Pokedex[toID(battleForme)] || {};
 					assert.equal(battleForme, battleEntry.name, `Misspelled/nonexistent battle-only forme "${battleForme}" of ${entry.name}`);
 					assert.equal(battleEntry.baseSpecies || battleEntry.name, entry.baseSpecies, `Battle-only forme ${entry.name} of ${battleEntry.name} should have the same baseSpecies`);
-					if (entry.name === 'Zygarde-Mega') continue;
 					assert(!battleEntry.battleOnly, `Out-of-battle forme ${battleEntry.name} of ${entry.name} should not be battle-only`);
 				}
 			}
