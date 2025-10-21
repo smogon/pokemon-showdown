@@ -265,10 +265,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	filesavehelp: [`/filesave [path], [GitHub/Gist raw URL] - Downloads and saves a file from URL. Requires: ~ and whitelist`],
 
-	file() {
-		return this.parse(`/help file`);
-	},
-	help() {
+	filehelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/fileread [path]", desc: "Reads and displays the contents of a file. Requires: ~ and whitelist"},
@@ -280,11 +277,10 @@ export const commands: Chat.ChatCommands = {
 			{cmd: "/filesave [path], [GitHub/Gist raw URL]", desc: "Downloads and saves a file from URL. Requires: ~ and whitelist"},
 		];
 		const html = `<center><strong>File Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}) =>
-				`<li><b>${cmd}</b> - ${desc}</li><hr>`
+			helpList.map(({cmd, desc}, i) =>
+				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
 			`</ul>`;
 		this.sendReplyBox(html);
 	},
-	filehelp: 'help',
 };
