@@ -169,7 +169,7 @@ export const commands: Chat.ChatCommands = {
 				{cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &."},
 				{cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &."},
 				];
-			const html = `<center><strong>Custom Symbol Commands:</strong>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
