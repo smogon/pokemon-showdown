@@ -6,7 +6,7 @@
 
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable as table } from '../../utils';
-import { nameColor } from '../../colors.ts';
+import { nameColor } from '../../colors';
 
 interface NewsEntry {
 	_id?: any;
