@@ -34,6 +34,8 @@ import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
+// ExpSystem
+import { ExpSystem } from '../../impulse/chat-plugins/misc/exp-system';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
@@ -692,6 +694,8 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
+			// Exp Rewards
+			if (this.user.registered) ExpSystem.addExp(this.user.id, 1);
 			message = true;
 		}
 
