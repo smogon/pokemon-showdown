@@ -222,14 +222,14 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/emoticon", desc: "Shows all emoticons"},
-				{cmd: "/emoticon add [name], [url]", desc: "Add emoticon. Requires: &"},
-				{cmd: "/emoticon delete [name]", desc: "Remove emoticon. Requires: &"},
-				{cmd: "/emoticon toggle", desc: "Enable/disable emoticons in room. Requires: #"},
+				{cmd: "/emoticon add [name], [url]", desc: "Add emoticon. Requires: &."},
+				{cmd: "/emoticon delete [name]", desc: "Remove emoticon. Requires: &."},
+				{cmd: "/emoticon toggle", desc: "Enable/disable emoticons in room. Requires: #."},
 				{cmd: "/emoticon ignore", desc: "Ignore emoticons"},
 				{cmd: "/emoticon unignore", desc: "Show emoticons"},
-				{cmd: "/emoticon size [px]", desc: "Set size of emoticons. Requires: &"},
+				{cmd: "/emoticon size [px]", desc: "Set size of emoticons. Requires: &."},
 				{cmd: "/emoticon info [name]", desc: "Info about emoticon"},
-				{cmd: "/emoticon stats", desc: "Statistics. Requires: &"},
+				{cmd: "/emoticon stats", desc: "Statistics. Requires: &."},
 				{cmd: "<small>Note: History may show emoticons even if ignored</small>", desc: ""},
 			];
 			const html = `<center><strong>Emoticon Commands:<br>Alias: /emote, /emotes, /emoticons</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
