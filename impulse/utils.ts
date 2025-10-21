@@ -8,21 +8,21 @@ export const generateThemedTable = (
   dataRows: string[][]
 ): string => {
   let output = '';
-  output += `<div class="themed-table-container" style="max-width: 100%; max-height: 380px; overflow-y: auto;">\n`;
-  output += `<h3 class="themed-table-title">${title}</h3>\n`;
-  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse;">\n`;
-  output += `<tr class="themed-table-header">\n`;
+  output += `<div class="themed-table-container" style="max-width: 100%; max-height: 380px; overflow-y: auto;">`;
+  output += `<h3 class="themed-table-title">${title}</h3>`;
+  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse;">`;
+  output += `<tr class="themed-table-header">`;
   headerRow.forEach(header => {
-    output += `<th>${header}</th>\n`;
+    output += `<th>${header}</th>`;
   });
-  output += `</tr>\n`;
+  output += `</tr>`;
   dataRows.forEach(row => {
-    output += `<tr class="themed-table-row">\n`;
+    output += `<tr class="themed-table-row">`;
     row.forEach(cell => {
-      output += `<td>${cell}</td>\n`;
+      output += `<td>${cell}</td>`;
     });
-    output += `</tr>\n`;
+    output += `</tr>`;
   });
-  output += `</table></div>\n`;
+  output += `</table></div>`;
   return output;
 };
