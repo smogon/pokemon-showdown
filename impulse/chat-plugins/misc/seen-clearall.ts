@@ -166,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/clearall", desc: "Clear the current room chat. Requires: #."},
-				{cmd: "/clearall global", desc: "Clear all public rooms. Requires: &."},
+				{cmd: "/clearall global", desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>"},
 			];
 			const html = `<center><strong>Clearall Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
