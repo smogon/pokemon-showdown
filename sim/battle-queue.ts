@@ -15,14 +15,20 @@
 
 import type { Battle } from './battle';
 
+/** Actions are sorted based on order (lower first)
+ * followed by priority (higher first)
+ * followed by speed (higher first)
+ * Ties are broken with Fischer-Yates.
+ */
+
 /** A move action */
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
 	order: 5 | 105 | 199 | 200 | 201;
-	/** priority of the action (lower first) */
+	/** priority of the action (higher first) */
 	priority: number;
-	/** fractional priority of the action (lower first) */
+	/** fractional priority of the action (higher first) */
 	fractionalPriority: number;
 	/** speed of pokemon using move (higher first if priority tie) */
 	speed: number;
@@ -51,7 +57,7 @@ export interface SwitchAction {
 	/** action type */
 	choice: 'switch' | 'instaswitch' | 'revivalblessing';
 	order: 3 | 6 | 101;
-	/** priority of the action (lower first) */
+	/** priority of the action (higher first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
 	speed: number;
@@ -67,7 +73,7 @@ export interface SwitchAction {
 export interface TeamAction {
 	/** action type */
 	choice: 'team';
-	/** priority of the action (lower first) */
+	/** priority of the action (higher first) */
 	priority: number;
 	/** unused for this action type */
 	speed: 1;
@@ -81,7 +87,7 @@ export interface TeamAction {
 export interface FieldAction {
 	/** action type */
 	choice: 'start' | 'residual' | 'pass' | 'beforeTurn';
-	/** priority of the action (lower first) */
+	/** priority of the action (higher first) */
 	priority: number;
 	/** unused for this action type */
 	speed: 1;
@@ -93,7 +99,7 @@ export interface FieldAction {
 export interface PokemonAction {
 	/** action type */
 	choice: 'megaEvo' | 'megaEvoX' | 'megaEvoY' | 'shift' | 'runSwitch' | 'event' | 'runDynamax' | 'terastallize';
-	/** priority of the action (lower first) */
+	/** priority of the action (higher first) */
 	priority: number;
 	/** speed of pokemon doing action (higher first if priority tie) */
 	speed: number;

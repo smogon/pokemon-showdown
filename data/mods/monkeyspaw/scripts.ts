@@ -206,7 +206,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
 				pokemon.details = pokemon.getUpdatedDetails();
-				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.setAbility(species.abilities['0'], null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 
 				const behemothMove: { [k: string]: string } = {
