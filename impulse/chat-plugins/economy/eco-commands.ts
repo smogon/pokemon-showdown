@@ -229,7 +229,7 @@ export const commands: Chat.ChatCommands = {
 				dataRows
 			);
 
-			this.sendReplyBox(`|html|${tableHtml}`);
+			this.sendReply(`|html|${tableHtml}`);
 		},
 
 		async ladder(target, room, user) {
