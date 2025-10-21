@@ -2928,6 +2928,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Heal Block",
 		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
 		shortDesc: "For 5 turns, the foe(s) is prevented from healing.",
+		gen8: {
+			end: "  [POKEMON]'s Heal Block wore off!",
+			cant: "[POKEMON] can't use [MOVE] because of Heal Block!",
+		},
 		gen7: {
 			desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected. Relevant Z-Powered moves can still be selected and executed during this effect.",
 		},
@@ -2939,8 +2943,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] was prevented from healing!",
-		end: "  [POKEMON]'s Heal Block wore off!",
-		cant: "[POKEMON] can't use [MOVE] because of Heal Block!",
+		end: "  [POKEMON] is no longer prevented from healing!",
+		cant: "[POKEMON] is prevented from healing, so it can't use [MOVE]!",
 		fail: "  But it failed to affect [POKEMON]!",
 	},
 	healingwish: {
@@ -4758,6 +4762,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poison Tail",
 		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio. 10% chance to poison.",
+	},
+	polarflare: {
+		name: "Polar Flare",
+		desc: "Has a 10% chance to freeze the target. This move cannot thaw a frozen target. If this move is successful on at least one target and the user is a Ramnarok, it changes to Radiant Forme if it is currently in Dormant Forme, or changes to Dormant Forme if it is currently in Radiant Forme. This forme change does not happen if the Ramnarok has the Sheer Force Ability. The Radiant Forme reverts to Dormant Forme when Ramnarok is not active.",
+		shortDesc: "10% chance to frz foe(s). Ramnarok transforms.",
 	},
 	pollenpuff: {
 		name: "Pollen Puff",

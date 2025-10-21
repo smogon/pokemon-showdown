@@ -129,6 +129,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			let sourceEffect = options?.sourceEffect;
 			const target = this.battle.getTarget(pokemon, moveOrMoveName, targetLoc);
 			let move = this.battle.dex.getActiveMove(moveOrMoveName);
+			if (move.id !== 'struggle') {
+				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, move);
+				if (changedMove && changedMove !== true) {
+					move = this.battle.dex.getActiveMove(changedMove);
+				}
+			}
 
 			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
 			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
@@ -153,27 +159,26 @@ export const Scripts: ModdedBattleScriptsData = {
 				return;
 			}
 
-			let ppMove: ID = pokemon.volatiles['twoturnmove']?.ppMove || '';
-			if (pokemon.getLockedMove()) {
-				// locked moves don't deduct PP
-				sourceEffect = move;
-			} else {
-				ppMove ||= move.id;
-			}
+			const lockedMove = pokemon.getLockedMove();
+			if (lockedMove) sourceEffect = move;
 
-			this.useMove(move, pokemon, { target, sourceEffect });
-
-			if (pokemon.volatiles['twoturnmove']) {
-				// Deduct PP on the second turn, not first
-				// If called from e.g. Metronome, remember to deduct Metronome PP
-				pokemon.volatiles['twoturnmove'].ppMove = move.id;
-			} else if (ppMove) {
+			// Locked moves don't deduct PP
+			// Two-turn moves like Sky Attack deduct PP on their second turn.
+			if (!lockedMove || pokemon.volatiles['twoturnmove']) {
+				const ppMove = pokemon.volatiles['twoturnmove']?.ppMove || move.id;
 				pokemon.deductPP(ppMove, null, target);
 				const moveSlot = pokemon.getMoveData(ppMove);
 				if (moveSlot && moveSlot.pp < 0) {
 					moveSlot.pp += 64;
 					this.battle.hint("In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 				}
+			}
+
+			this.useMove(move, pokemon, { target, sourceEffect });
+
+			if (pokemon.volatiles['twoturnmove']) {
+				pokemon.deductPP(move, -1, target);
+				pokemon.volatiles['twoturnmove'].ppMove = move.id;
 			}
 		},
 		// This function deals with AfterMoveSelf events.
@@ -211,37 +216,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
 
-					if (pokemon.volatiles['lockedmove']?.time <= 0) pokemon.removeVolatile('lockedmove');
-
-					// If target fainted
-					if (target && target.hp <= 0) {
-						// We remove recharge
-						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
-						delete pokemon.volatiles['partialtrappinglock'];
-					} else {
-						if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
-						if (pokemon.hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-					}
-
-					// For partial trapping moves, we are saving the target
-					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
-						// Let's check if the lock exists
-						if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
-							// Here the partialtrappinglock volatile has been already applied
-							const sourceVolatile = pokemon.volatiles['partialtrappinglock'];
-							const targetVolatile = target.volatiles['partiallytrapped'];
-							if (!sourceVolatile.locked) {
-								// If it's the first hit, we save the target
-								sourceVolatile.locked = target;
-							} else if (target !== pokemon && target !== sourceVolatile.locked) {
-								// Our target switched out! Re-roll the duration, damage, and accuracy.
-								const duration = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
-								sourceVolatile.duration = duration;
-								sourceVolatile.locked = target;
-								// Duration reset thus partially trapped at 2 always.
-								targetVolatile.duration = 2;
-							}
-						} // If we move to here, the move failed and there's no partial trapping lock.
+					this.battle.runEvent('AfterMove', pokemon, target, move);
+					if (!target || target.hp > 0) {
+						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
 				}
 			}
@@ -281,7 +258,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
 			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
@@ -370,11 +347,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Now, let's calculate the accuracy.
 			let accuracy = move.accuracy;
-
-			// Partial trapping moves: true accuracy while it lasts
-			if (move.volatileStatus === 'partiallytrapped' && target === pokemon.volatiles['partialtrappinglock']?.locked) {
-				accuracy = true;
-			}
 
 			// If a sleep inducing move is used while the user is recharging, the accuracy is true.
 			if (move.status === 'slp' && target?.volatiles['mustrecharge']) {
@@ -507,14 +479,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (target) {
 				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
-
-				// Handle here the applying of partial trapping moves to Pokémon with Substitute
-				if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
-					target.addVolatile(moveData.volatileStatus, pokemon, move);
-					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration! > 1) {
-						target.volatiles[moveData.volatileStatus].duration = 2;
-					}
-				}
 
 				if (!hitResult) {
 					if (hitResult === false) this.battle.add('-fail', target);
@@ -681,11 +645,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
-			// Now we can save the partial trapping damage.
-			if (pokemon.volatiles['partialtrappinglock']) {
-				pokemon.volatiles['partialtrappinglock'].damage = this.battle.lastDamage;
-			}
-
 			// Apply move secondaries.
 			if (moveData.secondaries && target && target.hp > 0) {
 				for (const secondary of moveData.secondaries) {
@@ -757,7 +716,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If it's the first hit on a Normal-type partially trap move, it hits Ghosts anyways but damage is 0.
-			if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && target.hasType('Ghost')) {
+			if (move.self?.volatileStatus === 'partialtrappinglock' && move.type === 'Normal' && target.hasType('Ghost')) {
 				return 0;
 			}
 

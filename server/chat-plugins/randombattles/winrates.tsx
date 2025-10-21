@@ -47,6 +47,7 @@ function getDefaultStats(): Stats {
 			gen9randombattle: { mons: {} },
 			gen9randomdoublesbattle: { mons: {} },
 			gen9babyrandombattle: { mons: {} },
+			gen9chatbats: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },
@@ -173,16 +174,20 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod === 'gen2' || format.team === 'randomBaby') {
-		// ladders are inactive, so use a lower threshold
+	if (format.mod === 'gen2') {
+		// ladder is inactive, so use a lower threshold
 		eloFloor = 1150;
+	} else if (format.team === 'randomBaby') {
+		// ladder is even more inactive, so an even lower threshold
+		eloFloor = 1000;
 	} else if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	} else if (format.gameType === 'doubles') {
 		// may need to be raised again if ladder takes off further
 		eloFloor = 1400;
 	}
-	if (!formatData || (format.mod !== 'gen9ssb' && battle.rated < eloFloor) || !winner) return;
+	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats') && battle.rated < eloFloor) || !winner)
+		return;
 	checkRollover();
 	for (const p of battle.players) {
 		const team = await battle.getPlayerTeam(p);

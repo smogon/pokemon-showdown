@@ -190,7 +190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
-			if (target?.item && !target.itemState.knockedOff) {
+			if (target?.item) {
 				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
@@ -534,21 +534,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (bannedAbilities.includes(target.ability)) {
 				return;
 			}
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
-			}
+			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
-	},
-	unburden: {
-		inherit: true,
-		condition: {
-			onModifySpe(spe, pokemon) {
-				if ((!pokemon.item || pokemon.itemState.knockedOff) && !pokemon.ignoringAbility()) {
-					return this.chainModify(2);
-				}
-			},
-		},
 	},
 	vitalspirit: {
 		inherit: true,
@@ -568,5 +556,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
+	},
+	rebound: {
+		inherit: true,
+		onTryHitSide() {},
 	},
 };
