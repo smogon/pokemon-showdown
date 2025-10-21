@@ -29,6 +29,9 @@ exports.githubToken = '';
 // Emoticons Size For Emoticons
 exports.emoteSize = '36';
 
+// Whitelisted users for management commands
+exports.fileWhitelist = ['princesky', 'musaddiktemkar'];
+
 // ImpulseDB config
 exports.impulsedb = {
 	uri: 'mongodb://127.0.0.1:27017/impulse',
