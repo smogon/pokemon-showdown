@@ -30,8 +30,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove(move, attacker) {
 			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Mega' &&
 				!attacker.transformed) {
-				move.multihit = 1;
-				move.basePower = 75;
+				delete move.multihit;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
