@@ -171,7 +171,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const tableHTML = generateThemedTable('Available Emoticons', [], rows);
-			this.sendReply(`html|${tableHTML}`);
+			this.sendReply(`|html|${tableHTML}`);
 		},
 
 		async ignore(target, room, user) {
