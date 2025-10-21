@@ -84,8 +84,6 @@ const hashColor = (name: string): string => {
 	return color;
 };
 
-Impulse.hashColor = hashColor;
-
 export const validateHexColor = (color: string): boolean => /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
 export const clearColorCache = () => {
@@ -98,5 +96,3 @@ export const nameColor = (name: string, bold = false, userGroup = false, room: R
 	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
 	return symbol + (bold ? '<b>' : '') + `<font color=${hashColor(name)}>${userName}</font>` + (bold ? '</b>' : '');
 };
-
-Impulse.nameColor = nameColor;
