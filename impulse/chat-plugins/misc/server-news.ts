@@ -5,7 +5,6 @@
 */
 
 import { ImpulseDB } from '../../impulse-db';
-import { generateThemedTable as table } from '../../utils';
 import { nameColor } from '../../colors';
 
 interface NewsEntry {
@@ -83,10 +82,7 @@ export const commands: Chat.ChatCommands = {
 				`<center><strong>Server News:</strong></center>${news.join('<hr>')}` :
 				`<center><strong>Server News:</strong></center><center><em>No news.</em></center>`;
 
-			if (this.broadcasting) {
-				return this.sendReplyBox(`<div class="infobox-limited">${output}</div>`);
-			}
-			user.send(`|popup||wide||html|<div class="infobox">${output}</div>`);
+			user.send(`|popup||html|<div class="infobox">${output}</div>`);
 		},
 
 		async add(target, room, user) {
