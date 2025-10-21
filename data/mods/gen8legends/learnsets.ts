@@ -4626,7 +4626,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			twister: ["8L1"],
 		},
 	},
-	dialgaorigin: {},
 	palkia: {
 		inherit: true,
 		learnset: {
@@ -4659,7 +4658,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["8T"],
 		},
 	},
-	palkiaorigin: {},
 	heatran: {
 		inherit: true,
 		learnset: {
@@ -4748,7 +4746,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["8T"],
 		},
 	},
-	giratinaorigin: {},
 	cresselia: {
 		inherit: true,
 		learnset: {
@@ -4873,7 +4870,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zenheadbutt: ["8T"],
 		},
 	},
-	shayminsky: {},
 	arceus: {
 		inherit: true,
 		learnset: {
@@ -4923,23 +4919,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zenheadbutt: ["8T"],
 		},
 	},
-	arceusbug: {},
-	arceusdark: {},
-	arceusdragon: {},
-	arceuselectric: {},
-	arceusfairy: {},
-	arceusfighting: {},
-	arceusfire: {},
-	arceusflying: {},
-	arceusghost: {},
-	arceusgrass: {},
-	arceusground: {},
-	arceusice: {},
-	arceuspoison: {},
-	arceuspsychic: {},
-	arceusrock: {},
-	arceussteel: {},
-	arceuswater: {},
 	oshawott: {
 		learnset: {
 			aerialace: ["8T"],
@@ -5179,7 +5158,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			twister: ["8L11"],
 		},
 	},
-	tornadustherian: {},
 	thundurus: {
 		inherit: true,
 		learnset: {
@@ -5209,7 +5187,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["8T"],
 		},
 	},
-	thundurustherian: {},
 	landorus: {
 		inherit: true,
 		learnset: {
@@ -5236,7 +5213,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			twister: ["8L11"],
 		},
 	},
-	landorustherian: {},
 	sylveon: {
 		learnset: {
 			babydolleyes: ["8T", "8L18"],
@@ -5648,5 +5624,4 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zenheadbutt: ["8T"],
 		},
 	},
-	enamorustherian: {},
 };
