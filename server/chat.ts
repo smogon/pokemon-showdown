@@ -694,10 +694,12 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
-			// Exp Rewards
-			if (this.user.registered) ExpSystem.addExp(this.user.id, 1);
 			message = true;
 		}
+
+		// Exp Rewards
+		if (this.user.registered) ExpSystem.addExp(this.user.id, 1);
+		
 
 		this.update();
 
