@@ -1218,7 +1218,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					const results = this.generator.getResults() as TournamentPlayer[][];
 
 					// Check if this is a single elimination tournament
-					const isSingleElimination = this.generator.name?.toLowerCase().includes('singleelimination');
+					const isSingleElimination = this.generator.name?.toLowerCase().includes('elimination');
 
 					const rewardMessages: string[] = [];
 					const places = ['winner', 'runner-up'];
