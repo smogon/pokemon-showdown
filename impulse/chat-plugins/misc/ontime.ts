@@ -168,7 +168,7 @@ export const commands: Chat.ChatCommands = {
 			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
 			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
 			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
-			this.sendReplyBox(tableHTML);
+			this.sendReply(`|html|${tableHTML}`);
 		},
 	},
 
