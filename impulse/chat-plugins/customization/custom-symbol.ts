@@ -164,10 +164,10 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &+"},
-				{cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &+"},
-				{cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &+"},
-				{cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &+"},
+				{cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &."},
+				{cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &."},
+				{cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &."},
+				{cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &."},
 				];
 			const html = `<center><strong>Custom Symbol Commands:</strong>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
