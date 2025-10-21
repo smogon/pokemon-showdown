@@ -58,13 +58,9 @@ export const transferMoney = async (from: string, to: string, amount: number, re
 	await updateBalance(from, -amount);
 	const updatedTo = await updateBalance(to, amount);
 
-	await logTransaction({ from, to, amount, type: 'transfer', reason, timestamp: new Date() });
-
 	const updatedFrom = await getEconomyUser(from);
 	return { success: true, fromBalance: updatedFrom.balance, toBalance: updatedTo.balance };
 };
-
-export const logTransaction = (txn: Transaction): Promise<void> => TransactionsDB.insertOne(txn);
 
 export const getTransactionHistory = (userid: string, limit = 50): Promise<Transaction[]> => 
 	userid ? TransactionsDB.find({ $or: [{ from: userid }, { to: userid }] }, { sort: { timestamp: -1 }, limit })
@@ -102,7 +98,6 @@ export const Economy = {
 	getUser: getEconomyUser,
 	updateBalance,
 	transferMoney,
-	logTransaction,
 	getTransactionHistory,
 	formatMoney,
 	getStats: getEconomyStats,
