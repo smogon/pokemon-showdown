@@ -322,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Name:</b>`, config.name || '(none)'],
 			];
 			const tableHTML = generateThemedTable(`Autotour settings for ${roomid}`, [], rows);
-			this.sendReplyBox(tableHTML);
+			this.sendReply(`|html|${tableHTML}`);
 		},
 		nextrun(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -344,7 +344,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Interval:</b>`, `${config.interval} min`],
 				[`<b>Last Run:</b>`, config.lastTourTime ? new Date(config.lastTourTime).toLocaleString() : '(never)'],
 			]);
-			this.sendReply(`|html|<div class="impulse-table-section">${tableHTML}</div>`);
+			this.sendReply(`|html|${tableHTML}`);
 		},
 		help() {
 			if (!this.runBroadcast()) return;
