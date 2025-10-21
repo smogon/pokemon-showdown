@@ -84,14 +84,6 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const updatedUser = await Economy.updateBalance(targetUserid, amount);
-			await Economy.logTransaction({
-				from: user.id,
-				to: targetUserid,
-				amount: amount,
-				type: 'give',
-				reason: reason,
-				timestamp: new Date(),
-			});
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
@@ -101,7 +93,7 @@ export const commands: Chat.ChatCommands = {
 			if (targetSocket) {
 				const giverNameColor = Impulse.nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${Economy.CURRENCY.name}. Your new balance is ${newBalanceDisplay} ${Economy.CURRENCY.name}. (Reason: ${reason})`);
+				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${Economy.CURRENCY.name}. Your new balance is ${newBalanceDisplay} ${Economy.CURRENCY.name}.`);
 			}
 		},
 
@@ -127,14 +119,6 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const updatedUser = await Economy.updateBalance(targetUserid, -amount);
-			await Economy.logTransaction({
-				from: user.id,
-				to: targetUserid,
-				amount: amount,
-				type: 'take',
-				reason: reason,
-				timestamp: new Date(),
-			});
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = Impulse.nameColor(targetDisplayName);
@@ -144,7 +128,7 @@ export const commands: Chat.ChatCommands = {
 			if (targetSocket) {
 				const takerNameColor = Impulse.nameColor(user.name, false, true);
 				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from you. (Reason: ${reason})`);
+				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${Economy.CURRENCY.name} from you.`);
 			}
 		},
 
@@ -189,12 +173,10 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'give':
 						typeColor = 'green';
-						//details = `Given by ${fromColor}`;
 						amountDisplay = `+ ${amountDisplay}`;
 						break;
 					case 'take':
 						typeColor = 'red';
-						//details = `Taken by ${fromColor}`;
 						amountDisplay = `- ${amountDisplay}`;
 						break;
 					case 'shop':
@@ -322,7 +304,7 @@ export const commands: Chat.ChatCommands = {
 				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: & (Leader or higher)."},
 				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: & (Leader or higher)."}
 			];
-			const html = `<strong>Economy Commands: (/economy or /eco)</strong><br /><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<strong>Economy Commands: (/economy or /eco)</strong><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}) =>
 					`<li><b>${cmd}</b> - ${desc}</li><hr>`
 								).join('') +
