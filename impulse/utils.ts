@@ -1,7 +1,13 @@
 // Pokemon Showdown
 // Utils Modules
 
-// Reusable Table Function
+/**
+ * Generates a themed HTML table with title and data
+ * @param title - Table title to display
+ * @param headerRow - Array of header column names
+ * @param dataRows - 2D array of data cells
+ * @returns HTML string containing the themed table
+ */
 export const generateThemedTable = (
   title: string,
   headerRow: string[],
