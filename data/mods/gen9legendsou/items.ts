@@ -13,11 +13,24 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 	},
-	floettite: {
+	chesnaughtite: {
 		inherit: true,
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name) return false;
-			return true;
-		},
+		isNonstandard: "Unobtainable",
+	},
+	delphoxite: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	mewtwonitex: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	mewtwonitey: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	diancite: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 };
