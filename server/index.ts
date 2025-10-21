@@ -166,13 +166,13 @@ export const readyPromise = cleanupStale().then(() => {
 	return initializeDatabase();
 }).then((dbReady) => {
 	if (dbReady) {
-		Monitor.notice('ImpulseDB: Database ready');
+		console.log('ImpulseDB: Database ready');
 	}
 	setupGlobals();
 }).then(() => {
 	if (Config.usesqlite) {
 		require('./modlog').start(Config.subprocessescache);
-	}
+}
 
 /*export const readyPromise = cleanupStale().then(() => {
 	setupGlobals();
