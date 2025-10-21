@@ -1,0 +1,93 @@
+/*
+* Pokemon Showdown
+* Git Commands
+* Allows pulling git changes directly from chatrooms.
+* Note: Remove sudo if you're using windows or android.
+* @author PrinceSky-Git
+*/
+
+import { FS, Utils } from '../../../lib';
+import { execSync } from 'child_process';
+
+async function findGitRoot(startPath: string): Promise<string | null> {
+	let currentPath = FS(startPath);
+	
+	while (true) {
+		const gitPath = FS(`${currentPath.path}/.git`);
+		if (await gitPath.exists()) {
+			return currentPath.path;
+		}
+		
+		const parentPath = currentPath.parentDir();
+		if (parentPath.path === currentPath.path) {
+			return null;
+		}
+		currentPath = parentPath;
+	}
+}
+
+export const commands: Chat.ChatCommands = {
+	async gitpull(target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.checkCan('bypassall');
+		
+		const gitRoot = await findGitRoot(FS.ROOT_PATH);
+		if (!gitRoot) {
+			throw new Chat.ErrorMessage('Could not find git root directory.');
+		}
+		
+		try {
+			const output = execSync('sudo git pull', {
+				cwd: gitRoot,
+				encoding: 'utf8',
+				timeout: 30000,
+			});
+			
+			return this.sendReplyBox(`<details><summary>Git pull completed</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
+		} catch (err: any) {
+			throw new Chat.ErrorMessage(`Git pull failed: ${err.message}`);
+		}
+	},
+	gitpullhelp: [`/gitpull - Pulls the latest changes from git repository. Requires: ~`],
+	
+	async gitstatus(target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.checkCan('bypassall');
+		
+		const gitRoot = await findGitRoot(FS.ROOT_PATH);
+		if (!gitRoot) {
+			throw new Chat.ErrorMessage('Could not find git root directory.');
+		}
+		
+		try {
+			const output = execSync('sudo git status', {
+				cwd: gitRoot,
+				encoding: 'utf8',
+				timeout: 30000,
+			});
+			
+			return this.sendReplyBox(`<details><summary>Git status</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
+		} catch (err: any) {
+			throw new Chat.ErrorMessage(`Git status failed: ${err.message}`);
+		}
+	},
+	gitstatushelp: [`/gitstatus - Shows the current git status. Requires: ~`],
+
+	git() {
+		return this.parse(`/help git`);
+	},
+	help() {
+		if (!this.runBroadcast()) return;
+		const helpList = [
+			{cmd: "/gitpull", desc: "Pulls the latest changes from git repository. Requires: ~"},
+			{cmd: "/gitstatus", desc: "Shows the current git status. Requires: ~"},
+		];
+		const html = `<strong>Git Commands:</strong><hr><ul style="list-style-type:none;padding-left:0;">` +
+			helpList.map(({cmd, desc}) =>
+				`<li><b>${cmd}</b> - ${desc}</li><hr>`
+			).join('') +
+			`</ul>`;
+		this.sendReplyBox(html);
+	},
+	githelp: 'help',
+};
