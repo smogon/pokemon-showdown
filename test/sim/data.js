@@ -77,7 +77,6 @@ describe('Dex data', () => {
 					const battleEntry = Pokedex[toID(battleForme)] || {};
 					assert.equal(battleForme, battleEntry.name, `Misspelled/nonexistent battle-only forme "${battleForme}" of ${entry.name}`);
 					assert.equal(battleEntry.baseSpecies || battleEntry.name, entry.baseSpecies, `Battle-only forme ${entry.name} of ${battleEntry.name} should have the same baseSpecies`);
-					if (entry.name === 'Zygarde-Mega') continue;
 					assert(!battleEntry.battleOnly, `Out-of-battle forme ${battleEntry.name} of ${entry.name} should not be battle-only`);
 				}
 			}
@@ -402,9 +401,9 @@ describe('Dex data', () => {
 	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
 	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
 	species['gen9legends'] = 230;
-	// Mega (63) + Greninja (1) + Vivillon (2) + Floette (1) + Meowstic (1) + Aegislash (1) + Pumpkaboo (3) +
+	// Mega (63) + Vivillon (2) + Floette (1) + Meowstic (1) + Aegislash (1) + Pumpkaboo (3) +
 	// Gourgeist (3) + Xerneas (1) + Zygarde (2) + Alola (1) + Galar (4)
-	formes['gen9legends'] = 63 + 1 + 2 + 1 + 1 + 1 + 3 + 3 + 1 + 2 + 1 + 4;
+	formes['gen9legends'] = 63 + 2 + 1 + 1 + 1 + 3 + 3 + 1 + 2 + 1 + 4;
 
 	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
 		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {

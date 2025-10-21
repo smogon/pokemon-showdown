@@ -333,7 +333,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	gengarmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	onix: {
 		tier: "LC",
@@ -402,10 +402,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	staryu: {
-		tier: "OU",
+		tier: "LC",
 	},
 	starmie: {
-		tier: "LC",
+		tier: "OU",
 	},
 	starmiemega: {
 		tier: "OU",
@@ -508,12 +508,15 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	mewtwo: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	mewtwomegax: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	mewtwomegay: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	mew: {
 		isNonstandard: "Past",
@@ -1665,7 +1668,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	trubbish: {
-		tier: "OU",
+		tier: "LC",
 	},
 	garbodor: {
 		tier: "OU",
@@ -1906,6 +1909,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	chesnaughtmega: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	fennekin: {
 		tier: "LC",
@@ -1918,6 +1922,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	delphoxmega: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	froakie: {
 		tier: "LC",
@@ -1929,7 +1934,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	greninjabond: {
-		tier: "OU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	greninjamega: {
 		tier: "OU",
@@ -2109,12 +2115,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	sliggoohisui: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	goodra: {
 		tier: "OU",
 	},
 	goodrahisui: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	klefki: {
 		tier: "OU",
@@ -2157,6 +2165,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	avalugghisui: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	noibat: {
 		tier: "LC",
@@ -2174,7 +2183,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	zygarde: {
-		tier: "Uber",
+		tier: "OU",
 	},
 	zygarde10: {
 		tier: "OU",
@@ -2187,18 +2196,23 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	diancie: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	dianciemega: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	hoopa: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	hoopaunbound: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	volcanion: {
 		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	rowlet: {
 		isNonstandard: "Past",
