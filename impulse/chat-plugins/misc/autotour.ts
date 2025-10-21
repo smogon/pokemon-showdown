@@ -349,9 +349,9 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/autotour enable", desc: "Enable autotour in this room."},
-				{cmd: "/autotour disable", desc: "Disable autotour in this room."},
-				{cmd: "/autotour set [option],...", desc: "Set per-room option (run in room):<br>formats, addformat, removeformat, removeallformats, types, addtype, removetype, removealltypes, interval, autostart, autodq, playercap, name."},
+				{cmd: "/autotour enable", desc: "Enable autotour in this room. Requires: #/~."},
+				{cmd: "/autotour disable", desc: "Disable autotour in this room. Requires: #/~."},
+				{cmd: "/autotour set [option],...", desc: "Set per-room option (run in room):<br>formats, addformat, removeformat, removeallformats, types, addtype, removetype, removealltypes, interval, autostart, autodq, playercap, name. Requires: #/~."},
 				{cmd: "/autotour show", desc: "Show current autotour settings for this room."},
 				{cmd: "/autotour nextrun [room]", desc: "Show time remaining until next tournament starts."},
 			];
