@@ -1,4 +1,4 @@
-export const Learnsets: import('../../../sim/dex-items').ModdedItemDataTable = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	slowbronite: {
 		inherit: true,
 		onTakeItem(item, source) {
