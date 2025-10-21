@@ -180,7 +180,7 @@ export const commands: Chat.ChatCommands = {
 				helpList.map(({cmd, desc}, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
-				`</ul><small>Requires &+. Format: #FF5733 or #F73</small>`;
+				`</ul><small>Format: #FF5733 or #F73</small>`;
 			this.sendReplyBox(html);
 		},
 
