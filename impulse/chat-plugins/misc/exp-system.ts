@@ -10,11 +10,11 @@ import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-const DEFAULT_EXP = 0;
+const DEFAULT_EXP = 9;
 const EXP_UNIT = `EXP`;
 
 const MIN_LEVEL_EXP = 10;
-const MULTIPLIER = 1.5;
+const MULTIPLIER = 1.1;
 let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
 const EXP_COOLDOWN = 30000;
