@@ -309,11 +309,12 @@ export const commands: Chat.ChatCommands = {
 			const roomid = room!.roomid;
 			const config = autotourConfig[roomid] || {roomid, ...defaultRoomConfig};
 			const colorName = nameColor(user.name, true, true);
+			const formatsHtml = `<div style="max-width:100%;overflow-x:auto;white-space:nowrap;">${config.formats.join(', ') || '(none)'}</div>`;
 			const rows = [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
 				[`<b>Owner:</b>`, colorName],
 				[`<b>Enabled:</b>`, config.enabled ? '<span style="color:limegreen">Yes</span>' : '<span style="color:red">No</span>'],
-				[`<b>Formats:</b>`, config.formats.join(', ') || '(none)'],
+				[`<b>Formats:</b>`, formatsHtml],
 				[`<b>Types:</b>`, config.types.join(', ') || '(none)'],
 				[`<b>Interval:</b>`, `${config.interval} min`],
 				[`<b>Autostart:</b>`, `${config.autostart} min`],
