@@ -295,13 +295,13 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/balance [user]", desc: "Shows a user's current balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>"},
-				{cmd: "/eco history [user]", desc: "Shows the last 50 transactions for a user. Staff (Leader or higher) can view other users' history. (Default: yourself)"},
+				{cmd: "/eco history [user]", desc: "Shows the last 50 transactions for a user. Staff & can view other users' history. (Default: yourself)"},
 				{cmd: "/eco stats", desc: "Shows global economy statistics and total money in circulation."},
 				{cmd: "/eco ladder [page], [limit]", desc: "Shows the economy leaderboard. Max limit is 50."},
 				{cmd: "/eco transfer [user], [amount]", desc: "Transfers money to another user."},
-				{cmd: "/eco give [user], [amount], [reason]", desc: "Gives a user money. Requires: & (Leader or higher)."},
-				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: & (Leader or higher)."},
-				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: & (Leader or higher)."}
+				{cmd: "/eco give [user], [amount], [reason]", desc: "Gives a user money. Requires: &"},
+				{cmd: "/eco take [user], [amount], [reason]", desc: "Takes money from a user. Requires: &"},
+				{cmd: "/eco reset [user]", desc: "Resets a user's economy data (balance and transactions). Requires: &"}
 			];
 			const html = `<center><strong>Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
@@ -311,6 +311,5 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 	},
-	economyhelp: 'eco.help',
 	economy: 'eco',
 };
