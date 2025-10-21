@@ -1209,16 +1209,22 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
 					const playerCount = this.players.length;
 					let multiplier = 1;
-				
+		
 					if (playerCount > 4) {
 						multiplier = 1 + ((playerCount - 4) * 0.2);
 					}
-				
+		
 					const baseRewards = rewardConfig.rewards.map(reward => Math.floor(reward * multiplier));
 					const results = this.generator.getResults() as TournamentPlayer[][];
-
-					// Check if this is a single elimination tournament
-					const isSingleElimination = this.generator.name?.toLowerCase().includes('elimination');
+			
+					// Determine whether this is a true single-elimination tournament.
+					// Use the generator's maxSubtrees property (defined by Elimination) rather
+					// than string-matching on the generator name.
+					let isSingleElimination = false;
+					if ((this.generator as any).maxSubtrees !== undefined) {
+						// For Elimination generator, maxSubtrees == 1 -> single elimination
+						isSingleElimination = (this.generator as any).maxSubtrees === 1;
+					}
 
 					const rewardMessages: string[] = [];
 					const places = ['winner', 'runner-up'];
@@ -1226,10 +1232,11 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 					// Determine how many places to reward
 					// Single elimination: only winner (place 0)
-					// Other formats: winner and runner-up (places 0 and 1)
+					// Other formats: reward up to the number of configured rewards and actual places
 					const maxPlace = isSingleElimination ? 1 : Math.min(baseRewards.length, results.length);
-					
+			
 					for (let place = 0; place < maxPlace; place++) {
+						if (!results[place]) continue;
 						for (const player of results[place]) {
 							const userId = typeof player === 'string' ? toID(player) : player.id;
 							const userName = typeof player === 'string' ? player : player.name;
@@ -1250,7 +1257,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 			}
 		})();
-		// --- End Reward Distribution ---
 
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
