@@ -48,7 +48,7 @@ export interface EventMethods {
 	onDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void;
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
-	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon, source?: Pokemon, effect?: Effect) => void;
 	onEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
@@ -460,6 +460,7 @@ export interface EventMethods {
 	onFractionalPriorityPriority?: number;
 	onHitPriority?: number;
 	onInvulnerabilityPriority?: number;
+	onMaybeTrapPokemonPriority?: number;
 	onModifyAccuracyPriority?: number;
 	onModifyAtkPriority?: number;
 	onModifyCritRatioPriority?: number;

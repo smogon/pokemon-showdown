@@ -1056,13 +1056,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	castformsunny: {
-		tier: "ZU",
 	},
 	castformrainy: {
-		tier: "ZU",
 	},
 	castformsnowy: {
-		tier: "ZU",
 	},
 	kecleon: {
 		tier: "NU",
@@ -1092,7 +1089,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	glalie: {
-		tier: "NU",
+		tier: "NUBL",
 	},
 	spheal: {
 		tier: "LC",
@@ -1104,7 +1101,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	clamperl: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	huntail: {
 		tier: "NU",

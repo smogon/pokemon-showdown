@@ -65,6 +65,7 @@ interface EventInfo {
 	japan?: boolean;
 	/** For Emerald event eggs to allow Pomeg glitched moves */
 	emeraldEventEgg?: boolean;
+	source?: string;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -311,8 +312,9 @@ interface ModdedBattlePokemon {
 	runEffectiveness?: (this: Pokemon, move: ActiveMove) => number;
 	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: string | boolean) => boolean;
 	setAbility?: (
-		this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean
-	) => string | false;
+		this: Pokemon, ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
+		isFromFormeChange?: boolean, isTransform?: boolean
+	) => ID | false | null;
 	setItem?: (this: Pokemon, item: string | Item, source?: Pokemon, effect?: Effect) => boolean;
 	setStatus?: (
 		this: Pokemon, status: string | Condition, source: Pokemon | null,
@@ -474,6 +476,7 @@ declare namespace RandomTeamsTypes {
 		illusion?: number;
 		statusCure?: number;
 		teraBlast?: number;
+		imprison?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
@@ -559,5 +562,5 @@ declare namespace RandomTeamsTypes {
 		'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
 		'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
 		'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
-		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user';
+		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user' | 'Imprisoner';
 }

@@ -145,11 +145,12 @@ export const IPTools = new class {
 			if (ip === null) return null;
 			return { minIP: ip, maxIP: ip };
 		}
-		const low = IPTools.ipToNumber(cidr.slice(0, index));
+		let low = IPTools.ipToNumber(cidr.slice(0, index));
 		const bits = Utils.parseExactInt(cidr.slice(index + 1));
 		// fun fact: IPTools fails if bits <= 1 because JavaScript
 		// does << with signed int32s.
 		if (low === null || !bits || bits < 2 || bits > 32) return null;
+		low &= ~((1 << (32 - bits)) - 1);
 		const high = low + (1 << (32 - bits)) - 1;
 		return { minIP: low, maxIP: high };
 	}
