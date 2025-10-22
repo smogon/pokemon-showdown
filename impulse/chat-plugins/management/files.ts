@@ -8,7 +8,7 @@
 import { FS, Utils } from '../../../lib';
 
 export const commands: Chat.ChatCommands = {
-	async fileread(target, room, user) {
+	async fileread(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -40,13 +40,14 @@ export const commands: Chat.ChatCommands = {
 				`<pre style="max-height: 400px; overflow-y: auto;">${Utils.escapeHTML(content)}</pre>` +
 				`</details>`
 			);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to read file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to read file: ${message}`);
 		}
 	},
 	filereadhelp: [`/fileread [path] - Reads and displays the contents of a file. Requires: ~ and whitelist`],
 	
-	async filedelete(target, room, user) {
+	async filedelete(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -69,13 +70,14 @@ export const commands: Chat.ChatCommands = {
 			await file.unlinkIfExists();
 			
 			return this.sendReply(`File deleted: ${filePath}`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to delete file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to delete file: ${message}`);
 		}
 	},
 	filedeletehelp: [`/filedelete [path] - Deletes a file. Requires: ~ and whitelist`],
 	
-	async filemove(target, room, user) {
+	async filemove(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -98,13 +100,14 @@ export const commands: Chat.ChatCommands = {
 			await sourceFile.rename(FS(destination).path);
 			
 			return this.sendReply(`File moved from ${source} to ${destination}`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to move file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to move file: ${message}`);
 		}
 	},
 	filemovehelp: [`/filemove [source], [destination] - Moves a file. Requires: ~ and whitelist`],
 	
-	async filecopy(target, room, user) {
+	async filecopy(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -128,13 +131,14 @@ export const commands: Chat.ChatCommands = {
 			await FS(destination).write(content);
 			
 			return this.sendReply(`File copied from ${source} to ${destination}`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to copy file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to copy file: ${message}`);
 		}
 	},
 	filecopyhelp: [`/filecopy [source], [destination] - Copies a file. Requires: ~ and whitelist`],
 	
-	async filerename(target, room, user) {
+	async filerename(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -157,13 +161,14 @@ export const commands: Chat.ChatCommands = {
 			await sourceFile.rename(FS(destination).path);
 			
 			return this.sendReply(`File renamed from ${source} to ${destination}`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to rename file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to rename file: ${message}`);
 		}
 	},
 	filerenamehelp: [`/filerename [source], [destination] - Renames a file. Requires: ~ and whitelist`],
 	
-	async fileupload(target, room, user) {
+	async fileupload(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -223,13 +228,14 @@ export const commands: Chat.ChatCommands = {
 				`File: ${Utils.escapeHTML(filePath)}<br />` +
 				`Gist URL: <a href="${result.html_url}" target="_blank">${result.html_url}</a>`
 			);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to upload file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to upload file: ${message}`);
 		}
 	},
 	fileuploadhelp: [`/fileupload [path] - Uploads a file to GitHub Gist. Requires: ~ and whitelist`],
 	
-	async filesave(target, room, user) {
+	async filesave(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		if (!Config.fileWhitelist?.includes(user.id)) {
@@ -259,13 +265,14 @@ export const commands: Chat.ChatCommands = {
 			await file.write(content);
 			
 			return this.sendReply(`File saved successfully: ${filePath} (${content.length} bytes)`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Failed to save file: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to save file: ${message}`);
 		}
 	},
 	filesavehelp: [`/filesave [path], [GitHub/Gist raw URL] - Downloads and saves a file from URL. Requires: ~ and whitelist`],
 
-	filehelp() {
+	filehelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/fileread [path]", desc: "Reads and displays the contents of a file. Requires: Whitelisted User."},
