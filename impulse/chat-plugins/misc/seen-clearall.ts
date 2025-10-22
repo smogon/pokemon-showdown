@@ -173,7 +173,6 @@ export const commands: Chat.ChatCommands = {
 					`Cannot clear room "${room.id}" because a tournament is running.`
 				);
 			}
-			staff.add(`|html|<div class="infobox">${user.name} used /globalclearall</div>`);
 		},
 
 		async global(target, room, user): Promise<void> {
@@ -185,7 +184,6 @@ export const commands: Chat.ChatCommands = {
 					`Cannot clear the following rooms because a tournament is running: ${failed.join(', ')}`
 				);
 			}
-			staff.add(`|html|<div class="infobox">${user.name} used /globalclearall</div>`);
 		},
 
 		help(): void {
@@ -202,12 +200,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 	},
-
-	/**
-	 * Admin command to forcibly destroy a stuck tournament in a room.
-	 * Usage: /cleantour [roomid]
-	 * Only for roomowner/global staff.
-	 */
+	
 	cleantour: {
 		async ''(target, room, user): Promise<void> {
 			const roomid = toID(target) || room?.roomid;
