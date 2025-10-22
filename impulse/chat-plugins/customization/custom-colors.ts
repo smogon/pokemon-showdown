@@ -12,7 +12,7 @@ import { generateThemedTable } from '../../utils';
 const STAFF_ROOM_ID = 'staff';
 
 Impulse.reloadCSS = () => {
-	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
+	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid || 'impulse'}`;
 	const req = https.get(url, res => {});
 	req.on('error', err => {});
 	req.end();
@@ -20,7 +20,7 @@ Impulse.reloadCSS = () => {
 
 const generateCSS = (name: string, color: string): string => {
 	const id = toID(name);
-	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, [class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, [id$="-userlist-user-${id}"] strong { color: ${color} !important; }\n`;
+	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, [class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, [id$="-userlist-user-${id}"] strong, [id$="-userlist-user-${id}"] span { color: ${color} !important; }\n`;
 };
 
 const updateColor = async () => {
