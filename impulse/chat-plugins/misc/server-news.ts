@@ -8,7 +8,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
 interface NewsEntry {
-	_id?: any;
+	_id?: unknown;
 	title: string;
 	postedBy: string;
 	desc: string;
@@ -21,7 +21,7 @@ const serverName = Config.serverName || 'Impulse';
 const NewsDB = ImpulseDB<NewsEntry>('news');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const formatDate = (date: Date = new Date()) => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+const formatDate = (date: Date = new Date()): string => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
 class NewsManager {
 	static async generateNewsDisplay(): Promise<string[]> {
@@ -31,7 +31,7 @@ class NewsManager {
 		);
 	}
 
-	static async onUserConnect(user: User) {
+	static async onUserConnect(user: User): Promise<void> {
 		if (!await NewsDB.exists({})) return;
 		const news = await this.generateNewsDisplay();
 		if (news.length) {
@@ -68,7 +68,7 @@ class NewsManager {
 	}
 }
 
-export const loginfilter = function(user: User, oldUser: User | null, userType: string) {
+export const loginfilter = function(user: User, oldUser: User | null, userType: string): void {
 	void NewsManager.onUserConnect(user);
 };
 
@@ -76,7 +76,7 @@ export const commands: Chat.ChatCommands = {
 	servernews: {
 		'': 'view',
 		display: 'view',
-		async view(target, room, user) {
+		async view(target, room, user): Promise<void> {
 			const news = await NewsManager.generateNewsDisplay();
 			const output = news.length ?
 				`<center><strong>Server News:</strong></center>${news.join('<hr>')}` :
@@ -85,7 +85,7 @@ export const commands: Chat.ChatCommands = {
 			user.send(`|popup||html|<div class="infobox">${output}</div>`);
 		},
 
-		async add(target, room, user) {
+		async add(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
@@ -103,7 +103,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Added: "${trimmedTitle}"`);
 		},
 
-		async update(target, room, user) {
+		async update(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
@@ -119,7 +119,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		remove: 'delete',
-		async delete(target, room, user) {
+		async delete(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
@@ -131,7 +131,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Deleted: "${trimmedTitle}"`);
 		},
 
-		async cleanup(target, room, user) {
+		async cleanup(target, room, user): Promise<void> {
 			this.checkCan('bypassall');
 			const days = Math.max(parseInt(target) || 90, 1);
 
@@ -142,7 +142,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	svn: 'servernews',
 
-	servernewshelp() {
+	servernewshelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/servernews view", desc: "View the latest 3 server news."},
