@@ -21,7 +21,7 @@ interface PerRoomAutotourConfig {
 	enabled: boolean;
 	modifier?: string;
 	lastTourTime?: number;
-	_id?: any;
+	_id?: unknown;
 }
 
 const ALL_TOUR_TYPES = [
@@ -54,7 +54,7 @@ const autotourCollection = new ImpulseCollection<PerRoomAutotourConfig>(AUTOTOUR
 let autotourConfig: Record<string, PerRoomAutotourConfig> = {};
 let autotourIntervals: Record<string, NodeJS.Timeout> = {};
 
-async function saveConfig(roomid: string) {
+async function saveConfig(roomid: string): Promise<void> {
 	const config = autotourConfig[roomid];
 	await autotourCollection.updateOne(
 		{roomid},
@@ -63,7 +63,7 @@ async function saveConfig(roomid: string) {
 	);
 }
 
-async function loadConfig() {
+async function loadConfig(): Promise<void> {
 	const configs = await autotourCollection.find({});
 	autotourConfig = {};
 	for (const config of configs) {
@@ -99,7 +99,7 @@ function pickTourTypeAndModifier(types: string[]): {type: string, modifier?: str
 	return {type};
 }
 
-function startRoomAutotourScheduler(roomid: string) {
+function startRoomAutotourScheduler(roomid: string): void {
 	stopRoomAutotourScheduler(roomid);
 	const config = autotourConfig[roomid];
 	if (!config?.enabled) return;
@@ -107,18 +107,18 @@ function startRoomAutotourScheduler(roomid: string) {
 	autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), min * 60 * 1000);
 }
 
-function stopRoomAutotourScheduler(roomid: string) {
+function stopRoomAutotourScheduler(roomid: string): void {
 	if (autotourIntervals[roomid]) clearInterval(autotourIntervals[roomid]);
 	delete autotourIntervals[roomid];
 }
 
-async function updateLastTourTime(roomid: string, time: number) {
+async function updateLastTourTime(roomid: string, time: number): Promise<void> {
 	if (!autotourConfig[roomid]) return;
 	autotourConfig[roomid].lastTourTime = time;
 	await saveConfig(roomid);
 }
 
-function runAutotour(roomid: string) {
+function runAutotour(roomid: string): void {
 	const config = autotourConfig[roomid];
 	if (!config?.enabled) return;
 	const room = Rooms.get(roomid);
@@ -180,24 +180,25 @@ function runAutotour(roomid: string) {
 			autotourConfig[roomid].lastTourTime = now;
 			void saveConfig(roomid);
 		}
-	} catch (err: any) {
+	} catch (err: unknown) {
 	}
 }
 
-function checkRoomOwner(context: any, room: ChatRoom | null): boolean {
+function checkRoomOwner(context: unknown, room: ChatRoom | null): boolean {
+	const ctx = context as { user: User; errorReply: (msg: string) => void };
 	if (!room) {
-		context.errorReply('Use this command in a room.');
+		ctx.errorReply('Use this command in a room.');
 		return false;
 	}
-	if (context.user.can('declare', null, room)) return true;
-	if (room.auth && room.founder && context.user.id === toID(room.founder)) return true;
-	context.errorReply('Only the Room Owner or a global Admin can use this command in this room.');
+	if (ctx.user.can('declare', null, room)) return true;
+	if (room.auth && room.founder && ctx.user.id === toID(room.founder)) return true;
+	ctx.errorReply('Only the Room Owner or a global Admin can use this command in this room.');
 	return false;
 }
 
 export const commands: Chat.ChatCommands = {
 	autotour: {
-		async enable(target, room, user) {
+		async enable(target, room, user): Promise<void> {
 			if (!checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
 			if (!autotourConfig[roomid]) autotourConfig[roomid] = {roomid, ...defaultRoomConfig};
@@ -206,7 +207,7 @@ export const commands: Chat.ChatCommands = {
 			startRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour enabled for room ${roomid}.`);
 		},
-		async disable(target, room, user) {
+		async disable(target, room, user): Promise<void> {
 			if (!checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
 			if (!autotourConfig[roomid]) autotourConfig[roomid] = {roomid, ...defaultRoomConfig};
@@ -215,7 +216,7 @@ export const commands: Chat.ChatCommands = {
 			stopRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour disabled for room ${roomid}.`);
 		},
-		async set(target, room, user) {
+		async set(target, room, user): Promise<void> {
 			if (!checkRoomOwner(this, room)) return;
 			const args = target.split(',').map(s => s.trim());
 			const [key, ...rest] = args;
@@ -303,7 +304,7 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(roomid);
 			if (config.enabled) startRoomAutotourScheduler(roomid);
 		},
-		show(target, room, user) {
+		show(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			if (!checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
@@ -325,7 +326,7 @@ export const commands: Chat.ChatCommands = {
 			const tableHTML = generateThemedTable(`Autotour settings for ${roomid}`, [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
-		nextrun(target, room, user) {
+		nextrun(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			const roomid = target ? toID(target) : room?.roomid;
 			if (!roomid) return this.errorReply('Specify a room.');
@@ -347,7 +348,7 @@ export const commands: Chat.ChatCommands = {
 			]);
 			this.sendReply(`|html|${tableHTML}`);
 		},
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/autotour enable", desc: "Enable autotour in this room. Requires: #/~."},
@@ -366,7 +367,7 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-void (async () => {
+void (async (): Promise<void> => {
 	await loadConfig();
 	for (const roomid in autotourConfig) {
 		if (autotourConfig[roomid]?.enabled) startRoomAutotourScheduler(roomid);
