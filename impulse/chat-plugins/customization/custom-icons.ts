@@ -51,8 +51,12 @@ const updateIcons = async () => {
 		const start = file.indexOf('/* ICONS START */');
 		const end = file.indexOf('/* ICONS END */');
 
-		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
-		await FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
+		if (start !== -1 && end !== -1 && start < end) {
+			file.splice(start, (end - start + 1), ...css.split('\n'));
+			await FS('config/custom.css').writeUpdate(() => file.join('\n'));
+		} else {
+			await FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
+		}
 		Impulse.reloadCSS();
 	} catch (err) {}
 };
