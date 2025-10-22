@@ -33,4 +33,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	zygardite: {
+		inherit: true,
+		onTakeItem(item, source) {
+			if ((source.baseSpecies.baseSpecies === 'Zygarde' && source.baseAbility === 'powerconstruct') ||
+				source.baseSpecies.name === 'Zygarde-Mega') return false;
+			return true;
+		},
+	},
 };
