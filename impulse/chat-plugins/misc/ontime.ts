@@ -19,7 +19,7 @@ const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
 const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>('ontimeblocks');
 const ONTIME_LEADERBOARD_SIZE = 100;
 
-const convertTime = (time: number) => {
+const convertTime = (time: number): { h: number; m: number; s: number } => {
 	const s = Math.floor((time / 1000) % 60);
 	const m = Math.floor((time / (1000 * 60)) % 60);
 	const h = Math.floor(time / (1000 * 60 * 60));
@@ -44,7 +44,7 @@ async function getBlockedOntimeUsers(): Promise<string[]> {
 }
 
 export const handlers: Chat.Handlers = {
-	async onDisconnect(user: User) {
+	async onDisconnect(user: User): Promise<void> {
 		const isLastConnection = user.connections.length === 0;
 		if (user.named && isLastConnection && !user.isPublicBot) {
 			if (await isBlockedOntime(user.id)) return;
@@ -59,7 +59,7 @@ export const handlers: Chat.Handlers = {
 export const commands: Chat.ChatCommands = {
 	ontime: {
 		'': 'check',
-		async check(target, room, user) {
+		async check(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 
 			const targetId = toID(target) || user.id;
@@ -86,7 +86,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		async ladder(target, room, user) {
+		async ladder(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 
 			const blockedUsers = await getBlockedOntimeUsers();
@@ -123,7 +123,7 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply(`|raw|${tableHTML}`);
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/ontime [user]", desc: "Check user's online time."},
@@ -140,7 +140,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
-		async block(target, room, user) {
+		async block(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to block.");
@@ -151,7 +151,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
 		},
 
-		async unblock(target, room, user) {
+		async unblock(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to unblock.");
@@ -162,7 +162,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
 		},
 
-		async blocked(target, room, user) {
+		async blocked(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const blockedUsers = await getBlockedOntimeUsers();
 			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
@@ -172,5 +172,5 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 
-	ontimehelp() { this.parse('/ontime help'); },
+	ontimehelp(): void { this.parse('/ontime help'); },
 };
