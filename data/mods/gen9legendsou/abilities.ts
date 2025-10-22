@@ -5,10 +5,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
-		onResidual(pokemon, target) {
-			if (target?.baseSpecies.isMega && !target.fainted) {
-				this.damage(target.baseMaxhp / 10, target, pokemon);
-				this.heal(target.baseMaxhp / 10);
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const megaFoes = [];
+			for (const target of pokemon.foes()) {
+				if (target.baseSpecies.isMega) megaFoes.push(target);
+			}
+			if (megaFoes.length) {
+				for (const target of megaFoes) {
+					this.damage(target.baseMaxhp / 10, target, pokemon);
+					this.heal(target.baseMaxhp / 10);
+				}
 			} else {
 				this.heal(pokemon.baseMaxhp / 12);
 			}
