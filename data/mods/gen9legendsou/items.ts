@@ -1,18 +1,4 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
-	slowbronite: {
-		inherit: true,
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name) return false;
-			return true;
-		},
-	},
-	greninjite: {
-		inherit: true,
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name) return false;
-			return true;
-		},
-	},
 	chesnaughtite: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -32,5 +18,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	diancite: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
+	},
+	zygardite: {
+		inherit: true,
+		onTakeItem(item, source) {
+			// needs special handling because of intermediate form
+			if ((source.baseSpecies.baseSpecies === 'Zygarde' && source.baseAbility === 'Power Construct') ||
+			source.baseSpecies.name === 'Zygarde-Mega') return false;
+			return true;
+		},
 	},
 };
