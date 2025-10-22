@@ -57,9 +57,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (toID(source.ability) === 'multitype') return false;
 			}
 			const item = this.getItem();
-			if ((this.baseSpecies.name === item.megaEvolves && (
-				item.id !== 'zygardite' || this.baseAbility === 'powerconstruct')
-			) || this.baseSpecies.name === item.megaStone) {
+			if (this.baseSpecies.name === item.megaEvolves || this.baseSpecies.name === item.megaStone) {
 				return false;
 			}
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
