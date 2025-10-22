@@ -1,9 +1,10 @@
+
 /*
 * Pokemon Showdown
 * Color Module
 */
 import * as crypto from 'crypto';
-import { FS } from '../lib/fs';
+import { ImpulseDB } from './impulse-db';
 
 /**
  * RGB color representation
@@ -22,7 +23,7 @@ interface CustomColors {
 }
 
 /**
- * Color document structure in database/file
+ * Color document structure in database
  */
 interface ColorDocument {
 	userid: string;
@@ -32,46 +33,21 @@ interface ColorDocument {
 let customColors: CustomColors = {};
 const colorCache: Record<string, string> = {};
 
-const CUSTOM_COLORS_FILE = 'impulse/db/customcolors.json';
-
 /**
- * Loads custom colors from a JSON file using FS
+ * Loads custom colors from the database
  */
 export const loadCustomColorsFromDB = async (): Promise<void> => {
 	try {
-		const data = await FS(CUSTOM_COLORS_FILE).readIfExists();
-		// Accept either array of ColorDocument or object map
-		let parsed: CustomColors | ColorDocument[] = {};
-		if (data) parsed = JSON.parse(data);
+		const colorDocs = await ImpulseDB<ColorDocument>('customcolors').find({});
 		customColors = {};
-		if (Array.isArray(parsed)) {
-			parsed.forEach(doc => {
-				if (doc.userid && doc.color) {
-					customColors[doc.userid] = doc.color;
-				}
-			});
-		} else {
-			// object map
-			Object.assign(customColors, parsed);
-		}
+		colorDocs.forEach(doc => {
+			customColors[doc.userid] = doc.color;
+		});
 	} catch (e) {
 		console.error('Error loading colors:', e);
-		customColors = {};
 	}
 };
 
-/**
- * Saves custom colors to disk (JSON)
- */
-export const saveCustomColorsToDB = async (): Promise<void> => {
-	try {
-		await FS(CUSTOM_COLORS_FILE).safeWrite(JSON.stringify(customColors, null, 2));
-	} catch (e) {
-		console.error('Error saving colors:', e);
-	}
-};
-
-// Initialize colors from file at startup
 loadCustomColorsFromDB().catch(err => console.error('Failed to init colors:', err));
 
 /**
@@ -85,13 +61,11 @@ export const getCustomColors = (): CustomColors => customColors;
  * @param colors - Custom colors object to set
  */
 export const setCustomColors = (colors: CustomColors): void => { 
-	customColors = colors;
-	// Save to disk
-	void saveCustomColorsToDB();
+	customColors = colors; 
 };
 
 /**
- * Reloads custom colors from file and clears cache
+ * Reloads custom colors from database and clears cache
  */
 export const reloadCustomColors = async (): Promise<void> => {
 	await loadCustomColorsFromDB();
@@ -187,7 +161,7 @@ export const clearColorCache = (): void => {
  */
 export const nameColor = (
 	name: string, 
-	bold = true, 
+	bold = false, 
 	userGroup = false, 
 	room: Room | null = null
 ): string => {
