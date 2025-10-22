@@ -12,7 +12,7 @@ import { generateThemedTable } from '../../utils';
 const STAFF_ROOM_ID = 'staff';
 
 Impulse.reloadCSS = () => {
-	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid || 'impulse'}`;
+	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
 	const req = https.get(url, res => {});
 	req.on('error', err => {});
 	req.end();
