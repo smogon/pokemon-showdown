@@ -104,7 +104,22 @@ function startRoomAutotourScheduler(roomid: string): void {
 	const config = autotourConfig[roomid];
 	if (!config?.enabled) return;
 	const min = Math.max(1, config.interval);
-	autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), min * 60 * 1000);
+	const intervalMs = min * 60 * 1000;
+	
+	// Calculate time until next tour
+	const now = Date.now();
+	const lastRun = config.lastTourTime || now;
+	const nextRun = lastRun + intervalMs;
+	const timeUntilNext = Math.max(0, nextRun - now);
+	
+	// If we're overdue, schedule for the next interval instead of immediately
+	const delay = timeUntilNext === 0 ? intervalMs : timeUntilNext;
+	
+	// Schedule the next tour
+	autotourIntervals[roomid] = setTimeout(() => {
+		runAutotour(roomid);
+		autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), intervalMs);
+	}, delay);
 }
 
 function stopRoomAutotourScheduler(roomid: string): void {
@@ -365,6 +380,12 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 	},
+};
+
+export const destroy = (): void => {
+	for (const roomid in autotourIntervals) {
+		stopRoomAutotourScheduler(roomid);
+	}
 };
 
 void (async (): Promise<void> => {
