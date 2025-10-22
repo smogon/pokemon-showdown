@@ -14,12 +14,12 @@ interface SeenDocument {
 
 const SeenDB = ImpulseDB<SeenDocument>('seen');
 
-export const trackSeen = (userid: string) => {
+export const trackSeen = (userid: string): void => {
 	void SeenDB.upsert({ _id: userid }, { $set: { lastSeen: new Date() } }).catch(err => {});
 };
 
 export const handlers: Chat.Handlers = {
-	onDisconnect(user: User) {
+	onDisconnect(user: User): void {
 		if (user.named && user.connections.length === 0) trackSeen(user.id);
 	}
 };
@@ -64,7 +64,7 @@ const clearRooms = (rooms: Room[], user: User): string[] => {
 
 export const commands: Chat.ChatCommands = {
 	seen: {
-		async ''(target, room, user) {
+		async ''(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.parse('/seen help');
 
@@ -81,12 +81,13 @@ export const commands: Chat.ChatCommands = {
 
 				const duration = Chat.toDurationString(Date.now() - lastSeen.getTime(), { precision: true });
 				this.sendReplyBox(`${nameColor(target, true, true)} was last seen <b>${duration}</b> ago.`);
-			} catch (err: any) {
-				this.errorReply('Error retrieving seen data: ' + err.message);
+			} catch (err: unknown) {
+				const message = err instanceof Error ? err.message : String(err);
+				this.errorReply('Error retrieving seen data: ' + message);
 			}
 		},
 
-		async recent(target, room, user) {
+		async recent(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
@@ -109,12 +110,13 @@ export const commands: Chat.ChatCommands = {
 				);
 
 				this.sendReply(`|raw|${tableHTML}`);
-			} catch (err: any) {
-				this.errorReply('Error: ' + err.message);
+			} catch (err: unknown) {
+				const message = err instanceof Error ? err.message : String(err);
+				this.errorReply('Error: ' + message);
 			}
 		},
 
-		async cleanup(target, room, user) {
+		async cleanup(target, room, user): Promise<void> {
 			this.checkCan('roomownwr');
 			if (!this.runBroadcast()) return;
 
@@ -124,12 +126,13 @@ export const commands: Chat.ChatCommands = {
 			try {
 				const deleted = await cleanupOldSeen(days);
 				this.sendReply(`Deleted ${deleted} records older than ${days} days.`);
-			} catch (err: any) {
-				this.errorReply('Error: ' + err.message);
+			} catch (err: unknown) {
+				const message = err instanceof Error ? err.message : String(err);
+				this.errorReply('Error: ' + message);
 			}
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/seen [user]", desc: "Shows the last connection time for a user."},
@@ -145,10 +148,10 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 
-	seenhelp() { this.parse('/seen help'); },
+	seenhelp(): void { this.parse('/seen help'); },
 
 	clearall: {
-		async ''(target, room, user) {
+		async ''(target, room, user): Promise<void> {
 			if (room?.battle) return this.sendReply("Cannot clearall in battle rooms.");
 			if (!room) return this.errorReply("Requires a room.");
 
@@ -156,13 +159,13 @@ export const commands: Chat.ChatCommands = {
 			clearRooms([room], user);
 		},
 
-		async global(target, room, user) {
+		async global(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const rooms = Rooms.global.chatRooms.filter((r): r is Room => !!r && !r.battle);
 			clearRooms(rooms, user);
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/clearall", desc: "Clear the current room chat. Requires: #."},
@@ -177,8 +180,8 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 
-	globalclearall() { this.parse('/clearall global'); },
-	clearallhelp() { this.parse('/clearall help'); },
-	recentseen() { this.parse('/seen recent'); },
-	cleanupseen() { this.parse('/seen cleanup'); },
+	globalclearall(): void { this.parse('/clearall global'); },
+	clearallhelp(): void { this.parse('/clearall help'); },
+	recentseen(): void { this.parse('/seen recent'); },
+	cleanupseen(): void { this.parse('/seen cleanup'); },
 };
