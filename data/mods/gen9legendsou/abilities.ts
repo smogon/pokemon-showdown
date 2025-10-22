@@ -6,9 +6,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon, target) {
-			if (target?.hp && !target.fainted && target.species.isMega) {
+			if (target?.baseSpecies.isMega && !target.fainted) {
 				this.damage(target.baseMaxhp / 10, target, pokemon);
-				this.heal(pokemon.baseMaxhp / 10);
+				this.heal(target.baseMaxhp / 10);
 			} else {
 				this.heal(pokemon.baseMaxhp / 12);
 			}
@@ -30,13 +30,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove(move, attacker) {
 			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Mega' &&
 				!attacker.transformed) {
-				delete move.multihit;
+				move.multihit = 3;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
-		desc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 75 power, hits 1x.",
-		shortDesc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 75 power, hits 1x.",
+		desc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 20 power, hits 3x.",
+		shortDesc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 20 power, hits 3x.",
 	},
 	brassbond: {
 		onPrepareHit(source, target, move) {
@@ -45,18 +45,39 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			move.multihit = 3;
 			move.multihitType = 'brassbond' as 'parentalbond';
 		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.effectType === 'Move' && effect.multihitType && effect.hit > 1 &&
+				source && target === source) {
+				let i: keyof BoostsTable;
+				for (i in boost) {
+					delete boost[i];
+				}
+			}
+		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
 		onSourceModifySecondaries(secondaries, target, source, move) {
-			if (move.multihitType && move.id === 'secretpower' && move.hit < 2) {
-				// hack to prevent accidentally suppressing King's Rock/Razor Fang
-				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			if (move.multihitType && move.hit > 1) {
+				return [];
 			}
 		},
 		flags: {},
 		name: "Brass Bond",
 		gen: 9,
-		desc: "This Pokemon's damaging moves hit 3x. The second and third hits do 1/10 of the original damage.",
-		shortDesc: "This Pokemon's damaging moves hit 3x. The second and third hits do 1/10 of the original damage.",
+		desc: "This Pokemon's damaging moves hit 3x. Successive hits do 15% damage without added effects.",
+		shortDesc: "This Pokemon's damaging moves hit 3x. Successive hits do 15% damage without added effects.",
+	},
+	contrarian: {
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= -2;
+			}
+		},
+		name: "Contrarian",
+		desc: "This Pokemon has its stat changes inverted and doubled.",
+		shortDesc: "This Pokemon has its stat changes inverted and doubled.",
+		gen: 9,
 	},
 	corrosion: {
 		inherit: true,
@@ -67,7 +88,39 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.ignoreImmunity['Poison'] = true;
 			}
 		},
-		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit it with Poison moves.",
+		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit them with Poison moves.",
+	},
+	ionbattery: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			return this.chainModify(1.5);
+		},
+		flags: { breakable: 1 },
+		name: "Ion Battery",
+		desc: "This Pokemon floats and has 1.5x Sp. Atk.",
+		shortDesc: "This Pokemon floats and has 1.5x Sp. Atk.",
+	},
+	leaderofthepride: {
+		onStart(pokemon) {
+			pokemon.updateMaxHp();
+			if (this.field.setWeather('sunnyday')) {
+				this.add('-activate', pokemon, 'Leader of the Pride', '[source]');
+			} else if (this.field.isWeather('sunnyday')) {
+				this.add('-activate', pokemon, 'ability: Leader of the Pride');
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				this.debug('leader of the pride boost');
+				return this.chainModify([5461, 4096]);
+			}
+		},
+		flags: {},
+		name: "Leader of the Pride",
+		gen: 9,
+		desc: "On switch-in, summons Sunny Day. During Sunny Day, Sp. Atk is 1.3333x.",
+		shortDesc: "On switch-in, summons Sunny Day. During Sunny Day, Sp. Atk is 1.3333x.",
 	},
 	luchadorspride: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -99,5 +152,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: { breakable: 1 },
+	},
+	minus: {
+		inherit: true,
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			for (const allyActive of pokemon.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus', 'ionbattery'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
+	},
+	plus: {
+		inherit: true,
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			for (const allyActive of pokemon.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus', 'ionbattery'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 	},
 };
