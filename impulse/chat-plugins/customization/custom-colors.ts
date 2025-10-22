@@ -5,14 +5,8 @@
 
 import https from 'https';
 import { FS } from '../../../lib';
-import {
-	validateHexColor,
-	clearColorCache,
-	loadCustomColorsFromDB,
-	nameColor,
-	getCustomColors,
-	setCustomColors,
-} from '../../colors';
+import { ImpulseDB } from '../../impulse-db';
+import { validateHexColor, clearColorCache, loadCustomColorsFromDB, nameColor } from '../../colors';
 import { generateThemedTable } from '../../utils';
 
 const STAFF_ROOM_ID = 'staff';
@@ -26,20 +20,18 @@ Impulse.reloadCSS = () => {
 
 const generateCSS = (name: string, color: string): string => {
 	const id = toID(name);
-	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, [class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, [id$="-userlist-user-${id}"] strong {\n` +
-		`  color: ${color} !important;\n` +
-		`}\n`;
+	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, [class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, [id$="-userlist-user-${id}"] strong { color: ${color} !important; }\n`;
 };
 
 const updateColor = async () => {
 	try {
-		await loadCustomColorsFromDB();
-		const customColors = getCustomColors();
+		const colorDocs = await ImpulseDB('customcolors').find({});
 		let css = '/* COLORS START */\n';
 
-		for (const userid in customColors) {
-			css += generateCSS(userid, customColors[userid]);
-		}
+		colorDocs.forEach(doc => {
+			css += generateCSS(doc.userid, doc.color);
+		});
+
 		css += '/* COLORS END */\n';
 
 		const fileContent = await FS('config/custom.css').readIfExists();
@@ -47,19 +39,14 @@ const updateColor = async () => {
 
 		const start = file.indexOf('/* COLORS START */');
 		const end = file.indexOf('/* COLORS END */');
-		if (start !== -1 && end !== -1 && start < end) {
-			file.splice(start, (end - start + 1), ...css.split('\n'));
-			await FS('config/custom.css').writeUpdate(() => file.join('\n'));
-		} else {
-			await FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
-		}
+		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
+
+		await FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
 
 		clearColorCache();
 		await loadCustomColorsFromDB();
 		Impulse.reloadCSS();
-	} catch (e) {
-		console.error('Error updating custom colors CSS:', e);
-	}
+	} catch (e) {}
 };
 
 export const commands: Chat.ChatCommands = {
@@ -80,14 +67,14 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			const customColors = getCustomColors();
-			customColors[targetId] = color;
-			setCustomColors(customColors); // Saves to disk
+			await ImpulseDB('customcolors').upsert(
+				{ userid: targetId },
+				{ $set: { userid: targetId, color, updatedBy: user.id, updatedAt: new Date() } }
+			);
 
 			await updateColor();
 
 			this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(name)}</font></b> a custom color.`);
-			this.parse(`/cc reload`);
 
 			const staffRoom = Rooms.get(STAFF_ROOM_ID);
 			if (staffRoom) {
@@ -100,16 +87,14 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/customcolorhelp');
 
 			const targetId = toID(target);
-			const customColors = getCustomColors();
+			const colorDoc = await ImpulseDB('customcolors').findOne({ userid: targetId });
 
-			if (!customColors[targetId]) return this.errorReply(`${target} does not have a custom color.`);
+			if (!colorDoc) return this.errorReply(`${target} does not have a custom color.`);
 
-			delete customColors[targetId];
-			setCustomColors(customColors); // Saves to disk
+			await ImpulseDB('customcolors').deleteOne({ userid: targetId });
 			await updateColor();
 
 			this.sendReply(`You removed ${target}'s custom color.`);
-			this.parse(`/cc reload`);
 
 			const targetUser = Users.get(target);
 			if (targetUser?.connected) {
@@ -143,24 +128,27 @@ export const commands: Chat.ChatCommands = {
 		async list(target, room, user) {
 			this.checkCan('roomowner');
 
-			const customColors = getCustomColors();
-			const userids = Object.keys(customColors).sort();
+			try {
+				const colorDocs = await ImpulseDB('customcolors').find({}, { sort: { userid: 1 } });
 
-			if (userids.length === 0) return this.sendReply('No custom colors are currently set.');
+				if (colorDocs.length === 0) return this.sendReply('No custom colors are currently set.');
 
-			const rows: string[][] = userids.map(userid => [
-				Chat.escapeHTML(userid),
-				`<code>${Chat.escapeHTML(customColors[userid])}</code>`,
-				`<b><font color="${customColors[userid]}">${Chat.escapeHTML(userid)}</font></b>`,
-			]);
+				const rows: string[][] = colorDocs.map(doc => [
+					Chat.escapeHTML(doc.userid),
+					`<code>${Chat.escapeHTML(doc.color)}</code>`,
+					`<b><font color="${doc.color}">${Chat.escapeHTML(doc.userid)}</font></b>`,
+				]);
 
-			const output = generateThemedTable(
-				`Custom Colors (${userids.length} users)`,
-				['User', 'Color', 'Preview'],
-				rows,
-			);
+				const output = generateThemedTable(
+					`Custom Colors (${colorDocs.length} users)`,
+					['User', 'Color', 'Preview'],
+					rows,
+				);
 
-			this.sendReply(`|raw|${output}`);
+				this.sendReply(`|raw|${output}`);
+			} catch (err) {
+				return this.errorReply('Failed to list custom colors.');
+			}
 		},
 
 		help() {
