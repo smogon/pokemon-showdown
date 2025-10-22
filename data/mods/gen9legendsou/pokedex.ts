@@ -82,11 +82,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	greninjamega: {
 		inherit: true,
-		abilities: { 0: "Battle Bond" },
+		abilities: { 0: "Technician" },
 	},
 	pyroarmega: {
 		inherit: true,
-		abilities: { 0: "Leader of the Pride" },
+		abilities: { 0: "Drought" },
 	},
 	dragalgemega: {
 		inherit: true,
