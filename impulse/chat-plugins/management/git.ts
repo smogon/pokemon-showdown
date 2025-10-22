@@ -27,7 +27,7 @@ async function findGitRoot(startPath: string): Promise<string | null> {
 }
 
 export const commands: Chat.ChatCommands = {
-	async gitpull(target, room, user) {
+	async gitpull(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		
@@ -44,13 +44,14 @@ export const commands: Chat.ChatCommands = {
 			});
 			
 			return this.sendReplyBox(`<details><summary>Git pull completed</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Git pull failed: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Git pull failed: ${message}`);
 		}
 	},
 	gitpullhelp: [`/gitpull - Pulls the latest changes from git repository. Requires: ~`],
 	
-	async gitstatus(target, room, user) {
+	async gitstatus(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
 		
@@ -67,13 +68,14 @@ export const commands: Chat.ChatCommands = {
 			});
 			
 			return this.sendReplyBox(`<details><summary>Git status</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
-		} catch (err: any) {
-			throw new Chat.ErrorMessage(`Git status failed: ${err.message}`);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Git status failed: ${message}`);
 		}
 	},
 	gitstatushelp: [`/gitstatus - Shows the current git status. Requires: ~`],
 	
-	async githelp() {
+	async githelp(): Promise<void> {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/gitpull", desc: "Pulls the latest changes from git repository. Requires: ~."},
