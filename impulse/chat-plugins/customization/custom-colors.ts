@@ -40,7 +40,6 @@ const updateColor = async () => {
 		for (const userid in customColors) {
 			css += generateCSS(userid, customColors[userid]);
 		}
-
 		css += '/* COLORS END */\n';
 
 		const fileContent = await FS('config/custom.css').readIfExists();
@@ -48,14 +47,19 @@ const updateColor = async () => {
 
 		const start = file.indexOf('/* COLORS START */');
 		const end = file.indexOf('/* COLORS END */');
-		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
-
-		await FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
+		if (start !== -1 && end !== -1 && start < end) {
+			file.splice(start, (end - start + 1), ...css.split('\n'));
+			await FS('config/custom.css').writeUpdate(() => file.join('\n'));
+		} else {
+			await FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
+		}
 
 		clearColorCache();
 		await loadCustomColorsFromDB();
 		Impulse.reloadCSS();
-	} catch (e) {}
+	} catch (e) {
+		console.error('Error updating custom colors CSS:', e);
+	}
 };
 
 export const commands: Chat.ChatCommands = {
