@@ -1871,6 +1871,7 @@ export class BattleActions {
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
+		if (!item.megaStone) return false;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		if (this.battle.dex.species.get(item.megaEvolves).baseSpecies === pokemon.baseSpecies.baseSpecies &&
 			item.megaStone !== species.name) {
