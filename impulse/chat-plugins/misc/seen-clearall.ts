@@ -39,10 +39,20 @@ export const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
 	return result.deletedCount || 0;
 };
 
-const clearRooms = (rooms: Room[], user: User): string[] => {
+/**
+ * Returns an object with two arrays:
+ * - cleared: rooms successfully cleared
+ * - failed: rooms not cleared due to tournament
+ */
+const clearRooms = (rooms: Room[], user: User): {cleared: string[], failed: string[]} => {
 	const cleared: string[] = [];
+	const failed: string[] = [];
 	for (const room of rooms) {
 		if (!room) continue;
+		if (room.game && room.game.gameid === 'tournament') {
+			failed.push(room.id);
+			continue;
+		}
 		if (room.log.log) room.log.log.length = 0;
 
 		const userIds = Object.keys(room.users) as ID[];
@@ -59,7 +69,7 @@ const clearRooms = (rooms: Room[], user: User): string[] => {
 			});
 		}, 1000);
 	}
-	return cleared;
+	return { cleared, failed };
 };
 
 export const commands: Chat.ChatCommands = {
@@ -156,13 +166,26 @@ export const commands: Chat.ChatCommands = {
 			if (!room) return this.errorReply("Requires a room.");
 
 			this.checkCan('roommod', null, room);
-			clearRooms([room], user);
+
+			const { cleared, failed } = clearRooms([room], user);
+			if (failed.length) {
+				return this.errorReply(
+					`Cannot clear room "${room.id}" because a tournament is running.`
+				);
+			}
+			staff.add(`|html|<div class="infobox">${user.name} used /globalclearall</div>`);
 		},
 
 		async global(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const rooms = Rooms.global.chatRooms.filter((r): r is Room => !!r && !r.battle);
-			clearRooms(rooms, user);
+			const { cleared, failed } = clearRooms(rooms, user);
+			if (failed.length) {
+				this.errorReply(
+					`Cannot clear the following rooms because a tournament is running: ${failed.join(', ')}`
+				);
+			}
+			staff.add(`|html|<div class="infobox">${user.name} used /globalclearall</div>`);
 		},
 
 		help(): void {
@@ -177,6 +200,43 @@ export const commands: Chat.ChatCommands = {
 								).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
+		},
+	},
+
+	/**
+	 * Admin command to forcibly destroy a stuck tournament in a room.
+	 * Usage: /cleantour [roomid]
+	 * Only for roomowner/global staff.
+	 */
+	cleantour: {
+		async ''(target, room, user): Promise<void> {
+			const roomid = toID(target) || room?.roomid;
+			if (!roomid) return this.errorReply("Specify a room.");
+			const targetRoom = Rooms.get(roomid);
+			if (!targetRoom) return this.errorReply(`Room "${roomid}" not found.`);
+			if (!user.can('roomowner', null, targetRoom) && !user.can('declare', null, targetRoom)) {
+				return this.errorReply("Requires: Room Owner or Global Admin.");
+			}
+			if (targetRoom.game && targetRoom.game.gameid === 'tournament') {
+				try {
+					if (typeof targetRoom.game.end === 'function') {
+						targetRoom.game.end();
+					}
+					targetRoom.game = null;
+					this.sendReply(`Cleaned up stuck tournament in "${roomid}". Autotour will resume on next interval.`);
+				} catch (err) {
+					targetRoom.game = null;
+					this.errorReply(`Tournament forcibly removed from "${roomid}".`);
+				}
+			} else {
+				return this.errorReply(`No tournament is running in "${roomid}".`);
+			}
+		},
+		help(): void {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(
+				`<b>/cleantour [room]</b>: Forcibly destroys a stuck tournament in the room. Requires: # or ~`
+			);
 		},
 	},
 
