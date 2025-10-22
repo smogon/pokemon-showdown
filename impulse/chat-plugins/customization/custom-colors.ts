@@ -87,6 +87,7 @@ export const commands: Chat.ChatCommands = {
 			await updateColor();
 
 			this.sendReply(`|raw|You have given <b><font color="${color}">${Chat.escapeHTML(name)}</font></b> a custom color.`);
+			this.parse(`/cc reload`);
 
 			const staffRoom = Rooms.get(STAFF_ROOM_ID);
 			if (staffRoom) {
@@ -108,6 +109,7 @@ export const commands: Chat.ChatCommands = {
 			await updateColor();
 
 			this.sendReply(`You removed ${target}'s custom color.`);
+			this.parse(`/cc reload`);
 
 			const targetUser = Users.get(target);
 			if (targetUser?.connected) {
