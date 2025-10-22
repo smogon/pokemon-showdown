@@ -347,12 +347,18 @@ export const commands: Chat.ChatCommands = {
 			if (!roomid) return this.errorReply('Specify a room.');
 			const config = autotourConfig[roomid];
 			if (!config?.enabled) return this.errorReply(`Autotour is not enabled in ${roomid}.`);
-			let lastRun = config.lastTourTime;
-			if (!lastRun) {
-				lastRun = Date.now() - (config.interval * 60 * 1000);
+	
+			const now = Date.now();
+			const intervalMs = config.interval * 60 * 1000;
+			const lastRun = config.lastTourTime || (now - intervalMs);
+			const nextRun = lastRun + intervalMs;
+			let timeRemaining = Math.max(0, nextRun - now);
+	
+			// If overdue, next tour is one full interval away
+			if (timeRemaining === 0) {
+				timeRemaining = intervalMs;
 			}
-			const nextRun = lastRun + (config.interval * 60 * 1000);
-			const timeRemaining = Math.max(0, nextRun - Date.now());
+	
 			const minutes = Math.floor(timeRemaining / 60000);
 			const seconds = Math.floor((timeRemaining % 60000) / 1000);
 			const tableHTML = generateThemedTable(`Next Autotour in ${roomid}`, [], [
