@@ -25,10 +25,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Abomasnow-Mega",
 		megaEvolves: "Abomasnow",
 		itemUser: ["Abomasnow"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 674,
 		gen: 6,
 		isNonstandard: "Past",
@@ -39,10 +35,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Absol-Mega",
 		megaEvolves: "Absol",
 		itemUser: ["Absol"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 677,
 		gen: 6,
 		isNonstandard: "Past",
@@ -130,10 +122,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
 		itemUser: ["Aerodactyl"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 672,
 		gen: 6,
 		isNonstandard: "Past",
@@ -144,10 +132,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
 		itemUser: ["Aggron"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 667,
 		gen: 6,
 		isNonstandard: "Past",
@@ -214,10 +198,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
 		itemUser: ["Alakazam"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 679,
 		gen: 6,
 		isNonstandard: "Past",
@@ -239,10 +219,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Altaria-Mega",
 		megaEvolves: "Altaria",
 		itemUser: ["Altaria"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 755,
 		gen: 6,
 		isNonstandard: "Past",
@@ -253,10 +229,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
 		itemUser: ["Ampharos"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 658,
 		gen: 6,
 		isNonstandard: "Past",
@@ -339,10 +311,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Audino-Mega",
 		megaEvolves: "Audino",
 		itemUser: ["Audino"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 757,
 		gen: 6,
 		isNonstandard: "Past",
@@ -386,10 +354,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
 		itemUser: ["Banette"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 668,
 		gen: 6,
 		isNonstandard: "Past",
@@ -400,10 +364,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Barbaracle-Mega",
 		megaEvolves: "Barbaracle",
 		itemUser: ["Barbaracle"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2581,
 		gen: 9,
 		isNonstandard: "Future",
@@ -421,10 +381,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Beedrill-Mega",
 		megaEvolves: "Beedrill",
 		itemUser: ["Beedrill"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 770,
 		gen: 6,
 		isNonstandard: "Past",
@@ -557,10 +513,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
 		itemUser: ["Blastoise"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 661,
 		gen: 6,
 		isNonstandard: "Past",
@@ -571,10 +523,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
 		itemUser: ["Blaziken"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 664,
 		gen: 6,
 		isNonstandard: "Past",
@@ -737,10 +685,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Camerupt-Mega",
 		megaEvolves: "Camerupt",
 		itemUser: ["Camerupt"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 767,
 		gen: 6,
 		isNonstandard: "Past",
@@ -768,10 +712,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Chandelure-Mega",
 		megaEvolves: "Chandelure",
 		itemUser: ["Chandelure"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2574,
 		gen: 9,
 		isNonstandard: "Future",
@@ -797,10 +737,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 660,
 		gen: 6,
 		isNonstandard: "Past",
@@ -811,10 +747,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 678,
 		gen: 6,
 		isNonstandard: "Past",
@@ -878,10 +810,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Chesnaught-Mega",
 		megaEvolves: "Chesnaught",
 		itemUser: ["Chesnaught"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2575,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1091,10 +1019,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Clefable-Mega",
 		megaEvolves: "Clefable",
 		itemUser: ["Clefable"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2559,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1358,10 +1282,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Delphox-Mega",
 		megaEvolves: "Delphox",
 		itemUser: ["Delphox"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2576,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1387,10 +1307,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Diancie-Mega",
 		megaEvolves: "Diancie",
 		itemUser: ["Diancie"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 764,
 		gen: 6,
 		isNonstandard: "Past",
@@ -1454,10 +1370,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Dragalge-Mega",
 		megaEvolves: "Dragalge",
 		itemUser: ["Dragalge"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2582,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1522,10 +1434,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Dragonite-Mega",
 		megaEvolves: "Dragonite",
 		itemUser: ["Dragonite"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2562,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1548,10 +1456,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Drampa-Mega",
 		megaEvolves: "Drampa",
 		itemUser: ["Drampa"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2585,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1647,10 +1551,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Eelektross-Mega",
 		megaEvolves: "Eelektross",
 		itemUser: ["Eelektross"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2573,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1822,10 +1722,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Emboar-Mega",
 		megaEvolves: "Emboar",
 		itemUser: ["Emboar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2569,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1879,10 +1775,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Excadrill-Mega",
 		megaEvolves: "Excadrill",
 		itemUser: ["Excadrill"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2570,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1964,10 +1856,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Falinks-Mega",
 		megaEvolves: "Falinks",
 		itemUser: ["Falinks"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2586,
 		gen: 9,
 		isNonstandard: "Future",
@@ -1985,10 +1873,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Feraligatr-Mega",
 		megaEvolves: "Feraligatr",
 		itemUser: ["Feraligatr"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2564,
 		gen: 9,
 		isNonstandard: "Future",
@@ -2185,10 +2069,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Floette-Mega",
 		megaEvolves: "Floette-Eternal",
 		itemUser: ["Floette-Eternal"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name) return false;
-			return true;
-		},
 		num: 2579,
 		gen: 9,
 		isNonstandard: "Future",
@@ -2330,10 +2210,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Froslass-Mega",
 		megaEvolves: "Froslass",
 		itemUser: ["Froslass"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2566,
 		gen: 9,
 		isNonstandard: "Future",
@@ -2373,10 +2249,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Gallade-Mega",
 		megaEvolves: "Gallade",
 		itemUser: ["Gallade"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 756,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2407,10 +2279,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
 		itemUser: ["Garchomp"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 683,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2421,10 +2289,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
 		itemUser: ["Gardevoir"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 657,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2435,10 +2299,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
 		itemUser: ["Gengar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 656,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2491,10 +2351,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Glalie-Mega",
 		megaEvolves: "Glalie",
 		itemUser: ["Glalie"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 763,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2586,11 +2442,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Greninja-Mega",
 		megaEvolves: "Greninja",
 		itemUser: ["Greninja"],
-		onTakeItem(item, source) {
-			// TODO: Figure out if this works on Greninja-Bond
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2577,
 		gen: 9,
 		isNonstandard: "Future",
@@ -2701,10 +2552,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
 		itemUser: ["Gyarados"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 676,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2754,10 +2601,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Hawlucha-Mega",
 		megaEvolves: "Hawlucha",
 		itemUser: ["Hawlucha"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2583,
 		gen: 9,
 		isNonstandard: "Future",
@@ -2832,10 +2675,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
 		itemUser: ["Heracross"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 680,
 		gen: 6,
 		isNonstandard: "Past",
@@ -2858,10 +2697,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
 		itemUser: ["Houndoom"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 666,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3156,10 +2991,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
 		itemUser: ["Kangaskhan"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 675,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3234,10 +3065,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Latias-Mega",
 		megaEvolves: "Latias",
 		itemUser: ["Latias"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 684,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3248,10 +3075,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Latios-Mega",
 		megaEvolves: "Latios",
 		itemUser: ["Latios"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 685,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3434,10 +3257,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Lopunny-Mega",
 		megaEvolves: "Lopunny",
 		itemUser: ["Lopunny"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 768,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3464,10 +3283,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
 		itemUser: ["Lucario"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 673,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3695,10 +3510,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Malamar-Mega",
 		megaEvolves: "Malamar",
 		itemUser: ["Malamar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2580,
 		gen: 9,
 		isNonstandard: "Future",
@@ -3718,10 +3529,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
 		itemUser: ["Manectric"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 682,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3778,10 +3585,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
 		itemUser: ["Mawile"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 681,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3812,10 +3615,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
 		itemUser: ["Medicham"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 665,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3826,10 +3625,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Meganium-Mega",
 		megaEvolves: "Meganium",
 		itemUser: ["Meganium"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2563,
 		gen: 9,
 		isNonstandard: "Future",
@@ -3878,10 +3673,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Metagross-Mega",
 		megaEvolves: "Metagross",
 		itemUser: ["Metagross"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 758,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3985,10 +3776,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 662,
 		gen: 6,
 		isNonstandard: "Past",
@@ -3999,10 +3786,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 663,
 		gen: 6,
 		isNonstandard: "Past",
@@ -4498,10 +4281,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Pidgeot-Mega",
 		megaEvolves: "Pidgeot",
 		itemUser: ["Pidgeot"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 762,
 		gen: 6,
 		isNonstandard: "Past",
@@ -4547,10 +4326,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
 		itemUser: ["Pinsir"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 671,
 		gen: 6,
 		isNonstandard: "Past",
@@ -4903,10 +4678,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Pyroar-Mega",
 		megaEvolves: "Pyroar",
 		itemUser: ["Pyroar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2578,
 		gen: 9,
 		isNonstandard: "Future",
@@ -5352,10 +5123,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Sableye-Mega",
 		megaEvolves: "Sableye",
 		itemUser: ["Sableye"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 754,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5431,10 +5198,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Salamence-Mega",
 		megaEvolves: "Salamence",
 		itemUser: ["Salamence"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 769,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5445,10 +5208,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Sceptile-Mega",
 		megaEvolves: "Sceptile",
 		itemUser: ["Sceptile"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 753,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5459,10 +5218,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
 		itemUser: ["Scizor"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 670,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5473,10 +5228,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Scolipede-Mega",
 		megaEvolves: "Scolipede",
 		itemUser: ["Scolipede"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2571,
 		gen: 9,
 		isNonstandard: "Future",
@@ -5499,10 +5250,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Scrafty-Mega",
 		megaEvolves: "Scrafty",
 		itemUser: ["Scrafty"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2572,
 		gen: 9,
 		isNonstandard: "Future",
@@ -5544,10 +5291,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Sharpedo-Mega",
 		megaEvolves: "Sharpedo",
 		itemUser: ["Sharpedo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 759,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5691,10 +5434,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Skarmory-Mega",
 		megaEvolves: "Skarmory",
 		itemUser: ["Skarmory"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2565,
 		gen: 9,
 		isNonstandard: "Future",
@@ -5735,10 +5474,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Slowbro-Mega",
 		megaEvolves: "Slowbro",
 		itemUser: ["Slowbro"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 760,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5938,10 +5673,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Starmie-Mega",
 		megaEvolves: "Starmie",
 		itemUser: ["Starmie"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2561,
 		gen: 9,
 		isNonstandard: "Future",
@@ -5961,10 +5692,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Steelix-Mega",
 		megaEvolves: "Steelix",
 		itemUser: ["Steelix"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 761,
 		gen: 6,
 		isNonstandard: "Past",
@@ -6101,10 +5828,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Swampert-Mega",
 		megaEvolves: "Swampert",
 		itemUser: ["Swampert"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 752,
 		gen: 6,
 		isNonstandard: "Past",
@@ -7298,10 +7021,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
 		itemUser: ["Tyranitar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 669,
 		gen: 6,
 		isNonstandard: "Past",
@@ -7377,10 +7096,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
 		itemUser: ["Venusaur"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 659,
 		gen: 6,
 		isNonstandard: "Past",
@@ -7391,10 +7106,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Victreebel-Mega",
 		megaEvolves: "Victreebel",
 		itemUser: ["Victreebel"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2560,
 		gen: 9,
 		isNonstandard: "Future",
@@ -7741,10 +7452,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Zygarde-Mega",
 		megaEvolves: "Zygarde-Complete",
 		itemUser: ["Zygarde-Complete"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: 2584,
 		gen: 9,
 		isNonstandard: "Future",
@@ -8038,10 +7745,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaStone: "Crucibelle-Mega",
 		megaEvolves: "Crucibelle",
 		itemUser: ["Crucibelle"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
 		num: -1,
 		gen: 6,
 		isNonstandard: "CAP",

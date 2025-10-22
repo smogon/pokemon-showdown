@@ -48,6 +48,29 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';
 		},
+		takeItem(source?: Pokemon) {
+			if (!this.item) return false;
+			if (!source) source = this;
+			if (this.battle.gen <= 4) {
+				if (source.itemKnockedOff) return false;
+				if (toID(this.ability) === 'multitype') return false;
+				if (toID(source.ability) === 'multitype') return false;
+			}
+			const item = this.getItem();
+			if (this.baseSpecies.name === item.megaEvolves || this.baseSpecies.name === item.megaStone) {
+				return false;
+			}
+			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+				this.item = '';
+				const oldItemState = this.itemState;
+				this.battle.clearEffectState(this.itemState);
+				this.pendingStaleness = undefined;
+				this.battle.singleEvent('End', item, oldItemState, this);
+				this.battle.runEvent('AfterTakeItem', this, null, null, item);
+				return item;
+			}
+			return false;
+		},
 	},
 	actions: {
 		canTerastallize(pokemon) {

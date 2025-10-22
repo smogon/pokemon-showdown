@@ -1871,12 +1871,10 @@ export class BattleActions {
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
-		// Temporary hardcode until generation shift
-		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaEvolves === species.name) {
-			return item.megaStone;
-		}
+		if (!item.megaStone) return false;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
+		if (this.battle.dex.species.get(item.megaEvolves).baseSpecies === pokemon.baseSpecies.baseSpecies &&
+			item.megaStone !== species.name) {
 			return item.megaStone;
 		}
 		return null;

@@ -1829,6 +1829,10 @@ export class Pokemon {
 			if (toID(source.ability) === 'multitype') return false;
 		}
 		const item = this.getItem();
+		if (item.megaStone &&
+			this.battle.dex.species.get(item.megaEvolves).baseSpecies === this.baseSpecies.baseSpecies) {
+			return false;
+		}
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			const oldItemState = this.itemState;
