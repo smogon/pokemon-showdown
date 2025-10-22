@@ -20,7 +20,7 @@ interface CustomSymbolDocument {
 
 const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
 
-const applyCustomSymbol = async (userid: string) => {
+const applyCustomSymbol = async (userid: string): Promise<void> => {
 	const user = Users.get(userid);
 	if (!user) return;
 
@@ -32,7 +32,7 @@ const applyCustomSymbol = async (userid: string) => {
 	}
 };
 
-const removeCustomSymbol = async (userid: string) => {
+const removeCustomSymbol = async (userid: string): Promise<void> => {
 	const user = Users.get(userid);
 	if (!user) return;
 
@@ -41,14 +41,14 @@ const removeCustomSymbol = async (userid: string) => {
 	user.updateIdentity();
 };
 
-const notifyUser = (userId: string, staffName: string, symbol: string, action: string) => {
+const notifyUser = (userId: string, staffName: string, symbol: string, action: string): void => {
 	const user = Users.get(userId);
 	if (user?.connected) {
 		user.popup(`|html|${nameColor(staffName, true, true)} ${action} your custom symbol to: <strong>${symbol}</strong><br /><center>Refresh to see changes.</center>`);
 	}
 };
 
-const notifyStaff = (staffName: string, targetName: string, symbol: string, action: string) => {
+const notifyStaff = (staffName: string, targetName: string, symbol: string, action: string): void => {
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
 		room.add(`|html|<div class="infobox">${nameColor(staffName, true, true)} ${action} custom symbol for ${nameColor(targetName, true, false)}: <strong>${symbol}</strong></div>`).update();
@@ -59,11 +59,11 @@ export const commands: Chat.ChatCommands = {
 	customsymbol: 'symbol',
 	cs: 'symbol',
 	symbol: {
-		''(target, room, user) {
+		''(target, room, user): void {
 			this.parse('/symbolhelp');
 		},
 
-		async set(target, room, user) {
+		async set(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, symbol] = target.split(',').map(s => s.trim());
 			if (!name || !symbol) return this.parse('/help symbol');
@@ -86,7 +86,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, symbol, 'set');
 		},
 
-		async update(target, room, user) {
+		async update(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, symbol] = target.split(',').map(s => s.trim());
 			if (!name || !symbol) return this.parse('/help symbol');
@@ -107,7 +107,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, symbol, 'updated');
 		},
 
-		async delete(target, room, user) {
+		async delete(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
@@ -132,7 +132,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async list(target, room, user) {
+		async list(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
 			const result = await CustomSymbolDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
@@ -161,7 +161,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|${output}`);
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &."},
@@ -186,7 +186,7 @@ export const loginfilter: Chat.LoginFilter = user => {
 };
 
 const originalGetIdentity = Users.User.prototype.getIdentity;
-Users.User.prototype.getIdentity = function (room: BasicRoom | null = null) {
+Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
 
 	if (!customSymbol) return originalGetIdentity.call(this, room);
