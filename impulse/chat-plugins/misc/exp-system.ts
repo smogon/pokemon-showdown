@@ -19,7 +19,7 @@ let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
 const EXP_COOLDOWN = 30000;
 
-const formatTime = (date: Date) => {
+const formatTime = (date: Date): string => {
   return date.toISOString().replace('T', ' ').slice(0, 19);
 };
 
@@ -43,46 +43,10 @@ interface ExpDocument {
   lastUpdated: Date;
 }
 
-interface ExpConfigDocument {
-  _id: string;
-  doubleExp: boolean;
-  doubleExpEndTime: number | null;
-  lastUpdated: Date;
-}
-
 const ExpDB = ImpulseDB<ExpDocument>('expdata');
-const ExpConfigDB = ImpulseDB<ExpConfigDocument>('expconfig');
 
 export class ExpSystem {
   private static cooldowns: CooldownData = {};
-
-  private static async loadExpConfig(): Promise<void> {
-    try {
-      const config = await ExpConfigDB.findOne({ _id: 'config' });
-      if (config) {
-        DOUBLE_EXP = config.doubleExp;
-        DOUBLE_EXP_END_TIME = config.doubleExpEndTime;
-      }
-    } catch (error) {
-      console.error(`Error reading EXP config: ${error}`);
-    }
-  }
-
-  private static async saveExpConfig(): Promise<void> {
-    try {
-      await ExpConfigDB.upsert(
-        { _id: 'config' },
-        {
-          _id: 'config',
-          doubleExp: DOUBLE_EXP,
-          doubleExpEndTime: DOUBLE_EXP_END_TIME,
-          lastUpdated: new Date(),
-        }
-      );
-    } catch (error) {
-      console.error(`Error saving EXP config: ${error}`);
-    }
-  }
 
   private static isOnCooldown(userid: string): boolean {
     const lastExp = this.cooldowns[userid] || 0;
@@ -190,7 +154,7 @@ export class ExpSystem {
     const user = Users.get(userid);
     if (!user || !user.connected) return;
     
-    let rewards = '';
+    const rewards = '';
     
     user.popup(
       `|html|<div style="text-align: center;">` +
@@ -209,11 +173,10 @@ export class ExpSystem {
     );
   }
 
-  static async checkDoubleExpStatus(room?: Room | null, user?: User) {
+  static async checkDoubleExpStatus(room?: Room | null, user?: User): Promise<void> {
     if (DOUBLE_EXP && DOUBLE_EXP_END_TIME && Date.now() >= DOUBLE_EXP_END_TIME) {
       DOUBLE_EXP = false;
       DOUBLE_EXP_END_TIME = null;
-      await this.saveExpConfig();
     }
     if (!room) return;
     let message;
@@ -246,7 +209,7 @@ export class ExpSystem {
     }
   }
 
-  static async grantExp() {
+  static async grantExp(): Promise<void> {
     Users.users.forEach(async user => {
       if (!user || !user.named || !user.connected || !user.lastPublicMessage) return;
       if (Date.now() - user.lastPublicMessage > 300000) return;
@@ -310,16 +273,10 @@ export class ExpSystem {
     }
     return totalExp;
   }
-
-  static async init(): Promise<void> {
-    await this.loadExpConfig();
-  }
 }
 
-ExpSystem.init();
-
 export const pages: Chat.PageTable = {
-  async expladder(args, user) {
+  async expladder(args, user): Promise<string> {
     const richest = await ExpSystem.getRichestUsers(100);
     if (!richest.length) {
       return `<div class="pad"><h2>No users have any ${EXP_UNIT} yet.</h2></div>`;
@@ -348,7 +305,7 @@ export const pages: Chat.PageTable = {
 export const commands: Chat.ChatCommands = {
   exp: {
     '': 'level',
-    async level(target, room, user) {
+    async level(target, room, user): Promise<void> {
       if (!target) target = user.name;
       if (!this.runBroadcast()) return;    
       const userid = toID(target);
@@ -364,7 +321,7 @@ export const commands: Chat.ChatCommands = {
       );
     },
 
-    async give(target, room, user) {
+    async give(target, room, user): Promise<void> {
       this.checkCan('roomowner');
       if (!target) return this.sendReply(`Usage: /exp give [user], [amount], [reason]`);
       const parts = target.split(',').map(p => p.trim());
@@ -401,7 +358,7 @@ export const commands: Chat.ChatCommands = {
       }
     },
 
-    async take(target, room, user) {
+    async take(target, room, user): Promise<void> {
       this.checkCan('roomowner');
       if (!target) return this.sendReply(`Usage: /exp take [user], [amount], [reason]`);
       const parts = target.split(',').map(p => p.trim());
@@ -438,7 +395,7 @@ export const commands: Chat.ChatCommands = {
       }
     },
 
-    async reset(target, room, user) {
+    async reset(target, room, user): Promise<void> {
       this.checkCan('roomowner');
       if (!target) return this.sendReply(`Usage: /exp reset [user], [reason]`);
       const parts = target.split(',').map(p => p.trim());
@@ -463,7 +420,7 @@ export const commands: Chat.ChatCommands = {
       }
     },
 
-    async resetall(target, room, user) {
+    async resetall(target, room, user): Promise<void> {
       this.checkCan('bypassall');
       const reason = target.trim() || 'No reason specified.';
 
@@ -484,13 +441,12 @@ export const commands: Chat.ChatCommands = {
       }
     },
 
-    async toggledouble(target, room, user) {
+    async toggledouble(target, room, user): Promise<void> {
       this.checkCan('roomowner');
       
       if (!target) {
         DOUBLE_EXP = !DOUBLE_EXP;
         DOUBLE_EXP_END_TIME = null;
-        await ExpSystem.saveExpConfig();
         await ExpSystem.checkDoubleExpStatus(room, user);
         return;
       }
@@ -498,7 +454,6 @@ export const commands: Chat.ChatCommands = {
       if (target.toLowerCase() === 'off') {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
-        await ExpSystem.saveExpConfig();
         await ExpSystem.checkDoubleExpStatus(room, user);
         return;
       }
@@ -515,17 +470,16 @@ export const commands: Chat.ChatCommands = {
       DOUBLE_EXP = true;
       DOUBLE_EXP_END_TIME = endTime;
       
-      await ExpSystem.saveExpConfig();
       await ExpSystem.checkDoubleExpStatus(room, user);
       setTimeout(async () => await ExpSystem.checkDoubleExpStatus(), duration);
     },
 
-    async ladder(target, room, user) {
+    async ladder(target, room, user): Promise<void> {
       if (!this.runBroadcast()) return;
       return this.parse(`/join view-expladder`);
     },
 
-	  async help(target, room, user) {
+	  async help(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/exp level [user]", desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)"},
