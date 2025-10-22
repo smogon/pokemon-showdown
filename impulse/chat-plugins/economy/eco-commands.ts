@@ -13,7 +13,7 @@ export const commands: Chat.ChatCommands = {
 	bal: 'balance',
 	money: 'balance',
 	atm: 'balance',
-	async balance(target, room, user) {
+	async balance(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 
 		const targetUserid = toID(target) || user.id;
@@ -28,7 +28,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	eco: {
-		async transfer(target, room, user) {
+		async transfer(target, room, user): Promise<void> {
 			if (!target) return this.parse('/help eco');
 	
 			const [targetStr, amountStr] = target.split(',').map(s => s.trim());
@@ -68,7 +68,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async give(target, room, user) {
+		async give(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
 			const [targetStr, amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async take(target, room, user) {
+		async take(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
 			const [targetStr, amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
@@ -133,7 +133,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async history(target, room, user) {
+		async history(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 
 			let targetUserid = toID(target);
@@ -211,7 +211,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHtml}`);
 		},
 		
-		async stats() {
+		async stats(): Promise<void> {
 			if (!this.runBroadcast()) return;
 
 			const stats = await Economy.getStats();
@@ -232,7 +232,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHtml}`);
 		},
 
-		async ladder(target, room, user) {
+		async ladder(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
 
 			let [pageStr, limitStr] = target.split(',').map(s => s.trim());
@@ -266,7 +266,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHtml}`);
 		},
 
-		async reset(target, room, user) {
+		async reset(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
 			const targetUserid = toID(target);
@@ -293,7 +293,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/balance [user]", desc: "Shows a user's " + CURRENCYNAME + " balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>"},
