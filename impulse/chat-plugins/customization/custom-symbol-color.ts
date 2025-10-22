@@ -23,7 +23,7 @@ const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
 
 const isValidColor = (color: string): boolean => HEX_REGEX.test(color);
 
-const updateSymbolColors = async () => {
+const updateSymbolColors = async (): Promise<void> => {
 	try {
 		const symbolColorDocs = await SymbolColorsDB.find({});
 		let css = '/* SYMBOLCOLORS START */\n';
@@ -46,16 +46,16 @@ const updateSymbolColors = async () => {
 	} catch (err) {}
 };
 
-const colorPreview = (color: string) => `<span style="color: ${color}; font-size: 24px;">■</span>`;
+const colorPreview = (color: string): string => `<span style="color: ${color}; font-size: 24px;">■</span>`;
 
-const notifyUser = (userId: string, staffName: string, color: string, action: string) => {
+const notifyUser = (userId: string, staffName: string, color: string, action: string): void => {
 	const user = Users.get(userId);
 	if (user?.connected) {
 		user.popup(`|html|${nameColor(staffName, true, true)} ${action} your symbol color to <span style="color: ${color}; font-weight: bold;">${color}</span><br /><center>Refresh if you don't see it.</center>`);
 	}
 };
 
-const notifyStaff = (staffName: string, targetName: string, color: string, action: string) => {
+const notifyStaff = (staffName: string, targetName: string, color: string, action: string): void => {
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
 		room.add(`|html|<div class="infobox">${nameColor(staffName, true, true)} ${action} symbol color for ${nameColor(targetName, true, false)}: <span style="color: ${color}">■ ${color}</span></div>`).update();
@@ -64,7 +64,7 @@ const notifyStaff = (staffName: string, targetName: string, color: string, actio
 
 export const commands: Chat.ChatCommands = {
 	symbolcolor: {
-		async set(this: CommandContext, target: string, room: Room, user: User) {
+		async set(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
 			if (!name || !color) return this.parse('/help symbolcolor');
@@ -90,7 +90,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, color, 'set');
 		},
 
-		async update(this: CommandContext, target: string, room: Room, user: User) {
+		async update(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
 			if (!name || !color) return this.parse('/help symbolcolor');
@@ -114,7 +114,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, color, 'updated');
 		},
 
-		async delete(this: CommandContext, target: string, room: Room, user: User) {
+		async delete(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
@@ -139,7 +139,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async list(this: CommandContext, target: string, room: Room, user: User) {
+		async list(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const result = await SymbolColorsDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
@@ -168,14 +168,14 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|${output}`);
 		},
 
-		help() {
+		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/symbolcolor set [user], [hex]", desc: "Set symbol color. Requires: &."},
 				{cmd: "/symbolcolor update [user], [hex]", desc: "Update color. Requires: &."},
 				{cmd: "/symbolcolor delete [user]", desc: "Remove color. Requires: &."},
-			{cmd: "/symbolcolor list [page]", desc: "List colors. Requires: &."},
-];
+				{cmd: "/symbolcolor list [page]", desc: "List colors. Requires: &."},
+			];
 			const html = `<center><strong>Custom Symbol Color Commands:</strong><br>Alias: /sc</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
@@ -184,7 +184,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
-		''(target, room, user) {
+		''(target, room, user): void {
 			this.parse('/symbolcolor help');
 		},
 	},
