@@ -400,10 +400,10 @@ describe('Dex data', () => {
 	// Vulpix (1) + Ninetales (1) + Wormadam (2) + Cherrim (1) + Rotom (5) + Origin (3) + Arceus (17) +
 	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
 	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
-	species['gen9legends'] = 230;
-	// Mega (63) + Vivillon (2) + Floette (1) + Meowstic (1) + Aegislash (1) + Pumpkaboo (3) +
-	// Gourgeist (3) + Xerneas (1) + Zygarde (2) + Alola (1) + Galar (4)
-	formes['gen9legends'] = 63 + 2 + 1 + 1 + 1 + 3 + 3 + 1 + 2 + 1 + 4;
+	species['gen9legends'] = 234;
+	// Mega (68) + Greninja (1) + Vivillon (2) + Floette (1) + Meowstic (1) + Aegislash (1) + Pumpkaboo (3) +
+	// Gourgeist (3) + Xerneas (1) + Zygarde (2) + Hoopa (1) + Alola (1) + Galar (4) + Hisui (3)
+	formes['gen9legends'] = 68 + 1 + 2 + 1 + 1 + 1 + 3 + 3 + 1 + 2 + 1 + 1 + 4 + 3;
 
 	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
 		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {

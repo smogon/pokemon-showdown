@@ -17,11 +17,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			'payapaberry', 'pechaberry', 'persimberry', 'pomegberry', 'qualotberry', 'rawstberry', 'rindoberry', 'roseliberry', 'shucaberry',
 			'sitrusberry', 'tamatoberry', 'tangaberry', 'wacanberry', 'yacheberry',
 		];
+		const votedLegalitems = [
+			'heavydutyboots', 'choiceband', 'choicescarf', 'choicespecs',
+		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
-			if (legalItems.includes(i) || this.data.Items[i].megaStone || legalBerries.includes(i)) {
-				if (['mewtwonitex', 'mewtwonitey', 'diancite',
-					'delphoxite', 'chesnaughtite'].includes(i)) continue;
+			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) || this.data.Items[i].megaStone) {
+				if (['blazikenite', 'swampertite', 'sceptilite'].includes(i)) continue;
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
@@ -31,6 +33,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.data.Moves[i].isNonstandard !== 'Past') continue;
 			this.modData('Moves', i).isNonstandard = null;
 		}
+	},
+	pokemon: {
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			const item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
+			if (this.hasAbility(['levitate', 'ionbattery']) && !this.battle.suppressingAbility(this)) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			return item !== 'airballoon';
+		},
 	},
 	actions: {
 		canTerastallize(pokemon) {
@@ -106,7 +123,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			} else if (move.multihitType === 'brassbond' as 'parentalbond' && move.hit > 1) {
 				// Brass Bond modifier
-				const bondModifier = 0.1;
+				const bondModifier = 0.15;
 				this.battle.debug(`Brass Bond modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			}
