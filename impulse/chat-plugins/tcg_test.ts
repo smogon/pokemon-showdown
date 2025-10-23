@@ -40,7 +40,8 @@ export const commands: ChatCommands = {
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
 
-				let html = `<div class="infobox" style="display: flex; align-items: flex-start; gap: 20px; padding: 10px;">`; // Increased gap and added padding
+				// Increased gap from 20px to 30px
+				let html = `<div class="infobox" style="display: flex; align-items: flex-start; gap: 30px; padding: 10px;">`; 
 
 				// Image Section
 				html += `<div style="flex-shrink: 0;">`;
@@ -48,17 +49,17 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 
 				// Text Info Section
-				html += `<div style="flex: 1; line-height: 1.5;">`; // Added line-height for better readability
-				html += `<strong style="font-size: 20px; display: block; margin-bottom: 8px;">${card.name}</strong>`; // Larger name, block display, margin
-				html += `<span style="color: #555; font-size: 0.9em;">(${card.cardId})</span><br />`; // Slightly muted ID
-				html += `<div style="margin-top: 10px;">`; // Spacing before details
+				html += `<div style="flex: 1; line-height: 1.5;">`; 
+				html += `<strong style="font-size: 20px; display: block; margin-bottom: 8px;">${card.name}</strong>`; 
+				html += `<span style="color: #555; font-size: 0.9em;">(${card.cardId})</span><br />`; 
+				html += `<div style="margin-top: 10px;">`; 
 				html += `<strong>Set:</strong> ${card.set} <span style="color: #555; font-size: 0.9em;">(${card.setId})</span><br />`;
 				html += `<strong>Rarity:</strong> ${card.rarity}<br />`;
 				html += `<strong>Supertype:</strong> ${card.supertype}<br />`;
-				if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') { // Only show subtypes if relevant
+				if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') { 
 					html += `<strong>Subtypes:</strong> ${subtypes}<br />`;
 				}
-				html += `<strong style="color: #007bff;">Points:</strong> ${card.totalPoints}`; // Highlight points
+				html += `<strong style="color: #007bff;">Points:</strong> ${card.totalPoints}`; 
 				html += `</div>`;
 				html += `</div>`; // End Text Info Section
 
