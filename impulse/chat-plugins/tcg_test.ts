@@ -44,11 +44,11 @@ export const commands: ChatCommands = {
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
 
-				// Changed align-items to center
+				// Using align-items center
 				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
 
-				// Image Section - Lighter border #eee
-				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #eee;">`;
+				// Image Section - Changed border color to #ccc
+				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
@@ -57,7 +57,7 @@ export const commands: ChatCommands = {
 				// Name/ID Line
 				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
 				html += `<span style="color: #777; font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
-				// Details section - Slightly smaller font-size for labels
+				// Details section
 				html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
 				html += `<strong style="font-size: 0.9em;">Set:</strong> ${card.set} <span style="color: #777; font-size: 0.9em;">(${card.setId})</span><br />`;
 				html += `<strong style="font-size: 0.9em;">Rarity:</strong> ${card.rarity}<br />`;
@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 
 				html += `</div>`; // End Infobox
 
-				this.sendReplyBox(html);
+				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG card command');
 				return this.errorReply('An error occurred while fetching card data.');
