@@ -7,7 +7,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
 import { generatePack } from './utils';
 
-const SEARCH_PAGE_LIMIT = 52; // Number of cards per page (13 rows * 4 cards)
+const SEARCH_PAGE_LIMIT = 280; // Number of cards per page (13 rows * 4 cards)
 
 /**
  * Helper function to parse the complex search query
@@ -107,8 +107,17 @@ function parseSearchQuery(target: string): {
 				descriptions.push(`Reg Mark: ${value}`);
 				break;
 			case 'set':
-				// Add set/setId search
-				filter.$and.push({ $or: [{ set: valueRegex }, { setId: valueRegex }] });
+				// Match partially on set name (e.g., "Sword & Shield")
+				const partialRegex = new RegExp(escapedValue, 'i');
+				// Match exactly on setId (e.g., "swsh1")
+				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
+
+				filter.$and.push({ 
+					$or: [
+						{ set: partialRegex },
+						{ setId: exactRegex }
+					] 
+				});
 				descriptions.push(`Set: ${value}`);
 				break;
 		}
@@ -439,7 +448,7 @@ export const commands: ChatCommands = {
 
 				html += `</div>`; // End infobox
 
-				this.sendReply(`|html|<center>${html}</center>`);
+				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG search command');
 				return this.errorReply('An error occurred while searching for cards.');
