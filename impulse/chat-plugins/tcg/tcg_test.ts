@@ -390,7 +390,8 @@ export const commands: ChatCommands = {
 							html += `</div>`; // Close previous row
 							html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 						}
-						html += `<div style="display: inline-block; text-align: center; margin-top: 5px;">`;
+						// Row container
+						html += `<div style="display: inline-block; text-align: center;">`; 
 					}
 
 					const imageWidth = 74;
@@ -398,7 +399,8 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; margin-bottom: 5px;">`;
+					// Individual card container
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -437,7 +439,7 @@ export const commands: ChatCommands = {
 
 				html += `</div>`; // End infobox
 
-				this.sendReply(`|html|${html}`);
+				this.sendReply(`|html|<center>${html}</center>`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG search command');
 				return this.errorReply('An error occurred while searching for cards.');
