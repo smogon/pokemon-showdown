@@ -54,7 +54,7 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 
 				// Text Info Section - margin-left: 20px;
-				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
+				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; max-height: ${imageHeight}px; overflow-y: auto;">`;
 				// Name/ID Line
 				html += `<strong style="font-size: 22px;">${card.name}</strong> `;
 				html += `<span style="font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
