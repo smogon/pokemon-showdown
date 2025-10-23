@@ -40,7 +40,7 @@ export const commands: ChatCommands = {
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
 
-				let html = `<div class="style="display: flex; align-items: flex-start; gap: 20px; padding: 10px;">`; // Increased gap and added padding
+				let html = `<div class="infobox" style="display: flex; align-items: flex-start; gap: 20px; padding: 10px;">`; // Increased gap and added padding
 
 				// Image Section
 				html += `<div style="flex-shrink: 0;">`;
@@ -61,6 +61,8 @@ export const commands: ChatCommands = {
 				html += `<strong style="color: #007bff;">Points:</strong> ${card.totalPoints}`; // Highlight points
 				html += `</div>`;
 				html += `</div>`; // End Text Info Section
+
+				html += `</div>`; // End Infobox
 
 				this.sendReplyBox(html);
 			} catch (error) {
