@@ -306,10 +306,9 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 		const newDocData: TcgUser = {
 			userId: userId,
 			cardId: card.cardId,
-			// --- REMOVED THIS LINE ---
-			// quantity: 0, // This will be set by $inc
 			firstAcquiredAt: now,
-			lastAcquiredAt: now,
+			// --- REMOVED THIS LINE ---
+			// lastAcquiredAt: now,
 			
 			// --- Denormalized fields ---
 			name: card.name,
@@ -335,8 +334,8 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 				filter: { userId: userId, cardId: cardId },
 				update: {
 					$inc: { quantity: count },
-					$set: { lastAcquiredAt: now },
-					$setOnInsert: newDocData, // Only applies on document creation
+					$set: { lastAcquiredAt: now }, // This will handle both inserts and updates
+					$setOnInsert: newDocData,
 				},
 				upsert: true
 			}
