@@ -7,7 +7,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
 import { generatePack } from './utils';
 
-const SEARCH_PAGE_LIMIT = 280; // Number of cards per page (13 rows * 4 cards)
+const SEARCH_PAGE_LIMIT = 80; // Number of cards per page (20 rows * 4 cards)
 
 /**
  * Helper function to parse the complex search query
