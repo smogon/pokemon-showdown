@@ -102,3 +102,54 @@ export interface TcgCard {
   importedAt: string;
   dataVersion: string;
 }
+
+/**
+ * Represents a user's TCG collection.
+ * This will be stored in the 'user_collections' collection.
+ * Each document represents ONE card owned by ONE user.
+ */
+export interface TcgUser {
+  /** A unique, normalized user identifier (e.g., 'princeskygit') */
+  userId: string;
+  /** The unique card identifier (e.g., 'sv3pt5-1') */
+  cardId: string;
+  /** How many copies of this card the user owns */
+  quantity: number;
+  /** The ISO date string of when this card was first acquired */
+  firstAcquiredAt: string;
+  /** The ISO date string of when the quantity was last updated */
+  lastAcquiredAt: string;
+
+  // --- Denormalized fields for performance ---
+  /** (From TcgCard) The card's name. For filtering. */
+  name: string;
+  /** (From TcgCard) The set this card belongs to (e.g., 'sv3pt5'). For filtering. */
+  setId: string;
+  /** (From TcgCard) The card's rarity (e.g., 'Secret Rare'). For filtering. */
+  rarity: string;
+  /** (From TcgCard) The card's calculated point value. For leaderboards. */
+  totalPoints: number;
+  /** (From TcgCard) e.g., 'Pokémon', 'Trainer'. For filtering. */
+  supertype: string;
+  /** (From TcgCard) e.g., ['Fire']. For filtering. */
+  types: string[];
+  /** (From TcgCard) e.g., ['Stage 1', 'V']. For filtering. */
+  subtypes: string[];
+  /** (From TcgCard) e.g., 120. For filtering. */
+  hp?: number;
+  /** (From TcgCard) e.g., 'Scarlet & Violet'. For filtering. */
+  setSeries?: string;
+  /** (From TcgCard) e.g., 'G'. For filtering. */
+  regulationMark?: string;
+}
+
+/**
+ * Tracks the last time a user claimed their daily reward.
+ * This will be stored in a new collection, e.g., 'tcg_cooldowns'.
+ */
+export interface TcgDailyCooldown {
+  /** A unique, normalized user identifier (e.g., 'princeskygit') */
+  userId: string;
+  /** The ISO date string of when the user last claimed their daily reward */
+  lastClaimedAt: string;
+}
