@@ -81,8 +81,8 @@ export const commands: ChatCommands = {
 			try {
 				const pack = await generatePack(setId);
 
-				let html = `<div class="infobox" style="padding: 10px; text-align: center;">`;
-				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br /><br />`;
+				let html = `<div class="infobox" style="padding: 5px; text-align: center;">`;
+				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
 				// Row 1: First 4 cards
 				html += `<div style="display: inline-block; text-align: center;">`;
@@ -102,7 +102,7 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
-				html += `<hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 2: Next 4 cards
 				html += `<div style="display: inline-block; text-align: center;">`;
@@ -122,7 +122,7 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
-				html += `<hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 3: Last 2 cards (rarest)
 				html += `<div style="display: inline-block; text-align: center;">`;
