@@ -220,6 +220,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async info(target, room, user): Promise<void> {
+			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /emoticon info <name>');
 
 			const emote = await EmoticonDB.findOne({ _id: target });
