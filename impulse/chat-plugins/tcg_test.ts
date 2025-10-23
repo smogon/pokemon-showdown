@@ -1,6 +1,6 @@
 /**
  * Pokemon TCG Chat Plugin for Pokemon Showdown
- * Displays Pokemon TCG card information using CSS classes
+ * Displays Pokemon TCG card information
  */
 
 import { ImpulseDB } from '../impulse-db';
@@ -17,55 +17,56 @@ interface TCGCard {
 	imageUrl?: string;
 }
 
-// Helper function to get the CSS class name based on rarity
-function getRarityClass(rarity: string): string {
-	const lowerRarity = rarity?.toLowerCase() || 'common';
+// Helper function to get background color based on rarity
+function getRarityColor(rarity: string): string {
+	// Using rgba for semi-transparency - adjust colors/opacity as needed
+	switch (rarity?.toLowerCase()) {
+		// Standard rarities
+		case 'common':
+			return 'rgba(150, 150, 150, 0.1)'; // Light grey
+		case 'uncommon':
+			return 'rgba(100, 180, 100, 0.15)'; // Light green
+		case 'rare':
+			return 'rgba(90, 150, 200, 0.15)'; // Light blue
 
-	if (lowerRarity.includes('common') || lowerRarity.includes('1st edition') || lowerRarity.includes('shadowless') || lowerRarity.includes('double rare')) {
-		return 'tcg-rarity-common';
-	}
-	if (lowerRarity.includes('uncommon') || lowerRarity.includes('reverse holo')) {
-		return 'tcg-rarity-uncommon';
-	}
-	if (lowerRarity === 'rare') {
-		return 'tcg-rarity-rare';
-	}
-	if (lowerRarity.includes('rare holo') || lowerRarity.includes('promo') || lowerRarity.includes('classic collection')) {
-		if (!lowerRarity.includes('star') && !lowerRarity.includes(' ex') && !lowerRarity.includes(' gx') && !lowerRarity.includes(' v') && !lowerRarity.includes(' lv.x')) {
-			return 'tcg-rarity-holo-promo';
-		}
-	}
-	if (lowerRarity.includes('rare prime') || lowerRarity.includes('legend') || lowerRarity.includes('rare break') || lowerRarity.includes('prism star') || lowerRarity.includes('ace spec') || lowerRarity.includes('rare ace') || lowerRarity.includes('rare sp')) {
-		return 'tcg-rarity-special-mech';
-	}
-	if (lowerRarity.includes('rare holo ex') || lowerRarity.includes('rare holo gx') || lowerRarity.includes('rare holo v') || lowerRarity.includes('rare holo vmax') || lowerRarity.includes('rare holo vstar') || lowerRarity.includes('rare ex') || lowerRarity.includes('rare holo lv.x')) {
-		return 'tcg-rarity-rulebox';
-	}
-	if (lowerRarity.includes('shining') || lowerRarity.includes('radiant rare') || lowerRarity.includes('amazing rare') || lowerRarity.includes('trainer gallery') || lowerRarity.includes('character rare')) {
-		return 'tcg-rarity-special-shiny';
-	}
-	if (lowerRarity.includes('full art') || lowerRarity.includes('rare ultra') || lowerRarity.includes('ultra rare') || lowerRarity.includes('rare shiny') || lowerRarity.includes('shiny rare')) {
-		return 'tcg-rarity-fullart-shiny';
-	}
-	if (lowerRarity.includes('rare shiny gx') || lowerRarity.includes('shiny ultra rare') || lowerRarity.includes('character super rare')) {
-		return 'tcg-rarity-high-shiny';
-	}
-	if (lowerRarity.includes('rare secret') || lowerRarity.includes('secret rare') || lowerRarity.includes('rare holo star') || lowerRarity.includes('gold star') || lowerRarity === 'star') {
-	    if (!lowerRarity.includes('rainbow') && !lowerRarity.includes('gold')) {
- 			return 'tcg-rarity-secret';
- 		}
-	}
-	if (lowerRarity.includes('illustration rare')) {
-		return 'tcg-rarity-illustration';
-	}
-	if (lowerRarity.includes('hyper rare') || lowerRarity.includes('rare rainbow')) {
-		return 'tcg-rarity-rainbow';
-	}
-	if (lowerRarity.includes('gold full art') || lowerRarity.includes('rare gold')) {
-		return 'tcg-rarity-gold';
-	}
+		// Holo/Reverse Holo
+		case 'rare holo':
+		case 'rare holo ex':
+		case 'rare holo gx':
+		case 'rare holo v':
+		case 'rare holo vmax':
+		case 'rare holo vstar':
+		case 'rare holo lv.x':
+		case 'reverse holo':
+			return 'rgba(210, 180, 90, 0.2)'; // Light gold/yellow shimmer
 
-	return 'tcg-rarity-default'; // Fallback class
+		// Ultra/Secret Rares
+		case 'rare ultra':
+		case 'ultra rare':
+		case 'rare secret':
+		case 'secret rare':
+		case 'hyper rare':
+		case 'rare rainbow':
+		case 'shiny ultra rare':
+			return 'rgba(180, 110, 220, 0.2)'; // Light purple/magenta shimmer
+
+		// Special Rarities
+		case 'promo':
+		case 'black star promo':
+			return 'rgba(220, 100, 100, 0.15)'; // Light red/promo color
+		case 'amazing rare':
+			return 'rgba(255, 105, 180, 0.2)'; // Hot pink / amazing rare color
+		case 'illustration rare':
+		case 'special illustration rare':
+			return 'rgba(135, 206, 235, 0.2)'; // Sky blue / art rare color
+		case 'radiant rare':
+			return 'rgba(255, 215, 0, 0.25)'; // Gold / radiant color
+			
+		// Add more cases as needed for specific rarities...
+		
+		default:
+			return 'rgba(200, 200, 200, 0.05)'; // Default subtle grey
+	}
 }
 
 
@@ -85,41 +86,42 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Card with ID "${cardId}" not found.`);
 				}
 
+				// Calculate 60% of original dimensions
 				const originalWidth = 246;
 				const originalHeight = 342;
-				const scaleFactor = 0.60;
-				const imageWidth = Math.round(originalWidth * scaleFactor);
-				const imageHeight = Math.round(originalHeight * scaleFactor);
+				const scaleFactor = 0.65;
+				const imageWidth = Math.round(originalWidth * scaleFactor);  // Approx 148
+				const imageHeight = Math.round(originalHeight * scaleFactor); // Approx 205
 
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
-				const rarityClass = getRarityClass(card.rarity); // Get the CSS class
+				const rarityColor = getRarityColor(card.rarity); // Get the background color
 
-				// Apply base class and rarity class to the main div
-				let html = `<div class="infobox tcg-card-container ${rarityClass}">`;
+				// Main container
+				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
 
-				// Image Section
-				html += `<div class="tcg-card-image-container">`;
-				html += `<img class="tcg-card-image" src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" />`;
+				// Image Section - Border #ccc
+				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
+				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section
-				html += `<div class="tcg-card-info">`;
+				// Text Info Section - Added background-color and padding
+				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; background-color: ${rarityColor}; padding: 10px; border-radius: 5px;">`;
 				// Name/ID Line
-				html += `<span class="tcg-card-name">${card.name}</span>`;
-				html += `<span class="tcg-card-id">(${card.cardId})</span><br />`;
+				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
+				html += `<span style="color: #777; font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
 				// Details section
-				html += `<div class="tcg-card-details">`;
-				html += `<span class="tcg-card-label">Set:</span> ${card.set} <span class="tcg-card-set-id">(${card.setId})</span><br />`;
-				html += `<span class="tcg-card-label">Rarity:</span> ${card.rarity}<br />`;
-				html += `<span class="tcg-card-label">Supertype:</span> ${card.supertype}<br />`;
+				html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+				html += `<strong style="font-size: 0.9em;">Set:</strong> ${card.set} <span style="color: #777; font-size: 0.9em;">(${card.setId})</span><br />`;
+				html += `<strong style="font-size: 0.9em;">Rarity:</strong> ${card.rarity}<br />`;
+				html += `<strong style="font-size: 0.9em;">Supertype:</strong> ${card.supertype}<br />`;
 				if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') {
-					html += `<span class="tcg-card-label">Subtypes:</span> ${subtypes}<br />`;
+					html += `<strong style="font-size: 0.9em;">Subtypes:</strong> ${subtypes}<br />`;
 				}
 				// Points section
-				html += `<div class="tcg-card-points">`;
-				html += `<span class="tcg-card-points-label">Points:</span> <span class="tcg-card-points-value">${card.totalPoints}</span>`;
+				html += `<div style="margin-top: 10px;">`;
+				html += `<strong style="color: #007bff; font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}`;
 				html += `</div>`;
 				html += `</div>`; // End Details section
 				html += `</div>`; // End Text Info Section
