@@ -5,20 +5,20 @@
 
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
-import { generatePack } from './utils';
-import { 
-	getCard, 
-	getSet, 
+import {
+	generatePack,
+	getCard,
+	getSet,
 	initializeCache,
 	getCacheStats,
 	clearCache,
-} from './tcg-cache'; // Import cache functions
+} from './utils';
 
-const SEARCH_PAGE_LIMIT = 52; // Number of cards per page (13 rows * 4 cards)
+const SEARCH_PAGE_LIMIT = 60; // Number of cards per page (15 rows * 4 cards)
 
 /**
  * Helper function to parse the complex search query
- * (This function is unchanged)
+ * @param target The full search string from the user
  */
 function parseSearchQuery(target: string): {
 	filter: any,
@@ -429,6 +429,7 @@ export const commands: ChatCommands = {
 		// Cache commands (unchanged)
 		async loadcache(target, room, user) {
 			this.checkCan('bypassall');
+			if (!this.can('lock')) return;
 			this.sendReply('Initializing TCG cache... This may take a moment.');
 			try {
 				const { cardCount, setCount } = await initializeCache();
@@ -439,6 +440,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		cachestats(target, room, user) {
+			if (!this.runBroadcast()) return;
 			this.checkCan('bypassall');
 			const stats = getCacheStats();
 			let html = `<div class="infobox" style="padding: 15px;">`;
