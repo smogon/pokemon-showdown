@@ -7,7 +7,131 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
 import { generatePack } from './utils';
 
-const SEARCH_PAGE_LIMIT = 50; // Renamed from MAX_SEARCH_LIMIT
+const SEARCH_PAGE_LIMIT = 50; // Number of cards per page
+
+/**
+ * Helper function to parse the complex search query
+ * @param target The full search string from the user
+ */
+function parseSearchQuery(target: string): {
+	filter: any,
+	queryDescription: string,
+	page: number,
+	commandString: string
+} {
+	const parts = target.split(',');
+	let page = 1;
+	let query = target.trim();
+	let commandString = query;
+
+	// 1. Extract Page
+	if (parts.length > 1) {
+		const lastPart = parts[parts.length - 1].trim();
+		const potentialPage = parseInt(lastPart);
+		if (!isNaN(potentialPage)) {
+			page = Math.max(1, potentialPage);
+			query = parts.slice(0, -1).join(',').trim();
+			commandString = query;
+		}
+	}
+
+	const filter: any = { $and: [] };
+	const descriptions: string[] = [];
+	
+	// Regex to find key:value or key:>value etc.
+	// Allows quoted values: artist:"Some Name"
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
+	
+	let nameQuery = query;
+	let match;
+
+	while ((match = filterRegex.exec(query)) !== null) {
+		const key = match[1].toLowerCase();
+		const operator = match[2]; // e.g., >, <=, or undefined
+		let value = match[3].replace(/"/g, ''); // Remove quotes
+
+		// Remove this match from the nameQuery string
+		nameQuery = nameQuery.replace(match[0], '');
+
+		const valueNum = parseInt(value);
+		// Escape regex characters from user input
+		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const valueRegex = new RegExp(escapedValue, 'i');
+
+		switch (key) {
+			case 'rarity':
+				filter.$and.push({ rarity: valueRegex });
+				descriptions.push(`Rarity: ${value}`);
+				break;
+			case 'supertype':
+			case 'st':
+				filter.$and.push({ supertype: valueRegex });
+				descriptions.push(`Supertype: ${value}`);
+				break;
+			case 'subtype':
+				filter.$and.push({ subtypes: valueRegex });
+				descriptions.push(`Subtype: ${value}`);
+				break;
+			case 'type':
+				filter.$and.push({ types: valueRegex });
+				descriptions.push(`Type: ${value}`);
+				break;
+			case 'artist':
+				filter.$and.push({ artist: valueRegex });
+				descriptions.push(`Artist: ${value}`);
+				break;
+			case 'hp':
+				if (!isNaN(valueNum)) {
+					let hpFilter: any = {};
+					if (operator === '>') hpFilter = { $gt: valueNum };
+					else if (operator === '>=') hpFilter = { $gte: valueNum };
+					else if (operator === '<') hpFilter = { $lt: valueNum };
+					else if (operator === '<=') hpFilter = { $lte: valueNum };
+					else hpFilter = valueNum; // Exact match
+					
+					filter.$and.push({ hp: hpFilter });
+					descriptions.push(`HP: ${operator || ''}${value}`);
+				}
+				break;
+			case 'legal':
+				const legalKey = `legalities.${value.toLowerCase()}`;
+				filter.$and.push({ [legalKey]: 'Legal' });
+				descriptions.push(`Legal: ${value}`);
+				break;
+			case 'series':
+				filter.$and.push({ setSeries: valueRegex });
+				descriptions.push(`Series: ${value}`);
+				break;
+			case 'reg':
+				filter.$and.push({ regulationMark: valueRegex });
+				descriptions.push(`Reg Mark: ${value}`);
+				break;
+			case 'set':
+				// Add set/setId search
+				filter.$and.push({ $or: [{ set: valueRegex }, { setId: valueRegex }] });
+				descriptions.push(`Set: ${value}`);
+				break;
+		}
+	}
+
+	// 3. Add remaining text as name query
+	const nameQueryClean = nameQuery.trim();
+	if (nameQueryClean) {
+		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+		filter.$and.push({ name: nameRegex });
+		descriptions.unshift(`'${nameQueryClean}'`); // Add to the front
+	}
+
+	// 4. Finalize
+	if (filter.$and.length === 0) {
+		// No filters provided, search everything
+		delete filter.$and;
+	}
+	
+	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
+
+	return { filter, queryDescription, page, commandString };
+}
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -217,42 +341,25 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.parse('/help tcg search');
 
-			// --- Pagination and Query Parsing ---
-			const parts = target.split(',');
-			let page = 1;
-			let query = target.trim();
-
-			if (parts.length > 1) {
-				const lastPart = parts[parts.length - 1].trim();
-				const potentialPage = parseInt(lastPart);
-				if (!isNaN(potentialPage)) {
-					page = Math.max(1, potentialPage);
-					query = parts.slice(0, -1).join(',').trim(); // Re-join the rest as the query
-				}
-			}
-			// --- End Parsing ---
-
 			try {
-				const collection = ImpulseDB<TcgCard>('tcg_cards');
-				// Use regex for case-insensitive partial matching
-				const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				const searchRegex = new RegExp(escapedQuery, 'i');
-				const filter = { name: searchRegex };
+				// --- 1. Parse Query ---
+				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
 
-				// First, get the total count
+				const collection = ImpulseDB<TcgCard>('tcg_cards');
+
+				// --- 2. Get Counts ---
 				const totalMatches = await collection.countDocuments(filter);
 
 				if (totalMatches === 0) {
-					return this.errorReply(`No cards found matching "${query}".`);
+					return this.errorReply(`No cards found matching: ${queryDescription}.`);
 				}
 
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
-				// Ensure page is within valid range
-				if (page > totalPages) page = totalPages;
+				const currentPage = Math.min(page, totalPages); // Ensure page is within valid range
 				
-				const skip = (page - 1) * SEARCH_PAGE_LIMIT;
+				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
-				// Now, get the documents for the current page
+				// --- 3. Get Results ---
 				const results = await collection.find(
 					filter,
 					{
@@ -263,9 +370,10 @@ export const commands: ChatCommands = {
 					}
 				);
 
-				// Build HTML using the 'openpack' UI style
+				// --- 4. Build HTML ---
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">Search results for "${query}"</strong><br />`;
+				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
 
 				// Container for all cards
@@ -292,24 +400,24 @@ export const commands: ChatCommands = {
 				
 				html += `</div>`; // End card container
 
-				// --- Pagination Footer ---
+				// --- 5. Pagination Footer ---
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">`;
 
 					// Previous Button
-					if (page > 1) {
-						html += `<button name="send" value="/tcg search ${query}, ${page - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
+					if (currentPage > 1) {
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
 					} else {
 						html += `<div></div>`; // Placeholder
 					}
 
 					// Page Info
-					html += `<div style="font-size: 0.9em; color: #555;">Page ${page} of ${totalPages}</div>`;
+					html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
 
 					// Next Button
-					if (page < totalPages) {
-						html += `<button name="send" value="/tcg search ${query}, ${page + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
+					if (currentPage < totalPages) {
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
 					} else {
 						html += `<div></div>`; // Placeholder
 					}
@@ -334,7 +442,8 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [name], [page]</code> - Search for a card by name (e.g., /tcg search Charizard, 2)`
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like <code>type:Fire</code>, <code>hp:100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:200, 1</code>`
 			);
 		},
 	},
