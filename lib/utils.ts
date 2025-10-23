@@ -122,7 +122,7 @@ export function visualize(value: any, depth = 0): string {
 		return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
 	case 'Set':
 		if (depth > 2) return `Set`;
-		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v), depth + 1).join(', ')} }`;
+		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v, depth + 1)).join(', ')} }`;
 	}
 
 	if (value.toString) {
@@ -202,7 +202,7 @@ export function sortBy<T>(array: T[], callback: (a: T) => Comparable): T[];
  * this to sort numbers.
  */
 export function sortBy<T extends Comparable>(array: T[]): T[];
-export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
+export function sortBy<T>(array: T[], callback?: (a: T) => Comparable): T[] {
 	if (!callback) return (array as any[]).sort(compare);
 	return array.sort((a, b) => compare(callback(a), callback(b)));
 }
@@ -327,9 +327,10 @@ export function clearRequireCache(options: { exclude?: string[] } = {}) {
 
 export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
 	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
-	for (const [i, child] of mod.children.entries()) {
+	for (let i = mod.children.length - 1; i >= 0; i--) {
+		const child = mod.children[i];
 		if (excludes.some(p => child.filename.includes(p))) continue;
-		mod.children?.splice(i, 1);
+		mod.children.splice(i, 1);
 		uncacheModuleTree(child, excludes);
 	}
 	delete (mod as any).children;
