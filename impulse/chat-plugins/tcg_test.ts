@@ -23,7 +23,7 @@ function getRarityColor(rarity: string): string {
 	const lowerRarity = rarity?.toLowerCase() || 'common';
 
 	if (lowerRarity.includes('common') || lowerRarity.includes('1st edition') || lowerRarity.includes('shadowless') || lowerRarity.includes('double rare')) {
-		return 'rgba(150, 150, 150, 0.15)'; // Light grey (slightly less transparent)
+		return 'rgba(150, 150, 150, 0.15)'; // Light grey
 	}
 	if (lowerRarity.includes('uncommon') || lowerRarity.includes('reverse holo')) {
 		return 'rgba(100, 180, 100, 0.2)'; // Light green
@@ -95,18 +95,18 @@ export const commands: ChatCommands = {
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
-				const rarityColor = getRarityColor(card.rarity); // Get the background color
+				const rarityColor = getRarityColor(card.rarity);
 
-				// Apply background color and gap to the main div
-				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px; background-color: ${rarityColor}; border-radius: 8px; gap: 20px;">`; // Added bg, radius, gap
+				// Apply background color to main div, keep align-items: center
+				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px; background-color: ${rarityColor}; border-radius: 8px;">`;
 
-				// Image Section - Removed border and padding-right
-				html += `<div style="flex-shrink: 0;">`;
+				// Image Section - Added border and padding-right back
+				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section - Removed background, padding, radius, margin-left
-				html += `<div style="flex: 1; line-height: 1.6;">`;
+				// Text Info Section - Added margin-left back
+				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
 				// Name/ID Line
 				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
 				html += `<span style="color: #777; font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
