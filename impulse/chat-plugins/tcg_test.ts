@@ -18,55 +18,69 @@ interface TCGCard {
 }
 
 // Helper function to get background color based on rarity (rgba values)
+// Increased opacity for more vibrant colors
 function getRarityColor(rarity: string): string {
-	// Using rgba for semi-transparency - adjust colors/opacity as needed
 	const lowerRarity = rarity?.toLowerCase() || 'common';
 
+	// Tier 1: Common / Basic Variants
 	if (lowerRarity.includes('common') || lowerRarity.includes('1st edition') || lowerRarity.includes('shadowless') || lowerRarity.includes('double rare')) {
-		return 'rgba(150, 150, 150, 0.15)'; // Light grey
+		return 'rgba(150, 150, 150, 0.25)'; // Grey (more opaque)
 	}
+	// Tier 2: Uncommon / Reverse
 	if (lowerRarity.includes('uncommon') || lowerRarity.includes('reverse holo')) {
-		return 'rgba(100, 180, 100, 0.2)'; // Light green
+		return 'rgba(100, 180, 100, 0.3)'; // Green (more opaque)
 	}
+	// Tier 3: Basic Rares
 	if (lowerRarity === 'rare') {
-		return 'rgba(90, 150, 200, 0.2)'; // Light blue
+		return 'rgba(90, 150, 200, 0.3)'; // Blue (more opaque)
 	}
+	// Tier 4: Standard Holos & Promos
 	if (lowerRarity.includes('rare holo') || lowerRarity.includes('promo') || lowerRarity.includes('classic collection')) {
 		if (!lowerRarity.includes('star') && !lowerRarity.includes(' ex') && !lowerRarity.includes(' gx') && !lowerRarity.includes(' v') && !lowerRarity.includes(' lv.x')) {
-			return 'rgba(210, 180, 90, 0.25)'; // Light gold/yellow
+			return 'rgba(210, 180, 90, 0.35)'; // Gold/yellow (more opaque)
 		}
 	}
+	// Tier 5: Special Mechanics (Prime, LEGEND, BREAK, Prism, ACE SPEC) & SP
 	if (lowerRarity.includes('rare prime') || lowerRarity.includes('legend') || lowerRarity.includes('rare break') || lowerRarity.includes('prism star') || lowerRarity.includes('ace spec') || lowerRarity.includes('rare ace') || lowerRarity.includes('rare sp')) {
-		return 'rgba(170, 170, 190, 0.25)'; // Metallic grey/silver
+		return 'rgba(170, 170, 190, 0.35)'; // Metallic grey/silver (more opaque)
 	}
+	// Tier 6: Rule Box Holos (EX, GX, V, VMAX, VSTAR, ex, LV.X)
 	if (lowerRarity.includes('rare holo ex') || lowerRarity.includes('rare holo gx') || lowerRarity.includes('rare holo v') || lowerRarity.includes('rare holo vmax') || lowerRarity.includes('rare holo vstar') || lowerRarity.includes('rare ex') || lowerRarity.includes('rare holo lv.x')) {
-		return 'rgba(100, 200, 200, 0.25)'; // Teal/Aqua
+		return 'rgba(100, 200, 200, 0.35)'; // Teal/Aqua (more opaque)
 	}
+	// Tier 7: Shining, Radiant, Amazing, Character Rares
 	if (lowerRarity.includes('shining') || lowerRarity.includes('radiant rare') || lowerRarity.includes('amazing rare') || lowerRarity.includes('trainer gallery') || lowerRarity.includes('character rare')) {
-		return 'rgba(255, 105, 180, 0.25)'; // Pink/Magenta
+		return 'rgba(255, 105, 180, 0.35)'; // Pink/Magenta (more opaque)
 	}
+	// Tier 8: Full Arts / Ultra Rares / Basic Shiny
 	if (lowerRarity.includes('full art') || lowerRarity.includes('rare ultra') || lowerRarity.includes('ultra rare') || lowerRarity.includes('rare shiny') || lowerRarity.includes('shiny rare')) {
-		return 'rgba(135, 206, 235, 0.25)'; // Sky blue
+		return 'rgba(135, 206, 235, 0.35)'; // Sky blue (more opaque)
 	}
+	// Tier 9: Higher Shinies & Character Super Rares
 	if (lowerRarity.includes('rare shiny gx') || lowerRarity.includes('shiny ultra rare') || lowerRarity.includes('character super rare')) {
-		return 'rgba(255, 165, 0, 0.3)'; // Orange
+		return 'rgba(255, 165, 0, 0.4)'; // Orange (more opaque)
 	}
+	// Tier 10: Secret Rares (Generic, Holo Star, Gold Star, Star)
 	if (lowerRarity.includes('rare secret') || lowerRarity.includes('secret rare') || lowerRarity.includes('rare holo star') || lowerRarity.includes('gold star') || lowerRarity === 'star') {
-		if (!lowerRarity.includes('rainbow') && !lowerRarity.includes('gold')) {
- 			return 'rgba(255, 215, 0, 0.3)'; // Gold
+	    if (!lowerRarity.includes('rainbow') && !lowerRarity.includes('gold')) {
+ 			return 'rgba(255, 215, 0, 0.4)'; // Gold (more opaque)
  		}
 	}
+	// Tier 11: Illustration Rares
 	if (lowerRarity.includes('illustration rare')) {
-		return 'rgba(180, 110, 220, 0.25)'; // Purple
+		return 'rgba(180, 110, 220, 0.35)'; // Purple (more opaque)
 	}
+	// Tier 12: Hyper Rares & Rainbow Rares
 	if (lowerRarity.includes('hyper rare') || lowerRarity.includes('rare rainbow')) {
-		return 'rgba(180, 110, 220, 0.3)'; // Brighter Purple
+		return 'rgba(180, 110, 220, 0.4)'; // Brighter Purple (more opaque)
 	}
+	// Tier 13: Gold Rares
 	if (lowerRarity.includes('gold full art') || lowerRarity.includes('rare gold')) {
-		return 'rgba(255, 215, 0, 0.35)'; // Brighter Gold
+		return 'rgba(255, 215, 0, 0.45)'; // Brighter Gold (more opaque)
 	}
 
-	return 'rgba(200, 200, 200, 0.1)'; // Default subtle grey
+	// Fallback
+	return 'rgba(200, 200, 200, 0.15)'; // Default subtle grey (slightly more opaque)
 }
 
 
@@ -95,17 +109,17 @@ export const commands: ChatCommands = {
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
-				const rarityColor = getRarityColor(card.rarity);
+				const rarityColor = getRarityColor(card.rarity); // Get the updated background color
 
-				// Apply background color to main div, keep align-items: center
+				// Apply background color to main div
 				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px; background-color: ${rarityColor}; border-radius: 8px;">`;
 
-				// Image Section - Added border and padding-right back
+				// Image Section - Border #ccc
 				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section - Added margin-left back
+				// Text Info Section - margin-left: 20px;
 				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
 				// Name/ID Line
 				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
