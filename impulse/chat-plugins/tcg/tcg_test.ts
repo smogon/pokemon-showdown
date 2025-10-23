@@ -429,7 +429,6 @@ export const commands: ChatCommands = {
 		// Cache commands (unchanged)
 		async loadcache(target, room, user) {
 			this.checkCan('bypassall');
-			if (!this.can('lock')) return;
 			this.sendReply('Initializing TCG cache... This may take a moment.');
 			try {
 				const { cardCount, setCount } = await initializeCache();
