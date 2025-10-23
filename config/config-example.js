@@ -474,6 +474,14 @@ exports.ratedtours = false;
 exports.appealurl = '';
 
 /**
+ * rebuildcommands - which admin commands should trigger rebuilds
+ */
+exports.rebuildcommands = {
+	updateserver: false,
+	hotpatch: true,
+};
+
+/**
  * repl - whether repl sockets are enabled or not
  * replsocketprefix - the prefix for the repl sockets to be listening on
  * replsocketmode - the file mode bits to use for the repl sockets
