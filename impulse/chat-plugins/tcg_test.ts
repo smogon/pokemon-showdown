@@ -55,19 +55,19 @@ export const commands: ChatCommands = {
 				// Text Info Section - margin-left: 20px;
 				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
 				// Name/ID Line
-				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
-				html += `<span style="color: #777; font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
+				html += `<strong style="font-size: 25px;">${card.name}</strong> `;
+				html += `<span style="font-size: 1.3em; margin-left: 5px;">(${card.cardId})</span><br />`;
 				// Details section
 				html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
-				html += `<strong style="font-size: 0.9em;">Set:</strong> ${card.set} <span style="color: #777; font-size: 0.9em;">(${card.setId})</span><br />`;
-				html += `<strong style="font-size: 0.9em;">Rarity:</strong> ${card.rarity}<br />`;
-				html += `<strong style="font-size: 0.9em;">Supertype:</strong> ${card.supertype}<br />`;
+				html += `<strong style="font-size: 1.3em;">Set:</strong> ${card.set} <span style="color: #777; font-size: 0.9em;">(${card.setId})</span><br />`;
+				html += `<strong style="font-size: 1.3em;">Rarity:</strong> ${card.rarity}<br />`;
+				html += `<strong style="font-size: 1.3em;">Supertype:</strong> ${card.supertype}<br />`;
 				if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') {
-					html += `<strong style="font-size: 0.9em;">Subtypes:</strong> ${subtypes}<br />`;
+					html += `<strong style="font-size: 1.3em;">Subtypes:</strong> ${subtypes}<br />`;
 				}
 				// Points section
-				html += `<div style="margin-top: 10px;">`;
-				html += `<strong style="color: #007bff; font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}`;
+				html += `<div style="margin-top: 12px;">`;
+				html += `<strong style="font-size: 1.3em; font-weight: bold;">Points:</strong> ${card.totalPoints}`;
 				html += `</div>`;
 				html += `</div>`; // End Details section
 				html += `</div>`; // End Text Info Section
