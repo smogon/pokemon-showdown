@@ -3,19 +3,8 @@
  * Displays Pokemon TCG card information
  */
 
-import { ImpulseDB } from '../impulse-db';
-
-interface TCGCard {
-	cardId: string;
-	name: string;
-	setId: string;
-	set: string;
-	rarity: string;
-	supertype: string;
-	subtypes: string[];
-	totalPoints: number;
-	imageUrl?: string;
-}
+import { ImpulseDB } from '../../impulse-db';
+import { TcgCard } from './interface';
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -27,7 +16,7 @@ export const commands: ChatCommands = {
 			const cardId = target.trim();
 
 			try {
-				const collection = ImpulseDB<TCGCard>('tcg_cards');
+				const collection = ImpulseDB<TcgCard>('tcg_cards');
 				const card = await collection.findOne({ cardId });
 
 				if (!card) {
