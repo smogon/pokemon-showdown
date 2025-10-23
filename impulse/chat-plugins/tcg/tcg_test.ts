@@ -158,7 +158,8 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	filter: any,
 	queryDescription: string,
 	page: number,
-	commandString: string
+	commandString: string,
+	targetUserId: string,
 } {
 	const parts = target.split(',');
 	let page = 1;
@@ -273,7 +274,7 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	// Ensure user: filter is not in the command string for pagination
 	const finalCommandString = commandString.replace(/user:\s*("[^"]+"|[\w-]+)/gi, '').trim();
 
-	return { filter, queryDescription, page, commandString: finalCommandString };
+	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
 }
 
 /**
@@ -307,8 +308,6 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 			userId: userId,
 			cardId: card.cardId,
 			firstAcquiredAt: now,
-			// --- REMOVED THIS LINE ---
-			// lastAcquiredAt: now,
 			
 			// --- Denormalized fields ---
 			name: card.name,
@@ -750,12 +749,30 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 
 			try {
-				const { filter, queryDescription, page, commandString } = parseCollectionQuery(target, user.id);
+				const { filter, queryDescription, page, commandString, targetUserId } = parseCollectionQuery(target, user.id);
 				const collection = ImpulseDB<TcgUser>('user_collections');
 
-				const totalMatches = await collection.countDocuments(filter);
+				// --- NEW: Run stats aggregation first ---
+				const statsPipeline: any[] = [
+					{ $match: filter },
+					{
+						$group: {
+							_id: null,
+							totalUniqueCards: { $sum: 1 },
+							totalQuantity: { $sum: "$quantity" },
+							totalPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
+						}
+					}
+				];
+				const statsResult = await collection.aggregate(statsPipeline);
+				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, totalPoints: 0 };
+				
+				const totalMatches = stats.totalUniqueCards; // This is the count for pagination
+				// --- END NEW STATS ---
+
 				if (totalMatches === 0) {
-					return this.errorReply(`No cards found in collection matching: ${queryDescription}.`);
+					// Use targetUserId in error
+					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription}.`);
 				}
 
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
@@ -786,10 +803,22 @@ export const commands: ChatCommands = {
 				
 				const results = await collection.aggregate(pipeline);
 
+				// --- HTML MODIFICATIONS ---
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">Card Collection</strong><br />`;
-				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
-				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
+				
+				// Use targetUserId for the name. Use user.name only if it's the current user.
+				const displayName = targetUserId === user.id ? user.name : targetUserId;
+				html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
+				
+				// Add new stats line
+				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity} | Total Points: ${stats.totalPoints}</div>`;
+				
+				// Add filter description
+				html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${queryDescription}</div>`;
+				
+				// Update showing line
+				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} unique cards.</div>`;
+				// --- END HTML MODIFICATIONS ---
 
 				if (results.length === 0) {
 					html += `No results found for this page.`;
@@ -883,7 +912,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like <code>type:Fire</code>, T<code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg daily</code> - Claim your free daily booster pack (once per 24h).<br />` +
