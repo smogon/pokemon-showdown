@@ -99,15 +99,14 @@ export class Field {
 	}
 
 	effectiveWeather() {
-		if (this.suppressingWeather()) return '';
-		return this.weather;
+		return this.suppressingWeather() ? '' : this.weather;
 	}
 
 	suppressingWeather() {
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
-					pokemon.getAbility().suppressWeather && !pokemon.abilityState.ending) {
+					pokemon.getAbility().suppressWeather && !pokemon.abilityState?.ending) {
 					return true;
 				}
 			}
@@ -233,6 +232,8 @@ export class Field {
 		// deallocate ourself
 
 		// get rid of some possibly-circular references
-		(this as any).battle = null!;
+		if (this.battle) {
+			(this as any).battle = null!;
+		}
 	}
 }
