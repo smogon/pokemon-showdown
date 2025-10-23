@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 			try {
 				const pack = await generatePack(setId);
 
-				let html = `<div class="infobox" style="padding: 5px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
 				// Row 1: First 4 cards
@@ -93,7 +93,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<div style="display: inline-block; margin: 0 7px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
