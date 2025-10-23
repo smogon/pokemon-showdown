@@ -66,15 +66,13 @@ export const commands: Chat.ChatCommands = {
 			if (PoofManager.isPoofDisabled()) {
 				return this.errorReply("Poof is currently disabled.");
 			}
-			if (target && !this.checkCan('broadcast')) return;
-
 			const message = target || PoofManager.getRandomMessage();
 			const formattedMessage = PoofManager.formatMessage(message, user.name);
 
 			if (!this.canTalk(formattedMessage)) return;
 
 			const colour = PoofManager.generateRandomColor();
-			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage} ~~</font></strong></center>`);
+			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage || target} ~~</font></strong></center>`);
 			user.disconnectAll();
 		},
 
