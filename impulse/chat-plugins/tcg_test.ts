@@ -47,13 +47,13 @@ export const commands: ChatCommands = {
 				// Using margin-left on the text div for spacing
 				let html = `<div class="infobox" style="display: flex; align-items: flex-start; padding: 15px;">`;
 
-				// Image Section - Updated width and height
+				// Image Section
 				html += `<div style="flex-shrink: 0;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section
-				html += `<div style="flex: 1; line-height: 1.5; margin-left: 30px;">`;
+				// Text Info Section - Updated margin-left: 25px;
+				html += `<div style="flex: 1; line-height: 1.5; margin-left: 25px;">`;
 				html += `<strong style="font-size: 20px; display: block; margin-bottom: 8px;">${card.name}</strong>`;
 				html += `<span style="color: #555; font-size: 0.9em;">(${card.cardId})</span><br />`;
 				html += `<div style="margin-top: 10px;">`;
