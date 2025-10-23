@@ -84,9 +84,9 @@ export const commands: ChatCommands = {
 				let html = `<div class="infobox" style="padding: 5px; text-align: center;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
-				// Row 1: First 5 cards
+				// Row 1: First 4 cards
 				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 5; i++) {
+				for (let i = 0; i < 4; i++) {
 					const card = pack[i];
 					const imageWidth = 74;
 					const imageHeight = 103;
@@ -104,9 +104,29 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
 
-				// Row 2: Next 5 cards
+				// Row 2: Next 4 cards
 				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 5; i < 10; i++) {
+				for (let i = 4; i < 8; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
+
+				// Row 3: Last 2 cards (rarest)
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 8; i < 10; i++) {
 					const card = pack[i];
 					const imageWidth = 74;
 					const imageHeight = 103;
