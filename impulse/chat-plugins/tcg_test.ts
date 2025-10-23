@@ -36,7 +36,7 @@ export const commands: ChatCommands = {
 				// Calculate 60% of original dimensions
 				const originalWidth = 246;
 				const originalHeight = 342;
-				const scaleFactor = 0.60;
+				const scaleFactor = 0.65;
 				const imageWidth = Math.round(originalWidth * scaleFactor);  // Approx 148
 				const imageHeight = Math.round(originalHeight * scaleFactor); // Approx 205
 
