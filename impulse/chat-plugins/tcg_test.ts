@@ -21,6 +21,7 @@ export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
 	pokemontcg: {
 		async card(target, room, user) {
+			if (!this.runBroadcast()) return;
 			if (!target) return this.parse('/help tcg card');
 
 			const cardId = target.trim();
@@ -74,7 +75,7 @@ export const commands: ChatCommands = {
 				html += `</div>`; // End Text Info Section
 				html += `</div>`; // End Infobox
 
-				this.sendReplyBox(html);
+				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG card command');
 				return this.errorReply('An error occurred while fetching card data.');
