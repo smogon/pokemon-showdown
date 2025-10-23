@@ -7,7 +7,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
 import { generatePack } from './utils';
 
-const MAX_SEARCH_RESULTS = 15;
+const SEARCH_PAGE_LIMIT = 50; // Renamed from MAX_SEARCH_LIMIT
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -215,46 +215,110 @@ export const commands: ChatCommands = {
 
 		async search(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const query = target.trim();
-			if (!query) return this.parse('/help tcg search');
+			if (!target) return this.parse('/help tcg search');
+
+			// --- Pagination and Query Parsing ---
+			const parts = target.split(',');
+			let page = 1;
+			let query = target.trim();
+
+			if (parts.length > 1) {
+				const lastPart = parts[parts.length - 1].trim();
+				const potentialPage = parseInt(lastPart);
+				if (!isNaN(potentialPage)) {
+					page = Math.max(1, potentialPage);
+					query = parts.slice(0, -1).join(',').trim(); // Re-join the rest as the query
+				}
+			}
+			// --- End Parsing ---
 
 			try {
 				const collection = ImpulseDB<TcgCard>('tcg_cards');
 				// Use regex for case-insensitive partial matching
-				// Add \Q and \E to escape regex special characters in the user's query
 				const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 				const searchRegex = new RegExp(escapedQuery, 'i');
+				const filter = { name: searchRegex };
 
-				const results = await collection.find(
-					{ name: searchRegex },
-					{
-						limit: MAX_SEARCH_RESULTS,
-						projection: { name: 1, cardId: 1, rarity: 1 },
-						sort: { releaseDate: -1, name: 1 },
-					}
-				);
+				// First, get the total count
+				const totalMatches = await collection.countDocuments(filter);
 
-				if (results.length === 0) {
+				if (totalMatches === 0) {
 					return this.errorReply(`No cards found matching "${query}".`);
 				}
 
-				let html = `<div class="infobox" style="max-height: 300px; overflow-y: auto;">`;
-				html += `<strong>Search results for "${query}"</strong> (displaying ${results.length} results):<br />`;
-				html += `<ul style="list-style: none; padding-left: 10px; margin-top: 5px;">`;
+				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
+				// Ensure page is within valid range
+				if (page > totalPages) page = totalPages;
+				
+				const skip = (page - 1) * SEARCH_PAGE_LIMIT;
+
+				// Now, get the documents for the current page
+				const results = await collection.find(
+					filter,
+					{
+						limit: SEARCH_PAGE_LIMIT,
+						skip: skip,
+						projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
+						sort: { rarityPoints: -1, name: 1 }, // Sort by rarity (descending) then name
+					}
+				);
+
+				// Build HTML using the 'openpack' UI style
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">Search results for "${query}"</strong><br />`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
+
+				// Container for all cards
+				html += `<div style="display: inline-block; text-align: center;">`;
+
+				if (results.length === 0) {
+					html += `No results found for this page.`;
+				}
 
 				for (const card of results) {
-					html += `<li style="margin-bottom: 5px;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 5px; cursor: pointer; color: #005cc5; text-decoration: underline; text-align: left;">`;
-					html += `${card.name} (${card.cardId}) - [${card.rarity}]`;
-					html += `</button>`;
-					html += `</li>`;
-				}
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
 
-				html += `</ul>`;
-				if (results.length >= MAX_SEARCH_RESULTS) {
-					html += `<div style="font-style: italic; color: #555; margin-top: 10px;">More results may exist. Please refine your search.</div>`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; margin-bottom: 5px;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `</div>`;
 				}
-				html += `</div>`;
+				
+				html += `</div>`; // End card container
+
+				// --- Pagination Footer ---
+				if (totalPages > 1) {
+					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+					html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">`;
+
+					// Previous Button
+					if (page > 1) {
+						html += `<button name="send" value="/tcg search ${query}, ${page - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
+					} else {
+						html += `<div></div>`; // Placeholder
+					}
+
+					// Page Info
+					html += `<div style="font-size: 0.9em; color: #555;">Page ${page} of ${totalPages}</div>`;
+
+					// Next Button
+					if (page < totalPages) {
+						html += `<button name="send" value="/tcg search ${query}, ${page + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
+					} else {
+						html += `<div></div>`; // Placeholder
+					}
+
+					html += `</div>`;
+				}
+				// --- End Pagination Footer ---
+
+				html += `</div>`; // End infobox
 
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
@@ -270,7 +334,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [name]</code> - Search for a card by its name`
+				`<code>/tcg search [name], [page]</code> - Search for a card by name (e.g., /tcg search Charizard, 2)`
 			);
 		},
 	},
