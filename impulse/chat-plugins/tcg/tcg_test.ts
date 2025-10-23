@@ -202,7 +202,7 @@ export const commands: ChatCommands = {
 			html += `<strong style="font-size: 1.1em;">Set:</strong> ${card.set} <span style="font-size: 0.9em;">(${card.setId})</span><br />`;
 			html += `<strong style="font-size: 1.1em;">Rarity:</strong> ${card.rarity}<br />`;
 			html += `<strong style="font-size: 1.1em;">Supertype:</strong> ${card.supertype}<br />`;
-			if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') {
+			if (card.supertype === 'PokÃ©mon' || card.supertype === 'Trainer') {
 				html += `<strong style="font-size: 1.1em;">Subtypes:</strong> ${subtypes}<br />`;
 			}
 			html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
@@ -390,13 +390,13 @@ export const commands: ChatCommands = {
 					const card = results[i];
 					if (i % 4 === 0) {
 						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-						html += `<div style="display: inline-block; text-align: center;">`; 
+						html += `<div style="display: flex; justify-content: center; gap: 10px; text-align: center;">`; 
 					}
 					const imageWidth = 74;
 					const imageHeight = 103;
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<div style="display: inline-block; margin: 0; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
