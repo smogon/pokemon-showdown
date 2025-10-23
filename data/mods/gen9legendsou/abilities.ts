@@ -5,38 +5,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
-		onResidual(pokemon, target) {
-			if (target?.baseSpecies.isMega && !target.fainted) {
-				this.damage(target.baseMaxhp / 10, target, pokemon);
-				this.heal(target.baseMaxhp / 10);
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const megaFoes = [];
+			for (const target of pokemon.foes()) {
+				if (target.baseSpecies.isMega) megaFoes.push(target);
+			}
+			if (megaFoes.length) {
+				for (const target of megaFoes) {
+					this.damage(target.baseMaxhp / 10, target, pokemon);
+					this.heal(target.baseMaxhp / 10);
+				}
 			} else {
 				this.heal(pokemon.baseMaxhp / 12);
 			}
 		},
 		name: "Ange",
-	},
-	battlebond: {
-		inherit: true,
-		onSourceAfterFaint(length, target, source, effect) {
-			if (source.bondTriggered) return;
-			if (effect?.effectType !== 'Move') return;
-			if (source.species.baseSpecies === 'Greninja' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
-				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
-				this.add('-activate', source, 'ability: Battle Bond');
-				source.bondTriggered = true;
-			}
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Mega' &&
-				!attacker.transformed) {
-				move.multihit = 3;
-			}
-		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		name: "Battle Bond",
-		desc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 20 power, hits 3x.",
-		shortDesc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 20 power, hits 3x.",
 	},
 	brassbond: {
 		onPrepareHit(source, target, move) {
@@ -99,28 +83,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Ion Battery",
 		desc: "This Pokemon floats and has 1.5x Sp. Atk.",
 		shortDesc: "This Pokemon floats and has 1.5x Sp. Atk.",
-	},
-	leaderofthepride: {
-		onStart(pokemon) {
-			pokemon.updateMaxHp();
-			if (this.field.setWeather('sunnyday')) {
-				this.add('-activate', pokemon, 'Leader of the Pride', '[source]');
-			} else if (this.field.isWeather('sunnyday')) {
-				this.add('-activate', pokemon, 'ability: Leader of the Pride');
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				this.debug('leader of the pride boost');
-				return this.chainModify([5461, 4096]);
-			}
-		},
-		flags: {},
-		name: "Leader of the Pride",
-		gen: 9,
-		desc: "On switch-in, summons Sunny Day. During Sunny Day, Sp. Atk is 1.3333x.",
-		shortDesc: "On switch-in, summons Sunny Day. During Sunny Day, Sp. Atk is 1.3333x.",
 	},
 	luchadorspride: {
 		onSourceAfterFaint(length, target, source, effect) {
