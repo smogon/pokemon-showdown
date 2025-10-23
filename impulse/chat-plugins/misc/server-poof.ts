@@ -25,7 +25,6 @@ const messages: string[] = [
 	`got rekt by Travis CI!`,
 	`exited life.exe.`,
 	`found a species called "friends" (whatever that means).`,
-	// New fun messages
 	`tripped over a wireless cable.`,
 	`ragequit due to hax.`,
 	`got lost in Verdanturf Tunnel without Flash.`,
@@ -136,7 +135,7 @@ export const commands: Chat.ChatCommands = {
 			{cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &."},
 			{cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &."},
 		];
-		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center><hr><ul style=\"list-style-type:none;padding-left:0;\">` +
+		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({cmd, desc}, i) =>
 				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
