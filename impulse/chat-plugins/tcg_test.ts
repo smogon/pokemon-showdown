@@ -66,7 +66,9 @@ export const commands: ChatCommands = {
 					html += `<strong style="font-size: 1.1em;">Subtypes:</strong> ${subtypes}<br />`;
 				}
 				// Points section
-				html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}`;
+				html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
+				// Flavor Text & Artist
+				html += `<strong style="font-size: 1.1em; font-weight: bold;">Artist:</strong> ${card.artist}`;
 				html += `</div>`; // End Details section
 				html += `</div>`; // End Text Info Section
 
