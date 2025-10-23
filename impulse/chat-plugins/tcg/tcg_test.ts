@@ -306,7 +306,8 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 		const newDocData: TcgUser = {
 			userId: userId,
 			cardId: card.cardId,
-			quantity: 0, // This will be set by $inc
+			// --- REMOVED THIS LINE ---
+			// quantity: 0, // This will be set by $inc
 			firstAcquiredAt: now,
 			lastAcquiredAt: now,
 			
