@@ -5,6 +5,7 @@
 
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
+import { generatePack } from './utils';
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -71,11 +72,49 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async openpack(target, room, user) {
+			if (!this.runBroadcast()) return;
+			if (!target) return this.parse('/help tcg openpack');
+
+			const setId = target.trim();
+
+			try {
+				const pack = await generatePack(setId);
+
+				let html = `<div class="infobox" style="padding: 15px;">`;
+				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br />`;
+				html += `<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">`;
+
+				for (const card of pack) {
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+
+					html += `<div style="text-align: center;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 5px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em; color: #666;">${card.rarity} (${card.totalPoints} pts)</div>`;
+					html += `</div>`;
+				}
+
+				html += `</div></div>`;
+
+				this.sendReply(`|html|${html}`);
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG openpack command');
+				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
+			}
+		},
+
 		'': 'help',
 		help() {
 			this.sendReplyBox(
 				`<strong>TCG Commands:</strong><br />` +
-				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information`
+				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
+				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set`
 			);
 		},
 	},
