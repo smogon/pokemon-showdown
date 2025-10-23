@@ -1,26 +1,25 @@
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard } from './interface';
+import {
+	getCardsFromPool,
+	getWeightedCardFromPool,
+	getGlobalFallback,
+	getCacheStats, // Import cache status checker
+} from './tcg-cache';
 
-const COLLECTION_NAME = 'tcg_cards';
-const HIT_CHANCE = 0.3; // 30% chance for the 10th slot to be from the "Rarest" pool
-const SAMPLE_SIZE = 20; // Number of cards to sample for weighted selection
+// Constants for both DB and Cache logic
+const HIT_CHANCE = 0.3;
+const DB_SAMPLE_SIZE = 20; // For DB-based weighted random
 
-// ==================== CUSTOM RARITY DEFINITIONS (Based on Rarity Points) ====================
-
-// Pool 1: Commons (10 pts)
-const CUSTOM_COMMON_RARITIES = ['Common'];
-
-// Pool 2: Uncommons (20 pts)
-const CUSTOM_UNCOMMON_RARITIES = ['Uncommon'];
-
-// Pool 3: Regular Rares (25 pts to 99 pts)
-const CUSTOM_REVERSE_RARE_RARITIES = [
+// ==================== CUSTOM RARITY DEFINITIONS ====================
+// (Exported for cache)
+export const CUSTOM_COMMON_RARITIES = ['Common'];
+export const CUSTOM_UNCOMMON_RARITIES = ['Uncommon'];
+export const CUSTOM_REVERSE_RARE_RARITIES = [
   'Reverse Holo', 'Rare', 'Double Rare', 'Rare Holo', 'Classic Collection',
   'Rare Holo 1st Edition', 'Rare SP', 'Rare Holo EX', 'Rare Holo GX', 'Rare Holo V',
 ];
-
-// Pool 4: Rarest (100+ pts)
-const CUSTOM_RAREST_RARITIES = [
+export const CUSTOM_RAREST_RARITIES = [
   'Rare Prime', 'LEGEND', 'Rare BREAK', 'Prism Star', 'Rare Holo VMAX',
   'Rare Holo VSTAR', 'Rare ex', 'Radiant Rare', 'Shining', 'Amazing Rare',
   'ACE SPEC Rare', 'Rare ACE', 'Full Art', 'Rare Ultra', 'Ultra Rare',
@@ -30,34 +29,103 @@ const CUSTOM_RAREST_RARITIES = [
   'Special Illustration Rare', 'Rare Rainbow', 'Rare Gold', 'Hyper Rare',
   'Gold Full Art', 'Gold Star',
 ];
+export const FALLBACK_RARITIES = ['Common'];
+
+
+// ==================== ROUTER FUNCTION ====================
 
 /**
- * Ultimate fallback pool. If we still need cards,
- * we pull from this list (most common cards).
+ * Main function called by commands.
+ * Checks if cache is initialized and routes to the appropriate function.
  */
-const FALLBACK_RARITIES = ['Common'];
+export async function generatePack(setId: string): Promise<TcgCard[]> {
+	if (getCacheStats().isInitialized) {
+		// Use fast cache-based generation
+		return generatePackFromCache(setId);
+	} else {
+		// Use slower DB-based generation
+		return generatePackFromDB(setId);
+	}
+}
 
-// ==================== HELPER FUNCTIONS ====================
+// ==================== CACHE-BASED LOGIC ====================
 
 /**
- * Fetches a specified number of *uniformly* random cards,
- * ensuring they are not in the excludeIds list.
- * Can optionally search all sets if setId is null.
+ * Generates a pack from the in-memory cache (fast).
  */
-async function getRandomCards(
+async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
+  const pack: TcgCard[] = [];
+  let excludeIds: string[] = [];
+
+  try {
+    const commonCards = getCardsFromPool(setId, 'common', 5, excludeIds);
+    const uncommonCards = getCardsFromPool(setId, 'uncommon', 3, excludeIds);
+    const reverseRareSlotCards = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
+    
+    pack.push(...commonCards, ...uncommonCards, ...reverseRareSlotCards);
+    excludeIds = pack.map(c => c.cardId);
+
+    let tenthCard: TcgCard | null = null;
+    if (Math.random() < HIT_CHANCE) {
+      tenthCard = getWeightedCardFromPool(setId, 'rarest', excludeIds);
+    }
+    if (!tenthCard) {
+      const regularRareFallback = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
+      if (regularRareFallback.length > 0) {
+        tenthCard = regularRareFallback[0];
+      }
+    }
+    if (!tenthCard) {
+        const ultimateFallback = getCardsFromPool(setId, 'fallback', 1, excludeIds);
+        if (ultimateFallback.length > 0) {
+            tenthCard = ultimateFallback[0];
+        }
+    }
+    if (tenthCard) pack.push(tenthCard);
+
+    let missingCount = 10 - pack.length;
+    if (missingCount > 0) {
+      excludeIds = pack.map(c => c.cardId);
+      const fillCards = getCardsFromPool(setId, 'fallback', missingCount, excludeIds);
+      pack.push(...fillCards);
+    }
+    
+    missingCount = 10 - pack.length;
+    if (missingCount > 0) {
+      excludeIds = pack.map(c => c.cardId);
+      const ultimateFillCards = getGlobalFallback(missingCount, excludeIds);
+      pack.push(...ultimateFillCards);
+    }
+
+    if (pack.length < 10) {
+        throw new Error(`Total card database has fewer than 10 unique cards available.`);
+    }
+    return pack;
+
+  } catch (error) {
+    console.error(`Error generating pack from CACHE for set ${setId}:`, error);
+    throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards to build a pack.`);
+  }
+}
+
+// ==================== DATABASE-BASED LOGIC ====================
+// These functions are restored from the original utils.ts
+
+/**
+ * [DB FALLBACK] Fetches *uniformly* random cards from DB.
+ */
+async function getRandomCardsDB(
   collection: ImpulseCollection<TcgCard>,
-  setId: string | null, // Allow null to search all sets
+  setId: string | null,
   rarities: string[],
   size: number,
-  excludeIds: string[] = [] // List of cardIds to exclude
+  excludeIds: string[] = []
 ): Promise<TcgCard[]> {
   
   const match: any = {
     rarity: { $in: rarities },
-    cardId: { $nin: excludeIds } // Exclude already-picked cards
+    cardId: { $nin: excludeIds }
   };
-
-  // Add setId filter *only* if it's provided
   if (setId) {
     match.setId = setId;
   }
@@ -69,140 +137,91 @@ async function getRandomCards(
 }
 
 /**
- * Fetches one *weighted* random card from a pool,
- * ensuring it is not in the excludeIds list.
- * It favors cards with *lower* rarityPoints within that pool.
+ * [DB FALLBACK] Fetches one *weighted* random card from DB.
  */
-async function getWeightedRandomCard(
+async function getWeightedRandomCardDB(
   collection: ImpulseCollection<TcgCard>,
   setId: string,
   rarities: string[],
-  excludeIds: string[] = [] // List of cardIds to exclude
+  excludeIds: string[] = []
 ): Promise<TcgCard | null> {
   const matchStage = {
     $match: {
       setId: setId,
       rarity: { $in: rarities },
-      cardId: { $nin: excludeIds } // Exclude already-picked cards
+      cardId: { $nin: excludeIds }
     }
   };
-  const sampleStage = { $sample: { size: SAMPLE_SIZE } };
+  const sampleStage = { $sample: { size: DB_SAMPLE_SIZE } };
   const pipeline = [matchStage, sampleStage];
   
   const sampledCards = await collection.aggregate<TcgCard>(pipeline);
-
-  if (sampledCards.length === 0) {
-    return null;
-  }
-
-  // Sort the sample by rarityPoints (lowest first)
+  if (sampledCards.length === 0) return null;
   sampledCards.sort((a, b) => a.rarityPoints - b.rarityPoints);
-
-  // Return the card with the *lowest* points from the random sample
   return sampledCards[0];
 }
 
-// ==================== MAIN FUNCTION ====================
-
 /**
- * Generates a 10-card booster pack with weighted rarity and fallbacks.
- *
- * It attempts to fill the pack with:
- * - 5 Common cards
- * - 3 Uncommon cards
- * - 1 "Regular Rare" card (25-99 pts)
- * - 1 "Hit" slot (weighted 100+ pts or another 25-99 pt card)
- *
- * If any slots fail to fill, it uses "Common" cards from the
- * *same set* as a fallback.
- * If the pack still isn't full (e.g., set has < 10 cards),
- * it uses "Common" cards from *any set* as a final fallback.
- *
- * @param setId The 'setId' of the set to generate a pack from (e.g., 'sv1')
- * @returns A promise that resolves to an array of 10 TcgCard objects
+ * Generates a pack from the Database (slow).
  */
-export async function generatePack(setId: string): Promise<TcgCard[]> {
-  const collection = ImpulseDB<TcgCard>(COLLECTION_NAME);
+async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
+  const collection = ImpulseDB<TcgCard>('tcg_cards');
   const pack: TcgCard[] = [];
   let excludeIds: string[] = [];
 
   try {
-    // --- 1. Get the 9 "base" cards (Commons, Uncommons, Regular Rare) ---
     const [
       commonCards,
       uncommonCards,
       reverseRareSlotCards,
     ] = await Promise.all([
-      getRandomCards(collection, setId, CUSTOM_COMMON_RARITIES, 5, excludeIds),
-      getRandomCards(collection, setId, CUSTOM_UNCOMMON_RARITIES, 3, excludeIds),
-      getRandomCards(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds),
+      getRandomCardsDB(collection, setId, CUSTOM_COMMON_RARITIES, 5, excludeIds),
+      getRandomCardsDB(collection, setId, CUSTOM_UNCOMMON_RARITIES, 3, excludeIds),
+      getRandomCardsDB(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds),
     ]);
 
-    // Add successfully fetched cards to the pack and update exclude list
     pack.push(...commonCards, ...uncommonCards, ...reverseRareSlotCards);
     excludeIds = pack.map(c => c.cardId);
 
-    // --- 2. Handle the 10th "Hit" Slot ---
     let tenthCard: TcgCard | null = null;
-
     if (Math.random() < HIT_CHANCE) {
-      // 30% chance: Try to get a weighted "Rarest" card (100+ pts)
-      tenthCard = await getWeightedRandomCard(collection, setId, CUSTOM_RAREST_RARITIES, excludeIds);
+      tenthCard = await getWeightedRandomCardDB(collection, setId, CUSTOM_RAREST_RARITIES, excludeIds);
     }
-
-    // If we didn't get a "Rarest" card (either by chance or because none exist),
-    // fill the 10th slot with a "Regular Rare" (25-99 pts).
     if (!tenthCard) {
-      const regularRareFallback = await getRandomCards(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
+      const regularRareFallback = await getRandomCardsDB(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
       if (regularRareFallback.length > 0) {
         tenthCard = regularRareFallback[0];
       }
     }
-    
-    // If we *still* don't have a 10th card (e.g., set has no Regular Rares),
-    // try to get an *ultimate fallback* card (Common from same set).
     if (!tenthCard) {
-        const ultimateFallback = await getRandomCards(collection, setId, FALLBACK_RARITIES, 1, excludeIds);
+        const ultimateFallback = await getRandomCardsDB(collection, setId, FALLBACK_RARITIES, 1, excludeIds);
         if (ultimateFallback.length > 0) {
             tenthCard = ultimateFallback[0];
         }
     }
+    if (tenthCard) pack.push(tenthCard);
 
-    // Add the 10th card to the pack if we found one
-    if (tenthCard) {
-      pack.push(tenthCard);
-    }
-
-    // --- 3. First Pack Fill (Same Set) ---
-    // Check if the pack still has fewer than 10 cards
     let missingCount = 10 - pack.length;
     if (missingCount > 0) {
       excludeIds = pack.map(c => c.cardId);
-      const fillCards = await getRandomCards(collection, setId, FALLBACK_RARITIES, missingCount, excludeIds);
+      const fillCards = await getRandomCardsDB(collection, setId, FALLBACK_RARITIES, missingCount, excludeIds);
       pack.push(...fillCards);
     }
     
-    // --- 4. Final Fallback Fill (Any Set) ---
-    // If the pack *still* has fewer than 10 cards (e.g., set has < 10 total cards)
-    // fill the remaining slots with "Common" cards from *any set*.
     missingCount = 10 - pack.length;
     if (missingCount > 0) {
       excludeIds = pack.map(c => c.cardId);
-      // Pass 'null' for setId to search all sets
-      const ultimateFillCards = await getRandomCards(collection, null, FALLBACK_RARITIES, missingCount, excludeIds);
+      const ultimateFillCards = await getRandomCardsDB(collection, null, FALLBACK_RARITIES, missingCount, excludeIds);
       pack.push(...ultimateFillCards);
     }
 
-    // --- 5. Final Validation ---
     if (pack.length < 10) {
         throw new Error(`Total card database has fewer than 10 unique cards available.`);
     }
-
-    // Return the 10-card pack
     return pack;
 
   } catch (error) {
-    console.error(`Error generating pack for set ${setId}:`, error);
+    console.error(`Error generating pack from DB for set ${setId}:`, error);
     throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards to build a pack.`);
   }
 }
