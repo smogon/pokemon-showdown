@@ -7,6 +7,8 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard } from './interface';
 import { generatePack } from './utils';
 
+const MAX_SEARCH_RESULTS = 15;
+
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
 	pokemontcg: {
@@ -211,13 +213,64 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async search(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const query = target.trim();
+			if (!query) return this.parse('/help tcg search');
+
+			try {
+				const collection = ImpulseDB<TcgCard>('tcg_cards');
+				// Use regex for case-insensitive partial matching
+				// Add \Q and \E to escape regex special characters in the user's query
+				const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				const searchRegex = new RegExp(escapedQuery, 'i');
+
+				const results = await collection.find(
+					{ name: searchRegex },
+					{
+						limit: MAX_SEARCH_RESULTS,
+						projection: { name: 1, cardId: 1, rarity: 1 },
+						sort: { releaseDate: -1, name: 1 },
+					}
+				);
+
+				if (results.length === 0) {
+					return this.errorReply(`No cards found matching "${query}".`);
+				}
+
+				let html = `<div class="infobox" style="max-height: 300px; overflow-y: auto;">`;
+				html += `<strong>Search results for "${query}"</strong> (displaying ${results.length} results):<br />`;
+				html += `<ul style="list-style: none; padding-left: 10px; margin-top: 5px;">`;
+
+				for (const card of results) {
+					html += `<li style="margin-bottom: 5px;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 5px; cursor: pointer; color: #005cc5; text-decoration: underline; text-align: left;">`;
+					html += `${card.name} (${card.cardId}) - [${card.rarity}]`;
+					html += `</button>`;
+					html += `</li>`;
+				}
+
+				html += `</ul>`;
+				if (results.length >= MAX_SEARCH_RESULTS) {
+					html += `<div style="font-style: italic; color: #555; margin-top: 10px;">More results may exist. Please refine your search.</div>`;
+				}
+				html += `</div>`;
+
+				this.sendReply(`|html|${html}`);
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG search command');
+				return this.errorReply('An error occurred while searching for cards.');
+			}
+		},
+
 		'': 'help',
 		help() {
 			this.sendReplyBox(
 				`<strong>TCG Commands:</strong><br />` +
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
-				`<code>/tcg set [setId]</code> - Display information about a specific TCG set`
+				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
+				`<code>/tcg search [name]</code> - Search for a card by its name`
 			);
 		},
 	},
