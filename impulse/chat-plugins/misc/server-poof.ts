@@ -66,8 +66,7 @@ export const commands: Chat.ChatCommands = {
 			if (PoofManager.isPoofDisabled()) {
 				return this.errorReply("Poof is currently disabled.");
 			}
-			if (target && !this.can("broadcast")) return;
-			if (room.roomid !== "lobby") return;
+			if (target && !this.checkCan('broadcast')) return;
 
 			const message = target || PoofManager.getRandomMessage();
 			const formattedMessage = PoofManager.formatMessage(message, user.name);
@@ -75,17 +74,6 @@ export const commands: Chat.ChatCommands = {
 			if (!this.canTalk(formattedMessage)) return;
 
 			const colour = PoofManager.generateRandomColor();
-			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage} ~~</font></strong></center>`);
-			user.disconnectAll();
-		},
-
-		custommsg: 'customsmg',
-		customsmg(target: string, room: Room, user: User) {
-			this.checkCan('roomowner');
-			if (!target) return this.errorReply("Usage: /poof customsmg [message]");
-			const formattedMessage = PoofManager.formatMessage(target, user.name);
-			const colour = PoofManager.generateRandomColor();
-			if (!this.canTalk(formattedMessage)) return;
 			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage} ~~</font></strong></center>`);
 			user.disconnectAll();
 		},
@@ -118,7 +106,6 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/poof [message]", desc: "Disconnects the user and leaves a message in the lobby."},
-			{cmd: "/poof customsmg [message]", desc: "Disconnect with a custom message. Requires: &."},
 			{cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &."},
 			{cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &."},
 		];
