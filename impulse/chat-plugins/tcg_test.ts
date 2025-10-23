@@ -33,23 +33,22 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Card with ID "${cardId}" not found.`);
 				}
 
-				// Larger image size, maintaining aspect ratio (approx 2.5:3.5)
-				const imageWidth = 246; // Official image width
-				const imageHeight = 342; // Official image height
+				const imageWidth = 246;
+				const imageHeight = 342;
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
 
-				// Increased gap from 20px to 30px
-				let html = `<div class="infobox" style="display: flex; align-items: flex-start; gap: 30px; padding: 10px;">`; 
+				// Removed gap, added padding for overall box aesthetics
+				let html = `<div class="infobox" style="display: flex; align-items: flex-start; padding: 15px;">`; 
 
 				// Image Section
 				html += `<div style="flex-shrink: 0;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section
-				html += `<div style="flex: 1; line-height: 1.5;">`; 
+				// Text Info Section - Added margin-left: 30px;
+				html += `<div style="flex: 1; line-height: 1.5; margin-left: 30px;">`; 
 				html += `<strong style="font-size: 20px; display: block; margin-bottom: 8px;">${card.name}</strong>`; 
 				html += `<span style="color: #555; font-size: 0.9em;">(${card.cardId})</span><br />`; 
 				html += `<div style="margin-top: 10px;">`; 
