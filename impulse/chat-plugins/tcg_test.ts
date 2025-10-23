@@ -33,12 +33,12 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Card with ID "${cardId}" not found.`);
 				}
 
-				// Calculate 70% of original dimensions
+				// Calculate 60% of original dimensions
 				const originalWidth = 246;
 				const originalHeight = 342;
-				const scaleFactor = 0.70;
-				const imageWidth = Math.round(originalWidth * scaleFactor);  // Approx 172
-				const imageHeight = Math.round(originalHeight * scaleFactor); // Approx 239
+				const scaleFactor = 0.60; // Changed to 60%
+				const imageWidth = Math.round(originalWidth * scaleFactor);  // Approx 148
+				const imageHeight = Math.round(originalHeight * scaleFactor); // Approx 205
 
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
@@ -47,13 +47,13 @@ export const commands: ChatCommands = {
 				// Using margin-left on the text div for spacing
 				let html = `<div class="infobox" style="display: flex; align-items: flex-start; padding: 15px;">`;
 
-				// Image Section
+				// Image Section - Updated width and height
 				html += `<div style="flex-shrink: 0;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section - Updated margin-left: 25px;
-				html += `<div style="flex: 1; line-height: 1.5; margin-left: 25px;">`;
+				// Text Info Section - Updated margin-left: 20px;
+				html += `<div style="flex: 1; line-height: 1.5; margin-left: 20px;">`;
 				html += `<strong style="font-size: 20px; display: block; margin-bottom: 8px;">${card.name}</strong>`;
 				html += `<span style="color: #555; font-size: 0.9em;">(${card.cardId})</span><br />`;
 				html += `<div style="margin-top: 10px;">`;
