@@ -17,74 +17,56 @@ interface TCGCard {
 	imageUrl?: string;
 }
 
-// Helper function to get background color based on rarity
+// Helper function to get background color based on rarity (rgba values)
 function getRarityColor(rarity: string): string {
 	// Using rgba for semi-transparency - adjust colors/opacity as needed
-	// Normalize rarity string for easier matching
 	const lowerRarity = rarity?.toLowerCase() || 'common';
 
-	// Tier 1: Common / Basic Variants
 	if (lowerRarity.includes('common') || lowerRarity.includes('1st edition') || lowerRarity.includes('shadowless') || lowerRarity.includes('double rare')) {
-		return 'rgba(150, 150, 150, 0.1)'; // Light grey
+		return 'rgba(150, 150, 150, 0.15)'; // Light grey (slightly less transparent)
 	}
-	// Tier 2: Uncommon / Reverse
 	if (lowerRarity.includes('uncommon') || lowerRarity.includes('reverse holo')) {
-		return 'rgba(100, 180, 100, 0.15)'; // Light green
+		return 'rgba(100, 180, 100, 0.2)'; // Light green
 	}
-	// Tier 3: Basic Rares
 	if (lowerRarity === 'rare') {
-		return 'rgba(90, 150, 200, 0.15)'; // Light blue
+		return 'rgba(90, 150, 200, 0.2)'; // Light blue
 	}
-	// Tier 4: Standard Holos & Promos
 	if (lowerRarity.includes('rare holo') || lowerRarity.includes('promo') || lowerRarity.includes('classic collection')) {
-		// Exclude higher tier holo variants explicitly
 		if (!lowerRarity.includes('star') && !lowerRarity.includes(' ex') && !lowerRarity.includes(' gx') && !lowerRarity.includes(' v') && !lowerRarity.includes(' lv.x')) {
-			return 'rgba(210, 180, 90, 0.2)'; // Light gold/yellow
+			return 'rgba(210, 180, 90, 0.25)'; // Light gold/yellow
 		}
 	}
-	// Tier 5: Special Mechanics (Prime, LEGEND, BREAK, Prism, ACE SPEC) & SP
 	if (lowerRarity.includes('rare prime') || lowerRarity.includes('legend') || lowerRarity.includes('rare break') || lowerRarity.includes('prism star') || lowerRarity.includes('ace spec') || lowerRarity.includes('rare ace') || lowerRarity.includes('rare sp')) {
-		return 'rgba(170, 170, 190, 0.2)'; // Metallic grey/silver
+		return 'rgba(170, 170, 190, 0.25)'; // Metallic grey/silver
 	}
-	// Tier 6: Rule Box Holos (EX, GX, V, VMAX, VSTAR, ex, LV.X)
 	if (lowerRarity.includes('rare holo ex') || lowerRarity.includes('rare holo gx') || lowerRarity.includes('rare holo v') || lowerRarity.includes('rare holo vmax') || lowerRarity.includes('rare holo vstar') || lowerRarity.includes('rare ex') || lowerRarity.includes('rare holo lv.x')) {
-		return 'rgba(100, 200, 200, 0.2)'; // Teal/Aqua
+		return 'rgba(100, 200, 200, 0.25)'; // Teal/Aqua
 	}
-	// Tier 7: Shining, Radiant, Amazing, Character Rares
 	if (lowerRarity.includes('shining') || lowerRarity.includes('radiant rare') || lowerRarity.includes('amazing rare') || lowerRarity.includes('trainer gallery') || lowerRarity.includes('character rare')) {
-		return 'rgba(255, 105, 180, 0.2)'; // Pink/Magenta
+		return 'rgba(255, 105, 180, 0.25)'; // Pink/Magenta
 	}
-	// Tier 8: Full Arts / Ultra Rares / Basic Shiny
 	if (lowerRarity.includes('full art') || lowerRarity.includes('rare ultra') || lowerRarity.includes('ultra rare') || lowerRarity.includes('rare shiny') || lowerRarity.includes('shiny rare')) {
-		return 'rgba(135, 206, 235, 0.2)'; // Sky blue
+		return 'rgba(135, 206, 235, 0.25)'; // Sky blue
 	}
-	// Tier 9: Higher Shinies & Character Super Rares
 	if (lowerRarity.includes('rare shiny gx') || lowerRarity.includes('shiny ultra rare') || lowerRarity.includes('character super rare')) {
-		return 'rgba(255, 165, 0, 0.25)'; // Orange
+		return 'rgba(255, 165, 0, 0.3)'; // Orange
 	}
-	// Tier 10: Secret Rares (Generic, Holo Star, Gold Star, Star)
 	if (lowerRarity.includes('rare secret') || lowerRarity.includes('secret rare') || lowerRarity.includes('rare holo star') || lowerRarity.includes('gold star') || lowerRarity === 'star') {
-	    // Exclude Rainbow/Gold variants explicitly
 		if (!lowerRarity.includes('rainbow') && !lowerRarity.includes('gold')) {
- 			return 'rgba(255, 215, 0, 0.25)'; // Gold
+ 			return 'rgba(255, 215, 0, 0.3)'; // Gold
  		}
 	}
-	// Tier 11: Illustration Rares
-	if (lowerRarity.includes('illustration rare')) { // Catches "Illustration Rare" and "Special Illustration Rare"
-		return 'rgba(180, 110, 220, 0.2)'; // Purple
+	if (lowerRarity.includes('illustration rare')) {
+		return 'rgba(180, 110, 220, 0.25)'; // Purple
 	}
-	// Tier 12: Hyper Rares & Rainbow Rares
 	if (lowerRarity.includes('hyper rare') || lowerRarity.includes('rare rainbow')) {
-		// Use a gradient or a representative color - simple purple for now
-		return 'rgba(180, 110, 220, 0.25)'; // Brighter Purple
+		return 'rgba(180, 110, 220, 0.3)'; // Brighter Purple
 	}
-	// Tier 13: Gold Rares
 	if (lowerRarity.includes('gold full art') || lowerRarity.includes('rare gold')) {
-		return 'rgba(255, 215, 0, 0.3)'; // Brighter Gold
+		return 'rgba(255, 215, 0, 0.35)'; // Brighter Gold
 	}
 
-	// Fallback for anything missed
-	return 'rgba(200, 200, 200, 0.05)'; // Default subtle grey
+	return 'rgba(200, 200, 200, 0.1)'; // Default subtle grey
 }
 
 
@@ -104,28 +86,27 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Card with ID "${cardId}" not found.`);
 				}
 
-				// Calculate 60% of original dimensions
 				const originalWidth = 246;
 				const originalHeight = 342;
 				const scaleFactor = 0.60;
-				const imageWidth = Math.round(originalWidth * scaleFactor);  // Approx 148
-				const imageHeight = Math.round(originalHeight * scaleFactor); // Approx 205
+				const imageWidth = Math.round(originalWidth * scaleFactor);
+				const imageHeight = Math.round(originalHeight * scaleFactor);
 
 				const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 				const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 				const imageAlt = `${card.name} (${card.cardId})`;
 				const rarityColor = getRarityColor(card.rarity); // Get the background color
 
-				// Main container
-				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
+				// Apply background color and gap to the main div
+				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px; background-color: ${rarityColor}; border-radius: 8px; gap: 20px;">`; // Added bg, radius, gap
 
-				// Image Section - Border #ccc
-				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
+				// Image Section - Removed border and padding-right
+				html += `<div style="flex-shrink: 0;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
-				// Text Info Section - Added background-color and padding
-				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; background-color: ${rarityColor}; padding: 10px; border-radius: 5px;">`;
+				// Text Info Section - Removed background, padding, radius, margin-left
+				html += `<div style="flex: 1; line-height: 1.6;">`;
 				// Name/ID Line
 				html += `<strong style="font-size: 20px;">${card.name}</strong> `;
 				html += `<span style="color: #777; font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
