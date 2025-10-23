@@ -46,18 +46,10 @@ export const commands: ChatCommands = {
 				const imageAlt = `${card.name} (${card.cardId})`;
 
 				// Using align-items center
-				//let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
-				let html = `<div class="infobox tcg-card-infobox" style="display: flex; align-items: center; padding: 15px;">`;
-
+				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
+				
 				// Image Section - Changed border color to #ccc
-				/*html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
-				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-				html += `</div>`;*/
-				// Image Section - Changed border color to #ccc
-				// Add a wrapper class 'tcg-img-wrapper' for hover effect
-				// We pass the image URL as a CSS custom property
-				const cssImageUrl = `url(${imageUrl.replace(/'/g, "\\'")})`; // Basic escaping for ' in URL
-				html += `<div class="tcg-img-wrapper" style="--bg-img: ${cssImageUrl}; flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
+				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 				html += `</div>`;
 
