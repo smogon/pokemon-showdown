@@ -93,7 +93,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="display: inline-block; margin: 0 7px; vertical-align: top;">`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -102,7 +102,7 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
-				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 2: Next 4 cards
 				html += `<div style="display: inline-block; text-align: center;">`;
@@ -113,7 +113,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="display: inline-block; margin: 0 7px; vertical-align: top;">`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -122,7 +122,7 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
-				html += `<hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 3: Last 2 cards (rarest)
 				html += `<div style="display: inline-block; text-align: center;">`;
@@ -133,7 +133,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="display: inline-block; margin: 0 7px; vertical-align: top;">`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
