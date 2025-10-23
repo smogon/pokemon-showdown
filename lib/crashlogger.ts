@@ -52,11 +52,11 @@ export function crashlogger(
 	} else if (error && typeof error === 'object' && 'stack' in error) {
 		stack = (error as Error).stack || '';
 	}
-	
+
 	if (error && typeof error === 'object' && 'cause' in error && (error as any).cause) {
 		stack += appendCause(error as Error);
 	}
-	
+
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
