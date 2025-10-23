@@ -83,7 +83,7 @@ export const commands: ChatCommands = {
 
 				let html = `<div class="infobox" style="padding: 15px;">`;
 				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br />`;
-				html += `<div style="margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 15px;">`;
+				html += `<div style="margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 20px;">`;
 
 				// Row 1: First 4 cards
 				html += `<div style="display: flex; gap: 15px; justify-content: center;">`;
