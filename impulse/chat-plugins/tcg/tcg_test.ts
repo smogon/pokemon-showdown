@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 			try {
 				const pack = await generatePack(setId);
 
-				let html = `<div class="infobox" style="padding: 5px; text-align: center;">`;
+				let html = `<div class="infobox" style="padding: 5px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
 				// Row 1: First 4 cards
