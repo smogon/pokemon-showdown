@@ -75,7 +75,7 @@ export const commands: ChatCommands = {
 
 				html += `</div>`; // End Infobox
 
-				this.sendReply(html);
+				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG card command');
 				return this.errorReply('An error occurred while fetching card data.');
