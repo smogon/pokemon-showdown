@@ -50,7 +50,6 @@ export const commands: ChatCommands = {
 				// Image Section - Changed border color to #ccc
 				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 				html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-				html += `<br><strong style="font-size: 1.1em; font-weight: bold;"> ${card.cardText || card.ruleText}</strong>`;
 				html += `</div>`;
 
 				// Text Info Section - margin-left: 20px;
@@ -70,7 +69,7 @@ export const commands: ChatCommands = {
 				html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
 				// Flavor Text & Artist
 				html += `<strong style="font-size: 1.1em; font-weight: bold;">Artist:</strong> ${card.artist}<br />`;
-				//html += `<strong style="font-size: 1.1em; font-weight: bold;">Flavor:</strong> ${card.cardText || card.ruleText}`;
+				html += `<strong style="font-size: 1.1em; font-weight: bold;">Dex:</strong> ${card.cardText || card.ruleText}`;
 				html += `</div>`; // End Details section
 				html += `</div>`; // End Text Info Section
 				html += `</div>`; // End Infobox
