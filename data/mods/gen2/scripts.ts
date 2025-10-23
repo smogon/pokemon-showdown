@@ -160,8 +160,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				if (move.target === 'all') {
+			if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
+				if (move.target === 'field') {
 					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
 				} else {
 					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
@@ -308,7 +308,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!moveData) moveData = move;
 			let hitResult: boolean | number | null = true;
 
-			if (move.target === 'all' && !isSelf) {
+			if (move.target === 'field' && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
 			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, (target ? target.side : null), pokemon, move);
@@ -411,7 +411,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				//   These are like the TryHit events, except we don't need a FieldHit event.
 				//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
 				hitResult = null;
-				if (move.target === 'all' && !isSelf) {
+				if (move.target === 'field' && !isSelf) {
 					if (moveData.onHitField) hitResult = this.battle.singleEvent('HitField', moveData, {}, target, pokemon, move);
 				} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
 					if (moveData.onHitSide) hitResult = this.battle.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
