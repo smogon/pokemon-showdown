@@ -46,7 +46,8 @@ export const commands: ChatCommands = {
 				const imageAlt = `${card.name} (${card.cardId})`;
 
 				// Using align-items center
-				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
+				//let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
+				let html = `<div class="infobox tcg-card-infobox" style="display: flex; align-items: center; padding: 15px;">`;
 
 				// Image Section - Changed border color to #ccc
 				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
