@@ -83,7 +83,7 @@ export const commands: ChatCommands = {
 
 				let html = `<div class="infobox" style="padding: 15px;">`;
 				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br />`;
-				html += `<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">`;
+				html += `<div style="margin-top: 15px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 500px;">`;
 
 				for (const card of pack) {
 					const imageWidth = 74;
@@ -95,8 +95,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 5px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em; color: #666;">${card.rarity} (${card.totalPoints} pts)</div>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
 					html += `</div>`;
 				}
 
