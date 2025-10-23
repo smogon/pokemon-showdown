@@ -25,9 +25,11 @@ function appendCause(error: any) {
 	let stack = ``;
 	if (typeof error.cause === 'string') {
 		stack += `\n\n[cause]: ${error.cause}\n`;
-	} else {
-		stack += `\n\n[cause]: ${(error.cause as Error).message}\n`;
-		stack += `  ${(error.cause as Error)?.stack}`;
+	} else if (error.cause && typeof error.cause === 'object') {
+		stack += `\n\n[cause]: ${(error.cause as Error).message || 'Unknown error'}\n`;
+		if ((error.cause as Error).stack) {
+			stack += `  ${(error.cause as Error).stack}`;
+		}
 	}
 	return stack;
 }
@@ -44,25 +46,38 @@ export function crashlogger(
 ): string | null {
 	const datenow = Date.now();
 
-	let stack = (typeof error === 'string' ? error : (error as Error)?.stack) || '';
-	if ((error as any)?.cause) {
+	let stack = '';
+	if (typeof error === 'string') {
+		stack = error;
+	} else if (error && typeof error === 'object' && 'stack' in error) {
+		stack = (error as Error).stack || '';
+	}
+	
+	if (error && typeof error === 'object' && 'cause' in error && (error as any).cause) {
 		stack += appendCause(error as Error);
 	}
+	
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
-			stack += `  ${k} = ${data[k]}\n`;
+			if (Object.prototype.hasOwnProperty.call(data, k)) {
+				stack += `  ${k} = ${data[k]}\n`;
+			}
 		}
 	}
 
 	console.error(`\nCRASH: ${stack}\n`);
-	const out = fs.createWriteStream(logPath, { flags: 'a' });
-	out.on('open', () => {
-		out.write(`\n${stack}\n`);
-		out.end();
-	}).on('error', (err: Error) => {
-		console.error(`\nSUBCRASH: ${err.stack}\n`);
-	});
+	try {
+		const out = fs.createWriteStream(logPath, { flags: 'a' });
+		out.on('open', () => {
+			out.write(`\n${stack}\n`);
+			out.end();
+		}).on('error', (err: Error) => {
+			console.error(`\nSUBCRASH: ${err.stack}\n`);
+		});
+	} catch (fileErr) {
+		console.error(`Failed to write crash log to file: ${fileErr}`);
+	}
 
 	const emailOpts = emailConfig || (global as any).Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
