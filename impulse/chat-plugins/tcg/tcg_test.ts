@@ -17,30 +17,46 @@ function parseSearchQuery(target: string): {
 	filter: any,
 	queryDescription: string,
 	page: number,
-	commandString: string
+	sort: string, // 'rarity', 'name', 'set', 'hp'
+	baseCommand: string // query string without page or sort
+	pageCommand: string // query string without page, but with sort
 } {
 	const parts = target.split(',');
 	let page = 1;
 	let query = target.trim();
-	let commandString = query;
 
 	// 1. Extract Page
-	if (parts.length > 1) {
-		const lastPart = parts[parts.length - 1].trim();
+	const lastPart = parts[parts.length - 1]?.trim();
+	if (lastPart) {
 		const potentialPage = parseInt(lastPart);
 		if (!isNaN(potentialPage)) {
 			page = Math.max(1, potentialPage);
 			query = parts.slice(0, -1).join(',').trim();
-			commandString = query;
 		}
 	}
 
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
+	let sort = 'rarity'; // Default sort
+	
+	// Regex to find sort:value
+	const sortFilterRegex = /sort:(\w+)\s*/i;
+	// baseCommand is the query string WITHOUT sort and page
+	let baseCommand = query.replace(sortFilterRegex, '').trim().replace(/\s+/g, ' ');
+	// pageCommand is the query string WITHOUT page, but WITH sort
+	let pageCommand = query.trim().replace(/\s+/g, ' ');
+
+	const sortMatch = query.match(sortFilterRegex);
+	if (sortMatch) {
+		sort = sortMatch[1].toLowerCase();
+	} else {
+        // Add default sort to pageCommand if not present
+        pageCommand = (pageCommand + ' sort:rarity').trim();
+    }
 	
 	// Regex to find key:value or key:>value etc.
 	// Allows quoted values: artist:"Some Name"
-	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w.-]+)/g;
 	
 	let nameQuery = query;
 	let match;
@@ -59,6 +75,9 @@ function parseSearchQuery(target: string): {
 		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
+			case 'sort':
+				// This was handled before the loop
+				break;
 			case 'rarity':
 				filter.$and.push({ rarity: valueRegex });
 				descriptions.push(`Rarity: ${value}`);
@@ -115,11 +134,11 @@ function parseSearchQuery(target: string): {
 	}
 
 	// 3. Add remaining text as name query
-	const nameQueryClean = nameQuery.trim();
+	const nameQueryClean = nameQuery.replace(sortFilterRegex, '').trim(); // Also remove sort from here
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 		filter.$and.push({ name: nameRegex });
-		descriptions.unshift(`'${nameQueryClean}'`); // Add to the front
+		descriptions.unshift(`'${nameQueryClean}'`);
 	}
 
 	// 4. Finalize
@@ -130,8 +149,9 @@ function parseSearchQuery(target: string): {
 	
 	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
 
-	return { filter, queryDescription, page, commandString };
+	return { filter, queryDescription, page, sort, baseCommand, pageCommand };
 }
+
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -343,11 +363,27 @@ export const commands: ChatCommands = {
 
 			try {
 				// --- 1. Parse Query ---
-				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
+				const { filter, queryDescription, page, sort, baseCommand, pageCommand } = parseSearchQuery(target);
 
 				const collection = ImpulseDB<TcgCard>('tcg_cards');
 
-				// --- 2. Get Counts ---
+				// --- 2. Define Sort Options ---
+				let sortOptions: any = { rarityPoints: -1, name: 1 }; // Default: rarity
+				switch (sort) {
+					case 'name':
+						sortOptions = { name: 1, rarityPoints: -1 };
+						break;
+					case 'set':
+						// Use setReleaseDate from the card data
+						sortOptions = { setReleaseDate: -1, name: 1 };
+						break;
+					case 'hp':
+						// Sort by HP descending, nulls/undefined (non-Pokemon) last
+						sortOptions = { hp: -1, name: 1 };
+						break;
+				}
+
+				// --- 3. Get Counts ---
 				const totalMatches = await collection.countDocuments(filter);
 
 				if (totalMatches === 0) {
@@ -359,22 +395,38 @@ export const commands: ChatCommands = {
 				
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
-				// --- 3. Get Results ---
+				// --- 4. Get Results ---
 				const results = await collection.find(
 					filter,
 					{
 						limit: SEARCH_PAGE_LIMIT,
 						skip: skip,
 						projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
-						sort: { rarityPoints: -1, name: 1 }, // Sort by rarity (descending) then name
+						sort: sortOptions,
 					}
 				);
 
-				// --- 4. Build HTML ---
+				// --- 5. Build HTML ---
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
+
+				// --- 6. Sort Buttons ---
+				const sortButton = (sortType: string, label: string) => {
+					const isCurrent = sort === sortType;
+					// baseCommand is the query string *without* sort or page
+					// We add the new sort and reset to page 1
+					const sortValue = `/tcg search ${baseCommand} sort:${sortType}, 1`;
+					return `<button name="send" value="${sortValue}" ${isCurrent ? 'disabled' : ''} style="background: ${isCurrent ? '#ccc' : '#eee'}; border: 1px solid #ccc; padding: 3px 8px; border-radius: 4px; cursor: ${isCurrent ? 'default' : 'pointer'};">${label}</button>`;
+				};
+				html += `<div style="display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; font-size: 0.9em;">`;
+				html += `<strong>Sort by:</strong>`;
+				html += sortButton('rarity', 'Rarity');
+				html += sortButton('name', 'Name');
+				html += sortButton('set', 'Set');
+				html += sortButton('hp', 'HP');
+				html += `</div>`;
 
 				// Container for all cards
 				html += `<div style="display: inline-block; text-align: center;">`;
@@ -400,16 +452,16 @@ export const commands: ChatCommands = {
 				
 				html += `</div>`; // End card container
 
-				// --- 5. Pagination Footer ---
+				// --- 7. Pagination Footer ---
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-					html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">`;
+					// Centered pagination container
+					html += `<div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 10px;">`;
 
 					// Previous Button
 					if (currentPage > 1) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
-					} else {
-						html += `<div></div>`; // Placeholder
+						// pageCommand has the full query *with* the current sort
+						html += `<button name="send" value="/tcg search ${pageCommand}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
 					}
 
 					// Page Info
@@ -417,11 +469,9 @@ export const commands: ChatCommands = {
 
 					// Next Button
 					if (currentPage < totalPages) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
-					} else {
-						html += `<div></div>`; // Placeholder
+						html += `<button name="send" value="/tcg search ${pageCommand}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
 					}
-
+					
 					html += `</div>`;
 				}
 				// --- End Pagination Footer ---
@@ -442,8 +492,10 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like <code>type:Fire</code>, <code>hp:100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
-				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:200, 1</code>`
+				`<code>/tcg search [query], [page]</code> - Search for cards. <br />` +
+				`<strong>Filters:</strong> <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>, <code>sort:name</code>.<br />` +
+				`<strong>Sorts:</strong> <code>rarity</code> (default), <code>name</code>, <code>set</code>, <code>hp</code>.<br />` +
+				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>`
 			);
 		},
 	},
