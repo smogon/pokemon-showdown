@@ -81,12 +81,11 @@ export const commands: ChatCommands = {
 			try {
 				const pack = await generatePack(setId);
 
-				let html = `<div class="infobox" style="padding: 15px;">`;
-				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br />`;
-				html += `<div style="margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 20px;">`;
+				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
+				html += `<strong style="font-size: 20px;">Pack Opening - ${setId}</strong><br /><br />`;
 
 				// Row 1: First 4 cards
-				html += `<div style="display: flex; gap: 15px; justify-content: center;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 0; i < 4; i++) {
 					const card = pack[i];
 					const imageWidth = 74;
@@ -94,7 +93,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="text-align: center;">`;
+					html += `<div style="display: inline-block; margin: 0 10px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -103,9 +102,10 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
+				html += `<hr style="margin: 15px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 2: Next 4 cards
-				html += `<div style="display: flex; gap: 15px; justify-content: center;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 4; i < 8; i++) {
 					const card = pack[i];
 					const imageWidth = 74;
@@ -113,7 +113,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="text-align: center;">`;
+					html += `<div style="display: inline-block; margin: 0 10px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -122,9 +122,10 @@ export const commands: ChatCommands = {
 					html += `</div>`;
 				}
 				html += `</div>`;
+				html += `<hr style="margin: 15px 0; border: none; border-top: 1px solid #ccc;">`;
 
 				// Row 3: Last 2 cards (rarest)
-				html += `<div style="display: flex; gap: 15px; justify-content: center;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 8; i < 10; i++) {
 					const card = pack[i];
 					const imageWidth = 74;
@@ -132,7 +133,7 @@ export const commands: ChatCommands = {
 					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 					const imageAlt = `${card.name} (${card.cardId})`;
 
-					html += `<div style="text-align: center;">`;
+					html += `<div style="display: inline-block; margin: 0 10px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
@@ -140,8 +141,6 @@ export const commands: ChatCommands = {
 					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
 					html += `</div>`;
 				}
-				html += `</div>`;
-
 				html += `</div>`;
 
 				html += `</div></div>`;
