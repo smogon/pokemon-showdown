@@ -33,7 +33,7 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Card with ID "${cardId}" not found.`);
 				}
 
-				// Calculate 60% of original dimensions
+				// Calculate 65% of original dimensions
 				const originalWidth = 246;
 				const originalHeight = 342;
 				const scaleFactor = 0.65;
@@ -69,6 +69,7 @@ export const commands: ChatCommands = {
 				html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
 				// Flavor Text & Artist
 				html += `<strong style="font-size: 1.1em; font-weight: bold;">Artist:</strong> ${card.artist}`;
+				html += `<strong style="font-size: 1.1em; font-weight: bold;">Flavor:</strong> ${card.cardText || card.ruleText}`;
 				html += `</div>`; // End Details section
 				html += `</div>`; // End Text Info Section
 
