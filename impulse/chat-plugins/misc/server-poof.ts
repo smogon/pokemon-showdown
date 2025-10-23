@@ -75,23 +75,23 @@ export const commands: Chat.ChatCommands = {
 			if (!this.canTalk(formattedMessage)) return;
 
 			const colour = PoofManager.generateRandomColor();
-			room.addRaw(`<strong><font color="${colour}">~~ ${formattedMessage} ~~</font></strong>`);
+			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage} ~~</font></strong></center>`);
 			user.disconnectAll();
 		},
 
 		on: function (target: string, room: Room, user: User): void {
-			this.checkCan('hotpatch');
+			this.checkCan('roomowner');
 			PoofManager.enablePoof();
 			this.sendReply("Poof is now enabled.");
 		},
-		onhelp: ["/poof on - Enable the use /poof command. Requires: ~"],
+		onhelp: ["/poof on - Enable the use /poof command. Requires: &"],
 
 		off: function (target: string, room: Room, user: User): void {
-			this.checkCan('hotpatch');
+			this.checkCan('roomowner');
 			PoofManager.disablePoof();
 			this.sendReply("Poof is now disabled.");
 		},
-		offhelp: ["/poof off - Disable the use of the /poof command. Requires: ~"],
+		offhelp: ["/poof off - Disable the use of the /poof command. Requires: &"],
 	},
 
 	// Aliases
@@ -107,8 +107,8 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{cmd: "/poof [message]", desc: "Disconnects the user and leaves a message in the lobby."},
-			{cmd: "/poof on", desc: "Enable the use of /poof command. Requires: ~."},
-			{cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: ~."},
+			{cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &."},
+			{cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &."},
 		];
 		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({cmd, desc}, i) =>
