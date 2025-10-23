@@ -26,9 +26,10 @@ function appendCause(error: any) {
 	if (typeof error.cause === 'string') {
 		stack += `\n\n[cause]: ${error.cause}\n`;
 	} else if (error.cause && typeof error.cause === 'object') {
-		stack += `\n\n[cause]: ${(error.cause as Error).message || 'Unknown error'}\n`;
-		if ((error.cause as Error).stack) {
-			stack += `  ${(error.cause as Error).stack}`;
+		const cause = error.cause as unknown as Partial<Error>;
+		stack += `\n\n[cause]: ${cause.message || 'Unknown error'}\n`;
+		if (cause.stack) {
+			stack += `  ${cause.stack}`;
 		}
 	}
 	return stack;
@@ -50,11 +51,11 @@ export function crashlogger(
 	if (typeof error === 'string') {
 		stack = error;
 	} else if (error && typeof error === 'object' && 'stack' in error) {
-		stack = (error as Error).stack || '';
+		stack = ((error as unknown) as Partial<Error>).stack || '';
 	}
 
 	if (error && typeof error === 'object' && 'cause' in error && (error as any).cause) {
-		stack += appendCause(error as Error);
+		stack += appendCause(error as any);
 	}
 
 	if (data) {
