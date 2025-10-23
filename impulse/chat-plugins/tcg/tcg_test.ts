@@ -152,12 +152,72 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async set(target, room, user) {
+			if (!this.runBroadcast()) return;
+			if (!target) return this.parse('/help tcg set');
+
+			const setId = target.trim();
+
+			try {
+				const collection = ImpulseDB<TcgCard>('tcg_cards');
+				// We only need one card to get the set's info
+				const card = await collection.findOne({ setId });
+
+				if (!card) {
+					return this.errorReply(`Set with ID "${setId}" not found.`);
+				}
+
+				// Extract set information (data is duplicated on every card)
+				const setName = card.set;
+				const series = card.setSeries || 'N/A';
+				const releaseDate = card.setReleaseDate || 'N/A';
+				const printedTotal = card.setPrintedTotal || 'N/A';
+				const total = card.setTotal || 'N/A';
+				const logoUrl = card.setImages?.logo || '';
+				const symbolUrl = card.setImages?.symbol || '';
+				
+				const logoHeight = 40; // Example height
+
+				let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
+				
+				// Logo Section
+				if (logoUrl) {
+					html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc; text-align: center;">`;
+					html += `<img src="${logoUrl}" height="${logoHeight}" alt="${setName} Logo" title="${setName} Logo" style="display: block; max-width: 120px;" />`;
+					if (symbolUrl) {
+						html += `<img src="${symbolUrl}" height="20" width="20" alt="${setName} Symbol" title="${setName} Symbol" style="margin-top: 10px;" />`;
+					}
+					html += `</div>`;
+				}
+
+				// Text Info Section
+				html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
+				// Name/ID Line
+				html += `<strong style="font-size: 22px;">${setName}</strong> `;
+				html += `<span style="font-size: 0.9em; margin-left: 5px;">(${card.setId})</span><br />`;
+				// Details section
+				html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+				html += `<strong style="font-size: 1.1em;">Series:</strong> ${series}<br />`;
+				html += `<strong style="font-size: 1.1em;">Released:</strong> ${releaseDate}<br />`;
+				html += `<strong style="font-size: 1.1em;">Total Cards:</strong> ${total} (Printed: ${printedTotal})<br />`;
+				html += `</div>`; // End Details section
+				html += `</div>`; // End Text Info Section
+				html += `</div>`; // End Infobox
+
+				this.sendReply(`|html|${html}`);
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG set command');
+				return this.errorReply('An error occurred while fetching set data.');
+			}
+		},
+
 		'': 'help',
 		help() {
 			this.sendReplyBox(
 				`<strong>TCG Commands:</strong><br />` +
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
-				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set`
+				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
+				`<code>/tcg set [setId]</code> - Display information about a specific TCG set`
 			);
 		},
 	},
