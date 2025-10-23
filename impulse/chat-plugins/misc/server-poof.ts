@@ -66,8 +66,7 @@ export const commands: Chat.ChatCommands = {
 			if (PoofManager.isPoofDisabled()) {
 				return this.errorReply("Poof is currently disabled.");
 			}
-			if (target && !this.can("broadcast")) return;
-			if (room.roomid !== "lobby") return;
+			if (target && !this.checkCan('broadcast')) return;
 
 			const message = target || PoofManager.getRandomMessage();
 			const formattedMessage = PoofManager.formatMessage(message, user.name);
