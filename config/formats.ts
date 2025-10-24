@@ -273,35 +273,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		restricted: ['Restricted Legendary', 'Mythical'],
 	},
 	{
-		name: "[Gen 9] Terastal Crescendo",
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
-		unbanlist: ['Koraidon', 'Miraidon'],
-		onValidateTeam(team) {
-			const donCount = team.filter(set => set.species === 'Koraidon' || set.species === 'Miraidon').length;
-			if (donCount !== 1) {
-				return [
-					`You must bring either Koraidon or Miraidon, but not both.`,
-					`(You have ${!donCount ? 'neither' : 'both'} Koraidon ${!donCount ? 'nor' : 'and'} Miraidon)`,
-				];
-			}
-		},
-		onChooseTeam(positions, pokemon, autoChoose) {
-			const donIndex = pokemon.findIndex(p => p.species.name === 'Koraidon' || p.species.name === 'Miraidon');
-			if (autoChoose) {
-				positions = [donIndex];
-				for (let i = 0; i < pokemon.length; i++) {
-					if (i !== donIndex) positions.push(i);
-				}
-				return positions;
-			}
-			if (!positions.includes(donIndex)) {
-				return `You must bring ${pokemon[donIndex].species.name} to the battle.`;
-			}
-		},
-	},
-	{
 		name: "[Gen 9] Doubles Custom Game",
 		mod: 'gen9',
 		gameType: 'doubles',
