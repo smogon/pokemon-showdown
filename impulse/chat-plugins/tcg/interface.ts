@@ -111,7 +111,7 @@ export interface TcgCard {
 export interface TcgUser {
   /** A unique, normalized user identifier (e.g., 'princeskygit') */
   userId: string;
-  /** The unique card identifier (e.g., 'sv3pt5-1') */
+  /** The unique card identifier (e..g., 'sv3pt5-1') */
   cardId: string;
   /** How many copies of this card the user owns */
   quantity: number;
@@ -172,6 +172,10 @@ export interface TcgUserProfile {
   totalQuantity: number;
   /** The sum of (totalPoints * quantity) for all cards. */
   collectionPoints: number;
+  /** The total number of sets completed (user count >= set total). */
+  totalSetsCompleted?: number;
+  /** Up to 10 card IDs the user has favorited for their profile. */
+  favoriteCards?: string[];
   /** The ISO date string of when this profile was last updated */
   lastUpdatedAt: string;
 }
