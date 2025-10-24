@@ -12,7 +12,7 @@ import { TcgCard } from './interface';
 
 const CACHE_SAMPLE_SIZE = 20;
 const DB_SAMPLE_SIZE = 20;
-export const HIT_CHANCE = 0.3;
+export const HIT_CHANCE = 0.5;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
