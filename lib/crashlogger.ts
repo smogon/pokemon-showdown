@@ -61,9 +61,7 @@ export function crashlogger(
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
-			if (Object.prototype.hasOwnProperty.call(data, k)) {
-				stack += `  ${k} = ${data[k]}\n`;
-			}
+			stack += `  ${k} = ${data[k]}\n`;
 		}
 	}
 
