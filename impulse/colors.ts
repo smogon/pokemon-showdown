@@ -1,29 +1,20 @@
 /*
 * Pokemon Showdown
-* Color Module
+* Colors Module
 */
 import * as crypto from 'crypto';
 import { FS } from '../lib/fs';
 
-/**
- * RGB color representation
- */
 interface RGB { 
 	R: number; 
 	G: number; 
 	B: number; 
 }
 
-/**
- * Custom colors mapping by user ID
- */
 interface CustomColors { 
 	[userid: string]: string; 
 }
 
-/**
- * Color document structure in database/file
- */
 interface ColorDocument {
 	userid: string;
 	color: string;
@@ -34,13 +25,9 @@ const colorCache: Record<string, string> = {};
 
 const CUSTOM_COLORS_FILE = 'impulse/db/customcolors.json';
 
-/**
- * Loads custom colors from a JSON file using FS
- */
 export const loadCustomColorsFromDB = async (): Promise<void> => {
 	try {
 		const data = await FS(CUSTOM_COLORS_FILE).readIfExists();
-		// Accept either array of ColorDocument or object map
 		let parsed: CustomColors | ColorDocument[] = {};
 		if (data) parsed = JSON.parse(data);
 		customColors = {};
@@ -51,7 +38,6 @@ export const loadCustomColorsFromDB = async (): Promise<void> => {
 				}
 			});
 		} else {
-			// object map
 			Object.assign(customColors, parsed);
 		}
 	} catch (e) {
@@ -60,9 +46,6 @@ export const loadCustomColorsFromDB = async (): Promise<void> => {
 	}
 };
 
-/**
- * Saves custom colors to disk (JSON)
- */
 export const saveCustomColorsToDB = async (): Promise<void> => {
 	try {
 		await FS(CUSTOM_COLORS_FILE).safeWrite(JSON.stringify(customColors, null, 2));
@@ -71,40 +54,20 @@ export const saveCustomColorsToDB = async (): Promise<void> => {
 	}
 };
 
-// Initialize colors from file at startup
 loadCustomColorsFromDB().catch(err => console.error('Failed to init colors:', err));
 
-/**
- * Gets the current custom colors map
- * @returns Object containing custom colors by user ID
- */
 export const getCustomColors = (): CustomColors => customColors;
 
-/**
- * Sets custom colors (used for bulk updates)
- * @param colors - Custom colors object to set
- */
 export const setCustomColors = (colors: CustomColors): void => { 
 	customColors = colors;
-	// Save to disk
 	void saveCustomColorsToDB();
 };
 
-/**
- * Reloads custom colors from file and clears cache
- */
 export const reloadCustomColors = async (): Promise<void> => {
 	await loadCustomColorsFromDB();
 	clearColorCache();
 };
 
-/**
- * Converts HSL color values to RGB
- * @param H - Hue (0-360)
- * @param S - Saturation (0-100)
- * @param L - Lightness (0-100)
- * @returns RGB color object
- */
 const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	const C = (100 - Math.abs(2 * L - 100)) * S / 100 / 100;
 	const X = C * (1 - Math.abs((H / 60) % 2 - 1));
@@ -122,11 +85,6 @@ const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	return { R: R1 + m, G: G1 + m, B: B1 + m };
 };
 
-/**
- * Generates a consistent color hash for a given name
- * @param name - Username to generate color for
- * @returns Hex color string
- */
 const hashColor = (name: string): string => {
 	const id = toID(name);
 
@@ -162,29 +120,13 @@ const hashColor = (name: string): string => {
 	return color;
 };
 
-/**
- * Validates if a string is a valid hex color
- * @param color - Color string to validate
- * @returns True if valid hex color format
- */
 export const validateHexColor = (color: string): boolean => 
 	/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
-/**
- * Clears the color cache
- */
 export const clearColorCache = (): void => {
 	Object.keys(colorCache).forEach(key => delete colorCache[key]);
 };
 
-/**
- * Generates HTML for a colored username
- * @param name - Username to color
- * @param bold - Whether to make the name bold
- * @param userGroup - Whether to show user group symbol
- * @param room - Room context (currently unused but kept for compatibility)
- * @returns HTML string with colored username
- */
 export const nameColor = (
 	name: string, 
 	bold = true, 
