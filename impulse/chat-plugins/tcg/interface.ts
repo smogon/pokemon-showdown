@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* TCG Interface
+*/
 export interface TcgAbility {
   name: string;
   text: string;
