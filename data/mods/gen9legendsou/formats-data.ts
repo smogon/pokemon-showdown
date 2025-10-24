@@ -935,7 +935,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	zygarde: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	zygarde10: {
 		tier: "OU",
