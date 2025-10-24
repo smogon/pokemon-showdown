@@ -1,5 +1,7 @@
-// Pokemon Showdown
-// Utils Modules
+/*
+* Pokemon Showdown
+* Utility Module
+*/
 
 /**
  * Generates a themed HTML table with title and data
