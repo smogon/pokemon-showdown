@@ -654,7 +654,7 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			let randomSetId = 'sv3pt5';
+			let randomSetId = 'sv1';
 			
 			try {
 				const setCollection = ImpulseDB<TcgCard>('tcg_cards');
@@ -946,7 +946,7 @@ export const commands: ChatCommands = {
 
 			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 			html += `<strong style="font-size: 20px;">${user.name}'s Saved Packs</strong><br />`;
-			html += `<div style="font-size: 0.9em; color: #555; margin-bottom: 15px;">Click a pack to open it.</div>`;
+			html += `<div style="font-size: 0.9em; margin-bottom: 15px;">Click a pack to open it.</div>`;
 			
 			for (let i = 0; i < userPacks.length; i++) {
 				const pack = userPacks[i];
@@ -959,7 +959,7 @@ export const commands: ChatCommands = {
 				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
 				
 				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
-				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
+				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
 				html += `<span style="font-size: 0.8em; color: #333;">Quantity: ${pack.quantity}</span>`;
