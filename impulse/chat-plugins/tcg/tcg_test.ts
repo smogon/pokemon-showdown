@@ -13,6 +13,9 @@ import {
 	getCacheStats,
 	clearCache,
 } from './utils';
+// --- NEW IMPORT ---
+import { generateThemedTable } from '../../utils';
+// --- END NEW IMPORT ---
 
 // --- CONFIGURATION CONSTANTS ---
 const SEARCH_PAGE_LIMIT = 60; // Number of cards per page (15 rows * 4 cards)
@@ -998,26 +1001,26 @@ export const commands: ChatCommands = {
 					return this.errorReply("No users found in the leaderboard yet.");
 				}
 				
-				let html = `<div class="infobox" style="padding: 10px;">`;
-				html += `<strong style="font-size: 1.2em;">TCG Leaderboard - ${title}</strong>`;
-				html += `<table style="width: 100%; margin-top: 10px; border-collapse: collapse;">`;
-				html += `<tr style="background: #eee; text-align: left;">`;
-				html += `<th style="padding: 5px; width: 40px;">Rank</th>`;
-				html += `<th style="padding: 5px;">User</th>`;
-				html += `<th style="padding: 5px; text-align: right;">${title}</th>`;
-				html += `</tr>`;
-
-				for (let i = 0; i < results.length; i++) {
-					const profile = results[i];
+				// --- MODIFICATION START ---
+				
+				// Prepare data for the utility function
+				const headerRow = ['Rank', 'User', title];
+				const dataRows = results.map((profile, i) => {
 					const value = profile[valueField] as number || 0;
-					html += `<tr style="border-top: 1px solid #eee;">`;
-					html += `<td style="padding: 5px; text-align: center;"><strong>${i + 1}</strong></td>`;
-					html += `<td style="padding: 5px;">${profile.userName}</td>`;
-					html += `<td style="padding: 5px; text-align: right;">${value.toLocaleString()}</td>`;
-					html += `</tr>`;
-				}
-				html += `</table>`;
+					return [
+						`<strong>${i + 1}</strong>`, // Rank (formatted)
+						profile.userName,             // User
+						value.toLocaleString()        // Value (formatted)
+					];
+				});
+
+				// Build the HTML using the utility
+				let html = `<div class="infobox" style="padding: 10px;">`;
+				// Pass the title directly to the function
+				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows); // Call the utility function
 				html += `</div>`;
+
+				// --- MODIFICATION END ---
 
 				this.sendReply(`|html|${html}`);
 
@@ -1068,7 +1071,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
 				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
-				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
+				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg daily</code> - Claim your free daily booster pack (once per 24h).<br />` +
 				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
