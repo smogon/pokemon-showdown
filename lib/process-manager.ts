@@ -582,7 +582,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	}
 	queryTemporaryProcess(input: T, force?: boolean) {
 		const process = this.spawnOne(force);
-		const result = this.query!(input, process);
+		const result = this.query(input, process);
 		void this.unspawnOne(process);
 		return result;
 	}
