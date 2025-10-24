@@ -957,7 +957,7 @@ export const commands: ChatCommands = {
 		async setprogress(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
-			const setId = toID(target);
+			const setId = target.trim(); // <-- FIX: Changed from toID(target)
 			if (!setId) {
 				return this.parse('/help tcg setprogress');
 			}
@@ -1120,7 +1120,7 @@ export const commands: ChatCommands = {
 		},
 
 		async favorite(target, room, user) {
-			const cardId = toID(target);
+			const cardId = target.trim(); // <-- FIX: Changed from toID(target)
 			if (!cardId) return this.parse('/help tcg favorite');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
@@ -1165,7 +1165,7 @@ export const commands: ChatCommands = {
 		},
 
 		async unfavorite(target, room, user) {
-			const cardId = toID(target);
+			const cardId = target.trim(); // <-- FIX: Changed from toID(target)
 			if (!cardId) return this.parse('/help tcg unfavorite');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
