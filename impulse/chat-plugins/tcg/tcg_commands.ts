@@ -1636,6 +1636,77 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async giftpack(target, room, user) {
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) {
+				return this.errorReply("Please specify a user and set ID. Usage: /tcg giftpack [user], [setId], [quantity]");
+			}
+
+			const targetUserId = toID(parts[0]);
+			const setId = parts[1];
+			let quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
+
+			if (!targetUserId) {
+				return this.errorReply("Please specify a user to gift to.");
+			}
+			if (targetUserId === user.id) {
+				return this.errorReply("You cannot gift packs to yourself.");
+			}
+			if (!setId) {
+				return this.errorReply("Please specify a pack set ID to gift.");
+			}
+			if (isNaN(quantityToGift) || quantityToGift <= 0) {
+				return this.errorReply("Invalid quantity. Quantity must be a positive number.");
+			}
+
+			const collection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+
+			try {
+				// Find the sender's pack first to get info and check quantity
+				const senderPack = await collection.findOne({ userId: user.id, setId: setId });
+
+				if (!senderPack || senderPack.quantity < quantityToGift) {
+					const owned = senderPack ? senderPack.quantity : 0;
+					return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
+				}
+
+				// Decrement from sender
+				const updateSenderResult = await collection.updateOne(
+					{ userId: user.id, setId: setId, quantity: { $gte: quantityToGift } },
+					{ $inc: { quantity: -quantityToGift } }
+				);
+
+				if (updateSenderResult.modifiedCount === 0) {
+					// This is a race condition check, in case quantity changed between find and update
+					return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
+				}
+
+				// Increment for recipient
+				const now = new Date().toISOString();
+				await collection.updateOne(
+					{ userId: targetUserId, setId: setId },
+					{
+						$inc: { quantity: quantityToGift },
+						$set: {
+							setName: senderPack.setName,
+							setLogo: senderPack.setLogo,
+							lastAcquiredAt: now
+						},
+						$setOnInsert: {
+							userId: targetUserId
+						}
+					},
+					{ upsert: true }
+				);
+
+				this.sendReply(`You successfully gifted ${quantityToGift}x "${senderPack.setName}" pack(s) to ${targetUserId}.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG giftpack command');
+				return this.errorReply('An error occurred while gifting your pack(s).');
+			}
+		},
+
 		async profile(target, room, user) {
 			if (!this.runBroadcast()) return;
 
