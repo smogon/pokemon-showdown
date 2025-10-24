@@ -1181,7 +1181,7 @@ export const commands: ChatCommands = {
 					{ $inc: { credits: -PACK_COST } }
 				);
 
-				if (updateResult.modifiedCount === 0) {
+				if (updateResult.matchedCount === 0) { // <-- ****** THIS IS THE FIX ******
 					// This fails if the user doesn't exist OR if they have < PACK_COST
 					const profile = await profileCollection.findOne({ userId: user.id });
 					const userCredits = profile?.credits || 0;
