@@ -2304,6 +2304,12 @@ export const commands: ChatCommands = {
 				`<strong>Example:</strong> <code>/tcg sell sv1-1, 3</code><br />` +
 				`<code>/tcg sellduplicates [all | setId]</code> - Sell all duplicate cards (quantity > 1) for credits.<br />` +
 				`<strong>Example:</strong> <code>/tcg sellduplicates sv1</code><br />` +
+				`<code>/tcg giftcard [user], [cardId], [quantity]</code> - Gift a card from your collection to another user.<br />` +
+				`<strong>Example:</strong> <code>/tcg giftcard princeskygit, sv1-1, 1</code><br />` +
+				`<code>/tcg giftpack [user], [setId], [quantity]</code> - Gift one or more saved packs to another user.<br />` +
+				`<strong>Example:</strong> <code>/tcg giftpack princeskygit, sv1, 2</code><br />` +
+				`<code>/tcg giftcredits [user], [amount]</code> - Gift credits to another user.<br />` +
+				`<strong>Example:</strong> <code>/tcg giftcredits princeskygit, 100</code><br />` +
 				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
 				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
 				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
