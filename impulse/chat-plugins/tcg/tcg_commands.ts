@@ -1627,7 +1627,7 @@ export const commands: ChatCommands = {
 				this.sendReply(reply);
 				const targetUser = Users.get(targetUserId);
 				if (targetUser) {
-					targetUser.popup(`|html|${user.name} has gifted you ${quantityToGift} "${senderCard.name}" card(s).`);
+					targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
 				}
 
 			} catch (error) {
@@ -1702,7 +1702,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`You successfully gifted ${quantityToGift}x "${senderPack.setName}" pack(s) to ${targetUserId}.`);
 				const targetUser = Users.get(targetUserId);
 				if (targetUser) {
-					targetUser.popup(`|html|${user.name} has gifted you ${quantityToGift} "${senderPack.setName}" pack(s).`);
+					targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
 				}
 
 			} catch (error) {
@@ -1776,7 +1776,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`You successfully gifted ${amountToGift.toLocaleString()} credits to ${targetUserId}.`);
 				const targetUser = Users.get(targetUserId);
 				if (targetUser) {
-					targetUser.popup(`|html|${user.name} has gifted you ${amountToGift.toLocaleString()} credit(s).`);
+					targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
 				}
 
 			} catch (error) {
