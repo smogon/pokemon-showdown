@@ -151,16 +151,17 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 } {
 	const parts = target.split(',');
 	let page = 1;
-	let query = target.trim();
-	let commandString = query;
+	let query = target.trim(); // e.g., "user:princesky, set:rsv10pt5" or "Pikachu user:ash, set:base1"
+	let commandStringForPagination = query; // Store original base query for pagination links
 
+	// Handle page number at the end
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
 		if (!isNaN(potentialPage)) {
 			page = Math.max(1, potentialPage);
-			query = parts.slice(0, -1).join(',').trim();
-			commandString = query;
+			query = parts.slice(0, -1).join(',').trim(); // Remove page number part
+			commandStringForPagination = query; // Update base command string too
 		}
 	}
 
@@ -168,27 +169,32 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
 	
-	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
+	// Regex to find filters, consumes optional trailing comma/space
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)\s*,?\s*/g; 
 	
-	let nameQuery = query;
+	// Store filter matches to remove them later
+	const filterMatches: string[] = [];
 	let match;
-
+	filterRegex.lastIndex = 0; // Reset regex state just in case
 	while ((match = filterRegex.exec(query)) !== null) {
+		filterMatches.push(match[0]); // Store the full matched filter string (e.g., "user:princesky, ")
+
 		const key = match[1].toLowerCase();
 		const operator = match[2];
 		let value = match[3].replace(/"/g, '');
 
-		nameQuery = nameQuery.replace(match[0], '');
+		// Handle user filter separately first
+		if (key === 'user') {
+			targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
+			continue; // Skip adding to filter/descriptions for now
+		}
 
+		// Process other filters
 		const valueNum = parseInt(value);
 		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
-			case 'user':
-				targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
-				commandString = commandString.replace(match[0], '');
-				break;
 			case 'rarity':
 				filter.$and.push({ rarity: valueRegex });
 				descriptions.push(`Rarity: ${value}`);
@@ -228,31 +234,49 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 				descriptions.push(`Reg Mark: ${value}`);
 				break;
 			case 'set':
-				const partialRegex = new RegExp(escapedValue, 'i');
-				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
+				// Using exact match for setId based on original code logic
+                const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
 				filter.$and.push({ setId: exactRegex });
 				descriptions.push(`Set ID: ${value}`);
 				break;
-			case 'artist':
+			case 'artist': // Ignored filters based on original code
 			case 'legal':
-				descriptions.push(`(Filter ${key}:${value} ignored for collections)`);
+				descriptions.push(`(Filter ${key}:${value} ignored)`);
 				break;
 		}
 	}
 
+	// Add the mandatory user filter
 	filter.$and.push({ userId: targetUserId });
 	
-	const nameQueryClean = nameQuery.trim();
+	// Determine the name query part by removing all matched filters from the original query string
+	let nameQuery = query;
+	for (const matchedFilter of filterMatches) {
+		nameQuery = nameQuery.replace(matchedFilter, '');
+	}
+	const nameQueryClean = nameQuery.trim(); // Trim remaining whitespace
+
+	// Add name filter if there's anything left besides an empty string
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 		filter.$and.push({ name: nameRegex });
-		descriptions.push(`Name: '${nameQueryClean}'`);
+		descriptions.unshift(`Name: '${nameQueryClean}'`); // Use unshift to match original description order
 	}
 	
+    // Build final query description string
 	const filterDesc = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
-	const queryDescription = `Owner: ${targetUserId}${descriptions.length > 0 ? ', ' + descriptions.join(', ') : ''}`;
+	// Construct description including Owner first, then other filters
+    let queryDescription = `Owner: ${targetUserId}`;
+    if (descriptions.length > 0) {
+        queryDescription += `, ${filterDesc}`;
+    } else {
+         queryDescription += ', All Cards'; // Explicitly state if no other filters
+    }
 	
-	const finalCommandString = commandString.replace(/user:\s*("[^"]+"|[\w-]+)/gi, '').trim();
+	// Build command string for pagination: original query (minus page) minus the user filter part
+    let finalCommandString = commandStringForPagination.replace(/user:\s*("[^"]+"|[\w-]+)\s*,?\s*/gi, '').trim();
+    // Remove potential trailing comma left after removing user filter
+    finalCommandString = finalCommandString.replace(/,\s*$/, '').trim();
 
 	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
 }
