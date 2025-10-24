@@ -12,7 +12,7 @@ import { TcgCard } from './interface';
 
 const CACHE_SAMPLE_SIZE = 20;
 const DB_SAMPLE_SIZE = 20;
-const HIT_CHANCE = 0.3;
+export const HIT_CHANCE = 0.3;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
@@ -35,7 +35,7 @@ const CUSTOM_REVERSE_RARE_RARITIES = [
   'Reverse Holo', 'Rare', 'Double Rare', 'Rare Holo', 'Classic Collection',
   'Rare Holo 1st Edition', 'Rare SP', 'Rare Holo EX', 'Rare Holo GX', 'Rare Holo V',
 ];
-const CUSTOM_RAREST_RARITIES = [
+export const CUSTOM_RAREST_RARITIES = [
   'Rare Prime', 'LEGEND', 'Rare BREAK', 'Prism Star', 'Rare Holo VMAX',
   'Rare Holo VSTAR', 'Rare ex', 'Radiant Rare', 'Shining', 'Amazing Rare',
   'ACE SPEC Rare', 'Rare ACE', 'Full Art', 'Rare Ultra', 'Ultra Rare',
