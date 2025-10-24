@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Custom Avatars chat-plugin
+* Custom Avatars Commands
 */
 
 import { FS } from '../../../lib';
