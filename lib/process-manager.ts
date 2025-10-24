@@ -560,6 +560,9 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 
 		processManagers.push(this);
 	}
+	setQuery(query: (input: T) => U | Promise<U>) {
+		this._query = query;
+	}
 	async query(input: T, process = this.acquire()) {
 		if (!process) return this._query(input);
 
