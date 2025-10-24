@@ -1434,6 +1434,86 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async sellduplicates(target, room, user) {
+			const targetId = target;
+			const collection = ImpulseDB<TcgUser>('user_collections');
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			
+			const filter: any = { userId: user.id, quantity: { $gt: 1 } };
+			let description = "all duplicates";
+
+			if (targetId && targetId !== 'all') {
+				filter.setId = targetId;
+				description = `duplicates from set "${targetId}"`;
+			}
+
+			try {
+				const cardsToSell = await collection.find(filter);
+
+				if (cardsToSell.length === 0) {
+					return this.errorReply(`You have no ${description} to sell.`);
+				}
+
+				let totalCardsSold = 0;
+				let totalCreditsEarned = 0;
+				let totalPointsDeducted = 0;
+				const operations = [];
+				const now = new Date().toISOString();
+
+				for (const card of cardsToSell) {
+					const quantityToSell = card.quantity - 1;
+
+					if (quantityToSell <= 0) continue; // Should be caught by $gt: 1, but good practice
+
+					totalCardsSold += quantityToSell;
+					totalCreditsEarned += (quantityToSell * CREDITS_PER_DUPLICATE);
+					totalPointsDeducted += (card.totalPoints * quantityToSell);
+
+					// Set quantity to 1, leaving one copy
+					operations.push({
+						updateOne: {
+							filter: { userId: user.id, cardId: card.cardId },
+							update: { 
+								$set: { quantity: 1 },
+								$inc: {} // This is just to satisfy the type, $set does the work
+							}
+						}
+					});
+				}
+
+				if (operations.length === 0) {
+					return this.errorReply(`No duplicates found matching your criteria.`);
+				}
+
+				// Execute batch update to set all duplicate quantities to 1
+				await collection.bulkWrite(operations, { ordered: false });
+
+				// Update profile with totals
+				await profiles.updateOne(
+					{ userId: user.id },
+					{
+						$inc: {
+							credits: totalCreditsEarned,
+							totalQuantity: -totalCardsSold,
+							collectionPoints: -totalPointsDeducted
+							// totalUniqueCards does not change
+						},
+						$set: {
+							userName: user.name,
+							lastUpdatedAt: now
+						}
+					},
+					{ upsert: true }
+				);
+
+				this.sendReply(`You successfully sold ${totalCardsSold} ${description} for ${totalCreditsEarned} credits.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG sellduplicates command');
+				return this.errorReply('An error occurred while selling your duplicates.');
+			}
+		},
+
 		async profile(target, room, user) {
 			if (!this.runBroadcast()) return;
 
