@@ -1092,48 +1092,59 @@ export const commands: ChatCommands = {
 
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
-			// const setId = target.trim(); // OLD
-            const setId = toID(target); // NEW: Use toID for consistency with /buy
-			if (!setId) {
+			// Use the raw setId directly from the button's value
+			const rawSetId = target.trim(); 
+			if (!rawSetId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 				return this.parse('/tcg packs');
 			}
 
+			// Log the raw ID received for debugging
+            console.log(`OpenAllPacks Attempt: User ${user.id}, Raw SetId: '${rawSetId}'`);
+
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 			
-			// 1. Atomically find the pack and set its quantity to 0
-            // We use findOneAndUpdate to get the original document (and its quantity) *before* updating
+			// 1. Atomically find the pack using the RAW setId and set its quantity to 0
 			const findResult = await packCollection.findOneAndUpdate(
-				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
+				// Use the rawSetId directly in the query filter
+				{ userId: user.id, setId: rawSetId, quantity: { $gt: 0 } }, 
 				{ $set: { quantity: 0 } }
 			);
 
             // findResult.value will be the document *before* the update
 			if (!findResult.value || findResult.value.quantity === 0) {
-				// Added a log to help debug if it persists
-				console.log(`OpenAllPacks: Failed findOneAndUpdate for user ${user.id}, setId ${setId}. Value: ${JSON.stringify(findResult.value)}`);
-				return this.errorReply(`You do not have any saved "${setId}" packs to open.`);
+				// Log failure details
+                console.log(`OpenAllPacks FAIL: User ${user.id}, Raw SetId: '${rawSetId}'. DB Result: ${JSON.stringify(findResult.value)}`);
+				// Check if a pack exists with 0 quantity (potential double click?)
+				const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
+				if (zeroCheck && zeroCheck.quantity === 0) {
+					 console.log(`OpenAllPacks INFO: Pack for ${user.id}, Raw SetId: '${rawSetId}' already at quantity 0.`);
+					 return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
+				}
+				// Report the rawSetId in the error
+				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open.`); 
 			}
 
             const packQuantity = findResult.value.quantity;
-            const setName = findResult.value.setName || setId;
+			// Use rawSetId as fallback if setName is missing
+            const setName = findResult.value.setName || rawSetId; 
 
 			try {
-				// 2. Generate all the packs
+				// 2. Generate all the packs using the RAW setId
                 const allPacks: TcgCard[] = [];
-                // Add a limit to prevent server overload if quantity is huge somehow
-                const quantityToOpen = Math.min(packQuantity, 100); // Limit to opening 100 at a time
+                const quantityToOpen = Math.min(packQuantity, 100); // Limit opening 100 at a time
                 if (packQuantity > 100) {
                     this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
-                    // Refund the difference if we limited it
+					// Use rawSetId for refund update
                     await packCollection.updateOne(
-                        { userId: user.id, setId: setId },
+                        { userId: user.id, setId: rawSetId }, 
                         { $inc: { quantity: packQuantity - 100 } } 
                     );
                 }
 
                 for (let i = 0; i < quantityToOpen; i++) {
-                    const pack = await generatePack(setId);
+					// Use rawSetId when generating packs
+                    const pack = await generatePack(rawSetId); 
                     allPacks.push(...pack);
                 }
 				
@@ -1150,7 +1161,8 @@ export const commands: ChatCommands = {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
                 html += `<br /><br />`;
-                html += `<button name="send" value="/tcg collection ${user.id}, set:${setId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
+				// Use rawSetId in the collection button value
+                html += `<button name="send" value="/tcg collection ${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
 				html += `</div>`;
 
 				this.sendReply(`|html|${html}`);
@@ -1158,8 +1170,9 @@ export const commands: ChatCommands = {
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG openallpacks command');
 				// CRITICAL: Refund the packs if pack generation or card adding fails
+				// Use rawSetId for refund
 				await packCollection.updateOne(
-					{ userId: user.id, setId: setId },
+					{ userId: user.id, setId: rawSetId }, 
 					{ $inc: { quantity: packQuantity } } // Give back the original quantity
 				);
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
