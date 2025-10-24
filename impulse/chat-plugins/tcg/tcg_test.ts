@@ -12,7 +12,7 @@ import {
 	initializeCache,
 	getCacheStats,
 	clearCache,
-} from './utils';
+} from './tcg_utils';
 // --- NEW IMPORT ---
 import { generateThemedTable } from '../../utils';
 // --- END NEW IMPORT ---
@@ -1015,10 +1015,9 @@ export const commands: ChatCommands = {
 				});
 
 				// Build the HTML using the utility
-				let html = `<div class="infobox" style="padding: 10px;">`;
+				let html = `<div class="style="padding: 10px;">`;
 				// Pass the title directly to the function
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows); // Call the utility function
-				html += `</div>`;
 
 				// --- MODIFICATION END ---
 
