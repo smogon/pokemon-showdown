@@ -5,9 +5,8 @@
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
-	generatePack, getCard, getSet, HIT_CHANCE,
-	initializeCache, getCacheStats, clearCache,
-	CUSTOM_RAREST_RARITIES,
+	generatePack, getCard, getSet,
+	initializeCache, getCacheStats, clearCache
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
@@ -1002,87 +1001,7 @@ export const commands: ChatCommands = {
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		},
-
-		async packinfo(target, room, user) {
-			if (!this.runBroadcast()) return;
-			const setId = toID(target);
-			if (!setId) {
-				return this.errorReply("Please specify a set ID. Usage: /tcg packinfo [setId]");
-			}
-			
-			// --- Duplicated constants removed, now imported ---
-
-			try {
-				// 1. Get Set Info
-				let setInfo: TcgCard | null = null;
-				const cacheInitialized = getCacheStats().isInitialized; //
-
-				if (cacheInitialized) {
-					setInfo = getSet(setId) || null; //
-				}
-				if (!setInfo) {
-					const collection = ImpulseDB<TcgCard>('tcg_cards');
-					setInfo = await collection.findOne({ setId }); //
-				}
-				if (!setInfo) {
-					return this.errorReply(`Set with ID "${setId}" not found.`);
-				}
-
-				const setName = setInfo.set;
-				const setLogo = setInfo.setImages?.logo || '';
-
-				// 2. Get Rarest Cards from DB
-				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
-				const rarestCards = await cardCollection.find(
-					{ setId: setId, rarity: { $in: CUSTOM_RAREST_RARITIES } }, // Uses imported constant
-					{ 
-						projection: { name: 1, cardId: 1, rarity: 1 },
-						sort: { rarityPoints: -1, name: 1 },
-						limit: 20 // Limit to a reasonable number for display
-					}
-				); //
-
-				// 3. Format Output
-				let html = `<div class="infobox" style="padding: 15px;">`;
-				
-				// Header
-				html += `<div style="display: flex; align-items: center; margin-bottom: 10px;">`;
-				if (setLogo) {
-					html += `<img src="${setLogo}" height="30" alt="${setName} Logo" title="${setName} Logo" style="margin-right: 10px;" />`;
-				}
-				html += `<strong style="font-size: 1.5em;">${setName} Pack Info (${setInfo.setId})</strong>`;
-				html += `</div>`;
-
-				// Hit Chance
-				const hitPercentage = HIT_CHANCE * 100; // Uses imported constant
-				html += `<div style="font-size: 1.1em; margin-bottom: 15px;">`;
-				html += `Based on the pack generation logic, this pack has a <strong>${hitPercentage}%</strong> chance to pull a card from the "rarest" pool (e.g., Ultra Rare, Secret Rare, etc.).`; //
-				html += `</div>`;
-				
-				// Rarest Cards Table
-				if (rarestCards.length > 0) {
-					const title = `Potential "Rarest" Cards (Sample of ${rarestCards.length})`;
-					const headerRow = ['Card Name', 'Rarity', 'Card ID'];
-					const dataRows = rarestCards.map(card => {
-						// Create a clickable button that looks like a link
-						const cardLink = `<button name="send" value="/tcg card ${card.cardId}" style="background:none;border:none;padding:0;color:#0055cc;text-decoration:underline;cursor:pointer;">${card.name}</button>`;
-						return [cardLink, card.rarity, card.cardId];
-					});
-					
-					html += generateThemedTable(title, headerRow, dataRows); //
-				} else {
-					html += `<strong>No cards found in the "rarest" pool for this set.</strong>`;
-				}
-				
-				html += `</div>`;
-				this.sendReply(`|html|${html}`);
-
-			} catch (error) {
-				Monitor.crashlog(error, 'TCG packinfo command');
-				return this.errorReply('An error occurred while fetching pack info.');
-			}
-		},
-
+		
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const setId = target.trim();
