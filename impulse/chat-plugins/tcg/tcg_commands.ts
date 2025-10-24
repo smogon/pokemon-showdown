@@ -1361,6 +1361,79 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async sell(target, room, user) {
+			const parts = target.split(',').map(p => p.trim());
+			let cardId = parts[0];
+			let quantityToSell = parts[1] ? parseInt(parts[1]) : 1;
+
+			if (!cardId) {
+				return this.errorReply("Please specify a card ID to sell. Usage: /tcg sell [cardId], [quantity]");
+			}
+			if (isNaN(quantityToSell) || quantityToSell <= 0) {
+				return this.errorReply("Invalid quantity. Quantity must be a positive number.");
+			}
+			if (quantityToSell > MAX_CARD_QUANTITY) {
+				return this.errorReply(`You can sell a maximum of ${MAX_CARD_QUANTITY} cards at a time.`);
+			}
+			
+			cardId = toID(cardId);
+
+			const collection = ImpulseDB<TcgUser>('user_collections');
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+
+			try {
+				const userCard = await collection.findOne({ userId: user.id, cardId: cardId });
+
+				if (!userCard || userCard.quantity === 0) {
+					return this.errorReply(`You do not own any "${cardId}" cards.`);
+				}
+
+				if (userCard.quantity < quantityToSell) {
+					return this.errorReply(`You only have ${userCard.quantity}x "${userCard.name}". You cannot sell ${quantityToSell}.`);
+				}
+
+				const newQuantity = userCard.quantity - quantityToSell;
+				const creditsToAward = quantityToSell * CREDITS_PER_DUPLICATE;
+				const pointsToDeduct = userCard.totalPoints * quantityToSell;
+				const uniqueCardsChange = newQuantity === 0 ? -1 : 0;
+				const now = new Date().toISOString();
+
+				// Update or delete from collection
+				if (newQuantity === 0) {
+					await collection.deleteOne({ userId: user.id, cardId: cardId });
+				} else {
+					await collection.updateOne(
+						{ userId: user.id, cardId: cardId },
+						{ $inc: { quantity: -quantityToSell } }
+					);
+				}
+
+				// Update profile
+				await profiles.updateOne(
+					{ userId: user.id },
+					{
+						$inc: {
+							credits: creditsToAward,
+							totalQuantity: -quantityToSell,
+							collectionPoints: -pointsToDeduct,
+							totalUniqueCards: uniqueCardsChange
+						},
+						$set: {
+							userName: user.name, // Keep username in sync
+							lastUpdatedAt: now
+						}
+					},
+					{ upsert: true } // Should not be necessary, but safe.
+				);
+
+				this.sendReply(`You successfully sold ${quantityToSell}x "${userCard.name}" for ${creditsToAward} credits.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG sell command');
+				return this.errorReply('An error occurred while selling your card.');
+			}
+		},
+
 		async profile(target, room, user) {
 			if (!this.runBroadcast()) return;
 
