@@ -958,7 +958,7 @@ export const commands: ChatCommands = {
 
 				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
 				
-				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
+				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 100px;">`;
 				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
