@@ -345,7 +345,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 			totalPointsChange += (card.totalPoints * actualQtyAdded);
 		}
 
-		if (currentQty === 0) {
+		if (currentQty === 0 && actualQtyAdded > 0) { // Only count as unique if it was actually added
 			totalUniqueCardsAdded++;
 		}
 
@@ -410,7 +410,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 				},
 				$setOnInsert: {
 					userId: user.id,
-					credits: 0 // Will be incremented by the $inc
+					// credits: 0 // Removed to fix conflict
 				}
 			},
 			{ upsert: true }
