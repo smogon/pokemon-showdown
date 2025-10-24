@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Files Plugin
+* Files Commands
 * Allows reading, deleting, uploading and more from chatrooms.
 * @author PrinceSky-Git
 */
