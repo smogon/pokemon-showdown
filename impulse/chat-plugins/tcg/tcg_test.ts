@@ -21,6 +21,7 @@ import { generateThemedTable } from '../../utils';
 const SEARCH_PAGE_LIMIT = 60; // Number of cards per page (15 rows * 4 cards)
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
+const MAX_FAVORITE_CARDS = 10;
 // --- END CONFIGURATION ---
 
 /**
@@ -953,6 +954,239 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async setprogress(target, room, user) {
+			if (!this.runBroadcast()) return;
+			
+			const setId = toID(target);
+			if (!setId) {
+				return this.parse('/help tcg setprogress');
+			}
+
+			// We will check the progress for the user running the command.
+			// This could be expanded later to check other users.
+			const targetUserId = user.id; 
+
+			try {
+				// 1. Get Set Information (Total cards in set)
+				let setInfo: TcgCard | null = null;
+				const cacheInitialized = getCacheStats().isInitialized;
+
+				if (cacheInitialized) {
+					setInfo = getSet(setId);
+				}
+				
+				// Fallback to DB if cache is off or set not found
+				if (!setInfo) {
+					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					setInfo = await cardCollection.findOne({ setId: setId });
+				}
+
+				// We need setInfo and specifically setInfo.setTotal to calculate progress
+				if (!setInfo || !setInfo.setTotal) {
+					return this.errorReply(`Set with ID "${setId}" not found or has no card total listed.`);
+				}
+				
+				const totalInSet = setInfo.setTotal;
+				const setName = setInfo.set;
+				const setLogo = setInfo.setImages?.logo || '';
+
+				// 2. Get User's Progress
+				const userCollection = ImpulseDB<TcgUser>('user_collections');
+				const userUniqueCount = await userCollection.countDocuments({
+					userId: targetUserId,
+					setId: setId,
+				});
+
+				// 3. Calculate and Render
+				const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
+				const barWidth = 200; // width in pixels
+				const progressWidth = Math.max(0, (barWidth * percentage) / 100); // Ensure width is not negative
+				
+				const displayName = user.name;
+
+				let html = `<div class="infobox" style="padding: 15px;">`;
+				html += `<div style="display: flex; align-items: center; margin-bottom: 10px;">`;
+				if (setLogo) {
+					html += `<img src="${setLogo}" height="30" alt="${setName} Logo" title="${setName} Logo" style="margin-right: 10px;" />`;
+				}
+				html += `<strong style="font-size: 1.5em;">${setName} Set Progress</strong>`;
+				html += `</div>`;
+				html += `<div style="font-size: 0.9em; color: #555; margin-bottom: 15px;">For: <strong>${displayName}</strong></div>`;
+				
+				html += `<strong>Collection:</strong> ${userUniqueCount} / ${totalInSet} unique cards<br />`;
+				html += `<strong>Completion:</strong> ${percentage.toFixed(1)}%<br />`;
+
+				// Progress Bar
+				html += `<div style="background: #eee; border: 1px solid #ccc; border-radius: 4px; width: ${barWidth}px; height: 20px; margin-top: 8px;">`;
+				// Use min-width to show a sliver even for small percentages
+				const progressStyle = `background: #4CAF50; width: ${progressWidth}px; height: 100%; border-radius: 4px;`;
+				html += `<div style="${progressStyle}"></div>`;
+				html += `</div>`;
+				
+				html += `</div>`;
+				
+				this.sendReply(`|html|${html}`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG setprogress command');
+				return this.errorReply('An error occurred while fetching your set progress.');
+			}
+		},
+
+		async profile(target, room, user) {
+			if (!this.runBroadcast()) return;
+
+			const targetUserId = toID(target) || user.id;
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const profile = await profiles.findOne({ userId: targetUserId });
+
+			if (!profile) {
+				const errorMsg = targetUserId === user.id ? "You do not have a TCG profile yet. Claim your /tcg daily to start!" : `User "${targetUserId}" does not have a TCG profile.`;
+				return this.errorReply(errorMsg);
+			}
+
+			// --- NEW: Fetch favorite cards ---
+			const favoriteCardIds = profile.favoriteCards || [];
+			let orderedFavoriteCards: Partial<TcgCard>[] = [];
+
+			if (favoriteCardIds.length > 0) {
+				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const favoriteCardsData = await cardCollection.find(
+					{ cardId: { $in: favoriteCardIds } },
+					{ projection: { cardId: 1, imageUrl: 1, name: 1, rarity: 1 } }
+				);
+				
+				// Re-sort the fetched data to match the user's saved order
+				const cardDataMap = new Map<string, Partial<TcgCard>>();
+				for (const card of favoriteCardsData) {
+					cardDataMap.set(card.cardId, card);
+				}
+				orderedFavoriteCards = favoriteCardIds
+					.map(id => cardDataMap.get(id))
+					.filter((card): card is Partial<TcgCard> => !!card);
+			}
+			// --- END NEW ---
+
+			// Get total sets in the game from cache for percentage calculation
+			const { setsCached } = getCacheStats();
+			const totalSetsInGame = Math.max(1, setsCached); // Avoid division by zero
+			const setsCompleted = profile.totalSetsCompleted || 0;
+			const setCompletionPercent = (setsCompleted / totalSetsInGame) * 100;
+
+			// --- NEW HTML LAYOUT ---
+			const imageWidth = 160;
+			const imageHeight = 222; // ~65% of 246x342
+
+			let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${imageHeight + 30}px;">`;
+			
+			// Left Column (Image Scroller)
+			html += `<div style="flex: 0 0 ${imageWidth + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
+			html += `<div style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap; max-width: ${imageWidth + 20}px;">`;
+
+			if (orderedFavoriteCards.length > 0) {
+				for (const card of orderedFavoriteCards) {
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin-right: 10px; width: ${imageWidth}px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px; white-space: pre-wrap;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666; white-space: pre-wrap;">${card.rarity}</div>`;
+					html += `</div>`;
+				}
+			} else {
+				html += `<div style="color: #888; text-align: center; padding-top: 50px; font-size: 0.9em; white-space: pre-wrap; width: ${imageWidth}px;">`;
+				html += `No favorite cards set.<br /><br />Use<br />/tcg favorite [cardId]`;
+				html += `</div>`;
+			}
+			html += `</div></div>`;
+
+			// Right Column (Stats)
+			html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${imageHeight + 30}px; overflow-y: auto;">`;
+			html += `<strong style="font-size: 22px;">${profile.userName}</strong><br />`;
+			html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+			html += `<strong>Collection Points:</strong> ${profile.collectionPoints.toLocaleString()}<br />`;
+			html += `<strong>Total Cards:</strong> ${profile.totalQuantity.toLocaleString()}<br />`;
+			html += `<strong>Unique Cards:</strong> ${profile.totalUniqueCards.toLocaleString()}<br />`;
+			html += `<strong>Credits:</strong> ${profile.credits.toLocaleString()}<br />`;
+			html += `<strong>Sets Completed:</strong> ${setsCompleted} / ${totalSetsInGame} (${setCompletionPercent.toFixed(1)}%)<br />`;
+			html += `<strong>Last Active:</strong> ${new Date(profile.lastUpdatedAt).toLocaleDateString()}<br />`;
+			html += `</div>`;
+			html += `</div>`; // Close Right Column
+			html += `</div>`; // Close Infobox
+
+			this.sendReply(`|html|${html}`);
+		},
+
+		async favorite(target, room, user) {
+			const cardId = toID(target);
+			if (!cardId) return this.parse('/help tcg favorite');
+
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const collections = ImpulseDB<TcgUser>('user_collections');
+
+			try {
+				// 1. Check if user owns the card
+				const userCard = await collections.findOne({ userId: user.id, cardId: cardId });
+				if (!userCard) {
+					return this.errorReply(`You do not own this card. You can only favorite cards from your collection.`);
+				}
+
+				// 2. Check current favorite count
+				const profile = await profiles.findOne({ userId: user.id });
+				const currentFavorites = profile?.favoriteCards || [];
+
+				if (currentFavorites.includes(cardId)) {
+					return this.errorReply(`"${userCard.name}" is already in your favorites.`);
+				}
+
+				if (currentFavorites.length >= MAX_FAVORITE_CARDS) {
+					return this.errorReply(`You already have ${MAX_FAVORITE_CARDS} favorite cards. Use /tcg unfavorite [cardId] to remove one first.`);
+				}
+
+				// 3. Add to set (prevents duplicates)
+				const result = await profiles.updateOne(
+					{ userId: user.id },
+					{ $addToSet: { favoriteCards: cardId } }
+				);
+
+				if (result.modifiedCount > 0) {
+					this.sendReply(`Added "${userCard.name}" to your profile favorites.`);
+				} else {
+					// This case is now handled by the check above, but we leave it as a fallback.
+					this.errorReply(`"${userCard.name}" is already in your favorites.`);
+				}
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG favorite command');
+				return this.errorReply('An error occurred while adding your favorite card.');
+			}
+		},
+
+		async unfavorite(target, room, user) {
+			const cardId = toID(target);
+			if (!cardId) return this.parse('/help tcg unfavorite');
+
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+
+			try {
+				const result = await profiles.updateOne(
+					{ userId: user.id },
+					{ $pull: { favoriteCards: cardId } }
+				);
+
+				if (result.modifiedCount > 0) {
+					this.sendReply(`Removed card "${cardId}" from your profile favorites.`);
+				} else {
+					this.errorReply(`Card "${cardId}" was not in your favorites list.`);
+				}
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG unfavorite command');
+				return this.errorReply('An error occurred while removing your favorite card.');
+			}
+		},
+
 		async leaderboard(target, room, user) {
 			if (!this.runBroadcast()) return;
 
@@ -983,8 +1217,13 @@ export const commands: ChatCommands = {
 					title = 'Total Credits';
 					valueField = 'credits';
 					break;
+				case 'sets': // <-- NEW CASE
+					sortKey = 'totalSetsCompleted';
+					title = 'Sets Completed';
+					valueField = 'totalSetsCompleted';
+					break;
 				default:
-					return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', or 'credits'.");
+					return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', 'credits', or 'sets'.");
 			}
 
 			try {
@@ -1029,6 +1268,237 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async recalculatestats(target, room, user) {
+			let targetUserId = toID(target);
+			
+			if (targetUserId) {
+				// If a target is specified, only admins can run it
+				this.checkCan('bypassall');
+			} else {
+				// If no target, default to the user running the command
+				targetUserId = user.id;
+			}
+
+			this.sendReply(`Starting stats recalculation for ${targetUserId}... This may take a while.`);
+
+			try {
+				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const userCollection = ImpulseDB<TcgUser>('user_collections');
+				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+
+				// 1. Get all sets in the game and their totals
+				const setTotalsPipeline = [
+					{
+						$group: {
+							_id: "$setId",
+							setTotal: { $first: "$setTotal" }
+						}
+					},
+					{
+						$project: {
+							_id: 0,
+							setId: "$_id",
+							setTotal: { $ifNull: ["$setTotal", 0] } // Default to 0 if setTotal is missing
+						}
+					}
+				];
+				const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
+				
+				if (allSets.length === 0) {
+					return this.errorReply("Failed to fetch set totals. Aborting.");
+				}
+
+				// 2. Get all unique cards owned by the user, grouped by set
+				const userProgressPipeline = [
+					{ $match: { userId: targetUserId } },
+					{
+						$group: {
+							_id: "$setId",
+							uniqueCount: { $sum: 1 }
+						}
+					}
+				];
+				const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
+
+				// Map user counts for easy lookup
+				const userProgressMap = new Map<string, number>();
+				for (const set of userSetCounts) {
+					userProgressMap.set(set._id, set.uniqueCount);
+				}
+
+				// 3. Compare user progress to set totals
+				let setsCompleted = 0;
+				for (const set of allSets) {
+					if (set.setTotal > 0) { // Only count sets that have a defined total
+						const userCount = userProgressMap.get(set.setId) || 0;
+						if (userCount >= set.setTotal) {
+							setsCompleted++;
+						}
+					}
+				}
+
+				// 4. Recalculate all other stats for accuracy
+				const allStatsPipeline = [
+					{ $match: { userId: targetUserId } },
+					{
+						$group: {
+							_id: null,
+							totalUniqueCards: { $sum: 1 },
+							totalQuantity: { $sum: "$quantity" },
+							collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
+						}
+					}
+				];
+				const statsResult = await userCollection.aggregate(allStatsPipeline);
+				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
+				
+				// 5. Get user's current credits and name (don't reset them)
+				const profile = await profileCollection.findOne({ userId: targetUserId });
+				const currentCredits = profile?.credits || 0;
+				const userName = profile?.userName || targetUserId;
+				const currentFavorites = profile?.favoriteCards || []; // Preserve favorites
+
+				// 6. Update the user's profile with all recalculated data
+				await profileCollection.updateOne(
+					{ userId: targetUserId },
+					{
+						$set: {
+							userName: userName,
+							credits: currentCredits,
+							totalUniqueCards: stats.totalUniqueCards,
+							totalQuantity: stats.totalQuantity,
+							collectionPoints: stats.collectionPoints,
+							totalSetsCompleted: setsCompleted, // The new stat
+							favoriteCards: currentFavorites, // Preserve
+							lastUpdatedAt: new Date().toISOString()
+						}
+					},
+					{ upsert: true }
+				);
+				
+				this.sendReply(`✅ Recalculation complete for ${targetUserId}:`);
+				this.sendReply(`- Sets Completed: ${setsCompleted} / ${allSets.length}`);
+				this.sendReply(`- Total Points: ${stats.collectionPoints.toLocaleString()}`);
+				this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG recalculatestats command');
+				return this.errorReply(`An error occurred during recalculation: ${error.message}`);
+			}
+		},
+
+		recalculateallstats(target, room, user) {
+			this.checkCan('bypassall'); // Admin-only command
+
+			this.sendReply(`Starting stats recalculation for ALL users... This will take a long time and run in the background. You will be notified when it's complete.`);
+
+			// Run this as a background process, not awaiting it.
+			(async () => {
+				let processedCount = 0;
+				let errorCount = 0;
+				const startTime = Date.now();
+
+				try {
+					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					const userCollection = ImpulseDB<TcgUser>('user_collections');
+					const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+
+					// 1. Get all sets in the game (do this once)
+					const setTotalsPipeline = [
+						{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
+						{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
+					];
+					const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
+					if (allSets.length === 0) {
+						this.sendReply(`❌ RECALCULATION FAILED: Could not fetch set totals.`);
+						return;
+					}
+
+					// 2. Get all user IDs to process
+					const allUserIds = await profileCollection.distinct("userId", {});
+					if (allUserIds.length === 0) {
+						this.sendReply(`❌ RECALCULATION FAILED: No user profiles found to process.`);
+						return;
+					}
+					
+					// 3. Loop through each user and process them
+					for (const targetUserId of allUserIds) {
+						try {
+							// 3a. Get user's set progress
+							const userProgressPipeline = [
+								{ $match: { userId: targetUserId } },
+								{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } }
+							];
+							const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
+							const userProgressMap = new Map<string, number>();
+							for (const set of userSetCounts) {
+								userProgressMap.set(set._id, set.uniqueCount);
+							}
+
+							// 3b. Compare progress to totals
+							let setsCompleted = 0;
+							for (const set of allSets) {
+								if (set.setTotal > 0) {
+									const userCount = userProgressMap.get(set.setId) || 0;
+									if (userCount >= set.setTotal) {
+										setsCompleted++;
+									}
+								}
+							}
+
+							// 3c. Recalculate all other stats
+							const allStatsPipeline = [
+								{ $match: { userId: targetUserId } },
+								{ $group: {
+									_id: null,
+									totalUniqueCards: { $sum: 1 },
+									totalQuantity: { $sum: "$quantity" },
+									collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
+								}}
+							];
+							const statsResult = await userCollection.aggregate(allStatsPipeline);
+							const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
+							
+							// 3d. Get existing credits/name/favorites to preserve
+							const profile = await profileCollection.findOne({ userId: targetUserId });
+							const currentCredits = profile?.credits || 0;
+							const userName = profile?.userName || targetUserId;
+							const currentFavorites = profile?.favoriteCards || [];
+
+							// 3e. Update the profile
+							await profileCollection.updateOne(
+								{ userId: targetUserId },
+								{
+									$set: {
+										userName: userName,
+										credits: currentCredits,
+										totalUniqueCards: stats.totalUniqueCards,
+										totalQuantity: stats.totalQuantity,
+										collectionPoints: stats.collectionPoints,
+										totalSetsCompleted: setsCompleted,
+										favoriteCards: currentFavorites,
+										lastUpdatedAt: new Date().toISOString()
+									}
+								},
+								{ upsert: true }
+							);
+							processedCount++;
+						} catch (err) {
+							Monitor.crashlog(err, `TCG recalculateallstats loop error for user: ${targetUserId}`);
+							errorCount++;
+						}
+					} // End user loop
+
+					const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+					this.sendReply(`✅ RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
+					
+				} catch (error) {
+					Monitor.crashlog(error, 'TCG recalculateallstats command');
+					this.sendReply(`❌ RECALCULATION FAILED: A critical error occurred: ${error.message}`);
+				}
+			})(); // End background process IIFE
+		},
+
 		// Cache commands (unchanged)
 		async loadcache(target, room, user) {
 			this.checkCan('bypassall');
@@ -1069,17 +1539,23 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
+				`<code>/tcg profile [user]</code> - View a user's TCG profile and collection stats.<br />` +
 				`<code>/tcg daily</code> - Claim your free daily booster pack (once per 24h).<br />` +
 				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
 				`<strong>Example:</strong> <code>/tcg collection user:princeskygit, rarity:Secret</code><br />` +
-				`<code>/tcg leaderboard [points | count | unique | credits]</code> - View the top collectors.<br />` +
+				`<code>/tcg setprogress [setId]</code> - Track your collection progress for a specific set.<br />` +
+				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
+				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
+				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
+				`<code>/tcg recalculatestats [user]</code> - Recalculate your stats. Admins can specify a user.<br />` +
 				`<strong>Admin Commands:</strong><br />` +
 				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
-				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.`
+				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
+				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users.`
 			);
 		},
 	},
