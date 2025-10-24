@@ -106,7 +106,7 @@ export class Field {
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
-					pokemon.getAbility().suppressWeather && !pokemon.abilityState?.ending) {
+					pokemon.getAbility().suppressWeather && !pokemon.abilityState.ending) {
 					return true;
 				}
 			}
