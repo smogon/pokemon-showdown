@@ -106,16 +106,13 @@ function startRoomAutotourScheduler(roomid: string): void {
 	const min = Math.max(1, config.interval);
 	const intervalMs = min * 60 * 1000;
 	
-	// Calculate time until next tour
 	const now = Date.now();
 	const lastRun = config.lastTourTime || now;
 	const nextRun = lastRun + intervalMs;
 	const timeUntilNext = Math.max(0, nextRun - now);
 	
-	// If we're overdue, schedule for the next interval instead of immediately
 	const delay = timeUntilNext === 0 ? intervalMs : timeUntilNext;
 	
-	// Schedule the next tour
 	autotourIntervals[roomid] = setTimeout(() => {
 		runAutotour(roomid);
 		autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), intervalMs);
@@ -354,7 +351,6 @@ export const commands: Chat.ChatCommands = {
 			const nextRun = lastRun + intervalMs;
 			let timeRemaining = Math.max(0, nextRun - now);
 	
-			// If overdue, next tour is one full interval away
 			if (timeRemaining === 0) {
 				timeRemaining = intervalMs;
 			}
