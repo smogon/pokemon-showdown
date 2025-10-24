@@ -151,17 +151,17 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 } {
 	const parts = target.split(',');
 	let page = 1;
-	let query = target.trim(); // e.g., "user:princesky, set:rsv10pt5" or "Pikachu user:ash, set:base1"
-	let commandStringForPagination = query; // Store original base query for pagination links
+	let query = target.trim();
+	let commandStringForPagination = query;
 
-	// Handle page number at the end
+
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
 		if (!isNaN(potentialPage)) {
 			page = Math.max(1, potentialPage);
-			query = parts.slice(0, -1).join(',').trim(); // Remove page number part
-			commandStringForPagination = query; // Update base command string too
+			query = parts.slice(0, -1).join(',').trim();
+			commandStringForPagination = query;
 		}
 	}
 
@@ -169,27 +169,27 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
 	
-	// Regex to find filters, consumes optional trailing comma/space
+
 	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)\s*,?\s*/g; 
 	
-	// Store filter matches to remove them later
+
 	const filterMatches: string[] = [];
 	let match;
-	filterRegex.lastIndex = 0; // Reset regex state just in case
+	filterRegex.lastIndex = 0;
 	while ((match = filterRegex.exec(query)) !== null) {
-		filterMatches.push(match[0]); // Store the full matched filter string (e.g., "user:princesky, ")
+		filterMatches.push(match[0]);
 
 		const key = match[1].toLowerCase();
 		const operator = match[2];
 		let value = match[3].replace(/"/g, '');
 
-		// Handle user filter separately first
+
 		if (key === 'user') {
 			targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
-			continue; // Skip adding to filter/descriptions for now
+			continue;
 		}
 
-		// Process other filters
+
 		const valueNum = parseInt(value);
 		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 		const valueRegex = new RegExp(escapedValue, 'i');
@@ -234,48 +234,48 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 				descriptions.push(`Reg Mark: ${value}`);
 				break;
 			case 'set':
-				// Using exact match for setId based on original code logic
+
                 const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
 				filter.$and.push({ setId: exactRegex });
 				descriptions.push(`Set ID: ${value}`);
 				break;
-			case 'artist': // Ignored filters based on original code
+			case 'artist':
 			case 'legal':
 				descriptions.push(`(Filter ${key}:${value} ignored)`);
 				break;
 		}
 	}
 
-	// Add the mandatory user filter
+
 	filter.$and.push({ userId: targetUserId });
 	
-	// Determine the name query part by removing all matched filters from the original query string
+
 	let nameQuery = query;
 	for (const matchedFilter of filterMatches) {
 		nameQuery = nameQuery.replace(matchedFilter, '');
 	}
-	const nameQueryClean = nameQuery.trim(); // Trim remaining whitespace
+	const nameQueryClean = nameQuery.trim();
 
-	// Add name filter if there's anything left besides an empty string
+
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 		filter.$and.push({ name: nameRegex });
-		descriptions.unshift(`Name: '${nameQueryClean}'`); // Use unshift to match original description order
+		descriptions.unshift(`Name: '${nameQueryClean}'`);
 	}
 	
-    // Build final query description string
+
 	const filterDesc = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
-	// Construct description including Owner first, then other filters
+
     let queryDescription = `Owner: ${targetUserId}`;
     if (descriptions.length > 0) {
         queryDescription += `, ${filterDesc}`;
     } else {
-         queryDescription += ', All Cards'; // Explicitly state if no other filters
+         queryDescription += ', All Cards';
     }
 	
-	// Build command string for pagination: original query (minus page) minus the user filter part
+
     let finalCommandString = commandStringForPagination.replace(/user:\s*("[^"]+"|[\w-]+)\s*,?\s*/gi, '').trim();
-    // Remove potential trailing comma left after removing user filter
+
     finalCommandString = finalCommandString.replace(/,\s*$/, '').trim();
 
 	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
@@ -975,7 +975,7 @@ export const commands: ChatCommands = {
 			for (let i = 0; i < userPacks.length; i++) {
 				const pack = userPacks[i];
 				
-				if (i % 3 === 0) { // Start a new row
+				if (i % 3 === 0) {
 					if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: inline-block; text-align: center;">`; 
 				}
@@ -983,15 +983,15 @@ export const commands: ChatCommands = {
 				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
 				
 				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
-				// Main pack button (opens one)
+
 				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; min-height: 90px;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
 				html += `<span style="font-size: 0.8em;">Quantity: ${pack.quantity}</span>`;
 				html += `</button>`;
 				
-				// "Open All" button
-				if (pack.quantity > 1) { // Only show if there's more than 1
+
+				if (pack.quantity > 1) {
 					html += `<button name="send" value="/tcg openallpacks ${pack.setId}" style="background: none; border: 1px solid #aaa; border-radius: 4px; padding: 2px 5px; width: 100%; text-align: center; cursor: pointer; font-size: 0.75em; margin-top: 3px;">`;
 					html += `Open All ${pack.quantity}`;
 					html += `</button>`;
@@ -1000,7 +1000,7 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 			}
 			
-			if (userPacks.length > 0) html += `</div>`; // Close the last row container
+			if (userPacks.length > 0) html += `</div>`;
 
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
@@ -1016,7 +1016,7 @@ export const commands: ChatCommands = {
 
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 			
-			// 1. Atomically check and decrement pack quantity
+
 			const updateResult = await packCollection.updateOne(
 				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
 				{ $inc: { quantity: -1 } }
@@ -1027,20 +1027,20 @@ export const commands: ChatCommands = {
 			}
 
 			try {
-				// 2. Generate the pack
+
 				const pack = await generatePack(setId);
 				
-				// 3. Add cards to user's collection
+
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
-				// 4. Get Set Name for display (from cache)
+
 				let setName = setId;
 				const setInfo = getSet(setId);
 				if (setInfo) {
 					setName = setInfo.set;
 				}
 
-				// 5. Display the opened pack (similar to /tcg daily)
+
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened a ${setName} pack!</strong>`;
 				
@@ -1105,7 +1105,7 @@ export const commands: ChatCommands = {
 				
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG opensavedpack command');
-				// CRITICAL: Refund the pack if pack generation or card adding fails
+
 				await packCollection.updateOne(
 					{ userId: user.id, setId: setId },
 					{ $inc: { quantity: 1 } }
@@ -1122,12 +1122,12 @@ export const commands: ChatCommands = {
 				return this.parse('/tcg packs');
 			}
 
-            console.log(`[TCG OpenAllPacks] START: User='${user.id}', RawSetId='${rawSetId}' (Length: ${rawSetId.length})`);
+            
             
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 
             const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
-            console.log(`[TCG OpenAllPacks] Running findOneAndUpdate with filter: ${JSON.stringify(queryFilter)}`);
+            
 			
 			let findResult: TcgUserPack | null = null; 
 			try {
@@ -1137,45 +1137,45 @@ export const commands: ChatCommands = {
 				);
 			} catch (dbError) {
 				Monitor.crashlog(dbError, 'TCG openallpacks findOneAndUpdate');
-				console.error(`[TCG OpenAllPacks] DB Error during findOneAndUpdate for User='${user.id}', RawSetId='${rawSetId}':`, dbError);
+				
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
             
-            console.log(`[TCG OpenAllPacks] findOneAndUpdate raw result (expected document or null): ${JSON.stringify(findResult)}`);
+            
 
 			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
-                console.log(`[TCG OpenAllPacks] FAIL: User='${user.id}', RawSetId='${rawSetId}'. Document found before update: ${JSON.stringify(findResult)}`);
+                
 				
 				try {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
-					console.log(`[TCG OpenAllPacks] ZeroCheck result for RawSetId='${rawSetId}': ${JSON.stringify(zeroCheck)}`);
+					
 					if (zeroCheck && zeroCheck.quantity === 0) {
-						 console.log(`[TCG OpenAllPacks] INFO: Pack for User='${user.id}', RawSetId='${rawSetId}' already at quantity 0.`);
+						 
 						 return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
 					} else if (zeroCheck && zeroCheck.quantity > 0) {
-						 console.error(`[TCG OpenAllPacks] INCONSISTENCY: findOneAndUpdate failed check but findOne found quantity > 0 for User='${user.id}', RawSetId='${rawSetId}'.`);
+						 
 					} else {
                          const similarPacks = await packCollection.find({ userId: user.id, setId: new RegExp(`^${rawSetId}$`, 'i') });
                          if (similarPacks.length > 0) {
-                            console.warn(`[TCG OpenAllPacks] WARNING: Found packs with case-insensitive match for RawSetId='${rawSetId}'. Actual stored IDs: ${similarPacks.map(p => `'${p.setId}'`).join(', ')}`);
+                            
                          }
                     }
 				} catch (checkError) {
-					console.error(`[TCG OpenAllPacks] Error during zeroCheck for User='${user.id}', RawSetId='${rawSetId}':`, checkError);
+					
 				}
 
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`); 
 			}
 
             const packQuantity = findResult.quantity; 
-            console.log(`[TCG OpenAllPacks] SUCCESS: Found pack for User='${user.id}', RawSetId='${rawSetId}'. Original Quantity: ${packQuantity}`);
+            
             
             const setName = findResult.setName || rawSetId; 
 
 			try {
                 const allPacks: TcgCard[] = [];
                 const quantityToOpen = Math.min(packQuantity, 100); 
-                console.log(`[TCG OpenAllPacks] Generating ${quantityToOpen} packs for SetId='${rawSetId}'...`);
+                
 
                 if (packQuantity > 100) {
                     this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
@@ -1190,11 +1190,11 @@ export const commands: ChatCommands = {
                     allPacks.push(...pack);
                 }
 
-                console.log(`[TCG OpenAllPacks] Generated ${allPacks.length} cards total.`);
+                
 				
-                console.log(`[TCG OpenAllPacks] Adding cards to collection for User='${user.id}'...`);
+                
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
-                console.log(`[TCG OpenAllPacks] Cards added. Credits Awarded: ${creditsAwarded}`);
+                
 
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong>`;
@@ -1205,16 +1205,16 @@ export const commands: ChatCommands = {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
                 html += `<br /><br />`;
-                // ****** THIS IS THE FIX ******
+
 				html += `<button name="send" value="/tcg collection user:${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
-                // ******************************
+
 				html += `</div>`;
 
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG openallpacks command execution');
-                console.error(`[TCG OpenAllPacks] Error during pack generation/adding for User='${user.id}', RawSetId='${rawSetId}':`, error);
+                
 				await packCollection.updateOne(
 					{ userId: user.id, setId: rawSetId }, 
 					{ $set: { quantity: packQuantity } }  
@@ -1227,7 +1227,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 
 			try {
-				// 1. Check and update the daily shop cache
+
 				const today = new Date().toISOString().split('T')[0];
 				if (currentShopDate !== today || dailyShopCache.length === 0) {
 					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
@@ -1245,7 +1245,7 @@ export const commands: ChatCommands = {
 						{ $sort: { setReleaseDate: -1 } }
 					]);
 
-					// Map the aggregation result to a partial TcgCard structure
+
 					dailyShopCache = newShopSets.map(set => ({
 						setId: set._id,
 						set: set.setName,
@@ -1256,12 +1256,12 @@ export const commands: ChatCommands = {
 					currentShopDate = today;
 				}
 
-				// 2. Get user's current credits
+
 				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 				const profile = await profileCollection.findOne({ userId: user.id });
 				const userCredits = profile?.credits || 0;
 
-				// 3. Generate the HTML display
+
 				let html = `<div class="style="padding: 10px;">`;
 
 				const title = `TCG Packs Shop<br><span style="font-size: 0.9em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
@@ -1298,20 +1298,20 @@ export const commands: ChatCommands = {
 				return this.errorReply("Please specify a set ID to buy. Use /tcg shop to see available packs.");
 			}
 
-			// 1. Verify the set is in the current shop
+
 			const setInShop = dailyShopCache.find(s => s.setId === setId);
 			if (!setInShop) {
-				// Check if the shop cache is just empty (e.g., server restart)
+
 				const today = new Date().toISOString().split('T')[0];
 				if (currentShopDate !== today || dailyShopCache.length === 0) {
-					this.parse('/tcg shop'); // Refresh the shop for the user
+					this.parse('/tcg shop');
 					return this.errorReply("The shop is currently resetting. We've refreshed it for you, please try buying again.");
 				}
 				return this.errorReply(`The pack "${setId}" is not currently in the daily shop. Use /tcg shop to see today's packs.`);
 			}
 
 			try {
-				// 2. Atomically deduct credits
+
 				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 				const updateResult = await profileCollection.updateOne(
 					{ userId: user.id, credits: { $gte: PACK_COST } },
@@ -1319,13 +1319,13 @@ export const commands: ChatCommands = {
 				);
 
 				if (updateResult.matchedCount === 0) {
-					// This fails if the user doesn't exist OR if they have < PACK_COST
+
 					const profile = await profileCollection.findOne({ userId: user.id });
 					const userCredits = profile?.credits || 0;
 					return this.errorReply(`You do not have enough credits to buy this pack. You need ${PACK_COST} credits, but you only have ${userCredits}.`);
 				}
 
-				// 3. Add the pack to the user's inventory
+
 				const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 				const now = new Date().toISOString();
 				
@@ -1345,13 +1345,13 @@ export const commands: ChatCommands = {
 					{ upsert: true }
 				);
 
-				// 4. Send success reply
+
 				this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
 				this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
 
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG buy command');
-				// ATTEMPT TO REFUND if something went wrong after payment
+
 				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 				await profileCollection.updateOne(
 					{ userId: user.id },
@@ -1490,27 +1490,27 @@ export const commands: ChatCommands = {
 			try {
 				let result;
 				if (targetId === 'all') {
-					// Remove all favorites
+
 					result = await profiles.updateOne(
 						{ userId: user.id },
-						{ $set: { favoriteCards: [] } } // Set the array to empty
+						{ $set: { favoriteCards: [] } }
 					);
 
 					if (result.modifiedCount > 0) {
 						this.sendReply(`Removed all cards from your profile favorites.`);
 					} else {
-						// Check if the list was already empty or if the user profile doesn't exist
+
 						const profile = await profiles.findOne({ userId: user.id });
 						if (profile && (!profile.favoriteCards || profile.favoriteCards.length === 0)) {
 							this.errorReply(`Your favorites list is already empty.`);
 						} else {
-							// Should ideally not happen if the update ran, but good to handle
+
 							this.errorReply(`Could not find your profile or your favorites list was already empty.`);
 						}
 					}
 				} else {
-					// Remove a single card (existing logic)
-					const cardId = target.trim(); // Use original trim for the card ID
+
+					const cardId = target.trim();
 					result = await profiles.updateOne(
 						{ userId: user.id },
 						{ $pull: { favoriteCards: cardId } }
