@@ -477,7 +477,7 @@ export const commands: ChatCommands = {
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
 					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.65em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
