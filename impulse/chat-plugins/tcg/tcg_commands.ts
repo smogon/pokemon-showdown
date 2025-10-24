@@ -1120,13 +1120,9 @@ export const commands: ChatCommands = {
 				const userCredits = profile?.credits || 0;
 
 				// 3. Generate the HTML display
-				let html = `<div class="infobox" style="padding: 10px;">`;
-				html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px 10px 15px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">`;
-				html += `<strong style="font-size: 1.5em;">Daily Pack Shop</strong>`;
-				html += `<span style="font-size: 1.1em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
-				html += `</div>`;
+				let html = `<div class="style="padding: 10px;">`;
 
-				const title = `Packs reset at midnight. All packs cost ${PACK_COST} credits.`;
+				const title = `TCG Packs Shop<br><span style="font-size: 0.9em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
 				const headerRow = ['Pack', 'Series', 'Price', 'Buy'];
 				const dataRows: string[][] = [];
 
@@ -1138,7 +1134,7 @@ export const commands: ChatCommands = {
 					const logoHtml = set.setImages?.logo ? `<img src="${set.setImages.logo}" height="20" style="max-width: 60px; vertical-align: middle; margin-right: 5px;" alt="${set.set}">` : '';
 					
 					dataRows.push([
-						`${logoHtml} <strong>${set.set}</strong> (${set.setId})`,
+						`${logoHtml} (${set.setId})`,
 						set.setSeries || 'N/A',
 						`${PACK_COST} Credits`,
 						`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`
@@ -1146,7 +1142,6 @@ export const commands: ChatCommands = {
 				}
 
 				html += generateThemedTable(title, headerRow, dataRows);
-				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
