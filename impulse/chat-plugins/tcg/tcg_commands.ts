@@ -18,7 +18,7 @@ const SEARCH_PAGE_LIMIT = 60;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 const MAX_FAVORITE_CARDS = 10;
-const PACK_COST = 0;
+const PACK_COST = 100;
 
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
