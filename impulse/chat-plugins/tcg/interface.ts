@@ -153,3 +153,25 @@ export interface TcgDailyCooldown {
   /** The ISO date string of when the user last claimed their daily reward */
   lastClaimedAt: string;
 }
+
+/**
+ * Stores aggregated, pre-calculated stats for each user.
+ * This is used for fast leaderboards.
+ * Stored in 'user_profiles' collection.
+ */
+export interface TcgUserProfile {
+  /** A unique, normalized user identifier (e.g., 'princeskygit') */
+  userId: string;
+  /** The user's display name */
+  userName: string;
+  /** In-game currency */
+  credits: number;
+  /** The total number of *unique* cards owned. */
+  totalUniqueCards: number;
+  /** The total quantity of all cards owned. */
+  totalQuantity: number;
+  /** The sum of (totalPoints * quantity) for all cards. */
+  collectionPoints: number;
+  /** The ISO date string of when this profile was last updated */
+  lastUpdatedAt: string;
+}
