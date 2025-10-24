@@ -18,7 +18,7 @@ const SEARCH_PAGE_LIMIT = 60;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 const MAX_FAVORITE_CARDS = 10;
-const PACK_COST = 0;
+const PACK_COST = 100;
 
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
@@ -944,23 +944,32 @@ export const commands: ChatCommands = {
 				return this.errorReply("You do not have any saved packs. You can buy them from the /tcg shop.");
 			}
 
-			let html = `<div class="infobox" style="padding: 10px; max-height: 340px; overflow-y: auto;">`;
-			html += `<strong style="font-size: 1.5em;">${user.name}'s Saved Packs</strong><br />`;
+			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+			html += `<strong style="font-size: 20px;">${user.name}'s Saved Packs</strong><br />`;
 			html += `<div style="font-size: 0.9em; color: #555; margin-bottom: 15px;">Click a pack to open it.</div>`;
 			
-			html += `<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">`;
+			for (let i = 0; i < userPacks.length; i++) {
+				const pack = userPacks[i];
+				
+				if (i % 4 === 0) { // Start a new row
+					if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+					html += `<div style="display: inline-block; text-align: center;">`; 
+				}
 
-			for (const pack of userPacks) {
 				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
 				
-				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 120px; text-align: center; cursor: pointer;">`;
+				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
+				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
 				html += `<span style="font-size: 0.8em; color: #333;">Quantity: ${pack.quantity}</span>`;
 				html += `</button>`;
+				html += `</div>`;
 			}
+			
+			if (userPacks.length > 0) html += `</div>`; // Close the last row container
 
-			html += `</div></div>`;
+			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		},
 
@@ -1686,7 +1695,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, G<code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg profile [user]</code> - View a user's TCG profile and collection stats.<br />` +
