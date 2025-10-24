@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Ontime chat-plugin
+* Ontime Commands
 */
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
