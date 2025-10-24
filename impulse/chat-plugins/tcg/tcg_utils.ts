@@ -6,16 +6,13 @@
  * 2. Cache management (init, clear, stats)
  * 3. Pack generation (router, cache-based, and DB-fallback)
  */
-
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard } from './interface';
 
-// ==================== CACHE CONSTANTS ====================
-const CACHE_SAMPLE_SIZE = 20; // Number of cards to sample for weighted selection
-const DB_SAMPLE_SIZE = 20; // For DB-based weighted random
+const CACHE_SAMPLE_SIZE = 20;
+const DB_SAMPLE_SIZE = 20;
 const HIT_CHANCE = 0.3;
 
-// ==================== CACHE DEFINITIONS ====================
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
 interface RarityPools {
@@ -26,18 +23,10 @@ interface RarityPools {
 	fallback: TcgCard[];
 }
 
-// 1. Cache for /tcg card (cardId -> TcgCard)
 const cardsCache = new Map<string, TcgCard>();
-
-// 2. Cache for /tcg set (setId -> TcgCard)
 const setsCache = new Map<string, TcgCard>();
-
-// 3. Cache for /tcg openpack (setId -> RarityPools)
 const packCache = new Map<string, RarityPools>();
 let globalFallbackCache: TcgCard[] = [];
-
-// ==================== CUSTOM RARITY DEFINITIONS ====================
-// These are now internal to utils.ts
 
 const CUSTOM_COMMON_RARITIES = ['Common'];
 const CUSTOM_UNCOMMON_RARITIES = ['Uncommon'];
@@ -57,9 +46,6 @@ const CUSTOM_RAREST_RARITIES = [
 ];
 const FALLBACK_RARITIES = ['Common'];
 
-/**
- * Helper to get the rarity pool for a card
- */
 function getCardPool(card: TcgCard): RarityPool | null {
 	if (CUSTOM_RAREST_RARITIES.includes(card.rarity)) return 'rarest';
 	if (CUSTOM_REVERSE_RARE_RARITIES.includes(card.rarity)) return 'reverseRare';
@@ -69,14 +55,8 @@ function getCardPool(card: TcgCard): RarityPool | null {
 	return null;
 }
 
-// ==================== CACHE MANAGEMENT (Exported) ====================
-
-/**
- * Clears and repopulates all in-memory caches from the database.
- */
 export async function initializeCache(): Promise<{ cardCount: number; setCount: number; }> {
 	console.log('Starting TCG cache initialization...');
-	// Clear existing caches
 	clearCache();
 
 	const collection = ImpulseDB<TcgCard>('tcg_cards');
@@ -87,17 +67,13 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 		return { cardCount: 0, setCount: 0 };
 	}
 
-	// Iterate and populate caches
 	for (const card of allCards) {
-		// 1. Populate cardsCache
 		cardsCache.set(card.cardId, card);
 
-		// 2. Populate setsCache (one card per set)
 		if (!setsCache.has(card.setId)) {
 			setsCache.set(card.setId, card);
 		}
 
-		// 3. Populate packCache
 		if (!packCache.has(card.setId)) {
 			packCache.set(card.setId, {
 				common: [],
@@ -128,9 +104,6 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 	return { cardCount: cardsCache.size, setCount: setsCache.size };
 }
 
-/**
- * Clears all in-memory caches.
- */
 export function clearCache(): { cardsCleared: number; setsCleared: number; } {
 	const stats = {
 		cardsCleared: cardsCache.size,
@@ -144,9 +117,6 @@ export function clearCache(): { cardsCleared: number; setsCleared: number; } {
 	return stats;
 }
 
-/**
- * Retrieves statistics about the current cache state.
- */
 export function getCacheStats(): {
 	cardsCached: number;
 	setsCached: number;
@@ -163,35 +133,19 @@ export function getCacheStats(): {
 	};
 }
 
-// ==================== CACHE ACCESSORS (Exported) ====================
-
-/**
- * Gets a card by its ID from the cache.
- */
 export function getCard(cardId: string): TcgCard | undefined {
 	return cardsCache.get(cardId);
 }
 
-/**
- * Gets a sample card for a set ID from the cache.
- */
 export function getSet(setId: string): TcgCard | undefined {
 	return setsCache.get(setId);
 }
 
-// ==================== CACHE-BASED HELPERS (Internal) ====================
-
-/**
- * Gets a pool of cards for a specific set.
- */
 function getPool(setId: string, pool: RarityPool): TcgCard[] {
 	const setPools = packCache.get(setId);
 	return setPools?.[pool] || [];
 }
 
-/**
- * Replicates the `getRandomCards` logic, but on the cache.
- */
 function getCardsFromPool(
 	setId: string,
 	pool: RarityPool,
@@ -205,9 +159,6 @@ function getCardsFromPool(
 	return shuffled.slice(0, size);
 }
 
-/**
- * Replicates the `getWeightedRandomCard` logic, but on the cache.
- */
 function getWeightedCardFromPool(
 	setId: string,
 	pool: RarityPool,
@@ -226,37 +177,23 @@ function getWeightedCardFromPool(
 	return sampled[0];
 }
 
-/**
- * Gets cards from the global fallback cache (all commons).
- */
 function getGlobalFallback(size: number, excludeIds: string[]): TcgCard[] {
 	const validCards = globalFallbackCache.filter(c => !excludeIds.includes(c.cardId));
 	const shuffled = [...validCards].sort(() => 0.5 - Math.random());
 	return shuffled.slice(0, size);
 }
 
-
-// ==================== PACK GENERATION ROUTER (Exported) ====================
-
 /**
- * Main function called by commands.
- * Checks if cache is initialized and routes to the appropriate function.
+ * Main pack generation function. Routes to cache or DB based on initialization status.
  */
 export async function generatePack(setId: string): Promise<TcgCard[]> {
 	if (getCacheStats().isInitialized) {
-		// Use fast cache-based generation
 		return generatePackFromCache(setId);
 	} else {
-		// Use slower DB-based generation
 		return generatePackFromDB(setId);
 	}
 }
 
-// ==================== CACHE-BASED LOGIC ====================
-
-/**
- * Generates a pack from the in-memory cache (fast).
- */
 async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
   const pack: TcgCard[] = [];
   let excludeIds: string[] = [];
@@ -312,11 +249,6 @@ async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
   }
 }
 
-// ==================== DATABASE-BASED LOGIC ====================
-
-/**
- * [DB FALLBACK] Fetches *uniformly* random cards from DB.
- */
 async function getRandomCardsDB(
   collection: ImpulseCollection<TcgCard>,
   setId: string | null,
@@ -339,9 +271,6 @@ async function getRandomCardsDB(
   return collection.aggregate<TcgCard>(pipeline);
 }
 
-/**
- * [DB FALLBACK] Fetches one *weighted* random card from DB.
- */
 async function getWeightedRandomCardDB(
   collection: ImpulseCollection<TcgCard>,
   setId: string,
@@ -364,9 +293,6 @@ async function getWeightedRandomCardDB(
   return sampledCards[0];
 }
 
-/**
- * Generates a pack from the Database (slow).
- */
 async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
   const collection = ImpulseDB<TcgCard>('tcg_cards');
   const pack: TcgCard[] = [];
