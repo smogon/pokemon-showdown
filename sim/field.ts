@@ -232,8 +232,6 @@ export class Field {
 		// deallocate ourself
 
 		// get rid of some possibly-circular references
-		if (this.battle) {
-			(this as any).battle = null!;
-		}
+		(this as any).battle = null!;
 	}
 }
