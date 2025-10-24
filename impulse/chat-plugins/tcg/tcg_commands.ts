@@ -18,7 +18,7 @@ const SEARCH_PAGE_LIMIT = 60;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 const MAX_FAVORITE_CARDS = 10;
-const PACK_COST = 100;
+const PACK_COST = 0;
 
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
@@ -1191,13 +1191,9 @@ export const commands: ChatCommands = {
 				const userCredits = profile?.credits || 0;
 
 				// 3. Generate the HTML display
-				let html = `<div class="infobox" style="padding: 10px;">`;
-				html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px 10px 15px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">`;
-				html += `<strong style="font-size: 1.5em;">Daily Pack Shop</strong>`;
-				html += `<span style="font-size: 1.1em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
-				html += `</div>`;
+				let html = `<div class="style="padding: 10px;">`;
 
-				const title = `Packs reset at midnight. All packs cost ${PACK_COST} credits.`;
+				const title = `TCG Packs Shop<br><span style="font-size: 0.9em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
 				const headerRow = ['Pack', 'Series', 'Price', 'Buy'];
 				const dataRows: string[][] = [];
 
@@ -1217,7 +1213,6 @@ export const commands: ChatCommands = {
 				}
 
 				html += generateThemedTable(title, headerRow, dataRows);
-				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
