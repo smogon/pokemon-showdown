@@ -951,14 +951,14 @@ export const commands: ChatCommands = {
 			for (let i = 0; i < userPacks.length; i++) {
 				const pack = userPacks[i];
 				
-				if (i % 4 === 0) { // Start a new row
+				if (i % 3 === 0) { // Start a new row
 					if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: inline-block; text-align: center;">`; 
 				}
 
 				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
 				
-				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 100px;">`;
+				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
 				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
