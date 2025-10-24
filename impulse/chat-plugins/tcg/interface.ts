@@ -115,3 +115,12 @@ export interface TcgUserProfile {
   favoriteCards?: string[];
   lastUpdatedAt: string;
 }
+
+export interface TcgUserPack {
+  userId: string;
+  setId: string;
+  setName: string;
+  setLogo: string;
+  quantity: number;
+  lastAcquiredAt: string;
+}
