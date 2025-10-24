@@ -73,10 +73,6 @@ export function crashlogger(
 			out.end();
 		}).on('error', (err: Error) => {
 			console.error(`\nSUBCRASH: ${err.stack}\n`);
-		});
-	} catch (fileErr) {
-		console.error(`Failed to write crash log to file: ${fileErr}`);
-	}
 
 	const emailOpts = emailConfig || (global as any).Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
