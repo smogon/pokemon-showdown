@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Emoticons
+* Emoticons Commands
 * @author PrinceSky-Git
 */
 
