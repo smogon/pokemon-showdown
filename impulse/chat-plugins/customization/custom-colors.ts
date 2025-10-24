@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Custom Colors
+* Custom Colors Commands
 */
 
 import https from 'https';
