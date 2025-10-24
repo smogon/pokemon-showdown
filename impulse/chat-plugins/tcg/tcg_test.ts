@@ -1,8 +1,3 @@
-/**
- * Pokemon TCG Chat Plugin for Pokemon Showdown
- * Displays Pokemon TCG card information
- */
-
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile } from './interface';
 import {
@@ -13,21 +8,13 @@ import {
 	getCacheStats,
 	clearCache,
 } from './tcg_utils';
-// --- NEW IMPORT ---
 import { generateThemedTable } from '../../utils';
-// --- END NEW IMPORT ---
 
-// --- CONFIGURATION CONSTANTS ---
-const SEARCH_PAGE_LIMIT = 60; // Number of cards per page (15 rows * 4 cards)
+const SEARCH_PAGE_LIMIT = 60;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 const MAX_FAVORITE_CARDS = 10;
-// --- END CONFIGURATION ---
 
-/**
- * Helper function to parse the complex search query
- * @param target The full search string from the user
- */
 function parseSearchQuery(target: string): {
 	filter: any,
 	queryDescription: string,
@@ -39,7 +26,6 @@ function parseSearchQuery(target: string): {
 	let query = target.trim();
 	let commandString = query;
 
-	// 1. Extract Page
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
@@ -53,8 +39,6 @@ function parseSearchQuery(target: string): {
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
 	
-	// Regex to find key:value or key:>value etc.
-	// Allows quoted values: artist:"Some Name"
 	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
 	
 	let nameQuery = query;
@@ -62,14 +46,12 @@ function parseSearchQuery(target: string): {
 
 	while ((match = filterRegex.exec(query)) !== null) {
 		const key = match[1].toLowerCase();
-		const operator = match[2]; // e.g., >, <=, or undefined
-		let value = match[3].replace(/"/g, ''); // Remove quotes
+		const operator = match[2];
+		let value = match[3].replace(/"/g, '');
 
-		// Remove this match from the nameQuery string
 		nameQuery = nameQuery.replace(match[0], '');
 
 		const valueNum = parseInt(value);
-		// Escape regex characters from user input
 		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 		const valueRegex = new RegExp(escapedValue, 'i');
 
@@ -102,7 +84,7 @@ function parseSearchQuery(target: string): {
 					else if (operator === '>=') hpFilter = { $gte: valueNum };
 					else if (operator === '<') hpFilter = { $lt: valueNum };
 					else if (operator === '<=') hpFilter = { $lte: valueNum };
-					else hpFilter = valueNum; // Exact match
+					else hpFilter = valueNum;
 					
 					filter.$and.push({ hp: hpFilter });
 					descriptions.push(`HP: ${operator || ''}${value}`);
@@ -122,9 +104,7 @@ function parseSearchQuery(target: string): {
 				descriptions.push(`Reg Mark: ${value}`);
 				break;
 			case 'set':
-				// Match partially on set name (e.g., "Sword & Shield")
 				const partialRegex = new RegExp(escapedValue, 'i');
-				// Match exactly on setId (e.g., "swsh1")
 				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
 
 				filter.$and.push({ 
@@ -138,17 +118,14 @@ function parseSearchQuery(target: string): {
 		}
 	}
 
-	// 3. Add remaining text as name query
 	const nameQueryClean = nameQuery.trim();
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 		filter.$and.push({ name: nameRegex });
-		descriptions.unshift(`'${nameQueryClean}'`); // Add to the front
+		descriptions.unshift(`'${nameQueryClean}'`);
 	}
 
-	// 4. Finalize
 	if (filter.$and.length === 0) {
-		// No filters provided, search everything
 		delete filter.$and;
 	}
 	
@@ -157,11 +134,6 @@ function parseSearchQuery(target: string): {
 	return { filter, queryDescription, page, commandString };
 }
 
-/**
- * Helper function to parse the complex collection search query
- * @param target The full search string from the user
- * @param defaultUserId The user ID to default to if 'user:' is not specified
- */
 function parseCollectionQuery(target: string, defaultUserId: string): {
 	filter: any,
 	queryDescription: string,
@@ -174,7 +146,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	let query = target.trim();
 	let commandString = query;
 
-	// 1. Extract Page
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
@@ -189,7 +160,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
 	
-	// Regex to find key:value or key:>value etc.
 	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
 	
 	let nameQuery = query;
@@ -197,10 +167,9 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 
 	while ((match = filterRegex.exec(query)) !== null) {
 		const key = match[1].toLowerCase();
-		const operator = match[2]; // e.g., >, <=, or undefined
-		let value = match[3].replace(/"/g, ''); // Remove quotes
+		const operator = match[2];
+		let value = match[3].replace(/"/g, '');
 
-		// Remove this match from the nameQuery string
 		nameQuery = nameQuery.replace(match[0], '');
 
 		const valueNum = parseInt(value);
@@ -208,12 +177,10 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
-			// This filter targets the user, not the card data
 			case 'user':
 				targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
-				commandString = commandString.replace(match[0], ''); // Remove from pagination
+				commandString = commandString.replace(match[0], '');
 				break;
-			// All other filters target the denormalized fields in TcgUser
 			case 'rarity':
 				filter.$and.push({ rarity: valueRegex });
 				descriptions.push(`Rarity: ${value}`);
@@ -255,10 +222,9 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 			case 'set':
 				const partialRegex = new RegExp(escapedValue, 'i');
 				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
-				filter.$and.push({ setId: exactRegex }); // Only match on setId
+				filter.$and.push({ setId: exactRegex });
 				descriptions.push(`Set ID: ${value}`);
 				break;
-			// Filters from parseSearchQuery to *exclude*
 			case 'artist':
 			case 'legal':
 				descriptions.push(`(Filter ${key}:${value} ignored for collections)`);
@@ -266,10 +232,8 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		}
 	}
 
-	// 4. Add the target user filter (THE MOST IMPORTANT PART)
 	filter.$and.push({ userId: targetUserId });
 	
-	// 5. Add remaining text as name query
 	const nameQueryClean = nameQuery.trim();
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
@@ -277,23 +241,16 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		descriptions.push(`Name: '${nameQueryClean}'`);
 	}
 	
-	// Rebuild queryDescription, putting Owner first
 	const filterDesc = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
 	const queryDescription = `Owner: ${targetUserId}${descriptions.length > 0 ? ', ' + descriptions.join(', ') : ''}`;
 	
-	// Ensure user: filter is not in the command string for pagination
 	const finalCommandString = commandString.replace(/user:\s*("[^"]+"|[\w-]+)/gi, '').trim();
 
 	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
 }
 
 /**
- * Adds a list of cards to a user's collection in the database.
- * This handles incrementing quantity or creating new entries,
- * and it correctly maps all denormalized fields.
- *
- * THIS FUNCTION ALSO UPDATES THE user_profiles COLLECTION.
- * This function now caps quantity at MAX_CARD_QUANTITY.
+ * This function caps quantity at MAX_CARD_QUANTITY and awards credits for excess cards.
  */
 async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
 	if (!pack.length) return { creditsAwarded: 0 };
@@ -301,7 +258,6 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 	const collection = ImpulseDB<TcgUser>('user_collections');
 	const now = new Date().toISOString();
 	
-	// Consolidate card counts (e.g., if a pack has 2 of the same card)
 	const cardCounts = new Map<string, { card: TcgCard, count: number }>();
 	for (const card of pack) {
 		const existing = cardCounts.get(card.cardId);
@@ -312,7 +268,6 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 		}
 	}
 
-	// --- NEW LOGIC: Read current quantities first ---
 	const cardIdsInPack = Array.from(cardCounts.keys());
 	const userCards = await collection.find({ userId: user.id, cardId: { $in: cardIdsInPack } });
 	
@@ -320,7 +275,6 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 	for (const card of userCards) {
 		currentQuantities.set(card.cardId, card.quantity);
 	}
-	// --- END NEW LOGIC ---
 
 	const operations = [];
 	let totalPointsChange = 0;
@@ -333,15 +287,12 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 		const newQty = currentQty + count;
 		let finalQty = newQty;
 
-		// --- NEW: Check for cap and award credits ---
 		if (newQty > MAX_CARD_QUANTITY) {
 			const excess = newQty - MAX_CARD_QUANTITY;
 			creditsToAward += (excess * CREDITS_PER_DUPLICATE);
 			finalQty = MAX_CARD_QUANTITY;
 		}
-		// --- END NEW CAP LOGIC ---
 
-		// How many cards were *actually* added to the collection (not converted to credits)
 		const actualQtyAdded = finalQty - currentQty;
 		
 		if (actualQtyAdded > 0) {
@@ -349,17 +300,14 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 			totalPointsChange += (card.totalPoints * actualQtyAdded);
 		}
 
-		if (currentQty === 0 && actualQtyAdded > 0) { // Only count as unique if it was actually added
+		if (currentQty === 0 && actualQtyAdded > 0) {
 			totalUniqueCardsAdded++;
 		}
 
-		// This is the data for a new document.
 		const newDocData: TcgUser = {
 			userId: user.id,
 			cardId: card.cardId,
 			firstAcquiredAt: now,
-			
-			// --- Denormalized fields ---
 			name: card.name,
 			setId: card.setId,
 			rarity: card.rarity,
@@ -376,8 +324,6 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 		if (newDocData.setSeries === undefined) delete newDocData.setSeries;
 		if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
 
-		// We use bulkWrite to efficiently update all cards in one go.
-		// We use $set to directly set the new quantity, not $inc.
 		operations.push({
 			updateOne: {
 				filter: { userId: user.id, cardId: cardId },
@@ -390,13 +336,10 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 		});
 	}
 	
-	// --- Execute card collection bulk write ---
 	if (operations.length > 0) {
 		await collection.bulkWrite(operations, { ordered: false });
 	}
 	
-	// --- NOW, UPDATE THE USER_PROFILE ---
-	// This update runs even if only credits were awarded
 	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
 		const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 		await profiles.updateOne(
@@ -409,18 +352,16 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 					credits: creditsToAward
 				},
 				$set: {
-					userName: user.name, // Keep name updated
+					userName: user.name,
 					lastUpdatedAt: now
 				},
 				$setOnInsert: {
 					userId: user.id,
-					// credits: 0 // Removed to fix conflict
 				}
 			},
 			{ upsert: true }
 		);
 	}
-	// --- END PROFILE UPDATE ---
 	
 	return { creditsAwarded: creditsToAward };
 }
@@ -434,7 +375,6 @@ export const commands: ChatCommands = {
 
 			const cardId = target.trim();
 			
-			// --- MODIFICATION: Add fallback logic ---
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
@@ -442,20 +382,15 @@ export const commands: ChatCommands = {
 				card = getCard(cardId) || null;
 			}
 			
-			// Fallback to DB if cache is off OR card not found in cache
-			// (A populated cache should be complete, but this adds robustness)
 			if (!card) {
 				const collection = ImpulseDB<TcgCard>('tcg_cards');
 				card = await collection.findOne({ cardId });
 			}
-			// --- END MODIFICATION ---
 
 			if (!card) {
-				// Added cache status to error for debugging
 				return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 			}
 
-			// Calculate 65% of original dimensions
 			const originalWidth = 246;
 			const originalHeight = 342;
 			const scaleFactor = 0.65;
@@ -466,7 +401,6 @@ export const commands: ChatCommands = {
 			const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 			const imageAlt = `${card.name} (${card.cardId})`;
 
-			// HTML building (unchanged)
 			let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
 			html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
 			html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
@@ -478,7 +412,7 @@ export const commands: ChatCommands = {
 			html += `<strong style="font-size: 1.1em;">Set:</strong> ${card.set} <span style="font-size: 0.9em;">(${card.setId})</span><br />`;
 			html += `<strong style="font-size: 1.1em;">Rarity:</strong> ${card.rarity}<br />`;
 			html += `<strong style="font-size: 1.1em;">Supertype:</strong> ${card.supertype}<br />`;
-			if (card.supertype === 'Pokémon' || card.supertype === 'Trainer') {
+			if (card.supertype === 'PokÃ©mon' || card.supertype === 'Trainer') {
 				html += `<strong style="font-size: 1.1em;">Subtypes:</strong> ${subtypes}<br />`;
 			}
 			html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
@@ -498,15 +432,11 @@ export const commands: ChatCommands = {
 			const setId = target.trim();
 
 			try {
-				// --- MODIFICATION ---
-				// This function now automatically handles cache/DB logic.
 				const pack = await generatePack(setId);
-				// --- END MODIFICATION ---
 
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
-				// HTML building (unchanged)
 				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 0; i < 4; i++) {
 					const card = pack[i];
@@ -572,7 +502,6 @@ export const commands: ChatCommands = {
 
 			const setId = target.trim();
 
-			// --- MODIFICATION: Add fallback logic ---
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
@@ -580,18 +509,15 @@ export const commands: ChatCommands = {
 				card = getSet(setId) || null;
 			}
 			
-			// Fallback to DB if cache is off OR set not found in cache
 			if (!card) {
 				const collection = ImpulseDB<TcgCard>('tcg_cards');
 				card = await collection.findOne({ setId });
 			}
-			// --- END MODIFICATION ---
 
 			if (!card) {
 				return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 			}
 
-			// HTML building (unchanged)
 			const setName = card.set;
 			const series = card.setSeries || 'N/A';
 			const releaseDate = card.setReleaseDate || 'N/A';
@@ -629,8 +555,6 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help tcg search');
 
 			try {
-				// --- This command *always* uses the DB ---
-				// --- The cache is not designed for complex filters ---
 				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
 				const collection = ImpulseDB<TcgCard>('tcg_cards');
 
@@ -653,7 +577,6 @@ export const commands: ChatCommands = {
 					}
 				);
 
-				// HTML Building (unchanged)
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
@@ -706,18 +629,16 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			
 			const userId = user.id;
-			const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+                        const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
 			const now = Date.now();
-			const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
-			// 1. Check Cooldown
 			const cooldown = await cooldowns.findOne({ userId });
 			if (cooldown) {
 				const lastClaimed = new Date(cooldown.lastClaimedAt).getTime();
 				const timeRemaining = (lastClaimed + COOLDOWN_MS) - now;
 				
 				if (timeRemaining > 0) {
-					// Format timeRemaining into H:M:S
 					const hours = Math.floor(timeRemaining / 3600000);
 					const minutes = Math.floor((timeRemaining % 3600000) / 60000);
 					const seconds = Math.floor((timeRemaining % 60000) / 1000);
@@ -725,16 +646,13 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// 2. Cooldown is over. Generate a pack from a random set.
-			let randomSetId = 'sv3pt5'; // Default fallback set
+			let randomSetId = 'sv3pt5';
 			
 			try {
-				// We must get a random setId.
-				// Querying the DB is the most reliable way.
 				const setCollection = ImpulseDB<TcgCard>('tcg_cards');
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
-					{ $group: { _id: "$setId" } }, // Get all unique setIds
-					{ $sample: { size: 1 } },     // Pick one at random
+					{ $group: { _id: "$setId" } },
+					{ $sample: { size: 1 } },
 					{ $project: { _id: 0, setId: "$_id" } }
 				]);
 				if (randomSetArr.length > 0) {
@@ -743,26 +661,21 @@ export const commands: ChatCommands = {
 
 				const pack = await generatePack(randomSetId);
 				
-				// 3. Save cards to the user's collection
-				const { creditsAwarded } = await addCardsToCollection(user, pack); // Pass user object
+				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
-				// 4. Update the user's cooldown time
 				await cooldowns.updateOne(
 					{ userId: userId },
 					{ $set: { lastClaimedAt: new Date(now).toISOString() } },
 					{ upsert: true }
 				);
 				
-				// 5. Display the pack to the user (reusing openpack's HTML)
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong>`;
 				
-				// --- NEW: Show credits awarded ---
 				if (creditsAwarded > 0) {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
 				html += `<br /><br />`;
-				// --- END NEW ---
 
 				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 0; i < 4; i++) {
@@ -831,7 +744,6 @@ export const commands: ChatCommands = {
 				const { filter, queryDescription, page, commandString, targetUserId } = parseCollectionQuery(target, user.id);
 				const collection = ImpulseDB<TcgUser>('user_collections');
 
-				// --- NEW: Run stats aggregation first ---
 				const statsPipeline: any[] = [
 					{ $match: filter },
 					{
@@ -846,11 +758,9 @@ export const commands: ChatCommands = {
 				const statsResult = await collection.aggregate(statsPipeline);
 				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, totalPoints: 0 };
 				
-				const totalMatches = stats.totalUniqueCards; // This is the count for pagination
-				// --- END NEW STATS ---
+				const totalMatches = stats.totalUniqueCards;
 
 				if (totalMatches === 0) {
-					// Use targetUserId in error
 					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription.replace(`Owner: ${targetUserId}, `, '')}.`);
 				}
 
@@ -858,7 +768,6 @@ export const commands: ChatCommands = {
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
-				// We must use aggregate to join with tcg_cards to get imageUrl
 				const pipeline: any[] = [
 					{ $match: filter },
 					{ $sort: { totalPoints: -1, cardId: 1 } },
@@ -875,39 +784,33 @@ export const commands: ChatCommands = {
 					{
 						$unwind: {
 							path: '$cardDetails',
-							preserveNullAndEmptyArrays: true // Keep card even if main DB is missing it
+							preserveNullAndEmptyArrays: true
 						}
 					}
 				];
 				
 				const results = await collection.aggregate(pipeline);
 
-				// --- HTML MODIFICATIONS ---
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				
-				// Use targetUserId for the name. Use user.name only if it's the current user.
 				const displayName = targetUserId === user.id ? user.name : targetUserId;
 				html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
 				
-				// Add new stats line
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity.toLocaleString()} | Total Points: ${stats.totalPoints.toLocaleString()}</div>`;
 				
-				// Add filter description
 				const filtersOnly = queryDescription.replace(`Owner: ${targetUserId}, `, '').replace(`Owner: ${targetUserId}`, '');
 				if (filtersOnly && filtersOnly !== 'All Cards') {
 					html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${filtersOnly}</div>`;
 				}
 				
-				// Update showing line
 				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches.toLocaleString()} unique cards.</div>`;
-				// --- END HTML MODIFICATIONS ---
 
 				if (results.length === 0) {
 					html += `No results found for this page.`;
 				}
 				for (let i = 0; i < results.length; i++) {
 					const userCard = results[i];
-					const cardInfo = userCard.cardDetails; // This is the TcgCard object
+					const cardInfo = userCard.cardDetails;
 					
 					if (i % 4 === 0) {
 						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
@@ -921,7 +824,6 @@ export const commands: ChatCommands = {
 					const imageAlt = `${name} (${userCard.cardId})`;
 					
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; position: relative;">`;
-					// Add quantity badge
 					html += `<div style="position: absolute; top: -5px; right: -5px; background: #0055cc; color: white; border-radius: 10px; padding: 2px 6px; font-size: 0.8em; font-weight: bold; z-index: 1;">`;
 					html += `x${userCard.quantity}</div>`;
 					
@@ -957,17 +859,14 @@ export const commands: ChatCommands = {
 		async setprogress(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
-			const setId = target.trim(); // <-- FIX: Changed from toID(target)
+			const setId = target.trim();
 			if (!setId) {
 				return this.parse('/help tcg setprogress');
 			}
 
-			// We will check the progress for the user running the command.
-			// This could be expanded later to check other users.
 			const targetUserId = user.id; 
 
 			try {
-				// 1. Get Set Information (Total cards in set)
 				let setInfo: TcgCard | null = null;
 				const cacheInitialized = getCacheStats().isInitialized;
 
@@ -975,13 +874,11 @@ export const commands: ChatCommands = {
 					setInfo = getSet(setId);
 				}
 				
-				// Fallback to DB if cache is off or set not found
 				if (!setInfo) {
 					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
 					setInfo = await cardCollection.findOne({ setId: setId });
 				}
 
-				// We need setInfo and specifically setInfo.setTotal to calculate progress
 				if (!setInfo || !setInfo.setTotal) {
 					return this.errorReply(`Set with ID "${setId}" not found or has no card total listed.`);
 				}
@@ -990,17 +887,15 @@ export const commands: ChatCommands = {
 				const setName = setInfo.set;
 				const setLogo = setInfo.setImages?.logo || '';
 
-				// 2. Get User's Progress
 				const userCollection = ImpulseDB<TcgUser>('user_collections');
 				const userUniqueCount = await userCollection.countDocuments({
 					userId: targetUserId,
 					setId: setId,
 				});
 
-				// 3. Calculate and Render
 				const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
-				const barWidth = 200; // width in pixels
-				const progressWidth = Math.max(0, (barWidth * percentage) / 100); // Ensure width is not negative
+				const barWidth = 200;
+				const progressWidth = Math.max(0, (barWidth * percentage) / 100);
 				
 				const displayName = user.name;
 
@@ -1016,9 +911,7 @@ export const commands: ChatCommands = {
 				html += `<strong>Collection:</strong> ${userUniqueCount} / ${totalInSet} unique cards<br />`;
 				html += `<strong>Completion:</strong> ${percentage.toFixed(1)}%<br />`;
 
-				// Progress Bar
 				html += `<div style="background: #eee; border: 1px solid #ccc; border-radius: 4px; width: ${barWidth}px; height: 20px; margin-top: 8px;">`;
-				// Use min-width to show a sliver even for small percentages
 				const progressStyle = `background: #4CAF50; width: ${progressWidth}px; height: 100%; border-radius: 4px;`;
 				html += `<div style="${progressStyle}"></div>`;
 				html += `</div>`;
@@ -1045,7 +938,6 @@ export const commands: ChatCommands = {
 				return this.errorReply(errorMsg);
 			}
 
-			// --- NEW: Fetch favorite cards ---
 			const favoriteCardIds = profile.favoriteCards || [];
 			let orderedFavoriteCards: Partial<TcgCard>[] = [];
 
@@ -1056,7 +948,6 @@ export const commands: ChatCommands = {
 					{ projection: { cardId: 1, imageUrl: 1, name: 1, rarity: 1 } }
 				);
 				
-				// Re-sort the fetched data to match the user's saved order
 				const cardDataMap = new Map<string, Partial<TcgCard>>();
 				for (const card of favoriteCardsData) {
 					cardDataMap.set(card.cardId, card);
@@ -1065,21 +956,17 @@ export const commands: ChatCommands = {
 					.map(id => cardDataMap.get(id))
 					.filter((card): card is Partial<TcgCard> => !!card);
 			}
-			// --- END NEW ---
 
-			// Get total sets in the game from cache for percentage calculation
 			const { setsCached } = getCacheStats();
-			const totalSetsInGame = Math.max(1, setsCached); // Avoid division by zero
+			const totalSetsInGame = Math.max(1, setsCached);
 			const setsCompleted = profile.totalSetsCompleted || 0;
 			const setCompletionPercent = (setsCompleted / totalSetsInGame) * 100;
 
-			// --- NEW HTML LAYOUT ---
 			const imageWidth = 160;
-			const imageHeight = 222; // ~65% of 246x342
+			const imageHeight = 222;
 
 			let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${imageHeight + 30}px;">`;
 			
-			// Left Column (Image Scroller)
 			html += `<div style="flex: 0 0 ${imageWidth + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
 			html += `<div style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap; max-width: ${imageWidth + 20}px;">`;
 
@@ -1102,7 +989,6 @@ export const commands: ChatCommands = {
 			}
 			html += `</div></div>`;
 
-			// Right Column (Stats)
 			html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${imageHeight + 30}px; overflow-y: auto;">`;
 			html += `<strong style="font-size: 22px;">${profile.userName}</strong><br />`;
 			html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
@@ -1113,27 +999,25 @@ export const commands: ChatCommands = {
 			html += `<strong>Sets Completed:</strong> ${setsCompleted} / ${totalSetsInGame} (${setCompletionPercent.toFixed(1)}%)<br />`;
 			html += `<strong>Last Active:</strong> ${new Date(profile.lastUpdatedAt).toLocaleDateString()}<br />`;
 			html += `</div>`;
-			html += `</div>`; // Close Right Column
-			html += `</div>`; // Close Infobox
+			html += `</div>`;
+			html += `</div>`;
 
 			this.sendReply(`|html|${html}`);
 		},
 
 		async favorite(target, room, user) {
-			const cardId = target.trim(); // <-- FIX: Changed from toID(target)
+			const cardId = target.trim();
 			if (!cardId) return this.parse('/help tcg favorite');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 			const collections = ImpulseDB<TcgUser>('user_collections');
 
 			try {
-				// 1. Check if user owns the card
 				const userCard = await collections.findOne({ userId: user.id, cardId: cardId });
 				if (!userCard) {
 					return this.errorReply(`You do not own this card. You can only favorite cards from your collection.`);
 				}
 
-				// 2. Check current favorite count
 				const profile = await profiles.findOne({ userId: user.id });
 				const currentFavorites = profile?.favoriteCards || [];
 
@@ -1145,7 +1029,6 @@ export const commands: ChatCommands = {
 					return this.errorReply(`You already have ${MAX_FAVORITE_CARDS} favorite cards. Use /tcg unfavorite [cardId] to remove one first.`);
 				}
 
-				// 3. Add to set (prevents duplicates)
 				const result = await profiles.updateOne(
 					{ userId: user.id },
 					{ $addToSet: { favoriteCards: cardId } }
@@ -1154,7 +1037,6 @@ export const commands: ChatCommands = {
 				if (result.modifiedCount > 0) {
 					this.sendReply(`Added "${userCard.name}" to your profile favorites.`);
 				} else {
-					// This case is now handled by the check above, but we leave it as a fallback.
 					this.errorReply(`"${userCard.name}" is already in your favorites.`);
 				}
 
@@ -1165,7 +1047,7 @@ export const commands: ChatCommands = {
 		},
 
 		async unfavorite(target, room, user) {
-			const cardId = target.trim(); // <-- FIX: Changed from toID(target)
+			const cardId = target.trim();
 			if (!cardId) return this.parse('/help tcg unfavorite');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
@@ -1217,7 +1099,7 @@ export const commands: ChatCommands = {
 					title = 'Total Credits';
 					valueField = 'credits';
 					break;
-				case 'sets': // <-- NEW CASE
+				case 'sets':
 					sortKey = 'totalSetsCompleted';
 					title = 'Sets Completed';
 					valueField = 'totalSetsCompleted';
@@ -1240,25 +1122,18 @@ export const commands: ChatCommands = {
 					return this.errorReply("No users found in the leaderboard yet.");
 				}
 				
-				// --- MODIFICATION START ---
-				
-				// Prepare data for the utility function
 				const headerRow = ['Rank', 'User', title];
 				const dataRows = results.map((profile, i) => {
 					const value = profile[valueField] as number || 0;
 					return [
-						`<strong>${i + 1}</strong>`, // Rank (formatted)
-						profile.userName,             // User
-						value.toLocaleString()        // Value (formatted)
+						`<strong>${i + 1}</strong>`,
+						profile.userName,
+						value.toLocaleString()
 					];
 				});
 
-				// Build the HTML using the utility
 				let html = `<div class="style="padding: 10px;">`;
-				// Pass the title directly to the function
-				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows); // Call the utility function
-
-				// --- MODIFICATION END ---
+				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
 
 				this.sendReply(`|html|${html}`);
 
@@ -1272,10 +1147,8 @@ export const commands: ChatCommands = {
 			let targetUserId = toID(target);
 			
 			if (targetUserId) {
-				// If a target is specified, only admins can run it
 				this.checkCan('bypassall');
 			} else {
-				// If no target, default to the user running the command
 				targetUserId = user.id;
 			}
 
@@ -1286,7 +1159,6 @@ export const commands: ChatCommands = {
 				const userCollection = ImpulseDB<TcgUser>('user_collections');
 				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 
-				// 1. Get all sets in the game and their totals
 				const setTotalsPipeline = [
 					{
 						$group: {
@@ -1298,7 +1170,7 @@ export const commands: ChatCommands = {
 						$project: {
 							_id: 0,
 							setId: "$_id",
-							setTotal: { $ifNull: ["$setTotal", 0] } // Default to 0 if setTotal is missing
+							setTotal: { $ifNull: ["$setTotal", 0] }
 						}
 					}
 				];
@@ -1308,7 +1180,6 @@ export const commands: ChatCommands = {
 					return this.errorReply("Failed to fetch set totals. Aborting.");
 				}
 
-				// 2. Get all unique cards owned by the user, grouped by set
 				const userProgressPipeline = [
 					{ $match: { userId: targetUserId } },
 					{
@@ -1320,16 +1191,14 @@ export const commands: ChatCommands = {
 				];
 				const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
 
-				// Map user counts for easy lookup
 				const userProgressMap = new Map<string, number>();
 				for (const set of userSetCounts) {
 					userProgressMap.set(set._id, set.uniqueCount);
 				}
 
-				// 3. Compare user progress to set totals
 				let setsCompleted = 0;
 				for (const set of allSets) {
-					if (set.setTotal > 0) { // Only count sets that have a defined total
+					if (set.setTotal > 0) {
 						const userCount = userProgressMap.get(set.setId) || 0;
 						if (userCount >= set.setTotal) {
 							setsCompleted++;
@@ -1337,7 +1206,6 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				// 4. Recalculate all other stats for accuracy
 				const allStatsPipeline = [
 					{ $match: { userId: targetUserId } },
 					{
@@ -1352,13 +1220,11 @@ export const commands: ChatCommands = {
 				const statsResult = await userCollection.aggregate(allStatsPipeline);
 				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
 				
-				// 5. Get user's current credits and name (don't reset them)
 				const profile = await profileCollection.findOne({ userId: targetUserId });
 				const currentCredits = profile?.credits || 0;
 				const userName = profile?.userName || targetUserId;
-				const currentFavorites = profile?.favoriteCards || []; // Preserve favorites
+				const currentFavorites = profile?.favoriteCards || [];
 
-				// 6. Update the user's profile with all recalculated data
 				await profileCollection.updateOne(
 					{ userId: targetUserId },
 					{
@@ -1368,8 +1234,8 @@ export const commands: ChatCommands = {
 							totalUniqueCards: stats.totalUniqueCards,
 							totalQuantity: stats.totalQuantity,
 							collectionPoints: stats.collectionPoints,
-							totalSetsCompleted: setsCompleted, // The new stat
-							favoriteCards: currentFavorites, // Preserve
+							totalSetsCompleted: setsCompleted,
+							favoriteCards: currentFavorites,
 							lastUpdatedAt: new Date().toISOString()
 						}
 					},
@@ -1388,11 +1254,10 @@ export const commands: ChatCommands = {
 		},
 
 		recalculateallstats(target, room, user) {
-			this.checkCan('bypassall'); // Admin-only command
+			this.checkCan('bypassall');
 
 			this.sendReply(`Starting stats recalculation for ALL users... This will take a long time and run in the background. You will be notified when it's complete.`);
 
-			// Run this as a background process, not awaiting it.
 			(async () => {
 				let processedCount = 0;
 				let errorCount = 0;
@@ -1403,7 +1268,6 @@ export const commands: ChatCommands = {
 					const userCollection = ImpulseDB<TcgUser>('user_collections');
 					const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 
-					// 1. Get all sets in the game (do this once)
 					const setTotalsPipeline = [
 						{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
 						{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
@@ -1414,17 +1278,14 @@ export const commands: ChatCommands = {
 						return;
 					}
 
-					// 2. Get all user IDs to process
 					const allUserIds = await profileCollection.distinct("userId", {});
 					if (allUserIds.length === 0) {
 						this.sendReply(`❌ RECALCULATION FAILED: No user profiles found to process.`);
 						return;
 					}
 					
-					// 3. Loop through each user and process them
 					for (const targetUserId of allUserIds) {
 						try {
-							// 3a. Get user's set progress
 							const userProgressPipeline = [
 								{ $match: { userId: targetUserId } },
 								{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } }
@@ -1435,7 +1296,6 @@ export const commands: ChatCommands = {
 								userProgressMap.set(set._id, set.uniqueCount);
 							}
 
-							// 3b. Compare progress to totals
 							let setsCompleted = 0;
 							for (const set of allSets) {
 								if (set.setTotal > 0) {
@@ -1446,7 +1306,6 @@ export const commands: ChatCommands = {
 								}
 							}
 
-							// 3c. Recalculate all other stats
 							const allStatsPipeline = [
 								{ $match: { userId: targetUserId } },
 								{ $group: {
@@ -1459,13 +1318,11 @@ export const commands: ChatCommands = {
 							const statsResult = await userCollection.aggregate(allStatsPipeline);
 							const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
 							
-							// 3d. Get existing credits/name/favorites to preserve
 							const profile = await profileCollection.findOne({ userId: targetUserId });
 							const currentCredits = profile?.credits || 0;
 							const userName = profile?.userName || targetUserId;
 							const currentFavorites = profile?.favoriteCards || [];
 
-							// 3e. Update the profile
 							await profileCollection.updateOne(
 								{ userId: targetUserId },
 								{
@@ -1487,7 +1344,7 @@ export const commands: ChatCommands = {
 							Monitor.crashlog(err, `TCG recalculateallstats loop error for user: ${targetUserId}`);
 							errorCount++;
 						}
-					} // End user loop
+					}
 
 					const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 					this.sendReply(`✅ RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
@@ -1496,10 +1353,9 @@ export const commands: ChatCommands = {
 					Monitor.crashlog(error, 'TCG recalculateallstats command');
 					this.sendReply(`❌ RECALCULATION FAILED: A critical error occurred: ${error.message}`);
 				}
-			})(); // End background process IIFE
+			})();
 		},
 
-		// Cache commands (unchanged)
 		async loadcache(target, room, user) {
 			this.checkCan('bypassall');
 			this.sendReply('Initializing TCG cache... This may take a moment.');
@@ -1511,6 +1367,7 @@ export const commands: ChatCommands = {
 				this.errorReply('An error occurred while initializing the TCG cache.');
 			}
 		},
+
 		cachestats(target, room, user) {
 			if (!this.runBroadcast()) return;
 			this.checkCan('bypassall');
@@ -1526,6 +1383,7 @@ export const commands: ChatCommands = {
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		},
+
 		clearcache(target, room, user) {
 			this.checkCan('bypassall');
 			const { cardsCleared, setsCleared } = clearCache();
