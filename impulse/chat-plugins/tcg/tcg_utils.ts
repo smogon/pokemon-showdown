@@ -1,4 +1,5 @@
 /**
+ * Pokemon Showdown
  * TCG Utility Functions
  *
  * This file contains all logic for:
