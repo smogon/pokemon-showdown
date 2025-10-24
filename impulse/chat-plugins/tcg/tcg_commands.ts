@@ -476,8 +476,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -493,8 +493,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -510,8 +510,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -627,8 +627,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				if (results.length > 0) html += `</div>`;
@@ -716,8 +716,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -733,8 +733,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -750,8 +750,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -858,8 +858,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${userCard.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${userCard.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${userCard.cardId} ]<br>${userCard.rarity}</div>`;
 					html += `</div>`;
 				}
 				if (results.length > 0) html += `</div>`;
@@ -1056,8 +1056,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -1073,8 +1073,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -1090,8 +1090,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 				html += `</div>`;
@@ -1272,7 +1272,7 @@ export const commands: ChatCommands = {
 					const logoHtml = set.setImages?.logo ? `<img src="${set.setImages.logo}" height="20" style="max-width: 60px; vertical-align: middle; margin-right: 5px;" alt="${set.set}">` : '';
 					
 					dataRows.push([
-						`${logoHtml} (${set.setId})`,
+						`${logoHtml} [ ${set.setId} ]`,
 						set.setSeries || 'N/A',
 						`${PACK_COST} Credits`,
 						`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`
@@ -1851,8 +1851,8 @@ export const commands: ChatCommands = {
 					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
 					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.75em; margin-top: 3px; white-space: pre-wrap;">${card.name}</div>`;
-					html += `<div style="font-size: 0.65em; color: #666; white-space: pre-wrap;">${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px; white-space: pre-wrap;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em; white-space: pre-wrap;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
 			} else {
