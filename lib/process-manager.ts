@@ -539,7 +539,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 }
 
 export class QueryProcessManager<T = string, U = string> extends ProcessManager<QueryProcessWrapper<T, U>> {
-	_query: (input: T) => U | Promise<U>;
+	_query: null | ((input: T) => U | Promise<U>);
 	messageCallback?: (message: string) => any;
 	timeout: number;
 
@@ -549,7 +549,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	constructor(
 		id: string,
 		ctx: NodeJS.Module,
-		query: (input: T) => U | Promise<U>,
+		query: null | ((input: T) => U | Promise<U>),
 		timeout = 15 * 60 * 1000,
 		debugCallback?: (message: string) => any
 	) {
@@ -582,7 +582,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	}
 	queryTemporaryProcess(input: T, force?: boolean) {
 		const process = this.spawnOne(force);
-		const result = this.query(input, process);
+		const result = this.query!(input, process);
 		void this.unspawnOne(process);
 		return result;
 	}
