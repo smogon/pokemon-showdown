@@ -2023,6 +2023,10 @@ export const commands: ChatCommands = {
 				`<code>/tcg openallpacks [setId]</code> - Open all packs of a specific set from your inventory.<br />` +
 				`<code>/tcg shop</code> - View the daily rotating pack shop.<br />` +
 				`<code>/tcg buy [setId]</code> - Buy a pack from the shop.<br />` +
+				`<code>/tcg sell [cardId], [quantity]</code> - Sell a card from your collection for credits.<br />` +
+				`<strong>Example:</strong> <code>/tcg sell sv1-1, 3</code><br />` +
+				`<code>/tcg sellduplicates [all | setId]</code> - Sell all duplicate cards (quantity > 1) for credits.<br />` +
+				`<strong>Example:</strong> <code>/tcg sellduplicates sv1</code><br />` +
 				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
 				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
 				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
