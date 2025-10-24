@@ -1707,6 +1707,81 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async giftcredits(target, room, user) {
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) {
+				return this.errorReply("Please specify a user and an amount. Usage: /tcg giftcredits [user], [amount]");
+			}
+
+			const targetUserId = toID(parts[0]);
+			const amountToGift = parseInt(parts[1]);
+
+			if (!targetUserId) {
+				return this.errorReply("Please specify a user to gift to.");
+			}
+			if (targetUserId === user.id) {
+				return this.errorReply("You cannot gift credits to yourself.");
+			}
+			if (isNaN(amountToGift) || amountToGift <= 0) {
+				return this.errorReply("Invalid amount. Amount must be a positive number.");
+			}
+
+			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+
+			try {
+				// Use a transaction to ensure both updates succeed or fail together
+				await ImpulseDB.withTransaction(async (session) => {
+					const now = new Date().toISOString();
+
+					// 1. Decrement credits from sender
+					// Atomically check if sender has enough credits
+					const senderUpdateResult = await profiles.updateOne(
+						{ userId: user.id, credits: { $gte: amountToGift } },
+						{ $inc: { credits: -amountToGift } },
+						{ session }
+					);
+
+					if (senderUpdateResult.modifiedCount === 0) {
+						// If no documents were modified, the user either doesn't exist or has insufficient funds
+						const senderProfile = await profiles.findOne({ userId: user.id }, { session });
+						const senderCredits = senderProfile?.credits || 0;
+						throw new Error(`You do not have enough credits. You have ${senderCredits.toLocaleString()}, but tried to send ${amountToGift.toLocaleString()}.`);
+					}
+
+					// 2. Increment credits for recipient
+					await profiles.updateOne(
+						{ userId: targetUserId },
+						{
+							$inc: { credits: amountToGift },
+							$set: { lastUpdatedAt: now },
+							$setOnInsert: {
+								userId: targetUserId,
+								userName: targetUserId, // Use targetUserId as a fallback name
+								credits: 0, // This will be incremented by $inc
+								collectionPoints: 0,
+								totalQuantity: 0,
+								totalUniqueCards: 0,
+								lastUpdatedAt: now
+							}
+						},
+						{ upsert: true, session }
+					);
+				});
+
+				// If the transaction successfully commits
+				this.sendReply(`You successfully gifted ${amountToGift.toLocaleString()} credits to ${targetUserId}.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG giftcredits command');
+				// Check for the custom error message
+				if (error.message.startsWith('You do not have enough credits')) {
+					return this.errorReply(error.message);
+				}
+				// Generic error for any other transaction failure
+				return this.errorReply('An error occurred during the credit transfer. The transaction was rolled back.');
+			}
+		},
+
 		async profile(target, room, user) {
 			if (!this.runBroadcast()) return;
 
