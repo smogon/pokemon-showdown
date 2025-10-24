@@ -3,7 +3,7 @@
 * TCG Commands
 */
 import { ImpulseDB } from '../../impulse-db';
-import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile } from './interface';
+import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack,
 	getCard,
@@ -18,6 +18,10 @@ const SEARCH_PAGE_LIMIT = 60;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 const MAX_FAVORITE_CARDS = 10;
+const PACK_COST = 100;
+
+let dailyShopCache: TcgCard[] = [];
+let currentShopDate: string = '';
 
 function parseSearchQuery(target: string): {
 	filter: any,
@@ -930,6 +934,287 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async packs(target, room, user) {
+			if (!this.runBroadcast()) return;
+			
+			const collection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			const userPacks = await collection.find({ userId: user.id, quantity: { $gt: 0 } }, { sort: { setName: 1 } });
+
+			if (userPacks.length === 0) {
+				return this.errorReply("You do not have any saved packs. You can buy them from the /tcg shop.");
+			}
+
+			let html = `<div class="infobox" style="padding: 10px; max-height: 340px; overflow-y: auto;">`;
+			html += `<strong style="font-size: 1.5em;">${user.name}'s Saved Packs</strong><br />`;
+			html += `<div style="font-size: 0.9em; color: #555; margin-bottom: 15px;">Click a pack to open it.</div>`;
+			
+			html += `<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">`;
+
+			for (const pack of userPacks) {
+				const logoUrl = pack.setLogo || `https://via.placeholder.com/80x30?text=${pack.setId}`;
+				
+				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 120px; text-align: center; cursor: pointer;">`;
+				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
+				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
+				html += `<span style="font-size: 0.8em; color: #333;">Quantity: ${pack.quantity}</span>`;
+				html += `</button>`;
+			}
+
+			html += `</div></div>`;
+			this.sendReply(`|html|${html}`);
+		},
+
+		async opensavedpack(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const setId = target.trim();
+			if (!setId) {
+				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+				return this.parse('/tcg packs');
+			}
+
+			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			
+			// 1. Atomically check and decrement pack quantity
+			const updateResult = await packCollection.updateOne(
+				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
+				{ $inc: { quantity: -1 } }
+			);
+
+			if (updateResult.modifiedCount === 0) {
+				return this.errorReply(`You do not have any saved "${setId}" packs to open. Use /tcg packs to see your inventory.`);
+			}
+
+			try {
+				// 2. Generate the pack
+				const pack = await generatePack(setId);
+				
+				// 3. Add cards to user's collection
+				const { creditsAwarded } = await addCardsToCollection(user, pack);
+
+				// 4. Get Set Name for display (from cache)
+				let setName = setId;
+				const setInfo = getSet(setId);
+				if (setInfo) {
+					setName = setInfo.set;
+				}
+
+				// 5. Display the opened pack (similar to /tcg daily)
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">${user.name} opened a ${setName} pack!</strong>`;
+				
+				if (creditsAwarded > 0) {
+					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+				}
+				html += `<br /><br />`;
+
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 0; i < 4; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 4; i < 8; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 8; i < 10; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.75em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.65em; color: #666;">${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `</div></div>`;
+
+				this.sendReply(`|html|${html}`);
+				
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG opensavedpack command');
+				// CRITICAL: Refund the pack if pack generation or card adding fails
+				await packCollection.updateOne(
+					{ userId: user.id, setId: setId },
+					{ $inc: { quantity: 1 } }
+				);
+				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
+			}
+		},
+
+		async shop(target, room, user) {
+			if (!this.runBroadcast()) return;
+
+			try {
+				// 1. Check and update the daily shop cache
+				const today = new Date().toISOString().split('T')[0];
+				if (currentShopDate !== today || dailyShopCache.length === 0) {
+					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					const newShopSets = await cardCollection.aggregate([
+						{
+							$group: {
+								_id: "$setId",
+								setName: { $first: "$set" },
+								setLogo: { $first: "$setImages.logo" },
+								setSeries: { $first: "$setSeries" },
+								setReleaseDate: { $first: "$setReleaseDate" }
+							}
+						},
+						{ $sample: { size: 10 } },
+						{ $sort: { setReleaseDate: -1 } }
+					]);
+
+					// Map the aggregation result to a partial TcgCard structure
+					dailyShopCache = newShopSets.map(set => ({
+						setId: set._id,
+						set: set.setName,
+						setImages: { logo: set.setLogo, symbol: '' },
+						setSeries: set.setSeries,
+					} as Partial<TcgCard> as TcgCard));
+					
+					currentShopDate = today;
+				}
+
+				// 2. Get user's current credits
+				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const profile = await profileCollection.findOne({ userId: user.id });
+				const userCredits = profile?.credits || 0;
+
+				// 3. Generate the HTML display
+				let html = `<div class="infobox" style="padding: 10px;">`;
+				html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px 10px 15px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">`;
+				html += `<strong style="font-size: 1.5em;">Daily Pack Shop</strong>`;
+				html += `<span style="font-size: 1.1em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
+				html += `</div>`;
+
+				const title = `Packs reset at midnight. All packs cost ${PACK_COST} credits.`;
+				const headerRow = ['Pack', 'Series', 'Price', 'Buy'];
+				const dataRows: string[][] = [];
+
+				if (dailyShopCache.length === 0) {
+					return this.errorReply("The shop is empty or still loading. Please try again in a moment.");
+				}
+
+				for (const set of dailyShopCache) {
+					const logoHtml = set.setImages?.logo ? `<img src="${set.setImages.logo}" height="20" style="max-width: 60px; vertical-align: middle; margin-right: 5px;" alt="${set.set}">` : '';
+					
+					dataRows.push([
+						`${logoHtml} <strong>${set.set}</strong> (${set.setId})`,
+						set.setSeries || 'N/A',
+						`${PACK_COST} Credits`,
+						`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`
+					]);
+				}
+
+				html += generateThemedTable(title, headerRow, dataRows);
+				html += `</div>`;
+				this.sendReply(`|html|${html}`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG shop command');
+				return this.errorReply('An error occurred while fetching the shop. Please try again later.');
+			}
+		},
+
+		async buy(target, room, user) {
+			const setId = toID(target);
+			if (!setId) {
+				return this.errorReply("Please specify a set ID to buy. Use /tcg shop to see available packs.");
+			}
+
+			// 1. Verify the set is in the current shop
+			const setInShop = dailyShopCache.find(s => s.setId === setId);
+			if (!setInShop) {
+				// Check if the shop cache is just empty (e.g., server restart)
+				const today = new Date().toISOString().split('T')[0];
+				if (currentShopDate !== today || dailyShopCache.length === 0) {
+					this.parse('/tcg shop'); // Refresh the shop for the user
+					return this.errorReply("The shop is currently resetting. We've refreshed it for you, please try buying again.");
+				}
+				return this.errorReply(`The pack "${setId}" is not currently in the daily shop. Use /tcg shop to see today's packs.`);
+			}
+
+			try {
+				// 2. Atomically deduct credits
+				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const updateResult = await profileCollection.updateOne(
+					{ userId: user.id, credits: { $gte: PACK_COST } },
+					{ $inc: { credits: -PACK_COST } }
+				);
+
+				if (updateResult.modifiedCount === 0) {
+					// This fails if the user doesn't exist OR if they have < PACK_COST
+					const profile = await profileCollection.findOne({ userId: user.id });
+					const userCredits = profile?.credits || 0;
+					return this.errorReply(`You do not have enough credits to buy this pack. You need ${PACK_COST} credits, but you only have ${userCredits}.`);
+				}
+
+				// 3. Add the pack to the user's inventory
+				const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+				const now = new Date().toISOString();
+				
+				await packCollection.updateOne(
+					{ userId: user.id, setId: setId },
+					{ 
+						$inc: { quantity: 1 },
+						$set: { 
+							setName: setInShop.set,
+							setLogo: setInShop.setImages?.logo || '',
+							lastAcquiredAt: now
+						},
+						$setOnInsert: {
+							userId: user.id
+						}
+					},
+					{ upsert: true }
+				);
+
+				// 4. Send success reply
+				this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
+				this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG buy command');
+				// ATTEMPT TO REFUND if something went wrong after payment
+				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				await profileCollection.updateOne(
+					{ userId: user.id },
+					{ $inc: { credits: PACK_COST } }
+				);
+				return this.errorReply(`An unknown error occurred during your purchase. Your credits have been refunded. Error: ${error.message}`);
+			}
+		},
+
 		async profile(target, room, user) {
 			if (!this.runBroadcast()) return;
 
@@ -1401,7 +1686,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, G<code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg profile [user]</code> - View a user's TCG profile and collection stats.<br />` +
@@ -1409,6 +1694,10 @@ export const commands: ChatCommands = {
 				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
 				`<strong>Example:</strong> <code>/tcg collection user:princeskygit, rarity:Secret</code><br />` +
 				`<code>/tcg setprogress [setId]</code> - Track your collection progress for a specific set.<br />` +
+				`<code>/tcg packs</code> - View your unopened booster packs.<br />` +
+				`<code>/tcg opensavedpack [setId]</code> - Open a pack from your inventory.<br />` +
+				`<code>/tcg shop</code> - View the daily rotating pack shop.<br />` +
+				`<code>/tcg buy [setId]</code> - Buy a pack from the shop.<br />` +
 				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
 				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
 				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
