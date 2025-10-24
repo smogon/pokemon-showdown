@@ -1482,25 +1482,50 @@ export const commands: ChatCommands = {
 		},
 
 		async unfavorite(target, room, user) {
-			const cardId = target.trim();
-			if (!cardId) return this.parse('/help tcg unfavorite');
+			const targetId = target.trim().toLowerCase();
+			if (!targetId) return this.parse('/help tcg unfavorite');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 
 			try {
-				const result = await profiles.updateOne(
-					{ userId: user.id },
-					{ $pull: { favoriteCards: cardId } }
-				);
+				let result;
+				if (targetId === 'all') {
+					// Remove all favorites
+					result = await profiles.updateOne(
+						{ userId: user.id },
+						{ $set: { favoriteCards: [] } } // Set the array to empty
+					);
 
-				if (result.modifiedCount > 0) {
-					this.sendReply(`Removed card "${cardId}" from your profile favorites.`);
+					if (result.modifiedCount > 0) {
+						this.sendReply(`Removed all cards from your profile favorites.`);
+					} else {
+						// Check if the list was already empty or if the user profile doesn't exist
+						const profile = await profiles.findOne({ userId: user.id });
+						if (profile && (!profile.favoriteCards || profile.favoriteCards.length === 0)) {
+							this.errorReply(`Your favorites list is already empty.`);
+						} else {
+							// Should ideally not happen if the update ran, but good to handle
+							this.errorReply(`Could not find your profile or your favorites list was already empty.`);
+						}
+					}
 				} else {
-					this.errorReply(`Card "${cardId}" was not in your favorites list.`);
+					// Remove a single card (existing logic)
+					const cardId = target.trim(); // Use original trim for the card ID
+					result = await profiles.updateOne(
+						{ userId: user.id },
+						{ $pull: { favoriteCards: cardId } }
+					);
+
+					if (result.modifiedCount > 0) {
+						this.sendReply(`Removed card "${cardId}" from your profile favorites.`);
+					} else {
+						this.errorReply(`Card "${cardId}" was not in your favorites list.`);
+					}
 				}
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG unfavorite command');
-				return this.errorReply('An error occurred while removing your favorite card.');
+				const action = targetId === 'all' ? 'removing all your favorite cards' : 'removing your favorite card';
+				return this.errorReply(`An error occurred while ${action}.`);
 			}
 		},
 
