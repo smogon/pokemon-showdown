@@ -962,7 +962,7 @@ export const commands: ChatCommands = {
 				html += `<button name="send" value="/tcg opensavedpack ${pack.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; height: 100%;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${pack.setName} Logo" title="${pack.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
 				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.setName}</strong>`;
-				html += `<span style="font-size: 0.8em; color: #333;">Quantity: ${pack.quantity}</span>`;
+				html += `<span style="font-size: 0.8em;">Quantity: ${pack.quantity}</span>`;
 				html += `</button>`;
 				html += `</div>`;
 			}
