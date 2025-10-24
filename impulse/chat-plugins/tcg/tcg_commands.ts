@@ -968,7 +968,7 @@ export const commands: ChatCommands = {
 				
 				// "Open All" button
 				if (pack.quantity > 1) { // Only show if there's more than 1
-					html += `<button name="send" value="/tcg openallpacks ${pack.setId}" style="background: #e0e0e0; border: 1px solid #aaa; border-radius: 4px; padding: 2px 5px; width: 100%; text-align: center; cursor: pointer; font-size: 0.75em; margin-top: 3px;">`;
+					html += `<button name="send" value="/tcg openallpacks ${pack.setId}" style="background: none; border: 1px solid #aaa; border-radius: 4px; padding: 2px 5px; width: 100%; text-align: center; cursor: pointer; font-size: 0.75em; margin-top: 3px;">`;
 					html += `Open All ${pack.quantity}`;
 					html += `</button>`;
 				}
@@ -1105,13 +1105,11 @@ export const commands: ChatCommands = {
             const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
             console.log(`[TCG OpenAllPacks] Running findOneAndUpdate with filter: ${JSON.stringify(queryFilter)}`);
 			
-			let findResult: TcgUserPack | null = null; // Explicitly type as the document or null
+			let findResult: TcgUserPack | null = null; 
 			try {
-				// Assuming the wrapper returns the document directly
 				findResult = await packCollection.findOneAndUpdate(
 					queryFilter,
 					{ $set: { quantity: 0 } }
-                    // The default behavior returns the document *before* the update.
 				);
 			} catch (dbError) {
 				Monitor.crashlog(dbError, 'TCG openallpacks findOneAndUpdate');
@@ -1119,16 +1117,9 @@ export const commands: ChatCommands = {
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
             
-            // Log the raw result (which we now assume is the document or null)
             console.log(`[TCG OpenAllPacks] findOneAndUpdate raw result (expected document or null): ${JSON.stringify(findResult)}`);
 
-            // ******************** MODIFIED CHECK ********************
-            // Check if findResult *is* the document and has a quantity > 0
-            // Since it returns the document *before* the update, we just need to check if it was found.
 			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
-            // **********************************************************
-
-				// Log failure details
                 console.log(`[TCG OpenAllPacks] FAIL: User='${user.id}', RawSetId='${rawSetId}'. Document found before update: ${JSON.stringify(findResult)}`);
 				
 				try {
@@ -1152,14 +1143,12 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`); 
 			}
 
-            // If we reach here, findResult is the document *before* the update
-            const packQuantity = findResult.quantity; // Get quantity directly from the found document
+            const packQuantity = findResult.quantity; 
             console.log(`[TCG OpenAllPacks] SUCCESS: Found pack for User='${user.id}', RawSetId='${rawSetId}'. Original Quantity: ${packQuantity}`);
             
             const setName = findResult.setName || rawSetId; 
 
 			try {
-				// 2. Generate all the packs using the RAW setId
                 const allPacks: TcgCard[] = [];
                 const quantityToOpen = Math.min(packQuantity, 100); 
                 console.log(`[TCG OpenAllPacks] Generating ${quantityToOpen} packs for SetId='${rawSetId}'...`);
@@ -1183,7 +1172,6 @@ export const commands: ChatCommands = {
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
                 console.log(`[TCG OpenAllPacks] Cards added. Credits Awarded: ${creditsAwarded}`);
 
-				// 4. Display a summary message
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong>`;
 				html += `<br /><br />`;
@@ -1193,7 +1181,9 @@ export const commands: ChatCommands = {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
                 html += `<br /><br />`;
-                html += `<button name="send" value="/tcg collection ${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
+                // ****** THIS IS THE FIX ******
+				html += `<button name="send" value="/tcg collection user:${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
+                // ******************************
 				html += `</div>`;
 
 				this.sendReply(`|html|${html}`);
@@ -1203,12 +1193,11 @@ export const commands: ChatCommands = {
                 console.error(`[TCG OpenAllPacks] Error during pack generation/adding for User='${user.id}', RawSetId='${rawSetId}':`, error);
 				await packCollection.updateOne(
 					{ userId: user.id, setId: rawSetId }, 
-					// Give back the original quantity that was present before the update attempt
-					{ $set: { quantity: packQuantity } }  // Use $set instead of $inc for precise refund
+					{ $set: { quantity: packQuantity } }  
 				);
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
-		}, // End of openallpacks
+		},
 		
 		async shop(target, room, user) {
 			if (!this.runBroadcast()) return;
