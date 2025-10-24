@@ -4,7 +4,7 @@
  */
 
 import { ImpulseDB } from '../../impulse-db';
-import { TcgCard, TcgDailyCooldown, TcgUser } from './interface';
+import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile } from './interface';
 import {
 	generatePack,
 	getCard,
@@ -14,7 +14,11 @@ import {
 	clearCache,
 } from './utils';
 
+// --- CONFIGURATION CONSTANTS ---
 const SEARCH_PAGE_LIMIT = 60; // Number of cards per page (15 rows * 4 cards)
+const MAX_CARD_QUANTITY = 10;
+const CREDITS_PER_DUPLICATE = 1;
+// --- END CONFIGURATION ---
 
 /**
  * Helper function to parse the complex search query
@@ -260,8 +264,7 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 
 	// 4. Add the target user filter (THE MOST IMPORTANT PART)
 	filter.$and.push({ userId: targetUserId });
-	descriptions.unshift(`Owner: ${targetUserId}`); // Add to the front
-
+	
 	// 5. Add remaining text as name query
 	const nameQueryClean = nameQuery.trim();
 	if (nameQueryClean) {
@@ -270,7 +273,10 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		descriptions.push(`Name: '${nameQueryClean}'`);
 	}
 	
-	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
+	// Rebuild queryDescription, putting Owner first
+	const filterDesc = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
+	const queryDescription = `Owner: ${targetUserId}${descriptions.length > 0 ? ', ' + descriptions.join(', ') : ''}`;
+	
 	// Ensure user: filter is not in the command string for pagination
 	const finalCommandString = commandString.replace(/user:\s*("[^"]+"|[\w-]+)/gi, '').trim();
 
@@ -281,9 +287,12 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
  * Adds a list of cards to a user's collection in the database.
  * This handles incrementing quantity or creating new entries,
  * and it correctly maps all denormalized fields.
+ *
+ * THIS FUNCTION ALSO UPDATES THE user_profiles COLLECTION.
+ * This function now caps quantity at MAX_CARD_QUANTITY.
  */
-async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ added: number, updated: number }> {
-	if (!pack.length) return { added: 0, updated: 0 };
+async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
+	if (!pack.length) return { creditsAwarded: 0 };
 	
 	const collection = ImpulseDB<TcgUser>('user_collections');
 	const now = new Date().toISOString();
@@ -299,13 +308,50 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 		}
 	}
 
+	// --- NEW LOGIC: Read current quantities first ---
+	const cardIdsInPack = Array.from(cardCounts.keys());
+	const userCards = await collection.find({ userId: user.id, cardId: { $in: cardIdsInPack } });
+	
+	const currentQuantities = new Map<string, number>();
+	for (const card of userCards) {
+		currentQuantities.set(card.cardId, card.quantity);
+	}
+	// --- END NEW LOGIC ---
+
 	const operations = [];
+	let totalPointsChange = 0;
+	let totalQuantityChange = 0;
+	let totalUniqueCardsAdded = 0;
+	let creditsToAward = 0;
 
 	for (const [cardId, { card, count }] of cardCounts.entries()) {
+		const currentQty = currentQuantities.get(cardId) || 0;
+		const newQty = currentQty + count;
+		let finalQty = newQty;
+
+		// --- NEW: Check for cap and award credits ---
+		if (newQty > MAX_CARD_QUANTITY) {
+			const excess = newQty - MAX_CARD_QUANTITY;
+			creditsToAward += (excess * CREDITS_PER_DUPLICATE);
+			finalQty = MAX_CARD_QUANTITY;
+		}
+		// --- END NEW CAP LOGIC ---
+
+		// How many cards were *actually* added to the collection (not converted to credits)
+		const actualQtyAdded = finalQty - currentQty;
+		
+		if (actualQtyAdded > 0) {
+			totalQuantityChange += actualQtyAdded;
+			totalPointsChange += (card.totalPoints * actualQtyAdded);
+		}
+
+		if (currentQty === 0) {
+			totalUniqueCardsAdded++;
+		}
+
 		// This is the data for a new document.
-		// All fields from TcgUser are explicitly set.
 		const newDocData: TcgUser = {
-			userId: userId,
+			userId: user.id,
 			cardId: card.cardId,
 			firstAcquiredAt: now,
 			
@@ -322,18 +368,17 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 			regulationMark: card.regulationMark || undefined,
 		};
 		
-		// Remove undefined optional fields so $setOnInsert doesn't add them as 'null'
 		if (newDocData.hp === undefined) delete newDocData.hp;
 		if (newDocData.setSeries === undefined) delete newDocData.setSeries;
 		if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
 
 		// We use bulkWrite to efficiently update all cards in one go.
+		// We use $set to directly set the new quantity, not $inc.
 		operations.push({
 			updateOne: {
-				filter: { userId: userId, cardId: cardId },
+				filter: { userId: user.id, cardId: cardId },
 				update: {
-					$inc: { quantity: count },
-					$set: { lastAcquiredAt: now }, // This will handle both inserts and updates
+					$set: { quantity: finalQty, lastAcquiredAt: now },
 					$setOnInsert: newDocData,
 				},
 				upsert: true
@@ -341,16 +386,39 @@ async function addCardsToCollection(userId: string, pack: TcgCard[]): Promise<{ 
 		});
 	}
 	
-	let added = 0;
-	let updated = 0;
-	
+	// --- Execute card collection bulk write ---
 	if (operations.length > 0) {
-		const result = await collection.bulkWrite(operations, { ordered: false });
-		added = result.upsertedCount;
-		updated = result.modifiedCount;
+		await collection.bulkWrite(operations, { ordered: false });
 	}
 	
-	return { added, updated };
+	// --- NOW, UPDATE THE USER_PROFILE ---
+	// This update runs even if only credits were awarded
+	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
+		const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+		await profiles.updateOne(
+			{ userId: user.id },
+			{
+				$inc: {
+					totalQuantity: totalQuantityChange,
+					collectionPoints: totalPointsChange,
+					totalUniqueCards: totalUniqueCardsAdded,
+					credits: creditsToAward
+				},
+				$set: {
+					userName: user.name, // Keep name updated
+					lastUpdatedAt: now
+				},
+				$setOnInsert: {
+					userId: user.id,
+					credits: 0 // Will be incremented by the $inc
+				}
+			},
+			{ upsert: true }
+		);
+	}
+	// --- END PROFILE UPDATE ---
+	
+	return { creditsAwarded: creditsToAward };
 }
 
 export const commands: ChatCommands = {
@@ -672,7 +740,7 @@ export const commands: ChatCommands = {
 				const pack = await generatePack(randomSetId);
 				
 				// 3. Save cards to the user's collection
-				await addCardsToCollection(userId, pack);
+				const { creditsAwarded } = await addCardsToCollection(user, pack); // Pass user object
 
 				// 4. Update the user's cooldown time
 				await cooldowns.updateOne(
@@ -683,7 +751,14 @@ export const commands: ChatCommands = {
 				
 				// 5. Display the pack to the user (reusing openpack's HTML)
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong><br /><br />`;
+				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong>`;
+				
+				// --- NEW: Show credits awarded ---
+				if (creditsAwarded > 0) {
+					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+				}
+				html += `<br /><br />`;
+				// --- END NEW ---
 
 				html += `<div style="display: inline-block; text-align: center;">`;
 				for (let i = 0; i < 4; i++) {
@@ -772,7 +847,7 @@ export const commands: ChatCommands = {
 
 				if (totalMatches === 0) {
 					// Use targetUserId in error
-					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription}.`);
+					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription.replace(`Owner: ${targetUserId}, `, '')}.`);
 				}
 
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
@@ -811,13 +886,16 @@ export const commands: ChatCommands = {
 				html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
 				
 				// Add new stats line
-				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity} | Total Points: ${stats.totalPoints}</div>`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity.toLocaleString()} | Total Points: ${stats.totalPoints.toLocaleString()}</div>`;
 				
 				// Add filter description
-				html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${queryDescription}</div>`;
+				const filtersOnly = queryDescription.replace(`Owner: ${targetUserId}, `, '').replace(`Owner: ${targetUserId}`, '');
+				if (filtersOnly && filtersOnly !== 'All Cards') {
+					html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${filtersOnly}</div>`;
+				}
 				
 				// Update showing line
-				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} unique cards.</div>`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches.toLocaleString()} unique cards.</div>`;
 				// --- END HTML MODIFICATIONS ---
 
 				if (results.length === 0) {
@@ -872,6 +950,83 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async leaderboard(target, room, user) {
+			if (!this.runBroadcast()) return;
+
+			let targetStat = toID(target) || 'points';
+			let sortKey: keyof TcgUserProfile = 'collectionPoints';
+			let title = 'Collection Points';
+			let valueField: keyof TcgUserProfile = 'collectionPoints';
+
+			switch (targetStat) {
+				case 'points':
+					sortKey = 'collectionPoints';
+					title = 'Collection Points';
+					valueField = 'collectionPoints';
+					break;
+				case 'count':
+				case 'quantity':
+					sortKey = 'totalQuantity';
+					title = 'Total Cards';
+					valueField = 'totalQuantity';
+					break;
+				case 'unique':
+					sortKey = 'totalUniqueCards';
+					title = 'Unique Cards';
+					valueField = 'totalUniqueCards';
+					break;
+				case 'credits':
+					sortKey = 'credits';
+					title = 'Total Credits';
+					valueField = 'credits';
+					break;
+				default:
+					return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', or 'credits'.");
+			}
+
+			try {
+				const collection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const results = await collection.find(
+					{},
+					{
+						sort: { [sortKey]: -1 },
+						limit: 10,
+					}
+				);
+
+				if (results.length === 0) {
+					return this.errorReply("No users found in the leaderboard yet.");
+				}
+				
+				let html = `<div class="infobox" style="padding: 10px;">`;
+				html += `<strong style="font-size: 1.2em;">TCG Leaderboard - ${title}</strong>`;
+				html += `<table style="width: 100%; margin-top: 10px; border-collapse: collapse;">`;
+				html += `<tr style="background: #eee; text-align: left;">`;
+				html += `<th style="padding: 5px; width: 40px;">Rank</th>`;
+				html += `<th style="padding: 5px;">User</th>`;
+				html += `<th style="padding: 5px; text-align: right;">${title}</th>`;
+				html += `</tr>`;
+
+				for (let i = 0; i < results.length; i++) {
+					const profile = results[i];
+					const value = profile[valueField] as number || 0;
+					html += `<tr style="border-top: 1px solid #eee;">`;
+					html += `<td style="padding: 5px; text-align: center;"><strong>${i + 1}</strong></td>`;
+					html += `<td style="padding: 5px;">${profile.userName}</td>`;
+					html += `<td style="padding: 5px; text-align: right;">${value.toLocaleString()}</td>`;
+					html += `</tr>`;
+				}
+				html += `</table>`;
+				html += `</div>`;
+
+				this.sendReply(`|html|${html}`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG leaderboard command');
+				return this.errorReply('An error occurred while fetching the leaderboard.');
+			}
+		},
+
 		// Cache commands (unchanged)
 		async loadcache(target, room, user) {
 			this.checkCan('bypassall');
@@ -912,12 +1067,13 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like <code>type:Fire</code>, T<code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg daily</code> - Claim your free daily booster pack (once per 24h).<br />` +
 				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
 				`<strong>Example:</strong> <code>/tcg collection user:princeskygit, rarity:Secret</code><br />` +
+				`<code>/tcg leaderboard [points | count | unique | credits]</code> - View the top collectors.<br />` +
 				`<strong>Admin Commands:</strong><br />` +
 				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
