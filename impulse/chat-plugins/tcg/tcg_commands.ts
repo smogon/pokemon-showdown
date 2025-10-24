@@ -1376,7 +1376,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You can sell a maximum of ${MAX_CARD_QUANTITY} cards at a time.`);
 			}
 			
-			cardId = toID(cardId);
+			cardId = cardId;
 
 			const collection = ImpulseDB<TcgUser>('user_collections');
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
