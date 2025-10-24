@@ -1105,13 +1105,13 @@ export const commands: ChatCommands = {
             const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
             console.log(`[TCG OpenAllPacks] Running findOneAndUpdate with filter: ${JSON.stringify(queryFilter)}`);
 			
-			let findResult;
+			let findResult: TcgUserPack | null = null; // Explicitly type as the document or null
 			try {
-				// Ensure returnDocument is 'before' explicitly for consistency if needed, though it's default
+				// Assuming the wrapper returns the document directly
 				findResult = await packCollection.findOneAndUpdate(
 					queryFilter,
-					{ $set: { quantity: 0 } },
-                    // { returnDocument: 'before' } // Optional: Explicitly state default behavior
+					{ $set: { quantity: 0 } }
+                    // The default behavior returns the document *before* the update.
 				);
 			} catch (dbError) {
 				Monitor.crashlog(dbError, 'TCG openallpacks findOneAndUpdate');
@@ -1119,20 +1119,17 @@ export const commands: ChatCommands = {
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
             
-            // Log the raw result structure again to be sure
-            console.log(`[TCG OpenAllPacks] findOneAndUpdate raw result: ${JSON.stringify(findResult)}`);
-            console.log(`[TCG OpenAllPacks] Checking findResult.value: ${JSON.stringify(findResult?.value)}`); // Log the .value part specifically
+            // Log the raw result (which we now assume is the document or null)
+            console.log(`[TCG OpenAllPacks] findOneAndUpdate raw result (expected document or null): ${JSON.stringify(findResult)}`);
 
             // ******************** MODIFIED CHECK ********************
-            // Check if findResult itself contains the document data based on logs
-            // Access the quantity from findResult.value as per standard driver behavior
-            const originalDocument = findResult?.value;
-
-			if (!originalDocument || typeof originalDocument.quantity !== 'number' || originalDocument.quantity === 0) {
+            // Check if findResult *is* the document and has a quantity > 0
+            // Since it returns the document *before* the update, we just need to check if it was found.
+			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
             // **********************************************************
 
 				// Log failure details
-                console.log(`[TCG OpenAllPacks] FAIL: User='${user.id}', RawSetId='${rawSetId}'. Original Document: ${JSON.stringify(originalDocument)}`);
+                console.log(`[TCG OpenAllPacks] FAIL: User='${user.id}', RawSetId='${rawSetId}'. Document found before update: ${JSON.stringify(findResult)}`);
 				
 				try {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
@@ -1155,11 +1152,11 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`); 
 			}
 
-            // If we reach here, the check succeeded using originalDocument
-            const packQuantity = originalDocument.quantity;
+            // If we reach here, findResult is the document *before* the update
+            const packQuantity = findResult.quantity; // Get quantity directly from the found document
             console.log(`[TCG OpenAllPacks] SUCCESS: Found pack for User='${user.id}', RawSetId='${rawSetId}'. Original Quantity: ${packQuantity}`);
             
-            const setName = originalDocument.setName || rawSetId; 
+            const setName = findResult.setName || rawSetId; 
 
 			try {
 				// 2. Generate all the packs using the RAW setId
@@ -1206,11 +1203,12 @@ export const commands: ChatCommands = {
                 console.error(`[TCG OpenAllPacks] Error during pack generation/adding for User='${user.id}', RawSetId='${rawSetId}':`, error);
 				await packCollection.updateOne(
 					{ userId: user.id, setId: rawSetId }, 
-					{ $inc: { quantity: packQuantity } } 
+					// Give back the original quantity that was present before the update attempt
+					{ $set: { quantity: packQuantity } }  // Use $set instead of $inc for precise refund
 				);
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
-		},
+		}, // End of openallpacks
 		
 		async shop(target, room, user) {
 			if (!this.runBroadcast()) return;
