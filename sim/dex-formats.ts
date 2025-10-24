@@ -1,5 +1,6 @@
 import { Utils } from '../lib/utils';
-import { assignMissingFields, toID, BasicEffect } from './dex-data';
+import { assignMissingFields, BasicEffect } from './dex-data';
+import { toID } from '../lib/to-id';
 import type { EventMethods } from './dex-conditions';
 import type { SpeciesData } from './dex-species';
 import { Tags } from '../data/tags';

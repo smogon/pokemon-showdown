@@ -1,7 +1,7 @@
 import type { SSBSet } from "./random-teams";
 import type { ChosenAction } from '../../../sim/side';
 import { FS } from '../../../lib';
-import { toID } from '../../../sim/dex-data';
+import { toID } from '../../../lib/to-id';
 import { type SwitchAction } from "../../../sim/battle-queue";
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
