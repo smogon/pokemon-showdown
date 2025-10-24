@@ -1092,7 +1092,8 @@ export const commands: ChatCommands = {
 
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const setId = target.trim();
+			// const setId = target.trim(); // OLD
+            const setId = toID(target); // NEW: Use toID for consistency with /buy
 			if (!setId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 				return this.parse('/tcg packs');
@@ -1109,6 +1110,8 @@ export const commands: ChatCommands = {
 
             // findResult.value will be the document *before* the update
 			if (!findResult.value || findResult.value.quantity === 0) {
+				// Added a log to help debug if it persists
+				console.log(`OpenAllPacks: Failed findOneAndUpdate for user ${user.id}, setId ${setId}. Value: ${JSON.stringify(findResult.value)}`);
 				return this.errorReply(`You do not have any saved "${setId}" packs to open.`);
 			}
 
@@ -1118,7 +1121,18 @@ export const commands: ChatCommands = {
 			try {
 				// 2. Generate all the packs
                 const allPacks: TcgCard[] = [];
-                for (let i = 0; i < packQuantity; i++) {
+                // Add a limit to prevent server overload if quantity is huge somehow
+                const quantityToOpen = Math.min(packQuantity, 100); // Limit to opening 100 at a time
+                if (packQuantity > 100) {
+                    this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
+                    // Refund the difference if we limited it
+                    await packCollection.updateOne(
+                        { userId: user.id, setId: setId },
+                        { $inc: { quantity: packQuantity - 100 } } 
+                    );
+                }
+
+                for (let i = 0; i < quantityToOpen; i++) {
                     const pack = await generatePack(setId);
                     allPacks.push(...pack);
                 }
@@ -1128,7 +1142,7 @@ export const commands: ChatCommands = {
 
 				// 4. Display a summary message
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened ${packQuantity} ${setName} packs!</strong>`;
+				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong>`;
 				html += `<br /><br />`;
                 html += `You found a total of <strong>${allPacks.length}</strong> cards.`;
 				
@@ -1151,7 +1165,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
 		},
-
+		
 		async shop(target, room, user) {
 			if (!this.runBroadcast()) return;
 
