@@ -564,7 +564,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 		this._query = query;
 	}
 	async query(input: T, process = this.acquire()) {
-		if (!process) return this._query(input);
+		if (!process) return this._query!(input);
 
 		const timeout = setTimeout(() => {
 			const debugInfo = process.debug || "No debug information found.";
@@ -604,7 +604,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 				return;
 			}
 
-			void Promise.resolve(this._query(JSON.parse(message))).then(
+			void Promise.resolve(this._query!(JSON.parse(message))).then(
 				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
 			);
 		});
