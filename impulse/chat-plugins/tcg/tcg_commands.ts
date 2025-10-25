@@ -19,6 +19,13 @@ const PACK_COST = 0;
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
 
+// Database Collections
+const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
+const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
+const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+const userPacksCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+const cooldownsCollection = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+
 function parseSearchQuery(target: string): {
 	filter: any,
 	queryDescription: string,
@@ -283,7 +290,7 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
 	if (!pack.length) return { creditsAwarded: 0 };
 	
-	const collection = ImpulseDB<TcgUser>('user_collections');
+	const collection = userCollectionsCollection;
 	const now = new Date().toISOString();
 	
 	const cardCounts = new Map<string, { card: TcgCard, count: number }>();
@@ -375,7 +382,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 	
 	// Profile update logic remains the same...
 	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
-		const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+		const profiles = userProfilesCollection;
 		await profiles.updateOne(
 			{ userId: user.id },
 			{
@@ -417,7 +424,7 @@ export const commands: ChatCommands = {
 			}
 			
 			if (!card) {
-				const collection = ImpulseDB<TcgCard>('tcg_cards');
+				const collection = tcgCardsCollection;
 				card = await collection.findOne({ cardId });
 			}
 
@@ -490,7 +497,7 @@ export const commands: ChatCommands = {
 			}
 			
 			if (!card) {
-				const collection = ImpulseDB<TcgCard>('tcg_cards');
+				const collection = tcgCardsCollection;
 				card = await collection.findOne({ setId });
 			}
 
@@ -536,7 +543,7 @@ export const commands: ChatCommands = {
 
 			try {
 				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
-				const collection = ImpulseDB<TcgCard>('tcg_cards');
+				const collection = tcgCardsCollection;
 
 				const totalMatches = await collection.countDocuments(filter);
 				if (totalMatches === 0) {
@@ -609,7 +616,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			
 			const userId = user.id;
-                        const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+                        const cooldowns = cooldownsCollection;
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
@@ -629,7 +636,7 @@ export const commands: ChatCommands = {
 			let randomSetId = 'sv3pt5';
 			
 			try {
-				const setCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
 					{ $group: { _id: "$setId" } },
 					{ $sample: { size: 1 } },
@@ -666,7 +673,7 @@ export const commands: ChatCommands = {
 
 			try {
 				const { filter, queryDescription, page, commandString, targetUserId } = parseCollectionQuery(target, user.id);
-				const collection = ImpulseDB<TcgUser>('user_collections');
+				const collection = userCollectionsCollection;
 
 				// *** MODIFICATION START: Simplified stats pipeline ***
 				const statsPipeline: any[] = [
@@ -794,7 +801,7 @@ export const commands: ChatCommands = {
 				}
 				
 				if (!setInfo) {
-					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					const cardCollection = tcgCardsCollection;
 					setInfo = await cardCollection.findOne({ setId: setId });
 				}
 
@@ -806,7 +813,7 @@ export const commands: ChatCommands = {
 				const setName = setInfo.set;
 				const setLogo = setInfo.setImages?.logo || '';
 
-				const userCollection = ImpulseDB<TcgUser>('user_collections');
+				const userCollection = userCollectionsCollection;
 				const userUniqueCount = await userCollection.countDocuments({
 					userId: targetUserId,
 					setId: setId,
@@ -883,7 +890,7 @@ export const commands: ChatCommands = {
 			// If parts.length === 1, all defaults are fine.
 
 			try {
-				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const cardCollection = tcgCardsCollection;
 
 				let setInfo: TcgCard | null | undefined = getSet(setId);
 				if (!setInfo) {
@@ -1007,7 +1014,7 @@ export const commands: ChatCommands = {
 		async packs(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
-			const collection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			const collection = userPacksCollection;
 			const userPacks = await collection.find({ userId: user.id, quantity: { $gt: 0 } }, { sort: { setName: 1 } });
 
 			if (userPacks.length === 0) {
@@ -1059,7 +1066,7 @@ export const commands: ChatCommands = {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			}
 
-			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			const packCollection = userPacksCollection;
 			
 
 			const updateResult = await packCollection.updateOne(
@@ -1110,7 +1117,7 @@ export const commands: ChatCommands = {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			}
             
-			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			const packCollection = userPacksCollection;
 
             const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
 			
@@ -1209,7 +1216,7 @@ export const commands: ChatCommands = {
 
 				const today = new Date().toISOString().split('T')[0];
 				if (currentShopDate !== today || dailyShopCache.length === 0) {
-					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					const cardCollection = tcgCardsCollection;
 					const newShopSets = await cardCollection.aggregate([
 						{
 							$group: {
@@ -1235,7 +1242,7 @@ export const commands: ChatCommands = {
 				}
 
 
-				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const profileCollection = userProfilesCollection;
 				const profile = await profileCollection.findOne({ userId: user.id });
 				const userCredits = profile?.credits || 0;
 
@@ -1289,7 +1296,7 @@ export const commands: ChatCommands = {
 
 			try {
 
-				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const profileCollection = userProfilesCollection;
 				const updateResult = await profileCollection.updateOne(
 					{ userId: user.id, credits: { $gte: PACK_COST } },
 					{ $inc: { credits: -PACK_COST } }
@@ -1303,7 +1310,7 @@ export const commands: ChatCommands = {
 				}
 
 
-				const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+				const packCollection = userPacksCollection;
 				const now = new Date().toISOString();
 				
 				await packCollection.updateOne(
@@ -1328,7 +1335,7 @@ export const commands: ChatCommands = {
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG buy command');
 
-				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const profileCollection = userProfilesCollection;
 				await profileCollection.updateOne(
 					{ userId: user.id },
 					{ $inc: { credits: PACK_COST } }
@@ -1354,8 +1361,8 @@ export const commands: ChatCommands = {
 			
 			cardId = cardId;
 
-			const collection = ImpulseDB<TcgUser>('user_collections');
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const collection = userCollectionsCollection;
+			const profiles = userProfilesCollection;
 
 			try {
 				const userCard = await collection.findOne({ userId: user.id, cardId: cardId });
@@ -1412,8 +1419,8 @@ export const commands: ChatCommands = {
 
 		async sellduplicates(target, room, user) {
 			const targetId = target;
-			const collection = ImpulseDB<TcgUser>('user_collections');
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const collection = userCollectionsCollection;
+			const profiles = userProfilesCollection;
 			
 			const filter: any = { userId: user.id, quantity: { $gt: 1 } };
 			let description = "all duplicates";
@@ -1513,8 +1520,8 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid quantity. Quantity must be a positive number.");
 			}
 
-			const collection = ImpulseDB<TcgUser>('user_collections');
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const collection = userCollectionsCollection;
+			const profiles = userProfilesCollection;
 
 			try {
 				const senderCard = await collection.findOne({ userId: user.id, cardId: cardId });
@@ -1639,7 +1646,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid quantity. Quantity must be a positive number.");
 			}
 
-			const collection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			const collection = userPacksCollection;
 
 			try {
 				// Find the sender's pack first to get info and check quantity
@@ -1710,7 +1717,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid amount. Amount must be a positive number.");
 			}
 
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const profiles = userProfilesCollection;
 			let senderUpdateSucceeded = false;
 
 			try {
@@ -1783,7 +1790,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 
 			const targetUserId = toID(target) || user.id;
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const profiles = userProfilesCollection;
 			const profile = await profiles.findOne({ userId: targetUserId });
 
 			if (!profile) {
@@ -1795,7 +1802,7 @@ export const commands: ChatCommands = {
 			let orderedFavoriteCards: Partial<TcgCard>[] = [];
 
 			if (favoriteCardIds.length > 0) {
-				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const cardCollection = tcgCardsCollection;
 				const favoriteCardsData = await cardCollection.find(
 					{ cardId: { $in: favoriteCardIds } },
 					{ projection: { cardId: 1, imageUrl: 1, name: 1, rarity: 1 } }
@@ -1862,8 +1869,8 @@ export const commands: ChatCommands = {
 			const cardId = target.trim();
 			if (!cardId) return this.parse('/tcg help');
 
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
-			const collections = ImpulseDB<TcgUser>('user_collections');
+			const profiles = userProfilesCollection;
+			const collections = userCollectionsCollection;
 
 			try {
 				const userCard = await collections.findOne({ userId: user.id, cardId: cardId });
@@ -1903,7 +1910,7 @@ export const commands: ChatCommands = {
 			const targetId = target.trim().toLowerCase();
 			if (!targetId) return this.parse('/tcg help');
 
-			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
+			const profiles = userProfilesCollection;
 
 			try {
 				let result;
@@ -1987,7 +1994,7 @@ export const commands: ChatCommands = {
 			}
 
 			try {
-				const collection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const collection = userProfilesCollection;
 				const results = await collection.find(
 					{},
 					{
@@ -2033,9 +2040,9 @@ export const commands: ChatCommands = {
 			this.sendReply(`Starting stats recalculation for ${targetUserId}... This may take a while.`);
 
 			try {
-				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
-				const userCollection = ImpulseDB<TcgUser>('user_collections');
-				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const cardCollection = tcgCardsCollection;
+				const userCollection = userCollectionsCollection;
+				const profileCollection = userProfilesCollection;
 
 				const setTotalsPipeline = [
 					{
@@ -2142,9 +2149,9 @@ export const commands: ChatCommands = {
 				const startTime = Date.now();
 
 				try {
-					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
-					const userCollection = ImpulseDB<TcgUser>('user_collections');
-					const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+					const cardCollection = tcgCardsCollection;
+					const userCollection = userCollectionsCollection;
+					const profileCollection = userProfilesCollection;
 
 					// 1. Get all set totals once
 					const setTotalsPipeline = [
@@ -2317,8 +2324,8 @@ export const commands: ChatCommands = {
 			this.sendReply("Attempting to create/recreate recommended indexes for TCG collections...");
 
 			try {
-				const userCollection = ImpulseDB<TcgUser>('user_collections');
-				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				const userCollection = userCollectionsCollection;
+				const profileCollection = userProfilesCollection;
 				let createdCount = 0;
 				let failedCount = 0;
 				const startTime = Date.now();
