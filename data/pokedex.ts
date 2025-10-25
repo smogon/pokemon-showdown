@@ -16477,6 +16477,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Lemon-Cream",
 		color: "Yellow",
 	},
+	alcremiesaltedcream: {
+		isCosmeticForme: true,
+		name: "Alcremie-Salted-Cream",
+		baseSpecies: "Alcremie",
+		forme: "Salted-Cream",
+		color: "Yellow",
+	},
 	alcremierubyswirl: {
 		isCosmeticForme: true,
 		name: "Alcremie-Ruby-Swirl",
