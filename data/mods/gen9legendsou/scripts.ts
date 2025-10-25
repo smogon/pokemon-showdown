@@ -50,9 +50,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	actions: {
-		canTerastallize(pokemon) {
-			return null;
-		},
 		canMegaEvo(pokemon) {
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);

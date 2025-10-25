@@ -459,7 +459,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	metagrossmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	budew: {
 		tier: "LC",
