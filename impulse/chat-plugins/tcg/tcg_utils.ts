@@ -357,29 +357,26 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
   }
 }
 
-export function renderPackOpeningHtml(
-  pack: TcgCard[],
-  username: string,
-  packLabel: string,
-  creditsAwarded?: number,
-  extraMessage?: string
+export function renderCardGridHtml(
+  cards: TcgCard[],
+  title?: string,
+  subtitle?: string,
+  options?: { showOpenedPackHeader?: boolean }
 ): string {
   let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-  html += `<strong style="font-size: 20px;">${username} opened${packLabel ? ' ' + packLabel : ''} pack!</strong>`;
-  if (creditsAwarded && creditsAwarded > 0) {
-    html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+  if (title) {
+    html += `<strong style="font-size: 20px;">${title}</strong><br />`;
   }
-  if (extraMessage) {
-    html += `<br /><div style="font-size: 1.1em; color: #cc0000; margin-top: 5px;">${extraMessage}</div>`;
+  if (subtitle) {
+    html += `<div style="font-size: 0.95em; margin-bottom: 7px;">${subtitle}</div>`;
   }
-  html += `<br /><br />`;
 
-  for (let group = 0; group < 3; group++) {
-    const start = group === 2 ? 8 : group * 4;
-    const end = group === 2 ? 10 : start + 4;
+  // Card grid: 4-4-2 layout for packs, but for missing, just show in rows of 4
+  const cardsPerRow = 4;
+  for (let i = 0; i < cards.length; i += cardsPerRow) {
     html += `<div style="display: inline-block; text-align: center;">`;
-    for (let i = start; i < end && i < pack.length; i++) {
-      const card = pack[i];
+    for (let j = i; j < i + cardsPerRow && j < cards.length; j++) {
+      const card = cards[j];
       const imageWidth = 74, imageHeight = 103;
       const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
       const imageAlt = `${card.name} (${card.cardId})`;
@@ -387,12 +384,14 @@ export function renderPackOpeningHtml(
       html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
       html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
       html += `</button>`;
-      html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-      html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+      html += `<div style="font-size: 0.95em; margin-top: 3px;">${card.name}</div>`;
+      html += `<div style="font-size: 0.88em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
       html += `</div>`;
     }
     html += `</div>`;
-    if (group < 2) html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+    if (i + cardsPerRow < cards.length) {
+      html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+    }
   }
   html += `</div>`;
   return html;
