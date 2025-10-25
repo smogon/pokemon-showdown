@@ -456,7 +456,10 @@ export const commands: ChatCommands = {
 
 		async openpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('Usage: /tcg openpack [setid]');
+			if (!target) {
+				this.errorReply(`Usage: /tcg openpack [setid]`);
+			}
+			
 
 			const setId = target.trim();
 
@@ -466,7 +469,7 @@ export const commands: ChatCommands = {
 				// Use the new grid UI with correct header for pack opening
 				const html = renderCardGridHtml(
 					pack,
-					`${user.name} opened a ${setId} pack!`
+					`${user.name} opened a ${setId} pack!<br>`
 				);
 				this.sendReply(`|html|${html}`);
 
@@ -653,7 +656,7 @@ export const commands: ChatCommands = {
 				// Use new grid UI for daily pack opening
 				const html = renderCardGridHtml(
 					pack,
-					`${user.name} opened their daily pack! (${randomSetId})`,
+					`${user.name} opened their daily pack! (${randomSetId})<br>`,
 					creditsAwarded && creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined
 				);
 				this.sendReply(`|html|${html}`);
@@ -860,7 +863,7 @@ export const commands: ChatCommands = {
 			const page = parts[1] ? Math.max(1, parseInt(parts[1])) : 1;
 			const PAGE_LIMIT = 60;
 			if (!setId) {
-				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+				this.errorReply(`Usage: /tcg missing [setid]`);
 			}		
 
 			// 1. Get all cards in the set
@@ -1004,8 +1007,8 @@ export const commands: ChatCommands = {
 				// Use new grid UI for saved pack opening
 				const html = renderCardGridHtml(
 					pack,
-					`${user.name} opened a ${setName} pack!`,
-					creditsAwarded && creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined
+					`${user.name} opened a ${setName} pack!<br>`,
+					creditsAwarded && creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined
 				);
 				this.sendReply(`|html|${html}`);
 
