@@ -31,7 +31,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			vinewhip: ["9L3"],
 			workup: ["9M"],
-		}
+		},
 	},
 	ivysaur: {
 		learnset: {
@@ -64,7 +64,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			vinewhip: ["9L3"],
 			workup: ["9M"],
-		}
+		},
 	},
 	venusaur: {
 		learnset: {
@@ -103,7 +103,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			vinewhip: ["9L3"],
 			workup: ["9M"],
-		}
+		},
 	},
 	charmander: {
 		learnset: {
@@ -142,7 +142,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderpunch: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	charmeleon: {
 		learnset: {
@@ -181,7 +181,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderpunch: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	charizard: {
 		learnset: {
@@ -228,7 +228,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderpunch: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	squirtle: {
 		learnset: {
@@ -266,7 +266,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	wartortle: {
 		learnset: {
@@ -304,7 +304,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	blastoise: {
 		learnset: {
@@ -352,14 +352,14 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	weedle: {
 		learnset: {
 			electroweb: ["9M"],
 			poisonsting: ["9L1"],
 			stringshot: ["9L1"],
-		}
+		},
 	},
 	kakuna: {
 		learnset: {
@@ -368,7 +368,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			irondefense: ["9M"],
 			poisonsting: ["9L1"],
 			stringshot: ["9L1"],
-		}
+		},
 	},
 	beedrill: {
 		learnset: {
@@ -402,7 +402,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxicspikes: ["9M", "9L29"],
 			uturn: ["9M"],
 			xscissor: ["9M", "9L25"],
-		}
+		},
 	},
 	pidgey: {
 		learnset: {
@@ -429,7 +429,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L25"],
 			wingattack: ["9L21"],
 			workup: ["9M"],
-		}
+		},
 	},
 	pidgeotto: {
 		learnset: {
@@ -456,7 +456,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L25"],
 			wingattack: ["9L21"],
 			workup: ["9M"],
-		}
+		},
 	},
 	pidgeot: {
 		learnset: {
@@ -485,7 +485,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L25"],
 			wingattack: ["9L21"],
 			workup: ["9M"],
-		}
+		},
 	},
 	ekans: {
 		learnset: {
@@ -519,7 +519,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderfang: ["9M"],
 			toxic: ["9M", "9L25"],
-		}
+		},
 	},
 	arbok: {
 		learnset: {
@@ -557,7 +557,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderfang: ["9M"],
 			toxic: ["9M", "9L25"],
-		}
+		},
 	},
 	pikachu: {
 		learnset: {
@@ -593,7 +593,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			volttackle: ["9L99"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	raichu: {
 		learnset: {
@@ -632,7 +632,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			volttackle: ["9L99"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	raichualola: {
 		learnset: {
@@ -674,7 +674,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			volttackle: ["9L99"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	clefairy: {
 		learnset: {
@@ -725,7 +725,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	clefable: {
 		learnset: {
@@ -780,7 +780,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	abra: {
 		learnset: {
@@ -807,7 +807,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	kadabra: {
 		learnset: {
@@ -840,7 +840,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	alakazam: {
 		learnset: {
@@ -876,7 +876,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	machop: {
 		learnset: {
@@ -912,7 +912,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderpunch: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	machoke: {
 		learnset: {
@@ -948,7 +948,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderpunch: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	machamp: {
 		learnset: {
@@ -988,7 +988,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderpunch: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	bellsprout: {
 		learnset: {
@@ -1017,7 +1017,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M", "9L26"],
 			vinewhip: ["9L1"],
-		}
+		},
 	},
 	weepinbell: {
 		learnset: {
@@ -1047,7 +1047,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M", "9L26"],
 			vinewhip: ["9L1"],
-		}
+		},
 	},
 	victreebel: {
 		learnset: {
@@ -1080,7 +1080,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M", "9L26"],
 			vinewhip: ["9L1"],
-		}
+		},
 	},
 	slowpoke: {
 		learnset: {
@@ -1120,7 +1120,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L18"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M", "9L24"],
-		}
+		},
 	},
 	slowbro: {
 		learnset: {
@@ -1169,7 +1169,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L18"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M", "9L24"],
-		}
+		},
 	},
 	slowbrogalar: {
 		learnset: {
@@ -1224,7 +1224,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L18"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M", "9L24"],
-		}
+		},
 	},
 	gastly: {
 		learnset: {
@@ -1256,7 +1256,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			toxic: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	haunter: {
 		learnset: {
@@ -1296,7 +1296,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	gengar: {
 		learnset: {
@@ -1340,7 +1340,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	onix: {
 		learnset: {
@@ -1368,7 +1368,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M"],
-		}
+		},
 	},
 	kangaskhan: {
 		learnset: {
@@ -1417,7 +1417,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			whirlpool: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	staryu: {
 		learnset: {
@@ -1453,7 +1453,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			watergun: ["9L4"],
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
-		}
+		},
 	},
 	starmie: {
 		learnset: {
@@ -1500,7 +1500,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	scyther: {
 		learnset: {
@@ -1531,7 +1531,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			wingattack: ["9L12"],
 			xscissor: ["9M", "9L32"],
-		}
+		},
 	},
 	pinsir: {
 		learnset: {
@@ -1563,14 +1563,14 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			takedown: ["9L24"],
 			xscissor: ["9M", "9L32"],
-		}
+		},
 	},
 	magikarp: {
 		learnset: {
 			hydropump: ["9M"],
 			splash: ["9L1"],
 			tackle: ["9L15"],
-		}
+		},
 	},
 	gyarados: {
 		learnset: {
@@ -1615,7 +1615,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			watergun: ["9L0"],
 			waterpulse: ["9M"],
 			whirlpool: ["9M", "9L0"],
-		}
+		},
 	},
 	eevee: {
 		learnset: {
@@ -1640,7 +1640,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tailwhip: ["9L1"],
 			takedown: ["9L40"],
 			wish: ["9L30"],
-		}
+		},
 	},
 	vaporeon: {
 		learnset: {
@@ -1684,7 +1684,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	jolteon: {
 		learnset: {
@@ -1726,7 +1726,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			wildcharge: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	flareon: {
 		learnset: {
@@ -1767,7 +1767,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M"],
 			willowisp: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	aerodactyl: {
 		learnset: {
@@ -1806,7 +1806,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderfang: ["9M"],
 			whirlwind: ["9M"],
 			wingattack: ["9L10"],
-		}
+		},
 	},
 	dratini: {
 		learnset: {
@@ -1844,7 +1844,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
-		}
+		},
 	},
 	dragonair: {
 		learnset: {
@@ -1882,7 +1882,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
-		}
+		},
 	},
 	dragonite: {
 		learnset: {
@@ -1939,7 +1939,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["9M"],
 			whirlwind: ["9M"],
 			wingattack: ["9L0"],
-		}
+		},
 	},
 	mewtwo: {
 		inherit: true,
@@ -2003,7 +2003,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	chikorita: {
 		learnset: {
@@ -2036,7 +2036,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			tailwhip: ["9L1"],
 			workup: ["9M"],
-		}
+		},
 	},
 	bayleef: {
 		learnset: {
@@ -2071,7 +2071,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			tailwhip: ["9L1"],
 			workup: ["9M"],
-		}
+		},
 	},
 	meganium: {
 		learnset: {
@@ -2111,7 +2111,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			tailwhip: ["9L1"],
 			workup: ["9M"],
-		}
+		},
 	},
 	totodile: {
 		learnset: {
@@ -2148,7 +2148,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	croconaw: {
 		learnset: {
@@ -2188,7 +2188,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	feraligatr: {
 		learnset: {
@@ -2234,7 +2234,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			whirlpool: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	spinarak: {
 		learnset: {
@@ -2267,7 +2267,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M"],
 			xscissor: ["9M", "9L16"],
-		}
+		},
 	},
 	ariados: {
 		learnset: {
@@ -2304,7 +2304,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			toxicspikes: ["9M"],
 			xscissor: ["9M", "9L16"],
-		}
+		},
 	},
 	pichu: {
 		learnset: {
@@ -2339,7 +2339,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			volttackle: ["9L99"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	cleffa: {
 		learnset: {
@@ -2386,7 +2386,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	mareep: {
 		learnset: {
@@ -2413,7 +2413,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M", "9L8"],
 			voltswitch: ["9M"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	flaaffy: {
 		learnset: {
@@ -2444,7 +2444,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M", "9L8"],
 			voltswitch: ["9M"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	ampharos: {
 		learnset: {
@@ -2487,7 +2487,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			wildcharge: ["9M"],
 			zapcannon: ["9L50"],
-		}
+		},
 	},
 	espeon: {
 		learnset: {
@@ -2528,7 +2528,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L0"],
 			thunderwave: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	umbreon: {
 		learnset: {
@@ -2569,7 +2569,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			toxic: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	slowking: {
 		learnset: {
@@ -2619,7 +2619,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L18"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M", "9L24"],
-		}
+		},
 	},
 	slowkinggalar: {
 		learnset: {
@@ -2676,7 +2676,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L18"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M", "9L24"],
-		}
+		},
 	},
 	steelix: {
 		learnset: {
@@ -2716,7 +2716,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			taunt: ["9M"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	scizor: {
 		learnset: {
@@ -2754,7 +2754,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			wingattack: ["9L12"],
 			xscissor: ["9M", "9L32"],
-		}
+		},
 	},
 	heracross: {
 		learnset: {
@@ -2797,7 +2797,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			takedown: ["9L20"],
 			workup: ["9M"],
-		}
+		},
 	},
 	delibird: {
 		learnset: {
@@ -2824,7 +2824,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			swift: ["9M"],
 			waterpulse: ["9M"],
-		}
+		},
 	},
 	skarmory: {
 		learnset: {
@@ -2865,7 +2865,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M"],
 			wingattack: ["9L20"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	houndour: {
 		learnset: {
@@ -2898,7 +2898,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			taunt: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	houndoom: {
 		learnset: {
@@ -2936,7 +2936,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderfang: ["9M"],
 			toxic: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	larvitar: {
 		learnset: {
@@ -2972,7 +2972,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M"],
-		}
+		},
 	},
 	pupitar: {
 		learnset: {
@@ -3009,7 +3009,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M"],
-		}
+		},
 	},
 	tyranitar: {
 		learnset: {
@@ -3067,7 +3067,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderfang: ["9M"],
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
-		}
+		},
 	},
 	ralts: {
 		learnset: {
@@ -3106,7 +3106,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	kirlia: {
 		learnset: {
@@ -3146,7 +3146,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	gardevoir: {
 		learnset: {
@@ -3193,7 +3193,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			wish: ["9L32"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	sableye: {
 		learnset: {
@@ -3245,7 +3245,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			xscissor: ["9M"],
 			zenheadbutt: ["9M", "9L42"],
-		}
+		},
 	},
 	mawile: {
 		learnset: {
@@ -3293,7 +3293,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M", "9L40"],
 			thunderfang: ["9M"],
 			thunderpunch: ["9M"],
-		}
+		},
 	},
 	aron: {
 		learnset: {
@@ -3324,7 +3324,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			takedown: ["9L36"],
-		}
+		},
 	},
 	lairon: {
 		learnset: {
@@ -3356,7 +3356,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			takedown: ["9L36"],
-		}
+		},
 	},
 	aggron: {
 		learnset: {
@@ -3411,7 +3411,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			whirlpool: ["9M"],
-		}
+		},
 	},
 	meditite: {
 		learnset: {
@@ -3450,7 +3450,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			workup: ["9M", "9L1"],
 			zenheadbutt: ["9M", "9L25"],
-		}
+		},
 	},
 	medicham: {
 		learnset: {
@@ -3492,7 +3492,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M", "9L0"],
 			workup: ["9M", "9L1"],
 			zenheadbutt: ["9M", "9L25"],
-		}
+		},
 	},
 	electrike: {
 		learnset: {
@@ -3526,7 +3526,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M", "9L12"],
 			voltswitch: ["9M"],
 			wildcharge: ["9M", "9L44"],
-		}
+		},
 	},
 	manectric: {
 		learnset: {
@@ -3564,7 +3564,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M", "9L12"],
 			voltswitch: ["9M"],
 			wildcharge: ["9M", "9L44"],
-		}
+		},
 	},
 	roselia: {
 		learnset: {
@@ -3598,7 +3598,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			synthesis: ["9L37"],
 			toxic: ["9M", "9L44"],
 			toxicspikes: ["9M", "9L22"],
-		}
+		},
 	},
 	carvanha: {
 		learnset: {
@@ -3629,7 +3629,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	sharpedo: {
 		learnset: {
@@ -3668,7 +3668,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			whirlpool: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	numel: {
 		learnset: {
@@ -3706,7 +3706,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L31"],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	camerupt: {
 		learnset: {
@@ -3747,7 +3747,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L31"],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	swablu: {
 		learnset: {
@@ -3782,7 +3782,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swift: ["9M"],
 			takedown: ["9L37"],
 			twister: ["9L35"],
-		}
+		},
 	},
 	altaria: {
 		learnset: {
@@ -3827,7 +3827,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L37"],
 			twister: ["9L35"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	shuppet: {
 		learnset: {
@@ -3859,7 +3859,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			willowisp: ["9M", "9L16"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	banette: {
 		learnset: {
@@ -3895,7 +3895,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			willowisp: ["9M", "9L16"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	absol: {
 		learnset: {
@@ -3940,7 +3940,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			xscissor: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	snorunt: {
 		learnset: {
@@ -3964,7 +3964,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			spikes: ["9M"],
 			substitute: ["9M"],
 			waterpulse: ["9M"],
-		}
+		},
 	},
 	glalie: {
 		learnset: {
@@ -3996,7 +3996,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			spikes: ["9M"],
 			substitute: ["9M"],
 			waterpulse: ["9M"],
-		}
+		},
 	},
 	bagon: {
 		learnset: {
@@ -4031,7 +4031,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderfang: ["9M"],
 			zenheadbutt: ["9M", "9L35"],
-		}
+		},
 	},
 	shelgon: {
 		learnset: {
@@ -4066,7 +4066,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderfang: ["9M"],
 			zenheadbutt: ["9M", "9L35"],
-		}
+		},
 	},
 	salamence: {
 		learnset: {
@@ -4110,7 +4110,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swift: ["9M"],
 			thunderfang: ["9M"],
 			zenheadbutt: ["9M", "9L35"],
-		}
+		},
 	},
 	beldum: {
 		learnset: {
@@ -4120,7 +4120,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			ironhead: ["9M"],
 			tackle: ["9L1"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	metang: {
 		learnset: {
@@ -4158,7 +4158,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L26"],
 			thunderpunch: ["9M"],
 			zenheadbutt: ["9M", "9L6"],
-		}
+		},
 	},
 	metagross: {
 		learnset: {
@@ -4202,7 +4202,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L26"],
 			thunderpunch: ["9M"],
 			zenheadbutt: ["9M", "9L6"],
-		}
+		},
 	},
 	budew: {
 		learnset: {
@@ -4224,7 +4224,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			swift: ["9M"],
 			swordsdance: ["9M"],
-		}
+		},
 	},
 	roserade: {
 		learnset: {
@@ -4260,7 +4260,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			synthesis: ["9L37"],
 			toxic: ["9M", "9L44"],
 			toxicspikes: ["9M", "9L22"],
-		}
+		},
 	},
 	buneary: {
 		learnset: {
@@ -4294,7 +4294,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	lopunny: {
 		learnset: {
@@ -4337,7 +4337,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			uturn: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	gible: {
 		learnset: {
@@ -4372,7 +4372,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			takedown: ["9L54"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	gabite: {
 		learnset: {
@@ -4412,7 +4412,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			takedown: ["9L54"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	garchomp: {
 		learnset: {
@@ -4457,7 +4457,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			takedown: ["9L54"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	riolu: {
 		learnset: {
@@ -4491,7 +4491,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			workup: ["9M", "9L16"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	lucario: {
 		learnset: {
@@ -4543,7 +4543,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			workup: ["9M", "9L16"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	hippopotas: {
 		learnset: {
@@ -4571,7 +4571,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L28"],
 			thunderfang: ["9M"],
 			whirlwind: ["9M"],
-		}
+		},
 	},
 	hippowdon: {
 		learnset: {
@@ -4604,7 +4604,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L28"],
 			thunderfang: ["9M"],
 			whirlwind: ["9M"],
-		}
+		},
 	},
 	snover: {
 		learnset: {
@@ -4631,7 +4631,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M"],
 			waterpulse: ["9M"],
 			woodhammer: ["9L41"],
-		}
+		},
 	},
 	abomasnow: {
 		learnset: {
@@ -4669,7 +4669,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M"],
 			waterpulse: ["9M"],
 			woodhammer: ["9L41"],
-		}
+		},
 	},
 	leafeon: {
 		learnset: {
@@ -4710,7 +4710,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M"],
 			wish: ["9L0"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	glaceon: {
 		learnset: {
@@ -4745,7 +4745,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L0"],
 			taunt: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	gallade: {
 		learnset: {
@@ -4805,7 +4805,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			xscissor: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	froslass: {
 		learnset: {
@@ -4846,7 +4846,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			waterpulse: ["9M"],
 			willowisp: ["9M", "9L45"],
-		}
+		},
 	},
 	tepig: {
 		learnset: {
@@ -4876,7 +4876,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["9M"],
 			willowisp: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	pignite: {
 		learnset: {
@@ -4919,7 +4919,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	emboar: {
 		learnset: {
@@ -4970,7 +4970,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	patrat: {
 		learnset: {
@@ -4997,7 +4997,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			workup: ["9M", "9L28"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	watchog: {
 		learnset: {
@@ -5039,7 +5039,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			workup: ["9M", "9L28"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	pansage: {
 		learnset: {
@@ -5075,7 +5075,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			vinewhip: ["9L10"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	simisage: {
 		learnset: {
@@ -5113,7 +5113,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			vinewhip: ["9L10"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	pansear: {
 		learnset: {
@@ -5152,7 +5152,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M"],
 			willowisp: ["9M"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	simisear: {
 		learnset: {
@@ -5193,7 +5193,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M"],
 			willowisp: ["9M"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	panpour: {
 		learnset: {
@@ -5231,7 +5231,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L10"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	simipour: {
 		learnset: {
@@ -5272,7 +5272,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L10"],
 			workup: ["9M", "9L1"],
-		}
+		},
 	},
 	drilbur: {
 		learnset: {
@@ -5300,7 +5300,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M", "9L36"],
 			tackle: ["9L1"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	excadrill: {
 		learnset: {
@@ -5337,7 +5337,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M", "9L36"],
 			tackle: ["9L1"],
 			xscissor: ["9M", "9L26"],
-		}
+		},
 	},
 	audino: {
 		learnset: {
@@ -5383,7 +5383,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wish: ["9L36"],
 			workup: ["9M"],
 			zenheadbutt: ["9M", "9L20"],
-		}
+		},
 	},
 	venipede: {
 		learnset: {
@@ -5407,7 +5407,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			toxic: ["9M", "9L36"],
 			toxicspikes: ["9M"],
-		}
+		},
 	},
 	whirlipede: {
 		learnset: {
@@ -5431,7 +5431,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			toxic: ["9M", "9L36"],
 			toxicspikes: ["9M"],
-		}
+		},
 	},
 	scolipede: {
 		learnset: {
@@ -5466,7 +5466,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxicspikes: ["9M"],
 			uturn: ["9M"],
 			xscissor: ["9M", "9L44"],
-		}
+		},
 	},
 	sandile: {
 		learnset: {
@@ -5500,7 +5500,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			taunt: ["9M"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	krokorok: {
 		learnset: {
@@ -5536,7 +5536,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			taunt: ["9M"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	krookodile: {
 		learnset: {
@@ -5581,7 +5581,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L24"],
 			taunt: ["9M"],
 			thunderfang: ["9M"],
-		}
+		},
 	},
 	scraggy: {
 		learnset: {
@@ -5620,7 +5620,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	scrafty: {
 		learnset: {
@@ -5668,7 +5668,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	trubbish: {
 		learnset: {
@@ -5694,7 +5694,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L20"],
 			toxic: ["9M", "9L30"],
 			toxicspikes: ["9M", "9L15"],
-		}
+		},
 	},
 	garbodor: {
 		learnset: {
@@ -5729,7 +5729,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			toxic: ["9M", "9L30"],
 			toxicspikes: ["9M", "9L15"],
-		}
+		},
 	},
 	vanillite: {
 		learnset: {
@@ -5751,7 +5751,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M", "9L4"],
-		}
+		},
 	},
 	vanillish: {
 		learnset: {
@@ -5773,7 +5773,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M", "9L4"],
-		}
+		},
 	},
 	vanilluxe: {
 		learnset: {
@@ -5798,7 +5798,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			taunt: ["9M", "9L4"],
-		}
+		},
 	},
 	emolga: {
 		learnset: {
@@ -5831,7 +5831,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M", "9L40"],
 			wildcharge: ["9M"],
 			wingattack: ["9L22"],
-		}
+		},
 	},
 	tynamo: {
 		learnset: {
@@ -5839,7 +5839,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			spark: ["9L1"],
 			tackle: ["9L1"],
 			thunderwave: ["9M", "9L1"],
-		}
+		},
 	},
 	eelektrik: {
 		learnset: {
@@ -5867,7 +5867,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			voltswitch: ["9M"],
 			wildcharge: ["9M", "9L46"],
 			zapcannon: ["9L48"],
-		}
+		},
 	},
 	eelektross: {
 		learnset: {
@@ -5913,7 +5913,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["9M", "9L46"],
 			zapcannon: ["9L48"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	litwick: {
 		learnset: {
@@ -5943,7 +5943,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			taunt: ["9M"],
 			willowisp: ["9M", "9L20"],
-		}
+		},
 	},
 	lampent: {
 		learnset: {
@@ -5973,7 +5973,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			taunt: ["9M"],
 			willowisp: ["9M", "9L20"],
-		}
+		},
 	},
 	chandelure: {
 		learnset: {
@@ -6006,7 +6006,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			taunt: ["9M"],
 			willowisp: ["9M", "9L20"],
-		}
+		},
 	},
 	stunfisk: {
 		learnset: {
@@ -6038,7 +6038,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thundershock: ["9L1"],
 			thunderwave: ["9M"],
 			watergun: ["9L1"],
-		}
+		},
 	},
 	stunfiskgalar: {
 		learnset: {
@@ -6070,7 +6070,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			toxic: ["9M"],
 			watergun: ["9L1"],
-		}
+		},
 	},
 	chespin: {
 		learnset: {
@@ -6109,7 +6109,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			vinewhip: ["9L1"],
 			woodhammer: ["9L48"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	quilladin: {
 		learnset: {
@@ -6150,7 +6150,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			vinewhip: ["9L1"],
 			woodhammer: ["9L48"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	chesnaught: {
 		learnset: {
@@ -6203,7 +6203,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			vinewhip: ["9L1"],
 			woodhammer: ["9L48"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	fennekin: {
 		learnset: {
@@ -6228,7 +6228,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			tailwhip: ["9L1"],
 			willowisp: ["9M", "9L38"],
-		}
+		},
 	},
 	braixen: {
 		learnset: {
@@ -6256,7 +6256,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tailwhip: ["9L1"],
 			thunderpunch: ["9M"],
 			willowisp: ["9M", "9L38"],
-		}
+		},
 	},
 	delphox: {
 		learnset: {
@@ -6298,7 +6298,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			willowisp: ["9M", "9L38"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	froakie: {
 		learnset: {
@@ -6332,7 +6332,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M"],
-		}
+		},
 	},
 	frogadier: {
 		learnset: {
@@ -6375,7 +6375,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M"],
-		}
+		},
 	},
 	greninja: {
 		learnset: {
@@ -6422,7 +6422,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			watergun: ["9L5"],
 			waterpulse: ["9M"],
 			watershuriken: ["9L0"],
-		}
+		},
 	},
 	greninjabond: {},
 	bunnelby: {
@@ -6457,7 +6457,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L36"],
 			uturn: ["9M"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	diggersby: {
 		learnset: {
@@ -6498,7 +6498,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			uturn: ["9M"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	fletchling: {
 		learnset: {
@@ -6526,7 +6526,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			whirlwind: ["9M", "9L20"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	fletchinder: {
 		learnset: {
@@ -6559,7 +6559,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L20"],
 			willowisp: ["9M"],
 			wingattack: ["9L0"],
-		}
+		},
 	},
 	talonflame: {
 		learnset: {
@@ -6597,7 +6597,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L20"],
 			willowisp: ["9M"],
 			wingattack: ["9L1"],
-		}
+		},
 	},
 	scatterbug: {
 		learnset: {
@@ -6605,7 +6605,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			stringshot: ["9L1"],
 			stunspore: ["9L7"],
 			tackle: ["9L1"],
-		}
+		},
 	},
 	spewpa: {
 		learnset: {
@@ -6617,7 +6617,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			stringshot: ["9L1"],
 			stunspore: ["9L7"],
 			tackle: ["9L1"],
-		}
+		},
 	},
 	vivillon: {
 		learnset: {
@@ -6651,7 +6651,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L0"],
 			uturn: ["9M", "9L25"],
 			whirlwind: ["9M", "9L45"],
-		}
+		},
 	},
 	vivillonfancy: {},
 	vivillonpokeball: {},
@@ -6687,7 +6687,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["9M"],
 			willowisp: ["9M"],
 			workup: ["9M", "9L8"],
-		}
+		},
 	},
 	pyroar: {
 		learnset: {
@@ -6724,7 +6724,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["9M"],
 			willowisp: ["9M"],
 			workup: ["9M", "9L8"],
-		}
+		},
 	},
 	flabebe: {
 		learnset: {
@@ -6750,7 +6750,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			vinewhip: ["9L1"],
 			wish: ["9L20"],
-		}
+		},
 	},
 	floette: {
 		learnset: {
@@ -6778,7 +6778,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			vinewhip: ["9L1"],
 			wish: ["9L20"],
-		}
+		},
 	},
 	floetteeternal: {
 		inherit: true,
@@ -6809,7 +6809,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			vinewhip: ["9L1"],
 			wish: ["9L20"],
-		}
+		},
 	},
 	florges: {
 		learnset: {
@@ -6839,7 +6839,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			vinewhip: ["9L1"],
 			wish: ["9L20"],
-		}
+		},
 	},
 	skiddo: {
 		learnset: {
@@ -6874,7 +6874,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			vinewhip: ["9L7"],
 			wildcharge: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	gogoat: {
 		learnset: {
@@ -6913,7 +6913,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			vinewhip: ["9L7"],
 			wildcharge: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	pancham: {
 		learnset: {
@@ -6944,7 +6944,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M", "9L8"],
 			thunderpunch: ["9M"],
 			workup: ["9M", "9L20"],
-		}
+		},
 	},
 	pangoro: {
 		learnset: {
@@ -6995,7 +6995,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			workup: ["9M", "9L20"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	furfrou: {
 		learnset: {
@@ -7031,7 +7031,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wildcharge: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	espurr: {
 		learnset: {
@@ -7060,7 +7060,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	meowstic: {
 		learnset: {
@@ -7100,7 +7100,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wish: ["9L50"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	meowsticf: {
 		learnset: {
@@ -7136,7 +7136,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M"],
 			workup: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	honedge: {
 		learnset: {
@@ -7160,7 +7160,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			swordsdance: ["9M", "9L44"],
 			tackle: ["9L1"],
-		}
+		},
 	},
 	doublade: {
 		learnset: {
@@ -7186,7 +7186,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M", "9L44"],
 			tackle: ["9L1"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	aegislash: {
 		learnset: {
@@ -7217,7 +7217,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M", "9L44"],
 			tackle: ["9L1"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	spritzee: {
 		learnset: {
@@ -7243,7 +7243,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderbolt: ["9M"],
 			wish: ["9L22"],
-		}
+		},
 	},
 	aromatisse: {
 		learnset: {
@@ -7273,7 +7273,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			thunderbolt: ["9M"],
 			wish: ["9L22"],
-		}
+		},
 	},
 	swirlix: {
 		learnset: {
@@ -7302,7 +7302,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderbolt: ["9M"],
 			wish: ["9L32"],
-		}
+		},
 	},
 	slurpuff: {
 		learnset: {
@@ -7334,7 +7334,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			thunderbolt: ["9M"],
 			wish: ["9L32"],
-		}
+		},
 	},
 	inkay: {
 		learnset: {
@@ -7367,7 +7367,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			topsyturvy: ["9L42"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	malamar: {
 		learnset: {
@@ -7407,7 +7407,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			topsyturvy: ["9L42"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	binacle: {
 		learnset: {
@@ -7445,7 +7445,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	barbaracle: {
 		learnset: {
@@ -7489,7 +7489,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	skrelp: {
 		learnset: {
@@ -7520,7 +7520,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			waterpulse: ["9M", "9L30"],
-		}
+		},
 	},
 	dragalge: {
 		learnset: {
@@ -7554,7 +7554,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			waterpulse: ["9M", "9L30"],
-		}
+		},
 	},
 	clauncher: {
 		learnset: {
@@ -7582,7 +7582,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			waterpulse: ["9M", "9L24"],
-		}
+		},
 	},
 	clawitzer: {
 		learnset: {
@@ -7613,7 +7613,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterfall: ["9M"],
 			watergun: ["9L1"],
 			waterpulse: ["9M", "9L24"],
-		}
+		},
 	},
 	helioptile: {
 		learnset: {
@@ -7644,7 +7644,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			voltswitch: ["9M", "9L28"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	heliolisk: {
 		learnset: {
@@ -7684,7 +7684,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			voltswitch: ["9M", "9L28"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	tyrunt: {
 		learnset: {
@@ -7723,7 +7723,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tailwhip: ["9L1"],
 			thunderfang: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	tyrantrum: {
 		learnset: {
@@ -7767,7 +7767,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tailwhip: ["9L1"],
 			thunderfang: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	amaura: {
 		learnset: {
@@ -7805,7 +7805,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			thunderwave: ["9M", "9L28"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	aurorus: {
 		learnset: {
@@ -7848,7 +7848,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			thunderwave: ["9M", "9L28"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	sylveon: {
 		learnset: {
@@ -7885,7 +7885,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			takedown: ["9L0"],
 			taunt: ["9M"],
 			wish: ["9L0"],
-		}
+		},
 	},
 	hawlucha: {
 		learnset: {
@@ -7925,7 +7925,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wingattack: ["9L4"],
 			xscissor: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	dedenne: {
 		learnset: {
@@ -7957,7 +7957,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uturn: ["9M"],
 			voltswitch: ["9M", "9L25"],
 			wildcharge: ["9M"],
-		}
+		},
 	},
 	carbink: {
 		learnset: {
@@ -7989,7 +7989,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L1"],
 			takedown: ["9L15"],
-		}
+		},
 	},
 	goomy: {
 		learnset: {
@@ -8014,7 +8014,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M", "9L25"],
-		}
+		},
 	},
 	sliggoo: {
 		learnset: {
@@ -8043,7 +8043,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M", "9L25"],
-		}
+		},
 	},
 	sliggoohisui: {
 		learnset: {
@@ -8075,7 +8075,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M", "9L25"],
-		}
+		},
 	},
 	goodra: {
 		learnset: {
@@ -8119,7 +8119,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M", "9L25"],
-		}
+		},
 	},
 	goodrahisui: {
 		learnset: {
@@ -8167,7 +8167,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["9M"],
 			watergun: ["9L5"],
 			waterpulse: ["9M", "9L25"],
-		}
+		},
 	},
 	klefki: {
 		learnset: {
@@ -8196,7 +8196,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swift: ["9M"],
 			tackle: ["9L1"],
 			thunderwave: ["9M"],
-		}
+		},
 	},
 	phantump: {
 		learnset: {
@@ -8226,7 +8226,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			willowisp: ["9M", "9L16"],
 			woodhammer: ["9L44"],
-		}
+		},
 	},
 	trevenant: {
 		learnset: {
@@ -8262,7 +8262,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["9M", "9L16"],
 			woodhammer: ["9L44"],
 			xscissor: ["9M"],
-		}
+		},
 	},
 	pumpkaboo: {
 		learnset: {
@@ -8296,7 +8296,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			trickortreat: ["9L1"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	gourgeist: {
 		learnset: {
@@ -8337,7 +8337,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			tackle: ["9L1"],
 			trickortreat: ["9L1"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	bergmite: {
 		learnset: {
@@ -8362,7 +8362,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			tackle: ["9L3"],
 			takedown: ["9L36"],
-		}
+		},
 	},
 	avalugg: {
 		learnset: {
@@ -8395,7 +8395,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			surf: ["9M"],
 			tackle: ["9L3"],
 			takedown: ["9L36"],
-		}
+		},
 	},
 	avalugghisui: {
 		learnset: {
@@ -8431,7 +8431,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			surf: ["9M"],
 			tackle: ["9L3"],
 			takedown: ["9L36"],
-		}
+		},
 	},
 	noibat: {
 		learnset: {
@@ -8470,7 +8470,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L28"],
 			wildcharge: ["9M"],
 			wingattack: ["9L16"],
-		}
+		},
 	},
 	noivern: {
 		learnset: {
@@ -8518,7 +8518,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M", "9L28"],
 			wildcharge: ["9M"],
 			wingattack: ["9L16"],
-		}
+		},
 	},
 	xerneas: {
 		inherit: true,
@@ -8554,7 +8554,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["9M"],
 			thunderwave: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	yveltal: {
 		inherit: true,
@@ -8588,7 +8588,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			taunt: ["9M", "9L5"],
 			uturn: ["9M"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	zygarde: {
 		inherit: true,
@@ -8627,7 +8627,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thousandarrows: ["9L1"],
 			thousandwaves: ["9L1"],
 			zenheadbutt: ["9M"],
-		}
+		},
 	},
 	zygarde10: {
 		inherit: true,
@@ -8674,7 +8674,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			substitute: ["9M"],
 			swift: ["9M"],
 			tackle: ["9L1"],
-		}
+		},
 	},
 	hoopa: {
 		inherit: true,
@@ -8713,7 +8713,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderpunch: ["9M"],
 			thunderwave: ["9M"],
 			zenheadbutt: ["9M", "9L38"],
-		}
+		},
 	},
 	volcanion: {
 		inherit: true,
@@ -8761,7 +8761,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["9M", "9L24"],
 			wildcharge: ["9M"],
 			willowisp: ["9M"],
-		}
+		},
 	},
 	drampa: {
 		learnset: {
@@ -8810,7 +8810,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			twister: ["9L1"],
 			whirlwind: ["9M"],
 			workup: ["9M"],
-		}
+		},
 	},
 	falinks: {
 		learnset: {
@@ -8839,6 +8839,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			swordsdance: ["9M"],
 			tackle: ["9L1"],
 			zenheadbutt: ["9M"],
-		}
-	}
+		},
+	},
 };
