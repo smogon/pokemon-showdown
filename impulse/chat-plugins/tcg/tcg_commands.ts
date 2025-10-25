@@ -461,7 +461,7 @@ export const commands: ChatCommands = {
 
 			try {
 				const pack = await generatePack(setId);
-				const title = `${user.name} opened - ${setId} pack.`;
+				const title = `${user.name} opened - ${setId} pack.<br>`;
 				const html = renderCardGridHtml(pack, title);
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
@@ -644,7 +644,7 @@ export const commands: ChatCommands = {
 				);
 				
 				const title = `${user.name} opened their daily pack! (${randomSetId})`;
-				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined;
+				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 
 				this.sendReply(`|html|${html}`);
@@ -928,7 +928,7 @@ export const commands: ChatCommands = {
 
 
 				const title = `${user.name} opened a ${setName} pack!`;
-				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined;
+				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 
 				this.sendReply(`|html|${html}`);
@@ -951,13 +951,10 @@ export const commands: ChatCommands = {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 				return this.parse('/tcg packs');
 			}
-
-            
             
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 
             const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
-            
 			
 			let findResult: TcgUserPack | null = null; 
 			try {
@@ -970,11 +967,8 @@ export const commands: ChatCommands = {
 				
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
-            
-            
 
 			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
-                
 				
 				try {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
@@ -1018,10 +1012,7 @@ export const commands: ChatCommands = {
                 for (let i = 0; i < quantityToOpen; i++) {
                     const pack = await generatePack(rawSetId); 
                     allPacks.push(...pack);
-                }
-
-                
-				
+					 }
                 
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
                 
@@ -1075,7 +1066,6 @@ export const commands: ChatCommands = {
 						{ $sort: { setReleaseDate: -1 } }
 					]);
 
-
 					dailyShopCache = newShopSets.map(set => ({
 						setId: set._id,
 						set: set.setName,
@@ -1128,7 +1118,6 @@ export const commands: ChatCommands = {
 				return this.errorReply("Please specify a set ID to buy. Use /tcg shop to see available packs.");
 			}
 
-
 			const setInShop = dailyShopCache.find(s => s.setId === setId);
 			if (!setInShop) {
 
@@ -1174,7 +1163,6 @@ export const commands: ChatCommands = {
 					},
 					{ upsert: true }
 				);
-
 
 				this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
 				this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
