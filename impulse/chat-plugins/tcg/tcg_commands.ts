@@ -6,8 +6,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack, getCard, getSet,
-	initializeCache, getCacheStats, clearCache,
-	renderCardGridHtml
+	initializeCache, getCacheStats, clearCache
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
@@ -456,29 +455,74 @@ export const commands: ChatCommands = {
 
 		async openpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) {
-				this.errorReply(`Usage: /tcg openpack [setid]`);
-			}
-			
+			if (!target) return this.parse('/help tcg openpack');
 
 			const setId = target.trim();
 
 			try {
 				const pack = await generatePack(setId);
 
-				// Use the new grid UI with correct header for pack opening
-				const html = renderCardGridHtml(
-					pack,
-					`${user.name} opened a ${setId} pack!<br>`
-				);
-				this.sendReply(`|html|${html}`);
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
 
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 0; i < 4; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 4; i < 8; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 8; i < 10; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `</div></div>`;
+
+				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG openpack command');
 				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
 			}
 		},
-		
 
 		async set(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -611,9 +655,9 @@ export const commands: ChatCommands = {
 
 		async daily(target, room, user) {
 			if (!this.runBroadcast()) return;
-
+			
 			const userId = user.id;
-			const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+                        const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
@@ -621,7 +665,7 @@ export const commands: ChatCommands = {
 			if (cooldown) {
 				const lastClaimed = new Date(cooldown.lastClaimedAt).getTime();
 				const timeRemaining = (lastClaimed + COOLDOWN_MS) - now;
-
+				
 				if (timeRemaining > 0) {
 					const hours = Math.floor(timeRemaining / 3600000);
 					const minutes = Math.floor((timeRemaining % 3600000) / 60000);
@@ -630,8 +674,8 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			let randomSetId = 'sv1';
-
+			let randomSetId = 'sv3pt5';
+			
 			try {
 				const setCollection = ImpulseDB<TcgCard>('tcg_cards');
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
@@ -644,7 +688,7 @@ export const commands: ChatCommands = {
 				}
 
 				const pack = await generatePack(randomSetId);
-
+				
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
 				await cooldowns.updateOne(
@@ -652,21 +696,75 @@ export const commands: ChatCommands = {
 					{ $set: { lastClaimedAt: new Date(now).toISOString() } },
 					{ upsert: true }
 				);
+				
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong>`;
+				
+				if (creditsAwarded > 0) {
+					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+				}
+				html += `<br /><br />`;
 
-				// Use new grid UI for daily pack opening
-				const html = renderCardGridHtml(
-					pack,
-					`${user.name} opened their daily pack! (${randomSetId})<br>`,
-					creditsAwarded && creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined
-				);
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 0; i < 4; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 4; i < 8; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 8; i < 10; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `</div></div>`;
+
 				this.sendReply(`|html|${html}`);
-
+				
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG daily command');
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
-		
+
 		async collection(target, room, user) {
 			if (!this.runBroadcast()) return;
 
@@ -856,78 +954,6 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		async missing(target, room, user) {
-			if (!this.runBroadcast()) return;
-			const parts = target.split(',').map(x => x.trim());
-			const setId = parts[0];
-			const page = parts[1] ? Math.max(1, parseInt(parts[1])) : 1;
-			const PAGE_LIMIT = 60;
-			if (!setId) {
-				this.errorReply(`Usage: /tcg missing [setid]`);
-			}		
-
-			// 1. Get all cards in the set
-			const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
-			const allSetCards = await cardCollection.find(
-				{ setId },
-				{
-					projection: { cardId: 1, name: 1, imageUrl: 1, rarity: 1 },
-					sort: { rarityPoints: -1, name: 1 }
-				}
-			);
-
-			if (allSetCards.length === 0) {
-				return this.errorReply(`Set ID "${setId}" not found or has no cards.`);
-			}
-
-			// 2. Get user's owned cards from that set
-			const userCollection = ImpulseDB<TcgUser>('user_collections');
-			const ownedCardIds = await userCollection.find(
-				{ userId: user.id, setId },
-				{ projection: { cardId: 1 } }
-			).then(list => list.map(c => c.cardId));
-
-			// 3. Compute missing cards
-			const missingCards = allSetCards.filter(card => !ownedCardIds.includes(card.cardId));
-			const totalMissing = missingCards.length;
-			const totalSet = allSetCards.length;
-			const totalOwned = totalSet - totalMissing;
-
-			if (totalMissing === 0) {
-				return this.sendReplyBox(`Congratulations, you have completed the set <strong>${setId}</strong>!`);
-			}
-
-			// 4. Pagination
-			const totalPages = Math.ceil(totalMissing / PAGE_LIMIT);
-			const currentPage = Math.min(page, totalPages);
-			const skip = (currentPage - 1) * PAGE_LIMIT;
-			const cardsToShow = missingCards.slice(skip, skip + PAGE_LIMIT);
-
-			// 5. Render UI (using new grid function)
-			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-width: 100%; max-height: 340px; overflow-y: auto;">`;
-			html += `<strong style="font-size: 20px;">Missing Cards from Set: ${setId}</strong><br />`;
-			html += `<div style="font-size: 0.95em; margin-bottom: 5px;">You own ${totalOwned}/${totalSet} cards (${((totalOwned / totalSet) * 100).toFixed(1)}% complete)</div>`;
-			html += `<div style="font-size: 0.95em; margin-bottom: 10px;">Showing ${cardsToShow.length} of ${totalMissing} missing cards.</div>`;
-
-			html += renderCardGridHtml(cardsToShow);
-			
-			if (totalPages > 1) {
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
-				if (currentPage > 1) {
-					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&larr; Prev</button>`;
-				}
-				html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
-				if (currentPage < totalPages) {
-					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &rarr;</button>`;
-				}
-				html += `</div>`;
-			}
-
-			html += `</div>`;
-			this.sendReply(`|html|${html}`);
-		},
-
 		async packs(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
@@ -975,15 +1001,17 @@ export const commands: ChatCommands = {
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		},
-
+		
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const setId = target.trim();
 			if (!setId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+				return this.parse('/tcg packs');
 			}
 
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
+			
 
 			const updateResult = await packCollection.updateOne(
 				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
@@ -993,10 +1021,14 @@ export const commands: ChatCommands = {
 			if (updateResult.modifiedCount === 0) {
 				return this.errorReply(`You do not have any saved "${setId}" packs to open. Use /tcg packs to see your inventory.`);
 			}
-			
+
 			try {
+
 				const pack = await generatePack(setId);
+				
+
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
+
 
 				let setName = setId;
 				const setInfo = getSet(setId);
@@ -1004,16 +1036,72 @@ export const commands: ChatCommands = {
 					setName = setInfo.set;
 				}
 
-				// Use new grid UI for saved pack opening
-				const html = renderCardGridHtml(
-					pack,
-					`${user.name} opened a ${setName} pack!<br>`,
-					creditsAwarded && creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined
-				);
-				this.sendReply(`|html|${html}`);
 
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">${user.name} opened a ${setName} pack!</strong>`;
+				
+				if (creditsAwarded > 0) {
+					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+				}
+				html += `<br /><br />`;
+
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 0; i < 4; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 4; i < 8; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: inline-block; text-align: center;">`;
+				for (let i = 8; i < 10; i++) {
+					const card = pack[i];
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+				html += `</div></div>`;
+
+				this.sendReply(`|html|${html}`);
+				
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG opensavedpack command');
+
 				await packCollection.updateOne(
 					{ userId: user.id, setId: setId },
 					{ $inc: { quantity: 1 } }
@@ -1021,13 +1109,16 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 			}
 		},
-		
+
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const rawSetId = target.trim(); 
 			if (!rawSetId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
-			}           
+				return this.parse('/tcg packs');
+			}
+
+            
             
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 
@@ -2204,9 +2295,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
 				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
-				`<code>/tcg missing [setId], [page]</code> - View which cards from a set you are missing.<br />` +
-				`<strong>Example:</strong> <code>/tcg missing sv1</code><br />` +
+				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
 				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
 				`<strong>Collection Commands:</strong><br />` +
 				`<code>/tcg profile [user]</code> - View a user's TCG profile and collection stats.<br />` +
