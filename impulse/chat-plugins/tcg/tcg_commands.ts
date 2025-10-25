@@ -6,7 +6,8 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack, getCard, getSet,
-	initializeCache, getCacheStats, clearCache
+	initializeCache, getCacheStats, clearCache,
+	renderPackOpeningHtml
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
@@ -462,64 +463,14 @@ export const commands: ChatCommands = {
 			try {
 				const pack = await generatePack(setId);
 
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
-
+				const html = renderPackOpeningHtml(
+					pack,
+					user.name,
+					`- ${setId}`
+				);
 				this.sendReply(`|html|${html}`);
+
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG openpack command');
 				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
 			}
 		},
@@ -657,7 +608,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			
 			const userId = user.id;
-                        const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+            const cooldowns = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
@@ -697,73 +648,18 @@ export const commands: ChatCommands = {
 					{ upsert: true }
 				);
 				
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong>`;
-				
-				if (creditsAwarded > 0) {
-					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
-				}
-				html += `<br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
-
+				const html = renderPackOpeningHtml(
+					pack,
+					user.name,
+					`their daily (${randomSetId})`,
+					creditsAwarded
+				);
 				this.sendReply(`|html|${html}`);
-				
+
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG daily command');
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
-		},
+		},		
 
 		async collection(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -1001,7 +897,7 @@ export const commands: ChatCommands = {
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		},
-		
+
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const setId = target.trim();
@@ -1012,7 +908,6 @@ export const commands: ChatCommands = {
 
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 			
-
 			const updateResult = await packCollection.updateOne(
 				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
 				{ $inc: { quantity: -1 } }
@@ -1023,12 +918,8 @@ export const commands: ChatCommands = {
 			}
 
 			try {
-
 				const pack = await generatePack(setId);
-				
-
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
-
 
 				let setName = setId;
 				const setInfo = getSet(setId);
@@ -1036,72 +927,15 @@ export const commands: ChatCommands = {
 					setName = setInfo.set;
 				}
 
-
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened a ${setName} pack!</strong>`;
-				
-				if (creditsAwarded > 0) {
-					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
-				}
-				html += `<br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
-
+				const html = renderPackOpeningHtml(
+					pack,
+					user.name,
+					`a ${setName}`,
+					creditsAwarded
+				);
 				this.sendReply(`|html|${html}`);
-				
-			} catch (error) {
-				Monitor.crashlog(error, 'TCG opensavedpack command');
 
+			} catch (error) {
 				await packCollection.updateOne(
 					{ userId: user.id, setId: setId },
 					{ $inc: { quantity: 1 } }
@@ -1116,9 +950,7 @@ export const commands: ChatCommands = {
 			if (!rawSetId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 				return this.parse('/tcg packs');
-			}
-
-            
+			}           
             
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 
