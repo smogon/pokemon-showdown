@@ -6,6 +6,7 @@
  * 1. In-memory caching (cards, sets, pack generation pools)
  * 2. Cache management (init, clear, stats)
  * 3. Pack generation (router, cache-based, and DB-fallback)
+ * 4. Pack opening ui function.
  */
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard } from './interface';
@@ -354,4 +355,45 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
     console.error(`Error generating pack from DB for set ${setId}:`, error);
     throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards to build a pack.`);
   }
+}
+
+export function renderPackOpeningHtml(
+  pack: TcgCard[],
+  username: string,
+  packLabel: string,
+  creditsAwarded?: number,
+  extraMessage?: string
+): string {
+  let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+  html += `<strong style="font-size: 20px;">${username} opened${packLabel ? ' ' + packLabel : ''} pack!</strong>`;
+  if (creditsAwarded && creditsAwarded > 0) {
+    html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
+  }
+  if (extraMessage) {
+    html += `<br /><div style="font-size: 1.1em; color: #cc0000; margin-top: 5px;">${extraMessage}</div>`;
+  }
+  html += `<br /><br />`;
+
+  for (let group = 0; group < 3; group++) {
+    const start = group === 2 ? 8 : group * 4;
+    const end = group === 2 ? 10 : start + 4;
+    html += `<div style="display: inline-block; text-align: center;">`;
+    for (let i = start; i < end && i < pack.length; i++) {
+      const card = pack[i];
+      const imageWidth = 74, imageHeight = 103;
+      const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+      const imageAlt = `${card.name} (${card.cardId})`;
+      html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+      html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+      html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+      html += `</button>`;
+      html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+      html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+    if (group < 2) html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+  }
+  html += `</div>`;
+  return html;
 }
