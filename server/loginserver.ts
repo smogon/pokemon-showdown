@@ -75,7 +75,6 @@ class LoginServerInstance {
 			if (json.error) {
 				return [null, new Error(json.error)];
 			}
-			this.openRequests--;
 			return [json.json!, null];
 		} catch (error: any) {
 			this.openRequests--;
