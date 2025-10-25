@@ -52110,8 +52110,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	dialgaorigin: { eventOnly: true
-	},
+	dialgaorigin: { eventOnly: true },
 	palkia: {
 		learnset: {
 			aerialace: ["9M", "7M", "6M", "5M", "4M"],
@@ -52231,8 +52230,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	palkiaorigin: { eventOnly: true
-	},
+	palkiaorigin: { eventOnly: true },
 	heatran: {
 		learnset: {
 			ancientpower: ["9M", "8L12", "7L1", "6L1", "5L1", "4T", "4L1", "4S2"],
@@ -53006,8 +53004,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	shayminsky: { eventOnly: true
-	},
+	shayminsky: { eventOnly: true },
 	arceus: {
 		learnset: {
 			acidspray: ["9M"],
@@ -53195,40 +53192,23 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	arceusbug: { eventOnly: true
-	},
-	arceusdark: { eventOnly: true
-	},
-	arceusdragon: { eventOnly: true
-	},
-	arceuselectric: { eventOnly: true
-	},
-	arceusfairy: { eventOnly: true
-	},
-	arceusfighting: { eventOnly: true
-	},
-	arceusfire: { eventOnly: true
-	},
-	arceusflying: { eventOnly: true
-	},
-	arceusghost: { eventOnly: true
-	},
-	arceusgrass: { eventOnly: true
-	},
-	arceusground: { eventOnly: true
-	},
-	arceusice: { eventOnly: true
-	},
-	arceuspoison: { eventOnly: true
-	},
-	arceuspsychic: { eventOnly: true
-	},
-	arceusrock: { eventOnly: true
-	},
-	arceussteel: { eventOnly: true
-	},
-	arceuswater: { eventOnly: true
-	},
+	arceusbug: { eventOnly: true },
+	arceusdark: { eventOnly: true },
+	arceusdragon: { eventOnly: true },
+	arceuselectric: { eventOnly: true },
+	arceusfairy: { eventOnly: true },
+	arceusfighting: { eventOnly: true },
+	arceusfire: { eventOnly: true },
+	arceusflying: { eventOnly: true },
+	arceusghost: { eventOnly: true },
+	arceusgrass: { eventOnly: true },
+	arceusground: { eventOnly: true },
+	arceusice: { eventOnly: true },
+	arceuspoison: { eventOnly: true },
+	arceuspsychic: { eventOnly: true },
+	arceusrock: { eventOnly: true },
+	arceussteel: { eventOnly: true },
+	arceuswater: { eventOnly: true },
 	victini: {
 		learnset: {
 			batonpass: ["8M"],
@@ -65614,8 +65594,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	tornadustherian: { eventOnly: true
-	},
+	tornadustherian: { eventOnly: true },
 	thundurus: {
 		learnset: {
 			acrobatics: ["9M"],
@@ -65720,8 +65699,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	thundurustherian: { eventOnly: true
-	},
+	thundurustherian: { eventOnly: true },
 	reshiram: {
 		learnset: {
 			ancientpower: ["9M", "8L1", "7L15", "6L15", "5L15"],
@@ -66031,8 +66009,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	landorustherian: { eventOnly: true
-	},
+	landorustherian: { eventOnly: true },
 	kyurem: {
 		learnset: {
 			aerialace: ["9M"],
@@ -66422,8 +66399,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	keldeoresolute: { eventOnly: true
-	},
+	keldeoresolute: { eventOnly: true },
 	meloetta: {
 		learnset: {
 			acrobatics: ["9M", "7M", "7L26", "6M", "6L26", "5M", "5L26"],
@@ -66633,14 +66609,10 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	genesectburn: { eventOnly: true
-	},
-	genesectchill: { eventOnly: true
-	},
-	genesectdouse: { eventOnly: true
-	},
-	genesectshock: { eventOnly: true
-	},
+	genesectburn: { eventOnly: true },
+	genesectchill: { eventOnly: true },
+	genesectdouse: { eventOnly: true },
+	genesectshock: { eventOnly: true },
 	chespin: {
 		learnset: {
 			aerialace: ["9M", "7M", "6M"],
@@ -68556,7 +68528,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wish: ["9M"],
 		},
 		eventData: [
-			{ generation: 9, level: 72, moves: ["lightofruin", "energyball", "gigadrain", "synthesis"], source: "gen9legends" },
+			{ generation: 9, level: 72, nature: "Modest", moves: ["lightofruin", "energyball", "gigadrain", "synthesis"], source: "gen9legends" },
 		],
 		eventOnly: true,
 	},
@@ -72724,7 +72696,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			{ generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball" },
 			{ generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball" },
 			{ generation: 8, level: 70, shiny: 1, isHidden: true, moves: ["thousandarrows", "landswrath", "dragonpulse", "bind"] },
-			{ generation: 9, level: 84, moves: ["coreenforcer", "thousandarrows", "thousandwaves", "landswrath"], source: "gen9legends" },
+			{ generation: 9, level: 84, ivs: { hp: 31, atk: 31, def: 15, spa: 31, spd: 28, spe: 19 }, nature: "Quiet", moves: ["coreenforcer", "thousandarrows", "thousandwaves", "landswrath"], source: "gen9legends" },
 		],
 		eventOnly: true,
 	},
@@ -72930,8 +72902,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	hoopaunbound: { eventOnly: true
-	},
+	hoopaunbound: { eventOnly: true },
 	volcanion: {
 		learnset: {
 			bodypress: ["9M", "8M"],
@@ -85873,8 +85844,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	enamorustherian: { eventOnly: true
-	},
+	enamorustherian: { eventOnly: true },
 	sprigatito: {
 		learnset: {
 			acrobatics: ["9M"],
@@ -92046,12 +92016,9 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		],
 		eventOnly: true,
 	},
-	ogerponhearthflame: { eventOnly: true
-	},
-	ogerponwellspring: { eventOnly: true
-	},
-	ogerponcornerstone: { eventOnly: true
-	},
+	ogerponhearthflame: { eventOnly: true },
+	ogerponwellspring: { eventOnly: true },
+	ogerponcornerstone: { eventOnly: true },
 	archaludon: {
 		learnset: {
 			aurasphere: ["9M"],
