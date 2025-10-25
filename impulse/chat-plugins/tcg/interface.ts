@@ -94,6 +94,7 @@ export interface TcgUser {
   supertype: string;
   types: string[];
   subtypes: string[];
+  imageUrl?: string;
   hp?: number;
   setSeries?: string;
   regulationMark?: string;
