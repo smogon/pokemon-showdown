@@ -2420,22 +2420,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 98,
 	},
 	magician: {
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!source.hp || source.item || source.volatiles['gem']) return;
+			if (!move || move.category === 'Status' || move.id === 'fling' || !target.item) return;
+			const item = target.getItem();
+			const immediate = item.isBerry || item.id === 'berryjuice' || (move.selfSwitch && move.flags['contact']);
+			if (immediate) {
+				if (!this.singleEvent('TakeItem', item, target.itemState, target, source, move, item)) return;
+				const stolen = target.takeItem(source);
+				if (!stolen) return;
+				if (!source.setItem(stolen)) target.item = stolen.id;
+				else this.add('-item', source, stolen, '[from] ability: Magician', `[of] ${target}`);
+				return;
+			}
+			(source.volatiles['magician'] ??= { id: 'magician', effectOrder: 0, candidates: [] }).candidates.push(target);
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
+			const state = source.volatiles['magician'];
+			if (!state) return;
+			delete source.volatiles['magician'];
+			if (!move || source.switchFlag || !move.hitTargets || source.item || source.volatiles['gem'] ||
 				move.id === 'fling' || move.category === 'Status') return;
 			const hitTargets = move.hitTargets;
 			this.speedSort(hitTargets);
 			for (const pokemon of hitTargets) {
-				if (pokemon !== source) {
-					const yourItem = pokemon.takeItem(source);
-					if (!yourItem) continue;
-					if (!source.setItem(yourItem)) {
-						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-						continue;
-					}
-					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
-					return;
-				}
+				if (!state.candidates.includes(pokemon) || !pokemon.item) continue;
+				const item = pokemon.getItem();
+				if (!this.singleEvent('TakeItem', item, pokemon.itemState, pokemon, source, move, item)) continue;
+				const stolen = pokemon.takeItem(source);
+				if (!stolen) continue;
+				if (!source.setItem(stolen)) pokemon.item = stolen.id;
+				else this.add('-item', source, stolen, '[from] ability: Magician', `[of] ${pokemon}`);
+				return;
 			}
 		},
 		flags: {},
