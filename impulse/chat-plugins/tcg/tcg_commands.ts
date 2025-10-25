@@ -1,7 +1,5 @@
-/*
-* Pokemon Showdown
-* TCG Commands
-*/
+
+
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
@@ -19,7 +17,6 @@ const PACK_COST = 0;
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
 
-// Database Collections
 const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
 const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
 const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
@@ -157,7 +154,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 	let query = target.trim();
 	let commandStringForPagination = query;
 
-
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
@@ -186,12 +182,10 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		const operator = match[2];
 		let value = match[3].replace(/"/g, '');
 
-
 		if (key === 'user') {
 			targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
 			continue;
 		}
-
 
 		const valueNum = parseInt(value);
 		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -249,7 +243,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		}
 	}
 
-
 	filter.$and.push({ userId: targetUserId });
 	
 
@@ -258,7 +251,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		nameQuery = nameQuery.replace(matchedFilter, '');
 	}
 	const nameQueryClean = nameQuery.trim();
-
 
 	if (nameQueryClean) {
 		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
@@ -1085,13 +1077,11 @@ export const commands: ChatCommands = {
 
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
-
 				let setName = setId;
 				const setInfo = getSet(setId);
 				if (setInfo) {
 					setName = setInfo.set;
 				}
-
 
 				const title = `${user.name} opened a ${setName} pack!`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
@@ -1241,11 +1231,9 @@ export const commands: ChatCommands = {
 					currentShopDate = today;
 				}
 
-
 				const profileCollection = userProfilesCollection;
 				const profile = await profileCollection.findOne({ userId: user.id });
 				const userCredits = profile?.credits || 0;
-
 
 				let html = `<div class="style="padding: 10px;">`;
 
@@ -1308,7 +1296,6 @@ export const commands: ChatCommands = {
 					const userCredits = profile?.credits || 0;
 					return this.errorReply(`You do not have enough credits to buy this pack. You need ${PACK_COST} credits, but you only have ${userCredits}.`);
 				}
-
 
 				const packCollection = userPacksCollection;
 				const now = new Date().toISOString();
@@ -1581,7 +1568,7 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				// Update recipient's profile
+				
 				if (actualQtyAdded > 0 || creditsToAward > 0) {
 					const recipientProfile = await profiles.findOne({ userId: targetUserId });
 					const recipientName = recipientProfile?.userName || targetUserId;
@@ -1649,7 +1636,7 @@ export const commands: ChatCommands = {
 			const collection = userPacksCollection;
 
 			try {
-				// Find the sender's pack first to get info and check quantity
+				
 				const senderPack = await collection.findOne({ userId: user.id, setId: setId });
 
 				if (!senderPack || senderPack.quantity < quantityToGift) {
@@ -1657,18 +1644,18 @@ export const commands: ChatCommands = {
 					return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
 				}
 
-				// Decrement from sender
+				
 				const updateSenderResult = await collection.updateOne(
 					{ userId: user.id, setId: setId, quantity: { $gte: quantityToGift } },
 					{ $inc: { quantity: -quantityToGift } }
 				);
 
 				if (updateSenderResult.modifiedCount === 0) {
-					// This is a race condition check, in case quantity changed between find and update
+					
 					return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
 				}
 
-				// Increment for recipient
+				
 				const now = new Date().toISOString();
 				await collection.updateOne(
 					{ userId: targetUserId, setId: setId },
@@ -1723,7 +1710,7 @@ export const commands: ChatCommands = {
 			try {
 				const now = new Date().toISOString();
 
-				// 1. Decrement credits from sender
+				
 				const senderUpdateResult = await profiles.updateOne(
 					{ userId: user.id, credits: { $gte: amountToGift } },
 					{ $inc: { credits: -amountToGift } }
@@ -1737,8 +1724,8 @@ export const commands: ChatCommands = {
 				
 				senderUpdateSucceeded = true;
 
-				// 2. Increment credits for recipient
-				// This upsert pattern matches the one in addCardsToCollection
+				
+				
 				await profiles.updateOne(
 					{ userId: targetUserId },
 					{
@@ -1746,12 +1733,12 @@ export const commands: ChatCommands = {
 							credits: amountToGift 
 						},
 						$set: { 
-							userName: targetUserId, // Set username
+							userName: targetUserId, 
 							lastUpdatedAt: now 
 						},
 						$setOnInsert: {
 							userId: targetUserId,
-							// Set other numeric fields to 0 only on insert
+							
 							collectionPoints: 0,
 							totalQuantity: 0,
 							totalUniqueCards: 0
@@ -1774,7 +1761,7 @@ export const commands: ChatCommands = {
 				}
 				
 				if (senderUpdateSucceeded) {
-					// Refund the sender if the recipient update failed
+					
 					await profiles.updateOne(
 						{ userId: user.id },
 						{ $inc: { credits: amountToGift } }
@@ -2153,7 +2140,7 @@ export const commands: ChatCommands = {
 					const userCollection = userCollectionsCollection;
 					const profileCollection = userProfilesCollection;
 
-					// 1. Get all set totals once
+					
 					const setTotalsPipeline = [
 						{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
 						{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
@@ -2168,16 +2155,16 @@ export const commands: ChatCommands = {
 						if (set.setTotal > 0) allSetsMap.set(set.setId, set.setTotal);
 					}
 
-					// 2. Get all existing profiles to preserve credits, names, etc.
+					
 					const allUserProfiles = await profileCollection.find({}, { projection: { userId: 1, userName: 1, credits: 1, favoriteCards: 1 } });
 					const profileMap = new Map<string, Partial<TcgUserProfile>>();
 					for (const profile of allUserProfiles) {
 						profileMap.set(profile.userId, profile);
 					}
 
-					// 3. Run ONE aggregation to calculate stats for ALL users
+					
 					const allStatsPipeline: any[] = [
-						// Stage 1: Group by user AND set to get unique counts per set
+						
 						{
 							$group: {
 								_id: {
@@ -2189,10 +2176,10 @@ export const commands: ChatCommands = {
 								pointsInSet: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
 							}
 						},
-						// Stage 2: Now group by just user
+						
 						{
 							$group: {
-								_id: "$_id.userId", // Group by just the user
+								_id: "$_id.userId", 
 								totalUniqueCards: { $sum: "$uniqueCountInSet" },
 								totalQuantity: { $sum: "$quantityInSet" },
 								collectionPoints: { $sum: "$pointsInSet" },
@@ -2207,7 +2194,7 @@ export const commands: ChatCommands = {
 					];
 					const allUserStats = await userCollection.aggregate<any>(allStatsPipeline);
 
-					// 4. Loop over aggregation results (in JS) and prepare bulk update
+					
 					const bulkOps: any[] = [];
 					const now = new Date().toISOString();
 
@@ -2215,7 +2202,7 @@ export const commands: ChatCommands = {
 						const targetUserId = userStats._id;
 						const profile = profileMap.get(targetUserId) || {};
 						
-						// Calculate setsCompleted
+						
 						let setsCompleted = 0;
 						if (userStats.setProgress) {
 							for (const set of userStats.setProgress) {
@@ -2244,10 +2231,10 @@ export const commands: ChatCommands = {
 								upsert: true
 							}
 						});
-						profileMap.delete(targetUserId); // Remove from map
+						profileMap.delete(targetUserId); 
 					}
 
-					// 5. Add users who have profiles but 0 cards
+					
 					for (const [targetUserId, profile] of profileMap.entries()) {
 						bulkOps.push({
 							updateOne: {
@@ -2269,7 +2256,7 @@ export const commands: ChatCommands = {
 						});
 					}
 
-					// 6. Execute bulk write
+					
 					if (bulkOps.length > 0) {
 						await profileCollection.bulkWrite(bulkOps, { ordered: false });
 					}
