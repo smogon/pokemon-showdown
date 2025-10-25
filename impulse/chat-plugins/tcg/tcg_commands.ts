@@ -856,7 +856,7 @@ export const commands: ChatCommands = {
 			const setId = parts[0];
 			const page = parts[1] ? Math.max(1, parseInt(parts[1])) : 1;
 
-			if (!setId) return this.parse('/help tcg missing');
+			if (!setId) return this.parse('/help tcg help');
 
 			// 1. Get all cards in the set
 			const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
@@ -892,7 +892,7 @@ export const commands: ChatCommands = {
 			html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${cardsToShow.length} of ${totalMissing} missing cards.</div>`;
 
 			// Use same grid as pack/search
-			html += renderPackOpeningHtml(cardsToShow, user.name, `missing from ${setId}`);
+			html += renderPackOpeningHtml(cardsToShow);
 
 			if (totalPages > 1) {
 				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
