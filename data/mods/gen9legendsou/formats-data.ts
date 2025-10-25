@@ -90,7 +90,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	kadabra: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	alakazam: {
 		tier: "OU",
