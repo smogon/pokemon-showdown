@@ -6,7 +6,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack, getCard, getSet,
-	initializeCache, getCacheStats, clearCache
+	initializeCache, getCacheStats, clearCache, renderCardGridHtml
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
@@ -461,62 +461,8 @@ export const commands: ChatCommands = {
 
 			try {
 				const pack = await generatePack(setId);
-
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened - ${setId} pack.</strong><br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
-
+				const title = `${user.name} opened - ${setId} pack.`;
+				const html = renderCardGridHtml(pack, title);
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				Monitor.crashlog(error, 'TCG openpack command');
@@ -697,65 +643,9 @@ export const commands: ChatCommands = {
 					{ upsert: true }
 				);
 				
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened their daily pack! (${randomSetId})</strong>`;
-				
-				if (creditsAwarded > 0) {
-					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
-				}
-				html += `<br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
+				const title = `${user.name} opened their daily pack! (${randomSetId})`;
+				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined;
+				const html = renderCardGridHtml(pack, title, subtitle);
 
 				this.sendReply(`|html|${html}`);
 				
@@ -1037,65 +927,9 @@ export const commands: ChatCommands = {
 				}
 
 
-				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened a ${setName} pack!</strong>`;
-				
-				if (creditsAwarded > 0) {
-					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
-				}
-				html += `<br /><br />`;
-
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 0; i < 4; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 4; i < 8; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-				for (let i = 8; i < 10; i++) {
-					const card = pack[i];
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
-					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
-					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
-					html += `</div>`;
-				}
-				html += `</div>`;
-				html += `</div></div>`;
+				const title = `${user.name} opened a ${setName} pack!`;
+				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!` : undefined;
+				const html = renderCardGridHtml(pack, title, subtitle);
 
 				this.sendReply(`|html|${html}`);
 				
@@ -2319,7 +2153,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg giftcredits [user], [amount]</code> - Gift credits to another user.<br />` +
 				`<strong>Example:</strong> <code>/tcg giftcredits princeskygit, 100</code><br />` +
 				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
-				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
+				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />E` +
 				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
 				`<code>/tcg recalculatestats [user]</code> - Recalculate your stats. Admins can specify a user.<br />` +
 				`<strong>Admin Commands:</strong><br />` +
