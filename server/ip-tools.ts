@@ -151,6 +151,7 @@ export const IPTools = new class {
 		// does << with signed int32s.
 		if (low === null || !bits || bits < 2 || bits > 32) return null;
 		low &= ~((1 << (32 - bits)) - 1);
+		if (low < 0) low += 4294967296;
 		const high = low + (1 << (32 - bits)) - 1;
 		return { minIP: low, maxIP: high };
 	}
