@@ -2311,6 +2311,66 @@ export const commands: ChatCommands = {
 			this.sendReply(`TCG caches cleared. Removed ${cardsCleared} cards and ${setsCleared} sets.`);
 		},
 
+		async createindexes(target, room, user) {
+			this.checkCan('bypassall');
+			
+			this.sendReply("Attempting to create/recreate recommended indexes for TCG collections...");
+
+			try {
+				const userCollection = ImpulseDB<TcgUser>('user_collections');
+				const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
+				let createdCount = 0;
+				let failedCount = 0;
+				const startTime = Date.now();
+
+				const userIndexes = [
+					{ spec: { userId: 1, cardId: 1 }, options: { name: 'userId_cardId_unique', unique: true } },
+					{ spec: { userId: 1, setId: 1 }, options: { name: 'userId_setId' } },
+					{ spec: { userId: 1, totalPoints: -1 }, options: { name: 'userId_totalPoints_desc' } },
+				];
+
+				const profileIndexes = [
+					{ spec: { userId: 1 }, options: { name: 'userId_unique', unique: true } },
+					{ spec: { collectionPoints: -1 }, options: { name: 'collectionPoints_desc' } },
+					{ spec: { totalQuantity: -1 }, options: { name: 'totalQuantity_desc' } },
+					{ spec: { totalUniqueCards: -1 }, options: { name: 'totalUniqueCards_desc' } },
+					{ spec: { credits: -1 }, options: { name: 'credits_desc' } },
+					{ spec: { totalSetsCompleted: -1 }, options: { name: 'totalSetsCompleted_desc' } },
+				];
+
+				this.sendReply(`Creating indexes for 'user_collections'...`);
+				for (const index of userIndexes) {
+					try {
+						await userCollection.createIndex(index.spec, index.options);
+						this.sendReply(`  ✅ Created index: ${index.options.name}`);
+						createdCount++;
+					} catch (e) {
+						this.errorReply(`  ❌ Failed to create index ${index.options.name}: ${e.message}`);
+						failedCount++;
+					}
+				}
+
+				this.sendReply(`Creating indexes for 'user_profiles'...`);
+				for (const index of profileIndexes) {
+					try {
+						await profileCollection.createIndex(index.spec, index.options);
+						this.sendReply(`  ✅ Created index: ${index.options.name}`);
+						createdCount++;
+					} catch (e) {
+						this.errorReply(`  ❌ Failed to create index ${index.options.name}: ${e.message}`);
+						failedCount++;
+					}
+				}
+				
+				const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+				this.sendReply(`Index creation finished in ${duration}s. Created: ${createdCount}, Failed: ${failedCount}.`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG createindexes command');
+				return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
+			}
+		},
+
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;
@@ -2353,6 +2413,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
 				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
 				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users.` +
+				`<code>/tcg createindexes</code> - (Admin) Creates all important mongodb indexes for fast querying.` +
 				`</div>`
 			);
 		},
