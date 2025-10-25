@@ -399,7 +399,7 @@ export const commands: ChatCommands = {
 	pokemontcg: {
 		async card(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/help tcg card');
+			if (!target) return this.parse('/tcg help');
 
 			const cardId = target.trim();
 			
@@ -455,7 +455,7 @@ export const commands: ChatCommands = {
 
 		async openpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/help tcg openpack');
+			if (!target) return this.parse('/tcg help');
 
 			const setId = target.trim();
 
@@ -472,7 +472,7 @@ export const commands: ChatCommands = {
 
 		async set(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/help tcg set');
+			if (!target) return this.parse('/tcg help');
 
 			const setId = target.trim();
 
@@ -526,7 +526,7 @@ export const commands: ChatCommands = {
 
 		async search(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/help tcg search');
+			if (!target) return this.parse('/tcg help');
 
 			try {
 				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
@@ -779,7 +779,7 @@ export const commands: ChatCommands = {
 			
 			const setId = target.trim();
 			if (!setId) {
-				return this.parse('/help tcg setprogress');
+				return this.parse('/tcg help');
 			}
 
 			const targetUserId = user.id; 
@@ -897,7 +897,6 @@ export const commands: ChatCommands = {
 			const setId = target.trim();
 			if (!setId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
-				return this.parse('/tcg packs');
 			}
 
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
@@ -949,7 +948,6 @@ export const commands: ChatCommands = {
 			const rawSetId = target.trim(); 
 			if (!rawSetId) {
 				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
-				return this.parse('/tcg packs');
 			}
             
 			const packCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
@@ -1702,7 +1700,7 @@ export const commands: ChatCommands = {
 
 		async favorite(target, room, user) {
 			const cardId = target.trim();
-			if (!cardId) return this.parse('/help tcg favorite');
+			if (!cardId) return this.parse('/tcg help');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 			const collections = ImpulseDB<TcgUser>('user_collections');
@@ -1743,7 +1741,7 @@ export const commands: ChatCommands = {
 
 		async unfavorite(target, room, user) {
 			const targetId = target.trim().toLowerCase();
-			if (!targetId) return this.parse('/help tcg unfavorite');
+			if (!targetId) return this.parse('/tcg help');
 
 			const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 
@@ -2112,7 +2110,9 @@ export const commands: ChatCommands = {
 
 		'': 'help',
 		help() {
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
+				`<div style="max-height: 360px; overflow-y: auto;">` +
 				`<strong>TCG Commands:</strong><br />` +
 				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
 				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
@@ -2148,7 +2148,8 @@ export const commands: ChatCommands = {
 				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
 				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
-				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users.`
+				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users.` +
+				`</div>`
 			);
 		},
 	},
