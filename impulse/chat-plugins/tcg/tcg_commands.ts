@@ -853,7 +853,7 @@ export const commands: ChatCommands = {
 			let targetUserName = user.name;
 			let page = 1;
 			
-			if (!setId) return this.parse('/help tcg missing');
+			if (!setId) return this.parse('/tcg help');
 
 			let commandString = setId; // For pagination
 
