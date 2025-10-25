@@ -1,4 +1,7 @@
-// [FILE: tcg_commands.ts]
+/*
+* Pokemon Showdown
+* TCG Commands
+*/
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
