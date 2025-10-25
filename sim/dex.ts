@@ -37,6 +37,7 @@ import { Ability, DexAbilities } from './dex-abilities';
 import { Species, DexSpecies } from './dex-species';
 import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
+import { toID as _toID } from '../lib/to-id';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
@@ -93,7 +94,7 @@ interface TextTableData {
 	Default: DexTable<DefaultText>;
 }
 
-export const toID = Data.toID;
+export const toID = _toID;
 
 export class ModdedDex {
 	readonly Data = Data;
@@ -110,7 +111,7 @@ export class ModdedDex {
 	readonly currentMod: string;
 	readonly dataDir: string;
 
-	readonly toID = Data.toID;
+	readonly toID = toID;
 
 	gen = 0;
 	parentMod = '';

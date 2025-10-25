@@ -14,7 +14,8 @@
  * @license MIT
  */
 
-import { Dex, toID } from './dex';
+import { Dex } from './dex';
+import { toID } from './../lib/to-id';
 import { Teams } from './teams';
 import { Field } from './field';
 import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';

@@ -1,6 +1,6 @@
 import { FS } from '../lib/fs';
 import type { RoomSection } from './chat-commands/room-settings';
-import { toID } from '../sim/dex-data';
+import { toID } from '../lib/to-id';
 
 export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
