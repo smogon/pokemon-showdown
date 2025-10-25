@@ -850,6 +850,66 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async missing(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const parts = target.split(',').map(x => x.trim());
+			const setId = parts[0];
+			const page = parts[1] ? Math.max(1, parseInt(parts[1])) : 1;
+
+			if (!setId) return this.parse('/help tcg missing');
+
+			// 1. Get all cards in the set
+			const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+			const allSetCards = await cardCollection.find({ setId }, { projection: { cardId: 1, name: 1, imageUrl: 1, rarity: 1 }, sort: { rarityPoints: -1, name: 1 } });
+
+			if (allSetCards.length === 0) {
+				return this.errorReply(`Set ID "${setId}" not found or has no cards.`);
+			}
+
+			// 2. Get user's owned cards from that set
+			const userCollection = ImpulseDB<TcgUser>('user_collections');
+			const ownedCardIds = await userCollection.find({ userId: user.id, setId }, { projection: { cardId: 1 } }).then(list => list.map(c => c.cardId));
+
+			// 3. Compute missing cards
+			const missingCards = allSetCards.filter(card => !ownedCardIds.includes(card.cardId));
+			const totalMissing = missingCards.length;
+			const totalSet = allSetCards.length;
+
+			if (totalMissing === 0) {
+				return this.sendReplyBox(`Congratulations, you have completed the set **${setId}**!`);
+			}
+
+			// 4. Pagination
+			const totalPages = Math.ceil(totalMissing / SEARCH_PAGE_LIMIT);
+			const currentPage = Math.min(page, totalPages);
+			const skip = (currentPage - 1) * PAGE_LIMIT;
+			const cardsToShow = missingCards.slice(skip, skip + SEARCH_PAGE_LIMIT);
+
+			// 5. Render UI (using existing function)
+			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+			html += `<strong style="font-size: 20px;">Missing Cards from Set: ${setId}</strong><br />`;
+			html += `<div style="font-size: 0.9em; margin-bottom: 5px;">You own ${totalSet - totalMissing}/${totalSet} cards (${((totalSet - totalMissing) / totalSet * 100).toFixed(1)}% complete)</div>`;
+			html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${cardsToShow.length} of ${totalMissing} missing cards.</div>`;
+
+			// Use same grid as pack/search
+			html += renderPackOpeningHtml(cardsToShow, user.name, `missing from ${setId}`);
+
+			if (totalPages > 1) {
+				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+				html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
+				if (currentPage > 1) {
+					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&larr; Prev</button>`;
+				}
+				html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
+				if (currentPage < totalPages) {
+					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &rarr;</button>`;
+				}
+				html += `</div>`;
+			}
+			html += `</div>`;
+			this.sendReply(`|html|${html}`);
+		},
+
 		async packs(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
