@@ -1,3 +1,4 @@
+// [FILE: tcg_commands.ts]
 /*
 * Pokemon Showdown
 * TCG Commands
@@ -6,7 +7,8 @@ import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack, getCard, getSet,
-	initializeCache, getCacheStats, clearCache, renderCardGridHtml
+	initializeCache, getCacheStats, clearCache, renderCardGridHtml,
+	addCardsToCollection
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
@@ -276,129 +278,6 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
     finalCommandString = finalCommandString.replace(/,\s*$/, '').trim();
 
 	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
-}
-
-/**
- * This function caps quantity at MAX_CARD_QUANTITY and awards credits for excess cards.
- */
-async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
-	if (!pack.length) return { creditsAwarded: 0 };
-	
-	const collection = userCollectionsCollection;
-	const now = new Date().toISOString();
-	
-	const cardCounts = new Map<string, { card: TcgCard, count: number }>();
-	for (const card of pack) {
-		const existing = cardCounts.get(card.cardId);
-		if (existing) {
-			existing.count++;
-		} else {
-			cardCounts.set(card.cardId, { card: card, count: 1 });
-		}
-	}
-
-	const cardIdsInPack = Array.from(cardCounts.keys());
-	const userCards = await collection.find({ userId: user.id, cardId: { $in: cardIdsInPack } });
-	
-	const currentQuantities = new Map<string, number>();
-	for (const card of userCards) {
-		currentQuantities.set(card.cardId, card.quantity);
-	}
-
-	const operations = [];
-	let totalPointsChange = 0;
-	let totalQuantityChange = 0;
-	let totalUniqueCardsAdded = 0;
-	let creditsToAward = 0;
-
-	for (const [cardId, { card, count }] of cardCounts.entries()) {
-		const currentQty = currentQuantities.get(cardId) || 0;
-		const newQty = currentQty + count;
-		let finalQty = newQty;
-
-		if (newQty > MAX_CARD_QUANTITY) {
-			const excess = newQty - MAX_CARD_QUANTITY;
-			creditsToAward += (excess * CREDITS_PER_DUPLICATE);
-			finalQty = MAX_CARD_QUANTITY;
-		}
-
-		const actualQtyAdded = finalQty - currentQty;
-		
-		if (actualQtyAdded > 0) {
-			totalQuantityChange += actualQtyAdded;
-			totalPointsChange += (card.totalPoints * actualQtyAdded);
-		}
-
-		if (currentQty === 0 && actualQtyAdded > 0) {
-			totalUniqueCardsAdded++;
-		}
-
-		// *** MODIFICATION START ***
-		const newDocData: TcgUser = {
-			userId: user.id,
-			cardId: card.cardId,
-			firstAcquiredAt: now,
-			name: card.name,
-			setId: card.setId,
-			rarity: card.rarity,
-			totalPoints: card.totalPoints,
-			supertype: card.supertype,
-			types: card.types || [],
-			subtypes: card.subtypes || [],
-			imageUrl: card.imageUrl || undefined, // <-- Add this line
-			hp: card.hp || undefined,
-			setSeries: card.setSeries || undefined,
-			regulationMark: card.regulationMark || undefined,
-		};
-		
-		if (newDocData.imageUrl === undefined) delete newDocData.imageUrl; // Keep object clean
-		// *** MODIFICATION END ***
-		
-		if (newDocData.hp === undefined) delete newDocData.hp;
-		if (newDocData.setSeries === undefined) delete newDocData.setSeries;
-		if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
-
-		operations.push({
-			updateOne: {
-				filter: { userId: user.id, cardId: cardId },
-				update: {
-					$set: { quantity: finalQty, lastAcquiredAt: now },
-					$setOnInsert: newDocData, // imageUrl is now included here
-				},
-				upsert: true
-			}
-		});
-	}
-	
-	if (operations.length > 0) {
-		await collection.bulkWrite(operations, { ordered: false });
-	}
-	
-	// Profile update logic remains the same...
-	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
-		const profiles = userProfilesCollection;
-		await profiles.updateOne(
-			{ userId: user.id },
-			{
-				$inc: {
-					totalQuantity: totalQuantityChange,
-					collectionPoints: totalPointsChange,
-					totalUniqueCards: totalUniqueCardsAdded,
-					credits: creditsToAward
-				},
-				$set: {
-					userName: user.name,
-					lastUpdatedAt: now
-				},
-				$setOnInsert: {
-					userId: user.id,
-				}
-			},
-			{ upsert: true }
-		);
-	}
-	
-	return { creditsAwarded: creditsToAward };
 }
 
 export const commands: ChatCommands = {
