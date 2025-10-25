@@ -332,6 +332,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 			totalUniqueCardsAdded++;
 		}
 
+		// *** MODIFICATION START ***
 		const newDocData: TcgUser = {
 			userId: user.id,
 			cardId: card.cardId,
@@ -343,10 +344,14 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 			supertype: card.supertype,
 			types: card.types || [],
 			subtypes: card.subtypes || [],
+			imageUrl: card.imageUrl || undefined, // <-- Add this line
 			hp: card.hp || undefined,
 			setSeries: card.setSeries || undefined,
 			regulationMark: card.regulationMark || undefined,
 		};
+		
+		if (newDocData.imageUrl === undefined) delete newDocData.imageUrl; // Keep object clean
+		// *** MODIFICATION END ***
 		
 		if (newDocData.hp === undefined) delete newDocData.hp;
 		if (newDocData.setSeries === undefined) delete newDocData.setSeries;
@@ -357,7 +362,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 				filter: { userId: user.id, cardId: cardId },
 				update: {
 					$set: { quantity: finalQty, lastAcquiredAt: now },
-					$setOnInsert: newDocData,
+					$setOnInsert: newDocData, // imageUrl is now included here
 				},
 				upsert: true
 			}
@@ -368,6 +373,7 @@ async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ cred
 		await collection.bulkWrite(operations, { ordered: false });
 	}
 	
+	// Profile update logic remains the same...
 	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
 		const profiles = ImpulseDB<TcgUserProfile>('user_profiles');
 		await profiles.updateOne(
@@ -662,6 +668,7 @@ export const commands: ChatCommands = {
 				const { filter, queryDescription, page, commandString, targetUserId } = parseCollectionQuery(target, user.id);
 				const collection = ImpulseDB<TcgUser>('user_collections');
 
+				// *** MODIFICATION START: Simplified stats pipeline ***
 				const statsPipeline: any[] = [
 					{ $match: filter },
 					{
@@ -677,6 +684,7 @@ export const commands: ChatCommands = {
 				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, totalPoints: 0 };
 				
 				const totalMatches = stats.totalUniqueCards;
+				// *** MODIFICATION END ***
 
 				if (totalMatches === 0) {
 					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription.replace(`Owner: ${targetUserId}, `, '')}.`);
@@ -686,28 +694,18 @@ export const commands: ChatCommands = {
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
+				// *** MODIFICATION START: Removed lookup and unwind ***
 				const pipeline: any[] = [
 					{ $match: filter },
 					{ $sort: { totalPoints: -1, cardId: 1 } },
 					{ $skip: skip },
 					{ $limit: SEARCH_PAGE_LIMIT },
-					{
-						$lookup: {
-							from: 'tcg_cards',
-							localField: 'cardId',
-							foreignField: 'cardId',
-							as: 'cardDetails'
-						}
-					},
-					{
-						$unwind: {
-							path: '$cardDetails',
-							preserveNullAndEmptyArrays: true
-						}
-					}
+					// $lookup removed
+					// $unwind removed
 				];
 				
-				const results = await collection.aggregate(pipeline);
+				const results = await collection.aggregate<TcgUser>(pipeline); // Now aggregates TcgUser directly
+				// *** MODIFICATION END ***
 
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				
@@ -727,9 +725,9 @@ export const commands: ChatCommands = {
 					html += `No results found for this page.`;
 				}
 				for (let i = 0; i < results.length; i++) {
-					const userCard = results[i];
-					const cardInfo = userCard.cardDetails;
-					
+					const userCard = results[i]; // Now directly TcgUser
+					// const cardInfo = userCard.cardDetails; // Removed
+
 					if (i % 4 === 0) {
 						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 						html += `<div style="display: inline-block; text-align: center;">`; 
@@ -737,8 +735,10 @@ export const commands: ChatCommands = {
 					
 					const imageWidth = 74;
 					const imageHeight = 103;
-					const imageUrl = cardInfo?.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const name = userCard.name || cardInfo?.name || userCard.cardId;
+					// *** MODIFICATION START: Use imageUrl directly from userCard ***
+					const imageUrl = userCard.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const name = userCard.name || userCard.cardId; // Fallback if name is missing
+					// *** MODIFICATION END ***
 					const imageAlt = `${name} (${userCard.cardId})`;
 					
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; position: relative;">`;
@@ -754,6 +754,7 @@ export const commands: ChatCommands = {
 				}
 				if (results.length > 0) html += `</div>`;
 
+				// Pagination logic remains the same...
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
@@ -844,7 +845,7 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		async missing(target, room, user) {
+      async missing(target, room, user) {
 			if (!this.runBroadcast()) return;
 
 			const parts = target.split(',').map(p => p.trim());
@@ -853,7 +854,7 @@ export const commands: ChatCommands = {
 			let targetUserName = user.name;
 			let page = 1;
 			
-			if (!setId) return this.parse('/tcg help');
+			if (!setId) return this.parse('/help tcg missing');
 
 			let commandString = setId; // For pagination
 
@@ -882,9 +883,10 @@ export const commands: ChatCommands = {
 			// If parts.length === 1, all defaults are fine.
 
 			try {
+				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+
 				let setInfo: TcgCard | null | undefined = getSet(setId);
 				if (!setInfo) {
-					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
 					setInfo = await cardCollection.findOne({ setId: setId });
 				}
 
@@ -893,46 +895,69 @@ export const commands: ChatCommands = {
 				}
 				const setName = setInfo.set;
 
-				// 1. Get all cards in the set
-				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
-				const allSetCards = await cardCollection.find(
-					{ setId: setId }, 
-					{ projection: { cardId: 1, name: 1, rarity: 1, imageUrl: 1 }, sort: { cardId: 1 } }
-				);
-
-				if (allSetCards.length === 0) {
+				// 1. Get total count of cards in the set (for UI)
+				const allSetCardsCount = await cardCollection.countDocuments({ setId: setId });
+				if (allSetCardsCount === 0) {
 					return this.errorReply(`No cards found for set "${setId}".`);
 				}
 
-				// 2. Get user's owned cards in that set
-				const userCollection = ImpulseDB<TcgUser>('user_collections');
-				const userOwnedCards = await userCollection.find(
-					{ userId: targetUserId, setId: setId }, 
-					{ projection: { cardId: 1 } }
-				);
-				const ownedCardIds = new Set(userOwnedCards.map(c => c.cardId));
-
-				// 3. Filter to find missing cards
-				const missingCards = allSetCards.filter(card => !ownedCardIds.has(card.cardId));
-				
-				// 4. Handle pagination
-				const limit = SEARCH_PAGE_LIMIT;
-				const totalMatches = missingCards.length;
+				// 2. Get total count of *missing* cards (Query 1)
+				const countPipeline: any[] = [
+					{ $match: { setId: setId } },
+					{
+						$lookup: {
+							from: 'user_collections',
+							let: { card_id: "$cardId" },
+							pipeline: [
+								{ $match: { $expr: { $and: [ { $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] } ] } } },
+								{ $project: { _id: 1 } }
+							],
+							as: 'userCollectionEntry'
+						}
+					},
+					{ $match: { userCollectionEntry: { $eq: [] } } },
+					{ $count: 'total' }
+				];
+				const countResult = await cardCollection.aggregate(countPipeline);
+				const totalMatches = countResult[0]?.total || 0;
 				
 				if (totalMatches === 0) {
 					return this.sendReply(`Congratulations! ${targetUserName} has completed the set "${setName}"!`);
 				}
-				
+
+				// 3. Handle pagination
+				const limit = SEARCH_PAGE_LIMIT;
 				const totalPages = Math.ceil(totalMatches / limit);
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * limit;
-				const paginatedResults = missingCards.slice(skip, skip + limit);
 
+				// 4. Get paginated list of *missing* cards (Query 2)
+				const dataPipeline: any[] = [
+					{ $match: { setId: setId } },
+					{
+						$lookup: {
+							from: 'user_collections',
+							let: { card_id: "$cardId" },
+							pipeline: [
+								{ $match: { $expr: { $and: [ { $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] } ] } } },
+								{ $project: { _id: 1 } }
+							],
+							as: 'userCollectionEntry'
+						}
+					},
+					{ $match: { userCollectionEntry: { $eq: [] } } },
+					{ $sort: { cardId: 1 } },
+					{ $skip: skip },
+					{ $limit: limit },
+					{ $project: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 } }
+				];
+				const paginatedResults = await cardCollection.aggregate(dataPipeline);
+				
 				// 5. Build HTML
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Missing Cards from ${setName}</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${targetUserName}</div>`;
-				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Missing ${totalMatches} of ${allSetCards.length} cards.</div>`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Missing ${totalMatches} of ${allSetCardsCount} cards.</div>`;
 
 				if (paginatedResults.length === 0) {
 					html += `No results found for this page.`;
@@ -955,7 +980,6 @@ export const commands: ChatCommands = {
 					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
 					html += `</div>`;
 				}
-
 				if (paginatedResults.length > 0) html += `</div>`;
 
 				// Pagination buttons
@@ -2107,7 +2131,7 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		recalculateallstats(target, room, user) {
+      recalculateallstats(target, room, user) {
 			this.checkCan('bypassall');
 
 			this.sendReply(`Starting stats recalculation for ALL users... This will take a long time and run in the background. You will be notified when it's complete.`);
@@ -2122,6 +2146,7 @@ export const commands: ChatCommands = {
 					const userCollection = ImpulseDB<TcgUser>('user_collections');
 					const profileCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 
+					// 1. Get all set totals once
 					const setTotalsPipeline = [
 						{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
 						{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
@@ -2131,75 +2156,117 @@ export const commands: ChatCommands = {
 						this.sendReply(`❌ RECALCULATION FAILED: Could not fetch set totals.`);
 						return;
 					}
-
-					const allUserIds = await profileCollection.distinct("userId", {});
-					if (allUserIds.length === 0) {
-						this.sendReply(`❌ RECALCULATION FAILED: No user profiles found to process.`);
-						return;
+					const allSetsMap = new Map<string, number>();
+					for (const set of allSets) {
+						if (set.setTotal > 0) allSetsMap.set(set.setId, set.setTotal);
 					}
-					
-					for (const targetUserId of allUserIds) {
-						try {
-							const userProgressPipeline = [
-								{ $match: { userId: targetUserId } },
-								{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } }
-							];
-							const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
-							const userProgressMap = new Map<string, number>();
-							for (const set of userSetCounts) {
-								userProgressMap.set(set._id, set.uniqueCount);
-							}
 
-							let setsCompleted = 0;
-							for (const set of allSets) {
-								if (set.setTotal > 0) {
-									const userCount = userProgressMap.get(set.setId) || 0;
-									if (userCount >= set.setTotal) {
-										setsCompleted++;
+					// 2. Get all existing profiles to preserve credits, names, etc.
+					const allUserProfiles = await profileCollection.find({}, { projection: { userId: 1, userName: 1, credits: 1, favoriteCards: 1 } });
+					const profileMap = new Map<string, Partial<TcgUserProfile>>();
+					for (const profile of allUserProfiles) {
+						profileMap.set(profile.userId, profile);
+					}
+
+					// 3. Run ONE aggregation to calculate stats for ALL users
+					const allStatsPipeline: any[] = [
+						// Stage 1: Group by user AND set to get unique counts per set
+						{
+							$group: {
+								_id: {
+									userId: "$userId",
+									setId: "$setId"
+								},
+								uniqueCountInSet: { $sum: 1 },
+								quantityInSet: { $sum: "$quantity" },
+								pointsInSet: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
+							}
+						},
+						// Stage 2: Now group by just user
+						{
+							$group: {
+								_id: "$_id.userId", // Group by just the user
+								totalUniqueCards: { $sum: "$uniqueCountInSet" },
+								totalQuantity: { $sum: "$quantityInSet" },
+								collectionPoints: { $sum: "$pointsInSet" },
+								setProgress: {
+									$push: {
+										setId: "$_id.setId",
+										uniqueCount: "$uniqueCountInSet"
 									}
 								}
 							}
+						}
+					];
+					const allUserStats = await userCollection.aggregate<any>(allStatsPipeline);
 
-							const allStatsPipeline = [
-								{ $match: { userId: targetUserId } },
-								{ $group: {
-									_id: null,
-									totalUniqueCards: { $sum: 1 },
-									totalQuantity: { $sum: "$quantity" },
-									collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
-								}}
-							];
-							const statsResult = await userCollection.aggregate(allStatsPipeline);
-							const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
-							
-							const profile = await profileCollection.findOne({ userId: targetUserId });
-							const currentCredits = profile?.credits || 0;
-							const userName = profile?.userName || targetUserId;
-							const currentFavorites = profile?.favoriteCards || [];
+					// 4. Loop over aggregation results (in JS) and prepare bulk update
+					const bulkOps: any[] = [];
+					const now = new Date().toISOString();
 
-							await profileCollection.updateOne(
-								{ userId: targetUserId },
-								{
+					for (const userStats of allUserStats) {
+						const targetUserId = userStats._id;
+						const profile = profileMap.get(targetUserId) || {};
+						
+						// Calculate setsCompleted
+						let setsCompleted = 0;
+						if (userStats.setProgress) {
+							for (const set of userStats.setProgress) {
+								const totalNeeded = allSetsMap.get(set.setId);
+								if (totalNeeded && set.uniqueCount >= totalNeeded) {
+									setsCompleted++;
+								}
+							}
+						}
+						
+						bulkOps.push({
+							updateOne: {
+								filter: { userId: targetUserId },
+								update: {
 									$set: {
-										userName: userName,
-										credits: currentCredits,
-										totalUniqueCards: stats.totalUniqueCards,
-										totalQuantity: stats.totalQuantity,
-										collectionPoints: stats.collectionPoints,
+										userName: profile.userName || targetUserId,
+										credits: profile.credits || 0,
+										favoriteCards: profile.favoriteCards || [],
+										totalUniqueCards: userStats.totalUniqueCards,
+										totalQuantity: userStats.totalQuantity,
+										collectionPoints: userStats.collectionPoints,
 										totalSetsCompleted: setsCompleted,
-										favoriteCards: currentFavorites,
-										lastUpdatedAt: new Date().toISOString()
+										lastUpdatedAt: now
 									}
 								},
-								{ upsert: true }
-							);
-							processedCount++;
-						} catch (err) {
-							Monitor.crashlog(err, `TCG recalculateallstats loop error for user: ${targetUserId}`);
-							errorCount++;
-						}
+								upsert: true
+							}
+						});
+						profileMap.delete(targetUserId); // Remove from map
 					}
 
+					// 5. Add users who have profiles but 0 cards
+					for (const [targetUserId, profile] of profileMap.entries()) {
+						bulkOps.push({
+							updateOne: {
+								filter: { userId: targetUserId },
+								update: {
+									$set: {
+										userName: profile.userName || targetUserId,
+										credits: profile.credits || 0,
+										favoriteCards: profile.favoriteCards || [],
+										totalUniqueCards: 0,
+										totalQuantity: 0,
+										collectionPoints: 0,
+										totalSetsCompleted: 0,
+										lastUpdatedAt: now
+									}
+								},
+								upsert: true
+							}
+						});
+					}
+
+					// 6. Execute bulk write
+					if (bulkOps.length > 0) {
+						await profileCollection.bulkWrite(bulkOps, { ordered: false });
+					}
+					processedCount = bulkOps.length;
 					const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 					this.sendReply(`✅ RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
 					
