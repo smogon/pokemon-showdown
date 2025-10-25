@@ -1,8 +1,4 @@
 // [FILE: tcg_commands.ts]
-/*
-* Pokemon Showdown
-* TCG Commands
-*/
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
@@ -351,7 +347,7 @@ export const commands: ChatCommands = {
 				const html = renderCardGridHtml(pack, title);
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG openpack command');
+				
 				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
 			}
 		},
@@ -480,7 +476,7 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG search command');
+				
 				return this.errorReply('An error occurred while searching for cards.');
 			}
 		},
@@ -536,7 +532,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG daily command');
+				
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
@@ -548,7 +544,6 @@ export const commands: ChatCommands = {
 				const { filter, queryDescription, page, commandString, targetUserId } = parseCollectionQuery(target, user.id);
 				const collection = userCollectionsCollection;
 
-				// *** MODIFICATION START: Simplified stats pipeline ***
 				const statsPipeline: any[] = [
 					{ $match: filter },
 					{
@@ -564,7 +559,6 @@ export const commands: ChatCommands = {
 				const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, totalPoints: 0 };
 				
 				const totalMatches = stats.totalUniqueCards;
-				// *** MODIFICATION END ***
 
 				if (totalMatches === 0) {
 					return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription.replace(`Owner: ${targetUserId}, `, '')}.`);
@@ -574,18 +568,16 @@ export const commands: ChatCommands = {
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
-				// *** MODIFICATION START: Removed lookup and unwind ***
 				const pipeline: any[] = [
 					{ $match: filter },
 					{ $sort: { totalPoints: -1, cardId: 1 } },
 					{ $skip: skip },
 					{ $limit: SEARCH_PAGE_LIMIT },
-					// $lookup removed
-					// $unwind removed
+					
+					
 				];
 				
-				const results = await collection.aggregate<TcgUser>(pipeline); // Now aggregates TcgUser directly
-				// *** MODIFICATION END ***
+				const results = await collection.aggregate<TcgUser>(pipeline);
 
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				
@@ -605,9 +597,8 @@ export const commands: ChatCommands = {
 					html += `No results found for this page.`;
 				}
 				for (let i = 0; i < results.length; i++) {
-					const userCard = results[i]; // Now directly TcgUser
-					// const cardInfo = userCard.cardDetails; // Removed
-
+					const userCard = results[i];
+					
 					if (i % 4 === 0) {
 						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 						html += `<div style="display: inline-block; text-align: center;">`; 
@@ -615,10 +606,8 @@ export const commands: ChatCommands = {
 					
 					const imageWidth = 74;
 					const imageHeight = 103;
-					// *** MODIFICATION START: Use imageUrl directly from userCard ***
 					const imageUrl = userCard.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const name = userCard.name || userCard.cardId; // Fallback if name is missing
-					// *** MODIFICATION END ***
+					const name = userCard.name || userCard.cardId;
 					const imageAlt = `${name} (${userCard.cardId})`;
 					
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; position: relative;">`;
@@ -634,7 +623,7 @@ export const commands: ChatCommands = {
 				}
 				if (results.length > 0) html += `</div>`;
 
-				// Pagination logic remains the same...
+				
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
@@ -650,7 +639,7 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG collection command');
+				
 				return this.errorReply('An error occurred while fetching your collection.');
 			}
 		},
@@ -720,7 +709,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG setprogress command');
+				
 				return this.errorReply('An error occurred while fetching your set progress.');
 			}
 		},
@@ -736,31 +725,31 @@ export const commands: ChatCommands = {
 			
 			if (!setId) return this.parse('/help tcg missing');
 
-			let commandString = setId; // For pagination
+			let commandString = setId;
 
 			if (parts.length === 3) {
-				// /tcg missing [setId], [user], [page]
+				
 				targetUserId = toID(parts[1]) || user.id;
 				targetUserName = parts[1] || user.name;
 				page = parseInt(parts[2]);
 				if (isNaN(page)) page = 1;
 				commandString = `${setId}, ${targetUserName}`;
 			} else if (parts.length === 2) {
-				// /tcg missing [setId], [page] OR /tcg missing [setId], [user]
+				
 				const part2 = parts[1];
 				const potentialPage = parseInt(part2);
 				if (!isNaN(potentialPage)) {
-					// It's a page number
+					
 					page = Math.max(1, potentialPage);
 					commandString = setId;
 				} else {
-					// It's a username
+					
 					targetUserId = toID(part2) || user.id;
 					targetUserName = part2 || user.name;
 					commandString = `${setId}, ${targetUserName}`;
 				}
 			}
-			// If parts.length === 1, all defaults are fine.
+			
 
 			try {
 				const cardCollection = tcgCardsCollection;
@@ -775,13 +764,13 @@ export const commands: ChatCommands = {
 				}
 				const setName = setInfo.set;
 
-				// 1. Get total count of cards in the set (for UI)
+				
 				const allSetCardsCount = await cardCollection.countDocuments({ setId: setId });
 				if (allSetCardsCount === 0) {
 					return this.errorReply(`No cards found for set "${setId}".`);
 				}
 
-				// 2. Get total count of *missing* cards (Query 1)
+				
 				const countPipeline: any[] = [
 					{ $match: { setId: setId } },
 					{
@@ -805,13 +794,13 @@ export const commands: ChatCommands = {
 					return this.sendReply(`Congratulations! ${targetUserName} has completed the set "${setName}"!`);
 				}
 
-				// 3. Handle pagination
+				
 				const limit = SEARCH_PAGE_LIMIT;
 				const totalPages = Math.ceil(totalMatches / limit);
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * limit;
 
-				// 4. Get paginated list of *missing* cards (Query 2)
+				
 				const dataPipeline: any[] = [
 					{ $match: { setId: setId } },
 					{
@@ -833,7 +822,7 @@ export const commands: ChatCommands = {
 				];
 				const paginatedResults = await cardCollection.aggregate(dataPipeline);
 				
-				// 5. Build HTML
+				
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Missing Cards from ${setName}</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${targetUserName}</div>`;
@@ -862,7 +851,7 @@ export const commands: ChatCommands = {
 				}
 				if (paginatedResults.length > 0) html += `</div>`;
 
-				// Pagination buttons
+				
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
@@ -879,7 +868,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG missing command');
+				
 				return this.errorReply('An error occurred while fetching missing cards.');
 			}
 		},
@@ -971,7 +960,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG opensavedpack command');
+				
 
 				await packCollection.updateOne(
 					{ userId: user.id, setId: setId },
@@ -999,7 +988,6 @@ export const commands: ChatCommands = {
 					{ $set: { quantity: 0 } }
 				);
 			} catch (dbError) {
-				Monitor.crashlog(dbError, 'TCG openallpacks findOneAndUpdate');
 				
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
@@ -1070,8 +1058,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG openallpacks command execution');
-                
+				
 				await packCollection.updateOne(
 					{ userId: user.id, setId: rawSetId }, 
 					{ $set: { quantity: packQuantity } }  
@@ -1141,7 +1128,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG shop command');
+				
 				return this.errorReply('An error occurred while fetching the shop. Please try again later.');
 			}
 		},
@@ -1201,7 +1188,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG buy command');
+				
 
 				const profileCollection = userProfilesCollection;
 				await profileCollection.updateOne(
@@ -1249,7 +1236,7 @@ export const commands: ChatCommands = {
 				const uniqueCardsChange = newQuantity === 0 ? -1 : 0;
 				const now = new Date().toISOString();
 
-				// Update or delete from collection
+				
 				if (newQuantity === 0) {
 					await collection.deleteOne({ userId: user.id, cardId: cardId });
 				} else {
@@ -1259,7 +1246,7 @@ export const commands: ChatCommands = {
 					);
 				}
 
-				// Update profile
+				
 				await profiles.updateOne(
 					{ userId: user.id },
 					{
@@ -1270,17 +1257,17 @@ export const commands: ChatCommands = {
 							totalUniqueCards: uniqueCardsChange
 						},
 						$set: {
-							userName: user.name, // Keep username in sync
+							userName: user.name,
 							lastUpdatedAt: now
 						}
 					},
-					{ upsert: true } // Should not be necessary, but safe.
+					{ upsert: true }
 				);
 
 				this.sendReply(`You successfully sold ${quantityToSell}x "${userCard.name}" for ${creditsToAward} credits.`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG sell command');
+				
 				return this.errorReply('An error occurred while selling your card.');
 			}
 		},
@@ -1314,19 +1301,19 @@ export const commands: ChatCommands = {
 				for (const card of cardsToSell) {
 					const quantityToSell = card.quantity - 1;
 
-					if (quantityToSell <= 0) continue; // Should be caught by $gt: 1, but good practice
+					if (quantityToSell <= 0) continue;
 
 					totalCardsSold += quantityToSell;
 					totalCreditsEarned += (quantityToSell * CREDITS_PER_DUPLICATE);
 					totalPointsDeducted += (card.totalPoints * quantityToSell);
 
-					// Set quantity to 1, leaving one copy
+					
 					operations.push({
 						updateOne: {
 							filter: { userId: user.id, cardId: card.cardId },
 							update: { 
 								$set: { quantity: 1 },
-								$inc: {} // This is just to satisfy the type, $set does the work
+								$inc: {} 
 							}
 						}
 					});
@@ -1336,10 +1323,10 @@ export const commands: ChatCommands = {
 					return this.errorReply(`No duplicates found matching your criteria.`);
 				}
 
-				// Execute batch update to set all duplicate quantities to 1
+				
 				await collection.bulkWrite(operations, { ordered: false });
 
-				// Update profile with totals
+				
 				await profiles.updateOne(
 					{ userId: user.id },
 					{
@@ -1347,7 +1334,7 @@ export const commands: ChatCommands = {
 							credits: totalCreditsEarned,
 							totalQuantity: -totalCardsSold,
 							collectionPoints: -totalPointsDeducted
-							// totalUniqueCards does not change
+							
 						},
 						$set: {
 							userName: user.name,
@@ -1360,7 +1347,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`You successfully sold ${totalCardsSold} ${description} for ${totalCreditsEarned} credits.`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG sellduplicates command');
+				
 				return this.errorReply('An error occurred while selling your duplicates.');
 			}
 		},
@@ -1399,7 +1386,7 @@ export const commands: ChatCommands = {
 					return this.errorReply(`You do not have ${quantityToGift}x "${cardId}". You only have ${owned}.`);
 				}
 
-				// Remove card(s) from sender
+				
 				const newSenderQty = senderCard.quantity - quantityToGift;
 				const pointsToDeduct = senderCard.totalPoints * quantityToGift;
 				const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
@@ -1424,7 +1411,7 @@ export const commands: ChatCommands = {
 					}
 				);
 
-				// Add card(s) to recipient
+				
 				const now = new Date().toISOString();
 				const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
 				const currentRecipientQty = recipientCard?.quantity || 0;
@@ -1444,7 +1431,7 @@ export const commands: ChatCommands = {
 						);
 					} else {
 						const newDocData: TcgUser = { ...senderCard, userId: targetUserId, quantity: finalRecipientQty, firstAcquiredAt: now, lastAcquiredAt: now };
-						delete (newDocData as any)._id; // Remove sender's _id
+						delete (newDocData as any)._id;
 						await collection.insertOne(newDocData);
 					}
 				}
@@ -1486,7 +1473,7 @@ export const commands: ChatCommands = {
 				}
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG giftcard command');
+				
 				return this.errorReply('An error occurred while gifting your card.');
 			}
 		},
@@ -1561,7 +1548,7 @@ export const commands: ChatCommands = {
 				}
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG giftpack command');
+				
 				return this.errorReply('An error occurred while gifting your pack(s).');
 			}
 		},
@@ -1635,7 +1622,6 @@ export const commands: ChatCommands = {
 				}
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG giftcredits command');
 				
 				if (error.message.startsWith('You do not have enough credits')) {
 					return this.errorReply(error.message);
@@ -1769,7 +1755,7 @@ export const commands: ChatCommands = {
 				}
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG favorite command');
+				
 				return this.errorReply('An error occurred while adding your favorite card.');
 			}
 		},
@@ -1816,7 +1802,7 @@ export const commands: ChatCommands = {
 					}
 				}
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG unfavorite command');
+				
 				const action = targetId === 'all' ? 'removing all your favorite cards' : 'removing your favorite card';
 				return this.errorReply(`An error occurred while ${action}.`);
 			}
@@ -1891,7 +1877,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG leaderboard command');
+				
 				return this.errorReply('An error occurred while fetching the leaderboard.');
 			}
 		},
@@ -2001,7 +1987,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG recalculatestats command');
+				
 				return this.errorReply(`An error occurred during recalculation: ${error.message}`);
 			}
 		},
@@ -2146,7 +2132,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`✅ RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
 					
 				} catch (error) {
-					Monitor.crashlog(error, 'TCG recalculateallstats command');
+					
 					this.sendReply(`❌ RECALCULATION FAILED: A critical error occurred: ${error.message}`);
 				}
 			})();
@@ -2159,7 +2145,7 @@ export const commands: ChatCommands = {
 				const { cardCount, setCount } = await initializeCache();
 				this.sendReply(`TCG cache initialization complete. Loaded ${cardCount} cards and ${setCount} sets.`);
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG cache initialization');
+				
 				this.errorReply('An error occurred while initializing the TCG cache.');
 			}
 		},
@@ -2241,7 +2227,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`Index creation finished in ${duration}s. Created: ${createdCount}, Failed: ${failedCount}.`);
 
 			} catch (error) {
-				Monitor.crashlog(error, 'TCG createindexes command');
+				
 				return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
 			}
 		},
