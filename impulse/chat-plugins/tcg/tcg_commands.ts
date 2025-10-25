@@ -2412,7 +2412,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
 				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
-				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users.` +
+				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users. <br />` +
 				`<code>/tcg createindexes</code> - (Admin) Creates all important mongodb indexes for fast querying.` +
 				`</div>`
 			);
