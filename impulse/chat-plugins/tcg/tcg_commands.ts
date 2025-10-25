@@ -844,6 +844,142 @@ export const commands: ChatCommands = {
 			}
 		},
 
+		async missing(target, room, user) {
+			if (!this.runBroadcast()) return;
+
+			const parts = target.split(',').map(p => p.trim());
+			let setId = parts[0];
+			let targetUserId = user.id;
+			let targetUserName = user.name;
+			let page = 1;
+			
+			if (!setId) return this.parse('/help tcg missing');
+
+			let commandString = setId; // For pagination
+
+			if (parts.length === 3) {
+				// /tcg missing [setId], [user], [page]
+				targetUserId = toID(parts[1]) || user.id;
+				targetUserName = parts[1] || user.name;
+				page = parseInt(parts[2]);
+				if (isNaN(page)) page = 1;
+				commandString = `${setId}, ${targetUserName}`;
+			} else if (parts.length === 2) {
+				// /tcg missing [setId], [page] OR /tcg missing [setId], [user]
+				const part2 = parts[1];
+				const potentialPage = parseInt(part2);
+				if (!isNaN(potentialPage)) {
+					// It's a page number
+					page = Math.max(1, potentialPage);
+					commandString = setId;
+				} else {
+					// It's a username
+					targetUserId = toID(part2) || user.id;
+					targetUserName = part2 || user.name;
+					commandString = `${setId}, ${targetUserName}`;
+				}
+			}
+			// If parts.length === 1, all defaults are fine.
+
+			try {
+				let setInfo: TcgCard | null | undefined = getSet(setId);
+				if (!setInfo) {
+					const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+					setInfo = await cardCollection.findOne({ setId: setId });
+				}
+
+				if (!setInfo) {
+					return this.errorReply(`Set with ID "${setId}" not found.`);
+				}
+				const setName = setInfo.set;
+
+				// 1. Get all cards in the set
+				const cardCollection = ImpulseDB<TcgCard>('tcg_cards');
+				const allSetCards = await cardCollection.find(
+					{ setId: setId }, 
+					{ projection: { cardId: 1, name: 1, rarity: 1, imageUrl: 1 }, sort: { cardId: 1 } }
+				);
+
+				if (allSetCards.length === 0) {
+					return this.errorReply(`No cards found for set "${setId}".`);
+				}
+
+				// 2. Get user's owned cards in that set
+				const userCollection = ImpulseDB<TcgUser>('user_collections');
+				const userOwnedCards = await userCollection.find(
+					{ userId: targetUserId, setId: setId }, 
+					{ projection: { cardId: 1 } }
+				);
+				const ownedCardIds = new Set(userOwnedCards.map(c => c.cardId));
+
+				// 3. Filter to find missing cards
+				const missingCards = allSetCards.filter(card => !ownedCardIds.has(card.cardId));
+				
+				// 4. Handle pagination
+				const limit = SEARCH_PAGE_LIMIT;
+				const totalMatches = missingCards.length;
+				
+				if (totalMatches === 0) {
+					return this.sendReply(`Congratulations! ${targetUserName} has completed the set "${setName}"!`);
+				}
+				
+				const totalPages = Math.ceil(totalMatches / limit);
+				const currentPage = Math.min(page, totalPages);
+				const skip = (currentPage - 1) * limit;
+				const paginatedResults = missingCards.slice(skip, skip + limit);
+
+				// 5. Build HTML
+				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+				html += `<strong style="font-size: 20px;">Missing Cards from ${setName}</strong><br />`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${targetUserName}</div>`;
+				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Missing ${totalMatches} of ${allSetCards.length} cards.</div>`;
+
+				if (paginatedResults.length === 0) {
+					html += `No results found for this page.`;
+				}
+				for (let i = 0; i < paginatedResults.length; i++) {
+					const card = paginatedResults[i];
+					if (i % 4 === 0) {
+						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+						html += `<div style="display: inline-block; text-align: center;">`; 
+					}
+					const imageWidth = 74;
+					const imageHeight = 103;
+					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+					const imageAlt = `${card.name} (${card.cardId})`;
+					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
+					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `</button>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `</div>`;
+				}
+
+				if (paginatedResults.length > 0) html += `</div>`;
+
+				// Pagination buttons
+				if (totalPages > 1) {
+					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
+					if (currentPage > 1) {
+						html += `<button name="send" value="/tcg missing ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
+					}
+					html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
+					if (currentPage < totalPages) {
+						html += `<button name="send" value="/tcg missing ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
+					}
+					html += `</div>`;
+				}
+				html += `</div>`;
+				this.sendReply(`|html|${html}`);
+
+			} catch (error) {
+				Monitor.crashlog(error, 'TCG missing command');
+				return this.errorReply('An error occurred while fetching missing cards.');
+			}
+		},
+
 		async packs(target, room, user) {
 			if (!this.runBroadcast()) return;
 			
@@ -2125,6 +2261,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
 				`<strong>Example:</strong> <code>/tcg collection user:princeskygit, rarity:Secret</code><br />` +
 				`<code>/tcg setprogress [setId]</code> - Track your collection progress for a specific set.<br />` +
+				`<code>/tcg missing [setId], [user?], [page?]</code> - Shows cards you are missing from a set.<br />` +
 				`<code>/tcg packs</code> - View your unopened booster packs.<br />` +
 				`<code>/tcg opensavedpack [setId]</code> - Open one pack from your inventory.<br />` +
 				`<code>/tcg openallpacks [setId]</code> - Open all packs of a specific set from your inventory.<br />` +
