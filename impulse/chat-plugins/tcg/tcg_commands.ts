@@ -882,7 +882,7 @@ export const commands: ChatCommands = {
 			// 4. Pagination
 			const totalPages = Math.ceil(totalMissing / SEARCH_PAGE_LIMIT);
 			const currentPage = Math.min(page, totalPages);
-			const skip = (currentPage - 1) * PAGE_LIMIT;
+			const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 			const cardsToShow = missingCards.slice(skip, skip + SEARCH_PAGE_LIMIT);
 
 			// 5. Render UI (using existing function)
@@ -898,11 +898,11 @@ export const commands: ChatCommands = {
 				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 				html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
 				if (currentPage > 1) {
-					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&larr; Prev</button>`;
+					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage - 1}" style="border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&larr; Prev</button>`;
 				}
 				html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
 				if (currentPage < totalPages) {
-					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &rarr;</button>`;
+					html += `<button name="send" value="/tcg missing ${setId}, ${currentPage + 1}" style="border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &rarr;</button>`;
 				}
 				html += `</div>`;
 			}
