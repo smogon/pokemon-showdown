@@ -7,11 +7,15 @@ import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from 
 import {
 	generatePack, getCard, getSet,
 	initializeCache, getCacheStats, clearCache, renderCardGridHtml,
-	addCardsToCollection, TCGConfig
+	addCardsToCollection
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 
 const SEARCH_PAGE_LIMIT = 60;
+const MAX_CARD_QUANTITY = 10;
+const CREDITS_PER_DUPLICATE = 1;
+const MAX_FAVORITE_CARDS = 10;
+const PACK_COST = 0;
 
 let dailyShopCache: TcgCard[] = [];
 let currentShopDate: string = '';
@@ -1118,7 +1122,7 @@ export const commands: ChatCommands = {
 					dataRows.push([
 						`${logoHtml} [ ${set.setId} ]`,
 						set.setSeries || 'N/A',
-						`${TCGConfig.PACK_COST} Credits`,
+						`${PACK_COST} Credits`,
 						`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`
 					]);
 				}
@@ -1153,15 +1157,15 @@ export const commands: ChatCommands = {
 
 				const profileCollection = userProfilesCollection;
 				const updateResult = await profileCollection.updateOne(
-					{ userId: user.id, credits: { $gte: TCGConfig.PACK_COST } },
-					{ $inc: { credits: -TCGConfig.PACK_COST } }
+					{ userId: user.id, credits: { $gte: PACK_COST } },
+					{ $inc: { credits: -PACK_COST } }
 				);
 
 				if (updateResult.matchedCount === 0) {
 
 					const profile = await profileCollection.findOne({ userId: user.id });
 					const userCredits = profile?.credits || 0;
-					return this.errorReply(`You do not have enough credits to buy this pack. You need ${TCGConfig.PACK_COST} credits, but you only have ${userCredits}.`);
+					return this.errorReply(`You do not have enough credits to buy this pack. You need ${PACK_COST} credits, but you only have ${userCredits}.`);
 				}
 
 				const packCollection = userPacksCollection;
@@ -1183,7 +1187,7 @@ export const commands: ChatCommands = {
 					{ upsert: true }
 				);
 
-				this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${TCGConfig.PACK_COST} credits!`);
+				this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
 				this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
 
 			} catch (error) {
@@ -1192,7 +1196,7 @@ export const commands: ChatCommands = {
 				const profileCollection = userProfilesCollection;
 				await profileCollection.updateOne(
 					{ userId: user.id },
-					{ $inc: { credits: TCGConfig.PACK_COST } }
+					{ $inc: { credits: PACK_COST } }
 				);
 				return this.errorReply(`An unknown error occurred during your purchase. Your credits have been refunded. Error: ${error.message}`);
 			}
@@ -1209,8 +1213,8 @@ export const commands: ChatCommands = {
 			if (isNaN(quantityToSell) || quantityToSell <= 0) {
 				return this.errorReply("Invalid quantity. Quantity must be a positive number.");
 			}
-			if (quantityToSell > TCGConfig.MAX_CARD_QUANTITY) {
-				return this.errorReply(`You can sell a maximum of ${TCGConfig.MAX_CARD_QUANTITY} cards at a time.`);
+			if (quantityToSell > MAX_CARD_QUANTITY) {
+				return this.errorReply(`You can sell a maximum of ${MAX_CARD_QUANTITY} cards at a time.`);
 			}
 			
 			cardId = cardId;
@@ -1230,7 +1234,7 @@ export const commands: ChatCommands = {
 				}
 
 				const newQuantity = userCard.quantity - quantityToSell;
-				const creditsToAward = quantityToSell * TCGConfig.CREDITS_PER_DUPLICATE;
+				const creditsToAward = quantityToSell * CREDITS_PER_DUPLICATE;
 				const pointsToDeduct = userCard.totalPoints * quantityToSell;
 				const uniqueCardsChange = newQuantity === 0 ? -1 : 0;
 				const now = new Date().toISOString();
@@ -1303,7 +1307,7 @@ export const commands: ChatCommands = {
 					if (quantityToSell <= 0) continue;
 
 					totalCardsSold += quantityToSell;
-					totalCreditsEarned += (quantityToSell * TCGConfig.CREDITS_PER_DUPLICATE);
+					totalCreditsEarned += (quantityToSell * CREDITS_PER_DUPLICATE);
 					totalPointsDeducted += (card.totalPoints * quantityToSell);
 
 					
@@ -1415,9 +1419,9 @@ export const commands: ChatCommands = {
 				const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
 				const currentRecipientQty = recipientCard?.quantity || 0;
 				const newRecipientQty = currentRecipientQty + quantityToGift;
-				const finalRecipientQty = Math.min(newRecipientQty, TCGConfig.MAX_CARD_QUANTITY);
+				const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
 				const excess = newRecipientQty - finalRecipientQty;
-				const creditsToAward = excess * TCGConfig.CREDITS_PER_DUPLICATE;
+				const creditsToAward = excess * CREDITS_PER_DUPLICATE;
 				const actualQtyAdded = finalRecipientQty - currentRecipientQty;
 				const pointsToAdd = senderCard.totalPoints * actualQtyAdded;
 				const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
@@ -1738,8 +1742,8 @@ export const commands: ChatCommands = {
 					return this.errorReply(`"${userCard.name}" is already in your favorites.`);
 				}
 
-				if (currentFavorites.length >= TCGConfig.MAX_FAVORITE_CARDS) {
-					return this.errorReply(`You already have ${TCGConfig.MAX_FAVORITE_CARDS} favorite cards. Use /tcg unfavorite [cardId] to remove one first.`);
+				if (currentFavorites.length >= MAX_FAVORITE_CARDS) {
+					return this.errorReply(`You already have ${MAX_FAVORITE_CARDS} favorite cards. Use /tcg unfavorite [cardId] to remove one first.`);
 				}
 
 				const result = await profiles.updateOne(
@@ -2343,11 +2347,6 @@ export const commands: ChatCommands = {
 			if (parts.length < 2) {
 				return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
 			}
-			
-			const TCGConfig = global.__impulseTCGConfig;
-			if (!TCGConfig) {
-				return this.errorReply("TCGConfig is not initialized.");
-			}
 
 			const targetUserId = toID(parts[0]);
 			const cardId = parts[1];
@@ -2377,9 +2376,9 @@ export const commands: ChatCommands = {
 				const currentRecipientQty = recipientCard?.quantity || 0;
 				const newRecipientQty = currentRecipientQty + quantityToAward;
 				
-				const finalRecipientQty = Math.min(newRecipientQty, TCGConfig.MAX_CARD_QUANTITY);
+				const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
 				const excess = newRecipientQty - finalRecipientQty;
-				const creditsToAward = excess * TCGConfig.CREDITS_PER_DUPLICATE;
+				const creditsToAward = excess * CREDITS_PER_DUPLICATE;
 				const actualQtyAdded = finalRecipientQty - currentRecipientQty;
 				const pointsToAdd = card.totalPoints * actualQtyAdded;
 				const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
@@ -2456,7 +2455,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred: ${error.message}`);
 			}
 		},
-		
+
 		async wipecollection(target, room, user) {
 			this.checkCan('bypassall');
 			const targetUserId = toID(target);
@@ -2515,38 +2514,6 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		async setconfig(target, room, user) {
-			this.checkCan('bypassall');
-			const parts = target.split(',').map(p => p.trim());
-			if (parts.length < 2) {
-				return this.errorReply("Usage: /tcg setconfig [key], [value]");
-			}
-			
-			const TCGConfig = global.__impulseTCGConfig;
-			if (!TCGConfig) {
-				return this.errorReply("TCGConfig is not initialized.");
-			}
-			
-			const key = parts[0] as keyof typeof TCGConfig;
-			const value = parts[1];
-
-			if (!(key in TCGConfig)) {
-				return this.errorReply(`Invalid config key. Valid keys are: ${Object.keys(TCGConfig).join(', ')}`);
-			}
-
-			const numValue = parseFloat(value);
-			if (isNaN(numValue)) {
-				return this.errorReply("Value must be a number.");
-			}
-
-			try {
-				(TCGConfig[key] as any) = numValue;
-				this.sendReply(`TCG config updated: ${key} is now ${numValue}.`);
-			} catch (error) {
-				return this.errorReply(`An error occurred: ${error.message}`);
-			}
-		},
-
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;
@@ -2591,7 +2558,6 @@ export const commands: ChatCommands = {
 				`<code>/tcg wipecollection [user]</code> - (Admin) Reset a user's entire TCG collection and profile.<br />` +
 				`<code>/tcg refreshshop</code> - (Admin) Force the daily TCG shop to load new packs.<br />` +
 				`<code>/tcg resetdaily [user | all]</code> - (Admin) Reset the daily pack cooldown for a user or all users.<br />` +
-				`<code>/tcg setconfig [key], [value]</code> - (Admin) Set a live config value (e.g., PACK_COST, HIT_CHANCE).<br />` +
 				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
 				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
 				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
