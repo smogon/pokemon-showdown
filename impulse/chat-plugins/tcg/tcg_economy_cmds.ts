@@ -5,10 +5,10 @@
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import { getSet, dailyShopCache, currentShopDate, setShopCache,
-		  MAX_CARD_QUANTITY } from './tcg_utils';
+	MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { tcgCardsCollection, userCollectionsCollection,
-		  userProfilesCollection, userPacksCollection } from './tcg_collections';
+	userProfilesCollection, userPacksCollection } from './tcg_collections';
 
 const PACK_COST = 0;
 
@@ -73,7 +73,6 @@ export const economyCommands: ChatCommands = {
 			this.sendReply(`|html|${html}`);
 
 		} catch (error) {
-			
 			return this.errorReply('An error occurred while fetching the shop. Please try again later.');
 		}
 	},
@@ -86,7 +85,6 @@ export const economyCommands: ChatCommands = {
 
 		const setInShop = dailyShopCache.find(s => s.setId === setId);
 		if (!setInShop) {
-
 			const today = new Date().toISOString().split('T')[0];
 			if (currentShopDate !== today || dailyShopCache.length === 0) {
 				this.parse('/tcg shop');
@@ -96,7 +94,6 @@ export const economyCommands: ChatCommands = {
 		}
 
 		try {
-
 			const profileCollection = userProfilesCollection;
 			const updateResult = await profileCollection.updateOne(
 				{ userId: user.id, credits: { $gte: PACK_COST } },
@@ -104,7 +101,6 @@ export const economyCommands: ChatCommands = {
 			);
 
 			if (updateResult.matchedCount === 0) {
-
 				const profile = await profileCollection.findOne({ userId: user.id });
 				const userCredits = profile?.credits || 0;
 				return this.errorReply(`You do not have enough credits to buy this pack. You need ${PACK_COST} credits, but you only have ${userCredits}.`);
@@ -134,8 +130,6 @@ export const economyCommands: ChatCommands = {
 			this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
 
 		} catch (error) {
-			
-
 			const profileCollection = userProfilesCollection;
 			await profileCollection.updateOne(
 				{ userId: user.id },
@@ -182,7 +176,6 @@ export const economyCommands: ChatCommands = {
 			const uniqueCardsChange = newQuantity === 0 ? -1 : 0;
 			const now = new Date().toISOString();
 
-			
 			if (newQuantity === 0) {
 				await collection.deleteOne({ userId: user.id, cardId: cardId });
 			} else {
@@ -192,7 +185,6 @@ export const economyCommands: ChatCommands = {
 				);
 			}
 
-			
 			await profiles.updateOne(
 				{ userId: user.id },
 				{
@@ -213,7 +205,6 @@ export const economyCommands: ChatCommands = {
 			this.sendReply(`You successfully sold ${quantityToSell}x "${userCard.name}" for ${creditsToAward} credits.`);
 
 		} catch (error) {
-			
 			return this.errorReply('An error occurred while selling your card.');
 		}
 	},
@@ -253,7 +244,6 @@ export const economyCommands: ChatCommands = {
 				totalCreditsEarned += (quantityToSell * CREDITS_PER_DUPLICATE);
 				totalPointsDeducted += (card.totalPoints * quantityToSell);
 
-				
 				operations.push({
 					updateOne: {
 						filter: { userId: user.id, cardId: card.cardId },
@@ -268,10 +258,8 @@ export const economyCommands: ChatCommands = {
 				return this.errorReply(`No duplicates found matching your criteria.`);
 			}
 
-			
 			await collection.bulkWrite(operations, { ordered: false });
 
-			
 			await profiles.updateOne(
 				{ userId: user.id },
 				{
@@ -279,7 +267,6 @@ export const economyCommands: ChatCommands = {
 						credits: totalCreditsEarned,
 						totalQuantity: -totalCardsSold,
 						collectionPoints: -totalPointsDeducted
-						
 					},
 					$set: {
 						userName: user.name,
@@ -292,7 +279,6 @@ export const economyCommands: ChatCommands = {
 			this.sendReply(`You successfully sold ${totalCardsSold} ${description} for ${totalCreditsEarned} credits.`);
 
 		} catch (error) {
-			
 			return this.errorReply('An error occurred while selling your duplicates.');
 		}
 	},
@@ -331,7 +317,6 @@ export const economyCommands: ChatCommands = {
 				return this.errorReply(`You do not have ${quantityToGift}x "${cardId}". You only have ${owned}.`);
 			}
 
-			
 			const newSenderQty = senderCard.quantity - quantityToGift;
 			const pointsToDeduct = senderCard.totalPoints * quantityToGift;
 			const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
@@ -356,7 +341,6 @@ export const economyCommands: ChatCommands = {
 				}
 			);
 
-			
 			const now = new Date().toISOString();
 			const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
 			const currentRecipientQty = recipientCard?.quantity || 0;
@@ -383,7 +367,7 @@ export const economyCommands: ChatCommands = {
 
 			if (actualQtyAdded > 0 || creditsToAward > 0) {
 				const recipientProfile = await profiles.findOne({ userId: targetUserId });
-	
+
 				if (recipientProfile) {
 					// Profile exists, just increment
 					await profiles.updateOne(
@@ -426,7 +410,6 @@ export const economyCommands: ChatCommands = {
 			}
 
 		} catch (error) {
-			
 			return this.errorReply('An error occurred while gifting your card.');
 		}
 	},
@@ -457,7 +440,6 @@ export const economyCommands: ChatCommands = {
 		const collection = userPacksCollection;
 
 		try {
-			
 			const senderPack = await collection.findOne({ userId: user.id, setId: setId });
 
 			if (!senderPack || senderPack.quantity < quantityToGift) {
@@ -465,18 +447,15 @@ export const economyCommands: ChatCommands = {
 				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
 			}
 
-			
 			const updateSenderResult = await collection.updateOne(
 				{ userId: user.id, setId: setId, quantity: { $gte: quantityToGift } },
 				{ $inc: { quantity: -quantityToGift } }
 			);
 
 			if (updateSenderResult.modifiedCount === 0) {
-				
 				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
 			}
 
-			
 			const now = new Date().toISOString();
 			await collection.updateOne(
 				{ userId: targetUserId, setId: setId },
@@ -501,7 +480,6 @@ export const economyCommands: ChatCommands = {
 			}
 
 		} catch (error) {
-			
 			return this.errorReply('An error occurred while gifting your pack(s).');
 		}
 	},
@@ -544,7 +522,7 @@ export const economyCommands: ChatCommands = {
 				const senderCredits = senderProfile?.credits || 0;
 				throw new Error(`You do not have enough credits. You have ${senderCredits.toLocaleString()}, but tried to send ${amountToGift.toLocaleString()}.`);
 			}
-		
+
 			senderUpdateSucceeded = true;
 
 			// Add credits to recipient
@@ -584,11 +562,10 @@ export const economyCommands: ChatCommands = {
 			}
 
 		} catch (error) {
-		
 			if (error.message.startsWith('You do not have enough credits')) {
 				return this.errorReply(error.message);
 			}
-		
+
 			if (senderUpdateSucceeded) {
 				// Refund sender
 				await profiles.updateOne(
