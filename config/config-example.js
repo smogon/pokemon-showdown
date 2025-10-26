@@ -47,6 +47,7 @@ exports.impulsedb = {
 exports.tournamentRewards = {
 	eligibleRooms: ['lobby', 'tournaments'],
 	rewards: [10, 5],
+	packs: [2, 1],
 };
 
 /**
