@@ -637,5 +637,9 @@ export const commands: ChatCommands = {
 				`</div>`
 				);
 		},
+		...adminCommands,
+		...collectionCommands,
+		...economyCommands,
+		
 	},
 };
