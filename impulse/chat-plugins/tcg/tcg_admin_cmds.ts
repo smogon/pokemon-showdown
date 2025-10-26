@@ -5,248 +5,248 @@
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import { getSet, initializeCache, getCacheStats, clearCache, clearShopCache,
-		  MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
+	MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
-		  userPacksCollection, cooldownsCollection } from './tcg_collections';
+	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 export const adminCommands: ChatCommands = {
 	async awardcredits(target, room, user) {
-	this.checkCan('bypassall');
-	const parts = target.split(',').map(p => p.trim());
-	if (parts.length < 2) {
-		return this.errorReply("Usage: /tcg awardcredits [user], [amount]");
-	}
-	
-	const targetUserId = toID(parts[0]);
-	const amount = parseInt(parts[1]);
-
-	if (!targetUserId) {
-		return this.errorReply("Please specify a user.");
-	}
-	if (isNaN(amount) || amount <= 0) {
-		return this.errorReply("Invalid amount. Amount must be a positive number.");
-	}
-
-	try {
-		const now = new Date().toISOString();
-		const profile = await userProfilesCollection.findOne({ userId: targetUserId });
-		
-		if (profile) {
-			// Profile exists
-			await userProfilesCollection.updateOne(
-				{ userId: targetUserId },
-				{
-					$inc: { credits: amount },
-					$set: { lastUpdatedAt: now }
-				}
-			);
-		} else {
-			// Create new profile
-			await userProfilesCollection.insertOne({
-				userId: targetUserId,
-				userName: targetUserId,
-				credits: amount,
-				collectionPoints: 0,
-				totalQuantity: 0,
-				totalUniqueCards: 0,
-				lastUpdatedAt: now
-			});
-		}
-
-		this.sendReply(`Successfully awarded ${amount.toLocaleString()} credits to ${targetUserId}.`);
-		const targetUser = Users.get(targetUserId);
-		if (targetUser) {
-			targetUser.popup(`|html|You have been awarded ${amount.toLocaleString()} TCG credits by ${user.name}.`);
-		}
-	} catch (error) {
-		return this.errorReply(`An error occurred: ${error.message}`);
-	}
-},
-
-	async awardpack(target, room, user) {
-	this.checkCan('bypassall');
-	const parts = target.split(',').map(p => p.trim());
-	if (parts.length < 2) {
-		return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
-	}
-
-	const targetUserId = toID(parts[0]);
-	const setId = parts[1];
-	const quantity = parts[2] ? parseInt(parts[2]) : 1;
-
-	if (!targetUserId) {
-		return this.errorReply("Please specify a user.");
-	}
-	if (!setId) {
-		return this.errorReply("Please specify a set ID.");
-	}
-	if (isNaN(quantity) || quantity <= 0) {
-		return this.errorReply("Invalid quantity. Must be a positive number.");
-	}
-	
-	try {
-		let setInfo = getSet(setId);
-		if (!setInfo) {
-			setInfo = await tcgCardsCollection.findOne({ setId: setId });
+		this.checkCan('bypassall');
+		const parts = target.split(',').map(p => p.trim());
+		if (parts.length < 2) {
+			return this.errorReply("Usage: /tcg awardcredits [user], [amount]");
 		}
 		
-		if (!setInfo) {
-			return this.errorReply(`Set with ID "${setId}" not found.`);
+		const targetUserId = toID(parts[0]);
+		const amount = parseInt(parts[1]);
+
+		if (!targetUserId) {
+			return this.errorReply("Please specify a user.");
+		}
+		if (isNaN(amount) || amount <= 0) {
+			return this.errorReply("Invalid amount. Amount must be a positive number.");
 		}
 
-		const setName = setInfo.set;
-		const setLogo = setInfo.setImages?.logo || '';
-		const now = new Date().toISOString();
-
-		await userPacksCollection.updateOne(
-			{ userId: targetUserId, setId: setId },
-			{
-				$inc: { quantity: quantity },
-				$set: {
-					setName: setName,
-					setLogo: setLogo,
-					lastAcquiredAt: now
-				},
-				$setOnInsert: {
-					userId: targetUserId,
-					setId: setId
-				}
-			},
-			{ upsert: true }
-		);
-
-		this.sendReply(`Successfully awarded ${quantity}x "${setName}" pack(s) to ${targetUserId}.`);
-		const targetUser = Users.get(targetUserId);
-		if (targetUser) {
-			targetUser.popup(`|html|You have been awarded ${quantity} "${setName}" pack(s) by ${user.name}.`);
-		}
-	} catch (error) {
-		return this.errorReply(`An error occurred: ${error.message}`);
-	}
-},
-
-	async awardcard(target, room, user) {
-	this.checkCan('bypassall');
-	const parts = target.split(',').map(p => p.trim());
-	if (parts.length < 2) {
-		return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
-	}
-
-	const targetUserId = toID(parts[0]);
-	const cardId = parts[1];
-	const quantityToAward = parts[2] ? parseInt(parts[2]) : 1;
-
-	if (!targetUserId) {
-		return this.errorReply("Please specify a user.");
-	}
-	if (!cardId) {
-		return this.errorReply("Please specify a card ID.");
-	}
-	if (isNaN(quantityToAward) || quantityToAward <= 0) {
-		return this.errorReply("Invalid quantity. Must be a positive number.");
-	}
-	
-	try {
-		const card = await tcgCardsCollection.findOne({ cardId: cardId });
-		if (!card) {
-			return this.errorReply(`Card with ID "${cardId}" not found in the database.`);
-		}
-
-		const collection = userCollectionsCollection;
-		const profiles = userProfilesCollection;
-		const now = new Date().toISOString();
-		
-		const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
-		const currentRecipientQty = recipientCard?.quantity || 0;
-		const newRecipientQty = currentRecipientQty + quantityToAward;
-		
-		const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
-		const excess = newRecipientQty - finalRecipientQty;
-		const creditsToAward = excess * CREDITS_PER_DUPLICATE;
-		const actualQtyAdded = finalRecipientQty - currentRecipientQty;
-		const pointsToAdd = card.totalPoints * actualQtyAdded;
-		const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
-
-		if (actualQtyAdded > 0) {
-			if (recipientCard) {
-				await collection.updateOne(
-					{ userId: targetUserId, cardId: cardId },
-					{ $set: { quantity: finalRecipientQty, lastAcquiredAt: now } }
-				);
-			} else {
-				const newDocData: TcgUser = {
-					userId: targetUserId,
-					cardId: card.cardId,
-					quantity: finalRecipientQty,
-					firstAcquiredAt: now,
-					lastAcquiredAt: now,
-					name: card.name,
-					setId: card.setId,
-					rarity: card.rarity,
-					totalPoints: card.totalPoints,
-					supertype: card.supertype,
-					types: card.types || [],
-					subtypes: card.subtypes || [],
-					imageUrl: card.imageUrl || undefined,
-					hp: card.hp || undefined,
-					setSeries: card.setSeries || undefined,
-					regulationMark: card.regulationMark || undefined,
-				};
-				if (newDocData.imageUrl === undefined) delete newDocData.imageUrl;
-				if (newDocData.hp === undefined) delete newDocData.hp;
-				if (newDocData.setSeries === undefined) delete newDocData.setSeries;
-				if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
-				await collection.insertOne(newDocData);
-			}
-		}
-
-		if (actualQtyAdded > 0 || creditsToAward > 0) {
-			const recipientProfile = await profiles.findOne({ userId: targetUserId });
+		try {
+			const now = new Date().toISOString();
+			const profile = await userProfilesCollection.findOne({ userId: targetUserId });
 			
-			if (recipientProfile) {
+			if (profile) {
 				// Profile exists
-				await profiles.updateOne(
+				await userProfilesCollection.updateOne(
 					{ userId: targetUserId },
 					{
-						$inc: {
-							totalQuantity: actualQtyAdded,
-							collectionPoints: pointsToAdd,
-							totalUniqueCards: uniqueCardsChangeRecipient,
-							credits: creditsToAward
-						},
-						$set: {
-							lastUpdatedAt: now
-						}
+						$inc: { credits: amount },
+						$set: { lastUpdatedAt: now }
 					}
 				);
 			} else {
 				// Create new profile
-				await profiles.insertOne({
+				await userProfilesCollection.insertOne({
 					userId: targetUserId,
 					userName: targetUserId,
-					credits: creditsToAward,
-					totalQuantity: actualQtyAdded,
-					collectionPoints: pointsToAdd,
-					totalUniqueCards: uniqueCardsChangeRecipient,
+					credits: amount,
+					collectionPoints: 0,
+					totalQuantity: 0,
+					totalUniqueCards: 0,
 					lastUpdatedAt: now
 				});
 			}
+
+			this.sendReply(`Successfully awarded ${amount.toLocaleString()} credits to ${targetUserId}.`);
+			const targetUser = Users.get(targetUserId);
+			if (targetUser) {
+				targetUser.popup(`|html|You have been awarded ${amount.toLocaleString()} TCG credits by ${user.name}.`);
+			}
+		} catch (error) {
+			return this.errorReply(`An error occurred: ${error.message}`);
 		}
-		
-		let reply = `Successfully awarded ${quantityToAward}x "${card.name}" to ${targetUserId}.`;
-		if (creditsToAward > 0) {
-			reply += ` They received ${actualQtyAdded} card(s) and ${creditsToAward} credits (from duplicates).`;
-		}
-		this.sendReply(reply);
-		const targetUser = Users.get(targetUserId);
-		if (targetUser) {
-			targetUser.popup(`|html|You have been awarded ${quantityToAward} "${card.name}" card(s) by ${user.name}.`);
+	},
+
+	async awardpack(target, room, user) {
+		this.checkCan('bypassall');
+		const parts = target.split(',').map(p => p.trim());
+		if (parts.length < 2) {
+			return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
 		}
 
-	} catch (error) {
-		return this.errorReply(`An error occurred: ${error.message}`);
-	}
-},
+		const targetUserId = toID(parts[0]);
+		const setId = parts[1];
+		const quantity = parts[2] ? parseInt(parts[2]) : 1;
+
+		if (!targetUserId) {
+			return this.errorReply("Please specify a user.");
+		}
+		if (!setId) {
+			return this.errorReply("Please specify a set ID.");
+		}
+		if (isNaN(quantity) || quantity <= 0) {
+			return this.errorReply("Invalid quantity. Must be a positive number.");
+		}
+		
+		try {
+			let setInfo = getSet(setId);
+			if (!setInfo) {
+				setInfo = await tcgCardsCollection.findOne({ setId: setId });
+			}
+			
+			if (!setInfo) {
+				return this.errorReply(`Set with ID "${setId}" not found.`);
+			}
+
+			const setName = setInfo.set;
+			const setLogo = setInfo.setImages?.logo || '';
+			const now = new Date().toISOString();
+
+			await userPacksCollection.updateOne(
+				{ userId: targetUserId, setId: setId },
+				{
+					$inc: { quantity: quantity },
+					$set: {
+						setName: setName,
+						setLogo: setLogo,
+						lastAcquiredAt: now
+					},
+					$setOnInsert: {
+						userId: targetUserId,
+						setId: setId
+					}
+				},
+				{ upsert: true }
+			);
+
+			this.sendReply(`Successfully awarded ${quantity}x "${setName}" pack(s) to ${targetUserId}.`);
+			const targetUser = Users.get(targetUserId);
+			if (targetUser) {
+				targetUser.popup(`|html|You have been awarded ${quantity} "${setName}" pack(s) by ${user.name}.`);
+			}
+		} catch (error) {
+			return this.errorReply(`An error occurred: ${error.message}`);
+		}
+	},
+
+	async awardcard(target, room, user) {
+		this.checkCan('bypassall');
+		const parts = target.split(',').map(p => p.trim());
+		if (parts.length < 2) {
+			return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
+		}
+
+		const targetUserId = toID(parts[0]);
+		const cardId = parts[1];
+		const quantityToAward = parts[2] ? parseInt(parts[2]) : 1;
+
+		if (!targetUserId) {
+			return this.errorReply("Please specify a user.");
+		}
+		if (!cardId) {
+			return this.errorReply("Please specify a card ID.");
+		}
+		if (isNaN(quantityToAward) || quantityToAward <= 0) {
+			return this.errorReply("Invalid quantity. Must be a positive number.");
+		}
+		
+		try {
+			const card = await tcgCardsCollection.findOne({ cardId: cardId });
+			if (!card) {
+				return this.errorReply(`Card with ID "${cardId}" not found in the database.`);
+			}
+
+			const collection = userCollectionsCollection;
+			const profiles = userProfilesCollection;
+			const now = new Date().toISOString();
+			
+			const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
+			const currentRecipientQty = recipientCard?.quantity || 0;
+			const newRecipientQty = currentRecipientQty + quantityToAward;
+			
+			const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
+			const excess = newRecipientQty - finalRecipientQty;
+			const creditsToAward = excess * CREDITS_PER_DUPLICATE;
+			const actualQtyAdded = finalRecipientQty - currentRecipientQty;
+			const pointsToAdd = card.totalPoints * actualQtyAdded;
+			const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
+
+			if (actualQtyAdded > 0) {
+				if (recipientCard) {
+					await collection.updateOne(
+						{ userId: targetUserId, cardId: cardId },
+						{ $set: { quantity: finalRecipientQty, lastAcquiredAt: now } }
+					);
+				} else {
+					const newDocData: TcgUser = {
+						userId: targetUserId,
+						cardId: card.cardId,
+						quantity: finalRecipientQty,
+						firstAcquiredAt: now,
+						lastAcquiredAt: now,
+						name: card.name,
+						setId: card.setId,
+						rarity: card.rarity,
+						totalPoints: card.totalPoints,
+						supertype: card.supertype,
+						types: card.types || [],
+						subtypes: card.subtypes || [],
+						imageUrl: card.imageUrl || undefined,
+						hp: card.hp || undefined,
+						setSeries: card.setSeries || undefined,
+						regulationMark: card.regulationMark || undefined,
+					};
+					if (newDocData.imageUrl === undefined) delete newDocData.imageUrl;
+					if (newDocData.hp === undefined) delete newDocData.hp;
+					if (newDocData.setSeries === undefined) delete newDocData.setSeries;
+					if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
+					await collection.insertOne(newDocData);
+				}
+			}
+
+			if (actualQtyAdded > 0 || creditsToAward > 0) {
+				const recipientProfile = await profiles.findOne({ userId: targetUserId });
+				
+				if (recipientProfile) {
+					// Profile exists
+					await profiles.updateOne(
+						{ userId: targetUserId },
+						{
+							$inc: {
+								totalQuantity: actualQtyAdded,
+								collectionPoints: pointsToAdd,
+								totalUniqueCards: uniqueCardsChangeRecipient,
+								credits: creditsToAward
+							},
+							$set: {
+								lastUpdatedAt: now
+							}
+						}
+					);
+				} else {
+					// Create new profile
+					await profiles.insertOne({
+						userId: targetUserId,
+						userName: targetUserId,
+						credits: creditsToAward,
+						totalQuantity: actualQtyAdded,
+						collectionPoints: pointsToAdd,
+						totalUniqueCards: uniqueCardsChangeRecipient,
+						lastUpdatedAt: now
+					});
+				}
+			}
+			
+			let reply = `Successfully awarded ${quantityToAward}x "${card.name}" to ${targetUserId}.`;
+			if (creditsToAward > 0) {
+				reply += ` They received ${actualQtyAdded} card(s) and ${creditsToAward} credits (from duplicates).`;
+			}
+			this.sendReply(reply);
+			const targetUser = Users.get(targetUserId);
+			if (targetUser) {
+				targetUser.popup(`|html|You have been awarded ${quantityToAward} "${card.name}" card(s) by ${user.name}.`);
+			}
+
+		} catch (error) {
+			return this.errorReply(`An error occurred: ${error.message}`);
+		}
+	},
 	
 	async wipecollection(target, room, user) {
 		this.checkCan('bypassall');
@@ -320,7 +320,6 @@ export const adminCommands: ChatCommands = {
 				const userCollection = userCollectionsCollection;
 				const profileCollection = userProfilesCollection;
 
-				
 				const setTotalsPipeline = [
 					{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
 					{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
@@ -335,16 +334,13 @@ export const adminCommands: ChatCommands = {
 					if (set.setTotal > 0) allSetsMap.set(set.setId, set.setTotal);
 				}
 
-				
 				const allUserProfiles = await profileCollection.find({}, { projection: { userId: 1, userName: 1, credits: 1, favoriteCards: 1 } });
 				const profileMap = new Map<string, Partial<TcgUserProfile>>();
 				for (const profile of allUserProfiles) {
 					profileMap.set(profile.userId, profile);
 				}
 
-				
 				const allStatsPipeline: any[] = [
-					
 					{
 						$group: {
 							_id: {
@@ -356,10 +352,9 @@ export const adminCommands: ChatCommands = {
 							pointsInSet: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
 						}
 					},
-					
 					{
 						$group: {
-							_id: "$_id.userId", 
+							_id: "$_id.userId",
 							totalUniqueCards: { $sum: "$uniqueCountInSet" },
 							totalQuantity: { $sum: "$quantityInSet" },
 							collectionPoints: { $sum: "$pointsInSet" },
@@ -374,14 +369,12 @@ export const adminCommands: ChatCommands = {
 				];
 				const allUserStats = await userCollection.aggregate<any>(allStatsPipeline);
 
-				
 				const bulkOps: any[] = [];
 				const now = new Date().toISOString();
 
 				for (const userStats of allUserStats) {
 					const targetUserId = userStats._id;
 					const profile = profileMap.get(targetUserId) || {};
-					
 					
 					let setsCompleted = 0;
 					if (userStats.setProgress) {
@@ -411,10 +404,9 @@ export const adminCommands: ChatCommands = {
 							upsert: true
 						}
 					});
-					profileMap.delete(targetUserId); 
+					profileMap.delete(targetUserId);
 				}
 
-				
 				for (const [targetUserId, profile] of profileMap.entries()) {
 					bulkOps.push({
 						updateOne: {
@@ -436,7 +428,6 @@ export const adminCommands: ChatCommands = {
 					});
 				}
 
-				
 				if (bulkOps.length > 0) {
 					await profileCollection.bulkWrite(bulkOps, { ordered: false });
 				}
@@ -445,7 +436,6 @@ export const adminCommands: ChatCommands = {
 				this.sendReply(`RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
 				
 			} catch (error) {
-				
 				this.sendReply(`RECALCULATION FAILED: A critical error occurred: ${error.message}`);
 			}
 		})();
@@ -458,7 +448,6 @@ export const adminCommands: ChatCommands = {
 			const { cardCount, setCount } = await initializeCache();
 			this.sendReply(`TCG cache initialization complete. Loaded ${cardCount} cards and ${setCount} sets.`);
 		} catch (error) {
-			
 			this.errorReply('An error occurred while initializing the TCG cache.');
 		}
 	},
@@ -540,7 +529,6 @@ export const adminCommands: ChatCommands = {
 			this.sendReply(`Index creation finished in ${duration}s. Created: ${createdCount}, Failed: ${failedCount}.`);
 
 		} catch (error) {
-			
 			return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
 		}
 	},
