@@ -342,9 +342,9 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			
 			const userId = user.id;
-			const cooldowns = cooldownsCollection;
+                        const cooldowns = cooldownsCollection;
 			const now = Date.now();
-			const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
 			const cooldown = await cooldowns.findOne({ userId });
 			if (cooldown) {
@@ -359,20 +359,21 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			let randomSetId = 'sv3pt5'; // Default fallback set
+			let randomSetId = 'sv1';
 			
 			try {
 				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
-					{ $group: { _id: "$setId" } }, 
-					{ $sample: { size: 1 } }, 
-					{ $project: { _id: 0, setId: "$_id" } } 
+					{ $group: { _id: "$setId" } },
+					{ $sample: { size: 1 } },
+					{ $project: { _id: 0, setId: "$_id" } }
 				]);
 				if (randomSetArr.length > 0) {
 					randomSetId = randomSetArr[0].setId;
 				}
 
 				const pack = await generatePack(randomSetId);
+				
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
 				await cooldowns.updateOne(
