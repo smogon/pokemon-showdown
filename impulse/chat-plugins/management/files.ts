@@ -72,7 +72,10 @@ export const commands: Chat.ChatCommands = {
 			await file.unlinkIfExists();
 			
 			return this.sendReply(`File deleted: ${filePath}`);
-			Rooms.get(staff).add(`|html|<div class="infobox">${user.name} deleted ${filePath}</div>`);
+			const staffRoom = Rooms.get(staff);
+			if (staffRoom) {
+				staffRoom.add(`|html|<div class="infobox"><center><strong>${nameColor(user.name, true, true)} deleted ${filePath}</center></div>`).update();
+			}
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : String(err);
 			throw new Chat.ErrorMessage(`Failed to delete file: ${message}`);
