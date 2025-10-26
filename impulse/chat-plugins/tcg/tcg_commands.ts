@@ -10,7 +10,7 @@ import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
-		  userPacksCollection, cooldownsCollection } from './tcg_collections';
+	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 80;
 
@@ -316,7 +316,6 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
-				
 				return this.errorReply('An error occurred while searching for cards.');
 			}
 		},
@@ -334,7 +333,6 @@ export const commands: ChatCommands = {
 				const html = renderCardGridHtml(pack, title);
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
-				
 				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
 			}
 		},
@@ -342,7 +340,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			
 			const userId = user.id;
-                        const cooldowns = cooldownsCollection;
+			const cooldowns = cooldownsCollection;
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
@@ -389,7 +387,6 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
-				
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
@@ -448,8 +445,8 @@ export const commands: ChatCommands = {
 				}
 				// IMPORTANT: Check the error message. If it's the conflict error, provide that specific feedback.
 				if (error instanceof Error && error.message.includes("conflict at 'quantity'")) {
-				    return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
-                }
+					return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
+				}
 				// Otherwise, show the general error + refund message
 				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 			}
@@ -473,7 +470,6 @@ export const commands: ChatCommands = {
 					{ $set: { quantity: 0 } }
 				);
 			} catch (dbError) {
-				
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
 
@@ -482,7 +478,7 @@ export const commands: ChatCommands = {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
 					
 					if (zeroCheck && zeroCheck.quantity === 0) {
-						 return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
+						return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
 					} 
 				} catch (checkError) { /* ignore */ }
 
@@ -515,7 +511,6 @@ export const commands: ChatCommands = {
 				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong>`;
 				html += `<br /><br />`;
 				html += `You found a total of <strong>${allPacks.length}</strong> cards.`;
-				
 				if (creditsAwarded > 0) {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
@@ -528,7 +523,6 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 				
 			} catch (error) {
-				
 				await packCollection.updateOne(
 					{ userId: user.id, setId: rawSetId }, 
 					{ $set: { quantity: packQuantity } }  
@@ -536,7 +530,6 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
 		},
-		
 		// --- Meta / Misc ---
 		async leaderboard(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -581,11 +574,9 @@ export const commands: ChatCommands = {
 				this.sendReply(`|html|${html}`);
 
 			} catch (error) {
-				
 				return this.errorReply('An error occurred while fetching the leaderboard.');
 			}
 		},
-
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;
@@ -636,11 +627,7 @@ export const commands: ChatCommands = {
 				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users. <br />` +
 				`<code>/tcg createindexes</code> - (Admin) Creates all important mongodb indexes for fast querying.` +
 				`</div>`
-			);
+				);
 		},
-
-		...adminCommands,
-		...economyCommands,
-		...collectionCommands,
 	},
 };
