@@ -2343,6 +2343,11 @@ export const commands: ChatCommands = {
 			if (parts.length < 2) {
 				return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
 			}
+			
+			const TCGConfig = global.__impulseTCGConfig;
+			if (!TCGConfig) {
+				return this.errorReply("TCGConfig is not initialized.");
+			}
 
 			const targetUserId = toID(parts[0]);
 			const cardId = parts[1];
@@ -2371,6 +2376,7 @@ export const commands: ChatCommands = {
 				const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
 				const currentRecipientQty = recipientCard?.quantity || 0;
 				const newRecipientQty = currentRecipientQty + quantityToAward;
+				
 				const finalRecipientQty = Math.min(newRecipientQty, TCGConfig.MAX_CARD_QUANTITY);
 				const excess = newRecipientQty - finalRecipientQty;
 				const creditsToAward = excess * TCGConfig.CREDITS_PER_DUPLICATE;
@@ -2450,7 +2456,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred: ${error.message}`);
 			}
 		},
-
+		
 		async wipecollection(target, room, user) {
 			this.checkCan('bypassall');
 			const targetUserId = toID(target);
@@ -2514,6 +2520,11 @@ export const commands: ChatCommands = {
 			const parts = target.split(',').map(p => p.trim());
 			if (parts.length < 2) {
 				return this.errorReply("Usage: /tcg setconfig [key], [value]");
+			}
+			
+			const TCGConfig = global.__impulseTCGConfig;
+			if (!TCGConfig) {
+				return this.errorReply("TCGConfig is not initialized.");
 			}
 			
 			const key = parts[0] as keyof typeof TCGConfig;
