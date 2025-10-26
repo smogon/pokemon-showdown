@@ -1,18 +1,10 @@
 /**
  * Pokemon Showdown
  * TCG Utility Functions
- *
- * This file contains all logic for:
- * 1. In-memory caching (cards, sets, pack generation pools)
- * 2. Cache management (init, clear, stats)
- * 3. Pack generation (router, cache-based, and DB-fallback)
- * 4. Pack opening ui function.
- * 5. Collection management utilities (add cards)
  */
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile } from './interface';
-import { userCollectionsCollection, userProfilesCollection,
-	tcgCardsCollection } from './tcg_collections';
+import { userCollectionsCollection, userProfilesCollection, tcgCardsCollection } from './tcg_collections';
 
 export const CACHE_SAMPLE_SIZE = 10;
 export const DB_SAMPLE_SIZE = 10;
@@ -90,33 +82,21 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 	for (const card of allCards) {
 		cardsCache.set(card.cardId, card);
 
-		if (!setsCache.has(card.setId)) {
-			setsCache.set(card.setId, card);
-		}
+		if (!setsCache.has(card.setId)) setsCache.set(card.setId, card);
 
 		if (!packCache.has(card.setId)) {
 			packCache.set(card.setId, {
-				common: [],
-				uncommon: [],
-				reverseRare: [],
-				rarest: [],
-				fallback: [],
+				common: [], uncommon: [], reverseRare: [], rarest: [], fallback: []
 			});
 		}
 
 		const setPools = packCache.get(card.setId)!;
 		const poolName = getCardPool(card);
+		if (poolName) setPools[poolName].push(card);
 
-		if (poolName) {
-			setPools[poolName].push(card);
-		}
 		if (CUSTOM_COMMON_RARITIES.includes(card.rarity) || FALLBACK_RARITIES.includes(card.rarity)) {
-			if (!setPools.fallback.find(c => c.cardId === card.cardId)) {
-				setPools.fallback.push(card);
-			}
-			if (!globalFallbackCache.find(c => c.cardId === card.cardId)) {
-				globalFallbackCache.push(card);
-			}
+			if (!setPools.fallback.find(c => c.cardId === card.cardId)) setPools.fallback.push(card);
+			if (!globalFallbackCache.find(c => c.cardId === card.cardId)) globalFallbackCache.push(card);
 		}
 	}
 
@@ -125,10 +105,7 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 }
 
 export function clearCache(): { cardsCleared: number; setsCleared: number; } {
-	const stats = {
-		cardsCleared: cardsCache.size,
-		setsCleared: setsCache.size,
-	};
+	const stats = { cardsCleared: cardsCache.size, setsCleared: setsCache.size };
 	cardsCache.clear();
 	setsCache.clear();
 	packCache.clear();
@@ -138,13 +115,7 @@ export function clearCache(): { cardsCleared: number; setsCleared: number; } {
 	return stats;
 }
 
-export function getCacheStats(): {
-	cardsCached: number;
-	setsCached: number;
-	packCacheSets: number;
-	globalFallbackCards: number;
-	isInitialized: boolean;
-} {
+export function getCacheStats() {
 	return {
 		cardsCached: cardsCache.size,
 		setsCached: setsCache.size,
@@ -165,95 +136,69 @@ export function getSet(setId: string): TcgCard | undefined {
 export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
 	if (!pack.length) return { creditsAwarded: 0 };
 
-	const collection = userCollectionsCollection;
 	const now = new Date().toISOString();
-
 	const cardCounts = new Map<string, { card: TcgCard, count: number }>();
+	
 	for (const card of pack) {
 		const existing = cardCounts.get(card.cardId);
 		if (existing) {
 			existing.count++;
 		} else {
-			cardCounts.set(card.cardId, { card: card, count: 1 });
+			cardCounts.set(card.cardId, { card, count: 1 });
 		}
 	}
 
 	const cardIdsInPack = Array.from(cardCounts.keys());
-	const userCards = await collection.find({ userId: user.id, cardId: { $in: cardIdsInPack } });
+	const userCards = await userCollectionsCollection.find({ userId: user.id, cardId: { $in: cardIdsInPack } });
 
-	const currentQuantities = new Map<string, number>();
-	for (const card of userCards) {
-		currentQuantities.set(card.cardId, card.quantity);
-	}
+	const currentQty = new Map<string, number>();
+	for (const card of userCards) currentQty.set(card.cardId, card.quantity);
 
-	const operations = [];
-	let totalPointsChange = 0;
-	let totalQuantityChange = 0;
-	let totalUniqueCardsAdded = 0;
-	let creditsToAward = 0;
+	const ops = [];
+	let totalPts = 0, totalQty = 0, totalUnique = 0, credits = 0;
 
 	for (const [cardId, { card, count }] of cardCounts.entries()) {
-		const currentQty = currentQuantities.get(cardId) || 0;
-		const newQty = currentQty + count;
+		const curr = currentQty.get(cardId) || 0;
+		const newQty = curr + count;
 		let finalQty = newQty;
 
 		if (newQty > MAX_CARD_QUANTITY) {
 			const excess = newQty - MAX_CARD_QUANTITY;
-			creditsToAward += (excess * CREDITS_PER_DUPLICATE);
+			credits += (excess * CREDITS_PER_DUPLICATE);
 			finalQty = MAX_CARD_QUANTITY;
 		}
 
-		const actualQtyAdded = finalQty - currentQty;
-
-		if (actualQtyAdded > 0) {
-			totalQuantityChange += actualQtyAdded;
-			totalPointsChange += (card.totalPoints * actualQtyAdded);
+		const added = finalQty - curr;
+		if (added > 0) {
+			totalQty += added;
+			totalPts += (card.totalPoints * added);
 		}
+		if (curr === 0 && added > 0) totalUnique++;
 
-		if (currentQty === 0 && actualQtyAdded > 0) {
-			totalUniqueCardsAdded++;
-		}
-
-		const newDocData: TcgUser = {
-			userId: user.id,
-			cardId: card.cardId,
-			quantity: finalQty,
-			firstAcquiredAt: now,
-			lastAcquiredAt: now,
-			name: card.name,
-			setId: card.setId,
-			rarity: card.rarity,
-			totalPoints: card.totalPoints,
-			supertype: card.supertype,
-			types: card.types || [],
-			subtypes: card.subtypes || [],
-			imageUrl: card.imageUrl || undefined,
-			hp: card.hp || undefined,
-			setSeries: card.setSeries || undefined,
-			regulationMark: card.regulationMark || undefined,
+		const doc: TcgUser = {
+			userId: user.id, cardId: card.cardId, quantity: finalQty,
+			firstAcquiredAt: now, lastAcquiredAt: now, name: card.name,
+			setId: card.setId, rarity: card.rarity, totalPoints: card.totalPoints,
+			supertype: card.supertype, types: card.types || [], subtypes: card.subtypes || [],
+			imageUrl: card.imageUrl || undefined, hp: card.hp || undefined,
+			setSeries: card.setSeries || undefined, regulationMark: card.regulationMark || undefined,
 		};
 
-		if (newDocData.imageUrl === undefined) delete newDocData.imageUrl;
-		if (newDocData.hp === undefined) delete newDocData.hp;
-		if (newDocData.setSeries === undefined) delete newDocData.setSeries;
-		if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
+		if (!doc.imageUrl) delete doc.imageUrl;
+		if (!doc.hp) delete doc.hp;
+		if (!doc.setSeries) delete doc.setSeries;
+		if (!doc.regulationMark) delete doc.regulationMark;
 
-		operations.push({
+		ops.push({
 			updateOne: {
-				filter: { userId: user.id, cardId: cardId },
+				filter: { userId: user.id, cardId },
 				update: {
 					$set: { quantity: finalQty, lastAcquiredAt: now },
 					$setOnInsert: {
-						userId: user.id,
-						cardId: card.cardId,
-						firstAcquiredAt: now,
-						name: card.name,
-						setId: card.setId,
-						rarity: card.rarity,
-						totalPoints: card.totalPoints,
-						supertype: card.supertype,
-						types: card.types || [],
-						subtypes: card.subtypes || [],
+						userId: user.id, cardId: card.cardId, firstAcquiredAt: now,
+						name: card.name, setId: card.setId, rarity: card.rarity,
+						totalPoints: card.totalPoints, supertype: card.supertype,
+						types: card.types || [], subtypes: card.subtypes || [],
 						...(card.imageUrl && { imageUrl: card.imageUrl }),
 						...(card.hp && { hp: card.hp }),
 						...(card.setSeries && { setSeries: card.setSeries }),
@@ -265,98 +210,54 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 		});
 	}
 
-	if (operations.length > 0) {
-		await collection.bulkWrite(operations, { ordered: false });
-	}
+	if (ops.length > 0) await userCollectionsCollection.bulkWrite(ops, { ordered: false });
 
-	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
-		const profiles = userProfilesCollection;
-
-		// Check if profile exists
-		const existingProfile = await profiles.findOne({ userId: user.id });
-
-		if (existingProfile) {
-			// Profile exists, just increment
-			await profiles.updateOne(
+	if (totalQty > 0 || totalUnique > 0 || credits > 0) {
+		const profile = await userProfilesCollection.findOne({ userId: user.id });
+		if (profile) {
+			await userProfilesCollection.updateOne(
 				{ userId: user.id },
 				{
-					$inc: {
-						totalQuantity: totalQuantityChange,
-						collectionPoints: totalPointsChange,
-						totalUniqueCards: totalUniqueCardsAdded,
-						credits: creditsToAward
-					},
-					$set: {
-						userName: user.name,
-						lastUpdatedAt: now
-					}
+					$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
+					$set: { userName: user.name, lastUpdatedAt: now }
 				}
 			);
 		} else {
-			// Profile doesn't exist, create it
-			await profiles.insertOne({
-				userId: user.id,
-				userName: user.name,
-				credits: creditsToAward,
-				totalUniqueCards: totalUniqueCardsAdded,
-				totalQuantity: totalQuantityChange,
-				collectionPoints: totalPointsChange,
-				lastUpdatedAt: now
+			await userProfilesCollection.insertOne({
+				userId: user.id, userName: user.name, credits,
+				totalUniqueCards: totalUnique, totalQuantity: totalQty,
+				collectionPoints: totalPts, lastUpdatedAt: now
 			});
 		}
 	}
 
-	return { creditsAwarded: creditsToAward };
+	return { creditsAwarded: credits };
 }
 
 function getPool(setId: string, pool: RarityPool): TcgCard[] {
-	const setPools = packCache.get(setId);
-	return setPools?.[pool] || [];
+	return packCache.get(setId)?.[pool] || [];
 }
 
-function getCardsFromPool(
-	setId: string,
-	pool: RarityPool,
-	size: number,
-	excludeIds: string[]
-): TcgCard[] {
-	const sourcePool = getPool(setId, pool);
-	const validCards = sourcePool.filter(c => !excludeIds.includes(c.cardId));
-
-	const shuffled = [...validCards].sort(() => 0.5 - Math.random());
-	return shuffled.slice(0, size);
+function getCardsFromPool(setId: string, pool: RarityPool, size: number, excludeIds: string[]): TcgCard[] {
+	const valid = getPool(setId, pool).filter(c => !excludeIds.includes(c.cardId));
+	return [...valid].sort(() => 0.5 - Math.random()).slice(0, size);
 }
 
-function getWeightedCardFromPool(
-	setId: string,
-	pool: RarityPool,
-	excludeIds: string[]
-): TcgCard | null {
-	const sourcePool = getPool(setId, pool);
-	const validCards = sourcePool.filter(c => !excludeIds.includes(c.cardId));
-
-	if (validCards.length === 0) return null;
-
-	const shuffled = [...validCards].sort(() => 0.5 - Math.random());
-	const sampled = shuffled.slice(0, CACHE_SAMPLE_SIZE);
-
+function getWeightedCardFromPool(setId: string, pool: RarityPool, excludeIds: string[]): TcgCard | null {
+	const valid = getPool(setId, pool).filter(c => !excludeIds.includes(c.cardId));
+	if (!valid.length) return null;
+	const sampled = [...valid].sort(() => 0.5 - Math.random()).slice(0, CACHE_SAMPLE_SIZE);
 	sampled.sort((a, b) => a.rarityPoints - b.rarityPoints);
-
 	return sampled[0];
 }
 
 function getGlobalFallback(size: number, excludeIds: string[]): TcgCard[] {
-	const validCards = globalFallbackCache.filter(c => !excludeIds.includes(c.cardId));
-	const shuffled = [...validCards].sort(() => 0.5 - Math.random());
-	return shuffled.slice(0, size);
+	const valid = globalFallbackCache.filter(c => !excludeIds.includes(c.cardId));
+	return [...valid].sort(() => 0.5 - Math.random()).slice(0, size);
 }
 
 export async function generatePack(setId: string): Promise<TcgCard[]> {
-	if (getCacheStats().isInitialized) {
-		return generatePackFromCache(setId);
-	} else {
-		return generatePackFromDB(setId);
-	}
+	return getCacheStats().isInitialized ? generatePackFromCache(setId) : generatePackFromDB(setId);
 }
 
 async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
@@ -364,58 +265,46 @@ async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
 	let excludeIds: string[] = [];
 
 	try {
-		const commonCards = getCardsFromPool(setId, 'common', 3, excludeIds);
-		const uncommonCards = getCardsFromPool(setId, 'uncommon', 3, excludeIds);
-		
-		pack.push(...commonCards, ...uncommonCards);
+		const commons = getCardsFromPool(setId, 'common', 3, excludeIds);
+		const uncommons = getCardsFromPool(setId, 'uncommon', 3, excludeIds);
+		pack.push(...commons, ...uncommons);
 		excludeIds = pack.map(c => c.cardId);
 
-		const rareCard = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
-		if (rareCard.length > 0) {
-			pack.push(rareCard[0]);
-			excludeIds.push(rareCard[0].cardId);
+		const rare = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
+		if (rare.length > 0) {
+			pack.push(rare[0]);
+			excludeIds.push(rare[0].cardId);
 		} else {
-			const fallbackRare = getCardsFromPool(setId, 'fallback', 1, excludeIds);
-			if (fallbackRare.length > 0) {
-				pack.push(fallbackRare[0]);
-				excludeIds.push(fallbackRare[0].cardId);
+			const fb = getCardsFromPool(setId, 'fallback', 1, excludeIds);
+			if (fb.length > 0) {
+				pack.push(fb[0]);
+				excludeIds.push(fb[0].cardId);
 			}
 		}
 
-		let eighthCard: TcgCard | null = null;
-		if (Math.random() < HIT_CHANCE) {
-			eighthCard = getWeightedCardFromPool(setId, 'rarest', excludeIds);
+		let eighth: TcgCard | null = null;
+		if (Math.random() < HIT_CHANCE) eighth = getWeightedCardFromPool(setId, 'rarest', excludeIds);
+		if (!eighth) {
+			const fb = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
+			if (fb.length > 0) eighth = fb[0];
 		}
-		if (!eighthCard) {
-			const regularRareFallback = getCardsFromPool(setId, 'reverseRare', 1, excludeIds);
-			if (regularRareFallback.length > 0) {
-				eighthCard = regularRareFallback[0];
-			}
+		if (!eighth) {
+			const fb = getCardsFromPool(setId, 'fallback', 1, excludeIds);
+			if (fb.length > 0) eighth = fb[0];
 		}
-		if (!eighthCard) {
-			const ultimateFallback = getCardsFromPool(setId, 'fallback', 1, excludeIds);
-			if (ultimateFallback.length > 0) {
-				eighthCard = ultimateFallback[0];
-			}
-		}
-		if (eighthCard) pack.push(eighthCard);
+		if (eighth) pack.push(eighth);
 
-		let missingCount = MAX_PACK_SIZE - pack.length;
-		if (missingCount > 0) {
+		let missing = MAX_PACK_SIZE - pack.length;
+		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
-			const fillCards = getGlobalFallback(missingCount, excludeIds);
-			pack.push(...fillCards);
+			pack.push(...getGlobalFallback(missing, excludeIds));
 		}
 
-		if (pack.length > MAX_PACK_SIZE) {
-			pack.length = MAX_PACK_SIZE;
-		}
-
+		if (pack.length > MAX_PACK_SIZE) pack.length = MAX_PACK_SIZE;
 		if (pack.length < MAX_PACK_SIZE) {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-
 	} catch (error) {
 		console.error(`Error generating pack from CACHE for set ${setId}:`, error);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
@@ -429,20 +318,9 @@ async function getRandomCardsDB(
 	size: number,
 	excludeIds: string[] = []
 ): Promise<TcgCard[]> {
-
-	const match: any = {
-		rarity: { $in: rarities },
-		cardId: { $nin: excludeIds }
-	};
-	if (setId) {
-		match.setId = setId;
-	}
-
-	const pipeline = [
-		{ $match: match },
-		{ $sample: { size: size } }
-	];
-	return collection.aggregate<TcgCard>(pipeline);
+	const match: any = { rarity: { $in: rarities }, cardId: { $nin: excludeIds } };
+	if (setId) match.setId = setId;
+	return collection.aggregate<TcgCard>([{ $match: match }, { $sample: { size } }]);
 }
 
 async function getWeightedRandomCardDB(
@@ -451,126 +329,93 @@ async function getWeightedRandomCardDB(
 	rarities: string[],
 	excludeIds: string[] = []
 ): Promise<TcgCard | null> {
-	const matchStage = {
-		$match: {
-			setId: setId,
-			rarity: { $in: rarities },
-			cardId: { $nin: excludeIds }
-		}
-	};
-	const sampleStage = { $sample: { size: DB_SAMPLE_SIZE } };
-	const pipeline = [matchStage, sampleStage];
-
-	const sampledCards = await collection.aggregate<TcgCard>(pipeline);
-	if (sampledCards.length === 0) return null;
-
-	sampledCards.sort((a, b) => a.rarityPoints - b.rarityPoints);
-	return sampledCards[0];
+	const sampled = await collection.aggregate<TcgCard>([
+		{ $match: { setId, rarity: { $in: rarities }, cardId: { $nin: excludeIds } } },
+		{ $sample: { size: DB_SAMPLE_SIZE } }
+	]);
+	if (!sampled.length) return null;
+	sampled.sort((a, b) => a.rarityPoints - b.rarityPoints);
+	return sampled[0];
 }
 
 async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
-	const collection = tcgCardsCollection;
 	const pack: TcgCard[] = [];
 	let excludeIds: string[] = [];
 
 	try {
-		const [
-			commonCards,
-			uncommonCards,
-		] = await Promise.all([
-			getRandomCardsDB(collection, setId, CUSTOM_COMMON_RARITIES, 3, excludeIds),
-			getRandomCardsDB(collection, setId, CUSTOM_UNCOMMON_RARITIES, 3, excludeIds),
+		const [commons, uncommons] = await Promise.all([
+			getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_COMMON_RARITIES, 3, excludeIds),
+			getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_UNCOMMON_RARITIES, 3, excludeIds),
 		]);
 
-		pack.push(...commonCards, ...uncommonCards);
+		pack.push(...commons, ...uncommons);
 		excludeIds = pack.map(c => c.cardId);
 
-		const rareCard = await getRandomCardsDB(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
-		if (rareCard.length > 0) {
-			pack.push(rareCard[0]);
-			excludeIds.push(rareCard[0].cardId);
+		const rare = await getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
+		if (rare.length > 0) {
+			pack.push(rare[0]);
+			excludeIds.push(rare[0].cardId);
 		} else {
-			const fallbackRare = await getRandomCardsDB(collection, setId, FALLBACK_RARITIES, 1, excludeIds);
-			if (fallbackRare.length > 0) {
-				pack.push(fallbackRare[0]);
-				excludeIds.push(fallbackRare[0].cardId);
+			const fb = await getRandomCardsDB(tcgCardsCollection, setId, FALLBACK_RARITIES, 1, excludeIds);
+			if (fb.length > 0) {
+				pack.push(fb[0]);
+				excludeIds.push(fb[0].cardId);
 			}
 		}
 
-		let eighthCard: TcgCard | null = null;
+		let eighth: TcgCard | null = null;
 		if (Math.random() < HIT_CHANCE) {
-			eighthCard = await getWeightedRandomCardDB(collection, setId, CUSTOM_RAREST_RARITIES, excludeIds);
+			eighth = await getWeightedRandomCardDB(tcgCardsCollection, setId, CUSTOM_RAREST_RARITIES, excludeIds);
 		}
-		if (!eighthCard) {
-			const regularRareFallback = await getRandomCardsDB(collection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
-			if (regularRareFallback.length > 0) {
-				eighthCard = regularRareFallback[0];
-			}
+		if (!eighth) {
+			const fb = await getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_REVERSE_RARE_RARITIES, 1, excludeIds);
+			if (fb.length > 0) eighth = fb[0];
 		}
-		if (!eighthCard) {
-			const ultimateFallback = await getRandomCardsDB(collection, setId, FALLBACK_RARITIES, 1, excludeIds);
-			if (ultimateFallback.length > 0) {
-				eighthCard = ultimateFallback[0];
-			}
+		if (!eighth) {
+			const fb = await getRandomCardsDB(tcgCardsCollection, setId, FALLBACK_RARITIES, 1, excludeIds);
+			if (fb.length > 0) eighth = fb[0];
 		}
-		if (eighthCard) pack.push(eighthCard);
+		if (eighth) pack.push(eighth);
 
-		let missingCount = MAX_PACK_SIZE - pack.length;
-		if (missingCount > 0) {
+		let missing = MAX_PACK_SIZE - pack.length;
+		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
-			const fillCards = await getRandomCardsDB(collection, null, FALLBACK_RARITIES, missingCount, excludeIds);
-			pack.push(...fillCards);
+			pack.push(...await getRandomCardsDB(tcgCardsCollection, null, FALLBACK_RARITIES, missing, excludeIds));
 		}
 
-		if (pack.length > MAX_PACK_SIZE) {
-			pack.length = MAX_PACK_SIZE;
-		}
-
+		if (pack.length > MAX_PACK_SIZE) pack.length = MAX_PACK_SIZE;
 		if (pack.length < MAX_PACK_SIZE) {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-
 	} catch (error) {
 		console.error(`Error generating pack from DB for set ${setId}:`, error);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
 	}
 }
 
-export function renderCardGridHtml(
-	cards: TcgCard[],
-	title?: string,
-	subtitle?: string,
-	options?: { showOpenedPackHeader?: boolean }
-): string {
+export function renderCardGridHtml(cards: TcgCard[], title?: string, subtitle?: string, options?: { showOpenedPackHeader?: boolean }): string {
 	let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-	if (title) {
-		html += `<strong style="font-size: 20px;">${title}</strong><br />`;
-	}
-	if (subtitle) {
-		html += `<div style="font-size: 0.95em; margin-bottom: 7px;">${subtitle}</div>`;
-	}
+	if (title) html += `<strong style="font-size: 20px;">${title}</strong><br />`;
+	if (subtitle) html += `<div style="font-size: 0.95em; margin-bottom: 7px;">${subtitle}</div>`;
 
 	const cardsPerRow = 4;
 	for (let i = 0; i < cards.length; i += cardsPerRow) {
 		html += `<div style="display: inline-block; text-align: center; width: 100%;">`;
-		
 		for (let j = i; j < i + cardsPerRow && j < cards.length; j++) {
-			const card = cards[j];
-			const imageWidth = 74, imageHeight = 103;
-			const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-			const imageAlt = `${card.name} (${card.cardId})`;
-			
+			const c = cards[j];
+			const w = 74, h = 103;
+			const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
+			const alt = `${c.name} (${c.cardId})`;
 			html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 84px;">`;
-			html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-			html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+			html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+			html += `<img src="${url}" width="${w}" height="${h}" alt="${alt}" title="${alt}" style="border-radius: 8px; display: block;" />`;
 			html += `</button>`;
-			html += `<div style="font-size: 0.95em; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${card.name}</div>`;
-			html += `<div style="font-size: 0.88em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+			html += `<div style="font-size: 0.95em; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.name}</div>`;
+			html += `<div style="font-size: 0.88em;">[ ${c.cardId} ]<br>${c.rarity}</div>`;
 			html += `</div>`;
 		}
 		html += `</div>`;
-		
 		if (i + cardsPerRow < cards.length) {
 			html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc; width: 90%; margin-left: auto; margin-right: auto;">`;
 		}
