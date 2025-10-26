@@ -5,13 +5,10 @@
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import {
-	getSet,
-	initializeCache, getCacheStats, clearCache,
-	clearShopCache,
+	getSet, initializeCache, getCacheStats,
+	clearCache, clearShopCache, MAX_CARD_QUANTITY,
+	CREDITS_PER_DUPLICATE
 } from './tcg_utils';
-
-const MAX_CARD_QUANTITY = 10;
-const CREDITS_PER_DUPLICATE = 1;
 
 const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
 const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
