@@ -19,7 +19,7 @@ class TimeoutError extends Error {}
 TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
-	if (json.startsWith(']')) json = json.substr(1);
+	if (json.startsWith(']')) json = json.slice(1);
 	const data: { error: string | null, json: any[] | null } = { error: null, json: null };
 	try {
 		data.json = JSON.parse(json);
@@ -171,7 +171,7 @@ class LoginServerInstance {
 		} else {
 			this.requestLog += `${(Date.now() - this.lastRequest) / 1000}s`;
 		}
-		this.requestLog = this.requestLog.substr(-1000);
+		this.requestLog = this.requestLog.slice(-1000);
 		this.requestTimerPoke();
 	}
 	getLog() {
