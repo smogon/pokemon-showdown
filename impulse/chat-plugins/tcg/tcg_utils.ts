@@ -14,7 +14,7 @@ import { TcgCard, TcgUser, TcgUserProfile } from './interface';
 
 const CACHE_SAMPLE_SIZE = 10;
 const DB_SAMPLE_SIZE = 10;
-export const HIT_CHANCE = 0.9;
+const HIT_CHANCE = 0.9;
 const MAX_CARD_QUANTITY = 10;
 const CREDITS_PER_DUPLICATE = 1;
 
