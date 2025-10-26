@@ -3,28 +3,18 @@
 * TCG Commands
 */
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
-import { generatePack, getCard, getSet, getCacheStats, renderCardGridHtml,
-	addCardsToCollection, dailyShopCache, currentShopDate, setShopCache } from './tcg_utils';
+import { generatePack, getCard, getSet, getCacheStats, renderCardGridHtml, addCardsToCollection, dailyShopCache, currentShopDate, setShopCache } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
-import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
-	userPacksCollection, cooldownsCollection } from './tcg_collections';
+import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 40;
 
-// Parser function kept here as it's only used by 'search' command now
-function parseSearchQuery(target: string): {
-	filter: any,
-	queryDescription: string,
-	page: number,
-	commandString: string
-} {
+function parseSearchQuery(target: string): { filter: any, queryDescription: string, page: number, commandString: string } {
 	const parts = target.split(',');
-	let page = 1;
-	let query = target.trim();
-	let commandString = query;
+	let page = 1, query = target.trim(), commandString = query;
 
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
@@ -38,17 +28,13 @@ function parseSearchQuery(target: string): {
 
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
-	
 	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
-	
-	let nameQuery = query;
-	let match;
+	let nameQuery = query, match;
 
 	while ((match = filterRegex.exec(query)) !== null) {
 		const key = match[1].toLowerCase();
 		const operator = match[2];
 		let value = match[3].replace(/"/g, '');
-
 		nameQuery = nameQuery.replace(match[0], '');
 
 		const valueNum = parseInt(value);
@@ -85,7 +71,6 @@ function parseSearchQuery(target: string): {
 					else if (operator === '<') hpFilter = { $lt: valueNum };
 					else if (operator === '<=') hpFilter = { $lte: valueNum };
 					else hpFilter = valueNum;
-					
 					filter.$and.push({ hp: hpFilter });
 					descriptions.push(`HP: ${operator || ''}${value}`);
 				}
@@ -106,13 +91,7 @@ function parseSearchQuery(target: string): {
 			case 'set':
 				const partialRegex = new RegExp(escapedValue, 'i');
 				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
-
-				filter.$and.push({ 
-					$or: [
-						{ set: partialRegex },
-						{ setId: exactRegex }
-					] 
-				});
+				filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
 				descriptions.push(`Set: ${value}`);
 				break;
 		}
@@ -125,49 +104,32 @@ function parseSearchQuery(target: string): {
 		descriptions.unshift(`'${nameQueryClean}'`);
 	}
 
-	if (filter.$and.length === 0) {
-		delete filter.$and;
-	}
-	
+	if (filter.$and.length === 0) delete filter.$and;
 	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
-
 	return { filter, queryDescription, page, commandString };
 }
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
 	pokemontcg: {
-		// --- Core Viewing ---
 		async card(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) {
-				return this.errorReply('Usage: /tcg card [cardid]');
-			}
+			if (!target) return this.errorReply('Usage: /tcg card [cardid]');
 
 			const cardId = target.trim();
-			
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
-			if (cacheInitialized) {
-				card = getCard(cardId) || null;
-			}
-			
+			if (cacheInitialized) card = getCard(cardId) || null;
 			if (!card) {
 				const collection = tcgCardsCollection;
 				card = await collection.findOne({ cardId });
 			}
+			if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 
-			if (!card) {
-				return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			}
-
-			const originalWidth = 246;
-			const originalHeight = 342;
-			const scaleFactor = 0.65;
+			const originalWidth = 246, originalHeight = 342, scaleFactor = 0.65;
 			const imageWidth = Math.round(originalWidth * scaleFactor);
 			const imageHeight = Math.round(originalHeight * scaleFactor);
-
 			const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 			const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 			const imageAlt = `${card.name} (${card.cardId})`;
@@ -177,47 +139,35 @@ export const commands: ChatCommands = {
 			html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 			html += `</div>`;
 			html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; max-height: ${imageHeight}px; overflow-y: auto;">`;
-			html += `<strong style="font-size: 22px;">${card.name}</strong> `;
-			html += `<span style="font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
+			html += `<strong style="font-size: 22px;">${card.name}</strong> <span style="font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
 			html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
 			html += `<strong style="font-size: 1.1em;">Set:</strong> ${card.set} <span style="font-size: 0.9em;">(${card.setId})</span><br />`;
 			html += `<strong style="font-size: 1.1em;">Rarity:</strong> ${card.rarity}<br />`;
 			html += `<strong style="font-size: 1.1em;">Supertype:</strong> ${card.supertype}<br />`;
-			if (card.supertype === 'Pokémon') { // Corrected Typo
+			if (card.supertype === 'Pokémon') {
 				html += `<strong style="font-size: 1.1em;">Subtypes:</strong> ${subtypes}<br />`;
 			}
 			html += `<strong style="font-size: 1.1em; font-weight: bold;">Points:</strong> ${card.totalPoints}<br />`;
 			html += `<strong style="font-size: 1.1em; font-weight: bold;">Artist:</strong> ${card.artist}<br />`;
 			html += `<strong style="font-size: 1.1em; font-weight: bold;">Dex:</strong> ${card.cardText || ''}`;
-			html += `</div>`;
-			html += `</div>`;
-			html += `</div>`;
-
+			html += `</div></div></div>`;
 			this.sendReply(`|html|${html}`);
 		},
+
 		async set(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) {
-				return this.errorReply('Usage: /tcg set [setid]');
-			}
+			if (!target) return this.errorReply('Usage: /tcg set [setid]');
 
 			const setId = target.trim();
-
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
-			if (cacheInitialized) {
-				card = getSet(setId) || null;
-			}
-			
+			if (cacheInitialized) card = getSet(setId) || null;
 			if (!card) {
 				const collection = tcgCardsCollection;
 				card = await collection.findOne({ setId });
 			}
-
-			if (!card) {
-				return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			}
+			if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 
 			const setName = card.set;
 			const series = card.setSeries || 'N/A';
@@ -238,18 +188,15 @@ export const commands: ChatCommands = {
 				html += `</div>`;
 			}
 			html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px;">`;
-			html += `<strong style="font-size: 22px;">${setName}</strong> `;
-			html += `<span style="font-size: 0.9em; margin-left: 5px;">(${card.setId})</span><br />`;
+			html += `<strong style="font-size: 22px;">${setName}</strong> <span style="font-size: 0.9em; margin-left: 5px;">(${card.setId})</span><br />`;
 			html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
 			html += `<strong style="font-size: 1.1em;">Series:</strong> ${series}<br />`;
 			html += `<strong style="font-size: 1.1em;">Released:</strong> ${releaseDate}<br />`;
 			html += `<strong style="font-size: 1.1em;">Total Cards:</strong> ${total} (Printed: ${printedTotal})<br />`;
-			html += `</div>`;
-			html += `</div>`;
-			html += `</div>`;
-
+			html += `</div></div></div>`;
 			this.sendReply(`|html|${html}`);
 		},
+
 		async search(target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (!target) {
@@ -257,52 +204,42 @@ export const commands: ChatCommands = {
 			}
 
 			try {
-				const { filter, queryDescription, page, commandString } = parseSearchQuery(target); // Now defined locally
+				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
 				const collection = tcgCardsCollection;
-
 				const totalMatches = await collection.countDocuments(filter);
-				if (totalMatches === 0) {
-					return this.errorReply(`No cards found matching: ${queryDescription}.`);
-				}
+				if (totalMatches === 0) return this.errorReply(`No cards found matching: ${queryDescription}.`);
 
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
-				const results = await collection.find(
-					filter,
-					{
-						limit: SEARCH_PAGE_LIMIT,
-						skip: skip,
-						projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
-						sort: { rarityPoints: -1, name: 1 },
-					}
-				);
+				const results = await collection.find(filter, {
+					limit: SEARCH_PAGE_LIMIT, skip: skip,
+					projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
+					sort: { rarityPoints: -1, name: 1 },
+				});
 
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
 
-				if (results.length === 0) {
-					html += `No results found for this page.`;
-				}
+				if (results.length === 0) html += `No results found for this page.`;
 				for (let i = 0; i < results.length; i++) {
-					const card = results[i];
+					const c = results[i];
 					if (i % 4 === 0) {
 						if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-						html += `<div style="display: inline-block; text-align: center;">`; 
+						html += `<div style="display: inline-block; text-align: center;">`;
 					}
-					const imageWidth = 74;
-					const imageHeight = 103;
-					const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
-					const imageAlt = `${card.name} (${card.cardId})`;
+					const w = 74, h = 103;
+					const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
+					const alt = `${c.name} (${c.cardId})`;
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
-					html += `<button name="send" value="/tcg card ${card.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
-					html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
+					html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
+					html += `<img src="${url}" width="${w}" height="${h}" alt="${alt}" title="${alt}" style="border-radius: 8px; display: block;" />`;
 					html += `</button>`;
-					html += `<div style="font-size: 0.85em; margin-top: 3px;">${card.name}</div>`;
-					html += `<div style="font-size: 0.75em;">[ ${card.cardId} ]<br>${card.rarity}</div>`;
+					html += `<div style="font-size: 0.85em; margin-top: 3px;">${c.name}</div>`;
+					html += `<div style="font-size: 0.75em;">[ ${c.cardId} ]<br>${c.rarity}</div>`;
 					html += `</div>`;
 				}
 				if (results.length > 0) html += `</div>`;
@@ -326,15 +263,11 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		// --- Basic Acquisition ---
 		async openpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) {
-				return this.errorReply('Usage: /tcg openpack [setid] - Only for testing');
-			}
+			if (!target) return this.errorReply('Usage: /tcg openpack [setid] - Only for testing');
 
 			const setId = target.trim();
-
 			try {
 				const pack = await generatePack(setId);
 				const title = `${user.name} opened - ${setId} pack.<br>`;
@@ -344,9 +277,9 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
 			}
 		},
+
 		async daily(target, room, user) {
 			if (!this.runBroadcast()) return;
-			
 			const userId = user.id;
 			const cooldowns = cooldownsCollection;
 			const now = Date.now();
@@ -356,7 +289,6 @@ export const commands: ChatCommands = {
 			if (cooldown) {
 				const lastClaimed = new Date(cooldown.lastClaimedAt).getTime();
 				const timeRemaining = (lastClaimed + COOLDOWN_MS) - now;
-				
 				if (timeRemaining > 0) {
 					const hours = Math.floor(timeRemaining / 3600000);
 					const minutes = Math.floor((timeRemaining % 3600000) / 60000);
@@ -366,7 +298,6 @@ export const commands: ChatCommands = {
 			}
 
 			let randomSetId = 'sv1';
-			
 			try {
 				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
@@ -374,12 +305,9 @@ export const commands: ChatCommands = {
 					{ $sample: { size: 1 } },
 					{ $project: { _id: 0, setId: "$_id" } }
 				]);
-				if (randomSetArr.length > 0) {
-					randomSetId = randomSetArr[0].setId;
-				}
+				if (randomSetArr.length > 0) randomSetId = randomSetArr[0].setId;
 
 				const pack = await generatePack(randomSetId);
-				
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
 				await cooldowns.updateOne(
@@ -391,24 +319,20 @@ export const commands: ChatCommands = {
 				const title = `${user.name} opened their daily pack! (${randomSetId})`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
-
 				this.sendReply(`|html|${html}`);
-				
 			} catch (error) {
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
+
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const setId = target.trim();
-			if (!setId) {
-				return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
-			}
+			if (!setId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 
 			const packCollection = userPacksCollection;
 			let updateResult;
 
-			// Step 1: Attempt to decrement the pack quantity
 			try {
 				updateResult = await packCollection.updateOne(
 					{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
@@ -416,16 +340,13 @@ export const commands: ChatCommands = {
 				);
 
 				if (updateResult.modifiedCount === 0) {
-					// User didn't have the pack or quantity was already 0
 					return this.errorReply(`You do not have any saved "${setId}" packs to open.`);
 				}
 			} catch (dbError) {
-				// Log the error for diagnostics
 				console.error(`DB error decrementing pack for ${user.id}, setId ${setId}:`, dbError);
 				return this.errorReply(`A database error occurred while trying to use your pack. Please try again.`);
 			}
 
-			// Step 2: Try to generate and add the pack
 			try {
 				const pack = await generatePack(setId);
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
@@ -438,45 +359,29 @@ export const commands: ChatCommands = {
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 				this.sendReply(`|html|${html}`);
-
-			} catch (error) { // Catch errors from generatePack or addCardsToCollection
-				// Step 3: Refund the pack if Step 2 failed
+			} catch (error) {
 				try {
-					await packCollection.updateOne(
-						{ userId: user.id, setId: setId }, // No quantity check needed, just increment back
-						{ $inc: { quantity: 1 } }
-					);
+					await packCollection.updateOne({ userId: user.id, setId: setId }, { $inc: { quantity: 1 } });
 				} catch (refundError) {
-					// Log refund error, but prioritize showing the original error
 					console.error(`Failed to refund pack for ${user.id}, setId ${setId}:`, refundError);
-					// Fall through to show the original error message
 				}
-				// IMPORTANT: Check the error message. If it's the conflict error, provide that specific feedback.
 				if (error instanceof Error && error.message.includes("conflict at 'quantity'")) {
 					return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 				}
-				// Otherwise, show the general error + refund message
 				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 			}
 		},
 		
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const rawSetId = target.trim(); 
-			if (!rawSetId) {
-				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
-			}
-			
+			const rawSetId = target.trim();
+			if (!rawSetId) this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			const packCollection = userPacksCollection;
-
 			const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
-			
-			let findResult: TcgUserPack | null = null; 
+			let findResult: TcgUserPack | null = null;
+
 			try {
-				findResult = await packCollection.findOneAndUpdate(
-					queryFilter,
-					{ $set: { quantity: 0 } }
-				);
+				findResult = await packCollection.findOneAndUpdate(queryFilter, { $set: { quantity: 0 } });
 			} catch (dbError) {
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
@@ -484,64 +389,49 @@ export const commands: ChatCommands = {
 			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
 				try {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
-					
 					if (zeroCheck && zeroCheck.quantity === 0) {
 						return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
-					} 
+					}
 				} catch (checkError) { /* ignore */ }
-
-				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`); 
+				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`);
 			}
 
-			const packQuantity = findResult.quantity; 
-			const setName = findResult.setName || rawSetId; 
+			const packQuantity = findResult.quantity;
+			const setName = findResult.setName || rawSetId;
 
 			try {
 				const allPacks: TcgCard[] = [];
-				const quantityToOpen = Math.min(packQuantity, 100); 
+				const quantityToOpen = Math.min(packQuantity, 100);
 				
 				if (packQuantity > 100) {
 					this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
-					await packCollection.updateOne(
-						{ userId: user.id, setId: rawSetId }, 
-						{ $inc: { quantity: packQuantity - 100 } } 
-					);
+					await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $inc: { quantity: packQuantity - 100 } });
 				}
 
 				for (let i = 0; i < quantityToOpen; i++) {
-					const pack = await generatePack(rawSetId); 
+					const pack = await generatePack(rawSetId);
 					allPacks.push(...pack);
 				}
 				
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
-				
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
-				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong>`;
-				html += `<br /><br />`;
+				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong><br /><br />`;
 				html += `You found a total of <strong>${allPacks.length}</strong> cards.`;
 				if (creditsAwarded > 0) {
 					html += `<br /><div style="font-size: 1.1em; color: green; margin-top: 5px;">+${creditsAwarded} Credits from duplicates!</div>`;
 				}
 				html += `<br /><br />`;
-
 				html += `<button name="send" value="/tcg collection user:${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
-
 				html += `</div>`;
-
 				this.sendReply(`|html|${html}`);
-				
 			} catch (error) {
-				await packCollection.updateOne(
-					{ userId: user.id, setId: rawSetId }, 
-					{ $set: { quantity: packQuantity } }  
-				);
+				await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $set: { quantity: packQuantity } });
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
 		},
-		// --- Meta / Misc ---
+
 		async leaderboard(target, room, user) {
 			if (!this.runBroadcast()) return;
-
 			let targetStat = toID(target) || 'points';
 			let sortKey: keyof TcgUserProfile = 'collectionPoints';
 			let title = 'Collection Points';
@@ -565,10 +455,7 @@ export const commands: ChatCommands = {
 			try {
 				const collection = userProfilesCollection;
 				const results = await collection.find({}, { sort: { [sortKey]: -1 }, limit: 10 });
-
-				if (results.length === 0) {
-					return this.errorReply("No users found in the leaderboard yet.");
-				}
+				if (results.length === 0) return this.errorReply("No users found in the leaderboard yet.");
 				
 				const headerRow = ['Rank', 'User', title];
 				const dataRows = results.map((profile, i) => {
@@ -578,13 +465,12 @@ export const commands: ChatCommands = {
 
 				let html = `<div class="style="padding: 10px;">`;
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
-
 				this.sendReply(`|html|${html}`);
-
 			} catch (error) {
 				return this.errorReply('An error occurred while fetching the leaderboard.');
 			}
 		},
+
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;
