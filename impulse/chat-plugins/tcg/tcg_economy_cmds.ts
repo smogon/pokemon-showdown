@@ -5,7 +5,7 @@
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
 import { getSet, dailyShopCache, currentShopDate, setShopCache,
-		  MAX_CARD_QUANTITY, MAX_CARD_QUANTITY } from './tcg_utils';
+		  MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { tcgCardsCollection, userCollectionsCollection,
 		  userProfilesCollection, userPacksCollection } from './tcg_collections';
@@ -257,8 +257,8 @@ export const economyCommands: ChatCommands = {
 					updateOne: {
 						filter: { userId: user.id, cardId: card.cardId },
 						update: { 
-							$set: { quantity: 1 },
-							$inc: {} 
+							$set: { quantity: 1 }
+							// $inc: {} <-- BUG: This empty $inc operator conflicts with $set
 						}
 					}
 				});
