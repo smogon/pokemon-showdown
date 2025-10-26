@@ -9,7 +9,7 @@ import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
 	userPacksCollection } from './tcg_collections';
 
 // Constants specific to these commands
-const SEARCH_PAGE_LIMIT = 60;
+const SEARCH_PAGE_LIMIT = 80;
 const MAX_FAVORITE_CARDS = 10;
 
 // Parser function moved here as it's only used by 'collection' command now
