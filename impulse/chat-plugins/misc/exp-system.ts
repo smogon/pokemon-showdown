@@ -479,23 +479,23 @@ export const commands: Chat.ChatCommands = {
       return this.parse(`/join view-expladder`);
     },
 
-	  async help(target, room, user): Promise<void> {
-			if (!this.runBroadcast()) return;
-			const helpList = [
-				{cmd: "/exp level [user]", desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)"},
-				{cmd: "/exp give [user], [amount], [reason]", desc: "Give a specified amount of " + EXP_UNIT + " to a user. Requires: &."},
-				{cmd: "/exp take [user], [amount], [reason]", desc: "Take a specified amount of " + EXP_UNIT + " from a user. Requires: &."},
-				{cmd: "/exp reset [user], [reason]", desc: "Reset a user's " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: &."},
-				{cmd: "/exp resetall [reason]", desc: "Reset all users' " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: ~."},
-				{cmd: "/exp ladder", desc: "View the top 100 users with the most " + EXP_UNIT + " and their levels."},
-				{cmd: "/exp toggledouble [duration|off]", desc: "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &."}
-			];
-			const html = `<center><strong>EXP System Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
-		},
+    async help(target, room, user): Promise<void> {
+      if (!this.runBroadcast()) return;
+      const helpList = [
+        {cmd: "/exp level [user]", desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)"},
+        {cmd: "/exp give [user], [amount], [reason]", desc: "Give a specified amount of " + EXP_UNIT + " to a user. Requires: &."},
+        {cmd: "/exp take [user], [amount], [reason]", desc: "Take a specified amount of " + EXP_UNIT + " from a user. Requires: &."},
+        {cmd: "/exp reset [user], [reason]", desc: "Reset a user's " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: &."},
+        {cmd: "/exp resetall [reason]", desc: "Reset all users' " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: ~."},
+        {cmd: "/exp ladder", desc: "View the top 100 users with the most " + EXP_UNIT + " and their levels."},
+        {cmd: "/exp toggledouble [duration|off]", desc: "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &."}
+      ];
+      const html = `<center><strong>EXP System Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+        helpList.map(({cmd, desc}, i) =>
+          `<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+        ).join('') +
+        `</ul>`;
+      this.sendReplyBox(html);
+    },
   },
 };
