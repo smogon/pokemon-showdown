@@ -123,7 +123,8 @@ export const economyCommands: ChatCommands = {
 						lastAcquiredAt: now
 					},
 					$setOnInsert: {
-						userId: user.id
+						userId: user.id,
+						setId: setId
 					}
 				},
 				{ upsert: true }
@@ -258,7 +259,6 @@ export const economyCommands: ChatCommands = {
 						filter: { userId: user.id, cardId: card.cardId },
 						update: { 
 							$set: { quantity: 1 }
-							// $inc: {} <-- BUG: This empty $inc operator conflicts with $set
 						}
 					}
 				});
@@ -381,30 +381,38 @@ export const economyCommands: ChatCommands = {
 				}
 			}
 
-			
 			if (actualQtyAdded > 0 || creditsToAward > 0) {
 				const recipientProfile = await profiles.findOne({ userId: targetUserId });
-				const recipientName = recipientProfile?.userName || targetUserId;
-				
-				await profiles.updateOne(
-					{ userId: targetUserId },
-					{
-						$inc: {
-							totalQuantity: actualQtyAdded,
-							collectionPoints: pointsToAdd,
-							totalUniqueCards: uniqueCardsChangeRecipient,
-							credits: creditsToAward
-						},
-						$set: {
-							userName: recipientName,
-							lastUpdatedAt: now
-						},
-						$setOnInsert: {
-							userId: targetUserId,
+	
+				if (recipientProfile) {
+					// Profile exists, just increment
+					await profiles.updateOne(
+						{ userId: targetUserId },
+						{
+							$inc: {
+								totalQuantity: actualQtyAdded,
+								collectionPoints: pointsToAdd,
+								totalUniqueCards: uniqueCardsChangeRecipient,
+								credits: creditsToAward
+							},
+							$set: {
+								userName: recipientProfile.userName,
+								lastUpdatedAt: now
+							}
 						}
-					},
-					{ upsert: true }
-				);
+					);
+				} else {
+					// Create new profile
+					await profiles.insertOne({
+						userId: targetUserId,
+						userName: targetUserId,
+						credits: creditsToAward,
+						totalUniqueCards: uniqueCardsChangeRecipient,
+						totalQuantity: actualQtyAdded,
+						collectionPoints: pointsToAdd,
+						lastUpdatedAt: now
+					});
+				}
 			}
 
 			let reply = `You successfully gifted ${quantityToGift}x "${senderCard.name}" to ${targetUserId}.`;
@@ -480,12 +488,12 @@ export const economyCommands: ChatCommands = {
 						lastAcquiredAt: now
 					},
 					$setOnInsert: {
-						userId: targetUserId
+						userId: targetUserId,
+						setId: setId
 					}
 				},
 				{ upsert: true }
 			);
-
 			this.sendReply(`You successfully gifted ${quantityToGift}x "${senderPack.setName}" pack(s) to ${targetUserId}.`);
 			const targetUser = Users.get(targetUserId);
 			if (targetUser) {
@@ -510,9 +518,11 @@ export const economyCommands: ChatCommands = {
 		if (!targetUserId) {
 			return this.errorReply("Please specify a user to gift to.");
 		}
+		
 		if (targetUserId === user.id) {
 			return this.errorReply("You cannot gift credits to yourself.");
 		}
+		
 		if (isNaN(amountToGift) || amountToGift <= 0) {
 			return this.errorReply("Invalid amount. Amount must be a positive number.");
 		}
@@ -523,7 +533,7 @@ export const economyCommands: ChatCommands = {
 		try {
 			const now = new Date().toISOString();
 
-			
+			// Deduct credits from sender
 			const senderUpdateResult = await profiles.updateOne(
 				{ userId: user.id, credits: { $gte: amountToGift } },
 				{ $inc: { credits: -amountToGift } }
@@ -534,46 +544,53 @@ export const economyCommands: ChatCommands = {
 				const senderCredits = senderProfile?.credits || 0;
 				throw new Error(`You do not have enough credits. You have ${senderCredits.toLocaleString()}, but tried to send ${amountToGift.toLocaleString()}.`);
 			}
-			
+		
 			senderUpdateSucceeded = true;
 
-			
-			
-			await profiles.updateOne(
-				{ userId: targetUserId },
-				{
-					$inc: { 
-						credits: amountToGift 
-					},
-					$set: { 
-						userName: targetUserId, 
-						lastUpdatedAt: now 
-					},
-					$setOnInsert: {
-						userId: targetUserId,
-						
-						collectionPoints: 0,
-						totalQuantity: 0,
-						totalUniqueCards: 0
+			// Add credits to recipient
+			const recipientProfile = await profiles.findOne({ userId: targetUserId });
+
+			if (recipientProfile) {
+				// Profile exists
+				await profiles.updateOne(
+					{ userId: targetUserId },
+					{
+						$inc: { 
+							credits: amountToGift 
+						},
+						$set: { 
+							lastUpdatedAt: now 
+						}
 					}
-				},
-				{ upsert: true }
-			);
+				);
+			} else {
+				// Create new profile
+				await profiles.insertOne({
+					userId: targetUserId,
+					userName: targetUserId,
+					credits: amountToGift,
+					collectionPoints: 0,
+					totalQuantity: 0,
+					totalUniqueCards: 0,
+					lastUpdatedAt: now
+				});
+			}
 
 			this.sendReply(`You successfully gifted ${amountToGift.toLocaleString()} credits to ${targetUserId}.`);
 			const targetUser = Users.get(targetUserId);
+			
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
 			}
 
 		} catch (error) {
-			
+		
 			if (error.message.startsWith('You do not have enough credits')) {
 				return this.errorReply(error.message);
 			}
-			
+		
 			if (senderUpdateSucceeded) {
-				
+				// Refund sender
 				await profiles.updateOne(
 					{ userId: user.id },
 					{ $inc: { credits: amountToGift } }
