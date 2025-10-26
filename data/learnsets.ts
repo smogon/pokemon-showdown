@@ -69513,7 +69513,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			worryseed: ["7T"],
 		},
 		eventData: [
-			{generation: 9, level: 72, moves: ["lightofruin", "energyball", "gigadrain", "synthesis"], source: "gen9legends"},
+			{generation: 9, level: 72, nature: "Modest", moves: ["lightofruin", "energyball", "gigadrain", "synthesis"], source: "gen9legends"},
 		],
 		eventOnly: true,
 	},
@@ -73665,7 +73665,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
 			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
 			{generation: 8, level: 70, shiny: 1, isHidden: true, moves: ["thousandarrows", "landswrath", "dragonpulse", "bind"]},
-			{generation: 9, level: 84, moves: ["coreenforcer", "thousandarrows", "thousandwaves", "landswrath"], source: "gen9legends"},
+			{generation: 9, level: 84, ivs: { hp: 31, atk: 31, def: 15, spa: 31, spd: 28, spe: 19 }, nature: "Quiet", moves: ["coreenforcer", "thousandarrows", "thousandwaves", "landswrath"], source: "gen9legends"},
 		],
 		eventOnly: true,
 	},
