@@ -7,6 +7,8 @@
 
 import { FS, Utils } from '../../../lib';
 
+const staff = 'staff';
+
 export const commands: Chat.ChatCommands = {
 	async fileread(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
@@ -70,6 +72,7 @@ export const commands: Chat.ChatCommands = {
 			await file.unlinkIfExists();
 			
 			return this.sendReply(`File deleted: ${filePath}`);
+			Rooms.get(staff).add(`|html|<div class="infobox">${user.name} deleted ${filePath}</div>`);
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : String(err);
 			throw new Chat.ErrorMessage(`Failed to delete file: ${message}`);
