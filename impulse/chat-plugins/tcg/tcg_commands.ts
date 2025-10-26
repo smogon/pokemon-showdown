@@ -3,23 +3,14 @@
 * TCG Commands
 */
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
-import {
-	generatePack, getCard, getSet,
-	getCacheStats, renderCardGridHtml,
-	addCardsToCollection,
-	dailyShopCache, currentShopDate, setShopCache // Keep shop cache imports for admin refresh command interaction
-} from './tcg_utils';
+import { generatePack, getCard, getSet, getCacheStats, renderCardGridHtml,
+	addCardsToCollection, dailyShopCache, currentShopDate, setShopCache } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
-import { adminCommands } from './tcg_admin';
-import { economyCommands } from './tcg_economy';
+import { adminCommands } from './tcg_admin_cmds';
+import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
-import {
-	tcgCardsCollection,
-	userCollectionsCollection, // Keep if needed by remaining commands (e.g., leaderboard)
-	userProfilesCollection,  // Keep if needed by remaining commands (e.g., leaderboard)
-	userPacksCollection,     // Keep if needed by remaining commands (e.g., openpack variants)
-	cooldownsCollection      // Keep if needed by remaining commands (e.g., daily)
-} from './tcg_collections';
+import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
+		  userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 60;
 
