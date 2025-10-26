@@ -9,12 +9,11 @@ import {
 	clearCache, clearShopCache, MAX_CARD_QUANTITY,
 	CREDITS_PER_DUPLICATE
 } from './tcg_utils';
-
-const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
-const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
-const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
-const userPacksCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
-const cooldownsCollection = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
+import {
+	tcgCardsCollection, userCollectionsCollection,
+    userProfilesCollection, userPacksCollection,
+    cooldownsCollection
+} from './tcg_collections';
 
 export const adminCommands: ChatCommands = {
 	async awardcredits(target, room, user) {
