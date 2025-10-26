@@ -270,30 +270,26 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 	}
 
 	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
-		const profiles = userProfilesCollection;
-		await profiles.updateOne(
-			{ userId: user.id },
-			{
-				$inc: {
-					totalQuantity: totalQuantityChange,
-					collectionPoints: totalPointsChange,
-					totalUniqueCards: totalUniqueCardsAdded,
-					credits: creditsToAward
-				},
-				$set: {
-					userName: user.name,
-					lastUpdatedAt: now
-				},
-				$setOnInsert: {
-					userId: user.id,
-					collectionPoints: totalPointsChange,
-					totalQuantity: totalQuantityChange,
-					totalUniqueCards: totalUniqueCardsAdded,
-					credits: creditsToAward,
-				}
+	const profiles = userProfilesCollection;
+	await profiles.updateOne(
+		{ userId: user.id },
+		{
+			$inc: {
+				totalQuantity: totalQuantityChange,
+				collectionPoints: totalPointsChange,
+				totalUniqueCards: totalUniqueCardsAdded,
+				credits: creditsToAward
 			},
-			{ upsert: true }
-		);
+			$set: {
+				userName: user.name,
+				lastUpdatedAt: now
+			},
+			$setOnInsert: {
+				userId: user.id
+			}
+		},
+		{ upsert: true }
+	);
 	}
 
 	return { creditsAwarded: creditsToAward };
