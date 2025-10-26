@@ -254,14 +254,13 @@ export const collectionCommands: ChatCommands = {
 			return this.errorReply('An error occurred while fetching your collection.');
 		}
 	},
-
-	// ... (setprogress, missing, packs, profile, favorite, unfavorite, recalculatestats commands remain here)
+	
 	async setprogress(target, room, user) {
 		if (!this.runBroadcast()) return;
 		
 		const setId = target.trim();
 		if (!setId) {
-			return this.parse('/tcg help');
+			return this.errorReply('Usage: /tcg setprogress [setid]');
 		}
 
 		const targetUserId = user.id; 
@@ -335,7 +334,9 @@ export const collectionCommands: ChatCommands = {
 		let targetUserName = user.name;
 		let page = 1;
 		
-		if (!setId) return this.parse('/help tcg missing');
+		if (!setId) {
+         return this.errorReply('Usage: /tcg missing [setid]');
+      }
 
 		let commandString = setId;
 
@@ -613,7 +614,9 @@ export const collectionCommands: ChatCommands = {
 
 	async favorite(target, room, user) {
 		const cardId = target.trim();
-		if (!cardId) return this.parse('/tcg help');
+		if (!cardId) {
+         return this.errorReply('Usage: /tcg favorite [cardid]');
+      }
 
 		const profiles = userProfilesCollection;
 		const collections = userCollectionsCollection;
@@ -654,7 +657,9 @@ export const collectionCommands: ChatCommands = {
 
 	async unfavorite(target, room, user) {
 		const targetId = target.trim().toLowerCase();
-		if (!targetId) return this.parse('/tcg help');
+		if (!targetId) {
+         return this.errorReply('Usage: /tcg unfavorite [cardid|all]');
+      }
 
 		const profiles = userProfilesCollection;
 
