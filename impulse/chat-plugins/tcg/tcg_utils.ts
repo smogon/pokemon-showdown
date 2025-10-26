@@ -12,11 +12,11 @@
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile } from './interface';
 
-const CACHE_SAMPLE_SIZE = 10;
-const DB_SAMPLE_SIZE = 10;
-const HIT_CHANCE = 0.9;
-const MAX_CARD_QUANTITY = 10;
-const CREDITS_PER_DUPLICATE = 1;
+export const CACHE_SAMPLE_SIZE = 10;
+export const DB_SAMPLE_SIZE = 10;
+export const HIT_CHANCE = 0.9;
+export const MAX_CARD_QUANTITY = 10;
+export const CREDITS_PER_DUPLICATE = 1;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
@@ -32,6 +32,19 @@ const cardsCache = new Map<string, TcgCard>();
 const setsCache = new Map<string, TcgCard>();
 const packCache = new Map<string, RarityPools>();
 let globalFallbackCache: TcgCard[] = [];
+
+export let dailyShopCache: TcgCard[] = [];
+export let currentShopDate: string = '';
+
+export function setShopCache(cache: TcgCard[], date: string) {
+	dailyShopCache = cache;
+	currentShopDate = date;
+}
+
+export function clearShopCache() {
+	dailyShopCache = [];
+	currentShopDate = '';
+}
 
 const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
 const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
