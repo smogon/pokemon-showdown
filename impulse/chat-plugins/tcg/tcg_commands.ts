@@ -331,6 +331,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) {
 				return this.errorReply('Usage: /tcg openpack [setid] - Only for testing');
+			}
 
 			const setId = target.trim();
 
