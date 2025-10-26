@@ -11558,7 +11558,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Dark", "Psychic"],
 		baseStats: { hp: 86, atk: 102, def: 88, spa: 98, spd: 120, spe: 88 },
-		abilities: { 0: "Rightside Down"},
+		abilities: { 0: "Right Side Down"},
 		heightm: 2.9,
 		weightkg: 69.8,
 		color: "Blue",
