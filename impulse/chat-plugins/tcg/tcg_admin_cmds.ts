@@ -4,52 +4,34 @@
 */
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
-import { getSet, initializeCache, getCacheStats, clearCache, clearShopCache,
-	MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
-import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
-	userPacksCollection, cooldownsCollection } from './tcg_collections';
+import { getSet, initializeCache, getCacheStats, clearCache, clearShopCache, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
+import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 export const adminCommands: ChatCommands = {
 	async awardcredits(target, room, user) {
 		this.checkCan('bypassall');
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Usage: /tcg awardcredits [user], [amount]");
-		}
+		if (parts.length < 2) return this.errorReply("Usage: /tcg awardcredits [user], [amount]");
 		
 		const targetUserId = toID(parts[0]);
 		const amount = parseInt(parts[1]);
 
-		if (!targetUserId) {
-			return this.errorReply("Please specify a user.");
-		}
-		if (isNaN(amount) || amount <= 0) {
-			return this.errorReply("Invalid amount. Amount must be a positive number.");
-		}
+		if (!targetUserId) return this.errorReply("Please specify a user.");
+		if (isNaN(amount) || amount <= 0) return this.errorReply("Invalid amount. Amount must be a positive number.");
 
 		try {
 			const now = new Date().toISOString();
 			const profile = await userProfilesCollection.findOne({ userId: targetUserId });
 			
 			if (profile) {
-				// Profile exists
 				await userProfilesCollection.updateOne(
 					{ userId: targetUserId },
-					{
-						$inc: { credits: amount },
-						$set: { lastUpdatedAt: now }
-					}
+					{ $inc: { credits: amount }, $set: { lastUpdatedAt: now } }
 				);
 			} else {
-				// Create new profile
 				await userProfilesCollection.insertOne({
-					userId: targetUserId,
-					userName: targetUserId,
-					credits: amount,
-					collectionPoints: 0,
-					totalQuantity: 0,
-					totalUniqueCards: 0,
-					lastUpdatedAt: now
+					userId: targetUserId, userName: targetUserId, credits: amount,
+					collectionPoints: 0, totalQuantity: 0, totalUniqueCards: 0, lastUpdatedAt: now
 				});
 			}
 
@@ -66,33 +48,20 @@ export const adminCommands: ChatCommands = {
 	async awardpack(target, room, user) {
 		this.checkCan('bypassall');
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
-		}
+		if (parts.length < 2) return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
 
 		const targetUserId = toID(parts[0]);
 		const setId = parts[1];
 		const quantity = parts[2] ? parseInt(parts[2]) : 1;
 
-		if (!targetUserId) {
-			return this.errorReply("Please specify a user.");
-		}
-		if (!setId) {
-			return this.errorReply("Please specify a set ID.");
-		}
-		if (isNaN(quantity) || quantity <= 0) {
-			return this.errorReply("Invalid quantity. Must be a positive number.");
-		}
+		if (!targetUserId) return this.errorReply("Please specify a user.");
+		if (!setId) return this.errorReply("Please specify a set ID.");
+		if (isNaN(quantity) || quantity <= 0) return this.errorReply("Invalid quantity. Must be a positive number.");
 		
 		try {
 			let setInfo = getSet(setId);
-			if (!setInfo) {
-				setInfo = await tcgCardsCollection.findOne({ setId: setId });
-			}
-			
-			if (!setInfo) {
-				return this.errorReply(`Set with ID "${setId}" not found.`);
-			}
+			if (!setInfo) setInfo = await tcgCardsCollection.findOne({ setId: setId });
+			if (!setInfo) return this.errorReply(`Set with ID "${setId}" not found.`);
 
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
@@ -102,15 +71,8 @@ export const adminCommands: ChatCommands = {
 				{ userId: targetUserId, setId: setId },
 				{
 					$inc: { quantity: quantity },
-					$set: {
-						setName: setName,
-						setLogo: setLogo,
-						lastAcquiredAt: now
-					},
-					$setOnInsert: {
-						userId: targetUserId,
-						setId: setId
-					}
+					$set: { setName: setName, setLogo: setLogo, lastAcquiredAt: now },
+					$setOnInsert: { userId: targetUserId, setId: setId }
 				},
 				{ upsert: true }
 			);
@@ -128,29 +90,19 @@ export const adminCommands: ChatCommands = {
 	async awardcard(target, room, user) {
 		this.checkCan('bypassall');
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
-		}
+		if (parts.length < 2) return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
 
 		const targetUserId = toID(parts[0]);
 		const cardId = parts[1];
 		const quantityToAward = parts[2] ? parseInt(parts[2]) : 1;
 
-		if (!targetUserId) {
-			return this.errorReply("Please specify a user.");
-		}
-		if (!cardId) {
-			return this.errorReply("Please specify a card ID.");
-		}
-		if (isNaN(quantityToAward) || quantityToAward <= 0) {
-			return this.errorReply("Invalid quantity. Must be a positive number.");
-		}
+		if (!targetUserId) return this.errorReply("Please specify a user.");
+		if (!cardId) return this.errorReply("Please specify a card ID.");
+		if (isNaN(quantityToAward) || quantityToAward <= 0) return this.errorReply("Invalid quantity. Must be a positive number.");
 		
 		try {
 			const card = await tcgCardsCollection.findOne({ cardId: cardId });
-			if (!card) {
-				return this.errorReply(`Card with ID "${cardId}" not found in the database.`);
-			}
+			if (!card) return this.errorReply(`Card with ID "${cardId}" not found in the database.`);
 
 			const collection = userCollectionsCollection;
 			const profiles = userProfilesCollection;
@@ -159,7 +111,6 @@ export const adminCommands: ChatCommands = {
 			const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
 			const currentRecipientQty = recipientCard?.quantity || 0;
 			const newRecipientQty = currentRecipientQty + quantityToAward;
-			
 			const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
 			const excess = newRecipientQty - finalRecipientQty;
 			const creditsToAward = excess * CREDITS_PER_DUPLICATE;
@@ -175,60 +126,39 @@ export const adminCommands: ChatCommands = {
 					);
 				} else {
 					const newDocData: TcgUser = {
-						userId: targetUserId,
-						cardId: card.cardId,
-						quantity: finalRecipientQty,
-						firstAcquiredAt: now,
-						lastAcquiredAt: now,
-						name: card.name,
-						setId: card.setId,
-						rarity: card.rarity,
-						totalPoints: card.totalPoints,
-						supertype: card.supertype,
-						types: card.types || [],
-						subtypes: card.subtypes || [],
-						imageUrl: card.imageUrl || undefined,
-						hp: card.hp || undefined,
-						setSeries: card.setSeries || undefined,
-						regulationMark: card.regulationMark || undefined,
+						userId: targetUserId, cardId: card.cardId, quantity: finalRecipientQty,
+						firstAcquiredAt: now, lastAcquiredAt: now, name: card.name,
+						setId: card.setId, rarity: card.rarity, totalPoints: card.totalPoints,
+						supertype: card.supertype, types: card.types || [], subtypes: card.subtypes || [],
+						imageUrl: card.imageUrl || undefined, hp: card.hp || undefined,
+						setSeries: card.setSeries || undefined, regulationMark: card.regulationMark || undefined,
 					};
-					if (newDocData.imageUrl === undefined) delete newDocData.imageUrl;
-					if (newDocData.hp === undefined) delete newDocData.hp;
-					if (newDocData.setSeries === undefined) delete newDocData.setSeries;
-					if (newDocData.regulationMark === undefined) delete newDocData.regulationMark;
+					if (!newDocData.imageUrl) delete newDocData.imageUrl;
+					if (!newDocData.hp) delete newDocData.hp;
+					if (!newDocData.setSeries) delete newDocData.setSeries;
+					if (!newDocData.regulationMark) delete newDocData.regulationMark;
 					await collection.insertOne(newDocData);
 				}
 			}
 
 			if (actualQtyAdded > 0 || creditsToAward > 0) {
 				const recipientProfile = await profiles.findOne({ userId: targetUserId });
-				
 				if (recipientProfile) {
-					// Profile exists
 					await profiles.updateOne(
 						{ userId: targetUserId },
 						{
 							$inc: {
-								totalQuantity: actualQtyAdded,
-								collectionPoints: pointsToAdd,
-								totalUniqueCards: uniqueCardsChangeRecipient,
-								credits: creditsToAward
+								totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
+								totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward
 							},
-							$set: {
-								lastUpdatedAt: now
-							}
+							$set: { lastUpdatedAt: now }
 						}
 					);
 				} else {
-					// Create new profile
 					await profiles.insertOne({
-						userId: targetUserId,
-						userName: targetUserId,
-						credits: creditsToAward,
-						totalQuantity: actualQtyAdded,
-						collectionPoints: pointsToAdd,
-						totalUniqueCards: uniqueCardsChangeRecipient,
-						lastUpdatedAt: now
+						userId: targetUserId, userName: targetUserId, credits: creditsToAward,
+						totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
+						totalUniqueCards: uniqueCardsChangeRecipient, lastUpdatedAt: now
 					});
 				}
 			}
@@ -242,7 +172,6 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|You have been awarded ${quantityToAward} "${card.name}" card(s) by ${user.name}.`);
 			}
-
 		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
@@ -251,9 +180,7 @@ export const adminCommands: ChatCommands = {
 	async wipecollection(target, room, user) {
 		this.checkCan('bypassall');
 		const targetUserId = toID(target);
-		if (!targetUserId) {
-			return this.errorReply("Usage: /tcg wipecollection [user]");
-		}
+		if (!targetUserId) return this.errorReply("Usage: /tcg wipecollection [user]");
 		
 		try {
 			await userCollectionsCollection.deleteMany({ userId: targetUserId });
@@ -281,9 +208,7 @@ export const adminCommands: ChatCommands = {
 	async resetdaily(target, room, user) {
 		this.checkCan('bypassall');
 		const targetId = toID(target);
-		if (!targetId) {
-			return this.errorReply("Usage: /tcg resetdaily [user | all]");
-		}
+		if (!targetId) return this.errorReply("Usage: /tcg resetdaily [user | all]");
 
 		try {
 			if (targetId === 'all') {
@@ -291,9 +216,7 @@ export const adminCommands: ChatCommands = {
 				this.sendReply(`Successfully reset daily pack cooldown for ALL users.`);
 			} else {
 				const result = await cooldownsCollection.deleteOne({ userId: targetId });
-				if (result.deletedCount === 0) {
-					return this.errorReply(`User ${targetId} had no cooldown to reset.`);
-				}
+				if (result.deletedCount === 0) return this.errorReply(`User ${targetId} had no cooldown to reset.`);
 				this.sendReply(`Successfully reset daily pack cooldown for ${targetId}.`);
 				const targetUser = Users.get(targetId);
 				if (targetUser) {
@@ -307,12 +230,10 @@ export const adminCommands: ChatCommands = {
 	
 	recalculateallstats(target, room, user) {
 		this.checkCan('bypassall');
-
 		this.sendReply(`Starting stats recalculation for ALL users... This will take a long time and run in the background. You will be notified when it's complete.`);
 
 		(async () => {
-			let processedCount = 0;
-			let errorCount = 0;
+			let processedCount = 0, errorCount = 0;
 			const startTime = Date.now();
 
 			try {
@@ -336,17 +257,12 @@ export const adminCommands: ChatCommands = {
 
 				const allUserProfiles = await profileCollection.find({}, { projection: { userId: 1, userName: 1, credits: 1, favoriteCards: 1 } });
 				const profileMap = new Map<string, Partial<TcgUserProfile>>();
-				for (const profile of allUserProfiles) {
-					profileMap.set(profile.userId, profile);
-				}
+				for (const profile of allUserProfiles) profileMap.set(profile.userId, profile);
 
 				const allStatsPipeline: any[] = [
 					{
 						$group: {
-							_id: {
-								userId: "$userId",
-								setId: "$setId"
-							},
+							_id: { userId: "$userId", setId: "$setId" },
 							uniqueCountInSet: { $sum: 1 },
 							quantityInSet: { $sum: "$quantity" },
 							pointsInSet: { $sum: { $multiply: ["$totalPoints", "$quantity"] } }
@@ -359,10 +275,7 @@ export const adminCommands: ChatCommands = {
 							totalQuantity: { $sum: "$quantityInSet" },
 							collectionPoints: { $sum: "$pointsInSet" },
 							setProgress: {
-								$push: {
-									setId: "$_id.setId",
-									uniqueCount: "$uniqueCountInSet"
-								}
+								$push: { setId: "$_id.setId", uniqueCount: "$uniqueCountInSet" }
 							}
 						}
 					}
@@ -380,9 +293,7 @@ export const adminCommands: ChatCommands = {
 					if (userStats.setProgress) {
 						for (const set of userStats.setProgress) {
 							const totalNeeded = allSetsMap.get(set.setId);
-							if (totalNeeded && set.uniqueCount >= totalNeeded) {
-								setsCompleted++;
-							}
+							if (totalNeeded && set.uniqueCount >= totalNeeded) setsCompleted++;
 						}
 					}
 					
@@ -416,11 +327,8 @@ export const adminCommands: ChatCommands = {
 									userName: profile.userName || targetUserId,
 									credits: profile.credits || 0,
 									favoriteCards: profile.favoriteCards || [],
-									totalUniqueCards: 0,
-									totalQuantity: 0,
-									collectionPoints: 0,
-									totalSetsCompleted: 0,
-									lastUpdatedAt: now
+									totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0,
+									totalSetsCompleted: 0, lastUpdatedAt: now
 								}
 							},
 							upsert: true
@@ -428,13 +336,10 @@ export const adminCommands: ChatCommands = {
 					});
 				}
 
-				if (bulkOps.length > 0) {
-					await profileCollection.bulkWrite(bulkOps, { ordered: false });
-				}
+				if (bulkOps.length > 0) await profileCollection.bulkWrite(bulkOps, { ordered: false });
 				processedCount = bulkOps.length;
 				const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 				this.sendReply(`RECALCULATION COMPLETE: Processed ${processedCount} users with ${errorCount} errors in ${duration} seconds.`);
-				
 			} catch (error) {
 				this.sendReply(`RECALCULATION FAILED: A critical error occurred: ${error.message}`);
 			}
@@ -476,14 +381,12 @@ export const adminCommands: ChatCommands = {
 
 	async createindexes(target, room, user) {
 		this.checkCan('bypassall');
-		
 		this.sendReply("Attempting to create/recreate recommended indexes for TCG collections...");
 
 		try {
 			const userCollection = userCollectionsCollection;
 			const profileCollection = userProfilesCollection;
-			let createdCount = 0;
-			let failedCount = 0;
+			let createdCount = 0, failedCount = 0;
 			const startTime = Date.now();
 
 			const userIndexes = [
@@ -527,7 +430,6 @@ export const adminCommands: ChatCommands = {
 			
 			const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 			this.sendReply(`Index creation finished in ${duration}s. Created: ${createdCount}, Failed: ${failedCount}.`);
-
 		} catch (error) {
 			return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
 		}
