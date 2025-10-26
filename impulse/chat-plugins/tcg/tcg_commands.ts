@@ -396,48 +396,64 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const setId = target.trim();
 			if (!setId) {
-				this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+				return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			}
 
 			const packCollection = userPacksCollection;
-			
-			const updateResult = await packCollection.updateOne(
-				{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
-				{ $inc: { quantity: -1 } }
-			);
+			let updateResult;
 
-			if (updateResult.modifiedCount === 0) {
-				return this.errorReply(`You do not have any saved "${setId}" packs to open. Use /tcg packs to see your inventory.`);
+			// Step 1: Attempt to decrement the pack quantity
+			try {
+				updateResult = await packCollection.updateOne(
+					{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
+					{ $inc: { quantity: -1 } }
+				);
+
+				if (updateResult.modifiedCount === 0) {
+					// User didn't have the pack or quantity was already 0
+					return this.errorReply(`You do not have any saved "${setId}" packs to open.`);
+				}
+			} catch (dbError) {
+				// Log the error for diagnostics
+				console.error(`DB error decrementing pack for ${user.id}, setId ${setId}:`, dbError);
+				return this.errorReply(`A database error occurred while trying to use your pack. Please try again.`);
 			}
 
+			// Step 2: Try to generate and add the pack
 			try {
 				const pack = await generatePack(setId);
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
 				let setName = setId;
-				const setInfo = getSet(setId); 
-				if (setInfo) {
-					setName = setInfo.set;
-				} else { 
-					const dbSetInfo = await tcgCardsCollection.findOne({ setId });
-					if (dbSetInfo) setName = dbSetInfo.set;
-				}
+				const setInfo = getSet(setId) ?? await tcgCardsCollection.findOne({ setId });
+				if (setInfo) setName = setInfo.set;
 
 				const title = `${user.name} opened a ${setName} pack!`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
-
 				this.sendReply(`|html|${html}`);
-				
-			} catch (error) {
-				
-				await packCollection.updateOne(
-					{ userId: user.id, setId: setId },
-					{ $inc: { quantity: 1 } }
-				);
+
+			} catch (error) { // Catch errors from generatePack or addCardsToCollection
+				// Step 3: Refund the pack if Step 2 failed
+				try {
+					await packCollection.updateOne(
+						{ userId: user.id, setId: setId }, // No quantity check needed, just increment back
+						{ $inc: { quantity: 1 } }
+					);
+				} catch (refundError) {
+					// Log refund error, but prioritize showing the original error
+					console.error(`Failed to refund pack for ${user.id}, setId ${setId}:`, refundError);
+					// Fall through to show the original error message
+				}
+				// IMPORTANT: Check the error message. If it's the conflict error, provide that specific feedback.
+				if (error instanceof Error && error.message.includes("conflict at 'quantity'")) {
+				    return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
+                }
+				// Otherwise, show the general error + refund message
 				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 			}
 		},
+		
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const rawSetId = target.trim(); 
