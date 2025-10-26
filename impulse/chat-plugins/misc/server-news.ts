@@ -91,16 +91,13 @@ export const commands: Chat.ChatCommands = {
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews add [title], [desc]");
 
-			const trimmedTitle = title.trim();
-			const trimmedDesc = descParts.join(',').trim();
-
-			if (await NewsDB.exists({ title: trimmedTitle })) {
-				return this.errorReply(`"${trimmedTitle}" exists. Use /servernews update.`);
+			if (await NewsDB.exists({ title: title })) {
+				return this.errorReply(`"${title}" exists. Use /servernews update.`);
 			}
 
-			await NewsManager.addNews(toID(trimmedTitle), trimmedDesc, user);
+			await NewsManager.addNews(title, descParts, user);
 
-			this.sendReply(`Added: "${trimmedTitle}"`);
+			this.sendReply(`Added: "${title}"`);
 		},
 
 		async update(target, room, user): Promise<void> {
@@ -109,13 +106,10 @@ export const commands: Chat.ChatCommands = {
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews update [title], [new desc]");
 
-			const trimmedTitle = title.trim();
-			const newDesc = descParts.join(',').trim();
-
-			const result = await NewsManager.updateNews(toID(trimmedTitle), newDesc);
+			const result = await NewsManager.updateNews(title, descParts);
 			if (result?.includes('not found')) return this.errorReply(result);
 
-			this.sendReply(`Updated: "${trimmedTitle}"`);
+			this.sendReply(`Updated: "${title}"`);
 		},
 
 		remove: 'delete',
@@ -123,12 +117,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
-			const trimmedTitle = target.trim();
-			const result = await NewsManager.deleteNews(toID(trimmedTitle));
+			const result = await NewsManager.deleteNews(target);
 
 			if (result?.includes('not found')) return this.errorReply(result);
 
-			this.sendReply(`Deleted: "${trimmedTitle}"`);
+			this.sendReply(`Deleted: "${target}"`);
 		},
 
 		async cleanup(target, room, user): Promise<void> {
