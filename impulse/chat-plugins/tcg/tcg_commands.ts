@@ -12,7 +12,7 @@ import { collectionCommands } from './tcg_collections_cmds';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
 	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
-const SEARCH_PAGE_LIMIT = 80;
+const SEARCH_PAGE_LIMIT = 40;
 
 // Parser function kept here as it's only used by 'search' command now
 function parseSearchQuery(target: string): {
@@ -140,7 +140,9 @@ export const commands: ChatCommands = {
 		// --- Core Viewing ---
 		async card(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/tcg help');
+			if (!target) {
+				return this.errorReply('Usage: /tcg card [cardid]');
+			}
 
 			const cardId = target.trim();
 			
@@ -195,7 +197,9 @@ export const commands: ChatCommands = {
 		},
 		async set(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/tcg help');
+			if (!target) {
+				return this.errorReply('Usage: /tcg set [setid]');
+			}
 
 			const setId = target.trim();
 
@@ -248,7 +252,9 @@ export const commands: ChatCommands = {
 		},
 		async search(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/tcg help');
+			if (!target) {
+				return this.errorReply('Usage: /tcg search [card/pokemonname|set:setid|rarity:"Rarity Name"|artist:"Artist Name"]');
+			}
 
 			try {
 				const { filter, queryDescription, page, commandString } = parseSearchQuery(target); // Now defined locally
@@ -323,7 +329,8 @@ export const commands: ChatCommands = {
 		// --- Basic Acquisition ---
 		async openpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			if (!target) return this.parse('/tcg help');
+			if (!target) {
+				return this.errorReply('Usage: /tcg openpack [setid] - Only for testing');
 
 			const setId = target.trim();
 
