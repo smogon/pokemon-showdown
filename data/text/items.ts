@@ -1,6 +1,7 @@
 export const ItemsText: { [id: IDEntry]: ItemText; } = {
 	// Custom Items
 	// I am going to harm someone.
+	// This is a test to see how pull requests works.
 	"lucarionitex": { "name": "Lucarionite X", "shortDesc": "If held by a Lucario-Mega-X, this item allows it to Mega Evolve in battle." }
 	, "serperionite": { "name": "Serperionite", "shortDesc": "If held by a Serperior, this item allows it to Mega Evolve in battle." }
 	, "serperiorite": { "name": "Serperiorite", "shortDesc": "If held by a Serperior, this item allows it to Mega Evolve in battle." }
