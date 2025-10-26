@@ -9,13 +9,12 @@ import {
   setShopCache, MAX_CARD_QUANTITY, MAX_CARD_QUANTITY
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
+import {
+	tcgCardsCollection, userCollectionsCollection,
+    userProfilesCollection, userPacksCollection
+} from './tcg_collections';
 
 const PACK_COST = 0;
-
-const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
-const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
-const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
-const userPacksCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
 
 export const economyCommands: ChatCommands = {
 	async shop(target, room, user) {
