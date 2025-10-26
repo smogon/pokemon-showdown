@@ -11,6 +11,7 @@
  */
 import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile } from './interface';
+import { userCollectionsCollection, userProfilesCollection } from './tcg_collections';
 
 export const CACHE_SAMPLE_SIZE = 10;
 export const DB_SAMPLE_SIZE = 10;
@@ -45,9 +46,6 @@ export function clearShopCache() {
 	dailyShopCache = [];
 	currentShopDate = '';
 }
-
-const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
-const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
 
 const CUSTOM_COMMON_RARITIES = ['Common'];
 const CUSTOM_UNCOMMON_RARITIES = ['Uncommon'];
