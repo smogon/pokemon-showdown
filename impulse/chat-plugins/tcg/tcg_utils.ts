@@ -244,9 +244,21 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 				update: {
 					$set: { quantity: finalQty, lastAcquiredAt: now },
 					$setOnInsert: {
-                        ...newDocData,
-                        quantity: finalQty
-                    },
+						userId: user.id,
+						cardId: card.cardId,
+						firstAcquiredAt: now,
+						name: card.name,
+						setId: card.setId,
+						rarity: card.rarity,
+						totalPoints: card.totalPoints,
+						supertype: card.supertype,
+						types: card.types || [],
+						subtypes: card.subtypes || [],
+						...(card.imageUrl && { imageUrl: card.imageUrl }),
+						...(card.hp && { hp: card.hp }),
+						...(card.setSeries && { setSeries: card.setSeries }),
+						...(card.regulationMark && { regulationMark: card.regulationMark }),
+					},
 				},
 				upsert: true
 			}
