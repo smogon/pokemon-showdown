@@ -4,6 +4,7 @@ import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
 import { Economy, CURRENCY } from '../../impulse/economy';
+import { tcgCardsCollection, userPacksCollection } from '../../impulse/chat-plugins/tcg/tcg_collections';
 // commented out doesn't look good on broadcast green.
 //import { nameColor } from '../../impulse/colors';
 
@@ -1194,6 +1195,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.remove();
 	}
 }*/
+
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1211,19 +1213,17 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					const playerCount = this.players.length;
 					let multiplier = 1;
 
-						if (playerCount > 4) {
-								multiplier = 1 + ((playerCount - 4) * 0.2);
-						}
+					if (playerCount > 4) {
+						multiplier = 1 + ((playerCount - 4) * 0.2);
+					}
 
-					const baseRewards = rewardConfig.rewards.map(reward => Math.floor(reward * multiplier));
+					const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
+					const packRewards = rewardConfig.packs || [];
 					const results = this.generator.getResults() as TournamentPlayer[][];
 
 					// Determine whether this is a true single-elimination tournament.
-					// Use the generator's maxSubtrees property (defined by Elimination) rather
-					// than string-matching on the generator name.
 					let isSingleElimination = false;
 					if ((this.generator as any).maxSubtrees !== undefined) {
-						// For Elimination generator, maxSubtrees == 1 -> single elimination
 						isSingleElimination = (this.generator as any).maxSubtrees === 1;
 					}
 
@@ -1232,9 +1232,11 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					const CURRENCYNAME = CURRENCY.name;
 
 					// Determine how many places to reward
-					// Single elimination: only winner (place 0)
-					// Other formats: reward up to the number of configured rewards and actual places
-					const maxPlace = isSingleElimination ? 1 : Math.min(baseRewards.length, results.length);
+					// Single elimination: reward up to max of configured rewards
+					// Other formats: only winner
+					const maxPlaceCredits = isSingleElimination ? Math.min(baseRewards.length, results.length) : 1;
+					const maxPlacePacks = isSingleElimination ? Math.min(packRewards.length, results.length) : 1;
+					const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
 
 					for (let place = 0; place < maxPlace; place++) {
 						const placeResults = results[place];
@@ -1243,21 +1245,17 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						for (const player of placeResults) {
 							// Guard against null/undefined/unfilled bracket nodes.
 							if (!player) {
-								// Log the unexpected case for visibility (won't crash)
 								Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
 								continue;
 							}
 
-							// player may be a TournamentPlayer instance or a string (depending on generator)
 							let userId: ID | '' = '';
 							let userName = '(unknown)';
-
+							
 							if (typeof player === 'string') {
 								userId = toID(player) as ID;
 								userName = player;
 							} else {
-								// If the TournamentPlayer has no associated User (setPlayerUser was called with null),
-								// it may still have an id or name. Prefer player.id, but fall back to player.name.
 								if (player.id) {
 									userId = player.id as ID;
 								} else if (player.name) {
@@ -1268,20 +1266,68 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 								userName = player.name || String(userId) || '(unfilled)';
 							}
 
-							// If userId is empty, skip awarding to avoid creating an economy record with empty id.
 							if (!userId) {
 								Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
 								continue;
 							}
-
-							// Safely index into baseRewards (baseRewards[place] should exist because of maxPlace)
-							const amount = baseRewards[place] ?? 0;
-							if (amount <= 0) continue;
 							
-							await Economy.updateBalance(userId, amount);
-							rewardMessages.push(
-								`<strong>${userName}</strong> (${places[place] || `place ${place + 1}`}) has earned <span style="font-weight:bold;">${Economy.formatMoney(amount)} ${CURRENCYNAME}</span> for their performance!`
-							);
+							const rewardParts: string[] = [];
+
+							// Award credits if configured for this place
+							if (place < maxPlaceCredits) {
+								const creditsAmount = baseRewards[place] ?? 0;
+								if (creditsAmount > 0) {
+									await Economy.updateBalance(userId, creditsAmount);									
+									rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(creditsAmount)} ${CURRENCYNAME}</span>`);
+								}
+							}
+
+							// Award packs if configured for this place
+							if (place < maxPlacePacks) {
+								const packsToAward = packRewards[place] ?? 0;
+								if (packsToAward > 0) {
+									// Get random sets from the database
+									const cardCollection = tcgCardsCollection;
+									const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
+										{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
+										{ $sample: { size: packsToAward } }
+									]);
+
+									if (randomSets.length > 0) {
+										const packCollection = userPacksCollection;
+										const now = new Date().toISOString();
+										const packNames: string[] = [];
+
+										for (const randomSet of randomSets) {
+											await packCollection.updateOne(
+												{ userId: userId, setId: randomSet._id },
+												{
+													$inc: { quantity: 1 },												
+													$set: {
+														setName: randomSet.setName,
+														setLogo: randomSet.setLogo,
+														lastAcquiredAt: now
+													},
+													$setOnInsert: {
+														userId: userId,
+														setId: randomSet._id
+													}
+												},
+												{ upsert: true }
+											);
+											packNames.push(randomSet.setName);
+										}
+
+										rewardParts.push(`<span style="font-weight:bold;">${packsToAward} pack${packsToAward > 1 ? 's' : ''}</span> (${packNames.join(', ')})`);
+									}
+								}
+							}
+
+							if (rewardParts.length > 0) {
+								rewardMessages.push(
+									`<strong>${userName}</strong> (${places[place] || `place ${place + 1}`}) has earned ${rewardParts.join(' and ')} for their performance!`
+								);
+							}
 						}
 					}
 					if (rewardMessages.length) {
@@ -1295,7 +1341,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 			}
 		})();
-
+		
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
 			if (!settings.recentTours) settings.recentTours = [];
