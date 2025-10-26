@@ -97,7 +97,7 @@ function cacheSubProcesses(config: ConfigType) {
 			config.subprocessescache = (Object.fromEntries(
 				processTypes.map(k => [k, value])
 			) as Record<ProcessType, number>);
-		} else if (typeof value === 'object') {
+		} else if (typeof value === 'object' && !Array.isArray(value)) {
 			config.subprocessescache = value;
 		} else {
 			pushError('error' as const, `Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
