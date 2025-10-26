@@ -271,25 +271,39 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 
 	if (totalQuantityChange > 0 || totalUniqueCardsAdded > 0 || creditsToAward > 0) {
 	const profiles = userProfilesCollection;
-	await profiles.updateOne(
-		{ userId: user.id },
-		{
-			$inc: {
-				totalQuantity: totalQuantityChange,
-				collectionPoints: totalPointsChange,
-				totalUniqueCards: totalUniqueCardsAdded,
-				credits: creditsToAward
-			},
-			$set: {
-				userName: user.name,
-				lastUpdatedAt: now
-			},
-			$setOnInsert: {
-				userId: user.id
+	
+	// Check if profile exists
+	const existingProfile = await profiles.findOne({ userId: user.id });
+	
+	if (existingProfile) {
+		// Profile exists, just increment
+		await profiles.updateOne(
+			{ userId: user.id },
+			{
+				$inc: {
+					totalQuantity: totalQuantityChange,
+					collectionPoints: totalPointsChange,
+					totalUniqueCards: totalUniqueCardsAdded,
+					credits: creditsToAward
+				},
+				$set: {
+					userName: user.name,
+					lastUpdatedAt: now
+				}
 			}
-		},
-		{ upsert: true }
-	);
+		);
+	} else {
+		// Profile doesn't exist, create it
+		await profiles.insertOne({
+			userId: user.id,
+			userName: user.name,
+			credits: creditsToAward,
+			totalUniqueCards: totalUniqueCardsAdded,
+			totalQuantity: totalQuantityChange,
+			collectionPoints: totalPointsChange,
+			lastUpdatedAt: now
+		});
+	}
 	}
 
 	return { creditsAwarded: creditsToAward };
