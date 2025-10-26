@@ -9,6 +9,7 @@
 
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
+const MAX_PARALLEL_REQUESTS = 5;
 
 import { Net, FS } from '../lib';
 
@@ -52,7 +53,7 @@ class LoginServerInstance {
 	}
 
 	async instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
-		if (this.openRequests > 5) {
+		if (this.openRequests > MAX_PARALLEL_REQUESTS) {
 			return Promise.resolve(
 				[null, new RangeError("Request overflow")]
 			);
