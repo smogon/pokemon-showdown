@@ -12,7 +12,7 @@ import { collectionCommands } from './tcg_collections_cmds';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
 		  userPacksCollection, cooldownsCollection } from './tcg_collections';
 
-const SEARCH_PAGE_LIMIT = 60;
+const SEARCH_PAGE_LIMIT = 80;
 
 // Parser function kept here as it's only used by 'search' command now
 function parseSearchQuery(target: string): {
