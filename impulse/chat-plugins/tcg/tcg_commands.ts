@@ -3,19 +3,20 @@
 * TCG Commands
 */
 import { ImpulseDB } from '../../impulse-db';
-import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
+import { TcgCard, TcgDailyCooldown, TcgUser,
+		  TcgUserProfile, TcgUserPack 
+		 } from './interface';
 import {
 	generatePack, getCard, getSet,
-	getCacheStats, renderCardGridHtml,
-	addCardsToCollection,
-	dailyShopCache, currentShopDate, setShopCache // Keep shop cache imports for admin refresh command interaction
+	getCacheStats, renderCardGridHtml, addCardsToCollection,
+	dailyShopCache, currentShopDate, setShopCache,
+	MAX_CARD_QUANTITY
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 
 const SEARCH_PAGE_LIMIT = 60;
-const MAX_CARD_QUANTITY = 10;
 const MAX_FAVORITE_CARDS = 10;
 
 const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
