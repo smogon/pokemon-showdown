@@ -525,7 +525,6 @@ export const commands: ChatCommands = {
 		},
 		...adminCommands,
 		...collectionCommands,
-		...economyCommands,
-		
+		...economyCommands,		
 	},
 };
