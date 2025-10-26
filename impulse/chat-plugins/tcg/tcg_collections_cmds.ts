@@ -3,17 +3,10 @@
 * TCG Collection and Profile Commands
 */
 import { TcgCard, TcgUser, TcgUserProfile } from './interface';
-import {
-	getSet, getCard,
-	getCacheStats, renderCardGridHtml
-} from './tcg_utils';
+import { getSet, getCard, getCacheStats, renderCardGridHtml } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
-import {
-	tcgCardsCollection,
-	userCollectionsCollection,
-	userProfilesCollection,
-	userPacksCollection
-} from './tcg_collections';
+import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection,
+	userPacksCollection } from './tcg_collections';
 
 // Constants specific to these commands
 const SEARCH_PAGE_LIMIT = 60;
@@ -808,7 +801,7 @@ export const collectionCommands: ChatCommands = {
 				{ upsert: true }
 			);
 			
-			this.sendReply(`✅ Recalculation complete for ${targetUserId}:`);
+			this.sendReply(`Recalculation complete for ${targetUserId}:`);
 			this.sendReply(`- Sets Completed: ${setsCompleted} / ${allSets.length}`);
 			this.sendReply(`- Total Points: ${stats.collectionPoints.toLocaleString()}`);
 			this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
