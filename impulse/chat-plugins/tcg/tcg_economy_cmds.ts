@@ -4,15 +4,11 @@
 */
 import { ImpulseDB } from '../../impulse-db';
 import { TcgCard, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
-import {
-	getSet, dailyShopCache, currentShopDate,
-  setShopCache, MAX_CARD_QUANTITY, MAX_CARD_QUANTITY
-} from './tcg_utils';
+import { getSet, dailyShopCache, currentShopDate, setShopCache,
+		  MAX_CARD_QUANTITY, MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
-import {
-	tcgCardsCollection, userCollectionsCollection,
-    userProfilesCollection, userPacksCollection
-} from './tcg_collections';
+import { tcgCardsCollection, userCollectionsCollection,
+		  userProfilesCollection, userPacksCollection } from './tcg_collections';
 
 const PACK_COST = 0;
 
