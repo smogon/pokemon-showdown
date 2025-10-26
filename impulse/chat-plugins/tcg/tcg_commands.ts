@@ -13,17 +13,16 @@ import {
 	MAX_CARD_QUANTITY
 } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
+import {
+	tcgCardsCollection, userCollectionsCollection,
+    userProfilesCollection, userPacksCollection,
+    cooldownsCollection
+} from './tcg_collections';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 
 const SEARCH_PAGE_LIMIT = 60;
 const MAX_FAVORITE_CARDS = 10;
-
-const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
-const userCollectionsCollection = ImpulseDB<TcgUser>('user_collections');
-const userProfilesCollection = ImpulseDB<TcgUserProfile>('user_profiles');
-const userPacksCollection = ImpulseDB<TcgUserPack>('tcg_user_packs');
-const cooldownsCollection = ImpulseDB<TcgDailyCooldown>('tcg_cooldowns');
 
 function parseSearchQuery(target: string): {
 	filter: any,
