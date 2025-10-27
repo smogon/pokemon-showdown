@@ -476,7 +476,7 @@ export const commands: ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: `<button name="adminhelp" send="/tcg adminhelp" style="background: none; border: none;">/tcg adminhelp</button>`, desc: "Shows all admin commands."},
+				{cmd: "/tcg adminhelp", desc: "Shows all admin commands."},
 				{cmd: "/tcg economyhelp", desc: "Shows all economy commands."},
 				{cmd: "/tcg tradehelp", desc: "Shows trading commands."},
 				{cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information."},
