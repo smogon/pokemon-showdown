@@ -55,7 +55,7 @@ const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
+const GYM_CHALLENGE_BOT_ID = 'impulseearth';
 
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
 // --- They just serve as a team template. ---
@@ -413,7 +413,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./battletower-test/bt_utils');
+  const btUtils = require('./bt_utils');
   
   return btUtils.createBattle({
     user: user,
