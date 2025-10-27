@@ -585,6 +585,6 @@ export const tradeCommands: ChatCommands = {
 				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 							).join('') +
 			`</ul>`;
-		this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
+		this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${html}</div>`);
 	},
 };
