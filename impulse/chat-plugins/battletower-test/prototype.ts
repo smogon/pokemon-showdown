@@ -135,18 +135,16 @@ const NPCS = {
 	}
 };
 
-// --- NEW: Hardcoded Starter Level-Up Moves ---
 const STARTER_LEARNSETS = {
 	// 'SpeciesName': { level: 'moveName', ... }
 	'Bulbasaur': { 7: 'Leech Seed', 9: 'Vine Whip' },
 	'Charmander': { 7: 'Ember', 9: 'Smokescreen' },
 	'Squirtle': { 7: 'Bubble', 9: 'Withdraw' }
 };
-// ------------------------------------------
 
 // Store user progress
 const userProgress = new Map<string, PlayerProgress>();
-const BOT_USER_ID = 'musaddiktemkar'; // Bot user for battles
+const BOT_USER_ID = 'impulseearth'; // Bot user for battles
 
 // --- 2. HTML GENERATION ---
 
@@ -226,7 +224,15 @@ function updateAdventureHTML(user: User, room: Room | null) {
 // --- 3. BATTLE LOGIC ---
 
 function createPokemonSet(species: string, level: number, moves: string[]): any {
-	const template = Dex.species.get(species);
+	const template = Dex.species.get(toID(species));
+	
+	if (!template?.exists) {
+		console.error(`Missing Dex data for species: ${species}`);
+		// @ts-ignore
+		this.errorReply(`A server error occurred: Missing species data for ${species}.`);
+		return null;
+	}
+
 	const ability = Object.values(template.abilities)[0] || 'None';
 	
 	const stats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -234,9 +240,13 @@ function createPokemonSet(species: string, level: number, moves: string[]): any 
 	const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 	const nature = "Serious";
 
+	// --- FIX: Get the Dex for the correct generation ---
+	const dex = Dex.mods('gen9'); // Assuming gen9, change if needed
+
 	for (const stat in stats) {
 		// @ts-ignore
-		stats[stat] = Dex.calcStat(stat, level, template.baseStats[stat], ivs[stat], evs[stat], nature);
+		// --- FIX: Use dex.calcStat ---
+		stats[stat] = dex.calcStat(stat, level, template.baseStats[stat], ivs[stat], evs[stat], nature);
 	}
 
 	return {
@@ -262,21 +272,19 @@ function generateWildTeam(encounters: any[]) {
 	const species = Dex.species.get(encounter.species);
 	
 	let moves: string[] = [];
-	const fallbackMoves = ['Tackle', 'Growl']; // <-- FALLBACK MOVES
+	const fallbackMoves = ['Tackle', 'Growl'];
 
-	// Try to get moves from learnset if it exists
 	if (species.learnset) {
 		moves = Object.keys(species.learnset)
 			.filter(move => species.learnset[move].some(m => m.startsWith(String(level)[0]) && m.endsWith('L' + level)))
 			.slice(0, 4);
 	}
 	
-	// If no moves were found, use the fallback
 	if (moves.length === 0) {
 		moves = fallbackMoves;
 	}
 
-	return [createPokemonSet(encounter.species, level, moves)];
+	return [createPokemonSet.call(this, encounter.species, level, moves)];
 }
 
 function startWildBattle(user: User, room: Room | null, progress: PlayerProgress) {
@@ -300,7 +308,8 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 		return p;
 	});
 
-	const wildTeam = generateWildTeam(location.wildEncounters);
+	const wildTeam = generateWildTeam.call(this, location.wildEncounters);
+	if (!wildTeam[0]) return false; // createPokemonSet failed
 
 	try {
 		const battleRoom = createBattle({
@@ -357,33 +366,34 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 				if (newLevel > teamMon.level) {
 					teamMon.level = newLevel;
 					
-					const template = Dex.species.get(teamMon.species);
+					const template = Dex.species.get(toID(teamMon.species));
 					const nature = teamMon.nature;
+
+					// --- FIX: Get the Dex for the correct generation ---
+					const dex = Dex.mods('gen9'); // Assuming gen9, change if needed
+
 					for (const stat in teamMon.evs) {
 						// @ts-ignore
-						const newStat = Dex.calcStat(stat, teamMon.level, template.baseStats[stat], teamMon.ivs[stat], teamMon.evs[stat], nature);
+						// --- FIX: Use dex.calcStat ---
+						const newStat = dex.calcStat(stat, teamMon.level, template.baseStats[stat], teamMon.ivs[stat], teamMon.evs[stat], nature);
 						if (stat === 'hp') {
 							teamMon.maxhp = newStat;
 							teamMon.hp = Math.min(teamMon.maxhp, teamMon.hp + Math.floor(newStat / 4));
 						}
 					}
 					
-					// --- MODIFIED: Check for new moves ---
-					const species = Dex.species.get(teamMon.species);
+					const species = Dex.species.get(toID(teamMon.species));
 					let newMoves: string[] = [];
 
-					// Check hardcoded starter learnsets first
 					// @ts-ignore
 					if (STARTER_LEARNSETS[species.name] && STARTER_LEARNSETS[species.name][newLevel]) {
 						// @ts-ignore
 						newMoves.push(STARTER_LEARNSETS[species.name][newLevel]);
 					} 
-					// Else, try to use Dex learnset if it exists
 					else if (species.learnset) { 
 						newMoves = Object.keys(species.learnset)
 							.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)));
 					}
-					// ------------------------------------
 					
 					for (const move of newMoves) {
 						if (!teamMon.moves.includes(move)) {
@@ -392,7 +402,7 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 								user.sendTo(originRoom, `${teamMon.species} learned ${move}!`);
 							} else {
 								const oldMove = teamMon.moves[0];
-								teamMon.moves[0] = move; // Simple replacement
+								teamMon.moves[0] = move;
 								user.sendTo(originRoom, `${teamMon.species} forgot ${oldMove} and learned ${move}!`);
 							}
 						}
@@ -557,14 +567,24 @@ export const commands: ChatCommands = {
 			const starterSpecies = toID(target);
 			let starterSet;
 
-			if (starterSpecies === 'charmander') {
-				starterSet = createPokemonSet('Charmander', 5, ['Scratch', 'Growl', 'Ember']);
-			} else if (starterSpecies === 'bulbasaur') {
-				starterSet = createPokemonSet('Bulbasaur', 5, ['Tackle', 'Growl', 'Vine Whip']);
-			} else if (starterSpecies === 'squirtle') {
-				starterSet = createPokemonSet('Squirtle', 5, ['Tackle', 'Tail Whip', 'Water Gun']);
-			} else {
-				return this.errorReply(`That is not a valid starter choice.`);
+			try {
+				if (starterSpecies === 'charmander') {
+					starterSet = createPokemonSet.call(this, 'Charmander', 5, ['Scratch', 'Growl', 'Ember']);
+				} else if (starterSpecies === 'bulbasaur') {
+					starterSet = createPokemonSet.call(this, 'Bulbasaur', 5, ['Tackle', 'Growl', 'Vine Whip']);
+				} else if (starterSpecies === 'squirtle') {
+					starterSet = createPokemonSet.call(this, 'Squirtle', 5, ['Tackle', 'Tail Whip', 'Water Gun']);
+				} else {
+					return this.errorReply(`That is not a valid starter choice.`);
+				}
+
+				if (!starterSet) { 
+					return;
+				}
+
+			} catch (e) {
+				console.error(e);
+				return this.errorReply(`An error occurred while creating your Pokémon.`);
 			}
 
 			progress.team.push(starterSet);
@@ -599,7 +619,7 @@ export const commands: ChatCommands = {
 			});
 			this.sendReply(reply);
 		},
-
+		
 		// /adventure reset
 		reset(target, room, user) {
 			if (!userProgress.has(user.id)) {
@@ -617,7 +637,7 @@ export const commands: ChatCommands = {
 			
 			userProgress.delete(user.id);
 		},
-
+		
 		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
