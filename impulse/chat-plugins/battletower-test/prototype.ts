@@ -80,41 +80,41 @@ const LOCATIONS = {
 const NPCS = {
 	'mom': {
 		dialogue: [
-			"You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!",
-			"Don't forget to change your underwear!"
+			`You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!`,
+			`Don't forget to change your underwear!`
 		],
 	},
 	'prof_oak': {
 		dialogue: [
-			"Ah, [player]! I've been waiting for you.",
-			"It's time you got your first Pokémon. Choose one!",
+			`Ah, [player]! I've been waiting for you.`,
+			`It's time you got your first Pokémon. Choose one!`,
 		],
 		// Special handler for giving starter
 		onTalk: (user, room, progress) => {
 			if (progress.eventFlags['got_starter']) {
 				// @ts-ignore
-				this.sendReply("Oak: How is your new Pokémon? Get out there and explore!");
+				this.sendReply(`Oak: How is your new Pokémon? Get out there and explore!`);
 				return;
 			}
 			
 			// Present starter choice
-			const starterHtml = '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">' +
-				'<b>Professor Oak:</b> Choose your starter!' +
-				'<br><button name="send" value="/adventure select_starter Charmander" style="background: #F44336; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Charmander</button>' +
-				'<button name="send" value="/adventure select_starter Bulbasaur" style="background: #4CAF50; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Bulbasaur</button>' +
-				'<button name="send" value="/adventure select_starter Squirtle" style="background: #2196F3; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Squirtle</button>' +
-				'</div>';
+			const starterHtml = `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">` +
+				`<b>Professor Oak:</b> Choose your starter!` +
+				`<br><button name="send" value="/adventure select_starter Charmander" style="background: #F44336; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Charmander</button>` +
+				`<button name="send" value="/adventure select_starter Bulbasaur" style="background: #4CAF50; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Bulbasaur</button>` +
+				`<button name="send" value="/adventure select_starter Squirtle" style="background: #2196F3; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Squirtle</button>` +
+				`</div>`;
 
 			if (room) {
-				room.add('|uhtml|adventure-' + user.id + '|' + starterHtml).update();
+				room.add(`|uhtml|adventure-` + user.id + `|` + starterHtml).update();
 			} else {
 				// @ts-ignore
-				this.sendReply('|uhtml|adventure-' + user.id + '|' + starterHtml);
+				this.sendReply(`|uhtml|adventure-` + user.id + `|` + starterHtml);
 			}
 		}
 	},
 	'nurse_joy': {
-		dialogue: ["Your Pokémon are fully healed! We hope to see you again!"],
+		dialogue: [`Your Pokémon are fully healed! We hope to see you again!`],
 		onTalk: (user, room, progress) => {
 			progress.team.forEach(pokemon => {
 				pokemon.hp = pokemon.maxhp;
@@ -131,61 +131,69 @@ const NPCS = {
 
 // Store user progress
 const userProgress = new Map<string, PlayerProgress>();
-const BOT_USER_ID = 'impulseearth'; // Bot user for battles
+const BOT_USER_ID = 'musaddiktemkar'; // Bot user for battles
 
 // --- 2. HTML GENERATION ---
 
 function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	const location = LOCATIONS[progress.location];
 	if (!location) {
-		return '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">Error: Unknown location. Please /adventure reset</div>';
+		return `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">` +
+			`Error: Unknown location. Please /adventure reset` +
+			`</div>`;
 	}
 
 	// Team Display
-	let teamHtml = '<b>Your Team:</b> ';
+	let teamHtml = `<b>Your Team:</b> `;
 	if (progress.team.length === 0) {
-		teamHtml += 'No Pokémon yet';
+		teamHtml += `No Pokémon yet`;
 	} else {
-		teamHtml += progress.team.map(p => `${p.species} (Lvl ${p.level}) - HP: ${p.hp}/${p.maxhp}`).join(', ');
+		teamHtml += progress.team.map(p => `\${p.species} (Lvl \${p.level}) - HP: \${p.hp}/\${p.maxhp}`).join(', ');
 	}
-	teamHtml = `<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">${teamHtml}</div>`;
+	teamHtml = `<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">` + teamHtml + `</div>`;
 
 	// Location Display
-	const locationHtml = `<div><b>${location.name}</b><br>${location.description}</div>`;
+	const locationHtml = `<div><b>\${location.name}</b><br>` + `\${location.description}</div>`;
 
 	// Buttons
-	let buttonsHtml = '<div style="margin-top: 10px;">';
+	let buttonsHtml = `<div style="margin-top: 10px;">`;
 
 	// Exits
 	if (location.exits) {
-		buttonsHtml += '<b>Exits:</b><br>';
+		buttonsHtml += `<b>Exits:</b><br>`;
 		for (const dir in location.exits) {
-			buttonsHtml += `<button name="send" value="/adventure move ${dir}" style="background: #607D8B; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">${dir} (${LOCATIONS[location.exits[dir]].name})</button>`;
+			buttonsHtml += `<button name="send" value="/adventure move \${dir}" style="background: #607D8B; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`\${dir} (\${LOCATIONS[location.exits[dir]].name})` +
+				`</button>`;
 		}
 	}
 
 	// Buildings
 	if (location.buildings) {
-		buttonsHtml += '<br><b>Buildings:</b><br>';
+		buttonsHtml += `<br><b>Buildings:</b><br>`;
 		for (const building in location.buildings) {
-			buttonsHtml += `<button name="send" value="/adventure enter ${building}" style="background: #795548; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Enter ${location.buildings[building]} (${building})</button>`;
+			buttonsHtml += `<button name="send" value="/adventure enter \${building}" style="background: #795548; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`Enter \${location.buildings[building]} (\${building})` +
+				`</button>`;
 		}
 	}
 
 	// NPCs
 	if (location.npcs && location.npcs.length > 0) {
-		buttonsHtml += '<br><b>People:</b><br>';
+		buttonsHtml += `<br><b>People:</b><br>`;
 		for (const npcId of location.npcs) {
-			buttonsHtml += `<button name="send" value="/adventure talk ${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Talk to ${npcId}</button>`;
+			buttonsHtml += `<button name="send" value="/adventure talk \${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`Talk to \${npcId}` +
+				`</button>`;
 		}
 	}
-	buttonsHtml += '</div>';
+	buttonsHtml += `</div>`;
 
-	return `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">
-		${teamHtml}
-		${locationHtml}
-		${buttonsHtml}
-	</div>`;
+	return `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">` +
+		`\${teamHtml}` +
+		`\${locationHtml}` +
+		`\${buttonsHtml}` +
+		`</div>`;
 }
 
 function updateAdventureHTML(user: User, room: Room | null) {
@@ -195,9 +203,9 @@ function updateAdventureHTML(user: User, room: Room | null) {
 	const html = generateAdventureHTML(user, progress);
 	
 	if (room) {
-		room.add(`|uhtml|adventure-${user.id}|${html}`).update();
+		room.add(`|uhtml|adventure-\${user.id}|\${html}`).update();
 	} else {
-		user.sendTo(null, `|uhtml|adventure-${user.id}|${html}`);
+		user.sendTo(null, `|uhtml|adventure-\${user.id}|\${html}`);
 	}
 }
 
@@ -255,7 +263,7 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 	const botUser = Users.get(BOT_USER_ID);
 	if (!botUser || !botUser.connected) {
 		// @ts-ignore
-		this.errorReply(`The battle couldn't start because ${BOT_USER_ID} is offline.`);
+		this.errorReply(`The battle couldn't start because \${BOT_USER_ID} is offline.`);
 		return false;
 	}
 
@@ -277,7 +285,7 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 			botTeam: wildTeam,
 			battleType: 'wild_adventure',
 			format: 'gen9customgame',
-			title: `${user.name} vs. Wild ${wildTeam[0].species}`,
+			title: `\${user.name} vs. Wild \${wildTeam[0].species}`,
 			data: { 
 				userId: user.id,
 				originRoomId: room ? room.id : null 
@@ -290,13 +298,13 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 			progress.battleId = battleRoom.id;
 			userProgress.set(user.id, progress);
 			// @ts-ignore
-			this.sendReply(`A wild ${wildTeam[0].species} appeared!`);
+			this.sendReply(`A wild \${wildTeam[0].species} appeared!`);
 			return true;
 		}
 	} catch (e) {
 		console.error('Failed to create wild battle:', e);
 		// @ts-ignore
-		this.errorReply('The battle failed to start due to a server error.');
+		this.errorReply(`The battle failed to start due to a server error.`);
 	}
 	return false;
 }
@@ -358,7 +366,7 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 
 	userProgress.set(userId, progress);
 	updateAdventureHTML(user, originRoom);
-	user.sendTo(originRoom, "You won the battle!");
+	user.sendTo(originRoom, `You won the battle!`);
 }
 
 function handleWildLoss(battle: any, winner: string, players: string[], meta: any) {
@@ -382,7 +390,7 @@ function handleWildLoss(battle: any, winner: string, players: string[], meta: an
 	progress.location = progress.lastHealLocation;
 	userProgress.set(userId, progress);
 
-	user.sendTo(originRoom, "You were defeated and blacked out... You woke up at the Pokémon Center.");
+	user.sendTo(originRoom, `You were defeated and blacked out... You woke up at the Pokémon Center.`);
 	updateAdventureHTML(user, originRoom);
 }
 
@@ -393,7 +401,7 @@ export const commands: ChatCommands = {
 		// /adventure start
 		start(target, room, user) {
 			if (userProgress.has(user.id)) {
-				this.errorReply('You’re already on an adventure! Use /adventure look or /adventure reset.');
+				this.errorReply(`You’re already on an adventure! Use /adventure look or /adventure reset.`);
 				updateAdventureHTML(user, room);
 				return;
 			}
@@ -408,20 +416,20 @@ export const commands: ChatCommands = {
 				lastHealLocation: 'player_home',
 			};
 			userProgress.set(user.id, newProgress);
-			this.sendReply('You have started your Pokémon RPG adventure!');
+			this.sendReply(`You have started your Pokémon RPG adventure!`);
 			updateAdventureHTML(user, room);
 		},
 
 		// /adventure move <direction>
 		move(target, room, user) {
 			const progress = userProgress.get(user.id);
-			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
-			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
+			if (progress.battleId) return this.errorReply(`You are in a battle! Finish the battle first.`);
 			
 			const direction = toID(target);
 			const currentLocation = LOCATIONS[progress.location];
 			if (!currentLocation || !currentLocation.exits[direction]) {
-				return this.errorReply("You can't go that way.");
+				return this.errorReply(`You can't go that way.`);
 			}
 
 			const newLocationId = currentLocation.exits[direction];
@@ -433,8 +441,8 @@ export const commands: ChatCommands = {
 			// Check for wild encounters
 			if (newLocation.wildEncounters && progress.team.length > 0) {
 				const encounterRoll = Math.random();
-				const encounterRate = newLocation.wildEncounters.reduce((sum, e) => sum + e.rate, 0) / newLocation.wildEncounters.length;
-				if (encounterRoll < encounterRate) {
+				// Simple 30% encounter rate for this example
+				if (encounterRoll < 0.3) { 
 					// Pass `this` context to the function
 					startWildBattle.call(this, user, room, progress);
 					return; // Stop here, battle started
@@ -447,13 +455,13 @@ export const commands: ChatCommands = {
 		// /adventure enter <building>
 		enter(target, room, user) {
 			const progress = userProgress.get(user.id);
-			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
-			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
+			if (progress.battleId) return this.errorReply(`You are in a battle! Finish the battle first.`);
 
 			const building = toID(target);
 			const currentLocation = LOCATIONS[progress.location];
 			if (!currentLocation || !currentLocation.buildings || !currentLocation.buildings[building]) {
-				return this.errorReply("You can't enter that.");
+				return this.errorReply(`You can't enter that.`);
 			}
 
 			progress.location = currentLocation.buildings[building];
@@ -464,13 +472,13 @@ export const commands: ChatCommands = {
 		// /adventure talk <npc>
 		talk(target, room, user) {
 			const progress = userProgress.get(user.id);
-			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
-			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
+			if (progress.battleId) return this.errorReply(`You are in a battle! Finish the battle first.`);
 
 			const npcId = toID(target);
 			const currentLocation = LOCATIONS[progress.location];
 			if (!currentLocation || !currentLocation.npcs || !currentLocation.npcs.includes(npcId)) {
-				return this.errorReply("That person isn't here.");
+				return this.errorReply(`That person isn't here.`);
 			}
 
 			const npc = NPCS[npcId];
@@ -478,16 +486,16 @@ export const commands: ChatCommands = {
 				// Pass `this` context
 				npc.onTalk.call(this, user, room, progress);
 			} else {
-				this.sendReply(npc.dialogue[0]);
+				this.sendReply(`\${npc.dialogue[0]}`);
 			}
 		},
 
 		// /adventure select_starter <pokemon>
 		select_starter(target, room, user) {
 			const progress = userProgress.get(user.id);
-			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
-			if (progress.eventFlags['got_starter']) return this.errorReply("You already have your starter!");
-			if (progress.location !== 'oaks_lab') return this.errorReply("You must be in Oak's Lab to choose a starter.");
+			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
+			if (progress.eventFlags['got_starter']) return this.errorReply(`You already have your starter!`);
+			if (progress.location !== 'oaks_lab') return this.errorReply(`You must be in Oak's Lab to choose a starter.`);
 
 			const starterSpecies = toID(target);
 			let starterSet;
@@ -499,21 +507,21 @@ export const commands: ChatCommands = {
 			} else if (starterSpecies === 'squirtle') {
 				starterSet = createPokemonSet('Squirtle', 5, ['Tackle', 'Tail Whip', 'Water Gun']);
 			} else {
-				return this.errorReply("That is not a valid starter choice.");
+				return this.errorReply(`That is not a valid starter choice.`);
 			}
 
 			progress.team.push(starterSet);
 			progress.eventFlags['got_starter'] = true;
 			userProgress.set(user.id, progress);
 
-			this.sendReply(`You received ${starterSet.species}!`);
+			this.sendReply(`You received \${starterSet.species}!`);
 			updateAdventureHTML(user, room);
 		},
 
 		// /adventure look
 		look(target, room, user) {
 			const progress = userProgress.get(user.id);
-			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
 			
 			updateAdventureHTML(user, room);
 		},
@@ -521,16 +529,16 @@ export const commands: ChatCommands = {
 		// /adventure team (replaces inventory)
 		team(target, room, user) {
 			if (!userProgress.has(user.id)) {
-				return this.errorReply('You haven’t started an adventure yet!');
+				return this.errorReply(`You haven’t started an adventure yet!`);
 			}
 			const progress = userProgress.get(user.id);
 			if (progress.team.length === 0) {
-				return this.sendReply('You haven’t caught any Pokémon yet!');
+				return this.sendReply(`You haven’t caught any Pokémon yet!`);
 			}
 
-			let reply = 'Your Pokémon:\n';
+			let reply = `Your Pokémon:\n`;
 			progress.team.forEach(p => {
-				reply += `- ${p.species} (Lvl ${p.level}) | HP: ${p.hp}/${p.maxhp} | Moves: ${p.moves.join(', ')}\n`;
+				reply += ` - \${p.species} (Lvl \${p.level}) | HP: \${p.hp}/\${p.maxhp} | Moves: \${p.moves.join(', ')}\n`;
 			});
 			this.sendReply(reply);
 		},
@@ -538,18 +546,18 @@ export const commands: ChatCommands = {
 		// /adventure reset
 		reset(target, room, user) {
 			if (!userProgress.has(user.id)) {
-				return this.errorReply('You haven’t started an adventure yet!');
+				return this.errorReply(`You haven’t started an adventure yet!`);
 			}
 			const progress = userProgress.get(user.id);
 			if (progress.battleId) {
 				const battle = Rooms.get(progress.battleId);
 				if (battle) battle.destroy();
 			}
-			const resetHtml = '<div style="border: 1px solid #ccc; padding: 10px;">Your adventure has been reset. Use /adventure start to begin again.</div>';
+			const resetHtml = `<div style="border: 1px solid #ccc; padding: 10px;">Your adventure has been reset. Use /adventure start to begin again.</div>`;
 			if (room) {
-				room.add('|uhtmlchange|adventure-' + user.id + '|' + resetHtml).update();
+				room.add(`|uhtmlchange|adventure-` + user.id + `|` + resetHtml).update();
 			} else {
-				this.sendReply('|uhtml|adventure-' + user.id + '|' + resetHtml);
+				this.sendReply(`|uhtml|adventure-` + user.id + `|` + resetHtml);
 			}
 			userProgress.delete(user.id);
 		},
@@ -557,14 +565,14 @@ export const commands: ChatCommands = {
 		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
-				'Pokémon RPG Commands:\n' +
-				'/adventure start - Begin your Pokémon adventure.\n' +
-				'/adventure look - See your current location, team, and options.\n' +
-				'/adventure move [direction] - Move to a new location (e.g., /adventure move north).\n' +
-				'/adventure enter [building] - Enter a building (e.g., /adventure enter lab).\n' +
-				'/adventure talk [npc] - Talk to a person (e.g., /adventure talk prof_oak).\n' +
-				'/adventure team - Check your current Pokémon team.\n' +
-				'/adventure reset - Reset your adventure to start over.'
+				`Pokémon RPG Commands:\n` +
+				`/adventure start - Begin your Pokémon adventure.\n` +
+				`/adventure look - See your current location, team, and options.\n` +
+				`/adventure move [direction] - Move to a new location (e.g., /adventure move north).\n` +
+				`/adventure enter [building] - Enter a building (e.g., /adventure enter lab).\n` +
+				`/adventure talk [npc] - Talk to a person (e.g., /adventure talk prof_oak).\n` +
+				`/adventure team - Check your current Pokémon team.\n` +
+				`/adventure reset - Reset your adventure to start over.`
 			);
 		},
 	},
