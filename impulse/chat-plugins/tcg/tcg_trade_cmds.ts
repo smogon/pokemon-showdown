@@ -577,8 +577,8 @@ export const tradeCommands: ChatCommands = {
 			{cmd: "/tcg tradeview", desc: "View the current trade details and status."},
 			{cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade."},
 			{cmd: "/tcg tradecancel", desc: "Cancel the current active trade."},
-			{cmd: "/tcg tradesdisable", desc: "Disable incoming trade requests from other users."},
-			{cmd: "/tcg tradesenable", desc: "Enable incoming trade requests from other users."},
+			{cmd: "/tcg tradedisable", desc: "Disable incoming trade requests from other users."},
+			{cmd: "/tcg tradeenable", desc: "Enable incoming trade requests from other users."},
 		];
 		const html = `<center><strong>TCG Trading Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({cmd, desc}, i) =>
