@@ -55,7 +55,7 @@ const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
 // --- They just serve as a team template. ---
@@ -159,8 +159,45 @@ const TM_POOL: string[] = [
   'stealthrock', 'toxic', 'surf', 'scald', 'voltswitch', 'uturn', 'willowisp',
 ];
 
-// --- NEW: Helper function to generate Pokemon ---
-function generateRandomPokemon(level: number, pool: string[]): any {
+const NATURES = [
+  'Adamant', 'Bashful', 'Bold', 'Brave', 'Calm', 'Careful', 'Docile', 'Gentle',
+  'Hardy', 'Hasty', 'Impish', 'Jolly', 'Lax', 'Lonely', 'Mild', 'Modest',
+  'Naive', 'Naughty', 'Quiet', 'Quirky', 'Rash', 'Relaxed', 'Sassy', 'Serious', 'Timid',
+];
+
+// --- NEW: Helper function for random EVs ---
+function getRandomEVs(): { [key: string]: number } {
+  const evs: { [key: string]: number } = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+  let points = 510;
+  const stats: string[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+
+  // Max two stats
+  for (let i = 0; i < 2; i++) {
+    const stat = stats.splice(Math.floor(Math.random() * stats.length), 1)[0];
+    const amount = 252; // Standard max
+    evs[stat] = amount;
+    points -= amount;
+  }
+  // Dump the remaining 6 points
+  evs[stats[0]] = points;
+  
+  return evs;
+}
+
+// --- NEW: Helper function for random IVs ---
+function getRandomIVs(): { [key: string]: number } {
+  return {
+    hp: Math.floor(Math.random() * 32),
+    atk: Math.floor(Math.random() * 32),
+    def: Math.floor(Math.random() * 32),
+    spa: Math.floor(Math.random() * 32),
+    spd: Math.floor(Math.random() * 32),
+    spe: Math.floor(Math.random() * 32),
+  };
+}
+
+// --- MODIFIED: Helper function to generate Pokemon ---
+function generateRandomPokemon(level: number, pool: string[], item: string = ''): any {
   const speciesName = pool[Math.floor(Math.random() * pool.length)];
   const species = Dex.species.get(speciesName);
   
@@ -183,11 +220,19 @@ function generateRandomPokemon(level: number, pool: string[]): any {
   
   const moves = [...possibleMoves].sort(() => 0.5 - Math.random()).slice(0, 4);
   
+  // Get all possible abilities (0, 1, H)
+  const abilities = Object.values(species.abilities);
+  const ability = abilities[Math.floor(Math.random() * abilities.length)] || 'No Ability';
+
   return {
     species: species.name,
-    item: '',
+    item: item,
     level: level,
     moves: moves,
+    ability: ability,
+    nature: NATURES[Math.floor(Math.random() * NATURES.length)],
+    evs: getRandomEVs(),
+    ivs: getRandomIVs(),
   };
 }
 
@@ -268,7 +313,7 @@ const REWARD_POOL: RewardOption[] = [
       }
       const playerAvgLevel = Math.round(totalLevel / state.teamData.length);
       
-      const newMon = generateRandomPokemon(playerAvgLevel, POKEMON_REWARD_POOL);
+      const newMon = generateRandomPokemon(playerAvgLevel, POKEMON_REWARD_POOL); // No item
       state.teamData.push(newMon);
       return [`${newMon.species} joined your team at Lvl ${newMon.level}!`];
     }
@@ -344,9 +389,23 @@ function createGymBattle(user: any, gymIndex: number) {
       scaledBotTeam[i].level = targetRegularLevel;
     }
   }
+
+  // --- NEW: Add random Ability, Nature, EVs, IVs to bot team ---
+  for (const mon of scaledBotTeam) {
+    const species = Dex.species.get(mon.species);
+    if (!species.exists) continue;
+    
+    // Get all possible abilities (0, 1, H)
+    const abilities = Object.values(species.abilities);
+    
+    mon.ability = abilities[Math.floor(Math.random() * abilities.length)];
+    mon.nature = NATURES[Math.floor(Math.random() * NATURES.length)];
+    mon.evs = getRandomEVs();
+    mon.ivs = getRandomIVs();
+  }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -431,14 +490,14 @@ export const commands: Chat.ChatCommands = {
       for (let i = 0; i < 3; i++) {
         // Starters are generated from their own pool, not the main one
         const starterPool: string[] = [pool[i]];
-        options.push(generateRandomPokemon(13, starterPool)); // Start at level 13
+        options.push(generateRandomPokemon(13, starterPool, 'Oran Berry'));
       }
 
       pendingStarters.set(user.id, options);
 
       this.sendReply("Choose your starter Pokemon with /gymchallenge choose [1-3]:");
       options.forEach((mon, i) => {
-        this.sendReplyBox(`${i + 1}. <strong>${mon.species}</strong> (Lvl ${mon.level}) - Moves: ${mon.moves.join(', ')}`);
+        this.sendReplyBox(`${i + 1}. <strong>${mon.species}</strong> (Lvl ${mon.level}) @ ${mon.item} - Moves: ${mon.moves.join(', ')}`);
       });
     },
 
@@ -561,7 +620,7 @@ export const commands: Chat.ChatCommands = {
         }
       } else if (['life_orb', 'choice_band', 'leftovers', 'focus_sash'].includes(selectedReward.id)) {
         this.sendReply(`You received: ${selectedReward.name}!`);
-        this.sendReplyBox(`It has been added to your inventory.<br />Use <code>/gymchallenge giveitem [pokemon number] | [item name]</code>`);
+        this.sendReplyBox(`It has been added to your inventory.<br />Use Code: <code>/gymchallenge giveitem [pokemon number] | [item name]</code>`);
       } else {
         this.sendReply(`You received: ${selectedReward.name}!`);
       }
