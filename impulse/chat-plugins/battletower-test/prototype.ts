@@ -42,14 +42,14 @@ const LOCATIONS = {
 		exits: {
 			'out': 'pallet_town',
 		},
-		npcs: ['profoak'], // <-- CHANGED
+		npcs: ['profoak'],
 	},
 	'route_1': {
 		name: 'Route 1',
 		description: 'A grassy path connecting Pallet Town and Viridian City.',
 		exits: {
 			'south': 'pallet_town',
-			'north': 'viridian_city', // Not implemented yet
+			'north': 'viridian_city',
 		},
 		wildEncounters: [
 			{ species: 'Pidgey', minLevel: 2, maxLevel: 4, rate: 0.5 },
@@ -73,13 +73,13 @@ const LOCATIONS = {
 		exits: {
 			'out': 'viridian_city',
 		},
-		npcs: ['nursejoy'], // <-- CHANGED
+		npcs: ['nursejoy'],
 	}
 };
 
 const NPCS = {
 	'mom': {
-		name: 'Mom', // <-- ADDED
+		name: 'Mom',
 		dialogue: [
 			`You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!`,
 			`Don't forget to change your underwear!`
@@ -96,8 +96,8 @@ const NPCS = {
 			this.sendReply(`Mom: ${dialogue}`);
 		}
 	},
-	'profoak': { // <-- CHANGED
-		name: 'Professor Oak', // <-- ADDED
+	'profoak': {
+		name: 'Professor Oak',
 		dialogue: [
 			`Ah, [player]! I've been waiting for you.`,
 			`It's time you got your first Pokémon. Choose one!`,
@@ -119,8 +119,8 @@ const NPCS = {
 			user.sendTo(targetRoomId, `|uhtml|adventure-` + user.id + `|` + starterHtml);
 		}
 	},
-	'nursejoy': { // <-- CHANGED
-		name: 'Nurse Joy', // <-- ADDED
+	'nursejoy': {
+		name: 'Nurse Joy',
 		dialogue: [`Your Pokémon are fully healed! We hope to see you again!`],
 		onTalk: function (user, room, progress) {
 			progress.team.forEach(pokemon => {
@@ -135,9 +135,18 @@ const NPCS = {
 	}
 };
 
+// --- NEW: Hardcoded Starter Level-Up Moves ---
+const STARTER_LEARNSETS = {
+	// 'SpeciesName': { level: 'moveName', ... }
+	'Bulbasaur': { 7: 'Leech Seed', 9: 'Vine Whip' },
+	'Charmander': { 7: 'Ember', 9: 'Smokescreen' },
+	'Squirtle': { 7: 'Bubble', 9: 'Withdraw' }
+};
+// ------------------------------------------
+
 // Store user progress
 const userProgress = new Map<string, PlayerProgress>();
-const BOT_USER_ID = 'impulseearth'; // Bot user for battles
+const BOT_USER_ID = 'musaddiktemkar'; // Bot user for battles
 
 // --- 2. HTML GENERATION ---
 
@@ -188,9 +197,9 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (location.npcs && location.npcs.length > 0) {
 		buttonsHtml += `<br><b>People:</b><br>`;
 		for (const npcId of location.npcs) {
-			const npcName = NPCS[npcId]?.name || npcId; // <-- USE PRETTY NAME
+			const npcName = NPCS[npcId]?.name || npcId;
 			buttonsHtml += `<button name="send" value="/adventure talk ${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
-				`Talk to ${npcName}` + // <-- CHANGED
+				`Talk to ${npcName}` +
 				`</button>`;
 		}
 	}
@@ -209,7 +218,6 @@ function updateAdventureHTML(user: User, room: Room | null) {
 	
 	const html = generateAdventureHTML(user, progress);
 	
-	// ALWAYS send privately
 	const targetRoomId = room ? room.id : null;
 	user.sendTo(targetRoomId, `|uhtml|adventure-${user.id}|${html}`);
 }
@@ -221,7 +229,6 @@ function createPokemonSet(species: string, level: number, moves: string[]): any 
 	const template = Dex.species.get(species);
 	const ability = Object.values(template.abilities)[0] || 'None';
 	
-	// Calculate stats
 	const stats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
@@ -250,16 +257,24 @@ function createPokemonSet(species: string, level: number, moves: string[]): any 
 }
 
 function generateWildTeam(encounters: any[]) {
-	// For now, just pick the first one
 	const encounter = encounters[0]; 
 	const level = Math.floor(Math.random() * (encounter.maxLevel - encounter.minLevel + 1)) + encounter.minLevel;
 	const species = Dex.species.get(encounter.species);
 	
-	// Get 4 moves it would know at this level
-	const moves = Object.keys(species.learnset)
-		.filter(move => species.learnset[move].some(m => m.startsWith(String(level)[0]) && m.endsWith('L' + level)))
-		.slice(0, 4);
-	if (moves.length === 0) moves.push('tackle');
+	let moves: string[] = [];
+	const fallbackMoves = ['Tackle', 'Growl']; // <-- FALLBACK MOVES
+
+	// Try to get moves from learnset if it exists
+	if (species.learnset) {
+		moves = Object.keys(species.learnset)
+			.filter(move => species.learnset[move].some(m => m.startsWith(String(level)[0]) && m.endsWith('L' + level)))
+			.slice(0, 4);
+	}
+	
+	// If no moves were found, use the fallback
+	if (moves.length === 0) {
+		moves = fallbackMoves;
+	}
 
 	return [createPokemonSet(encounter.species, level, moves)];
 }
@@ -275,13 +290,11 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 	const location = LOCATIONS[progress.location];
 	if (!location.wildEncounters) return false;
 	
-	// Prevent battle if no Pokemon are conscious
 	if (progress.team.every(p => p.hp <= 0)) {
 		// @ts-ignore
 		this.sendReply(`You have no healthy Pokémon! You should go to a Pokémon Center.`);
 		return false;
 	}
-	// Filter out fainted Pokemon from the battle team
 	const playerTeam = progress.team.filter(p => p.hp > 0).map(p => {
 		p.curHP = p.hp;
 		return p;
@@ -333,21 +346,17 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 
 	progress.battleId = null;
 	
-	// Map battle participants back to the main team
 	battle.sides[0].pokemon.forEach(battleMon => {
-		const teamMon = progress.team.find(p => p.species === battleMon.species && p.level === battleMon.level); // Simple check
+		const teamMon = progress.team.find(p => p.species === battleMon.species && p.level === battleMon.level); 
 		if (teamMon) {
-			// Update HP/Status from battle
 			teamMon.hp = battleMon.hp;
 			teamMon.status = battleMon.status;
 			
-			// If it participated and won, level it up
 			if (teamMon.hp > 0) {
 				const newLevel = Math.min(100, teamMon.level + 1);
 				if (newLevel > teamMon.level) {
 					teamMon.level = newLevel;
 					
-					// Recalculate stats
 					const template = Dex.species.get(teamMon.species);
 					const nature = teamMon.nature;
 					for (const stat in teamMon.evs) {
@@ -355,22 +364,36 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 						const newStat = Dex.calcStat(stat, teamMon.level, template.baseStats[stat], teamMon.ivs[stat], teamMon.evs[stat], nature);
 						if (stat === 'hp') {
 							teamMon.maxhp = newStat;
-							// Give back some HP on level up, respecting max
 							teamMon.hp = Math.min(teamMon.maxhp, teamMon.hp + Math.floor(newStat / 4));
 						}
 					}
 					
-					// Check for new moves
+					// --- MODIFIED: Check for new moves ---
 					const species = Dex.species.get(teamMon.species);
-					const newMoves = Object.keys(species.learnset)
-						.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)))
+					let newMoves: string[] = [];
+
+					// Check hardcoded starter learnsets first
+					// @ts-ignore
+					if (STARTER_LEARNSETS[species.name] && STARTER_LEARNSETS[species.name][newLevel]) {
+						// @ts-ignore
+						newMoves.push(STARTER_LEARNSETS[species.name][newLevel]);
+					} 
+					// Else, try to use Dex learnset if it exists
+					else if (species.learnset) { 
+						newMoves = Object.keys(species.learnset)
+							.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)));
+					}
+					// ------------------------------------
 					
 					for (const move of newMoves) {
 						if (!teamMon.moves.includes(move)) {
 							if (teamMon.moves.length < 4) {
 								teamMon.moves.push(move);
+								user.sendTo(originRoom, `${teamMon.species} learned ${move}!`);
 							} else {
+								const oldMove = teamMon.moves[0];
 								teamMon.moves[0] = move; // Simple replacement
+								user.sendTo(originRoom, `${teamMon.species} forgot ${oldMove} and learned ${move}!`);
 							}
 						}
 					}
@@ -395,7 +418,6 @@ function handleWildLoss(battle: any, winner: string, players: string[], meta: an
 
 	progress.battleId = null;
 
-	// Update team with fainted status from battle
 	battle.sides[0].pokemon.forEach(battleMon => {
 		const teamMon = progress.team.find(p => p.species === battleMon.species && p.level === battleMon.level);
 		if (teamMon) {
@@ -404,7 +426,6 @@ function handleWildLoss(battle: any, winner: string, players: string[], meta: an
 		}
 	});
 	
-	// Black out - move to last heal spot
 	progress.location = progress.lastHealLocation;
 	userProgress.set(userId, progress);
 
@@ -511,15 +532,14 @@ export const commands: ChatCommands = {
 			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
 			if (progress.battleId) return this.errorReply(`You are in a battle! Finish the battle first.`);
 
-			const npcId = toID(target); // This is now 'profoak'
+			const npcId = toID(target); 
 			const currentLocation = LOCATIONS[progress.location];
 			
-			// The check will now be: ['profoak'].includes('profoak') which is TRUE
 			if (!currentLocation || !currentLocation.npcs || !currentLocation.npcs.includes(npcId)) {
 				return this.errorReply(`That person isn't here.`);
 			}
 
-			const npc = NPCS[npcId]; // This will correctly get NPCS['profoak']
+			const npc = NPCS[npcId];
 			if (npc.onTalk) {
 				npc.onTalk.call(this, user, room, progress);
 			} else {
@@ -579,7 +599,7 @@ export const commands: ChatCommands = {
 			});
 			this.sendReply(reply);
 		},
-		
+
 		// /adventure reset
 		reset(target, room, user) {
 			if (!userProgress.has(user.id)) {
@@ -592,13 +612,12 @@ export const commands: ChatCommands = {
 			}
 			const resetHtml = `<div style="border: 1px solid #ccc; padding: 10px;">Your adventure has been reset. Use /adventure start to begin again.</div>`;
 			
-			// Send privately
 			const targetRoomId = room ? room.id : null;
 			user.sendTo(targetRoomId, `|uhtmlchange|adventure-` + user.id + `|` + resetHtml);
 			
 			userProgress.delete(user.id);
 		},
-		
+
 		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
