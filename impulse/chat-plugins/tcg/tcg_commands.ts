@@ -8,7 +8,7 @@ import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
-import { tradeCommands } from './tcg_trade_cmds.ts';
+import { tradeCommands } from './tcg_trade_cmds';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 40;
