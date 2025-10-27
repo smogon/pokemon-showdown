@@ -9,7 +9,7 @@ import { generateThemedTable } from '../../utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection } from './tcg_collections';
 
 const PACK_COST = 0;
-const PACKS_IN_SHOP = '20';
+const PACKS_IN_SHOP = 20;
 
 export const economyCommands: ChatCommands = {
 	async shop(target, room, user) {
