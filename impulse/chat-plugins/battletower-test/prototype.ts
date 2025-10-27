@@ -83,7 +83,7 @@ const NPCS = {
 			`You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!`,
 			`Don't forget to change your underwear!`
 		],
-		onTalk: (user, room, progress) => {
+		onTalk: function (user, room, progress) { // <-- CHANGED
 			let dialogue;
 			if (progress.eventFlags['awaiting_oak']) {
 				dialogue = `Professor Oak was just here looking for you! You should head over to his lab!`;
@@ -92,8 +92,7 @@ const NPCS = {
 			} else {
 				dialogue = NPCS['mom'].dialogue[0];
 			}
-			// @ts-ignore
-			this.sendReply(`Mom: ${dialogue}`);
+			this.sendReply(`Mom: ${dialogue}`); // 'this' will now be correct
 		}
 	},
 	'prof_oak': {
@@ -101,15 +100,12 @@ const NPCS = {
 			`Ah, [player]! I've been waiting for you.`,
 			`It's time you got your first Pokémon. Choose one!`,
 		],
-		// Special handler for giving starter
-		onTalk: (user, room, progress) => {
+		onTalk: function (user, room, progress) { // <-- CHANGED
 			if (progress.eventFlags['got_starter']) {
-				// @ts-ignore
 				this.sendReply(`Oak: How is your new Pokémon? Get out there and explore!`);
 				return;
 			}
 			
-			// Present starter choice
 			const starterHtml = `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">` +
 				`<b>Professor Oak:</b> Choose your starter!` +
 				`<br><button name="send" value="/adventure select_starter Charmander" style="background: #F44336; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Charmander</button>` +
@@ -123,23 +119,22 @@ const NPCS = {
 	},
 	'nurse_joy': {
 		dialogue: [`Your Pokémon are fully healed! We hope to see you again!`],
-		onTalk: (user, room, progress) => {
+		onTalk: function (user, room, progress) { // <-- CHANGED
 			progress.team.forEach(pokemon => {
 				pokemon.hp = pokemon.maxhp;
 				pokemon.status = '';
 			});
 			progress.lastHealLocation = progress.location;
 			userProgress.set(user.id, progress);
-			// @ts-ignore
 			this.sendReply(NPCS['nurse_joy'].dialogue[0]);
-			updateAdventureHTML(user, room); // Update UI to show full HP
+			updateAdventureHTML(user, room);
 		}
 	}
 };
 
 // Store user progress
 const userProgress = new Map<string, PlayerProgress>();
-const BOT_USER_ID = 'musaddiktemkar'; // Bot user for battles
+const BOT_USER_ID = 'impulseearth'; // Bot user for battles
 
 // --- 2. HTML GENERATION ---
 
