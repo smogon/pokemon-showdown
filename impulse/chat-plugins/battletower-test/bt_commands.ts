@@ -6,7 +6,7 @@
 import { Dex } from '../../../sim/dex';
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 interface GymLeader {
   botUserId: string;
@@ -43,29 +43,30 @@ interface PresetTeam {
   team: any[];
 }
 
+// --- MODIFIED: Starter levels evened out to 13 ---
 const PRESET_TEAMS: PresetTeam[] = [
   {
     name: "Bulbasaur's Buddies",
     team: [
       { species: 'Bulbasaur', item: 'Oran Berry', level: 13, moves: ['tackle', 'growl', 'leechseed', 'vinewhip'] },
-      { species: 'Pidgey', item: '', level: 12, moves: ['tackle', 'gust', 'sandattack'] },
-      { species: 'Rattata', item: '', level: 12, moves: ['tackle', 'quickattack', 'tailwhip'] },
+      { species: 'Pidgey', item: '', level: 13, moves: ['tackle', 'gust', 'sandattack'] },
+      { species: 'Rattata', item: '', level: 13, moves: ['tackle', 'quickattack', 'tailwhip'] },
     ]
   },
   {
     name: "Charmander's Crew",
     team: [
       { species: 'Charmander', item: 'Oran Berry', level: 13, moves: ['scratch', 'growl', 'ember', 'smokescreen'] },
-      { species: 'Mankey', item: '', level: 12, moves: ['scratch', 'lowkick', 'leer'] },
-      { species: 'Spearow', item: '', level: 12, moves: ['peck', 'growl', 'leer'] },
+      { species: 'Mankey', item: '', level: 13, moves: ['scratch', 'lowkick', 'leer'] },
+      { species: 'Spearow', item: '', level: 13, moves: ['peck', 'growl', 'leer'] },
     ]
   },
   {
     name: "Squirtle's Squad",
     team: [
       { species: 'Squirtle', item: 'Oran Berry', level: 13, moves: ['tackle', 'tailwhip', 'watergun', 'withdraw'] },
-      { species: 'Nidoran-M', item: '', level: 12, moves: ['peck', 'focusenergy', 'doublekick'] },
-      { species: 'Meowth', item: '', level: 12, moves: ['scratch', 'growl', 'bite'] },
+      { species: 'Nidoran-M', item: '', level: 13, moves: ['peck', 'focusenergy', 'doublekick'] },
+      { species: 'Meowth', item: '', level: 13, moves: ['scratch', 'growl', 'bite'] },
     ]
   },
 ];
@@ -74,7 +75,7 @@ const PRESET_TEAMS: PresetTeam[] = [
 const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
-// --- MODIFIED: All botUserIds now use the single constant ---
+// --- MODIFIED: Smoothed level curve across all 8 gyms ---
 const GYM_LEADERS: GymLeader[] = [
   {
     botUserId: GYM_CHALLENGE_BOT_ID,
@@ -82,8 +83,8 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Rock',
     badge: 'Boulder Badge',
     team: [
-      { species: 'Geodude', item: '', level: 12, moves: ['tackle', 'defensecurl', 'rockthrow'] },
-      { species: 'Onix', item: '', level: 14, moves: ['tackle', 'bind', 'rockthrow', 'rage'] },
+      { species: 'Geodude', item: '', level: 13, moves: ['tackle', 'defensecurl', 'rockthrow'] },
+      { species: 'Onix', item: '', level: 15, moves: ['tackle', 'bind', 'rockthrow', 'rage'] },
     ]
   },
   {
@@ -92,8 +93,8 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Water',
     badge: 'Cascade Badge',
     team: [
-      { species: 'Staryu', item: '', level: 18, moves: ['tackle', 'watergun', 'rapidspin', 'recover'] },
-      { species: 'Starmie', item: '', level: 21, moves: ['watergun', 'rapidspin', 'bubblebeam', 'swift'] },
+      { species: 'Staryu', item: '', level: 16, moves: ['tackle', 'watergun', 'rapidspin', 'recover'] },
+      { species: 'Starmie', item: '', level: 18, moves: ['watergun', 'rapidspin', 'bubblebeam', 'swift'] },
     ]
   },
   {
@@ -102,9 +103,9 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Electric',
     badge: 'Thunder Badge',
     team: [
-      { species: 'Voltorb', item: '', level: 21, moves: ['tackle', 'sonicboom', 'spark', 'selfdestruct'] },
+      { species: 'Voltorb', item: '', level: 19, moves: ['tackle', 'sonicboom', 'spark', 'selfdestruct'] },
       { species: 'Pikachu', item: '', level: 18, moves: ['thundershock', 'quickattack', 'thunderwave', 'doubleteam'] },
-      { species: 'Raichu', item: 'Oran Berry', level: 24, moves: ['thundershock', 'quickattack', 'thunderbolt', 'doubleteam'] },
+      { species: 'Raichu', item: 'Oran Berry', level: 22, moves: ['thundershock', 'quickattack', 'thunderbolt', 'doubleteam'] },
     ]
   },
   {
@@ -113,9 +114,9 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Grass',
     badge: 'Rainbow Badge',
     team: [
-      { species: 'Victreebel', item: '', level: 29, moves: ['razorleaf', 'acid', 'poisonpowder', 'gigadrain'] },
-      { species: 'Tangela', item: 'Sitrus Berry', level: 24, moves: ['vinewhip', 'bind', 'poisonpowder', 'gigadrain'] },
-      { species: 'Vileplume', item: '', level: 29, moves: ['megadrain', 'acid', 'poisonpowder', 'petaldance'] },
+      { species: 'Victreebel', item: '', level: 24, moves: ['razorleaf', 'acid', 'poisonpowder', 'gigadrain'] },
+      { species: 'Tangela', item: 'Sitrus Berry', level: 23, moves: ['vinewhip', 'bind', 'poisonpowder', 'gigadrain'] },
+      { species: 'Vileplume', item: '', level: 27, moves: ['megadrain', 'acid', 'poisonpowder', 'petaldance'] },
     ]
   },
   {
@@ -124,9 +125,9 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Psychic',
     badge: 'Marsh Badge',
     team: [
-      { species: 'Kadabra', item: 'Twisted Spoon', level: 38, moves: ['psybeam', 'reflect', 'futuresight', 'calmmind'] },
-      { species: 'Mr. Mime', item: 'Leftovers', level: 37, moves: ['barrier', 'psybeam', 'reflect', 'psychic'] },
-      { species: 'Alakazam', item: 'Twisted Spoon', level: 43, moves: ['psychic', 'recover', 'futuresight', 'calmmind'] },
+      { species: 'Kadabra', item: 'Twisted Spoon', level: 30, moves: ['psybeam', 'reflect', 'futuresight', 'calmmind'] },
+      { species: 'Mr. Mime', item: 'Leftovers', level: 29, moves: ['barrier', 'psybeam', 'reflect', 'psychic'] },
+      { species: 'Alakazam', item: 'Twisted Spoon', level: 33, moves: ['psychic', 'recover', 'futuresight', 'calmmind'] },
     ]
   },
   {
@@ -135,10 +136,10 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Poison',
     badge: 'Soul Badge',
     team: [
-      { species: 'Koffing', item: 'Black Sludge', level: 37, moves: ['sludgebomb', 'toxic', 'smokescreen', 'selfdestruct'] },
-      { species: 'Muk', item: 'Black Sludge', level: 39, moves: ['sludgebomb', 'toxic', 'minimize', 'acidarmor'] },
-      { species: 'Weezing', item: 'Black Sludge', level: 42, moves: ['sludgebomb', 'toxic', 'smokescreen', 'haze'] },
-      { species: 'Crobat', item: '', level: 43, moves: ['sludgebomb', 'airslash', 'toxic', 'confuseray'] },
+      { species: 'Koffing', item: 'Black Sludge', level: 34, moves: ['sludgebomb', 'toxic', 'smokescreen', 'selfdestruct'] },
+      { species: 'Muk', item: 'Black Sludge', level: 35, moves: ['sludgebomb', 'toxic', 'minimize', 'acidarmor'] },
+      { species: 'Weezing', item: 'Black Sludge', level: 36, moves: ['sludgebomb', 'toxic', 'smokescreen', 'haze'] },
+      { species: 'Crobat', item: '', level: 38, moves: ['sludgebomb', 'airslash', 'toxic', 'confuseray'] },
     ]
   },
   {
@@ -147,10 +148,10 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Fire',
     badge: 'Volcano Badge',
     team: [
-      { species: 'Growlithe', item: 'Charcoal', level: 42, moves: ['flamethrower', 'extremespeed', 'takedown', 'roar'] },
-      { species: 'Ponyta', item: '', level: 40, moves: ['flamethrower', 'takedown', 'bounce', 'fireblast'] },
-      { species: 'Rapidash', item: 'Charcoal', level: 42, moves: ['flamethrower', 'megahorn', 'bounce', 'fireblast'] },
-      { species: 'Arcanine', item: 'Charcoal', level: 47, moves: ['flamethrower', 'extremespeed', 'crunch', 'fireblast'] },
+      { species: 'Growlithe', item: 'Charcoal', level: 39, moves: ['flamethrower', 'extremespeed', 'takedown', 'roar'] },
+      { species: 'Ponyta', item: '', level: 38, moves: ['flamethrower', 'takedown', 'bounce', 'fireblast'] },
+      { species: 'Rapidash', item: 'Charcoal', level: 40, moves: ['flamethrower', 'megahorn', 'bounce', 'fireblast'] },
+      { species: 'Arcanine', item: 'Charcoal', level: 43, moves: ['flamethrower', 'extremespeed', 'crunch', 'fireblast'] },
     ]
   },
   {
@@ -159,11 +160,11 @@ const GYM_LEADERS: GymLeader[] = [
     type: 'Ground',
     badge: 'Earth Badge',
     team: [
-      { species: 'Rhyhorn', item: 'Soft Sand', level: 45, moves: ['earthquake', 'stoneedge', 'megahorn', 'rockpolish'] },
-      { species: 'Dugtrio', item: 'Choice Band', level: 42, moves: ['earthquake', 'stoneedge', 'suckerpunch', 'aerialace'] },
-      { species: 'Nidoqueen', item: 'Life Orb', level: 44, moves: ['earthquake', 'sludgebomb', 'icebeam', 'thunderbolt'] },
-      { species: 'Nidoking', item: 'Life Orb', level: 45, moves: ['earthquake', 'sludgebomb', 'icebeam', 'thunderbolt'] },
-      { species: 'Rhyperior', item: 'Leftovers', level: 50, moves: ['earthquake', 'stoneedge', 'megahorn', 'stealthrock'] },
+      { species: 'Rhyhorn', item: 'Soft Sand', level: 44, moves: ['earthquake', 'stoneedge', 'megahorn', 'rockpolish'] },
+      { species: 'Dugtrio', item: 'Choice Band', level: 43, moves: ['earthquake', 'stoneedge', 'suckerpunch', 'aerialace'] },
+      { species: 'Nidoqueen', item: 'Life Orb', level: 45, moves: ['earthquake', 'sludgebomb', 'icebeam', 'thunderbolt'] },
+      { species: 'Nidoking', item: 'Life Orb', level: 46, moves: ['earthquake', 'sludgebomb', 'icebeam', 'thunderbolt'] },
+      { species: 'Rhyperior', item: 'Leftovers', level: 48, moves: ['earthquake', 'stoneedge', 'megahorn', 'stealthrock'] },
     ]
   },
 ];
@@ -252,22 +253,32 @@ function createGymBattle(user: any, gymIndex: number) {
   const state = activeRuns.get(user.id);
   if (!state) return null;
 
-  // --- Dynamic Scaling Logic ---
+  // --- MODIFIED: Improved Dynamic Scaling Logic ---
   let totalLevel = 0;
   for (const mon of state.teamData) {
     totalLevel += mon.level;
   }
   const playerAvgLevel = Math.round(totalLevel / state.teamData.length);
-
-  const originalAceLevel = gym.team[gym.team.length - 1].level;
   
-  // Scale relative to the player, but don't de-level the gym
-  // Gym's ace will be 2 levels higher than player's average, or its original level, whichever is higher.
-  const targetAceLevel = Math.max(originalAceLevel, playerAvgLevel + 2);
+  // Define a scaling bonus that increases
+  let levelBonus = 2; // Brock, Misty
+  if (gymIndex >= 5) { // Koga, Blaine, Giovanni
+    levelBonus = 4;
+  } else if (gymIndex >= 2) { // Surge, Erika, Sabrina
+    levelBonus = 3;
+  }
+
+  const scaledPlayerTarget = playerAvgLevel + levelBonus;
+  const originalAceLevel = gym.team[gym.team.length - 1].level;
+
+  // Use the gym's original level OR the player's scaled level, whichever is higher.
+  // This maintains a "minimum difficulty" but scales up if the player levels.
+  const targetAceLevel = Math.max(originalAceLevel, scaledPlayerTarget);
   
   const levelDelta = targetAceLevel - originalAceLevel;
   let scaledBotTeam = gym.team; // Default to original team
 
+  // Only scale *up*, never down.
   if (levelDelta > 0) {
     // Deep clone and apply level scaling to the entire team
     scaledBotTeam = JSON.parse(JSON.stringify(gym.team));
@@ -277,7 +288,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -317,7 +328,7 @@ function handleGymWin(battle: any, winner: string, players: string[], meta: any)
   const rewards = getRandomRewards(3);
   pendingRewards.set(userId, rewards);
 
-  user.sendTo(battle.roomid, `|html|<div class="broadcast-green"><strong>Victory!</strong> You earned the ${gym.badge}!<br/>Choose your reward with C: <code>/gymchallenge reward [1-3]</code>:</div>`);
+  user.sendTo(battle.roomid, `|html|<div class="broadcast-green"><strong>Victory!</strong> You earned the ${gym.badge}!<br/>Choose your reward with <code>/gymchallenge reward [1-3]</code>:</div>`);
   rewards.forEach((reward, i) => {
     user.sendTo(battle.roomid, `|html|<div>${i + 1}. <strong>${reward.name}</strong>: ${reward.description}</div>`);
   });
