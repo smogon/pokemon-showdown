@@ -74,7 +74,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	chandeluremega: {
 		inherit: true,
-		abilities: { 0: "Flash Fire" },
+		abilities: { 0: "Magic Guard" },
 	},
 	chesnaughtmega: {
 		inherit: true,
