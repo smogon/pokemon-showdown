@@ -435,4 +435,23 @@ export const economyCommands: ChatCommands = {
 			return this.errorReply('An unknown error occurred during the credit transfer.');
 		}
 	},
+
+	economyhelp(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const helpList = [
+			{cmd: "/tcg shop", desc: "View the daily rotating pack shop with available packs."},
+			{cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop using credits."},
+			{cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits."},
+			{cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits."},
+			{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user."},
+			{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user."},
+			{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user."},
+		];
+		const html = `<center><strong>TCG Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			helpList.map(({cmd, desc}, i) =>
+				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+			).join('') +
+			`</ul>`;
+		this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${html}</div>`);
+	},
 };
