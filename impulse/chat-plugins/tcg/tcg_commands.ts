@@ -249,11 +249,11 @@ export const commands: ChatCommands = {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
 					if (currentPage > 1) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Previous</button>`;
 					}
 					html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
 					if (currentPage < totalPages) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next</button>`;
 					}
 					html += `</div>`;
 				}
@@ -476,6 +476,9 @@ export const commands: ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
+				{cmd: `<button name="/tcg adminhelp" value="/tcg adminhelp" style="background: none; border: none;">/tcg adminhelp</button>`, desc: "Shows all admin commands."},
+				{cmd: "/tcg economyhelp", desc: "Shows all economy commands."},
+				{cmd: "/tcg tradehelp", desc: "Shows trading commands."},
 				{cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information."},
 				{cmd: "/tcg openpack [setId]", desc: "Open a 10-card booster pack from the specified set (testing only)."},
 				{cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set."},
@@ -488,19 +491,10 @@ export const commands: ChatCommands = {
 				{cmd: "/tcg packs", desc: "View your unopened booster packs."},
 				{cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from your inventory."},
 				{cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a specific set from your inventory."},
-				{cmd: "/tcg shop", desc: "View the daily rotating pack shop."},
-				{cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop."},
-				{cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits.<br><b>Example:</b> <code>/tcg sell sv1-1, 3</code>"},
-				{cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits.<br><b>Example:</b> <code>/tcg sellduplicates sv1</code>"},
-				{cmd: "/tcg tradehelp", desc: "Shows trading commands."},
-				{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user.<br><b>Example:</b> <code>/tcg giftcard princeskygit, sv1-1, 1</code>"},
-				{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user.<br><b>Example:</b> <code>/tcg giftpack princeskygit, sv1, 2</code>"},
-				{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user.<br><b>Example:</b> <code>/tcg giftcredits princeskygit, 100</code>"},
 				{cmd: "/tcg favorite [cardId]", desc: "Add a card from your collection to your profile (max 10)."},
 				{cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites."},
 				{cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors."},
 				{cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user."},
-				{cmd: "/tcg adminhelp", desc: "Shows all admin commands."},
 			];
 			const html = `<center><strong>TCG Commands:</strong><br>Alias: /pokemontcg</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
