@@ -474,54 +474,51 @@ export const commands: ChatCommands = {
 		'': 'help',
 		help() {
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(
-				`<div style="max-height: 360px; overflow-y: auto;">` +
-				`<strong>TCG Commands:</strong><br />` +
-				`<code>/tcg card [cardId]</code> - Display Pokemon TCG card information<br />` +
-				`<code>/tcg openpack [setId]</code> - Open a 10-card booster pack from the specified set<br />` +
-				`<code>/tcg set [setId]</code> - Display information about a specific TCG set<br />` +
-				`<code>/tcg search [query], [page]</code> - Search for cards. Use filters like Example: D<code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:"Arita"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br />` +
-				`<strong>Example:</strong> Example: <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code><br />` +
-				`<strong>Collection Commands:</strong><br />` +
-				`<code>/tcg profile [user]</code> - View a user's TCG profile and collection stats.<br />` +
-				`<code>/tcg daily</code> - Claim your free daily booster pack (once per 24h).<br />` +
-				`<code>/tcg collection [user:], [filters:], [page]</code> - View your (or another user's) card collection.<br />` +
-				`<strong>Example:</strong> <code>/tcg collection user:princeskygit, rarity:Secret</code><br />` +
-				`<code>/tcg setprogress [setId]</code> - Track your collection progress for a specific set.<br />` +
-				`<code>/tcg missing [setId], [user?], [page?]</code> - Shows cards you are missing from a set.<br />` +
-				`<code>/tcg packs</code> - View your unopened booster packs.<br />` +
-				`<code>/tcg opensavedpack [setId]</code> - Open one pack from your inventory.<br />` +
-				`<code>/tcg openallpacks [setId]</code> - Open all packs of a specific set from your inventory.<br />` +
-				`<code>/tcg shop</code> - View the daily rotating pack shop.<br />` +
-				`<code>/tcg buy [setId]</code> - Buy a pack from the shop.<br />` +
-				`<code>/tcg sell [cardId], [quantity]</code> - Sell a card from your collection for credits.<br />` +
-				`<strong>Example:</strong> <code>/tcg sell sv1-1, 3</code><br />` +
-				`<code>/tcg sellduplicates [all | setId]</code> - Sell all duplicate cards (quantity > 1) for credits.<br />` +
-				`<strong>Example:</strong> <code>/tcg sellduplicates sv1</code><br />` +
-				`<code>/tcg giftcard [user], [cardId], [quantity]</code> - Gift a card from your collection to another user.<br />` +
-				`<strong>Example:</strong> <code>/tcg giftcard princeskygit, sv1-1, 1</code><br />` +
-				`<code>/tcg giftpack [user], [setId], [quantity]</code> - Gift one or more saved packs to another user.<br />` +
-				`<strong>Example:</strong> <code>/tcg giftpack princeskygit, sv1, 2</code><br />` +
-				`<code>/tcg giftcredits [user], [amount]</code> - Gift credits to another user.<br />` +
-				`<strong>Example:</strong> <code>/tcg giftcredits princeskygit, 100</code><br />` +
-				`<code>/tcg favorite [cardId]</code> - Add a card from your collection to your profile (max 10).<br />` +
-				`<code>/tcg unfavorite [cardId]</code> - Remove a card from your profile favorites.<br />` +
-				`<code>/tcg leaderboard [points | count | unique | credits | sets]</code> - View the top collectors.<br />` +
-				`<code>/tcg recalculatestats [user]</code> - Recalculate your stats. Admins can specify a user.<br />` +
-				`<strong>Admin Commands:</strong><br />` +
-				`<code>/tcg awardcredits [user], [amount]</code> - (Admin) Grant credits to a user.<br />` +
-				`<code>/tcg awardpack [user], [setId], [quantity]</code> - (Admin) Grant pack(s) to a user.<br />` +
-				`<code>/tcg awardcard [user], [cardId], [quantity]</code> - (Admin) Grant card(s) to a user.<br />` +
-				`<code>/tcg wipecollection [user]</code> - (Admin) Reset a user's entire TCG collection and profile.<br />` +
-				`<code>/tcg refreshshop</code> - (Admin) Force the daily TCG shop to load new packs.<br />` +
-				`<code>/tcg resetdaily [user | all]</code> - (Admin) Reset the daily pack cooldown for a user or all users.<br />` +
-				`<code>/tcg loadcache</code> - (Admin) Reloads the TCG card and set data into memory.<br />` +
-				`<code>/tcg cachestats</code> - (Admin) Shows statistics about the in-memory cache.<br />` +
-				`<code>/tcg clearcache</code> - (Admin) Clears all TCG data from the in-memory cache.<br />` +
-				`<code>/tcg recalculateallstats</code> - (Admin) Recalculates stats for ALL users. <br />` +
-				`<code>/tcg createindexes</code> - (Admin) Creates all important mongodb indexes for fast querying.` +
-				`</div>`
-				);
+			const helpList = [
+				{cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information."},
+				{cmd: "/tcg openpack [setId]", desc: "Open a 10-card booster pack from the specified set (testing only)."},
+				{cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set."},
+				{cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>"},
+				{cmd: "/tcg profile [user]", desc: "View a user's TCG profile and collection stats."},
+				{cmd: "/tcg daily", desc: "Claim your free daily booster pack (once per 24h)."},
+				{cmd: "/tcg collection [user:], [filters:], [page]", desc: "View your (or another user's) card collection.<br><b>Example:</b> <code>/tcg collection user:princeskygit, rarity:Secret</code>"},
+				{cmd: "/tcg setprogress [setId]", desc: "Track your collection progress for a specific set."},
+				{cmd: "/tcg missing [setId], [user?], [page?]", desc: "Shows cards you are missing from a set."},
+				{cmd: "/tcg packs", desc: "View your unopened booster packs."},
+				{cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from your inventory."},
+				{cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a specific set from your inventory."},
+				{cmd: "/tcg shop", desc: "View the daily rotating pack shop."},
+				{cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop."},
+				{cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits.<br><b>Example:</b> <code>/tcg sell sv1-1, 3</code>"},
+				{cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits.<br><b>Example:</b> <code>/tcg sellduplicates sv1</code>"},
+				{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user.<br><b>Example:</b> <code>/tcg giftcard princeskygit, sv1-1, 1</code>"},
+				{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user.<br><b>Example:</b> <code>/tcg giftpack princeskygit, sv1, 2</code>"},
+				{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user.<br><b>Example:</b> <code>/tcg giftcredits princeskygit, 100</code>"},
+				{cmd: "/tcg favorite [cardId]", desc: "Add a card from your collection to your profile (max 10)."},
+				{cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites."},
+				{cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors."},
+				{cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user."},
+				{cmd: "/tcg awardcredits [user], [amount]", desc: "Grant credits to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardcredits princeskygit, 1000</code>"},
+				{cmd: "/tcg awardpack [user], [setId], [quantity]", desc: "Grant pack(s) to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardpack princeskygit, sv1, 5</code>"},
+				{cmd: "/tcg awardcard [user], [cardId], [quantity]", desc: "Grant card(s) to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardcard princeskygit, sv1-1, 3</code>"},
+				{cmd: "/tcg takecard [user], [cardId], [quantity]", desc: "Remove card(s) from a user. Requires: &.<br><b>Example:</b> <code>/tcg takecard princeskygit, sv1-1, 2</code>"},
+				{cmd: "/tcg takecredits [user], [amount]", desc: "Remove credits from a user. Requires: &.<br><b>Example:</b> <code>/tcg takecredits princeskygit, 500</code>"},
+				{cmd: "/tcg takepack [user], [setId], [quantity]", desc: "Remove pack(s) from a user. Requires: &.<br><b>Example:</b> <code>/tcg takepack princeskygit, sv1, 3</code>"},
+				{cmd: "/tcg wipecollection [user]", desc: "Reset a user's entire TCG collection and profile. Requires: &."},
+				{cmd: "/tcg refreshshop", desc: "Force the daily TCG shop to load new packs. Requires: &."},
+				{cmd: "/tcg resetdaily [user | all]", desc: "Reset the daily pack cooldown for a user or all users. Requires: &."},
+				{cmd: "/tcg loadcache", desc: "Reloads the TCG card and set data into memory. Requires: &."},
+				{cmd: "/tcg cachestats", desc: "Shows statistics about the in-memory cache. Requires: &."},
+				{cmd: "/tcg clearcache", desc: "Clears all TCG data from the in-memory cache. Requires: &."},
+				{cmd: "/tcg recalculateallstats", desc: "Recalculates stats for ALL users. Requires: &."},
+				{cmd: "/tcg createindexes", desc: "Creates all important mongodb indexes for fast querying. Requires: &."},
+			];
+			const html = `<center><strong>TCG Commands:</strong><br>Alias: /pokemontcg</center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({cmd, desc}, i) =>
+					`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+								).join('') +
+				`</ul>`;
+			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
 		},
 		...adminCommands,
 		...collectionCommands,
