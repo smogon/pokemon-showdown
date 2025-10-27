@@ -1196,7 +1196,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 }*/
 
-	onTournamentEnd() {
+	// Replace the onTournamentEnd() method with this fixed version
+// Find this section around line 1090 in your code
+
+onTournamentEnd() {
 	const update = {
 		results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 		format: this.name,
@@ -1221,20 +1224,13 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				const packRewards = rewardConfig.packs || [];
 				const results = this.generator.getResults() as TournamentPlayer[][];
 
-				// Determine whether this is a true single-elimination tournament.
-				let isSingleElimination = false;
-				if ((this.generator as any).maxSubtrees !== undefined) {
-					isSingleElimination = (this.generator as any).maxSubtrees === 1;
-				}
-
 				const places = ['winner', 'runner-up'];
 				const CURRENCYNAME = CURRENCY.name;
 
-				// Determine how many places to reward
-				// Single elimination: reward up to max of configured rewards
-				// Other formats: only winner
-				const maxPlaceCredits = isSingleElimination ? Math.min(baseRewards.length, results.length) : 1;
-				const maxPlacePacks = isSingleElimination ? Math.min(packRewards.length, results.length) : 1;
+				// FIXED: Determine how many places to reward based on configuration, not format type
+				// Allow rewards for as many places as configured, regardless of tournament format
+				const maxPlaceCredits = Math.min(baseRewards.length, results.length);
+				const maxPlacePacks = Math.min(packRewards.length, results.length);
 				const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
 
 				// Group players by placement with their rewards
