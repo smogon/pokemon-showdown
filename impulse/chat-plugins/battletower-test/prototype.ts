@@ -386,7 +386,7 @@ export const commands: ChatCommands = {
 				progress.inventory.push(pokemon.charAt(0).toUpperCase() + pokemon.slice(1));
 			}
 			if (progress.node === 'start_gym_battle') {
-				const botUser = Users.get('musaddiktemkar');
+				const botUser = Users.get('impulseearth');
 				if (!botUser || !botUser.connected) {
 					progress.node = 'gym_defeat';
 					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
