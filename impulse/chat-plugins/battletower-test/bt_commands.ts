@@ -598,6 +598,7 @@ export const commands: Chat.ChatCommands = {
     },
 
     status(target, room, user) {
+		if (!this.runBroadcast()) return;
       const state = activeRuns.get(user.id);
       if (!state) {
         return this.errorReply("You don't have an active gym challenge.");
