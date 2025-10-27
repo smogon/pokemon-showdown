@@ -566,4 +566,25 @@ export const tradeCommands: ChatCommands = {
 			otherUser.popup(`|html|${user.name} cancelled the trade.`);
 		}
 	},
+
+	tradehelp(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const helpList = [
+			{cmd: "/tcg trade [user]", desc: "Initiate a trade with another user."},
+			{cmd: "/tcg tradeadd [cardId], [quantity]", desc: "Add cards to your current trade offer."},
+			{cmd: "/tcg traderemove [cardId], [quantity]", desc: "Remove cards from your current trade offer."},
+			{cmd: "/tcg tradeaddcredits [amount]", desc: "Add credits to your current trade offer."},
+			{cmd: "/tcg tradeview", desc: "View the current trade details and status."},
+			{cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade."},
+			{cmd: "/tcg tradecancel", desc: "Cancel the current active trade."},
+			{cmd: "/tcg tradesdisable", desc: "Disable incoming trade requests from other users."},
+			{cmd: "/tcg tradesenable", desc: "Enable incoming trade requests from other users."},
+		];
+		const html = `<center><strong>TCG Trading Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			helpList.map(({cmd, desc}, i) =>
+				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+							).join('') +
+			`</ul>`;
+		this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
+	},
 };
