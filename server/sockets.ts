@@ -32,7 +32,7 @@ export const Sockets = new class {
 				// *socketid, ip, protocol
 				// connect
 				worker.load++;
-				const [socketid, ip, protocol] = data.substr(1).split('\n');
+				const [socketid, ip, protocol] = data.slice(1).split('\n');
 				Users.socketConnect(worker, id, socketid, ip, protocol);
 				break;
 			}
@@ -41,7 +41,7 @@ export const Sockets = new class {
 				// !socketid
 				// disconnect
 				worker.load--;
-				const socketid = data.substr(1);
+				const socketid = data.slice(1);
 				Users.socketDisconnect(worker, id, socketid);
 				break;
 			}
@@ -50,8 +50,8 @@ export const Sockets = new class {
 				// <socketid, message
 				// message
 				const idx = data.indexOf('\n');
-				const socketid = data.substr(1, idx - 1);
-				const message = data.substr(idx + 1);
+				const socketid = data.slice(1, idx);
+				const message = data.slice(idx + 1);
 				Users.socketReceive(worker, id, socketid, message);
 				break;
 			}
@@ -153,12 +153,12 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		'$'(data) {
 			// $code
 			// eslint-disable-next-line no-eval
-			eval(data.substr(1));
+			eval(data.slice(1));
 		},
 		'!'(data) {
 			// !socketid
 			// destroy
-			const socketid = data.substr(1);
+			const socketid = data.slice(1);
 			const socket = this.sockets.get(socketid);
 			if (!socket) return;
 			socket.destroy();
@@ -177,10 +177,10 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// >socketid, message
 			// message to single connection
 			const nlLoc = data.indexOf('\n');
-			const socketid = data.substr(1, nlLoc - 1);
+			const socketid = data.slice(1, nlLoc);
 			const socket = this.sockets.get(socketid);
 			if (!socket) return;
-			const message = data.substr(nlLoc + 1);
+			const message = data.slice(nlLoc + 1);
 			socket.write(message);
 		},
 		'#'(data) {
@@ -189,20 +189,20 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// #, message
 			// message to all connections
 			const nlLoc = data.indexOf('\n');
-			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			const roomid = data.slice(1, nlLoc) as RoomID;
 			const room = roomid ? this.rooms.get(roomid) : this.sockets;
 			if (!room) return;
-			const message = data.substr(nlLoc + 1);
+			const message = data.slice(nlLoc + 1);
 			for (const curSocket of room.values()) curSocket.write(message);
 		},
 		'+'(data) {
 			// +roomid, socketid
 			// join room with connection
 			const nlLoc = data.indexOf('\n');
-			const socketid = data.substr(nlLoc + 1);
+			const socketid = data.slice(nlLoc + 1);
 			const socket = this.sockets.get(socketid);
 			if (!socket) return;
-			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			const roomid = data.slice(1, nlLoc) as RoomID;
 			let room = this.rooms.get(roomid);
 			if (!room) {
 				room = new Map();
@@ -257,7 +257,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			const messages: [string | null, string | null, string | null, string | null, string | null] = [
 				null, null, null, null, null,
 			];
-			const message = data.substr(nlLoc + 1);
+			const message = data.slice(nlLoc + 1);
 			const channelMessages = extractChannelMessages(message, [0, 1, 2, 3, 4]);
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
