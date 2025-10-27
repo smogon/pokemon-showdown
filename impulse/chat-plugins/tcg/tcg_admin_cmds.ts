@@ -9,7 +9,7 @@ import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, 
 
 export const adminCommands: ChatCommands = {
 	async awardcredits(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 2) return this.errorReply("Usage: /tcg awardcredits [user], [amount]");
 		
@@ -46,7 +46,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async awardpack(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 2) return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
 
@@ -88,7 +88,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async awardcard(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 2) return this.errorReply("Usage: /tcg awardcard [user], [cardId], [quantity]");
 
@@ -178,7 +178,7 @@ export const adminCommands: ChatCommands = {
 	},
 
   async takecard(target, room, user) {
-    this.checkCan('bypassall');
+    this.checkCan('roomowner');
     const parts = target.split(',').map(p => p.trim());
     if (parts.length < 2) return this.errorReply("Usage: /tcg takecard [user], [cardId], [quantity]");
 
@@ -234,7 +234,7 @@ export const adminCommands: ChatCommands = {
   },
 
   async takecredits(target, room, user) {
-    this.checkCan('bypassall');
+    this.checkCan('roomowner');
     const parts = target.split(',').map(p => p.trim());
     if (parts.length < 2) return this.errorReply("Usage: /tcg takecredits [user], [amount]");
 	
@@ -269,7 +269,7 @@ export const adminCommands: ChatCommands = {
   },
 
   async takepack(target, room, user) {
-    this.checkCan('bypassall');
+    this.checkCan('roomowner');
     const parts = target.split(',').map(p => p.trim());
     if (parts.length < 2) return this.errorReply("Usage: /tcg takepack [user], [setId], [quantity]");
 
@@ -313,7 +313,7 @@ export const adminCommands: ChatCommands = {
   },
 	
   async wipecollection(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const targetUserId = toID(target);
 		if (!targetUserId) return this.errorReply("Usage: /tcg wipecollection [user]");
 		
@@ -334,14 +334,14 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async refreshshop(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		clearShopCache();
 		this.sendReply('TCG shop cache cleared. It will refresh on the next /tcg shop command.');
 		await this.parse('/tcg shop');
 	},
 
 	async resetdaily(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const targetId = toID(target);
 		if (!targetId) return this.errorReply("Usage: /tcg resetdaily [user | all]");
 
@@ -364,7 +364,7 @@ export const adminCommands: ChatCommands = {
 	},
 	
 	recalculateallstats(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		this.sendReply(`Starting stats recalculation for ALL users... This will take a long time and run in the background. You will be notified when it's complete.`);
 
 		(async () => {
@@ -482,7 +482,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async loadcache(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		this.sendReply('Initializing TCG cache... This may take a moment.');
 		try {
 			const { cardCount, setCount } = await initializeCache();
@@ -494,7 +494,7 @@ export const adminCommands: ChatCommands = {
 
 	cachestats(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const stats = getCacheStats();
 		let html = `<div class="infobox" style="padding: 15px;">`;
 		html += `<strong style="font-size: 1.2em;">TCG Cache Statistics</strong><br />`;
@@ -509,7 +509,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	clearcache(target, room, user) {
-		this.checkCan('bypassall');
+		this.checkCan('roomowner');
 		const { cardsCleared, setsCleared } = clearCache();
 		this.sendReply(`TCG caches cleared. Removed ${cardsCleared} cards and ${setsCleared} sets.`);
 	},
