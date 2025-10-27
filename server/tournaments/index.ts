@@ -1256,6 +1256,29 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					let creditsAmount = 0;
 					let packsToAward = 0;
 
+					// Determine rewards for this placement
+					if (place < maxPlaceCredits) {
+						creditsAmount = baseRewards[place] ?? 0;
+					}
+					if (place < maxPlacePacks) {
+						packsToAward = packRewards[place] ?? 0;
+					}
+
+					// Get random packs once for this placement group (if applicable)
+					if (packsToAward > 0) {
+						const cardCollection = tcgCardsCollection;
+						const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
+							{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
+							{ $sample: { size: packsToAward } }
+						]);
+
+						if (randomSets.length > 0) {
+							for (const randomSet of randomSets) {
+								allPackNames.push(randomSet.setName);
+							}
+						}
+					}
+
 					for (const player of placeResults) {
 						// Guard against null/undefined/unfilled bracket nodes.
 						if (!player) {
@@ -1288,74 +1311,35 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						validPlayers.push(userName);
 
 						// Award credits if configured for this place
-						if (place < maxPlaceCredits) {
-							creditsAmount = baseRewards[place] ?? 0;
-							if (creditsAmount > 0) {
-								await Economy.updateBalance(userId, creditsAmount);
-							}
+						if (creditsAmount > 0) {
+							await Economy.updateBalance(userId, creditsAmount);
 						}
 
 						// Award packs if configured for this place
-						if (place < maxPlacePacks) {
-							packsToAward = packRewards[place] ?? 0;
-							if (packsToAward > 0 && allPackNames.length === 0) {
-								// Get random sets from the database (only once per placement group)
-								const cardCollection = tcgCardsCollection;
-								const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
-									{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
-									{ $sample: { size: packsToAward } }
-								]);
-
-								if (randomSets.length > 0) {
-									const packCollection = userPacksCollection;
-									const now = new Date().toISOString();
-
-									for (const randomSet of randomSets) {
-										await packCollection.updateOne(
-											{ userId: userId, setId: randomSet._id },
-											{
-												$inc: { quantity: 1 },												
-												$set: {
-													setName: randomSet.setName,
-													setLogo: randomSet.setLogo,
-													lastAcquiredAt: now
-												},
-												$setOnInsert: {
-													userId: userId,
-													setId: randomSet._id
-												}
+						if (packsToAward > 0 && allPackNames.length > 0) {
+							const packCollection = userPacksCollection;
+							const now = new Date().toISOString();
+							const cardCollection = tcgCardsCollection;
+							
+							for (const packName of allPackNames) {
+								const packInfo = await cardCollection.findOne({ set: packName });
+								if (packInfo) {
+									await packCollection.updateOne(
+										{ userId: userId, setId: packInfo.setId },
+										{
+											$inc: { quantity: 1 },												
+											$set: {
+												setName: packInfo.set,
+												setLogo: packInfo.setImages?.logo,
+												lastAcquiredAt: now
 											},
-											{ upsert: true }
-										);
-										allPackNames.push(randomSet.setName);
-									}
-								}
-							} else if (packsToAward > 0 && allPackNames.length > 0) {
-								// Award the same packs to other players in the same placement
-								const packCollection = userPacksCollection;
-								const now = new Date().toISOString();
-								const cardCollection = tcgCardsCollection;
-								
-								for (const packName of allPackNames) {
-									const packInfo = await cardCollection.findOne({ set: packName });
-									if (packInfo) {
-										await packCollection.updateOne(
-											{ userId: userId, setId: packInfo.setId },
-											{
-												$inc: { quantity: 1 },												
-												$set: {
-													setName: packInfo.set,
-													setLogo: packInfo.setImages?.logo,
-													lastAcquiredAt: now
-												},
-												$setOnInsert: {
-													userId: userId,
-													setId: packInfo.setId
-												}
-											},
-											{ upsert: true }
-										);
-									}
+											$setOnInsert: {
+												userId: userId,
+												setId: packInfo.setId
+											}
+										},
+										{ upsert: true }
+									);
 								}
 							}
 						}
