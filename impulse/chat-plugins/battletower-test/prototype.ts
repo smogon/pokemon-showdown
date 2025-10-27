@@ -148,12 +148,12 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (progress.team.length === 0) {
 		teamHtml += `No Pokémon yet`;
 	} else {
-		teamHtml += progress.team.map(p => `\${p.species} (Lvl \${p.level}) - HP: \${p.hp}/\${p.maxhp}`).join(', ');
+		teamHtml += progress.team.map(p => `${p.species} (Lvl ${p.level}) - HP: ${p.hp}/${p.maxhp}`).join(', ');
 	}
 	teamHtml = `<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">` + teamHtml + `</div>`;
 
 	// Location Display
-	const locationHtml = `<div><b>\${location.name}</b><br>` + `\${location.description}</div>`;
+	const locationHtml = `<div><b>${location.name}</b><br>` + `${location.description}</div>`;
 
 	// Buttons
 	let buttonsHtml = `<div style="margin-top: 10px;">`;
@@ -162,8 +162,8 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (location.exits) {
 		buttonsHtml += `<b>Exits:</b><br>`;
 		for (const dir in location.exits) {
-			buttonsHtml += `<button name="send" value="/adventure move \${dir}" style="background: #607D8B; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
-				`\${dir} (\${LOCATIONS[location.exits[dir]].name})` +
+			buttonsHtml += `<button name="send" value="/adventure move ${dir}" style="background: #607D8B; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`${dir} (${LOCATIONS[location.exits[dir]].name})` +
 				`</button>`;
 		}
 	}
@@ -172,8 +172,8 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (location.buildings) {
 		buttonsHtml += `<br><b>Buildings:</b><br>`;
 		for (const building in location.buildings) {
-			buttonsHtml += `<button name="send" value="/adventure enter \${building}" style="background: #795548; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
-				`Enter \${location.buildings[building]} (\${building})` +
+			buttonsHtml += `<button name="send" value="/adventure enter ${building}" style="background: #795548; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`Enter ${location.buildings[building]} (${building})` +
 				`</button>`;
 		}
 	}
@@ -182,17 +182,17 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (location.npcs && location.npcs.length > 0) {
 		buttonsHtml += `<br><b>People:</b><br>`;
 		for (const npcId of location.npcs) {
-			buttonsHtml += `<button name="send" value="/adventure talk \${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
-				`Talk to \${npcId}` +
+			buttonsHtml += `<button name="send" value="/adventure talk ${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
+				`Talk to ${npcId}` +
 				`</button>`;
 		}
 	}
 	buttonsHtml += `</div>`;
 
 	return `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">` +
-		`\${teamHtml}` +
-		`\${locationHtml}` +
-		`\${buttonsHtml}` +
+		`${teamHtml}` +
+		`${locationHtml}` +
+		`${buttonsHtml}` +
 		`</div>`;
 }
 
@@ -203,9 +203,9 @@ function updateAdventureHTML(user: User, room: Room | null) {
 	const html = generateAdventureHTML(user, progress);
 	
 	if (room) {
-		room.add(`|uhtml|adventure-\${user.id}|\${html}`).update();
+		room.add(`|uhtml|adventure-${user.id}|${html}`).update();
 	} else {
-		user.sendTo(null, `|uhtml|adventure-\${user.id}|\${html}`);
+		user.sendTo(null, `|uhtml|adventure-${user.id}|${html}`);
 	}
 }
 
@@ -263,7 +263,7 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 	const botUser = Users.get(BOT_USER_ID);
 	if (!botUser || !botUser.connected) {
 		// @ts-ignore
-		this.errorReply(`The battle couldn't start because \${BOT_USER_ID} is offline.`);
+		this.errorReply(`The battle couldn't start because ${BOT_USER_ID} is offline.`);
 		return false;
 	}
 
@@ -285,7 +285,7 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 			botTeam: wildTeam,
 			battleType: 'wild_adventure',
 			format: 'gen9customgame',
-			title: `\${user.name} vs. Wild \${wildTeam[0].species}`,
+			title: `${user.name} vs. Wild ${wildTeam[0].species}`,
 			data: { 
 				userId: user.id,
 				originRoomId: room ? room.id : null 
@@ -298,7 +298,7 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 			progress.battleId = battleRoom.id;
 			userProgress.set(user.id, progress);
 			// @ts-ignore
-			this.sendReply(`A wild \${wildTeam[0].species} appeared!`);
+			this.sendReply(`A wild ${wildTeam[0].species} appeared!`);
 			return true;
 		}
 	} catch (e) {
@@ -486,7 +486,7 @@ export const commands: ChatCommands = {
 				// Pass `this` context
 				npc.onTalk.call(this, user, room, progress);
 			} else {
-				this.sendReply(`\${npc.dialogue[0]}`);
+				this.sendReply(`${npc.dialogue[0]}`);
 			}
 		},
 
@@ -514,7 +514,7 @@ export const commands: ChatCommands = {
 			progress.eventFlags['got_starter'] = true;
 			userProgress.set(user.id, progress);
 
-			this.sendReply(`You received \${starterSet.species}!`);
+			this.sendReply(`You received ${starterSet.species}!`);
 			updateAdventureHTML(user, room);
 		},
 
@@ -526,7 +526,7 @@ export const commands: ChatCommands = {
 			updateAdventureHTML(user, room);
 		},
 
-		// /adventure team (replaces inventory)
+// /adventure team (replaces inventory)
 		team(target, room, user) {
 			if (!userProgress.has(user.id)) {
 				return this.errorReply(`You haven’t started an adventure yet!`);
@@ -538,7 +538,7 @@ export const commands: ChatCommands = {
 
 			let reply = `Your Pokémon:\n`;
 			progress.team.forEach(p => {
-				reply += ` - \${p.species} (Lvl \${p.level}) | HP: \${p.hp}/\${p.maxhp} | Moves: \${p.moves.join(', ')}\n`;
+				reply += ` - ${p.species} (Lvl ${p.level}) | HP: ${p.hp}/${p.maxhp} | Moves: ${p.moves.join(', ')}\n`;
 			});
 			this.sendReply(reply);
 		},
