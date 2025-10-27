@@ -469,6 +469,18 @@ export const tradeCommands: ChatCommands = {
 					await profiles.updateOne({ userId: trade.initiator }, { $inc: { credits: trade.recipientOffer.credits } }, { upsert: true });
 				}
 
+				// Increment trade counter for both users
+				await profiles.updateOne(
+					{ userId: trade.initiator },
+					{ $inc: { totalTrades: 1 } },
+					{ upsert: true }
+				);
+				await profiles.updateOne(
+					{ userId: trade.recipient },
+					{ $inc: { totalTrades: 1 } },
+					{ upsert: true }
+				);
+
 				activeTrades.delete(key);
 
 				this.sendReply(`Trade completed successfully!`);
