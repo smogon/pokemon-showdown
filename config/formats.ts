@@ -1158,6 +1158,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateSet(set, format, setHas, teamHas) {
 			const species = this.dex.species.get(set.species);
 			if (this.dex.species.get(species.baseSpecies).isNonstandard) return [`${species.name} does not exist in Gen 9.`];
+			if (species.name !== species.baseSpecies && species.baseSpecies === 'Arceus' &&
+				this.dex.items.get(set.item).onPlate !== species.types[0]) {
+				return [`${species.name} is required to hold the ${species.requiredItems![0]}.`];
+			}
 		},
 	},
 	{
