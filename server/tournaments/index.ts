@@ -1197,163 +1197,239 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 }*/
 
 	onTournamentEnd() {
-		const update = {
-			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
-			format: this.name,
-			generator: this.generator.name,
-			bracketData: this.getBracketData(),
-		};
-		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+	const update = {
+		results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
+		format: this.name,
+		generator: this.generator.name,
+		bracketData: this.getBracketData(),
+	};
+	this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 
-		// --- Reward Distribution --- (async IIFE)
-		void (async () => {
-			try {
-				const rewardConfig = Config.tournamentRewards;
-				if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
-					const playerCount = this.players.length;
-					let multiplier = 1;
+	// --- Reward Distribution --- (async IIFE)
+	void (async () => {
+		try {
+			const rewardConfig = Config.tournamentRewards;
+			if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
+				const playerCount = this.players.length;
+				let multiplier = 1;
 
-					if (playerCount > 4) {
-						multiplier = 1 + ((playerCount - 4) * 0.2);
-					}
+				if (playerCount > 4) {
+					multiplier = 1 + ((playerCount - 4) * 0.2);
+				}
 
-					const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
-					const packRewards = rewardConfig.packs || [];
-					const results = this.generator.getResults() as TournamentPlayer[][];
+				const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
+				const packRewards = rewardConfig.packs || [];
+				const results = this.generator.getResults() as TournamentPlayer[][];
 
-					// Determine whether this is a true single-elimination tournament.
-					let isSingleElimination = false;
-					if ((this.generator as any).maxSubtrees !== undefined) {
-						isSingleElimination = (this.generator as any).maxSubtrees === 1;
-					}
+				// Determine whether this is a true single-elimination tournament.
+				let isSingleElimination = false;
+				if ((this.generator as any).maxSubtrees !== undefined) {
+					isSingleElimination = (this.generator as any).maxSubtrees === 1;
+				}
 
-					const rewardMessages: string[] = [];
-					const places = ['winner', 'runner-up'];
-					const CURRENCYNAME = CURRENCY.name;
+				const places = ['winner', 'runner-up'];
+				const CURRENCYNAME = CURRENCY.name;
 
-					// Determine how many places to reward
-					// Single elimination: reward up to max of configured rewards
-					// Other formats: only winner
-					const maxPlaceCredits = isSingleElimination ? Math.min(baseRewards.length, results.length) : 1;
-					const maxPlacePacks = isSingleElimination ? Math.min(packRewards.length, results.length) : 1;
-					const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
+				// Determine how many places to reward
+				// Single elimination: reward up to max of configured rewards
+				// Other formats: only winner
+				const maxPlaceCredits = isSingleElimination ? Math.min(baseRewards.length, results.length) : 1;
+				const maxPlacePacks = isSingleElimination ? Math.min(packRewards.length, results.length) : 1;
+				const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
 
-					for (let place = 0; place < maxPlace; place++) {
-						const placeResults = results[place];
-						if (!placeResults || !placeResults.length) continue;
+				// Group players by placement with their rewards
+				const placementGroups: Array<{
+					place: number;
+					placeName: string;
+					players: string[];
+					credits: number;
+					packs: number;
+					packNames: string[];
+				}> = [];
 
-						for (const player of placeResults) {
-							// Guard against null/undefined/unfilled bracket nodes.
-							if (!player) {
-								Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
-								continue;
-							}
+				for (let place = 0; place < maxPlace; place++) {
+					const placeResults = results[place];
+					if (!placeResults || !placeResults.length) continue;
 
-							let userId: ID | '' = '';
-							let userName = '(unknown)';
-							
-							if (typeof player === 'string') {
-								userId = toID(player) as ID;
-								userName = player;
+					const validPlayers: string[] = [];
+					const allPackNames: string[] = [];
+					let creditsAmount = 0;
+					let packsToAward = 0;
+
+					for (const player of placeResults) {
+						// Guard against null/undefined/unfilled bracket nodes.
+						if (!player) {
+							Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
+							continue;
+						}
+
+						let userId: ID | '' = '';
+						let userName = '(unknown)';
+						
+						if (typeof player === 'string') {
+							userId = toID(player) as ID;
+							userName = player;
+						} else {
+							if (player.id) {
+								userId = player.id as ID;
+							} else if (player.name) {
+								userId = toID(player.name) as ID;
 							} else {
-								if (player.id) {
-									userId = player.id as ID;
-								} else if (player.name) {
-									userId = toID(player.name) as ID;
-								} else {
-									userId = '';
-								}
-								userName = player.name || String(userId) || '(unfilled)';
+								userId = '';
 							}
+							userName = player.name || String(userId) || '(unfilled)';
+						}
 
-							if (!userId) {
-								Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
-								continue;
+						if (!userId) {
+							Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
+							continue;
+						}
+
+						validPlayers.push(userName);
+
+						// Award credits if configured for this place
+						if (place < maxPlaceCredits) {
+							creditsAmount = baseRewards[place] ?? 0;
+							if (creditsAmount > 0) {
+								await Economy.updateBalance(userId, creditsAmount);
 							}
-							
-							const rewardParts: string[] = [];
+						}
 
-							// Award credits if configured for this place
-							if (place < maxPlaceCredits) {
-								const creditsAmount = baseRewards[place] ?? 0;
-								if (creditsAmount > 0) {
-									await Economy.updateBalance(userId, creditsAmount);									
-									rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(creditsAmount)} ${CURRENCYNAME}</span>`);
-								}
-							}
+						// Award packs if configured for this place
+						if (place < maxPlacePacks) {
+							packsToAward = packRewards[place] ?? 0;
+							if (packsToAward > 0 && allPackNames.length === 0) {
+								// Get random sets from the database (only once per placement group)
+								const cardCollection = tcgCardsCollection;
+								const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
+									{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
+									{ $sample: { size: packsToAward } }
+								]);
 
-							// Award packs if configured for this place
-							if (place < maxPlacePacks) {
-								const packsToAward = packRewards[place] ?? 0;
-								if (packsToAward > 0) {
-									// Get random sets from the database
-									const cardCollection = tcgCardsCollection;
-									const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
-										{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
-										{ $sample: { size: packsToAward } }
-									]);
+								if (randomSets.length > 0) {
+									const packCollection = userPacksCollection;
+									const now = new Date().toISOString();
 
-									if (randomSets.length > 0) {
-										const packCollection = userPacksCollection;
-										const now = new Date().toISOString();
-										const packNames: string[] = [];
-
-										for (const randomSet of randomSets) {
-											await packCollection.updateOne(
-												{ userId: userId, setId: randomSet._id },
-												{
-													$inc: { quantity: 1 },												
-													$set: {
-														setName: randomSet.setName,
-														setLogo: randomSet.setLogo,
-														lastAcquiredAt: now
-													},
-													$setOnInsert: {
-														userId: userId,
-														setId: randomSet._id
-													}
+									for (const randomSet of randomSets) {
+										await packCollection.updateOne(
+											{ userId: userId, setId: randomSet._id },
+											{
+												$inc: { quantity: 1 },												
+												$set: {
+													setName: randomSet.setName,
+													setLogo: randomSet.setLogo,
+													lastAcquiredAt: now
 												},
-												{ upsert: true }
-											);
-											packNames.push(randomSet.setName);
-										}
-
-										rewardParts.push(`<span style="font-weight:bold;">${packsToAward} pack${packsToAward > 1 ? 's' : ''}</span> (${packNames.join(', ')})`);
+												$setOnInsert: {
+													userId: userId,
+													setId: randomSet._id
+												}
+											},
+											{ upsert: true }
+										);
+										allPackNames.push(randomSet.setName);
+									}
+								}
+							} else if (packsToAward > 0 && allPackNames.length > 0) {
+								// Award the same packs to other players in the same placement
+								const packCollection = userPacksCollection;
+								const now = new Date().toISOString();
+								const cardCollection = tcgCardsCollection;
+								
+								for (const packName of allPackNames) {
+									const packInfo = await cardCollection.findOne({ set: packName });
+									if (packInfo) {
+										await packCollection.updateOne(
+											{ userId: userId, setId: packInfo.setId },
+											{
+												$inc: { quantity: 1 },												
+												$set: {
+													setName: packInfo.set,
+													setLogo: packInfo.setImages?.logo,
+													lastAcquiredAt: now
+												},
+												$setOnInsert: {
+													userId: userId,
+													setId: packInfo.setId
+												}
+											},
+											{ upsert: true }
+										);
 									}
 								}
 							}
-
-							if (rewardParts.length > 0) {
-								rewardMessages.push(
-									`<strong>${userName}</strong> (${places[place] || `place ${place + 1}`}) has earned ${rewardParts.join(' and ')} for their performance!`
-								);
-							}
 						}
 					}
-					if (rewardMessages.length) {
+
+					if (validPlayers.length > 0) {
+						placementGroups.push({
+							place,
+							placeName: places[place] || `place ${place + 1}`,
+							players: validPlayers,
+							credits: creditsAmount,
+							packs: packsToAward,
+							packNames: allPackNames,
+						});
+					}
+				}
+
+				// Generate grouped reward messages
+				if (placementGroups.length > 0) {
+					const rewardMessages: string[] = [];
+
+					for (const group of placementGroups) {
+						const rewardParts: string[] = [];
+						
+						if (group.credits > 0) {
+							rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(group.credits)} ${CURRENCYNAME}</span>`);
+						}
+						
+						if (group.packs > 0 && group.packNames.length > 0) {
+							rewardParts.push(`<span style="font-weight:bold;">${group.packs} pack${group.packs > 1 ? 's' : ''}</span> (${group.packNames.join(', ')})`);
+						}
+
+						if (rewardParts.length > 0) {
+							const playerList = group.players.length === 1 
+								? `<strong>${group.players[0]}</strong>`
+								: group.players.slice(0, -1).map(p => `<strong>${p}</strong>`).join(', ') + 
+								  ` and <strong>${group.players[group.players.length - 1]}</strong>`;
+							
+							const pluralSuffix = group.players.length > 1 ? ' each' : '';
+							const placementLabel = group.players.length > 1 && group.place === 0 ? 'winners' : 
+													group.players.length > 1 && group.place === 1 ? 'runner-ups' :
+													group.placeName;
+							
+							rewardMessages.push(
+								`${playerList} (${placementLabel}) ${group.players.length > 1 ? 'have' : 'has'} earned ${rewardParts.join(' and ')}${pluralSuffix} for ${group.players.length > 1 ? 'their' : 'their'} performance!`
+							);
+						}
+					}
+
+					if (rewardMessages.length > 0) {
 						this.room.add(
 							`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
 						);
 						this.room.update();
 					}
 				}
-			} catch (err) {
-				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 			}
-		})();
-		
-		const settings = this.room.settings.tournaments;
-		if (settings?.recentToursLength) {
-			if (!settings.recentTours) settings.recentTours = [];
-			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
-				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
-			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
-			while (settings.recentTours.length > settings.recentToursLength) {
-				settings.recentTours.pop();
-			}
-			this.room.saveSettings();
+		} catch (err) {
+			Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 		}
-		this.remove();
+	})();
+	
+	const settings = this.room.settings.tournaments;
+	if (settings?.recentToursLength) {
+		if (!settings.recentTours) settings.recentTours = [];
+		const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+			`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+		settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
+		while (settings.recentTours.length > settings.recentToursLength) {
+			settings.recentTours.pop();
+		}
+		this.room.saveSettings();
+	}
+	this.remove();
 	}
 }
 
