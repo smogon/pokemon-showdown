@@ -569,4 +569,30 @@ export const adminCommands: ChatCommands = {
 			return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
 		}
 	},
+
+	adminhelp(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const helpList = [
+			{cmd: "/tcg awardcredits [user], [amount]", desc: "Grant credits to a user. Requires: &."},
+			{cmd: "/tcg awardpack [user], [setId], [quantity]", desc: "Grant pack(s) to a user. Requires: &."},
+			{cmd: "/tcg awardcard [user], [cardId], [quantity]", desc: "Grant card(s) to a user. Requires: &."},
+			{cmd: "/tcg takecard [user], [cardId], [quantity]", desc: "Remove card(s) from a user. Requires: &."},
+			{cmd: "/tcg takecredits [user], [amount]", desc: "Remove credits from a user. Requires: &."},
+			{cmd: "/tcg takepack [user], [setId], [quantity]", desc: "Remove pack(s) from a user. Requires: &."},
+			{cmd: "/tcg wipecollection [user]", desc: "Reset a user's entire TCG collection and profile. Requires: &."},
+			{cmd: "/tcg refreshshop", desc: "Force the daily TCG shop to load new packs. Requires: &."},
+			{cmd: "/tcg resetdaily [user | all]", desc: "Reset the daily pack cooldown for a user or all users. Requires: &."},
+			{cmd: "/tcg loadcache", desc: "Reloads the TCG card and set data into memory. Requires: &."},
+			{cmd: "/tcg cachestats", desc: "Shows statistics about the in-memory cache. Requires: &."},
+			{cmd: "/tcg clearcache", desc: "Clears all TCG data from the in-memory cache. Requires: &."},
+			{cmd: "/tcg recalculateallstats", desc: "Recalculates stats for ALL users. Requires: &."},
+			{cmd: "/tcg createindexes", desc: "Creates all important mongodb indexes for fast querying. Requires: &."},
+		];
+		const html = `<center><strong>TCG Admin Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			helpList.map(({cmd, desc}, i) =>
+				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+			).join('') +
+			`</ul>`;
+		this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${html}</div>`);
+	},
 };
