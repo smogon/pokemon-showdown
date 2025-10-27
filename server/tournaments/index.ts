@@ -1195,221 +1195,213 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.remove();
 	}
 }*/
+	
+	onTournamentEnd() {
+		const update = {
+			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
+			format: this.name,
+			generator: this.generator.name,
+			bracketData: this.getBracketData(),
+		};
+		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 
-	// Replace the onTournamentEnd() method with this fixed version
-// Find this section around line 1090 in your code
+		// --- Reward Distribution --- (async IIFE)
+		void (async () => {
+			try {
+				const rewardConfig = Config.tournamentRewards;
+				if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
+					const playerCount = this.players.length;
+					let multiplier = 1;
 
-onTournamentEnd() {
-	const update = {
-		results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
-		format: this.name,
-		generator: this.generator.name,
-		bracketData: this.getBracketData(),
-	};
-	this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-
-	// --- Reward Distribution --- (async IIFE)
-	void (async () => {
-		try {
-			const rewardConfig = Config.tournamentRewards;
-			if (rewardConfig?.eligibleRooms.includes(this.room.roomid)) {
-				const playerCount = this.players.length;
-				let multiplier = 1;
-
-				if (playerCount > 4) {
-					multiplier = 1 + ((playerCount - 4) * 0.2);
-				}
-
-				const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
-				const packRewards = rewardConfig.packs || [];
-				const results = this.generator.getResults() as TournamentPlayer[][];
-
-				const places = ['winner', 'runner-up'];
-				const CURRENCYNAME = CURRENCY.name;
-
-				// FIXED: Determine how many places to reward based on configuration, not format type
-				// Allow rewards for as many places as configured, regardless of tournament format
-				const maxPlaceCredits = Math.min(baseRewards.length, results.length);
-				const maxPlacePacks = Math.min(packRewards.length, results.length);
-				const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
-
-				// Group players by placement with their rewards
-				const placementGroups: Array<{
-					place: number;
-					placeName: string;
-					players: string[];
-					credits: number;
-					packs: number;
-					packNames: string[];
-				}> = [];
-
-				for (let place = 0; place < maxPlace; place++) {
-					const placeResults = results[place];
-					if (!placeResults || !placeResults.length) continue;
-
-					const validPlayers: string[] = [];
-					const allPackNames: string[] = [];
-					let creditsAmount = 0;
-					let packsToAward = 0;
-
-					// Determine rewards for this placement
-					if (place < maxPlaceCredits) {
-						creditsAmount = baseRewards[place] ?? 0;
-					}
-					if (place < maxPlacePacks) {
-						packsToAward = packRewards[place] ?? 0;
+					if (playerCount > 4) {
+						multiplier = 1 + ((playerCount - 4) * 0.2);
 					}
 
-					// Get random packs once for this placement group (if applicable)
-					if (packsToAward > 0) {
-						const cardCollection = tcgCardsCollection;
-						const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
-							{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
-							{ $sample: { size: packsToAward } }
-						]);
+					const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
+					const packRewards = rewardConfig.packs || [];
+					const results = this.generator.getResults() as TournamentPlayer[][];
 
-						if (randomSets.length > 0) {
-							for (const randomSet of randomSets) {
-								allPackNames.push(randomSet.setName);
-							}
+					const places = ['winner', 'runner-up'];
+					const CURRENCYNAME = CURRENCY.name;
+
+					const maxPlaceCredits = Math.min(baseRewards.length, results.length);
+					const maxPlacePacks = Math.min(packRewards.length, results.length);
+					const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
+
+					// Group players by placement with their rewards
+					const placementGroups: Array<{
+						place: number;
+						placeName: string;
+						players: string[];
+						credits: number;
+						packs: number;
+						packNames: string[];
+					}> = [];
+
+					for (let place = 0; place < maxPlace; place++) {
+						const placeResults = results[place];
+						if (!placeResults || !placeResults.length) continue;
+
+						const validPlayers: string[] = [];
+						const allPackNames: string[] = [];
+						let creditsAmount = 0;
+						let packsToAward = 0;
+
+						// Determine rewards for this placement
+						if (place < maxPlaceCredits) {
+							creditsAmount = baseRewards[place] ?? 0;
 						}
-					}
-
-					for (const player of placeResults) {
-						// Guard against null/undefined/unfilled bracket nodes.
-						if (!player) {
-							Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
-							continue;
-						}
-
-						let userId: ID | '' = '';
-						let userName = '(unknown)';
-						
-						if (typeof player === 'string') {
-							userId = toID(player) as ID;
-							userName = player;
-						} else {
-							if (player.id) {
-								userId = player.id as ID;
-							} else if (player.name) {
-								userId = toID(player.name) as ID;
-							} else {
-								userId = '';
-							}
-							userName = player.name || String(userId) || '(unfilled)';
-						}
-
-						if (!userId) {
-							Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
-							continue;
+						if (place < maxPlacePacks) {
+							packsToAward = packRewards[place] ?? 0;
 						}
 
-						validPlayers.push(userName);
-
-						// Award credits if configured for this place
-						if (creditsAmount > 0) {
-							await Economy.updateBalance(userId, creditsAmount);
-						}
-
-						// Award packs if configured for this place
-						if (packsToAward > 0 && allPackNames.length > 0) {
-							const packCollection = userPacksCollection;
-							const now = new Date().toISOString();
+						// Get random packs once for this placement group (if applicable)
+						if (packsToAward > 0) {
 							const cardCollection = tcgCardsCollection;
-							
-							for (const packName of allPackNames) {
-								const packInfo = await cardCollection.findOne({ set: packName });
-								if (packInfo) {
-									await packCollection.updateOne(
-										{ userId: userId, setId: packInfo.setId },
-										{
-											$inc: { quantity: 1 },												
-											$set: {
-												setName: packInfo.set,
-												setLogo: packInfo.setImages?.logo,
-												lastAcquiredAt: now
-											},
-											$setOnInsert: {
-												userId: userId,
-												setId: packInfo.setId
-											}
-										},
-										{ upsert: true }
-									);
+							const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
+								{ $group: { _id: "$setId", setName: { $first: "$set" }, setLogo: { $first: "$setImages.logo" } } },
+								{ $sample: { size: packsToAward } }
+							]);
+							if (randomSets.length > 0) {
+								for (const randomSet of randomSets) {
+									allPackNames.push(randomSet.setName);
 								}
 							}
 						}
+
+						for (const player of placeResults) {
+							// Guard against null/undefined/unfilled bracket nodes.
+							if (!player) {
+								Monitor.warn?.(`Tournament reward skipped: empty player at place ${place} in ${this.room.roomid}`);
+								continue;
+							}
+
+							let userId: ID | '' = '';
+							let userName = '(unknown)';
+						
+							if (typeof player === 'string') {
+								userId = toID(player) as ID;
+								userName = player;
+							} else {
+								if (player.id) {
+									userId = player.id as ID;
+								} else if (player.name) {
+									userId = toID(player.name) as ID;
+								} else {
+									userId = '';
+								}
+								userName = player.name || String(userId) || '(unfilled)';
+							}
+
+							if (!userId) {
+								Monitor.warn?.(`Tournament reward skipped: resolved empty userId for ${userName} at place ${place} in ${this.room.roomid}`);
+								continue;
+							}
+
+							validPlayers.push(userName);
+
+							// Award credits if configured for this place
+							if (creditsAmount > 0) {
+								await Economy.updateBalance(userId, creditsAmount);
+							}
+
+							// Award packs if configured for this place
+							if (packsToAward > 0 && allPackNames.length > 0) {
+								const packCollection = userPacksCollection;
+								const now = new Date().toISOString();
+								const cardCollection = tcgCardsCollection;
+							
+								for (const packName of allPackNames) {
+									const packInfo = await cardCollection.findOne({ set: packName });
+									if (packInfo) {
+										await packCollection.updateOne(
+											{ userId: userId, setId: packInfo.setId },
+											{
+												$inc: { quantity: 1 },												
+												$set: {
+													setName: packInfo.set,
+													setLogo: packInfo.setImages?.logo,
+													lastAcquiredAt: now,
+												},
+												$setOnInsert: {
+													userId: userId,
+													setId: packInfo.setId
+												}
+											},
+											{ upsert: true }
+										);
+									}
+								}
+							}
+						}
+
+						if (validPlayers.length > 0) {
+							placementGroups.push({
+								place,
+								placeName: places[place] || `place ${place + 1}`,
+								players: validPlayers,
+								credits: creditsAmount,
+								packs: packsToAward,
+								packNames: allPackNames,
+							});
+						}
 					}
 
-					if (validPlayers.length > 0) {
-						placementGroups.push({
-							place,
-							placeName: places[place] || `place ${place + 1}`,
-							players: validPlayers,
-							credits: creditsAmount,
-							packs: packsToAward,
-							packNames: allPackNames,
-						});
-					}
-				}
+					// Generate grouped reward messages
+					if (placementGroups.length > 0) {
+						const rewardMessages: string[] = [];
 
-				// Generate grouped reward messages
-				if (placementGroups.length > 0) {
-					const rewardMessages: string[] = [];
-
-					for (const group of placementGroups) {
-						const rewardParts: string[] = [];
+						for (const group of placementGroups) {
+							const rewardParts: string[] = [];
+							if (group.credits > 0) {
+								rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(group.credits)} ${CURRENCYNAME}</span>`);
+							}
 						
-						if (group.credits > 0) {
-							rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(group.credits)} ${CURRENCYNAME}</span>`);
-						}
-						
-						if (group.packs > 0 && group.packNames.length > 0) {
-							rewardParts.push(`<span style="font-weight:bold;">${group.packs} pack${group.packs > 1 ? 's' : ''}</span> (${group.packNames.join(', ')})`);
-						}
+							if (group.packs > 0 && group.packNames.length > 0) {
+								rewardParts.push(`<span style="font-weight:bold;">${group.packs} pack${group.packs > 1 ? 's' : ''}</span> (${group.packNames.join(', ')})`);
+							}
 
-						if (rewardParts.length > 0) {
-							const playerList = group.players.length === 1 
-								? `<strong>${group.players[0]}</strong>`
-								: group.players.slice(0, -1).map(p => `<strong>${p}</strong>`).join(', ') + 
-								  ` and <strong>${group.players[group.players.length - 1]}</strong>`;
+							if (rewardParts.length > 0) {
+								const playerList = group.players.length === 1 
+									? `<strong>${group.players[0]}</strong>`
+									: group.players.slice(0, -1).map(p => `<strong>${p}</strong>`).join(', ') + 
+									` and <strong>${group.players[group.players.length - 1]}</strong>`;
 							
-							const pluralSuffix = group.players.length > 1 ? ' each' : '';
-							const placementLabel = group.players.length > 1 && group.place === 0 ? 'winners' : 
-													group.players.length > 1 && group.place === 1 ? 'runner-ups' :
-													group.placeName;
+								const pluralSuffix = group.players.length > 1 ? ' each' : '';
+								const placementLabel = group.players.length > 1 && group.place === 0 ? 'winners' : 
+									group.players.length > 1 && group.place === 1 ? 'runner-ups' :
+									group.placeName;
 							
-							rewardMessages.push(
-								`${playerList} (${placementLabel}) ${group.players.length > 1 ? 'have' : 'has'} earned ${rewardParts.join(' and ')}${pluralSuffix} for ${group.players.length > 1 ? 'their' : 'their'} performance!`
+								rewardMessages.push(
+									`${playerList} (${placementLabel}) ${group.players.length > 1 ? 'have' : 'has'} earned ${rewardParts.join(' and ')}${pluralSuffix} for ${group.players.length > 1 ? 'their' : 'their'} performance!`
+								);
+							}
+						}
+						if (rewardMessages.length > 0) {
+							this.room.add(
+								`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
 							);
+							this.room.update();
 						}
 					}
-
-					if (rewardMessages.length > 0) {
-						this.room.add(
-							`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
-						);
-						this.room.update();
-					}
 				}
+			} catch (err) {
+				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 			}
-		} catch (err) {
-			Monitor.error(`Failed to distribute tournament rewards: ${err}`);
-		}
-	})();
+		})();
 	
-	const settings = this.room.settings.tournaments;
-	if (settings?.recentToursLength) {
-		if (!settings.recentTours) settings.recentTours = [];
-		const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
-			`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
-		settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
-		while (settings.recentTours.length > settings.recentToursLength) {
-			settings.recentTours.pop();
+		const settings = this.room.settings.tournaments;
+		if (settings?.recentToursLength) {
+			if (!settings.recentTours) settings.recentTours = [];
+			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
+			while (settings.recentTours.length > settings.recentToursLength) {
+				settings.recentTours.pop();
+			}
+			this.room.saveSettings();
 		}
-		this.room.saveSettings();
-	}
-	this.remove();
+		this.remove();
 	}
 }
 
