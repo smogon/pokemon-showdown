@@ -200,6 +200,13 @@ function getRandomIVs(): { [key: string]: number } {
 function generateRandomPokemon(level: number, pool: string[], item: string = ''): any {
   const speciesName = pool[Math.floor(Math.random() * pool.length)];
   const species = Dex.species.get(speciesName);
+
+  // --- ADD THIS CHECK ---
+  if (!species.exists) {
+    // This will log the bad species name and prevent the crash
+    throw new Error(`[Gym Challenge] Invalid species in pool: ${speciesName}`);
+  }
+  // --- END CHECK ---
   
   // Get 4 random moves from level-up learnset + TMs
   const learnset = Dex.species.getLearnset(species.id);
