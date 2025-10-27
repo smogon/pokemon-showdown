@@ -1,510 +1,541 @@
 import { createBattle } from './bt_utils'; // Import from bt_utils
+// @ts-ignore
+import { Teams } from '../../../sim/teams'; // Assuming Teams is available
 
-const STORY = {
-	'start': {
-		text: 'You wake up in Pallet Town, ready to start your Pokémon journey! Professor Oak offers you a choice of three starter Pokémon: Charmander, Bulbasaur, or Squirtle. Which do you choose?',
-		choices: {
-			'Charmander': 'charmander_path',
-			'Bulbasaur': 'bulbasaur_path',
-			'Squirtle': 'squirtle_path',
+// --- 1. DATA STRUCTURES ---
+
+interface PlayerProgress {
+	location: string;
+	team: any[]; // Array of PokemonSet objects
+	inventory: { [itemId: string]: number };
+	badges: string[];
+	money: number;
+	eventFlags: { [flag: string]: boolean };
+	battleId: string | null;
+	lastHealLocation: string;
+}
+
+const LOCATIONS = {
+	'player_home': {
+		name: 'Your House',
+		description: 'A cozy, familiar home.',
+		exits: {
+			'out': 'pallet_town',
+		},
+		npcs: ['mom'],
+	},
+	'pallet_town': {
+		name: 'Pallet Town',
+		description: 'A quiet little town. Your house and Professor Oak\'s lab are here.',
+		exits: {
+			'north': 'route_1',
+		},
+		npcs: [],
+		buildings: {
+			'lab': 'oaks_lab',
+			'home': 'player_home',
 		},
 	},
-	'charmander_path': {
-		text: 'You chose Charmander! It’s a fiery little Pokémon. You head out to Route 1 and encounter a wild Pidgey. Do you try to catch it or battle it for experience?',
-		choices: {
-			'Catch': 'catch_pidgey',
-			'Battle': 'battle_pidgey',
+	'oaks_lab': {
+		name: 'Professor Oak\'s Lab',
+		description: 'Filled with strange machines and bookshelves. Professor Oak is here.',
+		exits: {
+			'out': 'pallet_town',
 		},
+		npcs: ['prof_oak'],
 	},
-	'bulbasaur_path': {
-		text: 'You chose Bulbasaur! Its Grass-type moves are strong. On Route 1, you spot a wild Rattata. Do you try to catch it or battle it for experience?',
-		choices: {
-			'Catch': 'catch_rattata',
-			'Battle': 'battle_rattata',
+	'route_1': {
+		name: 'Route 1',
+		description: 'A grassy path connecting Pallet Town and Viridian City.',
+		exits: {
+			'south': 'pallet_town',
+			'north': 'viridian_city', // Not implemented yet
 		},
+		wildEncounters: [
+			{ species: 'Pidgey', minLevel: 2, maxLevel: 4, rate: 0.5 },
+			{ species: 'Rattata', minLevel: 2, maxLevel: 4, rate: 0.5 },
+		],
 	},
-	'squirtle_path': {
-		text: 'You chose Squirtle! This Water-type Pokémon is ready for adventure. On Route 1, you see a wild Caterpie. Do you try to catch it or battle it for experience?',
-		choices: {
-			'Catch': 'catch_caterpie',
-			'Battle': 'battle_caterpie',
+	'viridian_city': {
+		name: 'Viridian City',
+		description: 'You\'ve arrived in Viridian City. You see a Pokémon Center and a Mart.',
+		exits: {
+			'south': 'route_1',
 		},
+		npcs: [],
+		buildings: {
+			'pokecenter': 'viridian_pokecenter',
+		}
 	},
-	'catch_pidgey': {
-		text: 'You throw a Poké Ball and catch the Pidgey! It joins your team. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
+	'viridian_pokecenter': {
+		name: 'Pokémon Center',
+		description: 'Nurse Joy is at the counter. "Welcome! Would you like to heal your Pokémon?"',
+		exits: {
+			'out': 'viridian_city',
 		},
-	},
-	'battle_pidgey': {
-		text: 'Charmander defeats the Pidgey, gaining experience! You feel stronger. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
-		},
-	},
-	'catch_rattata': {
-		text: 'You catch the Rattata with a Poké Ball! It’s now on your team. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
-		},
-	},
-	'battle_rattata': {
-		text: 'Bulbasaur defeats the Rattata, gaining experience! Your team grows stronger. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
-		},
-	},
-	'catch_caterpie': {
-		text: 'You catch the Caterpie! It joins your team. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
-		},
-	},
-	'battle_caterpie': {
-		text: 'Squirtle defeats the Caterpie, gaining experience! You’re ready for more. You see a path to Viridian Forest ahead. Continue?',
-		choices: {
-			'Continue': 'viridian_forest',
-		},
-	},
-	'viridian_forest': {
-		text: 'You enter Viridian Forest. It’s dark and full of Bug-type Pokémon. A wild Beedrill appears! Do you fight it or run away?',
-		choices: {
-			'Fight': 'fight_beedrill',
-			'Run': 'run_away',
-		},
-	},
-	'fight_beedrill': {
-		text: 'You battle the Beedrill and win! Your Pokémon are stronger now. You exit Viridian Forest and arrive in Pewter City. What do you do next: Explore the city or head straight to the gym?',
-		choices: {
-			'Explore': 'explore_pewter',
-			'Gym': 'challenge_gym',
-		},
-	},
-	'run_away': {
-		text: 'You safely escape the Beedrill and exit Viridian Forest. You arrive in Pewter City. What do you do next: Explore the city or head straight to the gym?',
-		choices: {
-			'Explore': 'explore_pewter',
-			'Gym': 'challenge_gym',
-		},
-	},
-	'explore_pewter': {
-		text: 'You explore Pewter City and visit the museum. You learn about ancient Pokémon fossils. Feeling inspired, you decide it’s time for the gym. Head to the gym?',
-		choices: {
-			'Yes': 'challenge_gym',
-		},
-	},
-	'challenge_gym': {
-		text: 'You enter the Pewter City Gym, led by Brock, the Rock-type specialist. He challenges you to a battle. Prepare to face him in a real Pokémon Showdown battle! Ready?',
-		choices: {
-			'Start': 'start_gym_battle',
-		},
-	},
-	'start_gym_battle': {
-		text: 'The battle against Brock is about to begin! Please wait for the battle to conclude.',
-		choices: {}, // No choices; progression depends on battle outcome
-	},
-	'gym_victory': {
-		text: 'You defeated Brock’s Pokémon! He awards you the Boulder Badge. Congratulations! Your adventure continues... Want to restart?',
-		choices: {
-			'Restart': 'start',
-		},
-	},
-	'gym_defeat': {
-		text: 'You lost to Brock’s Pokémon. Train harder and try again! Return to the gym?',
-		choices: {
-			'Try Again': 'challenge_gym',
-			'Restart': 'start',
-		},
-	},
+		npcs: ['nurse_joy'],
+	}
 };
 
-// Bot team pools in JSON format (PokemonSet[])
-const BOT_TEAM_POOLS = {
-	'brock': [
-		{
-			name: '',
-			species: 'Geodude',
-			gender: 'M',
-			item: 'Hard Stone',
-			ability: 'Sturdy',
-			moves: ['Rock Throw', 'Tackle', 'Defense Curl', 'Growl'],
-			nature: 'Adamant',
-			evs: {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 10
-		},
-		{
-			name: '',
-			species: 'Onix',
-			gender: 'M',
-			item: 'Hard Stone',
-			ability: 'Rock Head',
-			moves: ['Rock Throw', 'Tackle', 'Bind', 'Growl'],
-			nature: 'Adamant',
-			evs: {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 14
-		},
-		{
-			name: '',
-			species: 'Rhyhorn',
-			gender: 'M',
-			item: 'Hard Stone',
-			ability: 'Rock Head',
-			moves: ['Horn Attack', 'Tackle', 'Growl', 'Leer'],
-			nature: 'Adamant',
-			evs: {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 12
-		},
-		{
-			name: '',
-			species: 'Graveler',
-			gender: 'M',
-			item: 'Hard Stone',
-			ability: 'Sturdy',
-			moves: ['Rock Throw', 'Tackle', 'Defense Curl', 'Growl'],
-			nature: 'Adamant',
-			evs: {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 13
-		},
-	],
+const NPCS = {
+	'mom': {
+		dialogue: [
+			"You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!",
+			"Don't forget to change your underwear!"
+		],
+	},
+	'prof_oak': {
+		dialogue: [
+			"Ah, [player]! I've been waiting for you.",
+			"It's time you got your first Pokémon. Choose one!",
+		],
+		// Special handler for giving starter
+		onTalk: (user, room, progress) => {
+			if (progress.eventFlags['got_starter']) {
+				// @ts-ignore
+				this.sendReply("Oak: How is your new Pokémon? Get out there and explore!");
+				return;
+			}
+			
+			// Present starter choice
+			const starterHtml = '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">' +
+				'<b>Professor Oak:</b> Choose your starter!' +
+				'<br><button name="send" value="/adventure select_starter Charmander" style="background: #F44336; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Charmander</button>' +
+				'<button name="send" value="/adventure select_starter Bulbasaur" style="background: #4CAF50; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Bulbasaur</button>' +
+				'<button name="send" value="/adventure select_starter Squirtle" style="background: #2196F3; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Squirtle</button>' +
+				'</div>';
+
+			if (room) {
+				room.add('|uhtml|adventure-' + user.id + '|' + starterHtml).update();
+			} else {
+				// @ts-ignore
+				this.sendReply('|uhtml|adventure-' + user.id + '|' + starterHtml);
+			}
+		}
+	},
+	'nurse_joy': {
+		dialogue: ["Your Pokémon are fully healed! We hope to see you again!"],
+		onTalk: (user, room, progress) => {
+			progress.team.forEach(pokemon => {
+				pokemon.hp = pokemon.maxhp;
+				pokemon.status = '';
+			});
+			progress.lastHealLocation = progress.location;
+			userProgress.set(user.id, progress);
+			// @ts-ignore
+			this.sendReply(NPCS['nurse_joy'].dialogue[0]);
+			updateAdventureHTML(user, room); // Update UI to show full HP
+		}
+	}
 };
-
-// Generate bot team from pool (returns unpacked team)
-function generateBotTeam(gymLeader, count = 2) {
-	const pool = BOT_TEAM_POOLS[gymLeader];
-	if (!pool || pool.length < count) {
-		const defaultTeam = [{
-			name: '',
-			species: 'Geodude',
-			gender: 'M',
-			item: 'Hard Stone',
-			ability: 'Sturdy',
-			moves: ['Rock Throw', 'Tackle', 'Defense Curl', 'Growl'],
-			nature: 'Adamant',
-			evs: {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 10
-		}];
-		console.log('Default bot team used:', defaultTeam);
-		return defaultTeam;
-	}
-	const shuffled = pool.sort(() => Math.random() - 0.5);
-	const team = shuffled.slice(0, count);
-	console.log('Bot team:', team);
-	// Validate team if Dex.validateTeam is available
-	if (typeof Dex.validateTeam === 'function') {
-		const validation = Dex.validateTeam(team, 'gen9customgame');
-		if (validation) {
-			console.log('Bot team validation errors:', validation);
-		} else {
-			console.log('Bot team validated successfully');
-		}
-	}
-	return team; // Return unpacked team
-}
-
-// Generate player team based on inventory (returns unpacked team)
-function generatePlayerTeam(progress) {
-	const team = [];
-	const defaultMoves = ['Tackle', 'Growl', 'Leer'];
-	if (progress.starter) {
-		const starterLevel = progress.node === 'start_gym_battle' ? 12 : 10;
-		const moves = {
-			'Charmander': ['Ember', 'Scratch', 'Growl', 'Leer'],
-			'Bulbasaur': ['Vine Whip', 'Tackle', 'Growl', 'Leech Seed'],
-			'Squirtle': ['Water Gun', 'Tackle', 'Withdraw', 'Bubble'],
-		};
-		const abilities = {
-			'Charmander': 'Blaze',
-			'Bulbasaur': 'Overgrow',
-			'Squirtle': 'Torrent',
-		};
-		team.push({
-			name: '',
-			species: progress.starter,
-			gender: 'M',
-			item: 'None',
-			ability: abilities[progress.starter],
-			moves: moves[progress.starter],
-			nature: 'Modest',
-			evs: {hp: 4, atk: 0, def: 0, spa: 252, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: starterLevel
-		});
-	}
-	progress.inventory.forEach(pokemon => {
-		const moves = {
-			'Pidgey': ['Gust', 'Tackle', 'Quick Attack', 'Sand Attack'],
-			'Rattata': ['Tackle', 'Quick Attack', 'Hyper Fang', 'Focus Energy'],
-			'Caterpie': ['Tackle', 'String Shot', 'Bug Bite'],
-		};
-		const abilities = {
-			'Pidgey': 'Keen Eye',
-			'Rattata': 'Run Away',
-			'Caterpie': 'Shield Dust',
-		};
-		team.push({
-			name: '',
-			species: pokemon,
-			gender: 'M',
-			item: 'None',
-			ability: abilities[pokemon] || 'None',
-			moves: moves[pokemon] || defaultMoves,
-			nature: 'Modest',
-			evs: {hp: 4, atk: 0, def: 0, spa: 252, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 10
-		});
-	});
-	if (team.length === 0) {
-		team.push({
-			name: '',
-			species: 'Pidgey',
-			gender: 'M',
-			item: 'None',
-			ability: 'Keen Eye',
-			moves: ['Gust', 'Tackle', 'Quick Attack', 'Sand Attack'],
-			nature: 'Modest',
-			evs: {hp: 4, atk: 0, def: 0, spa: 252, spd: 0, spe: 252},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-			level: 10
-		});
-	}
-	console.log('Player team:', team);
-	// Validate team if Dex.validateTeam is available
-	if (typeof Dex.validateTeam === 'function') {
-		const validation = Dex.validateTeam(team, 'gen9customgame');
-		if (validation) {
-			console.log('Player team validation errors:', validation);
-		} else {
-			console.log('Player team validated successfully');
-		}
-	}
-	return team; // Return unpacked team
-}
-
-// Generate HTML with buttons for choices (use name="send" value="/adventure choose ...")
-function generateChoiceHtml(node, userId, pokemonList: string[]) {
-	const choices = Object.keys(node.choices).map(choice => 
-		'<button name="send" value="/adventure choose ' + choice + '" style="background: #4CAF50; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">' + choice + '</button>'
-	).join('');
-
-	// New Team Display
-	const teamString = pokemonList.length > 0 ? pokemonList.join(', ') : 'No Pokémon yet';
-	const teamHtml = '<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">' +
-		'<b>Your Team:</b> ' + teamString +
-		'</div>';
-
-	return '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">' +
-		teamHtml + // Add the team HTML at the top
-		'<div>' + node.text + '</div>' + // Story text
-		'<div style="margin-top: 10px;">' + // Choices section
-		(choices ? '<b>Choices:</b><br>' + choices : 'No choices available.') +
-		(choices ? '<br><small>(Or use /adventure choose [option])</small>' : '') +
-		'</div>' +
-		'</div>';
-}
 
 // Store user progress
-const userProgress = new Map();
+const userProgress = new Map<string, PlayerProgress>();
+const BOT_USER_ID = 'impulseearth'; // Bot user for battles
 
-// --- Battle Callbacks ---
+// --- 2. HTML GENERATION ---
 
-function handleGymVictory(battle: any, winner: string, players: string[], meta: any) {
+function generateAdventureHTML(user: User, progress: PlayerProgress) {
+	const location = LOCATIONS[progress.location];
+	if (!location) {
+		return '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">Error: Unknown location. Please /adventure reset</div>';
+	}
+
+	// Team Display
+	let teamHtml = '<b>Your Team:</b> ';
+	if (progress.team.length === 0) {
+		teamHtml += 'No Pokémon yet';
+	} else {
+		teamHtml += progress.team.map(p => `${p.species} (Lvl ${p.level}) - HP: ${p.hp}/${p.maxhp}`).join(', ');
+	}
+	teamHtml = `<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">${teamHtml}</div>`;
+
+	// Location Display
+	const locationHtml = `<div><b>${location.name}</b><br>${location.description}</div>`;
+
+	// Buttons
+	let buttonsHtml = '<div style="margin-top: 10px;">';
+
+	// Exits
+	if (location.exits) {
+		buttonsHtml += '<b>Exits:</b><br>';
+		for (const dir in location.exits) {
+			buttonsHtml += `<button name="send" value="/adventure move ${dir}" style="background: #607D8B; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">${dir} (${LOCATIONS[location.exits[dir]].name})</button>`;
+		}
+	}
+
+	// Buildings
+	if (location.buildings) {
+		buttonsHtml += '<br><b>Buildings:</b><br>';
+		for (const building in location.buildings) {
+			buttonsHtml += `<button name="send" value="/adventure enter ${building}" style="background: #795548; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Enter ${location.buildings[building]} (${building})</button>`;
+		}
+	}
+
+	// NPCs
+	if (location.npcs && location.npcs.length > 0) {
+		buttonsHtml += '<br><b>People:</b><br>';
+		for (const npcId of location.npcs) {
+			buttonsHtml += `<button name="send" value="/adventure talk ${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Talk to ${npcId}</button>`;
+		}
+	}
+	buttonsHtml += '</div>';
+
+	return `<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">
+		${teamHtml}
+		${locationHtml}
+		${buttonsHtml}
+	</div>`;
+}
+
+function updateAdventureHTML(user: User, room: Room | null) {
+	const progress = userProgress.get(user.id);
+	if (!progress) return;
+	
+	const html = generateAdventureHTML(user, progress);
+	
+	if (room) {
+		room.add(`|uhtml|adventure-${user.id}|${html}`).update();
+	} else {
+		user.sendTo(null, `|uhtml|adventure-${user.id}|${html}`);
+	}
+}
+
+
+// --- 3. BATTLE LOGIC ---
+
+function createPokemonSet(species: string, level: number, moves: string[]): any {
+	const template = Dex.species.get(species);
+	const ability = Object.values(template.abilities)[0] || 'None';
+	
+	// Calculate stats
+	const stats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+	const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+	const nature = "Serious";
+
+	for (const stat in stats) {
+		// @ts-ignore
+		stats[stat] = Dex.calcStat(stat, level, template.baseStats[stat], ivs[stat], evs[stat], nature);
+	}
+
+	return {
+		name: species,
+		species: species,
+		gender: 'M',
+		item: 'None',
+		ability: ability,
+		moves: moves,
+		nature: nature,
+		evs: evs,
+		ivs: ivs,
+		level: level,
+		hp: stats.hp,
+		maxhp: stats.hp,
+		status: '',
+	};
+}
+
+function generateWildTeam(encounters: any[]) {
+	// For now, just pick the first one
+	const encounter = encounters[0]; 
+	const level = Math.floor(Math.random() * (encounter.maxLevel - encounter.minLevel + 1)) + encounter.minLevel;
+	const species = Dex.species.get(encounter.species);
+	
+	// Get 4 moves it would know at this level
+	const moves = Object.keys(species.learnset)
+		.filter(move => species.learnset[move].some(m => m.startsWith(String(level)[0]) && m.endsWith('L' + level)))
+		.slice(0, 4);
+	if (moves.length === 0) moves.push('tackle');
+
+	return [createPokemonSet(encounter.species, level, moves)];
+}
+
+function startWildBattle(user: User, room: Room | null, progress: PlayerProgress) {
+	const botUser = Users.get(BOT_USER_ID);
+	if (!botUser || !botUser.connected) {
+		// @ts-ignore
+		this.errorReply(`The battle couldn't start because ${BOT_USER_ID} is offline.`);
+		return false;
+	}
+
+	const location = LOCATIONS[progress.location];
+	if (!location.wildEncounters) return false;
+
+	const playerTeam = progress.team.map(p => {
+		// Ensure HP is correct for battle start
+		p.curHP = p.hp;
+		return p;
+	});
+	const wildTeam = generateWildTeam(location.wildEncounters);
+
+	try {
+		const battleRoom = createBattle({
+			user: user,
+			botUserId: botUser.id,
+			userTeam: playerTeam,
+			botTeam: wildTeam,
+			battleType: 'wild_adventure',
+			format: 'gen9customgame',
+			title: `${user.name} vs. Wild ${wildTeam[0].species}`,
+			data: { 
+				userId: user.id,
+				originRoomId: room ? room.id : null 
+			},
+			onWin: handleWildWin,
+			onLose: handleWildLoss,
+		});
+
+		if (battleRoom) {
+			progress.battleId = battleRoom.id;
+			userProgress.set(user.id, progress);
+			// @ts-ignore
+			this.sendReply(`A wild ${wildTeam[0].species} appeared!`);
+			return true;
+		}
+	} catch (e) {
+		console.error('Failed to create wild battle:', e);
+		// @ts-ignore
+		this.errorReply('The battle failed to start due to a server error.');
+	}
+	return false;
+}
+
+// Post-battle callbacks
+function handleWildWin(battle: any, winner: string, players: string[], meta: any) {
 	const userId = meta.data.userId;
 	const originRoom = meta.data.originRoomId ? Rooms.get(meta.data.originRoomId) : null;
 	const user = Users.get(userId);
+	if (!user) return;
 
 	const progress = userProgress.get(userId);
 	if (!progress) return;
 
-	progress.node = 'gym_victory';
-	progress.battleId = null; // Clear battle ID
-	const newNode = STORY[progress.node];
-	const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
-	const html = generateChoiceHtml(newNode, userId, pokemonList);
+	progress.battleId = null;
 
-	if (originRoom) {
-		originRoom.add('|uhtml|adventure-' + userId + '|' + html).update();
-	} else if (user) {
-		user.sendTo(null, '|uhtml|adventure-' + userId + '|' + html);
-	}
-	
+	// User's requested logic: +1 level per win
+	progress.team.forEach(pokemon => {
+		if (pokemon.hp > 0) { // Don't level up fainted pokemon
+			const newLevel = Math.min(100, pokemon.level + 1);
+			if (newLevel > pokemon.level) {
+				pokemon.level = newLevel;
+				
+				// Re-calculate stats for new level
+				const template = Dex.species.get(pokemon.species);
+				const nature = pokemon.nature;
+				for (const stat in pokemon.evs) {
+					// @ts-ignore
+					const newStat = Dex.calcStat(stat, pokemon.level, template.baseStats[stat], pokemon.ivs[stat], pokemon.evs[stat], nature);
+					if (stat === 'hp') {
+						pokemon.maxhp = newStat;
+					}
+				}
+				
+				// Check for new moves (simplified: add if slot available, else replace 1st)
+				const species = Dex.species.get(pokemon.species);
+				const newMoves = Object.keys(species.learnset)
+					.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)))
+				
+				for (const move of newMoves) {
+					if (!pokemon.moves.includes(move)) {
+						if (pokemon.moves.length < 4) {
+							pokemon.moves.push(move);
+						} else {
+							pokemon.moves[0] = move; // Simple replacement
+						}
+					}
+				}
+			}
+		}
+
+		// Update HP from battle object
+		const battlePokemon = battle.sides[0].pokemon.find(p => p.name === pokemon.name);
+		if (battlePokemon) {
+			pokemon.hp = battlePokemon.hp;
+			pokemon.status = battlePokemon.status;
+		}
+	});
+
 	userProgress.set(userId, progress);
-	// if (battle) battle.destroy(); // Removed this line
+	updateAdventureHTML(user, originRoom);
+	user.sendTo(originRoom, "You won the battle!");
 }
 
-function handleGymDefeat(battle: any, winner: string, players: string[], meta: any) {
+function handleWildLoss(battle: any, winner: string, players: string[], meta: any) {
 	const userId = meta.data.userId;
 	const originRoom = meta.data.originRoomId ? Rooms.get(meta.data.originRoomId) : null;
 	const user = Users.get(userId);
+	if (!user) return;
 
 	const progress = userProgress.get(userId);
 	if (!progress) return;
 
-	progress.node = 'gym_defeat';
-	progress.battleId = null; // Clear battle ID
-	const newNode = STORY[progress.node];
-	const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
-	const html = generateChoiceHtml(newNode, userId, pokemonList);
+	progress.battleId = null;
 
-	if (originRoom) {
-		originRoom.add('|uhtml|adventure-' + userId + '|' + html).update();
-	} else if (user) {
-		user.sendTo(null, '|uhtml|adventure-' + userId + '|' + html);
-	}
+	// Update team with fainted status
+	progress.team.forEach(pokemon => {
+		pokemon.hp = 0;
+		pokemon.status = 'fnt';
+	});
 	
+	// Black out - move to last heal spot
+	progress.location = progress.lastHealLocation;
 	userProgress.set(userId, progress);
-	// if (battle) battle.destroy(); // Removed this line
+
+	user.sendTo(originRoom, "You were defeated and blacked out... You woke up at the Pokémon Center.");
+	updateAdventureHTML(user, originRoom);
 }
 
-// ----------------------
+// --- 4. CHAT COMMANDS ---
 
 export const commands: ChatCommands = {
 	adventure: {
+		// /adventure start
 		start(target, room, user) {
 			if (userProgress.has(user.id)) {
-				return this.errorReply('You’re already on an adventure! Use /adventure choose to continue or /adventure reset to start over.');
+				this.errorReply('You’re already on an adventure! Use /adventure look or /adventure reset.');
+				updateAdventureHTML(user, room);
+				return;
 			}
-			userProgress.set(user.id, { node: 'start', inventory: [], starter: null, battleId: null });
-			const node = STORY['start'];
-			const html = generateChoiceHtml(node, user.id, []); // Pass empty team
-			if (room) {
-				room.add('|uhtml|adventure-' + user.id + '|' + html).update();
-			} else {
-				this.sendReply('|uhtml|adventure-' + user.id + '|' + html);
-			}
-			this.sendReply('Click a button or use /adventure choose [option] to continue.');
+			const newProgress: PlayerProgress = {
+				location: 'player_home',
+				team: [],
+				inventory: { 'pokeball': 5, 'potion': 3 },
+				badges: [],
+				money: 3000,
+				eventFlags: { 'got_starter': false },
+				battleId: null,
+				lastHealLocation: 'player_home',
+			};
+			userProgress.set(user.id, newProgress);
+			this.sendReply('You have started your Pokémon RPG adventure!');
+			updateAdventureHTML(user, room);
 		},
-		choose(target, room, user) {
+
+		// /adventure move <direction>
+		move(target, room, user) {
+			const progress = userProgress.get(user.id);
+			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+			
+			const direction = toID(target);
+			const currentLocation = LOCATIONS[progress.location];
+			if (!currentLocation || !currentLocation.exits[direction]) {
+				return this.errorReply("You can't go that way.");
+			}
+
+			const newLocationId = currentLocation.exits[direction];
+			progress.location = newLocationId;
+			userProgress.set(user.id, progress);
+			
+			const newLocation = LOCATIONS[newLocationId];
+
+			// Check for wild encounters
+			if (newLocation.wildEncounters && progress.team.length > 0) {
+				const encounterRoll = Math.random();
+				const encounterRate = newLocation.wildEncounters.reduce((sum, e) => sum + e.rate, 0) / newLocation.wildEncounters.length;
+				if (encounterRoll < encounterRate) {
+					// Pass `this` context to the function
+					startWildBattle.call(this, user, room, progress);
+					return; // Stop here, battle started
+				}
+			}
+
+			updateAdventureHTML(user, room);
+		},
+
+		// /adventure enter <building>
+		enter(target, room, user) {
+			const progress = userProgress.get(user.id);
+			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+
+			const building = toID(target);
+			const currentLocation = LOCATIONS[progress.location];
+			if (!currentLocation || !currentLocation.buildings || !currentLocation.buildings[building]) {
+				return this.errorReply("You can't enter that.");
+			}
+
+			progress.location = currentLocation.buildings[building];
+			userProgress.set(user.id, progress);
+			updateAdventureHTML(user, room);
+		},
+
+		// /adventure talk <npc>
+		talk(target, room, user) {
+			const progress = userProgress.get(user.id);
+			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			if (progress.battleId) return this.errorReply('You are in a battle! Finish the battle first.');
+
+			const npcId = toID(target);
+			const currentLocation = LOCATIONS[progress.location];
+			if (!currentLocation || !currentLocation.npcs || !currentLocation.npcs.includes(npcId)) {
+				return this.errorReply("That person isn't here.");
+			}
+
+			const npc = NPCS[npcId];
+			if (npc.onTalk) {
+				// Pass `this` context
+				npc.onTalk.call(this, user, room, progress);
+			} else {
+				this.sendReply(npc.dialogue[0]);
+			}
+		},
+
+		// /adventure select_starter <pokemon>
+		select_starter(target, room, user) {
+			const progress = userProgress.get(user.id);
+			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			if (progress.eventFlags['got_starter']) return this.errorReply("You already have your starter!");
+			if (progress.location !== 'oaks_lab') return this.errorReply("You must be in Oak's Lab to choose a starter.");
+
+			const starterSpecies = toID(target);
+			let starterSet;
+
+			if (starterSpecies === 'charmander') {
+				starterSet = createPokemonSet('Charmander', 5, ['Scratch', 'Growl', 'Ember']);
+			} else if (starterSpecies === 'bulbasaur') {
+				starterSet = createPokemonSet('Bulbasaur', 5, ['Tackle', 'Growl', 'Vine Whip']);
+			} else if (starterSpecies === 'squirtle') {
+				starterSet = createPokemonSet('Squirtle', 5, ['Tackle', 'Tail Whip', 'Water Gun']);
+			} else {
+				return this.errorReply("That is not a valid starter choice.");
+			}
+
+			progress.team.push(starterSet);
+			progress.eventFlags['got_starter'] = true;
+			userProgress.set(user.id, progress);
+
+			this.sendReply(`You received ${starterSet.species}!`);
+			updateAdventureHTML(user, room);
+		},
+
+		// /adventure look
+		look(target, room, user) {
+			const progress = userProgress.get(user.id);
+			if (!progress) return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+			
+			updateAdventureHTML(user, room);
+		},
+
+		// /adventure team (replaces inventory)
+		team(target, room, user) {
 			if (!userProgress.has(user.id)) {
-				return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
+				return this.errorReply('You haven’t started an adventure yet!');
 			}
 			const progress = userProgress.get(user.id);
-			
-			const node = STORY[progress.node];
-			if (!node.choices[target]) {
-				return this.errorReply('Invalid choice. Available choices: ' + Object.keys(node.choices).join(', '));
-			}
-			if (progress.node === 'start') {
-				progress.starter = target;
-			}
-			progress.node = node.choices[target];
-			const newNode = STORY[progress.node];
-			if (progress.node.includes('catch_')) {
-				const pokemon = progress.node.split('_')[1];
-				progress.inventory.push(pokemon.charAt(0).toUpperCase() + pokemon.slice(1));
+			if (progress.team.length === 0) {
+				return this.sendReply('You haven’t caught any Pokémon yet!');
 			}
 
-			// Get team list *after* potential updates
-			const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
-
-			if (progress.node === 'start_gym_battle') {
-				const botUser = Users.get('impulseearth');
-				if (!botUser || !botUser.connected) {
-					progress.node = 'gym_defeat';
-					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle couldn’t start because musaddiktemkar is offline. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
-					if (room) {
-						room.add('|uhtml|adventure-' + user.id + '|' + errorHtml).update();
-					} else {
-						this.sendReply('|uhtml|adventure-' + user.id + '|' + errorHtml);
-					}
-					userProgress.set(user.id, progress);
-					return;
-				}
-				const formatOptions = ['gen9customgame', 'gen8customgame', 'gen7customgame'];
-				let formatId = 'gen9customgame';
-				for (const format of formatOptions) {
-					if (Dex.formats.get(format).exists) {
-						formatId = format;
-						break;
-					}
-				}
-				console.log('Selected format:', formatId);
-				const playerTeam = generatePlayerTeam(progress); // Unpacked
-				const botTeam = generateBotTeam('brock'); // Unpacked
-				let battleRoom;
-				try {
-					battleRoom = createBattle({
-						user: user,
-						botUserId: botUser.id,
-						userTeam: playerTeam,
-						botTeam: botTeam,
-						battleType: 'adventure_gym',
-						format: formatId,
-						title: `${user.name} vs. Gym Leader Brock`,
-						data: { 
-							userId: user.id,
-							originRoomId: room ? room.id : null 
-						},
-						onWin: handleGymVictory,
-						onLose: handleGymDefeat,
-					});
-				} catch (e) {
-					console.error('Failed to create battle:', e);
-					progress.node = 'gym_defeat';
-					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle failed to start due to a server error: ' + e.message + '. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
-					if (room) {
-						room.add('|uhtml|adventure-' + user.id + '|' + errorHtml).update();
-					} else {
-						this.sendReply('|uhtml|adventure-' + user.id + '|' + errorHtml);
-					}
-					userProgress.set(user.id, progress);
-					return;
-				}
-				if (!battleRoom) {
-					console.error('BattleRoom is undefined after createBattle');
-					progress.node = 'gym_defeat';
-					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle could not be created. Please try again. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
-					if (room) {
-						room.add('|uhtml|adventure-' - user.id + '|' + errorHtml).update();
-					} else {
-						this.sendReply('|uhtml|adventure-' + user.id + '|' + errorHtml);
-					}
-					userProgress.set(user.id, progress);
-					return;
-				}
-				
-				progress.battleId = battleRoom.id;
-				userProgress.set(user.id, progress);
-				
-				// Debug logging
-				console.log('BattleRoom:', battleRoom ? battleRoom.id : null, 'Format:', formatId, 'Players:', [user.id, botUser.id]);
-				
-				const battleHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-					// Team will be shown by generateChoiceHtml
-					generateChoiceHtml(newNode, user.id, pokemonList) + 
-					'<br>Battle started! Check your battle tab to fight Brock.</div>';
-				
-				if (room) {
-					// Need to fudge the HTML a bit since generateChoiceHtml wraps it
-					room.add('|uhtml|adventure-' + user.id + '|' + 
-						generateChoiceHtml(newNode, user.id, pokemonList).replace('</div>', 
-						'<br>Battle started! Check your battle tab to fight Brock.</div>')
-					).update();
-				} else {
-					this.sendReply('|uhtml|adventure-' + user.id + '|' + 
-						generateChoiceHtml(newNode, user.id, pokemonList).replace('</div>',
-						'<br>Battle started! Check your battle tab to fight Brock.</div>')
-					);
-				}
-			} else {
-				const html = generateChoiceHtml(newNode, user.id, pokemonList); // Pass team
-				if (room) {
-					room.add('|uhtml|adventure-' + user.id + '|' + html).update();
-				} else {
-					this.sendReply('|uhtml|adventure-' + user.id + '|' + html);
-				}
-			}
-			
-			// REMOVED the chat spam block
+			let reply = 'Your Pokémon:\n';
+			progress.team.forEach(p => {
+				reply += `- ${p.species} (Lvl ${p.level}) | HP: ${p.hp}/${p.maxhp} | Moves: ${p.moves.join(', ')}\n`;
+			});
+			this.sendReply(reply);
 		},
+		
+		// /adventure reset
 		reset(target, room, user) {
 			if (!userProgress.has(user.id)) {
 				return this.errorReply('You haven’t started an adventure yet!');
@@ -513,7 +544,6 @@ export const commands: ChatCommands = {
 			if (progress.battleId) {
 				const battle = Rooms.get(progress.battleId);
 				if (battle) battle.destroy();
-				// activeBattles map is in bt_utils, its handler will clean itself up.
 			}
 			const resetHtml = '<div style="border: 1px solid #ccc; padding: 10px;">Your adventure has been reset. Use /adventure start to begin again.</div>';
 			if (room) {
@@ -523,25 +553,18 @@ export const commands: ChatCommands = {
 			}
 			userProgress.delete(user.id);
 		},
-		inventory(target, room, user) {
-			if (!userProgress.has(user.id)) {
-				return this.errorReply('You haven’t started an adventure yet!');
-			}
-			const progress = userProgress.get(user.id);
-			const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
-			if (pokemonList.length === 0) {
-				return this.sendReply('You haven’t caught any Pokémon yet!');
-			}
-			this.sendReply('Your Pokémon: ' + pokemonList.join(', '));
-		},
+		
+		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
-				'Pokémon Adventure Commands:\n' +
+				'Pokémon RPG Commands:\n' +
 				'/adventure start - Begin your Pokémon adventure.\n' +
-				'/adventure choose [option] - Make a choice to continue the story (or click a button).\n' +
-				'/adventure inventory - Check your caught Pokémon.\n' +
-				'/adventure reset - Reset your adventure to start over.\n' +
-				'/adventure help - Show this help message.'
+				'/adventure look - See your current location, team, and options.\n' +
+				'/adventure move [direction] - Move to a new location (e.g., /adventure move north).\n' +
+				'/adventure enter [building] - Enter a building (e.g., /adventure enter lab).\n' +
+				'/adventure talk [npc] - Talk to a person (e.g., /adventure talk prof_oak).\n' +
+				'/adventure team - Check your current Pokémon team.\n' +
+				'/adventure reset - Reset your adventure to start over.'
 			);
 		},
 	},
