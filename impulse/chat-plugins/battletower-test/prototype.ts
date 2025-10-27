@@ -83,6 +83,18 @@ const NPCS = {
 			`You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!`,
 			`Don't forget to change your underwear!`
 		],
+		onTalk: (user, room, progress) => {
+			let dialogue;
+			if (progress.eventFlags['awaiting_oak']) {
+				dialogue = `Professor Oak was just here looking for you! You should head over to his lab!`;
+			} else if (progress.eventFlags['got_starter']) {
+				dialogue = `How's your new Pokémon? Take good care of it!`;
+			} else {
+				dialogue = NPCS['mom'].dialogue[0];
+			}
+			// @ts-ignore
+			this.sendReply(`Mom: ${dialogue}`);
+		}
 	},
 	'prof_oak': {
 		dialogue: [
@@ -105,12 +117,8 @@ const NPCS = {
 				`<button name="send" value="/adventure select_starter Squirtle" style="background: #2196F3; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">Squirtle</button>` +
 				`</div>`;
 
-			if (room) {
-				room.add(`|uhtml|adventure-` + user.id + `|` + starterHtml).update();
-			} else {
-				// @ts-ignore
-				this.sendReply(`|uhtml|adventure-` + user.id + `|` + starterHtml);
-			}
+			const targetRoomId = room ? room.id : null;
+			user.sendTo(targetRoomId, `|uhtml|adventure-` + user.id + `|` + starterHtml);
 		}
 	},
 	'nurse_joy': {
@@ -202,11 +210,9 @@ function updateAdventureHTML(user: User, room: Room | null) {
 	
 	const html = generateAdventureHTML(user, progress);
 	
-	if (room) {
-		room.add(`|uhtml|adventure-${user.id}|${html}`).update();
-	} else {
-		user.sendTo(null, `|uhtml|adventure-${user.id}|${html}`);
-	}
+	// ALWAYS send privately
+	const targetRoomId = room ? room.id : null;
+	user.sendTo(targetRoomId, `|uhtml|adventure-${user.id}|${html}`);
 }
 
 
@@ -269,12 +275,19 @@ function startWildBattle(user: User, room: Room | null, progress: PlayerProgress
 
 	const location = LOCATIONS[progress.location];
 	if (!location.wildEncounters) return false;
-
-	const playerTeam = progress.team.map(p => {
-		// Ensure HP is correct for battle start
+	
+	// Prevent battle if no Pokemon are conscious
+	if (progress.team.every(p => p.hp <= 0)) {
+		// @ts-ignore
+		this.sendReply(`You have no healthy Pokémon! You should go to a Pokémon Center.`);
+		return false;
+	}
+	// Filter out fainted Pokemon from the battle team
+	const playerTeam = progress.team.filter(p => p.hp > 0).map(p => {
 		p.curHP = p.hp;
 		return p;
 	});
+
 	const wildTeam = generateWildTeam(location.wildEncounters);
 
 	try {
@@ -320,47 +333,50 @@ function handleWildWin(battle: any, winner: string, players: string[], meta: any
 	if (!progress) return;
 
 	progress.battleId = null;
-
-	// User's requested logic: +1 level per win
-	progress.team.forEach(pokemon => {
-		if (pokemon.hp > 0) { // Don't level up fainted pokemon
-			const newLevel = Math.min(100, pokemon.level + 1);
-			if (newLevel > pokemon.level) {
-				pokemon.level = newLevel;
-				
-				// Re-calculate stats for new level
-				const template = Dex.species.get(pokemon.species);
-				const nature = pokemon.nature;
-				for (const stat in pokemon.evs) {
-					// @ts-ignore
-					const newStat = Dex.calcStat(stat, pokemon.level, template.baseStats[stat], pokemon.ivs[stat], pokemon.evs[stat], nature);
-					if (stat === 'hp') {
-						pokemon.maxhp = newStat;
+	
+	// Map battle participants back to the main team
+	battle.sides[0].pokemon.forEach(battleMon => {
+		const teamMon = progress.team.find(p => p.species === battleMon.species && p.level === battleMon.level); // Simple check
+		if (teamMon) {
+			// Update HP/Status from battle
+			teamMon.hp = battleMon.hp;
+			teamMon.status = battleMon.status;
+			
+			// If it participated and won, level it up
+			if (teamMon.hp > 0) {
+				const newLevel = Math.min(100, teamMon.level + 1);
+				if (newLevel > teamMon.level) {
+					teamMon.level = newLevel;
+					
+					// Recalculate stats
+					const template = Dex.species.get(teamMon.species);
+					const nature = teamMon.nature;
+					for (const stat in teamMon.evs) {
+						// @ts-ignore
+						const newStat = Dex.calcStat(stat, teamMon.level, template.baseStats[stat], teamMon.ivs[stat], teamMon.evs[stat], nature);
+						if (stat === 'hp') {
+							teamMon.maxhp = newStat;
+							// Give back some HP on level up, respecting max
+							teamMon.hp = Math.min(teamMon.maxhp, teamMon.hp + Math.floor(newStat / 4));
+						}
 					}
-				}
-				
-				// Check for new moves (simplified: add if slot available, else replace 1st)
-				const species = Dex.species.get(pokemon.species);
-				const newMoves = Object.keys(species.learnset)
-					.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)))
-				
-				for (const move of newMoves) {
-					if (!pokemon.moves.includes(move)) {
-						if (pokemon.moves.length < 4) {
-							pokemon.moves.push(move);
-						} else {
-							pokemon.moves[0] = move; // Simple replacement
+					
+					// Check for new moves
+					const species = Dex.species.get(teamMon.species);
+					const newMoves = Object.keys(species.learnset)
+						.filter(move => species.learnset[move].some(m => m.startsWith(String(newLevel)[0]) && m.endsWith('L' + newLevel)))
+					
+					for (const move of newMoves) {
+						if (!teamMon.moves.includes(move)) {
+							if (teamMon.moves.length < 4) {
+								teamMon.moves.push(move);
+							} else {
+								teamMon.moves[0] = move; // Simple replacement
+							}
 						}
 					}
 				}
 			}
-		}
-
-		// Update HP from battle object
-		const battlePokemon = battle.sides[0].pokemon.find(p => p.name === pokemon.name);
-		if (battlePokemon) {
-			pokemon.hp = battlePokemon.hp;
-			pokemon.status = battlePokemon.status;
 		}
 	});
 
@@ -380,10 +396,13 @@ function handleWildLoss(battle: any, winner: string, players: string[], meta: an
 
 	progress.battleId = null;
 
-	// Update team with fainted status
-	progress.team.forEach(pokemon => {
-		pokemon.hp = 0;
-		pokemon.status = 'fnt';
+	// Update team with fainted status from battle
+	battle.sides[0].pokemon.forEach(battleMon => {
+		const teamMon = progress.team.find(p => p.species === battleMon.species && p.level === battleMon.level);
+		if (teamMon) {
+			teamMon.hp = battleMon.hp;
+			teamMon.status = battleMon.status;
+		}
 	});
 	
 	// Black out - move to last heal spot
@@ -411,7 +430,7 @@ export const commands: ChatCommands = {
 				inventory: { 'pokeball': 5, 'potion': 3 },
 				badges: [],
 				money: 3000,
-				eventFlags: { 'got_starter': false },
+				eventFlags: { 'got_starter': false, 'awaiting_oak': true }, // ADDED awaiting_oak
 				battleId: null,
 				lastHealLocation: 'player_home',
 			};
@@ -432,7 +451,31 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You can't go that way.`);
 			}
 
+			// --- NEW LOGIC: OAK INTERCEPTION ---
+			if (progress.location === 'player_home' && direction === 'out' && progress.eventFlags['awaiting_oak']) {
+				progress.location = 'oaks_lab'; // Teleport to lab
+				progress.eventFlags['awaiting_oak'] = false; // Flag is done
+				userProgress.set(user.id, progress);
+				
+				this.sendReply(`As you step outside, Professor Oak finds you!`);
+				this.sendReply(`"Ah, ${user.name}! There you are! Come to my lab, I have something for you."`);
+				this.sendReply(`You follow him to his lab.`);
+				
+				updateAdventureHTML(user, room);
+				return; // Stop normal move logic
+			}
+			// --- END NEW LOGIC ---
+
 			const newLocationId = currentLocation.exits[direction];
+			
+			// --- NEW LOGIC: BLOCK ROUTE 1 ---
+			if (newLocationId === 'route_1' && !progress.eventFlags['got_starter']) {
+				this.errorReply(`It's dangerous to go into the tall grass without a Pokémon!`);
+				this.sendReply(`You should go talk to Professor Oak first.`);
+				return;
+			}
+			// --- END NEW LOGIC ---
+
 			progress.location = newLocationId;
 			userProgress.set(user.id, progress);
 			
@@ -444,8 +487,9 @@ export const commands: ChatCommands = {
 				// Simple 30% encounter rate for this example
 				if (encounterRoll < 0.3) { 
 					// Pass `this` context to the function
-					startWildBattle.call(this, user, room, progress);
-					return; // Stop here, battle started
+					if (startWildBattle.call(this, user, room, progress)) {
+						return; // Stop here, battle started
+					}
 				}
 			}
 
@@ -554,14 +598,14 @@ export const commands: ChatCommands = {
 				if (battle) battle.destroy();
 			}
 			const resetHtml = `<div style="border: 1px solid #ccc; padding: 10px;">Your adventure has been reset. Use /adventure start to begin again.</div>`;
-			if (room) {
-				room.add(`|uhtmlchange|adventure-` + user.id + `|` + resetHtml).update();
-			} else {
-				this.sendReply(`|uhtml|adventure-` + user.id + `|` + resetHtml);
-			}
+			
+			// Send privately
+			const targetRoomId = room ? room.id : null;
+			user.sendTo(targetRoomId, `|uhtmlchange|adventure-` + user.id + `|` + resetHtml);
+			
 			userProgress.delete(user.id);
 		},
-		
+
 		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
