@@ -499,6 +499,8 @@ export const commands: ChatCommands = {
 				{cmd: "/tcg tradeview", desc: "View the current trade details and status."},
 				{cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade."},
 				{cmd: "/tcg tradecancel", desc: "Cancel the current active trade."},
+				{cmd: "/tcg tradedisable", desc: "Disable incoming trade requests."},
+				{cmd: "/tcg tradeenable", desc: "Enable incoming trade requests."},
 				{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user.<br><b>Example:</b> <code>/tcg giftcard princeskygit, sv1-1, 1</code>"},
 				{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user.<br><b>Example:</b> <code>/tcg giftpack princeskygit, sv1, 2</code>"},
 				{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user.<br><b>Example:</b> <code>/tcg giftcredits princeskygit, 100</code>"},
