@@ -44,7 +44,6 @@ export const commands: Chat.ChatCommands = {
 			});
 			
 			return this.sendReplyBox(`<details><summary>Git pull completed</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
-			return this.room.add(`|html|<div class="infobox">${user.name} pulled latest changes from git repository.</div>`);
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : String(err);
 			throw new Chat.ErrorMessage(`Git pull failed: ${message}`);
