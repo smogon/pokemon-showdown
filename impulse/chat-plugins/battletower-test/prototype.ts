@@ -323,7 +323,7 @@ function handleGymVictory(battle: any, winner: string, players: string[], meta: 
 	}
 	
 	userProgress.set(userId, progress);
-	if (battle) battle.destroy();
+	//if (battle) battle.destroy();
 }
 
 function handleGymDefeat(battle: any, winner: string, players: string[], meta: any) {
@@ -346,7 +346,7 @@ function handleGymDefeat(battle: any, winner: string, players: string[], meta: a
 	}
 	
 	userProgress.set(userId, progress);
-	if (battle) battle.destroy();
+	//if (battle) battle.destroy();
 }
 
 // ----------------------
