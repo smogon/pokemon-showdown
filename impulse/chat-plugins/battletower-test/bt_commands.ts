@@ -6,7 +6,7 @@
 import { Dex } from '../../../sim/dex';
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
+const GYM_CHALLENGE_BOT_ID = 'impulseearth';
 
 interface GymLeader {
   botUserId: string;
@@ -277,7 +277,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./battletower-test/bt_utils');
+  const btUtils = require('./bt_utils');
   
   return btUtils.createBattle({
     user: user,
