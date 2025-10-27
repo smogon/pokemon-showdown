@@ -526,7 +526,7 @@ export const commands: ChatCommands = {
 					`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
 				`</ul>`;
-			this.sendReplyBox(`|html|<div style="max-height: 360">${html}</div>`);
+			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
 		},
 		...adminCommands,
 		...collectionCommands,
