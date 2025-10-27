@@ -1,12 +1,10 @@
 /*
 * Pokemon Showdown
-* Roguelike Gym Challenge Plugin
+* Rogelike Gym Challenge Plugin
 */
 
 import { Dex } from '../../../sim/dex';
-
-// --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+import { Teams } from '../../../sim/teams'; // Restored import
 
 interface GymLeader {
   botUserId: string;
@@ -30,7 +28,6 @@ interface RunState {
   };
 }
 
-// --- MODIFIED: apply function can now return string[] ---
 interface RewardOption {
   id: string;
   name: string;
@@ -38,47 +35,16 @@ interface RewardOption {
   apply: (state: RunState) => string[] | void;
 }
 
-// --- NEW: Preset Team Definitions ---
-interface PresetTeam {
-  name: string;
-  team: any[];
-}
-
-// --- MODIFIED: Starter levels evened out to 13 ---
-const PRESET_TEAMS: PresetTeam[] = [
-  {
-    name: "Bulbasaur's Buddies",
-    team: [
-      { species: 'Bulbasaur', item: 'Oran Berry', level: 13, moves: ['tackle', 'growl', 'leechseed', 'vinewhip'] },
-      { species: 'Pidgey', item: '', level: 13, moves: ['tackle', 'gust', 'sandattack'] },
-      { species: 'Rattata', item: '', level: 13, moves: ['tackle', 'quickattack', 'tailwhip'] },
-    ]
-  },
-  {
-    name: "Charmander's Crew",
-    team: [
-      { species: 'Charmander', item: 'Oran Berry', level: 13, moves: ['scratch', 'growl', 'ember', 'smokescreen'] },
-      { species: 'Mankey', item: '', level: 13, moves: ['scratch', 'lowkick', 'leer'] },
-      { species: 'Spearow', item: '', level: 13, moves: ['peck', 'growl', 'leer'] },
-    ]
-  },
-  {
-    name: "Squirtle's Squad",
-    team: [
-      { species: 'Squirtle', item: 'Oran Berry', level: 13, moves: ['tackle', 'tailwhip', 'watergun', 'withdraw'] },
-      { species: 'Nidoran-M', item: '', level: 13, moves: ['peck', 'focusenergy', 'doublekick'] },
-      { species: 'Meowth', item: '', level: 13, moves: ['scratch', 'growl', 'bite'] },
-    ]
-  },
-];
-// --- End Preset Teams ---
+// --- REMOVED: PRESET_TEAMS constant ---
 
 const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
-// --- MODIFIED: All botUserIds now use the single constant ---
+// --- NEW: Define a single User ID for the Gym Challenge Bot ---
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
+
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
-// --- They just serve as a template. ---
+// --- They just serve as a team template. ---
 const GYM_LEADERS: GymLeader[] = [
   {
     botUserId: GYM_CHALLENGE_BOT_ID,
@@ -209,7 +175,6 @@ const REWARD_POOL: RewardOption[] = [
       state.inventory.items.push('Leftovers');
     }
   },
-  // --- MODIFIED: Now handles evolution and returns messages ---
   {
     id: 'level_boost',
     name: 'Rare Candies',
@@ -278,18 +243,25 @@ function createGymBattle(user: any, gymIndex: number) {
   const state = activeRuns.get(user.id);
   if (!state) return null;
 
-  // --- MODIFIED: Pure Dynamic Scaling Logic ---
-  // This logic ignores hardcoded levels and scales *only* relative to the player.
-  
-  let totalLevel = 0;
+  // --- MODIFIED: BST-Based Dynamic Scaling Logic ---
+  let totalBST = 0;
   for (const mon of state.teamData) {
-    totalLevel += mon.level;
+    const species = Dex.species.get(mon.species);
+    if (!species.exists) continue; // Should not happen
+    const stats = species.baseStats;
+    totalBST += stats.hp + stats.atk + stats.def + stats.spa + stats.spd + stats.spe;
   }
-  const playerAvgLevel = Math.round(totalLevel / state.teamData.length);
+  const playerAvgBST = totalBST / state.teamData.length;
 
-  // Define target levels based on player's average
-  const targetRegularLevel = playerAvgLevel + 1;
-  const targetAceLevel = playerAvgLevel + 2;
+  // Base level scales with gym progression
+  const baseLevel = (gymIndex * 5) + 13; // Gym 0: 13, Gym 1: 18, ..., Gym 7: 48
+
+  // Modifier scales with player's team power (BST)
+  // Baseline is 310 (avg starter BST). +1 level for every 40 BST over 310.
+  const bstModifier = Math.round(Math.max(0, playerAvgBST - 310) / 40);
+
+  const targetRegularLevel = baseLevel + bstModifier;
+  const targetAceLevel = targetRegularLevel + 2; // Ace is 2 levels higher
 
   // Deep clone the bot's team to apply new levels
   let scaledBotTeam = JSON.parse(JSON.stringify(gym.team));
@@ -306,7 +278,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -378,20 +350,32 @@ export const commands: Chat.ChatCommands = {
         return this.errorReply("You already have an active gym challenge run.");
       }
       
-      if (target.trim()) {
-        return this.errorReply("Usage: /gymchallenge start (do not provide a team)");
+      // --- MODIFIED: Reverted to accept packed team ---
+      const teamText = target.trim();
+      if (!teamText) {
+        return this.errorReply("Usage: /gymchallenge start [packed team]");
       }
 
-      const presetIndex = Math.floor(Math.random() * PRESET_TEAMS.length);
-      const chosenPreset = PRESET_TEAMS[presetIndex];
-      const team = JSON.parse(JSON.stringify(chosenPreset.team));
-      const teamName = chosenPreset.name;
+      let team;
+      try {
+        team = Teams.unpack(teamText);
+        if (!team || team.length === 0) {
+          return this.errorReply("Invalid team format.");
+        }
+        // --- NEW: Limit team size to 3 for balance ---
+        if (team.length > 3) {
+          return this.errorReply("Your team can have a maximum of 3 Pokemon.");
+        }
+      } catch (e) {
+        return this.errorReply("Invalid team format.");
+      }
+      // --- End modifications ---
 
       const state: RunState = {
         userId: user.id,
         currentGym: 0,
         lives: 3,
-        teamData: team,
+        teamData: team, // Use the user's provided team
         rewards: [],
         badges: [],
         startTime: Date.now(),
@@ -402,13 +386,13 @@ export const commands: Chat.ChatCommands = {
       };
 
       activeRuns.set(user.id, state);
-      this.sendReply(`Gym Challenge started with the "${teamName}" preset team! You have 3 lives. Use /gymchallenge next to challenge the first gym.`);
+      this.sendReply(`Gym Challenge started with your team! You have 3 lives. Use /gymchallenge next to challenge the first gym.`);
     },
 
     next(target, room, user) {
       const state = activeRuns.get(user.id);
       if (!state) {
-        return this.errorReply("You don't have an active gym challenge. Use /gymchallenge start to begin.");
+        return this.errorReply("You don't have an active gym challenge. Use /gymchallenge start [team] to begin.");
       }
 
       if (pendingRewards.has(user.id)) {
@@ -435,7 +419,7 @@ export const commands: Chat.ChatCommands = {
       }
 
       if (state.lives <= 0) {
-        return this.errorReply("You have no lives remaining. Start a new run with /gymchallenge start");
+        return this.errorReply("You have no lives remaining. Start a new run with /gymchallenge start [team]");
       }
 
       const battle = createGymBattle(user, state.currentGym);
@@ -465,7 +449,6 @@ export const commands: Chat.ChatCommands = {
 
       const selectedReward = rewards[choice - 1];
 
-      // --- MODIFIED: Capture applyResult and handle evolution messages ---
       let newTMs: string[] = [];
       let applyResult: string[] | void;
 
@@ -598,7 +581,6 @@ export const commands: Chat.ChatCommands = {
     },
 
     status(target, room, user) {
-		if (!this.runBroadcast()) return;
       const state = activeRuns.get(user.id);
       if (!state) {
         return this.errorReply("You don't have an active gym challenge.");
