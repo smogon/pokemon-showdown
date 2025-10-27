@@ -264,21 +264,6 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		async openpack(target, room, user) {
-			if (!this.runBroadcast()) return;
-			if (!target) return this.errorReply('Usage: /tcg openpack [setid] - Only for testing');
-
-			const setId = target.trim();
-			try {
-				const pack = await generatePack(setId);
-				const title = `${user.name} opened - ${setId} pack.<br>`;
-				const html = renderCardGridHtml(pack, title);
-				this.sendReply(`|html|${html}`);
-			} catch (error) {
-				return this.errorReply(`An error occurred while generating pack: ${error.message}`);
-			}
-		},
-
 		async daily(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const userId = user.id;
@@ -477,10 +462,9 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{cmd: "/tcg adminhelp", desc: "Shows all admin commands."},
-				{cmd: "/tcg economyhelp", desc: "Shows all economy commands."},
+				{cmd: "/tcg economyhelp", desc: "Shows all economy and shop commands."},
 				{cmd: "/tcg tradehelp", desc: "Shows trading commands."},
 				{cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information."},
-				{cmd: "/tcg openpack [setId]", desc: "Open a 10-card booster pack from the specified set (testing only)."},
 				{cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set."},
 				{cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>"},
 				{cmd: "/tcg profile [user]", desc: "View a user's TCG profile and collection stats."},
