@@ -176,8 +176,143 @@ export const adminCommands: ChatCommands = {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
+
+  async takecard(target, room, user) {
+    this.checkCan('bypassall');
+    const parts = target.split(',').map(p => p.trim());
+    if (parts.length < 2) return this.errorReply("Usage: /tcg takecard [user], [cardId], [quantity]");
+
+    const targetUserId = toID(parts[0]);
+    const cardId = parts[1];
+    const quantityToTake = parts[2] ? parseInt(parts[2]) : 1;
+
+    if (!targetUserId) return this.errorReply("Please specify a user.");
+    if (!cardId) return this.errorReply("Please specify a card ID.");
+    if (isNaN(quantityToTake) || quantityToTake <= 0) return this.errorReply("Invalid quantity. Must be a positive number.");
 	
-	async wipecollection(target, room, user) {
+    try {
+      const collection = userCollectionsCollection;
+      const profiles = userProfilesCollection;
+		
+      const userCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
+      if (!userCard || userCard.quantity === 0) return this.errorReply(`${targetUserId} does not own any "${cardId}" cards.`);
+      if (userCard.quantity < quantityToTake) {
+        return this.errorReply(`${targetUserId} only has ${userCard.quantity}x "${userCard.name}". Cannot take ${quantityToTake}.`);
+      }
+
+      const newQuantity = userCard.quantity - quantityToTake;
+      const pointsToDeduct = userCard.totalPoints * quantityToTake;
+      const uniqueCardsChange = newQuantity === 0 ? -1 : 0;
+      const now = new Date().toISOString();
+
+      if (newQuantity === 0) {
+        await collection.deleteOne({ userId: targetUserId, cardId: cardId });
+      } else {
+        await collection.updateOne({ userId: targetUserId, cardId: cardId }, { $inc: { quantity: -quantityToTake } });
+      }
+
+      await profiles.updateOne(
+        { userId: targetUserId },
+        {
+          $inc: {
+            totalQuantity: -quantityToTake,
+            collectionPoints: -pointsToDeduct,
+            totalUniqueCards: uniqueCardsChange
+          },
+          $set: { lastUpdatedAt: now }
+        }
+      );
+
+      this.sendReply(`Successfully took ${quantityToTake}x "${userCard.name}" from ${targetUserId}.`);
+      const targetUser = Users.get(targetUserId);
+      if (targetUser) {
+        targetUser.popup(`|html|${quantityToTake} "${userCard.name}" card(s) have been removed from your collection by ${user.name}.`);
+      }
+    } catch (error) {
+      return this.errorReply(`An error occurred: ${error.message}`);
+    }
+  },
+
+  async takecredits(target, room, user) {
+    this.checkCan('bypassall');
+    const parts = target.split(',').map(p => p.trim());
+    if (parts.length < 2) return this.errorReply("Usage: /tcg takecredits [user], [amount]");
+	
+    const targetUserId = toID(parts[0]);
+    const amount = parseInt(parts[1]);
+
+    if (!targetUserId) return this.errorReply("Please specify a user.");
+    if (isNaN(amount) || amount <= 0) return this.errorReply("Invalid amount. Amount must be a positive number.");
+
+    try {
+      const now = new Date().toISOString();
+      const profile = await userProfilesCollection.findOne({ userId: targetUserId });
+		
+      if (!profile) return this.errorReply(`${targetUserId} does not have a TCG profile.`);
+      if (profile.credits < amount) {
+        return this.errorReply(`${targetUserId} only has ${profile.credits} credits. Cannot take ${amount}.`);
+      }
+
+      await userProfilesCollection.updateOne(
+        { userId: targetUserId },
+        { $inc: { credits: -amount }, $set: { lastUpdatedAt: now } }
+      );
+
+      this.sendReply(`Successfully took ${amount.toLocaleString()} credits from ${targetUserId}.`);
+      const targetUser = Users.get(targetUserId);
+      if (targetUser) {
+        targetUser.popup(`|html|${amount.toLocaleString()} TCG credits have been removed from your account by ${user.name}.`);
+      }
+    } catch (error) {
+      return this.errorReply(`An error occurred: ${error.message}`);
+    }
+  },
+
+  async takepack(target, room, user) {
+    this.checkCan('bypassall');
+    const parts = target.split(',').map(p => p.trim());
+    if (parts.length < 2) return this.errorReply("Usage: /tcg takepack [user], [setId], [quantity]");
+
+    const targetUserId = toID(parts[0]);
+    const setId = parts[1];
+    const quantity = parts[2] ? parseInt(parts[2]) : 1;
+
+    if (!targetUserId) return this.errorReply("Please specify a user.");
+    if (!setId) return this.errorReply("Please specify a set ID.");
+    if (isNaN(quantity) || quantity <= 0) return this.errorReply("Invalid quantity. Must be a positive number.");
+	
+    try {
+      const userPack = await userPacksCollection.findOne({ userId: targetUserId, setId: setId });
+      if (!userPack || userPack.quantity === 0) {
+        return this.errorReply(`${targetUserId} does not have any "${setId}" packs.`);
+      }
+      if (userPack.quantity < quantity) {
+        return this.errorReply(`${targetUserId} only has ${userPack.quantity}x "${userPack.setName}" pack(s). Cannot take ${quantity}.`);
+
+      
+      }
+
+      const newQuantity = userPack.quantity - quantity;
+      if (newQuantity === 0) {
+        await userPacksCollection.deleteOne({ userId: targetUserId, setId: setId });
+      } else {
+        await userPacksCollection.updateOne(
+          { userId: targetUserId, setId: setId },
+          { $inc: { quantity: -quantity } }
+        );
+      }
+
+      this.sendReply(`Successfully took ${quantity}x "${userPack.setName}" pack(s) from ${targetUserId}.`);
+      const targetUser = Users.get(targetUserId);
+      if (targetUser) {
+        targetUser.popup(`|html|${quantity} "${userPack.setName}" pack(s) have been removed from your inventory by ${user.name}.`);
+      }
+    } catch (error) {
+      return this.errorReply(`An error occurred: ${error.message}`);
+    }
+  },
+	
+  async wipecollection(target, room, user) {
 		this.checkCan('bypassall');
 		const targetUserId = toID(target);
 		if (!targetUserId) return this.errorReply("Usage: /tcg wipecollection [user]");
