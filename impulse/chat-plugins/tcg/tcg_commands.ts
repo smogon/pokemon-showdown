@@ -492,6 +492,13 @@ export const commands: ChatCommands = {
 				{cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop."},
 				{cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits.<br><b>Example:</b> <code>/tcg sell sv1-1, 3</code>"},
 				{cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits.<br><b>Example:</b> <code>/tcg sellduplicates sv1</code>"},
+				{cmd: "/tcg trade [user]", desc: "Initiate a trade with another user.<br><b>Example:</b> <code>/tcg trade princeskygit</code>"},
+				{cmd: "/tcg tradeadd [cardId], [quantity]", desc: "Add cards to your current trade offer.<br><b>Example:</b> <code>/tcg tradeadd sv1-1, 2</code>"},
+				{cmd: "/tcg traderemove [cardId], [quantity]", desc: "Remove cards from your current trade offer.<br><b>Example:</b> <code>/tcg traderemove sv1-1, 1</code>"},
+				{cmd: "/tcg tradeaddcredits [amount]", desc: "Add credits to your current trade offer.<br><b>Example:</b> <code>/tcg tradeaddcredits 500</code>"},
+				{cmd: "/tcg tradeview", desc: "View the current trade details and status."},
+				{cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade."},
+				{cmd: "/tcg tradecancel", desc: "Cancel the current active trade."},
 				{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user.<br><b>Example:</b> <code>/tcg giftcard princeskygit, sv1-1, 1</code>"},
 				{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user.<br><b>Example:</b> <code>/tcg giftpack princeskygit, sv1, 2</code>"},
 				{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user.<br><b>Example:</b> <code>/tcg giftcredits princeskygit, 100</code>"},
@@ -519,7 +526,7 @@ export const commands: ChatCommands = {
 					`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 								).join('') +
 				`</ul>`;
-			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
+			this.sendReplyBox(`|html|<div style="max-height: 360">${html}</div>`);
 		},
 		...adminCommands,
 		...collectionCommands,
