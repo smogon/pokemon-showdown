@@ -206,16 +206,20 @@ function generateRandomPokemon(level: number, pool: string[], item: string = '')
   }
   
   // Get 4 random moves from level-up learnset + TMs
-  // --- THIS IS THE FIX ---
-  // Call getLearnset on Dex.data.Learnsets (the data object)
   const learnset = Dex.data.Learnsets[species.id];
-  // --- END FIX ---
 
   let possibleMoves: string[] = [];
   if (learnset) {
       for (const moveid in learnset) {
+          // --- THIS IS THE FIX ---
+          // Get the property
+          const learnMethods = learnset[moveid];
+          // Check if it's an array before calling .some()
+          if (!Array.isArray(learnMethods)) continue;
+          // --- END FIX ---
+          
           // Check if it's a level-up move learnable at or below current level, or a TM move
-          const canLearn = learnset[moveid].some(source => (source.startsWith('9L') && parseInt(source.slice(2)) <= level) || source.startsWith('9M'));
+          const canLearn = learnMethods.some(source => (source.startsWith('9L') && parseInt(source.slice(2)) <= level) || source.startsWith('9M'));
           if (canLearn) {
               possibleMoves.push(moveid);
           }
@@ -628,7 +632,7 @@ export const commands: Chat.ChatCommands = {
         }
       } else if (['life_orb', 'choice_band', 'leftovers', 'focus_sash'].includes(selectedReward.id)) {
         this.sendReply(`You received: ${selectedReward.name}!`);
-        this.sendReplyBox(`It has been added to your inventory.<br />Use Code: <code>/gymchallenge giveitem [pokemon number] | [item name]</code>`);
+        this.sendReplyBox(`It has been added to your inventory.<br />Use Code: L <code>/gymchallenge giveitem [pokemon number] | [item name]</code>`);
       } else {
         this.sendReply(`You received: ${selectedReward.name}!`);
       }
@@ -679,10 +683,7 @@ export const commands: Chat.ChatCommands = {
       }
 
       // Check learnset
-      // --- THIS IS THE FIX ---
-      // Call getLearnset on Dex.data.Learnsets (the data object)
       const learnset = Dex.data.Learnsets[species.id];
-      // --- END FIX ---
       
       if (!learnset || !learnset[move.id]) {
         return this.errorReply(`${species.name} cannot learn ${move.name}.`);
