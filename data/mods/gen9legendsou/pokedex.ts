@@ -24,6 +24,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Dragon's Maw" },
 	},
+	ampharosmega: {
+		inherit: true,
+		abilities: { 0: "Fluffy" },
+	},
 	skarmorymega: {
 		inherit: true,
 		abilities: { 0: "Tough Claws" },
@@ -82,7 +86,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	greninjamega: {
 		inherit: true,
-		abilities: { 0: "Technician" },
+		abilities: { 0: "Protean" },
 	},
 	pyroarmega: {
 		inherit: true,
