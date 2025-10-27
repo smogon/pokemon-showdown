@@ -218,7 +218,7 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(roomid);
 			startRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour enabled for room ${roomid}.`);
-			this.room.add(`${user.name} enabled auto tournaments in this room.`);
+			this.room.add(`|html|<div class="infobox"><center>${user.name} enabled auto tournaments in this room.</center></div>`);
 		},
 		async disable(target, room, user): Promise<void> {
 			if (!checkRoomOwner(this, room)) return;
@@ -228,7 +228,7 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(roomid);
 			stopRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour disabled for room ${roomid}.`);
-			this.room.add(`${user.name} disabled auto tournaments in this room.`);
+			this.room.add(`|html|<div class="infobox"><center>${user.name} disabled auto tournaments in this room.</center></div>`);
 		},
 		async set(target, room, user): Promise<void> {
 			if (!checkRoomOwner(this, room)) return;
