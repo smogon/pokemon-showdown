@@ -115,6 +115,7 @@ export interface TcgUserProfile {
 	totalSetsCompleted?: number;
 	favoriteCards?: string[];
 	totalTrades?: number;
+	tradesEnabled?: boolean;
 	lastUpdatedAt: string;
 }
 
