@@ -209,7 +209,8 @@ function generateRandomPokemon(level: number, pool: string[], item: string = '')
   // --- END CHECK ---
   
   // Get 4 random moves from level-up learnset + TMs
-  const learnset = Dex.species.getLearnset(species.id);
+  // Get 4 random moves from level-up learnset + TMs
+  const learnset = Dex.getLearnset(species.id);
   let possibleMoves: string[] = [];
   if (learnset) {
       for (const moveid in learnset) {
