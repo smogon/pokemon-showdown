@@ -1,4 +1,4 @@
-import { createBattle } from './bt_utils';
+import { createBattle } from './bt_utils'; // Import from bt_utils
 
 const STORY = {
 	'start': {
@@ -287,14 +287,24 @@ function generatePlayerTeam(progress) {
 }
 
 // Generate HTML with buttons for choices (use name="send" value="/adventure choose ...")
-function generateChoiceHtml(node, userId) {
+function generateChoiceHtml(node, userId, pokemonList: string[]) {
 	const choices = Object.keys(node.choices).map(choice => 
 		'<button name="send" value="/adventure choose ' + choice + '" style="background: #4CAF50; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">' + choice + '</button>'
 	).join('');
+
+	// New Team Display
+	const teamString = pokemonList.length > 0 ? pokemonList.join(', ') : 'No Pokémon yet';
+	const teamHtml = '<div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.9em; color: #555;">' +
+		'<b>Your Team:</b> ' + teamString +
+		'</div>';
+
 	return '<div style="border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif;">' +
-		node.text + '<br>' +
+		teamHtml + // Add the team HTML at the top
+		'<div>' + node.text + '</div>' + // Story text
+		'<div style="margin-top: 10px;">' + // Choices section
 		(choices ? '<b>Choices:</b><br>' + choices : 'No choices available.') +
 		(choices ? '<br><small>(Or use /adventure choose [option])</small>' : '') +
+		'</div>' +
 		'</div>';
 }
 
@@ -314,7 +324,8 @@ function handleGymVictory(battle: any, winner: string, players: string[], meta: 
 	progress.node = 'gym_victory';
 	progress.battleId = null; // Clear battle ID
 	const newNode = STORY[progress.node];
-	const html = generateChoiceHtml(newNode, userId);
+	const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
+	const html = generateChoiceHtml(newNode, userId, pokemonList);
 
 	if (originRoom) {
 		originRoom.add('|uhtml|adventure-' + userId + '|' + html).update();
@@ -323,7 +334,7 @@ function handleGymVictory(battle: any, winner: string, players: string[], meta: 
 	}
 	
 	userProgress.set(userId, progress);
-	//if (battle) battle.destroy();
+	// if (battle) battle.destroy(); // Removed this line
 }
 
 function handleGymDefeat(battle: any, winner: string, players: string[], meta: any) {
@@ -337,7 +348,8 @@ function handleGymDefeat(battle: any, winner: string, players: string[], meta: a
 	progress.node = 'gym_defeat';
 	progress.battleId = null; // Clear battle ID
 	const newNode = STORY[progress.node];
-	const html = generateChoiceHtml(newNode, userId);
+	const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
+	const html = generateChoiceHtml(newNode, userId, pokemonList);
 
 	if (originRoom) {
 		originRoom.add('|uhtml|adventure-' + userId + '|' + html).update();
@@ -346,7 +358,7 @@ function handleGymDefeat(battle: any, winner: string, players: string[], meta: a
 	}
 	
 	userProgress.set(userId, progress);
-	//if (battle) battle.destroy();
+	// if (battle) battle.destroy(); // Removed this line
 }
 
 // ----------------------
@@ -359,7 +371,7 @@ export const commands: ChatCommands = {
 			}
 			userProgress.set(user.id, { node: 'start', inventory: [], starter: null, battleId: null });
 			const node = STORY['start'];
-			const html = generateChoiceHtml(node, user.id);
+			const html = generateChoiceHtml(node, user.id, []); // Pass empty team
 			if (room) {
 				room.add('|uhtml|adventure-' + user.id + '|' + html).update();
 			} else {
@@ -372,6 +384,7 @@ export const commands: ChatCommands = {
 				return this.errorReply('You haven’t started an adventure yet! Use /adventure start.');
 			}
 			const progress = userProgress.get(user.id);
+			
 			const node = STORY[progress.node];
 			if (!node.choices[target]) {
 				return this.errorReply('Invalid choice. Available choices: ' + Object.keys(node.choices).join(', '));
@@ -385,12 +398,16 @@ export const commands: ChatCommands = {
 				const pokemon = progress.node.split('_')[1];
 				progress.inventory.push(pokemon.charAt(0).toUpperCase() + pokemon.slice(1));
 			}
+
+			// Get team list *after* potential updates
+			const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
+
 			if (progress.node === 'start_gym_battle') {
-				const botUser = Users.get('impulseearth');
+				const botUser = Users.get('musaddiktemkar');
 				if (!botUser || !botUser.connected) {
 					progress.node = 'gym_defeat';
 					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle couldn’t start because musaddiktemkar is offline. ' + generateChoiceHtml(STORY['gym_defeat'], user.id) + '</div>';
+						'The gym battle couldn’t start because musaddiktemkar is offline. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
 					if (room) {
 						room.add('|uhtml|adventure-' + user.id + '|' + errorHtml).update();
 					} else {
@@ -431,7 +448,7 @@ export const commands: ChatCommands = {
 					console.error('Failed to create battle:', e);
 					progress.node = 'gym_defeat';
 					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle failed to start due to a server error: ' + e.message + '. ' + generateChoiceHtml(STORY['gym_defeat'], user.id) + '</div>';
+						'The gym battle failed to start due to a server error: ' + e.message + '. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
 					if (room) {
 						room.add('|uhtml|adventure-' + user.id + '|' + errorHtml).update();
 					} else {
@@ -444,9 +461,9 @@ export const commands: ChatCommands = {
 					console.error('BattleRoom is undefined after createBattle');
 					progress.node = 'gym_defeat';
 					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-						'The gym battle could not be created. Please try again. ' + generateChoiceHtml(STORY['gym_defeat'], user.id) + '</div>';
+						'The gym battle could not be created. Please try again. ' + generateChoiceHtml(STORY['gym_defeat'], user.id, pokemonList) + '</div>';
 					if (room) {
-						room.add('|uhtml|adventure-' + user.id + '|' + errorHtml).update();
+						room.add('|uhtml|adventure-' - user.id + '|' + errorHtml).update();
 					} else {
 						this.sendReply('|uhtml|adventure-' + user.id + '|' + errorHtml);
 					}
@@ -461,24 +478,32 @@ export const commands: ChatCommands = {
 				console.log('BattleRoom:', battleRoom ? battleRoom.id : null, 'Format:', formatId, 'Players:', [user.id, botUser.id]);
 				
 				const battleHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
-					newNode.text + '<br>Battle started! Check your battle tab to fight Brock.</div>';
+					// Team will be shown by generateChoiceHtml
+					generateChoiceHtml(newNode, user.id, pokemonList) + 
+					'<br>Battle started! Check your battle tab to fight Brock.</div>';
+				
 				if (room) {
-					room.add('|uhtml|adventure-' + user.id + '|' + battleHtml).update();
+					// Need to fudge the HTML a bit since generateChoiceHtml wraps it
+					room.add('|uhtml|adventure-' + user.id + '|' + 
+						generateChoiceHtml(newNode, user.id, pokemonList).replace('</div>', 
+						'<br>Battle started! Check your battle tab to fight Brock.</div>')
+					).update();
 				} else {
-					this.sendReply('|uhtml|adventure-' + user.id + '|' + battleHtml);
+					this.sendReply('|uhtml|adventure-' + user.id + '|' + 
+						generateChoiceHtml(newNode, user.id, pokemonList).replace('</div>',
+						'<br>Battle started! Check your battle tab to fight Brock.</div>')
+					);
 				}
 			} else {
-				const html = generateChoiceHtml(newNode, user.id);
+				const html = generateChoiceHtml(newNode, user.id, pokemonList); // Pass team
 				if (room) {
 					room.add('|uhtml|adventure-' + user.id + '|' + html).update();
 				} else {
 					this.sendReply('|uhtml|adventure-' + user.id + '|' + html);
 				}
 			}
-			if (progress.inventory.length > 0 || progress.starter) {
-				const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
-				this.sendReply('Your Pokémon: ' + pokemonList.join(', '));
-			}
+			
+			// REMOVED the chat spam block
 		},
 		reset(target, room, user) {
 			if (!userProgress.has(user.id)) {
