@@ -55,7 +55,7 @@ const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
 // --- They just serve as a team template. ---
@@ -201,16 +201,16 @@ function generateRandomPokemon(level: number, pool: string[], item: string = '')
   const speciesName = pool[Math.floor(Math.random() * pool.length)];
   const species = Dex.species.get(speciesName);
 
-  // --- ADD THIS CHECK ---
   if (!species.exists) {
-    // This will log the bad species name and prevent the crash
     throw new Error(`[Gym Challenge] Invalid species in pool: ${speciesName}`);
   }
-  // --- END CHECK ---
   
   // Get 4 random moves from level-up learnset + TMs
-  // Get 4 random moves from level-up learnset + TMs
-  const learnset = Dex.getLearnset(species.id);
+  // --- THIS IS THE FIX ---
+  // Call getLearnset on Dex.dex (the instance)
+  const learnset = Dex.dex.getLearnset(species.id);
+  // --- END FIX ---
+
   let possibleMoves: string[] = [];
   if (learnset) {
       for (const moveid in learnset) {
@@ -413,7 +413,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -679,7 +679,11 @@ export const commands: Chat.ChatCommands = {
       }
 
       // Check learnset
-      const learnset = Dex.species.getLearnset(species.id);
+      // --- THIS IS THE FIX ---
+      // Call getLearnset on Dex.dex (the instance)
+      const learnset = Dex.dex.getLearnset(species.id);
+      // --- END FIX ---
+      
       if (!learnset || !learnset[move.id]) {
         return this.errorReply(`${species.name} cannot learn ${move.name}.`);
       }
