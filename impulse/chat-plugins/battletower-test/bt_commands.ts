@@ -6,7 +6,7 @@
 import { Dex } from '../../../sim/dex';
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 interface GymLeader {
   botUserId: string;
@@ -30,11 +30,12 @@ interface RunState {
   };
 }
 
+// --- MODIFIED: apply function can now return string[] ---
 interface RewardOption {
   id: string;
   name: string;
   description: string;
-  apply: (state: RunState) => void;
+  apply: (state: RunState) => string[] | void;
 }
 
 // --- NEW: Preset Team Definitions ---
@@ -75,7 +76,9 @@ const PRESET_TEAMS: PresetTeam[] = [
 const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
-// --- MODIFIED: Smoothed level curve across all 8 gyms ---
+// --- MODIFIED: All botUserIds now use the single constant ---
+// --- NOTE: These levels are now IGNORED by createGymBattle ---
+// --- They just serve as a template. ---
 const GYM_LEADERS: GymLeader[] = [
   {
     botUserId: GYM_CHALLENGE_BOT_ID,
@@ -206,14 +209,36 @@ const REWARD_POOL: RewardOption[] = [
       state.inventory.items.push('Leftovers');
     }
   },
+  // --- MODIFIED: Now handles evolution and returns messages ---
   {
     id: 'level_boost',
     name: 'Rare Candies',
-    description: 'Boost all Pokemon by 2 levels',
-    apply: (state) => {
+    description: 'Boost all Pokemon by 2 levels (and evolve if possible)',
+    apply: (state: RunState): string[] => {
+      const evolutionMessages: string[] = [];
       state.teamData.forEach(mon => {
-        if (mon.level) mon.level += 2;
+        mon.level += 2;
+        let canEvolve = true;
+        while (canEvolve) {
+          const species = Dex.species.get(mon.species);
+          canEvolve = false; // Assume no evolution unless found
+          if (!species.evos || species.evos.length === 0) break;
+
+          // Find the first valid level-up evolution
+          for (const evoId of species.evos) {
+            const evoSpecies = Dex.species.get(evoId);
+            // Only handle level-up evolutions
+            if (evoSpecies.evoType === 'levelUp' && mon.level >= evoSpecies.evoLevel) {
+              const oldSpeciesName = mon.species;
+              mon.species = evoSpecies.name;
+              evolutionMessages.push(`Your ${oldSpeciesName} evolved into ${mon.species}!`);
+              canEvolve = true; // Check again for multi-stage evos
+              break; // Evolved, break inner loop and restart while
+            }
+          }
+        }
       });
+      return evolutionMessages;
     }
   },
   {
@@ -253,42 +278,35 @@ function createGymBattle(user: any, gymIndex: number) {
   const state = activeRuns.get(user.id);
   if (!state) return null;
 
-  // --- MODIFIED: Improved Dynamic Scaling Logic ---
+  // --- MODIFIED: Pure Dynamic Scaling Logic ---
+  // This logic ignores hardcoded levels and scales *only* relative to the player.
+  
   let totalLevel = 0;
   for (const mon of state.teamData) {
     totalLevel += mon.level;
   }
   const playerAvgLevel = Math.round(totalLevel / state.teamData.length);
+
+  // Define target levels based on player's average
+  const targetRegularLevel = playerAvgLevel + 1;
+  const targetAceLevel = playerAvgLevel + 2;
+
+  // Deep clone the bot's team to apply new levels
+  let scaledBotTeam = JSON.parse(JSON.stringify(gym.team));
   
-  // Define a scaling bonus that increases
-  let levelBonus = 2; // Brock, Misty
-  if (gymIndex >= 5) { // Koga, Blaine, Giovanni
-    levelBonus = 4;
-  } else if (gymIndex >= 2) { // Surge, Erika, Sabrina
-    levelBonus = 3;
-  }
+  // The ace is assumed to be the last pokemon in the array
+  const aceIndex = scaledBotTeam.length - 1;
 
-  const scaledPlayerTarget = playerAvgLevel + levelBonus;
-  const originalAceLevel = gym.team[gym.team.length - 1].level;
-
-  // Use the gym's original level OR the player's scaled level, whichever is higher.
-  // This maintains a "minimum difficulty" but scales up if the player levels.
-  const targetAceLevel = Math.max(originalAceLevel, scaledPlayerTarget);
-  
-  const levelDelta = targetAceLevel - originalAceLevel;
-  let scaledBotTeam = gym.team; // Default to original team
-
-  // Only scale *up*, never down.
-  if (levelDelta > 0) {
-    // Deep clone and apply level scaling to the entire team
-    scaledBotTeam = JSON.parse(JSON.stringify(gym.team));
-    for (const mon of scaledBotTeam) {
-      mon.level += levelDelta;
+  for (let i = 0; i < scaledBotTeam.length; i++) {
+    if (i === aceIndex) {
+      scaledBotTeam[i].level = targetAceLevel;
+    } else {
+      scaledBotTeam[i].level = targetRegularLevel;
     }
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -447,23 +465,29 @@ export const commands: Chat.ChatCommands = {
 
       const selectedReward = rewards[choice - 1];
 
-      // --- Special handling for TM reward ---
+      // --- MODIFIED: Capture applyResult and handle evolution messages ---
       let newTMs: string[] = [];
+      let applyResult: string[] | void;
+
       if (selectedReward.id === 'tm_case') {
         const currentTMs = new Set(state.inventory.tms);
-        selectedReward.apply(state); // This adds the new TMs
+        applyResult = selectedReward.apply(state); // This adds the new TMs
         newTMs = state.inventory.tms.filter(tm => !currentTMs.has(tm));
       } else {
-        selectedReward.apply(state);
+        applyResult = selectedReward.apply(state);
       }
-      // --- End special handling ---
-
+      
       state.rewards.push(selectedReward.name);
       pendingRewards.delete(user.id);
 
       if (selectedReward.id === 'tm_case' && newTMs.length > 0) {
         this.sendReply(`You received: ${selectedReward.name}!`);
         this.sendReplyBox(`You got 3 TMs: <strong>${newTMs.join(', ')}</strong><br />Use <code>/gymchallenge teach [pokemon number] | [move name] | [slot to replace]</code>`);
+      } else if (selectedReward.id === 'level_boost') {
+        this.sendReply(`You received: ${selectedReward.name}!`);
+        if (applyResult && applyResult.length > 0) {
+          this.sendReplyBox(applyResult.join('<br />'));
+        }
       } else if (['life_orb', 'choice_band', 'leftovers', 'focus_sash'].includes(selectedReward.id)) {
         this.sendReply(`You received: ${selectedReward.name}!`);
         this.sendReplyBox(`It has been added to your inventory.<br />Use <code>/gymchallenge giveitem [pokemon number] | [item name]</code>`);
