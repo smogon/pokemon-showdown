@@ -42,7 +42,7 @@ const LOCATIONS = {
 		exits: {
 			'out': 'pallet_town',
 		},
-		npcs: ['prof_oak'],
+		npcs: ['profoak'], // <-- CHANGED
 	},
 	'route_1': {
 		name: 'Route 1',
@@ -73,17 +73,18 @@ const LOCATIONS = {
 		exits: {
 			'out': 'viridian_city',
 		},
-		npcs: ['nurse_joy'],
+		npcs: ['nursejoy'], // <-- CHANGED
 	}
 };
 
 const NPCS = {
 	'mom': {
+		name: 'Mom', // <-- ADDED
 		dialogue: [
 			`You're finally starting your Pokémon journey! Be brave... and try not to get into too much trouble!`,
 			`Don't forget to change your underwear!`
 		],
-		onTalk: function (user, room, progress) { // <-- CHANGED
+		onTalk: function (user, room, progress) {
 			let dialogue;
 			if (progress.eventFlags['awaiting_oak']) {
 				dialogue = `Professor Oak was just here looking for you! You should head over to his lab!`;
@@ -92,15 +93,16 @@ const NPCS = {
 			} else {
 				dialogue = NPCS['mom'].dialogue[0];
 			}
-			this.sendReply(`Mom: ${dialogue}`); // 'this' will now be correct
+			this.sendReply(`Mom: ${dialogue}`);
 		}
 	},
-	'prof_oak': {
+	'profoak': { // <-- CHANGED
+		name: 'Professor Oak', // <-- ADDED
 		dialogue: [
 			`Ah, [player]! I've been waiting for you.`,
 			`It's time you got your first Pokémon. Choose one!`,
 		],
-		onTalk: function (user, room, progress) { // <-- CHANGED
+		onTalk: function (user, room, progress) {
 			if (progress.eventFlags['got_starter']) {
 				this.sendReply(`Oak: How is your new Pokémon? Get out there and explore!`);
 				return;
@@ -117,16 +119,17 @@ const NPCS = {
 			user.sendTo(targetRoomId, `|uhtml|adventure-` + user.id + `|` + starterHtml);
 		}
 	},
-	'nurse_joy': {
+	'nursejoy': { // <-- CHANGED
+		name: 'Nurse Joy', // <-- ADDED
 		dialogue: [`Your Pokémon are fully healed! We hope to see you again!`],
-		onTalk: function (user, room, progress) { // <-- CHANGED
+		onTalk: function (user, room, progress) {
 			progress.team.forEach(pokemon => {
 				pokemon.hp = pokemon.maxhp;
 				pokemon.status = '';
 			});
 			progress.lastHealLocation = progress.location;
 			userProgress.set(user.id, progress);
-			this.sendReply(NPCS['nurse_joy'].dialogue[0]);
+			this.sendReply(NPCS['nursejoy'].dialogue[0]);
 			updateAdventureHTML(user, room);
 		}
 	}
@@ -185,8 +188,9 @@ function generateAdventureHTML(user: User, progress: PlayerProgress) {
 	if (location.npcs && location.npcs.length > 0) {
 		buttonsHtml += `<br><b>People:</b><br>`;
 		for (const npcId of location.npcs) {
+			const npcName = NPCS[npcId]?.name || npcId; // <-- USE PRETTY NAME
 			buttonsHtml += `<button name="send" value="/adventure talk ${npcId}" style="background: #9C27B0; color: white; padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer;">` +
-				`Talk to ${npcId}` +
+				`Talk to ${npcName}` + // <-- CHANGED
 				`</button>`;
 		}
 	}
@@ -425,7 +429,7 @@ export const commands: ChatCommands = {
 				inventory: { 'pokeball': 5, 'potion': 3 },
 				badges: [],
 				money: 3000,
-				eventFlags: { 'got_starter': false, 'awaiting_oak': true }, // ADDED awaiting_oak
+				eventFlags: { 'got_starter': false, 'awaiting_oak': true },
 				battleId: null,
 				lastHealLocation: 'player_home',
 			};
@@ -446,10 +450,9 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You can't go that way.`);
 			}
 
-			// --- NEW LOGIC: OAK INTERCEPTION ---
 			if (progress.location === 'player_home' && direction === 'out' && progress.eventFlags['awaiting_oak']) {
-				progress.location = 'oaks_lab'; // Teleport to lab
-				progress.eventFlags['awaiting_oak'] = false; // Flag is done
+				progress.location = 'oaks_lab';
+				progress.eventFlags['awaiting_oak'] = false;
 				userProgress.set(user.id, progress);
 				
 				this.sendReply(`As you step outside, Professor Oak finds you!`);
@@ -457,33 +460,27 @@ export const commands: ChatCommands = {
 				this.sendReply(`You follow him to his lab.`);
 				
 				updateAdventureHTML(user, room);
-				return; // Stop normal move logic
+				return;
 			}
-			// --- END NEW LOGIC ---
 
 			const newLocationId = currentLocation.exits[direction];
 			
-			// --- NEW LOGIC: BLOCK ROUTE 1 ---
 			if (newLocationId === 'route_1' && !progress.eventFlags['got_starter']) {
 				this.errorReply(`It's dangerous to go into the tall grass without a Pokémon!`);
 				this.sendReply(`You should go talk to Professor Oak first.`);
 				return;
 			}
-			// --- END NEW LOGIC ---
 
 			progress.location = newLocationId;
 			userProgress.set(user.id, progress);
 			
 			const newLocation = LOCATIONS[newLocationId];
 
-			// Check for wild encounters
 			if (newLocation.wildEncounters && progress.team.length > 0) {
 				const encounterRoll = Math.random();
-				// Simple 30% encounter rate for this example
 				if (encounterRoll < 0.3) { 
-					// Pass `this` context to the function
 					if (startWildBattle.call(this, user, room, progress)) {
-						return; // Stop here, battle started
+						return;
 					}
 				}
 			}
@@ -514,15 +511,16 @@ export const commands: ChatCommands = {
 			if (!progress) return this.errorReply(`You haven’t started an adventure yet! Use /adventure start.`);
 			if (progress.battleId) return this.errorReply(`You are in a battle! Finish the battle first.`);
 
-			const npcId = toID(target);
+			const npcId = toID(target); // This is now 'profoak'
 			const currentLocation = LOCATIONS[progress.location];
+			
+			// The check will now be: ['profoak'].includes('profoak') which is TRUE
 			if (!currentLocation || !currentLocation.npcs || !currentLocation.npcs.includes(npcId)) {
 				return this.errorReply(`That person isn't here.`);
 			}
 
-			const npc = NPCS[npcId];
+			const npc = NPCS[npcId]; // This will correctly get NPCS['profoak']
 			if (npc.onTalk) {
-				// Pass `this` context
 				npc.onTalk.call(this, user, room, progress);
 			} else {
 				this.sendReply(`${npc.dialogue[0]}`);
@@ -600,7 +598,7 @@ export const commands: ChatCommands = {
 			
 			userProgress.delete(user.id);
 		},
-
+		
 		// /adventure help
 		help: function (target, room, user) {
 			this.sendReply(
