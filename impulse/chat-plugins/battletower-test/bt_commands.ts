@@ -55,7 +55,7 @@ const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulssearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
 // --- They just serve as a team template. ---
@@ -207,8 +207,8 @@ function generateRandomPokemon(level: number, pool: string[], item: string = '')
   
   // Get 4 random moves from level-up learnset + TMs
   // --- THIS IS THE FIX ---
-  // Call getLearnset on Dex.dex (the instance)
-  const learnset = Dex.dex.getLearnset(species.id);
+  // Call getLearnset on Dex.data.Learnsets (the data object)
+  const learnset = Dex.data.Learnsets[species.id];
   // --- END FIX ---
 
   let possibleMoves: string[] = [];
@@ -413,7 +413,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -680,8 +680,8 @@ export const commands: Chat.ChatCommands = {
 
       // Check learnset
       // --- THIS IS THE FIX ---
-      // Call getLearnset on Dex.dex (the instance)
-      const learnset = Dex.dex.getLearnset(species.id);
+      // Call getLearnset on Dex.data.Learnsets (the data object)
+      const learnset = Dex.data.Learnsets[species.id];
       // --- END FIX ---
       
       if (!learnset || !learnset[move.id]) {
