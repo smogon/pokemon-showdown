@@ -500,20 +500,7 @@ export const commands: ChatCommands = {
 				{cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites."},
 				{cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors."},
 				{cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user."},
-				{cmd: "/tcg awardcredits [user], [amount]", desc: "Grant credits to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardcredits princeskygit, 1000</code>"},
-				{cmd: "/tcg awardpack [user], [setId], [quantity]", desc: "Grant pack(s) to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardpack princeskygit, sv1, 5</code>"},
-				{cmd: "/tcg awardcard [user], [cardId], [quantity]", desc: "Grant card(s) to a user. Requires: &.<br><b>Example:</b> <code>/tcg awardcard princeskygit, sv1-1, 3</code>"},
-				{cmd: "/tcg takecard [user], [cardId], [quantity]", desc: "Remove card(s) from a user. Requires: &.<br><b>Example:</b> <code>/tcg takecard princeskygit, sv1-1, 2</code>"},
-				{cmd: "/tcg takecredits [user], [amount]", desc: "Remove credits from a user. Requires: &.<br><b>Example:</b> <code>/tcg takecredits princeskygit, 500</code>"},
-				{cmd: "/tcg takepack [user], [setId], [quantity]", desc: "Remove pack(s) from a user. Requires: &.<br><b>Example:</b> <code>/tcg takepack princeskygit, sv1, 3</code>"},
-				{cmd: "/tcg wipecollection [user]", desc: "Reset a user's entire TCG collection and profile. Requires: &."},
-				{cmd: "/tcg refreshshop", desc: "Force the daily TCG shop to load new packs. Requires: &."},
-				{cmd: "/tcg resetdaily [user | all]", desc: "Reset the daily pack cooldown for a user or all users. Requires: &."},
-				{cmd: "/tcg loadcache", desc: "Reloads the TCG card and set data into memory. Requires: &."},
-				{cmd: "/tcg cachestats", desc: "Shows statistics about the in-memory cache. Requires: &."},
-				{cmd: "/tcg clearcache", desc: "Clears all TCG data from the in-memory cache. Requires: &."},
-				{cmd: "/tcg recalculateallstats", desc: "Recalculates stats for ALL users. Requires: &."},
-				{cmd: "/tcg createindexes", desc: "Creates all important mongodb indexes for fast querying. Requires: &."},
+				{cmd: "/tcg adminhelp", desc: "Shows all admin commands."},
 			];
 			const html = `<center><strong>TCG Commands:</strong><br>Alias: /pokemontcg</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({cmd, desc}, i) =>
