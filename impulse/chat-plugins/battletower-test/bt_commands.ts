@@ -4,7 +4,7 @@
 */
 
 import { Dex } from '../../../sim/dex';
-import { Teams } from '../../../sim/teams'; // Restored import
+// import { Teams } from '../../../sim/teams'; // No longer needed
 
 interface GymLeader {
   botUserId: string;
@@ -35,13 +35,27 @@ interface RewardOption {
   apply: (state: RunState) => string[] | void;
 }
 
-// --- REMOVED: PRESET_TEAMS constant ---
+// --- NEW: Pokemon Pools ---
+const STARTER_POOL: string[] = [
+  'Bulbasaur', 'Charmander', 'Squirtle', 'Pikachu', 'Eevee', 'Machop', 'Abra', 'Geodude', 'Gastly', 'Ponyta',
+];
+
+const POKEMON_REWARD_POOL: string[] = [
+  'Sandshrew', 'Vulpix', 'Growlithe', 'Poliwag', 'Bellsprout', 'Magnemite', 'Grimer', 'Shellder', 'Drowzee',
+  'Koffing', 'Rhyhorn', 'Horsea', 'Scyther', 'Pinsir', 'Magikarp', 'Lapras', 'Dratini', 'Snorlax',
+  'Chikorita', 'Cyndaquil', 'Totodile', 'Sentret', 'Hoothoot', 'Mareep', 'Wooper', 'Snubbull', 'Heracross',
+  'Teddiursa', 'Swinub', 'Houndour', 'Phanpy', 'Larvitar',
+];
+// --- End Pokemon Pools ---
+
+// --- NEW: Pending Starter Choice Map ---
+const pendingStarters: Map<string, any[]> = new Map();
 
 const activeRuns: Map<string, RunState> = new Map();
 const pendingRewards: Map<string, RewardOption[]> = new Map();
 
 // --- NEW: Define a single User ID for the Gym Challenge Bot ---
-const GYM_CHALLENGE_BOT_ID = 'impulseearth';
+const GYM_CHALLENGE_BOT_ID = 'gymchallengebot';
 
 // --- NOTE: These levels are now IGNORED by createGymBattle ---
 // --- They just serve as a team template. ---
@@ -145,6 +159,38 @@ const TM_POOL: string[] = [
   'stealthrock', 'toxic', 'surf', 'scald', 'voltswitch', 'uturn', 'willowisp',
 ];
 
+// --- NEW: Helper function to generate Pokemon ---
+function generateRandomPokemon(level: number, pool: string[]): any {
+  const speciesName = pool[Math.floor(Math.random() * pool.length)];
+  const species = Dex.species.get(speciesName);
+  
+  // Get 4 random moves from level-up learnset + TMs
+  const learnset = Dex.species.getLearnset(species.id);
+  let possibleMoves: string[] = [];
+  if (learnset) {
+      for (const moveid in learnset) {
+          // Check if it's a level-up move learnable at or below current level, or a TM move
+          const canLearn = learnset[moveid].some(source => (source.startsWith('9L') && parseInt(source.slice(2)) <= level) || source.startsWith('9M'));
+          if (canLearn) {
+              possibleMoves.push(moveid);
+          }
+      }
+  }
+  // Fallback if no moves found (shouldn't happen with good pool)
+  if (possibleMoves.length < 4) {
+      possibleMoves.push('tackle', 'growl', 'scratch', 'leer');
+  }
+  
+  const moves = [...possibleMoves].sort(() => 0.5 - Math.random()).slice(0, 4);
+  
+  return {
+    species: species.name,
+    item: '',
+    level: level,
+    moves: moves,
+  };
+}
+
 function getRandomTMs(count: number = 3): string[] {
   const shuffled = [...TM_POOL].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
@@ -206,6 +252,27 @@ const REWARD_POOL: RewardOption[] = [
       return evolutionMessages;
     }
   },
+  // --- NEW: Add Pokemon Reward ---
+  {
+    id: 'add_pokemon',
+    name: 'New Teammate',
+    description: 'A new random Pokemon (max 3) joins your team.',
+    apply: (state: RunState): string[] | void => {
+      if (state.teamData.length >= 3) {
+        return ['Your team is already full!'];
+      }
+      
+      let totalLevel = 0;
+      for (const mon of state.teamData) {
+        totalLevel += mon.level;
+      }
+      const playerAvgLevel = Math.round(totalLevel / state.teamData.length);
+      
+      const newMon = generateRandomPokemon(playerAvgLevel, POKEMON_REWARD_POOL);
+      state.teamData.push(newMon);
+      return [`${newMon.species} joined your team at Lvl ${newMon.level}!`];
+    }
+  },
   {
     id: 'extra_life',
     name: 'Extra Life',
@@ -251,6 +318,7 @@ function createGymBattle(user: any, gymIndex: number) {
     const stats = species.baseStats;
     totalBST += stats.hp + stats.atk + stats.def + stats.spa + stats.spd + stats.spe;
   }
+  // Handles team size of 1, 2, or 3
   const playerAvgBST = totalBST / state.teamData.length;
 
   // Base level scales with gym progression
@@ -278,7 +346,7 @@ function createGymBattle(user: any, gymIndex: number) {
   }
   // --- End Dynamic Scaling ---
 
-  const btUtils = require('./bt_utils');
+  const btUtils = require('./battletower-test/bt_utils');
   
   return btUtils.createBattle({
     user: user,
@@ -349,33 +417,52 @@ export const commands: Chat.ChatCommands = {
       if (activeRuns.has(user.id)) {
         return this.errorReply("You already have an active gym challenge run.");
       }
+      if (pendingStarters.has(user.id)) {
+        return this.errorReply("You must choose your starter! Use /gymchallenge choose [1-3]");
+      }
       
-      // --- MODIFIED: Reverted to accept packed team ---
-      const teamText = target.trim();
-      if (!teamText) {
-        return this.errorReply("Usage: /gymchallenge start [packed team]");
+      if (target.trim()) {
+        return this.errorReply("Usage: /gymchallenge start (do not provide a team)");
       }
 
-      let team;
-      try {
-        team = Teams.unpack(teamText);
-        if (!team || team.length === 0) {
-          return this.errorReply("Invalid team format.");
-        }
-        // --- NEW: Limit team size to 3 for balance ---
-        if (team.length > 3) {
-          return this.errorReply("Your team can have a maximum of 3 Pokemon.");
-        }
-      } catch (e) {
-        return this.errorReply("Invalid team format.");
+      // Generate 3 starter options
+      const options: any[] = [];
+      const pool = [...STARTER_POOL].sort(() => 0.5 - Math.random());
+      for (let i = 0; i < 3; i++) {
+        // Starters are generated from their own pool, not the main one
+        const starterPool: string[] = [pool[i]];
+        options.push(generateRandomPokemon(13, starterPool)); // Start at level 13
       }
-      // --- End modifications ---
+
+      pendingStarters.set(user.id, options);
+
+      this.sendReply("Choose your starter Pokemon with /gymchallenge choose [1-3]:");
+      options.forEach((mon, i) => {
+        this.sendReplyBox(`${i + 1}. <strong>${mon.species}</strong> (Lvl ${mon.level}) - Moves: ${mon.moves.join(', ')}`);
+      });
+    },
+
+    choose(target, room, user) {
+      if (activeRuns.has(user.id)) {
+        return this.errorReply("You already have an active gym challenge run.");
+      }
+      const options = pendingStarters.get(user.id);
+      if (!options) {
+        return this.errorReply("You don't have a starter selection pending. Use /gymchallenge start");
+      }
+
+      const choice = parseInt(target.trim());
+      if (isNaN(choice) || choice < 1 || choice > options.length) {
+        return this.errorReply(`Choose a starter between 1 and ${options.length}.`);
+      }
+
+      const chosenPokemon = options[choice - 1];
 
       const state: RunState = {
         userId: user.id,
         currentGym: 0,
         lives: 3,
-        teamData: team, // Use the user's provided team
+        teamData: [chosenPokemon], // Team starts with only the chosen starter
         rewards: [],
         badges: [],
         startTime: Date.now(),
@@ -386,13 +473,14 @@ export const commands: Chat.ChatCommands = {
       };
 
       activeRuns.set(user.id, state);
-      this.sendReply(`Gym Challenge started with your team! You have 3 lives. Use /gymchallenge next to challenge the first gym.`);
+      pendingStarters.delete(user.id);
+      this.sendReply(`Gym Challenge started with ${chosenPokemon.species}! You have 3 lives. Use /gymchallenge next to challenge the first gym.`);
     },
 
     next(target, room, user) {
       const state = activeRuns.get(user.id);
       if (!state) {
-        return this.errorReply("You don't have an active gym challenge. Use /gymchallenge start [team] to begin.");
+        return this.errorReply("You don't have an active gym challenge. Use /gymchallenge start to begin.");
       }
 
       if (pendingRewards.has(user.id)) {
@@ -419,7 +507,7 @@ export const commands: Chat.ChatCommands = {
       }
 
       if (state.lives <= 0) {
-        return this.errorReply("You have no lives remaining. Start a new run with /gymchallenge start [team]");
+        return this.errorReply("You have no lives remaining. Start a new run with /gymchallenge start");
       }
 
       const battle = createGymBattle(user, state.currentGym);
@@ -466,7 +554,7 @@ export const commands: Chat.ChatCommands = {
       if (selectedReward.id === 'tm_case' && newTMs.length > 0) {
         this.sendReply(`You received: ${selectedReward.name}!`);
         this.sendReplyBox(`You got 3 TMs: <strong>${newTMs.join(', ')}</strong><br />Use <code>/gymchallenge teach [pokemon number] | [move name] | [slot to replace]</code>`);
-      } else if (selectedReward.id === 'level_boost') {
+      } else if (selectedReward.id === 'level_boost' || selectedReward.id === 'add_pokemon') {
         this.sendReply(`You received: ${selectedReward.name}!`);
         if (applyResult && applyResult.length > 0) {
           this.sendReplyBox(applyResult.join('<br />'));
@@ -603,12 +691,13 @@ export const commands: Chat.ChatCommands = {
     },
 
     abandon(target, room, user) {
-      if (!activeRuns.has(user.id)) {
-        return this.errorReply("You don't have an active gym challenge.");
+      if (!activeRuns.has(user.id) && !pendingStarters.has(user.id)) {
+        return this.errorReply("You don't have an active gym challenge or pending starter choice.");
       }
 
       activeRuns.delete(user.id);
       pendingRewards.delete(user.id);
+      pendingStarters.delete(user.id); // Clear pending starter choice
       this.sendReply("Your gym challenge run has been abandoned.");
     },
   },
