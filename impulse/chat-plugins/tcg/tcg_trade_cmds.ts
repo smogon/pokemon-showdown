@@ -57,6 +57,20 @@ export const tradeCommands: ChatCommands = {
 		const targetUser = Users.get(targetUserId);
 		if (!targetUser) return this.errorReply(`User "${target}" is not online.`);
 
+		const profiles = userProfilesCollection;
+		const [userProfile, targetProfile] = await Promise.all([
+			profiles.findOne({ userId: user.id }),
+			profiles.findOne({ userId: targetUserId })
+		]);
+
+		if (userProfile?.tradesEnabled === false) {
+			return this.errorReply("You have disabled trades. Use /tcg tradesenable to enable them.");
+		}
+
+		if (targetProfile?.tradesEnabled === false) {
+			return this.errorReply(`${targetUser.name} has disabled trades.`);
+		}
+
 		const existingTrade = getUserTrade(user.id);
 		if (existingTrade) {
 			return this.errorReply("You already have an active trade. Use /tcg tradecancel to cancel it first.");
@@ -82,6 +96,40 @@ export const tradeCommands: ChatCommands = {
 
 		this.sendReply(`Trade initiated with ${targetUser.name}. Use /tcg tradeadd to add items.`);
 		targetUser.popup(`|html|${user.name} wants to trade with you! Use <code>/tcg tradeadd [cardId], [quantity]</code> or <code>/tcg tradeaddcredits [amount]</code> to add items, then <code>/tcg tradeaccept</code> to accept.`);
+	},
+
+	async tradedisable(target, room, user) {
+		try {
+			const profiles = userProfilesCollection;
+			const now = new Date().toISOString();
+
+			await profiles.updateOne(
+				{ userId: user.id },
+				{ $set: { tradesEnabled: false, lastUpdatedAt: now } },
+				{ upsert: true }
+			);
+
+			this.sendReply("You have disabled trades. Use /tcg tradesenable to re-enable them.");
+		} catch (error) {
+			return this.errorReply("An error occurred while disabling trades.");
+		}
+	},
+
+	async tradeenable(target, room, user) {
+		try {
+			const profiles = userProfilesCollection;
+			const now = new Date().toISOString();
+
+			await profiles.updateOne(
+				{ userId: user.id },
+				{ $set: { tradesEnabled: true, lastUpdatedAt: now } },
+				{ upsert: true }
+			);
+
+			this.sendReply("You have enabled trades. Other users can now trade with you.");
+		} catch (error) {
+			return this.errorReply("An error occurred while enabling trades.");
+		}
 	},
 
 	async tradeadd(target, room, user) {
