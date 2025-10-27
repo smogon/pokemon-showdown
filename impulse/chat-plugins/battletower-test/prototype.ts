@@ -403,7 +403,7 @@ export const commands: ChatCommands = {
 			const pokemonList = progress.starter ? [progress.starter, ...progress.inventory] : progress.inventory;
 
 			if (progress.node === 'start_gym_battle') {
-				const botUser = Users.get('musaddiktemkar');
+				const botUser = Users.get('impulseearth');
 				if (!botUser || !botUser.connected) {
 					progress.node = 'gym_defeat';
 					const errorHtml = '<div style="border: 1px solid #ccc; padding: 10px;">' +
