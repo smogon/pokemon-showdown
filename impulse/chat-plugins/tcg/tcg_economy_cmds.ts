@@ -9,6 +9,7 @@ import { generateThemedTable } from '../../utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection } from './tcg_collections';
 
 const PACK_COST = 0;
+const PACKS_IN_SHOP = '20';
 
 export const economyCommands: ChatCommands = {
 	async shop(target, room, user) {
@@ -28,7 +29,7 @@ export const economyCommands: ChatCommands = {
 							setReleaseDate: { $first: "$setReleaseDate" }
 						}
 					},
-					{ $sample: { size: 10 } },
+					{ $sample: { size: PACKS_IN_SHOP } },
 					{ $sort: { setReleaseDate: -1 } }
 				]);
 
