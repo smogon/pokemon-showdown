@@ -158,6 +158,7 @@ export const commands: Chat.ChatCommands = {
 					if (member?.connected) {
 						(member as any).clanTag = clan.tag;
 						member.updateIdentity();
+						member.update();
 						refreshedCount++;
 					}
 				}
