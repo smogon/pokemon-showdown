@@ -28,10 +28,6 @@ const ALL_PERMISSIONS: ClanPermissions = {
 	canEditTag: true,
 	canSetMotw: true,
 	canManageChat: true,
-	canBankWithdraw: true,
-	canBankDeposit: true,
-	canManageAllies: true,
-	canManageRivals: true,
 	canEditRanks: true,
 };
 
