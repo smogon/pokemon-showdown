@@ -10,8 +10,6 @@ export type ClanPermission =
 	| 'canEditTag'
 	| 'canSetMotw'
 	| 'canManageChat'
-	| 'canManageAllies'
-	| 'canManageRivals'
 	| 'canEditRanks'
 
 export interface ClanPermissions {
