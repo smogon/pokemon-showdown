@@ -1766,5 +1766,96 @@ export const commands: Chat.ChatCommands = {
 		const output = generateThemedTable(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
+
+	async profile(target, room, user) {
+	if (!this.runBroadcast()) return;
+	let clan = null;
+	let lookupType = '';
+
+	if (target) {
+		const id = toID(target);
+
+		// 1. Try to find by clan id
+		clan = await Clans.findOne({ _id: id });
+		if (clan) {
+			lookupType = 'clanId';
+		} else {
+			// 2. Try to find by clan name (case-insensitive)
+			clan = await Clans.findOne({ name: new RegExp('^' + target.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$', 'i') });
+			if (clan) {
+				lookupType = 'clanName';
+			} else {
+				// 3. Try to find user by username/userid, then their clan
+				const userId = toID(target);
+				const userClanInfo = await UserClans.findOne({ _id: userId });
+				const memberOfId = userClanInfo?.memberOf;
+				if (memberOfId) {
+					clan = await Clans.findOne({ _id: memberOfId });
+					if (clan) lookupType = 'userClan';
+				}
+			}
+		}
+	} else {
+		// 4. Default to current user's clan
+		const userClanInfo = await UserClans.findOne({ _id: user.id });
+		const memberOfId = userClanInfo?.memberOf;
+		if (memberOfId) {
+			clan = await Clans.findOne({ _id: memberOfId });
+			if (clan) lookupType = 'selfClan';
+		}
+	}
+
+	if (!clan) {
+		if (target) {
+			return this.errorReply(
+				`No clan found for "${target}". (Not a clan name, ID, or user currently in a clan)`
+			);
+		} else {
+			return this.errorReply("You are not a member of any clan.");
+		}
+	}
+
+	const w = 100, h = 100;
+	const iconUrl = clan.icon?.trim()
+		? clan.icon
+		: `https://via.placeholder.com/${w}x${h}?text=No+Icon`;
+	const ownerName = clan.owner || "-";
+	const memberCount = Object.keys(clan.members || {}).length;
+	const desc = clan.desc || "";
+	const tag = clan.tag || "";
+	const createdDate = clan.created ? new Date(clan.created).toLocaleDateString() : "-";
+	const rivalsCount = Array.isArray(clan.rivals) ? clan.rivals.length : 0;
+	const alliesCount = Array.isArray(clan.allies) ? clan.allies.length : 0;
+	const stats = clan.stats || {};
+	const tourWins = stats.tourWins ?? 0;
+	const eventWins = stats.eventWins ?? 0;
+	const totalPointsEarned = stats.totalPointsEarned ?? 0;
+
+	let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
+	html += `<div style="flex: 0 0 ${w + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
+	html += `<div style="margin-bottom: 10px;">`;
+	html += `<img src="${iconUrl}" width="${w}" height="${h}" alt="${clan.name} Icon" title="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
+	html += `</div>`;
+	html += `<div style="font-size: 1.3em; font-weight: bold; margin-bottom: 6px;">${clan.name}</div>`;
+	if (tag) html += `<div style="font-size: 0.9em; color: #555; margin-bottom: 8px;">[${tag}]</div>`;
+	html += `<div style="font-size: 0.95em; color: #444; margin-bottom: 9px; white-space: pre-wrap;">${desc}</div>`;
+	html += `</div>`;
+	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
+	html += `<strong style="font-size: 22px;">Clan Profile</strong><br />`;
+	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+	html += `<strong>Clan Points:</strong> ${clan.points.toLocaleString()}<br />`;
+	html += `<strong>Level:</strong> ${clan.level}<br />`;
+	html += `<strong>Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
+	html += `<strong>Members:</strong> ${memberCount}<br />`;
+	html += `<strong>Owner:</strong> ${ownerName}<br />`;
+	html += `<strong>Tour Wins:</strong> ${tourWins}<br />`;
+	html += `<strong>Event Wins:</strong> ${eventWins}<br />`;
+	html += `<strong>Total Points Earned:</strong> ${totalPointsEarned.toLocaleString()}<br />`;
+	html += `<strong>Allies:</strong> ${alliesCount}<br />`;
+	html += `<strong>Rivals:</strong> ${rivalsCount}<br />`;
+	html += `<strong>Created:</strong> ${createdDate}<br />`;
+	html += `</div></div></div>`;
+	this.sendReply(`|html|${html}`);
+},
   },
 };
