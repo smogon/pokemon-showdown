@@ -98,7 +98,7 @@ function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermiss
 export const commands: Chat.ChatCommands = {
 	clan: {
 		async create(target, room, user) {
-			this.checkCan('bypassall');
+			this.checkCan('roomowner');
 
 			const [name, ownerUsername] = target.split(',').map(s => s.trim());
 			const clanName = name || '';
@@ -222,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async delete(target, room, user) {
-			this.checkCan('bypassall');
+			this.checkCan('roomowner');
 
 			const clanId = toID(target);
 			if (!clanId) {
