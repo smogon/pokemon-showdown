@@ -1404,7 +1404,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						
 						// Add clan points to reward message
 						if (group.clanPoints > 0) {
-							rewardParts.push(`<span style="font-weight:bold;">${group.clanPoints} clan points</span> (if in a clan)`);
+							rewardParts.push(`<span style="font-weight:bold;">${group.clanPoints} clan points</span>`);
 						}
 
 						if (rewardParts.length > 0) {
