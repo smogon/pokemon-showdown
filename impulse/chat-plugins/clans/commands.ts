@@ -78,14 +78,6 @@ const DEFAULT_STATS: ClanStats = {
 	totalPointsEarned: 0,
 };
 
-/**
- * Formats a Date object into a string representation.
- * @param date The Date object to format
- * @param options Formatting options:
- *   - date: if true, includes the date (YYYY-MM-DD format)
- *   - time: if true, includes the time (HH:MM:SS format)
- * @returns Formatted date/time string
- */
 function to(date: Date, options: { date?: boolean; time?: boolean } = {}): string {
 	if (!(date instanceof Date) || isNaN(date.getTime())) {
 		return '';
@@ -302,51 +294,39 @@ export const commands: Chat.ChatCommands = {
 			const chatRoom = Rooms.get(chatRoomId);
 
 			try {
-				// Step 1: Destroy the chatroom first (if it exists)
 				if (chatRoom) {
-					// Notify all users in the room before destruction
 					chatRoom.add(`|html|<div class="broadcast-red"><b>This clan chatroom is being permanently deleted by ${user.name}.</b></div>`).update();
 			
-					// Give users a moment to see the message
 					await new Promise(resolve => setTimeout(resolve, 1000));
 			
-					// Kick all users from the room
 					for (const userid in chatRoom.users) {
 						const roomUser = chatRoom.users[userid];
 						roomUser.leaveRoom(chatRoom);
 					}
 			
-					// Deregister from persistent storage
 					Rooms.global.deregisterChatRoom(chatRoom.roomid);
 			
-					// Delist from active rooms
 					Rooms.global.delistChatRoom(chatRoom.roomid);
 			
-					// Destroy the room instance
 					chatRoom.destroy();
 		
-					// Force immediate write to config file (bypass throttle)
 					await FS('config/chatrooms.json').writeUpdate(() => 
 						JSON.stringify(Rooms.global.settingsList)
 						.replace(/\{"title":/g, '\n{"title":')
 						.replace(/\]$/, '\n]'));
 				}
 
-				// Step 2: Delete all clan-related database entries
 				await Clans.deleteOne({ _id: clanId });
 		
-				// Step 3: Remove clan membership from all users
 				await UserClans.updateMany(
 					{ memberOf: clanId }, 
 					{ $unset: { memberOf: 1 } }
 				);
 		
-				// Step 4: Delete all clan logs
 				await ClanLogs.deleteMany({ clanId: clanId });
 				await ClanPointsLogs.deleteMany({ clanId: clanId });
 				await ClanBankLogs.deleteMany({ clanId: clanId });
 
-				// Step 5: Notify the owner (if online)
 				if (ownerUser?.connected) {
 					ownerUser.popup(
 						`|html|<div class="broadcast-red">` +
@@ -356,10 +336,9 @@ export const commands: Chat.ChatCommands = {
 					);
 				}
 
-				// Step 6: Notify all former clan members (if online)
 				const memberIds = Object.keys(clan.members);
 				for (const memberId of memberIds) {
-					if (memberId === ownerId) continue; // Already notified owner
+					if (memberId === ownerId) continue; 
 					const member = Users.getExact(memberId);
 					if (member?.connected) {
 						member.popup(
@@ -369,7 +348,6 @@ export const commands: Chat.ChatCommands = {
 						);
 					}
 				}
-				// Step 8: Success confirmation
 				this.sendReply(`Clan "${clan.name}" (${clanId}) has been successfully deleted.`);
 				Monitor.log(`[Clans] ${user.name} deleted clan: ${clan.name} (${clanId}) with ${memberIds.length} members`);
 		
@@ -381,7 +359,6 @@ export const commands: Chat.ChatCommands = {
 					user: user.name,
 				});
 		
-				// Attempt rollback notification
 				this.privateModAction(`(CRITICAL: Clan deletion failed for ${clanId}. Manual verification required.)`);
 			}
 		},
@@ -792,14 +769,12 @@ export const commands: Chat.ChatCommands = {
 		const value = target.trim().toLowerCase();
 		const actorId = user.id;
 
-		// Parse the input value
 		let newInviteOnlyStatus: boolean;
 		if (value === 'on' || value === 'true' || value === '1') {
 			newInviteOnlyStatus = true;
 		} else if (value === 'off' || value === 'false' || value === '0') {
 			newInviteOnlyStatus = false;
 		} else if (value === 'toggle') {
-			// Will be determined after fetching the clan
 			newInviteOnlyStatus = null as any;
 		} else {
 			return this.errorReply("Usage: /clan inviteonly [on/off/toggle]");
@@ -817,12 +792,10 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to change invite-only mode.`);
 		}
 
-		// Handle toggle case
 		if (newInviteOnlyStatus === null) {
 			newInviteOnlyStatus = !clan.inviteOnly;
 		}
 
-		// Check if status is already in desired state
 		if (clan.inviteOnly === newInviteOnlyStatus) {
 			const currentStatus = newInviteOnlyStatus ? 'already invite-only' : 'already open to all users';
 			return this.errorReply(`The clan is ${currentStatus}.`);
@@ -830,13 +803,11 @@ export const commands: Chat.ChatCommands = {
 
 		const oldValue = clan.inviteOnly;
 
-		// Update the clan in database
 		await Clans.updateOne(
 			{ _id: clanId },
 			{ $set: { inviteOnly: newInviteOnlyStatus } }
 		);
 
-		// Log the change
 		await ClanLogs.insertOne({
 			clanId: clanId,
 			timestamp: Date.now(),
@@ -847,14 +818,12 @@ export const commands: Chat.ChatCommands = {
 			note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
 		});
 
-		// Announce to the clan room
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
 			const statusText = newInviteOnlyStatus ? 'is now invite-only' : 'is now open to all users';
 			clanRoom.add(`|html|<div class="infobox"><center>${user.name} changed the clan setting: The clan ${statusText}.</center></div>`).update();
 		}
 
-		// Send confirmation to the user
 		const statusText = newInviteOnlyStatus ? 'enabled' : 'disabled';
 		this.sendReply(`You have successfully ${statusText} invite-only mode for ${clan.name}.`);
 	},
@@ -1550,7 +1519,6 @@ export const commands: Chat.ChatCommands = {
 		return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
 	}
 	
-	// Prevent setting same user as MOTW again
 	if (clan.memberOfTheWeek === targetId) {
 		return this.errorReply(`'${targetId}' is already the Member of the Week for ${clan.name}.`);
 	}
@@ -1558,13 +1526,11 @@ export const commands: Chat.ChatCommands = {
 	const oldMotw = clan.memberOfTheWeek;
 	const HOST_RANK = '^';
 
-	// Update database
 	await Clans.updateOne(
 		{ _id: clanId },
 		{ $set: { memberOfTheWeek: targetId } }
 	);
 
-	// Log the action
 	await ClanLogs.insertOne({
 		clanId: clanId,
 		timestamp: Date.now(),
@@ -1576,15 +1542,12 @@ export const commands: Chat.ChatCommands = {
 		note: `Set member of the week.`,
 	});
 
-	// Update room auth
 	const clanRoom = Rooms.get(clan.chatRoom);
 	if (clanRoom) {
-		// Demote previous MOTW if exists and is still connected
 		if (oldMotw && oldMotw !== targetId && clan.members[oldMotw]) {
 			const oldMotwMember = clan.members[oldMotw];
 			const oldMotwRank = clan.ranks[oldMotwMember.rank];
 			
-			// Map clan rank back to room rank
 			const roomRanks: { [key: string]: string } = {
 				'owner': '#',
 				'leader': '@',
@@ -1595,15 +1558,12 @@ export const commands: Chat.ChatCommands = {
 			clanRoom.auth.set(oldMotw, newRoomRank);
 		}
 
-		// Promote new MOTW to host rank
 		clanRoom.auth.set(targetId, HOST_RANK);
 		clanRoom.saveSettings();
 
-		// Announce in room
 		clanRoom.add(`|html|<div class="infobox"><center>${user.name} set <b>${targetId}</b> as the Member of the Week!</center></div>`).update();
 	}
 
-	// Notify the new MOTW
 	const targetUser = Users.getExact(targetId);
 	if (targetUser?.connected) {
 		targetUser.popup(`|html|<div class="infobox">Congratulations! You have been named <b>Member of the Week</b> in ${clan.name} by ${user.name}!</div>`);
