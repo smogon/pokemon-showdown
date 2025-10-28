@@ -15,6 +15,7 @@ import type {
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
+import { FS } from '../../../lib';
 
 const ALL_PERMISSIONS: ClanPermissions = {
 	canInvite: true,
@@ -320,7 +321,7 @@ export const commands: Chat.ChatCommands = {
 					ownerUser.popup(
 						`|html|<div class="broadcast-red">` +
 						`<b>Your clan "${clan.name" has been permanently deleted by ${user.name}.</b><br />` +
-						`All clan data, members, logs, and the chatroom (#${chatRoomId}) have been removed from the server.` +
+						`All clan data, members, logs, and the chatroom ${chatRoomId} have been removed from the server.` +
 						`</div>`
 					);
 				}
