@@ -320,7 +320,7 @@ export const commands: Chat.ChatCommands = {
 				if (ownerUser?.connected) {
 					ownerUser.popup(
 						`|html|<div class="broadcast-red">` +
-						`<b>Your clan "${clan.name" has been permanently deleted by ${user.name}.</b><br />` +
+						`<b>Your clan "${clan.name}" has been permanently deleted by ${user.name}.</b><br />` +
 						`All clan data, members, logs, and the chatroom ${chatRoomId} have been removed from the server.` +
 						`</div>`
 					);
@@ -334,7 +334,7 @@ export const commands: Chat.ChatCommands = {
 					if (member?.connected) {
 						member.popup(
 							`|html|<div class="broadcast-red">` +
-							`<b>The clan "${Utils.escapeHTML(clan.name)}" has been permanently deleted by ${user.name}.</b>` +
+							`<b>The clan "${clan.name}" has been permanently deleted by ${user.name}.</b>` +
 							`</div>`
 						);
 					}
