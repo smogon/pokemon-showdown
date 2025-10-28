@@ -535,6 +535,10 @@ export const commands: Chat.ChatCommands = {
 			if (clanRoom) {
 				clanRoom.auth.delete(targetId);
 				clanRoom.saveSettings();
+				const kickedUser = Users.get(targetId);
+				if (kickedUser && kickedUser.inRooms.has(clan.chatRoom)) {
+					kickedUser.leaveRoom(clanRoom);
+				}
 				clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
 			}
 			const targetUser = Users.getExact(targetId);
