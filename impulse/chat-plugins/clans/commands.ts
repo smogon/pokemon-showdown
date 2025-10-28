@@ -1211,67 +1211,67 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	async transfer(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to transfer ownership.");
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to transfer ownership.");
 
-		const targetId = toID(target);
-		const actorId = user.id;
+	const targetId = toID(target);
+	const actorId = user.id;
 
-		if (!targetId) return this.errorReply("Specify the user you wish to transfer ownership to.");
-		if (targetId === actorId) return this.errorReply("You are already the owner.");
+	if (!targetId) return this.errorReply("Specify the user you wish to transfer ownership to.");
+	if (targetId === actorId) return this.errorReply("You are already the owner.");
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+	const actorClanInfo = await UserClans.findOne({ _id: actorId });
+	const clanId = actorClanInfo?.memberOf;
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		if (clan.owner !== actorId) {
-			return this.errorReply("Only the clan owner can transfer ownership.");
+	if (clan.owner !== actorId) {
+		return this.errorReply("Only the clan owner can transfer ownership.");
+	}
+
+	if (!clan.members[targetId]) {
+		return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
+	}
+
+	const oldOwnerRank = clan.members[targetId].rank;
+
+	await Clans.updateOne(
+		{ _id: clanId },
+		{
+			$set: {
+				owner: targetId,
+				[`members.${targetId}.rank`]: 'owner' as ID,
+				[`members.${actorId}.rank`]: 'leader' as ID,
+			},
 		}
+	);
 
-		if (!clan.members[targetId]) {
-			return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
-		}
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: actorId,
+		action: 'PROMOTE',
+		target: targetId,
+		oldValue: oldOwnerRank,
+		newValue: 'owner',
+		note: `Ownership transferred from ${actorId} to ${targetId}.`,
+	});
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		clanRoom.auth.set(targetId, '#');
+		clanRoom.auth.set(actorId, '@');
+		clanRoom.saveSettings();
+		clanRoom.add(`|html|<div class="infobox"><center>Clan ownership has been transferred from ${user.name} to ${targetId}.</center></div>`).update();
+	}
 
-		const oldOwnerRank = clan.members[targetId].rank;
-
-		await Clans.updateOne(
-			{ _id: clanId },
-			{
-				$set: {
-					owner: targetId,
-					[`members.${targetId}.rank`]: 'owner' as ID,
-					[`members.${actorId}.rank`]: 'leader' as ID,
-				},
-			}
-		);
-
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'PROMOTE',
-			target: targetId,
-			oldValue: oldOwnerRank,
-			newValue: 'owner',
-			note: `Ownership transferred from ${actorId} to ${targetId}.`,
-		});
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.auth.set(targetId, '#');
-			clanRoom.auth.set(actorId, '#');
-			clanRoom.saveSettings();
-			clanRoom.add(`|html|<div class="infobox"><center>Clan ownership has been transferred from ${user.name} to ${targetId}.</center></div>`).update();
-		}
-
-		const targetUser = Users.getExact(targetId);
-		if (targetUser?.connected) {
-			targetUser.popup(`|html|<div class="infobox">You are now the owner of <b>${clan.name}</b>! Ownership was transferred to you by ${user.name}.</div>`);
-		}
-		this.sendReply(`You transferred ownership of ${clan.name} to '${targetId}'. You are now a Leader.`);
+	const targetUser = Users.getExact(targetId);
+	if (targetUser?.connected) {
+		targetUser.popup(`|html|<div class="infobox">You are now the owner of <b>${clan.name}</b>! Ownership was transferred to you by ${user.name}.</div>`);
+	}
+	this.sendReply(`You transferred ownership of ${clan.name} to '${targetId}'. You are now a Leader.`);
 	},
 
 	async members(target, room, user) {
