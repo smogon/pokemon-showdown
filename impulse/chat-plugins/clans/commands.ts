@@ -1177,5 +1177,51 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReply(`You transferred ownership of ${clan.name} to '${targetId}'. You are now a Leader.`);
 	},
+
+	async members(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to view clan members.");
+
+		let clanId: ID;
+	
+		if (target) {
+			clanId = toID(target);
+		} else {
+			const userClanInfo = await UserClans.findOne({ _id: user.id });
+			clanId = userClanInfo?.memberOf as ID;
+			if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its members.");
+		}
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+		
+		const memberEntries = Object.entries(clan.members);
+		if (memberEntries.length === 0) {
+			return this.errorReply(`Clan '${clan.name}' has no members.`);
+		}
+
+		const sortedMembers = memberEntries.sort((a, b) => {
+			const rankA = clan.ranks[a[1].rank];
+			const rankB = clan.ranks[b[1].rank];
+			return rankB.permissionLevel - rankA.permissionLevel;
+		});
+
+		const dataRows: string[][] = [];
+		const headerRow = ['Username', 'Rank', 'Join Date', 'Points Contributed'];
+		const title = `${clan.name} Members (${memberEntries.length})`;
+
+		sortedMembers.forEach(([userId, memberData]) => {
+			const rank = clan.ranks[memberData.rank];
+			dataRows.push([
+				userId,
+				rank.name,
+				Utils.toDurationString(Date.now() - memberData.joinDate, {precision: 2}) + ' ago',
+				memberData.totalPointsContributed.toString(),
+			]);
+		});
+
+		const output = generateThemedTable(title, headerRow, dataRows);
+		this.sendReply(`|html|${output}`);
 	},
+  },
 };
