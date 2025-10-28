@@ -212,7 +212,7 @@ export const commands: Chat.ChatCommands = {
 				}
 
 				this.sendReply(`Clan "${clanName}" has been successfully created! Owner: ${ownerId}.`);
-				this.sendReply(`Persistent chatroom: #${chatRoomId} created/updated. Owner was set as room owner (#).`);
+				this.room.add(`|html|<div class="infobox"><center>Clan "${clanName}" has been successfully created! Owner: ${ownerId}.</center></div>`);
 			} catch (e) {
 				this.errorReply("An error occurred while creating the clan.");
 				await Clans.deleteOne({ _id: clanId });
