@@ -538,6 +538,7 @@ export const commands: Chat.ChatCommands = {
 				clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
 			}
 			const targetUser = Users.getExact(targetId);
+			targetUser.leaveRoom(clanRoom.roomid, this.connection);
 			if (targetUser?.connected) {
 				targetUser.popup(`|html|<div class="infobox">You have been kicked from the clan <b>${clan.name}</b> by ${user.name}.</div>`);
 			}
