@@ -11,11 +11,10 @@ export type ClanPermission =
 	| 'canSetMotw'
 	| 'canManageChat'
 	| 'canBankWithdraw'
+	| 'canBankDeposit'
 	| 'canManageAllies'
 	| 'canManageRivals'
 	| 'canEditRanks'
-	| 'canAddPoints'
-	| 'canRemovePoints';
 
 export interface ClanPermissions {
 	[key in ClanPermission]?: boolean;
