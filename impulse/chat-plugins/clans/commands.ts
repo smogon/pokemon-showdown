@@ -229,12 +229,9 @@ export const commands: Chat.ChatCommands = {
 				invites: [],
 				points: 0,
 				level: 1,
-				bank: 0,
 				chatRoom: chatRoomId,
 				icon: '',
 				lastActive: now,
-				allies: [],
-				rivals: [],
 				stats: DEFAULT_STATS,
 			};
 
