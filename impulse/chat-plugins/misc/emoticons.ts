@@ -136,78 +136,7 @@ export const chatfilter = function(message, user, room, connection, pmTarget, or
 };
 
 export const commands: Chat.ChatCommands = {
-	emoticon: {
-		async panel(target, room, user): Promise<void> {
-	this.checkCan('roomowner');
-	if (!this.runBroadcast()) return;
-
-	const emoteKeys = Object.keys(emoticons);
-	const currentSize = getEmoteSize();
-
-	let deleteButtonsHTML = '';
-	if (emoteKeys.length > 0) {
-		deleteButtonsHTML = emoteKeys.map(name => 
-			`<button name="send" value="/emoticon delete ${name}" style="padding: 8px 12px; margin: 5px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">❌ ${Chat.escapeHTML(name)}</button>`
-		).join('');
-	} else {
-		deleteButtonsHTML = '<p style="color: #999;">No emoticons to delete.</p>';
-	}
-
-	let html = `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">`;
-	html += `<div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 12px;">`;
-	html += `<h2 style="margin: 0 0 20px 0; color: #333; text-align: center; font-size: 24px;">🎭 Emoticon Control Panel</h2>`;
-	
-	html += `<div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">`;
-	html += `<h3 style="margin: 0 0 10px 0; color: #667eea; font-size: 18px;">➕ Add New Emoticon</h3>`;
-	html += `<p style="margin: 5px 0; color: #666; font-size: 13px;">Use the command below to add a new emoticon:</p>`;
-	html += `<div style="background: #2d2d2d; padding: 12px; border-radius: 6px; margin: 10px 0; font-family: monospace; color: #fff; font-size: 14px;">`;
-	html += `/emoticon add &lt;name&gt;, &lt;url&gt;`;
-	html += `</div>`;
-	html += `<p style="margin: 5px 0; color: #888; font-size: 12px;"><strong>Example:</strong> /emoticon add :smile:, https://example.com/smile.png</p>`;
-	html += `<button name="send" value="/emoticon add " style="padding: 10px 20px; margin-top: 10px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold;">📝 Start Adding</button>`;
-	html += `</div>`;
-
-	html += `<div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #ff9800;">`;
-	html += `<h3 style="margin: 0 0 10px 0; color: #ff9800; font-size: 18px;">🗑️ Delete Emoticons</h3>`;
-	html += `<p style="margin: 5px 0 15px 0; color: #666; font-size: 13px;">Click any button below to delete that emoticon:</p>`;
-	html += `<div style="max-height: 300px; overflow-y: auto; padding: 10px; background: white; border-radius: 6px;">`;
-	html += deleteButtonsHTML;
-	html += `</div>`;
-	html += `</div>`;
-
-	html += `<div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4caf50;">`;
-	html += `<h3 style="margin: 0 0 10px 0; color: #4caf50; font-size: 18px;">⚙️ Settings</h3>`;
-	html += `<p style="margin: 5px 0; color: #666; font-size: 13px;">Current emoticon size: <strong>${currentSize}px</strong></p>`;
-	html += `<div style="margin-top: 10px;">`;
-	html += `<button name="send" value="/emoticon size 24" style="padding: 8px 12px; margin: 5px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">24px</button>`;
-	html += `<button name="send" value="/emoticon size 32" style="padding: 8px 12px; margin: 5px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">32px (default)</button>`;
-	html += `<button name="send" value="/emoticon size 48" style="padding: 8px 12px; margin: 5px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">48px</button>`;
-	html += `<button name="send" value="/emoticon size 64" style="padding: 8px 12px; margin: 5px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">64px</button>`;
-	html += `</div>`;
-	html += `<div style="margin-top: 10px;">`;
-	html += `<button name="send" value="/emoticon toggle" style="padding: 10px 20px; background: #2196f3; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">🔄 Toggle Room Emoticons</button>`;
-	html += `</div>`;
-	html += `</div>`;
-
-	html += `<div style="background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63;">`;
-	html += `<h3 style="margin: 0 0 10px 0; color: #e91e63; font-size: 18px;">📋 Quick Commands</h3>`;
-	html += `<div style="font-size: 12px; color: #666; line-height: 1.8;">`;
-	html += `<button name="send" value="/emoticon " style="padding: 6px 12px; margin: 3px; background: #e91e63; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">View All Emoticons</button>`;
-	html += `<button name="send" value="/emoticon info " style="padding: 6px 12px; margin: 3px; background: #e91e63; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Info About Emoticon</button>`;
-	html += `<button name="send" value="/emoticon ignore" style="padding: 6px 12px; margin: 3px; background: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Ignore Emoticons</button>`;
-	html += `<button name="send" value="/emoticon unignore" style="padding: 6px 12px; margin: 3px; background: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Unignore Emoticons</button>`;
-	html += `</div>`;
-	html += `</div>`;
-
-	html += `<div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">`;
-	html += `<p style="margin: 0; color: #999; font-size: 11px;">Total Emoticons: ${emoteKeys.length} | Requires: Room Owner (&) for management</p>`;
-	html += `</div>`;
-	html += `</div>`;
-	html += `</div>`;
-
-	this.sendReply(`|html|${html}`);
-},
-		
+	emoticon: {		
 		async add(target, room, user): Promise<void> {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
