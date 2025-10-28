@@ -190,7 +190,7 @@ export const commands: Chat.ChatCommands = {
 						auth: {},
 						creationTime: Date.now(),
 						modjoin: '+',
-						isPrivate: 'hidden',
+						desc: newClan.desc,
 					};
 
 					newRoom = Rooms.createChatRoom(chatRoomId, chatRoomTitle, roomSettings);
