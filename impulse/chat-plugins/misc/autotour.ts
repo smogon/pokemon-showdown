@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* Auto Tournaments Commands
+*/
 import {ImpulseCollection} from '../../impulse-db';
 import {generateThemedTable} from '../../utils';
 import {nameColor} from '../../colors';
@@ -443,7 +447,7 @@ export const commands: Chat.ChatCommands = {
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
 				`</ul>`;
-			this.sendReplyBox(html);
+			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
 		},
 	},
 };
