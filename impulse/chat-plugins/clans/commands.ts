@@ -1787,7 +1787,6 @@ export const commands: Chat.ChatCommands = {
 
 	const totalMembers = Object.keys(clan.members).length;
 	const clanAge = toDurationString(Date.now() - clan.created);
-	const lastActive = toDurationString(Date.now() - clan.lastActive);
 	const ownerUser = Users.getExact(clan.owner);
 	const ownerName = ownerUser?.name || clan.owner;
 	const motwUser = clan.memberOfTheWeek ? Users.getExact(clan.memberOfTheWeek) : null;
@@ -1812,23 +1811,17 @@ export const commands: Chat.ChatCommands = {
 	
 	html += `</div>`;
 	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
-	html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
+	html += `<strong style="font-size: 22px;">${clan.name} (${clan.tag})</strong><br />`;
 	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
-	html += `<strong>Tag:</strong> [${clan.tag}]<br />`;
 	html += `<strong>Owner:</strong> ${ownerName}<br />`;
 	html += `<strong>Members:</strong> ${totalMembers}<br />`;
-	html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
 	html += `<strong>Level:</strong> ${clan.level}<br />`;
-	html += `<strong>Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
-	html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
+	html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
 	html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins.toLocaleString()}<br />`;
 	html += `<strong>Event Wins:</strong> ${clan.stats.eventWins.toLocaleString()}<br />`;
-	html += `<strong>Total Points Earned:</strong> ${clan.stats.totalPointsEarned.toLocaleString()}<br />`;
-	html += `<strong>Created:</strong> ${clanAge} ago<br />`;
-	html += `<strong>Last Active:</strong> ${lastActive} ago<br />`;
+	html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
 	html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
-	html += `<strong>Allies:</strong> ${clan.allies.length}<br />`;
-	html += `<strong>Rivals:</strong> ${clan.rivals.length}<br />`;
+	html += `<strong>Created:</strong> ${clanAge} ago<br />`;
 	html += `</div></div></div>`;
 	
 	this.sendReply(`|html|${html}`);
