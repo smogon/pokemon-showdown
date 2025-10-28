@@ -4,6 +4,7 @@ import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
 import { Economy, CURRENCY } from '../../impulse/economy';
+import { Clans, UserClans, ClanPointsLogs } from '../../impulse/chat-plugins/clans/database';
 import { tcgCardsCollection, userPacksCollection } from '../../impulse/chat-plugins/tcg/tcg_collections';
 // commented out doesn't look good on broadcast green.
 //import { nameColor } from '../../impulse/colors';
@@ -1310,14 +1311,14 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 								const packCollection = userPacksCollection;
 								const now = new Date().toISOString();
 								const cardCollection = tcgCardsCollection;
-							
+
 								for (const packName of allPackNames) {
 									const packInfo = await cardCollection.findOne({ set: packName });
 									if (packInfo) {
 										await packCollection.updateOne(
 											{ userId: userId, setId: packInfo.setId },
 											{
-												$inc: { quantity: 1 },												
+												$inc: { quantity: 1 },
 												$set: {
 													setName: packInfo.set,
 													setLogo: packInfo.setImages?.logo,
@@ -1333,7 +1334,44 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 									}
 								}
 							}
-						}
+
+							// Award clan points if configured for this place (winners and runner-ups only)
+							const clanPointsRewards = rewardConfig.clanPoints || [];
+							if (place < clanPointsRewards.length) {
+								const clanPointsToAward = clanPointsRewards[place] ?? 0;
+    
+								if (clanPointsToAward > 0) {
+									// Check if user is in a clan
+									const userClanInfo = await UserClans.findOne({ _id: userId });
+									const clanId = userClanInfo?.memberOf;
+        
+									if (clanId) {
+										// Award points to the clan
+										await Clans.updateOne(
+											{ _id: clanId },
+											{ $inc: { points: clanPointsToAward } }
+										);
+            
+										// Log the clan points addition
+										await ClanPointsLogs.insertOne({
+											clanId: clanId,
+											timestamp: Date.now(),
+											userid: userId,
+											actor: userId,
+											amount: clanPointsToAward,
+											reason: `Tournament ${place === 0 ? 'winner' : 'runner-up'} reward in ${this.room.roomid}`,
+										});
+            
+										// Increment tournament wins for winner's clan (place 0 only)
+										if (place === 0) {
+											await Clans.updateOne(
+												{ _id: clanId },
+												{ $inc: { 'stats.tourWins': 1 } }
+											);
+										}
+									}
+								}
+							}
 
 						if (validPlayers.length > 0) {
 							placementGroups.push({
@@ -1347,45 +1385,54 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						}
 					}
 
-					// Generate grouped reward messages
-					if (placementGroups.length > 0) {
-						const rewardMessages: string[] = [];
+						// Generate grouped reward messages
+						if (placementGroups.length > 0) {
+							const rewardMessages: string[] = [];
 
-						for (const group of placementGroups) {
-							const rewardParts: string[] = [];
-							if (group.credits > 0) {
-								rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(group.credits)} ${CURRENCYNAME}</span>`);
-							}
-						
-							if (group.packs > 0 && group.packNames.length > 0) {
-								rewardParts.push(`<span style="font-weight:bold;">${group.packs} pack${group.packs > 1 ? 's' : ''}</span> (${group.packNames.join(', ')})`);
-							}
+							for (const group of placementGroups) {
+								const rewardParts: string[] = [];
+								if (group.credits > 0) {
+									rewardParts.push(`<span style="font-weight:bold;">${Economy.formatMoney(group.credits)} ${CURRENCYNAME}</span>`);
+								}
+    
+								if (group.packs > 0 && group.packNames.length > 0) {
+									rewardParts.push(`<span style="font-weight:bold;">${group.packs} pack${group.packs > 1 ? 's' : ''}</span> (${group.packNames.join(', ')})`);
+								}
+        
+								// Add clan points to reward message
+								const clanPointsRewards = rewardConfig.clanPoints || [];
+								if (group.place < clanPointsRewards.length) {
+									const clanPoints = clanPointsRewards[group.place] ?? 0;
+									if (clanPoints > 0) {
+										rewardParts.push(`<span style="font-weight:bold;">${clanPoints} clan points</span> (if in a clan)`);
+									}
+								}
 
-							if (rewardParts.length > 0) {
-								const playerList = group.players.length === 1 
-									? `<strong>${group.players[0]}</strong>`
-									: group.players.slice(0, -1).map(p => `<strong>${p}</strong>`).join(', ') + 
-									` and <strong>${group.players[group.players.length - 1]}</strong>`;
-							
-								const pluralSuffix = group.players.length > 1 ? ' each' : '';
-								const placementLabel = group.players.length > 1 && group.place === 0 ? 'winners' : 
-									group.players.length > 1 && group.place === 1 ? 'runner-ups' :
-									group.placeName;
-							
-								rewardMessages.push(
-									`${playerList} (${placementLabel}) ${group.players.length > 1 ? 'have' : 'has'} earned ${rewardParts.join(' and ')}${pluralSuffix} for ${group.players.length > 1 ? 'their' : 'their'} performance!`
+								if (rewardParts.length > 0) {
+									const playerList = group.players.length === 1 
+										? `<strong>${group.players[0]}</strong>`
+										: group.players.slice(0, -1).map(p => `<strong>${p}</strong>`).join(', ') + 
+										` and <strong>${group.players[group.players.length - 1]}</strong>`;
+        
+									const pluralSuffix = group.players.length > 1 ? ' each' : '';
+									const placementLabel = group.players.length > 1 && group.place === 0 ? 'winners' : 
+										group.players.length > 1 && group.place === 1 ? 'runner-ups' :
+										group.placeName;
+        
+									rewardMessages.push(
+										`${playerList} (${placementLabel}) ${group.players.length > 1 ? 'have' : 'has'} earned ${rewardParts.join(' and ')}${pluralSuffix} for ${group.players.length > 1 ? 'their' : 'their'} performance!`
+									);
+								}
+							}
+							if (rewardMessages.length > 0) {
+								this.room.add(
+									`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
 								);
+								this.room.update();
 							}
-						}
-						if (rewardMessages.length > 0) {
-							this.room.add(
-								`|html|<div class="broadcast-green"><b>Tournament Rewards:</b><br />${rewardMessages.join('<br />')}</div>`
-							);
-							this.room.update();
 						}
 					}
-				}
-			} catch (err) {
+				} catch (err) {
 				Monitor.error(`Failed to distribute tournament rewards: ${err}`);
 			}
 		})();
