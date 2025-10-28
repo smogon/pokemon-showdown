@@ -29,11 +29,10 @@ const ALL_PERMISSIONS: ClanPermissions = {
 	canSetMotw: true,
 	canManageChat: true,
 	canBankWithdraw: true,
+	canBankDeposit: true,
 	canManageAllies: true,
 	canManageRivals: true,
 	canEditRanks: true,
-	canAddPoints: true,
-	canRemovePoints: true,
 };
 
 const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
@@ -58,7 +57,6 @@ const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
 			canManageChat: true,
 			canManageAllies: true,
 			canManageRivals: true,
-			canAddPoints: true,
 		},
 	},
 	officer: {
