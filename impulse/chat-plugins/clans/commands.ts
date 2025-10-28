@@ -655,7 +655,6 @@ export const commands: Chat.ChatCommands = {
 			
 			this.sendReply(`|html|${output}`);
 		},
-	},
 
 	async createrank(target, room, user) {
 		this.checkChat();
