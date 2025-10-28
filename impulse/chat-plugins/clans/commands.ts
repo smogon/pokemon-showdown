@@ -1653,31 +1653,31 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 	// Handle locked/namelocked users
 	if (this.locked || this.namelocked) {
 		const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
-		return lockedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+		return lockedSymbol + this.name + (clanTag ? ` [${clanTag}]` : '');
 	}
 
 	// Handle room-specific identity
 	if (room) {
 		if (room.isMuted(this)) {
 			const mutedSymbol = (punishgroups.muted?.symbol || '!');
-			return mutedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+			return mutedSymbol + this.name + (clanTag ? ` [${clanTag}]` : '');
 		}
 		const roomGroup = room.auth.get(this);
 		if (customSymbol && (roomGroup === this.tempGroup || roomGroup === ' ')) {
-			return customSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+			return customSymbol + this.name + (clanTag ? ` [${clanTag}]` : '');
 		}
-		return roomGroup + (clanTag ? `[${clanTag}] ` : '') + this.name;
+		return roomGroup + this.name + (clanTag ? ` [${clanTag}]` : '');
 	}
 
 	// Handle semilocked users
 	if (this.semilocked) {
 		const mutedSymbol = (punishgroups.muted?.symbol || '!');
-		return mutedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+		return mutedSymbol + this.name + (clanTag ? ` [${clanTag}]` : '');
 	}
 
 	// Handle global identity
 	const symbol = customSymbol || this.tempGroup;
-	return symbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+	return symbol + this.name + (clanTag ? ` [${clanTag}]` : '');
 };
 
 const originalGetIdentityWithStatus = Users.User.prototype.getIdentityWithStatus;
