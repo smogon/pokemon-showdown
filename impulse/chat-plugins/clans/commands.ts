@@ -1210,6 +1210,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	async members(target, room, user) {
+		this.runBroadcast();
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to view clan members.");
 
