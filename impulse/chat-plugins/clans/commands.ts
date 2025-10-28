@@ -82,14 +82,17 @@ const DEFAULT_STATS: ClanStats = {
 
 export const commands: Chat.ChatCommands = {
 	clan: {
-		async create(target, room, user) {
+		create: async function (target, room, user) {
 			this.checkCan('bypassall');
 
-			if (!user.named) {
-				return this.errorReply("You must be logged in to create a clan.");
+			const [name, ownerUsername] = target.split(',').map(s => s.trim());
+			const clanName = name || '';
+			const ownerId = toID(ownerUsername);
+
+			if (!ownerId) {
+				return this.errorReply("You must specify the clan name and the owner's ID in the format: /clan create [Clan Name], [Owner ID]");
 			}
 
-			const clanName = target;
 			const clanId = toID(clanName);
 
 			if (!clanId) {
@@ -102,16 +105,21 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Clan name must be 30 characters or less.");
 			}
 
-			const [existingClan, userClanInfo] = await Promise.all([
+			const ownerUser = Users.getExact(ownerId);
+			if (!ownerUser) {
+				return this.errorReply(`Owner '${ownerId}' not found. The user must be logged in.`);
+			}
+
+			const [existingClan, ownerClanInfo] = await Promise.all([
 				Clans.findOne({ _id: clanId }),
-				UserClans.findOne({ _id: user.id }),
+				UserClans.findOne({ _id: ownerId }),
 			]);
 
 			if (existingClan) {
 				return this.errorReply(`A clan with the ID '${clanId}' already exists.`);
 			}
-			if (userClanInfo?.memberOf) {
-				return this.errorReply("You are already a member of a clan.");
+			if (ownerClanInfo?.memberOf) {
+				return this.errorReply(`User '${ownerId}' is already a member of a clan.`);
 			}
 
 			const now = Date.now();
@@ -121,9 +129,9 @@ export const commands: Chat.ChatCommands = {
 				_id: clanId,
 				name: clanName,
 				tag: clanId.slice(0, 5).toUpperCase(),
-				owner: user.id,
+				owner: ownerId,
 				members: {
-					[user.id]: {
+					[ownerId]: {
 						rank: 'owner' as ID,
 						joinDate: now,
 						totalPointsContributed: 0,
@@ -148,50 +156,58 @@ export const commands: Chat.ChatCommands = {
 
 			try {
 				await Clans.insertOne(newClan);
-				await UserClans.upsert({ _id: user.id }, { $set: { memberOf: clanId } });
+				await UserClans.upsert({ _id: ownerId }, { $set: { memberOf: clanId } });
 				await ClanLogs.insertOne({
 					clanId: clanId,
 					timestamp: now,
-					actor: user.id,
+					actor: user.id, // The admin running the command is the actor
 					action: 'CREATE',
-					note: `Clan ${clanName} created.`,
+					target: ownerId,
+					note: `Clan ${clanName} created for owner ${ownerId}.`,
 				});
 
 				const chatRoomTitle = `[Clan] ${clanName}`;
-				if (Rooms.get(chatRoomId)) {
-					this.sendReply(`Clan "${clanName}" created. The chatroom #${chatRoomId} already exists.`);
-					user.joinRoom(chatRoomId, this.connection);
-					return;
+				let newRoom = Rooms.get(chatRoomId);
+
+				if (!newRoom) {
+					const roomSettings: RoomSettings = {
+						title: chatRoomTitle,
+						auth: {},
+						creationTime: Date.now(),
+						modjoin: '+',
+						isPrivate: 'hidden',
+					};
+
+					newRoom = Rooms.createChatRoom(chatRoomId, chatRoomTitle, roomSettings);
+
+					newRoom.auth.set(ownerId, '#');
+
+					Rooms.global.settingsList.push(roomSettings);
+					Rooms.global.chatRooms.push(newRoom);
+					Rooms.global.writeChatRoomData();
+				} else {
+					// Ensure owner is set even if room pre-exists
+					newRoom.auth.set(ownerId, '#');
+					newRoom.saveSettings();
 				}
 
-				const roomSettings: RoomSettings = {
-					title: chatRoomTitle,
-					auth: {},
-					creationTime: Date.now(),
-					modjoin: '+',
-					isPrivate: 'hidden',
-				};
+				// The owner joins the room if they are connected
+				if (ownerUser.connected) {
+					ownerUser.joinRoom(newRoom.roomid);
+				}
 
-				const newRoom = Rooms.createChatRoom(chatRoomId, chatRoomTitle, roomSettings);
-
-				Rooms.global.settingsList.push(roomSettings);
-				Rooms.global.chatRooms.push(newRoom);
-				Rooms.global.writeChatRoomData();
-
-				user.joinRoom(newRoom.roomid, this.connection);
-
-				this.privateGlobalModAction(`${user.name} created the clan ${clanName} (${clanId}).`);
-				this.sendReply(`Clan "${clanName}" has been successfully created!`);
-				this.sendReply(`Created persistent chatroom: #${chatRoomId}. It has been set to modjoin (+).`);
+				this.privateGlobalModAction(`${user.name} created the clan ${clanName} (${clanId}) for owner ${ownerId}.`);
+				this.sendReply(`Clan "${clanName}" has been successfully created! Owner: ${ownerId}.`);
+				this.sendReply(`Persistent chatroom: #${chatRoomId} created/updated. Owner was set as room owner (#).`);
 			} catch (e) {
 				this.errorReply("An error occurred while creating the clan.");
 				await Clans.deleteOne({ _id: clanId });
-				await UserClans.updateOne({ _id: user.id }, { $unset: { memberOf: 1 } });
+				await UserClans.updateOne({ _id: ownerId }, { $unset: { memberOf: 1 } });
 				Monitor.crashlog(e as Error, "Clan creation command");
 			}
 		},
 
-		async delete(target, room, user) {
+		delete: async function (target, room, user) {
 			this.checkCan('bypassall');
 
 			const clanId = toID(target);
@@ -210,11 +226,8 @@ export const commands: Chat.ChatCommands = {
 			try {
 				// 1. Delete the chatroom
 				if (chatRoom) {
-					// Make it non-persistent
 					Rooms.global.deregisterChatRoom(chatRoom.roomid);
-					// Remove from active chat room list
 					Rooms.global.delistChatRoom(chatRoom.roomid);
-					// Kick all users, clear timers, and remove from Rooms.rooms
 					chatRoom.destroy();
 				}
 
