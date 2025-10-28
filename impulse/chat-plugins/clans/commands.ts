@@ -12,8 +12,6 @@ import type {
 	CustomClanRank,
 	ClanStats,
 } from './interface';
-import { Rooms } from '../rooms';
-import type { RoomSettings } from '../rooms';
 
 const ALL_PERMISSIONS: ClanPermissions = {
 	canInvite: true,
