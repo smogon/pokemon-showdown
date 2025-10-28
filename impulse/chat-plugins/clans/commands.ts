@@ -422,50 +422,57 @@ export const commands: Chat.ChatCommands = {
 			let output = '';
 			const dataRows: string[][] = [];
 			
-			const receivedInvites = userClanInfo?.invites || [];
-
-			if (receivedInvites.length) {
-				const invitedClans = await Clans.find({ _id: { $in: receivedInvites } });
-				
-				const headerRow = ['Clan', 'ID', 'Action'];
-				const title = 'Your Pending Clan Invites';
-				
-				invitedClans.forEach(clan => {
-					dataRows.push([
-						clan.name,
-						clan._id,
-						`<button class="button" name="send" value="/clan join ${clan._id}">Accept</button>`
-					]);
-				});
-				
-				output += generateThemedTable(title, headerRow, dataRows);
-				output += '<hr />';
-			} else {
-				output += `<div class="infobox">You have no pending clan invitations.</div><hr />`;
-			}
-
+			let isClanManager = false;
+			
 			if (memberOfClanId) {
 				const clan = await Clans.findOne({ _id: memberOfClanId });
-				if (clan && hasClanPermission(clan, userId, 'canInvite')) {
-					const sentInvites = clan.invites;
+				if (clan) {
+					isClanManager = hasClanPermission(clan, userId, 'canInvite');
+					
+					if (isClanManager) {
+						const sentInvites = clan.invites;
 
-					if (sentInvites.length) {
-						const sentDataRows: string[][] = [];
-						const sentHeaderRow = ['User', 'Invited By', 'Date'];
-						const sentTitle = `Invites Sent by ${clan.name}`;
-						
-						sentInvites.forEach(invite => {
-							sentDataRows.push([
-								invite.userid,
-								invite.actor,
-								Utils.to(new Date(invite.timestamp), {date: true, time: true})
-							]);
-						});
-						
-						output += generateThemedTable(sentTitle, sentHeaderRow, sentDataRows);
-					} else {
-						output += `<div class="infobox">${clan.name} has no pending outgoing invitations.</div>`;
+						if (sentInvites.length) {
+							const sentDataRows: string[][] = [];
+							const sentHeaderRow = ['User', 'Invited By', 'Date'];
+							const sentTitle = `Invites Sent by ${clan.name}`;
+							
+							sentInvites.forEach(invite => {
+								sentDataRows.push([
+									invite.userid,
+									invite.actor,
+									Utils.to(new Date(invite.timestamp), {date: true, time: true})
+								]);
+							});
+							
+							output += generateThemedTable(sentTitle, sentHeaderRow, sentDataRows);
+						} else {
+							output += `<div class="infobox">${clan.name} has no pending outgoing invitations.</div>`;
+						}
 					}
+				}
+			}
+			if (!isClanManager) {
+				const receivedInvites = userClanInfo?.invites || [];
+
+				if (receivedInvites.length) {
+					const invitedClans = await Clans.find({ _id: { $in: receivedInvites } });
+					
+					const headerRow = ['Clan', 'ID', 'Action'];
+					const title = 'Your Pending Clan Invites';
+					
+					invitedClans.forEach(clan => {
+						dataRows.push([
+							clan.name,
+							clan._id,
+							`<button class="button" name="send" value="/clan join ${clan._id}">Accept</button>`
+						]);
+					});
+					
+					if (output) output += '<hr />';
+					output += generateThemedTable(title, headerRow, dataRows);
+				} else if (!output) {
+					return this.errorReply("You have no pending clan invitations.");
 				}
 			}
 
