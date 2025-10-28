@@ -1766,5 +1766,79 @@ export const commands: Chat.ChatCommands = {
 		const output = generateThemedTable(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
+
+		async profile(target, room, user) {
+	this.runBroadcast();
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to view clan profiles.");
+
+	const targetUserId = toID(target) || user.id;
+	const targetUserName = target ? target.trim() : user.name;
+
+	const userClanInfo = await UserClans.findOne({ _id: targetUserId });
+	const clanId = userClanInfo?.memberOf;
+
+	if (!clanId) {
+		const errorMsg = targetUserId === user.id 
+			? "You do not have a clan profile yet. Join or create a clan to start!" 
+			: `User "${targetUserId}" is not a member of any clan.`;
+		return this.errorReply(errorMsg);
+	}
+
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Clan '${clanId}' was not found in the database.`);
+
+	const memberData = clan.members[targetUserId];
+	if (!memberData) return this.errorReply(`Error: User '${targetUserId}' not found in clan members.`);
+
+	const rank = clan.ranks[memberData.rank];
+	const memberSince = toDurationString(Date.now() - memberData.joinDate);
+	const totalMembers = Object.keys(clan.members).length;
+
+	const isOwner = clan.owner === targetUserId;
+	const isMOTW = clan.memberOfTheWeek === targetUserId;
+
+	const w = 160, h = 222;
+
+	let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
+	html += `<div style="flex: 0 0 ${w + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
+	
+	if (clan.icon) {
+		html += `<img src="${clan.icon}" width="${w}" alt="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
+		html += `<div style="font-size: 0.85em; margin-top: 10px; font-weight: bold;">${clan.name}</div>`;
+		html += `<div style="font-size: 0.75em; color: #666;">[${clan.tag}]</div>`;
+	} else {
+		html += `<div style="color: #888; text-align: center; padding-top: 50px; font-size: 0.9em; white-space: pre-wrap; width: ${w}px;">`;
+		html += `<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">${clan.name}</div>`;
+		html += `<div style="font-size: 0.9em; color: #666; margin-bottom: 20px;">[${clan.tag}]</div>`;
+		html += `No clan icon set.`;
+		html += `</div>`;
+	}
+	
+	html += `</div>`;
+	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
+	html += `<strong style="font-size: 22px;">${targetUserName}</strong>`;
+	
+	if (isOwner) {
+		html += ` <span style="color: #d4af37; font-size: 0.9em;">👑 Owner</span>`;
+	}
+	if (isMOTW) {
+		html += ` <span style="color: #4CAF50; font-size: 0.9em;">⭐ MOTW</span>`;
+	}
+	
+	html += `<br />`;
+	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+	html += `<strong>Clan:</strong> ${clan.name} [${clan.tag}]<br />`;
+	html += `<strong>Rank:</strong> ${rank.name}<br />`;
+	html += `<strong>Member Since:</strong> ${memberSince} ago<br />`;
+	html += `<strong>Points Contributed:</strong> ${memberData.totalPointsContributed.toLocaleString()}<br />`;
+	html += `<strong>Clan Points:</strong> ${clan.points.toLocaleString()}<br />`;
+	html += `<strong>Clan Level:</strong> ${clan.level}<br />`;
+	html += `<strong>Total Members:</strong> ${totalMembers}<br />`;
+	html += `<strong>Clan Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
+	html += `</div></div></div>`;
+	
+	this.sendReply(`|html|${html}`);
+},
 	},
 };
