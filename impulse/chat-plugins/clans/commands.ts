@@ -1255,5 +1255,301 @@ export const commands: Chat.ChatCommands = {
 		const output = generateThemedTable(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
+	
+	async setdesc(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to set clan description.");
+
+		const description = target.trim();
+		const actorId = user.id;
+
+		if (!description) return this.errorReply("You must specify a description.");
+		if (description.length > 80) return this.errorReply("Clan description must be 80 characters or less.");
+
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		if (!hasClanPermission(clan, actorId, 'canEditDesc')) {
+			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan description.`);
+		}
+		
+		const oldDesc = clan.desc;
+
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { desc: description } }
+		);
+
+		await ClanLogs.insertOne({
+			clanId: clanId,
+			timestamp: Date.now(),
+			actor: actorId,
+			action: 'SET_DESC',
+			oldValue: oldDesc,
+			newValue: description,
+			note: `Updated clan description.`,
+		});
+
+		const clanRoom = Rooms.get(clan.chatRoom);
+		if (clanRoom) {
+			clanRoom.desc = description;
+			clanRoom.saveSettings();
+			clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan description.</center></div>`).update();
+		}
+		this.sendReply(`You updated the clan description to: "${description}"`);
+	},
+
+	async settag(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to set clan tag.");
+
+		const tag = target.trim().toUpperCase();
+		const actorId = user.id;
+
+		if (!tag) return this.errorReply("You must specify a tag.");
+		if (tag.length > 3) return this.errorReply("Clan tag must be 3 characters or less.");
+		if (!/^[A-Z]+$/.test(tag)) return this.errorReply("Clan tag must contain only uppercase letters.");
+
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		if (!hasClanPermission(clan, actorId, 'canEditTag')) {
+			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan tag.`);
+		}
+
+		const oldTag = clan.tag;
+
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { tag: tag } }
+		);
+
+		await ClanLogs.insertOne({
+			clanId: clanId,
+			timestamp: Date.now(),
+			actor: actorId,
+			action: 'SET_TAG',
+			oldValue: oldTag,
+			newValue: tag,
+			note: `Updated clan tag.`,
+		});
+
+		const clanRoom = Rooms.get(clan.chatRoom);
+		if (clanRoom) {
+			clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan tag from "${oldTag}" to "${tag}".</center></div>`).update();
+		}
+		this.sendReply(`You updated the clan tag from "${oldTag}" to "${tag}".`);
+	},
+	
+	async setmotw(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to set member of the week.");
+
+		const targetId = toID(target);
+		const actorId = user.id;
+
+		if (!targetId) return this.errorReply("You must specify a user.");
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		if (!hasClanPermission(clan, actorId, 'canSetMotw')) {
+			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to set member of the week.`);
+		}
+
+		if (!clan.members[targetId]) {
+			return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
+		}
+		
+		const oldMotw = clan.memberOfTheWeek;
+
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { memberOfTheWeek: targetId } }
+		);
+
+		await ClanLogs.insertOne({
+			clanId: clanId,
+			timestamp: Date.now(),
+			actor: actorId,
+			action: 'SET_MOTW',
+			target: targetId,
+			oldValue: oldMotw,
+			newValue: targetId,
+			note: `Set member of the week.`,
+		});
+
+		const clanRoom = Rooms.get(clan.chatRoom);
+		if (clanRoom) {
+			clanRoom.add(`|html|<div class="infobox"><center>${user.name} set <b>${targetId}</b> as the Member of the Week!</center></div>`).update();
+		}
+
+		const targetUser = Users.getExact(targetId);
+		if (targetUser?.connected) {
+			targetUser.popup(`|html|<div class="infobox">Congratulations! You have been named <b>Member of the Week</b> in ${clan.name} by ${user.name}!</div>`);
+		}
+		this.sendReply(`You set '${targetId}' as the Member of the Week for ${clan.name}.`);
+	},
+	
+	async seticon(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to set clan icon.");
+
+		const iconUrl = target.trim();
+		const actorId = user.id;
+
+		if (!iconUrl) return this.errorReply("You must specify an icon URL.");
+		if (iconUrl.length > 1000) return this.errorReply("Icon URL must be 1000 characters or less.");
+		if (!/^https?:\/\/.+\.(png|jpg|jpeg|gif|webp)$/i.test(iconUrl)) {
+			return this.errorReply("Invalid image URL. Must be a valid HTTP(S) URL ending in .png, .jpg, .jpeg, .gif, or .webp");
+		}
+
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+		
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+		
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		if (!hasClanPermission(clan, actorId, 'canEditIcon')) {
+			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan icon.`);
+		}
+
+		const oldIcon = clan.icon;
+
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { icon: iconUrl } }
+		);
+		
+		await ClanLogs.insertOne({
+			clanId: clanId,
+			timestamp: Date.now(),
+			actor: actorId,
+			action: 'SET_ICON',
+			oldValue: oldIcon,
+			newValue: iconUrl,
+			note: `Updated clan icon.`,
+		});
+
+		const clanRoom = Rooms.get(clan.chatRoom);
+		if (clanRoom) {
+			clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan icon.</center></div>`).update();
+		}
+		this.sendReply(`You updated the clan icon.`);
+	},
+		
+	async list(target, room, user) {
+		this.checkChat();
+
+		const page = parseInt(target) || 1;
+		const limit = 20;
+		const skip = (page - 1) * limit;
+
+		const [clans, total] = await Promise.all([
+			Clans.find({}, { skip, limit, sort: { points: -1 } }),
+			Clans.countDocuments({}),
+		]);
+	
+		if (clans.length === 0) {
+			return this.errorReply("No clans found.");
+		}
+
+		const totalPages = Math.ceil(total / limit);
+		const dataRows: string[][] = [];
+		const headerRow = ['Clan', 'Tag', 'Owner', 'Members', 'Points'];
+		const title = `All Clans (Page ${page}/${totalPages})`;
+
+		clans.forEach(clan => {
+			const memberCount = Object.keys(clan.members).length;
+			dataRows.push([
+				clan.name,
+				clan.tag,
+				clan.owner,
+				memberCount.toString(),
+				clan.points.toString(),
+			]);
+		});
+
+		let output = generateThemedTable(title, headerRow, dataRows);
+
+		if (page > 1 || page < totalPages) {
+			output += '<center>';
+			if (page > 1) {
+				output += `<button class="button" name="send" value="/clan list ${page - 1}">Previous</button> `;
+			}
+			if (page < totalPages) {
+				output += `<button class="button" name="send" value="/clan list ${page + 1}">Next</button>`;
+			}
+			output += '</center>';
+		}
+		this.sendReply(`|html|${output}`);
+	},
+
+		
+	async logs(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to view clan logs.");
+
+		const limit = parseInt(target) || 20;
+		const actorId = user.id;
+		
+		if (limit < 1 || limit > 100) {
+			return this.errorReply("Limit must be between 1 and 100.");
+		}
+
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		const logs = await ClanLogs.find(
+			{ clanId: clanId },
+			{ limit, sort: { timestamp: -1 } }
+		);
+
+		if (logs.length === 0) {
+			return this.errorReply(`${clan.name} has no activity logs.`);
+		}
+		
+		const dataRows: string[][] = [];
+		const headerRow = ['Date', 'Actor', 'Action', 'Target', 'Details'];
+		const title = `${clan.name} Activity Logs (Last ${logs.length})`;
+
+		logs.forEach(log => {
+			const date = new Date(log.timestamp).toLocaleString();
+			const details = log.note || 
+				(log.oldValue !== undefined && log.newValue !== undefined ? 
+				 `${log.oldValue} → ${log.newValue}` : '');
+		
+			dataRows.push([
+				date,
+				log.actor,
+				log.action,
+				log.target || '-',
+				details,
+			]);
+		});
+		const output = generateThemedTable(title, headerRow, dataRows);
+		this.sendReply(`|html|${output}`);
+	},
   },
 };
