@@ -755,6 +755,80 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${output}`);
 		},
 
+	async inviteonly(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to toggle invite-only mode.");
+
+		const value = target.trim().toLowerCase();
+		const actorId = user.id;
+
+		// Parse the input value
+		let newInviteOnlyStatus: boolean;
+		if (value === 'on' || value === 'true' || value === '1') {
+			newInviteOnlyStatus = true;
+		} else if (value === 'off' || value === 'false' || value === '0') {
+			newInviteOnlyStatus = false;
+		} else if (value === 'toggle') {
+			// Will be determined after fetching the clan
+			newInviteOnlyStatus = null as any;
+		} else {
+			return this.errorReply("Usage: /clan inviteonly [on/off/toggle]");
+		}
+
+		const actorClanInfo = await UserClans.findOne({ _id: actorId });
+		const clanId = actorClanInfo?.memberOf;
+
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+		if (!hasClanPermission(clan, actorId, 'canManageChat')) {
+			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to change invite-only mode.`);
+		}
+
+		// Handle toggle case
+		if (newInviteOnlyStatus === null) {
+			newInviteOnlyStatus = !clan.inviteOnly;
+		}
+
+		// Check if status is already in desired state
+		if (clan.inviteOnly === newInviteOnlyStatus) {
+			const currentStatus = newInviteOnlyStatus ? 'already invite-only' : 'already open to all users';
+			return this.errorReply(`The clan is ${currentStatus}.`);
+		}
+
+		const oldValue = clan.inviteOnly;
+
+		// Update the clan in database
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { inviteOnly: newInviteOnlyStatus } }
+		);
+
+		// Log the change
+		await ClanLogs.insertOne({
+			clanId: clanId,
+			timestamp: Date.now(),
+			actor: actorId,
+			action: 'SET_INVITEONLY',
+			oldValue: oldValue,
+			newValue: newInviteOnlyStatus,
+			note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
+		});
+
+		// Announce to the clan room
+		const clanRoom = Rooms.get(clan.chatRoom);
+		if (clanRoom) {
+			const statusText = newInviteOnlyStatus ? 'is now invite-only' : 'is now open to all users';
+			clanRoom.add(`|html|<div class="infobox"><center>${user.name} changed the clan setting: The clan ${statusText}.</center></div>`).update();
+		}
+
+		// Send confirmation to the user
+		const statusText = newInviteOnlyStatus ? 'enabled' : 'disabled';
+		this.sendReply(`You have successfully ${statusText} invite-only mode for ${clan.name}.`);
+	},
+
 	async createrank(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to create ranks.");
