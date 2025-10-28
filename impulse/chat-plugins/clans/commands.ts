@@ -1565,7 +1565,7 @@ export const commands: Chat.ChatCommands = {
 	}
 	
 	const oldMotw = clan.memberOfTheWeek;
-	const HOST_RANK = '★'; // Host rank symbol from config
+	const HOST_RANK = '^';
 
 	// Update database
 	await Clans.updateOne(
