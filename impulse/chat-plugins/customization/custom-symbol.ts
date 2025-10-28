@@ -188,28 +188,29 @@ export const loginfilter: Chat.LoginFilter = user => {
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
+	const clanTag = (this as any).clanTag;
 
 	if (!customSymbol) return originalGetIdentity.call(this, room);
 
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
 	if (this.locked || this.namelocked) {
-		return (punishgroups.locked?.symbol || '\u203d') + this.name;
+		return (punishgroups.locked?.symbol || '\u203d') + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
 	if (room) {
 		if (room.isMuted(this)) {
-			return (punishgroups.muted?.symbol || '!') + this.name;
+			return (punishgroups.muted?.symbol || '!') + (clanTag ? `[${clanTag}] ` : '') + this.name;
 		}
 		const roomGroup = room.auth.get(this);
 		if (roomGroup === this.tempGroup || roomGroup === ' ') {
-			return customSymbol + this.name;
+			return customSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 		}
-		return roomGroup + this.name;
+		return roomGroup + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
 	if (this.semilocked) {
-		return (punishgroups.muted?.symbol || '!') + this.name;
+		return (punishgroups.muted?.symbol || '!') + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
-	return customSymbol + this.name;
+	return customSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 };
