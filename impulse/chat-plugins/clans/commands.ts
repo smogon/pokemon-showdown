@@ -615,6 +615,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async invites(target, room, user) {
+			this.runBroadcast();
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to check invites.");
 
@@ -898,6 +899,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	async ranks(target, room, user) {
+		this.runBroadcast();
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to view ranks.");
 
@@ -936,6 +938,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	async permissionlist(target, room, user) {
+		this.runBroadcast();
 		this.checkChat();
 
 		const permissions = Object.keys(ALL_PERMISSIONS);
@@ -1455,6 +1458,7 @@ export const commands: Chat.ChatCommands = {
 	},
 		
 	async list(target, room, user) {
+		this.runBroadcast();
 		this.checkChat();
 
 		const page = parseInt(target) || 1;
