@@ -169,7 +169,16 @@ export class LastFMInterface {
 		} catch {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
-		const req = JSON.parse(raw);
+		// Guard against empty or non-JSON responses
+		if (!raw || !raw.trim()) {
+			throw new Chat.ErrorMessage(`No track data found.`);
+		}
+		let req: any;
+		try {
+			req = JSON.parse(raw);
+		} catch {
+			throw new Chat.ErrorMessage(`No track data found.`);
+		}
 		let buf = ``;
 		if (req.results?.trackmatches?.track?.length) {
 			buf += `<table><tr><td style="padding-right:5px">`;
