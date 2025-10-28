@@ -1649,13 +1649,18 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 	const customSymbol = (this as any).customSymbol;
 	
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
+	
+	// Handle locked/namelocked users
 	if (this.locked || this.namelocked) {
-		return (punishgroups.locked?.symbol || '\u203d') + this.name;
+		const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
+		return lockedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
+	// Handle room-specific identity
 	if (room) {
 		if (room.isMuted(this)) {
-			return (punishgroups.muted?.symbol || '!') + this.name;
+			const mutedSymbol = (punishgroups.muted?.symbol || '!');
+			return mutedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 		}
 		const roomGroup = room.auth.get(this);
 		if (customSymbol && (roomGroup === this.tempGroup || roomGroup === ' ')) {
@@ -1664,10 +1669,20 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 		return roomGroup + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
+	// Handle semilocked users
 	if (this.semilocked) {
-		return (punishgroups.muted?.symbol || '!') + this.name;
+		const mutedSymbol = (punishgroups.muted?.symbol || '!');
+		return mutedSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
 
+	// Handle global identity
 	const symbol = customSymbol || this.tempGroup;
 	return symbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+};
+
+const originalGetIdentityWithStatus = Users.User.prototype.getIdentityWithStatus;
+Users.User.prototype.getIdentityWithStatus = function (room: BasicRoom | null = null): string {
+	const identity = this.getIdentity(room);
+	const status = this.statusType === 'online' ? '' : '@!';
+	return `${identity}${status}`;
 };
