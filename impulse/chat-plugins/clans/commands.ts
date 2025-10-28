@@ -211,7 +211,6 @@ export const commands: Chat.ChatCommands = {
 					ownerUser.popup(popupMessage);
 				}
 
-				this.privateGlobalModAction(`${user.name} created the clan ${clanName} (${clanId}) for owner ${ownerId}.`);
 				this.sendReply(`Clan "${clanName}" has been successfully created! Owner: ${ownerId}.`);
 				this.sendReply(`Persistent chatroom: #${chatRoomId} created/updated. Owner was set as room owner (#).`);
 			} catch (e) {
@@ -257,7 +256,6 @@ export const commands: Chat.ChatCommands = {
 					ownerUser.popup(`|html|Your clan <b>${clan.name}</b> was deleted by ${user.name}. All related data and the chatroom (#${chatRoomId}) have been removed.`);
 				}
 
-				this.privateGlobalModAction(`${user.name} deleted the clan ${clan.name} (${clanId}).`);
 				this.sendReply(`Clan ${clan.name} (${clanId}) has been successfully deleted.`);
 			} catch (e) {
 				this.errorReply("An error occurred while deleting the clan.");
