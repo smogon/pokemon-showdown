@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* Clans Commands
+*/
 import {
 	Clans,
 	UserClans,
@@ -1778,6 +1782,6 @@ export const commands: Chat.ChatCommands = {
 	html += `</div></div></div>`;
 	
 	this.sendReply(`|html|${html}`);
-},
+		},
 	},
 };
