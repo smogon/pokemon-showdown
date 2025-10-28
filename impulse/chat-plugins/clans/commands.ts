@@ -471,6 +471,7 @@ export const commands: Chat.ChatCommands = {
 				clanRoom.saveSettings();
 				clanRoom.add(`|html|<div class="infobox"><center>${user.name} left the clan.</center></div>`).update();
 			}
+			user.leaveRoom(clanRoom.roomid, this.connection);
 			this.sendReply(`You have successfully left the clan '${clan.name}'.`);
 		},
 
