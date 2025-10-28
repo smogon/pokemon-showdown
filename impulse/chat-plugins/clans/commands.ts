@@ -1533,60 +1533,93 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReply(`You updated the clan tag from "${oldTag}" to "${tag}".`);
 	},
-	
+
 	async setmotw(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to set member of the week.");
-
-		const targetId = toID(target);
-		const actorId = user.id;
-
-		if (!targetId) return this.errorReply("You must specify a user.");
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
-
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
-
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
-
-		if (!hasClanPermission(clan, actorId, 'canSetMotw')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to set member of the week.`);
-		}
-
-		if (!clan.members[targetId]) {
-			return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
-		}
 		
-		const oldMotw = clan.memberOfTheWeek;
+	const targetId = toID(target);
+	const actorId = user.id;
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { memberOfTheWeek: targetId } }
-		);
+	if (!targetId) return this.errorReply("You must specify a user.");
+	
+	const actorClanInfo = await UserClans.findOne({ _id: actorId });
+	const clanId = actorClanInfo?.memberOf;
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_MOTW',
-			target: targetId,
-			oldValue: oldMotw,
-			newValue: targetId,
-			note: `Set member of the week.`,
-		});
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} set <b>${targetId}</b> as the Member of the Week!</center></div>`).update();
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+	if (!hasClanPermission(clan, actorId, 'canSetMotw')) {
+		return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to set member of the week.`);
+	}
+
+	if (!clan.members[targetId]) {
+		return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
+	}
+	
+	// Prevent setting same user as MOTW again
+	if (clan.memberOfTheWeek === targetId) {
+		return this.errorReply(`'${targetId}' is already the Member of the Week for ${clan.name}.`);
+	}
+	
+	const oldMotw = clan.memberOfTheWeek;
+	const HOST_RANK = '★'; // Host rank symbol from config
+
+	// Update database
+	await Clans.updateOne(
+		{ _id: clanId },
+		{ $set: { memberOfTheWeek: targetId } }
+	);
+
+	// Log the action
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: actorId,
+		action: 'SET_MOTW',
+		target: targetId,
+		oldValue: oldMotw,
+		newValue: targetId,
+		note: `Set member of the week.`,
+	});
+
+	// Update room auth
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		// Demote previous MOTW if exists and is still connected
+		if (oldMotw && oldMotw !== targetId && clan.members[oldMotw]) {
+			const oldMotwMember = clan.members[oldMotw];
+			const oldMotwRank = clan.ranks[oldMotwMember.rank];
+			
+			// Map clan rank back to room rank
+			const roomRanks: { [key: string]: string } = {
+				'owner': '#',
+				'leader': '@',
+				'officer': '%',
+				'member': '+'
+			};
+			const newRoomRank = roomRanks[oldMotwMember.rank] || '+';
+			clanRoom.auth.set(oldMotw, newRoomRank);
 		}
 
-		const targetUser = Users.getExact(targetId);
-		if (targetUser?.connected) {
-			targetUser.popup(`|html|<div class="infobox">Congratulations! You have been named <b>Member of the Week</b> in ${clan.name} by ${user.name}!</div>`);
-		}
-		this.sendReply(`You set '${targetId}' as the Member of the Week for ${clan.name}.`);
-	},
+		// Promote new MOTW to host rank
+		clanRoom.auth.set(targetId, HOST_RANK);
+		clanRoom.saveSettings();
+
+		// Announce in room
+		clanRoom.add(`|html|<div class="infobox"><center>${user.name} set <b>${targetId}</b> as the Member of the Week!</center></div>`).update();
+	}
+
+	// Notify the new MOTW
+	const targetUser = Users.getExact(targetId);
+	if (targetUser?.connected) {
+		targetUser.popup(`|html|<div class="infobox">Congratulations! You have been named <b>Member of the Week</b> in ${clan.name} by ${user.name}!</div>`);
+	}
+
+	this.sendReply(`You set '${targetId}' as the Member of the Week for ${clan.name}.`);
+},
 	
 	async seticon(target, room, user) {
 		this.checkChat();
