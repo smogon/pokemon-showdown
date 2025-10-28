@@ -1480,7 +1480,7 @@ export const commands: Chat.ChatCommands = {
 
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
-			clanRoom.desc = description;
+			clanRoom.settings.desc = description;
 			clanRoom.saveSettings();
 			clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan description.</center></div>`).update();
 		}
