@@ -83,6 +83,20 @@ const DEFAULT_STATS: ClanStats = {
 	totalPointsEarned: 0,
 };
 
+async function updateClanTagForUser(userId: ID) {
+	const user = Users.get(userId);
+	if (!user) return;
+	
+	const userClanInfo = await UserClans.findOne({ _id: userId });
+	if (userClanInfo?.memberOf) {
+		const clan = await Clans.findOne({ _id: userClanInfo.memberOf });
+		(user as any).clanTag = clan?.tag || null;
+	} else {
+		delete (user as any).clanTag;
+	}
+	user.updateIdentity();
+}
+
 function toDurationString(ms: number): string {
 	const seconds = Math.floor(ms / 1000);
 	const minutes = Math.floor(seconds / 60);
@@ -128,6 +142,46 @@ function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermiss
 
 export const commands: Chat.ChatCommands = {
 	clan: {
+		async refresh(target, room, user) {
+			this.checkCan('roomowner');
+
+			let refreshedCount = 0;
+			const clanId = toID(target);
+
+			if (clanId) {
+				// Refresh specific clan
+				const clan = await Clans.findOne({ _id: clanId });
+				if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+				for (const memberId in clan.members) {
+					const member = Users.get(memberId);
+					if (member?.connected) {
+						(member as any).clanTag = clan.tag;
+						member.updateIdentity();
+						refreshedCount++;
+					}
+				}
+				
+				this.sendReply(`Refreshed clan tags for ${refreshedCount} online member(s) of ${clan.name}.`);
+			} else {
+				// Refresh all clans
+				const allClans = await Clans.find({});
+
+				for (const clan of allClans) {
+					for (const memberId in clan.members) {
+						const member = Users.get(memberId);
+						if (member?.connected) {
+							(member as any).clanTag = clan.tag;
+							member.updateIdentity();
+							refreshedCount++;
+						}
+					}
+				}
+				this.sendReply(`Refreshed clan tags for ${refreshedCount} online user(s) across all clans.`);
+			}
+			this.privateGlobalModAction(`${user.name} refreshed clan tags${clanId ? ` for clan '${clanId}'` : ' for all clans'}.`);
+		},
+		
 		async create(target, room, user) {
 			this.checkCan('roomowner');
 
@@ -295,191 +349,202 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async join(target, room, user) {
-			this.checkChat();
-			if (!user.named) return this.errorReply("You must be logged in to join a clan.");
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to join a clan.");
 
-			const clanId = toID(target);
-			const userId = user.id;
+	const clanId = toID(target);
+	const userId = user.id;
 
-			if (!clanId) return this.errorReply("Specify the ID of the clan you wish to join.");
+	if (!clanId) return this.errorReply("Specify the ID of the clan you wish to join.");
 
-			const [clan, userClanInfo] = await Promise.all([
-				Clans.findOne({ _id: clanId }),
-				UserClans.findOne({ _id: userId }),
-			]);
+	const [clan, userClanInfo] = await Promise.all([
+		Clans.findOne({ _id: clanId }),
+		UserClans.findOne({ _id: userId }),
+	]);
 
-			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
-			if (userClanInfo?.memberOf) return this.errorReply(`You are already a member of the clan '${userClanInfo.memberOf}'.`);
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	if (userClanInfo?.memberOf) return this.errorReply(`You are already a member of the clan '${userClanInfo.memberOf}'.`);
 
-			const isInvited = clan.invites.some(invite => invite.userid === userId);
+	const isInvited = clan.invites.some(invite => invite.userid === userId);
 
-			if (clan.inviteOnly && !isInvited) {
-				return this.errorReply(`The clan '${clan.name}' is invite-only. You must be invited to join.`);
-			}
+	if (clan.inviteOnly && !isInvited) {
+		return this.errorReply(`The clan '${clan.name}' is invite-only. You must be invited to join.`);
+	}
 
-			if (!clan.inviteOnly && userClanInfo?.invites?.includes(clanId)) {
-				await UserClans.updateOne({ _id: userId }, { $pull: { invites: clanId } });
-			}
+	if (!clan.inviteOnly && userClanInfo?.invites?.includes(clanId)) {
+		await UserClans.updateOne({ _id: userId }, { $pull: { invites: clanId } });
+	}
 
-			await Clans.updateOne(
-				{ _id: clanId },
-				{ $pull: { invites: { userid: userId } } }
-			);
+	await Clans.updateOne(
+		{ _id: clanId },
+		{ $pull: { invites: { userid: userId } } }
+	);
 
-			await Clans.updateOne(
-				{ _id: clanId },
-				{
-					$set: {
-						[`members.${userId}`]: {
-							rank: 'member' as ID,
-							joinDate: Date.now(),
-							totalPointsContributed: 0,
-						},
-					},
-				}
-			);
+	await Clans.updateOne(
+		{ _id: clanId },
+		{
+			$set: {
+				[`members.${userId}`]: {
+					rank: 'member' as ID,
+					joinDate: Date.now(),
+					totalPointsContributed: 0,
+				},
+			},
+		}
+	);
 
-			await UserClans.upsert({ _id: userId }, {
-				$set: { memberOf: clanId },
-				$pull: { invites: clanId },
-			});
+	await UserClans.upsert({ _id: userId }, {
+		$set: { memberOf: clanId },
+		$pull: { invites: clanId },
+	});
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: userId,
-				action: 'JOIN',
-				target: userId,
-				note: `User joined the clan.`,
-			});
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: userId,
+		action: 'JOIN',
+		target: userId,
+		note: `User joined the clan.`,
+	});
 
-			const clanRoom = Rooms.get(clan.chatRoom);
-			if (clanRoom) {
-				clanRoom.auth.set(userId, '+');
-				clanRoom.saveSettings();
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		clanRoom.auth.set(userId, '+');
+		clanRoom.saveSettings();
 
-				user.joinRoom(clanRoom.roomid, this.connection);
-				clanRoom.add(`|html|<div class="infobox">${user.name} joined the clan and was granted Room Voice.</div>`).update();
-			}
+		user.joinRoom(clanRoom.roomid, this.connection);
+		clanRoom.add(`|html|<div class="infobox">${user.name} joined the clan and was granted Room Voice.</div>`).update();
+	}
 
-			this.sendReply(`You have successfully joined the clan '${clan.name}'!`);
-			if (clanRoom) this.sendReply(`You have been automatically joined to the clan chatroom: #${clanRoom.roomid}`);
-		},
+	(user as any).clanTag = clan.tag;
+	user.updateIdentity();
 
-		async leave(target, room, user) {
-			this.checkChat();
-			if (!user.named) return this.errorReply("You must be logged in to leave a clan.");
-			
-			const userId = user.id;
+	this.sendReply(`You have successfully joined the clan '${clan.name}'!`);
+	if (clanRoom) this.sendReply(`You have been automatically joined to the clan chatroom: #${clanRoom.roomid}`);
+},
 
-			const userClanInfo = await UserClans.findOne({ _id: userId });
-			const clanId = userClanInfo?.memberOf;
+async leave(target, room, user) {
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to leave a clan.");
+	
+	const userId = user.id;
 
-			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const userClanInfo = await UserClans.findOne({ _id: userId });
+	const clanId = userClanInfo?.memberOf;
 
-			const clan = await Clans.findOne({ _id: clanId });
-			if (!clan) return this.errorReply(`Error: Clan '${clanId}' was not found in the database.`);
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-			if (clan.owner === userId) {
-				return this.errorReply("You are the owner of this clan. Transfer ownership before leaving or delete the clan.");
-			}
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Clan '${clanId}' was not found in the database.`);
 
-			await Clans.updateOne(
-				{ _id: clanId },
-				{ $unset: { [`members.${userId}`]: "" } }
-			);
+	if (clan.owner === userId) {
+		return this.errorReply("You are the owner of this clan. Transfer ownership before leaving or delete the clan.");
+	}
 
-			await UserClans.updateOne(
-				{ _id: userId },
-				{ $unset: { memberOf: 1 } }
-			);
+	await Clans.updateOne(
+		{ _id: clanId },
+		{ $unset: { [`members.${userId}`]: "" } }
+	);
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: userId,
-				action: 'LEAVE',
-				target: userId,
-				note: `User left the clan.`,
-			});
+	await UserClans.updateOne(
+		{ _id: userId },
+		{ $unset: { memberOf: 1 } }
+	);
 
-			const clanRoom = Rooms.get(clan.chatRoom);
-			if (clanRoom) {
-				clanRoom.auth.delete(userId);
-				clanRoom.saveSettings();
-				clanRoom.add(`|html|<div class="infobox"><center>${user.name} left the clan.</center></div>`).update();
-			}
-			this.sendReply(`You have successfully left the clan '${clan.name}'.`);
-		},
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: userId,
+		action: 'LEAVE',
+		target: userId,
+		note: `User left the clan.`,
+	});
 
-		async kick(target, room, user) {
-			this.checkChat();
-			if (!user.named) return this.errorReply("You must be logged in to kick users.");
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		clanRoom.auth.delete(userId);
+		clanRoom.saveSettings();
+		clanRoom.add(`|html|<div class="infobox"><center>${user.name} left the clan.</center></div>`).update();
+	}
 
-			const targetId = toID(target);
-			const kickerId = user.id;
+	delete (user as any).clanTag;
+	user.updateIdentity();
 
-			if (!targetId) return this.errorReply("Specify the user you wish to kick.");
-			if (targetId === kickerId) return this.errorReply("You cannot kick yourself.");
+	this.sendReply(`You have successfully left the clan '${clan.name}'.`);
+},
 
-			const kickerClanInfo = await UserClans.findOne({ _id: kickerId });
-			const clanId = kickerClanInfo?.memberOf;
-			
-			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+async kick(target, room, user) {
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to kick users.");
 
-			const clan = await Clans.findOne({ _id: clanId });
-			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+	const targetId = toID(target);
+	const kickerId = user.id;
 
-			if (!hasClanPermission(clan, kickerId, 'canKick')) {
-				return this.errorReply(`Your rank (${clan.members[kickerId]?.rank}) does not have permission to kick users.`);
-			}
+	if (!targetId) return this.errorReply("Specify the user you wish to kick.");
+	if (targetId === kickerId) return this.errorReply("You cannot kick yourself.");
 
-			if (!clan.members[targetId]) {
-				return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
-			}
+	const kickerClanInfo = await UserClans.findOne({ _id: kickerId });
+	const clanId = kickerClanInfo?.memberOf;
+	
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-			if (clan.owner === targetId) {
-				return this.errorReply("You cannot kick the clan owner.");
-			}
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-			const kickerRank = clan.ranks[clan.members[kickerId].rank];
-			const targetRank = clan.ranks[clan.members[targetId].rank];
+	if (!hasClanPermission(clan, kickerId, 'canKick')) {
+		return this.errorReply(`Your rank (${clan.members[kickerId]?.rank}) does not have permission to kick users.`);
+	}
 
-			if (targetRank.permissionLevel >= kickerRank.permissionLevel) {
-				return this.errorReply("You cannot kick users with equal or higher rank than yours.");
-			}
+	if (!clan.members[targetId]) {
+		return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
+	}
 
-			await Clans.updateOne(
-				{ _id: clanId },
-				{ $unset: { [`members.${targetId}`]: "" } }
-			);
+	if (clan.owner === targetId) {
+		return this.errorReply("You cannot kick the clan owner.");
+	}
 
-			await UserClans.updateOne(
-				{ _id: targetId },
-				{ $unset: { memberOf: 1 } }
-			);
+	const kickerRank = clan.ranks[clan.members[kickerId].rank];
+	const targetRank = clan.ranks[clan.members[targetId].rank];
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: kickerId,
-				action: 'KICK',
-				target: targetId,
-				note: `User was kicked from the clan.`,
-			});
+	if (targetRank.permissionLevel >= kickerRank.permissionLevel) {
+		return this.errorReply("You cannot kick users with equal or higher rank than yours.");
+	}
 
-			const clanRoom = Rooms.get(clan.chatRoom);
-			if (clanRoom) {
-				clanRoom.auth.delete(targetId);
-				clanRoom.saveSettings();
-				clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
-			}
-			const targetUser = Users.getExact(targetId);
-			if (targetUser?.connected) {
-				targetUser.popup(`|html|<div class="infobox">You have been kicked from the clan <b>${clan.name}</b> by ${user.name}.</div>`);
-			}
-			this.sendReply(`You kicked '${targetId}' from ${clan.name}.`);
-		},
+	await Clans.updateOne(
+		{ _id: clanId },
+		{ $unset: { [`members.${targetId}`]: "" } }
+	);
+
+	await UserClans.updateOne(
+		{ _id: targetId },
+		{ $unset: { memberOf: 1 } }
+	);
+
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: kickerId,
+		action: 'KICK',
+		target: targetId,
+		note: `User was kicked from the clan.`,
+	});
+
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		clanRoom.auth.delete(targetId);
+		clanRoom.saveSettings();
+		clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
+	}
+
+	const targetUser = Users.getExact(targetId);
+	if (targetUser?.connected) {
+		delete (targetUser as any).clanTag;
+		targetUser.updateIdentity();
+		targetUser.popup(`|html|<div class="infobox">You have been kicked from the clan <b>${clan.name}</b> by ${user.name}.</div>`);
+	}
+
+	this.sendReply(`You kicked '${targetId}' from ${clan.name}.`);
+},
 
 		async invite(target, room, user) {
 			this.checkChat();
@@ -1307,52 +1372,61 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`You updated the clan description to: "${description}"`);
 	},
 
-	async settag(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to set clan tag.");
+		async settag(target, room, user) {
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to set clan tag.");
 
-		const tag = target.trim().toUpperCase();
-		const actorId = user.id;
+	const tag = target.trim().toUpperCase();
+	const actorId = user.id;
 
-		if (!tag) return this.errorReply("You must specify a tag.");
-		if (tag.length > 4) return this.errorReply("Clan tag must be 3 characters or less.");
-		if (!/^[A-Z]+$/.test(tag)) return this.errorReply("Clan tag must contain only uppercase letters.");
+	if (!tag) return this.errorReply("You must specify a tag.");
+	if (tag.length > 3) return this.errorReply("Clan tag must be 3 characters or less.");
+	if (!/^[A-Z]+$/.test(tag)) return this.errorReply("Clan tag must contain only uppercase letters.");
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+	const actorClanInfo = await UserClans.findOne({ _id: actorId });
+	const clanId = actorClanInfo?.memberOf;
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		if (!hasClanPermission(clan, actorId, 'canEditTag')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan tag.`);
+	if (!hasClanPermission(clan, actorId, 'canEditTag')) {
+		return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan tag.`);
+	}
+
+	const oldTag = clan.tag;
+
+	await Clans.updateOne(
+		{ _id: clanId },
+		{ $set: { tag: tag } }
+	);
+
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: actorId,
+		action: 'SET_TAG',
+		oldValue: oldTag,
+		newValue: tag,
+		note: `Updated clan tag.`,
+	});
+
+	for (const memberId in clan.members) {
+		const member = Users.get(memberId);
+		if (member?.connected) {
+			(member as any).clanTag = tag;
+			member.updateIdentity();
 		}
+	}
 
-		const oldTag = clan.tag;
+	const clanRoom = Rooms.get(clan.chatRoom);
+	if (clanRoom) {
+		clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan tag from "${oldTag}" to "${tag}".</center></div>`).update();
+	}
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { tag: tag } }
-		);
-
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_TAG',
-			oldValue: oldTag,
-			newValue: tag,
-			note: `Updated clan tag.`,
-		});
-
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} updated the clan tag from "${oldTag}" to "${tag}".</center></div>`).update();
-		}
-		this.sendReply(`You updated the clan tag from "${oldTag}" to "${tag}".`);
-	},
+	this.sendReply(`You updated the clan tag from "${oldTag}" to "${tag}".`);
+},
 	
 	async setmotw(target, room, user) {
 		this.checkChat();
@@ -1556,4 +1630,37 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|html|${output}`);
 	},
   },
+};
+
+export const loginfilter: Chat.LoginFilter = async user => {
+	const userClanInfo = await UserClans.findOne({ _id: user.id });
+	if (userClanInfo?.memberOf) {
+		const clan = await Clans.findOne({ _id: userClanInfo.memberOf });
+		if (clan) {
+			(user as any).clanTag = clan.tag;
+		}
+	}
+};
+
+const originalGetIdentity = Users.User.prototype.getIdentity;
+Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
+	const clanTag = (this as any).clanTag;
+	const baseIdentity = originalGetIdentity.call(this, room);
+	
+	if (!clanTag) return baseIdentity;
+	
+	const punishgroups = Config.punishgroups || { locked: null, muted: null };
+	if (this.locked || this.namelocked) {
+		return baseIdentity; // Don't show tag if locked
+	}
+	
+	if (room && room.isMuted(this)) {
+		return baseIdentity; // Don't show tag if muted
+	}
+	
+	// Extract symbol and name from baseIdentity
+	const symbol = baseIdentity.charAt(0);
+	const name = baseIdentity.slice(1);
+	
+	return `${symbol}[${clanTag}] ${name}`;
 };
