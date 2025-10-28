@@ -1312,7 +1312,7 @@ export const commands: Chat.ChatCommands = {
 		const actorId = user.id;
 
 		if (!tag) return this.errorReply("You must specify a tag.");
-		if (tag.length > 3) return this.errorReply("Clan tag must be 3 characters or less.");
+		if (tag.length > 4) return this.errorReply("Clan tag must be 3 characters or less.");
 		if (!/^[A-Z]+$/.test(tag)) return this.errorReply("Clan tag must contain only uppercase letters.");
 
 		const actorClanInfo = await UserClans.findOne({ _id: actorId });
