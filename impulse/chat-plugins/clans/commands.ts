@@ -1177,4 +1177,5 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReply(`You transferred ownership of ${clan.name} to '${targetId}'. You are now a Leader.`);
 	},
+	},
 };
