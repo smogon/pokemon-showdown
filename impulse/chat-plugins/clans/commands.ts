@@ -207,7 +207,7 @@ export const commands: Chat.ChatCommands = {
 
 				if (ownerUser.connected) {
 					ownerUser.joinRoom(newRoom.roomid);
-					const popupMessage = `|html|<div class="infobox"><div class="infobox-message">${user.name} has created the clan <b>${clanName}</b> for you! You are the Room Owner (#).</div><br /><center><button class="button" name="join" value="${newRoom.roomid}">Go to Clan Room: #${newRoom.roomid}</button></center></div>`;
+					const popupMessage = `|html|<div class="infobox"><div class="infobox-message">${user.name} has created the clan <b>${clanName}</b> for you! You are the clan owner (#).</div><br /><center><button class="button" name="join" value="${newRoom.roomid}">Go to Clan Room: #${newRoom.roomid}</button></center></div>`;
 					ownerUser.popup(popupMessage);
 				}
 
@@ -335,6 +335,52 @@ export const commands: Chat.ChatCommands = {
 			if (clanRoom) this.sendReply(`You have been automatically joined to the clan chatroom: #${clanRoom.roomid}`);
 		},
 
+		async leave(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to leave a clan.");
+			
+			const userId = user.id;
+
+			const userClanInfo = await UserClans.findOne({ _id: userId });
+			const clanId = userClanInfo?.memberOf;
+
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Clan '${clanId}' was not found in the database.`);
+
+			if (clan.owner === userId) {
+				return this.errorReply("You are the owner of this clan. Transfer ownership before leaving or delete the clan.");
+			}
+
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $unset: { [`members.${userId}`]: "" } }
+			);
+
+			await UserClans.updateOne(
+				{ _id: userId },
+				{ $unset: { memberOf: 1 } }
+			);
+
+			await ClanLogs.insertOne({
+				clanId: clanId,
+				timestamp: Date.now(),
+				actor: userId,
+				action: 'LEAVE',
+				target: userId,
+				note: `User left the clan.`,
+			});
+
+			const clanRoom = Rooms.get(clan.chatRoom);
+			if (clanRoom) {
+				clanRoom.auth.delete(userId);
+				clanRoom.saveSettings();
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} left the clan.</center></div>`).update();
+			}
+			this.sendReply(`You have successfully left the clan '${clan.name}'.`);
+		},
+
 		async invite(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to send invites.");
@@ -406,7 +452,7 @@ export const commands: Chat.ChatCommands = {
 
 			const clanRoom = Rooms.get(clan.chatRoom);
 			if (clanRoom) {
-				clanRoom.add(`|c|${user.getIdentity(clanRoom)}|/log ${user.name} invited ${targetId} to the clan.`).update();
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} invited ${targetId} to the clan.</center></div>`).update();
 			}
 		},
 
