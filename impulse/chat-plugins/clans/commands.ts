@@ -1772,31 +1772,26 @@ export const commands: Chat.ChatCommands = {
 	this.checkChat();
 	if (!user.named) return this.errorReply("You must be logged in to view clan profiles.");
 
-	const targetUserId = toID(target) || user.id;
-	const targetUserName = target ? target.trim() : user.name;
+	let clanId: ID;
 
-	const userClanInfo = await UserClans.findOne({ _id: targetUserId });
-	const clanId = userClanInfo?.memberOf;
-
-	if (!clanId) {
-		const errorMsg = targetUserId === user.id 
-			? "You do not have a clan profile yet. Join or create a clan to start!" 
-			: `User "${targetUserId}" is not a member of any clan.`;
-		return this.errorReply(errorMsg);
+	if (target) {
+		clanId = toID(target);
+	} else {
+		const userClanInfo = await UserClans.findOne({ _id: user.id });
+		clanId = userClanInfo?.memberOf as ID;
+		if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its profile.");
 	}
 
 	const clan = await Clans.findOne({ _id: clanId });
-	if (!clan) return this.errorReply(`Error: Clan '${clanId}' was not found in the database.`);
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 
-	const memberData = clan.members[targetUserId];
-	if (!memberData) return this.errorReply(`Error: User '${targetUserId}' not found in clan members.`);
-
-	const rank = clan.ranks[memberData.rank];
-	const memberSince = toDurationString(Date.now() - memberData.joinDate);
 	const totalMembers = Object.keys(clan.members).length;
-
-	const isOwner = clan.owner === targetUserId;
-	const isMOTW = clan.memberOfTheWeek === targetUserId;
+	const clanAge = toDurationString(Date.now() - clan.created);
+	const lastActive = toDurationString(Date.now() - clan.lastActive);
+	const ownerUser = Users.getExact(clan.owner);
+	const ownerName = ownerUser?.name || clan.owner;
+	const motwUser = clan.memberOfTheWeek ? Users.getExact(clan.memberOfTheWeek) : null;
+	const motwName = motwUser?.name || clan.memberOfTheWeek || 'None';
 
 	const w = 160, h = 222;
 
@@ -1817,25 +1812,23 @@ export const commands: Chat.ChatCommands = {
 	
 	html += `</div>`;
 	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
-	html += `<strong style="font-size: 22px;">${targetUserName}</strong>`;
-	
-	if (isOwner) {
-		html += ` <span style="color: #d4af37; font-size: 0.9em;">👑 Owner</span>`;
-	}
-	if (isMOTW) {
-		html += ` <span style="color: #4CAF50; font-size: 0.9em;">⭐ MOTW</span>`;
-	}
-	
-	html += `<br />`;
+	html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
 	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
-	html += `<strong>Clan:</strong> ${clan.name} [${clan.tag}]<br />`;
-	html += `<strong>Rank:</strong> ${rank.name}<br />`;
-	html += `<strong>Member Since:</strong> ${memberSince} ago<br />`;
-	html += `<strong>Points Contributed:</strong> ${memberData.totalPointsContributed.toLocaleString()}<br />`;
-	html += `<strong>Clan Points:</strong> ${clan.points.toLocaleString()}<br />`;
-	html += `<strong>Clan Level:</strong> ${clan.level}<br />`;
-	html += `<strong>Total Members:</strong> ${totalMembers}<br />`;
-	html += `<strong>Clan Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
+	html += `<strong>Tag:</strong> [${clan.tag}]<br />`;
+	html += `<strong>Owner:</strong> ${ownerName}<br />`;
+	html += `<strong>Members:</strong> ${totalMembers}<br />`;
+	html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
+	html += `<strong>Level:</strong> ${clan.level}<br />`;
+	html += `<strong>Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
+	html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
+	html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins.toLocaleString()}<br />`;
+	html += `<strong>Event Wins:</strong> ${clan.stats.eventWins.toLocaleString()}<br />`;
+	html += `<strong>Total Points Earned:</strong> ${clan.stats.totalPointsEarned.toLocaleString()}<br />`;
+	html += `<strong>Created:</strong> ${clanAge} ago<br />`;
+	html += `<strong>Last Active:</strong> ${lastActive} ago<br />`;
+	html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
+	html += `<strong>Allies:</strong> ${clan.allies.length}<br />`;
+	html += `<strong>Rivals:</strong> ${clan.rivals.length}<br />`;
 	html += `</div></div></div>`;
 	
 	this.sendReply(`|html|${html}`);
