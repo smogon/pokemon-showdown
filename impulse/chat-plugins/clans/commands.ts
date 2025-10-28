@@ -1767,52 +1767,34 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|html|${output}`);
 	},
 
-	async profile(target, room, user) {
+		async profile(target, room, user) {
 	if (!this.runBroadcast()) return;
 	let clan = null;
-	let lookupType = '';
 
 	if (target) {
 		const id = toID(target);
-
-		// 1. Try to find by clan id
 		clan = await Clans.findOne({ _id: id });
-		if (clan) {
-			lookupType = 'clanId';
-		} else {
-			// 2. Try to find by clan name (case-insensitive)
+		if (!clan) {
 			clan = await Clans.findOne({ name: new RegExp('^' + target.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$', 'i') });
-			if (clan) {
-				lookupType = 'clanName';
-			} else {
-				// 3. Try to find user by username/userid, then their clan
-				const userId = toID(target);
-				const userClanInfo = await UserClans.findOne({ _id: userId });
-				const memberOfId = userClanInfo?.memberOf;
-				if (memberOfId) {
-					clan = await Clans.findOne({ _id: memberOfId });
-					if (clan) lookupType = 'userClan';
-				}
-			}
+		}
+		if (!clan) {
+			const userId = toID(target);
+			const userClanInfo = await UserClans.findOne({ _id: userId });
+			const memberOfId = userClanInfo?.memberOf;
+			if (memberOfId) clan = await Clans.findOne({ _id: memberOfId });
 		}
 	} else {
-		// 4. Default to current user's clan
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
 		const memberOfId = userClanInfo?.memberOf;
-		if (memberOfId) {
-			clan = await Clans.findOne({ _id: memberOfId });
-			if (clan) lookupType = 'selfClan';
-		}
+		if (memberOfId) clan = await Clans.findOne({ _id: memberOfId });
 	}
 
 	if (!clan) {
-		if (target) {
-			return this.errorReply(
-				`No clan found for "${target}". (Not a clan name, ID, or user currently in a clan)`
-			);
-		} else {
-			return this.errorReply("You are not a member of any clan.");
-		}
+		return this.errorReply(
+			target
+				? `No clan found for "${target}". (Not a clan name, ID, or user currently in a clan)`
+				: "You are not a member of any clan."
+		);
 	}
 
 	const w = 100, h = 100;
@@ -1841,19 +1823,20 @@ export const commands: Chat.ChatCommands = {
 	html += `<div style="font-size: 0.95em; color: #444; margin-bottom: 9px; white-space: pre-wrap;">${desc}</div>`;
 	html += `</div>`;
 	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
-	html += `<strong style="font-size: 22px;">Clan Profile</strong><br />`;
+	html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
 	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
-	html += `<strong>Clan Points:</strong> ${clan.points.toLocaleString()}<br />`;
-	html += `<strong>Level:</strong> ${clan.level}<br />`;
-	html += `<strong>Bank:</strong> ${clan.bank.toLocaleString()}<br />`;
-	html += `<strong>Members:</strong> ${memberCount}<br />`;
-	html += `<strong>Owner:</strong> ${ownerName}<br />`;
-	html += `<strong>Tour Wins:</strong> ${tourWins}<br />`;
-	html += `<strong>Event Wins:</strong> ${eventWins}<br />`;
-	html += `<strong>Total Points Earned:</strong> ${totalPointsEarned.toLocaleString()}<br />`;
-	html += `<strong>Allies:</strong> ${alliesCount}<br />`;
-	html += `<strong>Rivals:</strong> ${rivalsCount}<br />`;
-	html += `<strong>Created:</strong> ${createdDate}<br />`;
+
+	html += `<div style="margin-bottom: 8px;"><strong>Clan Points:</strong> ${clan.points.toLocaleString()}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Level:</strong> ${clan.level}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Bank:</strong> ${clan.bank.toLocaleString()}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Members:</strong> ${memberCount}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Owner:</strong> ${ownerName}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Tour Wins:</strong> ${tourWins}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Event Wins:</strong> ${eventWins}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Total Points Earned:</strong> ${totalPointsEarned.toLocaleString()}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Allies:</strong> ${alliesCount}</div>`;
+	html += `<div style="margin-bottom: 8px;"><strong>Rivals:</strong> ${rivalsCount}</div>`;
+	html += `<div style="margin-bottom: 2px;"><strong>Created:</strong> ${createdDate}</div>`;
 	html += `</div></div></div>`;
 	this.sendReply(`|html|${html}`);
 },
