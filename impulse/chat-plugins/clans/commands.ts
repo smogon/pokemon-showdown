@@ -82,7 +82,7 @@ const DEFAULT_STATS: ClanStats = {
 
 export const commands: Chat.ChatCommands = {
 	clan: {
-		create: async function (target, room, user) {
+		async create(target, room, user) {
 			this.checkCan('bypassall');
 
 			const [name, ownerUsername] = target.split(',').map(s => s.trim());
@@ -160,7 +160,7 @@ export const commands: Chat.ChatCommands = {
 				await ClanLogs.insertOne({
 					clanId: clanId,
 					timestamp: now,
-					actor: user.id, // The admin running the command is the actor
+					actor: user.id,
 					action: 'CREATE',
 					target: ownerId,
 					note: `Clan ${clanName} created for owner ${ownerId}.`,
@@ -186,19 +186,16 @@ export const commands: Chat.ChatCommands = {
 					Rooms.global.chatRooms.push(newRoom);
 					Rooms.global.writeChatRoomData();
 				} else {
-					// Ensure owner is set even if room pre-exists
 					newRoom.auth.set(ownerId, '#');
 					newRoom.saveSettings();
 				}
 
-				// The owner joins the room if they are connected
 				if (ownerUser.connected) {
 					ownerUser.joinRoom(newRoom.roomid);
+					// Send popup notification to the owner
+					ownerUser.popup(`|html|${user.name} has created the clan <b>${clanName}</b> for you! Your clan room is <a href="/${newRoom.roomid}">#${newRoom.roomid}</a>, and you are the Room Owner (#).`);
 				}
-
-				this.privateGlobalModAction(`${user.name} created the clan ${clanName} (${clanId}) for owner ${ownerId}.`);
 				this.sendReply(`Clan "${clanName}" has been successfully created! Owner: ${ownerId}.`);
-				this.sendReply(`Persistent chatroom: #${chatRoomId} created/updated. Owner was set as room owner (#).`);
 			} catch (e) {
 				this.errorReply("An error occurred while creating the clan.");
 				await Clans.deleteOne({ _id: clanId });
@@ -207,7 +204,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		delete: async function (target, room, user) {
+		async delete(target, room, user) {
 			this.checkCan('bypassall');
 
 			const clanId = toID(target);
@@ -219,7 +216,9 @@ export const commands: Chat.ChatCommands = {
 			if (!clan) {
 				return this.errorReply(`Clan '${clanId}' not found.`);
 			}
-
+			
+			const ownerId = clan.owner;
+			const ownerUser = Users.getExact(ownerId);
 			const chatRoomId = clan.chatRoom;
 			const chatRoom = Rooms.get(chatRoomId);
 
@@ -238,7 +237,10 @@ export const commands: Chat.ChatCommands = {
 				await ClanPointsLogs.deleteMany({ clanId: clanId });
 				await ClanBankLogs.deleteMany({ clanId: clanId });
 
-				this.privateGlobalModAction(`${user.name} deleted the clan ${clan.name} (${clanId}).`);
+				// 3. Send popup notification to the owner
+				if (ownerUser?.connected) {
+					ownerUser.popup(`|html|Your clan <b>${clan.name}</b> was deleted by ${user.name}. All related data and the chatroom (#${chatRoomId}) have been removed.`);
+				}
 				this.sendReply(`Clan ${clan.name} (${clanId}) has been successfully deleted.`);
 			} catch (e) {
 				this.errorReply("An error occurred while deleting the clan.");
