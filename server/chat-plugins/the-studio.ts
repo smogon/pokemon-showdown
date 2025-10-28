@@ -180,9 +180,10 @@ export class LastFMInterface {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
 		let buf = ``;
-		if (req.results?.trackmatches?.track?.length) {
-			buf += `<table><tr><td style="padding-right:5px">`;
-			const obj = req.results.trackmatches.track[0];
+		const first = req.results?.trackmatches?.track?.[0];
+		if (first) {
+			buf += `<table><tr><td style=\"padding-right:5px\">`;
+			const obj = first;
 			const trackName = obj.name || "Untitled";
 			const artistName = obj.artist || "Unknown Artist";
 			const searchName = `${artistName} - ${trackName}`;
@@ -190,12 +191,12 @@ export class LastFMInterface {
 				const img = obj.image;
 				const imageIndex = img.length >= 3 ? 2 : img.length - 1;
 				if (img[imageIndex]['#text'] && !DEFAULT_IMAGES.includes(img[imageIndex]['#text'])) {
-					buf += `<img src="${img[imageIndex]['#text']}" width="75" height="75" />`;
+					buf += `<img src=\"${img[imageIndex]['#text']}\" width=\"75\" height=\"75\" />`;
 				}
 			}
 			buf += `</td><td>`;
 			const artistUrl = obj.url.split('_/')[0];
-			buf += `<strong><a href="${artistUrl}">${artistName}</a> - <a href="${obj.url}">${trackName}</a></strong><br />`;
+			buf += `<strong><a href=\"${artistUrl}\">${artistName}</a> - <a href=\"${obj.url}\">${trackName}</a></strong><br />`;
 			let videoIDs: string[] | undefined;
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
@@ -207,7 +208,7 @@ export class LastFMInterface {
 			if (!videoIDs?.length || recommendations.youtubeSearchDisabled) {
 				buf += searchName;
 			} else {
-				buf += `<a href="https://youtu.be/${videoIDs[0]}">YouTube link</a>`;
+				buf += `<a href=\"https://youtu.be/${videoIDs[0]}\">YouTube link</a>`;
 			}
 			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
@@ -225,7 +226,7 @@ export class LastFMInterface {
 		}
 	}
 	getScrobbleBadge() {
-		return `<div class="gray" style="float:right;font-size:8pt">[powered by AudioScrobbler]</div><div style="clear:both"></div>`;
+		return `<div class=\"gray\" style=\"float:right;font-size:8pt\">[powered by AudioScrobbler]</div><div style=\"clear:both\"></div>`;
 	}
 }
 
@@ -332,50 +333,50 @@ class RecommendationsInterface {
 
 	async render(rec: Recommendation, suggested = false) {
 		let buf = ``;
-		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
-		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
+		buf += `<div style=\"color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))\">`;
+		buf += `<table style=\"margin:auto;background:rgba(255,255,255,0.25);padding:3px;\"><tbody><tr>`;
 		if (!rec.videoInfo) {
 			// eslint-disable-next-line require-atomic-updates
 			rec.videoInfo = await YouTube.getVideoData(YouTube.getId(rec.url));
 			saveRecommendations();
 		}
 		if (rec.videoInfo) {
-			buf += `<td style="text-align:center;"><img src="${rec.videoInfo.thumbnail}" width="120" height="67" /><br />`;
-			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, "points")} | ` : ``}${rec.videoInfo.views} views</em></small></td>`;
+			buf += `<td style=\"text-align:center;\"><img src=\"${rec.videoInfo.thumbnail}\" width=\"120\" height=\"67\" /><br />`;
+			buf += `<small><em>${!suggested ? `${Chat.count(rec.likes, \"points\")} | ` : ``}${rec.videoInfo.views} views</em></small></td>`;
 		}
-		buf += Utils.html`<td style="max-width:300px"><a href="${rec.url}" style="color:#000;font-weight:bold;">${rec.artist} - ${rec.title}</a>`;
+		buf += Utils.html`<td style=\"max-width:300px\"><a href=\"${rec.url}\" style=\"color:#000;font-weight:bold;\">${rec.artist} - ${rec.title}</a>`;
 		const tags = rec.tags.map(x => Utils.escapeHTML(x))
 			.filter(x => toID(x) !== toID(rec.userData.name) && toID(x) !== toID(rec.artist));
 		if (tags.length) {
 			buf += `<br /><strong>Tags:</strong> <em>${tags.join(', ')}</em>`;
 		}
 		if (rec.description) {
-			buf += `<br /><span style="display:inline-block;line-height:1.15em;"><strong>Description:</strong> ${Utils.escapeHTML(rec.description)}</span>`;
+			buf += `<br /><span style=\"display:inline-block;line-height:1.15em;\"><strong>Description:</strong> ${Utils.escapeHTML(rec.description)}</span>`;
 		}
 		if (!rec.videoInfo && !suggested) {
-			buf += `<br /><strong>Score:</strong> ${Chat.count(rec.likes, "points")}`;
+			buf += `<br /><strong>Score:</strong> ${Chat.count(rec.likes, \"points\")}`;
 		}
 		if (!rec.userData.avatar) {
 			buf += `<br /><strong>Recommended by:</strong> ${rec.userData.name}`;
 		}
 		buf += `<hr />`;
 		if (suggested) {
-			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/approvesuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Approve</button> | `;
-			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/denysuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Deny</button>`;
+			buf += Utils.html`<button class=\"button\" name=\"send\" value=\"/msgroom thestudio,/approvesuggestion ${rec.userData.name}|${rec.artist}|${rec.title}\">Approve</button> | `;
+			buf += Utils.html`<button class=\"button\" name=\"send\" value=\"/msgroom thestudio,/denysuggestion ${rec.userData.name}|${rec.artist}|${rec.title}\">Deny</button>`;
 		} else {
-			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/likerec ${rec.artist}|${rec.title}" style="float:right;display:inline;padding:3px 5px;font-size:8pt;">`;
-			buf += `<img src="https://${Config.routes.client}/sprites/bwicons/441.png" style="margin:-9px 0 -6px -7px;" width="32" height="32" />`;
-			buf += `<span style="position:relative;bottom:2.6px;">Upvote</span></button>`;
+			buf += Utils.html`<button class=\"button\" name=\"send\" value=\"/msgroom thestudio,/likerec ${rec.artist}|${rec.title}\" style=\"float:right;display:inline;padding:3px 5px;font-size:8pt;\">`;
+			buf += `<img src=\"https://${Config.routes.client}/sprites/bwicons/441.png\" style=\"margin:-9px 0 -6px -7px;\" width=\"32\" height=\"32\" />`;
+			buf += `<span style=\"position:relative;bottom:2.6px;\">Upvote</span></button>`;
 		}
 		buf += `</td>`;
 		if (rec.userData.avatar) {
-			buf += `<td style="text-align:center;width:110px;background:rgba(255,255,255,0.4);border-radius:15px;">`;
+			buf += `<td style=\"text-align:center;width:110px;background:rgba(255,255,255,0.4);border-radius:15px;\">`;
 			const isCustom = rec.userData.avatar.startsWith('#');
-			buf += `<img style="margin-bottom:-38px;" src="https://${Config.routes.client}/sprites/trainers${isCustom ? '-custom' : ''}/${isCustom ? rec.userData.avatar.slice(1) : rec.userData.avatar}.png" width="80" height="80" />`;
-			buf += `<br /><span style="background:rgba(0,0,0,0.5);padding:1.5px 4px;color:white;font-size:7pt;">Recommended by:`;
+			buf += `<img style=\"margin-bottom:-38px;\" src=\"https://${Config.routes.client}/sprites/trainers${isCustom ? '-custom' : ''}/${isCustom ? rec.userData.avatar.slice(1) : rec.userData.avatar}.png\" width=\"80\" height=\"80\" />`;
+			buf += `<br /><span style=\"background:rgba(0,0,0,0.5);padding:1.5px 4px;color:white;font-size:7pt;\">Recommended by:`;
 			buf += `<br /><strong>${rec.userData.name}</strong></span></td>`;
 		} else {
-			buf += `<td><span style="background:rgba(0,0,0,0.5);padding:1.5px 4px;color:white;font-size:7pt;">Recommended by: <strong>${rec.userData.name}</strong></span></td>`;
+			buf += `<td><span style=\"background:rgba(0,0,0,0.5);padding:1.5px 4px;color:white;font-size:7pt;\">Recommended by: <strong>${rec.userData.name}</strong></span></td>`;
 		}
 		buf += `</tbody></table>`;
 		buf += `</div>`;
@@ -676,18 +677,18 @@ export const pages: Chat.PageTable = {
 		this.checkCan('mute', null, room);
 		if (!user.inRooms.has(room.roomid)) throw new Chat.ErrorMessage(`You must be in ${room.title} to view this page.`);
 		this.title = 'Recommendations';
-		let buf = `<div class="pad">`;
-		buf += `<button style="float:right" class="button" name="send" value="/j view-recommendations-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		let buf = `<div class=\"pad\">`;
+		buf += `<button style=\"float:right\" class=\"button\" name=\"send\" value=\"/j view-recommendations-${room.roomid}\"><i class=\"fa fa-refresh\"></i> Refresh</button>`;
 		const recs = recommendations.saved;
 		if (!recs?.length) {
 			return `${buf}<h2>There are currently no recommendations.</h2></div>`;
 		}
 		buf += `<h2>Recommendations (${recs.length}):</h2>`;
 		for (const rec of recs) {
-			buf += `<div class="infobox">`;
+			buf += `<div class=\"infobox\">`;
 			buf += await Recs.render(rec);
 			if (user.can('mute', null, room) || toID(rec.userData.name) === user.id) {
-				buf += `<hr /><button class="button" name="send" value="/msgroom thestudio,/removerecommendation ${rec.artist}|${rec.title}">Delete</button>`;
+				buf += `<hr /><button class=\"button\" name=\"send\" value=\"/msgroom thestudio,/removerecommendation ${rec.artist}|${rec.title}\">Delete</button>`;
 			}
 			buf += `</div>`;
 		}
@@ -698,15 +699,15 @@ export const pages: Chat.PageTable = {
 		this.checkCan('mute', null, room);
 		if (!user.inRooms.has(room.roomid)) throw new Chat.ErrorMessage(`You must be in ${room.title} to view this page.`);
 		this.title = 'Suggested Recommendations';
-		let buf = `<div class="pad">`;
-		buf += `<button style="float:right" class="button" name="send" value="/j view-suggestedrecommendations-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		let buf = `<div class=\"pad\">`;
+		buf += `<button style=\"float:right\" class=\"button\" name=\"send\" value=\"/j view-suggestedrecommendations-${room.roomid}\"><i class=\"fa fa-refresh\"></i> Refresh</button>`;
 		const recs = recommendations.suggested;
 		if (!recs?.length) {
 			return `${buf}<h2>There are currently no suggested recommendations.</h2></div>`;
 		}
 		buf += `<h2>Suggested Recommendations (${recs.length}):</h2>`;
 		for (const rec of recs) {
-			buf += `<div class="infobox">`;
+			buf += `<div class=\"infobox\">`;
 			buf += await Recs.render(rec, true);
 			buf += `</div>`;
 		}
