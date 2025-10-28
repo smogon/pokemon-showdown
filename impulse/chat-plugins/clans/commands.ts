@@ -1811,7 +1811,7 @@ export const commands: Chat.ChatCommands = {
 	
 	html += `</div>`;
 	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
-	html += `<strong style="font-size: 22px;">${clan.name} (${clan.tag})</strong><br />`;
+	html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
 	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
 	html += `<strong>Owner:</strong> ${ownerName}<br />`;
 	html += `<strong>Members:</strong> ${totalMembers}<br />`;
