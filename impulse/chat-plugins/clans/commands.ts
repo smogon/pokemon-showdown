@@ -271,29 +271,90 @@ export const commands: Chat.ChatCommands = {
 			const chatRoom = Rooms.get(chatRoomId);
 
 			try {
+				// Step 1: Destroy the chatroom first (if it exists)
 				if (chatRoom) {
+					// Notify all users in the room before destruction
+					chatRoom.add(`|html|<div class="broadcast-red"><b>This clan chatroom is being permanently deleted by ${user.name}.</b></div>`).update();
+			
+					// Give users a moment to see the message
+					await new Promise(resolve => setTimeout(resolve, 1000));
+			
+					// Kick all users from the room
+					for (const userid in chatRoom.users) {
+						const roomUser = chatRoom.users[userid];
+						roomUser.leaveRoom(chatRoom);
+					}
+			
+					// Deregister from persistent storage
 					Rooms.global.deregisterChatRoom(chatRoom.roomid);
+			
+					// Delist from active rooms
 					Rooms.global.delistChatRoom(chatRoom.roomid);
+			
+					// Destroy the room instance
 					chatRoom.destroy();
+		
+					// Force immediate write to config file (bypass throttle)
+					await FS('config/chatrooms.json').writeUpdate(() => 
+						JSON.stringify(Rooms.global.settingsList)
+						.replace(/\{"title":/g, '\n{"title":')
+						.replace(/\]$/, '\n]'));
 				}
 
+				// Step 2: Delete all clan-related database entries
 				await Clans.deleteOne({ _id: clanId });
-				await UserClans.updateMany({ memberOf: clanId }, { $unset: { memberOf: 1 } });
+		
+				// Step 3: Remove clan membership from all users
+				await UserClans.updateMany(
+					{ memberOf: clanId }, 
+					{ $unset: { memberOf: 1 } }
+				);
+		
+				// Step 4: Delete all clan logs
 				await ClanLogs.deleteMany({ clanId: clanId });
 				await ClanPointsLogs.deleteMany({ clanId: clanId });
 				await ClanBankLogs.deleteMany({ clanId: clanId });
 
+				// Step 5: Notify the owner (if online)
 				if (ownerUser?.connected) {
-					ownerUser.popup(`|html|Your clan <b>${clan.name}</b> was deleted by ${user.name}. All related data and the chatroom (#${chatRoomId}) have been removed.`);
+					ownerUser.popup(
+						`|html|<div class="broadcast-red">` +
+						`<b>Your clan "${clan.name" has been permanently deleted by ${user.name}.</b><br />` +
+						`All clan data, members, logs, and the chatroom (#${chatRoomId}) have been removed from the server.` +
+						`</div>`
+					);
 				}
 
-				this.sendReply(`Clan ${clan.name} (${clanId}) has been successfully deleted.`);
+				// Step 6: Notify all former clan members (if online)
+				const memberIds = Object.keys(clan.members);
+				for (const memberId of memberIds) {
+					if (memberId === ownerId) continue; // Already notified owner
+					const member = Users.getExact(memberId);
+					if (member?.connected) {
+						member.popup(
+							`|html|<div class="broadcast-red">` +
+							`<b>The clan "${Utils.escapeHTML(clan.name)}" has been permanently deleted by ${user.name}.</b>` +
+							`</div>`
+						);
+					}
+				}
+				// Step 8: Success confirmation
+				this.sendReply(`Clan "${clan.name}" (${clanId}) has been successfully deleted.`);
+				Monitor.log(`[Clans] ${user.name} deleted clan: ${clan.name} (${clanId}) with ${memberIds.length} members`);
+		
 			} catch (e) {
-				this.errorReply("An error occurred while deleting the clan.");
-				Monitor.crashlog(e as Error, "Clan deletion command");
+				this.errorReply("An error occurred while deleting the clan. The deletion may have been partially completed.");
+				Monitor.crashlog(e as Error, "Clan deletion command", {
+					clanId,
+					clanName: clan.name,
+					user: user.name,
+				});
+		
+				// Attempt rollback notification
+				this.privateModAction(`(CRITICAL: Clan deletion failed for ${clanId}. Manual verification required.)`);
 			}
 		},
-
+		
 		async join(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to join a clan.");
