@@ -1645,22 +1645,28 @@ export const loginfilter: Chat.LoginFilter = async user => {
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const clanTag = (this as any).clanTag;
-	const baseIdentity = originalGetIdentity.call(this, room);
-	
-	if (!clanTag) return baseIdentity;
+	const customSymbol = (this as any).customSymbol;
 	
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
 	if (this.locked || this.namelocked) {
-		return baseIdentity; // Don't show tag if locked
+		return (punishgroups.locked?.symbol || '\u203d') + this.name;
 	}
-	
-	if (room && room.isMuted(this)) {
-		return baseIdentity; // Don't show tag if muted
+
+	if (room) {
+		if (room.isMuted(this)) {
+			return (punishgroups.muted?.symbol || '!') + this.name;
+		}
+		const roomGroup = room.auth.get(this);
+		if (customSymbol && (roomGroup === this.tempGroup || roomGroup === ' ')) {
+			return customSymbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
+		}
+		return roomGroup + (clanTag ? `[${clanTag}] ` : '') + this.name;
 	}
-	
-	// Extract symbol and name from baseIdentity
-	const symbol = baseIdentity.charAt(0);
-	const name = baseIdentity.slice(1);
-	
-	return `${symbol}[${clanTag}] ${name}`;
+
+	if (this.semilocked) {
+		return (punishgroups.muted?.symbol || '!') + this.name;
+	}
+
+	const symbol = customSymbol || this.tempGroup;
+	return symbol + (clanTag ? `[${clanTag}] ` : '') + this.name;
 };
