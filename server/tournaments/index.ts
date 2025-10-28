@@ -4,7 +4,6 @@ import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
 import { Economy, CURRENCY } from '../../impulse/economy';
-import { Clans, UserClans, ClanPointsLogs } from '../../impulse/chat-plugins/clans/database';
 import { tcgCardsCollection, userPacksCollection } from '../../impulse/chat-plugins/tcg/tcg_collections';
 // commented out doesn't look good on broadcast green.
 //import { nameColor } from '../../impulse/colors';
@@ -1196,6 +1195,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.remove();
 	}
 }*/
+	
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1219,9 +1219,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 					const baseRewards = rewardConfig.rewards?.map(reward => Math.floor(reward * multiplier)) || [];
 					const packRewards = rewardConfig.packs || [];
-					const clanRewards = rewardConfig.clanPoints || [];
-					const baseClanRewards = clanRewards?.map(reward => Math.floor(reward * multiplier)) || [];
-
 					const results = this.generator.getResults() as TournamentPlayer[][];
 
 					const places = ['winner', 'runner-up'];
@@ -1229,9 +1226,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 					const maxPlaceCredits = Math.min(baseRewards.length, results.length);
 					const maxPlacePacks = Math.min(packRewards.length, results.length);
-					const maxPlaceClan = Math.min(baseClanRewards.length, results.length);
-
-					const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks, maxPlaceClan);
+					const maxPlace = Math.max(maxPlaceCredits, maxPlacePacks);
 
 					// Group players by placement with their rewards
 					const placementGroups: Array<{
@@ -1251,7 +1246,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						const allPackNames: string[] = [];
 						let creditsAmount = 0;
 						let packsToAward = 0;
-						let clanPointsAmount = 0;
 
 						// Determine rewards for this placement
 						if (place < maxPlaceCredits) {
@@ -1260,10 +1254,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 						if (place < maxPlacePacks) {
 							packsToAward = packRewards[place] ?? 0;
 						}
-						if (place < maxPlaceClan) {
-							clanPointsAmount = baseClanRewards[place] ?? 0;
-						}
-// Get random packs once for this placement group (if applicable)
+
+						// Get random packs once for this placement group (if applicable)
 						if (packsToAward > 0) {
 							const cardCollection = tcgCardsCollection;
 							const randomSets = await cardCollection.aggregate<{ setId: string, setName: string, setLogo: string }>([
@@ -1313,29 +1305,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 								await Economy.updateBalance(userId, creditsAmount);
 							}
 
-							// Award clan points to the user's clan if configured
-							if (clanPointsAmount > 0) {
-								try {
-									const userClan = await UserClans.findOne({ _id: userId });
-									const clanId = userClan?.memberOf;
-									if (clanId) {
-										const clanInc: any = { $inc: { points: clanPointsAmount, "stats.totalPointsEarned": clanPointsAmount } };
-										if (place === 0) clanInc.$inc["stats.tourWins"] = 1;
-										await Clans.updateOne({ _id: clanId }, clanInc);
-										await ClanPointsLogs.insertOne({
-											clanId,
-											timestamp: new Date().toISOString(),
-											userid: userId,
-											actor: userId,
-											amount: clanPointsAmount,
-											reason: `Tournament ${this.name} (${this.room.roomid}) - ${places[place] || 'place ' + (place+1)}`
-										});
-									}
-								} catch (e) {
-									Monitor.warn?.(`Failed to award clan points for ${userId} in ${this.room.roomid}: ${e}`);
-								}
-							}
-
 							// Award packs if configured for this place
 							if (packsToAward > 0 && allPackNames.length > 0) {
 								const packCollection = userPacksCollection;
@@ -1374,7 +1343,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 								credits: creditsAmount,
 								packs: packsToAward,
 								packNames: allPackNames,
-								clanPoints: clanPointsAmount,
 							});
 						}
 					}
