@@ -14,7 +14,7 @@ import type {
 	ClanStats,
 } from './interface';
 import { generateThemedTable } from
-	'../../utils.ts';
+	'../../utils';
 
 const ALL_PERMISSIONS: ClanPermissions = {
 	canInvite: true,
