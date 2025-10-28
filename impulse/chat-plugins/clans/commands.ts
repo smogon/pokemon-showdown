@@ -84,6 +84,45 @@ const DEFAULT_STATS: ClanStats = {
 	totalPointsEarned: 0,
 };
 
+/**
+ * Formats a Date object into a string representation.
+ * @param date The Date object to format
+ * @param options Formatting options:
+ *   - date: if true, includes the date (YYYY-MM-DD format)
+ *   - time: if true, includes the time (HH:MM:SS format)
+ * @returns Formatted date/time string
+ */
+function to(date: Date, options: { date?: boolean; time?: boolean } = {}): string {
+	if (!(date instanceof Date) || isNaN(date.getTime())) {
+		return '';
+	}
+
+	const { date: showDate = false, time: showTime = false } = options;
+	
+	if (!showDate && !showTime) {
+		return date.toISOString();
+	}
+
+	let result = '';
+
+	if (showDate) {
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		result += `${year}-${month}-${day}`;
+	}
+
+	if (showTime) {
+		if (showDate) result += ' ';
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+		result += `${hours}:${minutes}:${seconds}`;
+	}
+
+	return result;
+}
+
 function toDurationString(ms: number): string {
 	const seconds = Math.floor(ms / 1000);
 	const minutes = Math.floor(seconds / 60);
@@ -713,7 +752,7 @@ export const commands: Chat.ChatCommands = {
 								sentDataRows.push([
 									invite.userid,
 									invite.actor,
-									Utils.to(new Date(invite.timestamp), {date: true, time: true})
+									to(new Date(invite.timestamp), {date: true, time: true})
 								]);
 							});
 							
