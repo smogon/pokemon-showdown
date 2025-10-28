@@ -10,8 +10,6 @@ export type ClanPermission =
 	| 'canEditTag'
 	| 'canSetMotw'
 	| 'canManageChat'
-	| 'canBankWithdraw'
-	| 'canBankDeposit'
 	| 'canManageAllies'
 	| 'canManageRivals'
 	| 'canEditRanks'
@@ -64,12 +62,9 @@ export interface Clan {
 	invites: ClanInvite[];
 	points: number;
 	level: number;
-	bank: number;
 	chatRoom: ID;
 	icon: string;
 	lastActive: number;
-	allies: ID[];
-	rivals: ID[];
 	stats: ClanStats;
 }
 
