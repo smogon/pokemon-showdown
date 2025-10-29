@@ -12,11 +12,9 @@ export type UserClanDoc = UserClanInfo & { _id: ID } & Document;
 export type ClanLogDoc = ClanLog & { clanId: ID } & Document;
 export type ClanPointsLogDoc = ClanPointsLogEntry & { clanId: ID } & Document;
 export type ClanBanDoc = { _id: ID, banned: boolean } & Document;
-export type ClanWarDoc = ClanWar & { _id: ID } & Document;
 
 export const Clans = ImpulseDB<ClanDoc>('clans');
 export const UserClans = ImpulseDB<UserClanDoc>('userclans');
 export const ClanLogs = ImpulseDB<ClanLogDoc>('clanlogs');
 export const ClanPointsLogs = ImpulseDB<ClanPointsLogDoc>('clanpointslogs');
 export const ClanBans = ImpulseDB<ClanBanDoc>('clanbans');
-export const ClanWars = ImpulseDB<ClanWarDoc>('clanwars');
