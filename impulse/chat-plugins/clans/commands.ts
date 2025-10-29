@@ -2278,5 +2278,44 @@ async clearmembers(target, room, user) {
 	});
 	this.sendReply(`Removed all members except owner from clan '${clan.name}'.`);
 },
+
+		help(): void {
+	if (!this.runBroadcast()) return;
+	const helpList = [
+		{cmd: "/clan create [Clan Name], [Owner ID]", desc: "Create a new clan with the specified name and owner."},
+		{cmd: "/clan delete [Clan ID]", desc: "Delete a clan. Requires roomowner."},
+		{cmd: "/clan join [Clan ID]", desc: "Join a clan. If invite-only, you must be invited."},
+		{cmd: "/clan leave", desc: "Leave your current clan (unless you are the owner)."},
+		{cmd: "/clan kick [user]", desc: "Remove a member from the clan. Requires permission."},
+		{cmd: "/clan invite [user]", desc: "Invite a user to your clan. Requires permission."},
+		{cmd: "/clan deinvite [user]", desc: "Revoke a user's invite to your clan. Requires permission."},
+		{cmd: "/clan invites", desc: "View clan invites sent and received."},
+		{cmd: "/clan inviteonly [on/off/toggle]", desc: "Toggle invite-only mode for your clan. Requires permission."},
+		{cmd: "/clan announce [message]", desc: "Send an announcement to all clan members. Requires permission."},
+		{cmd: "/clan createrank [id], [name], [level]", desc: "Create a custom rank within your clan. Requires permission."},
+		{cmd: "/clan deleterank [id]", desc: "Delete a rank (not default ranks). Requires permission."},
+		{cmd: "/clan editrank [id], [permission], [true/false]", desc: "Edit rank permissions. Requires permission."},
+		{cmd: "/clan ranks", desc: "View all ranks and their permissions in your clan."},
+		{cmd: "/clan permissionlist", desc: "View list of all available clan permissions."},
+		{cmd: "/clan promote [user], [rank]", desc: "Promote a clan member to a higher rank. Requires permission."},
+		{cmd: "/clan demote [user], [rank]", desc: "Demote a clan member to a lower rank. Requires permission."},
+		{cmd: "/clan transfer [user]", desc: "Transfer clan ownership to another member. Only owner."},
+		{cmd: "/clan members [Clan ID]", desc: "View member list for your clan or a specified clan."},
+		{cmd: "/clan setdesc [description]", desc: "Set your clan's description. Requires permission."},
+		{cmd: "/clan settag [tag]", desc: "Set your clan's tag (max 3 letters). Requires permission."},
+		{cmd: "/clan setmotw [user]", desc: "Set the member of the week. Requires permission."},
+		{cmd: "/clan seticon [URL]", desc: "Set your clan's icon image. Requires permission."},
+		{cmd: "/clan list [page]", desc: "View paginated list of all clans."},
+		{cmd: "/clan logs [Clan ID], [limit]", desc: "View recent activity logs for your clan or specified clan."},
+		{cmd: "/clan pointslog [limit]", desc: "View recent points logs for your clan."},
+		{cmd: "/clan profile [Clan ID]", desc: "View a detailed profile for your clan or specified clan."},
+	];
+	const html = `<center><strong>Clan Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+		helpList.map(({cmd, desc}, i) =>
+			`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+		).join('') +
+		`</ul>`;
+	this.sendReplyBox(`<div style="max-height: 380px; overflow-y: auto;">${html}</div>`);
+},
 },
 };
