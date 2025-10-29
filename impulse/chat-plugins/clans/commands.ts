@@ -9,7 +9,6 @@ import {
 	ClanBans,
 	ClanPointsLogs,
 	type ClanDoc,
-	UserClanDoc,
 } from './database';
 import type {
 	Clan,
@@ -320,7 +319,9 @@ export const commands: Chat.ChatCommands = {
 				if (chatRoom) {
 					chatRoom.add(`|html|<div class="broadcast-red"><b>This clan chatroom is being permanently deleted by ${user.name}.</b></div>`).update();
 
-					await new Promise(resolve => setTimeout(resolve, 1000));
+					await new Promise<void>(resolve => {
+						setTimeout(resolve, 1000);
+					});
 
 					for (const userid in chatRoom.users) {
 						const roomUser = chatRoom.users[userid];
@@ -333,7 +334,7 @@ export const commands: Chat.ChatCommands = {
 
 					chatRoom.destroy();
 
-					await FS('config/chatrooms.json').writeUpdate(() =>
+					FS('config/chatrooms.json').writeUpdate(() =>
 						JSON.stringify(Rooms.global.settingsList)
 							.replace(/\{"title":/g, '\n{"title":')
 							.replace(/\]$/, '\n]'));
@@ -552,7 +553,7 @@ export const commands: Chat.ChatCommands = {
 				clanRoom.auth.delete(targetId);
 				clanRoom.saveSettings();
 				const kickedUser = Users.get(targetId);
-				if (kickedUser && kickedUser.inRooms.has(clan.chatRoom)) {
+				if (kickedUser?.inRooms.has(clan.chatRoom)) {
 					kickedUser.leaveRoom(clanRoom);
 				}
 				clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
@@ -1100,7 +1101,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${output}`);
 		},
 
-		async permissionlist(target, room, user) {
+		permissionlist(target, room, user) {
 			this.runBroadcast();
 			this.checkChat();
 
@@ -1373,8 +1374,13 @@ export const commands: Chat.ChatCommands = {
 				clanId = toID(target);
 			} else {
 				const userClanInfo = await UserClans.findOne({ _id: user.id });
-				clanId = userClanInfo?.memberOf!;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its members.");
+				const memberOf = userClanInfo?.memberOf;
+				if (!memberOf) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Specify a clan ID to view its members."
+					);
+				}
+				clanId = memberOf;
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
@@ -1544,7 +1550,6 @@ export const commands: Chat.ChatCommands = {
 			if (clanRoom) {
 				if (oldMotw && oldMotw !== targetId && clan.members[oldMotw]) {
 					const oldMotwMember = clan.members[oldMotw];
-					const oldMotwRank = clan.ranks[oldMotwMember.rank];
 
 					const roomRanks: { [key: string]: string } = {
 						'owner': '#',
@@ -1692,7 +1697,11 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				const actorClanInfo = await UserClans.findOne({ _id: user.id });
 				clanId = actorClanInfo?.memberOf;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Usage: /clan logs [clan id], [limit] (admin only)");
+				if (!clanId) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Usage: /clan logs [clan id], [limit] (admin only)"
+					);
+				}
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
@@ -1776,8 +1785,13 @@ export const commands: Chat.ChatCommands = {
 				clanId = toID(target);
 			} else {
 				const userClanInfo = await UserClans.findOne({ _id: user.id });
-				clanId = userClanInfo?.memberOf!;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its profile.");
+				const memberOf = userClanInfo?.memberOf;
+				if (!memberOf) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Specify a clan ID to view its profile."
+					);
+				}
+				clanId = memberOf;
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
@@ -1831,7 +1845,11 @@ export const commands: Chat.ChatCommands = {
 			const amount = parseInt(amountStr);
 			const reason = reasonArr.join(',') || 'Admin adjustment';
 
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan addpoints [amount], [reason] (amount must be a positive number)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan addpoints [amount], [reason] (amount must be a positive number)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -1857,7 +1875,11 @@ export const commands: Chat.ChatCommands = {
 			const amount = parseInt(amountStr);
 			const reason = reasonArr.join(',') || 'Admin adjustment';
 
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removepoints [amount], [reason] (amount must be a positive number)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan removepoints [amount], [reason] (amount must be a positive number)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -1976,7 +1998,11 @@ export const commands: Chat.ChatCommands = {
 		async setlevel(target, room, user) {
 			this.checkCan('roomowner');
 			const level = parseInt(target.trim());
-			if (isNaN(level) || level < 1) return this.errorReply("Usage: /clan setlevel [level] (level must be a positive integer)");
+			if (isNaN(level) || level < 1) {
+				return this.errorReply(
+					"Usage: /clan setlevel [level] (level must be a positive integer)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -2020,7 +2046,11 @@ export const commands: Chat.ChatCommands = {
 		async removelevel(target, room, user) {
 			this.checkCan('roomowner');
 			const amount = parseInt(target.trim());
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removelevel [amount] (must be positive integer)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan removelevel [amount] (must be positive integer)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -2047,7 +2077,10 @@ export const commands: Chat.ChatCommands = {
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 			const oldStats = clan.stats;
-			await Clans.updateOne({ _id: clanId }, { $set: { "stats.tourWins": 0, "stats.eventWins": 0, "stats.totalPointsEarned": 0 } });
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { "stats.tourWins": 0, "stats.eventWins": 0, "stats.totalPointsEarned": 0 } }
+			);
 			await ClanLogs.insertOne({
 				clanId,
 				timestamp: Date.now(),
@@ -2088,7 +2121,9 @@ export const commands: Chat.ChatCommands = {
 			const clanId = toID(clanIdRaw);
 			const tag = tagRaw?.toUpperCase();
 			if (!clanId || !tag) return this.errorReply("Usage: /clan settagadmin [clan id], [tag]");
-			if (tag.length > 4 || !/^[A-Z]+$/.test(tag)) return this.errorReply("Tag must be 3 characters or less and only uppercase letters.");
+			if (tag.length > 4 || !/^[A-Z]+$/.test(tag)) {
+				return this.errorReply("Tag must be 3 characters or less and only uppercase letters.");
+			}
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 			await Clans.updateOne({ _id: clanId }, { $set: { tag } });

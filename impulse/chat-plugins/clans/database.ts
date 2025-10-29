@@ -5,7 +5,6 @@ import type {
 	UserClanInfo,
 	ClanLog,
 	ClanPointsLogEntry,
-	ClanBankLogEntry,
 } from './interface';
 
 export type ClanDoc = Omit<Clan, 'id'> & { _id: ID } & Document;
