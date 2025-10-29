@@ -14,8 +14,7 @@ import type {
 	Clan,
 	ClanPermissions,
 	CustomClanRank,
-	ClanStats,
-	ClanWar,
+	ClanStats
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
@@ -1830,8 +1829,6 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Members:</strong> ${totalMembers}<br />`;
 			html += `<strong>Level:</strong> ${clan.level}<br />`;
 			html += `<strong>Points:</strong> ${clan.points}<br />`;
-			html += `<strong>War Record:</strong> ${clan.stats.warWins}W - ${clan.stats.warLosses}L - ${clan.stats.warDraws}D<br />`;
-			html += `<strong>War Points:</strong> ${clan.stats.warPoints}<br />`;
 			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins}<br />`;
 			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
