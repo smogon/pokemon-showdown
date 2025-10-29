@@ -763,231 +763,231 @@ export const commands: Chat.ChatCommands = {
 			
 			this.sendReply(`|html|${output}`);
 		},
+		
+		async inviteonly(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to toggle invite-only mode.");
 
-	async inviteonly(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to toggle invite-only mode.");
+			const value = target.trim().toLowerCase();
+			const actorId = user.id;
 
-		const value = target.trim().toLowerCase();
-		const actorId = user.id;
+			let newInviteOnlyStatus: boolean;
+			if (value === 'on' || value === 'true' || value === '1') {
+				newInviteOnlyStatus = true;
+			} else if (value === 'off' || value === 'false' || value === '0') {
+				newInviteOnlyStatus = false;
+			} else if (value === 'toggle') {
+				newInviteOnlyStatus = null as any;
+			} else {
+				return this.errorReply("Usage: /clan inviteonly [on/off/toggle]");
+			}
 
-		let newInviteOnlyStatus: boolean;
-		if (value === 'on' || value === 'true' || value === '1') {
-			newInviteOnlyStatus = true;
-		} else if (value === 'off' || value === 'false' || value === '0') {
-			newInviteOnlyStatus = false;
-		} else if (value === 'toggle') {
-			newInviteOnlyStatus = null as any;
-		} else {
-			return this.errorReply("Usage: /clan inviteonly [on/off/toggle]");
-		}
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			if (!hasClanPermission(clan, actorId, 'canManageChat')) {
+				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to change invite-only mode.`);
+			}
 
-		if (!hasClanPermission(clan, actorId, 'canManageChat')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to change invite-only mode.`);
-		}
+			if (newInviteOnlyStatus === null) {
+				newInviteOnlyStatus = !clan.inviteOnly;
+			}
 
-		if (newInviteOnlyStatus === null) {
-			newInviteOnlyStatus = !clan.inviteOnly;
-		}
+			if (clan.inviteOnly === newInviteOnlyStatus) {
+				const currentStatus = newInviteOnlyStatus ? 'already invite-only' : 'already open to all users';
+				return this.errorReply(`The clan is ${currentStatus}.`);
+			}
 
-		if (clan.inviteOnly === newInviteOnlyStatus) {
-			const currentStatus = newInviteOnlyStatus ? 'already invite-only' : 'already open to all users';
-			return this.errorReply(`The clan is ${currentStatus}.`);
-		}
+			const oldValue = clan.inviteOnly;
+			
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { inviteOnly: newInviteOnlyStatus } }
+			);
 
-		const oldValue = clan.inviteOnly;
+			await logClanActivity(clanId, actorId, 'SET_INVITEONLY', {
+				oldValue: oldValue,
+				newValue: newInviteOnlyStatus,
+				note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
+			});
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { inviteOnly: newInviteOnlyStatus } }
-		);
+			const clanRoom = Rooms.get(clan.chatRoom);
+			if (clanRoom) {
+				const statusText = newInviteOnlyStatus ? 'is now invite-only' : 'is now open to all users';
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} changed the clan setting: The clan ${statusText}.</center></div>`).update();
+			}
 
-		await logClanActivity(clanId, actorId, 'SET_INVITEONLY', {
-			oldValue: oldValue,
-			newValue: newInviteOnlyStatus,
-			note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
-		});
-
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			const statusText = newInviteOnlyStatus ? 'is now invite-only' : 'is now open to all users';
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} changed the clan setting: The clan ${statusText}.</center></div>`).update();
-		}
-
-		const statusText = newInviteOnlyStatus ? 'enabled' : 'disabled';
-		this.sendReply(`You have successfully ${statusText} invite-only mode for ${clan.name}.`);
-	},
+			const statusText = newInviteOnlyStatus ? 'enabled' : 'disabled';
+			this.sendReply(`You have successfully ${statusText} invite-only mode for ${clan.name}.`);
+		},
 
 		async announce(target, room, user) {
-	this.checkChat();
-	if (!user.named) return this.errorReply("You must be logged in to announce to your clan.");
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to announce to your clan.");
 
-	const message = target.trim();
-	if (!message) return this.errorReply("You must specify a message to announce.");
+			const message = target.trim();
+			if (!message) return this.errorReply("You must specify a message to announce.");
 
-	const actorId = user.id;
-	const actorClanInfo = await UserClans.findOne({ _id: actorId });
-	const clanId = actorClanInfo?.memberOf;
+			const actorId = user.id;
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-	const clan = await Clans.findOne({ _id: clanId });
-	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-	if (!hasClanPermission(clan, actorId, 'canAnnounce')) {
-		return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to send announcements.`);
-	}
+			if (!hasClanPermission(clan, actorId, 'canAnnounce')) {
+				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to send announcements.`);
+			}
 
-	const memberIds = Object.keys(clan.members);
+			const memberIds = Object.keys(clan.members);
 
-	let sentTo = 0;
-	for (const memberId of memberIds) {
-		const memberUser = Users.getExact(memberId);
-		if (memberUser?.connected) {
-			memberUser.popup(`|html|<div class="infobox"><b>Clan Announcement</b><br /><hr />${message}<br /><hr /><small>Sent by ${user.name} (${clan.name})</small></div>`);
-			sentTo++;
-		}
-	}
+			let sentTo = 0;
+			for (const memberId of memberIds) {
+				const memberUser = Users.getExact(memberId);
+				if (memberUser?.connected) {
+					memberUser.popup(`|html|<div class="infobox"><b>Clan Announcement</b><br /><hr />${message}<br /><hr /><small>Sent by ${user.name} (${clan.name})</small></div>`);
+					sentTo++;
+				}
+			}
 
-	await logClanActivity(clanId, actorId, 'ANNOUNCE', {
-		note: `Announcement sent to ${sentTo} member(s): "${message}"`,
-	});
+			await logClanActivity(clanId, actorId, 'ANNOUNCE', {
+				note: `Announcement sent to ${sentTo} member(s): "${message}"`,
+			});
 
-	this.sendReply(`Announcement sent to ${sentTo} online member(s) of your clan.`);
-},
+			this.sendReply(`Announcement sent to ${sentTo} online member(s) of your clan.`);
+		},
 
-	async createrank(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to create ranks.");
+		async createrank(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to create ranks.");
 
-		const [rankId, rankName, permissionLevel] = target.split(',').map(s => s.trim());
-		const actorId = user.id;
+			const [rankId, rankName, permissionLevel] = target.split(',').map(s => s.trim());
+			const actorId = user.id;
 
-		if (!rankId || !rankName || !permissionLevel) {
-			return this.errorReply("Usage: /clan createrank [rank id], [rank name], [permission level]");
-		}
+			if (!rankId || !rankName || !permissionLevel) {
+				return this.errorReply("Usage: /clan createrank [rank id], [rank name], [permission level]");
+			}
 
-		const rankIdFormatted = toID(rankId);
-		const permLevel = parseInt(permissionLevel);
+			const rankIdFormatted = toID(rankId);
+			const permLevel = parseInt(permissionLevel);
 
-		if (!rankIdFormatted) return this.errorReply("Invalid rank ID.");
-		if (isNaN(permLevel) || permLevel < 0 || permLevel > 99) {
-			return this.errorReply("Permission level must be a number between 0 and 99.");
-		}
-		if (rankName.length > 20) return this.errorReply("Rank name must be 20 characters or less.");
+			if (!rankIdFormatted) return this.errorReply("Invalid rank ID.");
+			if (isNaN(permLevel) || permLevel < 0 || permLevel > 99) {
+				return this.errorReply("Permission level must be a number between 0 and 99.");
+			}
+			if (rankName.length > 20) return this.errorReply("Rank name must be 20 characters or less.");
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to create ranks.`);
-		}
+			if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
+				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to create ranks.`);
+			}
 
-		if (clan.ranks[rankIdFormatted]) {
-			return this.errorReply(`A rank with ID '${rankIdFormatted}' already exists.`);
-		}
+			if (clan.ranks[rankIdFormatted]) {
+				return this.errorReply(`A rank with ID '${rankIdFormatted}' already exists.`);
+			}
 
-		const actorRank = clan.ranks[clan.members[actorId].rank];
-		if (permLevel >= actorRank.permissionLevel) {
-			return this.errorReply("You cannot create ranks with permission level equal to or higher than your own.");
-		}
+			const actorRank = clan.ranks[clan.members[actorId].rank];
+			if (permLevel >= actorRank.permissionLevel) {
+				return this.errorReply("You cannot create ranks with permission level equal to or higher than your own.");
+			}
 
-		const newRank: CustomClanRank = {
-			id: rankIdFormatted as ID,
-			name: rankName,
-			permissionLevel: permLevel,
-			permissions: {},
-		};
+			const newRank: CustomClanRank = {
+				id: rankIdFormatted as ID,
+				name: rankName,
+				permissionLevel: permLevel,
+				permissions: {},
+			};
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { [`ranks.${rankIdFormatted}`]: newRank } }
-		);
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { [`ranks.${rankIdFormatted}`]: newRank } }
+			);
 
-		await logClanActivity(clanId, actorId, 'RANK_CREATE', {
-			target: rankIdFormatted as ID,
-			note: `Created rank '${rankName}' with permission level ${permLevel}.`,
-		});
+			await logClanActivity(clanId, actorId, 'RANK_CREATE', {
+				target: rankIdFormatted as ID,
+				note: `Created rank '${rankName}' with permission level ${permLevel}.`,
+			});
 
-		this.sendReply(`You created the rank '${rankName}' (${rankIdFormatted}) with permission level ${permLevel}.`);
+			this.sendReply(`You created the rank '${rankName}' (${rankIdFormatted}) with permission level ${permLevel}.`);
 
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} created rank '${rankName}' with permission level ${permLevel}.</center></div>`).update();
-		}
-	},
+			const clanRoom = Rooms.get(clan.chatRoom);
+			if (clanRoom) {
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} created rank '${rankName}' with permission level ${permLevel}.</center></div>`).update();
+			}
+		},
 
-	async deleterank(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to delete ranks.");
+		async deleterank(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to delete ranks.");
 
-		const rankId = toID(target);
-		const actorId = user.id;
+			const rankId = toID(target);
+			const actorId = user.id;
 
-		if (!rankId) return this.errorReply("Specify the rank ID you wish to delete.");
+			if (!rankId) return this.errorReply("Specify the rank ID you wish to delete.");
+			
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
+				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to delete ranks.`);
+			}
 
-		if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to delete ranks.`);
-		}
+			if (!clan.ranks[rankId]) {
+				return this.errorReply(`Rank '${rankId}' does not exist.`);
+			}
 
-		if (!clan.ranks[rankId]) {
-			return this.errorReply(`Rank '${rankId}' does not exist.`);
-		}
+			if (['owner', 'leader', 'officer', 'member'].includes(rankId)) {
+				return this.errorReply("You cannot delete default ranks.");
+			}
 
-		if (['owner', 'leader', 'officer', 'member'].includes(rankId)) {
-			return this.errorReply("You cannot delete default ranks.");
-		}
+			const rankToDelete = clan.ranks[rankId];
+			const actorRank = clan.ranks[clan.members[actorId].rank];
 
-		const rankToDelete = clan.ranks[rankId];
-		const actorRank = clan.ranks[clan.members[actorId].rank];
+			if (rankToDelete.permissionLevel >= actorRank.permissionLevel) {
+				return this.errorReply("You cannot delete ranks with permission level equal to or higher than your own.");
+			}
 
-		if (rankToDelete.permissionLevel >= actorRank.permissionLevel) {
-			return this.errorReply("You cannot delete ranks with permission level equal to or higher than your own.");
-		}
+			const membersWithRank = Object.entries(clan.members).filter(([, member]) => member.rank === rankId);
+			if (membersWithRank.length > 0) {
+				return this.errorReply(`Cannot delete rank '${rankId}' because ${membersWithRank.length} member(s) currently have this rank. Reassign them first.`);
+			}
 
-		const membersWithRank = Object.entries(clan.members).filter(([, member]) => member.rank === rankId);
-		if (membersWithRank.length > 0) {
-			return this.errorReply(`Cannot delete rank '${rankId}' because ${membersWithRank.length} member(s) currently have this rank. Reassign them first.`);
-		}
-
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $unset: { [`ranks.${rankId}`]: "" } }
-		);
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $unset: { [`ranks.${rankId}`]: "" } }
+			);
 		
-		await logClanActivity(clanId, actorId, 'RANK_DELETE', {
-			target: rankId as ID,
-			note: `Deleted rank '${rankToDelete.name}'.`,
-		});
+			await logClanActivity(clanId, actorId, 'RANK_DELETE', {
+				target: rankId as ID,
+				note: `Deleted rank '${rankToDelete.name}'.`,
+			});
 
-		this.sendReply(`You deleted the rank '${rankToDelete.name}' (${rankId}).`);
+			this.sendReply(`You deleted the rank '${rankToDelete.name}' (${rankId}).`);
 
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} deleted rank '${rankToDelete.name}'.</center></div>`).update();
-		}
-	},
+			const clanRoom = Rooms.get(clan.chatRoom);
+			if (clanRoom) {
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} deleted rank '${rankToDelete.name}'.</center></div>`).update();
+			}
+		},
 
 	async editrank(target, room, user) {
 		this.checkChat();
