@@ -2651,6 +2651,14 @@ export const Chat = new class {
 		return this.linkRegex.test(possibleUrl);
 	}
 
+	extractLinks(possibleUrl: string) {
+		// SEE ABOVE COMMENT
+		// HOW DID I FUCKING FORGET THAT THIS WAS A THING
+		// https://youtu.be/rnzMkJocw6Q?t=9
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.exec(possibleUrl);
+	}
+
 	readonly filterWords: { [k: string]: FilterWord[] } = {};
 	readonly monitors: { [k: string]: Monitor } = {};
 
