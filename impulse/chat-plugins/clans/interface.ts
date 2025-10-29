@@ -5,6 +5,11 @@ export type ClanPermission =
 	'canEditIcon' | 'canEditTag' | 'canSetMotw' |
 	'canManageChat' | 'canEditRanks' | 'canAnnounce';
 
+export type ClanWarLogType = 
+	| 'WAR_CHALLENGE' | 'WAR_ACCEPT' | 'WAR_DECLINE' 
+	| 'WAR_START' | 'WAR_BATTLE_COMPLETE' | 'WAR_COMPLETE' 
+	| 'WAR_CANCEL' | 'WAR_FORFEIT';
+
 export interface ClanPermissions {
 	[key in ClanPermission]?: boolean;
 }
@@ -32,6 +37,43 @@ export interface ClanStats {
 	tourWins: number;
 	eventWins: number;
 	totalPointsEarned: number;
+	warWins: number;
+	warLosses: number;
+	warDraws: number;
+	warPoints: number;
+	totalWarsParticipated: number;
+}
+
+export interface ClanWar {
+	warId: ID;
+	clan1: ID;
+	clan2: ID;
+	status: 'pending' | 'active' | 'completed' | 'cancelled';
+	challengedBy: ID;
+	acceptedBy?: ID;
+	startTime?: number;
+	endTime?: number;
+	format: string;
+	battleCount: number;
+	battles: ClanWarBattle[];
+	score: {
+		[clanId: string]: number;
+	};
+	participants: {
+		[clanId: string]: ID[];
+	};
+	winner?: ID;
+	pointsAwarded?: number;
+}
+
+export interface ClanWarBattle {
+	battleRoomId: RoomID;
+	clan1Player: ID;
+	clan2Player: ID;
+	winner?: ID;
+	completed: boolean;
+	startTime: number;
+	endTime?: number;
 }
 
 export interface Clan {
