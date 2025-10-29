@@ -322,7 +322,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "User must have used Moonlight last turn. Ignores abilities.",
 		shortDesc: "Must use Moonlight first. Ignores abilities.",
 		onTry(source, target) {
-			if (!source.lastMove.id || source.lastMove.id !== 'moonlight') {
+			if (source.lastMove.id && source.lastMove.id !== 'moonlight') {
 				this.add('cant', source, 'Moongeist Beam', 'Moongeist Beam');
 				return true;
 			}
