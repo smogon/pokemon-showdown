@@ -1674,19 +1674,36 @@ export const commands: Chat.ChatCommands = {
 	this.checkChat();
 	if (!user.named) return this.errorReply("You must be logged in to view clan logs.");
 
-	let limit = parseInt(target.trim()) || 50;
+	const parts = target.split(',').map(s => s.trim());
+	let clanId: ID | undefined;
+	let limit = 50;
+
+	if (parts.length === 2) {
+		clanId = toID(parts[0]);
+		limit = parseInt(parts[1]) || 50;
+	} else if (parts.length === 1 && parts[0]) {
+		const parsed = parseInt(parts[0]);
+		if (!isNaN(parsed)) {
+			limit = parsed;
+		} else {
+			clanId = toID(parts[0]);
+		}
+	}
+
 	if (limit < 1 || limit > 100) {
 		return this.errorReply("Limit must be between 1 and 100.");
 	}
 
-	const actorId = user.id;
-	const actorClanInfo = await UserClans.findOne({ _id: actorId });
-	const clanId = actorClanInfo?.memberOf;
-
-	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	if (clanId) {
+		this.checkCan('roomowner');
+	} else {
+		const actorClanInfo = await UserClans.findOne({ _id: user.id });
+		clanId = actorClanInfo?.memberOf as ID;
+		if (!clanId) return this.errorReply("You are not currently a member of any clan. Usage: /clan logs [clan id], [limit] (admin only)");
+	}
 
 	const clan = await Clans.findOne({ _id: clanId });
-	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 
 	const logs = await ClanLogs.find(
 		{ clanId: clanId },
@@ -1713,7 +1730,7 @@ export const commands: Chat.ChatCommands = {
 	}
 	html += `</div>`;
 	user.popup(`|html|${html}`);
-},		
+},
 		
 	async pointslog(target, room, user) {
 		this.checkChat();
