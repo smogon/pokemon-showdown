@@ -313,7 +313,7 @@ export const commands: Chat.ChatCommands = {
 
 			const ownerId = clan.owner;
 			const ownerUser = Users.getExact(ownerId);
-			const chatRoomId = clan.chatRoom;
+			const chatRoomId = toID(clan.chatRoom);
 			const chatRoom = Rooms.get(chatRoomId);
 
 			try {
