@@ -69,7 +69,7 @@ class PoofManager {
 
 	static formatMessage(message: string, userName: string): string {
 		let formattedMessage = message;
-		if (formattedMessage.indexOf('{{user}}') < 0) {
+		if (!formattedMessage.includes('{{user}}')) {
 			formattedMessage = `{{user}} ${formattedMessage}`;
 		}
 		return formattedMessage.replace(/{{user}}/g, userName);
@@ -90,7 +90,7 @@ class PoofManager {
 
 export const commands: Chat.ChatCommands = {
 	poof: {
-		'': function (target: string, room: Room, user: User): void {
+		''(target: string, room: Room, user: User): void {
 			if (PoofManager.isPoofDisabled()) {
 				return this.errorReply("Poof is currently disabled.");
 			}
@@ -104,14 +104,14 @@ export const commands: Chat.ChatCommands = {
 			user.disconnectAll();
 		},
 
-		on: function (target: string, room: Room, user: User): void {
+		on(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
 			PoofManager.enablePoof();
 			this.sendReply("Poof is now enabled.");
 		},
 		onhelp: ["/poof on - Enable the use /poof command. Requires: &"],
 
-		off: function (target: string, room: Room, user: User): void {
+		off(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
 			PoofManager.disablePoof();
 			this.sendReply("Poof is now disabled.");
@@ -131,12 +131,12 @@ export const commands: Chat.ChatCommands = {
 	poofhelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/poof [message]", desc: "Disconnects the user and leaves a message in the lobby."},
-			{cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &."},
-			{cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &."},
+			{ cmd: "/poof [message]", desc: "Disconnects the user and leaves a message in the lobby." },
+			{ cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &." },
+			{ cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &." },
 		];
 		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}, i) =>
+			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
 			`</ul>`;

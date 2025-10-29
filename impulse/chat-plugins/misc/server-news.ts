@@ -68,7 +68,7 @@ class NewsManager {
 	}
 }
 
-export const loginfilter = function(user: User, oldUser: User | null, userType: string): void {
+export const loginfilter = function (user: User, oldUser: User | null, userType: string): void {
 	void NewsManager.onUserConnect(user);
 };
 
@@ -91,7 +91,7 @@ export const commands: Chat.ChatCommands = {
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews add [title], [desc]");
 
-			if (await NewsDB.exists({ title: title })) {
+			if (await NewsDB.exists({ title })) {
 				return this.errorReply(`"${title}" exists. Use /servernews update.`);
 			}
 
@@ -138,14 +138,14 @@ export const commands: Chat.ChatCommands = {
 	servernewshelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/servernews view", desc: "View the latest 3 server news."},
-			{cmd: "/servernews add [title], [desc]", desc: "Add a news. Requires: &."},
-			{cmd: "/servernews update [title], [desc]", desc: "Update a news. Requires: &."},
-			{cmd: "/servernews delete [title]", desc: "Delete a news. Requires: &."},
-			{cmd: "/servernews cleanup [days]", desc: "Delete news older than [days] days. Requires: ~."},
+			{ cmd: "/servernews view", desc: "View the latest 3 server news." },
+			{ cmd: "/servernews add [title], [desc]", desc: "Add a news. Requires: &." },
+			{ cmd: "/servernews update [title], [desc]", desc: "Update a news. Requires: &." },
+			{ cmd: "/servernews delete [title]", desc: "Delete a news. Requires: &." },
+			{ cmd: "/servernews cleanup [days]", desc: "Delete news older than [days] days. Requires: ~." },
 		];
 		const html = `<center><strong>Server News Commands:<br>Alias: /svn</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}, i) =>
+			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
 			`</ul>`;

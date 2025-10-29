@@ -21,7 +21,7 @@ export const trackSeen = (userid: string): void => {
 export const handlers: Chat.Handlers = {
 	onDisconnect(user: User): void {
 		if (user.named && user.connections.length === 0) trackSeen(user.id);
-	}
+	},
 };
 
 export const getLastSeen = async (userid: string): Promise<Date | null> => {
@@ -44,7 +44,7 @@ export const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
  * - cleared: rooms successfully cleared
  * - failed: rooms not cleared due to tournament
  */
-const clearRooms = (rooms: Room[], user: User): {cleared: string[], failed: string[]} => {
+const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: string[] } => {
 	const cleared: string[] = [];
 	const failed: string[] = [];
 	for (const room of rooms) {
@@ -145,14 +145,14 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/seen [user]", desc: "Shows the last connection time for a user."},
-				{cmd: "/seen recent [limit]", desc: "Shows recently seen users (staff only). Default limit: 25, max: 100."},
-				{cmd: "/seen cleanup [days]", desc: "Deletes records older than X days (staff only, min: 30)."},
+				{ cmd: "/seen [user]", desc: "Shows the last connection time for a user." },
+				{ cmd: "/seen recent [limit]", desc: "Shows recently seen users (staff only). Default limit: 25, max: 100." },
+				{ cmd: "/seen cleanup [days]", desc: "Deletes records older than X days (staff only, min: 30)." },
 			];
 			const html = `<center><strong>Seen Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
@@ -189,18 +189,18 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/clearall", desc: "Clear the current room chat. Requires: #."},
-				{cmd: "/clearall global", desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>"},
+				{ cmd: "/clearall", desc: "Clear the current room chat. Requires: #." },
+				{ cmd: "/clearall global", desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>" },
 			];
 			const html = `<center><strong>Clearall Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
 	},
-	
+
 	cleantour: {
 		async ''(target, room, user): Promise<void> {
 			const roomid = toID(target) || room?.roomid;

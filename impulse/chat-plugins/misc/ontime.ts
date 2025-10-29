@@ -19,14 +19,14 @@ const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
 const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>('ontimeblocks');
 const ONTIME_LEADERBOARD_SIZE = 100;
 
-const convertTime = (time: number): { h: number; m: number; s: number } => {
+const convertTime = (time: number): { h: number, m: number, s: number } => {
 	const s = Math.floor((time / 1000) % 60);
 	const m = Math.floor((time / (1000 * 60)) % 60);
 	const h = Math.floor(time / (1000 * 60 * 60));
 	return { h, m, s };
 };
 
-const displayTime = (t: { h: number; m: number; s: number }): string => {
+const displayTime = (t: { h: number, m: number, s: number }): string => {
 	const parts: string[] = [];
 	if (t.h > 0) parts.push(`${t.h.toLocaleString()} ${t.h === 1 ? 'hour' : 'hours'}`);
 	if (t.m > 0) parts.push(`${t.m.toLocaleString()} ${t.m === 1 ? 'minute' : 'minutes'}`);
@@ -53,7 +53,7 @@ export const handlers: Chat.Handlers = {
 				void OntimeDB.updateOne({ _id: user.id }, { $inc: { ontime: sessionTime } }, { upsert: true });
 			}
 		}
-	}
+	},
 };
 
 export const commands: Chat.ChatCommands = {
@@ -126,16 +126,16 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/ontime [user]", desc: "Check user's online time."},
-				{cmd: "/ontime ladder", desc: "Top 100 by ontime."},
-				{cmd: "/ontime block [user]", desc: "Block user from gaining ontime. Requires: &."},
-				{cmd: "/ontime unblock [user]", desc: "Unblock user from gaining ontime. Requires: &."},
-				{cmd: "/ontime blocked", desc: "List blocked users. Requires: &."},
+				{ cmd: "/ontime [user]", desc: "Check user's online time." },
+				{ cmd: "/ontime ladder", desc: "Top 100 by ontime." },
+				{ cmd: "/ontime block [user]", desc: "Block user from gaining ontime. Requires: &." },
+				{ cmd: "/ontime unblock [user]", desc: "Unblock user from gaining ontime. Requires: &." },
+				{ cmd: "/ontime blocked", desc: "List blocked users. Requires: &." },
 			];
 			const html = `<center><strong>Ontime Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
