@@ -367,39 +367,43 @@ export const collectionCommands: ChatCommands = {
 
 	async packs(target, room, user) {
 		if (!this.runBroadcast()) return;
-		const collection = userPacksCollection;
-		const userPacks = await collection.find({ userId: user.id, quantity: { $gt: 0 } }, { sort: { setName: 1 } });
-		if (userPacks.length === 0) {
-			return this.errorReply("You do not have any saved packs. You can buy them from the /tcg shop.");
-		}
+		try {
+			const collection = userPacksCollection;
+			const userPacks = await collection.find({ userId: user.id, quantity: { $gt: 0 } }, { sort: { setName: 1 } });
+			if (userPacks.length === 0) {
+				return this.errorReply("You do not have any saved packs. You can buy them from the /tcg shop.");
+			}
 
-		let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
-		html += `<strong style="font-size: 20px;">${user.name}'s Saved Packs</strong><br />`;
-		html += `<div style="font-size: 0.9em; margin-bottom: 15px;">Click a pack to open one.</div>`;
-		
-		for (let i = 0; i < userPacks.length; i++) {
-			const p = userPacks[i];
-			if (i % 3 === 0) {
-				if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: inline-block; text-align: center;">`;
-			}
-			const logoUrl = p.setLogo || `https://via.placeholder.com/80x30?text=${p.setId}`;
-			html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
-			html += `<button name="send" value="/tcg opensavedpack ${p.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; min-height: 90px;">`;
-			html += `<img src="${logoUrl}" height="30" alt="${p.setName} Logo" title="${p.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
-			html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.setName}</strong>`;
-			html += `<span style="font-size: 0.8em;">[ ${p.setId} ]<br>Quantity: ${p.quantity}</span>`;
-			html += `</button>`;
-			if (p.quantity > 1) {
-				html += `<button name="send" value="/tcg openallpacks ${p.setId}" style="background: none; border: 1px solid #aaa; border-radius: 4px; padding: 2px 5px; width: 100%; text-align: center; cursor: pointer; font-size: 0.75em; margin-top: 3px;">`;
-				html += `Open All ${p.quantity}`;
+			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
+			html += `<strong style="font-size: 20px;">${user.name}'s Saved Packs</strong><br />`;
+			html += `<div style="font-size: 0.9em; margin-bottom: 15px;">Click a pack to open one.</div>`;
+			
+			for (let i = 0; i < userPacks.length; i++) {
+				const p = userPacks[i];
+				if (i % 3 === 0) {
+					if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
+					html += `<div style="display: inline-block; text-align: center;">`;
+				}
+				const logoUrl = p.setLogo || `https://via.placeholder.com/80x30?text=${p.setId}`;
+				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
+				html += `<button name="send" value="/tcg opensavedpack ${p.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; min-height: 90px;">`;
+				html += `<img src="${logoUrl}" height="30" alt="${p.setName} Logo" title="${p.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
+				html += `<strong style="font-size: 0.9em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.setName}</strong>`;
+				html += `<span style="font-size: 0.8em;">[ ${p.setId} ]<br>Quantity: ${p.quantity}</span>`;
 				html += `</button>`;
+				if (p.quantity > 1) {
+					html += `<button name="send" value="/tcg openallpacks ${p.setId}" style="background: none; border: 1px solid #aaa; border-radius: 4px; padding: 2px 5px; width: 100%; text-align: center; cursor: pointer; font-size: 0.75em; margin-top: 3px;">`;
+					html += `Open All ${p.quantity}`;
+					html += `</button>`;
+				}
+				html += `</div>`;
 			}
+			if (userPacks.length > 0) html += `</div>`;
 			html += `</div>`;
+			this.sendReply(`|html|${html}`);
+		} catch (error) {
+			return this.errorReply('An error occurred while fetching your packs.');
 		}
-		if (userPacks.length > 0) html += `</div>`;
-		html += `</div>`;
-		this.sendReply(`|html|${html}`);
 	},
 
 	async profile(target, room, user) {

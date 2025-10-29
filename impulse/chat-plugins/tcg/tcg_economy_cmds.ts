@@ -46,7 +46,7 @@ export const economyCommands: ChatCommands = {
 			const profile = await profileCollection.findOne({ userId: user.id });
 			const userCredits = profile?.credits || 0;
 
-			let html = `<div class="style="padding: 10px;">`;
+			let html = `<div style="padding: 10px;">`;
 			const title = `TCG Packs Shop<br><span style="font-size: 0.9em;">Your Credits: <strong>${userCredits.toLocaleString()}</strong></span>`;
 			const headerRow = ['Pack', 'Series', 'Price', 'Buy'];
 			const dataRows: string[][] = [];
