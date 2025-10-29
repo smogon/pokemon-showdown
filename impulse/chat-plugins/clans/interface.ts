@@ -1,16 +1,9 @@
 export type DefaultClanRankID = 'owner' | 'leader' | 'officer' | 'member';
 export type ClanPermission =
-	| 'canInvite'
-	| 'canDeinvite'
-	| 'canKick'
-	| 'canPromote'
-	| 'canDemote'
-	| 'canEditDesc'
-	| 'canEditIcon'
-	| 'canEditTag'
-	| 'canSetMotw'
-	| 'canManageChat'
-	| 'canEditRanks'
+	| 'canInvite' | 'canDeinvite' | 'canKick'
+	| 'canPromote' | 'canDemote' | 'canEditDesc'
+	| 'canEditIcon' | 'canEditTag' | 'canSetMotw'
+	| 'canManageChat' | 'canEditRanks' | 'canAnnounce'
 
 export interface ClanPermissions {
 	[key in ClanPermission]?: boolean;
