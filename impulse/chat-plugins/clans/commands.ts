@@ -7,7 +7,6 @@ import {
 	UserClans,
 	ClanLogs,
 	ClanPointsLogs,
-	ClanBankLogs,
 	ClanDoc,
 	UserClanDoc,
 } from './database';
@@ -55,8 +54,6 @@ const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
 			canEditDesc: true,
 			canSetMotd: true,
 			canManageChat: true,
-			canManageAllies: true,
-			canManageRivals: true,
 		},
 	},
 	officer: {
@@ -65,7 +62,7 @@ const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
 		permissionLevel: 25,
 		permissions: {
 			canInvite: true,
-			canAddPoints: true,
+			canDeinvite: true,
 		},
 	},
 	member: {
@@ -1701,7 +1698,9 @@ export const commands: Chat.ChatCommands = {
 		}
 		let html = `<div class="infobox" style="max-width:600px; max-height: 400px;"><center><strong>${clan.name} Activity Logs (Latest ${logs.length})</strong></center><br>`;
 		for (const log of logs) {
-			const date = new Date(log.timestamp).toLocaleString();
+			const date = (typeof log.timestamp === 'number' && !isNaN(log.timestamp))
+				? new Date(log.timestamp).toLocaleString()
+				: "Unknown";
 			const details = log.note ||
 				(log.oldValue !== undefined && log.newValue !== undefined ?
 				 `${log.oldValue} → ${log.newValue}` : '');
