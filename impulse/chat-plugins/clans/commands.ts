@@ -16,6 +16,9 @@ import type {
 	ClanPermissions,
 	CustomClanRank,
 	ClanStats,
+	ClanWar,
+	ClanWarBattle,
+	ClanWarLogType,
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
