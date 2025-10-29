@@ -17,5 +17,5 @@ export type ClanBanDoc = { _id: ID; banned: boolean } & Document;
 export const Clans = ImpulseDB<ClanDoc>('clans');
 export const UserClans = ImpulseDB<UserClanDoc>('userclans');
 export const ClanLogs = ImpulseDB<ClanLogDoc>('clanlogs');
-export const ClanPointsLogs = ImpulseDB<ClanPointsLogDoc>('clanpointslsogs');
+export const ClanPointsLogs = ImpulseDB<ClanPointsLogDoc>('clanpointslogs');
 export const ClanBans = ImpulseDB<ClanBanDoc>('clanbans');
