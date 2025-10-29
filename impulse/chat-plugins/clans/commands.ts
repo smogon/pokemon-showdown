@@ -6,6 +6,7 @@ import {
 	Clans,
 	UserClans,
 	ClanLogs,
+	ClanBans,
 	ClanPointsLogs,
 	ClanDoc,
 	UserClanDoc,
