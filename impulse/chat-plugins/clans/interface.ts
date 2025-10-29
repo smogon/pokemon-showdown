@@ -33,7 +33,6 @@ export interface ClanMember {
 	rank: ID;
 	joinDate: number;
 	totalPointsContributed: number;
-	nickname?: string;
 }
 
 export interface ClanStats {
@@ -94,11 +93,6 @@ export type ClanLogType =
 	| 'SET_TAG'
 	| 'SET_ICON'
 	| 'SET_INVITEONLY'
-	| 'CHATROOM_SET'
-	| 'ALLY_ADD'
-	| 'ALLY_REMOVE'
-	| 'RIVAL_ADD'
-	| 'RIVAL_REMOVE'
 	| 'RANK_CREATE'
 	| 'RANK_DELETE'
 	| 'RANK_EDIT';
@@ -117,7 +111,7 @@ export interface ClanLogs {
 	[clanId: string]: ClanLog[];
 }
 
-export interface ClanFinancialLogEntry {
+export interface ClanPointsLogEntry {
 	timestamp: number;
 	userid: ID;
 	actor: ID;
@@ -125,12 +119,7 @@ export interface ClanFinancialLogEntry {
 	reason: string;
 }
 
-export type ClanPointsLogEntry = ClanFinancialLogEntry;
 export interface ClanPointsLogs {
 	[clanId: string]: ClanPointsLogEntry[];
 }
 
-export type ClanBankLogEntry = ClanFinancialLogEntry;
-export interface ClanBankLogs {
-	[clanId: string]: ClanBankLogEntry[];
-}
