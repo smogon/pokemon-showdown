@@ -2,10 +2,14 @@
 * Pokemon Showdown
 * TCG Collection and Profile Commands
 */
-import { TcgCard, TcgUser, TcgUserProfile } from './interface';
-import { getSet, getCard, getCacheStats, renderCardGridHtml } from './tcg_utils';
-import { generateThemedTable } from '../../utils';
-import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection } from './tcg_collections';
+import type { TcgCard, TcgUser } from './interface';
+import { getSet, getCacheStats } from './tcg_utils';
+import {
+	tcgCardsCollection,
+	userCollectionsCollection,
+	userProfilesCollection,
+	userPacksCollection,
+} from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 80;
 const MAX_FAVORITE_CARDS = 10;
@@ -38,7 +42,7 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		filterMatches.push(match[0]);
 		const key = match[1].toLowerCase();
 		const operator = match[2];
-		let value = match[3].replace(/"/g, '');
+		const value = match[3].replace(/"/g, '');
 
 		if (key === 'user') {
 			targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -50,52 +54,52 @@ function parseCollectionQuery(target: string, defaultUserId: string): {
 		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
-			case 'rarity':
-				filter.$and.push({ rarity: valueRegex });
-				descriptions.push(`Rarity: ${value}`);
-				break;
-			case 'supertype':
-			case 'st':
-				filter.$and.push({ supertype: valueRegex });
-				descriptions.push(`Supertype: ${value}`);
-				break;
-			case 'subtype':
-				filter.$and.push({ subtypes: valueRegex });
-				descriptions.push(`Subtype: ${value}`);
-				break;
-			case 'type':
-				filter.$and.push({ types: valueRegex });
-				descriptions.push(`Type: ${value}`);
-				break;
-			case 'hp':
-				if (!isNaN(valueNum)) {
-					let hpFilter: any = {};
-					if (operator === '>') hpFilter = { $gt: valueNum };
-					else if (operator === '>=') hpFilter = { $gte: valueNum };
-					else if (operator === '<') hpFilter = { $lt: valueNum };
-					else if (operator === '<=') hpFilter = { $lte: valueNum };
-					else hpFilter = valueNum;
-					filter.$and.push({ hp: hpFilter });
-					descriptions.push(`HP: ${operator || ''}${value}`);
-				}
-				break;
-			case 'series':
-				filter.$and.push({ setSeries: valueRegex });
-				descriptions.push(`Series: ${value}`);
-				break;
-			case 'reg':
-				filter.$and.push({ regulationMark: valueRegex });
-				descriptions.push(`Reg Mark: ${value}`);
-				break;
-			case 'set':
-				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
-				filter.$and.push({ setId: exactRegex });
-				descriptions.push(`Set ID: ${value}`);
-				break;
-			case 'artist':
-			case 'legal':
-				descriptions.push(`(Filter ${key}:${value} ignored)`);
-				break;
+		case 'rarity':
+			filter.$and.push({ rarity: valueRegex });
+			descriptions.push(`Rarity: ${value}`);
+			break;
+		case 'supertype':
+		case 'st':
+			filter.$and.push({ supertype: valueRegex });
+			descriptions.push(`Supertype: ${value}`);
+			break;
+		case 'subtype':
+			filter.$and.push({ subtypes: valueRegex });
+			descriptions.push(`Subtype: ${value}`);
+			break;
+		case 'type':
+			filter.$and.push({ types: valueRegex });
+			descriptions.push(`Type: ${value}`);
+			break;
+		case 'hp':
+			if (!isNaN(valueNum)) {
+				let hpFilter: any = {};
+				if (operator === '>') hpFilter = { $gt: valueNum };
+				else if (operator === '>=') hpFilter = { $gte: valueNum };
+				else if (operator === '<') hpFilter = { $lt: valueNum };
+				else if (operator === '<=') hpFilter = { $lte: valueNum };
+				else hpFilter = valueNum;
+				filter.$and.push({ hp: hpFilter });
+				descriptions.push(`HP: ${operator || ''}${value}`);
+			}
+			break;
+		case 'series':
+			filter.$and.push({ setSeries: valueRegex });
+			descriptions.push(`Series: ${value}`);
+			break;
+		case 'reg':
+			filter.$and.push({ regulationMark: valueRegex });
+			descriptions.push(`Reg Mark: ${value}`);
+			break;
+		case 'set':
+			const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
+			filter.$and.push({ setId: exactRegex });
+			descriptions.push(`Set ID: ${value}`);
+			break;
+		case 'artist':
+		case 'legal':
+			descriptions.push(`(Filter ${key}:${value} ignored)`);
+			break;
 		}
 	}
 
@@ -131,7 +135,7 @@ export const collectionCommands: ChatCommands = {
 
 			const statsPipeline: any[] = [
 				{ $match: filter },
-				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, totalPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } }
+				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, totalPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } },
 			];
 			const statsResult = await collection.aggregate(statsPipeline);
 			const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, totalPoints: 0 };
@@ -157,7 +161,7 @@ export const collectionCommands: ChatCommands = {
 			const displayName = targetUserId === user.id ? user.name : targetUserId;
 			html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity.toLocaleString()} | Total Points: ${stats.totalPoints.toLocaleString()}</div>`;
-			
+
 			const filtersOnly = queryDescription.replace(`Owner: ${targetUserId}, `, '').replace(`Owner: ${targetUserId}`, '');
 			if (filtersOnly && filtersOnly !== 'All Cards') {
 				html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${filtersOnly}</div>`;
@@ -200,11 +204,11 @@ export const collectionCommands: ChatCommands = {
 			}
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while fetching your collection.');
 		}
 	},
-	
+
 	async setprogress(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const setId = target.trim();
@@ -217,17 +221,17 @@ export const collectionCommands: ChatCommands = {
 			if (cacheInitialized) setInfo = getSet(setId);
 			if (!setInfo) {
 				const cardCollection = tcgCardsCollection;
-				setInfo = await cardCollection.findOne({ setId: setId });
+				setInfo = await cardCollection.findOne({ setId });
 			}
-			if (!setInfo || !setInfo.setTotal) {
+			if (!setInfo?.setTotal) {
 				return this.errorReply(`Set with ID "${setId}" not found or has no card total listed.`);
 			}
-			
+
 			const totalInSet = setInfo.setTotal;
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
 			const userCollection = userCollectionsCollection;
-			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId: setId });
+			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId });
 			const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
 			const barWidth = 200;
 			const progressWidth = Math.max(0, (barWidth * percentage) / 100);
@@ -245,7 +249,7 @@ export const collectionCommands: ChatCommands = {
 			html += `<div style="background: #4CAF50; width: ${progressWidth}px; height: 100%; border-radius: 4px;"></div>`;
 			html += `</div></div>`;
 			this.sendReply(`|html|${html}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while fetching your set progress.');
 		}
 	},
@@ -253,7 +257,7 @@ export const collectionCommands: ChatCommands = {
 	async missing(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const parts = target.split(',').map(p => p.trim());
-		let setId = parts[0];
+		const setId = parts[0];
 		let targetUserId = user.id;
 		let targetUserName = user.name;
 		let page = 1;
@@ -278,25 +282,25 @@ export const collectionCommands: ChatCommands = {
 				commandString = `${setId}, ${targetUserName}`;
 			}
 		}
-		
+
 		try {
 			const cardCollection = tcgCardsCollection;
 			let setInfo: TcgCard | null | undefined = getSet(setId);
-			if (!setInfo) setInfo = await cardCollection.findOne({ setId: setId });
+			if (!setInfo) setInfo = await cardCollection.findOne({ setId });
 			if (!setInfo) return this.errorReply(`Set with ID "${setId}" not found.`);
 			const setName = setInfo.set;
 
-			const allSetCardsCount = await cardCollection.countDocuments({ setId: setId });
+			const allSetCardsCount = await cardCollection.countDocuments({ setId });
 			if (allSetCardsCount === 0) return this.errorReply(`No cards found for set "${setId}".`);
 
 			const countPipeline: any[] = [
-				{ $match: { setId: setId } },
+				{ $match: { setId } },
 				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
-					{ $match: { $expr: { $and: [ { $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] } ] } } },
-					{ $project: { _id: 1 } }
+					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
+					{ $project: { _id: 1 } },
 				], as: 'userCollectionEntry' } },
 				{ $match: { userCollectionEntry: { $eq: [] } } },
-				{ $count: 'total' }
+				{ $count: 'total' },
 			];
 			const countResult = await cardCollection.aggregate(countPipeline);
 			const totalMatches = countResult[0]?.total || 0;
@@ -308,16 +312,16 @@ export const collectionCommands: ChatCommands = {
 			const skip = (currentPage - 1) * limit;
 
 			const dataPipeline: any[] = [
-				{ $match: { setId: setId } },
+				{ $match: { setId } },
 				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
-					{ $match: { $expr: { $and: [ { $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] } ] } } },
-					{ $project: { _id: 1 } }
+					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
+					{ $project: { _id: 1 } },
 				], as: 'userCollectionEntry' } },
 				{ $match: { userCollectionEntry: { $eq: [] } } },
 				{ $sort: { cardId: 1 } },
 				{ $skip: skip },
 				{ $limit: limit },
-				{ $project: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 } }
+				{ $project: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 } },
 			];
 			const paginatedResults = await cardCollection.aggregate(dataPipeline);
 
@@ -360,7 +364,7 @@ export const collectionCommands: ChatCommands = {
 			}
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while fetching missing cards.');
 		}
 	},
@@ -377,7 +381,7 @@ export const collectionCommands: ChatCommands = {
 			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 			html += `<strong style="font-size: 20px;">${user.name}'s Saved Packs</strong><br />`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 15px;">Click a pack to open one.</div>`;
-			
+
 			for (let i = 0; i < userPacks.length; i++) {
 				const p = userPacks[i];
 				if (i % 3 === 0) {
@@ -401,7 +405,7 @@ export const collectionCommands: ChatCommands = {
 			if (userPacks.length > 0) html += `</div>`;
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while fetching your packs.');
 		}
 	},
@@ -473,7 +477,7 @@ export const collectionCommands: ChatCommands = {
 		html += `</div></div></div>`;
 		this.sendReply(`|html|${html}`);
 	},
-	
+
 	async favorite(target, room, user) {
 		const cardId = target.trim();
 		if (!cardId) return this.errorReply('Usage: /tcg favorite [cardid]');
@@ -481,7 +485,7 @@ export const collectionCommands: ChatCommands = {
 		const collections = userCollectionsCollection;
 
 		try {
-			const userCard = await collections.findOne({ userId: user.id, cardId: cardId });
+			const userCard = await collections.findOne({ userId: user.id, cardId });
 			if (!userCard) return this.errorReply(`You do not own this card. You can only favorite cards from your collection.`);
 
 			const profile = await profiles.findOne({ userId: user.id });
@@ -498,7 +502,7 @@ export const collectionCommands: ChatCommands = {
 			} else {
 				this.errorReply(`"${userCard.name}" is already in your favorites.`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while adding your favorite card.');
 		}
 	},
@@ -531,7 +535,7 @@ export const collectionCommands: ChatCommands = {
 					this.errorReply(`Card "${cardId}" was not in your favorites list.`);
 				}
 			}
-		} catch (error) {
+		} catch {
 			const action = targetId === 'all' ? 'removing all your favorite cards' : 'removing your favorite card';
 			return this.errorReply(`An error occurred while ${action}.`);
 		}
@@ -554,14 +558,14 @@ export const collectionCommands: ChatCommands = {
 
 			const setTotalsPipeline = [
 				{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
-				{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } }
+				{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } },
 			];
 			const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
 			if (allSets.length === 0) return this.errorReply("Failed to fetch set totals. Aborting.");
 
 			const userProgressPipeline = [
 				{ $match: { userId: targetUserId } },
-				{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } }
+				{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } },
 			];
 			const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
 			const userProgressMap = new Map<string, number>();
@@ -577,11 +581,11 @@ export const collectionCommands: ChatCommands = {
 
 			const allStatsPipeline = [
 				{ $match: { userId: targetUserId } },
-				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } }
+				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } },
 			];
 			const statsResult = await userCollection.aggregate(allStatsPipeline);
 			const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
-			
+
 			const profile = await profileCollection.findOne({ userId: targetUserId });
 			const currentCredits = profile?.credits || 0;
 			const userName = profile?.userName || targetUserId;
@@ -590,24 +594,24 @@ export const collectionCommands: ChatCommands = {
 				{ userId: targetUserId },
 				{
 					$set: {
-						userName: userName,
+						userName,
 						credits: currentCredits,
 						totalUniqueCards: stats.totalUniqueCards,
 						totalQuantity: stats.totalQuantity,
 						collectionPoints: stats.collectionPoints,
 						totalSetsCompleted: setsCompleted,
 						favoriteCards: currentFavorites,
-						lastUpdatedAt: new Date().toISOString()
-					}
+						lastUpdatedAt: new Date().toISOString(),
+					},
 				},
 				{ upsert: true }
 			);
-			
+
 			this.sendReply(`Recalculation complete for ${targetUserId}:`);
 			this.sendReply(`- Sets Completed: ${setsCompleted} / ${allSets.length}`);
 			this.sendReply(`- Total Points: ${stats.collectionPoints.toLocaleString()}`);
 			this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply(`An error occurred during recalculation: ${error.message}`);
 		}
 	},

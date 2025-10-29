@@ -2,8 +2,8 @@
  * Pokemon Showdown
  * TCG Utility Functions
  */
-import { ImpulseDB, ImpulseCollection } from '../../impulse-db';
-import { TcgCard, TcgUser, TcgUserProfile } from './interface';
+import { ImpulseDB, type ImpulseCollection } from '../../impulse-db';
+import { type TcgCard, type TcgUser, TcgUserProfile } from './interface';
 import { userCollectionsCollection, userProfilesCollection, tcgCardsCollection } from './tcg_collections';
 
 export const CACHE_SAMPLE_SIZE = 10;
@@ -29,7 +29,7 @@ const packCache = new Map<string, RarityPools>();
 let globalFallbackCache: TcgCard[] = [];
 
 export let dailyShopCache: TcgCard[] = [];
-export let currentShopDate: string = '';
+export let currentShopDate = '';
 
 export function setShopCache(cache: TcgCard[], date: string) {
 	dailyShopCache = cache;
@@ -67,7 +67,7 @@ function getCardPool(card: TcgCard): RarityPool | null {
 	return null;
 }
 
-export async function initializeCache(): Promise<{ cardCount: number; setCount: number; }> {
+export async function initializeCache(): Promise<{ cardCount: number, setCount: number }> {
 	console.log('Starting TCG cache initialization...');
 	clearCache();
 
@@ -86,7 +86,7 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 
 		if (!packCache.has(card.setId)) {
 			packCache.set(card.setId, {
-				common: [], uncommon: [], reverseRare: [], rarest: [], fallback: []
+				common: [], uncommon: [], reverseRare: [], rarest: [], fallback: [],
 			});
 		}
 
@@ -104,7 +104,7 @@ export async function initializeCache(): Promise<{ cardCount: number; setCount: 
 	return { cardCount: cardsCache.size, setCount: setsCache.size };
 }
 
-export function clearCache(): { cardsCleared: number; setsCleared: number; } {
+export function clearCache(): { cardsCleared: number, setsCleared: number } {
 	const stats = { cardsCleared: cardsCache.size, setsCleared: setsCache.size };
 	cardsCache.clear();
 	setsCache.clear();
@@ -138,7 +138,7 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 
 	const now = new Date().toISOString();
 	const cardCounts = new Map<string, { card: TcgCard, count: number }>();
-	
+
 	for (const card of pack) {
 		const existing = cardCounts.get(card.cardId);
 		if (existing) {
@@ -205,8 +205,8 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 						...(card.regulationMark && { regulationMark: card.regulationMark }),
 					},
 				},
-				upsert: true
-			}
+				upsert: true,
+			},
 		});
 	}
 
@@ -219,14 +219,14 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 				{ userId: user.id },
 				{
 					$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
-					$set: { userName: user.name, lastUpdatedAt: now }
+					$set: { userName: user.name, lastUpdatedAt: now },
 				}
 			);
 		} else {
 			await userProfilesCollection.insertOne({
 				userId: user.id, userName: user.name, credits,
 				totalUniqueCards: totalUnique, totalQuantity: totalQty,
-				collectionPoints: totalPts, lastUpdatedAt: now
+				collectionPoints: totalPts, lastUpdatedAt: now,
 			});
 		}
 	}
@@ -294,7 +294,7 @@ async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
 		}
 		if (eighth) pack.push(eighth);
 
-		let missing = MAX_PACK_SIZE - pack.length;
+		const missing = MAX_PACK_SIZE - pack.length;
 		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
 			pack.push(...getGlobalFallback(missing, excludeIds));
@@ -305,7 +305,7 @@ async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-	} catch (error) {
+	} catch {
 		console.error(`Error generating pack from CACHE for set ${setId}:`, error);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
 	}
@@ -331,7 +331,7 @@ async function getWeightedRandomCardDB(
 ): Promise<TcgCard | null> {
 	const sampled = await collection.aggregate<TcgCard>([
 		{ $match: { setId, rarity: { $in: rarities }, cardId: { $nin: excludeIds } } },
-		{ $sample: { size: DB_SAMPLE_SIZE } }
+		{ $sample: { size: DB_SAMPLE_SIZE } },
 	]);
 	if (!sampled.length) return null;
 	sampled.sort((a, b) => a.rarityPoints - b.rarityPoints);
@@ -377,7 +377,7 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 		}
 		if (eighth) pack.push(eighth);
 
-		let missing = MAX_PACK_SIZE - pack.length;
+		const missing = MAX_PACK_SIZE - pack.length;
 		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
 			pack.push(...await getRandomCardsDB(tcgCardsCollection, null, FALLBACK_RARITIES, missing, excludeIds));
@@ -388,7 +388,7 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-	} catch (error) {
+	} catch {
 		console.error(`Error generating pack from DB for set ${setId}:`, error);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
 	}

@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * TCG Commands
 */
-import { TcgCard, TcgDailyCooldown, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
+import { type TcgCard, TcgDailyCooldown, TcgUser, type TcgUserProfile, type TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats, renderCardGridHtml, addCardsToCollection, dailyShopCache, currentShopDate, setShopCache } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
@@ -35,7 +35,7 @@ function parseSearchQuery(target: string): { filter: any, queryDescription: stri
 	while ((match = filterRegex.exec(query)) !== null) {
 		const key = match[1].toLowerCase();
 		const operator = match[2];
-		let value = match[3].replace(/"/g, '');
+		const value = match[3].replace(/"/g, '');
 		nameQuery = nameQuery.replace(match[0], '');
 
 		const valueNum = parseInt(value);
@@ -43,58 +43,58 @@ function parseSearchQuery(target: string): { filter: any, queryDescription: stri
 		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
-			case 'rarity':
-				filter.$and.push({ rarity: valueRegex });
-				descriptions.push(`Rarity: ${value}`);
-				break;
-			case 'supertype':
-			case 'st':
-				filter.$and.push({ supertype: valueRegex });
-				descriptions.push(`Supertype: ${value}`);
-				break;
-			case 'subtype':
-				filter.$and.push({ subtypes: valueRegex });
-				descriptions.push(`Subtype: ${value}`);
-				break;
-			case 'type':
-				filter.$and.push({ types: valueRegex });
-				descriptions.push(`Type: ${value}`);
-				break;
-			case 'artist':
-				filter.$and.push({ artist: valueRegex });
-				descriptions.push(`Artist: ${value}`);
-				break;
-			case 'hp':
-				if (!isNaN(valueNum)) {
-					let hpFilter: any = {};
-					if (operator === '>') hpFilter = { $gt: valueNum };
-					else if (operator === '>=') hpFilter = { $gte: valueNum };
-					else if (operator === '<') hpFilter = { $lt: valueNum };
-					else if (operator === '<=') hpFilter = { $lte: valueNum };
-					else hpFilter = valueNum;
-					filter.$and.push({ hp: hpFilter });
-					descriptions.push(`HP: ${operator || ''}${value}`);
-				}
-				break;
-			case 'legal':
-				const legalKey = `legalities.${value.toLowerCase()}`;
-				filter.$and.push({ [legalKey]: 'Legal' });
-				descriptions.push(`Legal: ${value}`);
-				break;
-			case 'series':
-				filter.$and.push({ setSeries: valueRegex });
-				descriptions.push(`Series: ${value}`);
-				break;
-			case 'reg':
-				filter.$and.push({ regulationMark: valueRegex });
-				descriptions.push(`Reg Mark: ${value}`);
-				break;
-			case 'set':
-				const partialRegex = new RegExp(escapedValue, 'i');
-				const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
-				filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
-				descriptions.push(`Set: ${value}`);
-				break;
+		case 'rarity':
+			filter.$and.push({ rarity: valueRegex });
+			descriptions.push(`Rarity: ${value}`);
+			break;
+		case 'supertype':
+		case 'st':
+			filter.$and.push({ supertype: valueRegex });
+			descriptions.push(`Supertype: ${value}`);
+			break;
+		case 'subtype':
+			filter.$and.push({ subtypes: valueRegex });
+			descriptions.push(`Subtype: ${value}`);
+			break;
+		case 'type':
+			filter.$and.push({ types: valueRegex });
+			descriptions.push(`Type: ${value}`);
+			break;
+		case 'artist':
+			filter.$and.push({ artist: valueRegex });
+			descriptions.push(`Artist: ${value}`);
+			break;
+		case 'hp':
+			if (!isNaN(valueNum)) {
+				let hpFilter: any = {};
+				if (operator === '>') hpFilter = { $gt: valueNum };
+				else if (operator === '>=') hpFilter = { $gte: valueNum };
+				else if (operator === '<') hpFilter = { $lt: valueNum };
+				else if (operator === '<=') hpFilter = { $lte: valueNum };
+				else hpFilter = valueNum;
+				filter.$and.push({ hp: hpFilter });
+				descriptions.push(`HP: ${operator || ''}${value}`);
+			}
+			break;
+		case 'legal':
+			const legalKey = `legalities.${value.toLowerCase()}`;
+			filter.$and.push({ [legalKey]: 'Legal' });
+			descriptions.push(`Legal: ${value}`);
+			break;
+		case 'series':
+			filter.$and.push({ setSeries: valueRegex });
+			descriptions.push(`Series: ${value}`);
+			break;
+		case 'reg':
+			filter.$and.push({ regulationMark: valueRegex });
+			descriptions.push(`Reg Mark: ${value}`);
+			break;
+		case 'set':
+			const partialRegex = new RegExp(escapedValue, 'i');
+			const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
+			filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
+			descriptions.push(`Set: ${value}`);
+			break;
 		}
 	}
 
@@ -128,7 +128,7 @@ export const commands: ChatCommands = {
 					card = await collection.findOne({ cardId });
 				}
 				if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			} catch (error) {
+			} catch {
 				return this.errorReply('An error occurred while fetching card information.');
 			}
 
@@ -174,7 +174,7 @@ export const commands: ChatCommands = {
 					card = await collection.findOne({ setId });
 				}
 				if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			} catch (error) {
+			} catch {
 				return this.errorReply('An error occurred while fetching set information.');
 			}
 
@@ -223,7 +223,7 @@ export const commands: ChatCommands = {
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
 
 				const results = await collection.find(filter, {
-					limit: SEARCH_PAGE_LIMIT, skip: skip,
+					limit: SEARCH_PAGE_LIMIT, skip,
 					projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
 					sort: { rarityPoints: -1, name: 1 },
 				});
@@ -267,7 +267,7 @@ export const commands: ChatCommands = {
 				}
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch (error) {
+			} catch {
 				return this.errorReply('An error occurred while searching for cards.');
 			}
 		},
@@ -295,11 +295,11 @@ export const commands: ChatCommands = {
 				let randomSetId = 'sv1';
 				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([{
-					$group: { _id: "$setId" }
+					$group: { _id: "$setId" },
 				}, {
-					$sample: { size: 1 }
+					$sample: { size: 1 },
 				}, {
-					$project: { _id: 0, setId: "$_id" }
+					$project: { _id: 0, setId: "$_id" },
 				}]);
 				if (randomSetArr.length > 0) randomSetId = randomSetArr[0].setId;
 
@@ -307,16 +307,16 @@ export const commands: ChatCommands = {
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
 
 				await cooldowns.updateOne(
-					{ userId: userId },
+					{ userId },
 					{ $set: { lastClaimedAt: new Date(now).toISOString() } },
 					{ upsert: true }
 				);
-				
+
 				const title = `${user.name} opened their daily pack! (${randomSetId})`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 				this.sendReply(`|html|${html}`);
-			} catch (error) {
+			} catch {
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
@@ -331,7 +331,7 @@ export const commands: ChatCommands = {
 
 			try {
 				updateResult = await packCollection.updateOne(
-					{ userId: user.id, setId: setId, quantity: { $gt: 0 } },
+					{ userId: user.id, setId, quantity: { $gt: 0 } },
 					{ $inc: { quantity: -1 } }
 				);
 
@@ -355,9 +355,9 @@ export const commands: ChatCommands = {
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 				this.sendReply(`|html|${html}`);
-			} catch (error) {
+			} catch {
 				try {
-					await packCollection.updateOne({ userId: user.id, setId: setId }, { $inc: { quantity: 1 } });
+					await packCollection.updateOne({ userId: user.id, setId }, { $inc: { quantity: 1 } });
 				} catch (refundError) {
 					console.error(`Failed to refund pack for ${user.id}, setId ${setId}:`, refundError);
 				}
@@ -367,7 +367,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`An error occurred while opening your pack: ${error.message}. Your pack has been refunded.`);
 			}
 		},
-		
+
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const rawSetId = target.trim();
@@ -398,7 +398,7 @@ export const commands: ChatCommands = {
 			try {
 				const allPacks: TcgCard[] = [];
 				const quantityToOpen = Math.min(packQuantity, 100);
-				
+
 				if (packQuantity > 100) {
 					this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
 					await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $inc: { quantity: packQuantity - 100 } });
@@ -408,7 +408,7 @@ export const commands: ChatCommands = {
 					const pack = await generatePack(rawSetId);
 					allPacks.push(...pack);
 				}
-				
+
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong><br /><br />`;
@@ -420,7 +420,7 @@ export const commands: ChatCommands = {
 				html += `<button name="send" value="/tcg collection user:${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch (error) {
+			} catch {
 				await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $set: { quantity: packQuantity } });
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
@@ -428,34 +428,34 @@ export const commands: ChatCommands = {
 
 		async leaderboard(target, room, user) {
 			if (!this.runBroadcast()) return;
-			let targetStat = toID(target) || 'points';
+			const targetStat = toID(target) || 'points';
 			let sortKey: keyof TcgUserProfile = 'collectionPoints';
 			let title = 'Collection Points';
 			let valueField: keyof TcgUserProfile = 'collectionPoints';
 
 			switch (targetStat) {
-				case 'points':
-					sortKey = 'collectionPoints'; title = 'Collection Points'; valueField = 'collectionPoints'; break;
-				case 'count': case 'quantity':
-					sortKey = 'totalQuantity'; title = 'Total Cards'; valueField = 'totalQuantity'; break;
-				case 'unique':
-					sortKey = 'totalUniqueCards'; title = 'Unique Cards'; valueField = 'totalUniqueCards'; break;
-				case 'credits':
-					sortKey = 'credits'; title = 'Total Credits'; valueField = 'credits'; break;
-				case 'sets':
-					sortKey = 'totalSetsCompleted'; title = 'Sets Completed'; valueField = 'totalSetsCompleted'; break;
-				default:
-					return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', 'credits', or 'sets'.");
+			case 'points':
+				sortKey = 'collectionPoints'; title = 'Collection Points'; valueField = 'collectionPoints'; break;
+			case 'count': case 'quantity':
+				sortKey = 'totalQuantity'; title = 'Total Cards'; valueField = 'totalQuantity'; break;
+			case 'unique':
+				sortKey = 'totalUniqueCards'; title = 'Unique Cards'; valueField = 'totalUniqueCards'; break;
+			case 'credits':
+				sortKey = 'credits'; title = 'Total Credits'; valueField = 'credits'; break;
+			case 'sets':
+				sortKey = 'totalSetsCompleted'; title = 'Sets Completed'; valueField = 'totalSetsCompleted'; break;
+			default:
+				return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', 'credits', or 'sets'.");
 			}
 
 			try {
 				const collection = userProfilesCollection;
 				const results = await collection.find({}, { sort: { [sortKey]: -1 }, limit: 10 });
 				if (results.length === 0) return this.errorReply("No users found in the leaderboard yet.");
-				
+
 				const headerRow = ['Rank', 'User', title];
 				const dataRows = results.map((profile, i) => {
-					const value = profile[valueField] as number || 0;
+					const value = profile[valueField]! || 0;
 					return [`<strong>${i + 1}</strong>`, profile.userName, value.toLocaleString()];
 				});
 
@@ -463,7 +463,7 @@ export const commands: ChatCommands = {
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch (error) {
+			} catch {
 				return this.errorReply('An error occurred while fetching the leaderboard.');
 			}
 		},
@@ -472,35 +472,35 @@ export const commands: ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/tcg adminhelp", desc: "Shows all admin commands."},
-				{cmd: "/tcg economyhelp", desc: "Shows all economy and shop commands."},
-				{cmd: "/tcg tradehelp", desc: "Shows trading commands."},
-				{cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information."},
-				{cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set."},
-				{cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>"},
-				{cmd: "/tcg profile [user]", desc: "View a user's TCG profile and collection stats."},
-				{cmd: "/tcg daily", desc: "Claim your free daily booster pack (once per 24h)."},
-				{cmd: "/tcg collection [user:], [filters:], [page]", desc: "View your (or another user's) card collection.<br><b>Example:</b> <code>/tcg collection user:princeskygit, rarity:Secret</code>"},
-				{cmd: "/tcg setprogress [setId]", desc: "Track your collection progress for a specific set."},
-				{cmd: "/tcg missing [setId], [user?], [page?]", desc: "Shows cards you are missing from a set."},
-				{cmd: "/tcg packs", desc: "View your unopened booster packs."},
-				{cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from your inventory."},
-				{cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a specific set from your inventory."},
-				{cmd: "/tcg favorite [cardId]", desc: "Add a card from your collection to your profile (max 10)."},
-				{cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites."},
-				{cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors."},
-				{cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user."},
+				{ cmd: "/tcg adminhelp", desc: "Shows all admin commands." },
+				{ cmd: "/tcg economyhelp", desc: "Shows all economy and shop commands." },
+				{ cmd: "/tcg tradehelp", desc: "Shows trading commands." },
+				{ cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information." },
+				{ cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set." },
+				{ cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>" },
+				{ cmd: "/tcg profile [user]", desc: "View a user's TCG profile and collection stats." },
+				{ cmd: "/tcg daily", desc: "Claim your free daily booster pack (once per 24h)." },
+				{ cmd: "/tcg collection [user:], [filters:], [page]", desc: "View your (or another user's) card collection.<br><b>Example:</b> <code>/tcg collection user:princeskygit, rarity:Secret</code>" },
+				{ cmd: "/tcg setprogress [setId]", desc: "Track your collection progress for a specific set." },
+				{ cmd: "/tcg missing [setId], [user?], [page?]", desc: "Shows cards you are missing from a set." },
+				{ cmd: "/tcg packs", desc: "View your unopened booster packs." },
+				{ cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from your inventory." },
+				{ cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a specific set from your inventory." },
+				{ cmd: "/tcg favorite [cardId]", desc: "Add a card from your collection to your profile (max 10)." },
+				{ cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites." },
+				{ cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors." },
+				{ cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user." },
 			];
 			const html = `<center><strong>TCG Commands:</strong><br>Alias: /pokemontcg</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
 		},
 		...adminCommands,
 		...collectionCommands,
-		...economyCommands,		
+		...economyCommands,
 		...tradeCommands,
 	},
 };
