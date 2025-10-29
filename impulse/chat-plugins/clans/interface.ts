@@ -1,9 +1,9 @@
 export type DefaultClanRankID = 'owner' | 'leader' | 'officer' | 'member';
 export type ClanPermission =
-	| 'canInvite' | 'canDeinvite' | 'canKick'
-	| 'canPromote' | 'canDemote' | 'canEditDesc'
-	| 'canEditIcon' | 'canEditTag' | 'canSetMotw'
-	| 'canManageChat' | 'canEditRanks' | 'canAnnounce'
+	| 'canInvite' | 'canDeinvite' | 'canKick' |
+	'canPromote' | 'canDemote' | 'canEditDesc' |
+	'canEditIcon' | 'canEditTag' | 'canSetMotw' |
+	'canManageChat' | 'canEditRanks' | 'canAnnounce';
 
 export interface ClanPermissions {
 	[key in ClanPermission]?: boolean;
@@ -36,14 +36,14 @@ export interface ClanStats {
 
 export interface Clan {
 	id: ID;
-	name:string;
+	name: string;
 	tag: string;
 	owner: ID;
 	members: {
-		[userid: string]: ClanMember;
+		[userid: string]: ClanMember,
 	};
 	ranks: {
-		[rankId: string]: CustomClanRank;
+		[rankId: string]: CustomClanRank,
 	};
 	created: number;
 	desc: string;
@@ -72,14 +72,14 @@ export interface UserClanData {
 }
 
 export type ClanLogType =
-	| 'CREATE' | 'DELETE' | 'JOIN' | 'LEAVE'
-	| 'KICK' | 'INVITE' | 'DEINVITE' | 'PROMOTE'
-	| 'DEMOTE' | 'SET_MOTW' | 'SET_DESC' | 'SET_TAG'
-	| 'SET_ICON' | 'SET_INVITEONLY' | 'RANK_CREATE' | 'RANK_DELETE'
-	| 'ADMIN_POINTS' | 'ADMIN_TOURWIN' | 'ADMIN_EVENTWIN' | 'ADMIN_CLEARMEMBERS'
-	| 'ADMIN_TRANSFEROWNER' | 'ADMIN_CLEARINVITES' | 'ADMIN_KICKALL' | 'ADMIN_SETICON'
-	| 'ADMIN_SETTAG' | 'ADMIN_SETDESC' | 'ADMIN_RESETSTATS' | 'ADMIN_REMOVELEVEL'
-	| 'ADMIN_ADDLEVEL' | 'ADMIN_SETLEVEL' | 'RANK_EDIT';
+	| 'CREATE' | 'DELETE' | 'JOIN' | 'LEAVE' |
+	'KICK' | 'INVITE' | 'DEINVITE' | 'PROMOTE' |
+	'DEMOTE' | 'SET_MOTW' | 'SET_DESC' | 'SET_TAG' |
+	'SET_ICON' | 'SET_INVITEONLY' | 'RANK_CREATE' | 'RANK_DELETE' |
+	'ADMIN_POINTS' | 'ADMIN_TOURWIN' | 'ADMIN_EVENTWIN' | 'ADMIN_CLEARMEMBERS' |
+	'ADMIN_TRANSFEROWNER' | 'ADMIN_CLEARINVITES' | 'ADMIN_KICKALL' | 'ADMIN_SETICON' |
+	'ADMIN_SETTAG' | 'ADMIN_SETDESC' | 'ADMIN_RESETSTATS' | 'ADMIN_REMOVELEVEL' |
+	'ADMIN_ADDLEVEL' | 'ADMIN_SETLEVEL' | 'RANK_EDIT';
 
 export interface ClanLog {
 	timestamp: number;
@@ -106,4 +106,3 @@ export interface ClanPointsLogEntry {
 export interface ClanPointsLogs {
 	[clanId: string]: ClanPointsLogEntry[];
 }
-
