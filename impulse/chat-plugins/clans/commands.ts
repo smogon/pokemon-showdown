@@ -79,6 +79,11 @@ const DEFAULT_STATS: ClanStats = {
 	tourWins: 0,
 	eventWins: 0,
 	totalPointsEarned: 0,
+	warWins: 0,
+	warLosses: 0,
+	warDraws: 0,
+	warPoints: 0,
+	totalWarsParticipated: 0,
 };
 
 async function logClanActivity(
