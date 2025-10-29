@@ -29,7 +29,7 @@ function parseSearchQuery(target: string): { filter: any, queryDescription: stri
 
 	const filter: any = { $and: [] };
 	const descriptions: string[] = [];
-	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?("[^"]+"|[\w-]+)/g;
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?"([^"]+)"|([\w-]+)/g;
 	let nameQuery = query, match;
 
 	while ((match = filterRegex.exec(query)) !== null) {
@@ -286,11 +286,13 @@ export const commands: ChatCommands = {
 			let randomSetId = 'sv1';
 			try {
 				const setCollection = tcgCardsCollection;
-				const randomSetArr = await setCollection.aggregate<{ setId: string }>([
-					{ $group: { _id: "$setId" } },
-					{ $sample: { size: 1 } },
-					{ $project: { _id: 0, setId: "$_id" } }
-				]);
+				const randomSetArr = await setCollection.aggregate<{ setId: string }>([{
+					$group: { _id: "$setId" }
+				}, {
+					$sample: { size: 1 }
+				}, {
+					$project: { _id: 0, setId: "$_id" }
+				}]);
 				if (randomSetArr.length > 0) randomSetId = randomSetArr[0].setId;
 
 				const pack = await generatePack(randomSetId);
@@ -361,7 +363,7 @@ export const commands: ChatCommands = {
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const rawSetId = target.trim();
-			if (!rawSetId) this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+			if (!rawSetId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			const packCollection = userPacksCollection;
 			const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
 			let findResult: TcgUserPack | null = null;
@@ -449,8 +451,9 @@ export const commands: ChatCommands = {
 					return [`<strong>${i + 1}</strong>`, profile.userName, value.toLocaleString()];
 				});
 
-				let html = `<div class="style="padding: 10px;">`;
+				let html = `<div style="padding: 10px;">`;
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
+				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
 				return this.errorReply('An error occurred while fetching the leaderboard.');
