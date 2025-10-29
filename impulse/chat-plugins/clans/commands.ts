@@ -1785,5 +1785,153 @@ export const commands: Chat.ChatCommands = {
 	
 		this.sendReply(`|html|${html}`);
 	},
+
+	async addpoints(target, room, user) {
+	this.checkCan('roomowner');
+	const [amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
+	const amount = parseInt(amountStr);
+	const reason = reasonArr.join(',') || 'Admin adjustment';
+
+	if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan addpoints [amount], [reason] (amount must be a positive number)");
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { points: amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_POINTS',
+		oldValue: clan.points,
+		newValue: clan.points + amount,
+		note: `[ADMIN] Added ${amount} points. Reason: ${reason}`
+	});
+	this.sendReply(`Added ${amount} points to clan '${clan.name}'. Reason: ${reason}`);
+},
+
+async removepoints(target, room, user) {
+	this.checkCan('roomowner');
+	const [amountStr, ...reasonArr] = target.split(',').map(s => s.trim());
+	const amount = parseInt(amountStr);
+	const reason = reasonArr.join(',') || 'Admin adjustment';
+
+	if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removepoints [amount], [reason] (amount must be a positive number)");
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { points: -amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_POINTS',
+		oldValue: clan.points,
+		newValue: clan.points - amount,
+		note: `[ADMIN] Removed ${amount} points. Reason: ${reason}`
+	});
+	this.sendReply(`Removed ${amount} points from clan '${clan.name}'. Reason: ${reason}`);
+},
+
+async addtourwins(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim()) || 1;
+	if (amount <= 0) return this.errorReply("Amount must be a positive number.");
+
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { 'stats.tourWins': amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_TOURWIN',
+		oldValue: clan.stats.tourWins,
+		newValue: clan.stats.tourWins + amount,
+		note: `[ADMIN] Added ${amount} tour win(s)`
+	});
+	this.sendReply(`Added ${amount} tour win(s) to clan '${clan.name}'.`);
+},
+
+async removetourwins(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim()) || 1;
+	if (amount <= 0) return this.errorReply("Amount must be a positive number.");
+
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { 'stats.tourWins': -amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_TOURWIN',
+		oldValue: clan.stats.tourWins,
+		newValue: clan.stats.tourWins - amount,
+		note: `[ADMIN] Removed ${amount} tour win(s)`
+	});
+	this.sendReply(`Removed ${amount} tour win(s) from clan '${clan.name}'.`);
+},
+
+async addeventwins(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim()) || 1;
+	if (amount <= 0) return this.errorReply("Amount must be a positive number.");
+
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { 'stats.eventWins': amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_EVENTWIN',
+		oldValue: clan.stats.eventWins,
+		newValue: clan.stats.eventWins + amount,
+		note: `[ADMIN] Added ${amount} event win(s)`
+	});
+	this.sendReply(`Added ${amount} event win(s) to clan '${clan.name}'.`);
+},
+
+async removeeventwins(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim()) || 1;
+	if (amount <= 0) return this.errorReply("Amount must be a positive number.");
+
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+	await Clans.updateOne({ _id: clanId }, { $inc: { 'stats.eventWins': -amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: 'ADMIN_EVENTWIN',
+		oldValue: clan.stats.eventWins,
+		newValue: clan.stats.eventWins - amount,
+		note: `[ADMIN] Removed ${amount} event win(s)`
+	});
+	this.sendReply(`Removed ${amount} event win(s) from clan '${clan.name}'.`);
+},
 },
 };
