@@ -1673,18 +1673,16 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|html|${output}`);
 	},
 
-		
 	async logs(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to view clan logs.");
 
-		const limit = parseInt(target) || 20;
-		const actorId = user.id;
-		
+		let limit = parseInt(target.trim()) || 50;
 		if (limit < 1 || limit > 100) {
 			return this.errorReply("Limit must be between 1 and 100.");
 		}
 
+		const actorId = user.id;
 		const actorClanInfo = await UserClans.findOne({ _id: actorId });
 		const clanId = actorClanInfo?.memberOf;
 
@@ -1699,30 +1697,25 @@ export const commands: Chat.ChatCommands = {
 		);
 
 		if (logs.length === 0) {
-			return this.errorReply(`${clan.name} has no activity logs.`);
+			return user.popup(`|html|<div class="infobox"><center>No activity logs found for ${clan.name}.</center></div>`);
 		}
-		
-		const dataRows: string[][] = [];
-		const headerRow = ['Date', 'Actor', 'Action', 'Target', 'Details'];
-		const title = `${clan.name} Activity Logs (Last ${logs.length})`;
-
-		logs.forEach(log => {
+		let html = `<div class="infobox" style="max-width:600px; max-height: 400px;"><center><strong>${clan.name} Activity Logs (Latest ${logs.length})</strong></center><br>`;
+		for (const log of logs) {
 			const date = new Date(log.timestamp).toLocaleString();
-			const details = log.note || 
-				(log.oldValue !== undefined && log.newValue !== undefined ? 
+			const details = log.note ||
+				(log.oldValue !== undefined && log.newValue !== undefined ?
 				 `${log.oldValue} → ${log.newValue}` : '');
-		
-			dataRows.push([
-				date,
-				log.actor,
-				log.action,
-				log.target || '-',
-				details,
-			]);
-		});
-		const output = generateThemedTable(title, headerRow, dataRows);
-		this.sendReply(`|html|${output}`);
-	},
+			html += `<div>` +
+				`<strong>Date:</strong> ${date}<br />` +
+				`<strong>Actor:</strong> ${log.actor}<br />` +
+				`<strong>Action:</strong> ${log.action}<br />` -
+				`<strong>Target:</strong> ${log.target || '-'}<br />` +
+				`<strong>Details:</strong> ${details}` +
+				`</div><hr>`;
+	}
+	html += `</div>`;
+	user.popup(`|html|${html}`);
+},
 
 	async pointslog(target, room, user) {
 		this.checkChat();
@@ -1750,7 +1743,7 @@ export const commands: Chat.ChatCommands = {
 			return user.popup(`|html|<div class="infobox"><center>No points log entries found for ${clan.name}.</center></div>`);
 		}
 
-		let html = `<div class="infobox" style="max-width:600px"><center><strong>${clan.name} Points Logs (Latest ${logs.length})</strong></center><br>`;
+		let html = `<div class="infobox" style="max-width:600px; max-height: 400px;"><center><strong>${clan.name} Points Logs (Latest ${logs.length})</strong></center><br>`;
 		for (const log of logs) {
 			html += `<div>` +
 				`<strong>Date:</strong> ${new Date(log.timestamp).toLocaleString()}<br />` +
