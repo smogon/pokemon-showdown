@@ -41,12 +41,14 @@ const updateColor = async () => {
 		const end = file.indexOf('/* COLORS END */');
 		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
 
-		await FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
+		FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
 
 		clearColorCache();
 		await loadCustomColorsFromDB();
 		Impulse.reloadCSS();
-	} catch (e) {}
+	} catch {
+		// Ignore errors during initialization
+	}
 };
 
 export const commands: Chat.ChatCommands = {
@@ -146,7 +148,7 @@ export const commands: Chat.ChatCommands = {
 				);
 
 				this.sendReply(`|raw|${output}`);
-			} catch (err) {
+			} catch {
 				return this.errorReply('Failed to list custom colors.');
 			}
 		},
@@ -154,16 +156,16 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/customcolor set [user], [hex]", desc: "Set color for a user. Requires: &."},
-				{cmd: "/customcolor delete [user]", desc: "Delete color for a user. Requires: &."},
-				{cmd: "/customcolor reload", desc: "Reload all custom colors. Requires: &."},
-				{cmd: "/customcolor preview [user], [hex]", desc: "Preview color for a user."},
-				{cmd: "/customcolor list", desc: "List all custom colors. Requires: &."},
+				{ cmd: "/customcolor set [user], [hex]", desc: "Set color for a user. Requires: &." },
+				{ cmd: "/customcolor delete [user]", desc: "Delete color for a user. Requires: &." },
+				{ cmd: "/customcolor reload", desc: "Reload all custom colors. Requires: &." },
+				{ cmd: "/customcolor preview [user], [hex]", desc: "Preview color for a user." },
+				{ cmd: "/customcolor list", desc: "List all custom colors. Requires: &." },
 			];
 			const html = `<center><strong>Custom Color Commands:</strong><br>Alias: /cc</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul><small>Format: #RGB or #RRGGBB</small>`;
 			this.sendReplyBox(html);
 		},

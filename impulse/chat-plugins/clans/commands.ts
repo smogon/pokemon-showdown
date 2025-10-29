@@ -8,8 +8,7 @@ import {
 	ClanLogs,
 	ClanBans,
 	ClanPointsLogs,
-	ClanDoc,
-	UserClanDoc,
+	type ClanDoc,
 } from './database';
 import type {
 	Clan,
@@ -87,17 +86,17 @@ async function logClanActivity(
 	actor: ID,
 	action: ClanLogType,
 	options: {
-		target?: ID;
-		oldValue?: string | number | boolean;
-		newValue?: string | number | boolean;
-		note?: string;
+		target?: ID,
+		oldValue?: string | number | boolean,
+		newValue?: string | number | boolean,
+		note?: string,
 	} = {}
 ): Promise<void> {
 	await ClanLogs.insertOne({
-		clanId: clanId,
+		clanId,
 		timestamp: Date.now(),
-		actor: actor,
-		action: action,
+		actor,
+		action,
 		target: options.target,
 		oldValue: options.oldValue,
 		newValue: options.newValue,
@@ -105,13 +104,13 @@ async function logClanActivity(
 	});
 }
 
-function to(date: Date, options: { date?: boolean; time?: boolean } = {}): string {
+function to(date: Date, options: { date?: boolean, time?: boolean } = {}): string {
 	if (!(date instanceof Date) || isNaN(date.getTime())) {
 		return '';
 	}
 
 	const { date: showDate = false, time: showTime = false } = options;
-	
+
 	if (!showDate && !showTime) {
 		return date.toISOString();
 	}
@@ -257,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 					target: ownerId,
 					note: `Clan ${clanName} created for owner ${ownerId}.`,
 				});
-				
+
 				const chatRoomTitle = `[Clan] ${clanName}`;
 				let newRoom = Rooms.get(chatRoomId);
 
@@ -319,36 +318,38 @@ export const commands: Chat.ChatCommands = {
 			try {
 				if (chatRoom) {
 					chatRoom.add(`|html|<div class="broadcast-red"><b>This clan chatroom is being permanently deleted by ${user.name}.</b></div>`).update();
-			
-					await new Promise(resolve => setTimeout(resolve, 1000));
-			
+
+					await new Promise<void>(resolve => {
+						setTimeout(resolve, 1000);
+					});
+
 					for (const userid in chatRoom.users) {
 						const roomUser = chatRoom.users[userid];
 						roomUser.leaveRoom(chatRoom);
 					}
-			
+
 					Rooms.global.deregisterChatRoom(chatRoom.roomid);
-			
+
 					Rooms.global.delistChatRoom(chatRoom.roomid);
-			
+
 					chatRoom.destroy();
-		
-					await FS('config/chatrooms.json').writeUpdate(() => 
+
+					FS('config/chatrooms.json').writeUpdate(() =>
 						JSON.stringify(Rooms.global.settingsList)
-						.replace(/\{"title":/g, '\n{"title":')
-						.replace(/\]$/, '\n]'));
+							.replace(/\{"title":/g, '\n{"title":')
+							.replace(/\]$/, '\n]'));
 				}
 
 				await Clans.deleteOne({ _id: clanId });
-		
+
 				await UserClans.updateMany(
-					{ memberOf: clanId }, 
+					{ memberOf: clanId },
 					{ $unset: { memberOf: 1 } }
 				);
-		
-				await ClanLogs.deleteMany({ clanId: clanId });
-				await ClanPointsLogs.deleteMany({ clanId: clanId });
-		
+
+				await ClanLogs.deleteMany({ clanId });
+				await ClanPointsLogs.deleteMany({ clanId });
+
 				if (ownerUser?.connected) {
 					ownerUser.popup(
 						`|html|<div class="broadcast-red">` +
@@ -360,7 +361,7 @@ export const commands: Chat.ChatCommands = {
 
 				const memberIds = Object.keys(clan.members);
 				for (const memberId of memberIds) {
-					if (memberId === ownerId) continue; 
+					if (memberId === ownerId) continue;
 					const member = Users.getExact(memberId);
 					if (member?.connected) {
 						member.popup(
@@ -372,7 +373,6 @@ export const commands: Chat.ChatCommands = {
 				}
 				this.sendReply(`Clan "${clan.name}" (${clanId}) has been successfully deleted.`);
 				Monitor.log(`[Clans] ${user.name} deleted clan: ${clan.name} (${clanId}) with ${memberIds.length} members`);
-		
 			} catch (e) {
 				this.errorReply("An error occurred while deleting the clan. The deletion may have been partially completed.");
 				Monitor.crashlog(e as Error, "Clan deletion command", {
@@ -380,11 +380,11 @@ export const commands: Chat.ChatCommands = {
 					clanName: clan.name,
 					user: user.name,
 				});
-		
+
 				this.privateModAction(`(CRITICAL: Clan deletion failed for ${clanId}. Manual verification required.)`);
 			}
 		},
-		
+
 		async join(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to join a clan.");
@@ -456,7 +456,7 @@ export const commands: Chat.ChatCommands = {
 		async leave(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to leave a clan.");
-			
+
 			const userId = user.id;
 
 			const userClanInfo = await UserClans.findOne({ _id: userId });
@@ -508,7 +508,7 @@ export const commands: Chat.ChatCommands = {
 
 			const kickerClanInfo = await UserClans.findOne({ _id: kickerId });
 			const clanId = kickerClanInfo?.memberOf;
-			
+
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
 			const clan = await Clans.findOne({ _id: clanId });
@@ -553,7 +553,7 @@ export const commands: Chat.ChatCommands = {
 				clanRoom.auth.delete(targetId);
 				clanRoom.saveSettings();
 				const kickedUser = Users.get(targetId);
-				if (kickedUser && kickedUser.inRooms.has(clan.chatRoom)) {
+				if (kickedUser?.inRooms.has(clan.chatRoom)) {
 					kickedUser.leaveRoom(clanRoom);
 				}
 				clanRoom.add(`|html|<div class="infobox"><center>${targetId} was kicked from the clan by ${user.name}.</center></div>`).update();
@@ -642,7 +642,7 @@ export const commands: Chat.ChatCommands = {
 
 			const targetId = toID(target);
 			const actorId = user.id;
-			
+
 			if (!targetId) return this.errorReply("Specify the user whose invite you wish to revoke.");
 
 			const actorClanInfo = await UserClans.findOne({ _id: actorId });
@@ -702,14 +702,14 @@ export const commands: Chat.ChatCommands = {
 
 			let output = '';
 			const dataRows: string[][] = [];
-			
+
 			let isClanManager = false;
-			
+
 			if (memberOfClanId) {
 				const clan = await Clans.findOne({ _id: memberOfClanId });
 				if (clan) {
 					isClanManager = hasClanPermission(clan, userId, 'canInvite');
-					
+
 					if (isClanManager) {
 						const sentInvites = clan.invites;
 
@@ -717,15 +717,15 @@ export const commands: Chat.ChatCommands = {
 							const sentDataRows: string[][] = [];
 							const sentHeaderRow = ['User', 'Invited By', 'Date'];
 							const sentTitle = `Invites Sent by ${clan.name}`;
-							
+
 							sentInvites.forEach(invite => {
 								sentDataRows.push([
 									invite.userid,
 									invite.actor,
-									to(new Date(invite.timestamp), {date: true, time: true})
+									to(new Date(invite.timestamp), { date: true, time: true }),
 								]);
 							});
-							
+
 							output += generateThemedTable(sentTitle, sentHeaderRow, sentDataRows);
 						} else {
 							output += `<div class="infobox">${clan.name} has no pending outgoing invitations.</div>`;
@@ -738,18 +738,18 @@ export const commands: Chat.ChatCommands = {
 
 				if (receivedInvites.length) {
 					const invitedClans = await Clans.find({ _id: { $in: receivedInvites } });
-					
+
 					const headerRow = ['Clan', 'ID', 'Action'];
 					const title = 'Your Pending Clan Invites';
-					
+
 					invitedClans.forEach(clan => {
 						dataRows.push([
 							clan.name,
 							clan._id,
-							`<button class="button" name="send" value="/clan join ${clan._id}">Accept</button>`
+							`<button class="button" name="send" value="/clan join ${clan._id}">Accept</button>`,
 						]);
 					});
-					
+
 					if (output) output += '<hr />';
 					output += generateThemedTable(title, headerRow, dataRows);
 				} else if (!output) {
@@ -760,10 +760,10 @@ export const commands: Chat.ChatCommands = {
 			if (!output) {
 				return this.errorReply("You are not currently a member of a clan and have no pending invites.");
 			}
-			
+
 			this.sendReply(`|html|${output}`);
 		},
-		
+
 		async inviteonly(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to toggle invite-only mode.");
@@ -804,14 +804,14 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const oldValue = clan.inviteOnly;
-			
+
 			await Clans.updateOne(
 				{ _id: clanId },
 				{ $set: { inviteOnly: newInviteOnlyStatus } }
 			);
 
 			await logClanActivity(clanId, actorId, 'SET_INVITEONLY', {
-				oldValue: oldValue,
+				oldValue,
 				newValue: newInviteOnlyStatus,
 				note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
 			});
@@ -938,7 +938,7 @@ export const commands: Chat.ChatCommands = {
 			const actorId = user.id;
 
 			if (!rankId) return this.errorReply("Specify the rank ID you wish to delete.");
-			
+
 			const actorClanInfo = await UserClans.findOne({ _id: actorId });
 			const clanId = actorClanInfo?.memberOf;
 
@@ -975,7 +975,7 @@ export const commands: Chat.ChatCommands = {
 				{ _id: clanId },
 				{ $unset: { [`ranks.${rankId}`]: "" } }
 			);
-		
+
 			await logClanActivity(clanId, actorId, 'RANK_DELETE', {
 				target: rankId as ID,
 				note: `Deleted rank '${rankToDelete.name}'.`,
@@ -1039,7 +1039,7 @@ export const commands: Chat.ChatCommands = {
 			if (rankToEdit.permissionLevel >= actorRank.permissionLevel) {
 				return this.errorReply("You cannot edit ranks with permission level equal to or higher than your own.");
 			}
-			
+
 			const oldValue = rankToEdit.permissions[permission as keyof ClanPermissions] || false;
 
 			await Clans.updateOne(
@@ -1049,11 +1049,11 @@ export const commands: Chat.ChatCommands = {
 
 			await logClanActivity(clanId, actorId, 'RANK_EDIT', {
 				target: rankIdFormatted as ID,
-				oldValue: oldValue,
+				oldValue,
 				newValue: permValue,
 				note: `Edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.`,
 			});
-		
+
 			this.sendReply(`You edited rank '${rankToEdit.name}': ${permission} is now ${permValue}.`);
 
 			const clanRoom = Rooms.get(clan.chatRoom);
@@ -1101,10 +1101,10 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${output}`);
 		},
 
-		async permissionlist(target, room, user) {
+		permissionlist(target, room, user) {
 			this.runBroadcast();
 			this.checkChat();
-			
+
 			const permissions = Object.keys(ALL_PERMISSIONS);
 
 			const dataRows: string[][] = permissions.map(perm => [perm]);
@@ -1182,18 +1182,18 @@ export const commands: Chat.ChatCommands = {
 			);
 
 			await logClanActivity(clanId, actorId, 'PROMOTE', {
-					target: targetId,
-					oldValue: oldRank,
-					newValue: newRank,
-					note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
-				});
+				target: targetId,
+				oldValue: oldRank,
+				newValue: newRank,
+				note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
+			});
 
 			const clanRoom = Rooms.get(clan.chatRoom);
 			if (clanRoom) {
 				const roomRanks: { [key: string]: string } = {
 					'leader': '@',
 					'officer': '%',
-					'member': '+'
+					'member': '+',
 				};
 				const newRoomRank = roomRanks[newRank] || '+';
 				clanRoom.auth.set(targetId, newRoomRank);
@@ -1287,7 +1287,7 @@ export const commands: Chat.ChatCommands = {
 				const roomRanks: { [key: string]: string } = {
 					'leader': '@',
 					'officer': '%',
-					'member': '+'
+					'member': '+',
 				};
 				const newRoomRank = roomRanks[newRank] || '+';
 				clanRoom.auth.set(targetId, newRoomRank);
@@ -1369,18 +1369,23 @@ export const commands: Chat.ChatCommands = {
 			if (!user.named) return this.errorReply("You must be logged in to view clan members.");
 
 			let clanId: ID;
-		
+
 			if (target) {
 				clanId = toID(target);
 			} else {
 				const userClanInfo = await UserClans.findOne({ _id: user.id });
-				clanId = userClanInfo?.memberOf as ID;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its members.");
+				const memberOf = userClanInfo?.memberOf;
+				if (!memberOf) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Specify a clan ID to view its members."
+					);
+				}
+				clanId = memberOf;
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
-			
+
 			const memberEntries = Object.entries(clan.members);
 			if (memberEntries.length === 0) {
 				return this.errorReply(`Clan '${clan.name}' has no members.`);
@@ -1401,7 +1406,7 @@ export const commands: Chat.ChatCommands = {
 				dataRows.push([
 					userId,
 					rank.name,
-					toDurationString(Date.now() - memberData.joinDate, {precision: 2}) + ' ago',
+					toDurationString(Date.now() - memberData.joinDate, { precision: 2 }) + ' ago',
 					memberData.totalPointsContributed.toString(),
 				]);
 			});
@@ -1409,7 +1414,7 @@ export const commands: Chat.ChatCommands = {
 			const output = generateThemedTable(title, headerRow, dataRows);
 			this.sendReply(`|html|${output}`);
 		},
-		
+
 		async setdesc(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to set clan description.");
@@ -1431,7 +1436,7 @@ export const commands: Chat.ChatCommands = {
 			if (!hasClanPermission(clan, actorId, 'canEditDesc')) {
 				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit the clan description.`);
 			}
-			
+
 			const oldDesc = clan.desc;
 
 			await Clans.updateOne(
@@ -1481,7 +1486,7 @@ export const commands: Chat.ChatCommands = {
 
 			await Clans.updateOne(
 				{ _id: clanId },
-				{ $set: { tag: tag } }
+				{ $set: { tag } }
 			);
 
 			await logClanActivity(clanId, actorId, 'SET_TAG', {
@@ -1500,12 +1505,12 @@ export const commands: Chat.ChatCommands = {
 		async setmotw(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to set member of the week.");
-			
+
 			const targetId = toID(target);
 			const actorId = user.id;
 
 			if (!targetId) return this.errorReply("You must specify a user.");
-			
+
 			const actorClanInfo = await UserClans.findOne({ _id: actorId });
 			const clanId = actorClanInfo?.memberOf;
 
@@ -1521,11 +1526,11 @@ export const commands: Chat.ChatCommands = {
 			if (!clan.members[targetId]) {
 				return this.errorReply(`'${targetId}' is not a member of ${clan.name}.`);
 			}
-			
+
 			if (clan.memberOfTheWeek === targetId) {
 				return this.errorReply(`'${targetId}' is already the Member of the Week for ${clan.name}.`);
 			}
-			
+
 			const oldMotw = clan.memberOfTheWeek;
 			const HOST_RANK = '^';
 
@@ -1545,13 +1550,12 @@ export const commands: Chat.ChatCommands = {
 			if (clanRoom) {
 				if (oldMotw && oldMotw !== targetId && clan.members[oldMotw]) {
 					const oldMotwMember = clan.members[oldMotw];
-					const oldMotwRank = clan.ranks[oldMotwMember.rank];
-					
+
 					const roomRanks: { [key: string]: string } = {
 						'owner': '#',
 						'leader': '@',
 						'officer': '%',
-						'member': '+'
+						'member': '+',
 					};
 					const newRoomRank = roomRanks[oldMotwMember.rank] || '+';
 					clanRoom.auth.set(oldMotw, newRoomRank);
@@ -1570,7 +1574,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`You set '${targetId}' as the Member of the Week for ${clan.name}.`);
 		},
-		
+
 		async seticon(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to set clan icon.");
@@ -1586,9 +1590,9 @@ export const commands: Chat.ChatCommands = {
 
 			const actorClanInfo = await UserClans.findOne({ _id: actorId });
 			const clanId = actorClanInfo?.memberOf;
-			
+
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
-			
+
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
@@ -1602,7 +1606,7 @@ export const commands: Chat.ChatCommands = {
 				{ _id: clanId },
 				{ $set: { icon: iconUrl } }
 			);
-			
+
 			await logClanActivity(clanId, actorId, 'SET_ICON', {
 				oldValue: oldIcon,
 				newValue: iconUrl,
@@ -1615,7 +1619,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReply(`You updated the clan icon.`);
 		},
-			
+
 		async list(target, room, user) {
 			this.runBroadcast();
 			this.checkChat();
@@ -1628,7 +1632,7 @@ export const commands: Chat.ChatCommands = {
 				Clans.find({}, { skip, limit, sort: { points: -1 } }),
 				Clans.countDocuments({}),
 			]);
-		
+
 			if (clans.length === 0) {
 				return this.errorReply("No clans found.");
 			}
@@ -1692,15 +1696,19 @@ export const commands: Chat.ChatCommands = {
 				this.checkCan('roomowner');
 			} else {
 				const actorClanInfo = await UserClans.findOne({ _id: user.id });
-				clanId = actorClanInfo?.memberOf as ID;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Usage: /clan logs [clan id], [limit] (admin only)");
+				clanId = actorClanInfo?.memberOf;
+				if (!clanId) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Usage: /clan logs [clan id], [limit] (admin only)"
+					);
+				}
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 
 			const logs = await ClanLogs.find(
-				{ clanId: clanId },
+				{ clanId },
 				{ limit, sort: { timestamp: -1 } }
 			);
 
@@ -1710,10 +1718,10 @@ export const commands: Chat.ChatCommands = {
 
 			let html = `<div class="infobox" style="max-width:600px; max-height: 400px; overflow-y: auto;"><center><strong>${clan.name} Activity Logs (Latest ${logs.length})</strong></center><br>`;
 			for (const log of logs) {
-				const date = to(new Date(log.timestamp), {date: true, time: true});
-				const details = log.note || 
-					(log.oldValue !== undefined && log.newValue !== undefined ? 
-					 `${log.oldValue} → ${log.newValue}` : '');
+				const date = to(new Date(log.timestamp), { date: true, time: true });
+				const details = log.note ||
+					(log.oldValue !== undefined && log.newValue !== undefined ?
+						`${log.oldValue} → ${log.newValue}` : '');
 				html += `<div>` +
 					`<strong>Date:</strong> ${date}<br />` +
 					`<strong>Actor:</strong> ${log.actor}<br />` +
@@ -1725,12 +1733,12 @@ export const commands: Chat.ChatCommands = {
 			html += `</div>`;
 			user.popup(`|html|${html}`);
 		},
-			
+
 		async pointslog(target, room, user) {
 			this.checkChat();
 			if (!user.named) return this.errorReply("You must be logged in to view clan points logs.");
 
-			let limit = parseInt(target.trim()) || 50;
+			const limit = parseInt(target.trim()) || 50;
 			if (limit < 1 || limit > 100) {
 				return this.errorReply("Limit must be between 1 and 100.");
 			}
@@ -1744,7 +1752,7 @@ export const commands: Chat.ChatCommands = {
 			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
 			const logs = await ClanPointsLogs.find(
-				{ clanId: clanId },
+				{ clanId },
 				{ limit, sort: { timestamp: -1 } }
 			);
 
@@ -1761,10 +1769,10 @@ export const commands: Chat.ChatCommands = {
 					`<strong>Amount:</strong> <span style="color:${log.amount > 0 ? 'green' : 'red'};">${log.amount > 0 ? '+' : ''}${log.amount}</span><br />` +
 					`<strong>Reason:</strong> ${log.reason || '-'}` +
 					`</div><hr>`;
-				}
-				html += `</div>`;
-				user.popup(`|html|${html}`);
-			},
+			}
+			html += `</div>`;
+			user.popup(`|html|${html}`);
+		},
 
 		async profile(target, room, user) {
 			this.runBroadcast();
@@ -1777,8 +1785,13 @@ export const commands: Chat.ChatCommands = {
 				clanId = toID(target);
 			} else {
 				const userClanInfo = await UserClans.findOne({ _id: user.id });
-				clanId = userClanInfo?.memberOf as ID;
-				if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its profile.");
+				const memberOf = userClanInfo?.memberOf;
+				if (!memberOf) {
+					return this.errorReply(
+						"You are not currently a member of any clan. Specify a clan ID to view its profile."
+					);
+				}
+				clanId = memberOf;
 			}
 
 			const clan = await Clans.findOne({ _id: clanId });
@@ -1795,7 +1808,7 @@ export const commands: Chat.ChatCommands = {
 
 			let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
 			html += `<div style="flex: 0 0 ${w + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
-		
+
 			if (clan.icon) {
 				html += `<img src="${clan.icon}" width="${w}" alt="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
 				html += `<div style="font-size: 0.85em; margin-top: 10px; font-weight: bold;">${clan.name}</div>`;
@@ -1807,7 +1820,7 @@ export const commands: Chat.ChatCommands = {
 				html += `No clan icon set.`;
 				html += `</div>`;
 			}
-		
+
 			html += `</div>`;
 			html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
 			html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
@@ -1822,7 +1835,7 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
 			html += `<strong>Created:</strong> ${clanAge} ago<br />`;
 			html += `</div></div></div>`;
-		
+
 			this.sendReply(`|html|${html}`);
 		},
 
@@ -1832,7 +1845,11 @@ export const commands: Chat.ChatCommands = {
 			const amount = parseInt(amountStr);
 			const reason = reasonArr.join(',') || 'Admin adjustment';
 
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan addpoints [amount], [reason] (amount must be a positive number)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan addpoints [amount], [reason] (amount must be a positive number)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -1847,7 +1864,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_POINTS',
 				oldValue: clan.points,
 				newValue: clan.points + amount,
-				note: `[ADMIN] Added ${amount} points. Reason: ${reason}`
+				note: `[ADMIN] Added ${amount} points. Reason: ${reason}`,
 			});
 			this.sendReply(`Added ${amount} points to clan '${clan.name}'. Reason: ${reason}`);
 		},
@@ -1858,7 +1875,11 @@ export const commands: Chat.ChatCommands = {
 			const amount = parseInt(amountStr);
 			const reason = reasonArr.join(',') || 'Admin adjustment';
 
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removepoints [amount], [reason] (amount must be a positive number)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan removepoints [amount], [reason] (amount must be a positive number)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -1873,7 +1894,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_POINTS',
 				oldValue: clan.points,
 				newValue: clan.points - amount,
-				note: `[ADMIN] Removed ${amount} points. Reason: ${reason}`
+				note: `[ADMIN] Removed ${amount} points. Reason: ${reason}`,
 			});
 			this.sendReply(`Removed ${amount} points from clan '${clan.name}'. Reason: ${reason}`);
 		},
@@ -1897,7 +1918,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_TOURWIN',
 				oldValue: clan.stats.tourWins,
 				newValue: clan.stats.tourWins + amount,
-				note: `[ADMIN] Added ${amount} tour win(s)`
+				note: `[ADMIN] Added ${amount} tour win(s)`,
 			});
 			this.sendReply(`Added ${amount} tour win(s) to clan '${clan.name}'.`);
 		},
@@ -1921,7 +1942,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_TOURWIN',
 				oldValue: clan.stats.tourWins,
 				newValue: clan.stats.tourWins - amount,
-				note: `[ADMIN] Removed ${amount} tour win(s)`
+				note: `[ADMIN] Removed ${amount} tour win(s)`,
 			});
 			this.sendReply(`Removed ${amount} tour win(s) from clan '${clan.name}'.`);
 		},
@@ -1945,7 +1966,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_EVENTWIN',
 				oldValue: clan.stats.eventWins,
 				newValue: clan.stats.eventWins + amount,
-				note: `[ADMIN] Added ${amount} event win(s)`
+				note: `[ADMIN] Added ${amount} event win(s)`,
 			});
 			this.sendReply(`Added ${amount} event win(s) to clan '${clan.name}'.`);
 		},
@@ -1969,7 +1990,7 @@ export const commands: Chat.ChatCommands = {
 				action: 'ADMIN_EVENTWIN',
 				oldValue: clan.stats.eventWins,
 				newValue: clan.stats.eventWins - amount,
-				note: `[ADMIN] Removed ${amount} event win(s)`
+				note: `[ADMIN] Removed ${amount} event win(s)`,
 			});
 			this.sendReply(`Removed ${amount} event win(s) from clan '${clan.name}'.`);
 		},
@@ -1977,7 +1998,11 @@ export const commands: Chat.ChatCommands = {
 		async setlevel(target, room, user) {
 			this.checkCan('roomowner');
 			const level = parseInt(target.trim());
-			if (isNaN(level) || level < 1) return this.errorReply("Usage: /clan setlevel [level] (level must be a positive integer)");
+			if (isNaN(level) || level < 1) {
+				return this.errorReply(
+					"Usage: /clan setlevel [level] (level must be a positive integer)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -2021,7 +2046,11 @@ export const commands: Chat.ChatCommands = {
 		async removelevel(target, room, user) {
 			this.checkCan('roomowner');
 			const amount = parseInt(target.trim());
-			if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removelevel [amount] (must be positive integer)");
+			if (isNaN(amount) || amount <= 0) {
+				return this.errorReply(
+					"Usage: /clan removelevel [amount] (must be positive integer)"
+				);
+			}
 			const actorClanInfo = await UserClans.findOne({ _id: user.id });
 			const clanId = actorClanInfo?.memberOf;
 			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
@@ -2048,7 +2077,10 @@ export const commands: Chat.ChatCommands = {
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 			const oldStats = clan.stats;
-			await Clans.updateOne({ _id: clanId }, { $set: { "stats.tourWins": 0, "stats.eventWins": 0, "stats.totalPointsEarned": 0 } });
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { "stats.tourWins": 0, "stats.eventWins": 0, "stats.totalPointsEarned": 0 } }
+			);
 			await ClanLogs.insertOne({
 				clanId,
 				timestamp: Date.now(),
@@ -2089,7 +2121,9 @@ export const commands: Chat.ChatCommands = {
 			const clanId = toID(clanIdRaw);
 			const tag = tagRaw?.toUpperCase();
 			if (!clanId || !tag) return this.errorReply("Usage: /clan settagadmin [clan id], [tag]");
-			if (tag.length > 4 || !/^[A-Z]+$/.test(tag)) return this.errorReply("Tag must be 3 characters or less and only uppercase letters.");
+			if (tag.length > 4 || !/^[A-Z]+$/.test(tag)) {
+				return this.errorReply("Tag must be 3 characters or less and only uppercase letters.");
+			}
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
 			await Clans.updateOne({ _id: clanId }, { $set: { tag } });
@@ -2139,7 +2173,7 @@ export const commands: Chat.ChatCommands = {
 			const membersToKick = Object.keys(clan.members).filter(uid => uid !== ownerId);
 			if (!membersToKick.length) return this.sendReply(`No members to kick in clan '${clan.name}'.`);
 			await Clans.updateOne({ _id: clanId }, {
-				$unset: Object.fromEntries(membersToKick.map(uid => [`members.${uid}`, ""]))
+				$unset: Object.fromEntries(membersToKick.map(uid => [`members.${uid}`, ""])),
 			});
 			await UserClans.updateMany(
 				{ memberOf: clanId, _id: { $in: membersToKick } },
@@ -2192,7 +2226,7 @@ export const commands: Chat.ChatCommands = {
 				clan,
 				members,
 				logs,
-				pointsLogs
+				pointsLogs,
 			};
 			const exportStr = `<details><summary>Export data for clan '${clan.name}'</summary><pre>${JSON.stringify(exportObj, null, 2)}</pre></details>`;
 			this.sendReply(`|html|${exportStr}`);
@@ -2213,7 +2247,7 @@ export const commands: Chat.ChatCommands = {
 					owner: newOwnerId,
 					[`members.${newOwnerId}.rank`]: "owner",
 					[`members.${oldOwnerId}.rank`]: "leader",
-				}
+				},
 			});
 			await ClanLogs.insertOne({
 				clanId,
@@ -2262,7 +2296,7 @@ export const commands: Chat.ChatCommands = {
 			const membersToRemove = Object.keys(clan.members).filter(uid => uid !== ownerId);
 			if (!membersToRemove.length) return this.sendReply(`No members to remove in clan '${clan.name}'.`);
 			await Clans.updateOne({ _id: clanId }, {
-				$unset: Object.fromEntries(membersToRemove.map(uid => [`members.${uid}`, ""]))
+				$unset: Object.fromEntries(membersToRemove.map(uid => [`members.${uid}`, ""])),
 			});
 			await UserClans.updateMany(
 				{ memberOf: clanId, _id: { $in: membersToRemove } },
@@ -2281,57 +2315,57 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/clan create [Clan Name], [Owner ID]", desc: "Create a new clan. Requires: &."},
-				{cmd: "/clan delete [Clan ID]", desc: "Delete a clan. Requires: &."},
-				{cmd: "/clan join [Clan ID]", desc: "Join a clan."},
-				{cmd: "/clan leave", desc: "Leave your current clan."},
-				{cmd: "/clan kick [user]", desc: "Remove a member from the clan."},
-				{cmd: "/clan invite [user]", desc: "Invite a user to your clan."},
-				{cmd: "/clan deinvite [user]", desc: "Revoke a user's invite."},
-				{cmd: "/clan invites", desc: "View clan invites."},
-				{cmd: "/clan inviteonly [on/off/toggle]", desc: "Toggle invite-only mode."},
-				{cmd: "/clan announce [message]", desc: "Send announcement to all members."},
-				{cmd: "/clan createrank [id], [name], [level]", desc: "Create a custom rank."},
-				{cmd: "/clan deleterank [id]", desc: "Delete a custom rank."},
-				{cmd: "/clan editrank [id], [permission], [true/false]", desc: "Edit rank permissions."},
-				{cmd: "/clan ranks", desc: "View all ranks and permissions."},
-				{cmd: "/clan permissionlist", desc: "View available permissions."},
-				{cmd: "/clan promote [user], [rank]", desc: "Promote a member."},
-				{cmd: "/clan demote [user], [rank]", desc: "Demote a member."},
-				{cmd: "/clan transfer [user]", desc: "Transfer clan ownership."},
-				{cmd: "/clan members [Clan ID]", desc: "View member list."},
-				{cmd: "/clan setdesc [description]", desc: "Set clan description."},
-				{cmd: "/clan settag [tag]", desc: "Set clan tag."},
-				{cmd: "/clan setmotw [user]", desc: "Set member of the week."},
-				{cmd: "/clan seticon [URL]", desc: "Set clan icon."},
-				{cmd: "/clan list [page]", desc: "View all clans."},
-				{cmd: "/clan logs [Clan ID], [limit]", desc: "View activity logs."},
-				{cmd: "/clan pointslog [limit]", desc: "View points logs."},
-				{cmd: "/clan profile [Clan ID]", desc: "View clan profile."},
-				{cmd: "/clan addpoints [amount], [reason]", desc: "Add points to clan. Requires: &."},
-				{cmd: "/clan removepoints [amount], [reason]", desc: "Remove points from clan. Requires: &."},
-				{cmd: "/clan addtourwins [amount]", desc: "Add tour wins. Requires: &."},
-				{cmd: "/clan removetourwins [amount]", desc: "Remove tour wins. Requires: &."},
-				{cmd: "/clan addeventwins [amount]", desc: "Add event wins. Requires: &."},
-				{cmd: "/clan removeeventwins [amount]", desc: "Remove event wins. Requires: &."},
-				{cmd: "/clan setlevel [level]", desc: "Set clan level. Requires: &."},
-				{cmd: "/clan addlevel [amount]", desc: "Add levels. Requires: &."},
-				{cmd: "/clan removelevel [amount]", desc: "Remove levels. Requires: &."},
-				{cmd: "/clan resetstats", desc: "Reset clan stats. Requires: &."},
-				{cmd: "/clan setdescadmin [clan id], [desc]", desc: "Set description for any clan. Requires: &."},
-				{cmd: "/clan settagadmin [clan id], [tag]", desc: "Set tag for any clan. Requires: &."},
-				{cmd: "/clan seticonadmin [clan id], [icon url]", desc: "Set icon for any clan. Requires: &."},
-				{cmd: "/clan kickall [clan id]", desc: "Kick all members except owner. Requires: &."},
-				{cmd: "/clan clearinvites [clan id]", desc: "Clear all clan invites. Requires: &."},
-				{cmd: "/clan export [clan id]", desc: "Export clan data. Requires: &."},
-				{cmd: "/clan transferadmin [clan id], [new owner]", desc: "Transfer ownership. Requires: &."},
-				{cmd: "/clan banuser [username]", desc: "Ban user from joining clans. Requires: &."},
-				{cmd: "/clan unbanuser [username]", desc: "Unban user. Requires: &."},
-				{cmd: "/clan clearlogs [clan id]", desc: "Clear all logs for clan. Requires: &."},
-				{cmd: "/clan clearmembers [clan id]", desc: "Remove all members except owner. Requires: &."},
+				{ cmd: "/clan create [Clan Name], [Owner ID]", desc: "Create a new clan. Requires: &." },
+				{ cmd: "/clan delete [Clan ID]", desc: "Delete a clan. Requires: &." },
+				{ cmd: "/clan join [Clan ID]", desc: "Join a clan." },
+				{ cmd: "/clan leave", desc: "Leave your current clan." },
+				{ cmd: "/clan kick [user]", desc: "Remove a member from the clan." },
+				{ cmd: "/clan invite [user]", desc: "Invite a user to your clan." },
+				{ cmd: "/clan deinvite [user]", desc: "Revoke a user's invite." },
+				{ cmd: "/clan invites", desc: "View clan invites." },
+				{ cmd: "/clan inviteonly [on/off/toggle]", desc: "Toggle invite-only mode." },
+				{ cmd: "/clan announce [message]", desc: "Send announcement to all members." },
+				{ cmd: "/clan createrank [id], [name], [level]", desc: "Create a custom rank." },
+				{ cmd: "/clan deleterank [id]", desc: "Delete a custom rank." },
+				{ cmd: "/clan editrank [id], [permission], [true/false]", desc: "Edit rank permissions." },
+				{ cmd: "/clan ranks", desc: "View all ranks and permissions." },
+				{ cmd: "/clan permissionlist", desc: "View available permissions." },
+				{ cmd: "/clan promote [user], [rank]", desc: "Promote a member." },
+				{ cmd: "/clan demote [user], [rank]", desc: "Demote a member." },
+				{ cmd: "/clan transfer [user]", desc: "Transfer clan ownership." },
+				{ cmd: "/clan members [Clan ID]", desc: "View member list." },
+				{ cmd: "/clan setdesc [description]", desc: "Set clan description." },
+				{ cmd: "/clan settag [tag]", desc: "Set clan tag." },
+				{ cmd: "/clan setmotw [user]", desc: "Set member of the week." },
+				{ cmd: "/clan seticon [URL]", desc: "Set clan icon." },
+				{ cmd: "/clan list [page]", desc: "View all clans." },
+				{ cmd: "/clan logs [Clan ID], [limit]", desc: "View activity logs." },
+				{ cmd: "/clan pointslog [limit]", desc: "View points logs." },
+				{ cmd: "/clan profile [Clan ID]", desc: "View clan profile." },
+				{ cmd: "/clan addpoints [amount], [reason]", desc: "Add points to clan. Requires: &." },
+				{ cmd: "/clan removepoints [amount], [reason]", desc: "Remove points from clan. Requires: &." },
+				{ cmd: "/clan addtourwins [amount]", desc: "Add tour wins. Requires: &." },
+				{ cmd: "/clan removetourwins [amount]", desc: "Remove tour wins. Requires: &." },
+				{ cmd: "/clan addeventwins [amount]", desc: "Add event wins. Requires: &." },
+				{ cmd: "/clan removeeventwins [amount]", desc: "Remove event wins. Requires: &." },
+				{ cmd: "/clan setlevel [level]", desc: "Set clan level. Requires: &." },
+				{ cmd: "/clan addlevel [amount]", desc: "Add levels. Requires: &." },
+				{ cmd: "/clan removelevel [amount]", desc: "Remove levels. Requires: &." },
+				{ cmd: "/clan resetstats", desc: "Reset clan stats. Requires: &." },
+				{ cmd: "/clan setdescadmin [clan id], [desc]", desc: "Set description for any clan. Requires: &." },
+				{ cmd: "/clan settagadmin [clan id], [tag]", desc: "Set tag for any clan. Requires: &." },
+				{ cmd: "/clan seticonadmin [clan id], [icon url]", desc: "Set icon for any clan. Requires: &." },
+				{ cmd: "/clan kickall [clan id]", desc: "Kick all members except owner. Requires: &." },
+				{ cmd: "/clan clearinvites [clan id]", desc: "Clear all clan invites. Requires: &." },
+				{ cmd: "/clan export [clan id]", desc: "Export clan data. Requires: &." },
+				{ cmd: "/clan transferadmin [clan id], [new owner]", desc: "Transfer ownership. Requires: &." },
+				{ cmd: "/clan banuser [username]", desc: "Ban user from joining clans. Requires: &." },
+				{ cmd: "/clan unbanuser [username]", desc: "Unban user. Requires: &." },
+				{ cmd: "/clan clearlogs [clan id]", desc: "Clear all logs for clan. Requires: &." },
+				{ cmd: "/clan clearmembers [clan id]", desc: "Remove all members except owner. Requires: &." },
 			];
 			const html = `<center><strong>Clan Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
 				`</ul>`;

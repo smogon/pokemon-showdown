@@ -5,14 +5,13 @@ import type {
 	UserClanInfo,
 	ClanLog,
 	ClanPointsLogEntry,
-	ClanBankLogEntry,
 } from './interface';
 
 export type ClanDoc = Omit<Clan, 'id'> & { _id: ID } & Document;
 export type UserClanDoc = UserClanInfo & { _id: ID } & Document;
 export type ClanLogDoc = ClanLog & { clanId: ID } & Document;
 export type ClanPointsLogDoc = ClanPointsLogEntry & { clanId: ID } & Document;
-export type ClanBanDoc = { _id: ID; banned: boolean } & Document;
+export type ClanBanDoc = { _id: ID, banned: boolean } & Document;
 
 export const Clans = ImpulseDB<ClanDoc>('clans');
 export const UserClans = ImpulseDB<UserClanDoc>('userclans');

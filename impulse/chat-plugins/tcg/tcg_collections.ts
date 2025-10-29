@@ -3,8 +3,8 @@
 * TCG Collection Definitions
 */
 import { ImpulseDB } from '../../impulse-db';
-import { TcgCard, TcgDailyCooldown, TcgUser,
-	TcgUserProfile, TcgUserPack } from './interface';
+import { type TcgCard, type TcgDailyCooldown, type TcgUser,
+	type TcgUserProfile, type TcgUserPack } from './interface';
 
 export const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
 export const userCollectionsCollection = ImpulseDB<TcgUser>('tcg_collections');

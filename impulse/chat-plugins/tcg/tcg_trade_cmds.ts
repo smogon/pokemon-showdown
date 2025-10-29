@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * TCG Trading System
 */
-import { TcgCard, TcgUser } from './interface';
+import type { TcgUser } from './interface';
 import { getCard, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection } from './tcg_collections';
 
@@ -28,7 +28,7 @@ function getTradeKey(user1: string, user2: string): string {
 	return [user1, user2].sort().join(':');
 }
 
-function getUserTrade(userId: string): { trade: ActiveTrade; key: string } | null {
+function getUserTrade(userId: string): { trade: ActiveTrade, key: string } | null {
 	for (const [key, trade] of activeTrades.entries()) {
 		if (trade.initiator === userId || trade.recipient === userId) {
 			return { trade, key };
@@ -61,7 +61,7 @@ export const tradeCommands: ChatCommands = {
 			const profiles = userProfilesCollection;
 			const [userProfile, targetProfile] = await Promise.all([
 				profiles.findOne({ userId: user.id }),
-				profiles.findOne({ userId: targetUserId })
+				profiles.findOne({ userId: targetUserId }),
 			]);
 
 			if (userProfile?.tradesEnabled === false) {
@@ -71,7 +71,7 @@ export const tradeCommands: ChatCommands = {
 			if (targetProfile?.tradesEnabled === false) {
 				return this.errorReply(`${targetUser.name} has disabled trades.`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while checking trade settings.');
 		}
 
@@ -114,7 +114,7 @@ export const tradeCommands: ChatCommands = {
 			);
 
 			this.sendReply("You have disabled trades. Use /tcg tradesenable to re-enable them.");
-		} catch (error) {
+		} catch {
 			return this.errorReply("An error occurred while disabling trades.");
 		}
 	},
@@ -131,7 +131,7 @@ export const tradeCommands: ChatCommands = {
 			);
 
 			this.sendReply("You have enabled trades. Other users can now trade with you.");
-		} catch (error) {
+		} catch {
 			return this.errorReply("An error occurred while enabling trades.");
 		}
 	},
@@ -140,7 +140,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade. Use /tcg trade [user] to start one.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 1) return this.errorReply("Usage: /tcg tradeadd [cardId], [quantity]");
 
@@ -151,7 +151,7 @@ export const tradeCommands: ChatCommands = {
 		if (isNaN(quantity) || quantity <= 0) return this.errorReply("Invalid quantity. Must be a positive number.");
 
 		try {
-			const userCard = await userCollectionsCollection.findOne({ userId: user.id, cardId: cardId });
+			const userCard = await userCollectionsCollection.findOne({ userId: user.id, cardId });
 			if (!userCard || userCard.quantity === 0) {
 				return this.errorReply(`You do not own any "${cardId}" cards.`);
 			}
@@ -176,7 +176,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} added ${quantity}x "${userCard.name}" to their trade offer.`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -185,7 +185,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 1) return this.errorReply("Usage: /tcg traderemove [cardId], [quantity]");
 
@@ -224,7 +224,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} removed ${quantity}x "${cardName}" from their trade offer.`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -233,7 +233,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade. Use /tcg trade [user] to start one.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const amount = parseInt(target.trim());
 
 		if (isNaN(amount) || amount <= 0) return this.errorReply("Invalid amount. Must be a positive number.");
@@ -259,7 +259,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} added ${amount.toLocaleString()} credits to their trade offer.`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -332,7 +332,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const isInitiator = trade.initiator === user.id;
 
 		if (isInitiator) {
@@ -408,9 +408,9 @@ export const tradeCommands: ChatCommands = {
 							$inc: {
 								totalQuantity: -qty,
 								collectionPoints: -(card.totalPoints * qty),
-								totalUniqueCards: newQty === 0 ? -1 : 0
+								totalUniqueCards: newQty === 0 ? -1 : 0,
 							},
-							$set: { lastUpdatedAt: now }
+							$set: { lastUpdatedAt: now },
 						}
 					);
 
@@ -441,9 +441,9 @@ export const tradeCommands: ChatCommands = {
 									totalQuantity: actualQtyAdded,
 									collectionPoints: card.totalPoints * actualQtyAdded,
 									totalUniqueCards: currentRecipientQty === 0 ? 1 : 0,
-									credits: creditsToAward
+									credits: creditsToAward,
 								},
-								$set: { lastUpdatedAt: now }
+								$set: { lastUpdatedAt: now },
 							},
 							{ upsert: true }
 						);
@@ -468,9 +468,9 @@ export const tradeCommands: ChatCommands = {
 							$inc: {
 								totalQuantity: -qty,
 								collectionPoints: -(card.totalPoints * qty),
-								totalUniqueCards: newQty === 0 ? -1 : 0
+								totalUniqueCards: newQty === 0 ? -1 : 0,
 							},
-							$set: { lastUpdatedAt: now }
+							$set: { lastUpdatedAt: now },
 						}
 					);
 
@@ -501,9 +501,9 @@ export const tradeCommands: ChatCommands = {
 									totalQuantity: actualQtyAdded,
 									collectionPoints: card.totalPoints * actualQtyAdded,
 									totalUniqueCards: currentInitiatorQty === 0 ? 1 : 0,
-									credits: creditsToAward
+									credits: creditsToAward,
 								},
-								$set: { lastUpdatedAt: now }
+								$set: { lastUpdatedAt: now },
 							},
 							{ upsert: true }
 						);
@@ -539,7 +539,7 @@ export const tradeCommands: ChatCommands = {
 				if (otherUser) {
 					otherUser.popup(`|html|Trade with ${user.name} completed successfully!`);
 				}
-			} catch (error) {
+			} catch {
 				activeTrades.delete(key);
 				this.errorReply(`An error occurred during the trade: ${error.message}`);
 				if (otherUser) {
@@ -558,7 +558,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const isInitiator = trade.initiator === user.id;
 		const otherUserId = isInitiator ? trade.recipient : trade.initiator;
 		const otherUser = Users.get(otherUserId);
@@ -574,20 +574,20 @@ export const tradeCommands: ChatCommands = {
 	tradehelp(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/tcg trade [user]", desc: "Initiate a trade with another user."},
-			{cmd: "/tcg tradeadd [cardId], [quantity]", desc: "Add cards to your current trade offer."},
-			{cmd: "/tcg traderemove [cardId], [quantity]", desc: "Remove cards from your current trade offer."},
-			{cmd: "/tcg tradeaddcredits [amount]", desc: "Add credits to your current trade offer."},
-			{cmd: "/tcg tradeview", desc: "View the current trade details and status."},
-			{cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade."},
-			{cmd: "/tcg tradecancel", desc: "Cancel the current active trade."},
-			{cmd: "/tcg tradedisable", desc: "Disable incoming trade requests from other users."},
-			{cmd: "/tcg tradeenable", desc: "Enable incoming trade requests from other users."},
+			{ cmd: "/tcg trade [user]", desc: "Initiate a trade with another user." },
+			{ cmd: "/tcg tradeadd [cardId], [quantity]", desc: "Add cards to your current trade offer." },
+			{ cmd: "/tcg traderemove [cardId], [quantity]", desc: "Remove cards from your current trade offer." },
+			{ cmd: "/tcg tradeaddcredits [amount]", desc: "Add credits to your current trade offer." },
+			{ cmd: "/tcg tradeview", desc: "View the current trade details and status." },
+			{ cmd: "/tcg tradeaccept", desc: "Accept the current trade. Both users must accept to complete the trade." },
+			{ cmd: "/tcg tradecancel", desc: "Cancel the current active trade." },
+			{ cmd: "/tcg tradedisable", desc: "Disable incoming trade requests from other users." },
+			{ cmd: "/tcg tradeenable", desc: "Enable incoming trade requests from other users." },
 		];
 		const html = `<center><strong>TCG Trading Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}, i) =>
+			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-							).join('') +
+			).join('') +
 			`</ul>`;
 		this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${html}</div>`);
 	},

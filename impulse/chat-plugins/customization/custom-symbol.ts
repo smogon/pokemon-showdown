@@ -32,7 +32,7 @@ const applyCustomSymbol = async (userid: string): Promise<void> => {
 	}
 };
 
-const removeCustomSymbol = async (userid: string): Promise<void> => {
+const removeCustomSymbol = (userid: string): void => {
 	const user = Users.get(userid);
 	if (!user) return;
 
@@ -115,9 +115,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${target} does not have a custom symbol.`);
 			}
 
-			const symbolDoc = await CustomSymbolDB.findOne({ _id: userId }, { projection: { symbol: 1 } });
 			await CustomSymbolDB.deleteOne({ _id: userId });
-			await removeCustomSymbol(userId);
+			removeCustomSymbol(userId);
 
 			this.sendReply(`You removed ${target}'s custom symbol.`);
 
@@ -153,8 +152,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/symbol list ${result.page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/symbol list ${result.page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -164,15 +167,15 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &."},
-				{cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &."},
-				{cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &."},
-				{cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &."},
-				];
+				{ cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &." },
+				{ cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &." },
+				{ cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &." },
+				{ cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &." },
+			];
 			const html = `<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
@@ -182,7 +185,7 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const loginfilter: Chat.LoginFilter = user => {
-	applyCustomSymbol(user.id);
+	void applyCustomSymbol(user.id);
 };
 
 const originalGetIdentity = Users.User.prototype.getIdentity;

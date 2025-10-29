@@ -2,11 +2,15 @@
 * Pokemon Showdown
 * TCG Economy and Shop Commands
 */
-import { ImpulseDB } from '../../impulse-db';
-import { TcgCard, TcgUser, TcgUserProfile, TcgUserPack } from './interface';
-import { getSet, dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY } from './tcg_utils';
+import type { TcgCard, TcgUser } from './interface';
+import { dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
-import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection, userPacksCollection } from './tcg_collections';
+import {
+	tcgCardsCollection,
+	userCollectionsCollection,
+	userProfilesCollection,
+	userPacksCollection,
+} from './tcg_collections';
 
 const PACK_COST = 0;
 const PACKS_IN_SHOP = 20;
@@ -26,11 +30,11 @@ export const economyCommands: ChatCommands = {
 							setName: { $first: "$set" },
 							setLogo: { $first: "$setImages.logo" },
 							setSeries: { $first: "$setSeries" },
-							setReleaseDate: { $first: "$setReleaseDate" }
-						}
+							setReleaseDate: { $first: "$setReleaseDate" },
+						},
 					},
 					{ $sample: { size: PACKS_IN_SHOP } },
-					{ $sort: { setReleaseDate: -1 } }
+					{ $sort: { setReleaseDate: -1 } },
 				]);
 
 				const mappedCache = newShopSets.map(set => ({
@@ -61,13 +65,13 @@ export const economyCommands: ChatCommands = {
 					`${logoHtml} [ ${set.setId} ]`,
 					set.setSeries || 'N/A',
 					`${PACK_COST} Credits`,
-					`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`
+					`<button name="send" value="/tcg buy ${set.setId}" style="background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Buy</button>`,
 				]);
 			}
 
 			html += generateThemedTable(title, headerRow, dataRows);
 			this.sendReply(`|html|${html}`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while fetching the shop. Please try again later.');
 		}
 	},
@@ -102,18 +106,18 @@ export const economyCommands: ChatCommands = {
 			const packCollection = userPacksCollection;
 			const now = new Date().toISOString();
 			await packCollection.updateOne(
-				{ userId: user.id, setId: setId },
-				{ 
+				{ userId: user.id, setId },
+				{
 					$inc: { quantity: 1 },
 					$set: { setName: setInShop.set, setLogo: setInShop.setImages?.logo || '', lastAcquiredAt: now },
-					$setOnInsert: { userId: user.id, setId: setId }
+					$setOnInsert: { userId: user.id, setId },
 				},
 				{ upsert: true }
 			);
 
 			this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
 			this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
-		} catch (error) {
+		} catch {
 			const profileCollection = userProfilesCollection;
 			await profileCollection.updateOne({ userId: user.id }, { $inc: { credits: PACK_COST } });
 			return this.errorReply(`An unknown error occurred during your purchase. Your credits have been refunded. Error: ${error.message}`);
@@ -122,8 +126,8 @@ export const economyCommands: ChatCommands = {
 
 	async sell(target, room, user) {
 		const parts = target.split(',').map(p => p.trim());
-		let cardId = parts[0];
-		let quantityToSell = parts[1] ? parseInt(parts[1]) : 1;
+		const cardId = parts[0];
+		const quantityToSell = parts[1] ? parseInt(parts[1]) : 1;
 
 		if (!cardId) return this.errorReply("Please specify a card ID to sell. Usage: /tcg sell [cardId], [quantity]");
 		if (isNaN(quantityToSell) || quantityToSell <= 0) return this.errorReply("Invalid quantity. Quantity must be a positive number.");
@@ -133,7 +137,7 @@ export const economyCommands: ChatCommands = {
 		const profiles = userProfilesCollection;
 
 		try {
-			const userCard = await collection.findOne({ userId: user.id, cardId: cardId });
+			const userCard = await collection.findOne({ userId: user.id, cardId });
 			if (!userCard || userCard.quantity === 0) return this.errorReply(`You do not own any "${cardId}" cards.`);
 			if (userCard.quantity < quantityToSell) {
 				return this.errorReply(`You only have ${userCard.quantity}x "${userCard.name}". You cannot sell ${quantityToSell}.`);
@@ -146,9 +150,9 @@ export const economyCommands: ChatCommands = {
 			const now = new Date().toISOString();
 
 			if (newQuantity === 0) {
-				await collection.deleteOne({ userId: user.id, cardId: cardId });
+				await collection.deleteOne({ userId: user.id, cardId });
 			} else {
-				await collection.updateOne({ userId: user.id, cardId: cardId }, { $inc: { quantity: -quantityToSell } });
+				await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: -quantityToSell } });
 			}
 
 			await profiles.updateOne(
@@ -156,15 +160,15 @@ export const economyCommands: ChatCommands = {
 				{
 					$inc: {
 						credits: creditsToAward, totalQuantity: -quantityToSell,
-						collectionPoints: -pointsToDeduct, totalUniqueCards: uniqueCardsChange
+						collectionPoints: -pointsToDeduct, totalUniqueCards: uniqueCardsChange,
 					},
-					$set: { userName: user.name, lastUpdatedAt: now }
+					$set: { userName: user.name, lastUpdatedAt: now },
 				},
 				{ upsert: true }
 			);
 
 			this.sendReply(`You successfully sold ${quantityToSell}x "${userCard.name}" for ${creditsToAward} credits.`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while selling your card.');
 		}
 	},
@@ -198,8 +202,8 @@ export const economyCommands: ChatCommands = {
 				operations.push({
 					updateOne: {
 						filter: { userId: user.id, cardId: card.cardId },
-						update: { $set: { quantity: 1 } }
-					}
+						update: { $set: { quantity: 1 } },
+					},
 				});
 			}
 
@@ -210,13 +214,13 @@ export const economyCommands: ChatCommands = {
 				{ userId: user.id },
 				{
 					$inc: { credits: totalCreditsEarned, totalQuantity: -totalCardsSold, collectionPoints: -totalPointsDeducted },
-					$set: { userName: user.name, lastUpdatedAt: now }
+					$set: { userName: user.name, lastUpdatedAt: now },
 				},
 				{ upsert: true }
 			);
 
 			this.sendReply(`You successfully sold ${totalCardsSold} ${description} for ${totalCreditsEarned} credits.`);
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while selling your duplicates.');
 		}
 	},
@@ -229,7 +233,7 @@ export const economyCommands: ChatCommands = {
 
 		const targetUserId = toID(parts[0]);
 		const cardId = parts[1];
-		let quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
+		const quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
 
 		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
 		if (targetUserId === user.id) return this.errorReply("You cannot gift cards to yourself.");
@@ -240,7 +244,7 @@ export const economyCommands: ChatCommands = {
 		const profiles = userProfilesCollection;
 
 		try {
-			const senderCard = await collection.findOne({ userId: user.id, cardId: cardId });
+			const senderCard = await collection.findOne({ userId: user.id, cardId });
 			if (!senderCard || senderCard.quantity < quantityToGift) {
 				const owned = senderCard ? senderCard.quantity : 0;
 				return this.errorReply(`You do not have ${quantityToGift}x "${cardId}". You only have ${owned}.`);
@@ -251,9 +255,9 @@ export const economyCommands: ChatCommands = {
 			const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
 
 			if (newSenderQty === 0) {
-				await collection.deleteOne({ userId: user.id, cardId: cardId });
+				await collection.deleteOne({ userId: user.id, cardId });
 			} else {
-				await collection.updateOne({ userId: user.id, cardId: cardId }, { $inc: { quantity: -quantityToGift } });
+				await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: -quantityToGift } });
 			}
 
 			await profiles.updateOne(
@@ -262,7 +266,7 @@ export const economyCommands: ChatCommands = {
 			);
 
 			const now = new Date().toISOString();
-			const recipientCard = await collection.findOne({ userId: targetUserId, cardId: cardId });
+			const recipientCard = await collection.findOne({ userId: targetUserId, cardId });
 			const currentRecipientQty = recipientCard?.quantity || 0;
 			const newRecipientQty = currentRecipientQty + quantityToGift;
 			const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
@@ -275,7 +279,7 @@ export const economyCommands: ChatCommands = {
 			if (actualQtyAdded > 0) {
 				if (recipientCard) {
 					await collection.updateOne(
-						{ userId: targetUserId, cardId: cardId },
+						{ userId: targetUserId, cardId },
 						{ $set: { quantity: finalRecipientQty, lastAcquiredAt: now } }
 					);
 				} else {
@@ -293,16 +297,16 @@ export const economyCommands: ChatCommands = {
 						{
 							$inc: {
 								totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
-								totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward
+								totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward,
 							},
-							$set: { userName: recipientProfile.userName, lastUpdatedAt: now }
+							$set: { userName: recipientProfile.userName, lastUpdatedAt: now },
 						}
 					);
 				} else {
 					await profiles.insertOne({
 						userId: targetUserId, userName: targetUserId, credits: creditsToAward,
 						totalUniqueCards: uniqueCardsChangeRecipient, totalQuantity: actualQtyAdded,
-						collectionPoints: pointsToAdd, lastUpdatedAt: now
+						collectionPoints: pointsToAdd, lastUpdatedAt: now,
 					});
 				}
 			}
@@ -316,7 +320,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while gifting your card.');
 		}
 	},
@@ -329,7 +333,7 @@ export const economyCommands: ChatCommands = {
 
 		const targetUserId = toID(parts[0]);
 		const setId = parts[1];
-		let quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
+		const quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
 
 		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
 		if (targetUserId === user.id) return this.errorReply("You cannot gift packs to yourself.");
@@ -339,14 +343,14 @@ export const economyCommands: ChatCommands = {
 		const collection = userPacksCollection;
 
 		try {
-			const senderPack = await collection.findOne({ userId: user.id, setId: setId });
+			const senderPack = await collection.findOne({ userId: user.id, setId });
 			if (!senderPack || senderPack.quantity < quantityToGift) {
 				const owned = senderPack ? senderPack.quantity : 0;
 				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
 			}
 
 			const updateSenderResult = await collection.updateOne(
-				{ userId: user.id, setId: setId, quantity: { $gte: quantityToGift } },
+				{ userId: user.id, setId, quantity: { $gte: quantityToGift } },
 				{ $inc: { quantity: -quantityToGift } }
 			);
 
@@ -356,11 +360,11 @@ export const economyCommands: ChatCommands = {
 
 			const now = new Date().toISOString();
 			await collection.updateOne(
-				{ userId: targetUserId, setId: setId },
+				{ userId: targetUserId, setId },
 				{
 					$inc: { quantity: quantityToGift },
 					$set: { setName: senderPack.setName, setLogo: senderPack.setLogo, lastAcquiredAt: now },
-					$setOnInsert: { userId: targetUserId, setId: setId }
+					$setOnInsert: { userId: targetUserId, setId },
 				},
 				{ upsert: true }
 			);
@@ -369,7 +373,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
 			}
-		} catch (error) {
+		} catch {
 			return this.errorReply('An error occurred while gifting your pack(s).');
 		}
 	},
@@ -414,7 +418,7 @@ export const economyCommands: ChatCommands = {
 			} else {
 				await profiles.insertOne({
 					userId: targetUserId, userName: targetUserId, credits: amountToGift,
-					collectionPoints: 0, totalQuantity: 0, totalUniqueCards: 0, lastUpdatedAt: now
+					collectionPoints: 0, totalQuantity: 0, totalUniqueCards: 0, lastUpdatedAt: now,
 				});
 			}
 
@@ -423,7 +427,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
 			}
-		} catch (error) {
+		} catch {
 			if (error.message.startsWith('You do not have enough credits')) {
 				return this.errorReply(error.message);
 			}
@@ -440,16 +444,16 @@ export const economyCommands: ChatCommands = {
 	economyhelp(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{cmd: "/tcg shop", desc: "View the daily rotating pack shop with available packs."},
-			{cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop using credits."},
-			{cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits."},
-			{cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits."},
-			{cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user."},
-			{cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user."},
-			{cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user."},
+			{ cmd: "/tcg shop", desc: "View the daily rotating pack shop with available packs." },
+			{ cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop using credits." },
+			{ cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits." },
+			{ cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits." },
+			{ cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user." },
+			{ cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user." },
+			{ cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user." },
 		];
 		const html = `<center><strong>TCG Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			helpList.map(({cmd, desc}, i) =>
+			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
 			`</ul>`;
