@@ -121,12 +121,16 @@ export const commands: ChatCommands = {
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
-			if (cacheInitialized) card = getCard(cardId) || null;
-			if (!card) {
-				const collection = tcgCardsCollection;
-				card = await collection.findOne({ cardId });
+			try {
+				if (cacheInitialized) card = getCard(cardId) || null;
+				if (!card) {
+					const collection = tcgCardsCollection;
+					card = await collection.findOne({ cardId });
+				}
+				if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
+			} catch (error) {
+				return this.errorReply('An error occurred while fetching card information.');
 			}
-			if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 
 			const originalWidth = 246, originalHeight = 342, scaleFactor = 0.65;
 			const imageWidth = Math.round(originalWidth * scaleFactor);
@@ -163,12 +167,16 @@ export const commands: ChatCommands = {
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
-			if (cacheInitialized) card = getSet(setId) || null;
-			if (!card) {
-				const collection = tcgCardsCollection;
-				card = await collection.findOne({ setId });
+			try {
+				if (cacheInitialized) card = getSet(setId) || null;
+				if (!card) {
+					const collection = tcgCardsCollection;
+					card = await collection.findOne({ setId });
+				}
+				if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
+			} catch (error) {
+				return this.errorReply('An error occurred while fetching set information.');
 			}
-			if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 
 			const setName = card.set;
 			const series = card.setSeries || 'N/A';
@@ -271,20 +279,20 @@ export const commands: ChatCommands = {
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
-			const cooldown = await cooldowns.findOne({ userId });
-			if (cooldown) {
-				const lastClaimed = new Date(cooldown.lastClaimedAt).getTime();
-				const timeRemaining = (lastClaimed + COOLDOWN_MS) - now;
-				if (timeRemaining > 0) {
-					const hours = Math.floor(timeRemaining / 3600000);
-					const minutes = Math.floor((timeRemaining % 3600000) / 60000);
-					const seconds = Math.floor((timeRemaining % 60000) / 1000);
-					return this.errorReply(`You must wait ${hours}h ${minutes}m ${seconds}s before claiming your next daily pack.`);
-				}
-			}
-
-			let randomSetId = 'sv1';
 			try {
+				const cooldown = await cooldowns.findOne({ userId });
+				if (cooldown) {
+					const lastClaimed = new Date(cooldown.lastClaimedAt).getTime();
+					const timeRemaining = (lastClaimed + COOLDOWN_MS) - now;
+					if (timeRemaining > 0) {
+						const hours = Math.floor(timeRemaining / 3600000);
+						const minutes = Math.floor((timeRemaining % 3600000) / 60000);
+						const seconds = Math.floor((timeRemaining % 60000) / 1000);
+						return this.errorReply(`You must wait ${hours}h ${minutes}m ${seconds}s before claiming your next daily pack.`);
+					}
+				}
+
+				let randomSetId = 'sv1';
 				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([{
 					$group: { _id: "$setId" }
