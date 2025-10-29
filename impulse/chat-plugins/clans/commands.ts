@@ -1724,64 +1724,104 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|html|${output}`);
 	},
 
-		async profile(target, room, user) {
-	this.runBroadcast();
-	this.checkChat();
-	if (!user.named) return this.errorReply("You must be logged in to view clan profiles.");
+	async pointslog(target, room, user) {
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to view clan points logs.");
 
-	let clanId: ID;
+		let limit = parseInt(target.trim()) || 50;
+		if (limit < 1 || limit > 100) {
+			return this.errorReply("Limit must be between 1 and 100.");
+		}
 
-	if (target) {
-		clanId = toID(target);
-	} else {
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		clanId = userClanInfo?.memberOf as ID;
-		if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its profile.");
-	}
+		const clanId = userClanInfo?.memberOf;
 
-	const clan = await Clans.findOne({ _id: clanId });
-	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-	const totalMembers = Object.keys(clan.members).length;
-	const clanAge = toDurationString(Date.now() - clan.created);
-	const ownerUser = Users.getExact(clan.owner);
-	const ownerName = ownerUser?.name || clan.owner;
-	const motwUser = clan.memberOfTheWeek ? Users.getExact(clan.memberOfTheWeek) : null;
-	const motwName = motwUser?.name || clan.memberOfTheWeek || 'None';
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-	const w = 160, h = 222;
+		const logs = await ClanPointsLogs.find(
+			{ clanId: clanId },
+			{ limit, sort: { timestamp: -1 } }
+		);
 
-	let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
-	html += `<div style="flex: 0 0 ${w + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
-	
-	if (clan.icon) {
-		html += `<img src="${clan.icon}" width="${w}" alt="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
-		html += `<div style="font-size: 0.85em; margin-top: 10px; font-weight: bold;">${clan.name}</div>`;
-		html += `<div style="font-size: 0.75em; color: #666;">[${clan.tag}]</div>`;
-	} else {
-		html += `<div style="color: #888; text-align: center; padding-top: 50px; font-size: 0.9em; white-space: pre-wrap; width: ${w}px;">`;
-		html += `<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">${clan.name}</div>`;
-		html += `<div style="font-size: 0.9em; color: #666; margin-bottom: 20px;">[${clan.tag}]</div>`;
-		html += `No clan icon set.`;
-		html += `</div>`;
-	}
-	
-	html += `</div>`;
-	html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
-	html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
-	html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
-	html += `<strong>Owner:</strong> ${ownerName}<br />`;
-	html += `<strong>Members:</strong> ${totalMembers}<br />`;
-	html += `<strong>Level:</strong> ${clan.level}<br />`;
-	html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
-	html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins.toLocaleString()}<br />`;
-	html += `<strong>Event Wins:</strong> ${clan.stats.eventWins.toLocaleString()}<br />`;
-	html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
-	html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
-	html += `<strong>Created:</strong> ${clanAge} ago<br />`;
-	html += `</div></div></div>`;
-	
-	this.sendReply(`|html|${html}`);
+		if (!logs.length) {
+			return user.popup(`|html|<div class="infobox"><center>No points log entries found for ${clan.name}.</center></div>`);
+		}
+
+		let html = `<div class="infobox" style="max-width:600px"><center><strong>${clan.name} Points Logs (Latest ${logs.length})</strong></center><br>`;
+		for (const log of logs) {
+			html += `<div>` +
+				`<strong>Date:</strong> ${new Date(log.timestamp).toLocaleString()}<br />` +
+				`<strong>User:</strong> ${log.userid}<br />` +
+				`<strong>Actor:</strong> ${log.actor}<br />` +
+				`<strong>Amount:</strong> <span style="color:${log.amount > 0 ? 'green' : 'red'};">${log.amount > 0 ? '+' : ''}${log.amount}</span><br />` +
+				`<strong>Reason:</strong> ${log.reason || '-'}` +
+				`</div><hr>`;
+			}
+			html += `</div>`;
+			user.popup(`|html|${html}`);
 		},
+
+	async profile(target, room, user) {
+		this.runBroadcast();
+		this.checkChat();
+		if (!user.named) return this.errorReply("You must be logged in to view clan profiles.");
+
+		let clanId: ID;
+
+		if (target) {
+			clanId = toID(target);
+		} else {
+			const userClanInfo = await UserClans.findOne({ _id: user.id });
+			clanId = userClanInfo?.memberOf as ID;
+			if (!clanId) return this.errorReply("You are not currently a member of any clan. Specify a clan ID to view its profile.");
+		}
+
+		const clan = await Clans.findOne({ _id: clanId });
+		if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+		const totalMembers = Object.keys(clan.members).length;
+		const clanAge = toDurationString(Date.now() - clan.created);
+		const ownerUser = Users.getExact(clan.owner);
+		const ownerName = ownerUser?.name || clan.owner;
+		const motwUser = clan.memberOfTheWeek ? Users.getExact(clan.memberOfTheWeek) : null;
+		const motwName = motwUser?.name || clan.memberOfTheWeek || 'None';
+
+		const w = 160, h = 222;
+
+		let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
+		html += `<div style="flex: 0 0 ${w + 20}px; padding-right: 20px; border-right: 1px solid #ccc; overflow-y: hidden; text-align: center;">`;
+	
+		if (clan.icon) {
+			html += `<img src="${clan.icon}" width="${w}" alt="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
+			html += `<div style="font-size: 0.85em; margin-top: 10px; font-weight: bold;">${clan.name}</div>`;
+			html += `<div style="font-size: 0.75em; color: #666;">[${clan.tag}]</div>`;
+		} else {
+			html += `<div style="color: #888; text-align: center; padding-top: 50px; font-size: 0.9em; white-space: pre-wrap; width: ${w}px;">`;
+			html += `<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">${clan.name}</div>`;
+			html += `<div style="font-size: 0.9em; color: #666; margin-bottom: 20px;">[${clan.tag}]</div>`;
+			html += `No clan icon set.`;
+			html += `</div>`;
+		}
+	
+		html += `</div>`;
+		html += `<div style="flex: 1; line-height: 1.7; margin-left: 20px; max-height: ${h + 30}px; overflow-y: auto;">`;
+		html += `<strong style="font-size: 22px;">${clan.name}</strong><br />`;
+		html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
+		html += `<strong>Owner:</strong> ${ownerName}<br />`;
+		html += `<strong>Members:</strong> ${totalMembers}<br />`;
+		html += `<strong>Level:</strong> ${clan.level}<br />`;
+		html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
+		html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins.toLocaleString()}<br />`;
+		html += `<strong>Event Wins:</strong> ${clan.stats.eventWins.toLocaleString()}<br />`;
+		html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
+		html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
+		html += `<strong>Created:</strong> ${clanAge} ago<br />`;
+		html += `</div></div></div>`;
+	
+		this.sendReply(`|html|${html}`);
 	},
+},
 };
