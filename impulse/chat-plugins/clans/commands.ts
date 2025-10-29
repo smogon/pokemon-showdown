@@ -79,6 +79,29 @@ const DEFAULT_STATS: ClanStats = {
 	totalPointsEarned: 0,
 };
 
+async function logClanActivity(
+	clanId: ID,
+	actor: ID,
+	action: ClanLogType,
+	options: {
+		target?: ID;
+		oldValue?: string | number | boolean;
+		newValue?: string | number | boolean;
+		note?: string;
+	} = {}
+): Promise<void> {
+	await ClanLogs.insertOne({
+		clanId: clanId,
+		timestamp: Date.now(),
+		actor: actor,
+		action: action,
+		target: options.target,
+		oldValue: options.oldValue,
+		newValue: options.newValue,
+		note: options.note,
+	});
+}
+
 function to(date: Date, options: { date?: boolean; time?: boolean } = {}): string {
 	if (!(date instanceof Date) || isNaN(date.getTime())) {
 		return '';
@@ -227,15 +250,11 @@ export const commands: Chat.ChatCommands = {
 			try {
 				await Clans.insertOne(newClan);
 				await UserClans.upsert({ _id: ownerId }, { $set: { memberOf: clanId } });
-				await ClanLogs.insertOne({
-					clanId: clanId,
-					timestamp: now,
-					actor: user.id,
-					action: 'CREATE',
+				await logClanActivity(clanId, user.id, 'CREATE', {
 					target: ownerId,
 					note: `Clan ${clanName} created for owner ${ownerId}.`,
 				});
-
+				
 				const chatRoomTitle = `[Clan] ${clanName}`;
 				let newRoom = Rooms.get(chatRoomId);
 
@@ -414,11 +433,7 @@ export const commands: Chat.ChatCommands = {
 				$pull: { invites: clanId },
 			});
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: userId,
-				action: 'JOIN',
+			await logClanActivity(clanId, userId, 'JOIN', {
 				target: userId,
 				note: `User joined the clan.`,
 			});
@@ -464,11 +479,7 @@ export const commands: Chat.ChatCommands = {
 				{ $unset: { memberOf: 1 } }
 			);
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: userId,
-				action: 'LEAVE',
+			await logClanActivity(clanId, userId, 'LEAVE', {
 				target: userId,
 				note: `User left the clan.`,
 			});
@@ -530,11 +541,7 @@ export const commands: Chat.ChatCommands = {
 				{ $unset: { memberOf: 1 } }
 			);
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: kickerId,
-				action: 'KICK',
+			await logClanActivity(clanId, kickerId, 'KICK', {
 				target: targetId,
 				note: `User was kicked from the clan.`,
 			});
@@ -607,11 +614,7 @@ export const commands: Chat.ChatCommands = {
 				{ $addToSet: { invites: clanId } }
 			);
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: inviterId,
-				action: 'INVITE',
+			await logClanActivity(clanId, inviterId, 'INVITE', {
 				target: targetId,
 				note: `Invited user to the clan.`,
 			});
@@ -667,11 +670,7 @@ export const commands: Chat.ChatCommands = {
 				{ $pull: { invites: clanId } }
 			);
 
-			await ClanLogs.insertOne({
-				clanId: clanId,
-				timestamp: Date.now(),
-				actor: actorId,
-				action: 'DEINVITE',
+			await logClanActivity(clanId, actorId, 'DEINVITE', {
 				target: targetId,
 				note: `Revoked user's invite to the clan.`,
 			});
@@ -809,11 +808,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { inviteOnly: newInviteOnlyStatus } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_INVITEONLY',
+		await logClanActivity(clanId, actorId, 'SET_INVITEONLY', {
 			oldValue: oldValue,
 			newValue: newInviteOnlyStatus,
 			note: `${newInviteOnlyStatus ? 'Enabled' : 'Disabled'} invite-only mode.`,
@@ -882,11 +877,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { [`ranks.${rankIdFormatted}`]: newRank } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'RANK_CREATE',
+		await logClanActivity(clanId, actorId, 'RANK_CREATE', {
 			target: rankIdFormatted as ID,
 			note: `Created rank '${rankName}' with permission level ${permLevel}.`,
 		});
@@ -945,11 +936,7 @@ export const commands: Chat.ChatCommands = {
 			{ $unset: { [`ranks.${rankId}`]: "" } }
 		);
 		
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'RANK_DELETE',
+		await logClanActivity(clanId, actorId, 'RANK_DELETE', {
 			target: rankId as ID,
 			note: `Deleted rank '${rankToDelete.name}'.`,
 		});
@@ -1020,17 +1007,13 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { [`ranks.${rankIdFormatted}.permissions.${permission}`]: permValue } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'RANK_EDIT',
+		await logClanActivity(clanId, actorId, 'RANK_EDIT', {
 			target: rankIdFormatted as ID,
 			oldValue: oldValue,
 			newValue: permValue,
 			note: `Edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.`,
 		});
-
+		
 		this.sendReply(`You edited rank '${rankToEdit.name}': ${permission} is now ${permValue}.`);
 
 		const clanRoom = Rooms.get(clan.chatRoom);
@@ -1158,17 +1141,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { [`members.${targetId}.rank`]: newRank as ID } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'PROMOTE',
-			target: targetId,
-			oldValue: oldRank,
-			newValue: newRank,
-			note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
-		});
-
+		
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
 			const roomRanks: { [key: string]: string } = {
@@ -1181,7 +1154,13 @@ export const commands: Chat.ChatCommands = {
 			clanRoom.saveSettings();
 
 			clanRoom.add(`|html|<div class="infobox"><center>${targetId} was promoted from ${targetCurrentRank.name} to ${targetNewRank.name} by ${user.name}.</center></div>`).update();
-		}
+			
+			await logClanActivity(clanId, actorId, 'PROMOTE', {
+				target: targetId,
+				oldValue: oldRank,
+				newValue: newRank,
+				note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
+			});
 
 		const targetUser = Users.getExact(targetId);
 		if (targetUser?.connected) {
@@ -1257,17 +1236,12 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { [`members.${targetId}.rank`]: newRank as ID } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'DEMOTE',
+		await logClanActivity(clanId, actorId, 'DEMOTE', {
 			target: targetId,
 			oldValue: oldRank,
 			newValue: newRank,
 			note: `Demoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
 		});
-
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
 			const roomRanks: { [key: string]: string } = {
@@ -1328,11 +1302,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	);
 
-	await ClanLogs.insertOne({
-		clanId: clanId,
-		timestamp: Date.now(),
-		actor: actorId,
-		action: 'PROMOTE',
+	await logClanActivity(clanId, actorId, 'PROMOTE', {
 		target: targetId,
 		oldValue: oldOwnerRank,
 		newValue: 'owner',
@@ -1429,11 +1399,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { desc: description } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_DESC',
+		await logClanActivity(clanId, actorId, 'SET_DESC', {
 			oldValue: oldDesc,
 			newValue: description,
 			note: `Updated clan description.`,
@@ -1478,11 +1444,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { tag: tag } }
 		);
 
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_TAG',
+		await logClanActivity(clanId, actorId, 'SET_TAG', {
 			oldValue: oldTag,
 			newValue: tag,
 			note: `Updated clan tag.`,
@@ -1532,16 +1494,12 @@ export const commands: Chat.ChatCommands = {
 		{ $set: { memberOfTheWeek: targetId } }
 	);
 
-	await ClanLogs.insertOne({
-		clanId: clanId,
-		timestamp: Date.now(),
-		actor: actorId,
-		action: 'SET_MOTW',
-		target: targetId,
-		oldValue: oldMotw,
-		newValue: targetId,
-		note: `Set member of the week.`,
-	});
+		await logClanActivity(clanId, actorId, 'SET_MOTW', {
+			target: targetId,
+			oldValue: oldMotw,
+			newValue: targetId,
+			note: `Set member of the week.`,
+		});
 
 	const clanRoom = Rooms.get(clan.chatRoom);
 	if (clanRoom) {
@@ -1605,11 +1563,7 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { icon: iconUrl } }
 		);
 		
-		await ClanLogs.insertOne({
-			clanId: clanId,
-			timestamp: Date.now(),
-			actor: actorId,
-			action: 'SET_ICON',
+		await logClanActivity(clanId, actorId, 'SET_ICON', {
 			oldValue: oldIcon,
 			newValue: iconUrl,
 			note: `Updated clan icon.`,
