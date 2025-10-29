@@ -154,9 +154,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			];
 			if (this.turn % 3 !== 0) return;
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(spinSet)}`);
-			const results = this.random(9);
-			// results = 0;
-			switch (results) {
+			const result = this.random(9);
+			// result = 0;
+			switch (result) {
 			case 0:
 				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bighead)}`);
 				for (const pokemons of this.getAllActive()) {
