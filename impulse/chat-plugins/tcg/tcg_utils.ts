@@ -305,8 +305,8 @@ function generatePackFromCache(setId: string): TcgCard[] {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-	} catch {
-		console.error(`Error generating pack from CACHE for set ${setId}:`, error);
+	} catch (err) {
+		console.error(`Error generating pack from CACHE for set ${setId}:`, err);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
 	}
 }
