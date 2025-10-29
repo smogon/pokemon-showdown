@@ -143,7 +143,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 75,
 		onAfterHit(target, source, move) {
-			this.actions.useMove("painsplit", target, source);
+			this.actions.useMove("painsplit", target, { target });
 		},
 	},
 	lastrespects: {
@@ -165,7 +165,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 187.5,
 		basePowerCallback(pokemon) {
-			return Math.min(350, 50 + 1(pokemon.timesAttacked));
+			return Math.min(350, 50 + pokemon.timesAttacked);
 		},
 		onAfterHit(target, pokemon, move) {
 			this.damage(1, pokemon, target);
@@ -190,11 +190,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Always results in a critical hit.",
 		shortDesc: "Always results in a critical hit.",
 		willCrit: true,
-		critRatio: null,
+		critRatio: 1,
 	},
 	astonish: {
 		inherit: true,
-		viable: true,
 		desc: "Fails if not turn 1 out. 100% chance to flinch.",
 		shortDesc: "Fails if not turn 1 out. 100% chance to flinch.",
 		onTry(source) {
@@ -213,8 +212,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Paralyzes the target. Once per battle.",
 		shortDesc: "Paralyzes the target. Once per battle.",
 		onAfterHit(target, source, move) {
-			if (source.lick) return;
-			source.lick = true;
+			if (this.effectState.lick) return;
+			this.effectState.lick = true;
 			target.trySetStatus('par', source, move);
 		},
 		secondary: null,
@@ -246,7 +245,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: -3,
 		flags: {
 			contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1,
-			noassist: 1, failcopycat: 1, failinstruct: 1, trick: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1,
 		},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -306,12 +305,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	hex: {
 		inherit: true,
-		viable: true,
 		desc: "Fails if the target does not have a status ailment.",
 		shortDesc: "Fails if the target does not have a status ailment.",
 		basePower: 100,
-		basePowerCallback: null,
-		flags: { protect: 1, mirror: 1, trick: 1 },
+		basePowerCallback: {},
+		flags: { protect: 1, mirror: 1 },
 		onTry(source, target) {
 			return !!target.status;
 		},
@@ -322,12 +320,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "User must have used Moonlight last turn. Ignores abilities.",
 		shortDesc: "Must use Moonlight first. Ignores abilities.",
 		onTry(source, target) {
-			return source.lastMove === 'Moonlight';
+			return source.lastMove.id === 'moonlight';
+			if (source.lastMove.id !== 'moonlight') {
+				this.add('cant', pokemon, 'Moongeist Beam', 'Moongeist Beam');
+				return true;
+			}
 		},
 	},
 	shadowball: {
 		inherit: true,
-		viable: true,
 		desc: "10% chance to lower target/user's Sp. Def by 1.",
 		shortDesc: "10% chance to lower target/user's Sp. Def by 1.",
 		basePower: 70,
@@ -343,28 +344,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		desc: "+Fire effectiveness. 30% to burn.",
 		shortDesc: "+Fire effectiveness. 30% to burn.",
-		basePowerCallback: null,
+		basePowerCallback: {},
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
 	},
 	bittermalice: {
 		inherit: true,
-		viable: true,
 		basePower: 50,
 		desc: "+10 power for each PP used.",
 		shortDesc: "+10 power for each PP used.",
 		basePowerCallback(pokemon, target, move) {
 			const callerMoveId = move.sourceEffect || move.id;
 			const moveSlot = callerMoveId === 'instruct' ? pokemon.getMoveData(move.id) : pokemon.getMoveData(callerMoveId);
-			return 50 + 10 * ((move.pp * 1.6) - moveSlot.pp);
+			if (!moveSlot) {
+				return 50;
+			} else {
+				return 50 + 10 * ((move.pp * 1.6) - moveSlot.pp);
+			}
 		},
 		secondary: null,
 	},
 	ominouswind: {
 		inherit: true,
 		isNonstandard: null,
-		viable: true,
 		desc: "Forces the target out. 2x power if the user was hit.",
 		shortDesc: "Forces the target out. 2x power if the user was hit.",
 		basePower: 50,
@@ -424,12 +427,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 			const move = this.dex.getActiveMove(action.move.id);
-			target.lastmove = move;
+			target.lastMove = move;
 			if (action.zmove || move.isZ || move.isMax) return false;
 			if (target.volatiles['mustrecharge']) return false;
 			if (move.category === 'Status' || move.flags['failmefirst']) return false;
 
-			this.actions.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, { target });
 			target.addVolatile('spite');
 			return null;
 		},
@@ -442,7 +445,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else {
 					this.add('-start', pokemon, 'Spite', pokemon.lastMove);
 				}
-				const move = pokemon.lastmove;
+				const move = pokemon.lastMove;
 				this.effectState.move = move;
 			},
 			onResidualOrder: 17,
@@ -473,7 +476,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 		desc: "50% chance to trick, 50% chance to treat.",
 		shortDesc: "50% chance to trick, 50% chance to treat.",
-		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, trick: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, },
 		onHit(target, source) {
 			const random = this.random(2);
 			if (random === 0) {
@@ -488,7 +491,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					source.addVolatile(this.sample(volatiles), source);
 					break;
 				case 2:
-					this.actions.useMove("Trick", source, target);
+					this.actions.useMove("Trick", source, { target });
 					break;
 				default:
 					this.damage(source.baseMaxhp / 4, source);
@@ -505,7 +508,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 1,
 		desc: "Fails if target attacks. May cause target to disobey.",
 		shortDesc: "Fails if target attacks. May cause target to disobey.",
-		flags: { protect: 1, reflectable: 1, mirror: 1, trick: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, },
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
@@ -540,7 +543,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							'pretended not to notice!',
 						];
 						const noAttackSleep = 'ignored orders and kept sleeping!';
-						this.add('-message', `${pokemon.name} ${(pokemon.status === 'slp' && ['sleeptalk', 'snore'].includes(pokemon.move)) ? noAttackSleep : this.sample(noAttack)}`);
+						this.add('-message', `${pokemon.name} ${(pokemon.status === 'slp' && ['sleeptalk', 'snore'].includes(pokemon.move.id)) ? noAttackSleep : this.sample(noAttack)}`);
 					}
 					return null;
 				}
@@ -631,19 +634,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	flowertrick: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, trick: 1 },
+		flags: { protect: 1, mirror: 1 },
 	},
 	powertrick: {
 		inherit: true,
-		flags: { snatch: 1, trick: 1 },
+		flags: { snatch: 1 },
 	},
 	trick: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1, trick: 1 },
+		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 	},
 	trickroom: {
 		inherit: true,
-		flags: { mirror: 1, trick: 1 },
+		flags: { mirror: 1 },
 	},
 	grassyglide: {
 		inherit: true,
@@ -657,7 +660,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Confuses the target and lowers its Def/SpD by 2.",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, trick: 1, dance: 1, sound: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, dance: 1, sound: 1 },
 		ignoreImmunity: { 'Normal': true },
 		onPrepareHit(source, target, move) {
 			// ana you are so lucky i don't have to shorten these
@@ -749,7 +752,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, "Strength Sap", target);
 		},
 		onHit(target, source) {
-			if (target.basemaxHp === target.hp) return false;
+			if (target.baseMaxhp === target.hp) return false;
 			const toHeal = target.baseMaxhp - target.hp;
 			console.log(target.baseMaxhp);
 			console.log(target.hp);
@@ -987,7 +990,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1,
-			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, summon: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Invokum MONOCULUS!`);
@@ -1028,7 +1031,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
-			failcopycat: 1, failinstruct: 1, failmimic: 1, summon: 1,
+			failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Mortis Animataris!`);
@@ -1068,7 +1071,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
-			failcopycat: 1, failinstruct: 1, failmimic: 1, summon: 1,
+			failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Imputum Fulmenus!`);

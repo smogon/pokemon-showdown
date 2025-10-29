@@ -1,5 +1,18 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
+	checkFainted() {
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon.fainted) {
+					pokemon.status = 'fnt' as ID;
+					pokemon.switchFlag = true;
+				} else if (this.effectState.zombie) {
+					pokemon.status = '';
+					pokemon.switchFlag = true;
+				}
+			}
+		}
+	},
 	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
@@ -33,10 +46,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.baseAbility = toID(pokemon.set.ability);
 				}
 				pokemon.clearVolatile(false);
-				if (!pokemon.zombie) {
+				if (!this.effectState.zombie) {
 					pokemon.fainted = true;
 				} else {
-					pokemon.faintQueued = null;
+					pokemon.faintQueued = false;
 				}
 				pokemon.illusion = null;
 				pokemon.isActive = false;
@@ -82,18 +95,5 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
-	},
-	checkFainted() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				} else if (pokemon.zombie) {
-					pokemon.status = '';
-					pokemon.switchFlag = true;
-				}
-			}
-		}
 	},
 };

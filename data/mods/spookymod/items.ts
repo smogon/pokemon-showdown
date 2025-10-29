@@ -2,7 +2,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	spellbookmagazine: {
 		name: "Spellbook Magazine",
 		shortDesc: "Lets the user pick up and cast spells.",
-		rating: 3,
 		onTakeItem(item, pokemon, source, move) {
 			return false;
 		},
@@ -123,7 +122,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			];
 			if (rand === 0) {
 				const randSpell = this.sample(spells);
-				pokemon.moveSlots.push(randSpell);
+				this.moveSlots.push(randSpell);
 				pokemon.addVolatile("spellbookmagazine");
 			}
 		},

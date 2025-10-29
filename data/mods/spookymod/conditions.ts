@@ -127,11 +127,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	flinch: {
 		inherit: true,
-		flinches: true,
+		// flinches: true,
 	},
 	jumpscare: {
 		name: 'jumpscare',
-		flinches: true,
+		// flinches: true,
 		duration: 1,
 		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
@@ -175,7 +175,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-start', pokemon, 'Dynamax', '[silent]');
 			if (pokemon.species.id === 'gourgeistgigantic') {
 				this.add('-message', `${pokemon.name} grew so large it exploded!`);
-				this.actions.useMove('Explosion', pokemon, pokemon);
+				this.actions.useMove('Explosion', pokemon);
 			}
 		},
 		onEnd(pokemon) {

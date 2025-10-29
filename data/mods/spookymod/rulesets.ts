@@ -160,14 +160,14 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			case 0:
 				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bighead)}`);
 				for (const pokemons of this.getAllActive()) {
-					pokemons.removeVolatile('shrunken', pokemons);
+					pokemons.removeVolatile('shrunken');
 					pokemons.addVolatile('fakedynamax', pokemons);
 				}
 				break;
 			case 1:
 				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(smallhead)}`);
 				for (const pokemons of this.getAllActive()) {
-					pokemons.removeVolatile('fakedynamax', pokemons);
+					pokemons.removeVolatile('fakedynamax');
 					pokemons.addVolatile('shrunken', pokemons);
 				}
 				break;

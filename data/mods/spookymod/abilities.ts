@@ -40,7 +40,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	ahexual: {
 		onTryHit(target, source, move) {
-			if (move.flags['trick']) {
+			const tricks = [
+				'bombinomicon', 'wordsdance', 'hex', 'trickortreat', 'confuseray',
+				'flowertrick', 'powertrick', 'trick', 'trickroom',
+			];
+			if (tricks.includes(move.id)) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Ahexual');
 				}
@@ -97,13 +101,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	jumpscare: {
 		onStart(pokemon) {
-			if (pokemon.scare) return;
+			if (this.effectState.scare) return;
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Jumpscare');
 					activated = true;
-					pokemon.scare = true;
+					this.effectState.scare = true;
 				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
@@ -247,7 +251,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'wanderingspirit',
 				'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 			];
-			const possibleTargets = pokemon.foes().filter(foeActive => foeActive && !foeActive.getAbility().isPermanent &&
+			const possibleTargets = pokemon.foes().filter(foeActive => foeActive && !foeActive.getAbility().flags['cantsuppress'] &&
 				!additionalBannedAbilities.includes(foeActive.ability) && foeActive.isAdjacent(pokemon));
 			if (possibleTargets.length) {
 				let rand = 0;
@@ -285,7 +289,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
-				!(move.isZ && move.category !== 'Status') && move.name === 'Explosion' &&
+				!(move.isZ && move.category !== 'Status') && move.name !== 'Explosion' &&
 				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fire';
 				move.typeChangerBoosted = this.effect;
@@ -319,16 +323,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When this Pokemon has 0 HP, it switches out and is revived to 1/2 max HP. Once per battle.",
 		name: "Revive",
 		onBeforeSwitchIn(pokemon) {
-			if (pokemon.zombie) {
-				pokemon.zombie = false;
-				pokemon.switchedIn = undefined;
+			if (this.effectState.zombie) {
+				this.effectState.zombie = false;
+				this.effectState.switchedIn = undefined;
 			}
 		},
 		onFaint(pokemon) {
-			if (pokemon.name === 'Trevenant' && !pokemon.zombie && this.canSwitch(pokemon.side)) {
+			if (pokemon.name === 'Trevenant' && !this.effectState.zombie && this.canSwitch(pokemon.side)) {
 				if (pokemon.formeChange('Trevenant-Revenant', this.effect, true)) {
 					this.add('-ability', pokemon, 'Revive');
-					pokemon.zombie = true;
+					this.effectState.zombie = true;
 					pokemon.hp = Math.floor(pokemon.maxhp / 2);
 					pokemon.setAbility('reckless');
 				}
