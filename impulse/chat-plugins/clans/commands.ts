@@ -1933,5 +1933,312 @@ async removeeventwins(target, room, user) {
 	});
 	this.sendReply(`Removed ${amount} event win(s) from clan '${clan.name}'.`);
 },
+
+		// --- Admin-only commands ---
+async setlevel(target, room, user) {
+	this.checkCan('roomowner');
+	const level = parseInt(target.trim());
+	if (isNaN(level) || level < 1) return this.errorReply("Usage: /clan setlevel [level] (level must be a positive integer)");
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $set: { level } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_SETLEVEL",
+		oldValue: clan.level,
+		newValue: level,
+		note: `[ADMIN] Set clan level to ${level}`,
+	});
+	this.sendReply(`Set clan '${clan.name}' level to ${level}.`);
+},
+
+async addlevel(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim());
+	if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan addlevel [amount] (must be positive integer)");
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $inc: { level: amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_ADDLEVEL",
+		oldValue: clan.level,
+		newValue: clan.level + amount,
+		note: `[ADMIN] Added ${amount} level(s)`,
+	});
+	this.sendReply(`Added ${amount} level(s) to clan '${clan.name}'.`);
+},
+
+async removelevel(target, room, user) {
+	this.checkCan('roomowner');
+	const amount = parseInt(target.trim());
+	if (isNaN(amount) || amount <= 0) return this.errorReply("Usage: /clan removelevel [amount] (must be positive integer)");
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $inc: { level: -amount } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_REMOVELEVEL",
+		oldValue: clan.level,
+		newValue: clan.level - amount,
+		note: `[ADMIN] Removed ${amount} level(s)`,
+	});
+	this.sendReply(`Removed ${amount} level(s) from clan '${clan.name}'.`);
+},
+
+async resetstats(target, room, user) {
+	this.checkCan('roomowner');
+	const actorClanInfo = await UserClans.findOne({ _id: user.id });
+	const clanId = actorClanInfo?.memberOf;
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	const oldStats = clan.stats;
+	await Clans.updateOne({ _id: clanId }, { $set: { "stats.tourWins": 0, "stats.eventWins": 0, "stats.totalPointsEarned": 0 } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_RESETSTATS",
+		oldValue: oldStats,
+		newValue: { tourWins: 0, eventWins: 0, totalPointsEarned: 0 },
+		note: `[ADMIN] Reset clan stats`,
+	});
+	this.sendReply(`Reset all stats for clan '${clan.name}'.`);
+},
+
+async setdescadmin(target, room, user) {
+	this.checkCan('roomowner');
+	const [clanIdRaw, ...descArr] = target.split(',').map(s => s.trim());
+	const clanId = toID(clanIdRaw);
+	const desc = descArr.join(',') || '';
+	if (!clanId || !desc) return this.errorReply("Usage: /clan setdescadmin [clan id], [desc]");
+	if (desc.length > 80) return this.errorReply("Description must be 80 characters or less.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $set: { desc } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_SETDESC",
+		oldValue: clan.desc,
+		newValue: desc,
+		note: `[ADMIN] Set clan description`,
+	});
+	this.sendReply(`Set description for clan '${clan.name}'.`);
+},
+
+async settagadmin(target, room, user) {
+	this.checkCan('roomowner');
+	const [clanIdRaw, tagRaw] = target.split(',').map(s => s.trim());
+	const clanId = toID(clanIdRaw);
+	const tag = tagRaw?.toUpperCase();
+	if (!clanId || !tag) return this.errorReply("Usage: /clan settagadmin [clan id], [tag]");
+	if (tag.length > 4 || !/^[A-Z]+$/.test(tag)) return this.errorReply("Tag must be 3 characters or less and only uppercase letters.");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $set: { tag } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_SETTAG",
+		oldValue: clan.tag,
+		newValue: tag,
+		note: `[ADMIN] Set clan tag`,
+	});
+	this.sendReply(`Set tag for clan '${clan.name}'.`);
+},
+
+async seticonadmin(target, room, user) {
+	this.checkCan('roomowner');
+	const [clanIdRaw, ...iconArr] = target.split(',').map(s => s.trim());
+	const clanId = toID(clanIdRaw);
+	const iconUrl = iconArr.join(',') || '';
+	if (!clanId || !iconUrl) return this.errorReply("Usage: /clan seticonadmin [clan id], [icon url]");
+	if (iconUrl.length > 1000 || !/^https?:\/\/.+\.(png|jpg|jpeg|gif|webp)$/i.test(iconUrl)) {
+		return this.errorReply("Icon URL must be a valid HTTP(S) image url (png/jpg/jpeg/gif/webp) and 1000 chars or less.");
+	}
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	await Clans.updateOne({ _id: clanId }, { $set: { icon: iconUrl } });
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_SETICON",
+		oldValue: clan.icon,
+		newValue: iconUrl,
+		note: `[ADMIN] Set clan icon`,
+	});
+	this.sendReply(`Set icon for clan '${clan.name}'.`);
+},
+
+async kickall(target, room, user) {
+	this.checkCan('roomowner');
+	const clanId = toID(target.trim());
+	if (!clanId) return this.errorReply("Usage: /clan kickall [clan id]");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	const ownerId = clan.owner;
+	const membersToKick = Object.keys(clan.members).filter(uid => uid !== ownerId);
+	if (!membersToKick.length) return this.sendReply(`No members to kick in clan '${clan.name}'.`);
+	await Clans.updateOne({ _id: clanId }, {
+		$unset: Object.fromEntries(membersToKick.map(uid => [`members.${uid}`, ""]))
+	});
+	await UserClans.updateMany(
+		{ memberOf: clanId, _id: { $in: membersToKick } },
+		{ $unset: { memberOf: 1 } }
+	);
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_KICKALL",
+		note: `[ADMIN] Kicked all members except owner.`,
+	});
+	this.sendReply(`Kicked all members except owner from clan '${clan.name}'.`);
+},
+
+async clearinvites(target, room, user) {
+	this.checkCan('roomowner');
+	const clanId = toID(target.trim());
+	if (!clanId) return this.errorReply("Usage: /clan clearinvites [clan id]");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	const invitedUserIds = clan.invites.map(i => i.userid);
+	await Clans.updateOne({ _id: clanId }, { $set: { invites: [] } });
+	if (invitedUserIds.length) {
+		await UserClans.updateMany(
+			{ _id: { $in: invitedUserIds } },
+			{ $pull: { invites: clanId } }
+		);
+	}
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_CLEARINVITES",
+		note: `[ADMIN] Cleared all clan invites.`,
+	});
+	this.sendReply(`Cleared all invites from clan '${clan.name}'.`);
+},
+
+async export(target, room, user) {
+	this.checkCan('roomowner');
+	const clanId = toID(target.trim());
+	if (!clanId) return this.errorReply("Usage: /clan export [clan id]");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	const members = Object.keys(clan.members);
+	const logs = await ClanLogs.find({ clanId }, {});
+	const pointsLogs = await ClanPointsLogs.find({ clanId }, {});
+	const exportObj = {
+		clan,
+		members,
+		logs,
+		pointsLogs
+	};
+	const exportStr = `<details><summary>Export data for clan '${clan.name}'</summary><pre>${JSON.stringify(exportObj, null, 2)}</pre></details>`;
+	this.sendReply(`|html|${exportStr}`);
+},
+
+async transferadmin(target, room, user) {
+	this.checkCan('roomowner');
+	const [clanIdRaw, newOwnerRaw] = target.split(',').map(s => s.trim());
+	const clanId = toID(clanIdRaw);
+	const newOwnerId = toID(newOwnerRaw);
+	if (!clanId || !newOwnerId) return this.errorReply("Usage: /clan transferadmin [clan id], [new owner]");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	if (!clan.members[newOwnerId]) return this.errorReply(`User '${newOwnerId}' is not a member of the clan.`);
+	const oldOwnerId = clan.owner;
+	await Clans.updateOne({ _id: clanId }, {
+		$set: {
+			owner: newOwnerId,
+			[`members.${newOwnerId}.rank`]: "owner",
+			[`members.${oldOwnerId}.rank`]: "leader",
+		}
+	});
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_TRANSFEROWNER",
+		oldValue: oldOwnerId,
+		newValue: newOwnerId,
+		note: `[ADMIN] Ownership transferred.`,
+	});
+	this.sendReply(`Transferred ownership of clan '${clan.name}' to '${newOwnerId}'.`);
+},
+
+// -- Ban management, requires a bannedUsers collection or global array
+async banuser(target, room, user) {
+	this.checkCan('roomowner');
+	const bannedId = toID(target.trim());
+	if (!bannedId) return this.errorReply("Usage: /clan banuser [username]");
+	// You need a bannedUsers collection or array. Example below assumes a MongoDB collection named 'clanbans'
+	await ImpulseDB('clanbans').upsert({ _id: bannedId }, { $set: { banned: true } });
+	this.sendReply(`User '${bannedId}' is now banned from joining clans.`);
+},
+
+async unbanuser(target, room, user) {
+	this.checkCan('roomowner');
+	const bannedId = toID(target.trim());
+	if (!bannedId) return this.errorReply("Usage: /clan unbanuser [username]");
+	await ImpulseDB('clanbans').deleteOne({ _id: bannedId });
+	this.sendReply(`User '${bannedId}' is unbanned and may join clans.`);
+},
+
+async clearlogs(target, room, user) {
+	this.checkCan('roomowner');
+	const clanId = toID(target.trim());
+	if (!clanId) return this.errorReply("Usage: /clan clearlogs [clan id]");
+	await ClanLogs.deleteMany({ clanId });
+	await ClanPointsLogs.deleteMany({ clanId });
+	this.sendReply(`Cleared all logs for clan '${clanId}'.`);
+},
+
+async clearmembers(target, room, user) {
+	this.checkCan('roomowner');
+	const clanId = toID(target.trim());
+	if (!clanId) return this.errorReply("Usage: /clan clearmembers [clan id]");
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+	const ownerId = clan.owner;
+	const membersToRemove = Object.keys(clan.members).filter(uid => uid !== ownerId);
+	if (!membersToRemove.length) return this.sendReply(`No members to remove in clan '${clan.name}'.`);
+	await Clans.updateOne({ _id: clanId }, {
+		$unset: Object.fromEntries(membersToRemove.map(uid => [`members.${uid}`, ""]))
+	});
+	await UserClans.updateMany(
+		{ memberOf: clanId, _id: { $in: membersToRemove } },
+		{ $unset: { memberOf: 1 } }
+	);
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor: user.id,
+		action: "ADMIN_CLEARMEMBERS",
+		note: `[ADMIN] Removed all members except owner.`,
+	});
+	this.sendReply(`Removed all members except owner from clan '${clan.name}'.`);
+},
 },
 };
