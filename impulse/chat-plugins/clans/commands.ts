@@ -2661,7 +2661,8 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/clan wars challenge [clan], [format], [battles]", desc: "Challenge another clan to war." },
 				{ cmd: "/clan wars accept [war id]", desc: "Accept a war challenge." },
 				{ cmd: "/clan wars decline [war id]", desc: "Decline a war challenge." },
-				{ cmd: "/clan wars status [war id]", desc: "View status of a war." }		{ cmd: "/clan wars leaderboard [limit]", desc: "View top clans by war points." },
+				{ cmd: "/clan wars status [war id]", desc: "View status of a war." },
+				{ cmd: "/clan wars leaderboard [limit]", desc: "View top clans by war points." },
 				];
 			const html = `<center><strong>Clan Wars Commands</strong></center><hr /><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }) =>
