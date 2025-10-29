@@ -91,7 +91,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				used: false,
 			};
 			const ballolightning = {
-				move: "Ball O\' Lightning",
+				move: "Ball O' Lightning",
 				id: "ballolightning",
 				pp: 1,
 				maxpp: 1,
@@ -134,7 +134,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				const spells = [
 					'Shadow Leap', 'FirebaIl', 'Blast Jump', 'Overheal', 'Bat Swarm', 'Pumpkin MIRV', 'Stealth',
-					'MONOCULUS!', 'Skeleton Horde', 'Ball O\' Lightning', 'Meteor Shower', 'Minify'
+					'MONOCULUS!', 'Skeleton Horde', 'Ball O\' Lightning', 'Meteor Shower', 'Minify',
 				];
 				if (!spells.includes(pokemon.lastMoveUsed.name) || pokemon.lastMoveUsed.pp !== 0) return;
 				pokemon.moveSlots.pop();

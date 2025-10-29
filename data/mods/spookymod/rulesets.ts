@@ -154,9 +154,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			];
 			if (this.turn % 3 !== 0) return;
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(spinSet)}`);
-			const result = this.random(9);
-			// result = 0;
-			switch (result) {
+			const results = this.random(9);
+			// results = 0;
+			switch (results) {
 			case 0:
 				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bighead)}`);
 				for (const pokemons of this.getAllActive()) {
@@ -196,31 +196,31 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				const temps = this.random(4);
 				// const temps = 3;
 				switch (temps) {
-					case 0:
-						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bleed)}`);
-						for (const pokemons of this.getAllActive()) {
-							pokemons.trySetStatus('psn', pokemons);
-						}
-						break;
-					case 1:
-						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(fire)}`);
-						for (const pokemons of this.getAllActive()) {
-							pokemons.trySetStatus('brn', pokemons);
-						}
-						break;
-					case 2:
-						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(jarate)}`);
-						for (const pokemons of this.getAllActive()) {
-							pokemons.addVolatile('jarate', pokemons);
-							this.hint('pokemons covered in Jarate take 1.35x damage from opponent\'s attacks.');
-						}
-						break;
-					case 3:
-						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ghosts)}`);
-						for (const pokemons of this.getAllActive()) {
-							pokemons.addVolatile('jumpscare', pokemons);
-						}
-						break;
+				case 0:
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bleed)}`);
+					for (const pokemons of this.getAllActive()) {
+						pokemons.trySetStatus('psn', pokemons);
+					}
+					break;
+				case 1:
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(fire)}`);
+					for (const pokemons of this.getAllActive()) {
+						pokemons.trySetStatus('brn', pokemons);
+					}
+					break;
+				case 2:
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(jarate)}`);
+					for (const pokemons of this.getAllActive()) {
+						pokemons.addVolatile('jarate', pokemons);
+						this.hint('pokemons covered in Jarate take 1.35x damage from opponent\'s attacks.');
+					}
+					break;
+				case 3:
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ghosts)}`);
+					for (const pokemons of this.getAllActive()) {
+						pokemons.addVolatile('jumpscare', pokemons);
+					}
+					break;
 				}
 				break;
 			case 5:

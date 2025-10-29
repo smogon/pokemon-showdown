@@ -205,7 +205,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		name: "Mutual Exclusion",
 		shortDesc: "On switchin, this Pokemon gains Imprison.",
-		},
+	},
 	onderguard: {
 		onDamagingHit(damage, target, source, effect) {
 			if (this.randomChance(1, 2)) this.boost({ def: 1, spd: -1 });

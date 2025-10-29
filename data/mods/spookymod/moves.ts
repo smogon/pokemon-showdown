@@ -246,7 +246,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: -3,
 		flags: {
 			contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1,
-			noassist: 1, failcopycat: 1, failinstruct: 1, trick: 1
+			noassist: 1, failcopycat: 1, failinstruct: 1, trick: 1,
 		},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -667,7 +667,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				'megas for all mismagius torment confusion alchemist araquanid no recover parasex flavor town megas for all sharting pot dragon heaven big button is watching pet mods gluke smogon kero megas for all dimrah pumpkin joltemons sylvemons farfetchd acid rock hematite boomer mentality flavor drama sexcadrill pet mods smogon pet mods bubble dies from cringe purple frong bat silvally pet mods',
 				'免费塔普乐乐 Free Tapu Lele 格鲁克伯爵配对 The Earl G-Luke Pairing 厄尔哈克斯大屠杀 The Earl Hax Massacre 反乔尔特蒙斯斗争 The Anti-Joltemons Struggle 适合所有城市的大型大型设施 The Great M4A Tourban 伟大的南瓜史诗嵌入失败 The Great Gourgeist 0-8 大按钮 Big Button 霍普朗 Hooporant 副性交 Parasex 细胞器 Cellsius 多转麻痹 Multi-turn paralysis 罗托姆风扇 Rotom Fan 库诺之门 Cunogate 四万五千斯科帕帕 Scoopapa 推出樱桃 Rollout Cherrim 围巾电钻 Scarf Vikadrill 老板联系方式 The Bossaru Contact 永恒光束 Eternabeam 壁虎奶酪宣传 Gekokeso Propaganda 奇多 Cheeto',
 				// 'Right here it says "UPS: Our Fastest Ground Shipping Ever." You know, what if it said "Our fastest and hardest boner?" Quickest, uh, speed for getting a boner? Alright, thanks guys.',
-				'Pog sussy balls means nothing to you!?!? WTF! That\’s one epic fail! You’re in the quite the pickle there Rick! Im rofling on the floor laughing AND firing my lazor AND you sir win teh interwebs AND le reddit gold if i do say so myself yessir yessir!',
+				'Pog sussy balls means nothing to you!?!? WTF! That’s one epic fail! You’re in the quite the pickle there Rick! Im rofling on the floor laughing AND firing my lazor AND you sir win teh interwebs AND le reddit gold if i do say so myself yessir yessir!',
 			];
 			this.add('-message', `${target.name} took a deep breath and said:`);
 			this.attrLastMove('[still]');
@@ -878,7 +878,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Bat Swarm",
 		pp: 1.25,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, contact: 1, mirror: 1, failencore: 1, failmefirst: 1,
 			nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
@@ -1026,7 +1026,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Skeleton Horde",
 		pp: 0.625,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failinstruct: 1, failmimic: 1, summon: 1,
 		},
@@ -1066,8 +1066,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Ball O' Lightning",
 		pp: 0.625,
 		priority: 0,
-		flags: { 
-			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, 
+		flags: {
+			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failinstruct: 1, failmimic: 1, summon: 1,
 		},
 		onPrepareHit(target, source, move) {
