@@ -410,7 +410,8 @@ export class RandomGen8Teams {
 					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			}
+			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
