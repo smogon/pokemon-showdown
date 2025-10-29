@@ -21,13 +21,18 @@ const serverName = Config.serverName || 'Impulse';
 const NewsDB = ImpulseDB<NewsEntry>('news');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const formatDate = (date: Date = new Date()): string => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+const formatDate = (date: Date = new Date()): string =>
+	`${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
 class NewsManager {
 	static async generateNewsDisplay(): Promise<string[]> {
-		const news = await NewsDB.find({}, { sort: { timestamp: -1 }, limit: 3, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } });
+		const news = await NewsDB.find(
+			{},
+			{ sort: { timestamp: -1 }, limit: 3, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } }
+		);
 		return news.map(entry =>
-			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br><small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
+			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
+			`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
 		);
 	}
 

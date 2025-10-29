@@ -162,7 +162,8 @@ function runAutotour(roomid: RoomID): void {
 			autotourConfig[roomid].lastTourTime = now;
 			void saveConfig(roomid);
 		}
-	} catch (err: unknown) {
+	} catch {
+		// Silently fail
 	}
 }
 
@@ -188,7 +189,9 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(roomid);
 			startRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour enabled for room ${roomid}.`);
-			this.room!.add(`|html|<div class="infobox"><center>${user.name} enabled auto tournaments in this room.</center></div>`).update();
+			this.room!.add(
+				`|html|<div class="infobox"><center>${user.name} enabled auto tournaments in this room.</center></div>`
+			).update();
 		},
 		async disable(target, room, user) {
 			this.checkChat();
@@ -199,7 +202,9 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(roomid);
 			stopRoomAutotourScheduler(roomid);
 			this.sendReply(`Autotour disabled for room ${roomid}.`);
-			this.room!.add(`|html|<div class="infobox"><center>${user.name} disabled auto tournaments in this room.</center></div>`).update();
+			this.room!.add(
+				`|html|<div class="infobox"><center>${user.name} disabled auto tournaments in this room.</center></div>`
+			).update();
 		},
 		async formats(target, room, user) {
 			this.checkChat();
