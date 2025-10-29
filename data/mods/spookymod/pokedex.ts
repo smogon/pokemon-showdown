@@ -331,7 +331,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 65, atk: 110, def: 70, spa: 105, spd: 70, spe: 110 },
 		abilities: { 0: "Cursed Body", 1: "Snow Warning", H: "Illusion" },
 	},
-	//shrunken
+	// shrunken
 	aegislashshrunken: {
 		num: 1,
 		name: "Aegislash-Shrunken",

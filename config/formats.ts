@@ -2909,7 +2909,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `A Gen 9 Halloween-themed solomod comprised of entirely Ghost-types, some with more than 2 types.`,
 		mod: 'spookymod',
 		searchShow: false,
-        ruleset: ['Standard NatDex', 'Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', 'Sprite Viewer', 'Spokymod'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview', 'Sprite Viewer', 'Spokymod'],
 		banlist: ['All Pokemon'],
 		unbanlist: [
 			'Aegislash', 'Banette-Mega', 'Ceruledge', 'Dofagrigus', 'Eddy Azbear', 'Flutter Mane', 'Flutter Mane 2',

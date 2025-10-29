@@ -1,8 +1,8 @@
-import {FS} from '../../../lib';
-import {toID} from '../../../sim/dex-data';
+import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex-data';
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
-const usergroups: {[userid: string]: string} = {};
+const usergroups: { [userid: string]: string } = {};
 const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
 for (const row of usergroupData) {
 	if (!toID(row)) continue;
@@ -27,13 +27,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onModifyMove(move, pokemon) {
 			if (move.type === "Water") {
-				this.add('-curestatus', pokemon, 'brn', '[from] move: ' + move);
+				this.add('-curestatus', pokemon, 'brn', `[from] move: ${move}`);
 				pokemon.clearStatus();
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water' && move.category !== 'Status') {
-				this.add('-curestatus', target, 'brn', '[from] move: ' + move);
+				this.add('-curestatus', target, 'brn', `[from] move: ${move}`);
 				target.cureStatus();
 			}
 		},
@@ -69,7 +69,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Super Jump', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'Super Jump', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'Super Jump', '-silent');
 			}
@@ -135,33 +135,33 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 1,
 		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
-			let rand = this.random(6);
-			switch(rand) {
-				case 0:
-					this.add(`raw|<img src="https://pbs.twimg.com/media/E5tJ3LOWEAEuOx5.jpg" height="400" width="400">`);
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('man')}|BOO! Did I scare you? I'm a job application 😂😂`);
-					break;
-				case 1:
-					this.add(`raw|<img src="https://i.kym-cdn.com/photos/images/list/002/166/933/8a3.gif" height="400" width="400">`);
-					break;
-				case 2:
-					this.add(`raw|<img src="https://i.pinimg.com/originals/68/12/4c/68124cdddd5615b4c11df6dcdbe1ff7f.gif" height="400" width="400">`);
-					break;
-				case 3:
-					this.add(`raw|<img src="https://www.videomeme.in/wp-content/uploads/2022/12/1669720009775.jpg" height="400" width="400">`);
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ghost, From That Game With The Ghost Guy In It \(I Don\'t Remember What It Was Called\)')}| `);
-					break;	
-				case 4:
-					this.add(`raw|<img src="https://static.wikia.nocookie.net/slenderfortress/images/4/46/Zepheniah_Ghost.png" height="400" width="400">`);
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zepheniah_Ghost.png')}|BOO`);
-					break;	
-				case 5:
-					this.add(`raw|<img src="https://media.discordapp.net/attachments/575738724680204329/909632559036629022/talkinchu.png" height="4540" width="411">`);
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('DuoM2')}|Deez`);
-					break;
-				default:
-					this.add(`raw|<img src="https://steamuserimages-a.akamaihd.net/ugc/950713639436160734/A6DB24F241B8A496DED1033A4A345E05A8336DFA/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" height="400" width="400">`);
-					this.hint("Connection Lost: Auto-disconnect in 24.7 seconds");
+			const rand = this.random(6);
+			switch (rand) {
+			case 0:
+				this.add(`raw|<img src="https://pbs.twimg.com/media/E5tJ3LOWEAEuOx5.jpg" height="400" width="400">`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('man')}|BOO! Did I scare you? I'm a job application 😂😂`);
+				break;
+			case 1:
+				this.add(`raw|<img src="https://i.kym-cdn.com/photos/images/list/002/166/933/8a3.gif" height="400" width="400">`);
+				break;
+			case 2:
+				this.add(`raw|<img src="https://i.pinimg.com/originals/68/12/4c/68124cdddd5615b4c11df6dcdbe1ff7f.gif" height="400" width="400">`);
+				break;
+			case 3:
+				this.add(`raw|<img src="https://www.videomeme.in/wp-content/uploads/2022/12/1669720009775.jpg" height="400" width="400">`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ghost, From That Game With The Ghost Guy In It (I Don\'t Remember What It Was Called)')}| `);
+				break;
+			case 4:
+				this.add(`raw|<img src="https://static.wikia.nocookie.net/slenderfortress/images/4/46/Zepheniah_Ghost.png" height="400" width="400">`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zepheniah_Ghost.png')}|BOO`);
+				break;
+			case 5:
+				this.add(`raw|<img src="https://media.discordapp.net/attachments/575738724680204329/909632559036629022/talkinchu.png" height="4540" width="411">`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('DuoM2')}|Deez`);
+				break;
+			default:
+				this.add(`raw|<img src="https://steamuserimages-a.akamaihd.net/ugc/950713639436160734/A6DB24F241B8A496DED1033A4A345E05A8336DFA/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" height="400" width="400">`);
+				this.hint("Connection Lost: Auto-disconnect in 24.7 seconds");
 			}
 			this.add('cant', pokemon, 'flinch');
 			this.runEvent('Flinch', pokemon);
@@ -173,14 +173,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 1,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Dynamax', '[silent]');
-			if(pokemon.species.id === 'gourgeistgigantic') {
+			if (pokemon.species.id === 'gourgeistgigantic') {
 				this.add('-message', `${pokemon.name} grew so large it exploded!`);
 				this.actions.useMove('Explosion', pokemon, pokemon);
 			}
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax', '[silent]');
-		}
+		},
 	},
 	summon: {
 		// this is a slot condition
@@ -231,7 +231,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-start', target, 'shrunken', '[silent]');
 			this.add('-message', `${target.name} shrunk!`);
 			target.formeChange(target.species.id + 'shrunken');
-			if(target.species.id === 'gourgeisttinyshrunken') {
+			if (target.species.id === 'gourgeisttinyshrunken') {
 				this.add('-message', `${target.name} shrunk so small it disappeared from existence!`);
 				target.faint();
 			}

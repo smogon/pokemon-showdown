@@ -1,5 +1,5 @@
-import {FS} from '../../../lib';
-import {toID} from '../../../sim/dex-data';
+import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex-data';
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: { [userid: string]: string } = {};
@@ -14,8 +14,7 @@ for (const row of usergroupData) {
 export function getName(name: string): string {
 	const userid = toID(name);
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
-
-	let group = usergroups[userid] || ' ';
+	const group = usergroups[userid] || ' ';
 	return group + name;
 }
 
@@ -42,10 +41,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		},
 
 		onResidual(pokemon) {
-			let result : number;
-			//make sure it only rolls once
+			let result: number;
+			// make sure it only rolls once
 			let temp = false;
-			for(const p of this.sides[0].pokemon){
+			for (const p of this.sides[0].pokemon) {
 				if (p.isActive && p === pokemon) temp = true;
 			}
 			if (!temp) return;
@@ -153,99 +152,99 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				"You are GODS! Wait, no no no no no!",
 				"ÜBERCHARGE!",
 			];
-			if(this.turn % 3 !== 0) return;
+			if (this.turn % 3 !== 0) return;
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(spinSet)}`);
-			result = this.random(9);
-			//result = 0;
+			const result = this.random(9);
+			// result = 0;
 			switch (result) {
-				case 0:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bighead)}`);
-					for (const pokemon of this.getAllActive()) {
-						pokemon.removeVolatile('shrunken', pokemon);
-						pokemon.addVolatile('fakedynamax', pokemon);
-					}
-					break;
-				case 1:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(smallhead)}`);
-					for (const pokemon of this.getAllActive()) {
-						pokemon.removeVolatile('fakedynamax', pokemon);
-						pokemon.addVolatile('shrunken', pokemon);
-					}
-					break;
-				case 2:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${superspeed}`);
-					for (const pokemon of this.getAllActive()) {
-						this.boost({spe: 2}, pokemon, pokemon, null, true);
-					}
-					break;
-				case 3:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(dance)}`);
-					for (const pokemon of this.getAllActive()) {
-						this.add('-anim', pokemon, "Teeter Dance", pokemon);
-						this.add('-anim', pokemon, "Revelation Dance", pokemon);
-						this.add('-anim', pokemon, "Quiver Dance", pokemon);
-						this.add('-anim', pokemon, "Victory Dance", pokemon);
-						this.add('-anim', pokemon, "Dragon Dance", pokemon);
-						this.add('-anim', pokemon, "Swords Dance", pokemon);
-						this.add('-anim', pokemon, "Petal Dance", pokemon);
-						this.add('-anim', pokemon, "Lunar Dance", pokemon);
-						this.add('-anim', pokemon, "Feather Dance", pokemon);
-						this.add('-anim', pokemon, "Rain Dance", pokemon);
-					}
-					break;
-				case 4:
-					const temp = this.random(4);
-					//const temp = 3;
-					switch (temp) {
-						case 0:
-							this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bleed)}`);
-							for (const pokemon of this.getAllActive()) {
-								pokemon.trySetStatus('psn', pokemon);
-							}
-							break;
-						case 1:
-							this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(fire)}`);
-							for (const pokemon of this.getAllActive()) {
-								pokemon.trySetStatus('brn', pokemon);
-							}
-							break;
-						case 2:
-							this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(jarate)}`);
-							for (const pokemon of this.getAllActive()) {
-								pokemon.addVolatile('jarate', pokemon);
-								this.hint('Pokemon covered in Jarate take 1.35x damage from opponent\'s attacks.');
-							}
-							break;
-						case 3:
-							this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ghosts)}`);
-							for (const pokemon of this.getAllActive()) {
-								pokemon.addVolatile('jumpscare', pokemon);
-							}
-							break;
-					}
-					break;
-				case 5:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(lowgravity)}`);
-					for (const pokemon of this.getAllActive()) {
-						pokemon.addVolatile('telekinesis', pokemon);
-					}
-					break;
-				case 6:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(superjump)}`);
-					this.field.setWeather('superjump');
-					break;
-				case 7:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(crithit)}`);
-					for (const pokemon of this.getAllActive()) {
-						pokemon.addVolatile('laserfocus', pokemon);
-					}
-					break;
-				default:
-					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ubercharge)}`);
-					for (const pokemon of this.getAllActive()) {
-						pokemon.addVolatile('ubercharge', pokemon);
-					}
-					this.hint('Ubercharged Pokemon take no damage from attacks.');
+			case 0:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bighead)}`);
+				for (const pokemons of this.getAllActive()) {
+					pokemons.removeVolatile('shrunken', pokemons);
+					pokemons.addVolatile('fakedynamax', pokemons);
+				}
+				break;
+			case 1:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(smallhead)}`);
+				for (const pokemons of this.getAllActive()) {
+					pokemons.removeVolatile('fakedynamax', pokemons);
+					pokemons.addVolatile('shrunken', pokemons);
+				}
+				break;
+			case 2:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${superspeed}`);
+				for (const pokemons of this.getAllActive()) {
+					this.boost({ spe: 2 }, pokemons, pokemons, null, true);
+				}
+				break;
+			case 3:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(dance)}`);
+				for (const pokemons of this.getAllActive()) {
+					this.add('-anim', pokemons, "Teeter Dance", pokemons);
+					this.add('-anim', pokemons, "Revelation Dance", pokemons);
+					this.add('-anim', pokemons, "Quiver Dance", pokemons);
+					this.add('-anim', pokemons, "Victory Dance", pokemons);
+					this.add('-anim', pokemons, "Dragon Dance", pokemons);
+					this.add('-anim', pokemons, "Swords Dance", pokemons);
+					this.add('-anim', pokemons, "Petal Dance", pokemons);
+					this.add('-anim', pokemons, "Lunar Dance", pokemons);
+					this.add('-anim', pokemons, "Feather Dance", pokemons);
+					this.add('-anim', pokemons, "Rain Dance", pokemons);
+				}
+				break;
+			case 4:
+				const temps = this.random(4);
+				// const temps = 3;
+				switch (temps) {
+					case 0:
+						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bleed)}`);
+						for (const pokemons of this.getAllActive()) {
+							pokemons.trySetStatus('psn', pokemons);
+						}
+						break;
+					case 1:
+						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(fire)}`);
+						for (const pokemons of this.getAllActive()) {
+							pokemons.trySetStatus('brn', pokemons);
+						}
+						break;
+					case 2:
+						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(jarate)}`);
+						for (const pokemons of this.getAllActive()) {
+							pokemons.addVolatile('jarate', pokemons);
+							this.hint('pokemons covered in Jarate take 1.35x damage from opponent\'s attacks.');
+						}
+						break;
+					case 3:
+						this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ghosts)}`);
+						for (const pokemons of this.getAllActive()) {
+							pokemons.addVolatile('jumpscare', pokemons);
+						}
+						break;
+				}
+				break;
+			case 5:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(lowgravity)}`);
+				for (const pokemons of this.getAllActive()) {
+					pokemons.addVolatile('telekinesis', pokemons);
+				}
+				break;
+			case 6:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(superjump)}`);
+				this.field.setWeather('superjump');
+				break;
+			case 7:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(crithit)}`);
+				for (const pokemons of this.getAllActive()) {
+					pokemons.addVolatile('laserfocus', pokemons);
+				}
+				break;
+			default:
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(ubercharge)}`);
+				for (const pokemons of this.getAllActive()) {
+					pokemons.addVolatile('ubercharge', pokemons);
+				}
+				this.hint('Ubercharged Pokemon take no damage from attacks.');
 			}
 		},
 		onBasePowerPriority: 19,

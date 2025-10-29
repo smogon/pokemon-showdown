@@ -7,7 +7,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return false;
 		},
 		onResidual(pokemon) {
-			if(pokemon.volatiles['spellbookmagazine']) return;
+			if (pokemon.volatiles['spellbookmagazine']) return;
 			const rand = this.random(4);
 			const shadowleap = {
 				move: "Shadow Leap",
@@ -117,8 +117,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const spells = [shadowleap, firebail, blastjump, overheal, batswarm, pumpkinmirv, stealth, monoculus, skeletonhorde, ballolightning, meteorshower, minify];
-			if(rand === 0) {
+			const spells = [
+				shadowleap, firebail, blastjump, overheal, batswarm, pumpkinmirv, stealth,
+				monoculus, skeletonhorde, ballolightning, meteorshower, minify,
+			];
+			if (rand === 0) {
 				const randSpell = this.sample(spells);
 				pokemon.moveSlots.push(randSpell);
 				pokemon.addVolatile("spellbookmagazine");
@@ -129,8 +132,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				if (!pokemon.lastMoveUsed) {
 					return false;
 				}
-				const spells = ['Shadow Leap', 'FirebaIl', 'Blast Jump', 'Overheal', 'Bat Swarm', 'Pumpkin MIRV', 'Stealth', 'MONOCULUS!', 'Skeleton Horde', 'Ball O\' Lightning', 'Meteor Shower', 'Minify'];
-				if(!spells.includes(pokemon.lastMoveUsed.name) || pokemon.lastMoveUsed.pp != 0) return;
+				const spells = [
+					'Shadow Leap', 'FirebaIl', 'Blast Jump', 'Overheal', 'Bat Swarm', 'Pumpkin MIRV', 'Stealth',
+					'MONOCULUS!', 'Skeleton Horde', 'Ball O\' Lightning', 'Meteor Shower', 'Minify'
+				];
+				if (!spells.includes(pokemon.lastMoveUsed.name) || pokemon.lastMoveUsed.pp !== 0) return;
 				pokemon.moveSlots.pop();
 				pokemon.removeVolatile("spellbookmagazine");
 			},

@@ -1,8 +1,8 @@
-import {FS} from '../../../lib';
-import {toID} from '../../../sim/dex-data';
+import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex-data';
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
-const usergroups: {[userid: string]: string} = {};
+const usergroups: { [userid: string]: string } = {};
 const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
 for (const row of usergroupData) {
 	if (!toID(row)) continue;
@@ -53,7 +53,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cursedbody: {
 		onSourceModifyDamage(damage, source, target, move) {
-			if(this.effectState.cursed) return;
+			if (this.effectState.cursed) return;
 			return this.chainModify(0.75);
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -70,12 +70,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When attacked, takes 75% damage and disables the move. Once per switch in.",
 	},
 	dummy: {
-        onStart(pokemon) {
-            this.actions.useMove("substitute", pokemon);
-        },
-        name: "Dummy",
-        shortDesc: "On switchin, this Pokemon uses Substitute.",
-    },
+		onStart(pokemon) {
+			this.actions.useMove("substitute", pokemon);
+		},
+		name: "Dummy",
+		shortDesc: "On switchin, this Pokemon uses Substitute.",
+	},
 	jankster: {
 		onDamagingHit(damage, target, source, move) {
 			this.add('-ability', target, 'Jankster');
@@ -120,42 +120,42 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon heals 1/16 max HP while behind a Substitute.",
 		onStart(pokemon) {
 			const switchin = [
-				'I am here!', 
-				'I have come!', 
-				'Merasmus has risen!', 
-				'Cower fools! Merasmus is here!', 
-				'Run fools! Run from Merasmus!', 
-				'Merasmus the Wizard has come for your souls!', 
-				'(evil laughter)', 
-				'(wicked laughter)', 
-				'(diabolical laughter)', 
-				'Soldier! Never anger a magician!', 
-				'Welcome. To your doom!', 
-				'DOOM! All of you are doomed!', 
-				'Enjoy Halloween mortals, for it will be your last!', 
+				'I am here!',
+				'I have come!',
+				'Merasmus has risen!',
+				'Cower fools! Merasmus is here!',
+				'Run fools! Run from Merasmus!',
+				'Merasmus the Wizard has come for your souls!',
+				'(evil laughter)',
+				'(wicked laughter)',
+				'(diabolical laughter)',
+				'Soldier! Never anger a magician!',
+				'Welcome. To your doom!',
+				'DOOM! All of you are doomed!',
+				'Enjoy Halloween mortals, for it will be your last!',
 				'Merasmus arrives on a tide of blood! *sotto voce* Oh hello, Soldier.',
 			];
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(switchin)}`);
 		},
 		onResidual(pokemon) {
-			if(pokemon.volatiles['substitute']) {
+			if (pokemon.volatiles['substitute']) {
 				const sub = [
-					'Must hide and heal.', 
-					'Must hide and heal.', 
-					'Must hide. Get stronger.', 
-					'Must hide. Must heal.', 
-					'Must hide. Must heal.', 
-					'Merasmus must hide.', 
-					'Merasmus must hide.', 
-					'No strength. Must hide.', 
-					'No! This cannot be the end! Must hide.', 
-					'Fools! I will come back stronger!', 
-					'Fools! Do you not know you deal with the master of hiding!', 
-					'Fools! Feel the terror of my hiding!', 
-					'You cannot kill me fools! For I am great at hiding!', 
-					'The hide-ening! It is here! Okay, need to find a hiding-spot.', 
-					'Time to play hide-and-seek...your doom!', 
-					'Must hide. Get stronger.', 
+					'Must hide and heal.',
+					'Must hide and heal.',
+					'Must hide. Get stronger.',
+					'Must hide. Must heal.',
+					'Must hide. Must heal.',
+					'Merasmus must hide.',
+					'Merasmus must hide.',
+					'No strength. Must hide.',
+					'No! This cannot be the end! Must hide.',
+					'Fools! I will come back stronger!',
+					'Fools! Do you not know you deal with the master of hiding!',
+					'Fools! Feel the terror of my hiding!',
+					'You cannot kill me fools! For I am great at hiding!',
+					'The hide-ening! It is here! Okay, need to find a hiding-spot.',
+					'Time to play hide-and-seek...your doom!',
+					'Must hide. Get stronger.',
 					'You have bested my magic! But can you withstand the dark power...of HIDING!',
 				];
 				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(sub)}`);
@@ -164,35 +164,35 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onSwitchOut(pokemon) {
 			const switchout = [
-				'Goodbye... Forever!', 
-				'Alright, I\'m leaving now.', 
-				'Alright, I\'m leaving now.', 
-				'Goodbye, everyone!', 
-				'Well, that was fun. Off I go!', 
-				'Alright, goodbye everyone!', 
-				'Enough! I leave.', 
-				'A-ha! Too slow! I leave!', 
-				'*Evil laugh* Goodbye, forever!', 
-				'*Evil laugh* Goodbye, forever! *sotto voce* I\'ll see you at home, Soldier.', 
-				'You have amused Merasmus, but now I must attend to other eldritch business. Farewell!', 
-				'*Evil laugh* I bid you, farewell!', 
-				'Farewell! Happy Halloween, everyone!', 
+				'Goodbye... Forever!',
+				'Alright, I\'m leaving now.',
+				'Alright, I\'m leaving now.',
+				'Goodbye, everyone!',
+				'Well, that was fun. Off I go!',
+				'Alright, goodbye everyone!',
+				'Enough! I leave.',
+				'A-ha! Too slow! I leave!',
+				'*Evil laugh* Goodbye, forever!',
+				'*Evil laugh* Goodbye, forever! *sotto voce* I\'ll see you at home, Soldier.',
+				'You have amused Merasmus, but now I must attend to other eldritch business. Farewell!',
+				'*Evil laugh* I bid you, farewell!',
+				'Farewell! Happy Halloween, everyone!',
 				'I leave you... to your doom!',
 			];
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(switchout)}`);
 		},
 		onFaint(pokemon) {
 			const faint = [
-				'Ach, no!', 
+				'Ach, no!',
 				'You win. No, wait, it\'s a tie! Argh...',
-				'Aaah!', 
-				'Aaah!', 
-				'Oooh!', 
+				'Aaah!',
+				'Aaah!',
+				'Oooh!',
 				'Nyyaaagh! I hate you so much, Soldier!',
-				'You haven\'t heard the last of Merasmus the Magician!', 
-				'I die, I diieeee... bye Soldier.', 'I die! Soldier, you were the wooorst roommate!', 
-				'I die! I curse this land, for a hundred years!- No! A thousand! Thousand year-oh, I die!', 
-				'Noooo!', 
+				'You haven\'t heard the last of Merasmus the Magician!',
+				'I die, I diieeee... bye Soldier.', 'I die! Soldier, you were the wooorst roommate!',
+				'I die! I curse this land, for a hundred years!- No! A thousand! Thousand year-oh, I die!',
+				'Noooo!',
 				'Noooo!',
 			];
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(faint)}`);
@@ -203,9 +203,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-activate', target, 'ability: Mutual Exclusion');
 			target.addVolatile('imprison');
 		},
-        name: "Mutual Exclusion",
-        shortDesc: "On switchin, this Pokemon gains Imprison.",
-    },
+		name: "Mutual Exclusion",
+		shortDesc: "On switchin, this Pokemon gains Imprison.",
+		},
 	onderguard: {
 		onDamagingHit(damage, target, source, effect) {
 			if (this.randomChance(1, 2)) this.boost({ def: 1, spd: -1 });
@@ -245,10 +245,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const additionalBannedAbilities = [
 				// Zen Mode included here for compatability with Gen 5-6
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'wanderingspirit',
-				'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode'
+				'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 			];
-			const possibleTargets = pokemon.foes().filter(foeActive => foeActive && !foeActive.getAbility().isPermanent
-				&& !additionalBannedAbilities.includes(foeActive.ability) && foeActive.isAdjacent(pokemon));
+			const possibleTargets = pokemon.foes().filter(foeActive => foeActive && !foeActive.getAbility().isPermanent &&
+				!additionalBannedAbilities.includes(foeActive.ability) && foeActive.isAdjacent(pokemon));
 			if (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
@@ -285,7 +285,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
-				!(move.isZ && move.category !== 'Status') && move.name === 'Explosion' && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				!(move.isZ && move.category !== 'Status') && move.name === 'Explosion' &&
+				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fire';
 				move.typeChangerBoosted = this.effect;
 			}
@@ -339,42 +340,42 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "If this Pokemon is a Rotom, certain moves cause it to change forme.",
 		onBeforeMove(source, target, move) {
 			switch (move.type) {
-				case "Fire":
-					if (source.species.id !== "rotomheat") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom-Heat");
-					}
-					break;
-				case "Water":
-					if (source.species.id !== "rotomwash") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom-Wash");
-					}
-					break;
-				case "Grass":
-					if (source.species.id !== "rotommow") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom-Mow");
-					}
-					break;
-				case "Ice":
-					if (source.species.id !== "rotomfrost") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom-Frost");
-					}
-					break;
-				case "Flying":
-					if (source.species.id !== "rotomfan") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom-Fan");
-					}
-					break;
-				case "Ghost":
-					if (source.species.id !== "rotom") {
-						this.add('-activate', source, 'ability: Shapeshift');
-						source.formeChange("Rotom");
-					}
-					break;
+			case "Fire":
+				if (source.species.id !== "rotomheat") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom-Heat");
+				}
+				break;
+			case "Water":
+				if (source.species.id !== "rotomwash") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom-Wash");
+				}
+				break;
+			case "Grass":
+				if (source.species.id !== "rotommow") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom-Mow");
+				}
+				break;
+			case "Ice":
+				if (source.species.id !== "rotomfrost") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom-Frost");
+				}
+				break;
+			case "Flying":
+				if (source.species.id !== "rotomfan") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom-Fan");
+				}
+				break;
+			case "Ghost":
+				if (source.species.id !== "rotom") {
+					this.add('-activate', source, 'ability: Shapeshift');
+					source.formeChange("Rotom");
+				}
+				break;
 			}
 		},
 	},
@@ -403,18 +404,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon can hit Normal-types with Ghost attacks.",
 	},
 	vamp: {
-        onModifyMove(move) {
+		onModifyMove(move) {
 			if (!move.drain) move.drain = [1, 3];
 		},
-        name: "Vamp",
-        shortDesc: "This Pokemon's attacks heal for 33% of the damage dealt.",
-    },
+		name: "Vamp",
+		shortDesc: "This Pokemon's attacks heal for 33% of the damage dealt.",
+	},
 	wonderguard: {
 		onTryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) != 0) {
+			if (target.runEffectiveness(move) !== 0) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {

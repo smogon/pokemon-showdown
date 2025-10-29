@@ -20,7 +20,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.add('faint', pokemon);
 				if (
 					!(pokemon.species.name === 'Trevenant' && pokemon.ability === 'revive' && !pokemon.zombie &&
-					!pokemon.transformed && this.canSwitch(pokemon.side))
+						!pokemon.transformed && this.canSwitch(pokemon.side))
 				) {
 					pokemon.side.pokemonLeft--;
 				}
