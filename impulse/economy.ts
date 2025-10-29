@@ -61,9 +61,9 @@ export const updateBalance = async (userid: string, amount: number): Promise<Eco
 };
 
 export const transferMoney = async (
-	from: string, 
-	to: string, 
-	amount: number, 
+	from: string,
+	to: string,
+	amount: number,
 	reason?: string
 ): Promise<TransferResult> => {
 	if (amount <= 0) return { success: false, error: 'Amount must be positive' };
@@ -78,17 +78,17 @@ export const transferMoney = async (
 	return { success: true, fromBalance: updatedFrom.balance, toBalance: updatedTo.balance };
 };
 
-export const getTransactionHistory = (userid: string, limit = 50): Promise<Transaction[]> => 
-	userid ? TransactionsDB.find({ $or: [{ from: userid }, { to: userid }] }, { sort: { timestamp: -1 }, limit })
-	       : TransactionsDB.find({}, { sort: { timestamp: -1 }, limit });
+export const getTransactionHistory = (userid: string, limit = 50): Promise<Transaction[]> =>
+	userid ? TransactionsDB.find({ $or: [{ from: userid }, { to: userid }] }, { sort: { timestamp: -1 }, limit }) :
+	TransactionsDB.find({}, { sort: { timestamp: -1 }, limit });
 
-export const formatMoney = (amount: number | undefined | null): string => 
+export const formatMoney = (amount: number | undefined | null): string =>
 	`${CURRENCY.symbol}${(amount ?? 0).toLocaleString()}`;
 
 export const getEconomyStats = async (): Promise<EconomyStats> => {
 	const totalUsers = await EconomyDB.countDocuments({});
 	const [totalMoneyResult] = await EconomyDB.aggregate([
-		{ $group: { _id: null, totalBalance: { $sum: '$balance' } } }
+		{ $group: { _id: null, totalBalance: { $sum: '$balance' } } },
 	]);
 
 	return {
@@ -97,7 +97,7 @@ export const getEconomyStats = async (): Promise<EconomyStats> => {
 	};
 };
 
-export const getLeaderboard = (page = 1, limit = 50): ReturnType<typeof EconomyDB.findPaginated> => 
+export const getLeaderboard = (page = 1, limit = 50): ReturnType<typeof EconomyDB.findPaginated> =>
 	EconomyDB.findPaginated({}, { page, limit, sort: { balance: -1 } });
 
 export const resetUser = async (userid: string): Promise<void> => {
