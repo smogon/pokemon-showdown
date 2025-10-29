@@ -33,6 +33,7 @@ const ALL_PERMISSIONS: ClanPermissions = {
 	canSetMotw: true,
 	canManageChat: true,
 	canEditRanks: true,
+	canAnnounce: true,
 };
 
 const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
@@ -55,6 +56,7 @@ const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
 			canEditDesc: true,
 			canSetMotd: true,
 			canManageChat: true,
+			canAnnounce: true,
 		},
 	},
 	officer: {
@@ -824,6 +826,44 @@ export const commands: Chat.ChatCommands = {
 		const statusText = newInviteOnlyStatus ? 'enabled' : 'disabled';
 		this.sendReply(`You have successfully ${statusText} invite-only mode for ${clan.name}.`);
 	},
+
+		async announce(target, room, user) {
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to announce to your clan.");
+
+	const message = target.trim();
+	if (!message) return this.errorReply("You must specify a message to announce.");
+
+	const actorId = user.id;
+	const actorClanInfo = await UserClans.findOne({ _id: actorId });
+	const clanId = actorClanInfo?.memberOf;
+
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+
+	if (!hasClanPermission(clan, actorId, 'canAnnounce')) {
+		return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to send announcements.`);
+	}
+
+	const memberIds = Object.keys(clan.members);
+
+	let sentTo = 0;
+	for (const memberId of memberIds) {
+		const memberUser = Users.getExact(memberId);
+		if (memberUser?.connected) {
+			memberUser.popup(`|html|<div class="infobox"><b>Clan Announcement</b><br /><hr />${message}<br /><hr /><small>Sent by ${user.name} (${clan.name})</small></div>`);
+			sentTo++;
+		}
+	}
+
+	await logClanActivity(clanId, actorId, 'ANNOUNCE', {
+		note: `Announcement sent to ${sentTo} member(s): "${message}"`,
+	});
+
+	this.sendReply(`Announcement sent to ${sentTo} online member(s) of your clan.`);
+},
 
 	async createrank(target, room, user) {
 		this.checkChat();
