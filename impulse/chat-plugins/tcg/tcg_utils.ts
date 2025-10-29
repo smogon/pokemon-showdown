@@ -3,7 +3,7 @@
  * TCG Utility Functions
  */
 import { ImpulseDB, type ImpulseCollection } from '../../impulse-db';
-import { type TcgCard, type TcgUser, TcgUserProfile } from './interface';
+import type { TcgCard, TcgUser } from './interface';
 import { userCollectionsCollection, userProfilesCollection, tcgCardsCollection } from './tcg_collections';
 
 export const CACHE_SAMPLE_SIZE = 10;
@@ -260,7 +260,7 @@ export async function generatePack(setId: string): Promise<TcgCard[]> {
 	return getCacheStats().isInitialized ? generatePackFromCache(setId) : generatePackFromDB(setId);
 }
 
-async function generatePackFromCache(setId: string): Promise<TcgCard[]> {
+function generatePackFromCache(setId: string): TcgCard[] {
 	const pack: TcgCard[] = [];
 	let excludeIds: string[] = [];
 

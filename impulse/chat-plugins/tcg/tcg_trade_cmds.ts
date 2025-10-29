@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * TCG Trading System
 */
-import { TcgCard, type TcgUser } from './interface';
+import type { TcgUser } from './interface';
 import { getCard, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection } from './tcg_collections';
 
@@ -140,7 +140,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade. Use /tcg trade [user] to start one.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 1) return this.errorReply("Usage: /tcg tradeadd [cardId], [quantity]");
 
@@ -185,7 +185,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const parts = target.split(',').map(p => p.trim());
 		if (parts.length < 1) return this.errorReply("Usage: /tcg traderemove [cardId], [quantity]");
 
@@ -233,7 +233,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade. Use /tcg trade [user] to start one.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const amount = parseInt(target.trim());
 
 		if (isNaN(amount) || amount <= 0) return this.errorReply("Invalid amount. Must be a positive number.");
@@ -332,7 +332,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const isInitiator = trade.initiator === user.id;
 
 		if (isInitiator) {
@@ -558,7 +558,7 @@ export const tradeCommands: ChatCommands = {
 		const existingTrade = getUserTrade(user.id);
 		if (!existingTrade) return this.errorReply("You do not have an active trade.");
 
-		const { trade, key } = existingTrade;
+		const { trade } = existingTrade;
 		const isInitiator = trade.initiator === user.id;
 		const otherUserId = isInitiator ? trade.recipient : trade.initiator;
 		const otherUser = Users.get(otherUserId);
