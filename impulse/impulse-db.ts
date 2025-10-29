@@ -1,40 +1,40 @@
 /**
  * Impulse-DB: MongoDB Integration Layer
  * Local deployment with full feature support
- * 
+ *
  * MongoDB Atlas M0 (Free) Limitations (for reference):
  * - 512 MB storage, 100 max connections (maxPoolSize: 10)
  * - Aggregation timeout: 60s, Sort memory: 100MB (no allowDiskUse)
  * - No collection rename, JavaScript operations (mapReduce, $where)
  * - Cannot access 'local'/'config' databases
- * 
+ *
  * @license MIT
  * @author PrinceSky-Git
  */
 
-import { MongoClient, Db, Collection, Document, Filter, UpdateFilter, OptionalId, FindOptions, UpdateOptions, DeleteOptions, InsertOneOptions, BulkWriteOptions, AggregateOptions, CountDocumentsOptions, CreateIndexesOptions, IndexSpecification, MongoClientOptions, ClientSession, TransactionOptions, CollectionInfo, ListCollectionsOptions, RenameOptions } from 'mongodb';
+import { MongoClient, type Db, type Collection, type Document, type Filter, type UpdateFilter, type OptionalId, type FindOptions, type UpdateOptions, type DeleteOptions, type InsertOneOptions, type BulkWriteOptions, type AggregateOptions, type CountDocumentsOptions, type CreateIndexesOptions, type IndexSpecification, type MongoClientOptions, type ClientSession, type TransactionOptions, type CollectionInfo, type ListCollectionsOptions, type RenameOptions } from 'mongodb';
 
 /**
  * Configuration for ImpulseDB initialization
  */
-interface ImpulseDBConfig { 
-	uri: string; 
-	dbName: string; 
-	options?: MongoClientOptions; 
+interface ImpulseDBConfig {
+	uri: string;
+	dbName: string;
+	options?: MongoClientOptions;
 }
 
 /**
  * Global state management for database connection
  */
-interface GlobalState { 
-	client: MongoClient | null; 
-	db: Db | null; 
-	config: ImpulseDBConfig | null; 
-	isConnecting: boolean; 
-	connectionPromise: Promise<void> | null; 
+interface GlobalState {
+	client: MongoClient | null;
+	db: Db | null;
+	config: ImpulseDBConfig | null;
+	isConnecting: boolean;
+	connectionPromise: Promise<void> | null;
 }
 
-declare const global: { __impulseDBState?: GlobalState; Config?: unknown; };
+declare const global: { __impulseDBState?: GlobalState, Config?: unknown };
 
 if (!global.__impulseDBState) {
 	global.__impulseDBState = { client: null, db: null, config: null, isConnecting: false, connectionPromise: null };
@@ -80,7 +80,7 @@ const ensureConnection = async (): Promise<Db> => {
 		}
 	}
 
-	return state.db!;
+	return state.db;
 };
 
 /**
@@ -490,7 +490,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	 * @param options - Pagination options
 	 * @returns Paginated results
 	 */
-	async findPaginated(filter: Filter<T>, options: { page?: number; limit?: number; sort?: unknown } = {}): Promise<PaginatedResult<T>> {
+	async findPaginated(filter: Filter<T>, options: { page?: number, limit?: number, sort?: unknown } = {}): Promise<PaginatedResult<T>> {
 		const page = options.page || 1;
 		const limit = options.limit || 20;
 		const skip = (page - 1) * limit;
@@ -517,9 +517,9 @@ export class ImpulseCollection<T extends Document = Document> {
 	 * @param update - Update operations or replacement document
 	 * @returns Upsert result
 	 */
-	async upsert(filter: Filter<T>, update: UpdateFilter<T> | T): Promise<ReturnType<Collection<T>['updateOne']> | ReturnType<Collection<T>['replaceOne']>> {
+	async upsert(filter: Filter<T>, update: UpdateFilter<T> | T): Promise<ReturnType<Collection<T>['updateOne']>> {
 		const hasOps = Object.keys(update).some(k => k.startsWith('$'));
-		return hasOps ? 
+		return hasOps ?
 			this.updateOne(filter, update as UpdateFilter<T>, { upsert: true }) :
 			this.replaceOne(filter, update as T, { upsert: true });
 	}
@@ -615,10 +615,10 @@ export class ImpulseCollection<T extends Document = Document> {
 				$near: {
 					$geometry: {
 						type: "Point",
-						coordinates: coords
-					}
-				}
-			}
+						coordinates: coords,
+					},
+				},
+			},
 		};
 		if (maxDistance) query[field].$near.$maxDistance = maxDistance;
 		return this.find(query as Filter<T>, options);
@@ -638,7 +638,7 @@ export class ImpulseCollection<T extends Document = Document> {
 			mapReduce: this.collectionName,
 			map: map.toString(),
 			reduce: reduce.toString(),
-			...options
+			...options,
 		});
 	}
 
@@ -680,7 +680,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	 * Gets capped collection size information
 	 * @returns Size information
 	 */
-	async getCappedSize(): Promise<{ size: number; maxSize: number; count: number; max: number }> {
+	async getCappedSize(): Promise<{ size: number, maxSize: number, count: number, max: number }> {
 		const stats = await this.stats();
 		return { size: stats.size, maxSize: stats.maxSize, count: stats.count, max: stats.max };
 	}
@@ -787,7 +787,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	async clone(newName: string, copyIndexes = true): Promise<CloneResult> {
 		const db = await ensureConnection();
 		const docs = await this.find({});
-		
+
 		if (docs.length) {
 			const newCol = db.collection(newName);
 			await newCol.insertMany(docs);
@@ -813,7 +813,7 @@ export class ImpulseCollection<T extends Document = Document> {
  * @param name - Collection name
  * @returns Collection instance
  */
-const getCollection = <T extends Document = Document>(name: string): ImpulseCollection<T> => 
+const getCollection = <T extends Document = Document>(name: string): ImpulseCollection<T> =>
 	new ImpulseCollection<T>(name);
 
 /**
@@ -831,7 +831,7 @@ export const startSession = async (): Promise<ClientSession> => {
  * @param options - Transaction options
  * @returns Result of callback
  */
-export const withTransaction = async <T,>(
+export const withTransaction = async <T>(
 	callback: (session: ClientSession) => Promise<T>,
 	options?: TransactionOptions
 ): Promise<T> => {
@@ -952,7 +952,7 @@ export const serverStatus = async (): Promise<Document> => {
  * Lists all databases
  * @returns Database list
  */
-export const listDatabases = async (): Promise<{ databases: Array<{ name: string; sizeOnDisk: number; empty: boolean }>; totalSize: number }> => {
+export const listDatabases = async (): Promise<{ databases: { name: string, sizeOnDisk: number, empty: boolean }[], totalSize: number }> => {
 	const db = await ensureConnection();
 	return db.admin().listDatabases();
 };
