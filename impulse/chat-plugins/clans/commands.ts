@@ -2189,13 +2189,11 @@ async transferadmin(target, room, user) {
 	this.sendReply(`Transferred ownership of clan '${clan.name}' to '${newOwnerId}'.`);
 },
 
-// -- Ban management, requires a bannedUsers collection or global array
 async banuser(target, room, user) {
 	this.checkCan('roomowner');
 	const bannedId = toID(target.trim());
 	if (!bannedId) return this.errorReply("Usage: /clan banuser [username]");
-	// You need a bannedUsers collection or array. Example below assumes a MongoDB collection named 'clanbans'
-	await ImpulseDB('clanbans').upsert({ _id: bannedId }, { $set: { banned: true } });
+	await ClanBans.upsert({ _id: bannedId }, { $set: { banned: true } });
 	this.sendReply(`User '${bannedId}' is now banned from joining clans.`);
 },
 
@@ -2203,7 +2201,7 @@ async unbanuser(target, room, user) {
 	this.checkCan('roomowner');
 	const bannedId = toID(target.trim());
 	if (!bannedId) return this.errorReply("Usage: /clan unbanuser [username]");
-	await ImpulseDB('clanbans').deleteOne({ _id: bannedId });
+	await ClanBans.deleteOne({ _id: bannedId });
 	this.sendReply(`User '${bannedId}' is unbanned and may join clans.`);
 },
 
