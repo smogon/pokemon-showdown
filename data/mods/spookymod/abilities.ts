@@ -323,16 +323,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When this Pokemon has 0 HP, it switches out and is revived to 1/2 max HP. Once per battle.",
 		name: "Revive",
 		onBeforeSwitchIn(pokemon) {
-			if (this.effectState.zombie) {
-				this.effectState.zombie = false;
-				this.effectState.switchedIn = undefined;
+			if (pokemon.effectState.zombie) {
+				pokemon.effectState.zombie = false;
+				pokemon.effectState.switchedIn = undefined;
 			}
 		},
 		onFaint(pokemon) {
-			if (pokemon.name === 'Trevenant' && !this.effectState.zombie && this.canSwitch(pokemon.side)) {
+			if (pokemon.name === 'Trevenant' && !pokemon.effectState.zombie && this.canSwitch(pokemon.side)) {
 				if (pokemon.formeChange('Trevenant-Revenant', this.effect, true)) {
 					this.add('-ability', pokemon, 'Revive');
-					this.effectState.zombie = true;
+					pokemon.effectState.zombie = true;
 					pokemon.hp = Math.floor(pokemon.maxhp / 2);
 					pokemon.setAbility('reckless');
 				}

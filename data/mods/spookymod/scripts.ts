@@ -6,7 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.fainted) {
 					pokemon.status = 'fnt' as ID;
 					pokemon.switchFlag = true;
-				} else if (this.effectState.zombie) {
+				} else if (pokemon.effectState.zombie) {
 					pokemon.status = '';
 					pokemon.switchFlag = true;
 				}
@@ -32,7 +32,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				this.add('faint', pokemon);
 				if (
-					!(pokemon.species.name === 'Trevenant' && pokemon.ability === 'revive' && !pokemon.zombie &&
+					!(pokemon.species.name === 'Trevenant' && pokemon.ability === 'revive' && !pokemon.effectState.zombie &&
 						!pokemon.transformed && this.canSwitch(pokemon.side))
 				) {
 					pokemon.side.pokemonLeft--;
@@ -46,7 +46,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.baseAbility = toID(pokemon.set.ability);
 				}
 				pokemon.clearVolatile(false);
-				if (!this.effectState.zombie) {
+				if (!pokemon.effectState.zombie) {
 					pokemon.fainted = true;
 				} else {
 					pokemon.faintQueued = false;

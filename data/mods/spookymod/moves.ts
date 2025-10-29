@@ -308,7 +308,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Fails if the target does not have a status ailment.",
 		shortDesc: "Fails if the target does not have a status ailment.",
 		basePower: 100,
-		basePowerCallback: {},
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower;
+		},
 		flags: { protect: 1, mirror: 1 },
 		onTry(source, target) {
 			return !!target.status;
@@ -320,9 +322,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "User must have used Moonlight last turn. Ignores abilities.",
 		shortDesc: "Must use Moonlight first. Ignores abilities.",
 		onTry(source, target) {
-			return source.lastMove.id === 'moonlight';
-			if (source.lastMove.id !== 'moonlight') {
-				this.add('cant', pokemon, 'Moongeist Beam', 'Moongeist Beam');
+			if (!source.lastMove.id || source.lastMove.id !== 'moonlight') {
+				this.add('cant', source, 'Moongeist Beam', 'Moongeist Beam');
 				return true;
 			}
 		},
@@ -344,7 +345,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		desc: "+Fire effectiveness. 30% to burn.",
 		shortDesc: "+Fire effectiveness. 30% to burn.",
-		basePowerCallback: {},
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower;
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
@@ -543,7 +546,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							'pretended not to notice!',
 						];
 						const noAttackSleep = 'ignored orders and kept sleeping!';
-						this.add('-message', `${pokemon.name} ${(pokemon.status === 'slp' && ['sleeptalk', 'snore'].includes(pokemon.move.id)) ? noAttackSleep : this.sample(noAttack)}`);
+						this.add('-message', `${pokemon.name} ${(pokemon.status === 'slp' && ['sleeptalk', 'snore'].includes(move.id)) ? noAttackSleep : this.sample(noAttack)}`);
 					}
 					return null;
 				}
