@@ -95,6 +95,9 @@ export type ClanLogType =
 	| 'SET_INVITEONLY'
 	| 'RANK_CREATE'
 	| 'RANK_DELETE'
+	| 'ADMIN_POINTS'
+	| 'ADMIN_TOURWIN'
+	| 'ADMIN_EVENTWIN'
 	| 'RANK_EDIT';
 
 export interface ClanLog {
