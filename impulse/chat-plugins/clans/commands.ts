@@ -222,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const now = Date.now();
-			const chatRoomId = `clans-${clanId}` as RoomID;
+			const chatRoomId = toID(`clans-${clanId}`) as RoomID;
 
 			const newClan: ClanDoc = {
 				_id: clanId,
