@@ -989,131 +989,131 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-	async editrank(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to edit ranks.");
+		async editrank(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to edit ranks.");
 
-		const [rankId, permission, value] = target.split(',').map(s => s.trim());
-		const actorId = user.id;
+			const [rankId, permission, value] = target.split(',').map(s => s.trim());
+			const actorId = user.id;
 
-		if (!rankId || !permission || !value) {
-			return this.errorReply("Usage: /claneditrank [rank id], [permission], [true/false]");
-		}
+			if (!rankId || !permission || !value) {
+				return this.errorReply("Usage: /claneditrank [rank id], [permission], [true/false]");
+			}
 
-		const rankIdFormatted = toID(rankId);
-		const permValue = value.toLowerCase() === 'true';
+			const rankIdFormatted = toID(rankId);
+			const permValue = value.toLowerCase() === 'true';
 
-		if (!rankIdFormatted) return this.errorReply("Invalid rank ID.");
-		if (!['true', 'false'].includes(value.toLowerCase())) {
-			return this.errorReply("Permission value must be 'true' or 'false'.");
-		}
+			if (!rankIdFormatted) return this.errorReply("Invalid rank ID.");
+			if (!['true', 'false'].includes(value.toLowerCase())) {
+				return this.errorReply("Permission value must be 'true' or 'false'.");
+			}
 
-		const validPermissions = Object.keys(ALL_PERMISSIONS);
-		if (!validPermissions.includes(permission)) {
-			return this.errorReply(`Invalid permission. Valid permissions: ${validPermissions.join(', ')}`);
-		}
+			const validPermissions = Object.keys(ALL_PERMISSIONS);
+			if (!validPermissions.includes(permission)) {
+				return this.errorReply(`Invalid permission. Valid permissions: ${validPermissions.join(', ')}`);
+			}
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
-			return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit ranks.`);
-		}
+			if (!hasClanPermission(clan, actorId, 'canEditRanks')) {
+				return this.errorReply(`Your rank (${clan.members[actorId]?.rank}) does not have permission to edit ranks.`);
+			}
 
-		if (!clan.ranks[rankIdFormatted]) {
-			return this.errorReply(`Rank '${rankIdFormatted}' does not exist.`);
-		}
+			if (!clan.ranks[rankIdFormatted]) {
+				return this.errorReply(`Rank '${rankIdFormatted}' does not exist.`);
+			}
 
-		if (rankIdFormatted === 'owner') {
-			return this.errorReply("You cannot edit the owner rank permissions.");
-		}
+			if (rankIdFormatted === 'owner') {
+				return this.errorReply("You cannot edit the owner rank permissions.");
+			}
 
-		const rankToEdit = clan.ranks[rankIdFormatted];
-		const actorRank = clan.ranks[clan.members[actorId].rank];
+			const rankToEdit = clan.ranks[rankIdFormatted];
+			const actorRank = clan.ranks[clan.members[actorId].rank];
 
-		if (rankToEdit.permissionLevel >= actorRank.permissionLevel) {
-			return this.errorReply("You cannot edit ranks with permission level equal to or higher than your own.");
-		}
+			if (rankToEdit.permissionLevel >= actorRank.permissionLevel) {
+				return this.errorReply("You cannot edit ranks with permission level equal to or higher than your own.");
+			}
+			
+			const oldValue = rankToEdit.permissions[permission as keyof ClanPermissions] || false;
+
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { [`ranks.${rankIdFormatted}.permissions.${permission}`]: permValue } }
+			);
+
+			await logClanActivity(clanId, actorId, 'RANK_EDIT', {
+				target: rankIdFormatted as ID,
+				oldValue: oldValue,
+				newValue: permValue,
+				note: `Edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.`,
+			});
 		
-		const oldValue = rankToEdit.permissions[permission as keyof ClanPermissions] || false;
+			this.sendReply(`You edited rank '${rankToEdit.name}': ${permission} is now ${permValue}.`);
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { [`ranks.${rankIdFormatted}.permissions.${permission}`]: permValue } }
-		);
+			const clanRoom = Rooms.get(clan.chatRoom);
+			if (clanRoom) {
+				clanRoom.add(`|html|<div class="infobox"><center>${user.name} edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.</center></div>`).update();
+			}
+		},
 
-		await logClanActivity(clanId, actorId, 'RANK_EDIT', {
-			target: rankIdFormatted as ID,
-			oldValue: oldValue,
-			newValue: permValue,
-			note: `Edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.`,
-		});
-		
-		this.sendReply(`You edited rank '${rankToEdit.name}': ${permission} is now ${permValue}.`);
+		async ranks(target, room, user) {
+			this.runBroadcast();
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in to view ranks.");
 
-		const clanRoom = Rooms.get(clan.chatRoom);
-		if (clanRoom) {
-			clanRoom.add(`|html|<div class="infobox"><center>${user.name} edited rank '${rankToEdit.name}': ${permission} set to ${permValue}.</center></div>`).update();
-		}
-	},
+			const actorId = user.id;
 
-	async ranks(target, room, user) {
-		this.runBroadcast();
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to view ranks.");
+			const actorClanInfo = await UserClans.findOne({ _id: actorId });
+			const clanId = actorClanInfo?.memberOf;
 
-		const actorId = user.id;
+			if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+			const sortedRanks = Object.values(clan.ranks).sort((a, b) => b.permissionLevel - a.permissionLevel);
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+			const dataRows: string[][] = [];
+			const headerRow = ['Rank', 'ID', 'Level', 'Permissions'];
+			const title = `${clan.name} Ranks`;
 
-		const sortedRanks = Object.values(clan.ranks).sort((a, b) => b.permissionLevel - a.permissionLevel);
+			sortedRanks.forEach(rank => {
+				const permissions = Object.entries(rank.permissions)
+					.filter(([, value]) => value)
+					.map(([key]) => key)
+					.join(', ') || 'None';
 
-		const dataRows: string[][] = [];
-		const headerRow = ['Rank', 'ID', 'Level', 'Permissions'];
-		const title = `${clan.name} Ranks`;
+				dataRows.push([
+					rank.name,
+					rank.id,
+					rank.permissionLevel.toString(),
+					permissions,
+				]);
+			});
 
-		sortedRanks.forEach(rank => {
-			const permissions = Object.entries(rank.permissions)
-				.filter(([, value]) => value)
-				.map(([key]) => key)
-				.join(', ') || 'None';
+			const output = generateThemedTable(title, headerRow, dataRows);
+			this.sendReply(`|html|${output}`);
+		},
 
-			dataRows.push([
-				rank.name,
-				rank.id,
-				rank.permissionLevel.toString(),
-				permissions,
-			]);
-		});
+		async permissionlist(target, room, user) {
+			this.runBroadcast();
+			this.checkChat();
+			
+			const permissions = Object.keys(ALL_PERMISSIONS);
 
-		const output = generateThemedTable(title, headerRow, dataRows);
-		this.sendReply(`|html|${output}`);
-	},
+			const dataRows: string[][] = permissions.map(perm => [perm]);
+			const headerRow = ['Permission'];
+			const title = 'Available Clan Permissions';
 
-	async permissionlist(target, room, user) {
-		this.runBroadcast();
-		this.checkChat();
-
-		const permissions = Object.keys(ALL_PERMISSIONS);
-
-		const dataRows: string[][] = permissions.map(perm => [perm]);
-		const headerRow = ['Permission'];
-		const title = 'Available Clan Permissions';
-
-		const output = generateThemedTable(title, headerRow, dataRows);
-		this.sendReply(`|html|${output}`);
-	},
+			const output = generateThemedTable(title, headerRow, dataRows);
+			this.sendReply(`|html|${output}`);
+		},
 
 	async promote(target, room, user) {
 		this.checkChat();
