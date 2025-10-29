@@ -476,7 +476,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 		desc: "50% chance to trick, 50% chance to treat.",
 		shortDesc: "50% chance to trick, 50% chance to treat.",
-		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, },
+		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1 },
 		onHit(target, source) {
 			const random = this.random(2);
 			if (random === 0) {
@@ -508,7 +508,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 1,
 		desc: "Fails if target attacks. May cause target to disobey.",
 		shortDesc: "Fails if target attacks. May cause target to disobey.",
-		flags: { protect: 1, reflectable: 1, mirror: 1, },
+		flags: { protect: 1, reflectable: 1, mirror: 1 },
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
@@ -990,7 +990,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1,
-			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Invokum MONOCULUS!`);
@@ -1031,7 +1031,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
-			failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
+			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Mortis Animataris!`);
@@ -1071,7 +1071,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: {
 			protect: 1, bullet: 1, mirror: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
-			failcopycat: 1, failinstruct: 1, failmimic: 1,/* summon: 1, */
+			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Imputum Fulmenus!`);
