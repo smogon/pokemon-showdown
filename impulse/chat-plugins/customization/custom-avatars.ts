@@ -43,11 +43,15 @@ const deleteAllUserAvatarFiles = async (userId: string) => {
 	for (const ext of VALID_EXTENSIONS) {
 		try {
 			await FS(AVATAR_PATH + userId + ext).unlinkIfExists();
-		} catch (err) {}
+		} catch {
+			// Ignore errors when unlinking
+		}
 	}
 };
 
-const downloadImage = async (imageUrl: string, name: string, ext: string): Promise<{ success: boolean; error?: string }> => {
+const downloadImage = async (
+	imageUrl: string, name: string, ext: string
+): Promise<{ success: boolean, error?: string }> => {
 	try {
 		let url: URL;
 		try {
@@ -88,12 +92,14 @@ const downloadImage = async (imageUrl: string, name: string, ext: string): Promi
 		}
 
 		const uint8 = new Uint8Array(buffer);
-		if (!isValidImage(uint8, ext)) return { success: false, error: 'File content does not match extension or is corrupted' };
+		if (!isValidImage(uint8, ext)) {
+			return { success: false, error: 'File content does not match extension or is corrupted' };
+		}
 
 		await FS(AVATAR_PATH).parentDir().mkdirp();
 		await FS(AVATAR_PATH + name + ext).write(Buffer.from(buffer));
 		return { success: true };
-	} catch (err) {
+	} catch {
 		return { success: false, error: 'An unexpected error occurred' };
 	}
 };
@@ -192,9 +198,13 @@ export const commands: Chat.ChatCommands = {
 
 				const staffRoom = Rooms.get(STAFF_ROOM_ID);
 				if (staffRoom) {
-					staffRoom.add(`|html|<div class="infobox"><strong>${nameColor(user.name, true, true)} deleted custom avatar for ${nameColor(userId, true, true)}.</strong></div>`).update();
+					staffRoom.add(
+						`|html|<div class="infobox"><strong>` +
+						`${nameColor(user.name, true, true)} deleted custom avatar for ` +
+						`${nameColor(userId, true, true)}.</strong></div>`
+					).update();
 				}
-			} catch (err) {
+			} catch {
 				return this.errorReply('An error occurred while deleting the avatar.');
 			}
 		},
@@ -226,8 +236,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -237,14 +251,14 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/customavatar set [user], [url]", desc: "Set avatar for a user. Requires: &."},
-				{cmd: "/customavatar delete [user]", desc: "Remove avatar from a user. Requires: &."},
-				{cmd: "/customavatar list [page]", desc: "List all avatars. Requires: &."},
-];
+				{ cmd: "/customavatar set [user], [url]", desc: "Set avatar for a user. Requires: &." },
+				{ cmd: "/customavatar delete [user]", desc: "Remove avatar from a user. Requires: &." },
+				{ cmd: "/customavatar list [page]", desc: "List all avatars. Requires: &." },
+			];
 			const html = `<center><strong>Custom Avatar Commands:</strong><br>Alias: /cc</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul><small>Max 5MB. Formats: JPG, PNG, GIF</small>`;
 			this.sendReplyBox(html);
 		},

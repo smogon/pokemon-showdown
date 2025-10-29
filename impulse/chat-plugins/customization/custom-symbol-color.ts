@@ -42,12 +42,14 @@ const updateSymbolColors = async (): Promise<void> => {
 
 		if (start !== -1 && end !== -1 && start < end) {
 			file.splice(start, (end - start + 1), ...css.split('\n'));
-			await FS('config/custom.css').writeUpdate(() => file.join('\n'));
+			FS('config/custom.css').writeUpdate(() => file.join('\n'));
 		} else {
-			await FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
+			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
 		}
 		Impulse.reloadCSS();
-	} catch (err) {}
+	} catch {
+		// Ignore errors during initialization
+	}
 };
 
 const colorPreview = (color: string): string => `<span style="color: ${color}; font-size: 24px;">■</span>`;
@@ -164,8 +166,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/symbolcolor list ${result.page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/symbolcolor list ${result.page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/symbolcolor list ${result.page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/symbolcolor list ${result.page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -175,15 +181,15 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/symbolcolor set [user], [hex]", desc: "Set symbol color. Requires: &."},
-				{cmd: "/symbolcolor update [user], [hex]", desc: "Update color. Requires: &."},
-				{cmd: "/symbolcolor delete [user]", desc: "Remove color. Requires: &."},
-				{cmd: "/symbolcolor list [page]", desc: "List colors. Requires: &."},
+				{ cmd: "/symbolcolor set [user], [hex]", desc: "Set symbol color. Requires: &." },
+				{ cmd: "/symbolcolor update [user], [hex]", desc: "Update color. Requires: &." },
+				{ cmd: "/symbolcolor delete [user]", desc: "Remove color. Requires: &." },
+				{ cmd: "/symbolcolor list [page]", desc: "List colors. Requires: &." },
 			];
 			const html = `<center><strong>Custom Symbol Color Commands:</strong><br>Alias: /sc</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul><small>Format: #FF5733 or #F73</small>`;
 			this.sendReplyBox(html);
 		},

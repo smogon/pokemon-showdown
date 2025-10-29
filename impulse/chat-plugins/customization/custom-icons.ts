@@ -25,7 +25,7 @@ interface IconDocument {
 const IconsDB = ImpulseDB<IconDocument>('usericons');
 const cacheBuster = () => `?v=${Date.now()}`;
 
-const validateSize = (sizeStr: string | undefined): { valid: boolean; size: number; error?: string } => {
+const validateSize = (sizeStr: string | undefined): { valid: boolean, size: number, error?: string } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
 	const size = parseInt(sizeStr);
 	if (isNaN(size) || size < MIN_SIZE || size > MAX_SIZE) {
@@ -53,15 +53,17 @@ const updateIcons = async () => {
 
 		if (start !== -1 && end !== -1 && start < end) {
 			file.splice(start, (end - start + 1), ...css.split('\n'));
-			await FS('config/custom.css').writeUpdate(() => file.join('\n'));
+			FS('config/custom.css').writeUpdate(() => file.join('\n'));
 		} else {
-			await FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
+			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
 		}
 		Impulse.reloadCSS();
-	} catch (err) {}
+	} catch {
+		// Ignore errors during initialization
+	}
 };
 
-const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) => 
+const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) =>
 	`<img src="${url}${cacheBuster()}" width="32" height="32">`;
 
 const notifyUser = (userId: string, staffName: string, message: string, icon?: string) => {
@@ -165,7 +167,6 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${target} does not have an icon.`);
 			}
 
-			const icon = await IconsDB.findOne({ _id: userId }, { projection: { url: 1, size: 1 } });
 			await IconsDB.deleteOne({ _id: userId });
 			await updateIcons();
 
@@ -196,8 +197,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/icon list ${result.page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/icon list ${result.page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/icon list ${result.page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/icon list ${result.page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -207,15 +212,15 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{cmd: "/icon set [user], [url], [size]", desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.`},
-				{cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &."},
-				{cmd: "/icon delete [user]", desc: "Remove icon. Requires: &."},
-				{cmd: "/icon list [page]", desc: "List icons. Requires: &."},
-      ];
+				{ cmd: "/icon set [user], [url], [size]", desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.` },
+				{ cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &." },
+				{ cmd: "/icon delete [user]", desc: "Remove icon. Requires: &." },
+				{ cmd: "/icon list [page]", desc: "List icons. Requires: &." },
+			];
 			const html = `<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({cmd, desc}, i) =>
+				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-								).join('') +
+				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
