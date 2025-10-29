@@ -41,7 +41,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		},
 
 		onResidual(pokemon) {
-			let result: number;
+			const result: number;
 			// make sure it only rolls once
 			let temp = false;
 			for (const p of this.sides[0].pokemon) {
