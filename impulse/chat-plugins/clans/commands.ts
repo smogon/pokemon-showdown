@@ -144,6 +144,41 @@ function to(date: Date, options: { date?: boolean, time?: boolean } = {}): strin
 	return result;
 }
 
+function toLocaleString(
+	ts: number | string | Date | undefined | null,
+	locale?: string,
+	options?: Intl.DateTimeFormatOptions
+): string {
+	if (ts === undefined || ts === null) return 'Invalid date';
+
+	let dateObj: Date | null = null;
+	if (typeof ts === 'number') {
+		// Assume UNIX epoch ms
+		dateObj = new Date(ts);
+	} else if (typeof ts === 'string') {
+		// Try parsing string as date or number
+		const num = Number(ts);
+		if (!isNaN(num)) {
+			dateObj = new Date(num);
+		} else {
+			const parsed = new Date(ts);
+			dateObj = isNaN(parsed.getTime()) ? null : parsed;
+		}
+	} else if (ts instanceof Date) {
+		dateObj = isNaN(ts.getTime()) ? null : ts;
+	} else {
+		return 'Invalid date';
+	}
+
+	if (!dateObj || isNaN(dateObj.getTime())) return 'Invalid date';
+
+	try {
+		return dateObj.toLocaleString(locale, options);
+	} catch {
+		return dateObj.toString();
+	}
+}
+
 function toDurationString(ms: number): string {
 	const seconds = Math.floor(ms / 1000);
 	const minutes = Math.floor(seconds / 60);
@@ -1837,14 +1872,15 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Owner:</strong> ${ownerName}<br />`;
 			html += `<strong>Members:</strong> ${totalMembers}<br />`;
 			html += `<strong>Level:</strong> ${clan.level}<br />`;
-			html += `<strong>Points:</strong> ${clan.points.toLocaleString()}<br />`;
-			html += `<strong>War Record:</strong> ${clan.stats.warWins}W - ${clan.stats.warLosses}L - ${clan.stats.warDraws}D<br />`;
-			html += `<strong>War Points:</strong> ${clan.stats.warPoints.toLocaleString()}<br />`;
-			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins.toLocaleString()}<br />`;
-			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins.toLocaleString()}<br />`;
+			html += `<strong>Points:</strong> ${toLocaleString(clan.points)}<br />`;
+			html += `<strong>War Record:</strong> ${toLocaleString(clan.stats.warWins)}W - ${toLocaleString(clan.stats.warLosses)}L - ${toLocaleString(clan.stats.warDraws)}D<br />`;
+			html += `<strong>War Points:</strong> ${toLocaleString(clan.stats.warPoints)}<br />`;
+			html += `<strong>Tour Wins:</strong> ${toLocaleString(clan.stats.tourWins)}<br />`;
+			html += `<strong>Event Wins:</strong> ${toLocaleString(clan.stats.eventWins)}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
 			html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
-			html += `<strong>Created:</strong> ${clanAge} ago<br />`;
+			html += `<strong>Created:</strong> ${toLocaleString(clan.created)}<br />`;
+			html += `<strong>Age:</strong> ${clanAge} ago<br />`;
 			html += `</div></div></div>`;
 
 			this.sendReply(`|html|${html}`);
