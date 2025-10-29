@@ -116,7 +116,7 @@ export class ExpSystem {
 		}
 
 		if (newLevel > currentLevel) {
-			await this.notifyLevelUp(id, newLevel, currentLevel);
+			this.notifyLevelUp(id, newLevel, currentLevel);
 		}
 
 		return newExp;
@@ -144,13 +144,13 @@ export class ExpSystem {
 		);
 
 		if (newLevel > currentLevel) {
-			await this.notifyLevelUp(id, newLevel, currentLevel);
+			this.notifyLevelUp(id, newLevel, currentLevel);
 		}
 
 		return newExp;
 	}
 
-	static async notifyLevelUp(userid: string, newLevel: number, oldLevel: number): Promise<void> {
+	static notifyLevelUp(userid: string, newLevel: number, oldLevel: number): void {
 		const user = Users.get(userid);
 		if (!user?.connected) return;
 
@@ -167,13 +167,13 @@ export class ExpSystem {
 			`</div>` +
 			(rewards ? `<div style="margin-top: 10px; color: #27ae60;">${rewards}</div>` : '') +
 			`<div style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">` +
-      `Keep chatting and participating to earn more ${EXP_UNIT}!` +
-      `</div>` +
-      `</div>`
+			`Keep chatting and participating to earn more ${EXP_UNIT}!` +
+			`</div>` +
+			`</div>`
 		);
 	}
 
-	static async checkDoubleExpStatus(room?: Room | null, user?: User): Promise<void> {
+	static checkDoubleExpStatus(room?: Room | null, user?: User): void {
 		if (DOUBLE_EXP && DOUBLE_EXP_END_TIME && Date.now() >= DOUBLE_EXP_END_TIME) {
 			DOUBLE_EXP = false;
 			DOUBLE_EXP_END_TIME = null;
@@ -186,34 +186,27 @@ export class ExpSystem {
 				'No duration specified';
 
 			message =
-        `<div class="broadcast-green">` +
-        `<b>Double EXP has been enabled${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
-        `Duration: ${durationText}<br>` +
-        `All EXP gains will now be doubled.` +
-        `</div>`;
+				`<div class="broadcast-green">` +
+				`<b>Double EXP has been enabled${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
+				`Duration: ${durationText}<br>` +
+				`All EXP gains will now be doubled.` +
+				`</div>`;
 		} else {
 			message =
-        `<div class="broadcast-green">` +
-        `<b>Double EXP has been ${DOUBLE_EXP_END_TIME ? 'ended' : 'disabled'}${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
-        `All EXP gains will now be normal.` +
-        `</div>`;
+				`<div class="broadcast-green">` +
+				`<b>Double EXP has been ${DOUBLE_EXP_END_TIME ? 'ended' : 'disabled'}${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
+				`All EXP gains will now be normal.` +
+				`</div>`;
 		}
 
 		room.add(`|html|${message}`).update();
-
-		if (user) {
-			const status = DOUBLE_EXP ? 'enabled' : 'disabled';
-			const duration = DOUBLE_EXP_END_TIME ?
-				`until ${formatTime(new Date(DOUBLE_EXP_END_TIME))} UTC` :
-				'No duration specified';
-		}
 	}
 
-	static async grantExp(): Promise<void> {
-		Users.users.forEach(async user => {
+	static grantExp(): void {
+		Users.users.forEach(user => {
 			if (!user || !user.named || !user.connected || !user.lastPublicMessage) return;
 			if (Date.now() - user.lastPublicMessage > 300000) return;
-			await this.addExp(user.id, 1);
+			void this.addExp(user.id, 1);
 		});
 	}
 
@@ -284,7 +277,6 @@ export const pages: Chat.PageTable = {
 
 		const data = richest.map(([userid, exp], index) => {
 			const level = ExpSystem.getLevel(exp);
-			const expForNext = ExpSystem.getExpForNextLevel(level + 1);
 			return [
 				(index + 1).toString(),
 				nameColor(userid, true, true),
@@ -327,7 +319,7 @@ export const commands: Chat.ChatCommands = {
 			if (parts.length < 2) return this.sendReply(`Usage: /exp give [user], [amount], [reason]`);
 
 			const targetUser = Users.get(parts[0]);
-			const amount = parseInt(parts[1], 10);
+			const amount = parseInt(parts[1]);
 			const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
 
 			if (!targetUser) {
@@ -364,7 +356,7 @@ export const commands: Chat.ChatCommands = {
 			if (parts.length < 2) return this.sendReply(`Usage: /exp take [user], [amount], [reason]`);
 
 			const targetUser = Users.get(parts[0]);
-			const amount = parseInt(parts[1], 10);
+			const amount = parseInt(parts[1]);
 			const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
 
 			if (!targetUser) {
@@ -440,20 +432,20 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async toggledouble(target, room, user): Promise<void> {
+		toggledouble(target, room, user): void {
 			this.checkCan('roomowner');
 
 			if (!target) {
 				DOUBLE_EXP = !DOUBLE_EXP;
 				DOUBLE_EXP_END_TIME = null;
-				await ExpSystem.checkDoubleExpStatus(room, user);
+				ExpSystem.checkDoubleExpStatus(room, user);
 				return;
 			}
 
 			if (target.toLowerCase() === 'off') {
 				DOUBLE_EXP = false;
 				DOUBLE_EXP_END_TIME = null;
-				await ExpSystem.checkDoubleExpStatus(room, user);
+				ExpSystem.checkDoubleExpStatus(room, user);
 				return;
 			}
 
@@ -469,24 +461,24 @@ export const commands: Chat.ChatCommands = {
 			DOUBLE_EXP = true;
 			DOUBLE_EXP_END_TIME = endTime;
 
-			await ExpSystem.checkDoubleExpStatus(room, user);
-			setTimeout(async () => await ExpSystem.checkDoubleExpStatus(), duration);
+			ExpSystem.checkDoubleExpStatus(room, user);
+			setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 		},
 
-		async ladder(target, room, user): Promise<void> {
+		ladder(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			return this.parse(`/join view-expladder`);
 		},
 
-		async help(target, room, user): Promise<void> {
+		help(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/exp level [user]", desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)" },
-				{ cmd: "/exp give [user], [amount], [reason]", desc: "Give a specified amount of " + EXP_UNIT + " to a user. Requires: &." },
-				{ cmd: "/exp take [user], [amount], [reason]", desc: "Take a specified amount of " + EXP_UNIT + " from a user. Requires: &." },
-				{ cmd: "/exp reset [user], [reason]", desc: "Reset a user's " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: &." },
-				{ cmd: "/exp resetall [reason]", desc: "Reset all users' " + EXP_UNIT + " to " + DEFAULT_EXP + ". Requires: ~." },
-				{ cmd: "/exp ladder", desc: "View the top 100 users with the most " + EXP_UNIT + " and their levels." },
+				{ cmd: "/exp give [user], [amount], [reason]", desc: `Give a specified amount of ${EXP_UNIT} to a user. Requires: &.` },
+				{ cmd: "/exp take [user], [amount], [reason]", desc: `Take a specified amount of ${EXP_UNIT} from a user. Requires: &.` },
+				{ cmd: "/exp reset [user], [reason]", desc: `Reset a user's ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: &.` },
+				{ cmd: "/exp resetall [reason]", desc: `Reset all users' ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: ~.` },
+				{ cmd: "/exp ladder", desc: `View the top 100 users with the most ${EXP_UNIT} and their levels.` },
 				{ cmd: "/exp toggledouble [duration|off]", desc: "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &." },
 			];
 			const html = `<center><strong>EXP System Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +

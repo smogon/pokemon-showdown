@@ -37,7 +37,7 @@ const EmoticonConfigDB = ImpulseDB<EmoticonConfigDocument>('emoticonconfig');
 const IgnoreEmotesDB = ImpulseDB<IgnoreEmotesDocument>('ignoreemotes');
 
 let emoticons: { [key: string]: string } = {};
-let emoteRegex = new RegExp("^$", "g");
+let emoteRegex = /^$/g;
 let emoteSize = 32;
 Impulse.ignoreEmotes = {} as IgnoreEmotesData;
 
@@ -46,28 +46,28 @@ const getEmoteSize = (): string => emoteSize.toString();
 function parseMessage(message: string): string {
 	if (message.substr(0, 5) === "/html") {
 		message = message.substr(5);
-		message = message.replace(/\_\_([^< ](?:[^<]*?[^< ])?)\_\_(?![^<]*?<\/a)/g, '<i>$1</i>');
+		message = message.replace(/__([^< ](?:[^<]*?[^< ])?)__(?![^<]*?<\/a)/g, '<i>$1</i>');
 		message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
-		message = message.replace(/\~\~([^< ](?:[^<]*?[^< ])?)\~\~/g, '<strike>$1</strike>');
+		message = message.replace(/~~([^< ](?:[^<]*?[^< ])?)~~/g, '<strike>$1</strike>');
 		message = message.replace(/&lt;&lt;([a-z0-9-]+)&gt;&gt;/g, '&laquo;<a href="/$1" target="_blank">$1</a>&raquo;');
 		message = Autolinker.link(message.replace(/&#x2f;/g, '/'), { stripPrefix: false, phone: false, twitter: false });
 		return message;
 	}
 	message = Chat.escapeHTML(message).replace(/&#x2f;/g, '/');
-	message = message.replace(/\_\_([^< ](?:[^<]*?[^< ])?)\_\_(?![^<]*?<\/a)/g, '<i>$1</i>');
+	message = message.replace(/__([^< ](?:[^<]*?[^< ])?)__(?![^<]*?<\/a)/g, '<i>$1</i>');
 	message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
-	message = message.replace(/\~\~([^< ](?:[^<]*?[^< ])?)\~\~/g, '<strike>$1</strike>');
+	message = message.replace(/~~([^< ](?:[^<]*?[^< ])?)~~/g, '<strike>$1</strike>');
 	message = message.replace(/&lt;&lt;([a-z0-9-]+)&gt;&gt;/g, '&laquo;<a href="/$1" target="_blank">$1</a>&raquo;');
 	message = Autolinker.link(message, { stripPrefix: false, phone: false, twitter: false });
 	return message;
 }
 Impulse.parseMessage = parseMessage;
 
-const escapeRegExp = (str: string): string => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+const escapeRegExp = (str: string): string => str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
 
 const buildEmoteRegex = (): void => {
 	const emoteArray = Object.keys(emoticons).map(e => escapeRegExp(e));
-	emoteRegex = emoteArray.length > 0 ? new RegExp(`(${emoteArray.join('|')})`, 'g') : new RegExp("^$", "g");
+	emoteRegex = emoteArray.length > 0 ? new RegExp(`(${emoteArray.join('|')})`, 'g') : /^$/g;
 };
 
 const loadEmoticons = async (): Promise<void> => {
@@ -75,7 +75,9 @@ const loadEmoticons = async (): Promise<void> => {
 		const emoticonDocs = await EmoticonDB.find({}, { projection: { _id: 1, url: 1 } });
 		if (emoticonDocs.length > 0) {
 			emoticons = {};
-			emoticonDocs.forEach(doc => emoticons[doc._id] = doc.url);
+			emoticonDocs.forEach(doc => {
+				emoticons[doc._id] = doc.url;
+			});
 		}
 
 		const config = await EmoticonConfigDB.findOne({ _id: 'config' });
@@ -83,17 +85,23 @@ const loadEmoticons = async (): Promise<void> => {
 
 		const ignoreEmotesDocs = await IgnoreEmotesDB.find({ ignored: true }, { projection: { _id: 1 } });
 		Impulse.ignoreEmotes = {};
-		ignoreEmotesDocs.forEach(doc => Impulse.ignoreEmotes[doc._id] = true);
+		ignoreEmotesDocs.forEach(doc => {
+			Impulse.ignoreEmotes[doc._id] = true;
+		});
 
 		buildEmoteRegex();
-	} catch (e) {}
+	} catch {
+		// Silently fail
+	}
 };
 
 const saveEmoteSize = async (size: number): Promise<void> => {
 	try {
 		await EmoticonConfigDB.upsert({ _id: 'config' }, { $set: { emoteSize: size, lastUpdated: new Date() } });
 		emoteSize = size;
-	} catch (e) {}
+	} catch {
+		// Silently fail
+	}
 };
 
 const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
@@ -120,7 +128,7 @@ const parseEmoticons = (message: string, room?: Room): string | false => {
 };
 Impulse.parseEmoticons = parseEmoticons;
 
-loadEmoticons();
+void loadEmoticons();
 
 const renderEmoticonGrid = (emotes: { _id: string, url: string }[]): string[] =>
 	emotes.map(e =>
@@ -165,7 +173,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Emoticon removed.");
 		},
 
-		async toggle(target, room, user): Promise<void> {
+		toggle(target, room, user): void {
 			room = this.requireRoom();
 			this.checkCan('roommod');
 			room.disableEmoticons = !room.disableEmoticons;
@@ -174,7 +182,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(`(${user.name} ${action.toLowerCase()} emoticons.)`);
 		},
 
-		async ''(target, room, user): Promise<void> {
+		''(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			const emoteKeys = Object.keys(emoticons);
 			if (emoteKeys.length === 0) return this.sendReplyBox('No emoticons available.');
@@ -213,7 +221,6 @@ export const commands: Chat.ChatCommands = {
 			const size = parseInt(target);
 			if (isNaN(size) || size < 16 || size > 256) return this.errorReply('Size must be 16-256.');
 
-			const oldSize = emoteSize;
 			await saveEmoteSize(size);
 
 			this.sendReply(`Emoticon size set to ${size}px.`);

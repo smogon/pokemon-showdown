@@ -161,13 +161,13 @@ export const commands: Chat.ChatCommands = {
 	seenhelp(): void { this.parse('/seen help'); },
 
 	clearall: {
-		async ''(target, room, user): Promise<void> {
+		''(target, room, user): void {
 			if (room?.battle) return this.sendReply("Cannot clearall in battle rooms.");
 			if (!room) return this.errorReply("Requires a room.");
 
 			this.checkCan('roommod', null, room);
 
-			const { cleared, failed } = clearRooms([room], user);
+			const { failed } = clearRooms([room], user);
 			if (failed.length) {
 				return this.errorReply(
 					`Cannot clear room "${room.id}" because a tournament is running.`
@@ -175,10 +175,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async global(target, room, user): Promise<void> {
+		global(target, room, user): void {
 			this.checkCan('roomowner');
 			const rooms = Rooms.global.chatRooms.filter((r): r is Room => !!r && !r.battle);
-			const { cleared, failed } = clearRooms(rooms, user);
+			const { failed } = clearRooms(rooms, user);
 			if (failed.length) {
 				this.errorReply(
 					`Cannot clear the following rooms because a tournament is running: ${failed.join(', ')}`
@@ -202,7 +202,7 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	cleantour: {
-		async ''(target, room, user): Promise<void> {
+		''(target, room, user): void {
 			const roomid = toID(target) || room?.roomid;
 			if (!roomid) return this.errorReply("Specify a room.");
 			const targetRoom = Rooms.get(roomid);
@@ -217,7 +217,7 @@ export const commands: Chat.ChatCommands = {
 					}
 					targetRoom.game = null;
 					this.sendReply(`Cleaned up stuck tournament in "${roomid}". Autotour will resume on next interval.`);
-				} catch (err) {
+				} catch {
 					targetRoom.game = null;
 					this.errorReply(`Tournament forcibly removed from "${roomid}".`);
 				}

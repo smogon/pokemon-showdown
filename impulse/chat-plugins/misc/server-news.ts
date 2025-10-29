@@ -68,7 +68,7 @@ class NewsManager {
 	}
 }
 
-export const loginfilter = function (user: User, oldUser: User | null, userType: string): void {
+export const loginfilter = (user: User, oldUser: User | null, userType: string): void => {
 	void NewsManager.onUserConnect(user);
 };
 
@@ -106,7 +106,7 @@ export const commands: Chat.ChatCommands = {
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews update [title], [new desc]");
 
-			const result = await NewsManager.updateNews(title, descParts);
+			const result = await NewsManager.updateNews(title, descParts.join(','));
 			if (result?.includes('not found')) return this.errorReply(result);
 
 			this.sendReply(`Updated: "${title}"`);

@@ -44,14 +44,16 @@ async function getBlockedOntimeUsers(): Promise<string[]> {
 }
 
 export const handlers: Chat.Handlers = {
-	async onDisconnect(user: User): Promise<void> {
+	onDisconnect(user: User): void {
 		const isLastConnection = user.connections.length === 0;
 		if (user.named && isLastConnection && !user.isPublicBot) {
-			if (await isBlockedOntime(user.id)) return;
-			const sessionTime = user.lastDisconnected - user.lastConnected;
-			if (sessionTime > 0) {
-				void OntimeDB.updateOne({ _id: user.id }, { $inc: { ontime: sessionTime } }, { upsert: true });
-			}
+			void (async () => {
+				if (await isBlockedOntime(user.id)) return;
+				const sessionTime = user.lastDisconnected - user.lastConnected;
+				if (sessionTime > 0) {
+					void OntimeDB.updateOne({ _id: user.id }, { $inc: { ontime: sessionTime } }, { upsert: true });
+				}
+			})();
 		}
 	},
 };
