@@ -1141,7 +1141,13 @@ export const commands: Chat.ChatCommands = {
 			{ $set: { [`members.${targetId}.rank`]: newRank as ID } }
 		);
 
-		
+		await logClanActivity(clanId, actorId, 'PROMOTE', {
+				target: targetId,
+				oldValue: oldRank,
+				newValue: newRank,
+				note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
+			});
+
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
 			const roomRanks: { [key: string]: string } = {
@@ -1154,13 +1160,7 @@ export const commands: Chat.ChatCommands = {
 			clanRoom.saveSettings();
 
 			clanRoom.add(`|html|<div class="infobox"><center>${targetId} was promoted from ${targetCurrentRank.name} to ${targetNewRank.name} by ${user.name}.</center></div>`).update();
-			
-			await logClanActivity(clanId, actorId, 'PROMOTE', {
-				target: targetId,
-				oldValue: oldRank,
-				newValue: newRank,
-				note: `Promoted from ${targetCurrentRank.name} to ${targetNewRank.name}.`,
-			});
+		}
 
 		const targetUser = Users.getExact(targetId);
 		if (targetUser?.connected) {
