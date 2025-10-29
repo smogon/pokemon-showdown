@@ -348,8 +348,7 @@ export const commands: Chat.ChatCommands = {
 		
 				await ClanLogs.deleteMany({ clanId: clanId });
 				await ClanPointsLogs.deleteMany({ clanId: clanId });
-				await ClanBankLogs.deleteMany({ clanId: clanId });
-
+		
 				if (ownerUser?.connected) {
 					ownerUser.popup(
 						`|html|<div class="broadcast-red">` +
