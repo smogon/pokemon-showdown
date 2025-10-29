@@ -222,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const now = Date.now();
-			const chatRoomId = toID(`clans-${clanId}`) as RoomID;
+			const chatRoomId = toID(`${clanId}`) as RoomID;
 
 			const newClan: ClanDoc = {
 				_id: clanId,
@@ -313,7 +313,7 @@ export const commands: Chat.ChatCommands = {
 
 			const ownerId = clan.owner;
 			const ownerUser = Users.getExact(ownerId);
-			const chatRoomId = toID(clan.chatRoom);
+			const chatRoomId = (clan.chatRoom);
 			const chatRoom = Rooms.get(chatRoomId);
 
 			try {
