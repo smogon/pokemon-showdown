@@ -57,18 +57,22 @@ export const tradeCommands: ChatCommands = {
 		const targetUser = Users.get(targetUserId);
 		if (!targetUser) return this.errorReply(`User "${target}" is not online.`);
 
-		const profiles = userProfilesCollection;
-		const [userProfile, targetProfile] = await Promise.all([
-			profiles.findOne({ userId: user.id }),
-			profiles.findOne({ userId: targetUserId })
-		]);
+		try {
+			const profiles = userProfilesCollection;
+			const [userProfile, targetProfile] = await Promise.all([
+				profiles.findOne({ userId: user.id }),
+				profiles.findOne({ userId: targetUserId })
+			]);
 
-		if (userProfile?.tradesEnabled === false) {
-			return this.errorReply("You have disabled trades. Use /tcg tradesenable to enable them.");
-		}
+			if (userProfile?.tradesEnabled === false) {
+				return this.errorReply("You have disabled trades. Use /tcg tradesenable to enable them.");
+			}
 
-		if (targetProfile?.tradesEnabled === false) {
-			return this.errorReply(`${targetUser.name} has disabled trades.`);
+			if (targetProfile?.tradesEnabled === false) {
+				return this.errorReply(`${targetUser.name} has disabled trades.`);
+			}
+		} catch (error) {
+			return this.errorReply('An error occurred while checking trade settings.');
 		}
 
 		const existingTrade = getUserTrade(user.id);
