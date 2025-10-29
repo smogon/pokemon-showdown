@@ -5,14 +5,14 @@
 import * as crypto from 'crypto';
 import { FS } from '../lib/fs';
 
-interface RGB { 
-	R: number; 
-	G: number; 
-	B: number; 
+interface RGB {
+	R: number;
+	G: number;
+	B: number;
 }
 
-interface CustomColors { 
-	[userid: string]: string; 
+interface CustomColors {
+	[userid: string]: string;
 }
 
 interface ColorDocument {
@@ -58,7 +58,7 @@ loadCustomColorsFromDB().catch(err => console.error('Failed to init colors:', er
 
 export const getCustomColors = (): CustomColors => customColors;
 
-export const setCustomColors = (colors: CustomColors): void => { 
+export const setCustomColors = (colors: CustomColors): void => {
 	customColors = colors;
 	void saveCustomColorsToDB();
 };
@@ -75,12 +75,7 @@ const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	let R1 = 0, G1 = 0, B1 = 0;
 
 	const hCase = Math.floor(H / 60);
-	if (hCase === 0) { R1 = C; G1 = X; }
-	else if (hCase === 1) { R1 = X; G1 = C; }
-	else if (hCase === 2) { G1 = C; B1 = X; }
-	else if (hCase === 3) { G1 = X; B1 = C; }
-	else if (hCase === 4) { R1 = X; B1 = C; }
-	else if (hCase === 5) { R1 = C; B1 = X; }
+	if (hCase === 0) { R1 = C; G1 = X; } else if (hCase === 1) { R1 = X; G1 = C; } else if (hCase === 2) { G1 = C; B1 = X; } else if (hCase === 3) { G1 = X; B1 = C; } else if (hCase === 4) { R1 = X; B1 = C; } else if (hCase === 5) { R1 = C; B1 = X; }
 
 	return { R: R1 + m, G: G1 + m, B: B1 + m };
 };
@@ -92,11 +87,11 @@ const hashColor = (name: string): string => {
 	if (colorCache[id]) return colorCache[id];
 
 	const hash = crypto.createHash('md5').update(id).digest('hex');
-	let H = parseInt(hash.substr(4, 4), 16) % 360;
+	const H = parseInt(hash.substr(4, 4), 16) % 360;
 	const S = (parseInt(hash.substr(0, 4), 16) % 50) + 40;
 	let L = Math.floor(parseInt(hash.substr(8, 4), 16) % 20 + 30);
 
-	let { R, G, B } = HSLToRGB(H, S, L);
+	const { R, G, B } = HSLToRGB(H, S, L);
 
 	const lum = R * R * R * 0.2126 + G * G * G * 0.7152 + B * B * B * 0.0722;
 	let HLmod = (lum - 0.2) * -150;
@@ -120,7 +115,7 @@ const hashColor = (name: string): string => {
 	return color;
 };
 
-export const validateHexColor = (color: string): boolean => 
+export const validateHexColor = (color: string): boolean =>
 	/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
 export const clearColorCache = (): void => {
@@ -128,15 +123,15 @@ export const clearColorCache = (): void => {
 };
 
 export const nameColor = (
-	name: string, 
-	bold = true, 
-	userGroup = false, 
+	name: string,
+	bold = true,
+	userGroup = false,
 	room: Room | null = null
 ): string => {
 	const userId = toID(name);
-	const symbol = userGroup && Users.globalAuth.get(userId) 
-		? `<font color=#948A88>${Users.globalAuth.get(userId)}</font>` 
-		: '';
+	const symbol = userGroup && Users.globalAuth.get(userId) ?
+		`<font color=#948A88>${Users.globalAuth.get(userId)}</font>` :
+		'';
 	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
 	return symbol + (bold ? '<b>' : '') + `<font color=${hashColor(name)}>${userName}</font>` + (bold ? '</b>' : '');
 };
