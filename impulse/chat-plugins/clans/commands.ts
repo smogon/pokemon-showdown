@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Clans Commands.
+* Clans Commands
 */
 import {
 	Clans,
