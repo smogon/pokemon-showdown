@@ -1671,51 +1671,50 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	async logs(target, room, user) {
-		this.checkChat();
-		if (!user.named) return this.errorReply("You must be logged in to view clan logs.");
+	this.checkChat();
+	if (!user.named) return this.errorReply("You must be logged in to view clan logs.");
 
-		let limit = parseInt(target.trim()) || 50;
-		if (limit < 1 || limit > 100) {
-			return this.errorReply("Limit must be between 1 and 100.");
-		}
+	let limit = parseInt(target.trim()) || 50;
+	if (limit < 1 || limit > 100) {
+		return this.errorReply("Limit must be between 1 and 100.");
+	}
 
-		const actorId = user.id;
-		const actorClanInfo = await UserClans.findOne({ _id: actorId });
-		const clanId = actorClanInfo?.memberOf;
+	const actorId = user.id;
+	const actorClanInfo = await UserClans.findOne({ _id: actorId });
+	const clanId = actorClanInfo?.memberOf;
 
-		if (!clanId) return this.errorReply("You are not currently a member of any clan.");
+	if (!clanId) return this.errorReply("You are not currently a member of any clan.");
 
-		const clan = await Clans.findOne({ _id: clanId });
-		if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
+	const clan = await Clans.findOne({ _id: clanId });
+	if (!clan) return this.errorReply(`Error: Your clan '${clanId}' was not found in the database.`);
 
-		const logs = await ClanLogs.find(
-			{ clanId: clanId },
-			{ limit, sort: { timestamp: -1 } }
-		);
+	const logs = await ClanLogs.find(
+		{ clanId: clanId },
+		{ limit, sort: { timestamp: -1 } }
+	);
 
-		if (logs.length === 0) {
-			return user.popup(`|html|<div class="infobox"><center>No activity logs found for ${clan.name}.</center></div>`);
-		}
-		let html = `<div class="infobox" style="max-width:600px; max-height: 400px;"><center><strong>${clan.name} Activity Logs (Latest ${logs.length})</strong></center><br>`;
-		for (const log of logs) {
-			const date = (typeof log.timestamp === 'number' && !isNaN(log.timestamp))
-				? new Date(log.timestamp).toLocaleString()
-				: "Unknown";
-			const details = log.note ||
-				(log.oldValue !== undefined && log.newValue !== undefined ?
-				 `${log.oldValue} → ${log.newValue}` : '');
-			html += `<div>` +
-				`<strong>Date:</strong> ${date}<br />` +
-				`<strong>Actor:</strong> ${log.actor}<br />` +
-				`<strong>Action:</strong> ${log.action}<br />` -
-				`<strong>Target:</strong> ${log.target || '-'}<br />` +
-				`<strong>Details:</strong> ${details}` +
-				`</div><hr>`;
+	if (logs.length === 0) {
+		return user.popup(`|html|<div class="infobox"><center>No activity logs found for ${clan.name}.</center></div>`);
+	}
+
+	let html = `<div class="infobox" style="max-width:600px; max-height: 400px; overflow-y: auto;"><center><strong>${clan.name} Activity Logs (Latest ${logs.length})</strong></center><br>`;
+	for (const log of logs) {
+		const date = to(new Date(log.timestamp), {date: true, time: true});
+		const details = log.note || 
+			(log.oldValue !== undefined && log.newValue !== undefined ? 
+			 `${log.oldValue} → ${log.newValue}` : '');
+		html += `<div>` +
+			`<strong>Date:</strong> ${date}<br />` +
+			`<strong>Actor:</strong> ${log.actor}<br />` +
+			`<strong>Action:</strong> ${log.action}<br />` +
+			`<strong>Target:</strong> ${log.target || '-'}<br />` +
+			`<strong>Details:</strong> ${details}` +
+			`</div><hr>`;
 	}
 	html += `</div>`;
 	user.popup(`|html|${html}`);
-},
-
+},		
+		
 	async pointslog(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in to view clan points logs.");
