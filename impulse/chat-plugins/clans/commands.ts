@@ -12,16 +12,11 @@ import {
 	ClanBattleLogs,
 	type ClanDoc,
 } from './database';
-import type {
-	Clan,
-	ClanPermissions,
-	CustomClanRank,
-	ClanStats
-} from './interface';
+import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interface';
 import { generateThemedTable } from
 	'../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo,
-		 to, toDurationString } from './utils';
+import { K_FACTOR, getExpectedScore, calculateElo, to,
+		  toDurationString, logClanActivity, hasClanPermission } from './utils';
 import { FS } from '../../../lib';
 import { warCommands } from './war-commands';
 
@@ -91,41 +86,6 @@ export const DEFAULT_STATS: ClanStats = {
 	elo: 1000,
 	lastWarChallenge: 0,
 };
-
-export async function logClanActivity(
-	clanId: ID,
-	actor: ID,
-	action: ClanLogType,
-	options: {
-		target?: ID,
-		oldValue?: string | number | boolean,
-		newValue?: string | number | boolean,
-		note?: string,
-	} = {}
-): Promise<void> {
-	await ClanLogs.insertOne({
-		clanId,
-		timestamp: Date.now(),
-		actor,
-		action,
-		target: options.target,
-		oldValue: options.oldValue,
-		newValue: options.newValue,
-		note: options.note,
-	});
-}
-
-export function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermissions): boolean {
-	if (clan.owner === userId) return true;
-
-	const memberData = clan.members[userId];
-	if (!memberData) return false;
-
-	const rank = clan.ranks[memberData.rank];
-	if (!rank) return false;
-
-	return !!rank.permissions[permission];
-}
 
 export const commands: Chat.ChatCommands = {
 	clan: {
