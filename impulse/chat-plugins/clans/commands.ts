@@ -265,9 +265,9 @@ export const commands: Chat.ChatCommands = {
 						{ winningClan: clanId },
 						{ losingClan: clanId }
 					]
-						
-						// Delete all wars involving this clan
-						await ClanWars.deleteMany({
+				});
+				// Delete all wars involving this clan
+				await ClanWars.deleteMany({
 					clans: clanId
 				});
 
