@@ -9,74 +9,6 @@ import type { ClanBattleLogEntry, Clan } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
-/**
- * Utility function to pause execution for a given number of milliseconds.
- * @param ms - The number of milliseconds to sleep.
- */
-export function sleep(ms: number): Promise<void> {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function handleClanBattleStart(room: GameRoom) {
-    // 1. Initial Validation
-	await sleep(1000);
-    const battle = room.battle;
-    if (!battle || battle.players.length !== 2) return;
-
-    const [p1, p2] = battle.players;
-    if (!p1?.userid || !p2?.userid) return; // Ensure both players are users
-
-    // 2. Get Clan Info
-    const [p1ClanInfo, p2ClanInfo] = await Promise.all([
-        UserClans.findOne({ _id: p1.userid }),
-        UserClans.findOne({ _id: p2.userid }),
-    ]);
-    const p1ClanId = p1ClanInfo?.memberOf;
-    const p2ClanId = p2ClanInfo?.memberOf;
-
-    if (!p1ClanId || !p2ClanId || p1ClanId === p2ClanId) {
-        return; // Not a battle between two different clans
-    }
-
-    // 3. Check for Active War
-    const war = await ClanWars.findOne({
-        clans: { $all: [p1ClanId, p2ClanId] },
-        status: 'active',
-    });
-
-    // Not an active war, or war is paused
-    if (!war || war.paused) {
-        return;
-    }
-
-    // 4. Announce Battle Start
-    try {
-        const [clan1, clan2] = await Promise.all([
-            Clans.findOne({ _id: p1ClanId }),
-            Clans.findOne({ _id: p2ClanId }),
-        ]);
-        if (!clan1 || !clan2) return; // Clan deleted?
-
-        const p1Name = p1.name || p1.userid;
-        const p2Name = p2.name || p2.userid;
-
-        const message = `|html|<div class="broadcast-green"><center><strong>Clan War Battle Started!</strong><br />` +
-                       `${Utils.escapeHTML(p1Name)} (${clan1.name}) vs ${Utils.escapeHTML(p2Name)} (${clan2.name}) in ${battle.format}.</center></div>`;
-
-        const room1 = Rooms.get(clan1.chatRoom);
-        const room2 = Rooms.get(clan2.chatRoom);
-        if (room1) room1.add(message).update();
-        if (room2) room2.add(message).update();
-
-    } catch (e) {
-        Monitor.crashlog(e as Error, "Clan War Battle Start Handler", {
-            battleID: room.roomid,
-            warId: war._id,
-            players: [p1.userid, p2.userid],
-        });
-    }
-}
-
 
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
     // 1. Initial Validation
@@ -258,9 +190,5 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 // Register the handlers
 export const handlers: Chat.Handlers = {
-    // Note: The `user` parameter in onBattleStart refers to the user who triggered the event,
-    // which isn't necessarily one of the players in the battle (e.g., if started by command).
-    // We only need the room object to get the battle details.
-    onBattleStart: (user: User, room: GameRoom) => void handleClanBattleStart(room),
     onBattleEnd: handleClanBattleEnd,
 };
