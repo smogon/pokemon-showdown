@@ -108,9 +108,16 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have challenged ${targetClan.name} to a Best of ${bestOf} Pokémon War!`);
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
-		if (targetRoom) {
+		const myRoom = Rooms.get(myClan.chatRoom);
+		if (targetRoom || myRoom) {
 			const winsNeeded = Math.ceil(bestOf / 2);
-			targetRoom.add(`|html|<div class="broadcast-blue"><center><strong>POKEMON WAR CHALLENGE!</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> has sent a challenge to <strong style="font-size: 1.2em;">${targetClan.name}</strong>!<br /><br /><strong>War Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins!)<br /><strong>Their Clan Rating:</strong> ${Math.floor(myClan.stats.elo || 1000)} ELO<br /><strong>Your Clan Rating:</strong> ${Math.floor(targetClan.stats.elo || 1000)} ELO<br /><br />Will you accept this challenge and battle for glory?<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to decline.</center></div>`).update();
+			const challengeMessage = `|html|<div class="broadcast-blue"><center><strong>POKEMON WAR CHALLENGE!</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> has sent a challenge to <strong style="font-size: 1.2em;">${targetClan.name}</strong>!<br /><br /><strong>War Format:</strong> Best of ${bestOf} (First to ${winsNeeded} 1v1 wins!)<br /><strong>Their Clan Rating:</strong> ${Math.floor(myClan.stats.elo || 1000)} ELO<br /><strong>Your Clan Rating:</strong> ${Math.floor(targetClan.stats.elo || 1000)} ELO<br /><br />Will you accept this challenge and battle for glory?<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to decline.</center></div>`;
+			if (targetRoom) {
+				targetRoom.add(challengeMessage).update();
+			}
+			if (myRoom) {
+				myRoom.add(challengeMessage).update();
+			}
 		}
 	},
 
@@ -182,7 +189,7 @@ export const warCommands: Chat.ChatCommands = {
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 
 		const winsNeeded = Math.ceil(war.bestOf / 2);
-		const battleMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR BEGINS!</strong><br /><strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br /><br /><strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />Stakes: <strong>ELO Glory</strong><br /><br />Send your trainers into battle! Every 1v1 victory counts toward your clan's score.<br /><strong>Current Score:</strong> ${challengerClan.name} 0 - 0 ${targetClan.name}</center></div>`;
+		const battleMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR BEGINS!</strong><br /><strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br /><br /><strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> 1v1 battles wins the war!<br />Stakes: <strong>ELO Glory</strong><br /><br />Send your trainers into battle! Every 1v1 victory counts toward your clan's score.<br /><strong>Current Score:</strong> ${challengerClan.name} 0 - 0 ${targetClan.name}</center></div>`;
 
 		if (challengerRoom) challengerRoom.add(battleMessage).update();
 		if (targetRoom) targetRoom.add(battleMessage).update();
@@ -214,8 +221,13 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have declined the war challenge from ${targetClan?.name || targetClanId}.`);
 
 		const targetRoom = Rooms.get(targetClan?.chatRoom);
+		const myRoom = Rooms.get(myClan.chatRoom);
+		const declineMessage = `|html|<div class="broadcast-red"><center><strong>CHALLENGE DECLINED</strong><br />${myClan.name} has refused your war challenge.<br />Perhaps another time, trainers...</center></div>`;
 		if (targetRoom) {
-			targetRoom.add(`|html|<div class="broadcast-red"><center><strong>CHALLENGE DECLINED</strong><br />${myClan.name} has refused your war challenge.<br />Perhaps another time, trainers...</center></div>`).update();
+			targetRoom.add(declineMessage).update();
+		}
+		if (myRoom) {
+			myRoom.add(declineMessage).update();
 		}
 	},
 
@@ -259,8 +271,13 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have withdrawn your war challenge to ${targetClan.name}.`);
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
+		const myRoom = Rooms.get(myClan.chatRoom);
+		const cancelMessage = `|html|<div class="broadcast-red"><center><strong> CHALLENGE WITHDRAWN </strong><br />${myClan.name} has withdrawn their war challenge.<br />No battles today!</center></div>`;
 		if (targetRoom) {
-			targetRoom.add(`|html|<div class="broadcast-red"><center><strong>⛔ CHALLENGE WITHDRAWN ⛔</strong><br />${myClan.name} has withdrawn their war challenge.<br />No battles today!</center></div>`).update();
+			targetRoom.add(cancelMessage).update();
+		}
+		if (myRoom) {
+			myRoom.add(cancelMessage).update();
 		}
 	},
 
@@ -345,9 +362,16 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have challenged ${targetClan.name} to a rematch (Best of ${bestOf})!`);
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
-		if (targetRoom) {
+		const myRoom = Rooms.get(myClan.chatRoom);
+		if (targetRoom || myRoom) {
 			const winsNeeded = Math.ceil(bestOf / 2);
-			targetRoom.add(`|html|<div class="broadcast-blue"><center><strong>🔥 REMATCH CHALLENGE! 🔥</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> wants to settle the score!<br /><br /><strong>Rematch Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins)<br />Let's see who's truly the stronger clan!<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to back down.</center></div>`).update();
+			const rematchMessage = `|html|<div class="broadcast-blue"><center><strong> REMATCH CHALLENGE! </strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> wants to settle the score!<br /><br /><strong>Rematch Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins)<br />Let's see who's truly the stronger clan!<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to back down.</center></div>`;
+			if (targetRoom) {
+				targetRoom.add(rematchMessage).update();
+			}
+			if (myRoom) {
+				myRoom.add(rematchMessage).update();
+			}
 		}
 	},
 
