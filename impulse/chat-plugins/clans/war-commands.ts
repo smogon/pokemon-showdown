@@ -1646,7 +1646,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{ cmd: "/clan war status [clanid]", desc: "View your clan's active/pending war status. Defaults to your clan." },
-			{ cmd: "/clan war challenge [clanid], [bestof]", desc: "Challenge another clan to a Pokémon 1v1 War." },
+			{ cmd: "/clan war challenge [clanid], [bestof]", desc: "Challenge another clan to a Pokémon War." },
 			{ cmd: "/clan war accept [clanid]", desc: "Accept a pending war challenge." },
 			{ cmd: "/clan war deny [clanid]", desc: "Deny a pending war challenge." },
 			{ cmd: "/clan war cancel [clanid]", desc: "Cancel a pending war challenge you have sent." },
