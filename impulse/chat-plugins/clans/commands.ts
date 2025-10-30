@@ -8,6 +8,7 @@ import {
 	ClanLogs,
 	ClanBans,
 	ClanPointsLogs,
+	ClanWars,
 	type ClanDoc,
 } from './database';
 import type {
@@ -79,6 +80,9 @@ const DEFAULT_STATS: ClanStats = {
 	tourWins: 0,
 	eventWins: 0,
 	totalPointsEarned: 0,
+	clanBattleWins: 0,
+	clanBattleLosses: 0,
+	elo: 1000,
 };
 
 async function logClanActivity(
@@ -177,6 +181,39 @@ function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermiss
 
 	return !!rank.permissions[permission];
 }
+
+// --- ELO Calculation ---
+const K_FACTOR = 32; // Standard ELO K-factor
+
+/**
+ * Calculates the expected score for player A against player B.
+ * @param eloA Player A's ELO
+ * @param eloB Player B's ELO
+ * @returns The probability of player A winning (0 to 1)
+ */
+function getExpectedScore(eloA: number, eloB: number): number {
+	return 1 / (1 + Math.pow(10, (eloB - eloA) / 400));
+}
+
+/**
+ * Calculates the new ELO ratings for a winner and a loser.
+ * @param winnerElo Winner's current ELO
+ * @param loserElo Loser's current ELO
+ * @returns [newWinnerElo, newLoserElo, eloChange]
+ */
+function calculateElo(winnerElo: number, loserElo: number): [number, number, number] {
+	const expectedWinner = getExpectedScore(winnerElo, loserElo);
+
+	// Calculate ELO change
+	// We use Math.max(1, ...) to ensure a minimum of 1 ELO is always gained/lost
+	const eloChange = Math.max(1, Math.round(K_FACTOR * (1 - expectedWinner)));
+
+	const newWinnerElo = winnerElo + eloChange;
+	const newLoserElo = loserElo - eloChange;
+
+	return [newWinnerElo, newLoserElo, eloChange];
+}
+// --- End ELO Calculation ---
 
 export const commands: Chat.ChatCommands = {
 	clan: {
@@ -1624,12 +1661,21 @@ export const commands: Chat.ChatCommands = {
 			this.runBroadcast();
 			this.checkChat();
 
-			const page = parseInt(target) || 1;
+			const [pageStr, sortBy] = target.split(',').map(s => s.trim());
+			const page = parseInt(pageStr) || 1;
 			const limit = 20;
 			const skip = (page - 1) * limit;
 
+			let sortKey: 'elo' | 'points' = 'elo';
+			if (toID(sortBy) === 'points') {
+				sortKey = 'points';
+			}
+
+			const sortField = sortKey === 'elo' ? 'stats.elo' : 'points';
+			const headerName = sortKey === 'elo' ? 'ELO' : 'Points';
+
 			const [clans, total] = await Promise.all([
-				Clans.find({}, { skip, limit, sort: { points: -1 } }),
+				Clans.find({}, { skip, limit, sort: { [sortField]: -1 } }),
 				Clans.countDocuments({}),
 			]);
 
@@ -1639,32 +1685,42 @@ export const commands: Chat.ChatCommands = {
 
 			const totalPages = Math.ceil(total / limit);
 			const dataRows: string[][] = [];
-			const headerRow = ['Clan', 'Tag', 'Owner', 'Members', 'Points'];
-			const title = `All Clans (Page ${page}/${totalPages})`;
+			const headerRow = ['Rank', 'Clan', 'Tag', 'Members', headerName];
+			const title = `All Clans (Page ${page}/${totalPages}) - Sorted by ${headerName}`;
 
-			clans.forEach(clan => {
+			clans.forEach((clan, i) => {
 				const memberCount = Object.keys(clan.members).length;
+				const sortValue = sortKey === 'elo' ?
+					Math.floor(clan.stats.elo || 1000) :
+					clan.points;
+
 				dataRows.push([
+					`<strong>${(skip + i + 1)}</strong>`,
 					clan.name,
 					clan.tag,
-					clan.owner,
 					memberCount.toString(),
-					clan.points.toString(),
+					`<strong>${sortValue}</strong>`,
 				]);
 			});
 
 			let output = generateThemedTable(title, headerRow, dataRows);
 
+			const cmd = `/clan list`;
 			if (page > 1 || page < totalPages) {
 				output += '<center>';
 				if (page > 1) {
-					output += `<button class="button" name="send" value="/clan list ${page - 1}">Previous</button> `;
+					output += `<button class="button" name="send" value="${cmd} ${page - 1}, ${sortKey}">Previous</button> `;
 				}
 				if (page < totalPages) {
-					output += `<button class="button" name="send" value="/clan list ${page + 1}">Next</button>`;
+					output += `<button class="button" name="send" value="${cmd} ${page + 1}, ${sortKey}">Next</button>`;
 				}
 				output += '</center>';
 			}
+			// Add buttons to change sort
+			output += `<br /><center><small>Sort by: ` +
+				`<button class="button" name="send" value="${cmd} 1, elo">ELO</button> ` +
+				`<button class="button" name="send" value="${cmd} 1, points">Points</button>` +
+				`</small></center>`;
 			this.sendReply(`|html|${output}`);
 		},
 
@@ -1829,6 +1885,8 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Members:</strong> ${totalMembers}<br />`;
 			html += `<strong>Level:</strong> ${clan.level}<br />`;
 			html += `<strong>Points:</strong> ${clan.points}<br />`;
+			html += `<strong>Clan ELO:</strong> ${Math.floor(clan.stats.elo || 1000)}<br />`;
+			html += `<strong>War Battles:</strong> ${clan.stats.clanBattleWins || 0} W / ${clan.stats.clanBattleLosses || 0} L<br />`;
 			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins}<br />`;
 			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
@@ -1838,6 +1896,389 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`|html|${html}`);
 		},
+
+		war: {
+			async challenge(target, room, user) {
+				this.checkChat();
+				if (!user.named) return this.errorReply("You must be logged in.");
+
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				const clanId = userClanInfo?.memberOf;
+				if (!clanId) return this.errorReply("You are not in a clan.");
+
+				const myClan = await Clans.findOne({ _id: clanId });
+				if (!myClan) return this.errorReply("Your clan was not found.");
+
+				if (!hasClanPermission(myClan, user.id, 'canAnnounce')) { // 'canAnnounce' as a "can manage wars" perm
+					return this.errorReply("You do not have permission in your clan to challenge other clans.");
+				}
+
+				const [targetClanId, bestOfStr] = target.split(',').map(s => s.trim());
+				const bestOf = parseInt(bestOfStr);
+
+				if (!targetClanId) return this.errorReply("Specify a clan ID to challenge.");
+				if (!bestOf) return this.errorReply("You must specify a 'Best of' number. Usage: /clan war challenge [clanid], [number]");
+				if (bestOf < 1 || bestOf % 2 === 0) { // Must be an odd number
+					return this.errorReply("'Best of' must be an odd number (3, 5, 7, etc.).");
+				}
+				if (bestOf > 101) return this.errorReply("'Best of' cannot be higher than 101.");
+
+				const targetClan = await Clans.findOne({ _id: toID(targetClanId) });
+				if (!targetClan) return this.errorReply(`Clan '${targetClanId}' not found.`);
+				if (toID(targetClanId) === clanId) return this.errorReply("You cannot challenge your own clan.");
+
+				const existingWar = await ClanWars.findOne({
+					clans: { $all: [clanId, toID(targetClanId)] },
+					status: { $in: ['pending', 'active'] },
+				});
+				if (existingWar) {
+					return this.errorReply(`Your clan is already in a pending or active war with ${targetClan.name}.`);
+				}
+
+				const newWar: Omit<ClanWar, '_id'> = {
+					clans: [clanId, toID(targetClanId)],
+					scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
+					status: 'pending',
+					startDate: Date.now(),
+					bestOf: bestOf,
+				};
+				await ClanWars.insertOne(newWar as ClanWarDoc);
+
+				this.sendReply(`You have challenged ${targetClan.name} to a Best of ${bestOf} clan war!`);
+
+				const targetRoom = Rooms.get(targetClan.chatRoom);
+				if (targetRoom) {
+					targetRoom.add(`|html|<div class="infobox">Your clan has been challenged to a <strong>Best of ${bestOf} WAR</strong> by <strong>${myClan.name}</strong>! ` +
+						`A user with permissions can use <strong>/clan war accept ${clanId}</strong> or <strong>/clan war deny ${clanId}</strong>.</div>`).update();
+				}
+			},
+
+			async accept(target, room, user) {
+				this.checkChat();
+				if (!user.named) return this.errorReply("You must be logged in.");
+
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				const clanId = userClanInfo?.memberOf;
+				if (!clanId) return this.errorReply("You are not in a clan.");
+
+				const myClan = await Clans.findOne({ _id: clanId });
+				if (!myClan) return this.errorReply("Your clan was not found.");
+
+				if (!hasClanPermission(myClan, user.id, 'canAnnounce')) {
+					return this.errorReply("You do not have permission in your clan to accept war challenges.");
+				}
+
+				const targetClanId = toID(target);
+				if (!targetClanId) return this.errorReply("Specify a clan ID to accept a challenge from.");
+
+				const war = await ClanWars.findOne({
+					clans: [targetClanId, clanId], // [challenger, target]
+					status: 'pending',
+				});
+
+				if (!war) {
+					return this.errorReply(`You do not have a pending war challenge from '${targetClanId}'.`);
+				}
+
+				await ClanWars.updateOne(
+					{ _id: war._id },
+					{ $set: { status: 'active', startDate: Date.now() } }
+				);
+
+				const [challengerClan, targetClan] = await Promise.all([
+					Clans.findOne({ _id: war.clans[0] }),
+					Clans.findOne({ _id: war.clans[1] }),
+				]);
+
+				if (!challengerClan || !targetClan) return this.errorReply("One of the war clans no longer exists.");
+
+				const challengerRoom = Rooms.get(challengerClan.chatRoom);
+				const targetRoom = Rooms.get(targetClan.chatRoom);
+
+				const message = `|html|<div class="broadcast-green"><strong>WAR!</strong><br />The <strong>Best of ${war.bestOf}</strong> war between <strong>${challengerClan.name}</strong> and <strong>${targetClan.name}</strong> has begun! Battles between members will now be tracked.</div>`;
+
+				if (challengerRoom) challengerRoom.add(message).update();
+				if (targetRoom) targetRoom.add(message).update();
+			},
+
+			async deny(target, room, user) {
+				this.checkChat();
+				if (!user.named) return this.errorReply("You must be logged in.");
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				const clanId = userClanInfo?.memberOf;
+				if (!clanId) return this.errorReply("You are not in a clan.");
+				const myClan = await Clans.findOne({ _id: clanId });
+				if (!myClan) return this.errorReply("Your clan was not found.");
+				if (!hasClanPermission(myClan, user.id, 'canAnnounce')) {
+					return this.errorReply("You do not have permission in your clan to deny war challenges.");
+				}
+				const targetClanId = toID(target);
+				if (!targetClanId) return this.errorReply("Specify a clan ID to deny.");
+
+				const war = await ClanWars.findOne({
+					clans: { $all: [targetClanId, clanId] },
+					status: 'pending',
+				});
+				if (!war) return this.errorReply(`No pending challenge found between your clan and '${targetClanId}'.`);
+
+				await ClanWars.deleteOne({ _id: war._id });
+
+				this.sendReply(`You have denied the war challenge.`);
+			},
+
+			async end(target, room, user) {
+				this.checkChat();
+				if (!user.named) return this.errorReply("You must be logged in.");
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				const clanId = userClanInfo?.memberOf;
+				if (!clanId) return this.errorReply("You are not in a clan.");
+				const myClan = await Clans.findOne({ _id: clanId });
+				if (!myClan) return this.errorReply("Your clan was not found.");
+				if (!hasClanPermission(myClan, user.id, 'canAnnounce')) {
+					return this.errorReply("You do not have permission in your clan to end wars.");
+				}
+				const targetClanId = toID(target);
+				if (!targetClanId) return this.errorReply("Specify a clan ID to end the war with.");
+
+				const war = await ClanWars.findOne({
+					clans: { $all: [targetClanId, clanId] },
+					status: 'active',
+				});
+				if (!war) return this.errorReply(`No active war found with '${targetClanId}'.`);
+
+				await ClanWars.updateOne(
+					{ _id: war._id },
+					{ $set: { status: 'completed', endDate: Date.now() } }
+				);
+
+				const [clan1, clan2] = await Promise.all([
+					Clans.findOne({ _id: war.clans[0] }),
+					Clans.findOne({ _id: war.clans[1] }),
+				]);
+				if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+
+				const score1 = war.scores[clan1._id] || 0;
+				const score2 = war.scores[clan2._id] || 0;
+				let winnerText = `The war has ended in a draw: ${score1} - ${score2}.`;
+				if (score1 > score2) {
+					winnerText = `${clan1.name} has won the war against ${clan2.name}: ${score1} - ${score2}!`;
+				} else if (score2 > score1) {
+					winnerText = `${clan2.name} has won the war against ${clan1.name}: ${score2} - ${score1}!`;
+				}
+
+				const message = `|html|<div class="infobox"><strong>The war has ended!</strong><br />${winnerText}</div>`;
+
+				const room1 = Rooms.get(clan1.chatRoom);
+				const room2 = Rooms.get(clan2.chatRoom);
+				if (room1) room1.add(message).update();
+				if (room2) room2.add(message).update();
+			},
+
+			async forfeit(target, room, user) {
+				this.checkChat();
+				if (!user.named) return this.errorReply("You must be logged in.");
+
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				const loserClanId = userClanInfo?.memberOf; // The clan forfeiting
+				if (!loserClanId) return this.errorReply("You are not in a clan.");
+
+				const loserClan = await Clans.findOne({ _id: loserClanId });
+				if (!loserClan) return this.errorReply("Your clan was not found.");
+
+				if (!hasClanPermission(loserClan, user.id, 'canAnnounce')) {
+					return this.errorReply("You do not have permission in your clan to forfeit wars.");
+				}
+
+				const winnerClanId = toID(target);
+				if (!winnerClanId) return this.errorReply("Specify the opponent clan ID. Usage: /clan war forfeit [clanid]");
+
+				const war = await ClanWars.findOne({
+					clans: { $all: [winnerClanId, loserClanId] },
+					status: 'active',
+				});
+				if (!war) return this.errorReply(`No active war found with '${winnerClanId}'.`);
+
+				const winnerClan = await Clans.findOne({ _id: winnerClanId });
+				if (!winnerClan) return this.errorReply(`Opponent clan '${winnerClanId}' not found.`);
+
+				// --- ELO Calculation ---
+				const winnerOldElo = winnerClan.stats.elo || 1000;
+				const loserOldElo = loserClan.stats.elo || 1000;
+				const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
+
+				// --- Database Updates ---
+				try {
+					await Promise.all([
+						// Update winner's clan: SET new ELO, INC wins
+						Clans.updateOne(
+							{ _id: winnerClanId },
+							{
+								$set: { 'stats.elo': newWinnerElo },
+								$inc: { 'stats.clanBattleWins': 1 },
+							}
+						),
+						// Update loser's clan: SET new ELO, INC losses
+						Clans.updateOne(
+							{ _id: loserClanId },
+							{
+								$set: { 'stats.elo': newLoserElo },
+								$inc: { 'stats.clanBattleLosses': 1 },
+							}
+						),
+						// Update war doc: Set 'completed', end date
+						ClanWars.updateOne(
+							{ _id: war._id },
+							{ $set: { status: 'completed', endDate: Date.now() } }
+						),
+						// Log this action (optional but recommended)
+						logClanActivity(loserClanId, user.id, 'ADMIN_RESETSTATS', { // Using a random admin-level type
+							target: winnerClanId,
+							note: `Forfeited war. ELO changed from ${Math.floor(loserOldElo)} to ${Math.floor(newLoserElo)}.`,
+						}),
+						logClanActivity(winnerClanId, user.id, 'ADMIN_RESETSTATS', {
+							target: loserClanId,
+							note: `${loserClan.name} forfeited war. ELO changed from ${Math.floor(winnerOldElo)} to ${Math.floor(newWinnerElo)}.`,
+						}),
+					]);
+				} catch (e) {
+					this.errorReply("An error occurred while forfeiting the war. Please try again.");
+					Monitor.crashlog(e as Error, "Clan War Forfeit", {
+						warId: war._id,
+						winnerClanId,
+						loserClanId,
+					});
+					return;
+				}
+
+				// --- Announcements ---
+				const winMessage = `|html|<div class="broadcast-green"><strong>WAR WON! (+${eloChange} ELO)</strong><br />` +
+								   `${loserClan.name} has forfeited the war! ` +
+								   `New Clan ELO: ${Math.floor(newWinnerElo)}</div>`;
+
+				const lossMessage = `|html|<div class="broadcast-red"><strong>WAR FORFEITED. (-${eloChange} ELO)</strong><br />` +
+									`Your clan, led by ${user.name}, has forfeited the war against ${winnerClan.name}. ` +
+									`New Clan ELO: ${Math.floor(newLoserElo)}</div>`;
+
+				const winnerRoom = Rooms.get(winnerClan.chatRoom);
+				const loserRoom = Rooms.get(loserClan.chatRoom);
+				if (winnerRoom) winnerRoom.add(winMessage).update();
+				if (loserRoom) loserRoom.add(lossMessage).update();
+			},
+
+			async status(target, room, user) {
+				this.runBroadcast();
+				this.checkChat();
+
+				let clanId: ID;
+				if (target) {
+					clanId = toID(target);
+				} else {
+					const userClanInfo = await UserClans.findOne({ _id: user.id });
+					if (!userClanInfo?.memberOf) {
+						return this.errorReply("You are not in a clan. Specify a clan ID (e.g., /clan war status [clanid]).");
+					}
+					clanId = userClanInfo.memberOf;
+				}
+
+				const clan = await Clans.findOne({ _id: clanId });
+				if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+				const wars = await ClanWars.find(
+					{ clans: clanId, status: { $in: ['pending', 'active'] } },
+					{ limit: 50, sort: { startDate: -1 } }
+				);
+
+				if (!wars.length) {
+					return this.sendReplyBox(`${clan.name} has no pending or active wars.`);
+				}
+
+				const headerRow = ['Opponent', 'Status', 'Score (You - Opponent)', 'Type', 'Started'];
+				const dataRows: string[][] = [];
+				const title = `${clan.name} War Status`;
+
+				for (const war of wars) {
+					const opponentId = war.clans[0] === clanId ? war.clans[1] : war.clans[0];
+					const opponentClan = await Clans.findOne({ _id: opponentId });
+					const myScore = war.scores[clanId] || 0;
+					const opponentScore = war.scores[opponentId] || 0;
+
+					dataRows.push([
+						opponentClan?.name || opponentId,
+						war.status === 'active' ? `<strong style="color:green;">Active</strong>` : `<em style="color:gray;">Pending</em>`,
+						`<strong>${myScore} - ${opponentScore}</strong>`,
+						`Best of ${war.bestOf}`,
+						to(new Date(war.startDate), { date: true }),
+					]);
+				}
+
+				const output = generateThemedTable(title, headerRow, dataRows);
+				this.sendReply(`|html|${output}`);
+			},
+
+			'': 'status',
+		},
+
+		async battlelogs(target, room, user) {
+			this.checkChat();
+			if (!user.named) return this.errorReply("You must be logged in.");
+			this.runBroadcast();
+
+			let clanId: ID;
+			if (target) {
+				clanId = toID(target);
+			} else {
+				const userClanInfo = await UserClans.findOne({ _id: user.id });
+				if (!userClanInfo?.memberOf) {
+					return this.errorReply("You are not in a clan. Specify a clan ID to view its logs (e.g., /clan battlelogs [clanid]).");
+				}
+				clanId = userClanInfo.memberOf;
+			}
+
+			const clan = await Clans.findOne({ _id: clanId });
+			if (!clan) return this.errorReply(`Clan '${clanId}' not found.`);
+
+			const logs = await ClanBattleLogs.find(
+				{ $or: [{ winningClan: clanId }, { losingClan: clanId }] },
+				{ limit: 50, sort: { timestamp: -1 } }
+			);
+
+			if (!logs.length) {
+				return this.sendReplyBox(`No clan battle logs found for ${clan.name}.`);
+			}
+
+			const headerRow = ['Date', 'Outcome', 'ELO Change', 'Winner', 'Loser', 'Format'];
+			const dataRows: string[][] = [];
+			const title = `${clan.name} Battle Logs (Last ${logs.length})`;
+
+			for (const log of logs) {
+				const isWin = log.winningClan === clanId;
+				const eloChange = log.eloChangeWinner || 0;
+				let eloChangeStr = '';
+				if (log.isWarWinningBattle) {
+					if (isWin) {
+						eloChangeStr = `<strong style="color:green;">+${eloChange}</strong>`;
+					} else {
+						eloChangeStr = `<strong style="color:red;">${log.eloChangeLoser || -eloChange}</strong>`;
+					}
+				} else {
+					eloChangeStr = `<em>-</em>`;
+				}
+
+
+				dataRows.push([
+					to(new Date(log.timestamp), { date: true, time: true }),
+					isWin ? `<strong style="color:green;">Win</strong>` : `<strong style="color:red;">Loss</strong>`,
+					eloChangeStr,
+					`${log.winner} (${log.winningClan})`,
+					`${log.loser} (${log.losingClan})`,
+					log.format,
+				]);
+			}
+
+			const output = generateThemedTable(title, headerRow, dataRows);
+			this.sendReply(`|html|${output}`);
+		},
+
 
 		async addpoints(target, room, user) {
 			this.checkCan('roomowner');
@@ -2338,10 +2779,17 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/clan settag [tag]", desc: "Set clan tag." },
 				{ cmd: "/clan setmotw [user]", desc: "Set member of the week." },
 				{ cmd: "/clan seticon [URL]", desc: "Set clan icon." },
-				{ cmd: "/clan list [page]", desc: "View all clans." },
+				{ cmd: "/clan list [page], [sortby]", desc: "View all clans. Sort by elo or points." },
 				{ cmd: "/clan logs [Clan ID], [limit]", desc: "View activity logs." },
 				{ cmd: "/clan pointslog [limit]", desc: "View points logs." },
 				{ cmd: "/clan profile [Clan ID]", desc: "View clan profile." },
+				{ cmd: "/clan war challenge [clanid], [bestof]", desc: "Challenge another clan to a war." },
+				{ cmd: "/clan war accept [clanid]", desc: "Accept a pending war challenge." },
+				{ cmd: "/clan war deny [clanid]", desc: "Deny a pending war challenge." },
+				{ cmd: "/clan war end [clanid]", desc: "End an active war with another clan (no ELO change)." },
+				{ cmd: "/clan war forfeit [clanid]", desc: "Forfeit an active war, granting them the ELO win." },
+				{ cmd: "/clan war status [clanid]", desc: "View your clan's active and pending wars." },
+				{ cmd: "/clan battlelogs [clanid]", desc: "View a clan's recent war battle logs." },
 				{ cmd: "/clan addpoints [amount], [reason]", desc: "Add points to clan. Requires: &." },
 				{ cmd: "/clan removepoints [amount], [reason]", desc: "Remove points from clan. Requires: &." },
 				{ cmd: "/clan addtourwins [amount]", desc: "Add tour wins. Requires: &." },
