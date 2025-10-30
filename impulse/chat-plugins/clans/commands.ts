@@ -1884,14 +1884,13 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Level:</strong> ${clan.level}<br />`;
 			html += `<strong>Points:</strong> ${clan.points}<br />`;
 			html += `<strong>Clan ELO:</strong> ${Math.floor(clan.stats.elo || 1000)}<br />`;
-			html += `<strong>War Battles:</strong> ${clan.stats.clanBattleWins || 0} W / ${clan.stats.clanBattleLosses || 0} L<br />`;
+			html += `<strong>War Battles:</strong> ${clan.stats.clanBattleWins || 0} W / ${clan.stats.clanBattleLosses || 0} L<br />`;			
 			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins}<br />`;
 			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
-			html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
+			//html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
 			html += `<strong>Created:</strong> ${clanAge} ago<br />`;
 			html += `</div></div></div>`;
-
 			this.sendReply(`|html|${html}`);
 		},
 
