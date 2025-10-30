@@ -3,7 +3,7 @@ export type ClanPermission =
 	| 'canInvite' | 'canDeinvite' | 'canKick' |
 	'canPromote' | 'canDemote' | 'canEditDesc' |
 	'canEditIcon' | 'canEditTag' | 'canSetMotw' |
-	'canManageChat' | 'canEditRanks' | 'canAnnounce';
+	'canManageChat' | 'canEditRanks' | 'canAnnounce' | 'canWar';
 
 export interface ClanPermissions {
 	[key in ClanPermission]?: boolean;
@@ -35,6 +35,7 @@ export interface ClanStats {
 	clanBattleWins: number;
 	clanBattleLosses: number;
 	elo: number;
+	lastWarChallenge?: number;
 }
 
 export interface Clan {
@@ -118,6 +119,11 @@ export interface ClanWar {
 	startDate: number;
 	endDate?: number;
 	bestOf: number;
+	tieConfirmations?: ID[];
+	paused?: boolean;
+	pauseConfirmations?: ID[];
+	resumeConfirmations?: ID[];
+	extendConfirmations?: Array<{ clanId: ID; newBestOf: number }>;
 }
 
 export interface ClanBattleLogEntry {
