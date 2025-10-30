@@ -248,17 +248,14 @@ export const commands: Chat.ChatCommands = {
 
 		async delete(target, room, user) {
 			this.checkCan('roomowner');
-
 			const clanId = toID(target);
 			if (!clanId) {
 				return this.errorReply("You must specify a clan ID.");
 			}
-
 			const clan = await Clans.findOne({ _id: clanId });
 			if (!clan) {
 				return this.errorReply(`Clan '${clanId}' not found.`);
 			}
-
 			const ownerId = clan.owner;
 			const ownerUser = Users.getExact(ownerId);
 			const chatRoomId = (clan.chatRoom);
@@ -267,37 +264,52 @@ export const commands: Chat.ChatCommands = {
 			try {
 				if (chatRoom) {
 					chatRoom.add(`|html|<div class="broadcast-red"><b>This clan chatroom is being permanently deleted by ${user.name}.</b></div>`).update();
-
 					await new Promise<void>(resolve => {
 						setTimeout(resolve, 1000);
 					});
-
 					for (const userid in chatRoom.users) {
 						const roomUser = chatRoom.users[userid];
 						roomUser.leaveRoom(chatRoom);
 					}
-
 					Rooms.global.deregisterChatRoom(chatRoom.roomid);
-
 					Rooms.global.delistChatRoom(chatRoom.roomid);
-
 					chatRoom.destroy();
-
 					FS('config/chatrooms.json').writeUpdate(() =>
 						JSON.stringify(Rooms.global.settingsList)
-							.replace(/\{"title":/g, '\n{"title":')
-							.replace(/\]$/, '\n]'));
+						.replace(/\{"title":/g, '\n{"title":')
+						.replace(/\]$/, '\n]'));
 				}
 
+				// Delete clan document
 				await Clans.deleteOne({ _id: clanId });
 
+				// Remove clan membership from all users
 				await UserClans.updateMany(
 					{ memberOf: clanId },
 					{ $unset: { memberOf: 1 } }
 				);
 
+				// Remove invites to this clan from all users
+				await UserClans.updateMany(
+					{ invites: clanId },
+					{ $pull: { invites: clanId } }
+				);
+
+				// Delete all logs for the clan
 				await ClanLogs.deleteMany({ clanId });
 				await ClanPointsLogs.deleteMany({ clanId });
+
+				// Delete all battle logs involving this clan (winner or loser)
+				await ClanBattleLogs.deleteMany({
+					$or: [
+						{ winningClan: clanId },
+						{ losingClan: clanId }
+					]
+						
+						// Delete all wars involving this clan
+						await ClanWars.deleteMany({
+					clans: clanId
+				});
 
 				if (ownerUser?.connected) {
 					ownerUser.popup(
@@ -329,7 +341,6 @@ export const commands: Chat.ChatCommands = {
 					clanName: clan.name,
 					user: user.name,
 				});
-
 				this.privateModAction(`(CRITICAL: Clan deletion failed for ${clanId}. Manual verification required.)`);
 			}
 		},
