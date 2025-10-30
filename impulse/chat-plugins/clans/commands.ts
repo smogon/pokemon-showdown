@@ -182,13 +182,12 @@ function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermiss
 	return !!rank.permissions[permission];
 }
 
-// --- ELO Calculation ---
 const K_FACTOR = 32; // Standard ELO K-factor
 
 /**
  * Calculates the expected score for player A against player B.
- * @param eloA Player A's ELO
- * @param eloB Player B's ELO
+ * @param eloA Clan A's ELO
+ * @param eloB Clan B's ELO
  * @returns The probability of player A winning (0 to 1)
  */
 function getExpectedScore(eloA: number, eloB: number): number {
@@ -213,7 +212,6 @@ function calculateElo(winnerElo: number, loserElo: number): [number, number, num
 
 	return [newWinnerElo, newLoserElo, eloChange];
 }
-// --- End ELO Calculation ---
 
 export const commands: Chat.ChatCommands = {
 	clan: {
