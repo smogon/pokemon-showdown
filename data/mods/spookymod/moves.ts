@@ -953,7 +953,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-\			this.add('-message', `Barpo Invisium!`);
+			this.add('-message', `Barpo Invisium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Force", target);
 		},
