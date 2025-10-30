@@ -205,7 +205,7 @@ export const commands: Chat.ChatCommands = {
 					note: `Clan ${clanName} created for owner ${ownerId}.`,
 				});
 
-				const chatRoomTitle = `[Clan] ${clanName}`;
+				const chatRoomTitle = `${clanName}`;
 				let newRoom = Rooms.get(chatRoomId);
 
 				if (!newRoom) {
