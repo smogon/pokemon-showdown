@@ -6,11 +6,29 @@ import { ImpulseDB, type ImpulseCollection } from '../../impulse-db';
 import type { TcgCard, TcgUser } from './interface';
 import { userCollectionsCollection, userProfilesCollection, tcgCardsCollection } from './tcg_collections';
 
+/**
+ * The number of cards to randomly sample from the cache pool when selecting a weighted card.
+ */
 export const CACHE_SAMPLE_SIZE = 10;
+/**
+ * The number of cards to randomly sample from the database when selecting a weighted card (DB fallback).
+ */
 export const DB_SAMPLE_SIZE = 10;
+/**
+ * The chance (0 to 1) of getting a 'rarest' card in the eighth slot of a pack.
+ */
 export const HIT_CHANCE = 0.9;
+/**
+ * The maximum quantity of a single card a user can hold in their collection.
+ */
 export const MAX_CARD_QUANTITY = 10;
+/**
+ * The number of credits awarded for each duplicate card beyond MAX_CARD_QUANTITY.
+ */
 export const CREDITS_PER_DUPLICATE = 1;
+/**
+ * The fixed size of a generated TCG pack.
+ */
 export const MAX_PACK_SIZE = 8;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
@@ -28,14 +46,28 @@ const setsCache = new Map<string, TcgCard>();
 const packCache = new Map<string, RarityPools>();
 let globalFallbackCache: TcgCard[] = [];
 
+/**
+ * Cache for the current daily shop cards.
+ */
 export let dailyShopCache: TcgCard[] = [];
+/**
+ * Date string for when the shop cache was last set.
+ */
 export let currentShopDate = '';
 
+/**
+ * Updates the daily shop cache and the shop date.
+ * @param cache The array of cards to set as the daily shop.
+ * @param date The date string to associate with the shop.
+ */
 export function setShopCache(cache: TcgCard[], date: string) {
 	dailyShopCache = cache;
 	currentShopDate = date;
 }
 
+/**
+ * Clears the daily shop cache and the shop date.
+ */
 export function clearShopCache() {
 	dailyShopCache = [];
 	currentShopDate = '';
@@ -47,18 +79,26 @@ const CUSTOM_REVERSE_RARE_RARITIES = [
 	'Reverse Holo', 'Rare', 'Double Rare', 'Rare Holo', 'Classic Collection',
 	'Rare Holo 1st Edition', 'Rare SP', 'Rare Holo EX', 'Rare Holo GX', 'Rare Holo V',
 ];
+/**
+ * List of rarity strings considered 'rarest' for pack generation.
+ */
 export const CUSTOM_RAREST_RARITIES = [
 	'Rare Prime', 'LEGEND', 'Rare BREAK', 'Prism Star', 'Rare Holo VMAX',
 	'Rare Holo VSTAR', 'Rare ex', 'Radiant Rare', 'Shining', 'Amazing Rare',
 	'ACE SPEC Rare', 'Rare ACE', 'Full Art', 'Rare Ultra', 'Ultra Rare',
 	'Rare Shiny', 'Shiny Rare', 'Rare Shiny GX', 'Shiny Ultra Rare',
 	'Trainer Gallery', 'Character Rare', 'Illustration Rare', 'Rare Holo LV.X',
-	'Rare Holo Star', 'Star', 'Character Super Rare', 'Rare Secret', 'Secret Rare',
+	'Rare Holo Star', 'Star', 'Character Super Rare', 'Character Super Rare', 'Rare Secret', 'Secret Rare',
 	'Special Illustration Rare', 'Rare Rainbow', 'Rare Gold', 'Hyper Rare',
 	'Gold Full Art', 'Gold Star',
 ];
 const FALLBACK_RARITIES = ['Common'];
 
+/**
+ * Determines the rarity pool name for a given card based on its rarity string.
+ * @param card The TcgCard object.
+ * @returns The name of the rarity pool, or null if it doesn't match any custom pool.
+ */
 function getCardPool(card: TcgCard): RarityPool | null {
 	if (CUSTOM_RAREST_RARITIES.includes(card.rarity)) return 'rarest';
 	if (CUSTOM_REVERSE_RARE_RARITIES.includes(card.rarity)) return 'reverseRare';
@@ -67,6 +107,10 @@ function getCardPool(card: TcgCard): RarityPool | null {
 	return null;
 }
 
+/**
+ * Loads all TCG cards from the database into memory caches for faster pack generation.
+ * @returns An object containing the number of cards and sets cached.
+ */
 export async function initializeCache(): Promise<{ cardCount: number, setCount: number }> {
 	console.log('Starting TCG cache initialization...');
 	clearCache();
@@ -104,6 +148,10 @@ export async function initializeCache(): Promise<{ cardCount: number, setCount: 
 	return { cardCount: cardsCache.size, setCount: setsCache.size };
 }
 
+/**
+ * Clears all TCG in-memory caches.
+ * @returns An object containing statistics on the number of cached items cleared.
+ */
 export function clearCache(): { cardsCleared: number, setsCleared: number } {
 	const stats = { cardsCleared: cardsCache.size, setsCleared: setsCache.size };
 	cardsCache.clear();
@@ -115,6 +163,10 @@ export function clearCache(): { cardsCleared: number, setsCleared: number } {
 	return stats;
 }
 
+/**
+ * Gets the current statistics about the TCG caches.
+ * @returns An object detailing the cache status.
+ */
 export function getCacheStats() {
 	return {
 		cardsCached: cardsCache.size,
@@ -125,14 +177,30 @@ export function getCacheStats() {
 	};
 }
 
+/**
+ * Retrieves a card from the in-memory cache by its ID.
+ * @param cardId The ID of the card.
+ * @returns The TcgCard object, or undefined if not found.
+ */
 export function getCard(cardId: string): TcgCard | undefined {
 	return cardsCache.get(cardId);
 }
 
+/**
+ * Retrieves a representative card for a set from the in-memory cache by its set ID.
+ * @param setId The ID of the set.
+ * @returns A TcgCard object from the set, or undefined if not found.
+ */
 export function getSet(setId: string): TcgCard | undefined {
 	return setsCache.get(setId);
 }
 
+/**
+ * Adds a pack of cards to a user's collection, handling quantity limits and awarding credits for duplicates.
+ * @param user The user object.
+ * @param pack The array of cards to add.
+ * @returns An object containing the total credits awarded for duplicates.
+ */
 export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
 	if (!pack.length) return { creditsAwarded: 0 };
 
@@ -234,15 +302,37 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 	return { creditsAwarded: credits };
 }
 
+/**
+ * Gets the list of cards for a specific rarity pool within a set from the cache.
+ * @param setId The ID of the card set.
+ * @param pool The rarity pool name.
+ * @returns An array of TcgCard objects, or an empty array if the set or pool doesn't exist.
+ */
 function getPool(setId: string, pool: RarityPool): TcgCard[] {
 	return packCache.get(setId)?.[pool] || [];
 }
 
+/**
+ * Retrieves a specified number of random cards from a set's rarity pool cache, excluding specific card IDs.
+ * @param setId The ID of the card set.
+ * @param pool The rarity pool name.
+ * @param size The number of cards to retrieve.
+ * @param excludeIds A list of card IDs to exclude from the results.
+ * @returns An array of TcgCard objects.
+ */
 function getCardsFromPool(setId: string, pool: RarityPool, size: number, excludeIds: string[]): TcgCard[] {
 	const valid = getPool(setId, pool).filter(c => !excludeIds.includes(c.cardId));
 	return [...valid].sort(() => 0.5 - Math.random()).slice(0, size);
 }
 
+/**
+ * Retrieves a single weighted random card from a set's rarity pool cache.
+ * It samples a small group and selects the card with the lowest rarityPoints (highest rarity).
+ * @param setId The ID of the card set.
+ * @param pool The rarity pool name.
+ * @param excludeIds A list of card IDs to exclude.
+ * @returns A single TcgCard object, or null if the pool is empty.
+ */
 function getWeightedCardFromPool(setId: string, pool: RarityPool, excludeIds: string[]): TcgCard | null {
 	const valid = getPool(setId, pool).filter(c => !excludeIds.includes(c.cardId));
 	if (!valid.length) return null;
@@ -251,15 +341,33 @@ function getWeightedCardFromPool(setId: string, pool: RarityPool, excludeIds: st
 	return sampled[0];
 }
 
+/**
+ * Retrieves a specified number of random cards from the global fallback cache.
+ * @param size The number of cards to retrieve.
+ * @param excludeIds A list of card IDs to exclude.
+ * @returns An array of TcgCard objects.
+ */
 function getGlobalFallback(size: number, excludeIds: string[]): TcgCard[] {
 	const valid = globalFallbackCache.filter(c => !excludeIds.includes(c.cardId));
 	return [...valid].sort(() => 0.5 - Math.random()).slice(0, size);
 }
 
+/**
+ * Generates a full TCG pack, prioritizing generation from cache but falling back to the database.
+ * @param setId The ID of the card set to draw the pack from.
+ * @returns A promise that resolves to an array of TcgCard objects representing the pack.
+ * @throws If the cache is uninitialized and the DB query fails, or if a full pack cannot be generated.
+ */
 export async function generatePack(setId: string): Promise<TcgCard[]> {
 	return getCacheStats().isInitialized ? generatePackFromCache(setId) : generatePackFromDB(setId);
 }
 
+/**
+ * Generates a TCG pack using the in-memory caches for fast retrieval.
+ * @param setId The ID of the card set to draw the pack from.
+ * @returns An array of TcgCard objects representing the pack.
+ * @throws If a full pack cannot be generated due to missing cards in the cache pools.
+ */
 function generatePackFromCache(setId: string): TcgCard[] {
 	const pack: TcgCard[] = [];
 	let excludeIds: string[] = [];
@@ -311,6 +419,15 @@ function generatePackFromCache(setId: string): TcgCard[] {
 	}
 }
 
+/**
+ * Retrieves a specified number of random cards from the database using aggregation $sample.
+ * @param collection The TcgCard database collection.
+ * @param setId The ID of the card set (or null for all sets).
+ * @param rarities An array of rarity strings to include.
+ * @param size The number of cards to retrieve.
+ * @param excludeIds A list of card IDs to exclude.
+ * @returns A promise that resolves to an array of TcgCard objects.
+ */
 async function getRandomCardsDB(
 	collection: ImpulseCollection<TcgCard>,
 	setId: string | null,
@@ -323,6 +440,15 @@ async function getRandomCardsDB(
 	return collection.aggregate<TcgCard>([{ $match: match }, { $sample: { size } }]);
 }
 
+/**
+ * Retrieves a single weighted random card from the database.
+ * It samples a small group and selects the card with the lowest rarityPoints (highest rarity).
+ * @param collection The TcgCard database collection.
+ * @param setId The ID of the card set.
+ * @param rarities An array of rarity strings to include.
+ * @param excludeIds A list of card IDs to exclude.
+ * @returns A promise that resolves to a TcgCard object, or null if the query yields no results.
+ */
 async function getWeightedRandomCardDB(
 	collection: ImpulseCollection<TcgCard>,
 	setId: string,
@@ -338,6 +464,12 @@ async function getWeightedRandomCardDB(
 	return sampled[0];
 }
 
+/**
+ * Generates a TCG pack by querying the database directly. Used as a fallback if the cache is uninitialized.
+ * @param setId The ID of the card set to draw the pack from.
+ * @returns A promise that resolves to an array of TcgCard objects representing the pack.
+ * @throws If a full pack cannot be generated due to insufficient unique cards in the database.
+ */
 async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 	const pack: TcgCard[] = [];
 	let excludeIds: string[] = [];
@@ -388,12 +520,20 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
 		return pack;
-	} catch {
+	} catch (error) {
 		console.error(`Error generating pack from DB for set ${setId}:`, error);
 		throw new Error(`Failed to generate pack for set ${setId}. Set may not have enough cards.`);
 	}
 }
 
+/**
+ * Renders an array of TCG cards as an HTML grid for display in a chat room infobox.
+ * @param cards The array of TcgCard objects to display.
+ * @param title An optional title for the infobox.
+ * @param subtitle An optional subtitle for the infobox.
+ * @param options Rendering options (currently unused).
+ * @returns The HTML string for the card grid.
+ */
 export function renderCardGridHtml(cards: TcgCard[], title?: string, subtitle?: string, options?: { showOpenedPackHeader?: boolean }): string {
 	let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 	if (title) html += `<strong style="font-size: 20px;">${title}</strong><br />`;
