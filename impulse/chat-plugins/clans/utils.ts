@@ -1,3 +1,47 @@
+import { ClanLogs } from './database';
+import type { Clan, ClanPermissions, ClanLogType } from './interface';
+
+/**
+ * Logs clan-related activity to the ClanLogs collection.
+ */
+export async function logClanActivity(
+	clanId: ID,
+	actor: ID,
+	action: ClanLogType,
+	options: {
+		target?: ID,
+		oldValue?: string | number | boolean,
+		newValue?: string | number | boolean,
+		note?: string,
+	} = {}
+): Promise<void> {
+	await ClanLogs.insertOne({
+		clanId,
+		timestamp: Date.now(),
+		actor,
+		action,
+		target: options.target,
+		oldValue: options.oldValue,
+		newValue: options.newValue,
+		note: options.note,
+	});
+}
+
+/**
+ * Determines if a user has a specific permission in a clan.
+ */
+export function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermissions): boolean {
+	if (clan.owner === userId) return true;
+
+	const memberData = clan.members[userId];
+	if (!memberData) return false;
+
+	const rank = clan.ranks[memberData.rank];
+	if (!rank) return false;
+
+	return !!rank.permissions[permission];
+}
+
 export function to(date: Date, options: { date?: boolean, time?: boolean } = {}): string {
 	if (!(date instanceof Date) || isNaN(date.getTime())) {
 		return '';
