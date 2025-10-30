@@ -453,9 +453,9 @@ export const warCommands: Chat.ChatCommands = {
 		}
 
 		// --- Announcements ---
-		const winMessage = `|html|<div class="broadcast-green"><center><strong>🏆 VICTORY! 🏆</strong><br /><strong>${loserClan.name}</strong> has conceded the war!<br /><strong>${winnerClan.name}</strong> claims victory without further battle.<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have proven their strength!</center></div>`;
+		const winMessage = `|html|<div class="broadcast-green"><center><strong>VICTORY!</strong><br /><strong>${loserClan.name}</strong> has conceded the war!<br /><strong>${winnerClan.name}</strong> claims victory without further battle.<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have proven their strength!</center></div>`;
 
-		const lossMessage = `|html|<div class="broadcast-red"><center><strong>💔 DEFEAT 💔</strong><br />Your clan has forfeited the war against <strong>${winnerClan.name}</strong>.<br /><strong>Clan ELO: -${eloChange}</strong> (${Math.floor(loserOldElo)} → ${Math.floor(newLoserElo)})<br />Regroup and prepare for the next battle!</center></div>`;
+		const lossMessage = `|html|<div class="broadcast-red"><center><strong>DEFEAT</strong><br />Your clan has forfeited the war against <strong>${winnerClan.name}</strong>.<br /><strong>Clan ELO: -${eloChange}</strong> (${Math.floor(loserOldElo)} → ${Math.floor(newLoserElo)})<br />Regroup and prepare for the next battle!</center></div>`;
 
 		const winnerRoom = Rooms.get(winnerClan.chatRoom);
 		const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -521,7 +521,7 @@ export const warCommands: Chat.ChatCommands = {
 
 			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
-			const message = `|html|<div class="broadcast-blue"><center><strong>⚖️ STALEMATE ⚖️</strong><br />The war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has ended in a draw!<br /><strong>Final Score:</strong> ${score1} - ${score2}<br />Both clans fought with honor. A worthy match!</center></div>`;
+			const message = `|html|<div class="broadcast-blue"><center><strong>STALEMATE</strong><br />The war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has ended in a draw!<br /><strong>Final Score:</strong> ${score1} - ${score2}<br />Both clans fought with honor. A worthy match!</center></div>`;
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
@@ -534,7 +534,7 @@ export const warCommands: Chat.ChatCommands = {
 
 			const opponentRoom = Rooms.get(opponentClan.chatRoom);
 			if (opponentRoom) {
-				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>🤝 TIE PROPOSAL 🤝</strong><br /><strong>${myClan.name}</strong> proposes to end the war as a draw!<br />Current score is even—both clans have fought hard.<br /><br />Use <strong>/clan war tie ${clanId}</strong> to accept and conclude the war.</center></div>`).update();
+				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>TIE PROPOSAL</strong><br /><strong>${myClan.name}</strong> proposes to end the war as a draw!<br />Current score is even—both clans have fought hard.<br /><br />Use <strong>/clan war tie ${clanId}</strong> to accept and conclude the war.</center></div>`).update();
 			}
 		}
 	},
@@ -603,7 +603,7 @@ export const warCommands: Chat.ChatCommands = {
 			);
 
 			const winsNeeded = Math.ceil(newBestOf / 2);
-			const message = `|html|<div class="broadcast-blue"><center><strong>📈 WAR EXTENDED! 📈</strong><br />Both clans have agreed to extend the war!<br /><strong>New Format:</strong> Best of ${newBestOf} (First to ${winsNeeded} wins)<br />The battle for supremacy continues!</center></div>`;
+			const message = `|html|<div class="broadcast-blue"><center><strong>WAR EXTENDED!</strong><br />Both clans have agreed to extend the war!<br /><strong>New Format:</strong> Best of ${newBestOf} (First to ${winsNeeded} wins)<br />The battle for supremacy continues!</center></div>`;
 
 			const room1 = Rooms.get(myClan.chatRoom);
 			const room2 = Rooms.get(opponentClan.chatRoom);
@@ -617,7 +617,7 @@ export const warCommands: Chat.ChatCommands = {
 			const opponentRoom = Rooms.get(opponentClan.chatRoom);
 			if (opponentRoom) {
 				const newWinsNeeded = Math.ceil(newBestOf / 2);
-				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>🔄 EXTENSION PROPOSAL 🔄</strong><br /><strong>${myClan.name}</strong> wants to extend the war!<br /><strong>New Format:</strong> Best of ${newBestOf} (First to ${newWinsNeeded} wins)<br /><br />Use <strong>/clan war extend ${clanId}, ${newBestOf}</strong> to accept this proposal.</center></div>`).update();
+				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>EXTENSION PROPOSAL</strong><br /><strong>${myClan.name}</strong> wants to extend the war!<br /><strong>New Format:</strong> Best of ${newBestOf} (First to ${newWinsNeeded} wins)<br /><br />Use <strong>/clan war extend ${clanId}, ${newBestOf}</strong> to accept this proposal.</center></div>`).update();
 			}
 		}
 	},
@@ -675,7 +675,7 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: true }, $unset: { pauseConfirmations: 1 } }
 			);
 
-			const message = `|html|<div class="infobox"><center><strong>⏸️ WAR PAUSED ⏸️</strong><br />Both clans have agreed to pause the war temporarily.<br />Your trainers take a well-deserved rest.<br />Return when ready to resume!</center></div>`;
+			const message = `|html|<div class="infobox"><center><strong>WAR PAUSED</strong><br />Both clans have agreed to pause the war temporarily.<br />Your trainers take a well-deserved rest.<br />Return when ready to resume!</center></div>`;
 
 			const room1 = Rooms.get(myClan.chatRoom);
 			const room2 = Rooms.get(opponentClan.chatRoom);
@@ -688,7 +688,7 @@ export const warCommands: Chat.ChatCommands = {
 
 			const opponentRoom = Rooms.get(opponentClan.chatRoom);
 			if (opponentRoom) {
-				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>⏸️ PAUSE PROPOSAL ⏸️</strong><br /><strong>${myClan.name}</strong> requests a temporary pause on battles.<br />Use <strong>/clan war pause ${clanId}</strong> to accept.</center></div>`).update();
+				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>PAUSE PROPOSAL</strong><br /><strong>${myClan.name}</strong> requests a temporary pause on battles.<br />Use <strong>/clan war pause ${clanId}</strong> to accept.</center></div>`).update();
 			}
 		}
 	},
@@ -746,7 +746,7 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: false }, $unset: { resumeConfirmations: 1 } }
 			);
 
-			const message = `|html|<div class="broadcast-green"><center><strong>▶️ WAR RESUMED ▶️</strong><br />Both clans are ready! The battles commence once more!<br />Your trainers return to the field with renewed determination!</center></div>`;
+			const message = `|html|<div class="broadcast-green"><center><strong>WAR RESUMED</strong><br />Both clans are ready! The battles commence once more!<br />Your trainers return to the field with renewed determination!</center></div>`;
 
 			const room1 = Rooms.get(myClan.chatRoom);
 			const room2 = Rooms.get(opponentClan.chatRoom);
@@ -759,7 +759,7 @@ export const warCommands: Chat.ChatCommands = {
 
 			const opponentRoom = Rooms.get(opponentClan.chatRoom);
 			if (opponentRoom) {
-				opponentRoom.add(`|html|<div class="broadcast-green"><center><strong>▶️ RESUME PROPOSAL ▶️</strong><br /><strong>${myClan.name}</strong> is ready to resume battles!<br />Use <strong>/clan war resume ${clanId}</strong> to get back in the arena!</center></div>`).update();
+				opponentRoom.add(`|html|<div class="broadcast-green"><center><strong>RESUME PROPOSAL</strong><br /><strong>${myClan.name}</strong> is ready to resume battles!<br />Use <strong>/clan war resume ${clanId}</strong> to get back in the arena!</center></div>`).update();
 			}
 		}
 	},
@@ -804,7 +804,7 @@ export const warCommands: Chat.ChatCommands = {
 
 			dataRows.push([
 				opponentClan?.name || opponentId,
-				war.status === 'active' ? `<strong style="color:green;">🔥 Active</strong>` : `<em style="color:gray;">⏳ Pending</em>`,
+				war.status === 'active' ? `<strong style="color:green;">Active</strong>` : `<em style="color:gray;">Pending</em>`,
 				`<strong>${myScore} - ${opponentScore}</strong>`,
 				`Best of ${war.bestOf}`,
 				to(new Date(war.startDate), { date: true }),
@@ -886,7 +886,7 @@ export const warCommands: Chat.ChatCommands = {
 
 		const dataRows: string[][] = [];
 		const headerRow = ['Rank', 'Clan', 'ELO Rating', 'Battle Wins', 'Battle Losses', 'Win %'];
-		const title = `🏆 Pokémon Clan War Ladder (Page ${page}/${totalPages}) - Sorted by ${headerName}`;
+		const title = `Pokémon Clan War Ladder (Page ${page}/${totalPages}) - Sorted by ${headerName}`;
 
 		paginatedClans.forEach((clan, i) => {
 			const wins = clan.stats.clanBattleWins || 0;
@@ -914,7 +914,7 @@ export const warCommands: Chat.ChatCommands = {
 				output += `<button class="button" name="send" value="${cmd} ${page - 1}, ${sortType || 'elo'}">◀️ Previous</button> `;
 			}
 			if (page < totalPages) {
-				output += `<button class="button" name="send" value="${cmd} ${page + 1}, ${sortType || 'elo'}">Next ▶️</button>`;
+				output += `<button class="button" name="send" value="${cmd} ${page + 1}, ${sortType || 'elo'}">Next</button>`;
 			}
 			output += '</center>';
 		}
@@ -1001,7 +1001,7 @@ export const warCommands: Chat.ChatCommands = {
 		html += `Battle Win Rate: <strong style="color: green;">${winrate}%</strong><br>`;
 		html += `Best Win Streak: <strong>${longestWinStreak}</strong> consecutive victories<br><hr>`;
 
-		html += `<strong>🏆 War Record:</strong><br>`;
+		html += `<strong>War Record:</strong><br>`;
 		html += `Total Wars: <strong>${totalWars}</strong> (${warsWon}W - ${warsLost}L - ${warsTied}D)<br>`;
 		html += `War Win Rate: <strong style="color: green;">${warWinrate}%</strong><br>`;
 		html += `Active/Pending Wars: <strong>${activePendingWars.length}</strong><br>`;
@@ -1057,7 +1057,7 @@ export const warCommands: Chat.ChatCommands = {
 				result = '❌ LOSS';
 				resultColor = 'red';
 			} else {
-				result = '⚖️ TIE';
+				result = 'TIE';
 				resultColor = 'gray';
 			}
 
@@ -1118,7 +1118,7 @@ export const warCommands: Chat.ChatCommands = {
 			else ties++;
 		}
 
-		let html = `<div class="infobox" style="max-width:550px;"><center><strong style="font-size: 1.2em;">🔥 Head-to-Head Rivalry 🔥</strong></center><hr>`;
+		let html = `<div class="infobox" style="max-width:550px;"><center><strong style="font-size: 1.2em;">Head-to-Head Rivalry</strong></center><hr>`;
 		html += `<center><strong style="font-size: 1.15em;">${clan1.name} vs ${clan2.name}</strong></center><br>`;
 		html += `<strong>Wars Won:</strong> ${clan1.name} ${clan1Wins}W - ${clan2Wins}W ${clan2.name}<br>`;
 		html += `<strong>Battles Won:</strong> ${clan1.name} ${clan1BattleWins} - ${clan2BattleWins} ${clan2.name}<br>`;
@@ -1168,7 +1168,7 @@ export const warCommands: Chat.ChatCommands = {
 
 		const headerRow = ['Rank', 'Top Trainer', 'War Victories'];
 		const dataRows: string[][] = [];
-		const title = `🏆 ${clan.name} War MVPs - Top Trainers`;
+		const title = `${clan.name} War MVPs - Top Trainers`;
 
 		top10.forEach(([userid, wins], i) => {
 			dataRows.push([
@@ -1259,7 +1259,7 @@ export const warCommands: Chat.ChatCommands = {
 		const score1 = war.scores[clan1._id] || 0;
 		const score2 = war.scores[clan2._id] || 0;
 
-		const message = `|html|<div class="broadcast-red"><center><strong>⚖️ STALEMATE DECLARED ⚖️</strong><br /><strong>By Order of Admin ${user.name}</strong><br />The war between ${clan1.name} and ${clan2.name} ends in a draw!<br />Final Battle Score: ${score1} - ${score2}</center></div>`;
+		const message = `|html|<div class="broadcast-red"><center><strong>STALEMATE DECLARED</strong><br /><strong>By Order of Admin ${user.name}</strong><br />The war between ${clan1.name} and ${clan2.name} ends in a draw!<br />Final Battle Score: ${score1} - ${score2}</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1328,7 +1328,7 @@ export const warCommands: Chat.ChatCommands = {
 				}),
 			]);
 
-			const winMessage = `|html|<div class="broadcast-green"><center><strong>🏆 VICTORY AWARDED 🏆</strong><br />Admin ${user.name} has declared <strong>${winnerClan.name}</strong> the victor!<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have earned their glory!</center></div>`;
+			const winMessage = `|html|<div class="broadcast-green"><center><strong>VICTORY AWARDED</strong><br />Admin ${user.name} has declared <strong>${winnerClan.name}</strong> the victor!<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have earned their glory!</center></div>`;
 
 			const lossMessage = `|html|<div class="broadcast-red"><center><strong>⚡ ADMIN DECISION - FORFEIT ⚡</strong><br />Admin ${user.name} has ruled your clan the loser of this war.<br /><strong>Clan ELO: -${eloChange}</strong> (${Math.floor(loserOldElo)} → ${Math.floor(newLoserElo)})<br />Learn from this defeat and return stronger!</center></div>`;
 
@@ -1371,7 +1371,7 @@ export const warCommands: Chat.ChatCommands = {
 
 		const clanRoom = Rooms.get(clan.chatRoom);
 		if (clanRoom) {
-			clanRoom.add(`|html|<div class="broadcast-red"><center><strong>🔄 COOLDOWN RESET 🔄</strong><br />By order of Admin ${user.name}, your clan may challenge again immediately!</center></div>`).update();
+			clanRoom.add(`|html|<div class="broadcast-red"><center><strong>COOLDOWN RESET</strong><br />By order of Admin ${user.name}, your clan may challenge again immediately!</center></div>`).update();
 		}
 	},
 
