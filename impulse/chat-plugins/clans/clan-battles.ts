@@ -9,8 +9,17 @@ import type { ClanBattleLogEntry, Clan } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
+/**
+ * Utility function to pause execution for a given number of milliseconds.
+ * @param ms - The number of milliseconds to sleep.
+ */
+export function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function handleClanBattleStart(room: GameRoom) {
     // 1. Initial Validation
+	await sleep(1000);
     const battle = room.battle;
     if (!battle || battle.players.length !== 2) return;
 
