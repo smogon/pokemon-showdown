@@ -111,12 +111,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			// 4. Announce War Win
 			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
-			const winMessage = `|html|<div class="broadcast-green"><center><strong>WAR WON! (+${eloChange} ELO)</strong> ${warScore}<br />` +
-				`${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} to win the war for ${winnerClan.name}! ` +
-				`New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
-			const lossMessage = `|html|<div class="broadcast-red"><center><strong>WAR LOST. (-${eloChange} ELO)</strong> ${warScore}<br />` +
-				`${Utils.escapeHTML(loserName)} lost the final battle to ${Utils.escapeHTML(winnerName)}. ${loserClan.name} loses the war. ` +
-				`New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
+			const winMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR VICTORY! (+${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} defeats ${Utils.escapeHTML(loserName)}!<br />${winnerClan.name} emerges victorious and claims glory over ${loserClan.name}!<br />New Clan Rating: ${Math.floor(newWinnerElo)} ELO</center></div>`;
+			const lossMessage = `|html|<div class="broadcast-red"><center><strong>POKEMON WAR DEFEAT. (-${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(loserName)} falls to ${Utils.escapeHTML(winnerName)}!<br />${loserClan.name} is overcome by ${winnerClan.name}. The war is lost.<br />New Clan Rating: ${Math.floor(newLoserElo)} ELO</center></div>`;
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -166,10 +162,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			if (!winnerClan || !loserClan) return; // Should not happen
 
 			const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
-			const winMessage = `|html|<div class="broadcast-green"><center><strong><span style="color:green;">War Battle Win!</span></strong> ${warScore}<br />` +
-				`${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} (clan ${loserClan.name})!</center></div>`;
-			const lossMessage = `|html|<div class="broadcast-red"><center><strong><span style="color:red;">War Battle Loss</span></strong> ${warScore}<br />` +
-				`${Utils.escapeHTML(loserName)} lost to ${Utils.escapeHTML(winnerName)} (clan ${winnerClan.name}).</center></div>`;
+			const winMessage = `|html|<div class="broadcast-green"><center><strong>War Battle Victory!</strong> ${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} claims victory against ${Utils.escapeHTML(loserName)} from ${loserClan.name}!<br />The battle advances the war effort for ${winnerClan.name}!</center></div>`;
+			const lossMessage = `|html|<div class="broadcast-red"><center><strong>War Battle Defeat</strong> ${warScore}<br />Trainer ${Utils.escapeHTML(loserName)} falls to ${Utils.escapeHTML(winnerName)} from ${winnerClan.name}.<br />The war continues for ${loserClan.name}.</center></div>`;
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
