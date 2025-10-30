@@ -53,8 +53,8 @@ async function handleClanBattleStart(room: GameRoom) {
         const p1Name = p1.name || p1.userid;
         const p2Name = p2.name || p2.userid;
 
-        const message = `|html|<div class="infobox">⚔️ <strong>Clan War Battle Started!</strong> ⚔️<br />` +
-                       `${Utils.escapeHTML(p1Name)} (${clan1.name}) vs ${Utils.escapeHTML(p2Name)} (${clan2.name}) in ${battle.format}.</div>`;
+        const message = `|html|<div class="infobox"><center><strong>Clan War Battle Started!</strong><br />` +
+                       `${Utils.escapeHTML(p1Name)} (${clan1.name}) vs ${Utils.escapeHTML(p2Name)} (${clan2.name}) in ${battle.format}.</center></div>`;
 
         const room1 = Rooms.get(clan1.chatRoom);
         const room2 = Rooms.get(clan2.chatRoom);
@@ -173,12 +173,12 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
             // 4. Announce War Win
             const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
-            const winMessage = `|html|<div class="broadcast-green"><strong>WAR WON! (+${eloChange} ELO)</strong> ${warScore}<br />` +
+            const winMessage = `|html|<div class="broadcast-green"><center><strong>WAR WON! (+${eloChange} ELO)</strong> ${warScore}<br />` +
                                `${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} to win the war for ${winnerClan.name}! ` +
-                               `New Clan ELO: ${Math.floor(newWinnerElo)}</div>`;
-            const lossMessage = `|html|<div class="broadcast-red"><strong>WAR LOST. (-${eloChange} ELO)</strong> ${warScore}<br />` +
+                               `New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
+            const lossMessage = `|html|<div class="broadcast-red"><center><strong>WAR LOST. (-${eloChange} ELO)</strong> ${warScore}<br />` +
                                 `${Utils.escapeHTML(loserName)} lost the final battle to ${Utils.escapeHTML(winnerName)}. ${loserClan.name} loses the war. ` +
-                                `New Clan ELO: ${Math.floor(newLoserElo)}</div>`;
+                                `New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
 
             const winnerRoom = Rooms.get(winnerClan.chatRoom);
             const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -230,10 +230,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
             if (!winnerClan || !loserClan) return; // Should not happen
 
             const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
-            const winMessage = `|html|<div class="infobox"><strong><span style="color:green;">War Battle Win!</span></strong> ${warScore}<br />` +
-                               `${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} (clan ${loserClan.name})!</div>`;
-            const lossMessage = `|html|<div class="infobox"><strong><span style="color:red;">War Battle Loss</span></strong> ${warScore}<br />` +
-                                `${Utils.escapeHTML(loserName)} lost to ${Utils.escapeHTML(winnerName)} (clan ${winnerClan.name}).</div>`;
+            const winMessage = `|html|<div class="infobox"><center><strong><span style="color:green;">War Battle Win!</span></strong> ${warScore}<br />` +
+                               `${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} (clan ${loserClan.name})!</center></div>`;
+            const lossMessage = `|html|<div class="infobox"><center><strong><span style="color:red;">War Battle Loss</span></strong> ${warScore}<br />` +
+                                `${Utils.escapeHTML(loserName)} lost to ${Utils.escapeHTML(winnerName)} (clan ${winnerClan.name}).</center></div>`;
 
             const winnerRoom = Rooms.get(winnerClan.chatRoom);
             const loserRoom = Rooms.get(loserClan.chatRoom);
