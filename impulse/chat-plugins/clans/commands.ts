@@ -1750,10 +1750,8 @@ export const commands: Chat.ChatCommands = {
 
 			if (clan.icon) {
 				html += `<img src="${clan.icon}" width="${w}" alt="${clan.name} Icon" style="border-radius: 8px; display: block; margin: 0 auto;" />`;
-				html += `<div style="font-size: 0.85em; margin-top: 10px; font-weight: bold;">${clan.desc}</div>`;
 			} else {
 				html += `<div style="color: #888; text-align: center; padding-top: 50px; font-size: 0.9em; white-space: pre-wrap; width: ${w}px;">`;
-				html += `<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">${clan.desc}</div>`;
 				html += `No clan icon set.`;
 				html += `</div>`;
 			}
