@@ -110,11 +110,9 @@ export interface ClanPointsLogs {
 	[clanId: string]: ClanPointsLogEntry[];
 }
 
-// --- Interfaces for Clan Wars ---
-
 export interface ClanWar {
 	_id: ID;
-	clans: [ID, ID]; // [challengerId, targetId]
+	clans: [ID, ID];
 	scores: { [clanId: string]: number };
 	status: 'pending' | 'active' | 'completed';
 	startDate: number;
@@ -126,8 +124,8 @@ export interface ClanBattleLogEntry {
 	timestamp: number;
 	winningClan: ID;
 	losingClan: ID;
-	winner: ID; // userid of winning player
-	loser: ID; // userid of losing player
+	winner: ID;
+	loser: ID;
 	format: string;
 	battleID: RoomID;
 	warId?: ID;
