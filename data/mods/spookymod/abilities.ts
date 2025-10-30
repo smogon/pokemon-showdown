@@ -139,7 +139,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'Enjoy Halloween mortals, for it will be your last!',
 				'Merasmus arrives on a tide of blood! *sotto voce* Oh hello, Soldier.',
 			];
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(switchin)}`);
+			this.add('-message', `${this.sample(switchin)}`);
 		},
 		onResidual(pokemon) {
 			if (pokemon.volatiles['substitute']) {
@@ -162,7 +162,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					'Must hide. Get stronger.',
 					'You have bested my magic! But can you withstand the dark power...of HIDING!',
 				];
-				// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(sub)}`);
+				this.add('-message', `${this.sample(sub)}`);
 				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			}
 		},
@@ -183,7 +183,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'Farewell! Happy Halloween, everyone!',
 				'I leave you... to your doom!',
 			];
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(switchout)}`);
+			this.add('-message', `${this.sample(switchout)}`);
 		},
 		onFaint(pokemon) {
 			const faint = [
@@ -199,7 +199,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				'Noooo!',
 				'Noooo!',
 			];
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(faint)}`);
+			this.add('-message', `${this.sample(faint)}`);
 		},
 	},
 	mutualexclusion: {

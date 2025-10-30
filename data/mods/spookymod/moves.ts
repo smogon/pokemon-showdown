@@ -276,7 +276,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				'The fear is inside you!',
 				'Fear me! Poop, poop in your pumpkin pants!',
 			];
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bomb)}`);
+			this.add('-message', `${this.sample(bomb)}`);
 			pokemon.addVolatile('bombinomicon');
 		},
 		beforeMoveCallback(pokemon) {
@@ -569,16 +569,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
-			// censored all of these, left the originals in for reference
+			// censored all of these, left the originals in for reference (ana some of these are CRAZY!!!)
 			/* const curses = [
 				"Ass", "Asshole", "Bastard", "Bitch", "Bloody", "Bollocks", "Bugger", "Cock", "Crap", "Cunt", "Damn", "Dick", "Douche",
 				"Fart", "Fuck", "Heck", "Hell", "Motherfucker", "Piss", "Prick", "Pussy", "Shit", "Shut up", "Twat", "Wanker",
 			]; */
 			const curses = [
-				"butt", "booty", "Bastard", "beach", "bloody", "balls", "bugger", "doodoo", "carp", "dang",
-				"fart", "frick", "HECK", "heck", "mf", "piss", "prickly", "nitwit", "shoot", "shut up", "twit", "Wanker",
+				"butt", "booty", "blasted", "beach", "bloody HECK", "balls", "bugger", "doodoo", "carp", "dang",
+				"fart", "frick", "HECK", "heck", "mf", "piss", "prickly", "nitwit", "shoot", "shut up", "twerp", "silly sausage",
 			];
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|${this.sample(curses)}`);
+			this.add('-message', `${this.sample(curses)}!`);
 			if (!source.set.shiny) {
 				delete move.volatileStatus;
 				delete move.onHit;
@@ -786,7 +786,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Ipsum Instantarium!`);
+			this.add('-message', `Ipsum Instantarium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Sneak", target);
 		},
@@ -810,7 +810,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Caputus Crepitus!`);
+			this.add('-message', `Caputus Crepitus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Searing Shot", target);
 		},
@@ -832,7 +832,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		weather: 'superjump',
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Amplus Tripudio!`);
+			this.add('-message', `Amplus Tripudio!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "High Jump Kick", target);
 		},
@@ -852,7 +852,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Kabalto!`);
+			this.add('-message', `Barpo Kabalto!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Geomancy", target);
 		},
@@ -889,7 +889,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Deus Invictus!`);
+			this.add('-message', `Deus Invictus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Gunk Shot", target);
 		},
@@ -910,7 +910,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Pactum Diabolus!`);
+			this.add('-message', `Pactum Diabolus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Leech Seed", target);
 		},
@@ -953,7 +953,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
+\			this.add('-message', `Barpo Invisium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Force", target);
 		},
@@ -996,7 +996,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Invokum MONOCULUS!`);
+			this.add('-message', `Invokum MONOCULUS!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Steel Beam", target);
 			this.damage(150, target, source);
@@ -1037,7 +1037,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Mortis Animataris!`);
+			this.add('-message', `Mortis Animataris!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Bone", target);
 			if (!target.side.addSlotCondition(target, 'summon')) return false;
@@ -1077,7 +1077,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Imputum Fulmenus!`);
+			this.add('-message', `Imputum Fulmenus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Electro Ball", target);
 			if (!target.side.addSlotCondition(target, 'summon')) return false;
@@ -1122,7 +1122,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Seismela Tremoro!`);
+			this.add('-message', `Seismela Tremoro!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Draco Meteor", target);
 		},
@@ -1145,7 +1145,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
+			this.add('-message', `Barpo Invisium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Minimize", target);
 		},

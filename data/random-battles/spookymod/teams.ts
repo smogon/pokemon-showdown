@@ -910,7 +910,7 @@ export class RandomSPMTeams extends RandomTeams {
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 
 			// Increment level 100 counter
-			if (set.level === 100) numMaxLevelPokemon++;
+			// if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
