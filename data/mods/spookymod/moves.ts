@@ -1,4 +1,4 @@
-import { FS } from '../../../lib';
+/* import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex-data';
 // import { ModdedMoveData } from "../../../sim/dex-moves";
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
@@ -17,7 +17,7 @@ export function getName(name: string): string {
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 	const group = usergroups[userid] || ' ';
 	return group + name;
-}
+} */
 
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// physical ghost
@@ -276,7 +276,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				'The fear is inside you!',
 				'Fear me! Poop, poop in your pumpkin pants!',
 			];
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bomb)}`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Merasmus')}|${this.sample(bomb)}`);
 			pokemon.addVolatile('bombinomicon');
 		},
 		beforeMoveCallback(pokemon) {
@@ -578,7 +578,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				"butt", "booty", "Bastard", "beach", "bloody", "balls", "bugger", "doodoo", "carp", "dang",
 				"fart", "frick", "HECK", "heck", "mf", "piss", "prickly", "nitwit", "shoot", "shut up", "twit", "Wanker",
 			];
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|${this.sample(curses)}`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|${this.sample(curses)}`);
 			if (!source.set.shiny) {
 				delete move.volatileStatus;
 				delete move.onHit;
@@ -786,7 +786,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Ipsum Instantarium!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Ipsum Instantarium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Sneak", target);
 		},
@@ -810,7 +810,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Caputus Crepitus!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Caputus Crepitus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Searing Shot", target);
 		},
@@ -832,7 +832,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		weather: 'superjump',
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Amplus Tripudio!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Amplus Tripudio!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "High Jump Kick", target);
 		},
@@ -852,7 +852,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Kabalto!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Kabalto!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Geomancy", target);
 		},
@@ -889,7 +889,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Deus Invictus!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Deus Invictus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Gunk Shot", target);
 		},
@@ -910,7 +910,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Pactum Diabolus!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Pactum Diabolus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Leech Seed", target);
 		},
@@ -953,7 +953,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Force", target);
 		},
@@ -996,7 +996,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Invokum MONOCULUS!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Invokum MONOCULUS!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Steel Beam", target);
 			this.damage(150, target, source);
@@ -1037,7 +1037,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Mortis Animataris!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Mortis Animataris!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shadow Bone", target);
 			if (!target.side.addSlotCondition(target, 'summon')) return false;
@@ -1077,7 +1077,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			failcopycat: 1, failinstruct: 1, failmimic: 1, /* summon: 1, */
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Imputum Fulmenus!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Imputum Fulmenus!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Electro Ball", target);
 			if (!target.side.addSlotCondition(target, 'summon')) return false;
@@ -1122,7 +1122,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Seismela Tremoro!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Seismela Tremoro!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Draco Meteor", target);
 		},
@@ -1145,7 +1145,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onPrepareHit(target, source, move) {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
+			// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName(source.name)}|Barpo Invisium!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Minimize", target);
 		},

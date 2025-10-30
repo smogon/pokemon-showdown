@@ -1,4 +1,4 @@
-import { FS } from '../../../lib';
+/* import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex-data';
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
@@ -16,7 +16,7 @@ export function getName(name: string): string {
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 	const group = usergroups[userid] || ' ';
 	return group + name;
-}
+} */
 
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	brn: {
@@ -139,7 +139,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			switch (rand) {
 			case 0:
 				this.add(`raw|<img src="https://pbs.twimg.com/media/E5tJ3LOWEAEuOx5.jpg" height="400" width="400">`);
-				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('man')}|BOO! Did I scare you? I'm a job application 😂😂`);
+				// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('man')}|BOO! Did I scare you? I'm a job application 😂😂`);
 				break;
 			case 1:
 				this.add(`raw|<img src="https://i.kym-cdn.com/photos/images/list/002/166/933/8a3.gif" height="400" width="400">`);
@@ -149,15 +149,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				break;
 			case 3:
 				this.add(`raw|<img src="https://www.videomeme.in/wp-content/uploads/2022/12/1669720009775.jpg" height="400" width="400">`);
-				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ghost, From That Game With The Ghost Guy In It (I Don\'t Remember What It Was Called)')}| `);
+				// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ghost, From That Game With The Ghost Guy In It (I Don\'t Remember What It Was Called)')}| `);
 				break;
 			case 4:
 				this.add(`raw|<img src="https://static.wikia.nocookie.net/slenderfortress/images/4/46/Zepheniah_Ghost.png" height="400" width="400">`);
-				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zepheniah_Ghost.png')}|BOO`);
+				// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zepheniah_Ghost.png')}|BOO`);
 				break;
 			case 5:
 				this.add(`raw|<img src="https://media.discordapp.net/attachments/575738724680204329/909632559036629022/talkinchu.png" height="4540" width="411">`);
-				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('DuoM2')}|Deez`);
+				// this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('DuoM2')}|Deez`);
 				break;
 			default:
 				this.add(`raw|<img src="https://steamuserimages-a.akamaihd.net/ugc/950713639436160734/A6DB24F241B8A496DED1033A4A345E05A8336DFA/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" height="400" width="400">`);
