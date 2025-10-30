@@ -24,6 +24,7 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
+import { globalPersistenceManager } from './battle-persistence';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -107,6 +108,8 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
 export class Battle {
+	static readonly persistenceManager = globalPersistenceManager;
+
 	readonly id: ID;
 	readonly debugMode: boolean;
 	readonly forceRandomChance: boolean | null;

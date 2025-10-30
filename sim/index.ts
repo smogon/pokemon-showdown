@@ -25,6 +25,10 @@ export { Dex, toID } from './dex';
 export { Teams } from './teams';
 export { TeamValidator } from './team-validator';
 
+// battle persistence
+
+export { BattlePersistenceManager, globalPersistenceManager } from './battle-persistence';
+
 // misc libraries
 
 export * from '../lib';
