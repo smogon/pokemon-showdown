@@ -19,7 +19,8 @@ import type {
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo } from './elo';
+import { K_FACTOR, getExpectedScore, calculateElo,
+		 to, toDurationString } from './utils';
 import { FS } from '../../../lib';
 import { warCommands } from './war-commands';
 
@@ -111,68 +112,6 @@ export async function logClanActivity(
 		newValue: options.newValue,
 		note: options.note,
 	});
-}
-
-export function to(date: Date, options: { date?: boolean, time?: boolean } = {}): string {
-	if (!(date instanceof Date) || isNaN(date.getTime())) {
-		return '';
-	}
-
-	const { date: showDate = false, time: showTime = false } = options;
-
-	if (!showDate && !showTime) {
-		return date.toISOString();
-	}
-
-	let result = '';
-
-	if (showDate) {
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, '0');
-		const day = String(date.getDate()).padStart(2, '0');
-		result += `${year}-${month}-${day}`;
-	}
-
-	if (showTime) {
-		if (showDate) result += ' ';
-		const hours = String(date.getHours()).padStart(2, '0');
-		const minutes = String(date.getMinutes()).padStart(2, '0');
-		const seconds = String(date.getSeconds()).padStart(2, '0');
-		result += `${hours}:${minutes}:${seconds}`;
-	}
-
-	return result;
-}
-
-export function toDurationString(ms: number): string {
-	const seconds = Math.floor(ms / 1000);
-	const minutes = Math.floor(seconds / 60);
-	const hours = Math.floor(minutes / 60);
-	const days = Math.floor(hours / 24);
-	const months = Math.floor(days / 30);
-	const years = Math.floor(days / 365);
-
-	if (years > 0) {
-		const remainingMonths = Math.floor((days % 365) / 30);
-		return remainingMonths > 0 ? `${years}y ${remainingMonths}mo` : `${years}y`;
-	}
-	if (months > 0) {
-		const remainingDays = days % 30;
-		return remainingDays > 0 ? `${months}mo ${remainingDays}d` : `${months}mo`;
-	}
-	if (days > 0) {
-		const remainingHours = hours % 24;
-		return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
-	}
-	if (hours > 0) {
-		const remainingMinutes = minutes % 60;
-		return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
-	}
-	if (minutes > 0) {
-		const remainingSeconds = seconds % 60;
-		return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`;
-	}
-	return `${seconds}s`;
 }
 
 export function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermissions): boolean {
