@@ -37,6 +37,11 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
         return;
     }
 
+    // 3b. Check if War is Paused
+    if (war.paused) {
+        return; // Do not count battles for paused wars
+    }
+
     // 4. This is a valid War battle!
     const winsNeeded = Math.ceil(war.bestOf / 2); // e.g., Bo5 -> 3. Bo3 -> 2.
     const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
