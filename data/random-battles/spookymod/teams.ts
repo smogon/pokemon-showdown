@@ -815,7 +815,7 @@ export class RandomSPMTeams extends RandomTeams {
 		const typeWeaknesses: { [k: string]: number } = {};
 		const typeDoubleWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		let numMaxLevelPokemon = 0;
+		// let numMaxLevelPokemon = 0;
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
