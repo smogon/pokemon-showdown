@@ -21,10 +21,8 @@ import type {
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo, to } from './utils';
-
-import { logClanActivity, hasClanPermission } from './commands';
-
+import { K_FACTOR, getExpectedScore, calculateElo, to,
+		 logClanActivity, hasClanPermission } from './utils';
 
 export const warCommands: Chat.ChatCommands = {
 	// 1. War Lifecycle Management (Pending/Active)
