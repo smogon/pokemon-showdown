@@ -4,9 +4,9 @@
  * This plugin hooks into battle endings to track clan-vs-clan battles
  * during an active war, updating ELO and war scores.
  */
-import { Clans, UserClans, ClanBattleLogs, ClanWars } from '../clans/database';
-import type { ClanBattleLogEntry, Clan } from '../clans/interface';
-import { Utils } from '../../lib';
+import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
+import type { ClanBattleLogEntry, Clan } from './interface';
+import { Utils } from '../../..lib';
 
 // --- ELO Calculation ---
 const K_FACTOR = 32; // Standard ELO K-factor
@@ -221,6 +221,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 }
 
 // Register the handler
-export const handlers: Handlers = {
+export const handlers: Chat.Handlers = {
     onBattleEnd: handleClanBattleEnd,
 };
