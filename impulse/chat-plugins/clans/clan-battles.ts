@@ -12,7 +12,7 @@ import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 async function handleClanBattleStart(room: GameRoom) {
     // 1. Initial Validation
     // Wait a brief moment for battle object and players to initialize
-    await Utils.sleep(500); // Adjust delay if needed
+    await Utils.sleep(1000); // Adjust delay if needed
     const battle = room.battle;
     if (!battle || battle.players.length !== 2) return;
 
@@ -53,7 +53,7 @@ async function handleClanBattleStart(room: GameRoom) {
         const p1Name = p1.name || p1.userid;
         const p2Name = p2.name || p2.userid;
 
-        const message = `|html|<div class="infobox"><center><strong>Clan War Battle Started!</strong><br />` +
+        const message = `|html|<div class="broadcast-green"><center><strong>Clan War Battle Started!</strong><br />` +
                        `${Utils.escapeHTML(p1Name)} (${clan1.name}) vs ${Utils.escapeHTML(p2Name)} (${clan2.name}) in ${battle.format}.</center></div>`;
 
         const room1 = Rooms.get(clan1.chatRoom);
@@ -230,9 +230,9 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
             if (!winnerClan || !loserClan) return; // Should not happen
 
             const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
-            const winMessage = `|html|<div class="infobox"><center><strong><span style="color:green;">War Battle Win!</span></strong> ${warScore}<br />` +
+            const winMessage = `|html|<div class="broadcast-green"><center><strong><span style="color:green;">War Battle Win!</span></strong> ${warScore}<br />` +
                                `${Utils.escapeHTML(winnerName)} defeated ${Utils.escapeHTML(loserName)} (clan ${loserClan.name})!</center></div>`;
-            const lossMessage = `|html|<div class="infobox"><center><strong><span style="color:red;">War Battle Loss</span></strong> ${warScore}<br />` +
+            const lossMessage = `|html|<div class="broadcast-red"><center><strong><span style="color:red;">War Battle Loss</span></strong> ${warScore}<br />` +
                                 `${Utils.escapeHTML(loserName)} lost to ${Utils.escapeHTML(winnerName)} (clan ${winnerClan.name}).</center></div>`;
 
             const winnerRoom = Rooms.get(winnerClan.chatRoom);
