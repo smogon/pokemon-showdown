@@ -1355,6 +1355,252 @@ export const warCommands: Chat.ChatCommands = {
 		}
 	},
 
+	async setscore(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const [clan1Id, score1Str, clan2Id, score2Str] = target.split(',').map(s => s.trim());
+		const score1 = parseInt(score1Str);
+		const score2 = parseInt(score2Str);
+
+		if (!clan1Id || !clan2Id || isNaN(score1) || isNaN(score2) || score1 < 0 || score2 < 0) {
+			return this.errorReply("Usage: /clan war setscore [clan1id], [score1], [clan2id], [score2]");
+		}
+
+		const c1ID = toID(clan1Id);
+		const c2ID = toID(clan2Id);
+
+		const war = await ClanWars.findOne({
+			clans: { $all: [c1ID, c2ID] },
+			status: 'active',
+		});
+		if (!war) return this.errorReply(`No active war found between '${c1ID}' and '${c2ID}'.`);
+
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: c1ID }),
+			Clans.findOne({ _id: c2ID }),
+		]);
+		if (!clan1 || !clan2) return this.errorReply("One or both clans not found.");
+
+		await ClanWars.updateOne(
+			{ _id: war._id },
+			{ $set: { scores: { [c1ID]: score1, [c2ID]: score2 } } }
+		);
+
+		const message = `|html|<div class="infobox"><strong>War Score Updated (Admin)</strong><br />` +
+						`The score for the war between ${clan1.name} and ${clan2.name} has been set to <strong>${score1} - ${score2}</strong> by ${user.name}.</div>`;
+
+		const room1 = Rooms.get(clan1.chatRoom);
+		const room2 = Rooms.get(clan2.chatRoom);
+		if (room1) room1.add(message).update();
+		if (room2) room2.add(message).update();
+
+		this.sendReply(`War score updated. ${clan1.name}: ${score1}, ${clan2.name}: ${score2}.`);
+	},
+
+	async setbestof(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const [clan1Id, clan2Id, bestOfStr] = target.split(',').map(s => s.trim());
+		const newBestOf = parseInt(bestOfStr);
+
+		if (!clan1Id || !clan2Id || isNaN(newBestOf)) {
+			return this.errorReply("Usage: /clan war setbestof [clan1id], [clan2id], [newbestof]");
+		}
+		if (newBestOf < 1 || newBestOf % 2 === 0) {
+			return this.errorReply("'Best of' must be an odd number (3, 5, 7, etc.).");
+		}
+		if (newBestOf > 101) return this.errorReply("'Best of' cannot be higher than 101.");
+
+		const c1ID = toID(clan1Id);
+		const c2ID = toID(clan2Id);
+
+		const war = await ClanWars.findOne({
+			clans: { $all: [c1ID, c2ID] },
+			status: 'active',
+		});
+		if (!war) return this.errorReply(`No active war found between '${c1ID}' and '${c2ID}'.`);
+
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: c1ID }),
+			Clans.findOne({ _id: c2ID }),
+		]);
+		if (!clan1 || !clan2) return this.errorReply("One or both clans not found.");
+
+		await ClanWars.updateOne(
+			{ _id: war._id },
+			{ $set: { bestOf: newBestOf } }
+		);
+
+		const message = `|html|<div class="infobox"><strong>War 'Best Of' Updated (Admin)</strong><br />` +
+						`The war between ${clan1.name} and ${clan2.name} is now a <strong>Best of ${newBestOf}</strong> (set by ${user.name}).</div>`;
+
+		const room1 = Rooms.get(clan1.chatRoom);
+		const room2 = Rooms.get(clan2.chatRoom);
+		if (room1) room1.add(message).update();
+		if (room2) room2.add(message).update();
+
+		this.sendReply(`War 'Best of' updated to ${newBestOf} for the war between ${clan1.name} and ${clan2.name}.`);
+	},
+
+	async forcepause(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const clanId = toID(target);
+		if (!clanId) return this.errorReply("Usage: /clan war forcepause [clanid]");
+
+		const war = await ClanWars.findOne({
+			clans: clanId,
+			status: 'active',
+		});
+		if (!war) return this.errorReply(`No active war found for clan '${clanId}'.`);
+		if (war.paused) return this.errorReply("This war is already paused.");
+
+		await ClanWars.updateOne(
+			{ _id: war._id },
+			{ $set: { paused: true }, $unset: { pauseConfirmations: 1, resumeConfirmations: 1 } }
+		);
+
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: war.clans[0] }),
+			Clans.findOne({ _id: war.clans[1] }),
+		]);
+		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+
+		const message = `|html|<div class="infobox"><strong>War Paused (Admin)</strong><br />` +
+						`The war between ${clan1.name} and ${clan2.name} has been paused by ${user.name}.</div>`;
+
+		const room1 = Rooms.get(clan1.chatRoom);
+		const room2 = Rooms.get(clan2.chatRoom);
+		if (room1) room1.add(message).update();
+		if (room2) room2.add(message).update();
+
+		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been paused.`);
+	},
+
+	async forceresume(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const clanId = toID(target);
+		if (!clanId) return this.errorReply("Usage: /clan war forceresume [clanid]");
+
+		const war = await ClanWars.findOne({
+			clans: clanId,
+			status: 'active',
+		});
+		if (!war) return this.errorReply(`No active war found for clan '${clanId}'.`);
+		if (!war.paused) return this.errorReply("This war is not paused.");
+
+		await ClanWars.updateOne(
+			{ _id: war._id },
+			{ $set: { paused: false }, $unset: { pauseConfirmations: 1, resumeConfirmations: 1 } }
+		);
+
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: war.clans[0] }),
+			Clans.findOne({ _id: war.clans[1] }),
+		]);
+		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+
+		const message = `|html|<div class="infobox"><strong>War Resumed (Admin)</strong><br />` +
+						`The war between ${clan1.name} and ${clan2.name} has been resumed by ${user.name}.</div>`;
+
+		const room1 = Rooms.get(clan1.chatRoom);
+		const room2 = Rooms.get(clan2.chatRoom);
+		if (room1) room1.add(message).update();
+		if (room2) room2.add(message).update();
+
+		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been resumed.`);
+	},
+
+	async clearpending(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const [clan1Id, clan2Id] = target.split(',').map(s => toID(s.trim()));
+		if (!clan1Id || !clan2Id) {
+			return this.errorReply("Usage: /clan war clearpending [clan1id], [clan2id]");
+		}
+
+		const war = await ClanWars.findOne({
+			clans: { $all: [clan1Id, clan2Id] },
+			status: 'pending',
+		});
+		if (!war) return this.errorReply(`No pending war found between '${clan1Id}' and '${clan2Id}'.`);
+
+		await ClanWars.deleteOne({ _id: war._id });
+
+		this.sendReply(`Deleted pending war challenge between '${clan1Id}' and '${clan2Id}'.`);
+	},
+
+	async forcecreate(target, room, user) {
+		this.checkChat();
+		this.checkCan('roomowner');
+
+		const [clan1Id, clan2Id, bestOfStr] = target.split(',').map(s => s.trim());
+		const bestOf = parseInt(bestOfStr);
+
+		if (!clan1Id || !clan2Id || isNaN(bestOf)) {
+			return this.errorReply("Usage: /clan war forcecreate [clan1id], [clan2id], [bestof]");
+		}
+		if (bestOf < 1 || bestOf % 2 === 0) {
+			return this.errorReply("'Best of' must be an odd number (3, 5, 7, etc.).");
+		}
+		if (bestOf > 101) return this.errorReply("'Best of' cannot be higher than 101.");
+
+		const c1ID = toID(clan1Id);
+		const c2ID = toID(clan2Id);
+
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: c1ID }),
+			Clans.findOne({ _id: c2ID }),
+		]);
+		if (!clan1) return this.errorReply(`Clan '${clan1Id}' not found.`);
+		if (!clan2) return this.errorReply(`Clan '${clan2Id}' not found.`);
+		if (c1ID === c2ID) return this.errorReply("Clans must be different.");
+
+		// Check if either clan already has an active or pending war
+		const [clan1ExistingWar, clan2ExistingWar] = await Promise.all([
+			ClanWars.findOne({
+				clans: c1ID,
+				status: { $in: ['pending', 'active'] },
+			}),
+			ClanWars.findOne({
+				clans: c2ID,
+				status: { $in: ['pending', 'active'] },
+			}),
+		]);
+
+		if (clan1ExistingWar) {
+			return this.errorReply(`${clan1.name} is already in a war.`);
+		}
+		if (clan2ExistingWar) {
+			return this.errorReply(`${clan2.name} is already in a war.`);
+		}
+
+		const newWar: Omit<ClanWar, '_id'> = {
+			clans: [c1ID, c2ID],
+			scores: { [c1ID]: 0, [c2ID]: 0 },
+			status: 'active',
+			startDate: Date.now(),
+			bestOf: bestOf,
+		};
+		await ClanWars.insertOne(newWar as ClanWarDoc);
+
+		const message = `|html|<div class="broadcast-green"><strong>WAR! (Forced by Admin)</strong><br />` +
+						`A <strong>Best of ${bestOf}</strong> war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has been started by ${user.name}.</div>`;
+
+		const room1 = Rooms.get(clan1.chatRoom);
+		const room2 = Rooms.get(clan2.chatRoom);
+		if (room1) room1.add(message).update();
+		if (room2) room2.add(message).update();
+
+		this.sendReply(`Force-started an active war between ${clan1.name} and ${clan2.name}.`);
+	},
+
 	// 5. Help
 	help() {
 		if (!this.runBroadcast()) return;
@@ -1379,6 +1625,12 @@ export const warCommands: Chat.ChatCommands = {
 			{ cmd: "/clan war forcetie [clanid]", desc: "Forcefully end an active war as a tie. Requires: &." },
 			{ cmd: "/clan war forfeitadmin [loserclanid], [winnerclanid]", desc: "Force a clan to forfeit to another. Requires: &." },
 			{ cmd: "/clan war resetcooldown [clanid]", desc: "Reset a clan's war challenge cooldown. Requires: &." },
+			{ cmd: "/clan war setscore [clan1id], [score1], [clan2id], [score2]", desc: "Manually set the score of an active war. Requires: &." },
+			{ cmd: "/clan war setbestof [clan1id], [clan2id], [newbestof]", desc: "Forcibly change the 'Best of' for an active war. Requires: &." },
+			{ cmd: "/clan war forcepause [clanid]", desc: "Forcibly pause an active war. Requires: &." },
+			{ cmd: "/clan war forceresume [clanid]", desc: "Forcibly resume a paused war. Requires: &." },
+			{ cmd: "/clan war clearpending [clan1id], [clan2id]", desc: "Delete a pending war challenge. Requires: &." },
+			{ cmd: "/clan war forcecreate [clan1id], [clan2id], [bestof]", desc: "Instantly create an active war. Requires: &." },
 		];
 		const html = `<center><strong>Clan War Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
