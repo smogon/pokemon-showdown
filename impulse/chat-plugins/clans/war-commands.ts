@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Clan Wars Commands - Personalized for 1v1 Pokémon Battles
+* Clan Wars Commands
 */
 import {
 	Clans,
