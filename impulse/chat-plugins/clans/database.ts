@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* Clans Database & types
+*/
 import { ImpulseDB } from '../../impulse-db';
 import type { Document } from 'mongodb';
 import type {
