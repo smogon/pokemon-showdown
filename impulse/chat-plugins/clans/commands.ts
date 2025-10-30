@@ -9,6 +9,7 @@ import {
 	ClanBans,
 	ClanPointsLogs,
 	ClanWars,
+	ClanBattleLogs,
 	type ClanDoc,
 } from './database';
 import type {
