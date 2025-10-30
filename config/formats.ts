@@ -5054,4 +5054,45 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+
+	// Persistent Battle Formats
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Persistent Battles",
+		column: 2,
+	},
+	{
+		name: "[Gen 9] Gauntlet Challenge",
+		desc: `Your Pokemon's HP, PP, and status persist between battles. Can you defeat multiple opponents in a row?`,
+		mod: 'gen9',
+		searchShow: false,
+		challengeShow: true,
+		ruleset: ['Standard', 'Persistent Battles P1'],
+	},
+	{
+		name: "[Gen 9] Persistent Battle",
+		desc: `All Pokemon HP, PP, and status persist between battles for both players. Strategic endurance battles.`,
+		mod: 'gen9',
+		searchShow: false,
+		challengeShow: true,
+		ruleset: ['Standard', 'Persistent Battles'],
+	},
+	{
+		name: "[Gen 9] Persistent Random Battle",
+		desc: `Random Battle where HP, PP, and status persist between consecutive matches.`,
+		mod: 'gen9',
+		team: 'random',
+		searchShow: false,
+		challengeShow: true,
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Persistent Battles'],
+	},
+	{
+		name: "[Gen 9] Reset Persistent State",
+		desc: `Clears all persistent battle state. Use this to reset before starting a new gauntlet challenge.`,
+		mod: 'gen9',
+		searchShow: false,
+		debug: true,
+		ruleset: ['Clear Persistent State', 'Team Preview', 'Cancel Mod'],
+	},
 ];
