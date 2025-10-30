@@ -3,7 +3,7 @@
  * Shared ELO calculation logic for clan warfare and battle tracking
  */
 
-const K_FACTOR = 32; // Standard ELO K-factor
+export const K_FACTOR = 32; // Standard ELO K-factor
 
 /**
  * Calculates the expected score for player A against player B.
