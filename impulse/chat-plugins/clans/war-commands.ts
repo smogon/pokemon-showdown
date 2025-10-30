@@ -216,7 +216,19 @@ export const warCommands: Chat.ChatCommands = {
 		if (!war) return this.errorReply(`No pending challenge found between your clan and '${targetClanId}'.`);
 
 		const targetClan = await Clans.findOne({ _id: targetClanId });
-		await ClanWars.deleteOne({ _id: war._id });
+		
+		try {
+			await ClanWars.deleteOne({ _id: war._id });
+			
+			// Reset the cooldown for the challenging clan since challenge was denied
+			await Clans.updateOne(
+				{ _id: targetClanId },
+				{ $set: { 'stats.lastWarChallenge': 0 } }
+			);
+		} catch (e) {
+			this.errorReply("An error occurred while declining the challenge.");
+			return;
+		}
 
 		this.sendReply(`You have declined the war challenge from ${targetClan?.name || targetClanId}.`);
 
@@ -266,7 +278,18 @@ export const warCommands: Chat.ChatCommands = {
 		const targetClan = await Clans.findOne({ _id: targetClanId });
 		if (!targetClan) return this.errorReply(`Clan '${targetClanId}' not found.`);
 
-		await ClanWars.deleteOne({ _id: war._id });
+		try {
+			await ClanWars.deleteOne({ _id: war._id });
+
+			// Reset the cooldown since the challenger is cancelling
+			await Clans.updateOne(
+				{ _id: clanId },
+				{ $set: { 'stats.lastWarChallenge': 0 } }
+			);
+		} catch (e) {
+			this.errorReply("An error occurred while cancelling the challenge.");
+			return;
+		}
 
 		this.sendReply(`You have withdrawn your war challenge to ${targetClan.name}.`);
 
