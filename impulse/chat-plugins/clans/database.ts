@@ -5,8 +5,8 @@ import type {
 	UserClanInfo,
 	ClanLog,
 	ClanPointsLogEntry,
-	ClanBattleLogEntry, // Added
-	ClanWar, // Added
+	ClanBattleLogEntry,
+	ClanWar,
 } from './interface';
 
 export type ClanDoc = Omit<Clan, 'id'> & { _id: ID } & Document;
@@ -22,5 +22,5 @@ export const UserClans = ImpulseDB<UserClanDoc>('userclans');
 export const ClanLogs = ImpulseDB<ClanLogDoc>('clanlogs');
 export const ClanPointsLogs = ImpulseDB<ClanPointsLogDoc>('clanpointslogs');
 export const ClanBans = ImpulseDB<ClanBanDoc>('clanbans');
-export const ClanBattleLogs = ImpulseDB<ClanBattleLogDoc>('clanbattlelogs'); // Added
-export const ClanWars = ImpulseDB<ClanWarDoc>('clanwars'); // Added
+export const ClanBattleLogs = ImpulseDB<ClanBattleLogDoc>('clanbattlelogs');
+export const ClanWars = ImpulseDB<ClanWarDoc>('clanwars');
