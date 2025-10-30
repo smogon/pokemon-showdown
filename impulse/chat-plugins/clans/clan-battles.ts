@@ -11,8 +11,6 @@ import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
 async function handleClanBattleStart(room: GameRoom) {
     // 1. Initial Validation
-    // Wait a brief moment for battle object and players to initialize
-    await Utils.sleep(1000); // Adjust delay if needed
     const battle = room.battle;
     if (!battle || battle.players.length !== 2) return;
 
