@@ -1,8 +1,20 @@
+/*
+* Pokemon Showdown
+* Clans Utility Functions
+*/
 import { ClanLogs } from './database';
 import type { Clan, ClanPermissions, ClanLogType } from './interface';
 
 /**
  * Logs clan-related activity to the ClanLogs collection.
+ * @param clanId The ID of the clan.
+ * @param actor The ID of the user who performed the action.
+ * @param action The type of action performed.
+ * @param options Additional log data.
+ * @param options.target The ID of the user or entity targeted by the action.
+ * @param options.oldValue The old value of a modified field.
+ * @param options.newValue The new value of a modified field.
+ * @param options.note A free-form note about the activity.
  */
 export async function logClanActivity(
 	clanId: ID,
@@ -29,6 +41,10 @@ export async function logClanActivity(
 
 /**
  * Determines if a user has a specific permission in a clan.
+ * @param clan The Clan object.
+ * @param userId The ID of the user to check.
+ * @param permission The specific permission key to check for.
+ * @returns True if the user has the permission, false otherwise.
  */
 export function hasClanPermission(clan: Clan, userId: ID, permission: keyof ClanPermissions): boolean {
 	if (clan.owner === userId) return true;
@@ -42,6 +58,14 @@ export function hasClanPermission(clan: Clan, userId: ID, permission: keyof Clan
 	return !!rank.permissions[permission];
 }
 
+/**
+ * Formats a Date object into a readable string based on options.
+ * @param date The Date object to format.
+ * @param options Formatting options.
+ * @param options.date If true, includes the date part (YYYY-MM-DD).
+ * @param options.time If true, includes the time part (HH:MM:SS).
+ * @returns The formatted date string, or an empty string if the date is invalid.
+ */
 export function to(date: Date, options: { date?: boolean, time?: boolean } = {}): string {
 	if (!(date instanceof Date) || isNaN(date.getTime())) {
 		return '';
@@ -73,6 +97,12 @@ export function to(date: Date, options: { date?: boolean, time?: boolean } = {})
 	return result;
 }
 
+/**
+ * Converts a number of milliseconds into a human-readable duration string (e.g., '1y 2mo', '5h 3m').
+ * Displays up to two largest non-zero units.
+ * @param ms The duration in milliseconds.
+ * @returns The formatted duration string.
+ */
 export function toDurationString(ms: number): string {
 	const seconds = Math.floor(ms / 1000);
 	const minutes = Math.floor(seconds / 60);
@@ -105,17 +135,15 @@ export function toDurationString(ms: number): string {
 }
 
 /**
- * ELO Rating System Utilities
- * Shared ELO calculation logic for clan warfare and battle tracking
+ * Standard ELO K-factor used for ELO change calculation.
  */
-
-export const K_FACTOR = 32; // Standard ELO K-factor
+export const K_FACTOR = 32;
 
 /**
  * Calculates the expected score for player A against player B.
- * @param eloA Clan A's ELO
- * @param eloB Clan B's ELO
- * @returns The probability of player A winning (0 to 1)
+ * @param eloA Clan A's ELO.
+ * @param eloB Clan B's ELO.
+ * @returns The probability of player A winning (0 to 1).
  */
 export function getExpectedScore(eloA: number, eloB: number): number {
 	return 1 / (1 + 10 ** ((eloB - eloA) / 400));
@@ -123,15 +151,14 @@ export function getExpectedScore(eloA: number, eloB: number): number {
 
 /**
  * Calculates the new ELO ratings for a winner and a loser.
- * @param winnerElo Winner's current ELO
- * @param loserElo Loser's current ELO
- * @returns [newWinnerElo, newLoserElo, eloChange]
+ * The ELO change is clamped to a minimum of 1.
+ * @param winnerElo Winner's current ELO.
+ * @param loserElo Loser's current ELO.
+ * @returns An array containing [newWinnerElo, newLoserElo, eloChange].
  */
 export function calculateElo(winnerElo: number, loserElo: number): [number, number, number] {
 	const expectedWinner = getExpectedScore(winnerElo, loserElo);
 
-	// Calculate ELO change
-	// We use Math.max(1, ...) to ensure a minimum of 1 ELO is always gained/lost
 	const eloChange = Math.max(1, Math.round(K_FACTOR * (1 - expectedWinner)));
 
 	const newWinnerElo = winnerElo + eloChange;
