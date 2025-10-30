@@ -149,7 +149,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				break;
 			case 3:
 				this.add(`raw|<img src="https://www.videomeme.in/wp-content/uploads/2022/12/1669720009775.jpg" height="400" width="400">`);
-				this.add('-message', `Ghost, From That Game With The Ghost Guy In It (I Don't Remember What It Was Called)`);				
+				this.add('-message', `Ghost, From That Game With The Ghost Guy In It (I Don't Remember What It Was Called)`);
 				break;
 			case 4:
 				this.add(`raw|<img src="https://static.wikia.nocookie.net/slenderfortress/images/4/46/Zepheniah_Ghost.png" height="400" width="400">`);
