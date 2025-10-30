@@ -1,22 +1,25 @@
 /*
- * Clan Battles Plugin
- *
- * This plugin hooks into battle events to track clan-vs-clan battles
- * during an active war, updating ELO and war scores, and announcing starts/ends.
- */
+* Pokemon Showdown
+* Clans Battle Hook
+*/
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
 import type { ClanBattleLogEntry, Clan } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
+/**
+ * Handles the end of a battle between two users, checking if it is a clan war battle,
+ * updating war scores, ELO ratings (if the war ends), and announcing the results.
+ * @param battle The battle room object.
+ * @param winner The ID of the winning user.
+ * @param players The IDs of all players in the battle (expected to be two).
+ */
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
-	// 1. Initial Validation
 	if (players.length !== 2 || battle.tour) return;
 	const [p1, p2] = players;
 	const loser = (winner === p1) ? p2 : p1;
 	if (!winner || !loser) return;
 
-	// 2. Get Clan Info
 	const [winnerClanInfo, loserClanInfo] = await Promise.all([
 		UserClans.findOne({ _id: winner }),
 		UserClans.findOne({ _id: loser }),
@@ -24,31 +27,25 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	const winnerClanId = winnerClanInfo?.memberOf;
 	const loserClanId = loserClanInfo?.memberOf;
 	if (!winnerClanId || !loserClanId || winnerClanId === loserClanId) {
-		return; // Not a battle between two different clans
+		return;
 	}
 
-	// 3. Check for Active War
 	const war = await ClanWars.findOne({
 		clans: { $all: [winnerClanId, loserClanId] },
 		status: 'active',
 	});
-	// Not an active war, OR war has no 'bestOf' (old data/error), OR war is paused
 	if (!war || !war.bestOf || war.paused) {
 		return;
 	}
 
-	// 4. This is a valid War battle!
-	const winsNeeded = Math.ceil(war.bestOf / 2); // e.g., Bo5 -> 3. Bo3 -> 2.
+	const winsNeeded = Math.ceil(war.bestOf / 2);
 	const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
 	const newLoserScore = war.scores[loserClanId] || 0;
 
 	const winnerName = Users.get(winner)?.name || winner;
 	const loserName = Users.get(loser)?.name || loser;
 
-	// *** Check if this battle ends the war ***
 	if (newWinnerScore === winsNeeded) {
-		// --- WAR IS OVER ---
-		// Get full clan docs to read their ELO
 		const [winnerClan, loserClan] = await Promise.all([
 			Clans.findOne({ _id: winnerClanId }),
 			Clans.findOne({ _id: loserClanId }),
@@ -58,12 +55,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			return;
 		}
 
-		// 1. Calculate ELO
 		const winnerOldElo = winnerClan.stats.elo || 1000;
 		const loserOldElo = loserClan.stats.elo || 1000;
 		const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
 
-		// 2. Create the log entry
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
 			winningClan: winnerClanId,
@@ -78,10 +73,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			isWarWinningBattle: true,
 		};
 
-		// 3. Update Database
 		try {
 			await Promise.all([
-				// Update winner's clan: SET new ELO, INC wins
 				Clans.updateOne(
 					{ _id: winnerClanId },
 					{
@@ -89,7 +82,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 						$inc: { 'stats.clanBattleWins': 1 },
 					}
 				),
-				// Update loser's clan: SET new ELO, INC losses
 				Clans.updateOne(
 					{ _id: loserClanId },
 					{
@@ -97,7 +89,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 						$inc: { 'stats.clanBattleLosses': 1 },
 					}
 				),
-				// Update war doc: Set 'completed', end date, and final score
 				ClanWars.updateOne(
 					{ _id: war._id },
 					{
@@ -105,11 +96,9 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 						$inc: { [`scores.${winnerClanId}`]: 1 },
 					}
 				),
-				// Log the battle
 				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			// 4. Announce War Win
 			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
 			const winMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR VICTORY! (+${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} defeats ${Utils.escapeHTML(loserName)}!<br />${winnerClan.name} emerges victorious and claims glory over ${loserClan.name}!<br />New Clan Rating: ${Math.floor(newWinnerElo)} ELO</center></div>`;
 			const lossMessage = `|html|<div class="broadcast-red"><center><strong>POKEMON WAR DEFEAT. (-${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(loserName)} falls to ${Utils.escapeHTML(winnerName)}!<br />${loserClan.name} is overcome by ${winnerClan.name}. The war is lost.<br />New Clan Rating: ${Math.floor(newLoserElo)} ELO</center></div>`;
@@ -125,9 +114,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			});
 		}
 	} else {
-		// --- WAR CONTINUES ---
-
-		// 1. Create the log entry (no ELO change)
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
 			winningClan: winnerClanId,
@@ -142,24 +128,20 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			isWarWinningBattle: false,
 		};
 
-		// 2. Update Database
 		try {
 			await Promise.all([
-				// Update war doc: Just increment score
 				ClanWars.updateOne(
 					{ _id: war._id },
 					{ $inc: { [`scores.${winnerClanId}`]: 1 } }
 				),
-				// Log the battle
 				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			// 3. Announce Battle Win
 			const [winnerClan, loserClan] = await Promise.all([
 				Clans.findOne({ _id: winnerClanId }),
 				Clans.findOne({ _id: loserClanId }),
 			]);
-			if (!winnerClan || !loserClan) return; // Should not happen
+			if (!winnerClan || !loserClan) return;
 
 			const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
 			const winMessage = `|html|<div class="broadcast-green"><center><strong>War Battle Victory!</strong> ${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} claims victory against ${Utils.escapeHTML(loserName)} from ${loserClan.name}!<br />The battle advances the war effort for ${winnerClan.name}!</center></div>`;
@@ -178,7 +160,9 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	}
 }
 
-// Register the handlers
+/**
+ * Chat handler registration for the plugin.
+ */
 export const handlers: Chat.Handlers = {
 	onBattleEnd: handleClanBattleEnd,
 };
