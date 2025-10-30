@@ -21,9 +21,9 @@ import type {
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo } from './elo';
+import { K_FACTOR, getExpectedScore, calculateElo, to } from './utils';
 
-import { logClanActivity, to, hasClanPermission } from './commands';
+import { logClanActivity, hasClanPermission } from './commands';
 
 
 export const warCommands: Chat.ChatCommands = {
