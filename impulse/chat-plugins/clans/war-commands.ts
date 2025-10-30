@@ -110,7 +110,7 @@ export const warCommands: Chat.ChatCommands = {
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		if (targetRoom) {
 			const winsNeeded = Math.ceil(bestOf / 2);
-			targetRoom.add(`|html|<div class="broadcast-blue"><center><strong>POKEMON WAR CHALLENGE!</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> has sent a challenge to <strong style="font-size: 1.2em;">${targetClan.name}</strong>!<br /><br /><strong>War Format:</strong> Best of ${bestOf} (First to ${winsNeeded} 1v1 wins!)<br /><strong>Their Clan Rating:</strong> ${Math.floor(myClan.stats.elo || 1000)} ELO<br /><strong>Your Clan Rating:</strong> ${Math.floor(targetClan.stats.elo || 1000)} ELO<br /><br />Will you accept this challenge and battle for glory?<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to decline.</center></div>`).update();
+			targetRoom.add(`|html|<div class="broadcast-blue"><center><strong>POKEMON WAR CHALLENGE!</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> has sent a challenge to <strong style="font-size: 1.2em;">${targetClan.name}</strong>!<br /><br /><strong>War Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins!)<br /><strong>Their Clan Rating:</strong> ${Math.floor(myClan.stats.elo || 1000)} ELO<br /><strong>Your Clan Rating:</strong> ${Math.floor(targetClan.stats.elo || 1000)} ELO<br /><br />Will you accept this challenge and battle for glory?<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to decline.</center></div>`).update();
 		}
 	},
 
@@ -182,7 +182,7 @@ export const warCommands: Chat.ChatCommands = {
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 
 		const winsNeeded = Math.ceil(war.bestOf / 2);
-		const battleMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR BEGINS!</strong><br /><strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br /><br /><strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> 1v1 battles wins the war!<br />Stakes: <strong>ELO Glory</strong><br /><br />Send your trainers into battle! Every 1v1 victory counts toward your clan's score.<br /><strong>Current Score:</strong> ${challengerClan.name} 0 - 0 ${targetClan.name}</center></div>`;
+		const battleMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR BEGINS!</strong><br /><strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br /><br /><strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />Stakes: <strong>ELO Glory</strong><br /><br />Send your trainers into battle! Every 1v1 victory counts toward your clan's score.<br /><strong>Current Score:</strong> ${challengerClan.name} 0 - 0 ${targetClan.name}</center></div>`;
 
 		if (challengerRoom) challengerRoom.add(battleMessage).update();
 		if (targetRoom) targetRoom.add(battleMessage).update();
