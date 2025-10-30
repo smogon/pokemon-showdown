@@ -6,7 +6,7 @@
  */
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
 import type { ClanBattleLogEntry, Clan } from './interface';
-import { Utils } from '../../..lib';
+import { Utils } from '../../../lib';
 
 // --- ELO Calculation ---
 const K_FACTOR = 32; // Standard ELO K-factor
