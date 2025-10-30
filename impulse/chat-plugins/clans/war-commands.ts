@@ -17,12 +17,12 @@ import type {
 	ClanPermissions,
 	CustomClanRank,
 	ClanStats,
-	ClanWar
+	ClanWar,
 } from './interface';
 import { generateThemedTable } from
 	'../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
-		 logClanActivity, hasClanPermission } from './utils';
+	logClanActivity, hasClanPermission } from './utils';
 
 export const warCommands: Chat.ChatCommands = {
 	// 1. War Lifecycle Management (Pending/Active)
@@ -59,7 +59,7 @@ export const warCommands: Chat.ChatCommands = {
 		const lastChallenge = myClan.stats.lastWarChallenge || 0;
 		const cooldownTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 		const timeSinceLastChallenge = Date.now() - lastChallenge;
-		
+
 		if (timeSinceLastChallenge < cooldownTime) {
 			const timeRemaining = cooldownTime - timeSinceLastChallenge;
 			const hoursRemaining = Math.ceil(timeRemaining / (60 * 60 * 1000));
@@ -101,7 +101,7 @@ export const warCommands: Chat.ChatCommands = {
 			scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
 			status: 'pending',
 			startDate: Date.now(),
-			bestOf: bestOf,
+			bestOf,
 		};
 		await ClanWars.insertOne(newWar as ClanWarDoc);
 
@@ -331,7 +331,7 @@ export const warCommands: Chat.ChatCommands = {
 			scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
 			status: 'pending',
 			startDate: Date.now(),
-			bestOf: bestOf,
+			bestOf,
 		};
 		await ClanWars.insertOne(newWar as ClanWarDoc);
 
@@ -423,12 +423,12 @@ export const warCommands: Chat.ChatCommands = {
 
 		// --- Announcements ---
 		const winMessage = `|html|<div class="broadcast-green"><center><strong>WAR WON! (+${eloChange} ELO)</strong><br />` +
-						   `${loserClan.name} has forfeited the war! ` +
-						   `New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
+			`${loserClan.name} has forfeited the war! ` +
+			`New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
 
 		const lossMessage = `|html|<div class="broadcast-red"><center><strong>WAR FORFEITED. (-${eloChange} ELO)</strong><br />` +
-							`Your clan, led by ${user.name}, has forfeited the war against ${winnerClan.name}. ` +
-							`New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
+			`Your clan, led by ${user.name}, has forfeited the war against ${winnerClan.name}. ` +
+			`New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
 
 		const winnerRoom = Rooms.get(winnerClan.chatRoom);
 		const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -803,34 +803,34 @@ export const warCommands: Chat.ChatCommands = {
 
 		let sortField: string;
 		let headerName: string;
-		let sortOrder: 1 | -1 = -1;
+		const sortOrder: 1 | -1 = -1;
 
 		const sortType = toID(sortBy);
 		switch (sortType) {
-			case 'wins':
-				sortField = 'stats.clanBattleWins';
-				headerName = 'Wins';
-				break;
-			case 'losses':
-				sortField = 'stats.clanBattleLosses';
-				headerName = 'Losses';
-				break;
-			case 'winrate':
-				// Will be calculated after fetching
-				sortField = 'stats.clanBattleWins';
-				headerName = 'Win Rate';
-				break;
-			case 'elo':
-			default:
-				sortField = 'stats.elo';
-				headerName = 'ELO';
-				break;
+		case 'wins':
+			sortField = 'stats.clanBattleWins';
+			headerName = 'Wins';
+			break;
+		case 'losses':
+			sortField = 'stats.clanBattleLosses';
+			headerName = 'Losses';
+			break;
+		case 'winrate':
+			// Will be calculated after fetching
+			sortField = 'stats.clanBattleWins';
+			headerName = 'Win Rate';
+			break;
+		case 'elo':
+		default:
+			sortField = 'stats.elo';
+			headerName = 'ELO';
+			break;
 		}
 
 		const clans = await Clans.find({}, { skip: 0, limit: 1000, sort: { [sortField]: sortOrder } });
-		
+
 		// Filter clans that have participated in wars (at least 1 win or loss)
-		let warClans = clans.filter(clan => 
+		let warClans = clans.filter(clan =>
 			(clan.stats.clanBattleWins || 0) > 0 || (clan.stats.clanBattleLosses || 0) > 0
 		);
 
@@ -959,7 +959,7 @@ export const warCommands: Chat.ChatCommands = {
 		let currentStreak = 0;
 		let longestWinStreak = 0;
 		const sortedLogs = battleLogs.sort((a, b) => b.timestamp - a.timestamp);
-		
+
 		for (const log of sortedLogs) {
 			if (log.winningClan === clanId) {
 				currentStreak++;
@@ -975,7 +975,7 @@ export const warCommands: Chat.ChatCommands = {
 		html += `Total Battles: ${totalBattles} (${wins}W - ${losses}L)<br>`;
 		html += `Battle Win Rate: <strong>${winrate}%</strong><br>`;
 		html += `Longest Win Streak: ${longestWinStreak}<br><br>`;
-		
+
 		html += `<strong>War Stats:</strong><br>`;
 		html += `Total Wars: ${totalWars} (${warsWon}W - ${warsLost}L - ${warsTied}T)<br>`;
 		html += `War Win Rate: <strong>${warWinrate}%</strong><br>`;
@@ -1303,12 +1303,12 @@ export const warCommands: Chat.ChatCommands = {
 			]);
 
 			const winMessage = `|html|<div class="broadcast-green"><center><strong>WAR WON! (+${eloChange} ELO)</strong><br />` +
-							   `Admin ${user.name} has awarded your clan the war victory! ` +
-							   `New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
+				`Admin ${user.name} has awarded your clan the war victory! ` +
+				`New Clan ELO: ${Math.floor(newWinnerElo)}</center></div>`;
 
 			const lossMessage = `|html|<div class="broadcast-red"><center><strong>WAR FORFEITED. (-${eloChange} ELO)</strong><br />` +
-								`Admin ${user.name} has forfeited the war on behalf of your clan. ` +
-								`New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
+				`Admin ${user.name} has forfeited the war on behalf of your clan. ` +
+				`New Clan ELO: ${Math.floor(newLoserElo)}</center></div>`;
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -1386,7 +1386,7 @@ export const warCommands: Chat.ChatCommands = {
 		);
 
 		const message = `|html|<div class="broadcast-red"><center><strong>War Score Updated (Admin)</strong><br />` +
-						`The score for the war between ${clan1.name} and ${clan2.name} has been set to <strong>${score1} - ${score2}</strong> by ${user.name}.</center></div>`;
+			`The score for the war between ${clan1.name} and ${clan2.name} has been set to <strong>${score1} - ${score2}</strong> by ${user.name}.</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1432,7 +1432,7 @@ export const warCommands: Chat.ChatCommands = {
 		);
 
 		const message = `|html|<div class="broadcast-red"><center><strong>War 'Best Of' Updated (Admin)</strong><br />` +
-						`The war between ${clan1.name} and ${clan2.name} is now a <strong>Best of ${newBestOf}</strong> (set by ${user.name}).</center></div>`;
+			`The war between ${clan1.name} and ${clan2.name} is now a <strong>Best of ${newBestOf}</strong> (set by ${user.name}).</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1468,7 +1468,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
 		const message = `|html|<div class="broadcast-red"><center><strong>War Paused (Admin)</strong><br />` +
-						`The war between ${clan1.name} and ${clan2.name} has been paused by ${user.name}.</center></div>`;
+			`The war between ${clan1.name} and ${clan2.name} has been paused by ${user.name}.</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1504,7 +1504,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
 		const message = `|html|<div class="broadcast-red"><center><strong>War Resumed (Admin)</strong><br />` +
-						`The war between ${clan1.name} and ${clan2.name} has been resumed by ${user.name}.</center></div>`;
+			`The war between ${clan1.name} and ${clan2.name} has been resumed by ${user.name}.</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1584,12 +1584,12 @@ export const warCommands: Chat.ChatCommands = {
 			scores: { [c1ID]: 0, [c2ID]: 0 },
 			status: 'active',
 			startDate: Date.now(),
-			bestOf: bestOf,
+			bestOf,
 		};
 		await ClanWars.insertOne(newWar as ClanWarDoc);
 
 		const message = `|html|<div class="broadcast-green"><center><strong>WAR! (Forced by Admin)</strong><br />` +
-						`A <strong>Best of ${bestOf}</strong> war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has been started by ${user.name}.</center></div>`;
+			`A <strong>Best of ${bestOf}</strong> war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has been started by ${user.name}.</center></div>`;
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);

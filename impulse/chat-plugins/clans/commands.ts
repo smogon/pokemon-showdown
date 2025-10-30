@@ -16,7 +16,7 @@ import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interfa
 import { generateThemedTable } from
 	'../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
-		  toDurationString, logClanActivity, hasClanPermission } from './utils';
+	toDurationString, logClanActivity, hasClanPermission } from './utils';
 import { FS } from '../../../lib';
 import { warCommands } from './war-commands';
 
@@ -236,8 +236,8 @@ export const commands: Chat.ChatCommands = {
 					chatRoom.destroy();
 					FS('config/chatrooms.json').writeUpdate(() =>
 						JSON.stringify(Rooms.global.settingsList)
-						.replace(/\{"title":/g, '\n{"title":')
-						.replace(/\]$/, '\n]'));
+							.replace(/\{"title":/g, '\n{"title":')
+							.replace(/\]$/, '\n]'));
 				}
 
 				// Delete clan document
@@ -263,12 +263,12 @@ export const commands: Chat.ChatCommands = {
 				await ClanBattleLogs.deleteMany({
 					$or: [
 						{ winningClan: clanId },
-						{ losingClan: clanId }
-					]
+						{ losingClan: clanId },
+					],
 				});
 				// Delete all wars involving this clan
 				await ClanWars.deleteMany({
-					clans: clanId
+					clans: clanId,
 				});
 
 				if (ownerUser?.connected) {
@@ -1769,11 +1769,11 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Level:</strong> ${clan.level}<br />`;
 			html += `<strong>Points:</strong> ${clan.points}<br />`;
 			html += `<strong>Clan ELO:</strong> ${Math.floor(clan.stats.elo || 1000)}<br />`;
-			html += `<strong>War Battles:</strong> ${clan.stats.clanBattleWins || 0} W / ${clan.stats.clanBattleLosses || 0} L<br />`;			
+			html += `<strong>War Battles:</strong> ${clan.stats.clanBattleWins || 0} W / ${clan.stats.clanBattleLosses || 0} L<br />`;
 			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins}<br />`;
 			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
-			//html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
+			// html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
 			html += `<strong>Created:</strong> ${clanAge} ago<br />`;
 			html += `</div></div></div>`;
 			this.sendReply(`|html|${html}`);
@@ -1825,7 +1825,6 @@ export const commands: Chat.ChatCommands = {
 					eloChangeStr = `<em>-</em>`;
 				}
 
-
 				dataRows.push([
 					to(new Date(log.timestamp), { date: true, time: true }),
 					isWin ? `<strong style="color:green;">Win</strong>` : `<strong style="color:red;">Loss</strong>`,
@@ -1839,7 +1838,6 @@ export const commands: Chat.ChatCommands = {
 			const output = generateThemedTable(title, headerRow, dataRows);
 			this.sendReply(`|html|${output}`);
 		},
-
 
 		async addpoints(target, room, user) {
 			this.checkCan('roomowner');

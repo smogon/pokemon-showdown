@@ -123,7 +123,7 @@ export interface ClanWar {
 	paused?: boolean;
 	pauseConfirmations?: ID[];
 	resumeConfirmations?: ID[];
-	extendConfirmations?: Array<{ clanId: ID; newBestOf: number }>;
+	extendConfirmations?: { clanId: ID, newBestOf: number }[];
 }
 
 export interface ClanBattleLogEntry {

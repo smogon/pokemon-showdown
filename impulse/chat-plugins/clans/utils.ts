@@ -118,7 +118,7 @@ export const K_FACTOR = 32; // Standard ELO K-factor
  * @returns The probability of player A winning (0 to 1)
  */
 export function getExpectedScore(eloA: number, eloB: number): number {
-	return 1 / (1 + Math.pow(10, (eloB - eloA) / 400));
+	return 1 / (1 + 10 ** ((eloB - eloA) / 400));
 }
 
 /**
