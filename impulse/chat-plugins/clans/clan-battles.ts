@@ -7,7 +7,7 @@
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
 import type { ClanBattleLogEntry, Clan } from './interface';
 import { Utils } from '../../../lib';
-import { K_FACTOR, getExpectedScore, calculateElo } from './elo';
+import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
     // 1. Initial Validation
