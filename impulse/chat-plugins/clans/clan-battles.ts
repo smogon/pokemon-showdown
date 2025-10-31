@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* Clans Battle Hook
-*/
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
 import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
 import { Utils } from '../../../lib';
@@ -9,13 +5,6 @@ import { K_FACTOR, getExpectedScore, calculateElo, generateWarCard } from './uti
 
 const LOBBY_ROOM_ID = 'lobby' as RoomID;
 
-/**
- * Handles the end of a battle between two users, checking if it is a clan war battle,
- * updating war scores, ELO ratings (if the war ends), and announcing the results.
- * @param battle The battle room object.
- * @param winner The ID of the winning user.
- * @param players The IDs of all players in the battle (expected to be two).
- */
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
 	if (players.length !== 2 || battle.tour) return;
 	const [p1, p2] = players;
@@ -45,12 +34,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
 	const newLoserScore = war.scores[loserClanId] || 0;
 
-	// Get names for the battle log message
 	const winnerName = Users.get(winner)?.name || winner;
 	const loserName = Users.get(loser)?.name || loser;
 
 	if (newWinnerScore === winsNeeded) {
-		// WAR ENDS
 		const [winnerClan, loserClan] = await Promise.all([
 			Clans.findOne({ _id: winnerClanId }),
 			Clans.findOne({ _id: loserClanId }),
@@ -104,21 +91,18 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			// Update UHTML card
-			// We need clan1 (challenger) and clan2 (target)
 			const [clan1, clan2] = await Promise.all([
 				Clans.findOne({ _id: war.clans[0] }),
 				Clans.findOne({ _id: war.clans[1] }),
 			]);
-			if (!clan1 || !clan2) return; // Should not happen
+			if (!clan1 || !clan2) return;
 
 			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
 			const endMessage = `${winnerClan.name} emerges victorious over ${loserClan.name}! ${warScore}`;
 			
-			// Manually update local war object for card generation
 			war.status = 'completed';
 			war.scores[winnerClanId] = newWinnerScore;
-			war.scores[loserClanId] = newLoserScore; // Ensure loser score is also set for the card
+			war.scores[loserClanId] = newLoserScore;
 
 			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
@@ -141,7 +125,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			});
 		}
 	} else {
-		// WAR CONTINUES
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
 			winningClan: winnerClanId,
@@ -165,29 +148,25 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			// Get winner/loser clan objects
 			const [winnerClan, loserClan, updatedWar] = await Promise.all([
 				Clans.findOne({ _id: winnerClanId }),
 				Clans.findOne({ _id: loserClanId }),
-				ClanWars.findOne({ _id: war._id }), // Re-fetch the war to get the new score
+				ClanWars.findOne({ _id: war._id }),
 			]);
 			if (!winnerClan || !loserClan || !updatedWar) return;
 
-			// *** NEW: Create Last Battle Info ***
 			const lastBattle = { winnerName, loserName, winningClanName: winnerClan.name };
 
-			// Update UHTML card
 			const [clan1, clan2] = await Promise.all([
-				Clans.findOne({ _id: updatedWar.clans[0] }), // Challenger
-				Clans.findOne({ _id: updatedWar.clans[1] }), // Target
+				Clans.findOne({ _id: updatedWar.clans[0] }),
+				Clans.findOne({ _id: updatedWar.clans[1] }),
 			]);
-			if (!clan1 || !clan2) return; // Should not happen
+			if (!clan1 || !clan2) return;
 
 			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
 			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 			
-			// Determine which room gets which HTML
 			const challengerRoom = Rooms.get(clan1.chatRoom);
 			const targetRoom = Rooms.get(clan2.chatRoom);
 			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
@@ -210,9 +189,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	}
 }
 
-/**
- * Chat handler registration for the plugin.
- */
 export const handlers: Chat.Handlers = {
 	onBattleEnd: handleClanBattleEnd,
 };
