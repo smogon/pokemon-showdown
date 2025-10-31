@@ -1334,13 +1334,15 @@ export const warCommands: Chat.ChatCommands = {
 		} else if (score2 > score1) {
 			winnerText = `${clan2.name} has prevailed: ${score2} - ${score1}!`;
 		}
-
-		const message = `|html|<div class="broadcast-red"><center><strong>⚡ ADMIN INTERVENTION ⚡</strong><br /><strong>War Concluded by Admin ${user.name}</strong><br />${winnerText}<br />Battle Score: ${score1} - ${score2}</center></div>`;
+        
+        const uhtmlId = `clan-war-card-${war._id}`;
+        const endMessage = `[ADMIN] ${user.name} has concluded the war. Final Score: ${score1} - ${score2}`;
+        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 		this.sendReply(`Force ended the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1375,12 +1377,14 @@ export const warCommands: Chat.ChatCommands = {
 		const score1 = war.scores[clan1._id] || 0;
 		const score2 = war.scores[clan2._id] || 0;
 
-		const message = `|html|<div class="broadcast-red"><center><strong>STALEMATE DECLARED</strong><br /><strong>By Order of Admin ${user.name}</strong><br />The war between ${clan1.name} and ${clan2.name} ends in a draw!<br />Final Battle Score: ${score1} - ${score2}</center></div>`;
+        const uhtmlId = `clan-war-card-${war._id}`;
+        const endMessage = `[ADMIN] ${user.name} has declared the war a tie. Final Score: ${score1} - ${score2}`;
+        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 		this.sendReply(`Force tied the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1536,13 +1540,23 @@ export const warCommands: Chat.ChatCommands = {
 			{ _id: war._id },
 			{ $set: { scores: { [c1ID]: score1, [c2ID]: score2 } } }
 		);
-
-		const message = `|html|<div class="broadcast-red"><center><strong>⚙️ BATTLE SCORE ADJUSTED ⚙️</strong><br />By Admin ${user.name}<br />${clan1.name} ${score1} - ${score2} ${clan2.name}<br />The war continues with corrected scores!</center></div>`;
+        
+        const updatedWar = await ClanWars.findOne({ _id: war._id });
+        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+        
+        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+        const lastBattle = {
+            winnerName: "Admin",
+            loserName: `${user.name}`,
+            winningClanName: `Score manually set to ${score1} - ${score2}`,
+        };
+        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 		this.sendReply(`War score updated. ${clan1.name}: ${score1}, ${clan2.name}: ${score2}.`);
 	},
@@ -1582,13 +1596,22 @@ export const warCommands: Chat.ChatCommands = {
 			{ $set: { bestOf: newBestOf } }
 		);
 
-		const winsNeeded = Math.ceil(newBestOf / 2);
-		const message = `|html|<div class="broadcast-red"><center><strong>📊 FORMAT ADJUSTED 📊</strong><br />By Admin ${user.name}<br />New Format: Best of ${newBestOf} (First to ${winsNeeded} wins)<br />The stakes have changed!</center></div>`;
+        const updatedWar = await ClanWars.findOne({ _id: war._id });
+        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+        
+        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+        const lastBattle = {
+            winnerName: "Admin",
+            loserName: `${user.name}`,
+            winningClanName: `Format changed to Best of ${newBestOf}`,
+        };
+        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 		this.sendReply(`War 'Best of' updated to ${newBestOf} for the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1617,13 +1640,18 @@ export const warCommands: Chat.ChatCommands = {
 			Clans.findOne({ _id: war.clans[1] }),
 		]);
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+        
+        const updatedWar = await ClanWars.findOne({ _id: war._id });
+        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 
-		const message = `|html|<div class="broadcast-red"><center><strong> WAR PAUSED BY ADMIN </strong><br />Admin ${user.name} has halted all battles.<br />Trainers, take shelter and wait for the signal to resume!</center></div>`;
+        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been paused.`);
 	},
@@ -1653,12 +1681,17 @@ export const warCommands: Chat.ChatCommands = {
 		]);
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
-		const message = `|html|<div class="broadcast-green"><center><strong> BATTLE STATIONS! </strong><br />Admin ${user.name} calls for the war to resume!<br />Send your trainers back into battle! The showdown continues!</center></div>`;
+        const updatedWar = await ClanWars.findOne({ _id: war._id });
+        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+
+        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been resumed.`);
 	},
@@ -1735,15 +1768,31 @@ export const warCommands: Chat.ChatCommands = {
 			startDate: Date.now(),
 			bestOf,
 		};
-		await ClanWars.insertOne(newWar as ClanWarDoc);
+		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
+        const warId = insertResult.insertedId;
+        if (!warId) {
+            this.errorReply("There was an error creating the war document. Aborting.");
+            return;
+        }
+        const war = await ClanWars.findOne({ _id: warId });
+        if (!war) {
+            this.errorReply("Failed to fetch the newly created war. Aborting.");
+            return;
+        }
 
-		const winsNeeded = Math.ceil(bestOf / 2);
-		const message = `|html|<div class="broadcast-green"><center><strong> POKÉMON WAR BEGINS! </strong><br /><strong style="font-size: 1.3em;">${clan1.name}</strong> vs <strong style="font-size: 1.3em;">${clan2.name}</strong><br /><strong>Best of ${bestOf}</strong> — First to ${winsNeeded} 1v1 wins claims victory!<br />Initiated by Admin ${user.name}<br /><strong>Current Score:</strong> ${clan1.name} 0 - 0 ${clan2.name}<br />LET THE BATTLE BEGIN!</center></div>`;
+        const uhtmlId = `clan-war-card-${war._id}`;
+        const lastBattle = {
+            winnerName: "Admin",
+            loserName: `${user.name}`,
+            winningClanName: "War forcibly started",
+        };
+        const challengerHtml = generateWarCard(war, clan1, clan2, 'challenger', { lastBattle });
+        const targetHtml = generateWarCard(war, clan1, clan2, 'target', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
-		if (room1) room1.add(message).update();
-		if (room2) room2.add(message).update();
+		if (room1) room1.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
+		if (room2) room2.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
 
 		this.sendReply(`Force-started an active war between ${clan1.name} and ${clan2.name}.`);
 	},
