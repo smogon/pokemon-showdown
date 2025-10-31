@@ -301,9 +301,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	revive: {
 		// see scripts.ts
+		name: "Revive",
 		shortDesc: "Non-functional placeholder",
 		/* shortDesc: "When this Pokemon has 0 HP, it switches out and is revived to 1/2 max HP. Once per battle.",
-		name: "Revive",
 		onBeforeSwitchIn(pokemon) {
 			if (this.effectState.zombie) {
 				this.effectState.zombie = false;
