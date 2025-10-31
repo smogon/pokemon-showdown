@@ -176,6 +176,7 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
  * @param perspective Used to determine which buttons to show.
  * 'challenger': Shows buttons for clan1.
  * 'target': Shows buttons for clan2.
+ * 'public': Shows no buttons (for lobby).
  * 'ended': Shows a final message.
  * @param options Optional data for end messages or last battle.
  */
@@ -183,7 +184,7 @@ export function generateWarCard(
 	war: ClanWar,
 	clan1: Clan & { _id: ID },
 	clan2: Clan & { _id: ID },
-	perspective: 'challenger' | 'target' | 'ended',
+	perspective: 'challenger' | 'target' | 'ended' | 'public',
 	options: {
 		endMessage?: string,
 		lastBattle?: { winnerName: string, loserName: string, winningClanName: string },
@@ -196,16 +197,12 @@ export function generateWarCard(
 	let html = `<div class="infobox" style="border: 2px solid #6688AA; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); padding: 10px;">`;
 	html += `<center><strong style="font-size: 1.3em;">POKÉMON WAR</strong><hr style="margin: 5px 0;">`;
 
-	// --- THIS IS THE START OF THE FIX ---
-
 	// Clans and ELO (Horizontal and centered)
 	html += `<div style="margin: 10px 0; font-size: 1.2em;">`;
 	html += `<strong style="font-size: 1.2em;">${clan1.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
 	html += ` <strong style="font-size: 1.5em; color: #AAA; margin: 0 10px;">VS</strong> `;
 	html += `<strong style="font-size: 1.2em;">${clan2.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
 	html += `</div>`;
-
-	// --- THIS IS THE END OF THE FIX ---
 
 	// Format
 	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
@@ -242,7 +239,21 @@ export function generateWarCard(
 
 		// Buttons/Actions
 		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		if (war.status === 'pending') {
+		
+		if (perspective === 'public') {
+			// Public view has no buttons, just context
+			if (war.status === 'pending') {
+				html += `<em>Waiting for ${clan2.name} to respond...</em>`;
+			} else if (war.status === 'active') {
+				if (war.paused) {
+					html += `<strong>The war is currently paused.</strong>`;
+				} else {
+					html += `<strong>The war is on! Good luck, trainers!</strong>`;
+				}
+			} else if (war.status === 'completed') {
+				html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
+			}
+		} else if (war.status === 'pending') {
 			if (perspective === 'challenger') {
 				html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
 				html += `<button class"button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
