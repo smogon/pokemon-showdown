@@ -190,7 +190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
-			if (target?.item && !target.itemState.knockedOff) {
+			if (target?.item) {
 				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
@@ -390,7 +390,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
-			if (move.secondaries) {
+			if (move.secondaries && move.id !== 'chatter') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
 					if (secondary.chance) secondary.chance *= 2;
@@ -534,21 +534,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (bannedAbilities.includes(target.ability)) {
 				return;
 			}
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
-			}
+			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
-	},
-	unburden: {
-		inherit: true,
-		condition: {
-			onModifySpe(spe, pokemon) {
-				if ((!pokemon.item || pokemon.itemState.knockedOff) && !pokemon.ignoringAbility()) {
-					return this.chainModify(2);
-				}
-			},
-		},
 	},
 	vitalspirit: {
 		inherit: true,
@@ -563,10 +551,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0) {
+			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
 				this.add('-immune', target, '[from] ability: Wonder Guard');
 				return null;
 			}
 		},
+	},
+	rebound: {
+		inherit: true,
+		onTryHitSide() {},
 	},
 };

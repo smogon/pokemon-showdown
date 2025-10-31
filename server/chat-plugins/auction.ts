@@ -203,13 +203,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	generateAuctionTable() {
 		const queue = this.queue.filter(team => !team.isSuspended());
+		const lastIndexOfNomTeam = queue.lastIndexOf(queue[0]) + 1;
 		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!this.ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th>` : ''}<th style="width: 100%">Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
 			if (!this.ended) {
 				let i1 = queue.indexOf(team) + 1;
 				let i2 = queue.lastIndexOf(team) + 1;
-				if (i1 > queue.length / 2) {
+				if (i1 > lastIndexOfNomTeam) {
 					[i1, i2] = [i2, i1];
 				}
 				buf += `<td align="center" style="width: 15px">${i1 || '-'}</td><td align="center" style="width: 15px">${i2 || '-'}</td>`;
@@ -256,11 +257,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	sendBidInfo() {
-		if (this.type === 'blind') return;
 		let buf = `<div class="infobox">`;
 		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
-		buf += `Top bid: <b>${this.highestBid}</b> `;
-		buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
+		if (this.type === 'auction') buf += `Top bid: <b>${this.highestBid}</b> `;
+		if (this.type === 'auction') buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
 		buf += Utils.html`Tiers Played: <b>${this.nominatedPlayer.tiersPlayed.length ? `${this.nominatedPlayer.tiersPlayed.join(', ')}` : 'N/A'}</b><br/>`;
 		buf += Utils.html`Tiers Not Played: <b>${this.nominatedPlayer.tiersNotPlayed.length ? `${this.nominatedPlayer.tiersNotPlayed.join(', ')}` : 'N/A'}</b>`;
 		buf += `</div>`;
@@ -581,7 +581,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				const curUser = Users.getExact(currManager.id);
 				curUser?.sendTo(this.room, notifyMsg);
 				curUser?.sendTo(this.room,
-					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
+					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of 5000)!`);
 			}
 			this.sendBidInfo();
 			this.startBidTimer();
@@ -618,7 +618,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (bid <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
 			this.highestBid = bid;
 			this.highestBidder = team;
-			// this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
 			this.sendBidInfo();
 			this.startBidTimer();
 		}

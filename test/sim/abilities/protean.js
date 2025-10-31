@@ -180,7 +180,7 @@ describe('Protean', () => {
 		assert(cinder.hasType('Normal'));
 	});
 
-	describe('Gen 6-8', () => {
+	describe('[Gen 6-8]', () => {
 		it(`should activate on both turns of a charge move`, () => {
 			battle = common.gen(8).createBattle([[
 				{ species: 'Wynaut', ability: 'protean', moves: ['bounce'] },

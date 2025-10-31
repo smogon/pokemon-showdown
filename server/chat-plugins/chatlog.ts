@@ -240,6 +240,11 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
 			`<strong>${day}</strong></p><small>${opts ? `Options in use: ${opts}` : ''}</small> <hr />`;
 
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
+
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
@@ -361,6 +366,10 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> / ` +
 			`<strong>${month}</strong></p><hr />`;
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -397,6 +406,11 @@ export const LogViewer = new class {
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<strong>${roomid}</strong></p><hr />`;
+
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -465,9 +479,12 @@ export const LogViewer = new class {
 };
 
 export abstract class Searcher {
-	static checkEnabled() {
+	static checkEnabled(user?: User) {
 		if (global.Config.disableripgrep) {
 			throw new Chat.ErrorMessage("Log searching functionality is currently disabled.");
+		}
+		if (user && Config.searchlogrank && !Users.globalAuth.atLeast(user, Config.searchlogrank)) {
+			throw new Chat.ErrorMessage("Access denied.");
 		}
 	}
 	roomstatsCache = new Map<string, RoomStats>();
@@ -539,9 +556,22 @@ export abstract class Searcher {
 		);
 		context.setHTML(await LogSearcher.searchLinecounts(roomid, month, user));
 	}
-	runSearch() {
-		throw new Chat.ErrorMessage(`This functionality is currently disabled.`);
+	async runSearch(
+		context: Chat.PageContext, search: string, roomid: RoomID, date: string, limit: number | null
+	) {
+		context.title = `[Search] [${roomid}] ${search}`;
+		if (!Rooms.Roomlogs.table) {
+			throw new Error(`Database logging must be enabled to use this feature.`);
+		}
+		context.setHTML(
+			`<div class="pad"><h2>Running a chatlog search for "${search}" on room ${roomid}` +
+			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
+			`.</h2></div>`
+		);
+		const response = await this.searchLogs(roomid, search, limit, date);
+		return context.setHTML(response);
 	}
+	abstract searchLogs(roomid: RoomID, search: string, limit: number | null, date: string): Promise<string>;
 	// this would normally be abstract, but it's very difficult with ripgrep
 	// so it's easier to just do it the same way for both.
 	async roomStats(room: RoomID, month: string) {
@@ -601,6 +631,9 @@ export class FSLogSearcher extends Searcher {
 	constructor() {
 		super();
 		this.results = 0;
+	}
+	searchLogs(): Promise<string> {
+		throw new Chat.ErrorMessage(`Searching logs is not supported right now. Use database text logging to enable it.`);
 	}
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		const directory = Monitor.logPath(`chat/${roomid}/${month}`);
@@ -822,6 +855,78 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 }
 
 export class DatabaseLogSearcher extends Searcher {
+	async searchLogs(roomid: RoomID, rawSearch: string, limit: number | null, month: string) {
+		if (!limit) limit = 500;
+		if (limit > 5000) limit = 5000;
+		const search = {} as Record<string, [string, boolean]>;
+		const [monthStart, monthEnd] = LogReader.monthToRange(month);
+		if (!Rooms.Roomlogs.table) {
+			throw new Error(`Database table missing but searchlogs called`);
+		}
+		const parsedSearch = [];
+		for (let part of rawSearch.split(',').map(x => x.trim())) {
+			let negated = false;
+			if (part.includes('!=')) {
+				negated = true;
+				part = part.replace('!=', '=');
+			}
+			// account for some common instances of user search
+			if (['user=', 'user:', 'user-'].some(x => part.toLowerCase().startsWith(x))) {
+				search.user = [toID(part.slice(5)), negated];
+			} else {
+				// strip out special characters
+				part = part.replace(/[/\\:=!|&?*<->]+/g, ' ');
+				if (toID(part).length) parsedSearch.push(part);
+			}
+		}
+
+		const results = await Rooms.Roomlogs.table.selectAll()`
+			WHERE ${
+				search.user ? SQL`userid ${search.user[1] ? SQL`!=` : SQL`=`} ${search.user[0]} AND ` : SQL``
+			} time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
+			type = ${'c'} AND roomid = ${roomid}
+			${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(',')})` : SQL``} LIMIT ${limit}
+		`;
+
+		let curDate = '';
+
+		let parsedSearchStr = `"${parsedSearch.join(', ')}" `;
+		const argStr = Object.entries(search).map(([key, val]) => `${key}${val[1] ? '!=' : '='}${val[0]}`);
+		if (argStr.length) parsedSearchStr += `<small> (arguments: ${argStr})</small>`;
+
+		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for ${parsedSearchStr} during the month ${month}:</strong>`;
+		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
+		buf += `<hr />`;
+		const searchStr = `search-${Dashycode.encode(rawSearch)}--limit-${limit}`;
+		const pref = `/join view-chatlog-${roomid}--`;
+		buf += `<button class="button" name="send" value="${pref}${LogReader.prevMonth(month)}--${searchStr}">Previous month</button> `;
+		buf += `<button class="button" name="send" value="${pref}${LogReader.nextMonth(month)}--${searchStr}">Next month</button>`;
+		buf += `<br />`;
+		buf += `<div class="pad"><blockquote>`;
+		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
+			let [lineDate, lineTime] = Chat.toTimestamp(resultRow.time).split(' ');
+			let line = LogViewer.renderLine(`${lineTime} ${resultRow.log}`, '', {
+				roomid, date: lineDate,
+			});
+			if (!line) return null;
+			line = `<div class="chat chatmessage highlighted">${line}</div>`;
+			if (curDate !== lineDate) {
+				curDate = lineDate;
+				lineDate = `</details><details open><summary>[<a href="view-chatlog-${roomid}--${lineDate}">${lineDate}</a>]</summary>`;
+			} else {
+				lineDate = '';
+			}
+			return `${lineDate} ${line}`;
+		}).filter(Boolean).join('<hr />');
+		if (limit && limit < 5000) {
+			buf += `</details></blockquote><hr /><strong>Capped at ${limit}.</strong><br />`;
+			buf += `<button class="button" name="send" value="/sl ${rawSearch},room=${roomid},limit=${limit + 200}">`;
+			buf += `View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${rawSearch},room=${roomid},limit=3000">`;
+			buf += `View all<br />&#x25bc;</button></div>`;
+		}
+		return buf;
+	}
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		user = toID(user);
 		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
@@ -884,6 +989,9 @@ export const pages: Chat.PageTable = {
 			if (roomid.startsWith('spl') && roomid !== 'splatoon') {
 				throw new Chat.ErrorMessage("SPL team discussions are super secret.");
 			}
+			if (roomid.startsWith('scl')) {
+				throw new Chat.ErrorMessage("SCL team discussions are super secret.");
+			}
 			if (roomid.startsWith('wcop')) {
 				throw new Chat.ErrorMessage("WCOP team discussions are super secret.");
 			}
@@ -908,6 +1016,20 @@ export const pages: Chat.PageTable = {
 
 		date = date.trim();
 		let search;
+		let limit = null;
+
+		if (opts?.startsWith('search-')) {
+			let [input, limitString] = opts.split('--limit-');
+			input = input.slice(7);
+			search = Dashycode.decode(input);
+			if (search.length < 3) return this.errorReply(`That's too short of a search query.`);
+			if (limitString) {
+				limit = parseInt(limitString) || null;
+			} else {
+				limit = 500;
+			}
+			opts = '';
+		}
 
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
@@ -921,9 +1043,12 @@ export const pages: Chat.PageTable = {
 		if (isTime && opts) opts = toID(opts.slice(5));
 
 		if (search) {
-			Searcher.checkEnabled();
-			this.checkCan('bypassall');
-			return LogSearcher.runSearch();
+			if (!/^\d{4}-\d{2}$/.test(date)) {
+				throw new Chat.ErrorMessage(`Date must be a month in the YYYY-MM format.`);
+			}
+			Searcher.checkEnabled(user);
+			if (validDateStrings.includes(date)) throw new Chat.ErrorMessage(`Months must be specified for searching.`);
+			return LogSearcher.runSearch(this, search, roomid, date, limit);
 		} else {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
@@ -1040,7 +1165,7 @@ export const commands: Chat.ChatCommands = {
 		target = target.trim();
 		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');
-		let date = 'all';
+		let date = LogReader.getMonth(LogReader.today());
 		const searches: string[] = [];
 		let limit = '500';
 		let targetRoom: RoomID | undefined = room?.roomid;
@@ -1062,7 +1187,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		return this.parse(
 			`/join view-chatlog-${targetRoom}--${date}--search-` +
-			`${Dashycode.encode(searches.join('+'))}--limit-${limit}`
+			`${Dashycode.encode(searches.join(','))}--limit-${limit}`
 		);
 	},
 	searchlogshelp() {
@@ -1072,9 +1197,10 @@ export const commands: Chat.ChatCommands = {
 			`A limit can be specified using the argument <code>limit=[number less than or equal to 3000]</code>. Defaults to 500.<br />` +
 			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date=[month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
-			`All other arguments will be considered part of the search ` +
+			`Likewise, <code>user!=username</code> will only result in messages not from that user.<br />` +
+			`<strong>All other arguments will be considered part of the search string</strong>` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
-			"Requires: ~</div>";
+			"Requires: % @ # ~</div>";
 		return this.sendReplyBox(buffer);
 	},
 	topusers: 'linecount',

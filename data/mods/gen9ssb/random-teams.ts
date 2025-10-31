@@ -264,6 +264,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Good Vibes Only',
 		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
+	Cassiopeia: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -433,12 +439,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Augur of Ebrietas',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Ghost',
 	},
-	Hecate: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
-	},
 	HiZo: {
 		species: 'Zoroark-Hisui', ability: 'Justified', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Last Respects', 'Blood Moon', 'Spirit Break'],
@@ -570,12 +570,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Diamond Storm', 'Headlong Rush', ['Glacial Lance', 'U-turn']],
 		signatureMove: 'Shuckle Power',
 		evs: { hp: 252, def: 252, spd: 4 }, ivs: { spe: 0 }, nature: 'Relaxed', teraType: 'Ground', shiny: 213,
-	},
-	Lily: {
-		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
-		signatureMove: 'Power Up',
-		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
@@ -1111,9 +1105,9 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
-		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmovesclause') && debug.length;
+		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmoveclause') && !debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
-			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
+			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
 		let pool = meme ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		if (debug.length) {
@@ -1124,7 +1118,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 			pool = debug;
 		}
-		if (monotype && !debug.length) {
+		if (monotype && !debug.length && !afd && !meme) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
 		if (global.Config?.disabledssbsets?.length) {
@@ -1184,7 +1178,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves.push(this.dex.moves.get(move).name);
 			}
 			moves.push(this.dex.moves.get(ssbSet.signatureMove).name);
-			const ivs = { ...{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }, ...ssbSet.ivs };
+			const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...ssbSet.ivs };
 			if (!moves.map(x => this.dex.moves.get(x)).some(x => x.category === 'Physical')) {
 				ivs.atk = 0;
 			}
@@ -1197,7 +1191,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves,
 				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
 				gender: ssbSet.gender ? this.sampleIfArray(ssbSet.gender) : this.sample(['M', 'F', 'N']),
-				evs: ssbSet.evs ? { ...{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ...ssbSet.evs } :
+				evs: ssbSet.evs ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...ssbSet.evs } :
 				{ hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 				ivs,
 				level: this.adjustLevel || ssbSet.level || 100,

@@ -34,4 +34,13 @@ describe('Chatter [Gen 5]', () => {
 		battle.makeChoices('move chatter', 'move rest');
 		assert.equal(battle.p2.active[0].item, 'focussash');
 	});
+
+	it('should be boosted by Sheer Force', () => {
+		battle = common.gen(5).createBattle([
+			[{ species: "Rayquaza", ability: 'sheerforce', moves: ['chatter'] }],
+			[{ species: "Carnivine", ability: 'battlearmor', moves: ['sleeptalk'] }],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+	});
 });

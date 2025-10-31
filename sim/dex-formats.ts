@@ -46,6 +46,7 @@ export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
+	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	tagRules: string[];
 	valueRules: Map<string, string>;
@@ -68,6 +69,7 @@ export class RuleTable extends Map<string, string> {
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
+		this.onChooseTeam = null;
 		this.timer = null;
 		this.tagRules = [];
 		this.valueRules = new Map();
@@ -277,7 +279,7 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.get('evlimit') === 'Auto') {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'gen7letsgo') {
-				this.evLimit = this.has('allowavs') ? null : 0;
+				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
 			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
@@ -470,6 +472,9 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	) => Species | void;
 	declare readonly onBattleStart?: (this: Battle) => void;
 	declare readonly onTeamPreview?: (this: Battle) => void;
+	declare readonly onChooseTeam?: (
+		this: Battle, positions: number[], pokemon: Pokemon[], autoChoose?: boolean
+	) => number[] | string | void;
 	declare readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
@@ -676,9 +681,9 @@ export class DexFormats {
 			if (ruleset) return ruleset;
 		}
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			name = this.dex.data.Aliases[id];
-			id = toID(name);
+		if (this.dex.getAlias(id)) {
+			id = this.dex.getAlias(id)!;
+			name = id;
 		}
 		if (this.dex.data.Rulesets.hasOwnProperty(DEFAULT_MOD + id)) {
 			id = (DEFAULT_MOD + id) as ID;
@@ -749,6 +754,9 @@ export class DexFormats {
 		}
 		if (format.checkCanLearn) {
 			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
+		}
+		if (format.onChooseTeam) {
+			ruleTable.onChooseTeam = [format.onChooseTeam, format.name];
 		}
 
 		// apply rule repeals before other rules
@@ -932,6 +940,15 @@ export class DexFormats {
 				}
 				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
 			}
+			if (subRuleTable.onChooseTeam) {
+				if (ruleTable.onChooseTeam) {
+					throw new Error(
+						`"${format.name}" has conflicting team selection rules from ` +
+						`"${ruleTable.onChooseTeam[1]}" and "${subRuleTable.onChooseTeam[1]}"`
+					);
+				}
+				ruleTable.onChooseTeam = subRuleTable.onChooseTeam;
+			}
 		}
 		if (!hasPokemonBans && warnForNoPokemonBans) {
 			throw new Error(`"+All Pokemon" rule has no effect (no species are banned by default, and it does not override obtainability rules)`);
@@ -1030,7 +1047,7 @@ export class DexFormats {
 			}
 		}
 		const ruleid = id;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		id = this.dex.getAlias(id) || id;
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;

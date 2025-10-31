@@ -381,6 +381,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
+		// Enforce Stealth Rock if the team doesn't already have it
+		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
 		// Enforce recovery
 		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Spinner', 'Staller'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
@@ -553,6 +559,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (species.id === 'ditto' || (species.id === 'rampardos' && role === 'Fast Attacker')) return 'Choice Scarf';
+		if (species.id === 'honchkrow') return 'Life Orb';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id === 'yanmega') return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {

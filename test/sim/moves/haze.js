@@ -53,7 +53,7 @@ describe('[Gen 1] Haze', () => {
 		assert.equal(battle.p2.active[0].status, 'par');
 	});
 
-	it('should remove focus energy', () => {
+	it('should remove focus energy in gen 1', () => {
 		battle = common.gen(1).createBattle([
 			[{ species: "Mew", moves: ['splash'] }],
 			[{ species: "Mewtwo", moves: ['focusenergy', 'haze'] }],
@@ -179,5 +179,36 @@ describe('[Gen 1] Haze', () => {
 		assert.equal(battle.p2.active[0].status, 'frz');
 		battle.makeChoices('move haze', 'auto');
 		assert.equal(battle.lastMove.name, 'Haze');
+	});
+});
+
+describe('[Gen 4] Haze', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should remove focus energy in gen 4', () => {
+		battle = common.gen(4).createBattle([
+			[{ species: "Mew", moves: ['splash'] }],
+			[{ species: "Mewtwo", moves: ['focusenergy', 'haze'] }],
+		]);
+
+		battle.makeChoices('move splash', 'move focusenergy');
+		assert(battle.p2.active[0].volatiles['focusenergy']);
+
+		battle.makeChoices('move splash', 'move haze');
+		assert.equal(battle.p2.active[0].volatiles['focusenergy'], undefined);
+	});
+	it('should not remove focus energy in other gens', () => {
+		battle = common.gen(3).createBattle([
+			[{ species: "Mew", moves: ['splash'] }],
+			[{ species: "Mewtwo", moves: ['focusenergy', 'haze'] }],
+		]);
+
+		battle.makeChoices('move splash', 'move focusenergy');
+		assert(battle.p2.active[0].volatiles['focusenergy']);
+
+		battle.makeChoices('move splash', 'move haze');
+		assert(battle.p2.active[0].volatiles['focusenergy']);
 	});
 });
