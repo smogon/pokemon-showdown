@@ -177,14 +177,17 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
  * 'challenger': Shows buttons for clan1.
  * 'target': Shows buttons for clan2.
  * 'ended': Shows a final message.
- * @param endMessage Optional message for the 'ended' perspective.
+ * @param options Optional data for end messages or last battle.
  */
 export function generateWarCard(
 	war: ClanWar,
 	clan1: Clan & { _id: ID },
 	clan2: Clan & { _id: ID },
 	perspective: 'challenger' | 'target' | 'ended',
-	endMessage?: string
+	options: {
+		endMessage?: string,
+		lastBattle?: { winnerName: string, loserName: string, winningClanName: string },
+	} = {}
 ): string {
 	const clan1Elo = Math.floor(clan1.stats.elo || 1000);
 	const clan2Elo = Math.floor(clan2.stats.elo || 1000);
@@ -203,13 +206,11 @@ export function generateWarCard(
 	// Format
 	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
 
-	// --- THIS IS THE START OF THE FIX ---
-
 	// If the perspective is 'ended', show a final conclusive state.
 	if (perspective === 'ended') {
 		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">ENDED</span>`;
 		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This challenge is no longer valid.')}</strong>`;
+		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This challenge is no longer valid.')}</strong>`;
 		html += `</div>`;
 	} else {
 		// Otherwise, follow the normal logic for pending/active states.
@@ -223,6 +224,13 @@ export function generateWarCard(
 				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
 			}
 			html += `<strong style="font-size: 1.2em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
+		
+			// *** NEW: Add Last Battle Info ***
+			if (options.lastBattle) {
+				html += `<div style="font-size: 0.9em; color: #555; margin-top: 5px; border-top: 1px solid #EEE; padding-top: 5px;">`;
+				html += `Last Battle: <strong>${Utils.escapeHTML(options.lastBattle.winnerName)}</strong> defeated <strong>${Utils.escapeHTML(options.lastBattle.loserName)}</strong> (<strong>${Utils.escapeHTML(options.lastBattle.winningClanName)}</strong> +1)`;
+				html += `</div>`;
+			}
 		} else if (war.status === 'completed') {
 			html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
 			html += `<strong style="font-size: 1.2em;">Final Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
@@ -276,13 +284,11 @@ export function generateWarCard(
 				}
 			}
 		} else if (war.status === 'completed') {
-			html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This war has concluded.')}</strong>`;
+			html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
 		}
 		html += `</div>`;
 	}
 	
-	// --- THIS IS THE END OF THE FIX ---
-
 	html += `</center></div>`;
 	return html;
 }
