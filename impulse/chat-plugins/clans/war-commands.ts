@@ -255,7 +255,7 @@ export const warCommands: Chat.ChatCommands = {
 
 		const endMessage = `${myClan.name} has refused the war challenge from ${challengerClan.name}.`;
 		// 'ended' perspective does not need clan-specific views
-		const endedHtml = generateWarCard(war, challengerClan, myClan, 'ended', endMessage);
+		const endedHtml = generateWarCard(war, challengerClan, myClan, 'ended', { endMessage });
 
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
@@ -321,7 +321,7 @@ export const warCommands: Chat.ChatCommands = {
 		
 		const endMessage = `${myClan.name} has withdrawn their war challenge to ${targetClan.name}.`;
 		// 'ended' perspective does not need clan-specific views
-		const endedHtml = generateWarCard(war, myClan, targetClan, 'ended', endMessage);
+		const endedHtml = generateWarCard(war, myClan, targetClan, 'ended', { endMessage });
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
@@ -567,39 +567,43 @@ export const warCommands: Chat.ChatCommands = {
 		);
 
 		const updatedWar = await ClanWars.findOne({ _id: war._id });
-		const confirmations = updatedWar?.tieConfirmations || [];
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+		const confirmations = updatedWar.tieConfirmations || [];
+		
+		// Determine who is clan1 (challenger) and clan2 (target)
+        const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
+        const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
 		if (confirmations.length === 2) {
 			await ClanWars.updateOne(
 				{ _id: war._id },
-				{ $set: { status: 'completed', endDate: Date.now() } }
+				{ $set: { status: 'completed', endDate: Date.now() }, $unset: { tieConfirmations: 1 } }
 			);
 
-			const score1 = war.scores[war.clans[0]] || 0;
-			const score2 = war.scores[war.clans[1]] || 0;
-
-			const [clan1, clan2] = await Promise.all([
-				Clans.findOne({ _id: war.clans[0] }),
-				Clans.findOne({ _id: war.clans[1] }),
-			]);
-
-			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
-
-			const message = `|html|<div class="broadcast-blue"><center><strong>STALEMATE</strong><br />The war between <strong>${clan1.name}</strong> and <strong>${clan2.name}</strong> has ended in a draw!<br /><strong>Final Score:</strong> ${score1} - ${score2}<br />Both clans fought with honor. A worthy match!</center></div>`;
+			const score1 = war.scores[clan1._id] || 0;
+			const score2 = war.scores[clan2._id] || 0;
+			
+			const endMessage = `The war between ${clan1.name} and ${clan2.name} has ended in a draw! Final Score: ${score1} - ${score2}`;
+			const endedHtml = generateWarCard(updatedWar, clan1, clan2, 'ended', { endMessage });
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
-			if (room1) room1.add(message).update();
-			if (room2) room2.add(message).update();
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 			this.sendReply(`The war with ${opponentClan.name} has been concluded as a tie.`);
 		} else {
+			// This is the first proposal
 			this.sendReply(`You have proposed ending the war as a tie. Waiting for ${opponentClan.name}'s decision...`);
 
-			const opponentRoom = Rooms.get(opponentClan.chatRoom);
-			if (opponentRoom) {
-				opponentRoom.add(`|html|<div class="broadcast-blue"><center><strong>TIE PROPOSAL</strong><br /><strong>${myClan.name}</strong> proposes to end the war as a draw!<br />Current score is even—both clans have fought hard.<br /><br />Use <strong>/clan war tie ${clanId}</strong> to accept and conclude the war.</center></div>`).update();
-			}
+            const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+            const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+            
+            const room1 = Rooms.get(clan1.chatRoom);
+            const room2 = Rooms.get(clan2.chatRoom);
+
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 		}
 	},
 
