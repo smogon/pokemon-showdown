@@ -3,7 +3,8 @@
 * Clans Utility Functions
 */
 import { ClanLogs } from './database';
-import type { Clan, ClanPermissions, ClanLogType } from './interface';
+import type { Clan, ClanPermissions, ClanLogType, ClanWar } from './interface';
+import { Utils } from '../../../lib';
 
 /**
  * Logs clan-related activity to the ClanLogs collection.
@@ -165,4 +166,81 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
 	const newLoserElo = loserElo - eloChange;
 
 	return [newWinnerElo, newLoserElo, eloChange];
+}
+
+/**
+ * Generates the HTML for a clan war UHTML card.
+ * @param war The ClanWar object.
+ * @param clan1 Clan object for war.clans[0] (Challenger).
+ * @param clan2 Clan object for war.clans[1] (Target).
+ * @param perspective Used to determine which buttons to show.
+ * 'challenger': Shows 'Cancel' button.
+ * 'target': Shows 'Accept/Deny' buttons.
+ * 'active': Shows active war status (or paused/resume buttons).
+ * 'ended': Shows a final message.
+ * @param endMessage Optional message for the 'ended' perspective.
+ */
+export function generateWarCard(
+	war: ClanWar,
+	clan1: Clan,
+	clan2: Clan,
+	perspective: 'challenger' | 'target' | 'active' | 'ended',
+	endMessage?: string
+): string {
+	const clan1Elo = Math.floor(clan1.stats.elo || 1000);
+	const clan2Elo = Math.floor(clan2.stats.elo || 1000);
+	const winsNeeded = Math.ceil(war.bestOf / 2);
+
+	let html = `<div class="infobox" style="border: 2px solid #6688AA; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); padding: 10px;">`;
+	html += `<center><strong style="font-size: 1.3em;">POKÉMON WAR</strong><hr style="margin: 5px 0;">`;
+
+	// Clans and ELO
+	html += `<div style="display: flex; justify-content: space-around; align-items: center; margin: 10px 0;">`;
+	html += `<div style="text-align: center;"><strong style="font-size: 1.2em;">${clan1.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span></div>`;
+	html += `<strong style="font-size: 1.5em; color: #AAA; margin: 0 15px;">VS</strong>`;
+	html += `<div style="text-align: center;"><strong style="font-size: 1.2em;">${clan2.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span></div>`;
+	html += `</div>`;
+
+	// Format
+	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
+
+	// Status and Score
+	if (war.status === 'pending') {
+		html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PENDING</span>`;
+	} else if (war.status === 'active') {
+		if (war.paused) {
+			html += `<strong>Status:</strong> <span style"color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
+		} else {
+			html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
+		}
+		html += `<strong style="font-size: 1.2em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1.id] || 0} - ${war.scores[clan2.id] || 0}</span>`;
+	} else if (war.status === 'completed') {
+		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
+		html += `<strong style="font-size: 1.2em;">Final Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1.id] || 0} - ${war.scores[clan2.id] || 0}</span>`;
+	}
+
+	// Buttons/Actions
+	html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
+	if (perspective === 'challenger') {
+		html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
+		html += `<button class="button" name="send" value="/clan war cancel ${clan2.id}">Withdraw Challenge</button>`;
+	} else if (perspective === 'target') {
+		html += `<strong>${clan1.name} has challenged you!</strong><br />`;
+		html += `<button class="button" name="send" value="/clan war accept ${clan1.id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
+		html += `<button class="button" name="send" value="/clan war deny ${clan1.id}" style="background-color: #f44336; color: white;">Deny</button>`;
+	} else if (perspective === 'active') {
+		if (war.paused) {
+			const opponentId = war.clans[0] === clan1.id ? clan2.id : clan1.id;
+			html += `<strong>The war is paused.</strong><br />`;
+			html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+		} else {
+			const opponentId = war.clans[0] === clan1.id ? clan2.id : clan1.id;
+			html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
+			html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+		}
+	} else if (perspective === 'ended') {
+		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This challenge is no longer valid.')}</strong>`;
+	}
+	html += `</div></center></div>`;
+	return html;
 }
