@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* TCG Commands
+*/
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack,
