@@ -8,43 +8,6 @@ import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo } from './utils';
 
 /**
- * Generates a unique UHTML ID for a given Clan War document.
- * This should match the helper in war-commands.ts.
- * @param warId The unique _id of the ClanWar document.
- * @returns A stable, unique string for UHTML announcements.
- */
-function generateWarUhtmlId(warId: ID): string {
-	return `clanwar-${warId}`;
-}
-
-/**
- * Generates the HTML content for an active war's current score.
- * @param challengerClan The challenging clan object.
- * @param targetClan The challenged clan object.
- * @param war The ClanWar object.
- * @param messageLine The highlighted message about the latest battle.
- * @param battleResultColor The color for the battle result line.
- */
-function generateWarActiveMessage(
-	challengerClan: Clan,
-	targetClan: Clan,
-	war: ClanWar,
-	messageLine: string,
-	battleResultColor: string
-): string {
-	const winsNeeded = Math.ceil(war.bestOf / 2);
-	const c1Score = war.scores[challengerClan.id] || 0;
-	const c2Score = war.scores[targetClan.id] || 0;
-
-	return `<div class="broadcast-blue"><center><strong>POKEMON WAR ACTIVE</strong><br />` +
-		`<strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br />` +
-		`<strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />` +
-		`<strong style="color: ${battleResultColor};">${messageLine}</strong><br />` +
-		`<strong>Current Score:</strong> ${challengerClan.name} ${c1Score} - ${c2Score} ${targetClan.name}` +
-		`</center></div>`;
-}
-
-/**
  * Handles the end of a battle between two users, checking if it is a clan war battle,
  * updating war scores, ELO ratings (if the war ends), and announcing the results.
  * @param battle The battle room object.
@@ -75,32 +38,25 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 		return;
 	}
 
-	const [clan1, clan2] = war.clans[0] === winnerClanId ?
-		[war.clans[0], war.clans[1]] :
-		[war.clans[1], war.clans[0]];
-
-	const [challengerClan, targetClan] = await Promise.all([
-		Clans.findOne({ _id: clan1 }),
-		Clans.findOne({ _id: clan2 }),
-	]);
-
-	if (!challengerClan || !targetClan) {
-		Monitor.crashlog(new Error("War battle ended but a clan was missing."), "Clan War Battle End Handler");
-		return;
-	}
-
 	const winsNeeded = Math.ceil(war.bestOf / 2);
 	const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
 	const newLoserScore = war.scores[loserClanId] || 0;
 
 	const winnerName = Users.get(winner)?.name || winner;
 	const loserName = Users.get(loser)?.name || loser;
-	const uhtmlId = generateWarUhtmlId(war._id);
 
 	if (newWinnerScore === winsNeeded) {
-		// --- WAR END SCENARIO ---
-		const winnerOldElo = challengerClan.id === winnerClanId ? challengerClan.stats.elo || 1000 : targetClan.stats.elo || 1000;
-		const loserOldElo = challengerClan.id === loserClanId ? challengerClan.stats.elo || 1000 : targetClan.stats.elo || 1000;
+		const [winnerClan, loserClan] = await Promise.all([
+			Clans.findOne({ _id: winnerClanId }),
+			Clans.findOne({ _id: loserClanId }),
+		]);
+		if (!winnerClan || !loserClan) {
+			Monitor.crashlog(new Error("War battle ended but a clan was missing."), "Clan War Battle End Handler");
+			return;
+		}
+
+		const winnerOldElo = winnerClan.stats.elo || 1000;
+		const loserOldElo = loserClan.stats.elo || 1000;
 		const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
 
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
@@ -118,41 +74,39 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 		};
 
 		try {
-			// Update winner stats
-			await Clans.updateOne(
-				{ _id: winnerClanId },
-				{
-					$set: { 'stats.elo': newWinnerElo },
-					$inc: { 'stats.clanBattleWins': 1 },
-				}
-			);
-			// Update loser stats
-			await Clans.updateOne(
-				{ _id: loserClanId },
-				{
-					$set: { 'stats.elo': newLoserElo },
-					$inc: { 'stats.clanBattleLosses': 1 },
-				}
-			);
-			// Update war status and final score
-			await ClanWars.updateOne(
-				{ _id: war._id },
-				{
-					$set: { status: 'completed', endDate: Date.now() },
-					$inc: { [`scores.${winnerClanId}`]: 1 },
-				}
-			);
-			await ClanBattleLogs.insertOne(battleLogEntry);
+			await Promise.all([
+				Clans.updateOne(
+					{ _id: winnerClanId },
+					{
+						$set: { 'stats.elo': newWinnerElo },
+						$inc: { 'stats.clanBattleWins': 1 },
+					}
+				),
+				Clans.updateOne(
+					{ _id: loserClanId },
+					{
+						$set: { 'stats.elo': newLoserElo },
+						$inc: { 'stats.clanBattleLosses': 1 },
+					}
+				),
+				ClanWars.updateOne(
+					{ _id: war._id },
+					{
+						$set: { status: 'completed', endDate: Date.now() },
+						$inc: { [`scores.${winnerClanId}`]: 1 },
+					}
+				),
+				ClanBattleLogs.insertOne(battleLogEntry),
+			]);
 
 			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
+			const winMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR VICTORY! (+${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} defeats ${Utils.escapeHTML(loserName)}!<br />${winnerClan.name} emerges victorious and claims glory over ${loserClan.name}!<br />New Clan Rating: ${Math.floor(newWinnerElo)} ELO</center></div>`;
+			const lossMessage = `|html|<div class="broadcast-red"><center><strong>POKEMON WAR DEFEAT. (-${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(loserName)} falls to ${Utils.escapeHTML(winnerName)}!<br />${loserClan.name} is overcome by ${winnerClan.name}. The war is lost.<br />New Clan Rating: ${Math.floor(newLoserElo)} ELO</center></div>`;
 
-			// Message to display in both clan rooms (UHTML update)
-			const finalMessage = `|uhtmlchange|${uhtmlId}|<div class="broadcast-green"><center><strong>POKEMON WAR VICTORY! (+${eloChange} ELO)</strong><br />${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} defeats ${Utils.escapeHTML(loserName)}!<br />${challengerClan.name} vs ${targetClan.name}: <strong>${winnerClanId === challengerClan.id ? challengerClan.name : targetClan.name}</strong> emerges victorious and claims glory!<br />New Clan Rating: ${Math.floor(newWinnerElo)} ELO</center></div>`;
-
-			const winnerRoom = Rooms.get(challengerClan.chatRoom);
-			const loserRoom = Rooms.get(targetClan.chatRoom);
-			if (winnerRoom) winnerRoom.add(finalMessage).update();
-			if (loserRoom) loserRoom.add(finalMessage).update();
+			const winnerRoom = Rooms.get(winnerClan.chatRoom);
+			const loserRoom = Rooms.get(loserClan.chatRoom);
+			if (winnerRoom) winnerRoom.add(winMessage).update();
+			if (loserRoom) loserRoom.add(lossMessage).update();
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
 				battleID: battle.roomid,
@@ -160,7 +114,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			});
 		}
 	} else {
-		// --- WAR CONTINUE SCENARIO (BATTLE WIN) ---
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
 			winningClan: winnerClanId,
@@ -176,33 +129,28 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 		};
 
 		try {
-			await ClanWars.updateOne(
-				{ _id: war._id },
-				{ $inc: { [`scores.${winnerClanId}`]: 1 } }
-			);
-			await ClanBattleLogs.insertOne(battleLogEntry);
+			await Promise.all([
+				ClanWars.updateOne(
+					{ _id: war._id },
+					{ $inc: { [`scores.${winnerClanId}`]: 1 } }
+				),
+				ClanBattleLogs.insertOne(battleLogEntry),
+			]);
 
-			// Re-fetch war to get the current scores after update
-			const currentWar = await ClanWars.findOne({ _id: war._id }) || war;
-			
-			const messageLine = `Trainer ${Utils.escapeHTML(winnerName)} claims victory against ${Utils.escapeHTML(loserName)}!`;
+			const [winnerClan, loserClan] = await Promise.all([
+				Clans.findOne({ _id: winnerClanId }),
+				Clans.findOne({ _id: loserClanId }),
+			]);
+			if (!winnerClan || !loserClan) return;
 
-			const newMessage = generateWarActiveMessage(
-				challengerClan, 
-				targetClan, 
-				{ ...currentWar, scores: { [winnerClanId]: newWinnerScore, [loserClanId]: newLoserScore } as any }, 
-				messageLine, 
-				'green'
-			);
+			const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
+			const winMessage = `|html|<div class="broadcast-green"><center><strong>War Battle Victory!</strong> ${warScore}<br />Trainer ${Utils.escapeHTML(winnerName)} claims victory against ${Utils.escapeHTML(loserName)} from ${loserClan.name}!<br />The battle advances the war effort for ${winnerClan.name}!</center></div>`;
+			const lossMessage = `|html|<div class="broadcast-red"><center><strong>War Battle Defeat</strong> ${warScore}<br />Trainer ${Utils.escapeHTML(loserName)} falls to ${Utils.escapeHTML(winnerName)} from ${winnerClan.name}.<br />The war continues for ${loserClan.name}.</center></div>`;
 
-			const uhtmlUpdate = `|uhtmlchange|${uhtmlId}|${newMessage}`;
-			
-			const winnerRoom = Rooms.get(challengerClan.chatRoom);
-			const loserRoom = Rooms.get(targetClan.chatRoom);
-			
-			if (winnerRoom) winnerRoom.add(uhtmlUpdate).update();
-			if (loserRoom) loserRoom.add(uhtmlUpdate).update();
-
+			const winnerRoom = Rooms.get(winnerClan.chatRoom);
+			const loserRoom = Rooms.get(loserClan.chatRoom);
+			if (winnerRoom) winnerRoom.add(winMessage).update();
+			if (loserRoom) loserRoom.add(lossMessage).update();
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War Continue)", {
 				battleID: battle.roomid,
