@@ -2425,6 +2425,9 @@ export class RandomGen8Teams {
 			ivs.spe = 0;
 		}
 
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -2432,7 +2435,7 @@ export class RandomGen8Teams {
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability,
 			evs,
 			ivs,
