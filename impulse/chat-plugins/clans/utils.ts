@@ -195,7 +195,7 @@ export function generateWarCard(
 	const winsNeeded = Math.ceil(war.bestOf / 2);
 
 	let html = `<div class="infobox" style="border: 2px solid #6688AA; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); padding: 10px;">`;
-	html += `<center><strong style="font-size: 1.3em;">POKÉMON CLANS WAR</strong><hr style="margin: 5px 0;">`;
+	html += `<center><strong style="font-size: 1.3em;">POKÉMON CLAN WAR</strong><hr style="margin: 5px 0;">`;
 
 	// Clans and ELO (Horizontal and centered)
 	html += `<div style="margin: 10px 0; font-size: 1.1em;">`;
