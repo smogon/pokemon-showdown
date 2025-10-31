@@ -99,7 +99,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
 			const endMessage = `${winnerClan.name} emerges victorious over ${loserClan.name}! ${warScore}`;
-			
+
 			war.status = 'completed';
 			war.scores[winnerClanId] = newWinnerScore;
 			war.scores[loserClanId] = newLoserScore;
@@ -166,7 +166,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
 			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
-			
+
 			const challengerRoom = Rooms.get(clan1.chatRoom);
 			const targetRoom = Rooms.get(clan2.chatRoom);
 			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
@@ -190,5 +190,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 }
 
 export const handlers: Chat.Handlers = {
-	onBattleEnd: handleClanBattleEnd,
+	onBattleEnd: (battle, winner, players) => {
+		void handleClanBattleEnd(battle, winner, players);
+	},
 };
