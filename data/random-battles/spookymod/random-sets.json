@@ -395,7 +395,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Spirit Shackle", "Shadow Sneak", "Wood Hammer", "High Jump Kick", "Sucker Punch", "Swords Dance", "Destiny Bond"],
-                "abilities": ["Revive"],
+                "abilities": ["Triage"],
                 "teraTypes": ["Ghost"]
             },
 			{

@@ -1,6 +1,7 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
-	checkFainted() {
+	// the below is all commented out due to an ability that requires checkFainted, but it seems like we can't edit checkFainted
+	/* checkFainted() {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon.fainted) {
@@ -96,4 +97,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return false;
 	},
+	*/
 };
