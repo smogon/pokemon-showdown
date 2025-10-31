@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* TCG Economy & Shop Commands
+*/
 import type { TcgCard, TcgUser } from './interface';
 import { dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
