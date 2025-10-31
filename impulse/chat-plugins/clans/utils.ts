@@ -181,8 +181,8 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
  */
 export function generateWarCard(
 	war: ClanWar,
-	clan1: Clan & { _id: ID }, // Corrected type: The object from DB has _id
-	clan2: Clan & { _id: ID }, // Corrected type: The object from DB has _id
+	clan1: Clan & { _id: ID },
+	clan2: Clan & { _id: ID },
 	perspective: 'challenger' | 'target' | 'ended',
 	endMessage?: string
 ): string {
@@ -203,71 +203,86 @@ export function generateWarCard(
 	// Format
 	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
 
-	// Status and Score
-	if (war.status === 'pending') {
-		html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PENDING</span>`;
-	} else if (war.status === 'active') {
-		if (war.paused) {
-			html += `<strong>Status:</strong> <span style"color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
-		} else {
-			html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
-		}
-		html += `<strong style="font-size: 1.2em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
-	} else if (war.status === 'completed') {
-		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
-		html += `<strong style="font-size: 1.2em;">Final Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
-	}
+	// --- THIS IS THE START OF THE FIX ---
 
-	// Buttons/Actions
-	html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-	if (war.status === 'pending') {
-		if (perspective === 'challenger') {
-			html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
-			html += `<button class"button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
-		} else if (perspective === 'target') {
-			html += `<strong>${clan1.name} has challenged you!</strong><br />`;
-			html += `<button class="button" name="send" value="/clan war accept ${clan1._id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
-			html += `<button class="button" name="send" value="/clan war deny ${clan1._id}" style="background-color: #f44336; color: white;">Deny</button>`;
+	// If the perspective is 'ended', show a final conclusive state.
+	if (perspective === 'ended') {
+		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">ENDED</span>`;
+		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
+		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This challenge is no longer valid.')}</strong>`;
+		html += `</div>`;
+	} else {
+		// Otherwise, follow the normal logic for pending/active states.
+		// Status and Score
+		if (war.status === 'pending') {
+			html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PENDING</span>`;
+		} else if (war.status === 'active') {
+			if (war.paused) {
+				html += `<strong>Status:</strong> <span style"color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
+			} else {
+				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
+			}
+			html += `<strong style="font-size: 1.2em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
+		} else if (war.status === 'completed') {
+			html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
+			html += `<strong style="font-size: 1.2em;">Final Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
 		}
-	} else if (war.status === 'active') {
-		const myId = perspective === 'challenger' ? clan1._id : clan2._id;
-		const opponentId = perspective === 'challenger' ? clan2._id : clan1._id;
-		const opponentName = perspective === 'challenger' ? clan2.name : clan1.name;
 
-		const iProposedPause = war.pauseConfirmations?.includes(myId);
-		const theyProposedPause = war.pauseConfirmations?.includes(opponentId);
-		
-		const iProposedResume = war.resumeConfirmations?.includes(myId);
-		const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
-		
-		if (war.paused) {
-			// War is Paused
-			if (theyProposedResume && !iProposedResume) {
-				html += `<strong>${opponentName} has proposed to resume!</strong><br />`;
-				html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Accept Resume</button>`;
-			} else if (iProposedResume && !theyProposedResume) {
-				html += `<em>Resume proposed. Waiting for ${opponentName} to accept...</em><br />`;
-			} else {
-				// Default Paused state
-				html += `<strong>The war is paused.</strong><br />`;
-				html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+		// Buttons/Actions
+		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
+		if (war.status === 'pending') {
+			if (perspective === 'challenger') {
+				html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
+				html += `<button class"button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
+			} else if (perspective === 'target') {
+				html += `<strong>${clan1.name} has challenged you!</strong><br />`;
+				html += `<button class="button" name="send" value="/clan war accept ${clan1._id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
+				html += `<button class="button" name="send" value="/clan war deny ${clan1._id}" style="background-color: #f44336; color: white;">Deny</button>`;
 			}
-		} else {
-			// War is Active
-			if (theyProposedPause && !iProposedPause) {
-				html += `<strong>${opponentName} has proposed a pause!</strong><br />`;
-				html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Accept Pause</button>`;
-			} else if (iProposedPause && !theyProposedPause) {
-				html += `<em>Pause proposed. Waiting for ${opponentName} to accept...</em><br />`;
+		} else if (war.status === 'active') {
+			const myId = perspective === 'challenger' ? clan1._id : clan2._id;
+			const opponentId = perspective === 'challenger' ? clan2._id : clan1._id;
+			const opponentName = perspective === 'challenger' ? clan2.name : clan1.name;
+
+			const iProposedPause = war.pauseConfirmations?.includes(myId);
+			const theyProposedPause = war.pauseConfirmations?.includes(opponentId);
+			
+			const iProposedResume = war.resumeConfirmations?.includes(myId);
+			const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
+			
+			if (war.paused) {
+				// War is Paused
+				if (theyProposedResume && !iProposedResume) {
+					html += `<strong>${opponentName} has proposed to resume!</strong><br />`;
+					html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Accept Resume</button>`;
+				} else if (iProposedResume && !theyProposedResume) {
+					html += `<em>Resume proposed. Waiting for ${opponentName} to accept...</em><br />`;
+				} else {
+					// Default Paused state
+					html += `<strong>The war is paused.</strong><br />`;
+					html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+				}
 			} else {
-				// Default Active state
-				html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
-				html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+				// War is Active
+				if (theyProposedPause && !iProposedPause) {
+					html += `<strong>${opponentName} has proposed a pause!</strong><br />`;
+					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Accept Pause</button>`;
+				} else if (iProposedPause && !theyProposedPause) {
+					html += `<em>Pause proposed. Waiting for ${opponentName} to accept...</em><br />`;
+				} else {
+					// Default Active state
+					html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
+					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+				}
 			}
+		} else if (war.status === 'completed') {
+			html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This war has concluded.')}</strong>`;
 		}
-	} else if (war.status === 'completed' || perspective === 'ended') {
-		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This war has concluded.')}</strong>`;
+		html += `</div>`;
 	}
-	html += `</div></center></div>`;
+	
+	// --- THIS IS THE END OF THE FIX ---
+
+	html += `</center></div>`;
 	return html;
 }
