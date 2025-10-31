@@ -156,7 +156,7 @@ export function generateWarCard(
 				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
 			}
 			html += `<strong style="font-size: 1.0em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
-		
+
 			if (options.lastBattle) {
 				html += `<div style="font-size: 0.9em; color: #555; margin-top: 5px; border-top: 1px solid #EEE; padding-top: 5px;">`;
 				html += `Last Battle: <strong>${Utils.escapeHTML(options.lastBattle.winnerName)}</strong> defeated <strong>${Utils.escapeHTML(options.lastBattle.loserName)}</strong> (<strong>${Utils.escapeHTML(options.lastBattle.winningClanName)}</strong> +1)`;
@@ -168,7 +168,7 @@ export function generateWarCard(
 		}
 
 		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		
+
 		if (perspective === 'public') {
 			if (war.status === 'pending') {
 				html += `<em>Waiting for ${clan2.name} to respond...</em>`;
@@ -197,13 +197,13 @@ export function generateWarCard(
 
 			const iProposedPause = war.pauseConfirmations?.includes(myId);
 			const theyProposedPause = war.pauseConfirmations?.includes(opponentId);
-			
+
 			const iProposedResume = war.resumeConfirmations?.includes(myId);
 			const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
 
 			const iProposedTie = war.tieConfirmations?.includes(myId);
 			const theyProposedTie = war.tieConfirmations?.includes(opponentId);
-			
+
 			if (war.paused) {
 				if (theyProposedResume && !iProposedResume) {
 					html += `<strong>${opponentName} has proposed to resume!</strong><br />`;
@@ -236,7 +236,7 @@ export function generateWarCard(
 		}
 		html += `</div>`;
 	}
-	
+
 	html += `</center></div>`;
 	return html;
 }

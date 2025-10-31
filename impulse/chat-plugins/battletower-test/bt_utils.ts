@@ -22,7 +22,7 @@ interface ActiveBattleMeta {
 	onLose?: (battle: any, winner: string, players: string[], meta: ActiveBattleMeta) => void;
 }
 
-const activeBattles: Map<string, ActiveBattleMeta> = new Map();
+const activeBattles = new Map<string, ActiveBattleMeta>();
 
 /**
  * Packs the team array into the format required by the battle simulator, if the function is available.
@@ -72,7 +72,7 @@ export function createBattle(options: {
 		format: options.format || 'gen9customgame',
 		players: [
 			{ user: player1, team: player1Packed },
-			{ user: player2, team: player2Packed }
+			{ user: player2, team: player2Packed },
 		],
 		title: options.title || `${player1.name} vs. ${player2.name}`,
 	});
@@ -106,5 +106,5 @@ export const handlers: Chat.Handlers = {
 		} else {
 			entry.onLose?.(battle, winner, players, entry);
 		}
-	}
+	},
 };
