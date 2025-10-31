@@ -125,10 +125,14 @@ export const warCommands: Chat.ChatCommands = {
 		const myRoom = Rooms.get(myClan.chatRoom);
 
 		if (targetRoom) {
-			targetRoom.add(`|uhtml|${uhtmlId},${targetHtml}`).update();
+			targetRoom.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
+		} else {
+			this.errorReply(`Your challenge was sent, but I could not find the target clan's chat room ('${targetClan.chatRoom}') to post the challenge card. It may be inactive.`);
 		}
 		if (myRoom) {
-			myRoom.add(`|uhtml|${uhtmlId},${challengerHtml}`).update();
+			myRoom.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
+		} else {
+			this.errorReply(`Your challenge was sent, but I could not find your clan's chat room ('${myClan.chatRoom}') to post the challenge card. It may be inactive.`);
 		}
 	},
 
@@ -206,8 +210,8 @@ export const warCommands: Chat.ChatCommands = {
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 
-		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
-		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
 	},
 
 	async deny(target, room, user) {
@@ -257,10 +261,10 @@ export const warCommands: Chat.ChatCommands = {
 		const myRoom = Rooms.get(myClan.chatRoom);
 
 		if (challengerRoom) {
-			challengerRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+			challengerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 		if (myRoom) {
-			myRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+			myRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 	},
 
@@ -323,10 +327,10 @@ export const warCommands: Chat.ChatCommands = {
 		const myRoom = Rooms.get(myClan.chatRoom);
 
 		if (targetRoom) {
-			targetRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+			targetRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 		if (myRoom) {
-			myRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+			myRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 	},
 
@@ -428,10 +432,10 @@ export const warCommands: Chat.ChatCommands = {
 		const myRoom = Rooms.get(myClan.chatRoom);
 
 		if (targetRoom) {
-			targetRoom.add(`|uhtml|${uhtmlId},${targetHtml}`).update();
+			targetRoom.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
 		}
 		if (myRoom) {
-			myRoom.add(`|uhtml|${uhtmlId},${challengerHtml}`).update();
+			myRoom.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
 		}
 	},
 
@@ -751,8 +755,8 @@ export const warCommands: Chat.ChatCommands = {
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
 			
-			if (room1) room1.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
-			if (room2) room2.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
 
 			this.sendReply(`The war has been paused.`);
 		} else {
@@ -834,8 +838,8 @@ export const warCommands: Chat.ChatCommands = {
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
 
-			if (room1) room1.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
-			if (room2) room2.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
 
 			this.sendReply(`The war has been resumed.`);
 		} else {
