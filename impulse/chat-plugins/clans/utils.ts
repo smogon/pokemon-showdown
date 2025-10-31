@@ -230,13 +230,40 @@ export function generateWarCard(
 			html += `<button class="button" name="send" value="/clan war deny ${clan1._id}" style="background-color: #f44336; color: white;">Deny</button>`;
 		}
 	} else if (war.status === 'active') {
+		const myId = perspective === 'challenger' ? clan1._id : clan2._id;
 		const opponentId = perspective === 'challenger' ? clan2._id : clan1._id;
+		const opponentName = perspective === 'challenger' ? clan2.name : clan1.name;
+
+		const iProposedPause = war.pauseConfirmations?.includes(myId);
+		const theyProposedPause = war.pauseConfirmations?.includes(opponentId);
+		
+		const iProposedResume = war.resumeConfirmations?.includes(myId);
+		const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
+		
 		if (war.paused) {
-			html += `<strong>The war is paused.</strong><br />`;
-			html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+			// War is Paused
+			if (theyProposedResume && !iProposedResume) {
+				html += `<strong>${opponentName} has proposed to resume!</strong><br />`;
+				html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Accept Resume</button>`;
+			} else if (iProposedResume && !theyProposedResume) {
+				html += `<em>Resume proposed. Waiting for ${opponentName} to accept...</em><br />`;
+			} else {
+				// Default Paused state
+				html += `<strong>The war is paused.</strong><br />`;
+				html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+			}
 		} else {
-			html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
-			html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+			// War is Active
+			if (theyProposedPause && !iProposedPause) {
+				html += `<strong>${opponentName} has proposed a pause!</strong><br />`;
+				html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Accept Pause</button>`;
+			} else if (iProposedPause && !theyProposedPause) {
+				html += `<em>Pause proposed. Waiting for ${opponentName} to accept...</em><br />`;
+			} else {
+				// Default Active state
+				html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
+				html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+			}
 		}
 	} else if (war.status === 'completed' || perspective === 'ended') {
 		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This war has concluded.')}</strong>`;
