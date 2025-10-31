@@ -98,7 +98,7 @@ function pickTourTypeAndModifier(types: string[]): { type: string, modifier?: st
 	return { type };
 }
 
-function startRoomAutotourScheduler(roomid: RoomID): void {
+function startRoomAutotourScheduler(roomid: RoomID, resetTiming: boolean = false): void {
 	stopRoomAutotourScheduler(roomid);
 	const config = autotourConfig[roomid];
 	if (!config?.enabled) return;
@@ -106,7 +106,13 @@ function startRoomAutotourScheduler(roomid: RoomID): void {
 	const intervalMs = min * 60 * 1000;
 
 	const now = Date.now();
-	const lastRun = config.lastTourTime || now;
+	let lastRun = config.lastTourTime || now;
+	
+	if (resetTiming) {
+		lastRun = now;
+		config.lastTourTime = now;
+	}
+	
 	const nextRun = lastRun + intervalMs;
 	const timeUntilNext = Math.max(0, nextRun - now);
 
@@ -187,7 +193,7 @@ export const commands: Chat.ChatCommands = {
 			if (!autotourConfig[roomid]) autotourConfig[roomid] = { roomid, ...defaultRoomConfig };
 			autotourConfig[roomid].enabled = true;
 			await saveConfig(roomid);
-			startRoomAutotourScheduler(roomid);
+			startRoomAutotourScheduler(roomid, true);
 			this.sendReply(`Autotour enabled for room ${roomid}.`);
 			this.room!.add(
 				`|html|<div class="infobox"><center>${user.name} enabled auto tournaments in this room.</center></div>`
@@ -217,7 +223,7 @@ export const commands: Chat.ChatCommands = {
 			config.formats = formats;
 			await saveConfig(roomid);
 			this.sendReply(`Formats for ${roomid} set to: ${config.formats.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async addformat(target, room, user) {
 			this.checkChat();
@@ -232,7 +238,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await saveConfig(roomid);
 			this.sendReply(`Added formats to ${roomid}: ${formats.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async removeformat(target, room, user) {
 			this.checkChat();
@@ -248,7 +254,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await saveConfig(roomid);
 			this.sendReply(`Removed formats from ${roomid}: ${formats.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async removeallformats(target, room, user) {
 			this.checkChat();
@@ -259,7 +265,7 @@ export const commands: Chat.ChatCommands = {
 			config.formats = ['gen9randombattle'];
 			await saveConfig(roomid);
 			this.sendReply(`All formats removed except gen9randombattle for ${roomid}.`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async types(target, room, user) {
 			this.checkChat();
@@ -272,7 +278,7 @@ export const commands: Chat.ChatCommands = {
 			config.types = types;
 			await saveConfig(roomid);
 			this.sendReply(`Types for ${roomid} set to: ${config.types.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async addtype(target, room, user) {
 			this.checkChat();
@@ -287,7 +293,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await saveConfig(roomid);
 			this.sendReply(`Added types to ${roomid}: ${types.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async removetype(target, room, user) {
 			this.checkChat();
@@ -303,7 +309,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await saveConfig(roomid);
 			this.sendReply(`Removed types from ${roomid}: ${types.join(', ')}`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async removealltypes(target, room, user) {
 			this.checkChat();
@@ -314,7 +320,7 @@ export const commands: Chat.ChatCommands = {
 			config.types = ['elimination'];
 			await saveConfig(roomid);
 			this.sendReply(`All types removed except elimination for ${roomid}.`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async interval(target, room, user) {
 			this.checkChat();
@@ -327,7 +333,7 @@ export const commands: Chat.ChatCommands = {
 			config.interval = min;
 			await saveConfig(roomid);
 			this.sendReply(`Interval for ${roomid} set to ${min} minutes.`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
+			if (config.enabled) startRoomAutotourScheduler(roomid, true);
 		},
 		async autostart(target, room, user) {
 			this.checkChat();
@@ -340,7 +346,6 @@ export const commands: Chat.ChatCommands = {
 			config.autostart = min;
 			await saveConfig(roomid);
 			this.sendReply(`Autostart for ${roomid} set to ${min} minutes.`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
 		},
 		async autodq(target, room, user) {
 			this.checkChat();
@@ -353,7 +358,6 @@ export const commands: Chat.ChatCommands = {
 			config.autodq = min;
 			await saveConfig(roomid);
 			this.sendReply(`Autodq for ${roomid} set to ${min} minutes.`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
 		},
 		async playercap(target, room, user) {
 			this.checkChat();
@@ -364,7 +368,6 @@ export const commands: Chat.ChatCommands = {
 			config.playerCap = target.trim();
 			await saveConfig(roomid);
 			this.sendReply(`Player cap for ${roomid} set to "${config.playerCap}".`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
 		},
 		async name(target, room, user) {
 			this.checkChat();
@@ -375,7 +378,6 @@ export const commands: Chat.ChatCommands = {
 			config.name = target.trim();
 			await saveConfig(roomid);
 			this.sendReply(`Name for ${roomid} set to "${config.name}".`);
-			if (config.enabled) startRoomAutotourScheduler(roomid);
 		},
 		show(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -466,6 +468,6 @@ export const destroy = (): void => {
 void (async (): Promise<void> => {
 	await loadConfig();
 	for (const roomid in autotourConfig) {
-		if (autotourConfig[roomid]?.enabled) startRoomAutotourScheduler(roomid as RoomID);
+		if (autotourConfig[roomid]?.enabled) startRoomAutotourScheduler(roomid as RoomID, false);
 	}
 })();
