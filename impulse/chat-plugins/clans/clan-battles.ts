@@ -111,16 +111,17 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			// Manually update local war object for card generation
 			war.status = 'completed';
 			war.scores[winnerClanId] = newWinnerScore;
+			// 'ended' perspective is universal
 			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', endMessage);
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
 			if (winnerRoom) {
-				winnerRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 				winnerRoom.add(winMessage).update();
 			}
 			if (loserRoom) {
-				loserRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
+				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 				loserRoom.add(lossMessage).update();
 			}
 		} catch (e) {
@@ -163,6 +164,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			// Update UHTML card
 			const [clan1, clan2] = updatedWar.clans[0] === winnerClanId ? [winnerClan, loserClan] : [loserClan, winnerClan];
+			// 'active' perspective is universal and will show the correct buttons
 			const activeHtml = generateWarCard(updatedWar, clan1, clan2, 'active');
 			
 			const warScore = `(War Score: ${newWinnerScore} - ${newLoserScore} of ${war.bestOf})`;
@@ -172,11 +174,11 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
 			if (winnerRoom) {
-				winnerRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
 				winnerRoom.add(winMessage).update();
 			}
 			if (loserRoom) {
-				loserRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+				loserRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
 				loserRoom.add(lossMessage).update();
 			}
 		} catch (e) {
