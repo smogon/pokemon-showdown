@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* Clans War Commands
+*/
 import {
 	Clans,
 	UserClans,
