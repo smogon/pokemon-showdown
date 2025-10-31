@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* TCG Admin Commands
-*/
 import type { TcgUser, TcgUserProfile } from './interface';
 import {
 	getSet,
@@ -398,7 +394,7 @@ export const adminCommands: ChatCommands = {
 				];
 				const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
 				if (allSets.length === 0) {
-					this.sendReply(`❌ RECALCULATION FAILED: Could not fetch set totals.`);
+					this.sendReply(`RECALCULATION FAILED: Could not fetch set totals.`);
 					return;
 				}
 				const allSetsMap = new Map<string, number>();

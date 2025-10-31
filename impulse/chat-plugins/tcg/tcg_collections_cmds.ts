@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* TCG Collection and Profile Commands
-*/
 import type { TcgCard, TcgUser } from './interface';
 import { getSet, getCacheStats } from './tcg_utils';
 import {
