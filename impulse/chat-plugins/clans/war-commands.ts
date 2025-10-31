@@ -141,7 +141,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!user.named) return this.errorReply("You must be logged in.");
 
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf;
+		const clanId = userClanInfo?.memberOf; // This is the target clan (clan2)
 		if (!clanId) return this.errorReply("You are not in a clan.");
 
 		const myClan = await Clans.findOne({ _id: clanId });
@@ -151,7 +151,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("You do not have permission in your clan to accept war challenges.");
 		}
 
-		const targetClanId = toID(target);
+		const targetClanId = toID(target); // This is the challenger clan (clan1)
 		if (!targetClanId) return this.errorReply("Specify a clan ID to accept a challenge from.");
 
 		const war = await ClanWars.findOne({
@@ -197,35 +197,35 @@ export const warCommands: Chat.ChatCommands = {
 		if (!updatedWar) return this.errorReply("Failed to fetch updated war data.");
 
 		const [challengerClan, targetClan] = await Promise.all([
-			Clans.findOne({ _id: updatedWar.clans[0] }),
-			Clans.findOne({ _id: updatedWar.clans[1] }),
+			Clans.findOne({ _id: updatedWar.clans[0] }), // clan1
+			Clans.findOne({ _id: updatedWar.clans[1] }), // clan2
 		]);
 
 		if (!challengerClan || !targetClan) return this.errorReply("One of the war clans no longer exists.");
 
 		const uhtmlId = `clan-war-card-${updatedWar._id}`;
-		// We can use 'active' for both, generateWarCard now handles clan-specific buttons
-		const activeHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'active');
+		const challengerHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'challenger');
+		const targetHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'target');
 
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 
-		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
-		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 	},
 
 	async deny(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in.");
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf;
+		const clanId = userClanInfo?.memberOf; // This is the target clan (clan2)
 		if (!clanId) return this.errorReply("You are not in a clan.");
 		const myClan = await Clans.findOne({ _id: clanId });
 		if (!myClan) return this.errorReply("Your clan was not found.");
 		if (!hasClanPermission(myClan, user.id, 'canWar')) {
 			return this.errorReply("You do not have permission in your clan to deny war challenges.");
 		}
-		const challengerClanId = toID(target);
+		const challengerClanId = toID(target); // This is the challenger clan (clan1)
 		if (!challengerClanId) return this.errorReply("Specify a clan ID to deny.");
 
 		const war = await ClanWars.findOne({
@@ -273,7 +273,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!user.named) return this.errorReply("You must be logged in.");
 
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf;
+		const clanId = userClanInfo?.memberOf; // This is the challenger clan (clan1)
 		if (!clanId) return this.errorReply("You are not in a clan.");
 
 		const myClan = await Clans.findOne({ _id: clanId });
@@ -283,7 +283,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("You do not have permission in your clan to manage wars.");
 		}
 
-		const targetClanId = toID(target);
+		const targetClanId = toID(target); // This is the target clan (clan2)
 		if (!targetClanId) return this.errorReply("Specify the clan ID. Usage: /clan war cancel [clanid]");
 
 		const war = await ClanWars.findOne({
@@ -744,19 +744,20 @@ export const warCommands: Chat.ChatCommands = {
 			if (!finalWar) return this.errorReply("Failed to fetch war data after update.");
 
 			const [clan1, clan2] = await Promise.all([
-				Clans.findOne({ _id: finalWar.clans[0] }),
-				Clans.findOne({ _id: finalWar.clans[1] }),
+				Clans.findOne({ _id: finalWar.clans[0] }), // Challenger
+				Clans.findOne({ _id: finalWar.clans[1] }), // Target
 			]);
 			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
 			const uhtmlId = `clan-war-card-${finalWar._id}`;
-			const activeHtml = generateWarCard(finalWar, clan1, clan2, 'active');
+			const challengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
+			const targetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
 			
-			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
-			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 			this.sendReply(`The war has been paused.`);
 		} else {
@@ -827,19 +828,20 @@ export const warCommands: Chat.ChatCommands = {
 			if (!finalWar) return this.errorReply("Failed to fetch war data after update.");
 
 			const [clan1, clan2] = await Promise.all([
-				Clans.findOne({ _id: finalWar.clans[0] }),
-				Clans.findOne({ _id: finalWar.clans[1] }),
+				Clans.findOne({ _id: finalWar.clans[0] }), // Challenger
+				Clans.findOne({ _id: finalWar.clans[1] }), // Target
 			]);
 			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
 			const uhtmlId = `clan-war-card-${finalWar._id}`;
-			const activeHtml = generateWarCard(finalWar, clan1, clan2, 'active');
+			const challengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
+			const targetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
 
-			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
-			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${activeHtml}`).update();
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
 
 			this.sendReply(`The war has been resumed.`);
 		} else {
