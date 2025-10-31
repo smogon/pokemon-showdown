@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* TCG Commands
-*/
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import {
 	generatePack,
@@ -147,7 +143,7 @@ export const commands: ChatCommands = {
 			const originalWidth = 246, originalHeight = 342, scaleFactor = 0.65;
 			const imageWidth = Math.round(originalWidth * scaleFactor);
 			const imageHeight = Math.round(originalHeight * scaleFactor);
-			const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
+			const imageUrl = card.imageUrl || `https:
 			const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 			const imageAlt = `${card.name} (${card.cardId})`;
 
@@ -253,7 +249,7 @@ export const commands: ChatCommands = {
 						html += `<div style="display: inline-block; text-align: center;">`;
 					}
 					const w = 74, h = 103;
-					const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
+					const url = c.imageUrl || `https:
 					const alt = `${c.name} (${c.cardId})`;
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
@@ -400,7 +396,6 @@ export const commands: ChatCommands = {
 					if (zeroCheck && zeroCheck.quantity === 0) {
 						return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
 					}
-				} catch (checkError) { /* ignore */ }
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`);
 			}
 
