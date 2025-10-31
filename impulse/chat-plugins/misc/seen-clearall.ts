@@ -127,7 +127,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async cleanup(target, room, user): Promise<void> {
-			this.checkCan('roomownwr');
+			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
 			const days = parseInt(target) || 365;
