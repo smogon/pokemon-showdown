@@ -116,22 +116,27 @@ export function toDurationString(ms: number): string {
 		const remainingMonths = Math.floor((days % 365) / 30);
 		return remainingMonths > 0 ? `${years}y ${remainingMonths}mo` : `${years}y`;
 	}
+
 	if (months > 0) {
 		const remainingDays = days % 30;
 		return remainingDays > 0 ? `${months}mo ${remainingDays}d` : `${months}mo`;
 	}
+
 	if (days > 0) {
 		const remainingHours = hours % 24;
 		return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
 	}
+
 	if (hours > 0) {
 		const remainingMinutes = minutes % 60;
 		return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
 	}
+
 	if (minutes > 0) {
 		const remainingSeconds = seconds % 60;
 		return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`;
 	}
+
 	return `${seconds}s`;
 }
 
@@ -159,12 +164,9 @@ export function getExpectedScore(eloA: number, eloB: number): number {
  */
 export function calculateElo(winnerElo: number, loserElo: number): [number, number, number] {
 	const expectedWinner = getExpectedScore(winnerElo, loserElo);
-
 	const eloChange = Math.max(1, Math.round(K_FACTOR * (1 - expectedWinner)));
-
 	const newWinnerElo = winnerElo + eloChange;
 	const newLoserElo = loserElo - eloChange;
-
 	return [newWinnerElo, newLoserElo, eloChange];
 }
 
@@ -174,10 +176,10 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
  * @param clan1 Clan object for war.clans[0] (Challenger). This is a ClanDoc, so it has ._id
  * @param clan2 Clan object for war.clans[1] (Target). This is a ClanDoc, so it has ._id
  * @param perspective Used to determine which buttons to show.
- * 'challenger': Shows buttons for clan1.
- * 'target': Shows buttons for clan2.
- * 'public': Shows no buttons (for lobby).
- * 'ended': Shows a final message.
+ *   'challenger': Shows buttons for clan1.
+ *   'target': Shows buttons for clan2.
+ *   'public': Shows no buttons (for lobby).
+ *   'ended': Shows a final message.
  * @param options Optional data for end messages or last battle.
  */
 export function generateWarCard(
@@ -194,74 +196,71 @@ export function generateWarCard(
 	const clan2Elo = Math.floor(clan2.stats.elo || 1000);
 	const winsNeeded = Math.ceil(war.bestOf / 2);
 
-	let html = `<div class="infobox" style="border: 2px solid #6688AA; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); padding: 10px;">`;
-	html += `<center><strong style="font-size: 1.3em;">POKÉMON CLAN WAR</strong><hr style="margin: 5px 0;">`;
+	let html = `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white; font-family: Arial, sans-serif; max-width: 600px; margin: auto;">`;
 
-	// Clans and ELO (Horizontal and centered)
-	html += `<div style="margin: 10px 0; font-size: 1.1em;">`;
-	html += `<strong style="font-size: 1.1em;">${clan1.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
-	html += ` <strong style="font-size: 1.1em; color: #AAA; margin: 0 10px;">VS</strong> `;
-	html += `<strong style="font-size: 1.1em;">${clan2.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
+	html += `<h2 style="text-align: center; margin-top: 0;">POKEMON CLAN WAR</h2>`;
+
+	html += `<div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0; font-size: 18px; font-weight: bold;">`;
+	html += `<span style="color: #FFD700;">${clan1.name} (${clan1Elo} ELO)</span>`;
+	html += `<span style="font-size: 24px;"> VS </span>`;
+	html += `<span style="color: #FFD700;">${clan2.name} (${clan2Elo} ELO)</span>`;
 	html += `</div>`;
 
-	// Format
-	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
+	html += `<p style="text-align: center; font-size: 16px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</p>`;
 
-	// If the perspective is 'ended', show a final conclusive state.
 	if (perspective === 'ended') {
-		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">ENDED</span>`;
-		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This challenge is no longer valid.')}</strong>`;
+		html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #FF6B6B;">ENDED</span></p>`;
+		html += `<div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 5px; margin: 15px 0; text-align: center;">`;
+		html += `<p style="margin: 0;">${Utils.escapeHTML(options.endMessage || 'This challenge is no longer valid.')}</p>`;
 		html += `</div>`;
 	} else {
-		// Otherwise, follow the normal logic for pending/active states.
-		// Status and Score
 		if (war.status === 'pending') {
-			html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PENDING</span>`;
+			html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #FFA500;">PENDING</span></p>`;
 		} else if (war.status === 'active') {
 			if (war.paused) {
-				html += `<strong>Status:</strong> <span style"color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
+				html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #FFA500;">PAUSED</span></p>`;
 			} else {
-				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
+				html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #00FF00;">ACTIVE</span></p>`;
 			}
-			html += `<strong style="font-size: 1.0em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
-		
-			// *** NEW: Add Last Battle Info ***
+
+			html += `<p style="text-align: center; font-size: 20px; font-weight: bold;"><strong>Score:</strong> ${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</p>`;
+
 			if (options.lastBattle) {
-				html += `<div style="font-size: 0.9em; color: #555; margin-top: 5px; border-top: 1px solid #EEE; padding-top: 5px;">`;
-				html += `Last Battle: <strong>${Utils.escapeHTML(options.lastBattle.winnerName)}</strong> defeated <strong>${Utils.escapeHTML(options.lastBattle.loserName)}</strong> (<strong>${Utils.escapeHTML(options.lastBattle.winningClanName)}</strong> +1)`;
+				html += `<div style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center;">`;
+				html += `<p style="margin: 0; font-size: 14px;"><strong>Last Battle:</strong> ${Utils.escapeHTML(options.lastBattle.winnerName)} defeated ${Utils.escapeHTML(options.lastBattle.loserName)} (${Utils.escapeHTML(options.lastBattle.winningClanName)} +1)</p>`;
 				html += `</div>`;
 			}
+
 		} else if (war.status === 'completed') {
-			html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
-			html += `<strong style="font-size: 1.0em;">Final Score:</strong> <span style="font-size: 1.0em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
+			html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #FF6B6B;">COMPLETED</span></p>`;
+			html += `<p style="text-align: center; font-size: 20px; font-weight: bold;"><strong>Final Score:</strong> ${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</p>`;
 		}
 
-		// Buttons/Actions
-		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		
+		html += `<div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 5px; margin: 15px 0; text-align: center;">`;
+
 		if (perspective === 'public') {
-			// Public view has no buttons, just context
 			if (war.status === 'pending') {
-				html += `<em>Waiting for ${clan2.name} to respond...</em>`;
+				html += `<p style="margin: 0;">Waiting for ${clan2.name} to respond...</p>`;
 			} else if (war.status === 'active') {
 				if (war.paused) {
-					html += `<strong>The war is currently paused.</strong>`;
+					html += `<p style="margin: 0;">The war is currently paused.</p>`;
 				} else {
-					html += `<strong>The war is on! Good luck, trainers!</strong>`;
+					html += `<p style="margin: 0;">The war is on! Good luck, trainers!</p>`;
 				}
 			} else if (war.status === 'completed') {
-				html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
+				html += `<p style="margin: 0;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</p>`;
 			}
+
 		} else if (war.status === 'pending') {
 			if (perspective === 'challenger') {
-				html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
-				html += `<button class"button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
+				html += `<p style="margin: 0 0 10px 0;">Waiting for ${clan2.name} to respond...</p>`;
+				html += `<button name="send" value="/clan war withdraw ${war._id}" style="background: #FF6B6B; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Withdraw Challenge</button>`;
 			} else if (perspective === 'target') {
-				html += `<strong>${clan1.name} has challenged you!</strong><br />`;
-				html += `<button class="button" name="send" value="/clan war accept ${clan1._id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
-				html += `<button class="button" name="send" value="/clan war deny ${clan1._id}" style="background-color: #f44336; color: white;">Deny</button>`;
+				html += `<p style="margin: 0 0 10px 0;">${clan1.name} has challenged you!</p>`;
+				html += `<button name="send" value="/clan war accept ${war._id}" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;">Accept</button> `;
+				html += `<button name="send" value="/clan war deny ${war._id}" style="background: #FF6B6B; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Deny</button>`;
 			}
+
 		} else if (war.status === 'active') {
 			const myId = perspective === 'challenger' ? clan1._id : clan2._id;
 			const opponentId = perspective === 'challenger' ? clan2._id : clan1._id;
@@ -269,50 +268,46 @@ export function generateWarCard(
 
 			const iProposedPause = war.pauseConfirmations?.includes(myId);
 			const theyProposedPause = war.pauseConfirmations?.includes(opponentId);
-			
 			const iProposedResume = war.resumeConfirmations?.includes(myId);
 			const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
-
 			const iProposedTie = war.tieConfirmations?.includes(myId);
 			const theyProposedTie = war.tieConfirmations?.includes(opponentId);
-			
+
 			if (war.paused) {
-				// War is Paused
 				if (theyProposedResume && !iProposedResume) {
-					html += `<strong>${opponentName} has proposed to resume!</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Accept Resume</button>`;
+					html += `<p style="margin: 0 0 10px 0;">${opponentName} has proposed to resume!</p>`;
+					html += `<button name="send" value="/clan war resume ${war._id}" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Accept Resume</button>`;
 				} else if (iProposedResume && !theyProposedResume) {
-					html += `<em>Resume proposed. Waiting for ${opponentName} to accept...</em><br />`;
+					html += `<p style="margin: 0;">Resume proposed. Waiting for ${opponentName} to accept...</p>`;
 				} else {
-					// Default Paused state
-					html += `<strong>The war is paused.</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
+					html += `<p style="margin: 0 0 10px 0;">The war is paused.</p>`;
+					html += `<button name="send" value="/clan war resume ${war._id}" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Resume War</button>`;
 				}
+
 			} else {
-				// War is Active
 				if (theyProposedPause && !iProposedPause) {
-					html += `<strong>${opponentName} has proposed a pause!</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Accept Pause</button>`;
+					html += `<p style="margin: 0 0 10px 0;">${opponentName} has proposed a pause!</p>`;
+					html += `<button name="send" value="/clan war pause ${war._id}" style="background: #FFA500; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Accept Pause</button>`;
 				} else if (iProposedPause && !theyProposedPause) {
-					html += `<em>Pause proposed. Waiting for ${opponentName} to accept...</em><br />`;
+					html += `<p style="margin: 0;">Pause proposed. Waiting for ${opponentName} to accept...</p>`;
 				} else if (theyProposedTie && !iProposedTie) {
-					html += `<strong>${opponentName} has proposed a tie!</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war tie ${opponentId}" style="background-color: #E8A337; color: white;">Accept Tie</button>`;
+					html += `<p style="margin: 0 0 10px 0;">${opponentName} has proposed a tie!</p>`;
+					html += `<button name="send" value="/clan war tie ${war._id}" style="background: #9E9E9E; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Accept Tie</button>`;
 				} else if (iProposedTie && !theyProposedTie) {
-					html += `<em>Tie proposed. Waiting for ${opponentName} to accept...</em><br />`;
+					html += `<p style="margin: 0;">Tie proposed. Waiting for ${opponentName} to accept...</p>`;
 				} else {
-					// Default Active state
-					html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button> `;
-					html += `<button class="button" name="send" value="/clan war tie ${opponentId}">Propose Tie</button>`;
+					html += `<p style="margin: 0 0 10px 0;">The war is on! Good luck, trainers!</p>`;
+					html += `<button name="send" value="/clan war pause ${war._id}" style="background: #FFA500; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;">Pause War</button> `;
+					html += `<button name="send" value="/clan war tie ${war._id}" style="background: #9E9E9E; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Propose Tie</button>`;
 				}
 			}
 		} else if (war.status === 'completed') {
-			html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
+			html += `<p style="margin: 0;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</p>`;
 		}
+
 		html += `</div>`;
 	}
-	
-	html += `</center></div>`;
+
+	html += `</div>`;
 	return html;
 }
