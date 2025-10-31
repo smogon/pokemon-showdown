@@ -22,7 +22,7 @@ import type {
 import { generateThemedTable } from
 	'../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
-	logClanActivity, hasClanPermission } from './utils';
+	logClanActivity, hasClanPermission, generateWarCard } from './utils';
 
 export const warCommands: Chat.ChatCommands = {
 	// 1. War Lifecycle Management (Pending/Active)
@@ -103,21 +103,32 @@ export const warCommands: Chat.ChatCommands = {
 			startDate: Date.now(),
 			bestOf,
 		};
-		await ClanWars.insertOne(newWar as ClanWarDoc);
+		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
+		const warId = insertResult.insertedId;
+		if (!warId) {
+			this.errorReply("There was an error creating the war document. Aborting.");
+			return;
+		}
+		const war = await ClanWars.findOne({ _id: warId });
+		if (!war) {
+			this.errorReply("Failed to fetch the newly created war. Aborting.");
+			return;
+		}
 
 		this.sendReply(`You have challenged ${targetClan.name} to a Best of ${bestOf} Pokémon War!`);
 
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const challengerHtml = generateWarCard(war, myClan, targetClan, 'challenger');
+		const targetHtml = generateWarCard(war, myClan, targetClan, 'target');
+
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
-		if (targetRoom || myRoom) {
-			const winsNeeded = Math.ceil(bestOf / 2);
-			const challengeMessage = `|html|<div class="broadcast-blue"><center><strong>POKEMON WAR CHALLENGE!</strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> has sent a challenge to <strong style="font-size: 1.2em;">${targetClan.name}</strong>!<br /><br /><strong>War Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins!)<br /><strong>Their Clan Rating:</strong> ${Math.floor(myClan.stats.elo || 1000)} ELO<br /><strong>Your Clan Rating:</strong> ${Math.floor(targetClan.stats.elo || 1000)} ELO<br /><br />Will you accept this challenge and battle for glory?<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to decline.</center></div>`;
-			if (targetRoom) {
-				targetRoom.add(challengeMessage).update();
-			}
-			if (myRoom) {
-				myRoom.add(challengeMessage).update();
-			}
+
+		if (targetRoom) {
+			targetRoom.add(`|uhtml|${uhtmlId},${targetHtml}`).update();
+		}
+		if (myRoom) {
+			myRoom.add(`|uhtml|${uhtmlId},${challengerHtml}`).update();
 		}
 	},
 
@@ -178,21 +189,25 @@ export const warCommands: Chat.ChatCommands = {
 			{ $set: { status: 'active', startDate: Date.now() } }
 		);
 
+		const updatedWar = await ClanWars.findOne({ _id: war._id });
+		if (!updatedWar) return this.errorReply("Failed to fetch updated war data.");
+
 		const [challengerClan, targetClan] = await Promise.all([
-			Clans.findOne({ _id: war.clans[0] }),
-			Clans.findOne({ _id: war.clans[1] }),
+			Clans.findOne({ _id: updatedWar.clans[0] }),
+			Clans.findOne({ _id: updatedWar.clans[1] }),
 		]);
 
 		if (!challengerClan || !targetClan) return this.errorReply("One of the war clans no longer exists.");
 
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		// We can use 'active' for both, generateWarCard now handles clan-specific buttons
+		const activeHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'active');
+
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 
-		const winsNeeded = Math.ceil(war.bestOf / 2);
-		const battleMessage = `|html|<div class="broadcast-green"><center><strong>POKEMON WAR BEGINS!</strong><br /><strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br /><br /><strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />Stakes: <strong>ELO Glory</strong><br /><br />Send your trainers into battle! Every victory counts toward your clan's score.<br /><strong>Current Score:</strong> ${challengerClan.name} 0 - 0 ${targetClan.name}</center></div>`;
-
-		if (challengerRoom) challengerRoom.add(battleMessage).update();
-		if (targetRoom) targetRoom.add(battleMessage).update();
+		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
 	},
 
 	async deny(target, room, user) {
@@ -206,23 +221,25 @@ export const warCommands: Chat.ChatCommands = {
 		if (!hasClanPermission(myClan, user.id, 'canWar')) {
 			return this.errorReply("You do not have permission in your clan to deny war challenges.");
 		}
-		const targetClanId = toID(target);
-		if (!targetClanId) return this.errorReply("Specify a clan ID to deny.");
+		const challengerClanId = toID(target);
+		if (!challengerClanId) return this.errorReply("Specify a clan ID to deny.");
 
 		const war = await ClanWars.findOne({
-			clans: { $all: [targetClanId, clanId] },
+			clans: { $all: [challengerClanId, clanId] },
 			status: 'pending',
 		});
-		if (!war) return this.errorReply(`No pending challenge found between your clan and '${targetClanId}'.`);
+		if (!war) return this.errorReply(`No pending challenge found between your clan and '${challengerClanId}'.`);
 
-		const targetClan = await Clans.findOne({ _id: targetClanId });
+		const challengerClan = await Clans.findOne({ _id: challengerClanId });
+		if (!challengerClan) return this.errorReply("Challenging clan not found.");
+		
+		const uhtmlId = `clan-war-card-${war._id}`;
 		
 		try {
 			await ClanWars.deleteOne({ _id: war._id });
 			
-			// Reset the cooldown for the challenging clan since challenge was denied
 			await Clans.updateOne(
-				{ _id: targetClanId },
+				{ _id: challengerClanId },
 				{ $set: { 'stats.lastWarChallenge': 0 } }
 			);
 		} catch (e) {
@@ -230,16 +247,20 @@ export const warCommands: Chat.ChatCommands = {
 			return;
 		}
 
-		this.sendReply(`You have declined the war challenge from ${targetClan?.name || targetClanId}.`);
+		this.sendReply(`You have declined the war challenge from ${challengerClan.name}.`);
 
-		const targetRoom = Rooms.get(targetClan?.chatRoom);
+		const endMessage = `${myClan.name} has refused the war challenge from ${challengerClan.name}.`;
+		// 'ended' perspective does not need clan-specific views
+		const endedHtml = generateWarCard(war, challengerClan, myClan, 'ended', endMessage);
+
+		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
-		const declineMessage = `|html|<div class="broadcast-red"><center><strong>CHALLENGE DECLINED</strong><br />${myClan.name} has refused your war challenge.<br />Perhaps another time, trainers...</center></div>`;
-		if (targetRoom) {
-			targetRoom.add(declineMessage).update();
+
+		if (challengerRoom) {
+			challengerRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
 		}
 		if (myRoom) {
-			myRoom.add(declineMessage).update();
+			myRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
 		}
 	},
 
@@ -278,10 +299,11 @@ export const warCommands: Chat.ChatCommands = {
 		const targetClan = await Clans.findOne({ _id: targetClanId });
 		if (!targetClan) return this.errorReply(`Clan '${targetClanId}' not found.`);
 
+		const uhtmlId = `clan-war-card-${war._id}`;
+
 		try {
 			await ClanWars.deleteOne({ _id: war._id });
 
-			// Reset the cooldown since the challenger is cancelling
 			await Clans.updateOne(
 				{ _id: clanId },
 				{ $set: { 'stats.lastWarChallenge': 0 } }
@@ -292,15 +314,19 @@ export const warCommands: Chat.ChatCommands = {
 		}
 
 		this.sendReply(`You have withdrawn your war challenge to ${targetClan.name}.`);
+		
+		const endMessage = `${myClan.name} has withdrawn their war challenge to ${targetClan.name}.`;
+		// 'ended' perspective does not need clan-specific views
+		const endedHtml = generateWarCard(war, myClan, targetClan, 'ended', endMessage);
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
-		const cancelMessage = `|html|<div class="broadcast-red"><center><strong> CHALLENGE WITHDRAWN </strong><br />${myClan.name} has withdrawn their war challenge.<br />No battles today!</center></div>`;
+
 		if (targetRoom) {
-			targetRoom.add(cancelMessage).update();
+			targetRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
 		}
 		if (myRoom) {
-			myRoom.add(cancelMessage).update();
+			myRoom.add(`|uhtmlchange|${uhtmlId},${endedHtml}`).update();
 		}
 	},
 
@@ -380,21 +406,32 @@ export const warCommands: Chat.ChatCommands = {
 			startDate: Date.now(),
 			bestOf,
 		};
-		await ClanWars.insertOne(newWar as ClanWarDoc);
+		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
+		const warId = insertResult.insertedId;
+		if (!warId) {
+			this.errorReply("There was an error creating the war document. Aborting.");
+			return;
+		}
+		const war = await ClanWars.findOne({ _id: warId });
+		if (!war) {
+			this.errorReply("Failed to fetch the newly created war. Aborting.");
+			return;
+		}
 
 		this.sendReply(`You have challenged ${targetClan.name} to a rematch (Best of ${bestOf})!`);
 
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const challengerHtml = generateWarCard(war, myClan, targetClan, 'challenger');
+		const targetHtml = generateWarCard(war, myClan, targetClan, 'target');
+
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
-		if (targetRoom || myRoom) {
-			const winsNeeded = Math.ceil(bestOf / 2);
-			const rematchMessage = `|html|<div class="broadcast-blue"><center><strong> REMATCH CHALLENGE! </strong><br /><strong style="font-size: 1.2em;">${myClan.name}</strong> wants to settle the score!<br /><br /><strong>Rematch Format:</strong> Best of ${bestOf} (First to ${winsNeeded} wins)<br />Let's see who's truly the stronger clan!<br /><br />Use <strong>/clan war accept ${clanId}</strong> to accept or <strong>/clan war deny ${clanId}</strong> to back down.</center></div>`;
-			if (targetRoom) {
-				targetRoom.add(rematchMessage).update();
-			}
-			if (myRoom) {
-				myRoom.add(rematchMessage).update();
-			}
+
+		if (targetRoom) {
+			targetRoom.add(`|uhtml|${uhtmlId},${targetHtml}`).update();
+		}
+		if (myRoom) {
+			myRoom.add(`|uhtml|${uhtmlId},${challengerHtml}`).update();
 		}
 	},
 
@@ -698,12 +735,24 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: true }, $unset: { pauseConfirmations: 1 } }
 			);
 
-			const message = `|html|<div class="infobox"><center><strong>WAR PAUSED</strong><br />Both clans have agreed to pause the war temporarily.<br />Your trainers take a well-deserved rest.<br />Return when ready to resume!</center></div>`;
+			// Fetch the final state of the war to generate the card
+			const finalWar = await ClanWars.findOne({ _id: war._id });
+			if (!finalWar) return this.errorReply("Failed to fetch war data after update.");
 
-			const room1 = Rooms.get(myClan.chatRoom);
-			const room2 = Rooms.get(opponentClan.chatRoom);
-			if (room1) room1.add(message).update();
-			if (room2) room2.add(message).update();
+			const [clan1, clan2] = await Promise.all([
+				Clans.findOne({ _id: finalWar.clans[0] }),
+				Clans.findOne({ _id: finalWar.clans[1] }),
+			]);
+			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+
+			const uhtmlId = `clan-war-card-${finalWar._id}`;
+			const activeHtml = generateWarCard(finalWar, clan1, clan2, 'active');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
 
 			this.sendReply(`The war has been paused.`);
 		} else {
@@ -769,12 +818,24 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: false }, $unset: { resumeConfirmations: 1 } }
 			);
 
-			const message = `|html|<div class="broadcast-green"><center><strong>WAR RESUMED</strong><br />Both clans are ready! The battles commence once more!<br />Your trainers return to the field with renewed determination!</center></div>`;
+			// Fetch the final state of the war to generate the card
+			const finalWar = await ClanWars.findOne({ _id: war._id });
+			if (!finalWar) return this.errorReply("Failed to fetch war data after update.");
 
-			const room1 = Rooms.get(myClan.chatRoom);
-			const room2 = Rooms.get(opponentClan.chatRoom);
-			if (room1) room1.add(message).update();
-			if (room2) room2.add(message).update();
+			const [clan1, clan2] = await Promise.all([
+				Clans.findOne({ _id: finalWar.clans[0] }),
+				Clans.findOne({ _id: finalWar.clans[1] }),
+			]);
+			if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
+
+			const uhtmlId = `clan-war-card-${finalWar._id}`;
+			const activeHtml = generateWarCard(finalWar, clan1, clan2, 'active');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId},${activeHtml}`).update();
 
 			this.sendReply(`The war has been resumed.`);
 		} else {
