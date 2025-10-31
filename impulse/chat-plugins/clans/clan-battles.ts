@@ -36,12 +36,12 @@ function generateWarActiveMessage(
 	const c1Score = war.scores[challengerClan.id] || 0;
 	const c2Score = war.scores[targetClan.id] || 0;
 
-	return `<div class="broadcast-blue"><center><strong>POKEMON WAR ACTIVE</strong><br />
-		<strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br />
-		<strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />
-		<strong style="color: ${battleResultColor};">${messageLine}</strong><br />
-		<strong>Current Score:</strong> ${challengerClan.name} ${c1Score} - ${c2Score} ${targetClan.name}
-		</center></div>`;
+	return `<div class="broadcast-blue"><center><strong>POKEMON WAR ACTIVE</strong><br />` +
+		`<strong style="font-size: 1.3em;">${challengerClan.name}</strong> vs <strong style="font-size: 1.3em;">${targetClan.name}</strong><br />` +
+		`<strong>Best of ${war.bestOf}</strong> — First clan to win <strong>${winsNeeded}</strong> battles wins the war!<br />` +
+		`<strong style="color: ${battleResultColor};">${messageLine}</strong><br />` +
+		`<strong>Current Score:</strong> ${challengerClan.name} ${c1Score} - ${c2Score} ${targetClan.name}` +
+		`</center></div>`;
 }
 
 /**
