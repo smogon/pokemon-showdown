@@ -132,8 +132,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target) {
 			if (!target.getTypes().includes("Ghost")) return;
 			const newBaseTypes = target.getTypes().filter(t => t !== "Ghost");
-			this.add('-start', target, 'typechange', newBaseTypes);
 			target.setType(newBaseTypes);
+			this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] move: Spirit Shackle');
 		},
 		secondary: null,
 	},
@@ -322,7 +322,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "User must have used Moonlight last turn. Ignores abilities.",
 		shortDesc: "Must use Moonlight first. Ignores abilities.",
 		onTry(source, target) {
-			if (source.lastMove.id && source.lastMove.id !== 'moonlight') {
+			if (source.lastMove?.id && source.lastMove.id !== 'moonlight') {
 				this.add('cant', source, 'Moongeist Beam', 'Moongeist Beam');
 				return true;
 			}

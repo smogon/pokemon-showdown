@@ -87,7 +87,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				"Like your tiny heads? THANK MAGIC!",
 				"Teeny, tiny heads!",
 			];
-			const superspeed = "Super Speed!";
+			const superspeed = ["Super Speed!"];
 			const dance = [
 				"Dance fools!",
 				"Darkness falls across the land! The dancing hour is close at hand!",
