@@ -138,14 +138,12 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			if (lobbyRoom) {
 				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
-
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
 				battleID: battle.roomid,
 				warId: war._id,
 			});
 		}
-
 	} else {
 		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
@@ -206,7 +204,6 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			if (lobbyRoom) {
 				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 			}
-
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War Continue)", {
 				battleID: battle.roomid,

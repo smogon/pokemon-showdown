@@ -241,12 +241,12 @@ export const warCommands: Chat.ChatCommands = {
 
 		const challengerClan = await Clans.findOne({ _id: challengerClanId });
 		if (!challengerClan) return this.errorReply("Challenging clan not found.");
-		
+
 		const uhtmlId = `clan-war-card-${war._id}`;
-		
+
 		try {
 			await ClanWars.deleteOne({ _id: war._id });
-			
+
 			await Clans.updateOne(
 				{ _id: challengerClanId },
 				{ $set: { 'stats.lastWarChallenge': 0 } }
@@ -325,7 +325,7 @@ export const warCommands: Chat.ChatCommands = {
 		}
 
 		this.sendReply(`You have withdrawn your war challenge to ${targetClan.name}.`);
-		
+
 		const endMessage = `${myClan.name} has withdrawn their war challenge to ${targetClan.name}.`;
 		const endedHtml = generateWarCard(war, myClan, targetClan, 'ended', { endMessage });
 
@@ -521,21 +521,21 @@ export const warCommands: Chat.ChatCommands = {
 			return;
 		}
 
-        const [clan1, clan2] = await Promise.all([
-            Clans.findOne({ _id: war.clans[0] }),
-            Clans.findOne({ _id: war.clans[1] }),
-        ]);
-        if (!clan1 || !clan2) {
-            this.errorReply("Could not find clan data for UHTML update.");
-            return;
-        }
-        
-        war.status = 'completed';
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: war.clans[0] }),
+			Clans.findOne({ _id: war.clans[1] }),
+		]);
+		if (!clan1 || !clan2) {
+			this.errorReply("Could not find clan data for UHTML update.");
+			return;
+		}
 
-        const endMessage = `${loserClan.name} has forfeited the war to ${winnerClan.name}. ELO Change: ${eloChange}`;
-        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
-        const uhtmlId = `clan-war-card-${war._id}`;
-        
+		war.status = 'completed';
+
+		const endMessage = `${loserClan.name} has forfeited the war to ${winnerClan.name}. ELO Change: ${eloChange}`;
+		const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+		const uhtmlId = `clan-war-card-${war._id}`;
+
 		const winnerRoom = Rooms.get(winnerClan.chatRoom);
 		const loserRoom = Rooms.get(loserClan.chatRoom);
 		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
@@ -543,8 +543,8 @@ export const warCommands: Chat.ChatCommands = {
 		if (winnerRoom) winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
-        
-        this.sendReply(`You have forfeited the war against ${winnerClan.name}. Your clan lost ${eloChange} ELO.`);
+
+		this.sendReply(`You have forfeited the war against ${winnerClan.name}. Your clan lost ${eloChange} ELO.`);
 	},
 
 	async tie(target, room, user) {
@@ -589,9 +589,9 @@ export const warCommands: Chat.ChatCommands = {
 		const updatedWar = await ClanWars.findOne({ _id: war._id });
 		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.tieConfirmations || [];
-		
-        const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+
+		const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
 		if (confirmations.length === 2) {
 			await ClanWars.updateOne(
@@ -601,14 +601,14 @@ export const warCommands: Chat.ChatCommands = {
 
 			const score1 = war.scores[clan1._id] || 0;
 			const score2 = war.scores[clan2._id] || 0;
-			
+
 			const endMessage = `The war between ${clan1.name} and ${clan2.name} has ended in a draw! Final Score: ${score1} - ${score2}`;
 			const endedHtml = generateWarCard(updatedWar, clan1, clan2, 'ended', { endMessage });
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
 			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
-			
+
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
@@ -617,13 +617,13 @@ export const warCommands: Chat.ChatCommands = {
 		} else {
 			this.sendReply(`You have proposed ending the war as a tie. Waiting for ${opponentClan.name}'s decision...`);
 
-            const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-            const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
-            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
-            
-            const room1 = Rooms.get(clan1.chatRoom);
-            const room2 = Rooms.get(clan2.chatRoom);
-            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
@@ -759,11 +759,11 @@ export const warCommands: Chat.ChatCommands = {
 		);
 
 		const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.pauseConfirmations || [];
 
-        const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
 		if (confirmations.length === 2) {
 			await ClanWars.updateOne(
@@ -773,14 +773,14 @@ export const warCommands: Chat.ChatCommands = {
 
 			const finalWar = await ClanWars.findOne({ _id: war._id });
 			if (!finalWar) return this.errorReply("Failed to fetch final war data.");
-            
-            const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
-            const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
-            const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
-			
-            const room1 = Rooms.get(clan1.chatRoom);
-            const room2 = Rooms.get(clan2.chatRoom);
-            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
+			const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
+			const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
+			const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${finalChallengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${finalTargetHtml}`).update();
@@ -790,13 +790,13 @@ export const warCommands: Chat.ChatCommands = {
 		} else {
 			this.sendReply(`You have proposed pausing the war. Waiting for ${opponentClan.name} to agree...`);
 
-            const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-            const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
-            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
-            
-            const room1 = Rooms.get(clan1.chatRoom);
-            const room2 = Rooms.get(clan2.chatRoom);
-            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
@@ -849,11 +849,11 @@ export const warCommands: Chat.ChatCommands = {
 		);
 
 		const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.resumeConfirmations || [];
-        
-        const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
+
+		const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
 		if (confirmations.length === 2) {
 			await ClanWars.updateOne(
@@ -863,14 +863,14 @@ export const warCommands: Chat.ChatCommands = {
 
 			const finalWar = await ClanWars.findOne({ _id: war._id });
 			if (!finalWar) return this.errorReply("Failed to fetch final war data.");
-            
-            const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
-            const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
-            const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
-			
-            const room1 = Rooms.get(clan1.chatRoom);
-            const room2 = Rooms.get(clan2.chatRoom);
-            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
+			const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
+			const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
+			const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${finalChallengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${finalTargetHtml}`).update();
@@ -880,13 +880,13 @@ export const warCommands: Chat.ChatCommands = {
 		} else {
 			this.sendReply(`You have confirmed resuming the war. Waiting for ${opponentClan.name} to agree...`);
 
-            const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-            const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
-            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
-            
-            const room1 = Rooms.get(clan1.chatRoom);
-            const room2 = Rooms.get(clan2.chatRoom);
-            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
+
+			const room1 = Rooms.get(clan1.chatRoom);
+			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
@@ -1332,15 +1332,15 @@ export const warCommands: Chat.ChatCommands = {
 
 		const score1 = war.scores[clan1._id] || 0;
 		const score2 = war.scores[clan2._id] || 0;
-        
-        const uhtmlId = `clan-war-card-${war._id}`;
-        const endMessage = `[ADMIN] ${user.name} has concluded the war. Final Score: ${score1} - ${score2}`;
-        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const endMessage = `[ADMIN] ${user.name} has concluded the war. Final Score: ${score1} - ${score2}`;
+		const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
 		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
-		
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
@@ -1378,9 +1378,9 @@ export const warCommands: Chat.ChatCommands = {
 		const score1 = war.scores[clan1._id] || 0;
 		const score2 = war.scores[clan2._id] || 0;
 
-        const uhtmlId = `clan-war-card-${war._id}`;
-        const endMessage = `[ADMIN] ${user.name} has declared the war a tie. Final Score: ${score1} - ${score2}`;
-        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const endMessage = `[ADMIN] ${user.name} has declared the war a tie. Final Score: ${score1} - ${score2}`;
+		const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
@@ -1451,21 +1451,21 @@ export const warCommands: Chat.ChatCommands = {
 				}),
 			]);
 
-            const [clan1, clan2] = await Promise.all([
-                Clans.findOne({ _id: war.clans[0] }),
-                Clans.findOne({ _id: war.clans[1] }),
-            ]);
-            if (!clan1 || !clan2) {
-                this.errorReply("Could not find clan data for UHTML update.");
-                return;
-            }
-            
-            war.status = 'completed';
+			const [clan1, clan2] = await Promise.all([
+				Clans.findOne({ _id: war.clans[0] }),
+				Clans.findOne({ _id: war.clans[1] }),
+			]);
+			if (!clan1 || !clan2) {
+				this.errorReply("Could not find clan data for UHTML update.");
+				return;
+			}
 
-            const endMessage = `[ADMIN] ${user.name} has forced ${loserClan.name} to forfeit to ${winnerClan.name}. ELO Change: ${eloChange}`;
-            const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
-            const uhtmlId = `clan-war-card-${war._id}`;
-            
+			war.status = 'completed';
+
+			const endMessage = `[ADMIN] ${user.name} has forced ${loserClan.name} to forfeit to ${winnerClan.name}. ELO Change: ${eloChange}`;
+			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+			const uhtmlId = `clan-war-card-${war._id}`;
+
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
 			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
@@ -1543,18 +1543,18 @@ export const warCommands: Chat.ChatCommands = {
 			{ _id: war._id },
 			{ $set: { scores: { [c1ID]: score1, [c2ID]: score2 } } }
 		);
-        
-        const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
-        
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
-        const lastBattle = {
-            winnerName: "Admin",
-            loserName: `${user.name}`,
-            winningClanName: `Score manually set to ${score1} - ${score2}`,
-        };
-        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
-        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+
+		const updatedWar = await ClanWars.findOne({ _id: war._id });
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		const lastBattle = {
+			winnerName: "Admin",
+			loserName: `${user.name}`,
+			winningClanName: `Score manually set to ${score1} - ${score2}`,
+		};
+		const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+		const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
@@ -1603,17 +1603,17 @@ export const warCommands: Chat.ChatCommands = {
 			{ $set: { bestOf: newBestOf } }
 		);
 
-        const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
-        
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
-        const lastBattle = {
-            winnerName: "Admin",
-            loserName: `${user.name}`,
-            winningClanName: `Format changed to Best of ${newBestOf}`,
-        };
-        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
-        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+		const updatedWar = await ClanWars.findOne({ _id: war._id });
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		const lastBattle = {
+			winnerName: "Admin",
+			loserName: `${user.name}`,
+			winningClanName: `Format changed to Best of ${newBestOf}`,
+		};
+		const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+		const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
@@ -1651,13 +1651,13 @@ export const warCommands: Chat.ChatCommands = {
 			Clans.findOne({ _id: war.clans[1] }),
 		]);
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
-        
-        const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
-        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+		const updatedWar = await ClanWars.findOne({ _id: war._id });
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+		const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
 		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
 
 		const room1 = Rooms.get(clan1.chatRoom);
@@ -1696,12 +1696,12 @@ export const warCommands: Chat.ChatCommands = {
 		]);
 		if (!clan1 || !clan2) return this.errorReply("A clan was deleted.");
 
-        const updatedWar = await ClanWars.findOne({ _id: war._id });
-        if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
+		const updatedWar = await ClanWars.findOne({ _id: war._id });
+		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 
-        const uhtmlId = `clan-war-card-${updatedWar._id}`;
-        const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-        const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+		const uhtmlId = `clan-war-card-${updatedWar._id}`;
+		const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
+		const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
 		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
 
 		const room1 = Rooms.get(clan1.chatRoom);
@@ -1803,31 +1803,31 @@ export const warCommands: Chat.ChatCommands = {
 			bestOf,
 		};
 		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
-        const warId = insertResult.insertedId;
-        if (!warId) {
-            this.errorReply("There was an error creating the war document. Aborting.");
-            return;
-        }
-        const war = await ClanWars.findOne({ _id: warId });
-        if (!war) {
-            this.errorReply("Failed to fetch the newly created war. Aborting.");
-            return;
-        }
+		const warId = insertResult.insertedId;
+		if (!warId) {
+			this.errorReply("There was an error creating the war document. Aborting.");
+			return;
+		}
+		const war = await ClanWars.findOne({ _id: warId });
+		if (!war) {
+			this.errorReply("Failed to fetch the newly created war. Aborting.");
+			return;
+		}
 
-        const uhtmlId = `clan-war-card-${war._id}`;
-        const lastBattle = {
-            winnerName: "Admin",
-            loserName: `${user.name}`,
-            winningClanName: "War forcibly started",
-        };
-        const challengerHtml = generateWarCard(war, clan1, clan2, 'challenger', { lastBattle });
-        const targetHtml = generateWarCard(war, clan1, clan2, 'target', { lastBattle });
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const lastBattle = {
+			winnerName: "Admin",
+			loserName: `${user.name}`,
+			winningClanName: "War forcibly started",
+		};
+		const challengerHtml = generateWarCard(war, clan1, clan2, 'challenger', { lastBattle });
+		const targetHtml = generateWarCard(war, clan1, clan2, 'target', { lastBattle });
 		const publicHtml = generateWarCard(war, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
 		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
-		
+
 		if (room1) room1.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
 		if (lobbyRoom) lobbyRoom.add(`|uhtml|${uhtmlId}|${publicHtml}`).update();

@@ -230,7 +230,6 @@ export function generateWarCard(
 				html += `<p style="margin: 0; font-size: 14px;"><strong>Last Battle:</strong> ${Utils.escapeHTML(options.lastBattle.winnerName)} defeated ${Utils.escapeHTML(options.lastBattle.loserName)} (${Utils.escapeHTML(options.lastBattle.winningClanName)} +1)</p>`;
 				html += `</div>`;
 			}
-
 		} else if (war.status === 'completed') {
 			html += `<p style="text-align: center; font-size: 16px;"><strong>Status:</strong> <span style="color: #FF6B6B;">COMPLETED</span></p>`;
 			html += `<p style="text-align: center; font-size: 20px; font-weight: bold;"><strong>Final Score:</strong> ${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</p>`;
@@ -250,7 +249,6 @@ export function generateWarCard(
 			} else if (war.status === 'completed') {
 				html += `<p style="margin: 0;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</p>`;
 			}
-
 		} else if (war.status === 'pending') {
 			if (perspective === 'challenger') {
 				html += `<p style="margin: 0 0 10px 0;">Waiting for ${clan2.name} to respond...</p>`;
@@ -260,7 +258,6 @@ export function generateWarCard(
 				html += `<button name="send" value="/clan war accept ${war._id}" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;">Accept</button> `;
 				html += `<button name="send" value="/clan war deny ${war._id}" style="background: #FF6B6B; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Deny</button>`;
 			}
-
 		} else if (war.status === 'active') {
 			const myId = perspective === 'challenger' ? clan1._id : clan2._id;
 			const opponentId = perspective === 'challenger' ? clan2._id : clan1._id;
@@ -283,7 +280,6 @@ export function generateWarCard(
 					html += `<p style="margin: 0 0 10px 0;">The war is paused.</p>`;
 					html += `<button name="send" value="/clan war resume ${war._id}" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Resume War</button>`;
 				}
-
 			} else {
 				if (theyProposedPause && !iProposedPause) {
 					html += `<p style="margin: 0 0 10px 0;">${opponentName} has proposed a pause!</p>`;
