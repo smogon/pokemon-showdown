@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* Clans Wars Commands
-*/
 import {
 	Clans,
 	UserClans,
@@ -27,7 +23,6 @@ import { K_FACTOR, getExpectedScore, calculateElo, to,
 const LOBBY_ROOM_ID = 'lobby' as RoomID;
 
 export const warCommands: Chat.ChatCommands = {
-	// 1. War Lifecycle Management (Pending/Active)
 	async challenge(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in.");
@@ -48,7 +43,7 @@ export const warCommands: Chat.ChatCommands = {
 
 		if (!targetClanId) return this.errorReply("Specify a clan ID to challenge.");
 		if (!bestOf) return this.errorReply("You must specify a 'Best of' number. Usage: /clan war challenge [clanid], [number]");
-		if (bestOf < 1 || bestOf % 2 === 0) { // Must be an odd number
+		if (bestOf < 1 || bestOf % 2 === 0) {
 			return this.errorReply("'Best of' must be an odd number (3, 5, 7, etc.).");
 		}
 		if (bestOf > 101) return this.errorReply("'Best of' cannot be higher than 101.");
@@ -57,9 +52,8 @@ export const warCommands: Chat.ChatCommands = {
 		if (!targetClan) return this.errorReply(`Clan '${targetClanId}' not found.`);
 		if (toID(targetClanId) === clanId) return this.errorReply("You cannot challenge your own clan.");
 
-		// Check for 24 hour cooldown
 		const lastChallenge = myClan.stats.lastWarChallenge || 0;
-		const cooldownTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+		const cooldownTime = 24 * 60 * 60 * 1000;
 		const timeSinceLastChallenge = Date.now() - lastChallenge;
 
 		if (timeSinceLastChallenge < cooldownTime) {
@@ -68,7 +62,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`Your clan must wait ${hoursRemaining} more hour(s) before challenging another clan. (24 hour cooldown)`);
 		}
 
-		// Check if either clan already has an active or pending war
 		const [myClanExistingWar, targetClanExistingWar] = await Promise.all([
 			ClanWars.findOne({
 				clans: clanId,
@@ -92,7 +85,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`${targetClan.name} is already in a ${targetClanExistingWar.status} war with ${opponent?.name || opponentId}.`);
 		}
 
-		// Update last war challenge timestamp
 		await Clans.updateOne(
 			{ _id: clanId },
 			{ $set: { 'stats.lastWarChallenge': Date.now() } }
@@ -148,7 +140,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!user.named) return this.errorReply("You must be logged in.");
 
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf; // This is the target clan (clan2)
+		const clanId = userClanInfo?.memberOf;
 		if (!clanId) return this.errorReply("You are not in a clan.");
 
 		const myClan = await Clans.findOne({ _id: clanId });
@@ -158,11 +150,11 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("You do not have permission in your clan to accept war challenges.");
 		}
 
-		const targetClanId = toID(target); // This is the challenger clan (clan1)
+		const targetClanId = toID(target);
 		if (!targetClanId) return this.errorReply("Specify a clan ID to accept a challenge from.");
 
 		const war = await ClanWars.findOne({
-			clans: [targetClanId, clanId], // [challenger, target]
+			clans: [targetClanId, clanId],
 			status: 'pending',
 		});
 
@@ -170,7 +162,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`You do not have a pending war challenge from '${targetClanId}'.`);
 		}
 
-		// Check if either clan already has another active war
 		const [myClanActiveWar, targetClanActiveWar] = await Promise.all([
 			ClanWars.findOne({
 				clans: clanId,
@@ -204,8 +195,8 @@ export const warCommands: Chat.ChatCommands = {
 		if (!updatedWar) return this.errorReply("Failed to fetch updated war data.");
 
 		const [challengerClan, targetClan] = await Promise.all([
-			Clans.findOne({ _id: updatedWar.clans[0] }), // clan1
-			Clans.findOne({ _id: updatedWar.clans[1] }), // clan2
+			Clans.findOne({ _id: updatedWar.clans[0] }),
+			Clans.findOne({ _id: updatedWar.clans[1] }),
 		]);
 
 		if (!challengerClan || !targetClan) return this.errorReply("One of the war clans no longer exists.");
@@ -228,14 +219,14 @@ export const warCommands: Chat.ChatCommands = {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in.");
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf; // This is the target clan (clan2)
+		const clanId = userClanInfo?.memberOf;
 		if (!clanId) return this.errorReply("You are not in a clan.");
 		const myClan = await Clans.findOne({ _id: clanId });
 		if (!myClan) return this.errorReply("Your clan was not found.");
 		if (!hasClanPermission(myClan, user.id, 'canWar')) {
 			return this.errorReply("You do not have permission in your clan to deny war challenges.");
 		}
-		const challengerClanId = toID(target); // This is the challenger clan (clan1)
+		const challengerClanId = toID(target);
 		if (!challengerClanId) return this.errorReply("Specify a clan ID to deny.");
 
 		const war = await ClanWars.findOne({
@@ -264,7 +255,6 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have declined the war challenge from ${challengerClan.name}.`);
 
 		const endMessage = `${myClan.name} has refused the war challenge from ${challengerClan.name}.`;
-		// 'ended' perspective does not need clan-specific views
 		const endedHtml = generateWarCard(war, challengerClan, myClan, 'ended', { endMessage });
 
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
@@ -287,7 +277,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (!user.named) return this.errorReply("You must be logged in.");
 
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const clanId = userClanInfo?.memberOf; // This is the challenger clan (clan1)
+		const clanId = userClanInfo?.memberOf;
 		if (!clanId) return this.errorReply("You are not in a clan.");
 
 		const myClan = await Clans.findOne({ _id: clanId });
@@ -297,7 +287,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("You do not have permission in your clan to manage wars.");
 		}
 
-		const targetClanId = toID(target); // This is the target clan (clan2)
+		const targetClanId = toID(target);
 		if (!targetClanId) return this.errorReply("Specify the clan ID. Usage: /clan war cancel [clanid]");
 
 		const war = await ClanWars.findOne({
@@ -309,7 +299,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`No pending war challenge found with '${targetClanId}'.`);
 		}
 
-		// Only the challenger (first clan in array) can cancel
 		if (war.clans[0] !== clanId) {
 			return this.errorReply("Only the challenging clan can cancel a pending war.");
 		}
@@ -334,7 +323,6 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`You have withdrawn your war challenge to ${targetClan.name}.`);
 		
 		const endMessage = `${myClan.name} has withdrawn their war challenge to ${targetClan.name}.`;
-		// 'ended' perspective does not need clan-specific views
 		const endedHtml = generateWarCard(war, myClan, targetClan, 'ended', { endMessage });
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
@@ -381,7 +369,6 @@ export const warCommands: Chat.ChatCommands = {
 		if (!targetClan) return this.errorReply(`Clan '${targetClanId}' not found.`);
 		if (toID(targetClanId) === clanId) return this.errorReply("You cannot challenge your own clan.");
 
-		// Check if they have war history
 		const previousWar = await ClanWars.findOne({
 			clans: { $all: [clanId, toID(targetClanId)] },
 			status: 'completed',
@@ -391,7 +378,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`You have no war history with ${targetClan.name}. Use /clan war challenge instead.`);
 		}
 
-		// Check if either clan already has an active or pending war
 		const [myClanExistingWar, targetClanExistingWar] = await Promise.all([
 			ClanWars.findOne({
 				clans: clanId,
@@ -415,7 +401,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`${targetClan.name} is already in a ${targetClanExistingWar.status} war with ${opponent?.name || opponentId}.`);
 		}
 
-		// Rematch bypasses cooldown
 		await Clans.updateOne(
 			{ _id: clanId },
 			{ $set: { 'stats.lastWarChallenge': Date.now() } }
@@ -462,13 +447,12 @@ export const warCommands: Chat.ChatCommands = {
 		}
 	},
 
-	// 2. Active War Management
 	async forfeit(target, room, user) {
 		this.checkChat();
 		if (!user.named) return this.errorReply("You must be logged in.");
 
 		const userClanInfo = await UserClans.findOne({ _id: user.id });
-		const loserClanId = userClanInfo?.memberOf; // The clan forfeiting
+		const loserClanId = userClanInfo?.memberOf;
 		if (!loserClanId) return this.errorReply("You are not in a clan.");
 
 		const loserClan = await Clans.findOne({ _id: loserClanId });
@@ -490,15 +474,12 @@ export const warCommands: Chat.ChatCommands = {
 		const winnerClan = await Clans.findOne({ _id: winnerClanId });
 		if (!winnerClan) return this.errorReply(`Opponent clan '${winnerClanId}' not found.`);
 
-		// --- ELO Calculation ---
 		const winnerOldElo = winnerClan.stats.elo || 1000;
 		const loserOldElo = loserClan.stats.elo || 1000;
 		const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
 
-		// --- Database Updates ---
 		try {
 			await Promise.all([
-				// Update winner's clan: SET new ELO, INC wins
 				Clans.updateOne(
 					{ _id: winnerClanId },
 					{
@@ -506,7 +487,6 @@ export const warCommands: Chat.ChatCommands = {
 						$inc: { 'stats.clanBattleWins': 1 },
 					}
 				),
-				// Update loser's clan: SET new ELO, INC losses
 				Clans.updateOne(
 					{ _id: loserClanId },
 					{
@@ -514,13 +494,11 @@ export const warCommands: Chat.ChatCommands = {
 						$inc: { 'stats.clanBattleLosses': 1 },
 					}
 				),
-				// Update war doc: Set 'completed', end date
 				ClanWars.updateOne(
 					{ _id: war._id },
 					{ $set: { status: 'completed', endDate: Date.now() } }
 				),
-				// Log this action (optional but recommended)
-				logClanActivity(loserClanId, user.id, 'ADMIN_RESETSTATS', { // Using a random admin-level type
+				logClanActivity(loserClanId, user.id, 'ADMIN_RESETSTATS', {
 					target: winnerClanId,
 					note: `Forfeited war. ELO changed from ${Math.floor(loserOldElo)} to ${Math.floor(newLoserElo)}.`,
 				}),
@@ -539,7 +517,6 @@ export const warCommands: Chat.ChatCommands = {
 			return;
 		}
 
-        // --- Find clan1 and clan2 for generateWarCard ---
         const [clan1, clan2] = await Promise.all([
             Clans.findOne({ _id: war.clans[0] }),
             Clans.findOne({ _id: war.clans[1] }),
@@ -549,7 +526,6 @@ export const warCommands: Chat.ChatCommands = {
             return;
         }
         
-        // Manually update local war object for card generation
         war.status = 'completed';
 
         const endMessage = `${loserClan.name} has forfeited the war to ${winnerClan.name}. ELO Change: ${eloChange}`;
@@ -564,7 +540,6 @@ export const warCommands: Chat.ChatCommands = {
 		if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
         
-        // Send PM to user
         this.sendReply(`You have forfeited the war against ${winnerClan.name}. Your clan lost ${eloChange} ELO.`);
 	},
 
@@ -611,7 +586,6 @@ export const warCommands: Chat.ChatCommands = {
 		if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.tieConfirmations || [];
 		
-		// Determine who is clan1 (challenger) and clan2 (target)
         const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
         const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
@@ -637,7 +611,6 @@ export const warCommands: Chat.ChatCommands = {
 
 			this.sendReply(`The war with ${opponentClan.name} has been concluded as a tie.`);
 		} else {
-			// This is the first proposal
 			this.sendReply(`You have proposed ending the war as a tie. Waiting for ${opponentClan.name}'s decision...`);
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
@@ -785,7 +758,6 @@ export const warCommands: Chat.ChatCommands = {
         if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.pauseConfirmations || [];
 
-        // Determine who is clan1 (challenger) and clan2 (target)
         const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
         const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
@@ -795,7 +767,6 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: true }, $unset: { pauseConfirmations: 1 } }
 			);
 
-			// Fetch the FINAL state of the war to generate the card
 			const finalWar = await ClanWars.findOne({ _id: war._id });
 			if (!finalWar) return this.errorReply("Failed to fetch final war data.");
             
@@ -813,7 +784,6 @@ export const warCommands: Chat.ChatCommands = {
 
 			this.sendReply(`The war has been paused.`);
 		} else {
-			// This is the first proposal
 			this.sendReply(`You have proposed pausing the war. Waiting for ${opponentClan.name} to agree...`);
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
@@ -878,7 +848,6 @@ export const warCommands: Chat.ChatCommands = {
         if (!updatedWar) return this.errorReply("Failed to fetch war data after update.");
 		const confirmations = updatedWar.resumeConfirmations || [];
         
-        // Determine who is clan1 (challenger) and clan2 (target)
         const [clan1, clan2] = war.clans[0] === myClan._id ? [myClan, opponentClan] : [opponentClan, myClan];
         const uhtmlId = `clan-war-card-${updatedWar._id}`;
 
@@ -888,7 +857,6 @@ export const warCommands: Chat.ChatCommands = {
 				{ $set: { paused: false }, $unset: { resumeConfirmations: 1 } }
 			);
 
-			// Fetch the FINAL state of the war to generate the card
 			const finalWar = await ClanWars.findOne({ _id: war._id });
 			if (!finalWar) return this.errorReply("Failed to fetch final war data.");
             
@@ -906,7 +874,6 @@ export const warCommands: Chat.ChatCommands = {
 
 			this.sendReply(`The war has been resumed.`);
 		} else {
-			// This is the first proposal
 			this.sendReply(`You have confirmed resuming the war. Waiting for ${opponentClan.name} to agree...`);
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
@@ -923,7 +890,6 @@ export const warCommands: Chat.ChatCommands = {
 		}
 	},
 
-	// 3. Informational Commands (Read-only)
 	async status(target, room, user) {
 		this.runBroadcast();
 		this.checkChat();
@@ -1000,7 +966,6 @@ export const warCommands: Chat.ChatCommands = {
 			headerName = 'Losses';
 			break;
 		case 'winrate':
-			// Will be calculated after fetching
 			sortField = 'stats.clanBattleWins';
 			headerName = 'Win Rate';
 			break;
@@ -1013,12 +978,10 @@ export const warCommands: Chat.ChatCommands = {
 
 		const clans = await Clans.find({}, { skip: 0, limit: 1000, sort: { [sortField]: sortOrder } });
 
-		// Filter clans that have participated in wars (at least 1 win or loss)
 		let warClans = clans.filter(clan =>
 			(clan.stats.clanBattleWins || 0) > 0 || (clan.stats.clanBattleLosses || 0) > 0
 		);
 
-		// Sort by winrate if requested
 		if (sortType === 'winrate') {
 			warClans = warClans.sort((a, b) => {
 				const aWins = a.stats.clanBattleWins || 0;
@@ -1070,7 +1033,7 @@ export const warCommands: Chat.ChatCommands = {
 		if (page > 1 || page < totalPages) {
 			output += '<center>';
 			if (page > 1) {
-				output += `<button class="button" name="send" value="${cmd} ${page - 1}, ${sortType || 'elo'}">◀️ Previous</button> `;
+				output += `<button class="button" name="send" value="${cmd} ${page - 1}, ${sortType || 'elo'}">◀ Previous</button> `;
 			}
 			if (page < totalPages) {
 				output += `<button class="button" name="send" value="${cmd} ${page + 1}, ${sortType || 'elo'}">Next</button>`;
@@ -1078,7 +1041,6 @@ export const warCommands: Chat.ChatCommands = {
 			output += '</center>';
 		}
 
-		// Add buttons to change sort
 		output += `<br /><center><small>Sort by: ` +
 			`<button class="button" name="send" value="${cmd} 1, elo">ELO Rating</button> ` +
 			`<button class="button" name="send" value="${cmd} 1, wins">Battle Wins</button> ` +
@@ -1119,7 +1081,6 @@ export const warCommands: Chat.ChatCommands = {
 		const winrate = totalBattles > 0 ? ((wins / totalBattles) * 100).toFixed(1) : '0.0';
 		const elo = Math.floor(clan.stats.elo || 1000);
 
-		// Calculate war stats
 		let warsWon = 0;
 		let warsLost = 0;
 		let warsTied = 0;
@@ -1139,7 +1100,6 @@ export const warCommands: Chat.ChatCommands = {
 		const totalWars = warsWon + warsLost + warsTied;
 		const warWinrate = totalWars > 0 ? ((warsWon / totalWars) * 100).toFixed(1) : '0.0';
 
-		// Calculate win streak
 		let currentStreak = 0;
 		let longestWinStreak = 0;
 		const sortedLogs = battleLogs.sort((a, b) => b.timestamp - a.timestamp);
@@ -1153,8 +1113,8 @@ export const warCommands: Chat.ChatCommands = {
 			}
 		}
 
-		let html = `<div class="infobox" style="max-width:650px;"><center><strong style="font-size: 1.3em;">⚔️ ${clan.name} Pokémon War Statistics ⚔️</strong></center><hr>`;
-		html += `<strong>💪 Individual Battle Performance:</strong><br>`;
+		let html = `<div class="infobox" style="max-width:650px;"><center><strong style="font-size: 1.3em;"> ${clan.name} Pokémon War Statistics </strong></center><hr>`;
+		html += `<strong> Individual Battle Performance:</strong><br>`;
 		html += `Clan ELO Rating: <strong style="font-size: 1.15em; color: gold;">${elo}</strong><br>`;
 		html += `Total 1v1 Battles Fought: <strong>${totalBattles}</strong> (${wins}W - ${losses}L)<br>`;
 		html += `Battle Win Rate: <strong style="color: green;">${winrate}%</strong><br>`;
@@ -1210,10 +1170,10 @@ export const warCommands: Chat.ChatCommands = {
 			let result: string;
 			let resultColor: string;
 			if (myScore > opponentScore) {
-				result = '✅ WIN';
+				result = ' WIN';
 				resultColor = 'green';
 			} else if (myScore < opponentScore) {
-				result = '❌ LOSS';
+				result = ' LOSS';
 				resultColor = 'red';
 			} else {
 				result = 'TIE';
@@ -1315,13 +1275,11 @@ export const warCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${clan.name} has no war battle wins yet.`);
 		}
 
-		// Count wins per member
 		const memberWins: { [userid: string]: number } = {};
 		for (const log of battleLogs) {
 			memberWins[log.winner] = (memberWins[log.winner] || 0) + 1;
 		}
 
-		// Sort by wins
 		const sortedMembers = Object.entries(memberWins).sort((a, b) => b[1] - a[1]);
 		const top10 = sortedMembers.slice(0, 10);
 
@@ -1341,7 +1299,6 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`|html|${output}`);
 	},
 
-	// 4. Admin Commands (Forceful actions)
 	async forceend(target, room, user) {
 		this.checkChat();
 		this.checkCan('roomowner');
@@ -1456,7 +1413,6 @@ export const warCommands: Chat.ChatCommands = {
 
 		if (!war) return this.errorReply(`No active war found between these clans.`);
 
-		// Calculate ELO
 		const winnerOldElo = winnerClan.stats.elo || 1000;
 		const loserOldElo = loserClan.stats.elo || 1000;
 		const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
@@ -1491,7 +1447,6 @@ export const warCommands: Chat.ChatCommands = {
 				}),
 			]);
 
-            // --- Find clan1 and clan2 for generateWarCard ---
             const [clan1, clan2] = await Promise.all([
                 Clans.findOne({ _id: war.clans[0] }),
                 Clans.findOne({ _id: war.clans[1] }),
@@ -1501,7 +1456,6 @@ export const warCommands: Chat.ChatCommands = {
                 return;
             }
             
-            // Manually update local war object for card generation
             war.status = 'completed';
 
             const endMessage = `[ADMIN] ${user.name} has forced ${loserClan.name} to forfeit to ${winnerClan.name}. ELO Change: ${eloChange}`;
@@ -1774,8 +1728,6 @@ export const warCommands: Chat.ChatCommands = {
 
 		await ClanWars.deleteOne({ _id: war._id });
 
-		// We can't update the UHTML card because it's already deleted.
-		// We'll just clear it from the rooms.
 		const uhtmlId = `clan-war-card-${war._id}`;
 		const [clan1, clan2] = await Promise.all([
 			Clans.findOne({ _id: war.clans[0] }),
@@ -1821,7 +1773,6 @@ export const warCommands: Chat.ChatCommands = {
 		if (!clan2) return this.errorReply(`Clan '${clan2Id}' not found.`);
 		if (c1ID === c2ID) return this.errorReply("Clans must be different.");
 
-		// Check if either clan already has an active or pending war
 		const [clan1ExistingWar, clan2ExistingWar] = await Promise.all([
 			ClanWars.findOne({
 				clans: c1ID,
@@ -1880,7 +1831,6 @@ export const warCommands: Chat.ChatCommands = {
 		this.sendReply(`Force-started an active war between ${clan1.name} and ${clan2.name}.`);
 	},
 
-	// 5. Help
 	help() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
