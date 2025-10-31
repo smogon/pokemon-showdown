@@ -151,8 +151,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			const winnerRoom = Rooms.get(challengerClan.chatRoom);
 			const loserRoom = Rooms.get(targetClan.chatRoom);
-			if (winnerRoom) winnerRoom.add(finalMessage).update();
-			if (loserRoom) loserRoom.add(finalMessage).update();
+			if (winnerRoom) winnerRoom.add(finalMessage, -2000).update();
+			if (loserRoom) loserRoom.add(finalMessage, -2000).update();
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
 				battleID: battle.roomid,
@@ -200,8 +200,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			const winnerRoom = Rooms.get(challengerClan.chatRoom);
 			const loserRoom = Rooms.get(targetClan.chatRoom);
 			
-			if (winnerRoom) winnerRoom.add(uhtmlUpdate).update();
-			if (loserRoom) loserRoom.add(uhtmlUpdate).update();
+			if (winnerRoom) winnerRoom.add(uhtmlUpdate, -2000).update();
+			if (loserRoom) loserRoom.add(uhtmlUpdate, -2000).update();
 
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War Continue)", {
