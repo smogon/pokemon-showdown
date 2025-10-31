@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* TCG Trade Commands
+*/
 import type { TcgUser } from './interface';
 import { getCard, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection, userProfilesCollection } from './tcg_collections';
