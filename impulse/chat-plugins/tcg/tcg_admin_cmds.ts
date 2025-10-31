@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* TCG Admin Commands
+*/
 import type { TcgUser, TcgUserProfile } from './interface';
 import {
 	getSet,
