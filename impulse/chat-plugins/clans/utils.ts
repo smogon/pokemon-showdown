@@ -198,15 +198,11 @@ export function generateWarCard(
 
 	// --- THIS IS THE START OF THE FIX ---
 
-	// Clans and ELO (Stacked vertically and centered)
-	html += `<div style="text-align: center; margin: 10px 0;">`;
-	html += `<strong style="font-size: 1.2em;">${clan1.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
-	html += `</div>`;
-	
-	html += `<strong style="font-size: 1.5em; color: #AAA; margin: 5px 0; display: block;">VS</strong>`;
-	
-	html += `<div style="text-align: center; margin: 10px 0;">`;
-	html += `<strong style="font-size: 1.2em;">${clan2.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
+	// Clans and ELO (Horizontal and centered)
+	html += `<div style="margin: 10px 0; font-size: 1.2em;">`;
+	html += `<strong style="font-size: 1.2em;">${clan1.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
+	html += ` <strong style="font-size: 1.5em; color: #AAA; margin: 0 10px;">VS</strong> `;
+	html += `<strong style="font-size: 1.2em;">${clan2.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
 	html += `</div>`;
 
 	// --- THIS IS THE END OF THE FIX ---
