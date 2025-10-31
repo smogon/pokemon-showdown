@@ -8,16 +8,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onResidual(pokemon) {
 			if (pokemon.volatiles['spellbookmagazine']) return;
 			const rand = this.random(4);
-			const shadowleap = {
+			const shadowleap: typeof pokemon.moveSlots[0] = {
 				move: "Shadow Leap",
-				id: "shadowleap",
+				id: toID("shadowleap"),
 				pp: 2,
 				maxpp: 2,
 				target: "normal",
 				disabled: false,
 				used: false,
 			};
-			const firebail = {
+			const firebail: typeof pokemon.moveSlots[0] = {
 				move: "FirebaIl",
 				id: "firebail",
 				pp: 2,
@@ -26,7 +26,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const blastjump = {
+			const blastjump: typeof pokemon.moveSlots[0] = {
 				move: "Blast Jump",
 				id: "blastjump",
 				pp: 2,
@@ -35,7 +35,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const overheal = {
+			const overheal: typeof pokemon.moveSlots[0] = {
 				move: "Overheal",
 				id: "overheal",
 				pp: 1,
@@ -44,7 +44,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const batswarm = {
+			const batswarm: typeof pokemon.moveSlots[0] = {
 				move: "Bat Swarm",
 				id: "batswarm",
 				pp: 2,
@@ -53,7 +53,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const pumpkinmirv = {
+			const pumpkinmirv: typeof pokemon.moveSlots[0] = {
 				move: "Pumpkin MIRV",
 				id: "pumpkinmirv",
 				pp: 1,
@@ -62,7 +62,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const stealth = {
+			const stealth: typeof pokemon.moveSlots[0] = {
 				move: "Stealth",
 				id: "stealth",
 				pp: 1,
@@ -71,7 +71,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const monoculus = {
+			const monoculus: typeof pokemon.moveSlots[0] = {
 				move: "MONOCULUS!",
 				id: "monoculus",
 				pp: 1,
@@ -80,7 +80,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const skeletonhorde = {
+			const skeletonhorde: typeof pokemon.moveSlots[0] = {
 				move: "Skeleton Horde",
 				id: "skeletonhorde",
 				pp: 1,
@@ -89,7 +89,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const ballolightning = {
+			const ballolightning: typeof pokemon.moveSlots[0] = {
 				move: "Ball O' Lightning",
 				id: "ballolightning",
 				pp: 1,
@@ -98,7 +98,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const meteorshower = {
+			const meteorshower: typeof pokemon.moveSlots[0] = {
 				move: "Meteor Shower",
 				id: "meteorshower",
 				pp: 1,
@@ -107,7 +107,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				disabled: false,
 				used: false,
 			};
-			const minify = {
+			const minify: typeof pokemon.moveSlots[0] = {
 				move: "Minify",
 				id: "minify",
 				pp: 1,
@@ -122,7 +122,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			];
 			if (rand === 0) {
 				const randSpell = this.sample(spells);
-				this.moveSlots.push(randSpell);
+				pokemon.moveSlots.push(randSpell);
 				pokemon.addVolatile("spellbookmagazine");
 			}
 		},
