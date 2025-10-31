@@ -516,15 +516,31 @@ export const warCommands: Chat.ChatCommands = {
 			return;
 		}
 
-		// --- Announcements ---
-		const winMessage = `|html|<div class="broadcast-green"><center><strong>VICTORY!</strong><br /><strong>${loserClan.name}</strong> has conceded the war!<br /><strong>${winnerClan.name}</strong> claims victory without further battle.<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have proven their strength!</center></div>`;
+        // --- Find clan1 and clan2 for generateWarCard ---
+        const [clan1, clan2] = await Promise.all([
+            Clans.findOne({ _id: war.clans[0] }),
+            Clans.findOne({ _id: war.clans[1] }),
+        ]);
+        if (!clan1 || !clan2) {
+            this.errorReply("Could not find clan data for UHTML update.");
+            return;
+        }
+        
+        // Manually update local war object for card generation
+        war.status = 'completed';
 
-		const lossMessage = `|html|<div class="broadcast-red"><center><strong>DEFEAT</strong><br />Your clan has forfeited the war against <strong>${winnerClan.name}</strong>.<br /><strong>Clan ELO: -${eloChange}</strong> (${Math.floor(loserOldElo)} → ${Math.floor(newLoserElo)})<br />Regroup and prepare for the next battle!</center></div>`;
-
+        const endMessage = `${loserClan.name} has forfeited the war to ${winnerClan.name}. ELO Change: ${eloChange}`;
+        const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+        const uhtmlId = `clan-war-card-${war._id}`;
+        
 		const winnerRoom = Rooms.get(winnerClan.chatRoom);
 		const loserRoom = Rooms.get(loserClan.chatRoom);
-		if (winnerRoom) winnerRoom.add(winMessage).update();
-		if (loserRoom) loserRoom.add(lossMessage).update();
+
+		if (winnerRoom) winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+        
+        // Send PM to user
+        this.sendReply(`You have forfeited the war against ${winnerClan.name}. Your clan lost ${eloChange} ELO.`);
 	},
 
 	async tie(target, room, user) {
@@ -1428,14 +1444,28 @@ export const warCommands: Chat.ChatCommands = {
 				}),
 			]);
 
-			const winMessage = `|html|<div class="broadcast-green"><center><strong>VICTORY AWARDED</strong><br />Admin ${user.name} has declared <strong>${winnerClan.name}</strong> the victor!<br /><strong>Clan ELO: +${eloChange}</strong> (${Math.floor(winnerOldElo)} → ${Math.floor(newWinnerElo)})<br />Your trainers have earned their glory!</center></div>`;
+            // --- Find clan1 and clan2 for generateWarCard ---
+            const [clan1, clan2] = await Promise.all([
+                Clans.findOne({ _id: war.clans[0] }),
+                Clans.findOne({ _id: war.clans[1] }),
+            ]);
+            if (!clan1 || !clan2) {
+                this.errorReply("Could not find clan data for UHTML update.");
+                return;
+            }
+            
+            // Manually update local war object for card generation
+            war.status = 'completed';
 
-			const lossMessage = `|html|<div class="broadcast-red"><center><strong>⚡ ADMIN DECISION - FORFEIT ⚡</strong><br />Admin ${user.name} has ruled your clan the loser of this war.<br /><strong>Clan ELO: -${eloChange}</strong> (${Math.floor(loserOldElo)} → ${Math.floor(newLoserElo)})<br />Learn from this defeat and return stronger!</center></div>`;
-
+            const endMessage = `[ADMIN] ${user.name} has forced ${loserClan.name} to forfeit to ${winnerClan.name}. ELO Change: ${eloChange}`;
+            const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+            const uhtmlId = `clan-war-card-${war._id}`;
+            
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
-			if (winnerRoom) winnerRoom.add(winMessage).update();
-			if (loserRoom) loserRoom.add(lossMessage).update();
+
+			if (winnerRoom) winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 			this.sendReply(`Force forfeited war: ${loserClan.name} loses to ${winnerClan.name}.`);
 		} catch (e) {
