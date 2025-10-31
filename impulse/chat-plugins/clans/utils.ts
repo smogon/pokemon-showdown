@@ -174,9 +174,8 @@ export function calculateElo(winnerElo: number, loserElo: number): [number, numb
  * @param clan1 Clan object for war.clans[0] (Challenger).
  * @param clan2 Clan object for war.clans[1] (Target).
  * @param perspective Used to determine which buttons to show.
- * 'challenger': Shows 'Cancel' button.
- * 'target': Shows 'Accept/Deny' buttons.
- * 'active': Shows active war status (or paused/resume buttons).
+ * 'challenger': Shows buttons for clan1.
+ * 'target': Shows buttons for clan2.
  * 'ended': Shows a final message.
  * @param endMessage Optional message for the 'ended' perspective.
  */
@@ -184,7 +183,7 @@ export function generateWarCard(
 	war: ClanWar,
 	clan1: Clan,
 	clan2: Clan,
-	perspective: 'challenger' | 'target' | 'active' | 'ended',
+	perspective: 'challenger' | 'target' | 'ended',
 	endMessage?: string
 ): string {
 	const clan1Elo = Math.floor(clan1.stats.elo || 1000);
@@ -221,25 +220,26 @@ export function generateWarCard(
 
 	// Buttons/Actions
 	html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-	if (perspective === 'challenger') {
-		html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
-		html += `<button class="button" name="send" value="/clan war cancel ${clan2.id}">Withdraw Challenge</button>`;
-	} else if (perspective === 'target') {
-		html += `<strong>${clan1.name} has challenged you!</strong><br />`;
-		html += `<button class="button" name="send" value="/clan war accept ${clan1.id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
-		html += `<button class="button" name="send" value="/clan war deny ${clan1.id}" style="background-color: #f44336; color: white;">Deny</button>`;
-	} else if (perspective === 'active') {
+	if (war.status === 'pending') {
+		if (perspective === 'challenger') {
+			html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
+			html += `<button class="button" name="send" value="/clan war cancel ${clan2.id}">Withdraw Challenge</button>`;
+		} else if (perspective === 'target') {
+			html += `<strong>${clan1.name} has challenged you!</strong><br />`;
+			html += `<button class="button" name="send" value="/clan war accept ${clan1.id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
+			html += `<button class="button" name="send" value="/clan war deny ${clan1.id}" style="background-color: #f44336; color: white;">Deny</button>`;
+		}
+	} else if (war.status === 'active') {
+		const opponentId = perspective === 'challenger' ? clan2.id : clan1.id;
 		if (war.paused) {
-			const opponentId = war.clans[0] === clan1.id ? clan2.id : clan1.id;
 			html += `<strong>The war is paused.</strong><br />`;
 			html += `<button class="button" name="send" value="/clan war resume ${opponentId}" style="background-color: #4CAF50; color: white;">Resume War</button>`;
 		} else {
-			const opponentId = war.clans[0] === clan1.id ? clan2.id : clan1.id;
 			html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
 			html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
 		}
-	} else if (perspective === 'ended') {
-		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This challenge is no longer valid.')}</strong>`;
+	} else if (war.status === 'completed' || perspective === 'ended') {
+		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(endMessage || 'This war has concluded.')}</strong>`;
 	}
 	html += `</div></center></div>`;
 	return html;
