@@ -400,6 +400,7 @@ export const commands: ChatCommands = {
 					if (zeroCheck && zeroCheck.quantity === 0) {
 						return this.errorReply(`You just opened all "${rawSetId}" packs, or another request is in progress.`);
 					}
+				} catch (checkError) { /* ignore */ }
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`);
 			}
 
