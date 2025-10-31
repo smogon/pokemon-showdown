@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* TCG Trade Commands
+* TCG Trading Commands
 */
 import type { TcgUser } from './interface';
 import { getCard, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
@@ -22,7 +22,7 @@ interface ActiveTrade {
 }
 
 const activeTrades = new Map<string, ActiveTrade>();
-const TRADE_TIMEOUT = 10 * 60 * 1000;
+const TRADE_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
 function getTradeKey(user1: string, user2: string): string {
 	return [user1, user2].sort().join(':');
@@ -46,7 +46,7 @@ function cleanupExpiredTrades() {
 	}
 }
 
-setInterval(cleanupExpiredTrades, 60 * 1000);
+setInterval(cleanupExpiredTrades, 60 * 1000); // Clean up every minute
 
 export const tradeCommands: ChatCommands = {
 	async trade(target, room, user) {
@@ -279,6 +279,7 @@ export const tradeCommands: ChatCommands = {
 		let html = `<div class="infobox" style="padding: 15px;">`;
 		html += `<strong style="font-size: 1.3em;">Trade with ${otherUserName}</strong><br><hr>`;
 
+		// Your offer
 		html += `<div style="margin: 10px 0;"><strong style="font-size: 1.1em;">Your Offer:</strong><br>`;
 		if (myOffer.cards.size === 0 && myOffer.credits === 0) {
 			html += `<em>Nothing offered yet</em>`;
@@ -297,6 +298,7 @@ export const tradeCommands: ChatCommands = {
 		}
 		html += `</div><hr>`;
 
+		// Their offer
 		html += `<div style="margin: 10px 0;"><strong style="font-size: 1.1em;">${otherUserName}'s Offer:</strong><br>`;
 		if (theirOffer.cards.size === 0 && theirOffer.credits === 0) {
 			html += `<em>Nothing offered yet</em>`;
@@ -315,6 +317,7 @@ export const tradeCommands: ChatCommands = {
 		}
 		html += `</div><hr>`;
 
+		// Status
 		html += `<div style="margin: 10px 0;">`;
 		html += `<strong>Status:</strong><br>`;
 		html += `${user.name}: ${trade.initiatorReady && isInitiator || trade.recipientReady && !isInitiator ? '<span style="color: green;">Ready ✓</span>' : '<span style="color: orange;">Not Ready</span>'}<br>`;
@@ -342,11 +345,13 @@ export const tradeCommands: ChatCommands = {
 		const otherUser = Users.get(otherUserId);
 
 		if (trade.initiatorReady && trade.recipientReady) {
+			// Execute trade
 			try {
 				const now = new Date().toISOString();
 				const collection = userCollectionsCollection;
 				const profiles = userProfilesCollection;
 
+				// Validate both users still have the items
 				for (const [cardId, qty] of trade.initiatorOffer.cards.entries()) {
 					const card = await collection.findOne({ userId: trade.initiator, cardId });
 					if (!card || card.quantity < qty) {
@@ -367,6 +372,7 @@ export const tradeCommands: ChatCommands = {
 					}
 				}
 
+				// Validate credits
 				const initiatorProfile = await profiles.findOne({ userId: trade.initiator });
 				const recipientProfile = await profiles.findOne({ userId: trade.recipient });
 
@@ -384,6 +390,7 @@ export const tradeCommands: ChatCommands = {
 					return;
 				}
 
+				// Transfer cards from initiator to recipient
 				for (const [cardId, qty] of trade.initiatorOffer.cards.entries()) {
 					const card = await collection.findOne({ userId: trade.initiator, cardId });
 					if (!card) continue;
@@ -443,6 +450,7 @@ export const tradeCommands: ChatCommands = {
 					}
 				}
 
+				// Transfer cards from recipient to initiator
 				for (const [cardId, qty] of trade.recipientOffer.cards.entries()) {
 					const card = await collection.findOne({ userId: trade.recipient, cardId });
 					if (!card) continue;
@@ -502,6 +510,7 @@ export const tradeCommands: ChatCommands = {
 					}
 				}
 
+				// Transfer credits
 				if (trade.initiatorOffer.credits > 0) {
 					await profiles.updateOne({ userId: trade.initiator }, { $inc: { credits: -trade.initiatorOffer.credits } });
 					await profiles.updateOne({ userId: trade.recipient }, { $inc: { credits: trade.initiatorOffer.credits } }, { upsert: true });
@@ -512,6 +521,7 @@ export const tradeCommands: ChatCommands = {
 					await profiles.updateOne({ userId: trade.initiator }, { $inc: { credits: trade.recipientOffer.credits } }, { upsert: true });
 				}
 
+				// Increment trade counter for both users
 				await profiles.updateOne(
 					{ userId: trade.initiator },
 					{ $inc: { totalTrades: 1 } },

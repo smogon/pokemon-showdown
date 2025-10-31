@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* TCG Collections
+* TCG Collection Definitions
 */
 import { ImpulseDB } from '../../impulse-db';
 import { type TcgCard, type TcgDailyCooldown, type TcgUser,

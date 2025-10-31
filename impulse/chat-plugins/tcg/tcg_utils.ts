@@ -545,7 +545,7 @@ export function renderCardGridHtml(cards: TcgCard[], title?: string, subtitle?: 
 		for (let j = i; j < i + cardsPerRow && j < cards.length; j++) {
 			const c = cards[j];
 			const w = 74, h = 103;
-			const url = c.imageUrl || ``;
+			const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
 			const alt = `${c.name} (${c.cardId})`;
 			html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 84px;">`;
 			html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;

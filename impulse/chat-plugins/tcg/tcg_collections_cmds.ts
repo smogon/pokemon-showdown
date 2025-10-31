@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* TCG Collections Commands
+* TCG Collection and Profile Commands
 */
 import type { TcgCard, TcgUser } from './interface';
 import { getSet, getCacheStats } from './tcg_utils';
@@ -176,7 +176,7 @@ export const collectionCommands: ChatCommands = {
 					html += `<div style="display: inline-block; text-align: center;">`;
 				}
 				const w = 74, h = 103;
-				const url = c.imageUrl || ``;
+				const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
 				const name = c.name || c.cardId;
 				const alt = `${name} (${c.cardId})`;
 				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; position: relative;">`;
@@ -229,7 +229,7 @@ export const collectionCommands: ChatCommands = {
 
 			const totalInSet = setInfo.setTotal;
 			const setName = setInfo.set;
-			const setLogo = setInfo.setImages?.logo || ``;
+			const setLogo = setInfo.setImages?.logo || '';
 			const userCollection = userCollectionsCollection;
 			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId });
 			const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
@@ -338,7 +338,7 @@ export const collectionCommands: ChatCommands = {
 					html += `<div style="display: inline-block; text-align: center;">`;
 				}
 				const w = 74, h = 103;
-				const url = c.imageUrl || ``;
+				const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
 				const alt = `${c.name} (${c.cardId})`;
 				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 				html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
@@ -388,7 +388,7 @@ export const collectionCommands: ChatCommands = {
 					if (i > 0) html += `</div><hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
 					html += `<div style="display: inline-block; text-align: center;">`;
 				}
-				const logoUrl = p.setLogo || ``;
+				const logoUrl = p.setLogo || `https://via.placeholder.com/80x30?text=${p.setId}`;
 				html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top; width: 120px;">`;
 				html += `<button name="send" value="/tcg opensavedpack ${p.setId}" style="background: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; text-align: center; cursor: pointer; min-height: 90px;">`;
 				html += `<img src="${logoUrl}" height="30" alt="${p.setName} Logo" title="${p.setName} Logo" style="max-width: 100px; display: block; margin: 0 auto 5px auto;" />`;
@@ -448,7 +448,7 @@ export const collectionCommands: ChatCommands = {
 
 		if (orderedFavoriteCards.length > 0) {
 			for (const c of orderedFavoriteCards) {
-				const url = c.imageUrl || ``;
+				const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
 				const alt = `${c.name} (${c.cardId})`;
 				html += `<div style="display: inline-block; margin-right: 10px; width: ${w}px; vertical-align: top;">`;
 				html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;

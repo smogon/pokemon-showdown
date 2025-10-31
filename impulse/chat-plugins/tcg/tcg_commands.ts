@@ -147,7 +147,7 @@ export const commands: ChatCommands = {
 			const originalWidth = 246, originalHeight = 342, scaleFactor = 0.65;
 			const imageWidth = Math.round(originalWidth * scaleFactor);
 			const imageHeight = Math.round(originalHeight * scaleFactor);
-			const imageUrl = card.imageUrl || ``;
+			const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 			const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
 			const imageAlt = `${card.name} (${card.cardId})`;
 
@@ -253,7 +253,7 @@ export const commands: ChatCommands = {
 						html += `<div style="display: inline-block; text-align: center;">`;
 					}
 					const w = 74, h = 103;
-					const url = c.imageUrl || ``;
+					const url = c.imageUrl || `https://via.placeholder.com/${w}x${h}?text=No+Image`;
 					const alt = `${c.name} (${c.cardId})`;
 					html += `<div style="display: inline-block; margin: 0 5px; vertical-align: top;">`;
 					html += `<button name="send" value="/tcg card ${c.cardId}" style="background: none; border: none; padding: 0; cursor: pointer;">`;
