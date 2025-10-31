@@ -240,27 +240,33 @@ export const commands: Chat.ChatCommands = {
 							.replace(/\]$/, '\n]'));
 				}
 
+				// Delete clan document
 				await Clans.deleteOne({ _id: clanId });
 
+				// Remove clan membership from all users
 				await UserClans.updateMany(
 					{ memberOf: clanId },
 					{ $unset: { memberOf: 1 } }
 				);
 
+				// Remove invites to this clan from all users
 				await UserClans.updateMany(
 					{ invites: clanId },
 					{ $pull: { invites: clanId } }
 				);
 
+				// Delete all logs for the clan
 				await ClanLogs.deleteMany({ clanId });
 				await ClanPointsLogs.deleteMany({ clanId });
 
+				// Delete all battle logs involving this clan (winner or loser)
 				await ClanBattleLogs.deleteMany({
 					$or: [
 						{ winningClan: clanId },
 						{ losingClan: clanId },
 					],
 				});
+				// Delete all wars involving this clan
 				await ClanWars.deleteMany({
 					clans: clanId,
 				});
@@ -1593,6 +1599,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				output += '</center>';
 			}
+			// Add buttons to change sort
 			output += `<br /><center><small>Sort by: ` +
 				`<button class="button" name="send" value="${cmd} 1, elo">ELO</button> ` +
 				`<button class="button" name="send" value="${cmd} 1, points">Points</button>` +
@@ -1762,6 +1769,7 @@ export const commands: Chat.ChatCommands = {
 			html += `<strong>Tour Wins:</strong> ${clan.stats.tourWins}<br />`;
 			html += `<strong>Event Wins:</strong> ${clan.stats.eventWins}<br />`;
 			html += `<strong>Member of the Week:</strong> ${motwName}<br />`;
+			// html += `<strong>Invite Only:</strong> ${clan.inviteOnly ? 'Yes' : 'No'}<br />`;
 			html += `<strong>Created:</strong> ${clanAge} ago<br />`;
 			html += `</div></div></div>`;
 			this.sendReply(`|html|${html}`);
