@@ -257,6 +257,9 @@ export function generateWarCard(
 			
 			const iProposedResume = war.resumeConfirmations?.includes(myId);
 			const theyProposedResume = war.resumeConfirmations?.includes(opponentId);
+
+			const iProposedTie = war.tieConfirmations?.includes(myId);
+			const theyProposedTie = war.tieConfirmations?.includes(opponentId);
 			
 			if (war.paused) {
 				// War is Paused
@@ -277,10 +280,16 @@ export function generateWarCard(
 					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Accept Pause</button>`;
 				} else if (iProposedPause && !theyProposedPause) {
 					html += `<em>Pause proposed. Waiting for ${opponentName} to accept...</em><br />`;
+				} else if (theyProposedTie && !iProposedTie) {
+					html += `<strong>${opponentName} has proposed a tie!</strong><br />`;
+					html += `<button class="button" name="send" value="/clan war tie ${opponentId}" style="background-color: #E8A337; color: white;">Accept Tie</button>`;
+				} else if (iProposedTie && !theyProposedTie) {
+					html += `<em>Tie proposed. Waiting for ${opponentName} to accept...</em><br />`;
 				} else {
 					// Default Active state
 					html += `<strong>The war is on! Good luck, trainers!</strong><br />`;
-					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button>`;
+					html += `<button class="button" name="send" value="/clan war pause ${opponentId}">Pause War</button> `;
+					html += `<button class="button" name="send" value="/clan war tie ${opponentId}">Propose Tie</button>`;
 				}
 			}
 		} else if (war.status === 'completed') {
