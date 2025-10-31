@@ -43,6 +43,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
 	const newLoserScore = war.scores[loserClanId] || 0;
 
+	// Get names for the battle log message
+	const winnerName = Users.get(winner)?.name || winner;
+	const loserName = Users.get(loser)?.name || loser;
+
 	if (newWinnerScore === winsNeeded) {
 		// WAR ENDS
 		const [winnerClan, loserClan] = await Promise.all([
@@ -114,7 +118,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			war.scores[winnerClanId] = newWinnerScore;
 			war.scores[loserClanId] = newLoserScore; // Ensure loser score is also set for the card
 
-			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', endMessage);
+			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
@@ -155,10 +159,16 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			const [updatedWar] = await Promise.all([
+			// Get winner/loser clan objects
+			const [winnerClan, loserClan, updatedWar] = await Promise.all([
+				Clans.findOne({ _id: winnerClanId }),
+				Clans.findOne({ _id: loserClanId }),
 				ClanWars.findOne({ _id: war._id }), // Re-fetch the war to get the new score
 			]);
-			if (!updatedWar) return;
+			if (!winnerClan || !loserClan || !updatedWar) return;
+
+			// *** NEW: Create Last Battle Info ***
+			const lastBattle = { winnerName, loserName, winningClanName: winnerClan.name };
 
 			// Update UHTML card
 			const [clan1, clan2] = await Promise.all([
@@ -167,8 +177,8 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			]);
 			if (!clan1 || !clan2) return; // Should not happen
 
-			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
-			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
 			
 			// Determine which room gets which HTML
 			const challengerRoom = Rooms.get(clan1.chatRoom);
