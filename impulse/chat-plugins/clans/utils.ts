@@ -196,12 +196,20 @@ export function generateWarCard(
 	let html = `<div class="infobox" style="border: 2px solid #6688AA; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); padding: 10px;">`;
 	html += `<center><strong style="font-size: 1.3em;">POKÉMON WAR</strong><hr style="margin: 5px 0;">`;
 
-	// Clans and ELO
-	html += `<div style="display: flex; justify-content: space-around; align-items: center; margin: 10px 0;">`;
-	html += `<div style="text-align: center;"><strong style="font-size: 1.2em;">${clan1.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span></div>`;
-	html += `<strong style="font-size: 1.5em; color: #AAA; margin: 0 15px;">VS</strong>`;
-	html += `<div style="text-align: center;"><strong style="font-size: 1.2em;">${clan2.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span></div>`;
+	// --- THIS IS THE START OF THE FIX ---
+
+	// Clans and ELO (Stacked vertically and centered)
+	html += `<div style="text-align: center; margin: 10px 0;">`;
+	html += `<strong style="font-size: 1.2em;">${clan1.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
 	html += `</div>`;
+	
+	html += `<strong style="font-size: 1.5em; color: #AAA; margin: 5px 0; display: block;">VS</strong>`;
+	
+	html += `<div style="text-align: center; margin: 10px 0;">`;
+	html += `<strong style="font-size: 1.2em;">${clan2.name}</strong><br /><span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
+	html += `</div>`;
+
+	// --- THIS IS THE END OF THE FIX ---
 
 	// Format
 	html += `<div style="margin-top: 10px;"><strong>Format:</strong> Best of ${war.bestOf} (First to ${winsNeeded} wins)</div>`;
