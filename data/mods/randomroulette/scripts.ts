@@ -6,11 +6,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	start() {
 		// Choose a random format
 		this.gen = this.random(1, 10);
-		console.log(this.format.ruleset);
 		const format = Dex.formats.get(`gen${this.gen}randombattle@@@${([...this.format.ruleset, ...(this.format.customRules || [])]).join(',')}`);
 		this.dex = Dex.forFormat(format);
 		this.ruleTable = this.dex.formats.getRuleTable(format);
-		console.log(this.format.ruleset);
 		this.teamGenerator = Teams.getGenerator(format);
 
 		this.actions.battle = this;
