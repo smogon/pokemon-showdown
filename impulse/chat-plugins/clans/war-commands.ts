@@ -24,6 +24,8 @@ import { generateThemedTable } from
 import { K_FACTOR, getExpectedScore, calculateElo, to,
 	logClanActivity, hasClanPermission, generateWarCard } from './utils';
 
+const LOBBY_ROOM_ID = 'lobby' as RoomID;
+
 export const warCommands: Chat.ChatCommands = {
 	// 1. War Lifecycle Management (Pending/Active)
 	async challenge(target, room, user) {
@@ -120,9 +122,11 @@ export const warCommands: Chat.ChatCommands = {
 		const uhtmlId = `clan-war-card-${war._id}`;
 		const challengerHtml = generateWarCard(war, myClan, targetClan, 'challenger');
 		const targetHtml = generateWarCard(war, myClan, targetClan, 'target');
+		const publicHtml = generateWarCard(war, myClan, targetClan, 'public');
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (targetRoom) {
 			targetRoom.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
@@ -133,6 +137,9 @@ export const warCommands: Chat.ChatCommands = {
 			myRoom.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
 		} else {
 			this.errorReply(`Your challenge was sent, but I could not find your clan's chat room ('${myClan.chatRoom}') to post the challenge card. It may be inactive.`);
+		}
+		if (lobbyRoom) {
+			lobbyRoom.add(`|uhtml|${uhtmlId}|${publicHtml}`).update();
 		}
 	},
 
@@ -206,12 +213,15 @@ export const warCommands: Chat.ChatCommands = {
 		const uhtmlId = `clan-war-card-${updatedWar._id}`;
 		const challengerHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'challenger');
 		const targetHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'target');
+		const publicHtml = generateWarCard(updatedWar, challengerClan, targetClan, 'public');
 
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const targetRoom = Rooms.get(targetClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (challengerRoom) challengerRoom.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 		if (targetRoom) targetRoom.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 	},
 
 	async deny(target, room, user) {
@@ -259,12 +269,16 @@ export const warCommands: Chat.ChatCommands = {
 
 		const challengerRoom = Rooms.get(challengerClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (challengerRoom) {
 			challengerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 		if (myRoom) {
 			myRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		}
+		if (lobbyRoom) {
+			lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 	},
 
@@ -325,12 +339,16 @@ export const warCommands: Chat.ChatCommands = {
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (targetRoom) {
 			targetRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 		if (myRoom) {
 			myRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		}
+		if (lobbyRoom) {
+			lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		}
 	},
 
@@ -427,15 +445,20 @@ export const warCommands: Chat.ChatCommands = {
 		const uhtmlId = `clan-war-card-${war._id}`;
 		const challengerHtml = generateWarCard(war, myClan, targetClan, 'challenger');
 		const targetHtml = generateWarCard(war, myClan, targetClan, 'target');
+		const publicHtml = generateWarCard(war, myClan, targetClan, 'public');
 
 		const targetRoom = Rooms.get(targetClan.chatRoom);
 		const myRoom = Rooms.get(myClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (targetRoom) {
 			targetRoom.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
 		}
 		if (myRoom) {
 			myRoom.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
+		}
+		if (lobbyRoom) {
+			lobbyRoom.add(`|uhtml|${uhtmlId}|${publicHtml}`).update();
 		}
 	},
 
@@ -535,9 +558,11 @@ export const warCommands: Chat.ChatCommands = {
         
 		const winnerRoom = Rooms.get(winnerClan.chatRoom);
 		const loserRoom = Rooms.get(loserClan.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 		if (winnerRoom) winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
         
         // Send PM to user
         this.sendReply(`You have forfeited the war against ${winnerClan.name}. Your clan lost ${eloChange} ELO.`);
@@ -604,8 +629,11 @@ export const warCommands: Chat.ChatCommands = {
 
 			const room1 = Rooms.get(clan1.chatRoom);
 			const room2 = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+			
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 			this.sendReply(`The war with ${opponentClan.name} has been concluded as a tie.`);
 		} else {
@@ -614,12 +642,15 @@ export const warCommands: Chat.ChatCommands = {
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
             const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
             
             const room1 = Rooms.get(clan1.chatRoom);
             const room2 = Rooms.get(clan2.chatRoom);
+            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 		}
 	},
 
@@ -770,12 +801,15 @@ export const warCommands: Chat.ChatCommands = {
             
             const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
             const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
+            const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
 			
             const room1 = Rooms.get(clan1.chatRoom);
             const room2 = Rooms.get(clan2.chatRoom);
+            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${finalChallengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${finalTargetHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${finalPublicHtml}`).update();
 
 			this.sendReply(`The war has been paused.`);
 		} else {
@@ -784,12 +818,15 @@ export const warCommands: Chat.ChatCommands = {
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
             const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
             
             const room1 = Rooms.get(clan1.chatRoom);
             const room2 = Rooms.get(clan2.chatRoom);
+            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 		}
 	},
 
@@ -857,12 +894,15 @@ export const warCommands: Chat.ChatCommands = {
             
             const finalChallengerHtml = generateWarCard(finalWar, clan1, clan2, 'challenger');
             const finalTargetHtml = generateWarCard(finalWar, clan1, clan2, 'target');
+            const finalPublicHtml = generateWarCard(finalWar, clan1, clan2, 'public');
 			
             const room1 = Rooms.get(clan1.chatRoom);
             const room2 = Rooms.get(clan2.chatRoom);
+            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${finalChallengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${finalTargetHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${finalPublicHtml}`).update();
 
 			this.sendReply(`The war has been resumed.`);
 		} else {
@@ -871,12 +911,15 @@ export const warCommands: Chat.ChatCommands = {
 
             const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
             const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+            const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
             
             const room1 = Rooms.get(clan1.chatRoom);
             const room2 = Rooms.get(clan2.chatRoom);
+            const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 		}
 	},
 
@@ -1328,12 +1371,6 @@ export const warCommands: Chat.ChatCommands = {
 
 		const score1 = war.scores[clan1._id] || 0;
 		const score2 = war.scores[clan2._id] || 0;
-		let winnerText = `The war has ended by admin decree: ${score1} - ${score2}.`;
-		if (score1 > score2) {
-			winnerText = `${clan1.name} has prevailed: ${score1} - ${score2}!`;
-		} else if (score2 > score1) {
-			winnerText = `${clan2.name} has prevailed: ${score2} - ${score1}!`;
-		}
         
         const uhtmlId = `clan-war-card-${war._id}`;
         const endMessage = `[ADMIN] ${user.name} has concluded the war. Final Score: ${score1} - ${score2}`;
@@ -1341,8 +1378,11 @@ export const warCommands: Chat.ChatCommands = {
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+		
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 		this.sendReply(`Force ended the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1383,8 +1423,11 @@ export const warCommands: Chat.ChatCommands = {
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 		this.sendReply(`Force tied the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1467,9 +1510,11 @@ export const warCommands: Chat.ChatCommands = {
             
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (winnerRoom) winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			if (loserRoom) loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 
 			this.sendReply(`Force forfeited war: ${loserClan.name} loses to ${winnerClan.name}.`);
 		} catch (e) {
@@ -1552,11 +1597,15 @@ export const warCommands: Chat.ChatCommands = {
         };
         const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
         const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 
 		this.sendReply(`War score updated. ${clan1.name}: ${score1}, ${clan2.name}: ${score2}.`);
 	},
@@ -1607,11 +1656,15 @@ export const warCommands: Chat.ChatCommands = {
         };
         const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
         const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 
 		this.sendReply(`War 'Best of' updated to ${newBestOf} for the war between ${clan1.name} and ${clan2.name}.`);
 	},
@@ -1647,11 +1700,15 @@ export const warCommands: Chat.ChatCommands = {
         const uhtmlId = `clan-war-card-${updatedWar._id}`;
         const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
         const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 
 		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been paused.`);
 	},
@@ -1687,11 +1744,15 @@ export const warCommands: Chat.ChatCommands = {
         const uhtmlId = `clan-war-card-${updatedWar._id}`;
         const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger');
         const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target');
+		const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public');
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
 		if (room1) room1.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 
 		this.sendReply(`War between ${clan1.name} and ${clan2.name} has been resumed.`);
 	},
@@ -1712,6 +1773,24 @@ export const warCommands: Chat.ChatCommands = {
 		if (!war) return this.errorReply(`No pending war found between '${clan1Id}' and '${clan2Id}'.`);
 
 		await ClanWars.deleteOne({ _id: war._id });
+
+		// We can't update the UHTML card because it's already deleted.
+		// We'll just clear it from the rooms.
+		const uhtmlId = `clan-war-card-${war._id}`;
+		const [clan1, clan2] = await Promise.all([
+			Clans.findOne({ _id: war.clans[0] }),
+			Clans.findOne({ _id: war.clans[1] }),
+		]);
+		if (clan1) {
+			const room1 = Rooms.get(clan1.chatRoom);
+			if (room1) room1.add(`|uhtmlchange|${uhtmlId}|<div class="infobox">This challenge has been cleared by an admin.</div>`).update();
+		}
+		if (clan2) {
+			const room2 = Rooms.get(clan2.chatRoom);
+			if (room2) room2.add(`|uhtmlchange|${uhtmlId}|<div class="infobox">This challenge has been cleared by an admin.</div>`).update();
+		}
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+		if (lobbyRoom) lobbyRoom.add(`|uhtmlchange|${uhtmlId}|<div class="infobox">This challenge has been cleared by an admin.</div>`).update();
 
 		this.sendReply(`Deleted pending war challenge between '${clan1Id}' and '${clan2Id}'.`);
 	},
@@ -1788,11 +1867,15 @@ export const warCommands: Chat.ChatCommands = {
         };
         const challengerHtml = generateWarCard(war, clan1, clan2, 'challenger', { lastBattle });
         const targetHtml = generateWarCard(war, clan1, clan2, 'target', { lastBattle });
+		const publicHtml = generateWarCard(war, clan1, clan2, 'public', { lastBattle });
 
 		const room1 = Rooms.get(clan1.chatRoom);
 		const room2 = Rooms.get(clan2.chatRoom);
+		const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+		
 		if (room1) room1.add(`|uhtml|${uhtmlId}|${challengerHtml}`).update();
 		if (room2) room2.add(`|uhtml|${uhtmlId}|${targetHtml}`).update();
+		if (lobbyRoom) lobbyRoom.add(`|uhtml|${uhtmlId}|${publicHtml}`).update();
 
 		this.sendReply(`Force-started an active war between ${clan1.name} and ${clan2.name}.`);
 	},
