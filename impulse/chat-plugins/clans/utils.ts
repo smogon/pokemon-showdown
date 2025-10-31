@@ -198,10 +198,10 @@ export function generateWarCard(
 	html += `<center><strong style="font-size: 1.3em;">POKÉMON WAR</strong><hr style="margin: 5px 0;">`;
 
 	// Clans and ELO (Horizontal and centered)
-	html += `<div style="margin: 10px 0; font-size: 1.2em;">`;
-	html += `<strong style="font-size: 1.2em;">${clan1.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
-	html += ` <strong style="font-size: 1.5em; color: #AAA; margin: 0 10px;">VS</strong> `;
-	html += `<strong style="font-size: 1.2em;">${clan2.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
+	html += `<div style="margin: 10px 0; font-size: 1.1em;">`;
+	html += `<strong style="font-size: 1.1em;">${clan1.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan1Elo} ELO )</span>`;
+	html += ` <strong style="font-size: 1.1em; color: #AAA; margin: 0 10px;">VS</strong> `;
+	html += `<strong style="font-size: 1.1em;">${clan2.name}</strong> <span style="font-size: 1.1em; color: #555;">( ${clan2Elo} ELO )</span>`;
 	html += `</div>`;
 
 	// Format
@@ -211,7 +211,7 @@ export function generateWarCard(
 	if (perspective === 'ended') {
 		html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">ENDED</span>`;
 		html += `<div style="margin-top: 15px; border-top: 1px dashed #CCC; padding-top: 10px;">`;
-		html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This challenge is no longer valid.')}</strong>`;
+		html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This challenge is no longer valid.')}</strong>`;
 		html += `</div>`;
 	} else {
 		// Otherwise, follow the normal logic for pending/active states.
@@ -224,7 +224,7 @@ export function generateWarCard(
 			} else {
 				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
 			}
-			html += `<strong style="font-size: 1.2em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
+			html += `<strong style="font-size: 1.0em;">Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
 		
 			// *** NEW: Add Last Battle Info ***
 			if (options.lastBattle) {
@@ -234,7 +234,7 @@ export function generateWarCard(
 			}
 		} else if (war.status === 'completed') {
 			html += `<strong>Status:</strong> <span style="color: #999; font-weight: bold;">COMPLETED</span><br />`;
-			html += `<strong style="font-size: 1.2em;">Final Score:</strong> <span style="font-size: 1.2em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
+			html += `<strong style="font-size: 1.0em;">Final Score:</strong> <span style="font-size: 1.0em; font-weight: bold;">${war.scores[clan1._id] || 0} - ${war.scores[clan2._id] || 0}</span>`;
 		}
 
 		// Buttons/Actions
@@ -251,7 +251,7 @@ export function generateWarCard(
 					html += `<strong>The war is on! Good luck, trainers!</strong>`;
 				}
 			} else if (war.status === 'completed') {
-				html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
+				html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
 			}
 		} else if (war.status === 'pending') {
 			if (perspective === 'challenger') {
@@ -308,7 +308,7 @@ export function generateWarCard(
 				}
 			}
 		} else if (war.status === 'completed') {
-			html += `<strong style="font-size: 1.1em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
+			html += `<strong style="font-size: 1.0em;">${Utils.escapeHTML(options.endMessage || 'This war has concluded.')}</strong>`;
 		}
 		html += `</div>`;
 	}
