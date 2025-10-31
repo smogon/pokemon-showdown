@@ -7,6 +7,8 @@ import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo, generateWarCard } from './utils';
 
+const LOBBY_ROOM_ID = 'lobby' as RoomID;
+
 /**
  * Handles the end of a battle between two users, checking if it is a clan war battle,
  * updating war scores, ELO ratings (if the war ends), and announcing the results.
@@ -122,11 +124,15 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			const winnerRoom = Rooms.get(winnerClan.chatRoom);
 			const loserRoom = Rooms.get(loserClan.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 			if (winnerRoom) {
 				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 			if (loserRoom) {
 				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			}
+			if (lobbyRoom) {
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
@@ -179,16 +185,21 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 
 			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
 			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
 			
 			// Determine which room gets which HTML
 			const challengerRoom = Rooms.get(clan1.chatRoom);
 			const targetRoom = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
 
 			if (challengerRoom) {
 				challengerRoom.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
 			}
 			if (targetRoom) {
 				targetRoom.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+			}
+			if (lobbyRoom) {
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
 			}
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War Continue)", {
