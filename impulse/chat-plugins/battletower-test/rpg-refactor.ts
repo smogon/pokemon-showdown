@@ -3,6 +3,7 @@ import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
+import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -264,8 +265,6 @@ const STARTER_POKEMON = {
 	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott', 'froakie', 'popplio', 'sobble', 'quaxly'],
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy', 'chespin', 'rowlet', 'grookey', 'sprigatito'],
 };
-
-const MANUAL_LEARNSETS = Impulse.MANUAL_LEARNSETS;
 
 const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number] }> = {
 	'startertown_grass': {
