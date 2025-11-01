@@ -98,6 +98,7 @@ export const MANUAL_LEARNSETS = {
 		levelup: [
 			{ level: 1, move: 'tackle' },
 			{ level: 1, move: 'tailwhip' },
+			{ level: 3, move: 'flipturn' },
 			{ level: 4, move: 'withdraw' },
 			{ level: 8, move: 'bubble' },
 			{ level: 13, move: 'bite' },
