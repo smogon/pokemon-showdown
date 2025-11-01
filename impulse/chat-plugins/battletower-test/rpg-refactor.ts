@@ -2521,16 +2521,18 @@ function handleDamagingMove(
 	}
 }
 
-function handleHPDropEffects(pokemon: RPGPokemon, battle: BattleState, messageLog: string[]) {
+function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	// **NEW:** Magic Room disables all held items.
 	if (battle.magicRoomTurns > 0) return;
+	
+	const pokemon = slot.pokemon;
 
 	// No effect if fainted, no item, or if an item was already consumed this turn (prevents multiple berries activating)
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
 	let itemConsumed = false;
 	let consumedItemName = '';
-	const isPlayer = pokemon.id === battle.activePokemon.id;
+	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 
 	// **FIXED HP THRESHOLDS:** Check both 50% and 25% thresholds in one pass
 	const halfHP = pokemon.maxHp / 2;
@@ -2591,14 +2593,9 @@ function handleHPDropEffects(pokemon: RPGPokemon, battle: BattleState, messageLo
 				// Pokemon becomes confused if the berry's flavor matches what the nature dislikes
 				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
 				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
-					if ((isPlayer && !battle.playerIsConfused) || (!isPlayer && !battle.opponentIsConfused)) {
-						if (isPlayer) {
-							battle.playerIsConfused = true;
-							battle.playerConfusionCounter = Math.floor(Math.random() * 3) + 2; // 2-4 turns
-						} else {
-							battle.opponentIsConfused = true;
-							battle.opponentConfusionCounter = Math.floor(Math.random() * 3) + 2;
-						}
+					if (!slot.isConfused) {
+						slot.isConfused = true;
+						slot.confusionCounter = Math.floor(Math.random() * 3) + 2; // 2-4 turns
 						messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
 					}
 				}
@@ -2606,7 +2603,7 @@ function handleHPDropEffects(pokemon: RPGPokemon, battle: BattleState, messageLo
 			itemConsumed = true;
 		} else if (pokemon.item in pinchBerryStat) {
 			const statToBoost = pinchBerryStat[pokemon.item];
-			const targetStages = isPlayer ? battle.playerStatStages : battle.opponentStatStages;
+			const targetStages = slot.statStages;
 			if (targetStages[statToBoost] < 6) {
 				// FIXED: All stat-boosting berries now boost by exactly 1 stage
 				targetStages[statToBoost]++;
@@ -2615,7 +2612,7 @@ function handleHPDropEffects(pokemon: RPGPokemon, battle: BattleState, messageLo
 				itemConsumed = true;
 			}
 		} else if (pokemon.item === 'starfberry') {
-			const targetStages = isPlayer ? battle.playerStatStages : battle.opponentStatStages;
+			const targetStages = slot.statStages;
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 			const availableStats = stats.filter(stat => targetStages[stat] < 6);
 
@@ -3515,19 +3512,12 @@ function generateStarterSelectionHTML(type: string): string {
 }
 
 function generatePokemonInfoHTML(
-	pokemon: RPGPokemon,
-	showActions = false,
-	status: Status | null = null,
-	statStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number> | null = null,
-	isConfused = false,
-	// --- NEW PARAMS ---
-	isCursed = false,
-	isSeeded = false,
-	hasNightmare = false,
-	isTrapped = false,
-	tauntTurns = 0,
-	chargingMove: string | undefined = undefined
+	slot: ActivePokemonSlot,
+	showActions = false
 ): string {
+	const pokemon = slot.pokemon;
+	const statStages = slot.statStages;
+
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
@@ -3537,23 +3527,23 @@ function generatePokemonInfoHTML(
 	const expNeededForLevel = expForNextLevel - expForLastLevel;
 	const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
 
-	const displayStatus = status || pokemon.status;
+	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
-	const confusedTag = isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
+	const confusedTag = slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
 	// --- NEW TAGS ---
-	const cursedTag = isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
-	const seededTag = isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
-	const nightmareTag = hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
-	const trappedTag = isTrapped ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>` : '';
-	const tauntTag = tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
+	const cursedTag = slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
+	const seededTag = slot.isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
+	const nightmareTag = slot.hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
+	const trappedTag = slot.isTrapped ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>` : '';
+	const tauntTag = slot.tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
 	let chargingTag = '';
-	if (chargingMove) {
-		const moveName = Dex.moves.get(chargingMove).name || 'Attack';
+	if (slot.chargingMove) {
+		const moveName = Dex.moves.get(slot.chargingMove).name || 'Attack';
 		let chargeText = `Preparing ${moveName}!`;
-		if (chargingMove === 'fly') chargeText = 'Flew up high!';
-		if (chargingMove === 'dig') chargeText = 'Dug underground!';
-		if (chargingMove === 'dive') chargeText = 'Hid underwater!';
+		if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
+		if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
+		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
 		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
 	}
 
@@ -3591,69 +3581,132 @@ function generatePokemonInfoHTML(
 	return html;
 }
 
-function generateBattleHTML(battle: BattleState, messageLog: string[] = []): string {
-	const lockedMove = battle.activePokemon.moves.find(m => m.id === battle.playerLockedMove);
-	const isLockedMoveOutOfPP = !!(battle.playerLockedMove && lockedMove && lockedMove.pp === 0);
+function generateBattleHTML(
+	battle: BattleState,
+	messageLog: string[] = [],
+	targetSelection?: { attackerSlotIndex: number, moveId: string }
+): string {
+	const [pSlot0, pSlot1] = battle.playerSlots;
+	const [oSlot0, oSlot1] = battle.opponentSlots;
 
-	const moveButtons = battle.activePokemon.moves.map(move => {
-		const moveData = Dex.moves.get(move.id);
+	// Helper to generate HTML for a single slot
+	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
+		if (!slot) {
+			return `<div style="flex-basis: 48%; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 150px; text-align: center; color: #888;">(Empty Slot)</div>`;
+		}
+		if (slot.pokemon.hp <= 0) {
+			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot)}</div>`;
+		}
+		
+		let borderStyle = "1px solid #ccc";
+		// Check if this slot is a pending target
+		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
+			borderStyle = "3px dashed #007bff"; // Highlight as targetable
+		}
+		// Check if this slot has already acted
+		if (battle.pendingActions[slotIndex]) {
+			borderStyle = "3px solid #28a745"; // Green border for "Ready"
+		}
 
-		// **NEW: Assault Vest check**
-		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
-			battle.activePokemon.item === 'assaultvest' &&
-			moveData.category === 'Status';
+		return `<div style="flex-basis: 48%; border: ${borderStyle};">${generatePokemonInfoHTML(slot)}</div>`;
+	};
 
-		// --- NEW: Taunt check ---
-		const isTauntBlocked = battle.playerTauntTurns > 0 &&
-			moveData.category === 'Status';
+	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
+	html += generateFieldEffectHTML(battle);
 
-		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
-			(battle.playerLockedMove && battle.playerLockedMove !== move.id && !isLockedMoveOutOfPP);
+	// --- Opponent Side ---
+	html += `<div><h3>${battle.opponentName}</h3><div style="display: flex; justify-content: space-around;">`;
+	html += generateSlotHTML(oSlot0, 2, 'opponent');
+	html += generateSlotHTML(oSlot1, 3, 'opponent');
+	html += `</div></div><hr />`;
 
-		return `<button name="send" value="/rpg battleaction move ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
-	}).join('');
+	// --- Player Side ---
+	html += `<div><h3>Your Team</h3><div style="display: flex; justify-content: space-around;">`;
+	html += generateSlotHTML(pSlot0, 0, 'player');
+	html += generateSlotHTML(pSlot1, 1, 'player');
+	html += `</div></div><hr />`;
 
-	// --- NEW: Conditional Catch Button ---
-	const catchButton = battle.battleType === 'wild' ?
-		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
-		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+	// --- Message Log ---
+	html += `<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>`;
 
-	// --- NEW: Conditional Run Button ---
-	// --- MODIFIED: Disable Run if trapped ---
-	const runButton = (battle.battleType === 'wild' && !battle.playerIsTrapped) ?
-		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
-		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+	// --- Action Area ---
+	if (targetSelection) {
+		// --- STATE 2: Target Selection ---
+		const move = Dex.moves.get(targetSelection.moveId);
+		html += `<p>Select a target for <strong>${move.name}</strong>:</p>`;
+		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
 
-	// --- MODIFIED: Pass all volatile statuses to the info HTML ---
-	// --- NEW: Added generateFieldEffectHTML() ---
-	return `<div class="infobox"><h2>Battle!</h2>` +
-	// Add Field Effects display here
-	`${generateFieldEffectHTML(battle)}` +
-	`<div style="display: flex; justify-content: space-around;"><div><h3>Your Pokemon</h3><psicon pokemon="${battle.activePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(
-		battle.activePokemon,
-		false,
-		battle.playerStatus,
-		battle.playerStatStages,
-		battle.playerIsConfused,
-		battle.playerIsCursed,
-		battle.playerIsSeeded,
-		battle.playerHasNightmare,
-		!!battle.playerIsTrapped,
-		battle.playerTauntTurns,
-		battle.playerChargingMove
-	)}</div><div><h3>${battle.opponentName}</h3><psicon pokemon="${battle.opponentActivePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(
-		battle.opponentActivePokemon,
-		false,
-		battle.opponentStatus,
-		battle.opponentStatStages,
-		battle.opponentIsConfused,
-		battle.opponentIsCursed,
-		battle.opponentIsSeeded,
-		battle.opponentHasNightmare,
-		!!battle.opponentIsTrapped,
-		battle.opponentTauntTurns,
-		battle.opponentChargingMove
-	)}</div></div><hr /><div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div><p>What will ${battle.activePokemon.species} do?</p><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div><p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p></div>`;
+		// TODO: This needs to be smarter based on move.target (e.g., 'ally', 'allAdjacentFoes')
+		// For now, we'll just show all valid targets.
+		const targets = [
+			{ slot: pSlot0, name: "Ally 1", index: 0 },
+			{ slot: pSlot1, name: "Ally 2", index: 1 },
+			{ slot: oSlot0, name: "Foe 1", index: 2 },
+			{ slot: oSlot1, name: "Foe 2", index: 3 },
+		];
+
+		for (const target of targets) {
+			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex) {
+				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name} (${target.slot.pokemon.species})</button>`;
+			}
+		}
+		html += `</div>`;
+		html += `<p style="margin-top: 10px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+	} else {
+		// --- STATE 1: Action Selection ---
+		let activeSlot: ActivePokemonSlot | null = null;
+		let activeSlotIndex: number = -1;
+
+		// Find the next player slot that needs to act
+		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
+			activeSlot = pSlot0;
+			activeSlotIndex = 0;
+		} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
+			activeSlot = pSlot1;
+			activeSlotIndex = 1;
+		}
+
+		if (activeSlot) {
+			const pokemon = activeSlot.pokemon;
+			html += `<p>What will <strong>${pokemon.species}</strong> do?</p>`;
+			html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
+
+			const moves = pokemon.moves;
+			for (const move of moves) {
+				const moveData = Dex.moves.get(move.id);
+				
+				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+					pokemon.item === 'assaultvest' &&
+					moveData.category === 'Status';
+				
+				const isTauntBlocked = activeSlot.tauntTurns > 0 &&
+					moveData.category === 'Status';
+
+				const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
+					(activeSlot.lockedMove && activeSlot.lockedMove !== move.id);
+
+				html += `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+			}
+			html += `</div>`;
+		} else {
+			// All player Pokemon have actions queued
+			html += `<p>Waiting for opponent...</p>`;
+		}
+
+		// --- Main Action Buttons (Catch, Switch, Run) ---
+		const catchButton = (battle.battleType === 'wild' || battle.battleType === 'wild_double') ?
+			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
+			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+
+		const runButton = (battle.battleType === 'wild' || battle.battleType === 'wild_double') ? // TODO: Add trap check
+			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
+			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+
+		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+	}
+
+	html += `</div>`;
+	return html;
 }
 
 function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
@@ -4722,6 +4775,21 @@ export const commands: ChatCommands = {
 					// Waiting for other player's move
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
+			},
+
+			selecttarget(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const [attackerSlotStr, moveId] = target.split(' ');
+				const attackerSlotIndex = parseInt(attackerSlotStr);
+
+				if (isNaN(attackerSlotIndex) || !moveId) {
+					return this.errorReply("Invalid command.");
+				}
+
+				// Re-render the UI in "target selection" mode
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${Dex.moves.get(moveId).name}.`], { attackerSlotIndex, moveId })}`);
 			},
 			
 			forceswitch(target, room, user) {
