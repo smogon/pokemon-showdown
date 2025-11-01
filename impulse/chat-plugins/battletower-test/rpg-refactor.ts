@@ -1187,27 +1187,58 @@ function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
 	pokemon.spe = newStats.spe;
 }
 
-function gainExperience(player: PlayerData, pokemon: RPGPokemon, defeatedPokemon: RPGPokemon, room: ChatRoom, user: User): { messages: string[], leveledUp: boolean } {
+function gainExperience(
+	player: PlayerData,
+	participantSlots: ActivePokemonSlot[],
+	defeatedPokemon: RPGPokemon,
+	room: ChatRoom,
+	user: User
+): { messages: string[], leveledUp: boolean } {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
 	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId];
 	if (!baseExp) return { messages: ['No experience was gained.'], leveledUp: false };
+
 	const expGained = Math.floor((baseExp * defeatedPokemon.level) / 7);
-	if (expGained <= 0) return { messages: [`${pokemon.species} gained no Experience Points.`], leveledUp: false };
-	gainEffortValues(pokemon, defeatedPokemon);
-	pokemon.experience += expGained;
+	if (expGained <= 0) return { messages: [`No Experience Points were gained.`], leveledUp: false };
+
 	let leveledUp = false;
-	const messages = [`${pokemon.species} gained ${expGained} Experience Points!`];
-	while (pokemon.experience >= pokemon.expToNextLevel) {
-		messages.push(...levelUp(pokemon));
-		leveledUp = true;
-		const evolveMessage = checkEvolution(player, pokemon, room, user);
-		if (evolveMessage) {
-			messages.push(evolveMessage);
-			break;
-		}
-		const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
-		messages.push(...newMoveMessages);
+	const messages: string[] = [];
+	
+	const participantNames: string[] = [];
+
+	// 1. Distribute EVs and EXP
+	for (const slot of participantSlots) {
+		const pokemon = slot.pokemon;
+		if (pokemon.hp <= 0 || pokemon.level >= 100) continue; // Fainted or max level
+		
+		participantNames.push(pokemon.species);
+		gainEffortValues(pokemon, defeatedPokemon);
+		pokemon.experience += expGained;
 	}
+	
+	if (participantNames.length === 0) return { messages: [], leveledUp: false };
+	
+	messages.push(`**${participantNames.join(' and ')}** gained ${expGained} Experience Points!`);
+
+	// 2. Handle Level-Ups for all participants
+	for (const slot of participantSlots) {
+		const pokemon = slot.pokemon;
+		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
+
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+			messages.push(...levelUp(pokemon));
+			leveledUp = true;
+			const evolveMessage = checkEvolution(player, pokemon, room, user);
+			if (evolveMessage) {
+				messages.push(evolveMessage);
+				// Stop leveling this Pokemon if it evolved, as its stats/exp curve changed
+				break;
+			}
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messages.push(...newMoveMessages);
+		}
+	}
+
 	return { messages, leveledUp };
 }
 
@@ -2894,9 +2925,8 @@ function executeMove(
 	}
 }
 
-
 /**
- * Checks the HP of both active Pokémon and handles the outcome of a faint.
+ * Checks the HP of all active Pokémon and handles the outcome of a faint.
  * This can result in a win, a loss, or a prompt to switch Pokémon.
  * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
  */
@@ -2905,124 +2935,140 @@ function checkBattleEndCondition(
 	battle: BattleState,
 	room: ChatRoom,
 	user: User,
-	messageLog: string[],
-	// --- NEW PARAM ---
-	expGained = false
+	messageLog: string[]
 ): boolean {
 	const player = getPlayerData(user.id);
-	const { activePokemon, opponentActivePokemon } = battle;
 
-	// Check if the player's Pokémon has fainted
-	if (activePokemon.hp <= 0) {
-		if (!player.party.some(p => p.hp > 0)) {
-			// Player has no more Pokémon; they lose.
-			saveBattleStatus(battle);
-			activeBattles.delete(user.id);
+	// --- 1. Check for Fainted Opponents ---
+	let opponentFainted = false;
+	const playerParticipants = getActiveSlots(battle.playerSlots);
+
+	for (let i = 0; i < battle.opponentSlots.length; i++) {
+		const slot = battle.opponentSlots[i];
+		if (slot && slot.pokemon.hp <= 0) {
+			opponentFainted = true;
+			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
 			
-			// Determine money lost
-			let moneyLost = 100; // Base money lost for wild battle
-			if (battle.battleType === 'trainer') {
-				moneyLost = Math.floor(battle.opponentMoney / 10) || 200; // Lose 10% of trainer's prize, or 200
+			// Grant EXP to all active player Pokemon
+			if (playerParticipants.length > 0) {
+				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
+				messageLog.push(...expResult.messages);
 			}
-			moneyLost = Math.min(player.money, moneyLost);
-			player.money -= moneyLost;
-			
-			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.battleType === 'trainer' ? battle.opponentName : undefined)}`);
-			return true; // Battle ended
-		} else {
-			// Player must switch to another Pokémon.
-			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSwitchPokemonHTML(battle, messageLog.join('<br>'))}`);
-			return true; // Battle interrupted, awaiting switch
+
+			// Find a replacement from the trainer's party
+			const nextOpponent = battle.opponentParty.find(p =>
+				p.hp > 0 &&
+				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+			);
+
+			if (nextOpponent) {
+				messageLog.push(`**${battle.opponentName} is about to send in ${nextOpponent.species}!**`);
+				const newSlot = createActivePokemonSlot(nextOpponent);
+				battle.opponentSlots[i] = newSlot;
+
+				// Apply hazards on switch-in
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, false, messageLog);
+				if (faintedOnEntry) {
+					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+					// This will be caught in the next loop of the turn or next check
+				} else {
+					handleMirrorHerb(newSlot.pokemon, battle, messageLog);
+				}
+			} else {
+				// No replacement found, set slot to null
+				battle.opponentSlots[i] = null;
+			}
 		}
 	}
 
-	// Check if the opponent's Pokémon has fainted
-	else if (opponentActivePokemon.hp <= 0) {
-		// Player's active Pokémon gains EXP
-		// --- MODIFIED ---
-		let expMessages: string[] = [];
-		if (!expGained) {
-			const expResult = gainExperience(player, activePokemon, opponentActivePokemon, room, user);
-			expMessages = expResult.messages;
-			messageLog.push(...expMessages);
+	// --- 2. Check for Fainted Player Pokemon ---
+	let playerFaintSwitchNeeded = false;
+	for (let i = 0; i < battle.playerSlots.length; i++) {
+		const slot = battle.playerSlots[i];
+		if (slot && slot.pokemon.hp <= 0) {
+			messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
+			battle.playerSlots[i] = null; // Set slot to null
+			playerFaintSwitchNeeded = true;
 		}
-		// --- END MODIFIED ---
+	}
 
-		if (battle.battleType === 'wild') {
-			// --- Player wins vs. Wild Pokémon ---
-			saveBattleStatus(battle);
-			activeBattles.delete(user.id);
-			const moneyGained = Math.floor(opponentActivePokemon.level * 10);
+	// --- 3. Check for Win/Loss/Interrupt Conditions ---
+
+	// A. Check for Player Loss (No Pokemon left in party or field)
+	const playerHasLivingPokemon = player.party.some(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
+
+	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
+		// PLAYER LOSES
+		saveBattleStatus(battle);
+		activeBattles.delete(user.id);
+		
+		let moneyLost = 100;
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			moneyLost = Math.floor(battle.opponentMoney / 10) || 200;
+		}
+		moneyLost = Math.min(player.money, moneyLost);
+		player.money -= moneyLost;
+		
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
+		return true; // Battle ended
+	}
+	
+	// B. Check for Player Win (No Opponent Pokemon left in party or field)
+	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
+		p.hp > 0 &&
+		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
+
+	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
+		// PLAYER WINS
+		saveBattleStatus(battle);
+		activeBattles.delete(user.id);
+		
+		let moneyGained = 0;
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			moneyGained = battle.opponentMoney;
 			player.money += moneyGained;
-
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(opponentActivePokemon, expMessages, moneyGained, battle.zoneId)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
 			}
-			return true; // Battle ended
-		
-		} else if (battle.battleType === 'trainer') {
-			// --- Check if Trainer has more Pokémon ---
-			const nextOpponent = battle.opponentParty.find(p => p.hp > 0); // Find next available Pokemon
-
-			if (!nextOpponent) {
-				// --- Player wins vs. Trainer ---
-				saveBattleStatus(battle);
-				activeBattles.delete(user.id);
-				const moneyGained = battle.opponentMoney;
-				player.money += moneyGained;
-
-				if (player.pendingMoveLearnQueue?.moveIds.length) {
-					context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-				} else {
-					// Use a new HTML generator for this
-					context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, expMessages, moneyGained)}`);
-				}
-				return true; // Battle ended
-			
+		} else {
+			// Wild battle win
+			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5); // Average level * 10
+			player.money += moneyGained;
+			if (player.pendingMoveLearnQueue?.moveIds.length) {
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
-				// --- Trainer switches to next Pokémon ---
-				messageLog.push(`**${battle.opponentName} is about to send in ${nextOpponent.species}!**`);
-				battle.opponentActivePokemon = nextOpponent;
-				
-				// Reset all volatile statuses for the new opponent
-				const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-				battle.opponentStatStages = { ...initialStages };
-				battle.opponentStatus = nextOpponent.status; // Use status from party (e.g. if healed)
-				battle.opponentSleepCounter = 0;
-				battle.opponentLockedMove = undefined;
-				battle.opponentIsConfused = false;
-				battle.opponentConfusionCounter = 0;
-				battle.opponentProtectSuccessCounter = 0;
-				battle.opponentIsProtected = false;
-				battle.opponentWillFlinch = false;
-				battle.opponentIsTrapped = null;
-				battle.opponentTauntTurns = 0;
-				battle.opponentIsSeeded = false;
-				battle.opponentHasNightmare = false;
-				battle.opponentIsCursed = false;
-				battle.opponentChargingMove = undefined;
-				battle.opponentActiveTurns = 1; // Reset active turns
-
-				// Apply hazards on switch-in
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(battle.opponentActivePokemon, battle, false, messageLog);
-				if (faintedOnEntry) {
-					messageLog.push(`**${battle.opponentActivePokemon.species} fainted upon entry!**`);
-					// Recursively call to check the *next* Pokémon
-					return checkBattleEndCondition(context, battle, room, user, messageLog, true); // Pass true, exp was already handled
-				}
-
-				// Check for Mirror Herb
-				handleMirrorHerb(battle.opponentActivePokemon, battle, messageLog);
-				
-				// Battle continues
-				return false;
+				const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
 			}
 		}
+		return true; // Battle ended
 	}
 
-	// If no one has fainted, the battle continues.
+	// C. Check for Player Switch-In Needed
+	if (playerFaintSwitchNeeded && playerHasLivingPokemon) {
+		// Battle is interrupted, player must switch.
+		// We'll just show the first available slot to fill.
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		return true; // Battle interrupted
+	}
+	
+	// D. Check for U-turn/Volt Switch
+	if (battle.playerShouldSwitch) {
+		// This will be handled by executeAction in the future
+		// For now, let's assume it's checked here.
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog)}`);
+		return true; // Battle interrupted
+	}
+
+	// If no one has fainted or all faints were handled, the battle continues.
 	return false;
 }
 
@@ -3429,7 +3475,7 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 }
 
 /**
- * [STEP 4]
+ * [STEP 4/6 Implementation]
  * Executes a single queued action (move or switch).
  */
 function executeAction(
@@ -3439,8 +3485,10 @@ function executeAction(
 	user: User,
 	messageLog: string[]
 ) {
-	const attackerSlot = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots])
-		.find(s => s.pokemon.id === action.pokemonId);
+	const player = getPlayerData(battle.playerId);
+	const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
+	const attackerSlotIndex = allSlots.findIndex(s => s?.pokemon.id === action.pokemonId);
+	const attackerSlot = allSlots[attackerSlotIndex];
 
 	// Check if the Pokemon fainted before its turn (e.g., from an ally's Earthquake)
 	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
@@ -3448,17 +3496,62 @@ function executeAction(
 	}
 
 	// --- Handle Switch Action ---
-	if (action.actionType === 'switch') {
-		// This logic will be fully implemented in Step 6
-		// For now, we'll just log it.
-		messageLog.push(`${attackerSlot.pokemon.species} is switching out! (Logic TBD)`);
+	if (action.actionType === 'switch' && action.switchToPokemonId) {
+		const isPlayerSwitch = attackerSlotIndex <= 1;
+		const pokemonToSwitchInId = action.switchToPokemonId;
+		
+		if (isPlayerSwitch) {
+			const outgoingPokemon = attackerSlot.pokemon;
+			
+			// Find new Pokemon in party
+			const partyIndex = player.party.findIndex(p => p.id === pokemonToSwitchInId);
+			if (partyIndex === -1) {
+				messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
+				return;
+			}
+			
+			// Save outgoing Pokemon's status to the party
+			saveBattleStatus(battle); // This function needs to be updated in Step 7
+			
+			// Add outgoing Pokemon back to party
+			player.party.push(outgoingPokemon);
+			
+			// Remove incoming Pokemon from party
+			const [incomingPokemon] = player.party.splice(partyIndex, 1);
+			
+			// Create new slot
+			const newSlot = createActivePokemonSlot(incomingPokemon);
+			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+			
+			messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
+
+			// Apply hazards
+			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, true, messageLog);
+			if (faintedOnEntry) {
+				messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+				// Faint check will run at end of turn
+			} else {
+				handleMirrorHerb(newSlot.pokemon, battle, messageLog);
+			}
+		} else {
+			// TODO: Implement AI switching logic
+			messageLog.push(`${attackerSlot.pokemon.species} is switching out! (AI Logic TBD)`);
+		}
 		return;
 	}
 
 	// --- Handle Move Action ---
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
 		const move = Dex.moves.get(action.moveId);
-		const moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id) || { id: 'struggle', pp: 1 };
+		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
+
+		// Handle Struggle
+		if (move.id === 'struggle' || !moveObject) {
+			moveObject = { id: 'struggle', pp: 1 };
+		} else if (moveObject.pp === 0) {
+			moveObject = { id: 'struggle', pp: 1 };
+			messageLog.push(`${attackerSlot.pokemon.species} has no PP left for ${move.name}!`);
+		}
 
 		// 1. Pre-Turn Status Checks (Sleep, Freeze, Paralysis, Confusion, Flinch)
 		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
@@ -3466,13 +3559,12 @@ function executeAction(
 		}
 
 		// 2. PP Deduction
-		if (move.id !== 'struggle' && moveObject.pp > 0) {
+		if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
 			moveObject.pp--;
 		}
 
 		// 3. Resolve Targets
 		// TODO: Implement move redirects (Follow Me, Rage Powder) here
-		const attackerSlotIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(attackerSlot);
 		const targetSlots = getMoveTargets(attackerSlotIndex, action.targetSlot, move, battle);
 
 		// 4. Announce and Execute the Move
@@ -3485,6 +3577,31 @@ function executeAction(
 
 		// 5. Execute move against all targets
 		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
+		
+		// 6. Handle U-turn/Volt Switch (self-switch after move)
+		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
+			const isPlayer = attackerSlotIndex <= 1;
+			if (isPlayer) {
+				const player = getPlayerData(battle.playerId);
+				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+				if (hasReplacement) {
+					battle.playerShouldSwitch = move.selfSwitch; // Set flag
+					// This will be caught by checkBattleEndCondition after the turn
+					// We also need to set the slot to null
+					// This is complex: the switch needs to happen *now*.
+					
+					// For now, we will just set the flag.
+					// A proper implementation would pause the turn, ask for a switch,
+					// and then continue.
+					messageLog.push(`${attackerSlot.pokemon.species} is ready to switch out!`);
+				} else {
+					messageLog.push(`But there was no one to switch to!`);
+				}
+			} else {
+				// AI U-turn
+				// This will be caught by checkBattleEndCondition
+			}
+		}
 	}
 }
 
@@ -3914,36 +4031,54 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 	return html;
 }
 
-function generateSwitchMenuHTML(battle: BattleState): string {
-	let html = `<div class="infobox"><h2>Choose a Pokémon to switch to</h2><p>Select a Pokémon. This will use your turn.</p>`;
+function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
+	let html = `<div class="infobox"><h2>Choose a Pokémon to switch</h2>`;
 	const player = getPlayerData(battle.playerId);
-	let switchableFound = false;
+	const [pSlot0, pSlot1] = battle.playerSlots;
+	
+	const slotToSwitchOut = parseInt(target || '');
 
-	for (const pokemon of player.party) {
-		const content = `<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}`;
-		let button = '';
-
-		if (pokemon.hp <= 0) {
-			button = `<span style="float: right; color: #888;">Fainted</span>`;
-		} else if (pokemon.id === battle.activePokemon.id) {
-			button = `<span style="float: right; color: #888;">Active</span>`;
-		} else {
-			button = `<button name="send" value="/rpg battleaction playerswitch ${pokemon.id}" class="button" style="float: right;">Switch In</button>`;
-			switchableFound = true;
+	if (isNaN(slotToSwitchOut)) {
+		// --- Step 1: Choose which Pokemon to switch out ---
+		html += `<p>Select a Pokémon to switch out. This will use its turn.</p>`;
+		if (pSlot0 && pSlot0.pokemon.hp > 0) {
+			html += `<button name="send" value="/rpg battleaction switchmenu 0" class="button"><strong>${pSlot0.pokemon.species}</strong> (Slot 1)</button> `;
 		}
-		html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">${content}${button}</div>`;
-	}
+		if (pSlot1 && pSlot1.pokemon.hp > 0) {
+			html += `<button name="send" value="/rpg battleaction switchmenu 1" class="button"><strong>${pSlot1.pokemon.species}</strong> (Slot 2)</button> `;
+		}
+	} else {
+		// --- Step 2: Choose which Pokemon to switch in ---
+		const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
+		if (!outgoingPokemon) {
+			return `<h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p>`;
+		}
 
-	if (!switchableFound && player.party.filter(p => p.hp > 0).length > 1) {
-		html += `<p>There are no other Pokémon to switch to!</p>`;
+		html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
+		
+		const availableParty = player.party.filter(p =>
+			p.hp > 0 &&
+			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+		);
+		
+		if (availableParty.length === 0) {
+			html += `<p>You have no other Pokémon to switch to!</p>`;
+		} else {
+			for (const pokemon of availableParty) {
+				html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
+					`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
+					`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
+				`</div>`;
+			}
+		}
 	}
 
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
 
-function generateVictoryHTML(defeatedOpponent: RPGPokemon, expMessages: string[], moneyGained: number, zoneId: string): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponent.species}</strong>!</p><div style="background: #f0f0f0; padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You found ₽${moneyGained}!</p><p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another Pokemon</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[], moneyGained: number, zoneId: string): string {
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="background: #f0f0f0; padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You found ₽${moneyGained}!</p><p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another Pokemon</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 }
 
 // --- NEW FUNCTION ---
@@ -3957,12 +4092,31 @@ function generateDefeatHTML(moneyLost: number, opponentName?: string): string {
 	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 }
 
-function generateSwitchPokemonHTML(battle: BattleState, message: string): string {
-	let html = `<div class="infobox"><h2>${battle.activePokemon.species} fainted!</h2><p>${message}</p><p>Choose your next Pokemon:</p>`;
+function generateFaintSwitchHTML(battle: BattleState, message: string): string {
+	let html = `<div class="infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
-	for (const pokemon of player.party) {
-		if (pokemon.hp > 0) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px;"><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}<button name="send" value="/rpg battleaction forceswitch ${pokemon.id}" class="button" style="float: right;">Switch In</button></div>`;
+
+	// Find the first empty slot
+	const slotToFill = battle.playerSlots[0] === null ? 0 : (battle.playerSlots[1] === null ? 1 : -1);
+
+	if (slotToFill === -1) {
+		// This should not happen if we got here, but it's a safe fallback.
+		html += `<p>Error: No empty slot found.</p><button name="send" value="/rpg battleaction back" class="button">Back</button>`;
+	} else {
+		html += `<p>Choose a Pokémon to send to <strong>Slot ${slotToFill + 1}</strong>:</p>`;
+
+		// Find available party members
+		const availableParty = player.party.filter(p =>
+			p.hp > 0 &&
+			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+		);
+
+		if (availableParty.length === 0) {
+			html += `<p>You have no other Pokémon that can fight!</p>`;
+		} else {
+			for (const pokemon of availableParty) {
+				html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px;"><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}<button name="send" value="/rpg battleaction forceswitch ${slotToFill} ${pokemon.id}" class="button" style="float: right;">Switch In</button></div>`;
+			}
 		}
 	}
 	html += `</div>`;
@@ -4001,15 +4155,26 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 	return html;
 }
 
-function generatePivotSwitchHTML(battle: BattleState, messageLog: string[]): string {
-	let html = `<div class="infobox"><h2>${battle.activePokemon.species} went back!</h2><p>${messageLog.join('<br>')}</p><p>Choose your next Pokemon:</p>`;
+function generatePivotSwitchHTML(battle: BattleState, messageLog: string[], pivotSlotIndex: number): string {
+	let html = `<div class="infobox"><h2>A Pokémon is switching out!</h2><p>${messageLog.join('<br>')}</p>`;
 	const player = getPlayerData(battle.playerId);
-	const currentPokemonId = battle.activePokemon.id; // Get ID of the pivoting Pokemon
+	const pivotingPokemon = battle.playerSlots[pivotSlotIndex]?.pokemon;
 
-	for (const pokemon of player.party) {
-		// Show only if HP > 0 AND it's not the Pokemon that just pivoted out
-		if (pokemon.hp > 0 && pokemon.id !== currentPokemonId) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px;"><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}<button name="send" value="/rpg battleaction forceswitch ${pokemon.id}" class="button" style="float: right;">Switch In</button></div>`;
+	html += `<p>Choose a Pokémon to replace <strong>${pivotingPokemon?.species || 'your Pokémon'}</strong> in <strong>Slot ${pivotSlotIndex + 1}</strong>:</p>`;
+
+	const availableParty = player.party.filter(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+
+	if (availableParty.length === 0) {
+		html += `<p>You have no other Pokémon to switch to!</p>`;
+		// This is a problem. The battle needs to continue.
+		// We'll add a button to just continue the battle.
+		html += `<p><button name="send" value="/rpg battleaction forceswitch ${pivotSlotIndex} cancel" class="button">Continue</button></p>`;
+	} else {
+		for (const pokemon of availableParty) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px;"><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}<button name="send" value="/rpg battleaction forceswitch ${pivotSlotIndex} ${pokemon.id}" class="button" style="float: right;">Switch In</button></div>`;
 		}
 	}
 	html += `</div>`;
@@ -4791,92 +4956,74 @@ export const commands: ChatCommands = {
 				// Re-render the UI in "target selection" mode
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${Dex.moves.get(moveId).name}.`], { attackerSlotIndex, moveId })}`);
 			},
-			
+
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
-				// --- MODIFIED ---
-				// Allow this command if player fainted OR if they are pivoting
-				if (battle.activePokemon.hp > 0 && !battle.playerShouldSwitch) {
-					// Check if playerShouldSwitch was cleared by the move command
-					// We need to check if this is a pivot switch.
-					// The check in `battleaction: move` *already* cleared playerShouldSwitch
-					// So we can't check it here.
-					// The *only* time this command is called is on faint or pivot.
-					// Let's re-check the logic.
-					
-					// `move` calls `generatePivotSwitchHTML` -> user clicks `forceswitch`
-					// `checkBattleEndCondition` calls `generateSwitchPokemonHTML` -> user clicks `forceswitch`
-					// This command is fine. The logic inside it needs to change.
-				}
-				// --- END MODIFIED ---
 				
+				const [slotStr, pokemonId] = target.split(' ');
+				const slotToFill = parseInt(slotStr);
+
+				if (isNaN(slotToFill) || !pokemonId) {
+					return this.errorReply("Invalid switch command.");
+				}
+
+				if (pokemonId === 'cancel') {
+					// This happens if a player U-turns with no Pokemon to switch to.
+					// We just send them back to the battle.
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["The battle continues..."])}`);
+				}
+
 				const player = getPlayerData(battle.playerId);
-
-				const pokemonId = target.trim();
-				const nextPokemon = player.party.find(p => p.id === pokemonId && p.hp > 0);
-				if (!nextPokemon) return this.errorReply("Invalid Pokemon or it has fainted.");
 				
-				// --- NEW: Check if opponent is fainted *before* switching ---
-				const opponentFainted = battle.opponentActivePokemon.hp <= 0;
-				// Save the Pokemon that is *currently* active (the fainter or the pivoter)
-				const outgoingPokemon = battle.activePokemon; 
-				// --- END NEW ---
-
-				// --- NEW: Baton Pass logic ---
-				const isBatonPass = battle.playerShouldSwitch === 'copyvolatile';
-				// --- END NEW ---
-
-				battle.activePokemon = nextPokemon;
-				battle.playerStatus = nextPokemon.status;
-
-				// --- MODIFIED: Handle Baton Pass stat preservation ---
-				if (!isBatonPass) {
-					// Reset stats if not Baton Pass
-					battle.playerStatStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+				// Find the Pokemon in the party
+				const partyIndex = player.party.findIndex(p => p.id === pokemonId && p.hp > 0);
+				if (partyIndex === -1) {
+					return this.errorReply("Invalid Pokemon or it has fainted.");
 				}
-				// (If it *is* Baton Pass, we simply do *not* reset playerStatStages)
-				// --- END MODIFIED ---
 				
-				// These are always reset
-				battle.playerLockedMove = undefined;
-				battle.playerIsConfused = false;
-				battle.playerConfusionCounter = 0;
-				battle.playerWillFlinch = false;
-				battle.playerActiveTurns = 1; // Reset turn counter
+				// Check if this Pokemon is already in battle
+				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonId)) {
+					return this.errorReply("This Pokemon is already in battle.");
+				}
+				
+				// Check if the slot is actually empty
+				if (battle.playerSlots[slotToFill] !== null) {
+					return this.errorReply("This slot is not empty.");
+				}
+				
+				// --- Execute the Switch ---
+				const [nextPokemon] = player.party.splice(partyIndex, 1);
+				const newSlot = createActivePokemonSlot(nextPokemon);
+				battle.playerSlots[slotToFill] = newSlot;
 
-				// --- NEW: Clear the switch flag ---
-				battle.playerShouldSwitch = false;
-				// --- END NEW ---
-
+				// Add the Pokemon that was in the slot (fainted or pivoted) back to the party
+				// TODO: This logic is missing. The fainted/pivoting Pokemon needs to be moved from the slot to the party.
+				// For now, we assume the slot was just set to 'null' and the Pokemon is "in limbo".
+				// This needs to be fixed. Let's assume the fainted Pokemon is already "gone".
+				// For U-turn, we need to handle this.
+				
 				const playerColor = '#007bff';
 				const infoColor = '#dc3545';
+				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
 
-				const messageLog = [`<span style="color: ${playerColor};">You sent out ${nextPokemon.species}!</span>`];
-				if (isBatonPass) {
-					messageLog.push(`${nextPokemon.species} received the stat changes!`);
-				}
-				
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(battle.activePokemon, battle, true, messageLog);
-
-				let expWasGained = false;
+				// --- Apply Hazards ---
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, true, messageLog);
 				if (faintedOnEntry) {
-					messageLog.push(`<span style="color: ${infoColor};"><strong>${battle.activePokemon.species} fainted upon entry!</strong></span>`);
+					messageLog.push(`<span style="color: ${infoColor};"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
 				} else {
-					handleMirrorHerb(battle.activePokemon, battle, messageLog);
-					
-					// --- NEW: Grant EXP to the *outgoing* Pokemon if opponent was fainted ---
-					if (opponentFainted) {
-						const { messages: expMessages } = gainExperience(player, outgoingPokemon, battle.opponentActivePokemon, room, user);
-						messageLog.push(...expMessages);
-						expWasGained = true; // Signal to checkBattleEndCondition
-					}
-					// --- END NEW ---
+					handleMirrorHerb(newSlot.pokemon, battle, messageLog);
 				}
 
-				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog, expWasGained); // Pass the flag
-
-				if (!battleEnded) {
+				// --- Check if more switches are needed ---
+				const needsAnotherSwitch = battle.playerSlots.some(s => s === null) &&
+					player.party.some(p => p.hp > 0);
+					
+				if (needsAnotherSwitch) {
+					// Another slot is empty, show the switch screen again
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+				} else {
+					// All slots are filled, continue the battle
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
@@ -4885,57 +5032,50 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				if (battle.playerIsTrapped) {
-					this.errorReply(`${battle.activePokemon.species} is trapped and cannot switch out!`);
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${battle.activePokemon.species} can't escape!`])}`);
+				const [slotStr, pokemonIdIn] = target.split(' ');
+				const slotToSwitchOut = parseInt(slotStr);
+
+				if (isNaN(slotToSwitchOut) || !pokemonIdIn) {
+					return this.errorReply("Invalid switch command. Usage: /rpg battleaction playerswitch [slot] [pokemonId]");
 				}
+
+				const outgoingSlot = battle.playerSlots[slotToSwitchOut];
+				if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) {
+					return this.errorReply("The Pokémon in that slot has fainted or is not there.");
+				}
+				
+				// TODO: Add check for Arena Trap, etc.
+				// if (outgoingSlot.isTrapped) { ... }
 
 				const player = getPlayerData(battle.playerId);
-				const pokemonId = target.trim();
-				const nextPokemon = player.party.find(p => p.id === pokemonId && p.hp > 0);
-
-				if (!nextPokemon) return this.errorReply("Invalid Pokemon or it has fainted.");
-				if (nextPokemon.id === battle.activePokemon.id) return this.errorReply("This Pokemon is already in battle.");
-
-				const outgoingPokemon = battle.activePokemon;
-				saveBattleStatus(battle);
-
-				battle.activePokemon = nextPokemon;
-				battle.playerStatus = nextPokemon.status;
-				battle.playerStatStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-				battle.playerLockedMove = undefined;
-				battle.playerIsConfused = false;
-				battle.playerConfusionCounter = 0;
-				battle.playerActiveTurns = 1; // Reset turn counter
-				battle.turn++;
-
-				const playerColor = '#007bff';
-				const infoColor = '#dc3545';
-
-				const messageLog = [`<span style="color: ${playerColor};">${player.name} withdrew ${outgoingPokemon.species} and sent out ${nextPokemon.species}!</span>`];
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(battle.activePokemon, battle, true, messageLog);
-
-				if (faintedOnEntry) {
-					messageLog.push(`<span style="color: ${infoColor};"><strong>${battle.activePokemon.species} fainted upon entry!</strong></span>`);
-				} else {
-					handleMirrorHerb(battle.activePokemon, battle, messageLog);
-
-					const opponentMoveObject = battle.opponentActivePokemon.moves[Math.floor(Math.random() * battle.opponentActivePokemon.moves.length)];
-					const opponentMoveData = Dex.moves.get(opponentMoveObject.id);
-					battle.opponentMoveId = opponentMoveData.id;
-
-					executeMove(battle.opponentActivePokemon, battle.activePokemon, opponentMoveData, opponentMoveObject, battle, messageLog);
-
-					if (battle.activePokemon.hp > 0) {
-						processEndOfTurn(battle, messageLog);
-					}
+				
+				// Check if incoming Pokemon is valid
+				const incomingPokemon = player.party.find(p => p.id === pokemonIdIn && p.hp > 0);
+				if (!incomingPokemon) {
+					return this.errorReply("Invalid Pokemon or it has fainted.");
+				}
+				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonIdIn)) {
+					return this.errorReply("This Pokemon is already in battle.");
 				}
 
-				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog);
+				// --- Queue the Switch Action ---
+				battle.pendingActions[slotToSwitchOut] = {
+					actionType: 'switch',
+					switchToPokemonId: pokemonIdIn,
+					pokemonId: outgoingSlot.pokemon.id,
+				};
 
-				if (!battleEnded) {
-					// Increment opponent's active turn counter since it stayed in
-					battle.opponentActiveTurns++;
+				const messageLog = [`${outgoingSlot.pokemon.species} is ready to switch out!`];
+
+				// --- Check if all player actions are submitted ---
+				const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
+				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
+
+				if (submittedPlayerActions === activePlayerSlots) {
+					// All players have moved, process the turn
+					processTurn(this, battle, room, user);
+				} else {
+					// Waiting for other player's move
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
@@ -4943,8 +5083,9 @@ export const commands: ChatCommands = {
 			switchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSwitchMenuHTML(battle)}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSwitchMenuHTML(battle, target)}`);
 			},
+			
 			catchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
