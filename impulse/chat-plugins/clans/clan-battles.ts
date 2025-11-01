@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* Clans Battle Hook
+* @author PrinceSky-Git
+*/
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
 import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
 import { Utils } from '../../../lib';
