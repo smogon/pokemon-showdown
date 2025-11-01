@@ -4398,7 +4398,15 @@ export const commands: ChatCommands = {
 				player.party.push(starterPokemon);
 				player.name = user.name;
 				const species = Dex.species.get(starterId);
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(starterPokemon)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+
+				// --- FIX ---
+				// Create a temporary slot object to pass to the updated function.
+				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
+				const tempSlot = createActivePokemonSlot(starterPokemon);
+				
+				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				// --- END FIX ---
+				
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter pokemon!`).update();
