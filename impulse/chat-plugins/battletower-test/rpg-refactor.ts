@@ -4575,7 +4575,16 @@ export const commands: ChatCommands = {
 
 		learneggmove(target, room, user) {
 			const player = getPlayerData(user.id);
-			const [pokemonId, rawMoveId] = target.split(' ');
+			
+			// --- FIX: Correctly parse multi-word moves ---
+			const parts = target.split(' ');
+			if (parts.length < 2) {
+				return this.errorReply("Invalid command parameters.");
+			}
+			const pokemonId = parts[0];
+			const rawMoveId = parts.slice(1).join(' '); // This correctly becomes "magical leaf"
+			// --- END FIX ---
+
 			if (!pokemonId || !rawMoveId) {
 				return this.errorReply("Invalid command parameters.");
 			}
@@ -4586,6 +4595,8 @@ export const commands: ChatCommands = {
 			}
 			const speciesId = toID(pokemon.species);
 			const eggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
+			
+			// This check will now correctly use "magical leaf"
 			if (!eggMoves.includes(rawMoveId)) {
 				return this.errorReply("This is not a valid Egg Move for this Pokemon.");
 			}
@@ -4594,7 +4605,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Could not use the Egg Move Tutor. Item not found in inventory.");
 			}
 
-			const newMoveId = toID(rawMoveId);
+			const newMoveId = toID(rawMoveId); // Converts "magical leaf" to "magicalleaf"
 
 			if (pokemon.moves.length < 4) {
 				const newMoveData = Dex.moves.get(newMoveId);
