@@ -742,7 +742,7 @@ function getCriticalHitChance(attacker: RPGPokemon, move: Move, battle: BattleSt
 	let critStage = 0;
 
 	// Base critical hit stages for certain moves
-	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'aerialace', 'airslash', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
+	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
 		critStage += 1;
 	}
 
@@ -2858,14 +2858,17 @@ function executeMove(
 	// 5. Check for Sucker Punch failure
 	if (move.id === 'suckerpunch') {
 		const defenderMove = defender.id === playerPokemon.id ? Dex.moves.get(battle.playerMoveId || '') : Dex.moves.get(battle.opponentMoveId || '');
-		if (defenderMove.category === 'Status') {
+		// Fail if the defender's move doesn't exist (e.g., they switched) OR if it's a Status move
+		if (!defenderMove.exists || defenderMove.category === 'Status') {
 			messageLog.push(`<span style="color: ${infoColor};">${attacker.species} used Sucker Punch, but it failed!</span>`);
 			return false;
 		}
 	}
 
 	// 6. Accuracy Check
-	if (move.accuracy !== true) {
+	if (['aerialace'].includes(move.id)) {
+		// This move bypasses accuracy checks
+	} else if (move.accuracy !== true) {
 		const isAttackerPlayer = attacker.id === battle.activePokemon.id;
 		const attackerStages = isAttackerPlayer ? battle.playerStatStages : battle.opponentStatStages;
 		const defenderStages = isAttackerPlayer ? battle.opponentStatStages : battle.playerStatStages;
