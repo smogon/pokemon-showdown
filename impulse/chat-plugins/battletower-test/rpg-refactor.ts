@@ -3786,19 +3786,43 @@ function generateSingleBattleHTML(
 	`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 	// --- END MODIFICATION ---
 
+	// --- START OF NEW LAYOUT ---
 	return `<div class="infobox"><h2>Battle!</h2>` +
 	`${generateFieldEffectHTML(battle)}` +
-	`<div style="display: flex; justify-content: space-around;">` +
-		// Player Pokemon
-		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot, true)}</div>` +
-		// Opponent Pokemon
-		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot, false)}</div>` +
-	`</div><hr />` +
+
+	// --- Main Battle View (relative container) ---
+	`<div style="position: relative; min-height: 320px; background: #f9f9f9; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; padding: 10px;">` +
+
+		// --- Opponent Info Box (Upper Right) ---
+		`<div style="position: absolute; top: 10px; right: 10px; width: 48%;">` +
+			`<h3 style="margin: 0 0 5px 5px;">${battle.opponentName}</h3>` + // Title
+			`${generatePokemonInfoHTML(opponentSlot, false)}` + // Box (icon is inside)
+		`</div>` +
+
+		// --- Player Info Box (Bottom Right) ---
+		`<div style="position: absolute; bottom: 10px; right: 10px; width: 48%;">` +
+			`<h3 style="margin: 0 0 5px 5px;">Your Pokemon</h3>` + // Title
+			`${generatePokemonInfoHTML(playerSlot, true)}` + // Box (icon is inside)
+		`</div>` +
+
+		// --- Placeholders for Sprites (Left Side) ---
+		`<div style="position: absolute; top: 20px; left: 20px; text-align: center; opacity: 0.3;">` +
+			`` +
+			`<div style="font-size: 60px;">(Opponent)</div>` +
+		`</div>` +
+		`<div style="position: absolute; bottom: 20px; left: 20px; text-align: center; opacity: 0.3;">` +
+			`` +
+			`<div style="font-size: 60px;">(Player)</div>` +
+		`</div>` +
+
+	`</div><hr />` + // End of main battle area
+
 	// Message Log
 	`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
 	// Action Area
 	actionHTML +
 	`</div>`;
+	// --- END OF NEW LAYOUT ---
 }
 
 function generateWelcomeHTML(): string {
