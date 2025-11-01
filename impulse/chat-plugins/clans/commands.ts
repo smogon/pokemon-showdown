@@ -3,19 +3,11 @@
 * Clans Commands
 * @author PrinceSky-Git
 */
-import {
-	Clans,
-	UserClans,
-	ClanLogs,
-	ClanBans,
-	ClanPointsLogs,
-	ClanWars,
-	ClanBattleLogs,
-	type ClanDoc,
-} from './database';
+import { Clans, UserClans, ClanLogs, ClanBans,
+	ClanPointsLogs, ClanWars, ClanBattleLogs,
+		  type ClanDoc } from './database';
 import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interface';
-import { generateThemedTable } from
-	'../../utils';
+import { generateThemedTable } from '../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
 	toDurationString, logClanActivity, hasClanPermission } from './utils';
 import { FS } from '../../../lib';
