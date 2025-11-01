@@ -2135,10 +2135,23 @@ function handleDamagingMove(
 
 	// Handle One-Hit KO moves
 	if (move.ohko) {
+		// Check level immunity
 		if (defender.level > attacker.level) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
+
+		// Check type immunity (e.g., Ghost immune to Normal OHKO)
+		const defenderSpecies = Dex.species.get(defender.species);
+		if (move.ohko === 'Normal' && defenderSpecies.types.includes('Ghost')) {
+			messageLog.push(`It doesn't affect ${defender.species}...`);
+			return;
+		}
+		if (move.ohko === 'Ice' && defenderSpecies.types.includes('Ice')) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
 		const accuracy = 30 + attacker.level - defender.level;
 		if (Math.random() * 100 < accuracy) {
 			defender.hp = 0;
@@ -2220,7 +2233,8 @@ function handleDamagingMove(
 			defender.item = undefined;
 		}
 
-		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'airballoon' && damageDealt > 0 && move.category !== 'Status') {
+		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'airballoon' && 
+			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defender.species}'s Air Balloon popped!`);
 			defender.item = undefined;
 		}
@@ -2394,12 +2408,6 @@ function handleDamagingMove(
 		if (attacker.hp <= 0) break;
 	}
 
-	// --- Self-Destruct Fainting (after all hits) ---
-	if (moveWasSuccessful && move.selfdestruct === 'always' && attacker.hp > 0) {
-		messageLog.push(`${attacker.species} fainted!`);
-		attacker.hp = 0;
-	}
-
 	// --- Post-damage Item Manipulation Effects ---
 	if (defender.hp > 0 && battle.magicRoomTurns === 0) {
 		if (move.id === 'knockoff' && defender.item && defender.ability !== 'Sticky Hold') {
@@ -2434,6 +2442,22 @@ function handleDamagingMove(
 			messageLog.push(`${attacker.species}'s Speed rose!`);
 		}
 	}
+	
+	// --- Trapping Move Application ---
+	if (defender.hp > 0 && move.volatileStatus === 'partiallytrapped') {
+		const defenderIsPlayer = defender.id === battle.activePokemon.id;
+		const isTrapped = defenderIsPlayer ? battle.playerIsTrapped : battle.opponentIsTrapped;
+		
+		if (!isTrapped) {
+			const turns = Math.floor(Math.random() * 3) + 4; // 4, 5, or 6 turns
+			if (defenderIsPlayer) {
+				battle.playerIsTrapped = { turns: turns };
+			} else {
+				battle.opponentIsTrapped = { turns: turns };
+			}
+			messageLog.push(`${defender.species} was trapped!`);
+		}
+	}
 
 	// Handle Feint breaking protection after all hits
 	if (move.id === 'feint') {
@@ -2456,6 +2480,12 @@ function handleDamagingMove(
 				messageLog.push(`But it failed!`); // Can't force switch a trainer
 			}
 		}
+	}
+
+	// --- Self-Destruct Fainting (after all hits) ---
+	if (move.selfdestruct === 'always' && attacker.hp > 0) {
+		messageLog.push(`${attacker.species} fainted!`);
+		attacker.hp = 0;
 	}
 }
 
@@ -2517,7 +2547,8 @@ function handleHPDropEffects(pokemon: RPGPokemon, battle: BattleState, messageLo
 		if (pinchBerryHP.includes(pokemon.item)) {
 			const oldHp = pokemon.hp;
 			// FIXED: Now heals 1/2 max HP instead of 1/3
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.floor(pokemon.maxHp / 2));
+			const healAmount = Math.floor(pokemon.maxHp / 2);
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
 
@@ -2822,14 +2853,7 @@ function executeMove(
 		return false;
 	}
 
-	// 4. Deduct PP (unless it's Struggle)
-	if (move.id !== 'struggle') {
-		if (moveObject.pp <= 0) { // Safety check
-			messageLog.push(`<span style="color: ${infoColor};">${attacker.species} has no PP left for ${move.name}!</span>`);
-			return false;
-		}
-		moveObject.pp--;
-	}
+	// 4. PP Deduction (REMOVED - Moved to battleaction.move)
 
 	// 5. Check for Sucker Punch failure
 	if (move.id === 'suckerpunch') {
@@ -4207,65 +4231,129 @@ export const commands: ChatCommands = {
 				const messageLog: string[] = [];
 
 				// --- 1. Determine each Pokémon's intended action ---
+				
+				// --- Player Action ---
 				let playerMoveId = toID(target);
 				let playerAction: 'charge' | 'unleash' | 'move' = 'move';
 
 				if (battle.playerChargingMove) {
 					playerMoveId = battle.playerChargingMove;
 					playerAction = 'unleash';
-					battle.playerChargingMove = undefined; // Clear the charge state
 				}
 
 				const playerMoveData = Dex.moves.get(playerMoveId);
+				const playerMoveObject = playerPokemon.moves.find(m => m.id === playerMoveId) || { id: 'struggle', pp: 1 };
+
+				if (playerMoveData.flags.charge && playerAction === 'move') {
+					playerAction = 'charge';
+				}
+
+				// Solar Move Weather Check
+				if (playerAction === 'charge' && ['solarbeam', 'solarblade'].includes(playerMoveId) && battle.weather?.type === 'sun') {
+					playerAction = 'move'; // Skip charging
+				}
+				
+				// PP Deduction Logic
+				if (playerAction === 'charge') {
+					if (playerMoveObject.id === 'struggle') return this.errorReply("Struggle cannot be charged."); // Should be impossible
+					if (playerMoveObject.pp <= 0) {
+						battle.playerChargingMove = undefined;
+						return this.errorReply("Not enough PP!");
+					}
+					playerMoveObject.pp--; // Deduct PP on charge turn
+				} else if (playerAction === 'move') {
+					if (playerMoveObject.id !== 'struggle' && playerMoveObject.pp <= 0) {
+						return this.errorReply("Not enough PP!");
+					}
+					if (playerMoveObject.id !== 'struggle') {
+						playerMoveObject.pp--; // Deduct PP on normal move
+					}
+				}
+				// (Don't deduct PP for 'unleash')
 
 				// Validate Choice Item lock after determining the actual move
 				if (battle.magicRoomTurns === 0 && battle.playerLockedMove && battle.playerLockedMove !== playerMoveId) {
 					const lockedMoveData = Dex.moves.get(battle.playerLockedMove);
 					return this.errorReply(`${playerPokemon.species} is locked into using ${lockedMoveData.name}!`);
 				}
-
-				if (playerMoveData.flags.charge && playerAction === 'move') {
-					playerAction = 'charge';
+				
+				// Clear charge state if it was an unleash
+				if (playerAction === 'unleash') {
+					battle.playerChargingMove = undefined;
 				}
 
-				// Determine Opponent Pokémon's action
+				// --- Opponent Action ---
 				let opponentMoveId = battle.opponentChargingMove || opponentPokemon.moves[Math.floor(Math.random() * opponentPokemon.moves.length)].id;
 				let opponentAction: 'charge' | 'unleash' | 'move' = 'move';
 
 				if (battle.opponentChargingMove) {
 					opponentMoveId = battle.opponentChargingMove;
 					opponentAction = 'unleash';
-					battle.opponentChargingMove = undefined; // Clear the charge state
 				}
-
+				
 				const opponentMoveData = Dex.moves.get(opponentMoveId);
+				const opponentMoveObject = opponentPokemon.moves.find(m => m.id === opponentMoveId)!; // Assume opponent always has the move
 
 				if (opponentMoveData.flags.charge && opponentAction === 'move') {
 					opponentAction = 'charge';
 				}
 
+				// Solar Move Weather Check
+				if (opponentAction === 'charge' && ['solarbeam', 'solarblade'].includes(opponentMoveId) && battle.weather?.type === 'sun') {
+					opponentAction = 'move'; // Skip charging
+				}
+
+				// PP Deduction Logic
+				if (opponentAction === 'charge') {
+					if (opponentMoveObject.pp > 0) {
+						opponentMoveObject.pp--; // Deduct PP on charge turn
+					} else {
+						// Opponent has no PP, must use Struggle
+						opponentAction = 'move';
+						opponentMoveId = 'struggle';
+					}
+				} else if (opponentAction === 'move') {
+					if (opponentMoveObject.pp > 0) {
+						opponentMoveObject.pp--; // Deduct PP on normal move
+					} else {
+						// Opponent has no PP, must use Struggle
+						opponentAction = 'move';
+						opponentMoveId = 'struggle';
+					}
+				}
+				// (Don't deduct PP for 'unleash')
+				
+				// Clear charge state if it was an unleash
+				if (opponentAction === 'unleash') {
+					battle.opponentChargingMove = undefined;
+				}
+
 				// --- 2. Execute the turn based on actions ---
-				const playerMoveObject = playerPokemon.moves.find(m => m.id === playerMoveId) || { id: 'struggle', pp: 1 };
-				const opponentMoveObject = opponentPokemon.moves.find(m => m.id === opponentMoveId)!;
+				// (Struggle move objects are created on the fly if needed)
+				const finalPlayerMoveObject = playerMoveObject.id === 'struggle' ? { id: 'struggle', pp: 1 } : playerMoveObject;
+				const finalOpponentMoveObject = opponentMoveId === 'struggle' ? { id: 'struggle', pp: 1 } : opponentMoveObject;
+				const finalPlayerMoveData = Dex.moves.get(playerMoveId);
+				const finalOpponentMoveData = Dex.moves.get(opponentMoveId);
+
 
 				// Handle cases where one or both Pokémon are charging
 				if (playerAction === 'charge' || opponentAction === 'charge') {
 					// Player charges, Opponent attacks
 					if (playerAction === 'charge') {
-						battle.playerChargingMove = playerMoveData.id;
-						const chargeMessage = playerMoveData.charge || `${playerPokemon.species} is preparing its attack!`;
+						battle.playerChargingMove = finalPlayerMoveData.id;
+						const chargeMessage = finalPlayerMoveData.charge || `${playerPokemon.species} is preparing its attack!`;
 						messageLog.push(chargeMessage);
 						if (opponentPokemon.hp > 0) {
-							executeMove(opponentPokemon, playerPokemon, opponentMoveData, opponentMoveObject, battle, messageLog);
+							executeMove(opponentPokemon, playerPokemon, finalOpponentMoveData, finalOpponentMoveObject, battle, messageLog);
 						}
 					}
 					// Opponent charges, Player attacks
 					else if (opponentAction === 'charge') {
-						battle.opponentChargingMove = opponentMoveData.id;
-						const chargeMessage = opponentMoveData.charge || `${opponentPokemon.species} is preparing its attack!`;
+						battle.opponentChargingMove = finalOpponentMoveData.id;
+						const chargeMessage = finalOpponentMoveData.charge || `${opponentPokemon.species} is preparing its attack!`;
 						messageLog.push(chargeMessage);
 						if (playerPokemon.hp > 0) {
-							executeMove(playerPokemon, opponentPokemon, playerMoveData, playerMoveObject, battle, messageLog);
+							executeMove(playerPokemon, opponentPokemon, finalPlayerMoveData, finalPlayerMoveObject, battle, messageLog);
 						}
 					}
 				} else {
@@ -4276,15 +4364,15 @@ export const commands: ChatCommands = {
 					if (battle.opponentStatus === 'par') opponentSpe = Math.floor(opponentSpe / 2);
 
 					const turnOrder = [];
-					const playerGoesFirst = playerMoveData.priority > opponentMoveData.priority ||
-						(playerMoveData.priority === opponentMoveData.priority && playerSpe >= opponentSpe);
+					const playerGoesFirst = finalPlayerMoveData.priority > finalOpponentMoveData.priority ||
+						(finalPlayerMoveData.priority === finalOpponentMoveData.priority && playerSpe >= opponentSpe);
 
 					if (playerGoesFirst) {
-						turnOrder.push({ pokemon: playerPokemon, move: playerMoveData, moveObject: playerMoveObject });
-						turnOrder.push({ pokemon: opponentPokemon, move: opponentMoveData, moveObject: opponentMoveObject });
+						turnOrder.push({ pokemon: playerPokemon, move: finalPlayerMoveData, moveObject: finalPlayerMoveObject });
+						turnOrder.push({ pokemon: opponentPokemon, move: finalOpponentMoveData, moveObject: finalOpponentMoveObject });
 					} else {
-						turnOrder.push({ pokemon: opponentPokemon, move: opponentMoveData, moveObject: opponentMoveObject });
-						turnOrder.push({ pokemon: playerPokemon, move: playerMoveData, moveObject: playerMoveObject });
+						turnOrder.push({ pokemon: opponentPokemon, move: finalOpponentMoveData, moveObject: finalOpponentMoveObject });
+						turnOrder.push({ pokemon: playerPokemon, move: finalPlayerMoveData, moveObject: finalPlayerMoveObject });
 					}
 
 					if (turnOrder[0].pokemon.hp > 0) {
@@ -4318,16 +4406,16 @@ export const commands: ChatCommands = {
 					// Re-apply choice lock if necessary
 					const choiceItems = ['choiceband', 'choicespecs', 'choicescarf'];
 					if (battle.magicRoomTurns === 0 && playerPokemon.item && choiceItems.includes(playerPokemon.item)) {
-						if (!battle.playerLockedMove && playerMoveData.id !== 'struggle') {
-							battle.playerLockedMove = playerMoveData.id;
+						if (!battle.playerLockedMove && finalPlayerMoveData.id !== 'struggle') {
+							battle.playerLockedMove = finalPlayerMoveData.id;
 						}
 					} else {
 						battle.playerLockedMove = undefined;
 					}
 					
 					if (battle.magicRoomTurns === 0 && opponentPokemon.item && choiceItems.includes(opponentPokemon.item)) {
-						if (!battle.opponentLockedMove && opponentMoveData.id !== 'struggle') {
-							battle.opponentLockedMove = opponentMoveData.id;
+						if (!battle.opponentLockedMove && finalOpponentMoveData.id !== 'struggle') {
+							battle.opponentLockedMove = finalOpponentMoveData.id;
 						}
 					} else {
 						battle.opponentLockedMove = undefined;
@@ -4578,7 +4666,7 @@ export const commands: ChatCommands = {
 				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|run]");
 			},
 		},
-
+		
 		heal(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot heal your Pokemon during a battle.");
