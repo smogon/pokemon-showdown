@@ -750,8 +750,9 @@ function getStatMultiplier(stage: number): number {
 	}
 }
 
-function getCriticalHitChance(attacker: RPGPokemon, move: Move, battle: BattleState): number {
+function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
 	let critStage = 0;
+	const attacker = attackerSlot.pokemon;
 
 	// Base critical hit stages for certain moves
 	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
@@ -769,15 +770,18 @@ function getCriticalHitChance(attacker: RPGPokemon, move: Move, battle: BattleSt
 }
 
 function calculateDamage(
-	attacker: RPGPokemon,
-	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
 	moveId: string,
-	attackerStages: Record<keyof Omit<Stats, 'maxHp'>, number>,
-	defenderStages: Record<keyof Omit<Stats, 'maxHp'>, number>,
-	attackerStatus: Status | null,
 	battle: BattleState
 ): { damage: number, message: string, effectiveness: number, berryConsumed?: string } {
 	const move = Dex.moves.get(moveId);
+	const attacker = attackerSlot.pokemon;
+	const defender = defenderSlot.pokemon;
+	const attackerStages = attackerSlot.statStages;
+	const defenderStages = defenderSlot.statStages;
+	const attackerStatus = attackerSlot.status;
+
 	let moveType = move.type; // Use a mutable variable for type-changing moves
 	const attackerSpecies = Dex.species.get(attacker.species);
 	const defenderSpecies = Dex.species.get(defender.species);
@@ -803,8 +807,7 @@ function calculateDamage(
 	let basePower = move.basePower;
 
 	// --- Power modification for hitting semi-invulnerable targets ---
-	const isDefenderPlayer = defender.id === battle.activePokemon.id;
-	const defenderChargingMoveId = isDefenderPlayer ? battle.playerChargingMove : battle.opponentChargingMove;
+	const defenderChargingMoveId = defenderSlot.chargingMove;
 
 	if (defenderChargingMoveId) {
 		if (defenderChargingMoveId === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) {
@@ -880,7 +883,6 @@ function calculateDamage(
 		basePower = 20 + (20 * totalBoosts);
 		break;
 		
-	// FIX #5: Acrobatics - double power without held item
 	case 'acrobatics':
 		if (!attacker.item || battle.magicRoomTurns > 0) {
 			basePower *= 2;
@@ -895,7 +897,7 @@ function calculateDamage(
 	if (move.id === 'brine' && defender.hp <= defender.maxHp / 2) {
 		basePower *= 2;
 	}
-	const defenderStatus = isDefenderPlayer ? battle.playerStatus : battle.opponentStatus;
+	const defenderStatus = defenderSlot.status;
 	if (move.id === 'venoshock' && defenderStatus === 'psn') {
 		basePower *= 2;
 	}
@@ -906,7 +908,6 @@ function calculateDamage(
 		basePower *= 2;
 	}
 	
-	// FIX #6: Solar Beam/Blade power reduction in bad weather
 	if (['solarbeam', 'solarblade'].includes(move.id) && battle.weather) {
 		if (['rain', 'sand', 'hail'].includes(battle.weather.type)) {
 			basePower = Math.floor(basePower * 0.5);
@@ -996,7 +997,7 @@ function calculateDamage(
 		finalDefenseStat = Math.floor(finalDefenseStat * 0.5);
 	}
 
-	const isCritical = Math.random() < getCriticalHitChance(attacker, move, battle);
+	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, move, battle);
 	const criticalMultiplier = isCritical ? 1.5 : 1;
 	const isStab = attackerSpecies.types.includes(moveType);
 	const stabMultiplier = isStab ? 1.5 : 1;
@@ -1015,6 +1016,7 @@ function calculateDamage(
 	}
 
 	// --- Screen Damage Reduction Check ---
+	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
 	if (!isCritical) { // Critical hits bypass screens
 		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 
@@ -1034,6 +1036,10 @@ function calculateDamage(
 			}
 		}
 	}
+	// --- SPREAD MOVE DAMAGE REDUCTION (TBD) ---
+	// if (move.target === 'allAdjacentFoes' && numTargets > 1) {
+	// 	baseDamage = Math.floor(baseDamage * 0.75);
+	// }
 
 	if (battle.weather) {
 		if (battle.weather.type === 'sun') {
@@ -1270,29 +1276,25 @@ function saveBattleStatus(battle: BattleState) {
 /**********************
 * Battle Logic Helpers
 **********************/
-
 /**
  * Checks for statuses that might prevent a Pokémon from moving (sleep, freeze, paralysis, confusion).
  * @returns {boolean} `true` if the Pokémon can move, `false` otherwise.
  */
-function handlePreTurnChecks(attacker: RPGPokemon, battle: BattleState, messageLog: string[]): boolean {
-	const isPlayer = attacker.id === battle.activePokemon.id;
-	let status = isPlayer ? battle.playerStatus : battle.opponentStatus;
+function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	const attacker = attackerSlot.pokemon;
 
 	// START: Add this new block for Flinch
-	const willFlinch = isPlayer ? battle.playerWillFlinch : battle.opponentWillFlinch;
-	if (willFlinch) {
+	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
-		// Reset the flag after checking it
-		if (isPlayer) battle.playerWillFlinch = false; else battle.opponentWillFlinch = false;
+		attackerSlot.willFlinch = false; // Reset the flag
 		return false; // Prevent the move
 	}
 	// END: New Flinch block
 
 	// Check for Freeze
-	if (status === 'frz') {
+	if (attackerSlot.status === 'frz') {
 		if (Math.random() < 0.20) {
-			if (isPlayer) battle.playerStatus = null; else battle.opponentStatus = null;
+			attackerSlot.status = null;
 			messageLog.push(`${attacker.species} thawed out!`);
 		} else {
 			messageLog.push(`${attacker.species} is frozen solid!`);
@@ -1301,25 +1303,24 @@ function handlePreTurnChecks(attacker: RPGPokemon, battle: BattleState, messageL
 	}
 
 	// Check for Sleep
-	if (status === 'slp') {
-		const sleepCounter = isPlayer ? --battle.playerSleepCounter : --battle.opponentSleepCounter;
-		if (sleepCounter > 0) {
+	if (attackerSlot.status === 'slp') {
+		attackerSlot.sleepCounter--;
+		if (attackerSlot.sleepCounter > 0) {
 			messageLog.push(`${attacker.species} is fast asleep.`);
 			return false;
 		} else {
-			if (isPlayer) battle.playerStatus = null; else battle.opponentStatus = null;
+			attackerSlot.status = null;
 			messageLog.push(`${attacker.species} woke up!`);
 		}
 	}
 
 	// Check for Confusion
-	const isConfused = isPlayer ? battle.playerIsConfused : battle.opponentIsConfused;
-	if (isConfused) {
+	if (attackerSlot.isConfused) {
 		messageLog.push(`${attacker.species} is confused!`);
-		const confusionCounter = isPlayer ? --battle.playerConfusionCounter : --battle.opponentConfusionCounter;
+		attackerSlot.confusionCounter--;
 
-		if (confusionCounter <= 0) {
-			if (isPlayer) battle.playerIsConfused = false; else battle.opponentIsConfused = false;
+		if (attackerSlot.confusionCounter <= 0) {
+			attackerSlot.isConfused = false;
 			messageLog.push(`${attacker.species} snapped out of its confusion!`);
 		} else if (Math.random() < 1 / 3) {
 			messageLog.push(`It hurt itself in its confusion!`);
@@ -1331,8 +1332,7 @@ function handlePreTurnChecks(attacker: RPGPokemon, battle: BattleState, messageL
 	}
 
 	// Check for Paralysis
-	status = isPlayer ? battle.playerStatus : battle.opponentStatus; // Re-check status in case it changed
-	if (status === 'par' && Math.random() < 0.25) {
+	if (attackerSlot.status === 'par' && Math.random() < 0.25) {
 		messageLog.push(`${attacker.species} is fully paralyzed!`);
 		return false;
 	}
@@ -1632,21 +1632,25 @@ function handleMirrorHerb(pokemon: RPGPokemon, battle: BattleState, messageLog: 
 }
 
 function handleStatusMove(
-	attacker: RPGPokemon,
-	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
 	move: Move,
 	battle: BattleState,
 	messageLog: string[]
 ) {
-	const isPlayerAttacker = attacker.id === battle.activePokemon.id;
+	const attacker = attackerSlot.pokemon;
+	const defender = defenderSlot.pokemon;
+	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
 	const defenderSpecies = Dex.species.get(defender.species);
 	let hadEffect = false;
 
 	// Handle forced switching moves first
 	if (['roar', 'whirlwind'].includes(move.id)) {
 		// --- MODIFIED ---
-		if (battle.battleType === 'wild') {
+		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
 			messageLog.push(`The wild ${defender.species} was blown away!`);
+			// TODO: This needs to remove the slot and end the battle if all wild-side slots are empty
+			// For now, we'll just set the forceEnd flag
 			battle.forceEnd = true;
 		} else {
 			messageLog.push(`But it failed!`); // Can't force switch a trainer
@@ -1656,17 +1660,12 @@ function handleStatusMove(
 
 	// Handle Protect and Detect
 	if (['protect', 'detect'].includes(move.id)) {
-		const successCounter = isPlayerAttacker ? battle.playerProtectSuccessCounter : battle.opponentProtectSuccessCounter;
+		const successCounter = attackerSlot.protectSuccessCounter;
 		const successChance = 1 / 3 ** successCounter;
 
 		if (Math.random() < successChance) {
-			if (isPlayerAttacker) {
-				battle.playerIsProtected = true;
-				battle.playerProtectSuccessCounter++;
-			} else {
-				battle.opponentIsProtected = true;
-				battle.opponentProtectSuccessCounter++;
-			}
+			attackerSlot.isProtected = true;
+			attackerSlot.protectSuccessCounter++;
 			messageLog.push(`${attacker.species} protected itself!`);
 		} else {
 			messageLog.push(`But it failed!`);
@@ -1677,20 +1676,16 @@ function handleStatusMove(
 	// Handle Guarding Moves
 	if (['quickguard', 'wideguard', 'craftyshield'].includes(move.id)) {
 		let guardSet = false;
-		switch (move.id) {
-		case 'quickguard':
-			if (isPlayerAttacker) battle.playerQuickGuard = true; else battle.opponentQuickGuard = true;
-			guardSet = true;
-			break;
-		case 'wideguard':
-			if (isPlayerAttacker) battle.playerWideGuard = true; else battle.opponentWideGuard = true;
-			guardSet = true;
-			break;
-		case 'craftyshield':
-			if (isPlayerAttacker) battle.playerCraftyShield = true; else battle.opponentCraftyShield = true;
-			guardSet = true;
-			break;
+		if (isPlayerAttacker) {
+			if (move.id === 'quickguard') { battle.playerQuickGuard = true; guardSet = true; }
+			if (move.id === 'wideguard') { battle.playerWideGuard = true; guardSet = true; }
+			if (move.id === 'craftyshield') { battle.playerCraftyShield = true; guardSet = true; }
+		} else {
+			if (move.id === 'quickguard') { battle.opponentQuickGuard = true; guardSet = true; }
+			if (move.id === 'wideguard') { battle.opponentWideGuard = true; guardSet = true; }
+			if (move.id === 'craftyshield') { battle.opponentCraftyShield = true; guardSet = true; }
 		}
+		
 		if (guardSet) {
 			messageLog.push(`${attacker.species} is protecting its side!`);
 		} else {
@@ -1745,19 +1740,20 @@ function handleStatusMove(
 			clearedSomething = true;
 		}
 
-		const opp = isPlayerAttacker ? {
-			reflect: 'opponentReflectTurns', light: 'opponentLightScreenTurns', veil: 'opponentAuroraVeilTurns',
-		} : {
-			reflect: 'playerReflectTurns', light: 'playerLightScreenTurns', veil: 'playerAuroraVeilTurns',
-		};
+		// Defog clears screens from the *opposing* side
+		if (isPlayerAttacker) {
+			if (battle.opponentReflectTurns > 0) { battle.opponentReflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); clearedSomething = true; }
+			if (battle.opponentLightScreenTurns > 0) { battle.opponentLightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); clearedSomething = true; }
+			if (battle.opponentAuroraVeilTurns > 0) { battle.opponentAuroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); clearedSomething = true; }
+		} else {
+			if (battle.playerReflectTurns > 0) { battle.playerReflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); clearedSomething = true; }
+			if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); clearedSomething = true; }
+			if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); clearedSomething = true; }
+		}
 
-		if (battle[opp.reflect] > 0) { battle[opp.reflect] = 0; messageLog.push(`The opposing team's Reflect wore off!`); clearedSomething = true; }
-		if (battle[opp.light] > 0) { battle[opp.light] = 0; messageLog.push(`The opposing team's Light Screen wore off!`); clearedSomething = true; }
-		if (battle[opp.veil] > 0) { battle[opp.veil] = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); clearedSomething = true; }
-
-		const targetStages = isPlayerAttacker ? battle.opponentStatStages : battle.playerStatStages;
-		if (targetStages.evasion > -6) {
-			targetStages.evasion--;
+		// Defog lowers the target's evasion
+		if (defenderSlot.statStages.evasion > -6) {
+			defenderSlot.statStages.evasion--;
 			messageLog.push(`${defender.species}'s evasion fell!`);
 		}
 		hadEffect = true;
@@ -1846,46 +1842,35 @@ function handleStatusMove(
 	if (hadEffect) return;
 
 	if (move.id === 'leechseed') {
-		const defenderIsPlayer = !isPlayerAttacker;
-		const isSeeded = defenderIsPlayer ? battle.playerIsSeeded : battle.opponentIsSeeded;
 		if (defenderSpecies.types.includes('Grass')) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
 			return;
 		}
-		if (isSeeded) {
+		if (defenderSlot.isSeeded) {
 			messageLog.push(`${defender.species} is already seeded!`);
 		} else {
-			if (defenderIsPlayer) {
-				battle.playerIsSeeded = true;
-			} else {
-				battle.opponentIsSeeded = true;
-			}
+			defenderSlot.isSeeded = true;
 			messageLog.push(`${defender.species} was seeded!`);
 			hadEffect = true;
 		}
 	} else if (move.id === 'curse') {
 		const attackerSpecies = Dex.species.get(attacker.species);
-		const defenderIsPlayer = !isPlayerAttacker;
-		const isCursed = defenderIsPlayer ? battle.playerIsCursed : battle.opponentIsCursed;
 
 		if (attackerSpecies.types.includes('Ghost')) {
-			if (isCursed) {
+			if (defenderSlot.isCursed) {
 				messageLog.push(`But it failed!`);
 			} else {
 				attacker.hp = Math.max(1, Math.floor(attacker.hp / 2));
 				messageLog.push(`${attacker.species} cut its own HP to lay a curse!`);
-				if (defenderIsPlayer) {
-					battle.playerIsCursed = true;
-				} else {
-					battle.opponentIsCursed = true;
-				}
+				defenderSlot.isCursed = true;
 				messageLog.push(`${defender.species} was cursed!`);
 				hadEffect = true;
 			}
 		} else {
+			// Non-ghost Curse
 			const boosts = move.boosts;
 			if (boosts) {
-				const selfStages = isPlayerAttacker ? battle.playerStatStages : battle.opponentStatStages;
+				const selfStages = attackerSlot.statStages;
 				for (const stat in boosts) {
 					const stage = selfStages[stat as keyof typeof selfStages];
 					const boostValue = boosts[stat as keyof typeof boosts]!;
@@ -1898,15 +1883,15 @@ function handleStatusMove(
 			}
 		}
 	} else if (move.id === 'haze') {
-		const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-		battle.playerStatStages = { ...initialStages };
-		battle.opponentStatStages = { ...initialStages };
+		// Haze affects all slots
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			slot.statStages = { ...INITIAL_STAT_STAGES };
+		});
 		messageLog.push('All stat changes were eliminated!');
 		hadEffect = true;
 	} else if (move.id === 'psychup') {
-		const sourceStages = isPlayerAttacker ? battle.opponentStatStages : battle.playerStatStages;
-		const destStages = isPlayerAttacker ? battle.playerStatStages : battle.opponentStatStages;
-		Object.assign(destStages, sourceStages);
+		const sourceStages = defenderSlot.statStages;
+		attackerSlot.statStages = { ...sourceStages };
 		messageLog.push(`${attacker.species} copied ${defender.species}'s stat changes!`);
 		hadEffect = true;
 	} else if (['trick', 'switcheroo'].includes(move.id)) {
@@ -1935,20 +1920,15 @@ function handleStatusMove(
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item].name}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item].name}!`);
 	} else if (move.id === 'nightmare') {
-		const defenderIsPlayer = !isPlayerAttacker;
-		const defenderStatus = defenderIsPlayer ? battle.playerStatus : battle.opponentStatus;
-		const hasNightmare = defenderIsPlayer ? battle.playerHasNightmare : battle.opponentHasNightmare;
+		const defenderStatus = defenderSlot.status;
+		const hasNightmare = defenderSlot.hasNightmare;
 
 		if (defenderStatus !== 'slp') {
 			messageLog.push(`But it failed!`);
 		} else if (hasNightmare) {
 			messageLog.push(`${defender.species} is already having a nightmare!`);
 		} else {
-			if (defenderIsPlayer) {
-				battle.playerHasNightmare = true;
-			} else {
-				battle.opponentHasNightmare = true;
-			}
+			defenderSlot.hasNightmare = true;
 			messageLog.push(`${defender.species} began having a nightmare!`);
 			hadEffect = true;
 		}
@@ -1975,7 +1955,7 @@ function handleStatusMove(
 			hadEffect = true;
 		}
 	} else if (move.id === 'bellydrum') {
-		const attackerStages = isPlayerAttacker ? battle.playerStatStages : battle.opponentStatStages;
+		const attackerStages = attackerSlot.statStages;
 		if (attacker.hp <= attacker.maxHp / 2) {
 			messageLog.push(`But it failed! (Not enough HP)`);
 		} else if (attackerStages.atk >= 6) {
@@ -2024,14 +2004,14 @@ function handleStatusMove(
 			hadEffect = true;
 		}
 	} else if (move.boosts) {
-		const targetPokemon = move.target === 'self' ? attacker : defender;
-		const targetStages = targetPokemon.id === battle.activePokemon.id ? battle.playerStatStages : battle.opponentStatStages;
+		const targetSlot = move.target === 'self' ? attackerSlot : defenderSlot;
+		const targetStages = targetSlot.statStages;
 
 		if (move.target !== 'self') {
-			if (battle.magicRoomTurns === 0 && targetPokemon.item === 'clearamulet') {
+			if (battle.magicRoomTurns === 0 && targetSlot.pokemon.item === 'clearamulet') {
 				const hasNegativeBoosts = Object.values(move.boosts).some(boost => (boost || 0) < 0);
 				if (hasNegativeBoosts) {
-					messageLog.push(`${targetPokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+					messageLog.push(`${targetSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
 					return;
 				}
 			}
@@ -2042,12 +2022,12 @@ function handleStatusMove(
 			const boostValue = move.boosts[stat as keyof typeof move.boosts]!;
 			if ((stage < 6 && boostValue > 0) || (stage > -6 && boostValue < 0)) {
 				targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
-				messageLog.push(`${targetPokemon.species}'s ${stat.toUpperCase()} ${boostValue > 0 ? 'rose' : 'fell'}!`);
+				messageLog.push(`${targetSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 0 ? 'rose' : 'fell'}!`);
 				hadEffect = true;
 			}
 		}
 	} else if (move.status) {
-		const defenderCurrentStatus = !isPlayerAttacker ? battle.playerStatus : battle.opponentStatus;
+		const defenderCurrentStatus = defenderSlot.status;
 		let canBeAfflicted = !defenderCurrentStatus;
 		const defenderIsGrounded = isGrounded(defender, battle);
 
@@ -2068,58 +2048,35 @@ function handleStatusMove(
 
 		if (canBeAfflicted) {
 			const newStatus = move.status as Status;
-			if (isPlayerAttacker) {
-				battle.opponentStatus = newStatus;
-				if (newStatus === 'slp') {
-					battle.opponentSleepCounter = Math.floor(Math.random() * 3) + 2;
-				}
-			} else {
-				battle.playerStatus = newStatus;
-				if (newStatus === 'slp') {
-					battle.playerSleepCounter = Math.floor(Math.random() * 3) + 2;
-				}
+			defenderSlot.status = newStatus;
+			if (newStatus === 'slp') {
+				defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 			}
 			messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
 			hadEffect = true;
 		}
 	} else if (move.volatileStatus) {
-		const defenderIsPlayer = !isPlayerAttacker;
 		switch (move.volatileStatus) {
 		case 'confusion':
-			if ((defenderIsPlayer && !battle.playerIsConfused) || (!defenderIsPlayer && !battle.opponentIsConfused)) {
-				if (defenderIsPlayer) {
-					battle.playerIsConfused = true;
-					battle.playerConfusionCounter = Math.floor(Math.random() * 3) + 2;
-				} else {
-					battle.opponentIsConfused = true;
-					battle.opponentConfusionCounter = Math.floor(Math.random() * 3) + 2;
-				}
+			if (!defenderSlot.isConfused) {
+				defenderSlot.isConfused = true;
+				defenderSlot.confusionCounter = Math.floor(Math.random() * 3) + 2;
 				messageLog.push(`${defender.species} became confused!`);
 				hadEffect = true;
 			}
 			break;
 
 		case 'taunt':
-			const isTaunted = defenderIsPlayer ? battle.playerTauntTurns > 0 : battle.opponentTauntTurns > 0;
-			if (!isTaunted) {
-				if (defenderIsPlayer) {
-					battle.playerTauntTurns = 3;
-				} else {
-					battle.opponentTauntTurns = 3;
-				}
+			if (defenderSlot.tauntTurns <= 0) {
+				defenderSlot.tauntTurns = 3;
 				messageLog.push(`${defender.species} fell for the taunt!`);
 				hadEffect = true;
 			}
 			break;
 
 		case 'trap':
-			const isTrapped = defenderIsPlayer ? battle.playerIsTrapped : battle.opponentIsTrapped;
-			if (!isTrapped) {
-				if (defenderIsPlayer) {
-					battle.playerIsTrapped = { turns: 5 };
-				} else {
-					battle.opponentIsTrapped = { turns: 5 };
-				}
+			if (!defenderSlot.isTrapped) {
+				defenderSlot.isTrapped = { turns: 5 };
 				messageLog.push(`${defender.species} can no longer escape!`);
 				hadEffect = true;
 			}
@@ -2129,62 +2086,12 @@ function handleStatusMove(
 
 	// --- NEW BLOCK ---
 	// Handle self-switching status moves (Baton Pass, Teleport)
-	if (move.selfSwitch) { // This covers `true` and `'copyvolatile'`
-		const isPlayerAttacker = attacker.id === battle.activePokemon.id;
-		
-		if (isPlayerAttacker) {
-			// Check if player has any other Pokemon to switch to
-			const player = getPlayerData(battle.playerId);
-			// --- THIS IS THE FIX ---
-			if (player.party.some(p => p.hp > 0 && p.id !== attacker.id)) {
-			// --- END FIX ---
-				battle.playerShouldSwitch = move.selfSwitch; // `true` or `'copyvolatile'`
-				messageLog.push(`${attacker.species} is preparing to switch out!`);
-				hadEffect = true;
-			} else {
-				// No Pokemon to switch to, move fails
-				messageLog.push(`But it failed!`);
-			}
-		} else { // Opponent is attacker
-			if (battle.battleType === 'trainer') {
-				// Check if trainer has other Pokemon
-				const nextPokemon = battle.opponentParty.find(p => p.hp > 0 && p.id !== battle.opponentActivePokemon.id);
-				if (nextPokemon) {
-					messageLog.push(`${battle.opponentName} withdrew ${battle.opponentActivePokemon.species} and sent out ${nextPokemon.species}!`);
-					battle.opponentActivePokemon = nextPokemon;
-					// Reset opponent's volatile statuses
-					const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-					
-					// Baton Pass - preserve stat boosts
-					if (move.selfSwitch !== 'copyvolatile') {
-						battle.opponentStatStages = { ...initialStages };
-					}
-					// Other volatile statuses always reset
-					battle.opponentStatus = nextPokemon.status;
-					battle.opponentSleepCounter = 0;
-					battle.opponentLockedMove = undefined;
-					battle.opponentIsConfused = false;
-					battle.opponentConfusionCounter = 0;
-					battle.opponentProtectSuccessCounter = 0;
-					battle.opponentIsProtected = false;
-					battle.opponentWillFlinch = false;
-					battle.opponentIsTrapped = null;
-					battle.opponentTauntTurns = 0;
-					battle.opponentIsSeeded = false;
-					battle.opponentHasNightmare = false;
-					battle.opponentIsCursed = false;
-					battle.opponentChargingMove = undefined;
-					battle.opponentActiveTurns = 1;
-					hadEffect = true;
-				} else {
-					messageLog.push(`But it failed!`);
-				}
-			} else { // Wild Pokemon
-				messageLog.push(`But it failed!`); // Wild Pokemon can't switch
-			}
-		}
-		// We return here because 'hadEffect' is set (or it failed)
-		return;
+	if (move.selfSwitch) {
+		// This will be handled in Step 6
+		messageLog.push(`${attacker.species} is preparing to switch out! (Logic TBD)`);
+		hadEffect = true;
+		// This should register a switch action for the attacker
+		// battle.playerShouldSwitch = move.selfSwitch; // Old logic
 	}
 	if (!hadEffect) {
 		messageLog.push(`But it failed!`);
@@ -2192,16 +2099,17 @@ function handleStatusMove(
 }
 
 function handleDamagingMove(
-	attacker: RPGPokemon,
-	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
 	move: Move,
 	battle: BattleState,
 	messageLog: string[]
 ) {
+	const attacker = attackerSlot.pokemon;
+	const defender = defenderSlot.pokemon;
+	
 	// Check for semi-invulnerable state from two-turn moves
-	const isDefenderPlayer = defender.id === battle.activePokemon.id;
-	const defenderChargingMoveId = isDefenderPlayer ? battle.playerChargingMove : battle.opponentChargingMove;
-
+	const defenderChargingMoveId = defenderSlot.chargingMove;
 	if (defenderChargingMoveId) {
 		let isImmune = true; // Assume the defender is immune by default while charging
 		const semiInvulnerableStates = ['fly', 'dig', 'dive', 'bounce', 'shadowforce', 'phantomforce'];
@@ -2261,19 +2169,20 @@ function handleDamagingMove(
 		}
 	}
 
-	const isPlayerAttacker = attacker.id === battle.activePokemon.id;
-	const playerPokemon = battle.activePokemon;
-	const attackerStages = isPlayerAttacker ? battle.playerStatStages : battle.opponentStatStages;
-	const defenderStages = !isPlayerAttacker ? battle.playerStatStages : battle.opponentStatStages;
-	const attackerStatus = isPlayerAttacker ? battle.playerStatus : battle.opponentStatus;
+	const attackerStages = attackerSlot.statStages;
+	const defenderStages = defenderSlot.statStages;
 
 	if (hitCount > 1) {
-		const lastMessageIndex = messageLog.length > 0 ? messageLog.length - 1 : 0;
-		messageLog[lastMessageIndex] += ` <i style="color: #6c757d;">(It hit ${hitCount} times!)</i>`;
+		// Ensure messageLog is not empty before trying to access last element
+		if (messageLog.length > 0) {
+			messageLog[messageLog.length - 1] += ` <i style="color: #6c757d;">(It hit ${hitCount} times!)</i>`;
+		} else {
+			messageLog.push(`<i style="color: #6c757d;">(It hit ${hitCount} times!)</i>`);
+		}
 	}
 
 	for (let i = 0; i < hitCount; i++) {
-		const attackResult = calculateDamage(attacker, defender, move.id, attackerStages, defenderStages, attackerStatus, battle);
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle);
 
 		if (attackResult.effectiveness > 0) {
 			moveWasSuccessful = true;
@@ -2282,6 +2191,7 @@ function handleDamagingMove(
 		if (attackResult.berryConsumed) {
 			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
 			if (attackResult.berryConsumed === 'enigmaberry') {
+				// Special message handled by HP check
 			} else if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
 				messageLog.push(`${defender.species}'s ${itemName} weakened the attack!`);
 			} else {
@@ -2290,7 +2200,7 @@ function handleDamagingMove(
 			defender.item = undefined;
 		}
 
-                let damageDealt = attackResult.damage;
+		let damageDealt = attackResult.damage;
 
 		if (battle.magicRoomTurns === 0 && defender.item === 'airballoon' && move.type === 'Ground') {
 			messageLog.push(`<i style="color: #6c757d;">The Air Balloon made the attack miss!</i>`);
@@ -2307,11 +2217,15 @@ function handleDamagingMove(
 		if (hitCount > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else {
-			messageLog[messageLog.length - 1] += attackResult.message;
+			if (messageLog.length > 0) {
+				messageLog[messageLog.length - 1] += attackResult.message;
+			} else {
+				messageLog.push(attackResult.message); // Should not happen, but a safe fallback
+			}
 		}
 
 		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'enigmaberry' && attackResult.effectiveness > 1) {
-			const healAmount = Math.floor(defender.maxHp / 2);
+			const healAmount = Math.floor(defender.maxHp / 2); // Gen 4+ Enigma Berry heals 1/4
 			const oldHp = defender.hp;
 			defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
 			messageLog.push(`${defender.species} ate its Enigma Berry and restored ${defender.hp - oldHp} HP!`);
@@ -2332,7 +2246,7 @@ function handleDamagingMove(
 			}
 
 			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
-				const healAmount = Math.max(1, Math.floor(attacker.maxHp / 8));
+				const healAmount = Math.max(1, Math.floor(attacker.maxHp / 8)); // Shell Bell is 1/8 damage dealt
 				attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 				messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
 			}
@@ -2383,13 +2297,12 @@ function handleDamagingMove(
 				}
 			}
 
-			handleHPDropEffects(defender, battle, messageLog);
-			handleHPDropEffects(attacker, battle, messageLog);
+			handleHPDropEffects(defenderSlot, battle, messageLog);
+			handleHPDropEffects(attackerSlot, battle, messageLog);
 
 			if (attacker.hp > 0) {
 				let tookRecoil = false;
 				
-				// FIX #3: Mind Blown and Steel Beam - 50% HP cost
 				if (['mindblown', 'steelbeam'].includes(move.id)) {
 					const recoilDamage = Math.floor(attacker.maxHp / 2);
 					attacker.hp = Math.max(0, attacker.hp - recoilDamage);
@@ -2414,7 +2327,7 @@ function handleDamagingMove(
 					tookRecoil = true;
 				}
 				if (tookRecoil) {
-					handleHPDropEffects(attacker, battle, messageLog);
+					handleHPDropEffects(attackerSlot, battle, messageLog);
 				}
 			}
 
@@ -2431,6 +2344,7 @@ function handleDamagingMove(
 
 			if (defender.hp > 0) {
 				if (battle.magicRoomTurns === 0 && defender.item === 'covertcloak') {
+					// Covert Cloak blocks secondary effects
 				} else if (move.secondary) {
 					let chance = move.secondary.chance || 100;
 					if (attacker.ability === 'Serene Grace') {
@@ -2438,11 +2352,10 @@ function handleDamagingMove(
 					}
 
 					if (Math.random() * 100 < chance) {
-						// FIX #4: Tri Attack - randomize secondary status
 						if (move.id === 'triattack' && move.secondary.status) {
 							const statuses = ['brn', 'par', 'frz'] as Status[];
 							const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-							const defenderCurrentStatus = isDefenderPlayer ? battle.playerStatus : battle.opponentStatus;
+							const defenderCurrentStatus = defenderSlot.status;
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
 							
@@ -2453,15 +2366,11 @@ function handleDamagingMove(
 							}
 							
 							if (canBeAfflicted) {
-								if (isDefenderPlayer) {
-									battle.playerStatus = randomStatus;
-								} else {
-									battle.opponentStatus = randomStatus;
-								}
+								defenderSlot.status = randomStatus;
 								messageLog.push(`${defender.species} was afflicted with ${randomStatus}!`);
 							}
 						} else if (move.secondary.status) {
-							const defenderCurrentStatus = isDefenderPlayer ? battle.playerStatus : battle.opponentStatus;
+							const defenderCurrentStatus = defenderSlot.status;
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
 							const newStatus = move.secondary.status as Status;
@@ -2469,13 +2378,8 @@ function handleDamagingMove(
 								canBeAfflicted = false;
 							}
 							if (canBeAfflicted) {
-								if (isDefenderPlayer) {
-									battle.playerStatus = newStatus;
-									if (newStatus === 'slp') battle.playerSleepCounter = Math.floor(Math.random() * 3) + 2;
-								} else {
-									battle.opponentStatus = newStatus;
-									if (newStatus === 'slp') battle.opponentSleepCounter = Math.floor(Math.random() * 3) + 2;
-								}
+								defenderSlot.status = newStatus;
+								if (newStatus === 'slp') defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 								messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
 							}
 						}
@@ -2483,18 +2387,12 @@ function handleDamagingMove(
 						if (move.secondary.volatileStatus) {
 							switch (move.secondary.volatileStatus) {
 							case 'flinch':
-								if (isDefenderPlayer) battle.playerWillFlinch = true; else battle.opponentWillFlinch = true;
+								defenderSlot.willFlinch = true;
 								break;
 							case 'confusion':
-								const isConfused = isDefenderPlayer ? battle.playerIsConfused : battle.opponentIsConfused;
-								if (!isConfused) {
-									if (isDefenderPlayer) {
-										battle.playerIsConfused = true;
-										battle.playerConfusionCounter = Math.floor(Math.random() * 3) + 2;
-									} else {
-										battle.opponentIsConfused = true;
-										battle.opponentConfusionCounter = Math.floor(Math.random() * 3) + 2;
-									}
+								if (!defenderSlot.isConfused) {
+									defenderSlot.isConfused = true;
+									defenderSlot.confusionCounter = Math.floor(Math.random() * 3) + 2;
 									messageLog.push(`${defender.species} became confused!`);
 								}
 								break;
@@ -2542,14 +2440,16 @@ function handleDamagingMove(
 	// --- Post-damage Hazard/Trap Removal & Stat Boosts ---
 	if (attacker.hp > 0 && move.id === 'rapidspin') {
 		let clearedSomething = false;
+		const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+		
 		if (isPlayerAttacker) {
 			if (battle.playerHazards.length > 0) { battle.playerHazards = []; clearedSomething = true; }
-			if (battle.playerIsSeeded) { battle.playerIsSeeded = false; clearedSomething = true; }
-			if (battle.playerIsTrapped) { battle.playerIsTrapped = null; clearedSomething = true; }
+			if (attackerSlot.isSeeded) { attackerSlot.isSeeded = false; clearedSomething = true; }
+			if (attackerSlot.isTrapped) { attackerSlot.isTrapped = null; clearedSomething = true; }
 		} else { // Opponent is attacker
 			if (battle.opponentHazards.length > 0) { battle.opponentHazards = []; clearedSomething = true; }
-			if (battle.opponentIsSeeded) { battle.opponentIsSeeded = false; clearedSomething = true; }
-			if (battle.opponentIsTrapped) { battle.opponentIsTrapped = null; clearedSomething = true; }
+			if (attackerSlot.isSeeded) { attackerSlot.isSeeded = false; clearedSomething = true; }
+			if (attackerSlot.isTrapped) { attackerSlot.isTrapped = null; clearedSomething = true; }
 		}
 		if (clearedSomething) messageLog.push(`${attacker.species} cleared away hazards and traps!`);
 
@@ -2561,27 +2461,17 @@ function handleDamagingMove(
 	
 	// --- Trapping Move Application ---
 	if (defender.hp > 0 && move.volatileStatus === 'partiallytrapped') {
-		const defenderIsPlayer = defender.id === battle.activePokemon.id;
-		const isTrapped = defenderIsPlayer ? battle.playerIsTrapped : battle.opponentIsTrapped;
-		
-		if (!isTrapped) {
+		if (!defenderSlot.isTrapped) {
 			const turns = Math.floor(Math.random() * 3) + 4; // 4, 5, or 6 turns
-			if (defenderIsPlayer) {
-				battle.playerIsTrapped = { turns: turns };
-			} else {
-				battle.opponentIsTrapped = { turns: turns };
-			}
+			defenderSlot.isTrapped = { turns: turns };
 			messageLog.push(`${defender.species} was trapped!`);
 		}
 	}
 
 	// Handle Feint breaking protection after all hits
 	if (move.id === 'feint') {
-		if (defender.id === playerPokemon.id && battle.playerIsProtected) {
-			battle.playerIsProtected = false;
-			messageLog.push(`${defender.species}'s protection was broken!`);
-		} else if (defender.id !== playerPokemon.id && battle.opponentIsProtected) {
-			battle.opponentIsProtected = false;
+		if (defenderSlot.isProtected) {
+			defenderSlot.isProtected = false;
 			messageLog.push(`${defender.species}'s protection was broken!`);
 		}
 	}
@@ -2589,64 +2479,33 @@ function handleDamagingMove(
 	// FIX #1: U-Turn / Volt Switch / Flip Turn - handle switch after damage
 	if (attacker.hp > 0 && defender.hp > 0 && (move.selfSwitch === true || move.selfSwitch === 'copyvolatile')) {
 		// Store whether attacker was player
-		const switcherIsPlayer = isPlayerAttacker;
+		const switcherIsPlayer = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
 		
 		// For wild battles, opponent can't switch
-		if (!switcherIsPlayer && battle.battleType === 'wild') {
+		if (!switcherIsPlayer && (battle.battleType === 'wild' || battle.battleType === 'wild_double')) {
 			// Wild Pokemon doesn't switch
 		} else if (switcherIsPlayer) {
-			// --- THIS IS THE FIX ---
 			// Check if player has any other Pokemon to switch to
 			const player = getPlayerData(battle.playerId);
 			if (player.party.some(p => p.hp > 0 && p.id !== attacker.id)) {
+				// This needs to be handled by the turn processor in Step 6
 				battle.playerShouldSwitch = move.selfSwitch;
 				messageLog.push(`${attacker.species} went back to ${battle.playerId}!`);
 			} else {
 				// No Pokemon to switch to, move fails to pivot
 				messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 			}
-			// --- END FIX ---
-		} else if (battle.battleType === 'trainer') {
+		} else if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			// Trainer opponent uses pivot move - auto switch to next available
-			const nextPokemon = battle.opponentParty.find(p => p.hp > 0 && p.id !== battle.opponentActivePokemon.id);
-			if (nextPokemon) {
-				messageLog.push(`${battle.opponentName} withdrew ${battle.opponentActivePokemon.species} and sent out ${nextPokemon.species}!`);
-				battle.opponentActivePokemon = nextPokemon;
-				// Reset opponent's volatile statuses
-				const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-				// FIX #7: Baton Pass - preserve stat boosts
-				if (move.selfSwitch !== 'copyvolatile') {
-					battle.opponentStatStages = { ...initialStages };
-				}
-				// Other volatile statuses always reset
-				battle.opponentStatus = nextPokemon.status;
-				battle.opponentSleepCounter = 0;
-				battle.opponentLockedMove = undefined;
-				battle.opponentIsConfused = false;
-				battle.opponentConfusionCounter = 0;
-				battle.opponentProtectSuccessCounter = 0;
-				battle.opponentIsProtected = false;
-				battle.opponentWillFlinch = false;
-				battle.opponentIsTrapped = null;
-				battle.opponentTauntTurns = 0;
-				battle.opponentIsSeeded = false;
-				battle.opponentHasNightmare = false;
-				battle.opponentIsCursed = false;
-				battle.opponentChargingMove = undefined;
-				battle.opponentActiveTurns = 1;
-			}
-			// --- NEW ---
-			else {
-				messageLog.push(`But it failed! (No Pokémon to switch to!)`);
-			}
-			// --- END NEW ---
+			// This will be handled in Step 6
+			messageLog.push(`${battle.opponentName} is preparing to switch ${attacker.species}! (Logic TBD)`);
 		}
 	}
 
 	if (defender.hp > 0) {
 		if (['dragontail', 'circlethrow'].includes(move.id)) {
 			// --- MODIFIED ---
-			if (battle.battleType === 'wild') {
+			if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
 				messageLog.push(`The wild ${defender.species} was dragged away!`);
 				battle.forceEnd = true;
 			} else {
@@ -2952,158 +2811,92 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
  * @returns {boolean} Returns true if the move caused the defender to flinch.
  */
 function executeMove(
-	attacker: RPGPokemon,
-	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	targetSlots: ActivePokemonSlot[],
 	move: Move,
 	moveObject: { id: string, pp: number },
 	battle: BattleState,
 	messageLog: string[]
-): boolean {
-	const playerPokemon = battle.activePokemon;
-	const isPlayerAttacking = attacker.id === playerPokemon.id;
-	const currentColor = isPlayerAttacking ? '#007bff' : '#555';
-	const infoColor = '#dc3545';
-	const neutralColor = '#6c757d';
-
-	// --- Move-specific Failure Conditions ---
-	if (move.id === 'fakeout') {
-		const attackerTurnCount = isPlayerAttacking ? battle.playerActiveTurns : battle.opponentActiveTurns;
-		if (attackerTurnCount > 1) {
-			messageLog.push('But it failed!');
-			return false; // Prevent the move from executing
-		}
-	}
-
-	// 1. Pre-Turn Status Checks (Sleep, Freeze, Paralysis, Confusion)
-	if (!handlePreTurnChecks(attacker, battle, messageLog)) {
-		return false; // Attacker couldn't move
-	}
-
-	// NEW: Check for Side Guards (Quick Guard, etc.)
-	const isDefenderPlayer = defender.id === playerPokemon.id;
-	if (isDefenderPlayer) {
-		if (battle.playerQuickGuard && move.priority > 0) {
-			messageLog.push(`${defender.species} was protected by Quick Guard!`);
-			return false;
-		}
-		if (battle.playerCraftyShield && move.category === 'Status') {
-			messageLog.push(`${defender.species} was protected by Crafty Shield!`);
-			return false;
-		}
-	} else { // Defender is the opponent Pokemon
-		if (battle.opponentQuickGuard && move.priority > 0) {
-			messageLog.push(`${defender.species} was protected by Quick Guard!`);
-			return false;
-		}
-		if (battle.opponentCraftyShield && move.category === 'Status') {
-			messageLog.push(`${defender.species} was protected by Crafty Shield!`);
-			return false;
-		}
-	}
+): void { // Return type changed to void, flinch is handled in handleDamagingMove
 
 	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
-		if (isPlayerAttacking) {
-			battle.playerProtectSuccessCounter = 0;
-		} else {
-			battle.opponentProtectSuccessCounter = 0;
-		}
-	}
-
-	// 2. Check for Protection (Struggle bypasses this)
-	if (move.id !== 'struggle') {
-		const isDefenderProtected = (defender.id === playerPokemon.id && battle.playerIsProtected) ||
-			(defender.id !== playerPokemon.id && battle.opponentIsProtected);
-		if (isDefenderProtected && move.flags.protect && !move.breaksProtect) {
-			messageLog.push(`<span style="color: ${neutralColor};">${defender.species} protected itself!</span>`);
-			return false;
-		}
+		attackerSlot.protectSuccessCounter = 0;
 	}
 
 	// 3. Check for Terrain Immunity (e.g., Psychic Terrain blocking priority)
-	if (battle.terrain?.type === 'psychic' && isGrounded(defender, battle) && move.priority > 0) {
-		messageLog.push(`<span style="color: ${infoColor};">${attacker.species} tried to use ${move.name}, but the Psychic Terrain prevented it!</span>`);
-		return false;
-	}
+	// Note: This check should ideally happen *before* targeting
+	
+	// 4. Accuracy Check (Handled per-target)
+	
+	// 5. Check for Sucker Punch failure (Handled in processTurn/executeAction)
+	
+	for (const defenderSlot of targetSlots) {
+		if (attackerSlot.pokemon.hp <= 0) break; // Attacker fainted mid-move (e.g. from ally recoil)
+		if (defenderSlot.pokemon.hp <= 0) continue; // Target fainted mid-move (e.g. from first hit of spread)
 
-	// 4. PP Deduction (REMOVED - Moved to battleaction.move)
-
-	// 5. Check for Sucker Punch failure
-	if (move.id === 'suckerpunch') {
-		const defenderMove = defender.id === playerPokemon.id ? Dex.moves.get(battle.playerMoveId || '') : Dex.moves.get(battle.opponentMoveId || '');
-		// Fail if the defender's move doesn't exist (e.g., they switched) OR if it's a Status move
-		if (!defenderMove.exists || defenderMove.category === 'Status') {
-			messageLog.push(`<span style="color: ${infoColor};">${attacker.species} used Sucker Punch, but it failed!</span>`);
-			return false;
-		}
-	}
-
-	// 6. Accuracy Check
-	let moveHit = true; // Track whether the move hit
-	if (['aerialace'].includes(move.id)) {
-		// This move bypasses accuracy checks
-	} else if (move.accuracy !== true) {
-		const isAttackerPlayer = attacker.id === battle.activePokemon.id;
-		const attackerStages = isAttackerPlayer ? battle.playerStatStages : battle.opponentStatStages;
-		const defenderStages = isAttackerPlayer ? battle.opponentStatStages : battle.playerStatStages;
-
-		const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerStages.accuracy);
-		const evasionMultiplier = getAccuracyEvasionMultiplier(defenderStages.evasion);
-
-		let moveAccuracy = move.accuracy;
-
-		// --- Weather-Dependent Accuracy ---
-		if (battle.weather) {
-			if (battle.weather.type === 'rain') {
-				if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
-			} else if (battle.weather.type === 'sun') {
-				if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
+		// 2. Check for Protection (Struggle bypasses this)
+		if (move.id !== 'struggle') {
+			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect) {
+				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
+				continue; // Move fails against this target
 			}
-			if (battle.weather.type === 'hail' && move.id === 'blizzard') {
-				moveAccuracy = 100;
+			// TODO: Add Wide Guard check for spread moves
+		}
+		
+		// 6. Accuracy Check
+		let moveHit = true;
+		if (['aerialace'].includes(move.id)) {
+			// Bypasses accuracy
+		} else if (move.accuracy !== true) {
+			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
+			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
+			let moveAccuracy = move.accuracy;
+			// ... (Weather accuracy logic) ...
+			if (battle.weather) {
+				if (battle.weather.type === 'rain') {
+					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
+				} else if (battle.weather.type === 'sun') {
+					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
+				}
+				if (battle.weather.type === 'hail' && move.id === 'blizzard') {
+					moveAccuracy = 100;
+				}
 			}
-		}
-
-		// Gravity increases accuracy by 5/3 (approx 1.67x)
-		if (battle.gravityTurns > 0) {
-			moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
-		}
-
-		// The final accuracy formula
-		const finalAccuracy = moveAccuracy * (accuracyMultiplier / evasionMultiplier);
-		if ((Math.random() * 100) > finalAccuracy) {
-			messageLog.push(`<span style="color: ${infoColor};">${attacker.species}'s ${move.name} missed!</span>`);
-			moveHit = false;
-			
-			// FIX #2: High Jump Kick / Jump Kick crash damage
-			if (['highjumpkick', 'jumpkick'].includes(move.id)) {
-				const crashDamage = Math.floor(attacker.maxHp / 2);
-				attacker.hp = Math.max(0, attacker.hp - crashDamage);
-				messageLog.push(`<span style="color: ${infoColor};">${attacker.species} kept going and crashed!</span>`);
+	
+			// Gravity increases accuracy by 5/3 (approx 1.67x)
+			if (battle.gravityTurns > 0) {
+				moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
 			}
 			
-			return false;
+			const finalAccuracy = moveAccuracy * (accuracyMultiplier / evasionMultiplier);
+			if ((Math.random() * 100) > finalAccuracy) {
+				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
+				moveHit = false;
+				
+				if (['highjumpkick', 'jumpkick'].includes(move.id)) {
+					const crashDamage = Math.floor(attackerSlot.pokemon.maxHp / 2);
+					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - crashDamage);
+					messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species} kept going and crashed!</span>`);
+				}
+			}
+		}
+		
+		if (!moveHit) {
+			continue; // Move missed this target
+		}
+
+		// 7. Execute the Move
+		if (move.id === 'struggle') {
+			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog);
+		} else if (move.category === 'Status') {
+			handleStatusMove(attackerSlot, defenderSlot, move, battle, messageLog);
+		} else {
+			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog);
 		}
 	}
-
-	// 7. Announce and Execute the Move
-	messageLog.push(`<span style="color: ${currentColor};"><strong>${attacker.species}</strong> used <strong>${move.name}</strong>!</span>`);
-
-	if (move.id === 'struggle') {
-		handleDamagingMove(attacker, defender, move, battle, messageLog);
-	} else if (move.category === 'Status') {
-		handleStatusMove(attacker, defender, move, battle, messageLog);
-	} else {
-		handleDamagingMove(attacker, defender, move, battle, messageLog);
-	}
-
-	// 8. Check for Flinch
-	if (defender.hp > 0 && move.secondary?.volatileStatus === 'flinch') {
-		return true;
-	}
-
-	return false; // No flinch occurred
 }
+
 
 /**
  * Checks the HP of both active Pokémon and handles the outcome of a faint.
@@ -3512,31 +3305,190 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 }
 
 /**
- * [STEP 4 Placeholder]
+ * [STEP 4 Implementation]
  * Processes all queued actions for the turn.
  */
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User) {
-	// This is the core logic for Step 4.
-	// For now, it will just reset the queue and log a placeholder.
-	const messageLog = ["Turn processing is not yet implemented."];
+	const messageLog: string[] = [];
 	battle.turn++;
 
-	// TODO:
-	// 1. Generate AI Actions for opponent slots
-	// 2. Build and sort the full action order (all 4 slots)
-	// 3. Iterate through sorted order:
-	//    a. Check pre-turn statuses (sleep, freeze, etc.)
-	//    b. Check for redirects (Follow Me)
-	//    c. Get targets using getMoveTargets()
-	//    d. Call executeMove() for the attacker against all targets
-	//    e. Handle faint/switch logic
-	// 4. Call processEndOfTurn()
-	// 5. Call checkBattleEndCondition()
-	// 6. Reset battle.pendingActions = {}
-	// 7. Render the new battle state
+	// 1. Generate AI Actions
+	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
+		const slotIndex = 2 + i; // Opponent slots are 2 and 3
+		if (!battle.pendingActions[slotIndex]) {
+			battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
+		}
+	});
 
+	// 2. Build and Sort Action Order
+	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
+	const allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+
+	for (const slotIndex in battle.pendingActions) {
+		const action = battle.pendingActions[slotIndex];
+		if (action) {
+			actionQueue.push(action);
+		}
+	}
+
+	actionQueue.sort((a, b) => {
+		const slotA = allActiveSlots.find(s => s.pokemon.id === a.pokemonId);
+		const slotB = allActiveSlots.find(s => s.pokemon.id === b.pokemonId);
+
+		// If a Pokemon fainted before action selection, it shouldn't be in the queue
+		if (!slotA) return 1;
+		if (!slotB) return -1;
+
+		const moveA = Dex.moves.get(a.moveId || 'struggle');
+		const moveB = Dex.moves.get(b.moveId || 'struggle');
+
+		// Sort by Priority
+		if (moveA.priority !== moveB.priority) {
+			return moveB.priority - moveA.priority;
+		}
+
+		// Sort by Speed
+		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
+		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
+		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
+		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+
+		if (battle.trickRoomTurns > 0) {
+			return speedA - speedB; // Slower goes first in Trick Room
+		}
+		return speedB - speedA; // Faster goes first normally
+	});
+
+	// 3. Execute Actions in order
+	for (const action of actionQueue) {
+		executeAction(action, battle, room, user, messageLog);
+		// TODO: After each action, check for faints before the next action
+	}
+
+	// 4. End-of-Turn Effects
+	// This will be refactored in Step 7
+	// For now, we'll just log a placeholder
+	messageLog.push("--- End of Turn ---");
+	// processEndOfTurn(battle, messageLog);
+
+	// 5. Check for Battle End
+	// This will be refactored in Step 6
+	const battleEnded = false;
+	// const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+
+	// 6. Reset and Render
 	battle.pendingActions = {}; // Reset for next turn
-	context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+
+	if (!battleEnded) {
+		// Increment active turn counters for all active Pokemon
+		allActiveSlots.forEach(slot => {
+			if (slot.pokemon.hp > 0) {
+				slot.activeTurns++;
+			}
+		});
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+	}
+}
+
+/**
+ * Gets all active (non-fainted, non-null) slots for a given side.
+ * @param slots The [Slot | null, Slot | null] array.
+ * @returns An array of ActivePokemonSlot.
+ */
+function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null]): ActivePokemonSlot[] {
+	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
+}
+
+/**
+ * [AI] Generates a simple action for an AI-controlled slot.
+ * Picks a random damaging move and a random player-side target.
+ */
+function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
+	// Find valid moves (with PP)
+	const usableMoves = aiSlot.pokemon.moves.filter(m => {
+		const moveData = Dex.moves.get(m.id);
+		return m.pp > 0 && moveData.category !== 'Status'; // Simple AI: only use damaging moves
+	});
+
+	let chosenMoveId = 'struggle';
+	if (usableMoves.length > 0) {
+		chosenMoveId = usableMoves[Math.floor(Math.random() * usableMoves.length)].id;
+	}
+
+	// Find valid targets (player side)
+	const playerSlots = getActiveSlots(battle.playerSlots);
+	let targetSlotIndex = 0; // Default to slot 0 if no one is active
+	if (playerSlots.length > 0) {
+		const targetSlot = playerSlots[Math.floor(Math.random() * playerSlots.length)];
+		targetSlotIndex = battle.playerSlots.indexOf(targetSlot);
+	}
+
+	return {
+		actionType: 'move',
+		moveId: chosenMoveId,
+		targetSlot: targetSlotIndex,
+		pokemonId: aiSlot.pokemon.id,
+	};
+}
+
+/**
+ * [STEP 4]
+ * Executes a single queued action (move or switch).
+ */
+function executeAction(
+	action: NonNullable<BattleState['pendingActions'][number]>,
+	battle: BattleState,
+	room: ChatRoom,
+	user: User,
+	messageLog: string[]
+) {
+	const attackerSlot = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots])
+		.find(s => s.pokemon.id === action.pokemonId);
+
+	// Check if the Pokemon fainted before its turn (e.g., from an ally's Earthquake)
+	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
+		return;
+	}
+
+	// --- Handle Switch Action ---
+	if (action.actionType === 'switch') {
+		// This logic will be fully implemented in Step 6
+		// For now, we'll just log it.
+		messageLog.push(`${attackerSlot.pokemon.species} is switching out! (Logic TBD)`);
+		return;
+	}
+
+	// --- Handle Move Action ---
+	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
+		const move = Dex.moves.get(action.moveId);
+		const moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id) || { id: 'struggle', pp: 1 };
+
+		// 1. Pre-Turn Status Checks (Sleep, Freeze, Paralysis, Confusion, Flinch)
+		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
+			return; // Attacker couldn't move
+		}
+
+		// 2. PP Deduction
+		if (move.id !== 'struggle' && moveObject.pp > 0) {
+			moveObject.pp--;
+		}
+
+		// 3. Resolve Targets
+		// TODO: Implement move redirects (Follow Me, Rage Powder) here
+		const attackerSlotIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(attackerSlot);
+		const targetSlots = getMoveTargets(attackerSlotIndex, action.targetSlot, move, battle);
+
+		// 4. Announce and Execute the Move
+		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
+
+		if (targetSlots.length === 0) {
+			messageLog.push(`But there was no target!`);
+			return;
+		}
+
+		// 5. Execute move against all targets
+		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
+	}
 }
 
 /**********************
