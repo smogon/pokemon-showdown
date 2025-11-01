@@ -116,7 +116,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 			if (lobbyRoom) {
-				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`, -10000).update();
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
