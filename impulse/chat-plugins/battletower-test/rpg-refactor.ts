@@ -3724,6 +3724,89 @@ function executeAction(
 * HTML UI
 **********************/
 
+/**
+ * [NEW] Generates the UI for a 1-v-1 single battle.
+ */
+function generateSingleBattleHTML(
+	battle: BattleState,
+	messageLog: string[] = [],
+	targetSelection?: { attackerSlotIndex: number, moveId: string }
+): string {
+	const playerSlot = battle.playerSlots[0];
+	const opponentSlot = battle.opponentSlots[0];
+
+	if (!playerSlot || !opponentSlot) {
+		// This should not happen in a single battle
+		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>`;
+	}
+	
+	const playerPokemon = playerSlot.pokemon;
+
+	let actionHTML = '';
+
+	if (targetSelection) {
+		// --- STATE 2: Target Selection ---
+		// In a 1v1, the only target is the opponent (slot 2)
+		const moveId = targetSelection.moveId;
+		const move = Dex.moves.get(moveId);
+		actionHTML = `<p>Use <strong>${move.name}</strong> on ${opponentSlot.pokemon.species}?</p>` +
+		// Command format: /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
+		`<p><button name="send" value="/rpg battleaction move 0 ${moveId} 2" class="button" style="background-color: #28a745; color: white;">Confirm</button> ` +
+		`<button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+	} else {
+		// --- STATE 1: Action Selection ---
+		const moveButtons = playerPokemon.moves.map(move => {
+			const moveData = Dex.moves.get(move.id);
+	
+			const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+				playerPokemon.item === 'assaultvest' &&
+				moveData.category === 'Status';
+	
+			const isTauntBlocked = playerSlot.tauntTurns > 0 &&
+				moveData.category === 'Status';
+				
+			// --- FIX: Check Choice Item Lock ---
+			const isLocked = playerSlot.lockedMove && 
+				playerSlot.lockedMove !== move.id &&
+				battle.magicRoomTurns === 0 &&
+				// Check if the locked move still has PP
+				playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+
+			const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
+	
+			// Command format: /rpg battleaction selecttarget [attackerSlot] [moveId]
+			// We skip target selection for 1v1 and go right to confirmation
+			return `<button name="send" value="/rpg battleaction selecttarget 0 ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+		}).join('');
+		
+		const catchButton = (battle.battleType === 'wild') ?
+			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
+			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+	
+		const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
+			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
+			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+		
+		actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
+		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
+		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+	}
+
+	return `<div class="infobox"><h2>Battle!</h2>` +
+	`${generateFieldEffectHTML(battle)}` +
+	`<div style="display: flex; justify-content: space-around;">` +
+		// Player Pokemon
+		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot)}</div>` +
+		// Opponent Pokemon
+		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot)}</div>` +
+	`</div><hr />` +
+	// Message Log
+	`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
+	// Action Area
+	actionHTML +
+	`</div>`;
+}
+
 function generateWelcomeHTML(): string {
 	return `<div class="infobox"><h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/rpg choosetype fire" class="button">🔥 Fire</button><button name="send" value="/rpg choosetype water" class="button">💧 Water</button><button name="send" value="/rpg choosetype grass" class="button">🌱 Grass</button></p></div>`;
 }
@@ -3813,7 +3896,7 @@ function generatePokemonInfoHTML(
 	return html;
 }
 
-function generateBattleHTML(
+function generateDoubleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string }
@@ -3939,6 +4022,24 @@ function generateBattleHTML(
 
 	html += `</div>`;
 	return html;
+}
+
+/**
+ * [NEW ROUTER]
+ * Detects battle type and calls the correct UI generator.
+ */
+function generateBattleHTML(
+	battle: BattleState,
+	messageLog: string[] = [],
+	targetSelection?: { attackerSlotIndex: number, moveId: string }
+): string {
+	if (battle.battleType === 'wild' || battle.battleType === 'trainer') {
+		// Use single battle UI
+		return generateSingleBattleHTML(battle, messageLog, targetSelection);
+	} else {
+		// Use double battle UI
+		return generateDoubleBattleHTML(battle, messageLog, targetSelection);
+	}
 }
 
 function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
@@ -4133,18 +4234,32 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 			pokeBalls.push(item);
 		}
 	}
+	
+	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
 		html += `<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 		for (const ball of pokeBalls) {
-			html += `<div style="text-align: center; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="/rpg battleaction catch ${ball.id}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button></div>`;
+			// --- FIX: Change command based on battle type ---
+			let command = '';
+			if (isDoubleBattle) {
+				// Doubles: Go to target selection
+				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
+			} else {
+				// Singles: Hardcode target to slot 2 (the only opponent)
+				command = `/rpg battleaction catch ${ball.id} 2`;
+			}
+			
+			html += `<div style="text-align: center; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="${command}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button></div>`;
 		}
 		html += `</div>`;
 	}
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
+
 
 function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="infobox"><h2>Choose a Pokémon to switch</h2>`;
@@ -5466,6 +5581,7 @@ export const commands: ChatCommands = {
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
+					// --- FIX: Call the router function with no targetSelection ---
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
 				}
 			},
