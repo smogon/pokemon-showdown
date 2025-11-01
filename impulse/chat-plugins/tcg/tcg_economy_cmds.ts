@@ -1,12 +1,13 @@
+/*
+* Pokemon Showdown
+* TCG Economy & Shop Commands
+* @author PrinceSky-Git
+*/
 import type { TcgCard, TcgUser } from './interface';
 import { dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
-import {
-	tcgCardsCollection,
-	userCollectionsCollection,
-	userProfilesCollection,
-	userPacksCollection,
-} from './tcg_collections';
+import { tcgCardsCollection, userCollectionsCollection,
+	userProfilesCollection, userPacksCollection } from './tcg_collections';
 
 const PACK_COST = 0;
 const PACKS_IN_SHOP = 20;
