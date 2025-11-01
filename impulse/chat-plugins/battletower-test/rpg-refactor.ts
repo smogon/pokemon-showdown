@@ -4543,13 +4543,20 @@ export const commands: ChatCommands = {
 				let playerMoveId = toID(target);
 				let playerAction: 'charge' | 'unleash' | 'move' = 'move';
 
+				// --- NEW: Check for Struggle ---
+				const hasUsableMove = playerPokemon.moves.some(m => m.pp > 0);
+				if (!hasUsableMove) {
+					playerMoveId = 'struggle';
+				}
+				// --- END NEW ---
+
 				if (battle.playerChargingMove) {
 					playerMoveId = battle.playerChargingMove;
 					playerAction = 'unleash';
 				}
 
-				const playerMoveData = Dex.moves.get(playerMoveId);
-				const playerMoveObject = playerPokemon.moves.find(m => m.id === playerMoveId) || { id: 'struggle', pp: 1 };
+				let playerMoveData = Dex.moves.get(playerMoveId); // Use let
+				let playerMoveObject = playerPokemon.moves.find(m => m.id === playerMoveId) || { id: 'struggle', pp: 1 }; // Use let
 
 				if (playerMoveData.flags.charge && playerAction === 'move') {
 					playerAction = 'charge';
@@ -4560,20 +4567,28 @@ export const commands: ChatCommands = {
 					playerAction = 'move'; // Skip charging
 				}
 				
-				// PP Deduction Logic
+				// --- NEW PP Deduction Logic (Player) ---
 				if (playerAction === 'charge') {
-					if (playerMoveObject.id === 'struggle') return this.errorReply("Struggle cannot be charged."); // Should be impossible
-					if (playerMoveObject.pp <= 0) {
-						battle.playerChargingMove = undefined;
-						return this.errorReply("Not enough PP!");
+					if (playerMoveObject.pp > 0) {
+						playerMoveObject.pp--; // Deduct PP on charge turn
+					} else {
+						// Tried to charge a 0 PP move, force Struggle
+						playerAction = 'move';
+						playerMoveId = 'struggle';
+						playerMoveObject = { id: 'struggle', pp: 1 };
+						playerMoveData = Dex.moves.get('struggle');
 					}
-					playerMoveObject.pp--; // Deduct PP on charge turn
 				} else if (playerAction === 'move') {
-					if (playerMoveObject.id !== 'struggle' && playerMoveObject.pp <= 0) {
-						return this.errorReply("Not enough PP!");
-					}
-					if (playerMoveObject.id !== 'struggle') {
+					if (playerMoveObject.id === 'struggle') {
+						// Don't deduct PP for struggle
+					} else if (playerMoveObject.pp > 0) {
 						playerMoveObject.pp--; // Deduct PP on normal move
+					} else {
+						// Selected a 0 PP move, force Struggle
+						playerAction = 'move';
+						playerMoveId = 'struggle';
+						playerMoveObject = { id: 'struggle', pp: 1 };
+						playerMoveData = Dex.moves.get('struggle');
 					}
 				}
 				// (Don't deduct PP for 'unleash')
@@ -4639,7 +4654,7 @@ export const commands: ChatCommands = {
 				// (Struggle move objects are created on the fly if needed)
 				const finalPlayerMoveObject = playerMoveObject.id === 'struggle' ? { id: 'struggle', pp: 1 } : playerMoveObject;
 				const finalOpponentMoveObject = opponentMoveId === 'struggle' ? { id: 'struggle', pp: 1 } : opponentMoveObject;
-				const finalPlayerMoveData = Dex.moves.get(playerMoveId);
+				const finalPlayerMoveData = Dex.moves.get(playerMoveId); // Re-get data in case it was forced to Struggle
 				const finalOpponentMoveData = Dex.moves.get(opponentMoveId);
 
 
@@ -4671,8 +4686,17 @@ export const commands: ChatCommands = {
 					if (battle.opponentStatus === 'par') opponentSpe = Math.floor(opponentSpe / 2);
 
 					const turnOrder = [];
+
+					// --- NEW: Trick Room Check ---
+					let playerGoesFirstBySpeed;
+					if (battle.trickRoomTurns > 0) {
+						playerGoesFirstBySpeed = (playerSpe <= opponentSpe);
+					} else {
+						playerGoesFirstBySpeed = (playerSpe >= opponentSpe);
+					}
 					const playerGoesFirst = finalPlayerMoveData.priority > finalOpponentMoveData.priority ||
-						(finalPlayerMoveData.priority === finalOpponentMoveData.priority && playerSpe >= opponentSpe);
+						(finalPlayerMoveData.priority === finalOpponentMoveData.priority && playerGoesFirstBySpeed);
+					// --- END NEW ---
 
 					if (playerGoesFirst) {
 						turnOrder.push({ pokemon: playerPokemon, move: finalPlayerMoveData, moveObject: finalPlayerMoveObject });
@@ -4743,7 +4767,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
-
+			
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
