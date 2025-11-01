@@ -744,7 +744,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	floetteeternal: {
-		tier: "(OU)",
+		tier: "UU",
 	},
 	floettemega: {
 		tier: "OU",
