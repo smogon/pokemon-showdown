@@ -145,7 +145,7 @@ interface BattleState {
 	opponentName: string; // e.g., "Wild Pikachu" or "Rival"
 	opponentParty: RPGPokemon[];
 	opponentMoney: number; // Money to win (0 for wild)
-	playerShouldSwitch?: boolean; // For U-turn/Volt Switch/Flip Turn
+	playerShouldSwitch?: boolean | 'copyvolatile'; // For U-turn/Volt Switch (true) or Baton Pass ('copyvolatile')
 }
 
 // In-memory storage for player data (in production, use a database)
@@ -4656,6 +4656,11 @@ export const commands: ChatCommands = {
 				const finalOpponentMoveObject = opponentMoveId === 'struggle' ? { id: 'struggle', pp: 1 } : opponentMoveObject;
 				const finalPlayerMoveData = Dex.moves.get(playerMoveId); // Re-get data in case it was forced to Struggle
 				const finalOpponentMoveData = Dex.moves.get(opponentMoveId);
+
+				// --- NEW: Store selected moves for Sucker Punch check ---
+				battle.playerMoveId = finalPlayerMoveData.id;
+				battle.opponentMoveId = finalOpponentMoveData.id;
+				// --- END NEW ---
 
 
 				// Handle cases where one or both Pokémon are charging
