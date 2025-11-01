@@ -1,4 +1,8 @@
 // Pokemon RPG Plugin for Pokemon Showdown
+import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
+import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
+import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
+import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -261,11 +265,7 @@ const STARTER_POKEMON = {
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy', 'chespin', 'rowlet', 'grookey', 'sprigatito'],
 };
 
-const MANUAL_CATCH_RATES = Impulse.MANUAL_CATCH_RATES;
-const MANUAL_BASE_EXP = Impulse.MANUAL_BASE_EXP;
-const MANUAL_EV_YIELDS = Impulse.MANUAL_EV_YIELDS;
 const MANUAL_LEARNSETS = Impulse.MANUAL_LEARNSETS;
-const MANUAL_EVOLUTIONS = Impulse.MANUAL_EVOLUTIONS;
 
 const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number] }> = {
 	'startertown_grass': {
