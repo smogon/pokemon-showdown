@@ -2123,7 +2123,9 @@ function handleStatusMove(
 		if (isPlayerAttacker) {
 			// Check if player has any other Pokemon to switch to
 			const player = getPlayerData(battle.playerId);
+			// --- THIS IS THE FIX ---
 			if (player.party.some(p => p.hp > 0 && p.id !== attacker.id)) {
+			// --- END FIX ---
 				battle.playerShouldSwitch = move.selfSwitch; // `true` or `'copyvolatile'`
 				messageLog.push(`${attacker.species} is preparing to switch out!`);
 				hadEffect = true;
@@ -2172,8 +2174,6 @@ function handleStatusMove(
 		// We return here because 'hadEffect' is set (or it failed)
 		return;
 	}
-	// --- END NEW BLOCK ---
-
 	if (!hadEffect) {
 		messageLog.push(`But it failed!`);
 	}
@@ -2583,11 +2583,17 @@ function handleDamagingMove(
 		if (!switcherIsPlayer && battle.battleType === 'wild') {
 			// Wild Pokemon doesn't switch
 		} else if (switcherIsPlayer) {
-			// Player uses pivot move - mark for switch
 			// --- THIS IS THE FIX ---
-			battle.playerShouldSwitch = move.selfSwitch; // Was: move.selfSwitch === 'copyvolatile'
+			// Check if player has any other Pokemon to switch to
+			const player = getPlayerData(battle.playerId);
+			if (player.party.some(p => p.hp > 0 && p.id !== attacker.id)) {
+				battle.playerShouldSwitch = move.selfSwitch;
+				messageLog.push(`${attacker.species} went back to ${battle.playerId}!`);
+			} else {
+				// No Pokemon to switch to, move fails to pivot
+				messageLog.push(`But it failed! (No Pokémon to switch to!)`);
+			}
 			// --- END FIX ---
-			messageLog.push(`${attacker.species} went back to ${battle.playerId}!`);
 		} else if (battle.battleType === 'trainer') {
 			// Trainer opponent uses pivot move - auto switch to next available
 			const nextPokemon = battle.opponentParty.find(p => p.hp > 0 && p.id !== battle.opponentActivePokemon.id);
@@ -2617,6 +2623,11 @@ function handleDamagingMove(
 				battle.opponentChargingMove = undefined;
 				battle.opponentActiveTurns = 1;
 			}
+			// --- NEW ---
+			else {
+				messageLog.push(`But it failed! (No Pokémon to switch to!)`);
+			}
+			// --- END NEW ---
 		}
 	}
 
