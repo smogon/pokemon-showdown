@@ -5929,13 +5929,19 @@
         ]
     },
     "alcremie": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Acid Armor", "Alluring Voice", "Calm Mind", "Dazzling Gleam", "Recover"],
+                "movepool": ["Alluring Voice", "Calm Mind", "Psychic", "Psyshock", "Recover"],
                 "abilities": ["Aroma Veil"],
                 "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Alluring Voice", "Calm Mind", "Recover", "Tera Blast"],
+                "abilities": ["Aroma Veil"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
