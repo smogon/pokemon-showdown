@@ -1,20 +1,15 @@
+/*
+* Pokemon Showdown
+* TCG Admin Commands
+* @author PrinceSky-Git
+*/
 import type { TcgUser, TcgUserProfile } from './interface';
-import {
-	getSet,
-	initializeCache,
-	getCacheStats,
-	clearCache,
-	clearShopCache,
-	MAX_CARD_QUANTITY,
-	CREDITS_PER_DUPLICATE,
-} from './tcg_utils';
-import {
-	tcgCardsCollection,
-	userCollectionsCollection,
-	userProfilesCollection,
-	userPacksCollection,
-	cooldownsCollection,
-} from './tcg_collections';
+import { getSet, initializeCache, getCacheStats,
+	clearCache, clearShopCache, MAX_CARD_QUANTITY,
+	CREDITS_PER_DUPLICATE } from './tcg_utils';
+import { tcgCardsCollection, userCollectionsCollection,
+	userProfilesCollection, userPacksCollection,
+	cooldownsCollection } from './tcg_collections';
 
 export const adminCommands: ChatCommands = {
 	async awardcredits(target, room, user) {
