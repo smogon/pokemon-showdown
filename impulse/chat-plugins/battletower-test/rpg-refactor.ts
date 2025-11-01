@@ -3790,9 +3790,9 @@ function generateSingleBattleHTML(
 	`${generateFieldEffectHTML(battle)}` +
 	`<div style="display: flex; justify-content: space-around;">` +
 		// Player Pokemon
-		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot)}</div>` +
+		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot, true)}</div>` +
 		// Opponent Pokemon
-		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot)}</div>` +
+		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot, false)}</div>` +
 	`</div><hr />` +
 	// Message Log
 	`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
@@ -3822,6 +3822,7 @@ function generateStarterSelectionHTML(type: string): string {
 
 function generatePokemonInfoHTML(
 	slot: ActivePokemonSlot,
+	isPlayerSide: boolean,
 	showActions = false
 ): string {
 	const pokemon = slot.pokemon;
@@ -3830,11 +3831,18 @@ function generatePokemonInfoHTML(
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
-	const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
-	const expForNextLevel = pokemon.expToNextLevel;
-	const expProgress = pokemon.experience - expForLastLevel;
-	const expNeededForLevel = expForNextLevel - expForLastLevel;
-	const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+
+	// --- MODIFICATION: Only show EXP bar for player ---
+	let expBarHTML = '';
+	if (isPlayerSide) {
+		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+		const expForNextLevel = pokemon.expToNextLevel;
+		const expProgress = pokemon.experience - expForLastLevel;
+		const expNeededForLevel = expForNextLevel - expForLastLevel;
+		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+		expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+	}
+	// --- END MODIFICATION ---
 
 	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
@@ -3871,15 +3879,38 @@ function generatePokemonInfoHTML(
 		}
 	}
 
-	const movesDisplay = pokemon.moves.map(m => {
-		const moveData = Dex.moves.get(m.id);
-		return `${moveData.name} (${m.pp}/${moveData.pp})`;
-	}).slice(0, 4).join(', ') || 'None';
-	// --- UPDATE RENDER LINE ---
-	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>Nature: ${pokemon.nature}<br>Ability: ${pokemon.ability || 'Unknown'}<br>Moves: ${movesDisplay}`;
-	if (pokemon.item) {
-		html += `<br>Held Item: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}`;
+	// --- MODIFICATION: Conditional display ---
+	let movesDisplay = '';
+	let natureDisplay = '';
+	let abilityDisplay = '';
+	let itemDisplay = '';
+	let expDisplay = '';
+
+	if (isPlayerSide) {
+		movesDisplay = `Moves: ${pokemon.moves.map(m => {
+			const moveData = Dex.moves.get(m.id);
+			return `${moveData.name} (${m.pp}/${moveData.pp})`;
+		}).slice(0, 4).join(', ') || 'None'}`;
+		natureDisplay = `Nature: ${pokemon.nature}<br>`;
+		abilityDisplay = `Ability: ${pokemon.ability || 'Unknown'}<br>`;
+		if (pokemon.item) {
+			itemDisplay = `<br>Held Item: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}`;
+		}
+		expDisplay = `EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>`;
 	}
+	// --- END MODIFICATION ---
+
+	// --- UPDATE RENDER LINE ---
+	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	
+	// --- MODIFICATION: Add conditional elements ---
+	if (isPlayerSide) {
+		html += `${expBarHTML}${expDisplay}${natureDisplay}${abilityDisplay}${movesDisplay}`;
+	}
+	
+	html += itemDisplay; // This is already conditional
+	// --- END MODIFICATION ---
+
 	if (showActions) {
 		const itemButton = pokemon.item ?
 			`<button name="send" value="/rpg takeitem ${pokemon.id}" class="button" style="font-size: 12px;">Take Item</button>` :
@@ -3904,7 +3935,7 @@ function generateDoubleBattleHTML(
 			return `<div style="flex-basis: 48%; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 150px; text-align: center; color: #888;">(Empty Slot)</div>`;
 		}
 		if (slot.pokemon.hp <= 0) {
-			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot)}</div>`;
+			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
 		}
 		
 		let borderStyle = "1px solid #ccc";
@@ -3917,7 +3948,7 @@ function generateDoubleBattleHTML(
 			borderStyle = "3px solid #28a745"; // Green border for "Ready"
 		}
 
-		return `<div style="flex-basis: 48%; border: ${borderStyle};">${generatePokemonInfoHTML(slot)}</div>`;
+		return `<div style="flex-basis: 48%; border: ${borderStyle};">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
 	};
 
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
@@ -4509,7 +4540,7 @@ export const commands: ChatCommands = {
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 				
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 				
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
@@ -4571,7 +4602,7 @@ export const commands: ChatCommands = {
 				delete player.pendingMoveLearnQueue;
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			}
@@ -4673,7 +4704,7 @@ export const commands: ChatCommands = {
 						// --- FIX ---
 						// We must wrap the RPGPokemon in an ActivePokemonSlot
 						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(tempSlot, true)}</div>`;
+						partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
 						// --- END FIX ---
 					} else {
 						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
@@ -4732,7 +4763,7 @@ export const commands: ChatCommands = {
 				
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
@@ -4802,10 +4833,10 @@ export const commands: ChatCommands = {
 			player.party.push(pokemon);
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 			// --- END FIX ---
 		},
-
+		
 		shop(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
@@ -5415,7 +5446,6 @@ export const commands: ChatCommands = {
 				// Show target selection screen
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchTargetHTML(battle, ballId)}`);
 			},
-			// --- END NEW ---
 
 			catch(target, room, user) {
 				const battle = activeBattles.get(user.id);
@@ -5534,7 +5564,7 @@ export const commands: ChatCommands = {
 					// --- FIX: Use createActivePokemonSlot ---
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
 					const successHTML = `<div class="infobox">` + `${successMessage}` +
-						`${generatePokemonInfoHTML(tempSlot)}` +
+						`${generatePokemonInfoHTML(tempSlot, true)}` +
 						`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
 						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
 						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
@@ -5620,7 +5650,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
 		},
 
-		giveitem(target, room, user) {
+			giveitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const [pokemonId, itemId] = target.split(' ').map(toID);
@@ -5667,11 +5697,12 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
-		takeitem(target, room, user) {
+			
+		 takeitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const pokemonId = toID(target);
@@ -5697,12 +5728,12 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
-		nickname(target, room, user) {
+			nickname(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot change nicknames during a battle.");
 			}
@@ -5731,7 +5762,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
