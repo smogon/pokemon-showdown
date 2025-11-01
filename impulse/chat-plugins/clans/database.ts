@@ -1,6 +1,7 @@
 /*
 * Pokemon Showdown
-* Clans Database & types
+* Clans Database & Types
+* @author PrinceSky-Git
 */
 import { ImpulseDB } from '../../impulse-db';
 import type { Document } from 'mongodb';
