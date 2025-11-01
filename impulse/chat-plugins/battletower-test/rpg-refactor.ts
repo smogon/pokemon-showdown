@@ -4237,6 +4237,7 @@ export const commands: ChatCommands = {
 				
 				// --- Player Action ---
 				let playerMoveId = toID(target);
+				battle.playerMoveId = playerMoveId; // <-- THIS LINE IS NEW
 				let playerAction: 'charge' | 'unleash' | 'move' = 'move';
 
 				if (battle.playerChargingMove) {
@@ -4287,6 +4288,7 @@ export const commands: ChatCommands = {
 
 				// --- Opponent Action ---
 				let opponentMoveId = battle.opponentChargingMove || opponentPokemon.moves[Math.floor(Math.random() * opponentPokemon.moves.length)].id;
+				battle.opponentMoveId = opponentMoveId; // <-- THIS LINE IS NEW
 				let opponentAction: 'charge' | 'unleash' | 'move' = 'move';
 
 				if (battle.opponentChargingMove) {
@@ -4493,6 +4495,7 @@ export const commands: ChatCommands = {
 				battle.playerConfusionCounter = 0;
 				battle.playerActiveTurns = 1; // Reset turn counter
 				battle.turn++;
+				battle.playerMoveId = undefined; // <-- THIS LINE IS NEW
 
 				const playerColor = '#007bff';
 				const infoColor = '#dc3545';
@@ -4503,7 +4506,7 @@ export const commands: ChatCommands = {
 				if (faintedOnEntry) {
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${battle.activePokemon.species} fainted upon entry!</strong></span>`);
 				} else {
-					handleMirrorHerb(battle.activePokemon, battle, messageLog);
+					handleMirrorHerb(battle.activeTivePokemon, battle, messageLog);
 
 					const opponentMoveObject = battle.opponentActivePokemon.moves[Math.floor(Math.random() * battle.opponentActivePokemon.moves.length)];
 					const opponentMoveData = Dex.moves.get(opponentMoveObject.id);
@@ -4548,6 +4551,7 @@ export const commands: ChatCommands = {
 				}
 				
 				battle.turn++;
+				battle.playerMoveId = undefined; // <-- THIS LINE IS NEW
 
 				const player = getPlayerData(battle.playerId);
 				const ballId = toID(target);
