@@ -3364,6 +3364,37 @@ function getAccuracyEvasionMultiplier(stage: number): number {
 Core Functiins Ends
 *************""*"""" */
 
+// --- NEW GLOBAL CONSTANT AND HELPER FUNCTION ---
+
+const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+
+/**
+ * Creates a new ActivePokemonSlot object with default volatile statuses.
+ * @param pokemon The base RPGPokemon object.
+ * @returns A new ActivePokemonSlot object.
+ */
+function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
+	return {
+		pokemon,
+		statStages: { ...INITIAL_STAT_STAGES },
+		status: pokemon.status, // Carry over out-of-battle status
+		sleepCounter: 0,
+		isConfused: false,
+		confusionCounter: 0,
+		isProtected: false,
+		protectSuccessCounter: 0,
+		willFlinch: false,
+		isTrapped: null,
+		tauntTurns: 0,
+		isSeeded: false,
+		hasNightmare: false,
+		isCursed: false,
+		chargingMove: undefined,
+		activeTurns: 1,
+		lockedMove: undefined,
+	};
+}
+
 /**********************
 * HTML UI
 **********************/
@@ -4293,8 +4324,8 @@ export const commands: ChatCommands = {
 			}
 
 			const player = getPlayerData(user.id);
-			const firstPokemon = player.party.find(p => p.hp > 0);
-			if (!firstPokemon) {
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) {
 				return this.errorReply("All your Pokémon have fainted!");
 			}
 
@@ -4304,59 +4335,71 @@ export const commands: ChatCommands = {
 				return this.errorReply("This is not a valid area to explore. Use /rpg explore to see available areas.");
 			}
 
-			const wildSpeciesId = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
-			const [minLevel, maxLevel] = zone.levelRange;
-			const wildLevel = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+			const battleType = zone.battleType || 'single';
+			const battleMessages: string[] = [];
+			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			let finalBattleType: BattleState['battleType'] = 'wild';
 
 			try {
-				const wildPokemon = createPokemon(wildSpeciesId, wildLevel);
-				const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-				
+				// --- Player Pokemon ---
+				playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+
+				// --- Wild Pokemon ---
+				const wildSpecies1 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+				const [minLevel, maxLevel] = zone.levelRange;
+				const wildLevel1 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
+				opponentSlots[0] = createActivePokemonSlot(wildPokemon1);
+
+				if (battleType === 'double') {
+					finalBattleType = 'wild_double';
+					// Add second player Pokemon if available
+					if (activeParty[1]) {
+						playerSlots[1] = createActivePokemonSlot(activeParty[1]);
+					}
+
+					// Add second wild Pokemon
+					const wildSpecies2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
+					opponentSlots[1] = createActivePokemonSlot(wildPokemon2);
+					battleMessages.push(`A wild ${wildPokemon1.species} and ${wildPokemon2.species} appeared!`);
+				} else {
+					finalBattleType = 'wild';
+					battleMessages.push(`A wild ${wildPokemon1.species} appeared!`);
+				}
+
+				const opponentParty = [opponentSlots[0].pokemon];
+				if (opponentSlots[1]) opponentParty.push(opponentSlots[1].pokemon);
+
 				activeBattles.set(user.id, {
-					// --- New BattleState ---
+					// --- Battle Type Fields ---
+					battleType: finalBattleType,
+					opponentName: `Wild Pokémon`,
+					opponentParty: opponentParty,
+					opponentMoney: 0,
+					
+					// --- New Slot-Based Fields ---
+					playerSlots,
+					opponentSlots,
+					pendingActions: {},
+					
+					// --- Core BattleState Fields ---
 					playerId: user.id,
-					opponentActivePokemon: wildPokemon,
-					activePokemon: firstPokemon,
 					turn: 0,
 					zoneId,
 					playerHazards: [],
 					opponentHazards: [],
-					playerStatStages: { ...initialStages },
-					opponentStatStages: { ...initialStages },
-					playerStatus: firstPokemon.status,
-					opponentStatus: null,
-					playerSleepCounter: 0,
-					opponentSleepCounter: 0,
-					playerLockedMove: undefined,
-					opponentLockedMove: undefined,
-					playerIsConfused: false,
-					opponentIsConfused: false,
-					playerConfusionCounter: 0,
-					opponentConfusionCounter: 0,
 					weather: undefined,
-					playerProtectSuccessCounter: 0,
-					opponentProtectSuccessCounter: 0,
 					trickRoomTurns: 0,
 					magicRoomTurns: 0,
 					wonderRoomTurns: 0,
 					terrain: undefined,
-					playerIsProtected: false,
-					opponentIsProtected: false,
-					playerMoveId: undefined,
-					opponentMoveId: undefined,
-					playerWillFlinch: undefined,
-					opponentWillFlinch: undefined,
-					playerIsTrapped: null,
-					opponentIsTrapped: null,
-					playerTauntTurns: 0,
-					opponentTauntTurns: 0,
-					playerIsSeeded: false,
-					opponentIsSeeded: false,
-					playerIsCursed: false,
-					opponentIsCursed: false,
-					playerHasNightmare: false,
-					opponentHasNightmare: false,
+					playerShouldSwitch: false,
 					forceEnd: false,
+
+					// --- Side-Wide Fields ---
 					playerQuickGuard: false,
 					opponentQuickGuard: false,
 					playerWideGuard: false,
@@ -4369,33 +4412,24 @@ export const commands: ChatCommands = {
 					opponentLightScreenTurns: 0,
 					playerAuroraVeilTurns: 0,
 					opponentAuroraVeilTurns: 0,
-					playerActiveTurns: 1,
-					opponentActiveTurns: 1,
 					gravityTurns: 0,
 					mudSportTurns: 0,
 					waterSportTurns: 0,
-
-					// --- Battle Type Fields ---
-					battleType: 'wild',
-					opponentName: `Wild ${wildPokemon.species}`,
-					opponentParty: [wildPokemon], // Wild Pokémon party just contains itself
-					opponentMoney: 0,
 				});
 
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, [`A wild ${wildPokemon.species} appeared!`])}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
 		},
-		
-		// --- NEW COMMAND ---
+
 		challenge(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You are already in a battle!");
 			}
 			const player = getPlayerData(user.id);
-			const firstPokemon = player.party.find(p => p.hp > 0);
-			if (!firstPokemon) {
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) {
 				return this.errorReply("You must heal your Pokémon before challenging a trainer!");
 			}
 
@@ -4421,54 +4455,62 @@ export const commands: ChatCommands = {
 				trainerParty.push(pokemon);
 			}
 
-			const firstOpponentPokemon = trainerParty[0];
-			const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+			if (trainerParty.length === 0) {
+				return this.errorReply("This trainer has no Pokémon!");
+			}
+
+			const battleType = trainerSpec.battleType || 'single';
+			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			let finalBattleType: BattleState['battleType'] = 'trainer';
+
+			// --- Player Pokemon ---
+			playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+
+			// --- Opponent Pokemon ---
+			opponentSlots[0] = createActivePokemonSlot(trainerParty[0]);
+			
+			if (battleType === 'double') {
+				finalBattleType = 'trainer_double';
+				// Add second player Pokemon if available
+				if (activeParty[1]) {
+					playerSlots[1] = createActivePokemonSlot(activeParty[1]);
+				}
+				// Add second opponent Pokemon if available
+				if (trainerParty[1]) {
+					opponentSlots[1] = createActivePokemonSlot(trainerParty[1]);
+				}
+			} else {
+				finalBattleType = 'trainer';
+			}
 			
 			activeBattles.set(user.id, {
-				// --- Standard BattleState ---
+				// --- Battle Type Fields ---
+				battleType: finalBattleType,
+				opponentName: trainerSpec.name,
+				opponentParty: trainerParty, // The full party
+				opponentMoney: trainerSpec.money,
+
+				// --- New Slot-Based Fields ---
+				playerSlots,
+				opponentSlots,
+				pendingActions: {},
+
+				// --- Core BattleState Fields ---
 				playerId: user.id,
-				opponentActivePokemon: firstOpponentPokemon,
-				activePokemon: firstPokemon,
 				turn: 0,
 				zoneId: 'trainer_battle', // Or any identifier
 				playerHazards: [],
 				opponentHazards: [],
-				playerStatStages: { ...initialStages },
-				opponentStatStages: { ...initialStages },
-				playerStatus: firstPokemon.status,
-				opponentStatus: firstOpponentPokemon.status,
-				playerSleepCounter: 0,
-				opponentSleepCounter: 0,
-				playerLockedMove: undefined,
-				opponentLockedMove: undefined,
-				playerIsConfused: false,
-				opponentIsConfused: false,
-				playerConfusionCounter: 0,
-				opponentConfusionCounter: 0,
 				weather: undefined,
-				playerProtectSuccessCounter: 0,
-				opponentProtectSuccessCounter: 0,
 				trickRoomTurns: 0,
 				magicRoomTurns: 0,
 				wonderRoomTurns: 0,
 				terrain: undefined,
-				playerIsProtected: false,
-				opponentIsProtected: false,
-				playerMoveId: undefined,
-				opponentMoveId: undefined,
-				playerWillFlinch: undefined,
-				opponentWillFlinch: undefined,
-				playerIsTrapped: null,
-				opponentIsTrapped: null,
-				playerTauntTurns: 0,
-				opponentTauntTurns: 0,
-				playerIsSeeded: false,
-				opponentIsSeeded: false,
-				playerIsCursed: false,
-				opponentIsCursed: false,
-				playerHasNightmare: false,
-				opponentHasNightmare: false,
+				playerShouldSwitch: false,
 				forceEnd: false,
+
+				// --- Side-Wide Fields ---
 				playerQuickGuard: false,
 				opponentQuickGuard: false,
 				playerWideGuard: false,
@@ -4481,17 +4523,9 @@ export const commands: ChatCommands = {
 				opponentLightScreenTurns: 0,
 				playerAuroraVeilTurns: 0,
 				opponentAuroraVeilTurns: 0,
-				playerActiveTurns: 1,
-				opponentActiveTurns: 1,
 				gravityTurns: 0,
 				mudSportTurns: 0,
 				waterSportTurns: 0,
-				
-				// --- Battle Type Fields ---
-				battleType: 'trainer',
-				opponentName: trainerSpec.name,
-				opponentParty: trainerParty,
-				opponentMoney: trainerSpec.money,
 			});
 
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
