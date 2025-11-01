@@ -2115,6 +2115,65 @@ function handleStatusMove(
 		}
 	}
 
+	// --- NEW BLOCK ---
+	// Handle self-switching status moves (Baton Pass, Teleport)
+	if (move.selfSwitch) { // This covers `true` and `'copyvolatile'`
+		const isPlayerAttacker = attacker.id === battle.activePokemon.id;
+		
+		if (isPlayerAttacker) {
+			// Check if player has any other Pokemon to switch to
+			const player = getPlayerData(battle.playerId);
+			if (player.party.some(p => p.hp > 0 && p.id !== attacker.id)) {
+				battle.playerShouldSwitch = move.selfSwitch; // `true` or `'copyvolatile'`
+				messageLog.push(`${attacker.species} is preparing to switch out!`);
+				hadEffect = true;
+			} else {
+				// No Pokemon to switch to, move fails
+				messageLog.push(`But it failed!`);
+			}
+		} else { // Opponent is attacker
+			if (battle.battleType === 'trainer') {
+				// Check if trainer has other Pokemon
+				const nextPokemon = battle.opponentParty.find(p => p.hp > 0 && p.id !== battle.opponentActivePokemon.id);
+				if (nextPokemon) {
+					messageLog.push(`${battle.opponentName} withdrew ${battle.opponentActivePokemon.species} and sent out ${nextPokemon.species}!`);
+					battle.opponentActivePokemon = nextPokemon;
+					// Reset opponent's volatile statuses
+					const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+					
+					// Baton Pass - preserve stat boosts
+					if (move.selfSwitch !== 'copyvolatile') {
+						battle.opponentStatStages = { ...initialStages };
+					}
+					// Other volatile statuses always reset
+					battle.opponentStatus = nextPokemon.status;
+					battle.opponentSleepCounter = 0;
+					battle.opponentLockedMove = undefined;
+					battle.opponentIsConfused = false;
+					battle.opponentConfusionCounter = 0;
+					battle.opponentProtectSuccessCounter = 0;
+					battle.opponentIsProtected = false;
+					battle.opponentWillFlinch = false;
+					battle.opponentIsTrapped = null;
+					battle.opponentTauntTurns = 0;
+					battle.opponentIsSeeded = false;
+					battle.opponentHasNightmare = false;
+					battle.opponentIsCursed = false;
+					battle.opponentChargingMove = undefined;
+					battle.opponentActiveTurns = 1;
+					hadEffect = true;
+				} else {
+					messageLog.push(`But it failed!`);
+				}
+			} else { // Wild Pokemon
+				messageLog.push(`But it failed!`); // Wild Pokemon can't switch
+			}
+		}
+		// We return here because 'hadEffect' is set (or it failed)
+		return;
+	}
+	// --- END NEW BLOCK ---
+
 	if (!hadEffect) {
 		messageLog.push(`But it failed!`);
 	}
@@ -4705,19 +4764,40 @@ export const commands: ChatCommands = {
 				const outgoingPokemon = battle.activePokemon; 
 				// --- END NEW ---
 
+				// --- NEW: Baton Pass logic ---
+				const isBatonPass = battle.playerShouldSwitch === 'copyvolatile';
+				// --- END NEW ---
+
 				battle.activePokemon = nextPokemon;
 				battle.playerStatus = nextPokemon.status;
-				battle.playerStatStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+
+				// --- MODIFIED: Handle Baton Pass stat preservation ---
+				if (!isBatonPass) {
+					// Reset stats if not Baton Pass
+					battle.playerStatStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+				}
+				// (If it *is* Baton Pass, we simply do *not* reset playerStatStages)
+				// --- END MODIFIED ---
+				
+				// These are always reset
 				battle.playerLockedMove = undefined;
 				battle.playerIsConfused = false;
 				battle.playerConfusionCounter = 0;
 				battle.playerWillFlinch = false;
 				battle.playerActiveTurns = 1; // Reset turn counter
 
+				// --- NEW: Clear the switch flag ---
+				battle.playerShouldSwitch = false;
+				// --- END NEW ---
+
 				const playerColor = '#007bff';
 				const infoColor = '#dc3545';
 
 				const messageLog = [`<span style="color: ${playerColor};">You sent out ${nextPokemon.species}!</span>`];
+				if (isBatonPass) {
+					messageLog.push(`${nextPokemon.species} received the stat changes!`);
+				}
+				
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(battle.activePokemon, battle, true, messageLog);
 
 				let expWasGained = false;
