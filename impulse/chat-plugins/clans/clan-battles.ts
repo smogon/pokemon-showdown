@@ -113,7 +113,7 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 			if (loserRoom) {
-				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update(10000);
+				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update(-10000);
 			}
 			if (lobbyRoom) {
 				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
