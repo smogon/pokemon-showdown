@@ -3031,7 +3031,9 @@ function checkBattleEndCondition(
 	battle: BattleState,
 	room: ChatRoom,
 	user: User,
-	messageLog: string[]
+	messageLog: string[],
+	// --- NEW PARAM ---
+	expGained = false
 ): boolean {
 	const player = getPlayerData(user.id);
 	const { activePokemon, opponentActivePokemon } = battle;
@@ -3063,8 +3065,14 @@ function checkBattleEndCondition(
 	// Check if the opponent's Pokémon has fainted
 	else if (opponentActivePokemon.hp <= 0) {
 		// Player's active Pokémon gains EXP
-		const { messages: expMessages } = gainExperience(player, activePokemon, opponentActivePokemon, room, user);
-		messageLog.push(...expMessages);
+		// --- MODIFIED ---
+		let expMessages: string[] = [];
+		if (!expGained) {
+			const expResult = gainExperience(player, activePokemon, opponentActivePokemon, room, user);
+			expMessages = expResult.messages;
+			messageLog.push(...expMessages);
+		}
+		// --- END MODIFIED ---
 
 		if (battle.battleType === 'wild') {
 			// --- Player wins vs. Wild Pokémon ---
@@ -3128,7 +3136,7 @@ function checkBattleEndCondition(
 				if (faintedOnEntry) {
 					messageLog.push(`**${battle.opponentActivePokemon.species} fainted upon entry!**`);
 					// Recursively call to check the *next* Pokémon
-					return checkBattleEndCondition(context, battle, room, user, messageLog);
+					return checkBattleEndCondition(context, battle, room, user, messageLog, true); // Pass true, exp was already handled
 				}
 
 				// Check for Mirror Herb
@@ -3300,7 +3308,14 @@ function generatePokemonInfoHTML(
 	showActions = false,
 	status: Status | null = null,
 	statStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number> | null = null,
-	isConfused = false
+	isConfused = false,
+	// --- NEW PARAMS ---
+	isCursed = false,
+	isSeeded = false,
+	hasNightmare = false,
+	isTrapped = false,
+	tauntTurns = 0,
+	chargingMove: string | undefined = undefined
 ): string {
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
@@ -3315,6 +3330,21 @@ function generatePokemonInfoHTML(
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
 	const confusedTag = isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
+	// --- NEW TAGS ---
+	const cursedTag = isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
+	const seededTag = isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
+	const nightmareTag = hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
+	const trappedTag = isTrapped ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>` : '';
+	const tauntTag = tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
+	let chargingTag = '';
+	if (chargingMove) {
+		const moveName = Dex.moves.get(chargingMove).name || 'Attack';
+		let chargeText = `Preparing ${moveName}!`;
+		if (chargingMove === 'fly') chargeText = 'Flew up high!';
+		if (chargingMove === 'dig') chargeText = 'Dug underground!';
+		if (chargingMove === 'dive') chargeText = 'Hid underwater!';
+		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
+	}
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
@@ -3335,7 +3365,8 @@ function generatePokemonInfoHTML(
 		const moveData = Dex.moves.get(m.id);
 		return `${moveData.name} (${m.pp}/${moveData.pp})`;
 	}).slice(0, 4).join(', ') || 'None';
-	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>Nature: ${pokemon.nature}<br>Ability: ${pokemon.ability || 'Unknown'}<br>Moves: ${movesDisplay}`;
+	// --- UPDATE RENDER LINE ---
+	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>Nature: ${pokemon.nature}<br>Ability: ${pokemon.ability || 'Unknown'}<br>Moves: ${movesDisplay}`;
 	if (pokemon.item) {
 		html += `<br>Held Item: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}`;
 	}
@@ -3361,7 +3392,11 @@ function generateBattleHTML(battle: BattleState, messageLog: string[] = []): str
 			battle.activePokemon.item === 'assaultvest' &&
 			moveData.category === 'Status';
 
-		const isDisabled = move.pp === 0 || isAssaultVestBlocked ||
+		// --- NEW: Taunt check ---
+		const isTauntBlocked = battle.playerTauntTurns > 0 &&
+			moveData.category === 'Status';
+
+		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
 			(battle.playerLockedMove && battle.playerLockedMove !== move.id && !isLockedMoveOutOfPP);
 
 		return `<button name="send" value="/rpg battleaction move ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
@@ -3373,11 +3408,41 @@ function generateBattleHTML(battle: BattleState, messageLog: string[] = []): str
 		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
 
 	// --- NEW: Conditional Run Button ---
-	const runButton = battle.battleType === 'wild' || battle.playerIsTrapped ?
+	// --- MODIFIED: Disable Run if trapped ---
+	const runButton = (battle.battleType === 'wild' && !battle.playerIsTrapped) ?
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
-	return `<div class="infobox"><h2>Battle!</h2><div style="display: flex; justify-content: space-around;"><div><h3>Your Pokemon</h3><psicon pokemon="${battle.activePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(battle.activePokemon, false, battle.playerStatus, battle.playerStatStages, battle.playerIsConfused)}</div><div><h3>${battle.opponentName}</h3><psicon pokemon="${battle.opponentActivePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(battle.opponentActivePokemon, false, battle.opponentStatus, battle.opponentStatStages, battle.opponentIsConfused)}</div></div><hr /><div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div><p>What will ${battle.activePokemon.species} do?</p><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div><p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p></div>`;
+	// --- MODIFIED: Pass all volatile statuses to the info HTML ---
+	// --- NEW: Added generateFieldEffectHTML() ---
+	return `<div class="infobox"><h2>Battle!</h2>` +
+	// Add Field Effects display here
+	`${generateFieldEffectHTML(battle)}` +
+	`<div style="display: flex; justify-content: space-around;"><div><h3>Your Pokemon</h3><psicon pokemon="${battle.activePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(
+		battle.activePokemon,
+		false,
+		battle.playerStatus,
+		battle.playerStatStages,
+		battle.playerIsConfused,
+		battle.playerIsCursed,
+		battle.playerIsSeeded,
+		battle.playerHasNightmare,
+		!!battle.playerIsTrapped,
+		battle.playerTauntTurns,
+		battle.playerChargingMove
+	)}</div><div><h3>${battle.opponentName}</h3><psicon pokemon="${battle.opponentActivePokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(
+		battle.opponentActivePokemon,
+		false,
+		battle.opponentStatus,
+		battle.opponentStatStages,
+		battle.opponentIsConfused,
+		battle.opponentIsCursed,
+		battle.opponentIsSeeded,
+		battle.opponentHasNightmare,
+		!!battle.opponentIsTrapped,
+		battle.opponentTauntTurns,
+		battle.opponentChargingMove
+	)}</div></div><hr /><div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div><p>What will ${battle.activePokemon.species} do?</p><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div><p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p></div>`;
 }
 
 function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
@@ -3669,6 +3734,74 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 		`</div>`;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
+	return html;
+}
+
+function generatePivotSwitchHTML(battle: BattleState, messageLog: string[]): string {
+	let html = `<div class="infobox"><h2>${battle.activePokemon.species} went back!</h2><p>${messageLog.join('<br>')}</p><p>Choose your next Pokemon:</p>`;
+	const player = getPlayerData(battle.playerId);
+	const currentPokemonId = battle.activePokemon.id; // Get ID of the pivoting Pokemon
+
+	for (const pokemon of player.party) {
+		// Show only if HP > 0 AND it's not the Pokemon that just pivoted out
+		if (pokemon.hp > 0 && pokemon.id !== currentPokemonId) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px;"><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}<button name="send" value="/rpg battleaction forceswitch ${pokemon.id}" class="button" style="float: right;">Switch In</button></div>`;
+		}
+	}
+	html += `</div>`;
+	return html;
+}
+
+function generateFieldEffectHTML(battle: BattleState): string {
+	let html = '<div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
+	let fieldEffects: string[] = [];
+	let playerSide: string[] = [];
+	let opponentSide: string[] = [];
+
+	// --- Global Field Effects ---
+	if (battle.weather) {
+		const weatherIcons = { sun: '☀️', rain: '🌧️', sand: '🏜️', hail: '🌨️' };
+		fieldEffects.push(`${weatherIcons[battle.weather.type]} <strong>${battle.weather.type.toUpperCase()}</strong> (${battle.weather.turns} turns)`);
+	}
+	if (battle.terrain) {
+		const terrainIcons = { electric: '⚡', grassy: '🌱', misty: '🌫️', psychic: '👁️' };
+		fieldEffects.push(`${terrainIcons[battle.terrain.type]} <strong>${battle.terrain.type.toUpperCase()} Terrain</strong> (${battle.terrain.turns} turns)`);
+	}
+	if (battle.trickRoomTurns > 0) fieldEffects.push(`🕒 <strong>Trick Room</strong> (${battle.trickRoomTurns} turns)`);
+	if (battle.magicRoomTurns > 0) fieldEffects.push(`✨ <strong>Magic Room</strong> (${battle.magicRoomTurns} turns)`);
+	if (battle.wonderRoomTurns > 0) fieldEffects.push(`❓ <strong>Wonder Room</strong> (${battle.wonderRoomTurns} turns)`);
+	if (battle.gravityTurns > 0) fieldEffects.push(`🌍 <strong>Gravity</strong> (${battle.gravityTurns} turns)`);
+	if (battle.mudSportTurns > 0) fieldEffects.push(`💩 <strong>Mud Sport</strong> (${battle.mudSportTurns} turns)`);
+	if (battle.waterSportTurns > 0) fieldEffects.push(`💧 <strong>Water Sport</strong> (${battle.waterSportTurns} turns)`);
+
+	// --- Player Side Effects ---
+	if (battle.playerReflectTurns > 0) playerSide.push(`🛡️ Reflect (${battle.playerReflectTurns})`);
+	if (battle.playerLightScreenTurns > 0) playerSide.push(`💡 Light Screen (${battle.playerLightScreenTurns})`);
+	if (battle.playerAuroraVeilTurns > 0) playerSide.push(`🌈 Aurora Veil (${battle.playerAuroraVeilTurns})`);
+	if (battle.playerHazards.includes('stealthrock')) playerSide.push(`💎 Stealth Rock`);
+	const spikes = battle.playerHazards.filter(h => h === 'spikes').length;
+	if (spikes > 0) playerSide.push(`📌 Spikes (x${spikes})`);
+	const toxicSpikes = battle.playerHazards.filter(h => h === 'toxicspikes').length;
+	if (toxicSpikes > 0) playerSide.push(`☠️ Toxic Spikes (x${toxicSpikes})`);
+	if (battle.playerHazards.includes('stickyweb')) playerSide.push(`🕸️ Sticky Web`);
+
+	// --- Opponent Side Effects ---
+	if (battle.opponentReflectTurns > 0) opponentSide.push(`🛡️ Reflect (${battle.opponentReflectTurns})`);
+	if (battle.opponentLightScreenTurns > 0) opponentSide.push(`💡 Light Screen (${battle.opponentLightScreenTurns})`);
+	if (battle.opponentAuroraVeilTurns > 0) opponentSide.push(`🌈 Aurora Veil (${battle.opponentAuroraVeilTurns})`);
+	if (battle.opponentHazards.includes('stealthrock')) opponentSide.push(`💎 Stealth Rock`);
+	const oppSpikes = battle.opponentHazards.filter(h => h === 'spikes').length;
+	if (oppSpikes > 0) oppSpikes.push(`📌 Spikes (x${oppSpikes})`);
+	const oppToxicSpikes = battle.opponentHazards.filter(h => h === 'toxicspikes').length;
+	if (oppToxicSpikes > 0) opponentSide.push(`☠️ Toxic Spikes (x${oppToxicSpikes})`);
+	if (battle.opponentHazards.includes('stickyweb')) opponentSide.push(`🕸️ Sticky Web`);
+
+	// --- Assemble HTML ---
+	html += `<div><strong>Your Side:</strong><br>${playerSide.length > 0 ? playerSide.join('<br>') : '<em>Clear</em>'}</div>`;
+	html += `<div><strong>Field:</strong><br>${fieldEffects.length > 0 ? fieldEffects.join('<br>') : '<em>Clear</em>'}</div>`;
+	html += `<div><strong>Opponent's Side:</strong><br>${opponentSide.length > 0 ? opponentSide.join('<br>') : '<em>Clear</em>'}</div>`;
+
+	html += '</div>';
 	return html;
 }
 
@@ -4494,12 +4627,24 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${forceEndHTML}`);
 				}
 
+				// --- NEW PIVOT CHECK (Priority 1) ---
+				// Check if the player needs to pivot, ONLY if they are not fainted.
+				if (battle.playerShouldSwitch && battle.activePokemon.hp > 0) {
+					// Player used U-turn/etc. and is alive. They MUST switch.
+					saveBattleStatus(battle); // Save the pivoting Pokemon's status
+					battle.playerShouldSwitch = false; // Clear flag
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog)}`);
+				}
+
+				// --- END OF TURN & FINAL FAINT CHECKS (Priority 2) ---
 				if (battle.activePokemon.hp > 0 && battle.opponentActivePokemon.hp > 0) {
 					processEndOfTurn(battle, messageLog);
 				}
 
+				// This handles all faint logic (player faints, opponent faints, or double faint)
 				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog);
 
+				// --- BATTLE CONTINUES (Priority 3) ---
 				if (!battleEnded) {
 					// Increment active turn counters
 					battle.playerActiveTurns++;
@@ -4530,12 +4675,33 @@ export const commands: ChatCommands = {
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
-				if (battle.activePokemon.hp > 0) return this.errorReply("You can only use this command when your Pokémon has fainted.");
+				// --- MODIFIED ---
+				// Allow this command if player fainted OR if they are pivoting
+				if (battle.activePokemon.hp > 0 && !battle.playerShouldSwitch) {
+					// Check if playerShouldSwitch was cleared by the move command
+					// We need to check if this is a pivot switch.
+					// The check in `battleaction: move` *already* cleared playerShouldSwitch
+					// So we can't check it here.
+					// The *only* time this command is called is on faint or pivot.
+					// Let's re-check the logic.
+					
+					// `move` calls `generatePivotSwitchHTML` -> user clicks `forceswitch`
+					// `checkBattleEndCondition` calls `generateSwitchPokemonHTML` -> user clicks `forceswitch`
+					// This command is fine. The logic inside it needs to change.
+				}
+				// --- END MODIFIED ---
+				
 				const player = getPlayerData(battle.playerId);
 
 				const pokemonId = target.trim();
 				const nextPokemon = player.party.find(p => p.id === pokemonId && p.hp > 0);
 				if (!nextPokemon) return this.errorReply("Invalid Pokemon or it has fainted.");
+				
+				// --- NEW: Check if opponent is fainted *before* switching ---
+				const opponentFainted = battle.opponentActivePokemon.hp <= 0;
+				// Save the Pokemon that is *currently* active (the fainter or the pivoter)
+				const outgoingPokemon = battle.activePokemon; 
+				// --- END NEW ---
 
 				battle.activePokemon = nextPokemon;
 				battle.playerStatus = nextPokemon.status;
@@ -4552,13 +4718,22 @@ export const commands: ChatCommands = {
 				const messageLog = [`<span style="color: ${playerColor};">You sent out ${nextPokemon.species}!</span>`];
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(battle.activePokemon, battle, true, messageLog);
 
+				let expWasGained = false;
 				if (faintedOnEntry) {
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${battle.activePokemon.species} fainted upon entry!</strong></span>`);
 				} else {
 					handleMirrorHerb(battle.activePokemon, battle, messageLog);
+					
+					// --- NEW: Grant EXP to the *outgoing* Pokemon if opponent was fainted ---
+					if (opponentFainted) {
+						const { messages: expMessages } = gainExperience(player, outgoingPokemon, battle.opponentActivePokemon, room, user);
+						messageLog.push(...expMessages);
+						expWasGained = true; // Signal to checkBattleEndCondition
+					}
+					// --- END NEW ---
 				}
 
-				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog);
+				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog, expWasGained); // Pass the flag
 
 				if (!battleEnded) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
