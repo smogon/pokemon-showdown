@@ -4548,7 +4548,11 @@ export const commands: ChatCommands = {
 			} else {
 				for (let i = 0; i < 6; i++) {
 					if (player.party[i]) {
-						partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(player.party[i], true)}</div>`;
+						// --- FIX ---
+						// We must wrap the RPGPokemon in an ActivePokemonSlot
+						const tempSlot = createActivePokemonSlot(player.party[i]);
+						partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(tempSlot, true)}</div>`;
+						// --- END FIX ---
 					} else {
 						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
 					}
