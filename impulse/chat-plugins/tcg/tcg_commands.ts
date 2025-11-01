@@ -1,23 +1,18 @@
+/*
+* Pokemon Showdown
+* TCG Core Commands
+* @author PrinceSky-Git
+*/
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
-import {
-	generatePack,
-	getCard,
-	getSet,
-	getCacheStats,
-	renderCardGridHtml,
-	addCardsToCollection,
-} from './tcg_utils';
+import { generatePack, getCard, getSet, getCacheStats,
+	renderCardGridHtml, addCardsToCollection } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
 import { tradeCommands } from './tcg_trade_cmds';
-import {
-	tcgCardsCollection,
-	userProfilesCollection,
-	userPacksCollection,
-	cooldownsCollection,
-} from './tcg_collections';
+import { tcgCardsCollection, userProfilesCollection,
+	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 40;
 
