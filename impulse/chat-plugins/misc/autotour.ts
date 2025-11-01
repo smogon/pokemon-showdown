@@ -1,6 +1,7 @@
 /*
 * Pokemon Showdown
 * Auto Tournaments Commands
+* @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
