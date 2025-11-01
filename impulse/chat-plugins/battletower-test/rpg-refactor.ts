@@ -46,6 +46,28 @@ interface InventoryItem {
 	quantity: number;
 }
 
+// NEW INTERFACE for Double Battles
+// Holds a Pokemon and all its volatile, in-battle statuses
+interface ActivePokemonSlot {
+	pokemon: RPGPokemon;
+	statStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>;
+	status: Status | null;
+	sleepCounter: number;
+	isConfused: boolean;
+	confusionCounter: number;
+	isProtected: boolean;
+	protectSuccessCounter: number;
+	willFlinch: boolean;
+	isTrapped: { turns: number } | null;
+	tauntTurns: number;
+	isSeeded: boolean;
+	hasNightmare: boolean;
+	isCursed: boolean;
+	chargingMove?: string;
+	activeTurns: number;
+	lockedMove?: string;
+}
+
 // Interface for player data
 interface PlayerData {
 	id: string;
@@ -70,30 +92,15 @@ type Status = 'psn' | 'brn' | 'par' | 'slp' | 'frz';
 // Interface for battle state
 interface BattleState {
 	playerId: string;
-	opponentActivePokemon: RPGPokemon; // RENAMED
-	activePokemon: RPGPokemon;
 	turn: number;
 	zoneId: string; // Still useful for tracking location / return point
 	playerHazards: string[];
 	opponentHazards: string[];
-	playerStatStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>;
-	opponentStatStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>; // RENAMED
-	playerStatus: Status | null;
-	opponentStatus: Status | null;
-	playerSleepCounter: number;
-	opponentSleepCounter: number;
-	playerLockedMove?: string;
-	opponentLockedMove?: string;
-	playerIsConfused?: boolean;
-	opponentIsConfused?: boolean;
-	playerConfusionCounter: number;
-	opponentConfusionCounter: number;
+
 	weather?: {
 		type: 'sun' | 'rain' | 'sand' | 'hail',
 		turns: number,
 	};
-	playerProtectSuccessCounter: number;
-	opponentProtectSuccessCounter: number;
 	trickRoomTurns: number;
 	magicRoomTurns: number;
 	wonderRoomTurns: number;
@@ -101,26 +108,8 @@ interface BattleState {
 		type: 'electric' | 'grassy' | 'misty' | 'psychic',
 		turns: number,
 	};
-	// New properties for the unified executeMove function
-	playerIsProtected: boolean;
-	opponentIsProtected: boolean;
-	playerMoveId?: string;
-	opponentMoveId?: string;
-	playerWillFlinch?: boolean;
-	opponentWillFlinch?: boolean;
-	playerIsTrapped: { turns: number } | null;
-	opponentIsTrapped: { turns: number } | null;
-	playerTauntTurns: number;
-	opponentTauntTurns: number;
-	playerIsSeeded: boolean;
-	opponentIsSeeded: boolean;
-	playerHasNightmare: boolean;
-	opponentHasNightmare: boolean;
-	playerIsCursed: boolean;
-	opponentIsCursed: boolean;
-	forceEnd?: boolean;
-	playerChargingMove?: string;
-	opponentChargingMove?: string;
+
+	// --- Fields for side-wide guards ---
 	playerQuickGuard: boolean;
 	opponentQuickGuard: boolean;
 	playerWideGuard: boolean;
@@ -133,19 +122,33 @@ interface BattleState {
 	opponentLightScreenTurns: number;
 	playerAuroraVeilTurns: number;
 	opponentAuroraVeilTurns: number;
-	playerActiveTurns: number;
-	opponentActiveTurns: number;
-	// New fields for Gravity, Mud Sport, and Water Sport
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;
 
+	forceEnd?: boolean;
+
 	// --- NEW FIELDS FOR TRAINER BATTLES ---
-	battleType: 'wild' | 'trainer';
+	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double';
 	opponentName: string; // e.g., "Wild Pikachu" or "Rival"
 	opponentParty: RPGPokemon[];
 	opponentMoney: number; // Money to win (0 for wild)
 	playerShouldSwitch?: boolean | 'copyvolatile'; // For U-turn/Volt Switch (true) or Baton Pass ('copyvolatile')
+
+	// --- NEW FIELDS FOR DOUBLE BATTLES ---
+	playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
+	opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
+
+	// New field to store player/AI commands before the turn executes
+	pendingActions: {
+		[slotIndex: number]: { // 0, 1 for player; 2, 3 for opponent
+			actionType: 'move' | 'switch';
+			moveId?: string;
+			targetSlot?: number; // 0-3
+			switchToPokemonId?: string;
+			pokemonId: string; // To track who is acting
+		} | null
+	};
 }
 
 // In-memory storage for player data (in production, use a database)
@@ -266,16 +269,24 @@ const STARTER_POKEMON = {
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy', 'chespin', 'rowlet', 'grookey', 'sprigatito'],
 };
 
-const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number] }> = {
+const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
 	'startertown_grass': {
 		name: 'Tall Grass',
 		pokemon: ['pidgey', 'rattata', 'caterpie', 'weedle'],
 		levelRange: [5, 7],
+		battleType: 'single',
 	},
 	'startertown_pond': {
 		name: 'Pond',
-		pokemon: ['magikarp', 'poliwag'],
-		levelRange: [9, 11],
+		pokemon: ['magikarp', 'feebas'],
+		levelRange: [9, 20],
+		battleType: 'single',
+	},
+	'startertown_doubles_grass': {
+		name: 'Shaking Grass',
+		pokemon: ['pidgey', 'rattata', 'nidoranf', 'nidoranm'],
+		levelRange: [6, 8],
+		battleType: 'double',
 	},
 	// 'route2_grass': {
 	// 	name: 'Route 2 Tall Grass',
@@ -424,6 +435,7 @@ interface TrainerSpec {
 		win: string; // Dialogue if player wins
 		lose: string; // Dialogue if opponent wins
 	};
+	battleType?: 'single' | 'double'; // <-- NEW FIELD
 }
 
 // Database for all trainers
