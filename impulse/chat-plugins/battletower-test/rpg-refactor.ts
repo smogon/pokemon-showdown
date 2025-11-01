@@ -75,25 +75,25 @@ interface BattleState {
 	turn: number;
 	zoneId: string; // Still useful for tracking location / return point
 	playerHazards: string[];
-	opponentHazards: string[]; // RENAMED
+	opponentHazards: string[];
 	playerStatStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>;
 	opponentStatStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>; // RENAMED
 	playerStatus: Status | null;
-	opponentStatus: Status | null; // RENAMED
+	opponentStatus: Status | null;
 	playerSleepCounter: number;
-	opponentSleepCounter: number; // RENAMED
+	opponentSleepCounter: number;
 	playerLockedMove?: string;
-	opponentLockedMove?: string; // RENAMED
+	opponentLockedMove?: string;
 	playerIsConfused?: boolean;
-	opponentIsConfused?: boolean; // RENAMED
+	opponentIsConfused?: boolean;
 	playerConfusionCounter: number;
-	opponentConfusionCounter: number; // RENAMED
+	opponentConfusionCounter: number;
 	weather?: {
 		type: 'sun' | 'rain' | 'sand' | 'hail',
 		turns: number,
 	};
 	playerProtectSuccessCounter: number;
-	opponentProtectSuccessCounter: number; // RENAMED
+	opponentProtectSuccessCounter: number;
 	trickRoomTurns: number;
 	magicRoomTurns: number;
 	wonderRoomTurns: number;
@@ -103,38 +103,38 @@ interface BattleState {
 	};
 	// New properties for the unified executeMove function
 	playerIsProtected: boolean;
-	opponentIsProtected: boolean; // RENAMED
+	opponentIsProtected: boolean;
 	playerMoveId?: string;
-	opponentMoveId?: string; // RENAMED
+	opponentMoveId?: string;
 	playerWillFlinch?: boolean;
-	opponentWillFlinch?: boolean; // RENAMED
+	opponentWillFlinch?: boolean;
 	playerIsTrapped: { turns: number } | null;
-	opponentIsTrapped: { turns: number } | null; // RENAMED
+	opponentIsTrapped: { turns: number } | null;
 	playerTauntTurns: number;
-	opponentTauntTurns: number; // RENAMED
+	opponentTauntTurns: number;
 	playerIsSeeded: boolean;
-	opponentIsSeeded: boolean; // RENAMED
+	opponentIsSeeded: boolean;
 	playerHasNightmare: boolean;
-	opponentHasNightmare: boolean; // RENAMED
+	opponentHasNightmare: boolean;
 	playerIsCursed: boolean;
-	opponentIsCursed: boolean; // RENAMED
+	opponentIsCursed: boolean;
 	forceEnd?: boolean;
 	playerChargingMove?: string;
-	opponentChargingMove?: string; // RENAMED
+	opponentChargingMove?: string;
 	playerQuickGuard: boolean;
-	opponentQuickGuard: boolean; // RENAMED
+	opponentQuickGuard: boolean;
 	playerWideGuard: boolean;
-	opponentWideGuard: boolean; // RENAMED
+	opponentWideGuard: boolean;
 	playerCraftyShield: boolean;
-	opponentCraftyShield: boolean; // RENAMED
+	opponentCraftyShield: boolean;
 	playerReflectTurns: number;
-	opponentReflectTurns: number; // RENAMED
+	opponentReflectTurns: number;
 	playerLightScreenTurns: number;
-	opponentLightScreenTurns: number; // RENAMED
+	opponentLightScreenTurns: number;
 	playerAuroraVeilTurns: number;
-	opponentAuroraVeilTurns: number; // RENAMED
+	opponentAuroraVeilTurns: number;
 	playerActiveTurns: number;
-	opponentActiveTurns: number; // RENAMED
+	opponentActiveTurns: number;
 	// New fields for Gravity, Mud Sport, and Water Sport
 	gravityTurns: number;
 	mudSportTurns: number;
@@ -145,8 +145,8 @@ interface BattleState {
 	opponentName: string; // e.g., "Wild Pikachu" or "Rival"
 	opponentParty: RPGPokemon[];
 	opponentMoney: number; // Money to win (0 for wild)
+	playerShouldSwitch?: boolean; // For U-turn/Volt Switch/Flip Turn
 }
-
 
 // In-memory storage for player data (in production, use a database)
 const playerData = new Map<string, PlayerData>();
@@ -867,6 +867,13 @@ function calculateDamage(
 		}
 		basePower = 20 + (20 * totalBoosts);
 		break;
+		
+	// FIX #5: Acrobatics - double power without held item
+	case 'acrobatics':
+		if (!attacker.item || battle.magicRoomTurns > 0) {
+			basePower *= 2;
+		}
+		break;
 	}
 
 	// --- Context-Dependent Power Modifications ---
@@ -885,6 +892,13 @@ function calculateDamage(
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
 		basePower *= 2;
+	}
+	
+	// FIX #6: Solar Beam/Blade power reduction in bad weather
+	if (['solarbeam', 'solarblade'].includes(move.id) && battle.weather) {
+		if (['rain', 'sand', 'hail'].includes(battle.weather.type)) {
+			basePower = Math.floor(basePower * 0.5);
+		}
 	}
 
 	// --- Type-Changing Moves ---
@@ -2303,6 +2317,15 @@ function handleDamagingMove(
 
 			if (attacker.hp > 0) {
 				let tookRecoil = false;
+				
+				// FIX #3: Mind Blown and Steel Beam - 50% HP cost
+				if (['mindblown', 'steelbeam'].includes(move.id)) {
+					const recoilDamage = Math.floor(attacker.maxHp / 2);
+					attacker.hp = Math.max(0, attacker.hp - recoilDamage);
+					messageLog.push(`${attacker.species} was damaged by the move's recoil!`);
+					tookRecoil = true;
+				}
+				
 				if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 					attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 					messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
@@ -2344,7 +2367,29 @@ function handleDamagingMove(
 					}
 
 					if (Math.random() * 100 < chance) {
-						if (move.secondary.status) {
+						// FIX #4: Tri Attack - randomize secondary status
+						if (move.id === 'triattack' && move.secondary.status) {
+							const statuses = ['brn', 'par', 'frz'] as Status[];
+							const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+							const defenderCurrentStatus = isDefenderPlayer ? battle.playerStatus : battle.opponentStatus;
+							const defenderSpecies = Dex.species.get(defender.species);
+							let canBeAfflicted = !defenderCurrentStatus;
+							
+							if ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) || 
+								(randomStatus === 'par' && defenderSpecies.types.includes('Electric')) || 
+								(randomStatus === 'frz' && defenderSpecies.types.includes('Ice'))) {
+								canBeAfflicted = false;
+							}
+							
+							if (canBeAfflicted) {
+								if (isDefenderPlayer) {
+									battle.playerStatus = randomStatus;
+								} else {
+									battle.opponentStatus = randomStatus;
+								}
+								messageLog.push(`${defender.species} was afflicted with ${randomStatus}!`);
+							}
+						} else if (move.secondary.status) {
 							const defenderCurrentStatus = isDefenderPlayer ? battle.playerStatus : battle.opponentStatus;
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
@@ -2467,6 +2512,50 @@ function handleDamagingMove(
 		} else if (defender.id !== playerPokemon.id && battle.opponentIsProtected) {
 			battle.opponentIsProtected = false;
 			messageLog.push(`${defender.species}'s protection was broken!`);
+		}
+	}
+
+	// FIX #1: U-Turn / Volt Switch / Flip Turn - handle switch after damage
+	if (attacker.hp > 0 && defender.hp > 0 && (move.selfSwitch === true || move.selfSwitch === 'copyvolatile')) {
+		// Store whether attacker was player
+		const switcherIsPlayer = isPlayerAttacker;
+		
+		// For wild battles, opponent can't switch
+		if (!switcherIsPlayer && battle.battleType === 'wild') {
+			// Wild Pokemon doesn't switch
+		} else if (switcherIsPlayer) {
+			// Player uses pivot move - mark for switch
+			battle.playerShouldSwitch = move.selfSwitch === 'copyvolatile';
+			messageLog.push(`${attacker.species} went back to ${battle.playerId}!`);
+		} else if (battle.battleType === 'trainer') {
+			// Trainer opponent uses pivot move - auto switch to next available
+			const nextPokemon = battle.opponentParty.find(p => p.hp > 0 && p.id !== battle.opponentActivePokemon.id);
+			if (nextPokemon) {
+				messageLog.push(`${battle.opponentName} withdrew ${battle.opponentActivePokemon.species} and sent out ${nextPokemon.species}!`);
+				battle.opponentActivePokemon = nextPokemon;
+				// Reset opponent's volatile statuses
+				const initialStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
+				// FIX #7: Baton Pass - preserve stat boosts
+				if (move.selfSwitch !== 'copyvolatile') {
+					battle.opponentStatStages = { ...initialStages };
+				}
+				// Other volatile statuses always reset
+				battle.opponentStatus = nextPokemon.status;
+				battle.opponentSleepCounter = 0;
+				battle.opponentLockedMove = undefined;
+				battle.opponentIsConfused = false;
+				battle.opponentConfusionCounter = 0;
+				battle.opponentProtectSuccessCounter = 0;
+				battle.opponentIsProtected = false;
+				battle.opponentWillFlinch = false;
+				battle.opponentIsTrapped = null;
+				battle.opponentTauntTurns = 0;
+				battle.opponentIsSeeded = false;
+				battle.opponentHasNightmare = false;
+				battle.opponentIsCursed = false;
+				battle.opponentChargingMove = undefined;
+				battle.opponentActiveTurns = 1;
+			}
 		}
 	}
 
@@ -2866,6 +2955,7 @@ function executeMove(
 	}
 
 	// 6. Accuracy Check
+	let moveHit = true; // Track whether the move hit
 	if (['aerialace'].includes(move.id)) {
 		// This move bypasses accuracy checks
 	} else if (move.accuracy !== true) {
@@ -2899,6 +2989,15 @@ function executeMove(
 		const finalAccuracy = moveAccuracy * (accuracyMultiplier / evasionMultiplier);
 		if ((Math.random() * 100) > finalAccuracy) {
 			messageLog.push(`<span style="color: ${infoColor};">${attacker.species}'s ${move.name} missed!</span>`);
+			moveHit = false;
+			
+			// FIX #2: High Jump Kick / Jump Kick crash damage
+			if (['highjumpkick', 'jumpkick'].includes(move.id)) {
+				const crashDamage = Math.floor(attacker.maxHp / 2);
+				attacker.hp = Math.max(0, attacker.hp - crashDamage);
+				messageLog.push(`<span style="color: ${infoColor};">${attacker.species} kept going and crashed!</span>`);
+			}
+			
 			return false;
 		}
 	}
