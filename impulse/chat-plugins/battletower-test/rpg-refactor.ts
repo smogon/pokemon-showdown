@@ -3395,6 +3395,150 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 	};
 }
 
+/**
+ * Helper to get a live Pokemon slot from its index.
+ * Returns the slot if it exists and the Pokemon is not fainted.
+ */
+function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
+	let slot: ActivePokemonSlot | null = null;
+	if (slotIndex === 0) slot = battle.playerSlots[0];
+	else if (slotIndex === 1) slot = battle.playerSlots[1];
+	else if (slotIndex === 2) slot = battle.opponentSlots[0];
+	else if (slotIndex === 3) slot = battle.opponentSlots[1];
+
+	if (slot && slot.pokemon.hp > 0) {
+		return slot;
+	}
+	return null;
+}
+
+/**
+ * Resolves all targets for a move based on the move's target property.
+ * @param attackerSlotIndex The slot index (0-3) of the user.
+ * @param targetSlotIndex The slot index (0-3) the user *chose*.
+ * @param move The move being used.
+ * @param battle The current battle state.
+ * @returns An array of ActivePokemonSlot objects that are the final targets.
+ */
+function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
+	const targets: ActivePokemonSlot[] = [];
+	const attackerSlot = getSlotFromIndex(battle, attackerSlotIndex);
+	if (!attackerSlot) return []; // Attacker is fainted or doesn't exist
+
+	const isPlayerAttacker = attackerSlotIndex <= 1;
+
+	// Get all potential targets that are alive
+	const pSlot0 = getSlotFromIndex(battle, 0);
+	const pSlot1 = getSlotFromIndex(battle, 1);
+	const oSlot0 = getSlotFromIndex(battle, 2);
+	const oSlot1 = getSlotFromIndex(battle, 3);
+
+	const allFoes = isPlayerAttacker ? [oSlot0, oSlot1] : [pSlot0, pSlot1];
+	const allAllies = isPlayerAttacker ? [pSlot0, pSlot1] : [oSlot0, oSlot1];
+	const allOthers = [pSlot0, pSlot1, oSlot0, oSlot1];
+
+	// Helper function to add a target if it's valid
+	const addTarget = (slot: ActivePokemonSlot | null) => {
+		if (slot && slot.pokemon.hp > 0) {
+			targets.push(slot);
+		}
+	};
+
+	switch (move.target) {
+	// --- Single-target moves ---
+	case 'normal': // Hits one adjacent foe
+	case 'any': // Hits any one pokemon
+	case 'ally': // Hits one ally
+		// TODO: Add redirect logic (Follow Me, Rage Powder) here
+		const chosenTarget = getSlotFromIndex(battle, targetSlotIndex);
+		addTarget(chosenTarget);
+		break;
+
+	// --- User ---
+	case 'self':
+		addTarget(attackerSlot);
+		break;
+
+	// --- Spread moves ---
+	case 'allAdjacentFoes': // Hits both foes
+		allFoes.forEach(addTarget);
+		break;
+
+	case 'allAdjacent': // Hits everyone but user
+	case 'scripted': // e.g., Surf, Earthquake - hits everyone but user
+		allOthers.forEach(slot => {
+			if (slot && slot.pokemon.id !== attackerSlot.pokemon.id) {
+				addTarget(slot);
+			}
+		});
+		break;
+
+	case 'randomNormal': // Hits one random adjacent foe
+		const validFoes = allFoes.filter(s => s && s.pokemon.hp > 0) as ActivePokemonSlot[];
+		if (validFoes.length > 0) {
+			const randomFoe = validFoes[Math.floor(Math.random() * validFoes.length)];
+			addTarget(randomFoe);
+		}
+		break;
+
+	// --- Side-wide moves ---
+	case 'foeSide': // e.g., Stealth Rock, Spikes
+		// For damage/effect logic, we only need one target.
+		// The execution function will know to apply this to the *side*.
+		const primaryFoe = getSlotFromIndex(battle, isPlayerAttacker ? 2 : 0);
+		if (primaryFoe) addTarget(primaryFoe);
+		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 3 : 1));
+		break;
+
+	case 'allySide': // e.g., Reflect, Light Screen
+		const primaryAlly = getSlotFromIndex(battle, isPlayerAttacker ? 0 : 2);
+		if (primaryAlly) addTarget(primaryAlly);
+		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 1 : 3));
+		break;
+
+	case 'all': // e.g., Perish Song
+		allOthers.forEach(addTarget);
+		break;
+
+	default:
+		// Default to the chosen target if type is unhandled
+		const defaultTarget = getSlotFromIndex(battle, targetSlotIndex);
+		addTarget(defaultTarget);
+		break;
+	}
+
+	// Return a unique list of targets
+	return [...new Set(targets)];
+}
+
+/**
+ * [STEP 4 Placeholder]
+ * Processes all queued actions for the turn.
+ */
+function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User) {
+	// This is the core logic for Step 4.
+	// For now, it will just reset the queue and log a placeholder.
+	const messageLog = ["Turn processing is not yet implemented."];
+	battle.turn++;
+
+	// TODO:
+	// 1. Generate AI Actions for opponent slots
+	// 2. Build and sort the full action order (all 4 slots)
+	// 3. Iterate through sorted order:
+	//    a. Check pre-turn statuses (sleep, freeze, etc.)
+	//    b. Check for redirects (Follow Me)
+	//    c. Get targets using getMoveTargets()
+	//    d. Call executeMove() for the attacker against all targets
+	//    e. Handle faint/switch logic
+	// 4. Call processEndOfTurn()
+	// 5. Call checkBattleEndCondition()
+	// 6. Reset battle.pendingActions = {}
+	// 7. Render the new battle state
+
+	battle.pendingActions = {}; // Reset for next turn
+	context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+}
+
 /**********************
 * HTML UI
 **********************/
@@ -4556,265 +4700,74 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// Reset protection and guard statuses at the beginning of the action phase
-				battle.playerIsProtected = false;
-				battle.opponentIsProtected = false;
-				battle.playerQuickGuard = false;
-				battle.opponentQuickGuard = false;
-				battle.playerWideGuard = false;
-				battle.opponentWideGuard = false;
-				battle.playerCraftyShield = false;
-				battle.opponentCraftyShield = false;
+				// --- NEW COMMAND STRUCTURE ---
+				// /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
+				// e.g., /rpg battleaction move 0 tackle 2
+				const [attackerSlotStr, moveId, targetSlotStr] = target.split(' ');
+				const attackerSlotIndex = parseInt(attackerSlotStr);
+				const targetSlotIndex = parseInt(targetSlotStr);
 
-				const playerPokemon = battle.activePokemon;
-
-				// --- Pre-action validation ---
-				const tempPlayerMoveData = Dex.moves.get(toID(target));
-				if (battle.playerTauntTurns > 0 && tempPlayerMoveData.category === 'Status') {
-					this.errorReply(`${playerPokemon.species} is taunted! It can't use ${tempPlayerMoveData.name}!`);
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${playerPokemon.species} is taunted! It can't use status moves!`])}`);
-				}
-				if (battle.magicRoomTurns === 0 && playerPokemon.item === 'assaultvest' && tempPlayerMoveData.category === 'Status') {
-					this.errorReply("You can't select status moves while holding an Assault Vest.");
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Your Assault Vest prevents you from using ${tempPlayerMoveData.name}!`])}`);
+				if (isNaN(attackerSlotIndex) || !moveId || isNaN(targetSlotIndex)) {
+					// This is now a user-facing error, but we'll show it in the UI
+					// to guide them, as this command will be sent by buttons.
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Invalid move command received."])}`);
 				}
 
-				battle.turn++;
-				const opponentPokemon = battle.opponentActivePokemon;
-				const messageLog: string[] = [];
-
-				// --- 1. Determine each Pokémon's intended action ---
-				
-				// --- Player Action ---
-				let playerMoveId = toID(target);
-				let playerAction: 'charge' | 'unleash' | 'move' = 'move';
-
-				// --- NEW: Check for Struggle ---
-				const hasUsableMove = playerPokemon.moves.some(m => m.pp > 0);
-				if (!hasUsableMove) {
-					playerMoveId = 'struggle';
+				// Validate attacker slot
+				if (attackerSlotIndex !== 0 && attackerSlotIndex !== 1) {
+					return this.errorReply("Invalid attacker slot. Must be 0 or 1.");
 				}
-				// --- END NEW ---
-
-				if (battle.playerChargingMove) {
-					playerMoveId = battle.playerChargingMove;
-					playerAction = 'unleash';
+				const attackerSlot = battle.playerSlots[attackerSlotIndex];
+				if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
+					return this.errorReply("This Pokémon is not in battle or has fainted.");
 				}
 
-				let playerMoveData = Dex.moves.get(playerMoveId); // Use let
-				let playerMoveObject = playerPokemon.moves.find(m => m.id === playerMoveId) || { id: 'struggle', pp: 1 }; // Use let
-
-				if (playerMoveData.flags.charge && playerAction === 'move') {
-					playerAction = 'charge';
+				// Check if action is already registered
+				if (battle.pendingActions[attackerSlotIndex]) {
+					return this.errorReply(`${attackerSlot.pokemon.species} is already waiting to move.`);
 				}
 
-				// Solar Move Weather Check
-				if (playerAction === 'charge' && ['solarbeam', 'solarblade'].includes(playerMoveId) && battle.weather?.type === 'sun') {
-					playerAction = 'move'; // Skip charging
+				// Validate move
+				const moveData = Dex.moves.get(toID(moveId));
+				if (!moveData.exists) {
+					return this.errorReply(`Move '${moveId}' not found.`);
 				}
-				
-				// --- NEW PP Deduction Logic (Player) ---
-				if (playerAction === 'charge') {
-					if (playerMoveObject.pp > 0) {
-						playerMoveObject.pp--; // Deduct PP on charge turn
-					} else {
-						// Tried to charge a 0 PP move, force Struggle
-						playerAction = 'move';
-						playerMoveId = 'struggle';
-						playerMoveObject = { id: 'struggle', pp: 1 };
-						playerMoveData = Dex.moves.get('struggle');
-					}
-				} else if (playerAction === 'move') {
-					if (playerMoveObject.id === 'struggle') {
-						// Don't deduct PP for struggle
-					} else if (playerMoveObject.pp > 0) {
-						playerMoveObject.pp--; // Deduct PP on normal move
-					} else {
-						// Selected a 0 PP move, force Struggle
-						playerAction = 'move';
-						playerMoveId = 'struggle';
-						playerMoveObject = { id: 'struggle', pp: 1 };
-						playerMoveData = Dex.moves.get('struggle');
-					}
-				}
-				// (Don't deduct PP for 'unleash')
-
-				// Validate Choice Item lock after determining the actual move
-				if (battle.magicRoomTurns === 0 && battle.playerLockedMove && battle.playerLockedMove !== playerMoveId) {
-					const lockedMoveData = Dex.moves.get(battle.playerLockedMove);
-					return this.errorReply(`${playerPokemon.species} is locked into using ${lockedMoveData.name}!`);
-				}
-				
-				// Clear charge state if it was an unleash
-				if (playerAction === 'unleash') {
-					battle.playerChargingMove = undefined;
+				const moveObject = attackerSlot.pokemon.moves.find(m => m.id === moveData.id);
+				if (!moveObject && moveData.id !== 'struggle') {
+					return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
 				}
 
-				// --- Opponent Action ---
-				let opponentMoveId = battle.opponentChargingMove || opponentPokemon.moves[Math.floor(Math.random() * opponentPokemon.moves.length)].id;
-				let opponentAction: 'charge' | 'unleash' | 'move' = 'move';
-
-				if (battle.opponentChargingMove) {
-					opponentMoveId = battle.opponentChargingMove;
-					opponentAction = 'unleash';
+				// --- Pre-action validation (send feedback to UI) ---
+				if (attackerSlot.tauntTurns > 0 && moveData.category === 'Status') {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} is taunted! It can't use ${moveData.name}!`])}`);
 				}
-				
-				const opponentMoveData = Dex.moves.get(opponentMoveId);
-				const opponentMoveObject = opponentPokemon.moves.find(m => m.id === opponentMoveId)!; // Assume opponent always has the move
-
-				if (opponentMoveData.flags.charge && opponentAction === 'move') {
-					opponentAction = 'charge';
+				if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'assaultvest' && moveData.category === 'Status') {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Your Assault Vest prevents you from using ${moveData.name}!`])}`);
+				}
+				if (moveObject && moveObject.pp === 0) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`There is no PP left for ${moveData.name}!`])}`);
 				}
 
-				// Solar Move Weather Check
-				if (opponentAction === 'charge' && ['solarbeam', 'solarblade'].includes(opponentMoveId) && battle.weather?.type === 'sun') {
-					opponentAction = 'move'; // Skip charging
-				}
+				// --- Queue the action ---
+				battle.pendingActions[attackerSlotIndex] = {
+					actionType: 'move',
+					moveId: moveData.id,
+					targetSlot: targetSlotIndex,
+					pokemonId: attackerSlot.pokemon.id,
+				};
 
-				// PP Deduction Logic
-				if (opponentAction === 'charge') {
-					if (opponentMoveObject.pp > 0) {
-						opponentMoveObject.pp--; // Deduct PP on charge turn
-					} else {
-						// Opponent has no PP, must use Struggle
-						opponentAction = 'move';
-						opponentMoveId = 'struggle';
-					}
-				} else if (opponentAction === 'move') {
-					if (opponentMoveObject.pp > 0) {
-						opponentMoveObject.pp--; // Deduct PP on normal move
-					} else {
-						// Opponent has no PP, must use Struggle
-						opponentAction = 'move';
-						opponentMoveId = 'struggle';
-					}
-				}
-				// (Don't deduct PP for 'unleash')
-				
-				// Clear charge state if it was an unleash
-				if (opponentAction === 'unleash') {
-					battle.opponentChargingMove = undefined;
-				}
+				const messageLog = [`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
 
-				// --- 2. Execute the turn based on actions ---
-				// (Struggle move objects are created on the fly if needed)
-				const finalPlayerMoveObject = playerMoveObject.id === 'struggle' ? { id: 'struggle', pp: 1 } : playerMoveObject;
-				const finalOpponentMoveObject = opponentMoveId === 'struggle' ? { id: 'struggle', pp: 1 } : opponentMoveObject;
-				const finalPlayerMoveData = Dex.moves.get(playerMoveId); // Re-get data in case it was forced to Struggle
-				const finalOpponentMoveData = Dex.moves.get(opponentMoveId);
+				// --- Check if all player actions are submitted ---
+				const activePlayerSlots = battle.playerSlots.filter(s => s && s.pokemon.hp > 0).length;
+				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
 
-				// --- NEW: Store selected moves for Sucker Punch check ---
-				battle.playerMoveId = finalPlayerMoveData.id;
-				battle.opponentMoveId = finalOpponentMoveData.id;
-				// --- END NEW ---
-
-
-				// Handle cases where one or both Pokémon are charging
-				if (playerAction === 'charge' || opponentAction === 'charge') {
-					// Player charges, Opponent attacks
-					if (playerAction === 'charge') {
-						battle.playerChargingMove = finalPlayerMoveData.id;
-						const chargeMessage = finalPlayerMoveData.charge || `${playerPokemon.species} is preparing its attack!`;
-						messageLog.push(chargeMessage);
-						if (opponentPokemon.hp > 0) {
-							executeMove(opponentPokemon, playerPokemon, finalOpponentMoveData, finalOpponentMoveObject, battle, messageLog);
-						}
-					}
-					// Opponent charges, Player attacks
-					else if (opponentAction === 'charge') {
-						battle.opponentChargingMove = finalOpponentMoveData.id;
-						const chargeMessage = finalOpponentMoveData.charge || `${opponentPokemon.species} is preparing its attack!`;
-						messageLog.push(chargeMessage);
-						if (playerPokemon.hp > 0) {
-							executeMove(playerPokemon, opponentPokemon, finalPlayerMoveData, finalPlayerMoveObject, battle, messageLog);
-						}
-					}
+				if (submittedPlayerActions === activePlayerSlots) {
+					// All players have moved, process the turn
+					// This call will be implemented in Step 4
+					processTurn(this, battle, room, user);
 				} else {
-					// --- Standard Turn Logic (no new charging moves) ---
-					let playerSpe = playerPokemon.spe * getStatMultiplier(battle.playerStatStages.spe);
-					if (battle.playerStatus === 'par') playerSpe = Math.floor(playerSpe / 2);
-					let opponentSpe = opponentPokemon.spe * getStatMultiplier(battle.opponentStatStages.spe);
-					if (battle.opponentStatus === 'par') opponentSpe = Math.floor(opponentSpe / 2);
-
-					const turnOrder = [];
-
-					// --- NEW: Trick Room Check ---
-					let playerGoesFirstBySpeed;
-					if (battle.trickRoomTurns > 0) {
-						playerGoesFirstBySpeed = (playerSpe <= opponentSpe);
-					} else {
-						playerGoesFirstBySpeed = (playerSpe >= opponentSpe);
-					}
-					const playerGoesFirst = finalPlayerMoveData.priority > finalOpponentMoveData.priority ||
-						(finalPlayerMoveData.priority === finalOpponentMoveData.priority && playerGoesFirstBySpeed);
-					// --- END NEW ---
-
-					if (playerGoesFirst) {
-						turnOrder.push({ pokemon: playerPokemon, move: finalPlayerMoveData, moveObject: finalPlayerMoveObject });
-						turnOrder.push({ pokemon: opponentPokemon, move: finalOpponentMoveData, moveObject: finalOpponentMoveObject });
-					} else {
-						turnOrder.push({ pokemon: opponentPokemon, move: finalOpponentMoveData, moveObject: finalOpponentMoveObject });
-						turnOrder.push({ pokemon: playerPokemon, move: finalPlayerMoveData, moveObject: finalPlayerMoveObject });
-					}
-
-					if (turnOrder[0].pokemon.hp > 0) {
-						executeMove(turnOrder[0].pokemon, turnOrder[1].pokemon, turnOrder[0].move, turnOrder[0].moveObject, battle, messageLog);
-					}
-					if (turnOrder[1].pokemon.hp > 0 && turnOrder[0].pokemon.hp > 0) {
-						executeMove(turnOrder[1].pokemon, turnOrder[0].pokemon, turnOrder[1].move, turnOrder[1].moveObject, battle, messageLog);
-					}
-				}
-
-				// --- 3. Conclude the turn ---
-				if (battle.forceEnd) {
-					const zoneId = battle.zoneId;
-					saveBattleStatus(battle);
-					activeBattles.delete(user.id);
-					const forceEndHTML = `<div class="infobox"><h2>Wild Pokémon Fled!</h2><div style="padding: 10px; border-left: 3px solid #6c757d; margin-bottom: 10px;">${messageLog.join('<br>')}</div><p>The wild Pokémon was forced to flee!</p><p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button><button name="send" value="/rpg explore" class="button">Continue Exploring</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${forceEndHTML}`);
-				}
-
-				// --- NEW PIVOT CHECK (Priority 1) ---
-				// Check if the player needs to pivot, ONLY if they are not fainted.
-				if (battle.playerShouldSwitch && battle.activePokemon.hp > 0) {
-					// Player used U-turn/etc. and is alive. They MUST switch.
-					saveBattleStatus(battle); // Save the pivoting Pokemon's status
-					battle.playerShouldSwitch = false; // Clear flag
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog)}`);
-				}
-
-				// --- END OF TURN & FINAL FAINT CHECKS (Priority 2) ---
-				if (battle.activePokemon.hp > 0 && battle.opponentActivePokemon.hp > 0) {
-					processEndOfTurn(battle, messageLog);
-				}
-
-				// This handles all faint logic (player faints, opponent faints, or double faint)
-				const battleEnded = checkBattleEndCondition(this, battle, room, user, messageLog);
-
-				// --- BATTLE CONTINUES (Priority 3) ---
-				if (!battleEnded) {
-					// Increment active turn counters
-					battle.playerActiveTurns++;
-					battle.opponentActiveTurns++;
-
-					// Re-apply choice lock if necessary
-					const choiceItems = ['choiceband', 'choicespecs', 'choicescarf'];
-					if (battle.magicRoomTurns === 0 && playerPokemon.item && choiceItems.includes(playerPokemon.item)) {
-						if (!battle.playerLockedMove && finalPlayerMoveData.id !== 'struggle') {
-							battle.playerLockedMove = finalPlayerMoveData.id;
-						}
-					} else {
-						battle.playerLockedMove = undefined;
-					}
-					
-					if (battle.magicRoomTurns === 0 && opponentPokemon.item && choiceItems.includes(opponentPokemon.item)) {
-						if (!battle.opponentLockedMove && finalOpponentMoveData.id !== 'struggle') {
-							battle.opponentLockedMove = finalOpponentMoveData.id;
-						}
-					} else {
-						battle.opponentLockedMove = undefined;
-					}
-					
+					// Waiting for other player's move
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
