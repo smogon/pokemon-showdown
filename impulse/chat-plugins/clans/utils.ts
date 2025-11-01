@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* Clans Utility Functions 
+* @author PrinceSky-Git
+*/
 import { ClanLogs } from './database';
 import type { Clan, ClanPermissions, ClanLogType, ClanWar } from './interface';
 import { Utils } from '../../../lib';
