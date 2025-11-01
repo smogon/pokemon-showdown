@@ -1550,7 +1550,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Energy Ball", "Flamethrower", "Flame Charge", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
+                "movepool": ["Calm Mind", "Energy Ball", "Flame Charge", "Flamethrower", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
                 "abilities": ["Flame Body", "Flash Fire"],
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
             },
