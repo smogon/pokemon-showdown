@@ -24,7 +24,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	charizardmegay: {
-		tier: "OU",
+		tier: "UU",
 	},
 	squirtle: {
 		tier: "LC",
@@ -180,7 +180,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	gyaradosmega: {
-		tier: "OU",
+		tier: "(OU)",
 	},
 	eevee: {
 		tier: "LC",
@@ -345,13 +345,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	sableyemega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	mawile: {
 		tier: "UU",
 	},
 	mawilemega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	aron: {
 		tier: "LC",
@@ -474,7 +474,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	lopunnymega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	gible: {
 		tier: "LC",
@@ -522,13 +522,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	gallademega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	froslass: {
 		tier: "UU",
 	},
 	froslassmega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	tepig: {
 		tier: "LC",
@@ -579,7 +579,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	audinomega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	venipede: {
 		tier: "LC",
@@ -651,7 +651,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	chandeluremega: {
-		tier: "UU",
+		tier: "OU",
 	},
 	stunfisk: {
 		tier: "UU",
@@ -711,7 +711,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	talonflame: {
-		tier: "UU",
+		tier: "OU",
 	},
 	scatterbug: {
 		tier: "LC",
@@ -815,7 +815,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	barbaraclemega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	skrelp: {
 		tier: "LC",
@@ -950,7 +950,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	dianciemega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	hoopa: {
 		tier: "UU",
