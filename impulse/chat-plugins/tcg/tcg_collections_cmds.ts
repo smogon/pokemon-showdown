@@ -1,12 +1,12 @@
+/*
+* Pokemon Showdown
+* TCG Collections Commands
+* @author PrinceSky-Git
+*/
 import type { TcgCard, TcgUser } from './interface';
 import { getSet, getCacheStats } from './tcg_utils';
-import {
-	tcgCardsCollection,
-	userCollectionsCollection,
-	userProfilesCollection,
-	userPacksCollection,
-} from './tcg_collections';
-
+import { tcgCardsCollection, userCollectionsCollection,
+	userProfilesCollection, userPacksCollection } from './tcg_collections';
 const SEARCH_PAGE_LIMIT = 80;
 const MAX_FAVORITE_CARDS = 10;
 
