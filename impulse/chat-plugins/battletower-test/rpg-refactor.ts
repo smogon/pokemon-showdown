@@ -749,8 +749,7 @@ function performCatchAttempt(battle: BattleState, ballId: string): { success: bo
 	return { success: true, shakes: 4 };
 }
 
-
-	(stage: number): number {
+function getStatMultiplier(stage: number): number {
 	if (stage >= 0) {
 		return (2 + stage) / 2;
 	} else {
