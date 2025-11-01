@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* Clans Commands
+* @author PrinceSky-Git
+*/
 import {
 	Clans,
 	UserClans,
