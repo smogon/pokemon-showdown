@@ -66,6 +66,7 @@ interface ActivePokemonSlot {
 	chargingMove?: string;
 	activeTurns: number;
 	lockedMove?: string;
+	isRedirecting?: boolean;
 }
 
 // Interface for player data
@@ -134,6 +135,7 @@ interface BattleState {
 	opponentParty: RPGPokemon[];
 	opponentMoney: number; // Money to win (0 for wild)
 	playerShouldSwitch?: boolean | 'copyvolatile'; // For U-turn/Volt Switch (true) or Baton Pass ('copyvolatile')
+	pendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean }; // <-- NEW FIELD
 
 	// --- NEW FIELDS FOR DOUBLE BATTLES ---
 	playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
@@ -1626,12 +1628,13 @@ function handleStatusMove(
 
 	// Handle forced switching moves first
 	if (['roar', 'whirlwind'].includes(move.id)) {
-		// --- MODIFIED ---
 		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
 			messageLog.push(`The wild ${defender.species} was blown away!`);
-			// TODO: This needs to remove the slot and end the battle if all wild-side slots are empty
-			// For now, we'll just set the forceEnd flag
-			battle.forceEnd = true;
+			// Find and remove the slot
+			const oppSlotIndex = battle.opponentSlots.indexOf(defenderSlot);
+			if (oppSlotIndex !== -1) {
+				battle.opponentSlots[oppSlotIndex as 0 | 1] = null;
+			}
 		} else {
 			messageLog.push(`But it failed!`); // Can't force switch a trainer
 		}
@@ -1820,6 +1823,13 @@ function handleStatusMove(
 		break;
 	}
 	if (hadEffect) return;
+
+	// --- NEW: Add Follow Me / Rage Powder ---
+	if (['followme', 'ragepowder'].includes(move.id)) {
+		attackerSlot.isRedirecting = true;
+		messageLog.push(`${attacker.species} became the center of attention!`);
+		hadEffect = true;
+	}
 
 	if (move.id === 'leechseed') {
 		if (defenderSpecies.types.includes('Grass')) {
@@ -2067,11 +2077,10 @@ function handleStatusMove(
 	// --- NEW BLOCK ---
 	// Handle self-switching status moves (Baton Pass, Teleport)
 	if (move.selfSwitch) {
-		// This will be handled in Step 6
-		messageLog.push(`${attacker.species} is preparing to switch out! (Logic TBD)`);
+		// This will be handled by executeAction
+		// We just set the flag here
+		battle.playerShouldSwitch = move.selfSwitch;
 		hadEffect = true;
-		// This should register a switch action for the attacker
-		// battle.playerShouldSwitch = move.selfSwitch; // Old logic
 	}
 	if (!hadEffect) {
 		messageLog.push(`But it failed!`);
@@ -2813,13 +2822,28 @@ function executeMove(
 		if (attackerSlot.pokemon.hp <= 0) break; // Attacker fainted mid-move (e.g. from ally recoil)
 		if (defenderSlot.pokemon.hp <= 0) continue; // Target fainted mid-move (e.g. from first hit of spread)
 
+		// --- NEW: WIDE GUARD CHECK ---
+		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
+		const isSpreadMove = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target); // 'scripted' for Surf/EQ
+
+		if (isSpreadMove) {
+			if (isPlayerDefender && battle.playerWideGuard) {
+				messageLog.push(`${defenderSlot.pokemon.species} was protected by Wide Guard!`);
+				continue; // Fails against this target
+			}
+			if (!isPlayerDefender && battle.opponentWideGuard) {
+				messageLog.push(`${defenderSlot.pokemon.species} was protected by Wide Guard!`);
+				continue; // Fails against this target
+			}
+		}
+		// --- END WIDE GUARD CHECK ---
+
 		// 2. Check for Protection (Struggle bypasses this)
 		if (move.id !== 'struggle') {
 			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect) {
 				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
 				continue; // Move fails against this target
 			}
-			// TODO: Add Wide Guard check for spread moves
 		}
 		
 		// 6. Accuracy Check
@@ -2917,12 +2941,12 @@ function checkBattleEndCondition(
 				battle.opponentSlots[i] = newSlot;
 
 				// Apply hazards on switch-in
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, false, messageLog);
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 				if (faintedOnEntry) {
 					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
 					// This will be caught in the next loop of the turn or next check
 				} else {
-					handleMirrorHerb(newSlot.pokemon, battle, messageLog);
+					handleMirrorHerb(newSlot, battle, messageLog);
 				}
 			} else {
 				// No replacement found, set slot to null
@@ -3001,20 +3025,19 @@ function checkBattleEndCondition(
 		}
 		return true; // Battle ended
 	}
+	
+	// C. Check for Pivot Switch (U-turn, etc.)
+	if (battle.pendingPivot) {
+		// Battle is interrupted, player must switch.
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		return true; // Battle interrupted
+	}
 
-	// C. Check for Player Switch-In Needed
+	// D. Check for Player Faint Switch-In Needed
 	if (playerFaintSwitchNeeded && playerHasLivingPokemon) {
 		// Battle is interrupted, player must switch.
 		// We'll just show the first available slot to fill.
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
-		return true; // Battle interrupted
-	}
-	
-	// D. Check for U-turn/Volt Switch
-	if (battle.playerShouldSwitch) {
-		// This will be handled by executeAction in the future
-		// For now, let's assume it's checked here.
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog)}`);
 		return true; // Battle interrupted
 	}
 
@@ -3352,13 +3375,18 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const isSwitchB = b.actionType === 'switch';
 		if (isSwitchA && !isSwitchB) return -1; // Switches go first
 		if (!isSwitchA && isSwitchB) return 1;
-
-		const moveA = Dex.moves.get(a.moveId || 'struggle');
-		const moveB = Dex.moves.get(b.moveId || 'struggle');
-
-		// Sort by Move Priority
-		if (moveA.priority !== moveB.priority) {
-			return moveB.priority - moveA.priority;
+		
+		// If both are switches, speed order applies
+		if (isSwitchA && isSwitchB) {
+			// (Fall through to speed check)
+		} else {
+			// --- Handle move priority ---
+			const moveA = Dex.moves.get(a.moveId || 'struggle');
+			const moveB = Dex.moves.get(b.moveId || 'struggle');
+			
+			if (moveA.priority !== moveB.priority) {
+				return moveB.priority - moveA.priority;
+			}
 		}
 
 		// Sort by Speed
@@ -3385,16 +3413,6 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		}
 	}
 	
-	// --- Check for Pivot (U-turn) switch ---
-	// This is a simplified check. A full implementation would be more complex.
-	if (battle.playerShouldSwitch) {
-		const slotToPivot = battle.playerSlots.findIndex(s => s?.pokemon.id === battle.pendingActions[0]?.pokemonId || s?.pokemon.id === battle.pendingActions[1]?.pokemonId);
-		if (slotToPivot !== -1) {
-			const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
-			if (battleEnded) return;
-		}
-	}
-
 	// 4. End-of-Turn Effects
 	if (battle.forceEnd) {
 		// Handled by checkBattleEndCondition or executeAction
@@ -3464,7 +3482,7 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 }
 
 /**
- * [STEP 4/6 Implementation]
+ * [STEP 4/6/7 Implementation]
  * Executes a single queued action (move or switch).
  */
 function executeAction(
@@ -3483,6 +3501,9 @@ function executeAction(
 	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
 		return;
 	}
+	
+	// --- Reset redirection flag at the start of a pokemon's turn ---
+	attackerSlot.isRedirecting = false;
 
 	// --- Handle Switch Action ---
 	if (action.actionType === 'switch' && action.switchToPokemonId) {
@@ -3515,16 +3536,39 @@ function executeAction(
 			messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
 
 			// Apply hazards
-			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, true, messageLog);
+			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
 			if (faintedOnEntry) {
 				messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
 				// Faint check will run at end of turn
 			} else {
-				handleMirrorHerb(newSlot.pokemon, battle, messageLog);
+				handleMirrorHerb(newSlot, battle, messageLog);
 			}
 		} else {
-			// TODO: Implement AI switching logic
-			messageLog.push(`${attackerSlot.pokemon.species} is switching out! (AI Logic TBD)`);
+			// --- AI SWITCH LOGIC ---
+			const outgoingPokemon = attackerSlot.pokemon;
+			
+			// Find new Pokemon in party
+			const replacement = battle.opponentParty.find(p =>
+				p.hp > 0 &&
+				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+			);
+
+			if (replacement) {
+				const newSlot = createActivePokemonSlot(replacement);
+				battle.opponentSlots[attackerSlotIndex as 2 | 3] = newSlot;
+				
+				messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
+				
+				// Apply hazards
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+				if (faintedOnEntry) {
+					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+				} else {
+					handleMirrorHerb(newSlot, battle, messageLog);
+				}
+			} else {
+				messageLog.push(`${outgoingPokemon.species} tried to switch out, but no one was left!`);
+			}
 		}
 		return;
 	}
@@ -3553,8 +3597,19 @@ function executeAction(
 		}
 
 		// 3. Resolve Targets
-		// TODO: Implement move redirects (Follow Me, Rage Powder) here
-		const targetSlots = getMoveTargets(attackerSlotIndex, action.targetSlot, move, battle);
+		let chosenTargetSlot = action.targetSlot;
+		const isPlayerAttacker = attackerSlotIndex <= 1;
+		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
+		
+		// --- Check for redirection ---
+		const redirector = opponentSlots.find(s => s.isRedirecting);
+		if (redirector && move.target === 'normal') { // Check move is single-target
+			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
+			chosenTargetSlot = redirectorIndex;
+			messageLog.push(`${redirector.pokemon.species} took the attack!`);
+		}
+		
+		const targetSlots = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
 
 		// 4. Announce and Execute the Move
 		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
@@ -3574,21 +3629,21 @@ function executeAction(
 				const player = getPlayerData(battle.playerId);
 				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 				if (hasReplacement) {
-					battle.playerShouldSwitch = move.selfSwitch; // Set flag
-					// This will be caught by checkBattleEndCondition after the turn
-					// We also need to set the slot to null
-					// This is complex: the switch needs to happen *now*.
-					
-					// For now, we will just set the flag.
-					// A proper implementation would pause the turn, ask for a switch,
-					// and then continue.
-					messageLog.push(`${attackerSlot.pokemon.species} is ready to switch out!`);
+					// --- SET PIVOT FLAG ---
+					battle.pendingPivot = {
+						slotIndex: attackerSlotIndex,
+						slot: attackerSlot,
+						isBatonPass: move.selfSwitch === 'copyvolatile',
+					};
+					battle.playerSlots[attackerSlotIndex as 0 | 1] = null; // Empty the slot
+					messageLog.push(`${attackerSlot.pokemon.species} is waiting to switch out!`);
 				} else {
 					messageLog.push(`But there was no one to switch to!`);
 				}
 			} else {
 				// AI U-turn
-				// This will be caught by checkBattleEndCondition
+				// TODO: AI needs to pick a replacement
+				messageLog.push(`(AI U-turn logic not yet implemented)`);
 			}
 		}
 	}
@@ -4144,10 +4199,10 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 	return html;
 }
 
-function generatePivotSwitchHTML(battle: BattleState, messageLog: string[], pivotSlotIndex: number): string {
-	let html = `<div class="infobox"><h2>A Pokémon is switching out!</h2><p>${messageLog.join('<br>')}</p>`;
+function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlotIndex: number): string {
+	let html = `<div class="infobox"><h2>A Pokémon is switching out!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
-	const pivotingPokemon = battle.playerSlots[pivotSlotIndex]?.pokemon;
+	const pivotingPokemon = battle.pendingPivot?.slot.pokemon; // Get pokemon from the pivot request
 
 	html += `<p>Choose a Pokémon to replace <strong>${pivotingPokemon?.species || 'your Pokémon'}</strong> in <strong>Slot ${pivotSlotIndex + 1}</strong>:</p>`;
 
@@ -4959,7 +5014,12 @@ export const commands: ChatCommands = {
 
 				if (pokemonId === 'cancel') {
 					// This happens if a player U-turns with no Pokemon to switch to.
-					// We just send them back to the battle.
+					// We must clear the pivot flag.
+					if (battle.pendingPivot && battle.pendingPivot.slotIndex === slotToFill) {
+						// Put the Pokemon back
+						battle.playerSlots[slotToFill] = battle.pendingPivot.slot;
+						battle.pendingPivot = undefined;
+					}
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["The battle continues..."])}`);
 				}
 
@@ -4976,44 +5036,67 @@ export const commands: ChatCommands = {
 					return this.errorReply("This Pokemon is already in battle.");
 				}
 				
-				// Check if the slot is actually empty
-				if (battle.playerSlots[slotToFill] !== null) {
+				// Check if the slot is actually empty (it should be, if faint or pivot)
+				if (battle.playerSlots[slotToFill] !== null && !battle.pendingPivot) {
 					return this.errorReply("This slot is not empty.");
 				}
 				
 				// --- Execute the Switch ---
 				const [nextPokemon] = player.party.splice(partyIndex, 1);
 				const newSlot = createActivePokemonSlot(nextPokemon);
-				battle.playerSlots[slotToFill] = newSlot;
 
-				// Add the Pokemon that was in the slot (fainted or pivoted) back to the party
-				// TODO: This logic is missing. The fainted/pivoting Pokemon needs to be moved from the slot to the party.
-				// For now, we assume the slot was just set to 'null' and the Pokemon is "in limbo".
-				// This needs to be fixed. Let's assume the fainted Pokemon is already "gone".
-				// For U-turn, we need to handle this.
+				// **NEW:** Check if this is a pivot switch
+				if (battle.pendingPivot && battle.pendingPivot.slotIndex === slotToFill) {
+					// It's a pivot, add the pivoting pokemon back to the party
+					player.party.push(battle.pendingPivot.slot.pokemon);
+
+					// Handle Baton Pass
+					if (battle.pendingPivot.isBatonPass) {
+						newSlot.statStages = { ...battle.pendingPivot.slot.statStages };
+						newSlot.isConfused = battle.pendingPivot.slot.isConfused;
+						newSlot.confusionCounter = battle.pendingPivot.slot.confusionCounter;
+						newSlot.isSeeded = battle.pendingPivot.slot.isSeeded;
+						// (Copy any other volatiles you want to pass)
+						messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
+					}
+					battle.pendingPivot = undefined; // Clear the pivot flag
+				}
+				// (If not a pivot, it was a faint switch. The fainted mon is already in the party at 0 HP)
+				
+				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
 				
 				const playerColor = '#007bff';
 				const infoColor = '#dc3545';
 				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
 
 				// --- Apply Hazards ---
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot.pokemon, battle, true, messageLog);
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
 				if (faintedOnEntry) {
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
 				} else {
-					handleMirrorHerb(newSlot.pokemon, battle, messageLog);
+					handleMirrorHerb(newSlot, battle, messageLog);
 				}
 
 				// --- Check if more switches are needed ---
 				const needsAnotherSwitch = battle.playerSlots.some(s => s === null) &&
-					player.party.some(p => p.hp > 0);
+					player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 					
 				if (needsAnotherSwitch) {
 					// Another slot is empty, show the switch screen again
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 				} else {
 					// All slots are filled, continue the battle
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+					// Check if this switch *ended* the turn
+					const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
+					const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
+					
+					if (submittedPlayerActions === activePlayerSlots) {
+						// All actions for this turn are complete, process it
+						processTurn(this, battle, room, user);
+					} else {
+						// Turn is not over, just update the UI
+						this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+					}
 				}
 			},
 
@@ -5033,8 +5116,10 @@ export const commands: ChatCommands = {
 					return this.errorReply("The Pokémon in that slot has fainted or is not there.");
 				}
 				
-				// TODO: Add check for Arena Trap, etc.
-				// if (outgoingSlot.isTrapped) { ... }
+				// --- NEW TRAP CHECK ---
+				if (outgoingSlot.isTrapped) {
+					return this.errorReply(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
+				}
 
 				const player = getPlayerData(battle.playerId);
 				
@@ -5068,7 +5153,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
-
+			
 			switchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
