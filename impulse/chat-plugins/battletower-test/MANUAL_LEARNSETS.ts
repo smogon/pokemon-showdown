@@ -140,7 +140,7 @@ export const MANUAL_LEARNSETS = {
 		egg: [],
 		tm: ['toxic', 'rest', 'round', 'shadowball', 'scald', 'icebeam', 'earthquake'],
 	},
-	pidgeot: {
+	pidgey: {
 		levelup: [
 			{ level: 1, move: 'gust' },
 			{ level: 5, move: 'sandattack' },
