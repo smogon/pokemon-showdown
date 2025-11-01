@@ -1,6 +1,7 @@
 /*
 * Pokemon Showdown
-* Clans Interface & types
+* Clans Interface & Types
+* @author PrinceSky-Git
 */
 export type DefaultClanRankID = 'owner' | 'leader' | 'officer' | 'member';
 export type ClanPermission =
