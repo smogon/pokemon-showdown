@@ -1142,7 +1142,8 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 		.map(learnable => toID(learnable.move))
 		.filter(moveId => {
 			const moveData = Dex.moves.get(moveId);
-			return !pokemon.moves.some(m => m.id === moveId);
+			// --- FIX: Check if move exists AND Pokemon doesn't already know it ---
+			return moveData.exists && !pokemon.moves.some(m => m.id === moveId);
 		});
 
 	if (movesLearnedAtThisLevel.length === 0) return { messages };
