@@ -1269,35 +1269,30 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 
 function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
-	const pokemonInParty = player.party.find(p => p.id === battle.activePokemon.id);
 
-	if (pokemonInParty) {
-		pokemonInParty.hp = battle.activePokemon.hp;
-		pokemonInParty.item = battle.activePokemon.item;
-		if (battle.playerStatus === 'slp' || battle.playerStatus === 'frz') {
-			pokemonInParty.status = null;
-		} else {
-			pokemonInParty.status = battle.playerStatus;
-		}
-		for (const battleMove of battle.activePokemon.moves) {
-			const partyMove = pokemonInParty.moves.find(m => m.id === battleMove.id);
-			if (partyMove) {
-				partyMove.pp = battleMove.pp;
+	// Save player's active Pokemon statuses back to the party
+	for (const slot of battle.playerSlots) {
+		if (slot) {
+			const pokemonInParty = player.party.find(p => p.id === slot.pokemon.id);
+			if (pokemonInParty) {
+				// Copy volatile status back to the persistent Pokemon object
+				// HP, PP, and Item should already be updated (as slot.pokemon is a reference)
+				if (slot.status === 'slp' || slot.status === 'frz') {
+					pokemonInParty.status = null; // These statuses don't persist outside battle
+				} else {
+					pokemonInParty.status = slot.status;
+				}
 			}
 		}
 	}
 	
-	// Opponent's status (if trainer) is also saved back to the battle's party array
-	if (battle.battleType === 'trainer') {
-		const opponentPokemonInParty = battle.opponentParty.find(p => p.id === battle.opponentActivePokemon.id);
-		if (opponentPokemonInParty) {
-			opponentPokemonInParty.hp = battle.opponentActivePokemon.hp;
-			opponentPokemonInParty.item = battle.opponentActivePokemon.item;
-			opponentPokemonInParty.status = battle.opponentStatus;
-			for (const battleMove of battle.opponentActivePokemon.moves) {
-				const partyMove = opponentPokemonInParty.moves.find(m => m.id === battleMove.id);
-				if (partyMove) {
-					partyMove.pp = battleMove.pp;
+	// Save opponent's active Pokemon statuses back to the battle's party array
+	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+		for (const slot of battle.opponentSlots) {
+			if (slot) {
+				const opponentPokemonInParty = battle.opponentParty.find(p => p.id === slot.pokemon.id);
+				if (opponentPokemonInParty) {
+					opponentPokemonInParty.status = slot.status;
 				}
 			}
 		}
@@ -1375,27 +1370,27 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
  * Processes end-of-turn effects like status damage, item healing/damage, and volatile statuses.
  */
 
-function handleEndOfTurnEffects(pokemon: RPGPokemon, battle: BattleState, messageLog: string[]) {
-	if (pokemon.hp <= 0) return;
+function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
 
-	const isPlayer = pokemon.id === battle.activePokemon.id;
-	let status = isPlayer ? battle.playerStatus : battle.opponentStatus;
+	const pokemon = slot.pokemon;
+	let status = slot.status;
 	const speciesData = Dex.species.get(pokemon.species);
 
 	if (!status && battle.magicRoomTurns === 0) {
 		if (pokemon.item === 'flameorb' && !speciesData.types.includes('Fire')) {
-			if (isPlayer) battle.playerStatus = 'brn'; else battle.opponentStatus = 'brn';
+			slot.status = 'brn';
 			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was burned by its Flame Orb!</span>`);
 			status = 'brn';
 		} else if (pokemon.item === 'toxicorb' && !speciesData.types.includes('Poison') && !speciesData.types.includes('Steel')) {
-			if (isPlayer) battle.playerStatus = 'psn'; else battle.opponentStatus = 'psn';
+			slot.status = 'psn';
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was badly poisoned by its Toxic Orb!</span>`);
 			status = 'psn';
 		}
 	}
 
 	if (battle.magicRoomTurns === 0 && pokemon.item === 'lumberry' && status) {
-		if (isPlayer) battle.playerStatus = null; else battle.opponentStatus = null;
+		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		pokemon.item = undefined;
 		return;
@@ -1434,106 +1429,56 @@ function handleEndOfTurnEffects(pokemon: RPGPokemon, battle: BattleState, messag
 	}
 	if (pokemon.hp <= 0) return;
 
-	if (isPlayer) {
-		if (battle.playerIsCursed) {
+	if (slot.isCursed) {
+		const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
+		pokemon.hp = Math.max(0, pokemon.hp - damage);
+		messageLog.push(`${pokemon.species} is afflicted by the curse!`);
+	}
+	if (pokemon.hp <= 0) return;
+
+	if (slot.hasNightmare) {
+		if (slot.status === 'slp') {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is afflicted by the curse!`);
-		}
-	} else {
-		if (battle.opponentIsCursed) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is afflicted by the curse!`);
+			messageLog.push(`${pokemon.species} is locked in a nightmare!`);
+		} else {
+			slot.hasNightmare = false;
 		}
 	}
 	if (pokemon.hp <= 0) return;
 
-	if (isPlayer) {
-		if (battle.playerHasNightmare) {
-			if (battle.playerStatus === 'slp') {
-				const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
-				pokemon.hp = Math.max(0, pokemon.hp - damage);
-				messageLog.push(`${pokemon.species} is locked in a nightmare!`);
-			} else {
-				battle.playerHasNightmare = false;
-			}
+	if (slot.isTrapped) {
+		const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+		pokemon.hp = Math.max(0, pokemon.hp - damage);
+		messageLog.push(`${pokemon.species} is hurt by the trap!`);
+		slot.isTrapped.turns--;
+		if (slot.isTrapped.turns <= 0) {
+			slot.isTrapped = null;
+			messageLog.push(`${pokemon.species} was freed from the trap.`);
 		}
-	} else {
-		if (battle.opponentHasNightmare) {
-			if (battle.opponentStatus === 'slp') {
-				const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
-				pokemon.hp = Math.max(0, pokemon.hp - damage);
-				messageLog.push(`${pokemon.species} is locked in a nightmare!`);
-			} else {
-				battle.opponentHasNightmare = false;
-			}
+	}
+	if (slot.tauntTurns > 0) {
+		slot.tauntTurns--;
+		if (slot.tauntTurns <= 0) {
+			messageLog.push(`${pokemon.species}'s taunt wore off.`);
 		}
 	}
 	if (pokemon.hp <= 0) return;
 
-	if (isPlayer) {
-		if (battle.playerIsTrapped) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is hurt by the trap!`);
-			battle.playerIsTrapped.turns--;
-			if (battle.playerIsTrapped.turns <= 0) {
-				battle.playerIsTrapped = null;
-				messageLog.push(`${pokemon.species} was freed from the trap.`);
-			}
-		}
-		if (battle.playerTauntTurns > 0) {
-			battle.playerTauntTurns--;
-			if (battle.playerTauntTurns <= 0) {
-				messageLog.push(`${pokemon.species}'s taunt wore off.`);
-			}
-		}
-	} else {
-		if (battle.opponentIsTrapped) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is hurt by the trap!`);
-			battle.opponentIsTrapped.turns--;
-			if (battle.opponentIsTrapped.turns <= 0) {
-				battle.opponentIsTrapped = null;
-				messageLog.push(`${pokemon.species} was freed from the trap.`);
-			}
-		}
-		if (battle.opponentTauntTurns > 0) {
-			battle.opponentTauntTurns--;
-			if (battle.opponentTauntTurns <= 0) {
-				messageLog.push(`${pokemon.species}'s taunt wore off.`);
-			}
-		}
-	}
-	if (pokemon.hp <= 0) return;
+	if (slot.isSeeded && pokemon.hp > 0) {
+		const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+		pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
+		messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
 
-	if (isPlayer) {
-		if (battle.playerIsSeeded && pokemon.hp > 0) {
-			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
-			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
+		// Find an opponent to heal (flawed 1v1 logic, but a necessary patch)
+		const isPlayer = battle.playerSlots.includes(slot);
+		const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+		const opponentToHeal = opponentSlots[0]; // Heals the first available opponent
 
-			const opponent = battle.opponentActivePokemon;
-			if (opponent.hp > 0) {
-				const oldHp = opponent.hp;
-				opponent.hp = Math.min(opponent.maxHp, opponent.hp + drainAmount);
-				messageLog.push(`${opponent.species} restored ${opponent.hp - oldHp} HP!`);
-			}
-		}
-	} else {
-		if (battle.opponentIsSeeded && pokemon.hp > 0) {
-			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
-			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
-
-			const opponent = battle.activePokemon;
-			if (opponent.hp > 0) {
-				const oldHp = opponent.hp;
-				opponent.hp = Math.min(opponent.maxHp, opponent.hp + drainAmount);
-				messageLog.push(`${opponent.species} restored ${opponent.hp - oldHp} HP!`);
-			}
+		if (opponentToHeal && opponentToHeal.pokemon.hp > 0) {
+			const oldHp = opponentToHeal.pokemon.hp;
+			opponentToHeal.pokemon.hp = Math.min(opponentToHeal.pokemon.maxHp, opponentToHeal.pokemon.hp + drainAmount);
+			messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
 		}
 	}
 }
@@ -1544,8 +1489,8 @@ function handleEndOfTurnEffects(pokemon: RPGPokemon, battle: BattleState, messag
  * Also handles hazard removal effects (e.g., Poison-type absorbing Toxic Spikes).
  * @returns {boolean} Returns true if the Pokémon fainted from hazard damage.
  */
-
-function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
+function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
+	const pokemon = slot.pokemon;
 	// Heavy-Duty Boots provides total immunity to all entry hazards.
 	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
 		return false;
@@ -1556,7 +1501,10 @@ function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, 
 
 	const species = Dex.species.get(pokemon.species);
 	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-	const isGrounded = !(species.types.includes('Flying') || pokemon.ability === 'Levitate' || hasAirBalloon);
+	const isGroundedCheck = !(species.types.includes('Flying') || pokemon.ability === 'Levitate' || hasAirBalloon);
+	
+	// isGrounded check must also respect Gravity
+	const isGrounded = isGroundedCheck || battle.gravityTurns > 0;
 
 	let totalDamage = 0;
 	let airBalloonPopped = false;
@@ -1565,7 +1513,7 @@ function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, 
 	if (isGrounded) {
 		// Sticky Web lowers Speed
 		if (hazards.includes('stickyweb')) {
-			const targetStages = isPlayerSwitchIn ? battle.playerStatStages : battle.opponentStatStages;
+			const targetStages = slot.statStages;
 			if (targetStages.spe > -6) {
 				targetStages.spe--;
 				messageLog.push(`${pokemon.species}'s Speed was lowered by the sticky web!`);
@@ -1585,15 +1533,11 @@ function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, 
 				messageLog.push(`The Toxic Spikes were absorbed by ${pokemon.species}!`);
 			} else {
 				const isImmune = species.types.includes('Steel');
-				const targetStatus = isPlayerSwitchIn ? battle.playerStatus : battle.opponentStatus;
+				const targetStatus = slot.status; // Read from slot
 
 				if (!isImmune && !targetStatus) {
 					const newStatus: Status = 'psn';
-					if (isPlayerSwitchIn) {
-						battle.playerStatus = newStatus;
-					} else {
-						battle.opponentStatus = newStatus;
-					}
+					slot.status = newStatus; // Apply to slot
 					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
 				}
 			}
@@ -1617,6 +1561,7 @@ function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, 
 			pokemon.item = undefined;
 			airBalloonPopped = true;
 		}
+		// Pass the pokemon, not the slot, to getCustomEffectiveness
 		const effectiveness = getCustomEffectiveness('Rock', species.types, pokemon, battle);
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
@@ -1637,28 +1582,32 @@ function applyHazardEffectsOnSwitchIn(pokemon: RPGPokemon, battle: BattleState, 
 	return false; // Pokémon survived
 }
 
-function handleMirrorHerb(pokemon: RPGPokemon, battle: BattleState, messageLog: string[]): void {
-	if (battle.magicRoomTurns > 0 || pokemon.item !== 'mirrorherb') return;
+function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
+	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
 
-	const isPlayer = pokemon.id === battle.activePokemon.id;
-	const playerStages = battle.playerStatStages;
-	const opponentStages = battle.opponentStatStages;
-	const sourceStages = isPlayer ? opponentStages : playerStages;
-	const myStages = isPlayer ? playerStages : opponentStages;
+	const isPlayer = battle.playerSlots.includes(slot);
+	const myStages = slot.statStages;
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+
+	if (opponentSlots.length === 0) return; // No opponents to copy from
 
 	let copiedAny = false;
 	const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 
 	for (const stat of stats) {
-		if (sourceStages[stat] > 0) {
-			myStages[stat] = Math.min(6, myStages[stat] + sourceStages[stat]);
+		// Find the maximum positive stat boost for this stat among all opponents
+		const maxOpponentBoost = Math.max(0, ...opponentSlots.map(s => s.statStages[stat]));
+		
+		if (maxOpponentBoost > 0) {
+			// Copy those boosts
+			myStages[stat] = Math.min(6, myStages[stat] + maxOpponentBoost);
 			copiedAny = true;
 		}
 	}
 
 	if (copiedAny) {
-		messageLog.push(`${pokemon.species}'s Mirror Herb copied the opponent's stat boosts!`);
-		pokemon.item = undefined; // Consumed after use
+		messageLog.push(`${slot.pokemon.species}'s Mirror Herb copied the opponent's stat boosts!`);
+		slot.pokemon.item = undefined; // Consumed after use
 	}
 }
 
@@ -2682,10 +2631,10 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	messageLog.push(weatherMessages[battle.weather.type]);
 
 	// Apply weather damage if applicable
-	const { activePokemon, opponentActivePokemon } = battle;
-	const allPokemon = [activePokemon, opponentActivePokemon];
+	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
-	for (const pokemon of allPokemon) {
+	for (const slot of allSlots) {
+		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0) continue;
 		const species = Dex.species.get(pokemon.species);
 		let takeDamage = false;
@@ -2737,8 +2686,9 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 	// Handle Terrain
 	if (battle.terrain) {
 		if (battle.terrain.type === 'grassy') {
-			const allPokemon = [battle.activePokemon, battle.opponentActivePokemon];
-			for (const pokemon of allPokemon) {
+			const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+			for (const slot of allSlots) {
+				const pokemon = slot.pokemon;
 				if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp && isGrounded(pokemon, battle)) {
 					const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 					pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
@@ -3072,21 +3022,27 @@ function checkBattleEndCondition(
 	return false;
 }
 
-
 /**
  * Processes all end-of-turn effects, such as status damage,
  * weather, and field conditions, for both Pokémon.
  */
 function processEndOfTurn(battle: BattleState, messageLog: string[]) {
-	// START: Add this to clear flinch status
-	battle.playerWillFlinch = false;
-	battle.opponentWillFlinch = false;
-	// END: Flinch clear
-	// Handle effects that apply to each Pokémon individually (status, items)
-	handleEndOfTurnEffects(battle.activePokemon, battle, messageLog);
-	handleEndOfTurnEffects(battle.opponentActivePokemon, battle, messageLog);
+	// Get all active slots before effects start
+	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+	
+	// Reset flinch status for all active slots
+	for (const slot of allSlots) {
+		slot.willFlinch = false;
+	}
 
-	// Handle effects that apply to the whole field
+	// Handle effects that apply to each Pokémon individually (status, items)
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			handleEndOfTurnEffects(slot, battle, messageLog);
+		}
+	}
+	
+	// Handle effects that apply to the whole field (weather, terrain, rooms)
 	handleEndOfTurnWeather(battle, messageLog);
 	handleEndOfTurnFieldEffects(battle, messageLog);
 }
@@ -3348,12 +3304,20 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 }
 
 /**
- * [STEP 4 Implementation]
+ * [STEP 4/6/7 Implementation]
  * Processes all queued actions for the turn.
  */
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User) {
 	const messageLog: string[] = [];
 	battle.turn++;
+	
+	// --- Reset side-wide guards ---
+	battle.playerQuickGuard = false;
+	battle.opponentQuickGuard = false;
+	battle.playerWideGuard = false;
+	battle.opponentWideGuard = false;
+	battle.playerCraftyShield = false;
+	battle.opponentCraftyShield = false;
 
 	// 1. Generate AI Actions
 	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
@@ -3365,11 +3329,12 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 
 	// 2. Build and Sort Action Order
 	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
-	const allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+	let allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
 	for (const slotIndex in battle.pendingActions) {
 		const action = battle.pendingActions[slotIndex];
-		if (action) {
+		// Only queue actions for Pokemon that are still active
+		if (action && allActiveSlots.some(s => s.pokemon.id === action.pokemonId)) {
 			actionQueue.push(action);
 		}
 	}
@@ -3378,14 +3343,20 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const slotA = allActiveSlots.find(s => s.pokemon.id === a.pokemonId);
 		const slotB = allActiveSlots.find(s => s.pokemon.id === b.pokemonId);
 
-		// If a Pokemon fainted before action selection, it shouldn't be in the queue
+		// Should not happen, but as a fallback
 		if (!slotA) return 1;
 		if (!slotB) return -1;
+
+		// --- Handle switch priority ---
+		const isSwitchA = a.actionType === 'switch';
+		const isSwitchB = b.actionType === 'switch';
+		if (isSwitchA && !isSwitchB) return -1; // Switches go first
+		if (!isSwitchA && isSwitchB) return 1;
 
 		const moveA = Dex.moves.get(a.moveId || 'struggle');
 		const moveB = Dex.moves.get(b.moveId || 'struggle');
 
-		// Sort by Priority
+		// Sort by Move Priority
 		if (moveA.priority !== moveB.priority) {
 			return moveB.priority - moveA.priority;
 		}
@@ -3405,25 +3376,43 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	// 3. Execute Actions in order
 	for (const action of actionQueue) {
 		executeAction(action, battle, room, user, messageLog);
-		// TODO: After each action, check for faints before the next action
+		
+		// --- Faint Check (Mid-turn) ---
+		// Check for faints caused by this action
+		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
+		if (battleEndedMidTurn) {
+			return; // Battle ended or is waiting for a switch
+		}
+	}
+	
+	// --- Check for Pivot (U-turn) switch ---
+	// This is a simplified check. A full implementation would be more complex.
+	if (battle.playerShouldSwitch) {
+		const slotToPivot = battle.playerSlots.findIndex(s => s?.pokemon.id === battle.pendingActions[0]?.pokemonId || s?.pokemon.id === battle.pendingActions[1]?.pokemonId);
+		if (slotToPivot !== -1) {
+			const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+			if (battleEnded) return;
+		}
 	}
 
 	// 4. End-of-Turn Effects
-	// This will be refactored in Step 7
-	// For now, we'll just log a placeholder
+	if (battle.forceEnd) {
+		// Handled by checkBattleEndCondition or executeAction
+		return;
+	}
+	
 	messageLog.push("--- End of Turn ---");
-	// processEndOfTurn(battle, messageLog);
+	processEndOfTurn(battle, messageLog);
 
-	// 5. Check for Battle End
-	// This will be refactored in Step 6
-	const battleEnded = false;
-	// const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+	// 5. Check for Battle End (after EOT effects)
+	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
 
 	// 6. Reset and Render
 	battle.pendingActions = {}; // Reset for next turn
 
 	if (!battleEnded) {
 		// Increment active turn counters for all active Pokemon
+		allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 		allActiveSlots.forEach(slot => {
 			if (slot.pokemon.hp > 0) {
 				slot.activeTurns++;
