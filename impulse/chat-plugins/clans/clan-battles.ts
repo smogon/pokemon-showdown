@@ -3,7 +3,7 @@ import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo, generateWarCard } from './utils';
 
-const LOBBY_ROOM_ID = 'lobby' as RoomID;
+const LOBBY_ROOM_ID = 'clanwarlogs' as RoomID;
 
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
 	if (players.length !== 2 || battle.tour) return;
