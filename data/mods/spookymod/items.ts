@@ -10,7 +10,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			const rand = this.random(4);
 			const shadowleap: typeof pokemon.moveSlots[0] = {
 				move: "Shadow Leap",
-				id: toID("shadowleap"),
+				id: this.toID("shadowleap"),
 				pp: 2,
 				maxpp: 2,
 				target: "normal",
@@ -19,7 +19,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const firebail: typeof pokemon.moveSlots[0] = {
 				move: "FirebaIl",
-				id: toID("firebail"),
+				id: this.toID("firebail"),
 				pp: 2,
 				maxpp: 2,
 				target: "normal",
@@ -28,7 +28,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const blastjump: typeof pokemon.moveSlots[0] = {
 				move: "Blast Jump",
-				id: toID("blastjump"),
+				id: this.toID("blastjump"),
 				pp: 2,
 				maxpp: 2,
 				target: "normal",
@@ -37,7 +37,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const overheal: typeof pokemon.moveSlots[0] = {
 				move: "Overheal",
-				id: toID("overheal"),
+				id: this.toID("overheal"),
 				pp: 1,
 				maxpp: 1,
 				target: "self",
@@ -46,7 +46,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const batswarm: typeof pokemon.moveSlots[0] = {
 				move: "Bat Swarm",
-				id: toID("batswarm"),
+				id: this.toID("batswarm"),
 				pp: 2,
 				maxpp: 2,
 				target: "normal",
@@ -55,7 +55,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const pumpkinmirv: typeof pokemon.moveSlots[0] = {
 				move: "Pumpkin MIRV",
-				id: toID("pumpkinmirv"),
+				id: this.toID("pumpkinmirv"),
 				pp: 1,
 				maxpp: 1,
 				target: "normal",
@@ -64,7 +64,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const stealth: typeof pokemon.moveSlots[0] = {
 				move: "Stealth",
-				id: toID("stealth"),
+				id: this.toID("stealth"),
 				pp: 1,
 				maxpp: 1,
 				target: "self",
@@ -73,7 +73,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const monoculus: typeof pokemon.moveSlots[0] = {
 				move: "MONOCULUS!",
-				id: toID("monoculus"),
+				id: this.toID("monoculus"),
 				pp: 1,
 				maxpp: 1,
 				target: "normal",
@@ -82,7 +82,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const skeletonhorde: typeof pokemon.moveSlots[0] = {
 				move: "Skeleton Horde",
-				id: toID("skeletonhorde"),
+				id: this.toID("skeletonhorde"),
 				pp: 1,
 				maxpp: 1,
 				target: "normal",
@@ -91,7 +91,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const ballolightning: typeof pokemon.moveSlots[0] = {
 				move: "Ball O' Lightning",
-				id: toID("ballolightning"),
+				id: this.toID("ballolightning"),
 				pp: 1,
 				maxpp: 1,
 				target: "normal",
@@ -100,7 +100,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const meteorshower: typeof pokemon.moveSlots[0] = {
 				move: "Meteor Shower",
-				id: toID("meteorshower"),
+				id: this.toID("meteorshower"),
 				pp: 1,
 				maxpp: 1,
 				target: "normal",
@@ -109,7 +109,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			};
 			const minify: typeof pokemon.moveSlots[0] = {
 				move: "Minify",
-				id: toID("minify"),
+				id: this.toID("minify"),
 				pp: 1,
 				maxpp: 1,
 				target: "self",
