@@ -3723,14 +3723,13 @@ function executeAction(
 /**********************
 * HTML UI
 **********************/
-
 /**
  * [NEW] Generates the UI for a 1-v-1 single battle.
  */
 function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string }
+	targetSelection?: { attackerSlotIndex: number, moveId: string } // This parameter is no longer used here, but kept for signature compatibility
 ): string {
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
@@ -3744,53 +3743,44 @@ function generateSingleBattleHTML(
 
 	let actionHTML = '';
 
-	if (targetSelection) {
-		// --- STATE 2: Target Selection ---
-		// In a 1v1, the only target is the opponent (slot 2)
-		const moveId = targetSelection.moveId;
-		const move = Dex.moves.get(moveId);
-		actionHTML = `<p>Use <strong>${move.name}</strong> on ${opponentSlot.pokemon.species}?</p>` +
-		// Command format: /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
-		`<p><button name="send" value="/rpg battleaction move 0 ${moveId} 2" class="button" style="background-color: #28a745; color: white;">Confirm</button> ` +
-		`<button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
-	} else {
-		// --- STATE 1: Action Selection ---
-		const moveButtons = playerPokemon.moves.map(move => {
-			const moveData = Dex.moves.get(move.id);
-	
-			const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
-				playerPokemon.item === 'assaultvest' &&
-				moveData.category === 'Status';
-	
-			const isTauntBlocked = playerSlot.tauntTurns > 0 &&
-				moveData.category === 'Status';
-				
-			// --- FIX: Check Choice Item Lock ---
-			const isLocked = playerSlot.lockedMove && 
-				playerSlot.lockedMove !== move.id &&
-				battle.magicRoomTurns === 0 &&
-				// Check if the locked move still has PP
-				playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+	// --- STATE 1: Action Selection (Target selection is now skipped) ---
+	const moveButtons = playerPokemon.moves.map(move => {
+		const moveData = Dex.moves.get(move.id);
 
-			const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
+		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+			playerPokemon.item === 'assaultvest' &&
+			moveData.category === 'Status';
+
+		const isTauntBlocked = playerSlot.tauntTurns > 0 &&
+			moveData.category === 'Status';
+			
+		// --- FIX: Check Choice Item Lock ---
+		const isLocked = playerSlot.lockedMove && 
+			playerSlot.lockedMove !== move.id &&
+			battle.magicRoomTurns === 0 &&
+			// Check if the locked move still has PP
+			playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+
+		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
+
+		// --- MODIFICATION ---
+		// Command format: /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
+		// We now send the full move command directly, hardcoding attacker=0 and target=2.
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+	}).join('');
 	
-			// Command format: /rpg battleaction selecttarget [attackerSlot] [moveId]
-			// We skip target selection for 1v1 and go right to confirmation
-			return `<button name="send" value="/rpg battleaction selecttarget 0 ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
-		}).join('');
-		
-		const catchButton = (battle.battleType === 'wild') ?
-			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
-			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+	const catchButton = (battle.battleType === 'wild') ?
+		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
+		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+
+	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
+		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
+		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 	
-		const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
-			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
-			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
-		
-		actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
-		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
-		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
-	}
+	actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
+	`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
+	`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+	// --- END MODIFICATION ---
 
 	return `<div class="infobox"><h2>Battle!</h2>` +
 	`${generateFieldEffectHTML(battle)}` +
