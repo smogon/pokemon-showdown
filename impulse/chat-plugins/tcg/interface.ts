@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* TCG Interface
+* @author PrinceSky-Git
+*/
 export interface TcgAbility {
 	name: string;
 	text: string;
