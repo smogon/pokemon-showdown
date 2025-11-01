@@ -1,22 +1,14 @@
-import {
-	Clans,
-	UserClans,
-	ClanLogs,
-	ClanBans,
-	ClanPointsLogs,
-	ClanWars,
-	type ClanWarDoc,
-	ClanBattleLogs,
-} from './database';
-import type {
-	Clan,
-	ClanPermissions,
-	CustomClanRank,
-	ClanStats,
-	ClanWar,
-} from './interface';
-import { generateThemedTable } from
-	'../../utils';
+/*
+* Pokemon Showdown
+* Clans War Commands
+* @author PrinceSky-Git
+*/
+import { Clans, UserClans, ClanLogs, ClanBans,
+	ClanPointsLogs, ClanWars, type ClanWarDoc,
+	ClanBattleLogs } from './database';
+import type { Clan, ClanPermissions, CustomClanRank,
+	ClanStats, ClanWar } from './interface';
+import { generateThemedTable } from '../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
 	logClanActivity, hasClanPermission, generateWarCard } from './utils';
 
