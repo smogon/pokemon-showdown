@@ -3782,43 +3782,44 @@ function generateSingleBattleHTML(
 		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 	
 	actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
-	`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
-	`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+	`<div class="rpg-action-grid">${moveButtons}</div>` +
+	`<p class="rpg-action-bar"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 	// --- END MODIFICATION ---
 
 	// --- START OF NEW LAYOUT ---
-	return `<div class="infobox"><h2>Battle!</h2>` +
+	return `<div class="infobox">` +
+	`<h2>Battle!</h2>` +
 	`${generateFieldEffectHTML(battle)}` +
 
 	// --- Main Battle View (relative container) ---
-	`<div style="position: relative; min-height: 320px; background: #f9f9f9; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; padding: 10px;">` +
+	`<div class="rpg-battlefield">` +
 
 		// --- Opponent Info Box (Upper Right) ---
-		`<div style="position: absolute; top: 10px; right: 10px; width: 48%;">` +
-			`<h3 style="margin: 0 0 5px 5px;">${battle.opponentName}</h3>` + // Title
+		`<div class="rpg-opponent-info-area">` +
+			`<h3 class="rpg-info-area-title">${battle.opponentName}</h3>` + // Title
 			`${generatePokemonInfoHTML(opponentSlot, false)}` + // Box (icon is inside)
 		`</div>` +
 
 		// --- Player Info Box (Bottom Right) ---
-		`<div style="position: absolute; bottom: 10px; right: 10px; width: 48%;">` +
-			`<h3 style="margin: 0 0 5px 5px;">Your Pokemon</h3>` + // Title
+		`<div class="rpg-player-info-area">` +
+			`<h3 class="rpg-info-area-title">Your Pokemon</h3>` + // Title
 			`${generatePokemonInfoHTML(playerSlot, true)}` + // Box (icon is inside)
 		`</div>` +
 
 		// --- Placeholders for Sprites (Left Side) ---
-		`<div style="position: absolute; top: 20px; left: 20px; text-align: center; opacity: 0.3;">` +
+		`<div class="rpg-opponent-sprite-area">` +
 			`` +
-			`<div style="font-size: 60px;">(Opponent)</div>` +
+			`<div>(Opponent)</div>` +
 		`</div>` +
-		`<div style="position: absolute; bottom: 20px; left: 20px; text-align: center; opacity: 0.3;">` +
+		`<div class="rpg-player-sprite-area">` +
 			`` +
-			`<div style="font-size: 60px;">(Player)</div>` +
+			`<div>(Player)</div>` +
 		`</div>` +
 
 	`</div><hr />` + // End of main battle area
 
 	// Message Log
-	`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
+	`<div class="rpg-message-log">${messageLog.join('<br>')}</div>` +
 	// Action Area
 	actionHTML +
 	`</div>`;
@@ -3864,20 +3865,24 @@ function generatePokemonInfoHTML(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
-		expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div class="rpg-exp-bar-background"><div class="rpg-exp-bar-foreground" style="width: ${expPercentage}%;"></div></div>`;
 	}
 	// --- END MODIFICATION ---
 
 	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
-	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
-	const confusedTag = slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
-	// --- NEW TAGS ---
-	const cursedTag = slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
-	const seededTag = slot.isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
-	const nightmareTag = slot.hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
-	const trappedTag = slot.isTrapped ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>` : '';
-	const tauntTag = slot.tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
+	const statusTag = displayStatus ? `<span class="rpg-status-tag" style="background-color: ${statusColors[displayStatus]};">${displayStatus}</span>` : '';
+	
+	// --- Volatile Statuses ---
+	const volatileTags = [
+		slot.isConfused ? `<span class="rpg-volatile-tag" style="background-color: #A890F0;">Confused</span>` : '',
+		slot.isCursed ? `<span class="rpg-volatile-tag" style="background-color: #705898;">Cursed</span>` : '',
+		slot.isSeeded ? `<span class="rpg-volatile-tag" style="background-color: #78C850;">Seeded</span>` : '',
+		slot.hasNightmare ? `<span class="rpg-volatile-tag" style="background-color: #503870;">Nightmare</span>` : '',
+		slot.isTrapped ? `<span class="rpg-volatile-tag" style="background-color: #A8A878;">Trapped</span>` : '',
+		slot.tauntTurns > 0 ? `<span class="rpg-volatile-tag" style="background-color: #C03028;">Taunted</span>` : '',
+	].filter(Boolean).join('');
+
 	let chargingTag = '';
 	if (slot.chargingMove) {
 		const moveName = Dex.moves.get(slot.chargingMove).name || 'Attack';
@@ -3885,7 +3890,7 @@ function generatePokemonInfoHTML(
 		if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
 		if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
 		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
-		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
+		chargingTag = `<span class="rpg-volatile-tag" style="background-color: #6890F0;">${chargeText}</span>`;
 	}
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
@@ -3896,9 +3901,9 @@ function generatePokemonInfoHTML(
 		for (const stat in statStages) {
 			const stage = statStages[stat as keyof typeof statStages];
 			if (stage > 0) {
-				statStageTags += ` <span style="color: green; font-size: 11px;">🔼${stat.toUpperCase()}</span>`;
+				statStageTags += ` <span class="rpg-stat-boost">🔼${stat.toUpperCase()}</span>`;
 			} else if (stage < 0) {
-				statStageTags += ` <span style="color: red; font-size: 11px;">🔽${stat.toUpperCase()}</span>`;
+				statStageTags += ` <span class="rpg-stat-drop">🔽${stat.toUpperCase()}</span>`;
 			}
 		}
 	}
@@ -3925,7 +3930,7 @@ function generatePokemonInfoHTML(
 	// --- END MODIFICATION ---
 
 	// --- UPDATE RENDER LINE ---
-	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	let html = `<div class="rpg-info-box"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div class="rpg-hp-bar-background"><div class="rpg-hp-bar-foreground" style="background: ${hpBarColor}; width: ${hpPercentage}%;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
 	
 	// --- MODIFICATION: Add conditional elements ---
 	if (isPlayerSide) {
@@ -3954,51 +3959,79 @@ function generateDoubleBattleHTML(
 	const [oSlot0, oSlot1] = battle.opponentSlots;
 
 	// Helper to generate HTML for a single slot
+	// We remove 'flex-basis' as layout is now controlled by the parent.
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
 		if (!slot) {
-			return `<div style="flex-basis: 48%; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 150px; text-align: center; color: #888;">(Empty Slot)</div>`;
-		}
-		if (slot.pokemon.hp <= 0) {
-			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+			return `<div class="rpg-info-box-wrapper-empty">(Empty Slot)</div>`;
 		}
 		
-		let borderStyle = "1px solid #ccc";
+		let wrapperClasses = "rpg-info-box-wrapper";
+
+		if (slot.pokemon.hp <= 0) {
+			wrapperClasses += " rpg-info-box-wrapper-fainted";
+		}
+		
 		// Check if this slot is a pending target
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			borderStyle = "3px dashed #007bff"; // Highlight as targetable
+			wrapperClasses += " rpg-info-box-wrapper-target"; // Highlight as targetable
 		}
 		// Check if this slot has already acted
 		if (battle.pendingActions[slotIndex]) {
-			borderStyle = "3px solid #28a745"; // Green border for "Ready"
+			wrapperClasses += " rpg-info-box-wrapper-ready"; // Green border for "Ready"
 		}
 
-		return `<div style="flex-basis: 48%; border: ${borderStyle};">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+		// Apply border to a wrapper div
+		return `<div class="${wrapperClasses}">` +
+			`${generatePokemonInfoHTML(slot, side === 'player')}` +
+		`</div>`;
 	};
 
-	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
+	let html = `<div class="infobox">` +
+	`<h2>Battle! (${battle.battleType})</h2>`;
 	html += generateFieldEffectHTML(battle);
 
-	// --- Opponent Side ---
-	html += `<div><h3>${battle.opponentName}</h3><div style="display: flex; justify-content: space-around;">`;
-	html += generateSlotHTML(oSlot0, 2, 'opponent');
-	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += `</div></div><hr />`;
+	// --- NEW MAIN BATTLE AREA ---
+	html += `<div class="rpg-battlefield rpg-battlefield-doubles">` +
 
-	// --- Player Side ---
-	html += `<div><h3>Your Team</h3><div style="display: flex; justify-content: space-around;">`;
-	html += generateSlotHTML(pSlot0, 0, 'player');
-	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += `</div></div><hr />`;
+		// --- Opponent Info Boxes (Upper Right) ---
+		`<div class="rpg-opponent-info-area">` +
+			`<h3 class="rpg-info-area-title">${battle.opponentName}</h3>` +
+			`<div class="rpg-doubles-box-container">` + // Column wrapper
+				generateSlotHTML(oSlot0, 2, 'opponent') +
+				generateSlotHTML(oSlot1, 3, 'opponent') +
+			`</div>` +
+		`</div>` +
+
+		// --- Player Info Boxes (Bottom Right) ---
+		`<div class="rpg-player-info-area">` +
+			`<h3 class="rpg-info-area-title">Your Team</h3>` +
+			`<div class="rpg-doubles-box-container">` + // Column wrapper
+				generateSlotHTML(pSlot0, 0, 'player') +
+				generateSlotHTML(pSlot1, 1, 'player') +
+			`</div>` +
+		`</div>` +
+		
+		// --- Placeholders for Sprites (Left Side) ---
+		`<div class="rpg-opponent-sprite-area">` +
+			`` +
+			`<div>(Opponents)</div>` +
+		`</div>` +
+		`<div class="rpg-player-sprite-area">` +
+			`` +
+			`<div>(Players)</div>` +
+		`</div>` +
+
+	`</div><hr />`; // End of main battle area
 
 	// --- Message Log ---
-	html += `<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>`;
+	html += `<div class="rpg-message-log">${messageLog.join('<br>')}</div>`;
 
 	// --- Action Area ---
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = Dex.moves.get(targetSelection.moveId);
 		html += `<p>Select a target for <strong>${move.name}</strong>:</p>`;
-		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
+		html += `<div class="rpg-action-grid">`;
 
 		// TODO: This needs to be smarter based on move.target (e.g., 'ally', 'allAdjacentFoes')
 		// For now, we'll just show all valid targets.
@@ -4015,7 +4048,7 @@ function generateDoubleBattleHTML(
 			}
 		}
 		html += `</div>`;
-		html += `<p style="margin-top: 10px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+		html += `<p class="rpg-action-bar"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
 	} else {
 		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
@@ -4033,7 +4066,7 @@ function generateDoubleBattleHTML(
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
 			html += `<p>What will <strong>${pokemon.species}</strong> do?</p>`;
-			html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
+			html += `<div class="rpg-action-grid">`;
 
 			const moves = pokemon.moves;
 			for (const move of moves) {
@@ -4066,7 +4099,7 @@ function generateDoubleBattleHTML(
 			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
-		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+		html += `<p class="rpg-action-bar"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 	}
 
 	html += `</div>`;
