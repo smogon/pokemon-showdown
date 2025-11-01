@@ -159,7 +159,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	starmie: {
-		tier: "UU",
+		tier: "OU",
 	},
 	starmiemega: {
 		tier: "OU",
@@ -210,7 +210,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	dragonitemega: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	mewtwo: {
 		tier: "Uber",
@@ -639,7 +639,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	eelektrossmega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	litwick: {
 		tier: "LC",
@@ -651,7 +651,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	chandeluremega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	stunfisk: {
 		tier: "UU",
@@ -669,7 +669,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	chesnaughtmega: {
-		tier: "OU",
+		tier: "(OU)",
 	},
 	fennekin: {
 		tier: "LC",
@@ -744,7 +744,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	floetteeternal: {
-		tier: "OU",
+		tier: "(OU)",
 	},
 	floettemega: {
 		tier: "OU",
@@ -824,7 +824,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	dragalgemega: {
-		tier: "OU",
+		tier: "UU",
 	},
 	clauncher: {
 		tier: "LC",
