@@ -20,7 +20,7 @@ import { generateThemedTable } from
 import { K_FACTOR, getExpectedScore, calculateElo, to,
 	logClanActivity, hasClanPermission, generateWarCard } from './utils';
 
-const LOBBY_ROOM_ID = 'lobby' as RoomID;
+const LOBBY_ROOM_ID = 'clanwarlogs' as RoomID;
 
 export const warCommands: Chat.ChatCommands = {
 	async challenge(target, room, user) {
