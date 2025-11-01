@@ -488,8 +488,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 4] Draft",
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Standard Draft', 'Swagger Clause', 'DryPass Clause', 'Sleep Moves Clause', '!Team Preview', '!Evasion Abilities Clause'],
-		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak'],
+		ruleset: ['Standard Draft', 'Swagger Clause', 'DryPass Clause', '!Team Preview', '!Evasion Abilities Clause', 'Accuracy Moves Clause'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak', 'No Guard + Dynamic Punch'],
 	},
 	{
 		name: "[Gen 3] Draft",
