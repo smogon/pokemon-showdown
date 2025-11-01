@@ -2525,7 +2525,9 @@ function handleDamagingMove(
 			// Wild Pokemon doesn't switch
 		} else if (switcherIsPlayer) {
 			// Player uses pivot move - mark for switch
-			battle.playerShouldSwitch = move.selfSwitch === 'copyvolatile';
+			// --- THIS IS THE FIX ---
+			battle.playerShouldSwitch = move.selfSwitch; // Was: move.selfSwitch === 'copyvolatile'
+			// --- END FIX ---
 			messageLog.push(`${attacker.species} went back to ${battle.playerId}!`);
 		} else if (battle.battleType === 'trainer') {
 			// Trainer opponent uses pivot move - auto switch to next available
