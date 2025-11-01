@@ -713,7 +713,8 @@ function getBallBonus(ballId: string, battle: BattleState): number {
 function performCatchAttempt(battle: BattleState, ballId: string): { success: boolean, shakes: number } {
 	const { opponentActivePokemon, opponentStatus } = battle;
 	const speciesId = toID(opponentActivePokemon.species);
-	const catchRate = MANUAL_CATCH_RATES[speciesId] || 45;
+	// --- FIX: Updated fallback catch rate from 45 to 150 ---
+	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
 
 	const ballBonus = getBallBonus(ballId, battle);
 	if (ballBonus === 255) return { success: true, shakes: 4 }; // Master Ball
@@ -748,7 +749,8 @@ function performCatchAttempt(battle: BattleState, ballId: string): { success: bo
 	return { success: true, shakes: 4 };
 }
 
-function getStatMultiplier(stage: number): number {
+
+	(stage: number): number {
 	if (stage >= 0) {
 		return (2 + stage) / 2;
 	} else {
@@ -1174,8 +1176,9 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 
 function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId];
-	if (!evYield) return;
+	// --- FIX: Added fallback EV yield of { atk: 1 } ---
+	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
+	
 	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	for (const stat in evYield) {
 		if (totalEVs >= 510) break;
@@ -1207,8 +1210,9 @@ function gainExperience(
 	user: User
 ): { messages: string[], leveledUp: boolean } {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId];
-	if (!baseExp) return { messages: ['No experience was gained.'], leveledUp: false };
+	// --- FIX: Added fallback base experience of 150 ---
+	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
+	// if (!baseExp) return { messages: ['No experience was gained.'], leveledUp: false }; // <-- This check is no longer needed
 
 	const expGained = Math.floor((baseExp * defeatedPokemon.level) / 7);
 	if (expGained <= 0) return { messages: [`No Experience Points were gained.`], leveledUp: false };
