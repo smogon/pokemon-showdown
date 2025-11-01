@@ -3537,10 +3537,10 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 
 	let html = `<div class="infobox"><h2>Give ${item.name}</h2><p>Select a Pokémon to give this item to:</p>`;
 	for (const pokemon of player.party) {
-		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">
-			<span>${pokemon.species} (Holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</span>
-			<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>
-		</div>`;
+		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">` +
+			`<span>${pokemon.species} (Holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</span>` +
+			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
+		`</div>`;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
 	return html;
