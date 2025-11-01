@@ -3,7 +3,7 @@ import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
 import { Utils } from '../../../lib';
 import { K_FACTOR, getExpectedScore, calculateElo, generateWarCard } from './utils';
 
-const LOBBY_ROOM_ID = 'lobby' as RoomID;
+const LOBBY_ROOM_ID = 'clanwar' as RoomID;
 
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
 	if (players.length !== 2 || battle.tour) return;
@@ -113,10 +113,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 			if (loserRoom) {
-				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update(-10000);
+				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
 			}
 			if (lobbyRoom) {
-				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`, -10000).update();
 			}
 		} catch (e) {
 			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
