@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* TCG Collections
+* @author PrinceSky-Git
+*/
 import { ImpulseDB } from '../../impulse-db';
 import { type TcgCard, type TcgDailyCooldown, type TcgUser,
 	type TcgUserProfile, type TcgUserPack } from './interface';
