@@ -4,11 +4,6 @@ import { TYPE_CHART } from './constants';
 import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 
-// Global declarations (available from Pokemon Showdown environment)
-declare const Dex: any;
-declare function toID(text: string): string;
-declare type Move = any;
-
 /**
  * Calculate type effectiveness for a move against a defender
  */
