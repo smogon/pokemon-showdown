@@ -510,7 +510,10 @@ export const commands: ChatCommands = {
 
 export function start() {
 	// Initialize TCG cache when plugin is loaded/reloaded
-	void initializeCache().catch(err => {
+	console.log('TCG plugin start() called - initializing cache...');
+	void initializeCache().then(result => {
+		console.log(`TCG cache loaded on plugin start: ${result.cardCount} cards, ${result.setCount} sets`);
+	}).catch(err => {
 		console.error('Failed to initialize TCG cache on plugin start:', err);
 	});
 }
