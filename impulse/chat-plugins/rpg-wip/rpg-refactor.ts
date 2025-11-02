@@ -5233,8 +5233,7 @@ function generateDoubleBattleHTML(
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = getMove(targetSelection.moveId);
-		html += `<p style="margin-top: 10px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
-		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0;">`;
+		html += `<p style="margin-top: 15px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
 
 		const targets = [
 			{ slot: pSlot0, name: "Ally 1", index: 0 },
@@ -5243,13 +5242,27 @@ function generateDoubleBattleHTML(
 			{ slot: oSlot1, name: "Opponent 2", index: 3 },
 		];
 
-		for (const target of targets) {
-			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex) {
-				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name}</button>`;
-			}
-		}
-		html += `</div>`;
-		html += `<p><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+		const targetButtons = targets
+			.filter(target => target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex)
+			.map(target => {
+				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; min-height: 60px;`;
+				return `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button" style="${buttonStyle}">${target.name}</button>`;
+			});
+
+		// Use a <table> for the 2x2 grid layout
+		let targetButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+		targetButtonsHTML += `<tr>`;
+		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[0] || ''}</td>`;
+		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[1] || ''}</td>`;
+		targetButtonsHTML += `</tr>`;
+		targetButtonsHTML += `<tr>`;
+		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[2] || ''}</td>`;
+		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[3] || ''}</td>`;
+		targetButtonsHTML += `</tr>`;
+		targetButtonsHTML += `</table>`;
+
+		html += targetButtonsHTML;
+		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
 	} else {
 		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
@@ -5265,9 +5278,9 @@ function generateDoubleBattleHTML(
 
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
-			html += `<p style="margin-top: 10px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
+			html += `<p style="margin-top: 15px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
 
-			const moves = pokemon.moves.map(move => {
+			const moveButtons = pokemon.moves.map(move => {
 				const moveData = getMove(move.id);
 
 				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
@@ -5280,30 +5293,42 @@ function generateDoubleBattleHTML(
 				const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
 					(activeSlot.lockedMove && activeSlot.lockedMove !== move.id);
 
-				return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" style="flex: 1; padding: 10px;" ${isDisabled ? 'disabled style="background-color:#888; flex: 1; padding: 10px;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; min-height: 60px;`;
+
+				const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+					`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+					`<span>${moveData.type}</span>` +
+					`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+					`</div>`;
+
+				return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">${buttonContent}</button>`;
 			});
 
-			// Create rows of 2 buttons
-			html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">`;
-			for (let i = 0; i < moves.length; i += 2) {
-				html += moves[i];
-				if (i + 1 < moves.length) {
-					html += moves[i + 1];
-				}
-			}
-			html += `</div>`;
+			// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
+			let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+			moveButtonsHTML += `<tr>`;
+			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
+			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
+			moveButtonsHTML += `</tr>`;
+			moveButtonsHTML += `<tr>`;
+			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
+			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
+			moveButtonsHTML += `</tr>`;
+			moveButtonsHTML += `</table>`;
+
+			html += moveButtonsHTML;
 		} else {
 			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
 		}
 		const catchButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
-			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+			`<button class="button" disabled>⚽ Catch</button>`;
 
 		const runButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
-			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+			`<button class="button" disabled>🏃 Run</button>`;
 
-		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+		html += `<p style="margin-top: 10px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 	}
 
 	html += `</div>`;
