@@ -612,6 +612,15 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 };
 
+export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number): number {
+	const ability = toID(pokemon.ability || '');
+	const handler = STAT_MODIFIER_ABILITIES[ability];
+	if (handler) {
+		return handler(pokemon, stat, value);
+	}
+	return value;
+}
+
 /**
  * SECONDARY EFFECT MODIFIERS
  */
@@ -891,15 +900,6 @@ export function applyAbilityTypeModifier(ctx: AbilityContext, moveType: string):
 export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ITEM_INTERACTION_ABILITIES[ability]?.preventsItemRemoval || false;
-}
-
-export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number): number {
-	const ability = toID(pokemon.ability || '');
-	const handler = STAT_MODIFIER_ABILITIES[ability];
-	if (handler) {
-		return handler(pokemon, stat, value);
-	}
-	return value;
 }
 
 /**
@@ -1397,16 +1397,12 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	}
 }
 
-/**
- * Export all ability handlers
- */
-
 export const RPGAbilities = {
 	// Core functions
 	checkImmunity: checkAbilityImmunity,
 	applyPowerModifier: applyAbilityPowerModifier,
 	applyTypeModifier: applyAbilityTypeModifier,
-	applyStatModifier: applyAbilityStatModifier,
+	applyAbilityStatModifier, // <-- Changed from applyStatModifier
 	applySpeedModifier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
@@ -1445,5 +1441,3 @@ export const RPGAbilities = {
 	TERRAIN_ABILITIES,
 	HEALING_ABILITIES,
 };
-
-export default RPGAbilities;
