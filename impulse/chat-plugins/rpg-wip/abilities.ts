@@ -77,23 +77,43 @@ export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
 /**
  * Check if a Pokemon is grounded (affected by Ground-type moves)
  */
-export function isGrounded(pokemon: RPGPokemon, battle: BattleState): boolean {
-	const species = Dex.species.get(pokemon.species);
-	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-	const ability = toID(pokemon.ability || '');
-
-	// Flying types, Levitate ability, or Air Balloon make Pokemon ungrounded
-	if (species.types.includes('Flying') || ability === 'levitate' || hasAirBalloon) {
-		return false;
-	}
-
-	// Gravity grounds everything
+export function isGrounded(slot: ActivePokemonSlot, battle: BattleState): boolean {
+	// Gravity grounds everything, overriding all other effects.
 	if (battle.gravityTurns > 0) {
 		return true;
 	}
 
-	// Check for Smack Down effect (if implemented in slot)
-	// For now, default to grounded
+	// Smack Down grounds the Pokemon, overriding immunities.
+	if (slot.isSmackedDown) {
+		return true;
+	}
+
+	// Magnet Rise provides temporary levitation.
+	if (slot.magnetRiseTurns > 0) {
+		return false;
+	}
+
+	const pokemon = slot.pokemon;
+	const species = Dex.species.get(pokemon.species);
+	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
+	const ability = toID(pokemon.ability || '');
+
+	// Air Balloon provides immunity.
+	if (hasAirBalloon) {
+		return false;
+	}
+
+	// Levitate ability provides immunity.
+	if (ability === 'levitate') {
+		return false;
+	}
+
+	// Flying types are immune.
+	if (species.types.includes('Flying')) {
+		return false;
+	}
+
+	// If none of the above, the Pokemon is grounded.
 	return true;
 }
 
