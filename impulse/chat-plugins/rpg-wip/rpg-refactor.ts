@@ -4872,10 +4872,17 @@ function generateSingleBattleHTML(
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 15px; border-radius: 8px; text-align: center; width: 100%; margin: 8px 0;"><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 15px; border-radius: 8px; text-align: center;"><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
 	});
 
-	let moveButtonsHTML = moveButtons.join('');
+	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0;">`;
+	for (let i = 0; i < moveButtons.length; i += 2) {
+		moveButtonsHTML += moveButtons[i];
+		if (i + 1 < moveButtons.length) {
+			moveButtonsHTML += moveButtons[i + 1];
+		}
+	}
+	moveButtonsHTML += `</div>`;
 
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
