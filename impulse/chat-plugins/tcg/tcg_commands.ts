@@ -5,7 +5,7 @@
 */
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats,
-	renderCardGridHtml, addCardsToCollection } from './tcg_utils';
+	renderCardGridHtml, addCardsToCollection, initializeCache } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
@@ -507,3 +507,10 @@ export const commands: ChatCommands = {
 		...tradeCommands,
 	},
 };
+
+export function start() {
+	// Initialize TCG cache when plugin is loaded/reloaded
+	void initializeCache().catch(err => {
+		console.error('Failed to initialize TCG cache on plugin start:', err);
+	});
+}
