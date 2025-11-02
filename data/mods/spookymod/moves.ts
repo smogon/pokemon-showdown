@@ -303,7 +303,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onTry(source, target) {
 			if (source.lastMove?.id && source.lastMove.id !== 'moonlight') {
 				this.add('cant', source, 'Moongeist Beam', 'Moongeist Beam');
-				return false;
+				return true;
 			}
 		},
 	},
