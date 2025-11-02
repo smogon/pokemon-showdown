@@ -976,23 +976,21 @@ export class Side {
 		return Math.min(this.pokemon.length, this.battle.ruleTable.pickedTeamSize || Infinity);
 	}
 
-	chooseTeam(data = '') {
+	chooseTeam(data?: string) {
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
 		const ruleTable = this.battle.ruleTable;
-		let positions = data.split(data.includes(',') ? ',' : '')
-			.map(datum => parseInt(datum) - 1);
+		let positions = data ? data.split(data.includes(',') ? ',' : '').map(datum => parseInt(datum) - 1) :
+			[...this.pokemon.keys()]; // autoChoose
 		const pickedTeamSize = this.pickedTeamSize();
 
 		// make sure positions is exactly of length pickedTeamSize
 		// - If too big: the client automatically sends a full list, so we just trim it down to size
 		positions.splice(pickedTeamSize);
 		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
-		if (positions.length === 0) {
-			for (let i = 0; i < pickedTeamSize; i++) positions.push(i);
-		} else if (positions.length < pickedTeamSize) {
+		if (positions.length < pickedTeamSize) {
 			for (let i = 0; i < pickedTeamSize; i++) {
 				if (!positions.includes(i)) positions.push(i);
 				// duplicate in input, let the rest of the code handle the error message
@@ -1008,40 +1006,18 @@ export class Side {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 		}
-		if (ruleTable.maxTotalLevel) {
-			let totalLevel = 0;
-			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
-			if (totalLevel > ruleTable.maxTotalLevel) {
-				if (!data) {
-					// autoChoose
-					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
-						.slice(0, pickedTeamSize);
-				} else {
-					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${pickedTeamSize} Pokémon`);
-				}
+		const result = ruleTable.onChooseTeam?.[0].call(this.battle, positions, this.pokemon, !data);
+		if (result) {
+			if (typeof result === 'string') {
+				return this.emitChoiceError(`Can't choose for Team Preview: ${result}`);
 			}
-		}
-		if (ruleTable.valueRules.has('forceselect')) {
-			const species = this.battle.dex.species.get(ruleTable.valueRules.get('forceselect'));
-			if (!data) {
-				// autoChoose
-				positions = [...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name === species.name)
-					.concat([...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name !== species.name))
-					.slice(0, pickedTeamSize);
-			} else {
-				let hasSelection = false;
-				for (const pos of positions) {
-					if (this.pokemon[pos].species.name === species.name) {
-						hasSelection = true;
-						break;
-					}
-				}
-				if (!hasSelection) {
-					return this.emitChoiceError(`You must bring ${species.name} to the battle.`);
-				}
+			if (result.length < pickedTeamSize) {
+				throw new Error(`onChooseTeam from ${ruleTable.onChooseTeam![1]} returned a team of size ${result.length}, which is less than the required size of ${pickedTeamSize}`);
 			}
+			positions = result.slice(0, pickedTeamSize);
 		}
+
 		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
