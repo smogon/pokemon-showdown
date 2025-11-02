@@ -1799,6 +1799,37 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 	}
 }
 
+/**
+ * Mental Herb: Cures move-binding effects (Taunt, Encore, Disable, Torment, Heal Block)
+ * Called after a move-binding effect is applied to check if Mental Herb should cure it
+ */
+function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
+	
+	// Check if the Pokemon has any move-binding effects
+	const hasBindingEffect = 
+		slot.tauntTurns > 0 ||
+		slot.encoreMove !== undefined ||
+		slot.disabledMove !== undefined ||
+		slot.tormentActive ||
+		(slot.healBlockTurns || 0) > 0;
+	
+	if (hasBindingEffect) {
+		// Cure all move-binding effects
+		slot.tauntTurns = 0;
+		slot.encoreMove = undefined;
+		slot.disabledMove = undefined;
+		slot.tormentActive = false;
+		slot.healBlockTurns = 0;
+		
+		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
+		slot.pokemon.item = undefined; // Mental Herb is consumed
+		return true;
+	}
+	
+	return false;
+}
+
 function handleStatusMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot, // Note: defenderSlot can be null for 'self' or 'allySide' moves
@@ -2069,6 +2100,7 @@ function handleStatusMove(
 					defenderSlot.tauntTurns = 3;
 					messageLog.push(`${defender.species} fell for the taunt!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 
@@ -2106,6 +2138,7 @@ function handleStatusMove(
 					defenderSlot.disabledMove = { moveId: defenderSlot.lastMoveUsed, turns: 4 };
 					messageLog.push(`${defender.species}'s ${defenderSlot.lastMoveUsed} was disabled!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				} else {
 					messageLog.push(`But it failed!`);
 				}
@@ -2116,6 +2149,7 @@ function handleStatusMove(
 					defenderSlot.encoreMove = { moveId: defenderSlot.lastMoveUsed, turns: 3 };
 					messageLog.push(`${defender.species} received an encore!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				} else {
 					messageLog.push(`But it failed!`);
 				}
@@ -2174,6 +2208,7 @@ function handleStatusMove(
 					defenderSlot.tormentActive = true;
 					messageLog.push(`${defender.species} was subjected to torment!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 
@@ -2190,6 +2225,7 @@ function handleStatusMove(
 					defenderSlot.healBlockTurns = 5;
 					messageLog.push(`${defender.species} was prevented from healing!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 			}
@@ -2816,6 +2852,32 @@ function handleDamagingMove(
 				if (activated) {
 					messageLog.push(`${defender.species}'s Weakness Policy sharply boosted its Attack and Sp. Attack!`);
 					defender.item = undefined;
+				}
+			}
+
+			// Red Card: Forces attacker to switch when holder is hit
+			if (defender.hp > 0 && attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
+				// Only works in trainer battles where the attacker has backup Pokemon
+				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+					const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
+					const attackerSlotIndex = isPlayerDefending ? 
+						battle.opponentSlots.indexOf(attackerSlot) : 
+						battle.playerSlots.indexOf(attackerSlot);
+					
+					if (attackerSlotIndex !== -1) {
+						messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
+						defender.item = undefined; // Red Card is consumed
+						
+						// Mark that this slot needs to switch
+						if (isPlayerDefending) {
+							// Force opponent to switch
+							battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+						} else {
+							// Force player to switch (will trigger switch UI)
+							battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+							battle.playerShouldSwitch = true;
+						}
+					}
 				}
 			}
 
@@ -4057,6 +4119,13 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+
+		// Quick Claw: 20% chance to move first
+		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+		
+		if (quickClawA && !quickClawB) return -1; // A goes first
+		if (quickClawB && !quickClawA) return 1;  // B goes first
 
 		if (battle.trickRoomTurns > 0) {
 			return speedA - speedB; // Slower goes first in Trick Room
