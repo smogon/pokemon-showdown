@@ -71,6 +71,23 @@ interface ActivePokemonSlot {
 	isHelped?: boolean; // For Helping Hand
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
 	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
+	
+	// High-priority volatile statuses
+	substitute?: { hp: number }; // Substitute HP
+	disabledMove?: { moveId: string, turns: number }; // Disabled move and turns remaining
+	encoreMove?: { moveId: string, turns: number }; // Encored move and turns remaining
+	isIngrained?: boolean; // Ingrain - restores HP but prevents switching
+	hasAquaRing?: boolean; // Aqua Ring - restores 1/16 HP each turn
+	focusEnergy?: boolean; // Focus Energy - increases critical hit ratio
+	magnetRiseTurns?: number; // Magnet Rise - levitates (Ground immunity)
+	telekinesisCounter?: number; // Telekinesis - moves cannot miss
+	isSmackedDown?: boolean; // Smackdown - grounded (loses Flying/Levitate)
+	lastMoveUsed?: string; // For Torment, Disable, Encore tracking
+	tormentActive?: boolean; // Torment - cannot use same move twice
+	embargoTurns?: number; // Embargo - cannot use items
+	healBlockTurns?: number; // Heal Block - cannot heal
+	isCharged?: boolean; // Charge - next Electric move deals 2x damage
+	stockpileCount?: number; // Stockpile - stores energy (0-3)
 }
 
 // Interface for player data
@@ -798,6 +815,11 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battl
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
+	// Focus Energy boosts crit stage
+	if (attackerSlot.focusEnergy) {
+		critStage += 2;
+	}
+
 	// Base critical hit stages for certain moves
 	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
 		critStage += 1;
@@ -1010,6 +1032,11 @@ function calculateDamage(
 		basePower *= 2;
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
+		basePower *= 2;
+	}
+	
+	// Charge boosts next Electric move
+	if (attackerSlot.isCharged && moveType === 'Electric') {
 		basePower *= 2;
 	}
 
@@ -1614,6 +1641,68 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			slot.yawnCounter = undefined;
 		}
 	}
+
+	// Handle Aqua Ring healing
+	if (slot.hasAquaRing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
+	}
+
+	// Handle Ingrain healing
+	if (slot.isIngrained && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
+	}
+
+	// Decrement volatile counters
+	if (slot.disabledMove) {
+		slot.disabledMove.turns--;
+		if (slot.disabledMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s ${slot.disabledMove.moveId} is no longer disabled!`);
+			slot.disabledMove = undefined;
+		}
+	}
+
+	if (slot.encoreMove) {
+		slot.encoreMove.turns--;
+		if (slot.encoreMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s encore ended!`);
+			slot.encoreMove = undefined;
+		}
+	}
+
+	if (slot.magnetRiseTurns > 0) {
+		slot.magnetRiseTurns--;
+		if (slot.magnetRiseTurns === 0) {
+			messageLog.push(`${pokemon.species}'s electromagnetism wore off!`);
+		}
+	}
+
+	if (slot.telekinesisCounter > 0) {
+		slot.telekinesisCounter--;
+		if (slot.telekinesisCounter === 0) {
+			messageLog.push(`${pokemon.species} was freed from telekinesis!`);
+		}
+	}
+
+	if (slot.embargoTurns > 0) {
+		slot.embargoTurns--;
+		if (slot.embargoTurns === 0) {
+			messageLog.push(`${pokemon.species} can use items again!`);
+		}
+	}
+
+	if (slot.healBlockTurns > 0) {
+		slot.healBlockTurns--;
+		if (slot.healBlockTurns === 0) {
+			messageLog.push(`${pokemon.species}'s Heal Block wore off!`);
+		}
+	}
+
+	// Clear one-turn effects
+	slot.isCharged = false; // Charge only lasts until next Electric move
 }
 
 /**
@@ -2045,6 +2134,98 @@ function handleStatusMove(
 					}
 				}
 				break;
+
+			case 'disable':
+				if (defenderSlot.lastMoveUsed && !defenderSlot.disabledMove) {
+					defenderSlot.disabledMove = { moveId: defenderSlot.lastMoveUsed, turns: 4 };
+					messageLog.push(`${defender.species}'s ${defenderSlot.lastMoveUsed} was disabled!`);
+					hadEffect = true;
+				} else {
+					messageLog.push(`But it failed!`);
+				}
+				break;
+
+			case 'encore':
+				if (defenderSlot.lastMoveUsed && !defenderSlot.encoreMove) {
+					defenderSlot.encoreMove = { moveId: defenderSlot.lastMoveUsed, turns: 3 };
+					messageLog.push(`${defender.species} received an encore!`);
+					hadEffect = true;
+				} else {
+					messageLog.push(`But it failed!`);
+				}
+				break;
+
+			case 'ingrain':
+				if (!attackerSlot.isIngrained) {
+					attackerSlot.isIngrained = true;
+					messageLog.push(`${attacker.species} planted its roots!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'aquaring':
+				if (!attackerSlot.hasAquaRing) {
+					attackerSlot.hasAquaRing = true;
+					messageLog.push(`${attacker.species} surrounded itself with a veil of water!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'focusenergy':
+				if (!attackerSlot.focusEnergy) {
+					attackerSlot.focusEnergy = true;
+					messageLog.push(`${attacker.species} is getting pumped!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'magnetrise':
+				if (attackerSlot.magnetRiseTurns === 0) {
+					attackerSlot.magnetRiseTurns = 5;
+					messageLog.push(`${attacker.species} levitated with electromagnetism!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'telekinesis':
+				if (defenderSlot.telekinesisCounter === 0) {
+					defenderSlot.telekinesisCounter = 3;
+					messageLog.push(`${defender.species} was hurled into the air!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'smackdown':
+				if (!defenderSlot.isSmackedDown) {
+					defenderSlot.isSmackedDown = true;
+					messageLog.push(`${defender.species} fell straight down!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'torment':
+				if (!defenderSlot.tormentActive) {
+					defenderSlot.tormentActive = true;
+					messageLog.push(`${defender.species} was subjected to torment!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'embargo':
+				if (defenderSlot.embargoTurns === 0) {
+					defenderSlot.embargoTurns = 5;
+					messageLog.push(`${defender.species} can't use items anymore!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'healblock':
+				if (defenderSlot.healBlockTurns === 0) {
+					defenderSlot.healBlockTurns = 5;
+					messageLog.push(`${defender.species} was prevented from healing!`);
+					hadEffect = true;
+				}
+				break;
 			}
 		} else if (move.id === 'helpinghand') {
 			if (!defenderSlot) { // Target fainted or is empty
@@ -2055,6 +2236,36 @@ function handleStatusMove(
 			defenderSlot.isHelped = true; // <-- NEW VOLATILE
 			messageLog.push(`${attacker.species} is ready to help ${defender.species}!`);
 			hadEffect = true;
+		} else if (move.id === 'substitute') {
+			// Substitute creates a decoy with 1/4 of user's max HP
+			if (attackerSlot.substitute) {
+				messageLog.push(`${attacker.species} already has a substitute!`);
+			} else {
+				const subHP = Math.floor(attacker.maxHp / 4);
+				if (attacker.hp <= subHP) {
+					messageLog.push(`But it does not have enough HP left to make a substitute!`);
+				} else {
+					attacker.hp -= subHP;
+					attackerSlot.substitute = { hp: subHP };
+					messageLog.push(`${attacker.species} made a substitute!`);
+					hadEffect = true;
+				}
+			}
+		} else if (move.id === 'charge') {
+			attackerSlot.isCharged = true;
+			messageLog.push(`${attacker.species} began charging power!`);
+			hadEffect = true;
+		} else if (move.id === 'stockpile') {
+			if (attackerSlot.stockpileCount < 3) {
+				attackerSlot.stockpileCount++;
+				// Stockpile also raises Defense and Sp. Def by 1 stage
+				if (attackerSlot.statStages.def < 6) attackerSlot.statStages.def++;
+				if (attackerSlot.statStages.spd < 6) attackerSlot.statStages.spd++;
+				messageLog.push(`${attacker.species} stockpiled ${attackerSlot.stockpileCount}!`);
+				hadEffect = true;
+			} else {
+				messageLog.push(`${attacker.species} can't stockpile any more!`);
+			}
 		}
 	}
 
@@ -2514,6 +2725,22 @@ function handleDamagingMove(
 		if (battle.magicRoomTurns === 0 && defender.item === 'airballoon' && move.type === 'Ground') {
 			messageLog.push(`<i style="color: #6c757d;">The Air Balloon made the attack miss!</i>`);
 			continue;
+		}
+
+		// Handle Substitute - takes damage instead of the Pokemon
+		if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
+			const subHP = defenderSlot.substitute.hp;
+			if (damageDealt >= subHP) {
+				damageDealt -= subHP;
+				defenderSlot.substitute = undefined;
+				messageLog.push(`The substitute took the hit and broke!`);
+				// If there's remaining damage, it doesn't carry over in most cases
+				damageDealt = 0;
+			} else {
+				defenderSlot.substitute.hp -= damageDealt;
+				messageLog.push(`The substitute took the hit!`);
+				damageDealt = 0;
+			}
 		}
 
 		if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && defender.hp === defender.maxHp && damageDealt >= defender.hp) {
@@ -3118,6 +3345,9 @@ function executeMove(
 	battle: BattleState,
 	messageLog: string[]
 ): void {
+	// Track last move used (for Disable, Torment, etc.)
+	attackerSlot.lastMoveUsed = move.id;
+	
 	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
@@ -3634,6 +3864,22 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		lockedMove: undefined,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
+		// Initialize new volatile fields
+		substitute: undefined,
+		disabledMove: undefined,
+		encoreMove: undefined,
+		isIngrained: false,
+		hasAquaRing: false,
+		focusEnergy: false,
+		magnetRiseTurns: 0,
+		telekinesisCounter: 0,
+		isSmackedDown: false,
+		lastMoveUsed: undefined,
+		tormentActive: false,
+		embargoTurns: 0,
+		healBlockTurns: 0,
+		isCharged: false,
+		stockpileCount: 0,
 	};
 }
 
@@ -5653,6 +5899,18 @@ export const commands: ChatCommands = {
 				}
 				if (moveObject && moveObject.pp === 0) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`There is no PP left for ${moveData.name}!`])}`);
+				}
+				// Check Disable
+				if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${moveData.name} is disabled!`])}`);
+				}
+				// Check Encore
+				if (attackerSlot.encoreMove && attackerSlot.encoreMove.moveId !== moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`])}`);
+				}
+				// Check Torment
+				if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} can't use the same move twice due to Torment!`])}`);
 				}
 				// --- FIX: Check Choice Item Lock ---
 				if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
