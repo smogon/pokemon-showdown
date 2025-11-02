@@ -6,6 +6,7 @@ import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 import { Dex, toID } from '../../../sim/dex';
+import RPGAbilities from './abilities';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -827,17 +828,26 @@ function calculateDamage(
 	const attackerSpecies = Dex.species.get(attacker.species);
 	const defenderSpecies = Dex.species.get(defender.species);
 
-	// --- Ability/Type ImmunITIES Check ---
-	if (move.flags.sound && defender.ability === 'Soundproof') {
-		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species}'s Soundproof blocks the move!</i>`, effectiveness: 0 };
+	// --- Ability Immunity Check (using new abilities system) ---
+	const abilityContext = {
+		attacker,
+		defender,
+		attackerSlot,
+		defenderSlot,
+		move,
+		battle,
+		messageLog: [],
+	};
+
+	// Check for type immunities first (Grass-types immune to powder)
+	if (move.flags.powder && defenderSpecies.types.includes('Grass')) {
+		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0 };
 	}
-	if (move.flags.powder) {
-		if (defenderSpecies.types.includes('Grass')) {
-			return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0 };
-		}
-		if (defender.ability === 'Overcoat') {
-			return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species}'s Overcoat blocks the move!</i>`, effectiveness: 0 };
-		}
+
+	// Check ability-based immunities
+	const immunityCheck = RPGAbilities.checkImmunity(abilityContext);
+	if (immunityCheck && immunityCheck.immune) {
+		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0 };
 	}
 
 	if (!move.basePower) {
@@ -989,7 +999,7 @@ function calculateDamage(
 	if (move.id === 'weatherball' && battle.weather) {
 		basePower *= 2;
 	}
-	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
+	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
 		basePower *= 2;
 	}
 	
@@ -1013,7 +1023,7 @@ function calculateDamage(
 		case 'hail': moveType = 'Ice'; break;
 		}
 	}
-	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
+	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.RPGAbilities.isGrounded(attacker, battle)) {
 		switch (battle.terrain.type) {
 		case 'electric': moveType = 'Electric'; break;
 		case 'grassy': moveType = 'Grass'; break;
@@ -1022,21 +1032,16 @@ function calculateDamage(
 		}
 	}
 
+	// --- Apply Ability Type Modifiers ---
+	moveType = RPGAbilities.applyTypeModifier(abilityContext, moveType);
+
 	// --- Move-specific Power Boosts ---
 	if (move.id === 'knockoff' && defender.item) {
 		basePower = Math.floor(basePower * 1.5);
 	}
 
-	// --- Ability Power Boosts ---
-	if (attacker.ability === 'Iron Fist' && move.flags.punch) {
-		basePower = Math.floor(basePower * 1.2);
-	}
-	if (attacker.ability === 'Strong Jaw' && move.flags.bite) {
-		basePower = Math.floor(basePower * 1.5);
-	}
-	if (attacker.ability === 'Mega Launcher' && move.flags.pulse) {
-		basePower = Math.floor(basePower * 1.5);
-	}
+	// --- Ability Power Boosts (using new abilities system) ---
+	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
 
 	let attackStatRaw = move.category === 'Special' ? attacker.spa : attacker.atk;
 	let defenseStatRaw = move.category === 'Special' ? defender.spd : defender.def;
@@ -1089,8 +1094,7 @@ function calculateDamage(
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, move, battle);
 	const criticalMultiplier = isCritical ? 1.5 : 1;
-	const isStab = attackerSpecies.types.includes(moveType);
-	const stabMultiplier = isStab ? 1.5 : 1;
+	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / finalDefenseStat)) / 50) + 2);
 	const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
@@ -1138,8 +1142,8 @@ function calculateDamage(
 	}
 
 	if (battle.terrain) {
-		const attackerIsGrounded = isGrounded(attacker, battle);
-		const defenderIsGrounded = isGrounded(defender, battle);
+		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
+		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
 
 		if (battle.terrain.type === 'electric' && moveType === 'Electric' && attackerIsGrounded) {
 			baseDamage = Math.floor(baseDamage * 1.3);
@@ -1584,7 +1588,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			if (!slot.status) {
 				const speciesData = Dex.species.get(pokemon.species);
 				// Check immunity
-				const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(pokemon, battle);
+				const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(pokemon, battle);
 				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
 
 				if (!isTerrainImmune && !isAbilityImmune) {
@@ -1948,7 +1952,7 @@ function handleStatusMove(
 				messageLog.push('But it failed!');
 				return;
 			}
-			if (defender.ability === 'Sticky Hold' || attacker.ability === 'Sticky Hold') {
+			if (RPGAbilities.checkItemRemovalPrevention(defender) || RPGAbilities.checkItemRemovalPrevention(attacker)) {
 				messageLog.push('But it failed!');
 				return;
 			}
@@ -1990,7 +1994,7 @@ function handleStatusMove(
 				messageLog.push('But it failed!');
 				return;
 			}
-			if (defender.ability === 'Sticky Hold') {
+			if (RPGAbilities.checkItemRemovalPrevention(defender)) {
 				messageLog.push('But it failed!');
 				return;
 			}
@@ -2058,7 +2062,7 @@ function handleStatusMove(
 		} else if (move.status) {
 			const defenderCurrentStatus = defenderSlot.status;
 			let canBeAfflicted = !defenderCurrentStatus;
-			const defenderIsGrounded = isGrounded(defender, battle);
+			const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
 
 			if (battle.terrain?.type === 'misty' && defenderIsGrounded) {
 				canBeAfflicted = false;
@@ -2119,7 +2123,7 @@ function handleStatusMove(
 					// Check type immunity
 					const isTypeImmune = defenderSpecies.types.includes('Grass') && defenderSlot.pokemon.ability === 'Overcoat';
 					// Check terrain immunity
-					const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(defender, battle);
+					const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(defender, battle);
 					// Check ability immunity
 					const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(defender.ability || '');
 
@@ -2929,9 +2933,8 @@ function handleDamagingMove(
 					// Covert Cloak blocks secondary effects
 				} else if (move.secondary) {
 					let chance = move.secondary.chance || 100;
-					if (attacker.ability === 'Serene Grace') {
-						chance *= 2;
-					}
+					// Apply Serene Grace using abilities system
+					chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
 					if (Math.random() * 100 < chance) {
 						if (move.id === 'triattack' && move.secondary.status) {
@@ -3006,12 +3009,12 @@ function handleDamagingMove(
 
 	// --- Post-damage Item Manipulation Effects ---
 	if (defender.hp > 0 && battle.magicRoomTurns === 0) {
-		if (move.id === 'knockoff' && defender.item && defender.ability !== 'Sticky Hold') {
+		if (move.id === 'knockoff' && defender.item && !RPGAbilities.checkItemRemovalPrevention(defender)) {
 			const removedItem = ITEMS_DATABASE[defender.item];
 			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem?.name || defender.item}!`);
 			defender.item = undefined;
 		}
-		if (['thief', 'covet'].includes(move.id) && defender.item && !attacker.item && defender.ability !== 'Sticky Hold') {
+		if (['thief', 'covet'].includes(move.id) && defender.item && !attacker.item && !RPGAbilities.checkItemRemovalPrevention(defender)) {
 			const stolenItem = ITEMS_DATABASE[defender.item];
 			attacker.item = defender.item;
 			defender.item = undefined;
@@ -3252,20 +3255,6 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 }
 
 /**
- * Checks if a Pokémon is grounded and affected by terrain.
- */
-function isGrounded(pokemon: RPGPokemon, battle: BattleState): boolean {
-	// Gravity grounds all Pokémon, overriding other immunities.
-	if (battle.gravityTurns > 0) {
-		return true;
-	}
-	const species = Dex.species.get(pokemon.species);
-	// Air Balloon effect is disabled in Magic Room, so we can't check for it here
-	// The Magic Room check should be done in the calling function
-	return !species.types.includes('Flying') && pokemon.ability !== 'Levitate';
-}
-
-/**
  * Checks if a Pokemon's held item is usable (not suppressed by Magic Room or Embargo)
  * @param slot The Pokemon slot to check
  * @param battle The battle state
@@ -3289,7 +3278,7 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 			const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 			for (const slot of allSlots) {
 				const pokemon = slot.pokemon;
-				if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp && isGrounded(pokemon, battle)) {
+				if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp && RPGAbilities.isGrounded(pokemon, battle)) {
 					const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 					pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 					messageLog.push(`${pokemon.species} restored a little HP due to the Grassy Terrain!`);
