@@ -3,12 +3,12 @@
 // and the value is an object containing the EV yields for each stat.
 
 export const MANUAL_EV_YIELDS: Record<string, {
-	hp?: number;
-	atk?: number;
-	def?: number;
-	spa?: number;
-	spd?: number;
-	spe?: number;
+	hp?: number,
+	atk?: number,
+	def?: number,
+	spa?: number,
+	spd?: number,
+	spe?: number,
 }> = {
 	// --- Generation 1 ---
 	'bulbasaur': { spa: 1 },
