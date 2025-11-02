@@ -3609,6 +3609,7 @@ function executeMove(
  * This can result in a win, a loss, or a prompt to switch Pokémon.
  * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
  */
+
 function checkBattleEndCondition(
 	context: CommandContext,
 	battle: BattleState,
@@ -3661,13 +3662,18 @@ function checkBattleEndCondition(
 	}
 
 	// --- 2. Check for Fainted Player Pokemon ---
-	let playerFaintSwitchNeeded = false;
+	let playerSwitchNeeded = false; // <-- RENAMED
 	for (let i = 0; i < battle.playerSlots.length; i++) {
 		const slot = battle.playerSlots[i];
-		if (slot && slot.pokemon.hp <= 0) {
-			messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
-			battle.playerSlots[i as 0 | 1] = null; // Set slot to null
-			playerFaintSwitchNeeded = true;
+		// --- UPDATED LOGIC: Check for null slot OR fainted Pokemon ---
+		if (slot === null || slot.pokemon.hp <= 0) {
+			if (slot && slot.pokemon.hp <= 0) {
+				// Only show faint message if it was a faint
+				messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
+			}
+			// Set slot to null (handles both faint and Red Card)
+			battle.playerSlots[i as 0 | 1] = null;
+			playerSwitchNeeded = true; // <-- RENAMED
 		}
 	}
 
@@ -3779,8 +3785,9 @@ function checkBattleEndCondition(
 		battle.aiPendingPivot = undefined; // Clear flag
 	}
 
-	// E. Check for Player Faint Switch-In Needed
-	if (playerFaintSwitchNeeded && playerHasLivingPokemon) {
+	// E. Check for Player Faint/Forced Switch-In Needed
+	// --- UPDATED LOGIC: Use playerSwitchNeeded ---
+	if (playerSwitchNeeded && playerHasLivingPokemon) {
 		// Battle is interrupted, player must switch.
 		// We'll just show the first available slot to fill.
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
