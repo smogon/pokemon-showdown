@@ -1707,7 +1707,9 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
 	if (hazards.length === 0) return false; // No hazards, no effect.
 
+	const species = Dex.species.get(pokemon.species);
 	const isGrounded = RPGAbilities.isGrounded(pokemon, battle);
+	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
 
 	let totalDamage = 0;
 	let airBalloonPopped = false;
@@ -2302,9 +2304,10 @@ function handleStatusMove(
 		// Determine which side's future moves array to use
 		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
 
-		// Check if a future move is already scheduled for this slot
+		// Calculate the target slot index based on defender slot
 		const targetSlotLocalIndex = isPlayerAttacker ?
-			(chosenTargetSlot - 2) : chosenTargetSlot; // Convert to 0-1 index
+			battle.opponentSlots.indexOf(defenderSlot) :
+			battle.playerSlots.indexOf(defenderSlot);
 
 		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
 
@@ -2312,6 +2315,11 @@ function handleStatusMove(
 			messageLog.push(`But it failed!`);
 			return;
 		}
+
+		// Calculate the attacker slot index
+		const attackerSlotIndex = isPlayerAttacker ?
+			battle.playerSlots.indexOf(attackerSlot) :
+			battle.opponentSlots.indexOf(attackerSlot);
 
 		// Schedule the future move to hit in 2 turns
 		futureMoveArray.push({
@@ -3015,6 +3023,15 @@ function handleDamagingMove(
 				} else if (move.secondary && shouldApplySecondary) {
 					let chance = move.secondary.chance || 100;
 					// Apply Serene Grace using abilities system
+					const abilityContext = {
+						attacker,
+						defender,
+						attackerSlot,
+						defenderSlot,
+						move,
+						battle,
+						messageLog,
+					};
 					chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
 					if (Math.random() * 100 < chance) {
