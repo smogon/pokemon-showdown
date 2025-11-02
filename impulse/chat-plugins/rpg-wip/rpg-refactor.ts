@@ -5,6 +5,7 @@ import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
+import { Dex, toID } from '../../../sim/dex';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -198,24 +199,10 @@ interface BattleState {
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
-// Item database
-const ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
-	// PokeBalls
-	'pokeball': { id: 'pokeball', name: 'Poke Ball', category: 'pokeball', description: 'A device for catching wild Pokemon. It has a 1x catch rate.' },
-	'greatball': { id: 'greatball', name: 'Great Ball', category: 'pokeball', description: 'A good, high-performance Poke Ball. It has a 1.5x catch rate.' },
-	'ultraball': { id: 'ultraball', name: 'Ultra Ball', category: 'pokeball', description: 'An ultra-high performance Poke Ball. It has a 2x catch rate.' },
-	'masterball': { id: 'masterball', name: 'Master Ball', category: 'pokeball', description: 'The best Poke Ball with the ultimate performance. It will catch any wild Pokemon without fail.' },
-	'levelball': { id: 'levelball', name: 'Level Ball', category: 'pokeball', description: 'A Poke Ball that works well on Pokemon of a lower level than your own.' },
-	'fastball': { id: 'fastball', name: 'Fast Ball', category: 'pokeball', description: 'A Poke Ball that works well on Pokemon that have a high Speed stat.' },
-	'timerball': { id: 'timerball', name: 'Timer Ball', category: 'pokeball', description: 'A Poke Ball that becomes more effective the more turns that have passed in battle.' },
-	'nestball': { id: 'nestball', name: 'Nest Ball', category: 'pokeball', description: 'A Poke Ball that works well on low-level Pokemon.' },
-	'netball': { id: 'netball', name: 'Net Ball', category: 'pokeball', description: 'A Poke Ball that works well on Bug- or Water-type Pokemon.' },
-	'quickball': { id: 'quickball', name: 'Quick Ball', category: 'pokeball', description: 'A Poke Ball that provides a high catch rate if used at the start of a wild encounter.' },
-	'dreamball': { id: 'dreamball', name: 'Dream Ball', category: 'pokeball', description: 'A Poke Ball that works well on sleeping Pokemon.' },
-	'premierball': { id: 'premierball', name: 'Premier Ball', category: 'pokeball', description: 'A somewhat rare Poke Ball that has been specially made to commemorate an event.' },
-	'luxuryball': { id: 'luxuryball', name: 'Luxury Ball', category: 'pokeball', description: 'A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.' },
-	'healball': { id: 'healball', name: 'Heal Ball', category: 'pokeball', description: 'A remedial Poke Ball that restores the HP of a Pokemon it catches and eliminates any status conditions.' },
-	// Medicine
+// Custom RPG items that don't exist in Dex - these are hardcoded
+// All other items (pokeballs, berries, held items) are retrieved from Dex.items
+const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
+	// Medicine (RPG-specific healing items not in competitive Pokemon)
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'A spray-type medicine. It restores 20 HP to a Pokemon.' },
 	'superpotion': { id: 'superpotion', name: 'Super Potion', category: 'medicine', description: 'A spray-type medicine. It restores 60 HP to a Pokemon.' },
 	'hyperpotion': { id: 'hyperpotion', name: 'Hyper Potion', category: 'medicine', description: 'A spray-type medicine. It restores 120 HP to a Pokemon.' },
@@ -229,81 +216,52 @@ const ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'energyroot': { id: 'energyroot', name: 'Energy Root', category: 'medicine', description: 'A bitter medicinal root. It restores 200 HP to a Pokémon.' },
 	'energypowder': { id: 'energypowder', name: 'EnergyPowder', category: 'medicine', description: 'A bitter medicinal powder. It restores 50 HP to a Pokémon.' },
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
-	// Music
+	// Misc (RPG-specific custom item)
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
-	// Berries & Held Items
-	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 10 HP.' },
-	'sitrusberry': { id: 'sitrusberry', name: 'Sitrus Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 1/4 of max HP.' },
-	'aguavberry': { id: 'aguavberry', name: 'Aguav Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'enigmaberry': { id: 'enigmaberry', name: 'Enigma Berry', category: 'berry', description: 'If a Pokémon holding this Berry is hit with a supereffective move, it will recover 1/4 of its max HP.' },
-	'figyberry': { id: 'figyberry', name: 'Figy Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'goldberry': { id: 'goldberry', name: 'Gold Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 30 HP.' },
-	'iapapaberry': { id: 'iapapaberry', name: 'Iapapa Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'magoberry': { id: 'magoberry', name: 'Mago Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'wikiberry': { id: 'wikiberry', name: 'Wiki Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'berryjuice': { id: 'berryjuice', name: 'Berry Juice', category: 'held', description: 'A 100% natural juice. It restores 20 HP to a Pokémon when its HP drops to 1/2 or less.' },
-	'leftovers': { id: 'leftovers', name: 'Leftovers', category: 'held', description: 'An item to be held by a Pokémon. The holder\'s HP is gradually restored during battle.' },
-	'blacksludge': { id: 'blacksludge', name: 'Black Sludge', category: 'held', description: 'A held item that gradually restores the HP of Poison-type Pokémon. It damages any other type.' },
-	'shellbell': { id: 'shellbell', name: 'Shell Bell', category: 'held', description: 'A held item that restores a little HP to the holder whenever it inflicts damage.' },
-	'choiceband': { id: 'choiceband', name: 'Choice Band', category: 'held', description: 'Boosts Attack, but allows the use of only one move.' },
-	'choicescarf': { id: 'choicescarf', name: 'Choice Scarf', category: 'held', description: 'Boosts Speed, but allows the use of only one move.' },
-	'choicespecs': { id: 'choicespecs', name: 'Choice Specs', category: 'held', description: 'Boosts Special Attack, but allows the use of only one move.' },
-	'lifeorb': { id: 'lifeorb', name: 'Life Orb', category: 'held', description: 'Boosts the power of moves, but the holder loses HP after attacking.' },
-	'rockyhelmet': { id: 'rockyhelmet', name: 'Rocky Helmet', category: 'held', description: 'If the holder is hit by a contact move, the attacker is also damaged.' },
-	'stickybarb': { id: 'stickybarb', name: 'Sticky Barb', category: 'held', description: 'Damages the holder each turn. Can be passed to others on contact.' },
-	'jabocaberry': { id: 'jabocaberry', name: 'Jaboca Berry', category: 'berry', description: 'If the holder is hit by a physical move, the attacker is damaged. One-time use.' },
-	'rowapberry': { id: 'rowapberry', name: 'Rowap Berry', category: 'berry', description: 'If the holder is hit by a special move, the attacker is damaged. One-time use.' },
-	'flameorb': { id: 'flameorb', name: 'Flame Orb', category: 'held', description: 'A held item that will inflict a burn on the holder at the end of the turn.' },
-	'toxicorb': { id: 'toxicorb', name: 'Toxic Orb', category: 'held', description: 'A held item that will badly poison the holder at the end of the turn.' },
-	'liechiberry': { id: 'liechiberry', name: 'Liechi Berry', category: 'berry', description: 'A held item that raises Attack when HP is low.' },
-	'ganlonberry': { id: 'ganlonberry', name: 'Ganlon Berry', category: 'berry', description: 'A held item that raises Defense when HP is low.' },
-	'salacberry': { id: 'salacberry', name: 'Salac Berry', category: 'berry', description: 'A held item that raises Speed when HP is low.' },
-	'petayaberry': { id: 'petayaberry', name: 'Petaya Berry', category: 'berry', description: 'A held item that raises Special Attack when HP is low.' },
-	'apicotberry': { id: 'apicotberry', name: 'Apicot Berry', category: 'berry', description: 'A held item that raises Special Defense when HP is low.' },
-	'starfberry': { id: 'starfberry', name: 'Starf Berry', category: 'berry', description: 'A held item that sharply raises a random stat when HP is low.' },
-	'keberry': { id: 'keberry', name: 'Kee Berry', category: 'berry', description: 'If the holder is hit by a physical move, its Defense rises. One-time use.' },
-	'marangaberry': { id: 'marangaberry', name: 'Maranga Berry', category: 'berry', description: 'If the holder is hit by a special move, its Special Defense rises. One-time use.' },
-	'babiriberry': { id: 'babiriberry', name: 'Babiri Berry', category: 'berry', description: 'Weakens a supereffective Steel-type attack. One-time use.' },
-	'chartiberry': { id: 'chartiberry', name: 'Charti Berry', category: 'berry', description: 'Weakens a supereffective Rock-type attack. One-time use.' },
-	'chilanberry': { id: 'chilanberry', name: 'Chilan Berry', category: 'berry', description: 'Weakens a Normal-type attack. One-time use.' },
-	'chopleberry': { id: 'chopleberry', name: 'Chople Berry', category: 'berry', description: 'Weakens a supereffective Fighting-type attack. One-time use.' },
-	'cobaberry': { id: 'cobaberry', name: 'Coba Berry', category: 'berry', description: 'Weakens a supereffective Flying-type attack. One-time use.' },
-	'colburberry': { id: 'colburberry', name: 'Colbur Berry', category: 'berry', description: 'Weakens a supereffective Dark-type attack. One-time use.' },
-	'habanberry': { id: 'habanberry', name: 'Haban Berry', category: 'berry', description: 'Weakens a supereffective Dragon-type attack. One-time use.' },
-	'kasibberry': { id: 'kasibberry', name: 'Kasib Berry', category: 'berry', description: 'Weakens a supereffective Ghost-type attack. One-time use.' },
-	'kebiaberry': { id: 'kebiaberry', name: 'Kebia Berry', category: 'berry', description: 'Weakens a supereffective Poison-type attack. One-time use.' },
-	'occaberry': { id: 'occaberry', name: 'Occa Berry', category: 'berry', description: 'Weakens a supereffective Fire-type attack. One-time use.' },
-	'passhoberry': { id: 'passhoberry', name: 'Passho Berry', category: 'berry', description: 'Weakens a supereffective Water-type attack. One-time use.' },
-	'payapaberry': { id: 'payapaberry', name: 'Payapa Berry', category: 'berry', description: 'Weakens a supereffective Psychic-type attack. One-time use.' },
-	'rindoberry': { id: 'rindoberry', name: 'Rindo Berry', category: 'berry', description: 'Weakens a supereffective Grass-type attack. One-time use.' },
-	'roseliberry': { id: 'roseliberry', name: 'Roseli Berry', category: 'berry', description: 'Weakens a supereffective Fairy-type attack. One-time use.' },
-	'shucaberry': { id: 'shucaberry', name: 'Shuca Berry', category: 'berry', description: 'Weakens a supereffective Ground-type attack.One-time use.' },
-	'tangaberry': { id: 'tangaberry', name: 'Tanga Berry', category: 'berry', description: 'Weakens a supereffective Bug-type attack. One-time use.' },
-	'wacanberry': { id: 'wacanberry', name: 'Wacan Berry', category: 'berry', description: 'Weakens a supereffective Electric-type attack. One-time use.' },
-	'yacheberry': { id: 'yacheberry', name: 'Yache Berry', category: 'berry', description: 'Weakens a supereffective Ice-type attack. One-time use.' },
-	'heavydutyboots': { id: 'heavydutyboots', name: 'Heavy-Duty Boots', category: 'held', description: 'These boots prevent the holder from being affected by entry hazards.' },
-	'focussash': { id: 'focussash', name: 'Focus Sash', category: 'held', description: 'If the holder has full HP, it survives a hit that would KO it with 1 HP. One-time use.' },
-	'assaultvest': { id: 'assaultvest', name: 'Assault Vest', category: 'held', description: 'Boosts the holder\'s Sp. Def by 1.5x, but they can only select damaging moves.' },
-	'eviolite': { id: 'eviolite', name: 'Eviolite', category: 'held', description: 'Boosts the Defense and Sp. Def of a Pokémon that can still evolve by 1.5x.' },
-	'airballoon': { id: 'airballoon', name: 'Air Balloon', category: 'held', description: 'The holder is immune to Ground-type moves. Pops when hit.' },
-	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'A held item that extends the duration of Sunny Day used by the holder.' },
-	'damprock': { id: 'damprock', name: 'Damp Rock', category: 'held', description: 'A held item that extends the duration of Rain Dance used by the holder.' },
-	'smoothrock': { id: 'smoothrock', name: 'Smooth Rock', category: 'held', description: 'A held item that extends the duration of Sandstorm used by the holder.' },
-	'icyrock': { id: 'icyrock', name: 'Icy Rock', category: 'held', description: 'A held item that extends the duration of Hail used by the holder.' },
-	'expertbelt': { id: 'expertbelt', name: 'Expert Belt', category: 'held', description: 'An item to be held by a Pokémon. It boosts the power of super-effective moves.' },
-	'weaknesspolicy': { id: 'weaknesspolicy', name: 'Weakness Policy', category: 'held', description: 'An item to be held by a Pokémon. Attack and Sp. Atk sharply increase if the holder is hit by a super-effective move.' },
-	'lumberry': { id: 'lumberry', name: 'Lum Berry', category: 'berry', description: 'A held item that cures any status condition.' },
-	'mentalherb': { id: 'mentalherb', name: 'Mental Herb', category: 'held', description: 'A held item that snaps the holder out of move-binding effects.' },
-	'redcard': { id: 'redcard', name: 'Red Card', category: 'held', description: 'A held item that forces the attacker to switch out when the holder is hit by a move.' },
-	'quickclaw': { id: 'quickclaw', name: 'Quick Claw', category: 'held', description: 'An item that occasionally allows the holder to move first.' },
-	'mirrorherb': { id: 'mirrorherb', name: 'Mirror Herb', category: 'held', description: 'An item that copies stat boosts from the opposing Pokemon when the holder switches in.' },
-	'clearamulet': { id: 'clearamulet', name: 'Clear Amulet', category: 'held', description: 'An item that prevents the holder\'s stats from being lowered by moves used by other Pokemon.' },
-	'covertcloak': { id: 'covertcloak', name: 'Covert Cloak', category: 'held', description: 'An item that protects the holder from the additional effects of moves.' },
-	'kingsrock': { id: 'kingsrock', name: 'King\'s Rock', category: 'held', description: 'An item that may cause the foe to flinch when the holder inflicts damage.' },
-	'scopelens': { id: 'scopelens', name: 'Scope Lens', category: 'held', description: 'An item that increases the holder\'s critical hit ratio.' },
-	'razorclaw': { id: 'razorclaw', name: 'Razor Claw', category: 'held', description: 'An item that increases the holder\'s critical hit ratio.' },
-	'lightclay': { id: 'lightclay', name: 'Light Clay', category: 'held', description: 'An item to be held by a Pokémon. When the holder uses protective moves like Light Screen or Reflect, their effects will last longer than usual.' },
 };
+
+/**
+ * Get item data from Dex with fallback to custom items
+ * This function retrieves items from Dex.items where possible, and falls back to CUSTOM_ITEMS_DATABASE for RPG-specific items
+ */
+function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
+	// First check if it's a custom RPG item
+	if (CUSTOM_ITEMS_DATABASE[itemId]) {
+		return CUSTOM_ITEMS_DATABASE[itemId];
+	}
+	
+	// Try to get from Dex
+	const dexItem = Dex.items.get(itemId);
+	if (dexItem.exists) {
+		// Determine category based on Dex properties
+		let category: InventoryItem['category'] = 'held'; // default
+		if (dexItem.isPokeball) {
+			category = 'pokeball';
+		} else if (dexItem.isBerry) {
+			category = 'berry';
+		}
+		
+		// Use shortDesc if available, otherwise use desc or a generic message
+		const description = dexItem.shortDesc || dexItem.desc || 'An item.';
+		
+		return {
+			id: itemId,
+			name: dexItem.name,
+			category,
+			description,
+		};
+	}
+	
+	// Item doesn't exist in Dex or custom database
+	return null;
+}
+
+// Legacy ITEMS_DATABASE for backwards compatibility - now dynamically retrieves from Dex
+const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem, 'quantity'>>, {
+	get(target, prop: string) {
+		return getItemData(prop);
+	},
+});
 
 // Starter Pokemon data organized by type
 const STARTER_POKEMON = {
