@@ -18,6 +18,7 @@ import {
 	removeItemFromInventory,
 	storePokemonInPC,
 	withdrawPokemonFromPC,
+	createActivePokemonSlot,
 } from './utils';
 
 import {
