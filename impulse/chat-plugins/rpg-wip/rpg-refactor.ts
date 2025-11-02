@@ -4984,7 +4984,7 @@ function generateSingleBattleHTML(
 
 		// Style for the button, trying to match the 2x2 image
 		// This uses simple styles, float is the only risky one.
-		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 45px;`;
+		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
 
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
@@ -5000,7 +5000,7 @@ function generateSingleBattleHTML(
 	});
 
 	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
-	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 10px 0;">`;
+	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
 	moveButtonsHTML += `<tr>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
@@ -5050,7 +5050,7 @@ function generateSingleBattleHTML(
 		// --- Action Area ---
 		actionHTML +
 		`</div>`;
-}
+		}
 
 function generateDoubleBattleHTML(
 	battle: BattleState,
