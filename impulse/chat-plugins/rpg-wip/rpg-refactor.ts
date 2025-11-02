@@ -5,6 +5,7 @@ import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
+import { Dex, toID } from '../../../sim/dex';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -198,24 +199,10 @@ interface BattleState {
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
-// Item database
-const ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
-	// PokeBalls
-	'pokeball': { id: 'pokeball', name: 'Poke Ball', category: 'pokeball', description: 'A device for catching wild Pokemon. It has a 1x catch rate.' },
-	'greatball': { id: 'greatball', name: 'Great Ball', category: 'pokeball', description: 'A good, high-performance Poke Ball. It has a 1.5x catch rate.' },
-	'ultraball': { id: 'ultraball', name: 'Ultra Ball', category: 'pokeball', description: 'An ultra-high performance Poke Ball. It has a 2x catch rate.' },
-	'masterball': { id: 'masterball', name: 'Master Ball', category: 'pokeball', description: 'The best Poke Ball with the ultimate performance. It will catch any wild Pokemon without fail.' },
-	'levelball': { id: 'levelball', name: 'Level Ball', category: 'pokeball', description: 'A Poke Ball that works well on Pokemon of a lower level than your own.' },
-	'fastball': { id: 'fastball', name: 'Fast Ball', category: 'pokeball', description: 'A Poke Ball that works well on Pokemon that have a high Speed stat.' },
-	'timerball': { id: 'timerball', name: 'Timer Ball', category: 'pokeball', description: 'A Poke Ball that becomes more effective the more turns that have passed in battle.' },
-	'nestball': { id: 'nestball', name: 'Nest Ball', category: 'pokeball', description: 'A Poke Ball that works well on low-level Pokemon.' },
-	'netball': { id: 'netball', name: 'Net Ball', category: 'pokeball', description: 'A Poke Ball that works well on Bug- or Water-type Pokemon.' },
-	'quickball': { id: 'quickball', name: 'Quick Ball', category: 'pokeball', description: 'A Poke Ball that provides a high catch rate if used at the start of a wild encounter.' },
-	'dreamball': { id: 'dreamball', name: 'Dream Ball', category: 'pokeball', description: 'A Poke Ball that works well on sleeping Pokemon.' },
-	'premierball': { id: 'premierball', name: 'Premier Ball', category: 'pokeball', description: 'A somewhat rare Poke Ball that has been specially made to commemorate an event.' },
-	'luxuryball': { id: 'luxuryball', name: 'Luxury Ball', category: 'pokeball', description: 'A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.' },
-	'healball': { id: 'healball', name: 'Heal Ball', category: 'pokeball', description: 'A remedial Poke Ball that restores the HP of a Pokemon it catches and eliminates any status conditions.' },
-	// Medicine
+// Custom RPG items that don't exist in Dex - these are hardcoded
+// All other items (pokeballs, berries, held items) are retrieved from Dex.items
+const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
+	// Medicine (RPG-specific healing items not in competitive Pokemon)
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'A spray-type medicine. It restores 20 HP to a Pokemon.' },
 	'superpotion': { id: 'superpotion', name: 'Super Potion', category: 'medicine', description: 'A spray-type medicine. It restores 60 HP to a Pokemon.' },
 	'hyperpotion': { id: 'hyperpotion', name: 'Hyper Potion', category: 'medicine', description: 'A spray-type medicine. It restores 120 HP to a Pokemon.' },
@@ -229,81 +216,52 @@ const ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'energyroot': { id: 'energyroot', name: 'Energy Root', category: 'medicine', description: 'A bitter medicinal root. It restores 200 HP to a Pokémon.' },
 	'energypowder': { id: 'energypowder', name: 'EnergyPowder', category: 'medicine', description: 'A bitter medicinal powder. It restores 50 HP to a Pokémon.' },
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
-	// Music
+	// Misc (RPG-specific custom item)
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
-	// Berries & Held Items
-	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 10 HP.' },
-	'sitrusberry': { id: 'sitrusberry', name: 'Sitrus Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 1/4 of max HP.' },
-	'aguavberry': { id: 'aguavberry', name: 'Aguav Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'enigmaberry': { id: 'enigmaberry', name: 'Enigma Berry', category: 'berry', description: 'If a Pokémon holding this Berry is hit with a supereffective move, it will recover 1/4 of its max HP.' },
-	'figyberry': { id: 'figyberry', name: 'Figy Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'goldberry': { id: 'goldberry', name: 'Gold Berry', category: 'berry', description: 'A Berry to be consumed by Pokemon. If a Pokemon holds one, it restores 30 HP.' },
-	'iapapaberry': { id: 'iapapaberry', name: 'Iapapa Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'magoberry': { id: 'magoberry', name: 'Mago Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'wikiberry': { id: 'wikiberry', name: 'Wiki Berry', category: 'berry', description: 'If a Pokémon holds one, it restores 1/3 of its max HP when it drops to 1/4 or less. May cause confusion.' },
-	'berryjuice': { id: 'berryjuice', name: 'Berry Juice', category: 'held', description: 'A 100% natural juice. It restores 20 HP to a Pokémon when its HP drops to 1/2 or less.' },
-	'leftovers': { id: 'leftovers', name: 'Leftovers', category: 'held', description: 'An item to be held by a Pokémon. The holder\'s HP is gradually restored during battle.' },
-	'blacksludge': { id: 'blacksludge', name: 'Black Sludge', category: 'held', description: 'A held item that gradually restores the HP of Poison-type Pokémon. It damages any other type.' },
-	'shellbell': { id: 'shellbell', name: 'Shell Bell', category: 'held', description: 'A held item that restores a little HP to the holder whenever it inflicts damage.' },
-	'choiceband': { id: 'choiceband', name: 'Choice Band', category: 'held', description: 'Boosts Attack, but allows the use of only one move.' },
-	'choicescarf': { id: 'choicescarf', name: 'Choice Scarf', category: 'held', description: 'Boosts Speed, but allows the use of only one move.' },
-	'choicespecs': { id: 'choicespecs', name: 'Choice Specs', category: 'held', description: 'Boosts Special Attack, but allows the use of only one move.' },
-	'lifeorb': { id: 'lifeorb', name: 'Life Orb', category: 'held', description: 'Boosts the power of moves, but the holder loses HP after attacking.' },
-	'rockyhelmet': { id: 'rockyhelmet', name: 'Rocky Helmet', category: 'held', description: 'If the holder is hit by a contact move, the attacker is also damaged.' },
-	'stickybarb': { id: 'stickybarb', name: 'Sticky Barb', category: 'held', description: 'Damages the holder each turn. Can be passed to others on contact.' },
-	'jabocaberry': { id: 'jabocaberry', name: 'Jaboca Berry', category: 'berry', description: 'If the holder is hit by a physical move, the attacker is damaged. One-time use.' },
-	'rowapberry': { id: 'rowapberry', name: 'Rowap Berry', category: 'berry', description: 'If the holder is hit by a special move, the attacker is damaged. One-time use.' },
-	'flameorb': { id: 'flameorb', name: 'Flame Orb', category: 'held', description: 'A held item that will inflict a burn on the holder at the end of the turn.' },
-	'toxicorb': { id: 'toxicorb', name: 'Toxic Orb', category: 'held', description: 'A held item that will badly poison the holder at the end of the turn.' },
-	'liechiberry': { id: 'liechiberry', name: 'Liechi Berry', category: 'berry', description: 'A held item that raises Attack when HP is low.' },
-	'ganlonberry': { id: 'ganlonberry', name: 'Ganlon Berry', category: 'berry', description: 'A held item that raises Defense when HP is low.' },
-	'salacberry': { id: 'salacberry', name: 'Salac Berry', category: 'berry', description: 'A held item that raises Speed when HP is low.' },
-	'petayaberry': { id: 'petayaberry', name: 'Petaya Berry', category: 'berry', description: 'A held item that raises Special Attack when HP is low.' },
-	'apicotberry': { id: 'apicotberry', name: 'Apicot Berry', category: 'berry', description: 'A held item that raises Special Defense when HP is low.' },
-	'starfberry': { id: 'starfberry', name: 'Starf Berry', category: 'berry', description: 'A held item that sharply raises a random stat when HP is low.' },
-	'keberry': { id: 'keberry', name: 'Kee Berry', category: 'berry', description: 'If the holder is hit by a physical move, its Defense rises. One-time use.' },
-	'marangaberry': { id: 'marangaberry', name: 'Maranga Berry', category: 'berry', description: 'If the holder is hit by a special move, its Special Defense rises. One-time use.' },
-	'babiriberry': { id: 'babiriberry', name: 'Babiri Berry', category: 'berry', description: 'Weakens a supereffective Steel-type attack. One-time use.' },
-	'chartiberry': { id: 'chartiberry', name: 'Charti Berry', category: 'berry', description: 'Weakens a supereffective Rock-type attack. One-time use.' },
-	'chilanberry': { id: 'chilanberry', name: 'Chilan Berry', category: 'berry', description: 'Weakens a Normal-type attack. One-time use.' },
-	'chopleberry': { id: 'chopleberry', name: 'Chople Berry', category: 'berry', description: 'Weakens a supereffective Fighting-type attack. One-time use.' },
-	'cobaberry': { id: 'cobaberry', name: 'Coba Berry', category: 'berry', description: 'Weakens a supereffective Flying-type attack. One-time use.' },
-	'colburberry': { id: 'colburberry', name: 'Colbur Berry', category: 'berry', description: 'Weakens a supereffective Dark-type attack. One-time use.' },
-	'habanberry': { id: 'habanberry', name: 'Haban Berry', category: 'berry', description: 'Weakens a supereffective Dragon-type attack. One-time use.' },
-	'kasibberry': { id: 'kasibberry', name: 'Kasib Berry', category: 'berry', description: 'Weakens a supereffective Ghost-type attack. One-time use.' },
-	'kebiaberry': { id: 'kebiaberry', name: 'Kebia Berry', category: 'berry', description: 'Weakens a supereffective Poison-type attack. One-time use.' },
-	'occaberry': { id: 'occaberry', name: 'Occa Berry', category: 'berry', description: 'Weakens a supereffective Fire-type attack. One-time use.' },
-	'passhoberry': { id: 'passhoberry', name: 'Passho Berry', category: 'berry', description: 'Weakens a supereffective Water-type attack. One-time use.' },
-	'payapaberry': { id: 'payapaberry', name: 'Payapa Berry', category: 'berry', description: 'Weakens a supereffective Psychic-type attack. One-time use.' },
-	'rindoberry': { id: 'rindoberry', name: 'Rindo Berry', category: 'berry', description: 'Weakens a supereffective Grass-type attack. One-time use.' },
-	'roseliberry': { id: 'roseliberry', name: 'Roseli Berry', category: 'berry', description: 'Weakens a supereffective Fairy-type attack. One-time use.' },
-	'shucaberry': { id: 'shucaberry', name: 'Shuca Berry', category: 'berry', description: 'Weakens a supereffective Ground-type attack.One-time use.' },
-	'tangaberry': { id: 'tangaberry', name: 'Tanga Berry', category: 'berry', description: 'Weakens a supereffective Bug-type attack. One-time use.' },
-	'wacanberry': { id: 'wacanberry', name: 'Wacan Berry', category: 'berry', description: 'Weakens a supereffective Electric-type attack. One-time use.' },
-	'yacheberry': { id: 'yacheberry', name: 'Yache Berry', category: 'berry', description: 'Weakens a supereffective Ice-type attack. One-time use.' },
-	'heavydutyboots': { id: 'heavydutyboots', name: 'Heavy-Duty Boots', category: 'held', description: 'These boots prevent the holder from being affected by entry hazards.' },
-	'focussash': { id: 'focussash', name: 'Focus Sash', category: 'held', description: 'If the holder has full HP, it survives a hit that would KO it with 1 HP. One-time use.' },
-	'assaultvest': { id: 'assaultvest', name: 'Assault Vest', category: 'held', description: 'Boosts the holder\'s Sp. Def by 1.5x, but they can only select damaging moves.' },
-	'eviolite': { id: 'eviolite', name: 'Eviolite', category: 'held', description: 'Boosts the Defense and Sp. Def of a Pokémon that can still evolve by 1.5x.' },
-	'airballoon': { id: 'airballoon', name: 'Air Balloon', category: 'held', description: 'The holder is immune to Ground-type moves. Pops when hit.' },
-	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'A held item that extends the duration of Sunny Day used by the holder.' },
-	'damprock': { id: 'damprock', name: 'Damp Rock', category: 'held', description: 'A held item that extends the duration of Rain Dance used by the holder.' },
-	'smoothrock': { id: 'smoothrock', name: 'Smooth Rock', category: 'held', description: 'A held item that extends the duration of Sandstorm used by the holder.' },
-	'icyrock': { id: 'icyrock', name: 'Icy Rock', category: 'held', description: 'A held item that extends the duration of Hail used by the holder.' },
-	'expertbelt': { id: 'expertbelt', name: 'Expert Belt', category: 'held', description: 'An item to be held by a Pokémon. It boosts the power of super-effective moves.' },
-	'weaknesspolicy': { id: 'weaknesspolicy', name: 'Weakness Policy', category: 'held', description: 'An item to be held by a Pokémon. Attack and Sp. Atk sharply increase if the holder is hit by a super-effective move.' },
-	'lumberry': { id: 'lumberry', name: 'Lum Berry', category: 'berry', description: 'A held item that cures any status condition.' },
-	'mentalherb': { id: 'mentalherb', name: 'Mental Herb', category: 'held', description: 'A held item that snaps the holder out of move-binding effects.' },
-	'redcard': { id: 'redcard', name: 'Red Card', category: 'held', description: 'A held item that forces the attacker to switch out when the holder is hit by a move.' },
-	'quickclaw': { id: 'quickclaw', name: 'Quick Claw', category: 'held', description: 'An item that occasionally allows the holder to move first.' },
-	'mirrorherb': { id: 'mirrorherb', name: 'Mirror Herb', category: 'held', description: 'An item that copies stat boosts from the opposing Pokemon when the holder switches in.' },
-	'clearamulet': { id: 'clearamulet', name: 'Clear Amulet', category: 'held', description: 'An item that prevents the holder\'s stats from being lowered by moves used by other Pokemon.' },
-	'covertcloak': { id: 'covertcloak', name: 'Covert Cloak', category: 'held', description: 'An item that protects the holder from the additional effects of moves.' },
-	'kingsrock': { id: 'kingsrock', name: 'King\'s Rock', category: 'held', description: 'An item that may cause the foe to flinch when the holder inflicts damage.' },
-	'scopelens': { id: 'scopelens', name: 'Scope Lens', category: 'held', description: 'An item that increases the holder\'s critical hit ratio.' },
-	'razorclaw': { id: 'razorclaw', name: 'Razor Claw', category: 'held', description: 'An item that increases the holder\'s critical hit ratio.' },
-	'lightclay': { id: 'lightclay', name: 'Light Clay', category: 'held', description: 'An item to be held by a Pokémon. When the holder uses protective moves like Light Screen or Reflect, their effects will last longer than usual.' },
 };
+
+/**
+ * Get item data from Dex with fallback to custom items
+ * This function retrieves items from Dex.items where possible, and falls back to CUSTOM_ITEMS_DATABASE for RPG-specific items
+ */
+function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
+	// First check if it's a custom RPG item
+	if (CUSTOM_ITEMS_DATABASE[itemId]) {
+		return CUSTOM_ITEMS_DATABASE[itemId];
+	}
+	
+	// Try to get from Dex
+	const dexItem = Dex.items.get(itemId);
+	if (dexItem.exists) {
+		// Determine category based on Dex properties
+		let category: InventoryItem['category'] = 'held'; // default
+		if (dexItem.isPokeball) {
+			category = 'pokeball';
+		} else if (dexItem.isBerry) {
+			category = 'berry';
+		}
+		
+		// Use shortDesc if available, otherwise use desc or a generic message
+		const description = dexItem.shortDesc || dexItem.desc || 'An item.';
+		
+		return {
+			id: itemId,
+			name: dexItem.name,
+			category,
+			description,
+		};
+	}
+	
+	// Item doesn't exist in Dex or custom database
+	return null;
+}
+
+// Legacy ITEMS_DATABASE for backwards compatibility - now dynamically retrieves from Dex
+const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem, 'quantity'>>, {
+	get(target, prop: string) {
+		return getItemData(prop);
+	},
+});
 
 // Starter Pokemon data organized by type
 const STARTER_POKEMON = {
@@ -1841,6 +1799,37 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 	}
 }
 
+/**
+ * Mental Herb: Cures move-binding effects (Taunt, Encore, Disable, Torment, Heal Block)
+ * Called after a move-binding effect is applied to check if Mental Herb should cure it
+ */
+function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
+	
+	// Check if the Pokemon has any move-binding effects
+	const hasBindingEffect = 
+		slot.tauntTurns > 0 ||
+		slot.encoreMove !== undefined ||
+		slot.disabledMove !== undefined ||
+		slot.tormentActive ||
+		(slot.healBlockTurns || 0) > 0;
+	
+	if (hasBindingEffect) {
+		// Cure all move-binding effects
+		slot.tauntTurns = 0;
+		slot.encoreMove = undefined;
+		slot.disabledMove = undefined;
+		slot.tormentActive = false;
+		slot.healBlockTurns = 0;
+		
+		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
+		slot.pokemon.item = undefined; // Mental Herb is consumed
+		return true;
+	}
+	
+	return false;
+}
+
 function handleStatusMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot, // Note: defenderSlot can be null for 'self' or 'allySide' moves
@@ -1977,8 +1966,8 @@ function handleStatusMove(
 			hadEffect = true;
 			messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 
-			if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item].name}!`);
-			if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item].name}!`);
+			if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
+			if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
 		} else if (move.id === 'nightmare') {
 			const defenderStatus = defenderSlot.status;
 			const hasNightmare = defenderSlot.hasNightmare;
@@ -2009,7 +1998,7 @@ function handleStatusMove(
 			const givenItem = attacker.item;
 			defender.item = givenItem;
 			attacker.item = undefined;
-			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem].name} to ${defender.species}!`);
+			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem]?.name || givenItem} to ${defender.species}!`);
 			hadEffect = true;
 		} else if (move.id === 'transform') {
 			// Transform copies target's species, stats, moves, and ability (but not HP, status, or item)
@@ -2111,6 +2100,7 @@ function handleStatusMove(
 					defenderSlot.tauntTurns = 3;
 					messageLog.push(`${defender.species} fell for the taunt!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 
@@ -2148,6 +2138,7 @@ function handleStatusMove(
 					defenderSlot.disabledMove = { moveId: defenderSlot.lastMoveUsed, turns: 4 };
 					messageLog.push(`${defender.species}'s ${defenderSlot.lastMoveUsed} was disabled!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				} else {
 					messageLog.push(`But it failed!`);
 				}
@@ -2158,6 +2149,7 @@ function handleStatusMove(
 					defenderSlot.encoreMove = { moveId: defenderSlot.lastMoveUsed, turns: 3 };
 					messageLog.push(`${defender.species} received an encore!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				} else {
 					messageLog.push(`But it failed!`);
 				}
@@ -2216,6 +2208,7 @@ function handleStatusMove(
 					defenderSlot.tormentActive = true;
 					messageLog.push(`${defender.species} was subjected to torment!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 
@@ -2232,6 +2225,7 @@ function handleStatusMove(
 					defenderSlot.healBlockTurns = 5;
 					messageLog.push(`${defender.species} was prevented from healing!`);
 					hadEffect = true;
+					checkMentalHerb(defenderSlot, battle, messageLog);
 				}
 				break;
 			}
@@ -2634,7 +2628,7 @@ function handleDamagingMove(
 		};
 		const damage = flingPowers[attacker.item] || 30;
 		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
 		return;
 	}
@@ -2649,7 +2643,7 @@ function handleDamagingMove(
 		// Nature Gift power is based on berry (simplified to 80)
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
 		return;
 	}
@@ -2861,6 +2855,30 @@ function handleDamagingMove(
 				}
 			}
 
+			// Red Card: Forces attacker to switch when holder is hit
+			if (defender.hp > 0 && attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
+				const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
+				const attackerSlotIndex = isPlayerDefending ? 
+					battle.opponentSlots.indexOf(attackerSlot) : 
+					battle.playerSlots.indexOf(attackerSlot);
+				
+				if (attackerSlotIndex !== -1) {
+					messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
+					defender.item = undefined; // Red Card is consumed
+					
+					if (isPlayerDefending) {
+						// Force opponent to switch (AI will auto-switch)
+						// In trainer battles, opponent has backup Pokemon
+						// In wild battles, this ends the battle slot (wild pokemon flees)
+						battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+					} else {
+						// Force player to switch - set the slot to null and trigger switch UI
+						battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+						battle.playerShouldSwitch = true;
+					}
+				}
+			}
+
 			handleHPDropEffects(defenderSlot, battle, messageLog);
 			handleHPDropEffects(attackerSlot, battle, messageLog);
 
@@ -2990,14 +3008,14 @@ function handleDamagingMove(
 	if (defender.hp > 0 && battle.magicRoomTurns === 0) {
 		if (move.id === 'knockoff' && defender.item && defender.ability !== 'Sticky Hold') {
 			const removedItem = ITEMS_DATABASE[defender.item];
-			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem.name}!`);
+			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem?.name || defender.item}!`);
 			defender.item = undefined;
 		}
 		if (['thief', 'covet'].includes(move.id) && defender.item && !attacker.item && defender.ability !== 'Sticky Hold') {
 			const stolenItem = ITEMS_DATABASE[defender.item];
 			attacker.item = defender.item;
 			defender.item = undefined;
-			messageLog.push(`${attacker.species} stole ${defender.species}'s ${stolenItem.name}!`);
+			messageLog.push(`${attacker.species} stole ${defender.species}'s ${stolenItem?.name || defender.item}!`);
 		}
 	}
 
@@ -3091,23 +3109,23 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 		let healAmount = 0;
 		if (pokemon.item === 'berryjuice') {
 			healAmount = 20;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'oranberry') {
 			healAmount = 10;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'goldberry') {
 			healAmount = 30;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'sitrusberry') {
 			// FIXED: Sitrus Berry now activates at 1/2 HP and heals 1/4 max HP
 			healAmount = Math.floor(pokemon.maxHp / 4);
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		}
@@ -3131,7 +3149,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			// FIXED: Now heals 1/2 max HP instead of 1/3
 			const healAmount = Math.floor(pokemon.maxHp / 2);
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
 
 			// Check for confusion based on nature
@@ -3155,7 +3173,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			if (targetStages[statToBoost] < 6) {
 				// FIXED: All stat-boosting berries now boost by exactly 1 stage
 				targetStages[statToBoost]++;
-				consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to boost its ${statToBoost.toUpperCase()}!`);
 				itemConsumed = true;
 			}
@@ -3168,7 +3186,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
 				targetStages[randomStat] += 2; // Starf Berry boosts by 2 stages (this was correct)
 				targetStages[randomStat] = Math.min(6, targetStages[randomStat]); // Cap at +6
-				consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to sharply boost its ${randomStat.toUpperCase()}!`);
 				itemConsumed = true;
 			}
@@ -4099,6 +4117,19 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+
+		// Quick Claw: 20% chance to move first
+		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+		
+		if (quickClawA && !quickClawB) {
+			messageLog.push(`${slotA.pokemon.species}'s Quick Claw let it move first!`);
+			return -1;
+		}
+		if (quickClawB && !quickClawA) {
+			messageLog.push(`${slotB.pokemon.species}'s Quick Claw let it move first!`);
+			return 1;
+		}
 
 		if (battle.trickRoomTurns > 0) {
 			return speedA - speedB; // Slower goes first in Trick Room
@@ -5145,7 +5176,7 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 	let html = `<div class="infobox"><h2>Give ${item.name}</h2><p>Select a Pokémon to give this item to:</p>`;
 	for (const pokemon of player.party) {
 		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">` +
-			`<span>${pokemon.species} (Holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</span>` +
+			`<span>${pokemon.species} (Holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</span>` +
 			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
 			`</div>`;
 	}
@@ -6427,7 +6458,7 @@ export const commands: ChatCommands = {
 			if (!pokemonId) {
 				let html = `<div class="infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
 				for (const pokemon of player.party) {
-					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</div>`;
+					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
@@ -6480,7 +6511,7 @@ export const commands: ChatCommands = {
 				let html = `<div class="infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
 				for (const pokemon of player.party) {
 					if (pokemon.item) {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item].name})</div>`;
+						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
 					}
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
