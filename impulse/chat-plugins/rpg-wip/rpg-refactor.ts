@@ -2779,7 +2779,7 @@ function handleDamagingMove(
 	const attackerStages = attackerSlot.statStages;
 	const defenderStages = defenderSlot.statStages;
 
-	// Create AbilityContext for hooks
+	// --- FIX: Added messageLog to the context ---
 	const abilityContext = {
 		attacker: attackerSlot.pokemon,
 		defender: defenderSlot.pokemon,
@@ -2787,8 +2787,9 @@ function handleDamagingMove(
 		defenderSlot,
 		move,
 		battle,
-		messageLog,
+		messageLog, // <-- THIS WAS THE MISSING LINE
 	};
+	// --- END FIX ---
 
 	if (hitCount > 1) {
 		// Ensure messageLog is not empty before trying to access last element
@@ -3039,7 +3040,7 @@ function handleDamagingMove(
 			}
 
 			if (defender.hp > 0) {
-				// Check if secondary effects should apply (Sheer Force removes them)
+				// Check if secondary effects should be applied (Sheer Force removes them)
 				const shouldApplySecondary = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
 
 				if (battle.magicRoomTurns === 0 && defender.item === 'covertcloak') {
