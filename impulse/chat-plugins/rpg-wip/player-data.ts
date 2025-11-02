@@ -1,6 +1,7 @@
 // Pokemon RPG Player Data Management
 import type { PlayerData, BattleState } from './types';
 import { addItemToInventory } from './utils';
+import { createPokemon, createActivePokemonSlot } from './utils';
 
 // In-memory storage for player data (in production, use a database)
 export const playerData = new Map<string, PlayerData>();
