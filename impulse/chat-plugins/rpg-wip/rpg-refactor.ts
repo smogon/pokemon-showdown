@@ -1697,15 +1697,22 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
  * Also handles hazard removal effects (e.g., Poison-type absorbing Toxic Spikes).
  * @returns {boolean} Returns true if the Pokémon fainted from hazard damage.
  */
+
 function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
 	const pokemon = slot.pokemon;
 	// Heavy-Duty Boots provides total immunity to all entry hazards.
 	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
+		// Even if immune, still apply switch-in abilities
+		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 		return false;
 	}
 
 	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
-	if (hazards.length === 0) return false; // No hazards, no effect.
+	if (hazards.length === 0) {
+		// No hazards, but still apply switch-in abilities
+		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
+		return false;
+	}
 
 	const species = Dex.species.get(pokemon.species);
 	const isGrounded = RPGAbilities.isGrounded(pokemon, battle);
@@ -1785,7 +1792,7 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	}
 
 	// Apply switch-in abilities (weather/terrain setting)
-	RPGAbilities.applySwitchInAbilities(pokemon, battle, messageLog);
+	RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 
 	return false; // Pokémon survived
 }
@@ -2726,6 +2733,17 @@ function handleDamagingMove(
 	const attackerStages = attackerSlot.statStages;
 	const defenderStages = defenderSlot.statStages;
 
+	// Create AbilityContext for hooks
+	const abilityContext = {
+		attacker: attackerSlot.pokemon,
+		defender: defenderSlot.pokemon,
+		attackerSlot,
+		defenderSlot,
+		move,
+		battle,
+		messageLog,
+	};
+
 	if (hitCount > 1) {
 		// Ensure messageLog is not empty before trying to access last element
 		if (messageLog.length > 0) {
@@ -2864,49 +2882,9 @@ function handleDamagingMove(
 						defender.item = undefined;
 					}
 
-					// Ability-based contact effects
-					const defenderAbility = toID(defender.ability || '');
-					const attackerSpecies = Dex.species.get(attacker.species);
-
-					// Rough Skin / Iron Barbs - Damages attacker
-					if (defenderAbility === 'roughskin' || defenderAbility === 'ironbarbs') {
-						const damage = Math.floor(attacker.maxHp / 8);
-						attacker.hp = Math.max(0, attacker.hp - damage);
-						messageLog.push(`${attacker.species} was hurt by ${defender.species}'s ${defender.ability}!`);
-					}
-
-					// Status-inducing contact abilities
-					if (!attackerSlot.status && attacker.hp > 0) {
-						let statusToInflict: Status | null = null;
-						const triggerChance = 0.3;
-
-						if (defenderAbility === 'static' && !attackerSpecies.types.includes('Electric')) {
-							statusToInflict = 'par';
-						} else if (defenderAbility === 'flamebody' && !attackerSpecies.types.includes('Fire')) {
-							statusToInflict = 'brn';
-						} else if (defenderAbility === 'poisonpoint' && !attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) {
-							statusToInflict = 'psn';
-						} else if (defenderAbility === 'effectspore' && !attackerSpecies.types.includes('Grass')) {
-							// Effect Spore can inflict poison, paralysis, or sleep
-							const possibleStatuses: Status[] = [];
-							if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) possibleStatuses.push('psn');
-							if (!attackerSpecies.types.includes('Electric')) possibleStatuses.push('par');
-							possibleStatuses.push('slp');
-							if (possibleStatuses.length > 0) {
-								statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
-							}
-						}
-
-						if (statusToInflict && Math.random() < triggerChance) {
-							// Check if ability prevents the status
-							if (!RPGAbilities.preventsStatus(attacker, statusToInflict)) {
-								attackerSlot.status = statusToInflict;
-								if (statusToInflict === 'slp') {
-									attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
-								}
-								messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${defender.species}'s ${defender.ability}!`);
-							}
-						}
+					// Ability-based contact effects (NEW HOOK)
+					if (attacker.hp > 0) {
+						RPGAbilities.applyContactAbilityEffects(abilityContext);
 					}
 				}
 
@@ -3199,7 +3177,7 @@ function handleDamagingMove(
 		messageLog.push(`${attacker.species} fainted!`);
 		attacker.hp = 0;
 	}
-}
+}	
 
 function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	// **NEW:** Magic Room disables all held items.
