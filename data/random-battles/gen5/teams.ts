@@ -593,7 +593,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (species.id === 'honchkrow') return 'Life Orb';
 		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
-		if (ability === 'Poison Heal' || moves.has('facade') && species.id !== 'stoutland') return 'Toxic Orb';
+		if (ability === 'Poison Heal' || (moves.has('facade') && species.id !== 'stoutland')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
