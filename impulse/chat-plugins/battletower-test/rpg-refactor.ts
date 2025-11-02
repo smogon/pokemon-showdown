@@ -4,6 +4,7 @@ import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -627,7 +628,7 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 	}
 
 	const movesWithPP = availableMoves.map(moveId => {
-		const moveData = Dex.moves.get(moveId);
+		const moveData = getMove(moveId);
 		return { id: moveId, pp: moveData.pp || 5 };
 	});
 
@@ -794,6 +795,22 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battl
 	return critChances[Math.min(critStage, 3)];
 }
 
+/**
+ * Get a move from either Dex or Custom Moves
+ * This wrapper function checks custom moves first, then falls back to Dex
+ */
+function getMove(moveId: string): any {
+	// Check if it's a custom move
+	if (isCustomMove(moveId)) {
+		const customMove = getCustomMove(moveId);
+		// Add exists property for compatibility
+		return { ...customMove, exists: true };
+	}
+	
+	// Otherwise get from Dex
+	return getMove(moveId);
+}
+
 function calculateDamage(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -801,7 +818,7 @@ function calculateDamage(
 	battle: BattleState,
 	spreadMultiplier: number // <-- NEW PARAM
 ): { damage: number, message: string, effectiveness: number, berryConsumed?: string } {
-	const move = Dex.moves.get(moveId);
+	const move = getMove(moveId);
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 	const attackerStages = attackerSlot.statStages;
@@ -1199,7 +1216,7 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 		.filter(learnable => learnable.level === pokemon.level)
 		.map(learnable => toID(learnable.move))
 		.filter(moveId => {
-			const moveData = Dex.moves.get(moveId);
+			const moveData = getMove(moveId);
 			// --- FIX: Check if move exists AND Pokemon doesn't already know it ---
 			return moveData.exists && !pokemon.moves.some(m => m.id === moveId);
 		});
@@ -1212,7 +1229,7 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 	if (openMoveSlots > 0) {
 		const movesToAutoLearn = movesLearnedAtThisLevel.slice(0, openMoveSlots);
 		for (const moveId of movesToAutoLearn) {
-			const moveData = Dex.moves.get(moveId);
+			const moveData = getMove(moveId);
 			pokemon.moves.push({ id: moveId, pp: moveData.pp || 5 });
 			messages.push(`**${pokemon.species} learned ${moveData.name}!**`);
 		}
@@ -3618,8 +3635,8 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const isSwitchB = b.actionType === 'switch';
 
 		// Switches have +6 priority
-		const priorityA = isSwitchA ? 6 : (Dex.moves.get(a.moveId || 'struggle').priority);
-		const priorityB = isSwitchB ? 6 : (Dex.moves.get(b.moveId || 'struggle').priority);
+		const priorityA = isSwitchA ? 6 : (getMove(a.moveId || 'struggle').priority);
+		const priorityB = isSwitchB ? 6 : (getMove(b.moveId || 'struggle').priority);
 
 		// Sort by Priority
 		if (priorityA !== priorityB) {
@@ -3693,7 +3710,7 @@ function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | nu
 function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
 	// Find valid moves (with PP)
 	const usableMoves = aiSlot.pokemon.moves.filter(m => {
-		const moveData = Dex.moves.get(m.id);
+		const moveData = getMove(m.id);
 		return m.pp > 0 && moveData.category !== 'Status'; // Simple AI: only use damaging moves
 	});
 
@@ -3812,7 +3829,7 @@ function executeAction(
 
 	// --- Handle Move Action ---
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
-		const move = Dex.moves.get(action.moveId);
+		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
 
 		// Handle Struggle
@@ -3967,7 +3984,7 @@ function generateSingleBattleHTML(
 
 	// --- STATE 1: Action Selection (Target selection is now skipped) ---
 	const moveButtons = playerPokemon.moves.map(move => {
-		const moveData = Dex.moves.get(move.id);
+		const moveData = getMove(move.id);
 
 		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
 			playerPokemon.item === 'assaultvest' &&
@@ -4074,7 +4091,7 @@ function generatePokemonInfoHTML(
 	const tauntTag = slot.tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
 	let chargingTag = '';
 	if (slot.chargingMove) {
-		const moveName = Dex.moves.get(slot.chargingMove).name || 'Attack';
+		const moveName = getMove(slot.chargingMove).name || 'Attack';
 		let chargeText = `Preparing ${moveName}!`;
 		if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
 		if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
@@ -4106,7 +4123,7 @@ function generatePokemonInfoHTML(
 
 	if (isPlayerSide) {
 		movesDisplay = `Moves: ${pokemon.moves.map(m => {
-			const moveData = Dex.moves.get(m.id);
+			const moveData = getMove(m.id);
 			return `${moveData.name} (${m.pp}/${moveData.pp})`;
 		}).slice(0, 4).join(', ') || 'None'}`;
 		natureDisplay = `Nature: ${pokemon.nature}<br>`;
@@ -4190,7 +4207,7 @@ function generateDoubleBattleHTML(
 	// --- Action Area ---
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
-		const move = Dex.moves.get(targetSelection.moveId);
+		const move = getMove(targetSelection.moveId);
 		html += `<p>Select a target for <strong>${move.name}</strong>:</p>`;
 		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
 
@@ -4231,7 +4248,7 @@ function generateDoubleBattleHTML(
 
 			const moves = pokemon.moves;
 			for (const move of moves) {
-				const moveData = Dex.moves.get(move.id);
+				const moveData = getMove(move.id);
 
 				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
 					pokemon.item === 'assaultvest' &&
@@ -4288,7 +4305,7 @@ function generateBattleHTML(
 function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	const movesSummary = pokemon.moves.map(move => {
-		const moveData = Dex.moves.get(move.id);
+		const moveData = getMove(move.id);
 		return '<div style="text-align: center; padding: 5px; background: #f0f0f0; border-radius: 5px;">' +
 			moveData.name +
 			'<br><small>PP: ' + move.pp + '/' + moveData.pp + '</small>' +
@@ -4370,7 +4387,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
 	let html = `<div class="infobox"><h2>Teach an Egg Move</h2><p>Choose a move for <strong>${pokemon.species}</strong> to learn:</p>`;
 	for (const moveId of eggMoves) {
-		const move = Dex.moves.get(moveId);
+		const move = getMove(moveId);
 		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button" style="margin: 3px;">${move.name}</button> `;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Cancel</button></p></div>`;
@@ -4629,14 +4646,14 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	const queue = player.pendingMoveLearnQueue;
 	if (!queue || queue.moveIds.length === 0) return `<h2>Error: No pending moves found.</h2>`;
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
-	const newMove = Dex.moves.get(queue.moveIds[0]);
+	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
 		delete player.pendingMoveLearnQueue;
 		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
 	let html = `<div class="infobox"><h2>Move Learning</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Should a move be forgotten to make space for ${newMove.name}?</p><hr /><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
 	for (const move of pokemon.moves) {
-		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${Dex.moves.get(move.id).name}</button>`;
+		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}
 	html += `</div><hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="background-color: #d9534f; color: white;">Forget ${newMove.name}</button></div>`;
 	return html;
@@ -4826,7 +4843,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Error: Pokemon not found.");
 			}
 			const newMoveId = queue.moveIds[0];
-			const newMoveData = Dex.moves.get(newMoveId);
+			const newMoveData = getMove(newMoveId);
 
 			const newMoveName = newMoveData.name;
 			const moveToReplace = toID(target);
@@ -4838,7 +4855,7 @@ export const commands: ChatCommands = {
 				if (moveIndex === -1) {
 					return this.errorReply("That move is not known by your Pokemon.");
 				}
-				const oldMoveName = Dex.moves.get(pokemon.moves[moveIndex].id).name;
+				const oldMoveName = getMove(pokemon.moves[moveIndex].id).name;
 				pokemon.moves[moveIndex] = { id: newMoveId, pp: newMoveData.pp || 5 };
 				message = `1, 2, and... Poof! <strong>${pokemon.species}</strong> forgot <strong>${oldMoveName}</strong> and learned <strong>${newMoveName}</strong>!`;
 			}
@@ -4890,7 +4907,7 @@ export const commands: ChatCommands = {
 			const newMoveId = toID(rawMoveId); // Converts "magical leaf" to "magicalleaf"
 
 			if (pokemon.moves.length < 4) {
-				const newMoveData = Dex.moves.get(newMoveId);
+				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
@@ -5296,7 +5313,7 @@ export const commands: ChatCommands = {
 				const pokemon = createPokemon(spec.species, spec.level);
 				if (spec.moves) {
 					pokemon.moves = spec.moves.map(moveId => {
-						const moveData = Dex.moves.get(moveId);
+						const moveData = getMove(moveId);
 						return { id: moveId, pp: moveData.pp || 5 };
 					});
 				}
@@ -5437,7 +5454,7 @@ export const commands: ChatCommands = {
 				}
 
 				// Validate move
-				const moveData = Dex.moves.get(toID(moveId));
+				const moveData = getMove(toID(moveId));
 				if (!moveData.exists) {
 					return this.errorReply(`Move '${moveId}' not found.`);
 				}
@@ -5501,7 +5518,7 @@ export const commands: ChatCommands = {
 				}
 
 				// Re-render the UI in "target selection" mode
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${Dex.moves.get(moveId).name}.`], { attackerSlotIndex, moveId })}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId })}`);
 			},
 			// --- END NEW FUNCTION ---
 
@@ -5882,7 +5899,7 @@ export const commands: ChatCommands = {
 				pokemon.hp = pokemon.maxHp;
 				pokemon.status = null;
 				for (const move of pokemon.moves) {
-					const moveData = Dex.moves.get(move.id);
+					const moveData = getMove(move.id);
 					move.pp = moveData.pp || 5;
 				}
 			}
