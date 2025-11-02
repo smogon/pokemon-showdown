@@ -5193,7 +5193,7 @@ function generateDoubleBattleHTML(
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
 
 	// --- Pokemon Display (4 Pokemon in 2x2 grid) ---
-	html += `<table style="width: 100%; margin-bottom: 10px;">`;
+	html += `<table style="width: 100%; margin-bottom: 5px;">`;
 	// Opponent Side (Top Row)
 	html += `<tr>`;
 	html += `<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">`;
@@ -5218,13 +5218,13 @@ function generateDoubleBattleHTML(
 	html += `</tr>`;
 	html += `</table>`;
 
-	html += `<hr style="margin: 10px 0;" />`;
+	html += `<hr style="margin: 5px 0;" />`;
 
 	// --- Field Effects (Side by Side) ---
 	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
 		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
 		`</div>` +
-		`<hr style="margin: 10px 0;" />`;
+		`<hr style="margin: 5px 0;" />`;
 
 	// --- Message Log ---
 	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
@@ -5233,7 +5233,7 @@ function generateDoubleBattleHTML(
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = getMove(targetSelection.moveId);
-		html += `<p style="margin-top: 15px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
+		html += `<p style="margin-top: 10px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
 
 		const targets = [
 			{ slot: pSlot0, name: "Ally 1", index: 0 },
@@ -5245,12 +5245,12 @@ function generateDoubleBattleHTML(
 		const targetButtons = targets
 			.filter(target => target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex)
 			.map(target => {
-				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; min-height: 60px;`;
+				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; max-height: 50px;`;
 				return `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button" style="${buttonStyle}">${target.name}</button>`;
 			});
 
 		// Use a <table> for the 2x2 grid layout
-		let targetButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+		let targetButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 10px 0;">`;
 		targetButtonsHTML += `<tr>`;
 		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[0] || ''}</td>`;
 		targetButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${targetButtons[1] || ''}</td>`;
@@ -5262,7 +5262,7 @@ function generateDoubleBattleHTML(
 		targetButtonsHTML += `</table>`;
 
 		html += targetButtonsHTML;
-		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+		html += `<p style="margin-top: 10px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
 	} else {
 		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
@@ -5278,7 +5278,7 @@ function generateDoubleBattleHTML(
 
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
-			html += `<p style="margin-top: 15px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
+			html += `<p style="margin-top: 10px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
 
 			const moveButtons = pokemon.moves.map(move => {
 				const moveData = getMove(move.id);
@@ -5305,7 +5305,7 @@ function generateDoubleBattleHTML(
 			});
 
 			// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
-			let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+			let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 10px 0;">`;
 			moveButtonsHTML += `<tr>`;
 			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
 			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
