@@ -49,8 +49,6 @@ interface InventoryItem {
 	quantity: number;
 }
 
-// NEW INTERFACE for Double Battles
-// Holds a Pokemon and all its volatile, in-battle statuses
 interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
 	statStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>;
@@ -90,6 +88,7 @@ interface ActivePokemonSlot {
 	healBlockTurns?: number; // Heal Block - cannot heal
 	isCharged?: boolean; // Charge - next Electric move deals 2x damage
 	stockpileCount?: number; // Stockpile - stores energy (0-3)
+	flashFireBoost?: boolean; // (For Flash Fire ability)
 }
 
 // Interface for player data
