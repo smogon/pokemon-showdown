@@ -2857,26 +2857,24 @@ function handleDamagingMove(
 
 			// Red Card: Forces attacker to switch when holder is hit
 			if (defender.hp > 0 && attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
-				// Only works in trainer battles where the attacker has backup Pokemon
-				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-					const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
-					const attackerSlotIndex = isPlayerDefending ? 
-						battle.opponentSlots.indexOf(attackerSlot) : 
-						battle.playerSlots.indexOf(attackerSlot);
+				const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
+				const attackerSlotIndex = isPlayerDefending ? 
+					battle.opponentSlots.indexOf(attackerSlot) : 
+					battle.playerSlots.indexOf(attackerSlot);
+				
+				if (attackerSlotIndex !== -1) {
+					messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
+					defender.item = undefined; // Red Card is consumed
 					
-					if (attackerSlotIndex !== -1) {
-						messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
-						defender.item = undefined; // Red Card is consumed
-						
-						// Mark that this slot needs to switch
-						if (isPlayerDefending) {
-							// Force opponent to switch
-							battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
-						} else {
-							// Force player to switch (will trigger switch UI)
-							battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
-							battle.playerShouldSwitch = true;
-						}
+					if (isPlayerDefending) {
+						// Force opponent to switch (AI will auto-switch)
+						// In trainer battles, opponent has backup Pokemon
+						// In wild battles, this ends the battle slot (wild pokemon flees)
+						battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+					} else {
+						// Force player to switch - set the slot to null and trigger switch UI
+						battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+						battle.playerShouldSwitch = true;
 					}
 				}
 			}
@@ -4124,8 +4122,14 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 		
-		if (quickClawA && !quickClawB) return -1; // A goes first
-		if (quickClawB && !quickClawA) return 1;  // B goes first
+		if (quickClawA && !quickClawB) {
+			messageLog.push(`${slotA.pokemon.species}'s Quick Claw let it move first!`);
+			return -1;
+		}
+		if (quickClawB && !quickClawA) {
+			messageLog.push(`${slotB.pokemon.species}'s Quick Claw let it move first!`);
+			return 1;
+		}
 
 		if (battle.trickRoomTurns > 0) {
 			return speedA - speedB; // Slower goes first in Trick Room
