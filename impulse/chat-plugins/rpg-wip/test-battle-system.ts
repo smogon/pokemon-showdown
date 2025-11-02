@@ -392,7 +392,9 @@ function testDamageConsistency() {
 	const maxDamage = Math.max(...results);
 	const ratio = minDamage / maxDamage;
 	
-	if (ratio < 0.8) {
+	// Pokemon damage has 85-100% variance, so minimum ratio is 0.85
+	// Allow for some floating point error
+	if (ratio < 0.82) {
 		throw new Error(`Damage variance too high: ${minDamage}-${maxDamage} (ratio: ${ratio})`);
 	}
 	
