@@ -4174,8 +4174,8 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
  * [STEP 4/6/7 Implementation]
  * Processes all queued actions for the turn.
  */
-function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User) {
-	const messageLog: string[] = [];
+function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
+	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
 
 	// --- Reset side-wide guards ---
@@ -6518,7 +6518,8 @@ export const commands: ChatCommands = {
 
 					// --- NEW: Run the rest of the turn ---
 					// The catch "action" is done. Now process the rest of the turn (AI moves).
-					processTurn(this, battle, room, user);
+					// Pass messageLog so the catch failure message is displayed
+					processTurn(this, battle, room, user, messageLog);
 				}
 			},
 
