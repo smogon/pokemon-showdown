@@ -4837,9 +4837,6 @@ function generatePokemonInfoHTML(
 	return html;
 }
 
-/**
- * [NEW] Generates the UI for a 1-v-1 single battle.
- */
 function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
@@ -4901,22 +4898,20 @@ function generateSingleBattleHTML(
 		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
-		`<div style="display: flex; justify-content: space-around; gap: 15px; margin-bottom: 15px;">` +
-		// --- Player Pokemon (Left) ---
-		`<div style="flex: 1; text-align: center;">` +
-		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
-		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
-		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
-		`</div>` +
-		// --- VS Divider ---
-		`<div style="display: flex; align-items: center; justify-content: center; padding: 0 10px;">` +
-		`<div style="font-size: 24px; font-weight: bold; color: #999;">VS</div>` +
-		`</div>` +
-		// --- Opponent Pokemon (Right) ---
-		`<div style="flex: 1; text-align: center;">` +
+		// --- Opponent Pokemon (Top Right) ---
+		`<div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">` +
+		`<div style="text-align: center; width: 45%;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
 		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
 		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
+		`</div>` +
+		`</div>` +
+		// --- Player Pokemon (Bottom Left) ---
+		`<div style="display: flex; justify-content: flex-start; margin-bottom: 30px;">` +
+		`<div style="text-align: center; width: 45%;">` +
+		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
+		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
 		`</div>` +
 		`</div>` +
 		`<hr style="margin: 10px 0;" />` +
@@ -4962,25 +4957,24 @@ function generateDoubleBattleHTML(
 
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
 
-	// --- Battle Field (Player on Left, Opponent on Right) ---
-	html += `<div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 15px;">`;
-	
-	// --- Player Side (Left) ---
-	html += `<div style="flex: 1;">`;
-	html += `<h3 style="margin: 5px 0;">Your Team</h3>`;
-	html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
-	html += generateSlotHTML(pSlot0, 0, 'player');
-	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += `</div></div>`;
-
-	// --- Opponent Side (Right) ---
-	html += `<div style="flex: 1;">`;
-	html += `<h3 style="margin: 5px 0;">${battle.opponentName}</h3>`;
-	html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+	// --- Opponent Side (Top) ---
+	html += `<div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">`;
+	html += `<div style="flex: 1; max-width: 45%;">`;
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
+	html += `</div>`;
+	html += `<div style="flex: 1; max-width: 45%;">`;
 	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += `</div></div>`;
+	html += `</div>`;
+	html += `</div>`;
 
+	// --- Player Side (Bottom) ---
+	html += `<div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">`;
+	html += `<div style="flex: 1; max-width: 45%;">`;
+	html += generateSlotHTML(pSlot0, 0, 'player');
+	html += `</div>`;
+	html += `<div style="flex: 1; max-width: 45%;">`;
+	html += generateSlotHTML(pSlot1, 1, 'player');
+	html += `</div>`;
 	html += `</div>`;
 
 	html += `<hr style="margin: 10px 0;" />`;
