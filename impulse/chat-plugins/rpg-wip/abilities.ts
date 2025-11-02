@@ -171,10 +171,11 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Fire-type immunity (absorbs and heals)
+	// Fire-type immunity (absorbs and boosts Fire moves)
 	'flashfire': ctx => {
 		if (ctx.move.type === 'Fire') {
-			// Note: In full implementation, would boost Fire-type moves
+			// Set a volatile on the defender slot to boost their Fire moves
+			ctx.defenderSlot.flashFireBoost = true;
 			return {
 				immune: true,
 				message: `${ctx.defender.species}'s Flash Fire absorbed the Fire move!`,
@@ -183,35 +184,52 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Status move immunity (when at full HP)
+	// Grass-type immunity (boosts Attack)
 	'sapsipper': ctx => {
 		if (ctx.move.type === 'Grass') {
-			// Boost Attack by 1 stage (would need stat stage system)
+			let message = `${ctx.defender.species}'s Sap Sipper absorbed the Grass move!`;
+			// Boost Attack by 1 stage
+			if (ctx.defenderSlot.statStages.atk < 6) {
+				ctx.defenderSlot.statStages.atk++;
+				message = `${ctx.defender.species}'s Sap Sipper boosted its Attack!`;
+			}
 			return {
 				immune: true,
-				message: `${ctx.defender.species}'s Sap Sipper boosted its Attack!`,
+				message: message,
 			};
 		}
 		return null;
 	},
 
-	// Storm Drain - Water moves redirect to this Pokemon
+	// Storm Drain - Water moves redirect to this Pokemon (and boost SpA)
 	'stormdrain': ctx => {
 		if (ctx.move.type === 'Water') {
+			let message = `${ctx.defender.species}'s Storm Drain absorbed the Water move!`;
+			// Boost Sp. Atk by 1 stage
+			if (ctx.defenderSlot.statStages.spa < 6) {
+				ctx.defenderSlot.statStages.spa++;
+				message = `${ctx.defender.species}'s Storm Drain boosted its Sp. Atk!`;
+			}
 			return {
 				immune: true,
-				message: `${ctx.defender.species}'s Storm Drain absorbed the Water move and boosted Sp. Atk!`,
+				message: message,
 			};
 		}
 		return null;
 	},
 
-	// Lightning Rod - Electric moves redirect to this Pokemon
+	// Lightning Rod - Electric moves redirect to this Pokemon (and boost SpA)
 	'lightningrod': ctx => {
 		if (ctx.move.type === 'Electric') {
+			let message = `${ctx.defender.species}'s Lightning Rod absorbed the Electric move!`;
+			// Boost Sp. Atk by 1 stage
+			if (ctx.defenderSlot.statStages.spa < 6) {
+				ctx.defenderSlot.statStages.spa++;
+				message = `${ctx.defender.species}'s Lightning Rod boosted its Sp. Atk!`;
+			}
 			return {
 				immune: true,
-				message: `${ctx.defender.species}'s Lightning Rod absorbed the Electric move and boosted Sp. Atk!`,
+				message: message,
 			};
 		}
 		return null;
@@ -220,9 +238,15 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	// Motor Drive - Electric immunity with speed boost
 	'motordrive': ctx => {
 		if (ctx.move.type === 'Electric') {
+			let message = `${ctx.defender.species}'s Motor Drive absorbed the Electric move!`;
+			// Boost Speed by 1 stage
+			if (ctx.defenderSlot.statStages.spe < 6) {
+				ctx.defenderSlot.statStages.spe++;
+				message = `${ctx.defender.species}'s Motor Drive boosted its Speed!`;
+			}
 			return {
 				immune: true,
-				message: `${ctx.defender.species}'s Motor Drive boosted its Speed!`,
+				message: message,
 			};
 		}
 		return null;
@@ -820,6 +844,11 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = handler(ctx, basePower);
 	}
 
+	// Apply 1.5x boost for Flash Fire
+	if (ctx.move.type === 'Fire' && ctx.attackerSlot.flashFireBoost) {
+		basePower = Math.floor(basePower * 1.5);
+	}
+
 	// Apply 1.2x boost for type-conversion abilities
 	if ((ctx.move as any).typeConversionBoost) {
 		basePower = Math.floor(basePower * 1.2);
@@ -1237,8 +1266,14 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const opponentSlots = isPlayerSwitchIn ? battle.opponentSlots : battle.playerSlots;
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
-				// TODO: Check for abilities that block Intimidate (e.g., Clear Body, White Smoke)
-				if (opponentSlot.statStages.atk > -6) {
+				const oppAbility = toID(opponentSlot.pokemon.ability || '');
+				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody'];
+				
+				if (opponentSlot.substitute) {
+					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
+				} else if (blockAbilities.includes(oppAbility)) {
+					messageLog.push(`${opponentSlot.pokemon.species}'s ${opponentSlot.pokemon.ability} prevents its stats from being lowered!`);
+				} else if (opponentSlot.statStages.atk > -6) {
 					opponentSlot.statStages.atk--;
 					messageLog.push(`${pokemon.species}'s Intimidate lowered ${opponentSlot.pokemon.species}'s Attack!`);
 				}
@@ -1262,9 +1297,12 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	// Handle damage-on-contact (Rough Skin, Iron Barbs)
 	if (handler.onContactDamage) {
-		const damage = Math.floor(attacker.maxHp * handler.onContactDamage);
-		attacker.hp = Math.max(0, attacker.hp - damage);
-		ctx.messageLog.push(`${attacker.species} was hurt by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
+		// Check for Magic Guard
+		if (takesIndirectDamage(attacker)) {
+			const damage = Math.floor(attacker.maxHp * handler.onContactDamage);
+			attacker.hp = Math.max(0, attacker.hp - damage);
+			ctx.messageLog.push(`${attacker.species} was hurt by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
+		}
 	}
 
 	// Handle status-on-contact (Static, Flame Body, Poison Point)
@@ -1272,13 +1310,20 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const statusToInflict = handler.effect as Status;
 		let canBeAfflicted = true;
 
+		// Check type immunities
 		if ((statusToInflict === 'par' && attackerSpecies.types.includes('Electric')) ||
 			(statusToInflict === 'brn' && attackerSpecies.types.includes('Fire')) ||
 			(statusToInflict === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel')))) {
 			canBeAfflicted = false;
 		}
 
-		if (canBeAfflicted && !preventsStatus(attacker, statusToInflict)) {
+		// Check ability immunities
+		if (canBeAfflicted && preventsStatus(attacker, statusToInflict)) {
+			canBeAfflicted = false;
+			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
+		}
+
+		if (canBeAfflicted) {
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
 				attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
@@ -1290,9 +1335,16 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	// Handle Effect Spore
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
 		const possibleStatuses: Status[] = [];
-		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) possibleStatuses.push('psn');
-		if (!attackerSpecies.types.includes('Electric')) possibleStatuses.push('par');
-		if (!preventsStatus(attacker, 'slp')) possibleStatuses.push('slp'); // Check Insomnia/Vital Spirit
+		// Check immunities for each possible status
+		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel') && !preventsStatus(attacker, 'psn')) {
+			possibleStatuses.push('psn');
+		}
+		if (!attackerSpecies.types.includes('Electric') && !preventsStatus(attacker, 'par')) {
+			possibleStatuses.push('par');
+		}
+		if (!preventsStatus(attacker, 'slp')) {
+			possibleStatuses.push('slp');
+		}
 
 		if (possibleStatuses.length > 0) {
 			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
