@@ -7,7 +7,7 @@
 
 // Import types and utilities
 import type { RPGPokemon, PlayerData, BattleState, ActivePokemonSlot } from './types';
-import { ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY } from './constants';
+import { ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY, STARTER_POKEMON } from './constants';
 import { getActiveSlots } from './battle-helpers';
 import { isDoublesBattle, generateFieldEffectHTML as generateFieldEffectHTMLHelper } from './battle-system';
 
