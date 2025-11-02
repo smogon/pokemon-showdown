@@ -806,9 +806,9 @@ function getMove(moveId: string): any {
 		// Add exists property for compatibility
 		return { ...customMove, exists: true };
 	}
-	
+
 	// Otherwise get from Dex
-	return getMove(moveId);
+	return Dex.moves.get(moveId);
 }
 
 function calculateDamage(
