@@ -341,7 +341,7 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 
 	// Technician - Boost moves with 60 BP or less
 	'technician': (ctx, basePower) => {
-		if (basePower <= 60 && basePower > 0) {
+		if (ctx.move.basePower <= 60 && ctx.move.basePower > 0) {
 			return Math.floor(basePower * 1.5);
 		}
 		return basePower;
