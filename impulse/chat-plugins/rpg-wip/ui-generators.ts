@@ -11,10 +11,6 @@ import { ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY, STARTER_POKEMON } from './
 import { getActiveSlots } from './battle-helpers';
 import { isDoublesBattle, generateFieldEffectHTML as generateFieldEffectHTMLHelper } from './battle-system';
 
-// Global declarations (available from Pokemon Showdown environment)
-declare const Dex: any;
-declare function toID(text: string): string;
-
 export function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
