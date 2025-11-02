@@ -213,7 +213,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			move.infiltrates = true;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			this.damage(source.baseMaxhp / 8, source, target);
+			this.damage(target.baseMaxhp / 8, target, source);
 		},
 		name: "PInfiltrator",
 		shortDesc: "This Pokemon's moves ignore Substitute/screens and deal an extra 1/8 max HP.",

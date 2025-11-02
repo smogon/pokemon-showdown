@@ -1093,6 +1093,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 85,
 		basePower: 50,
 		category: "Special",
+		shortDesc: "Hits 3 times.",
 		name: "Meteor Shower",
 		pp: 0.625,
 		priority: 0,
