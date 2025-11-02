@@ -11,6 +11,7 @@ import { ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY, STARTER_POKEMON } from './
 import { getActiveSlots } from './battle-helpers';
 import { isDoublesBattle, generateFieldEffectHTML as generateFieldEffectHTMLHelper } from './battle-system';
 import { getPlayerData, activeBattles } from './player-data';
+import { createPokemon } from './utils';
 
 export function generateSingleBattleHTML(
 	battle: BattleState,
