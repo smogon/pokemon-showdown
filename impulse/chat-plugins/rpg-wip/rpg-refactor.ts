@@ -4879,8 +4879,8 @@ function generateSingleBattleHTML(
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
 		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.0em; margin-bottom: 8px;">${moveData.name}</div>` +
-            `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 8px;">${moveData.name}</div>` +
+            `<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">` +
                 `<span>${moveData.type}</span>` +
                `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
 			`</div> `;
@@ -4892,12 +4892,12 @@ function generateSingleBattleHTML(
 	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
 	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
 	moveButtonsHTML += `<tr>`;
-	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
-	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
 	moveButtonsHTML += `</tr>`;
 	moveButtonsHTML += `<tr>`;
-	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
-	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
 	moveButtonsHTML += `</tr>`;
 	moveButtonsHTML += `</table>`;
 
