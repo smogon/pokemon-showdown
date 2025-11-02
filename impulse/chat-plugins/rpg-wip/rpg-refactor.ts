@@ -4564,12 +4564,35 @@ function executeAction(
 		const isPlayerAttacker = attackerSlotIndex <= 1;
 		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
 
-		// --- Check for redirection ---
-		const redirector = opponentSlots.find(s => s.isRedirecting);
-		if (redirector && move.target === 'normal') { // Check move is single-target
-			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
-			chosenTargetSlot = redirectorIndex;
-			messageLog.push(`${redirector.pokemon.species} took the attack!`);
+		// --- NEW: Check for Ability Redirection (Storm Drain, Lightning Rod) ---
+		// This must be checked before Follow Me
+		let abilityRedirector: ActivePokemonSlot | undefined = undefined;
+		if (move.target === 'normal') { // Only single-target moves are redirected
+			const moveType = move.type; // Use the base move type
+			
+			if (moveType === 'Water') {
+				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
+			} else if (moveType === 'Electric') {
+				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'lightningrod');
+			}
+
+			if (abilityRedirector) {
+				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(abilityRedirector);
+				chosenTargetSlot = redirectorIndex;
+				messageLog.push(`${abilityRedirector.pokemon.species}'s ${abilityRedirector.pokemon.ability} drew in the attack!`);
+			}
+		}
+		// --- END NEW ---
+
+		// --- Check for Volatile Redirection (Follow Me) ---
+		// Only check if an ability didn't already redirect
+		if (!abilityRedirector) {
+			const redirector = opponentSlots.find(s => s.isRedirecting);
+			if (redirector && move.target === 'normal') { // Check move is single-target
+				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
+				chosenTargetSlot = redirectorIndex;
+				messageLog.push(`${redirector.pokemon.species} took the attack!`);
+			}
 		}
 
 		const targetSlots = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
@@ -4582,8 +4605,35 @@ function executeAction(
 			return;
 		}
 
-		// 6. Execute move against all targets
-		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
+		// --- NEW: Check for Move-Preventing Abilities ---
+		const remainingTargets: ActivePokemonSlot[] = [];
+		for (const defenderSlot of targetSlots) {
+			const abilityContext = {
+				attacker: attackerSlot.pokemon,
+				defender: defenderSlot.pokemon,
+				attackerSlot,
+				defenderSlot,
+				move,
+				battle,
+				messageLog,
+			};
+
+			const preventionCheck = RPGAbilities.preventMove(abilityContext);
+			if (preventionCheck && preventionCheck.prevented) {
+				messageLog.push(preventionCheck.message || `${defenderSlot.pokemon.species}'s ability prevented the move!`);
+			} else {
+				remainingTargets.push(defenderSlot);
+			}
+		}
+
+		// If the move was prevented against all targets, stop.
+		if (targetSlots.length > 0 && remainingTargets.length === 0) {
+			return;
+		}
+		// --- END NEW ---
+
+		// 6. Execute move against all (remaining) targets
+		executeMove(attackerSlot, remainingTargets, move, moveObject, battle, messageLog);
 
 		// --- NEW: Handle Choice Item Lock ---
 		if (attackerSlot.pokemon.hp > 0 && move.id !== 'struggle' && !attackerSlot.lockedMove) {
