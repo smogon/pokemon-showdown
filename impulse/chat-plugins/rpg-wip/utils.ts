@@ -2,6 +2,11 @@
 import type { RPGPokemon, PlayerData, InventoryItem, Stats } from './types';
 import { ITEMS_DATABASE, NATURES, NATURE_LIST } from './constants';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
+
+// Global declarations (available from Pokemon Showdown environment)
+declare const Dex: any;
+declare function toID(text: string): string;
 
 /**
  * Calculate total experience required for a Pokemon to reach a specific level
@@ -41,7 +46,7 @@ export function generateUniqueId(): string {
 /**
  * Calculate Pokemon stats based on base stats, level, nature, IVs, and EVs
  */
-export function calculateStats(species: any, level: number, nature: string, ivs: Record<keyof Stats, number>, evs: Record<keyof Stats, number>): Stats {
+export function calculateStats(species: any, level: number, nature: string, ivs: any, evs: any): Stats {
 	const stats: Stats = { maxHp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	stats.maxHp = Math.floor(((2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4)) * level) / 100) + level + 10;
 	stats.atk = Math.floor(((2 * species.baseStats.atk + ivs.atk + Math.floor(evs.atk / 4)) * level) / 100) + 5;

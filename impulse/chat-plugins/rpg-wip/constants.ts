@@ -136,7 +136,7 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	},
 };
 
-export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
+export const BERRY_FLAVORS: Record<string, { flavor: string, stat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' }> = {
 	'figyberry': { flavor: 'Spicy', stat: 'atk' },
 	'wikiberry': { flavor: 'Dry', stat: 'spa' },
 	'magoberry': { flavor: 'Sweet', stat: 'spe' },
@@ -144,7 +144,7 @@ export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }
 	'iapapaberry': { flavor: 'Sour', stat: 'def' },
 };
 
-export const NATURE_FLAVOR_PREFERENCES: Record<keyof Stats, string> = {
+export const NATURE_FLAVOR_PREFERENCES: Record<string, string> = {
 	atk: 'Spicy', def: 'Sour', spa: 'Dry', spd: 'Bitter', spe: 'Sweet', maxHp: '',
 };
 
@@ -255,7 +255,7 @@ export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEf
 	Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
 };
 
-export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
+export const NATURES: Record<string, { plus: 'atk' | 'def' | 'spa' | 'spd' | 'spe', minus: 'atk' | 'def' | 'spa' | 'spd' | 'spe' } | null> = {
 	'Adamant': { plus: 'atk', minus: 'spa' }, 'Bashful': null, 'Brave': { plus: 'atk', minus: 'spe' }, 'Bold': { plus: 'def', minus: 'atk' }, 'Calm': { plus: 'spd', minus: 'atk' }, 'Careful': { plus: 'spd', minus: 'spa' }, 'Docile': null, 'Gentle': { plus: 'spd', minus: 'def' }, 'Hardy': null, 'Hasty': { plus: 'spe', minus: 'def' }, 'Impish': { plus: 'def', minus: 'spa' }, 'Jolly': { plus: 'spe', minus: 'spa' }, 'Lax': { plus: 'def', minus: 'spd' }, 'Lonely': { plus: 'atk', minus: 'def' }, 'Mild': { plus: 'spa', minus: 'def' }, 'Modest': { plus: 'spa', minus: 'atk' }, 'Naive': { plus: 'spe', minus: 'spd' }, 'Naughty': { plus: 'atk', minus: 'spd' }, 'Quiet': { plus: 'spa', minus: 'spe' }, 'Quirky': null, 'Rash': { plus: 'spa', minus: 'spd' }, 'Relaxed': { plus: 'def', minus: 'spe' }, 'Sassy': { plus: 'spd', minus: 'spe' }, 'Serious': null, 'Timid': { plus: 'spe', minus: 'atk' },
 };
 export const NATURE_LIST = Object.keys(NATURES);

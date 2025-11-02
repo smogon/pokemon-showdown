@@ -3,8 +3,18 @@
 // Type alias for status conditions
 export type Status = 'psn' | 'brn' | 'par' | 'slp' | 'frz';
 
-// Type alias for stats (excluding hp which is handled separately)
-export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id' | 'expToNextLevel' | 'hp' | 'ability' | 'item' | 'nature' | 'growthRate' | 'ivs' | 'evs' | 'status'>;
+// Type alias for stat names
+export type StatID = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+
+// Interface for Pokemon stats
+export interface Stats {
+	maxHp: number;
+	atk: number;
+	def: number;
+	spa: number;
+	spd: number;
+	spe: number;
+}
 
 // Interface for RPG Pokemon data
 export interface RPGPokemon {
@@ -17,8 +27,8 @@ export interface RPGPokemon {
 	spa: number;
 	spd: number;
 	spe: number;
-	ivs: Record<keyof Stats, number>;
-	evs: Record<keyof Stats, number>;
+	ivs: { hp: number, atk: number, def: number, spa: number, spd: number, spe: number };
+	evs: { hp: number, atk: number, def: number, spa: number, spd: number, spe: number };
 	weightkg: number;
 	heightm: number;
 	friendship: number;
@@ -50,7 +60,7 @@ export interface InventoryItem {
 // Interface for Double Battles - Holds a Pokemon and all its volatile, in-battle statuses
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
-	statStages: Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>;
+	statStages: { atk: number, def: number, spa: number, spd: number, spe: number, accuracy: number, evasion: number };
 	status: Status | null;
 	sleepCounter: number;
 	isConfused: boolean;
@@ -99,8 +109,8 @@ export interface PlayerData {
 	party: RPGPokemon[];
 	location: string;
 	money: number;
-	inventory: Map<string, InventoryItem>;
-	pc: Map<string, RPGPokemon>;
+	inventory: any; // Map<string, InventoryItem>
+	pc: any; // Map<string, RPGPokemon>
 	pendingMoveLearnQueue?: {
 		pokemonId: string,
 		moveIds: string[],
