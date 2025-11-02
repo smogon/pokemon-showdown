@@ -303,9 +303,11 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Sheer Force - Boost moves with secondary effects
+	// Sheer Force - Boost moves with secondary effects (and removes them)
 	'sheerforce': (ctx, basePower) => {
 		if (ctx.move.secondary || ctx.move.secondaries) {
+			// Power boost is applied here
+			// Secondary effect removal is handled in the move execution code
 			return Math.floor(basePower * 1.3);
 		}
 		return basePower;
@@ -1007,6 +1009,18 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 }
 
 /**
+ * Check if secondary effects should be applied
+ * Sheer Force removes secondary effects
+ */
+export function shouldApplySecondaryEffects(attacker: RPGPokemon, move: Move): boolean {
+	const ability = toID(attacker.ability || '');
+	if (ability === 'sheerforce' && (move.secondary || move.secondaries)) {
+		return false; // Sheer Force removes secondary effects
+	}
+	return true;
+}
+
+/**
  * Check if ability prevents a specific move
  */
 export function preventMove(ctx: AbilityContext): { prevented: boolean; message?: string } | null {
@@ -1092,6 +1106,7 @@ export const RPGAbilities = {
 	getAllImplementedAbilities,
 	getAbilityInfo,
 	getAbilityData,
+	shouldApplySecondaryEffects,
 	
 	// Ability databases
 	IMMUNITY_ABILITIES,
