@@ -136,7 +136,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-message', `BOO`);
 				break;
 			case 5:
-				this.add(`raw|<img src="https://media.discordapp.net/attachments/575738724680204329/909632559036629022/talkinchu.png" height="4540" width="411">`);
+				this.add(`raw|<img src="https://raw.githubusercontent.com/scoopapa/DH2/38ec8d41f26b57766acda4ab509659b7e134b4f8/data/mods/spookymod/sprites/front/talkinchu.png" height="4540" width="411">`);
 				this.add('-message', `"Deez" ~ DuoM2`);
 				break;
 			default:
