@@ -70,6 +70,24 @@ interface ActivePokemonSlot {
 	isRedirecting?: boolean; // For Follow Me
 	isHelped?: boolean; // For Helping Hand
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
+	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
+	
+	// High-priority volatile statuses
+	substitute?: { hp: number }; // Substitute HP
+	disabledMove?: { moveId: string, turns: number }; // Disabled move and turns remaining
+	encoreMove?: { moveId: string, turns: number }; // Encored move and turns remaining
+	isIngrained?: boolean; // Ingrain - restores HP but prevents switching
+	hasAquaRing?: boolean; // Aqua Ring - restores 1/16 HP each turn
+	focusEnergy?: boolean; // Focus Energy - increases critical hit ratio
+	magnetRiseTurns?: number; // Magnet Rise - levitates (Ground immunity)
+	telekinesisCounter?: number; // Telekinesis - moves cannot miss
+	isSmackedDown?: boolean; // Smackdown - grounded (loses Flying/Levitate)
+	lastMoveUsed?: string; // For Torment, Disable, Encore tracking
+	tormentActive?: boolean; // Torment - cannot use same move twice
+	embargoTurns?: number; // Embargo - cannot use items
+	healBlockTurns?: number; // Heal Block - cannot heal
+	isCharged?: boolean; // Charge - next Electric move deals 2x damage
+	stockpileCount?: number; // Stockpile - stores energy (0-3)
 }
 
 // Interface for player data
@@ -157,6 +175,23 @@ interface BattleState {
 			pokemonId: string, // To track who is acting
 		} | null,
 	};
+
+	// --- FIELDS FOR DELAYED MOVE EFFECTS ---
+	// Future Sight and Doom Desire - attacks that hit after 2 turns
+	playerFutureMoves: Array<{
+		slotIndex: number, // Which slot will be hit (0 or 1)
+		moveId: 'futuresight' | 'doomdesire',
+		turnsLeft: number, // Hits when this reaches 0
+		attackerSlotIndex: number, // Who used it (for stat calculations)
+		attackerStats: { atk: number, spa: number }, // Stats when used
+	}>;
+	opponentFutureMoves: Array<{
+		slotIndex: number,
+		moveId: 'futuresight' | 'doomdesire',
+		turnsLeft: number,
+		attackerSlotIndex: number,
+		attackerStats: { atk: number, spa: number },
+	}>;
 }
 
 // In-memory storage for player data (in production, use a database)
@@ -780,6 +815,11 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battl
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
+	// Focus Energy boosts crit stage
+	if (attackerSlot.focusEnergy) {
+		critStage += 2;
+	}
+
 	// Base critical hit stages for certain moves
 	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
 		critStage += 1;
@@ -992,6 +1032,11 @@ function calculateDamage(
 		basePower *= 2;
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
+		basePower *= 2;
+	}
+	
+	// Charge boosts next Electric move
+	if (attackerSlot.isCharged && moveType === 'Electric') {
 		basePower *= 2;
 	}
 
@@ -1572,6 +1617,100 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
 		}
 	}
+
+	// Handle Yawn counter
+	if (slot.yawnCounter !== undefined && slot.yawnCounter > 0) {
+		slot.yawnCounter--;
+		if (slot.yawnCounter === 0) {
+			// Try to inflict sleep
+			if (!slot.status) {
+				const speciesData = Dex.species.get(pokemon.species);
+				// Check immunity
+				const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(pokemon, battle);
+				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
+
+				if (!isTerrainImmune && !isAbilityImmune) {
+					slot.status = 'slp';
+					slot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
+				} else {
+					messageLog.push(`${pokemon.species} stayed awake!`);
+				}
+			}
+			// Clear the yawn counter
+			slot.yawnCounter = undefined;
+		}
+	}
+
+	// Handle Aqua Ring healing (blocked by Heal Block)
+	if (slot.hasAquaRing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+		if (slot.healBlockTurns > 0) {
+			// Heal Block prevents Aqua Ring healing
+		} else {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
+		}
+	}
+
+	// Handle Ingrain healing (blocked by Heal Block)
+	if (slot.isIngrained && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+		if (slot.healBlockTurns > 0) {
+			// Heal Block prevents Ingrain healing
+		} else {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
+		}
+	}
+
+	// Decrement volatile counters
+	if (slot.disabledMove) {
+		slot.disabledMove.turns--;
+		if (slot.disabledMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s ${slot.disabledMove.moveId} is no longer disabled!`);
+			slot.disabledMove = undefined;
+		}
+	}
+
+	if (slot.encoreMove) {
+		slot.encoreMove.turns--;
+		if (slot.encoreMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s encore ended!`);
+			slot.encoreMove = undefined;
+		}
+	}
+
+	if (slot.magnetRiseTurns > 0) {
+		slot.magnetRiseTurns--;
+		if (slot.magnetRiseTurns === 0) {
+			messageLog.push(`${pokemon.species}'s electromagnetism wore off!`);
+		}
+	}
+
+	if (slot.telekinesisCounter > 0) {
+		slot.telekinesisCounter--;
+		if (slot.telekinesisCounter === 0) {
+			messageLog.push(`${pokemon.species} was freed from telekinesis!`);
+		}
+	}
+
+	if (slot.embargoTurns > 0) {
+		slot.embargoTurns--;
+		if (slot.embargoTurns === 0) {
+			messageLog.push(`${pokemon.species} can use items again!`);
+		}
+	}
+
+	if (slot.healBlockTurns > 0) {
+		slot.healBlockTurns--;
+		if (slot.healBlockTurns === 0) {
+			messageLog.push(`${pokemon.species}'s Heal Block wore off!`);
+		}
+	}
+
+	// Clear one-turn effects
+	slot.isCharged = false; // Charge only lasts until next Electric move
 }
 
 /**
@@ -1982,6 +2121,119 @@ function handleStatusMove(
 					hadEffect = true;
 				}
 				break;
+
+			case 'yawn':
+				// Check if target can be put to sleep
+				if (!defenderSlot.status && !defenderSlot.yawnCounter) {
+					const defenderSpecies = Dex.species.get(defender.species);
+					// Check type immunity
+					const isTypeImmune = defenderSpecies.types.includes('Grass') && defenderSlot.pokemon.ability === 'Overcoat';
+					// Check terrain immunity
+					const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(defender, battle);
+					// Check ability immunity
+					const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(defender.ability || '');
+
+					if (!isTypeImmune && !isTerrainImmune && !isAbilityImmune) {
+						defenderSlot.yawnCounter = 2; // Will fall asleep in 2 turns
+						messageLog.push(`${defender.species} grew drowsy!`);
+						hadEffect = true;
+					} else {
+						messageLog.push(`But it failed!`);
+					}
+				}
+				break;
+
+			case 'disable':
+				if (defenderSlot.lastMoveUsed && !defenderSlot.disabledMove) {
+					defenderSlot.disabledMove = { moveId: defenderSlot.lastMoveUsed, turns: 4 };
+					messageLog.push(`${defender.species}'s ${defenderSlot.lastMoveUsed} was disabled!`);
+					hadEffect = true;
+				} else {
+					messageLog.push(`But it failed!`);
+				}
+				break;
+
+			case 'encore':
+				if (defenderSlot.lastMoveUsed && !defenderSlot.encoreMove) {
+					defenderSlot.encoreMove = { moveId: defenderSlot.lastMoveUsed, turns: 3 };
+					messageLog.push(`${defender.species} received an encore!`);
+					hadEffect = true;
+				} else {
+					messageLog.push(`But it failed!`);
+				}
+				break;
+
+			case 'ingrain':
+				if (!attackerSlot.isIngrained) {
+					attackerSlot.isIngrained = true;
+					messageLog.push(`${attacker.species} planted its roots!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'aquaring':
+				if (!attackerSlot.hasAquaRing) {
+					attackerSlot.hasAquaRing = true;
+					messageLog.push(`${attacker.species} surrounded itself with a veil of water!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'focusenergy':
+				if (!attackerSlot.focusEnergy) {
+					attackerSlot.focusEnergy = true;
+					messageLog.push(`${attacker.species} is getting pumped!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'magnetrise':
+				if (attackerSlot.magnetRiseTurns === 0) {
+					attackerSlot.magnetRiseTurns = 5;
+					messageLog.push(`${attacker.species} levitated with electromagnetism!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'telekinesis':
+				if (defenderSlot.telekinesisCounter === 0) {
+					defenderSlot.telekinesisCounter = 3;
+					messageLog.push(`${defender.species} was hurled into the air!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'smackdown':
+				if (!defenderSlot.isSmackedDown) {
+					defenderSlot.isSmackedDown = true;
+					messageLog.push(`${defender.species} fell straight down!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'torment':
+				if (!defenderSlot.tormentActive) {
+					defenderSlot.tormentActive = true;
+					messageLog.push(`${defender.species} was subjected to torment!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'embargo':
+				if (defenderSlot.embargoTurns === 0) {
+					defenderSlot.embargoTurns = 5;
+					messageLog.push(`${defender.species} can't use items anymore!`);
+					hadEffect = true;
+				}
+				break;
+
+			case 'healblock':
+				if (defenderSlot.healBlockTurns === 0) {
+					defenderSlot.healBlockTurns = 5;
+					messageLog.push(`${defender.species} was prevented from healing!`);
+					hadEffect = true;
+				}
+				break;
 			}
 		} else if (move.id === 'helpinghand') {
 			if (!defenderSlot) { // Target fainted or is empty
@@ -1992,10 +2244,74 @@ function handleStatusMove(
 			defenderSlot.isHelped = true; // <-- NEW VOLATILE
 			messageLog.push(`${attacker.species} is ready to help ${defender.species}!`);
 			hadEffect = true;
+		} else if (move.id === 'substitute') {
+			// Substitute creates a decoy with 1/4 of user's max HP
+			if (attackerSlot.substitute) {
+				messageLog.push(`${attacker.species} already has a substitute!`);
+			} else {
+				const subHP = Math.floor(attacker.maxHp / 4);
+				if (attacker.hp <= subHP) {
+					messageLog.push(`But it does not have enough HP left to make a substitute!`);
+				} else {
+					attacker.hp -= subHP;
+					attackerSlot.substitute = { hp: subHP };
+					messageLog.push(`${attacker.species} made a substitute!`);
+					hadEffect = true;
+				}
+			}
+		} else if (move.id === 'charge') {
+			attackerSlot.isCharged = true;
+			messageLog.push(`${attacker.species} began charging power!`);
+			hadEffect = true;
+		} else if (move.id === 'stockpile') {
+			if (attackerSlot.stockpileCount < 3) {
+				attackerSlot.stockpileCount++;
+				// Stockpile also raises Defense and Sp. Def by 1 stage
+				if (attackerSlot.statStages.def < 6) attackerSlot.statStages.def++;
+				if (attackerSlot.statStages.spd < 6) attackerSlot.statStages.spd++;
+				messageLog.push(`${attacker.species} stockpiled ${attackerSlot.stockpileCount}!`);
+				hadEffect = true;
+			} else {
+				messageLog.push(`${attacker.species} can't stockpile any more!`);
+			}
 		}
 	}
 
 	// --- Handle moves that don't target a single defender ---
+
+	// Handle Future Sight and Doom Desire
+	if (['futuresight', 'doomdesire'].includes(move.id)) {
+		// Determine which side's future moves array to use
+		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
+		
+		// Check if a future move is already scheduled for this slot
+		const targetSlotLocalIndex = isPlayerAttacker ? 
+			(chosenTargetSlot - 2) : chosenTargetSlot; // Convert to 0-1 index
+		
+		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
+		
+		if (existingFutureMove) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
+		// Schedule the future move to hit in 2 turns
+		futureMoveArray.push({
+			slotIndex: targetSlotLocalIndex,
+			moveId: move.id as 'futuresight' | 'doomdesire',
+			turnsLeft: 2,
+			attackerSlotIndex,
+			attackerStats: {
+				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
+				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
+			},
+		});
+		
+		const moveName = move.id === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+		messageLog.push(`${attacker.species} foresaw an attack!`);
+		hadEffect = true;
+		return;
+	}
 
 	// Handle Protect and Detect
 	if (['protect', 'detect'].includes(move.id)) {
@@ -2419,6 +2735,22 @@ function handleDamagingMove(
 			continue;
 		}
 
+		// Handle Substitute - takes damage instead of the Pokemon
+		if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
+			const subHP = defenderSlot.substitute.hp;
+			if (damageDealt >= subHP) {
+				damageDealt -= subHP;
+				defenderSlot.substitute = undefined;
+				messageLog.push(`The substitute took the hit and broke!`);
+				// If there's remaining damage, it doesn't carry over in most cases
+				damageDealt = 0;
+			} else {
+				defenderSlot.substitute.hp -= damageDealt;
+				messageLog.push(`The substitute took the hit!`);
+				damageDealt = 0;
+			}
+		}
+
 		if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && defender.hp === defender.maxHp && damageDealt >= defender.hp) {
 			damageDealt = defender.hp - 1;
 			messageLog.push(`${defender.species} held on using its Focus Sash!`);
@@ -2461,16 +2793,26 @@ function handleDamagingMove(
 		}
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
+			// Drain moves - blocked by Heal Block
 			if (move.drain && attacker.hp < attacker.maxHp) {
-				const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
-				attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
-				messageLog.push(`${defender.species} had its energy drained!`);
+				if (attackerSlot.healBlockTurns > 0) {
+					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
+				} else {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
+					messageLog.push(`${defender.species} had its energy drained!`);
+				}
 			}
 
+			// Shell Bell - blocked by Heal Block
 			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
-				const healAmount = Math.max(1, Math.floor(damageDealt / 8)); // Shell Bell is 1/8 damage dealt
-				attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
-				messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
+				if (attackerSlot.healBlockTurns > 0) {
+					// Heal Block prevents Shell Bell healing
+				} else {
+					const healAmount = Math.max(1, Math.floor(damageDealt / 8)); // Shell Bell is 1/8 damage dealt
+					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
+				}
 			}
 
 			if (defender.hp > 0 && battle.magicRoomTurns === 0) {
@@ -2906,6 +3248,20 @@ function isGrounded(pokemon: RPGPokemon, battle: BattleState): boolean {
 }
 
 /**
+ * Checks if a Pokemon's held item is usable (not suppressed by Magic Room or Embargo)
+ * @param slot The Pokemon slot to check
+ * @param battle The battle state
+ * @returns true if items can be used, false if suppressed
+ */
+function canUseItem(slot: ActivePokemonSlot, battle: BattleState): boolean {
+	// Magic Room suppresses all items
+	if (battle.magicRoomTurns > 0) return false;
+	// Embargo suppresses this Pokemon's item specifically
+	if (slot.embargoTurns > 0) return false;
+	return true;
+}
+
+/**
  * Processes end-of-turn effects for all field conditions (Rooms, Terrains).
  */
 function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) {
@@ -3021,6 +3377,9 @@ function executeMove(
 	battle: BattleState,
 	messageLog: string[]
 ): void {
+	// Track last move used (for Disable, Torment, etc.)
+	attackerSlot.lastMoveUsed = move.id;
+	
 	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
@@ -3306,6 +3665,81 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	// Get all active slots before effects start
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
+	// --- Process Future Sight / Doom Desire attacks ---
+	// Process player's future moves (hitting opponents)
+	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
+		fm.turnsLeft--;
+		if (fm.turnsLeft === 0) {
+			// Execute the future move
+			const targetSlot = battle.opponentSlots[fm.slotIndex];
+			if (targetSlot && targetSlot.pokemon.hp > 0) {
+				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+				messageLog.push(`<strong>${moveName}</strong> took effect!`);
+				
+				// Calculate damage using stored stats
+				const move = getMove(fm.moveId);
+				const basePower = move.basePower || 120;
+				const moveType = move.type;
+				
+				// Get defender's current stats
+				const defender = targetSlot.pokemon;
+				const defenderSpecies = Dex.species.get(defender.species);
+				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
+				
+				// Calculate damage
+				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
+				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
+				const damage = Math.floor(baseDamage * effectiveness);
+				
+				// Apply damage
+				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
+				messageLog.push(`${defender.species} took ${damage} damage!`);
+				
+				if (effectiveness > 1) messageLog.push(`It's super effective!`);
+				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			}
+			return false; // Remove this future move from the array
+		}
+		return true; // Keep this future move
+	});
+	
+	// Process opponent's future moves (hitting player)
+	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
+		fm.turnsLeft--;
+		if (fm.turnsLeft === 0) {
+			// Execute the future move
+			const targetSlot = battle.playerSlots[fm.slotIndex];
+			if (targetSlot && targetSlot.pokemon.hp > 0) {
+				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+				messageLog.push(`<strong>${moveName}</strong> took effect!`);
+				
+				// Calculate damage using stored stats
+				const move = getMove(fm.moveId);
+				const basePower = move.basePower || 120;
+				const moveType = move.type;
+				
+				// Get defender's current stats
+				const defender = targetSlot.pokemon;
+				const defenderSpecies = Dex.species.get(defender.species);
+				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
+				
+				// Calculate damage
+				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
+				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
+				const damage = Math.floor(baseDamage * effectiveness);
+				
+				// Apply damage
+				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
+				messageLog.push(`${defender.species} took ${damage} damage!`);
+				
+				if (effectiveness > 1) messageLog.push(`It's super effective!`);
+				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			}
+			return false; // Remove this future move from the array
+		}
+		return true; // Keep this future move
+	});
+
 	// Reset flinch status for all active slots
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
@@ -3461,6 +3895,23 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		activeTurns: 1,
 		lockedMove: undefined,
 		lastDamageTaken: undefined,
+		yawnCounter: undefined,
+		// Initialize new volatile fields
+		substitute: undefined,
+		disabledMove: undefined,
+		encoreMove: undefined,
+		isIngrained: false,
+		hasAquaRing: false,
+		focusEnergy: false,
+		magnetRiseTurns: 0,
+		telekinesisCounter: 0,
+		isSmackedDown: false,
+		lastMoveUsed: undefined,
+		tormentActive: false,
+		embargoTurns: 0,
+		healBlockTurns: 0,
+		isCharged: false,
+		stockpileCount: 0,
 	};
 }
 
@@ -3763,6 +4214,16 @@ function executeAction(
 	if (action.actionType === 'switch' && action.switchToPokemonId) {
 		const isPlayerSwitch = attackerSlotIndex <= 1;
 		const pokemonToSwitchInId = action.switchToPokemonId;
+
+		// Check for switch prevention
+		if (attackerSlot.isIngrained) {
+			messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
+			return;
+		}
+		if (attackerSlot.isTrapped) {
+			messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
+			return;
+		}
 
 		if (isPlayerSwitch) {
 			const outgoingPokemon = attackerSlot.pokemon;
@@ -4083,7 +4544,7 @@ function generatePokemonInfoHTML(
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
 	const confusedTag = slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
-	// --- NEW TAGS ---
+	// --- EXISTING TAGS ---
 	const cursedTag = slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
 	const seededTag = slot.isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
 	const nightmareTag = slot.hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
@@ -4098,6 +4559,24 @@ function generatePokemonInfoHTML(
 		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
 		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
 	}
+	
+	// --- NEW VOLATILE STATUS TAGS ---
+	const substituteTag = slot.substitute ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Substitute (${slot.substitute.hp} HP)</span>` : '';
+	const yawnTag = slot.yawnCounter ? `<span style="background-color: #9898E8; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Drowsy (${slot.yawnCounter})</span>` : '';
+	const disableTag = slot.disabledMove ? `<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Disabled: ${slot.disabledMove.moveId}</span>` : '';
+	const encoreTag = slot.encoreMove ? `<span style="background-color: #F85888; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Encored: ${slot.encoreMove.moveId}</span>` : '';
+	const tormentTag = slot.tormentActive ? `<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Tormented</span>` : '';
+	const focusEnergyTag = slot.focusEnergy ? `<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Focused</span>` : '';
+	const ingrainTag = slot.isIngrained ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Ingrained</span>` : '';
+	const aquaRingTag = slot.hasAquaRing ? `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Aqua Ring</span>` : '';
+	const magnetRiseTag = slot.magnetRiseTurns > 0 ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Levitating (${slot.magnetRiseTurns})</span>` : '';
+	const telekinesisTag = slot.telekinesisCounter > 0 ? `<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Telekinesis (${slot.telekinesisCounter})</span>` : '';
+	const smackdownTag = slot.isSmackedDown ? `<span style="background-color: #B8A038; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Grounded</span>` : '';
+	const embargoTag = slot.embargoTurns > 0 ? `<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Embargo (${slot.embargoTurns})</span>` : '';
+	const healBlockTag = slot.healBlockTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (${slot.healBlockTurns})</span>` : '';
+	const chargeTag = slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '';
+	const stockpileTag = slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '';
+	// --- END NEW TAGS ---
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
@@ -4136,7 +4615,7 @@ function generatePokemonInfoHTML(
 	// --- END MODIFICATION ---
 
 	// --- UPDATE RENDER LINE ---
-	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
 
 	// --- MODIFICATION: Add conditional elements ---
 	if (isPlayerSide) {
@@ -5282,6 +5761,10 @@ export const commands: ChatCommands = {
 					gravityTurns: 0,
 					mudSportTurns: 0,
 					waterSportTurns: 0,
+
+					// --- Delayed Move Fields ---
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
 				});
 
 				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
@@ -5396,6 +5879,10 @@ export const commands: ChatCommands = {
 				gravityTurns: 0,
 				mudSportTurns: 0,
 				waterSportTurns: 0,
+
+				// --- Delayed Move Fields ---
+				playerFutureMoves: [],
+				opponentFutureMoves: [],
 			});
 
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
@@ -5472,6 +5959,18 @@ export const commands: ChatCommands = {
 				}
 				if (moveObject && moveObject.pp === 0) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`There is no PP left for ${moveData.name}!`])}`);
+				}
+				// Check Disable
+				if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${moveData.name} is disabled!`])}`);
+				}
+				// Check Encore
+				if (attackerSlot.encoreMove && attackerSlot.encoreMove.moveId !== moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`])}`);
+				}
+				// Check Torment
+				if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} can't use the same move twice due to Torment!`])}`);
 				}
 				// --- FIX: Check Choice Item Lock ---
 				if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
@@ -5642,6 +6141,13 @@ export const commands: ChatCommands = {
 					this.errorReply(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
 					// Re-render the UI with an error message
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
+				}
+				
+				// --- INGRAIN CHECK ---
+				if (outgoingSlot.isIngrained) {
+					this.errorReply(`${outgoingSlot.pokemon.species} is rooted in place by Ingrain and cannot switch out!`);
+					// Re-render the UI with an error message
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted in place and cannot switch out!`])}`);
 				}
 
 				const player = getPlayerData(battle.playerId);
