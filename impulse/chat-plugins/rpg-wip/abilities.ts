@@ -27,6 +27,7 @@ export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
 	statStages: Record<string, number>;
 	status: string | null;
+	flashFireBoost?: boolean;
 	[key: string]: any;
 }
 
