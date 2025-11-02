@@ -1935,8 +1935,8 @@ function handleStatusMove(
 			hadEffect = true;
 			messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 
-			if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item].name}!`);
-			if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item].name}!`);
+			if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
+			if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
 		} else if (move.id === 'nightmare') {
 			const defenderStatus = defenderSlot.status;
 			const hasNightmare = defenderSlot.hasNightmare;
@@ -1967,7 +1967,7 @@ function handleStatusMove(
 			const givenItem = attacker.item;
 			defender.item = givenItem;
 			attacker.item = undefined;
-			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem].name} to ${defender.species}!`);
+			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem]?.name || givenItem} to ${defender.species}!`);
 			hadEffect = true;
 		} else if (move.id === 'transform') {
 			// Transform copies target's species, stats, moves, and ability (but not HP, status, or item)
@@ -2592,7 +2592,7 @@ function handleDamagingMove(
 		};
 		const damage = flingPowers[attacker.item] || 30;
 		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
 		return;
 	}
@@ -2607,7 +2607,7 @@ function handleDamagingMove(
 		// Nature Gift power is based on berry (simplified to 80)
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
 		return;
 	}
@@ -2948,14 +2948,14 @@ function handleDamagingMove(
 	if (defender.hp > 0 && battle.magicRoomTurns === 0) {
 		if (move.id === 'knockoff' && defender.item && defender.ability !== 'Sticky Hold') {
 			const removedItem = ITEMS_DATABASE[defender.item];
-			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem.name}!`);
+			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem?.name || defender.item}!`);
 			defender.item = undefined;
 		}
 		if (['thief', 'covet'].includes(move.id) && defender.item && !attacker.item && defender.ability !== 'Sticky Hold') {
 			const stolenItem = ITEMS_DATABASE[defender.item];
 			attacker.item = defender.item;
 			defender.item = undefined;
-			messageLog.push(`${attacker.species} stole ${defender.species}'s ${stolenItem.name}!`);
+			messageLog.push(`${attacker.species} stole ${defender.species}'s ${stolenItem?.name || defender.item}!`);
 		}
 	}
 
@@ -3049,23 +3049,23 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 		let healAmount = 0;
 		if (pokemon.item === 'berryjuice') {
 			healAmount = 20;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'oranberry') {
 			healAmount = 10;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'goldberry') {
 			healAmount = 30;
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'sitrusberry') {
 			// FIXED: Sitrus Berry now activates at 1/2 HP and heals 1/4 max HP
 			healAmount = Math.floor(pokemon.maxHp / 4);
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		}
@@ -3089,7 +3089,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			// FIXED: Now heals 1/2 max HP instead of 1/3
 			const healAmount = Math.floor(pokemon.maxHp / 2);
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-			consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
 
 			// Check for confusion based on nature
@@ -3113,7 +3113,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			if (targetStages[statToBoost] < 6) {
 				// FIXED: All stat-boosting berries now boost by exactly 1 stage
 				targetStages[statToBoost]++;
-				consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to boost its ${statToBoost.toUpperCase()}!`);
 				itemConsumed = true;
 			}
@@ -3126,7 +3126,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
 				targetStages[randomStat] += 2; // Starf Berry boosts by 2 stages (this was correct)
 				targetStages[randomStat] = Math.min(6, targetStages[randomStat]); // Cap at +6
-				consumedItemName = ITEMS_DATABASE[pokemon.item].name;
+				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to sharply boost its ${randomStat.toUpperCase()}!`);
 				itemConsumed = true;
 			}
@@ -5103,7 +5103,7 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 	let html = `<div class="infobox"><h2>Give ${item.name}</h2><p>Select a Pokémon to give this item to:</p>`;
 	for (const pokemon of player.party) {
 		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">` +
-			`<span>${pokemon.species} (Holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</span>` +
+			`<span>${pokemon.species} (Holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</span>` +
 			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
 			`</div>`;
 	}
@@ -6385,7 +6385,7 @@ export const commands: ChatCommands = {
 			if (!pokemonId) {
 				let html = `<div class="infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
 				for (const pokemon of player.party) {
-					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</div>`;
+					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
@@ -6438,7 +6438,7 @@ export const commands: ChatCommands = {
 				let html = `<div class="infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
 				for (const pokemon of player.party) {
 					if (pokemon.item) {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item].name})</div>`;
+						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
 					}
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
