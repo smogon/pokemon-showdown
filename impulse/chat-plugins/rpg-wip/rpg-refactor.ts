@@ -4872,17 +4872,36 @@ function generateSingleBattleHTML(
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 60px;">` +
-                    `<strong style="display: block; text-align: center; margin-bottom: 8px; font-size: 1.0em;">${moveData.name}</strong>` +
-                    `<div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.9;">` +
-                        `<span>${moveData.type}</span>` +
-                        `<span>${move.pp} / ${moveData.pp}</span>` +
-                    `</div></button>`;
+		// Style for the button, trying to match the 2x2 image
+		// This uses simple styles, float is the only risky one.
+		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; min-height: 60px;`;
+
+		// Content inside the button
+		// `float: right` is the best bet for right-alignment without flex/grid.
+		// Added `overflow: hidden` to the container to make float work reliably
+		const buttonContent = `
+            <div style="text-align: center; font-weight: bold; font-size: 1.0em; margin-bottom: 8px;">${moveData.name}</div>` +
+            `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+                `<span>${moveData.type}</span>` +
+               ` <span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+            `</div> `;
+
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">
+                    ${buttonContent}
+                </button>`;
 	});
 
-	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">`;
-	moveButtonsHTML += moveButtons.join('');
-	moveButtonsHTML += `</div>`;
+	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
+	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+	moveButtonsHTML += `<tr>`;
+	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
+	moveButtonsHTML += `</tr>`;
+	moveButtonsHTML += `<tr>`;
+	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
+	moveButtonsHTML += `<td style="width: 50%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
+	moveButtonsHTML += `</tr>`;
+	moveButtonsHTML += `</table>`;
 
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
