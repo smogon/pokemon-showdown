@@ -27,6 +27,7 @@ import {
 	addItemToInventory,
 	removeItemFromInventory,
 	calculateTotalExpForLevel,
+	createPokemon,
 } from './utils';
 
 export function calculateDamage(
