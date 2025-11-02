@@ -4305,6 +4305,32 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 	return html;
 }
 
+function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
+	let html = `<div class="infobox"><h2>Select a Target</h2>`;
+	html += `<p>Choose which wild Pokémon to throw the ${ITEMS_DATABASE[ballId]?.name || 'Poke Ball'} at:</p>`;
+	
+	// Show all active opponent Pokemon as targets
+	const activeOpponents = getActiveSlots(battle.opponentSlots);
+	
+	if (activeOpponents.length === 0) {
+		html += `<p>No targets available!</p>`;
+	} else {
+		for (const slot of activeOpponents) {
+			const slotIndex = battle.opponentSlots.indexOf(slot);
+			const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
+			const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
+			
+			html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">` +
+				`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
+				`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
+				`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
+			`</div>`;
+		}
+	}
+	
+	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+	return html;
+}
 
 function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="infobox"><h2>Choose a Pokémon to switch</h2>`;
@@ -5323,6 +5349,10 @@ export const commands: ChatCommands = {
 				const [nextPokemon] = player.party.splice(partyIndex, 1);
 				const newSlot = createActivePokemonSlot(nextPokemon);
 
+				const playerColor = '#007bff';
+				const infoColor = '#dc3545';
+				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
+
 				// **NEW:** Check if this is a pivot switch
 				if (battle.pendingPivot && battle.pendingPivot.slotIndex === slotToFill) {
 					// It's a pivot, add the pivoting pokemon back to the party
@@ -5342,10 +5372,6 @@ export const commands: ChatCommands = {
 				// (If not a pivot, it was a faint switch. The fainted mon is already in the party at 0 HP)
 				
 				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
-				
-				const playerColor = '#007bff';
-				const infoColor = '#dc3545';
-				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
 
 				// --- Apply Hazards ---
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
