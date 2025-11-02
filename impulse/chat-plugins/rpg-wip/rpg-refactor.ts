@@ -5337,7 +5337,7 @@ function generateDoubleBattleHTML(
 			`<button class="button" disabled style="${buttonStyle}">⚽ Catch</button>`;
 
 		const runButton = (battle.battleType === 'wild_double') ?
-			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>`;
+			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
 			`<button class="button" disabled style="${buttonStyle}">🏃 Run</button>`;
 
 		html += `<p style="margin-top: 15px;">` +
