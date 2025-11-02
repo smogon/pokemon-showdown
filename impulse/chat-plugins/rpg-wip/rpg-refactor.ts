@@ -4874,7 +4874,7 @@ function generateSingleBattleHTML(
 
 		// Style for the button, trying to match the 2x2 image
 		// This uses simple styles, float is the only risky one.
-		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; min-height: 60px;`;
+		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; min-height: 40px;`;
 
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
@@ -4914,30 +4914,31 @@ function generateSingleBattleHTML(
 		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
-		// --- Opponent Pokemon (Top Right) ---
-		`<div style="margin-bottom: 10px;">` +
-		`<div style="text-align: center; width: 40%; margin-left: auto; margin-right: 0;">` +
-		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
-		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
-		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
-		`</div>` +
-		`</div>` +
-		// --- Player Pokemon (Bottom Left) ---
-		`<div style="margin-bottom: 10px;">` +
-		`<div style="text-align: center; width: 40%; margin-left: 0; margin-right: auto;">` +
+		// --- Pokemon Display (Side by Side) ---
+		`<table style="width: 100%; margin-bottom: 10px;">` +
+		`<tr>` +
+		// --- Player Pokemon (Left) ---
+		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
+		`${generatePokemonInfoHTML(playerSlot, true)}` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
-		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
-		`</div>` +
-		`</div>` +
+		`</td>` +
+		// --- Opponent Pokemon (Right) ---
+		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
+		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
+		`${generatePokemonInfoHTML(opponentSlot, false)}` +
+		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`</td>` +
+		`</tr>` +
+		`</table>` +
 		`<hr style="margin: 10px 0;" />` +
 		// --- Field Effects (Below Pokémon, styled like message log) ---
-		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
 		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
 		`</div>` +
 		`<hr style="margin: 10px 0;" />` +
 		// --- Message Log ---
-		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
 		// --- Action Area ---
 		actionHTML +
 		`</div>`;
