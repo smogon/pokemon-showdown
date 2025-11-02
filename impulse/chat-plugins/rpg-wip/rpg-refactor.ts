@@ -4852,16 +4852,31 @@ function generateSingleBattleHTML(
 	const playerPokemon = playerSlot.pokemon;
 	const opponentPokemon = opponentSlot.pokemon;
 
+	let actionHTML = '';
+
+	// --- STATE 1: Action Selection ---
 	const moveButtons = playerPokemon.moves.map(move => {
 		const moveData = getMove(move.id);
-		const isAssaultVestBlocked = battle.magicRoomTurns === 0 && playerPokemon.item === 'assaultvest' && moveData.category === 'Status';
-		const isTauntBlocked = playerSlot.tauntTurns > 0 && moveData.category === 'Status';
-		const isLocked = playerSlot.lockedMove && playerSlot.lockedMove !== move.id && battle.magicRoomTurns === 0 && playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+
+		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+			playerPokemon.item === 'assaultvest' &&
+			moveData.category === 'Status';
+
+		const isTauntBlocked = playerSlot.tauntTurns > 0 &&
+			moveData.category === 'Status';
+
+		const isLocked = playerSlot.lockedMove &&
+			playerSlot.lockedMove !== move.id &&
+			battle.magicRoomTurns === 0 &&
+			playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" style="flex: 1; padding: 3px 4px; font-size: 9px; line-height: 1.2;" ${isDisabled ? 'disabled style="background-color:#888; flex: 1; padding: 3px 4px; font-size: 9px; line-height: 1.2;"' : ''}>${moveData.name} ${move.pp}/${moveData.pp}</button>`;
+
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" style="flex: 1; padding: 10px;" ${isDisabled ? 'disabled style="background-color:#888; flex: 1; padding: 10px;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
 	});
 
-	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin: 2px 0;">`;
+	// Create rows of 2 buttons
+	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">`;
 	for (let i = 0; i < moveButtons.length; i += 2) {
 		moveButtonsHTML += moveButtons[i];
 		if (i + 1 < moveButtons.length) {
@@ -4870,42 +4885,45 @@ function generateSingleBattleHTML(
 	}
 	moveButtonsHTML += `</div>`;
 
-	const catchButton = (battle.battleType === 'wild') ? `<button name="send" value="/rpg battleaction catchmenu" class="button" style="font-size: 9px; padding: 3px 4px; flex: 1;">Catch</button>` : `<button class="button" disabled style="background-color:#888; font-size: 9px; padding: 3px 4px; flex: 1;">Catch</button>`;
-	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ? `<button name="send" value="/rpg battleaction run" class="button" style="font-size: 9px; padding: 3px 4px; flex: 1;">Run</button>` : `<button class="button" disabled style="background-color:#888; font-size: 9px; padding: 3px 4px; flex: 1;">Run</button>`;
+	const catchButton = (battle.battleType === 'wild') ?
+		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
+		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
 
-	const opponentHpPercent = Math.max(0, Math.floor((opponentPokemon.hp / opponentPokemon.maxHp) * 100));
-	const playerHpPercent = Math.max(0, Math.floor((playerPokemon.hp / playerPokemon.maxHp) * 100));
-	const opponentSpecies = Dex.species.get(opponentPokemon.species);
-	const playerSpecies = Dex.species.get(playerPokemon.species);
+	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
+		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
+		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
-	return `<div class="infobox" style="max-height: 400px; overflow-y: auto;">` +
-		`<h2 style="margin: 0; font-size: 16px; padding: 2px 0;">${battle.opponentName} vs ${playerPokemon.species}</h2>` +
-		`<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 2px 0;">` +
-		// --- Opponent (Top Right) ---
-		`<div></div>` +
-		`<div style="text-align: center; font-size: 9px;">` +
-		`<strong style="font-size: 10px;">${opponentPokemon.nickname || opponentPokemon.species}</strong><br>` +
-		`<small>Lvl ${opponentPokemon.level} ${opponentSpecies.types.join('/')}</small><br>` +
-		`<div style="background: #ddd; height: 3px; border-radius: 1px; margin: 1px 0;"><div style="background: green; height: 100%; width: ${opponentHpPercent}%; border-radius: 1px;"></div></div>` +
-		`<small>HP: ${opponentPokemon.hp}/${opponentPokemon.maxHp}</small>` +
-		`</div>` +
-		// --- Player (Bottom Left) ---
-		`<div style="text-align: center; font-size: 9px;">` +
-		`<strong style="font-size: 10px;">${playerPokemon.nickname || playerPokemon.species}</strong><br>` +
-		`<small>Lvl ${playerPokemon.level} ${playerSpecies.types.join('/')}</small><br>` +
-		`<div style="background: #ddd; height: 3px; border-radius: 1px; margin: 1px 0;"><div style="background: green; height: 100%; width: ${playerHpPercent}%; border-radius: 1px;"></div></div>` +
-		`<small>HP: ${playerPokemon.hp}/${playerPokemon.maxHp}</small>` +
-		`</div>` +
-		`<div></div>` +
-		`</div>` +
-		`<div style="padding: 2px; margin: 2px 0; border: 1px solid #666; background: #f0f0f0; min-height: 25px; max-height: 40px; overflow-y: auto; border-radius: 2px; font-size: 8px;">${messageLog.slice(-2).join(' | ')}</div>` +
-		`<p style="margin: 2px 0; font-size: 9px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
+	actionHTML = `<p style="margin-top: 15px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
 		moveButtonsHTML +
-		`<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin: 2px 0;">` +
-		`<button name="send" value="/rpg battleaction switchmenu" class="button" style="font-size: 9px; padding: 3px 4px;">Switch</button>` +
-		`${catchButton}` +
-		`${runButton}` +
+		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+
+	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
+		// --- Opponent Pokemon (Top Right) ---
+		`<div style="margin-bottom: 40px;">` +
+		`<div style="text-align: center; width: 40%; margin-left: auto; margin-right: 0;">` +
+		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
+		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
 		`</div>` +
+		`</div>` +
+		// --- Player Pokemon (Bottom Left) ---
+		`<div style="margin-bottom: 30px;">` +
+		`<div style="text-align: center; width: 40%; margin-left: 0; margin-right: auto;">` +
+		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
+		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
+		`</div>` +
+		`</div>` +
+		`<hr style="margin: 10px 0;" />` +
+		// --- Field Effects (Below Pokémon, styled like message log) ---
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
+		`</div>` +
+		`<hr style="margin: 10px 0;" />` +
+		// --- Message Log ---
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
+		// --- Action Area ---
+		actionHTML +
 		`</div>`;
 }
 
