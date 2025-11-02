@@ -272,9 +272,9 @@ const ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 
 // Starter Pokemon data organized by type
 const STARTER_POKEMON = {
-	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig', 'fennekin', 'litten', 'scorbunny', 'fuecoco'],
-	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott', 'froakie', 'popplio', 'sobble', 'quaxly'],
-	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy', 'chespin', 'rowlet', 'grookey', 'sprigatito'],
+	fire: ['charmander'],
+	water: ['squirtle'],
+	grass: ['bulbasaur'],
 };
 
 const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
