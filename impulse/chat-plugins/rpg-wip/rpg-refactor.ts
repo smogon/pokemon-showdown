@@ -5681,7 +5681,13 @@ function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 }
 
 function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[], moneyGained: number, zoneId: string): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="background: #f0f0f0; padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You found ₽${moneyGained}!</p><p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another Pokemon</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You gained ₽${moneyGained}!</p>` +
+		`<p>` +
+	`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
+	`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+	`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
+	`</p>` +
+	`</div>`;
 }
 
 // --- NEW FUNCTION ---
