@@ -533,6 +533,10 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "swordsdance"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bodyslam", "earthquake", "rest", "rockslide", "sleeptalk"]
             }
         ]
     },

@@ -771,7 +771,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["hydropump", "icebeam", "psyshock", "recover", "thunderbolt"],
-                "abilities": ["Analytic"]
+                "abilities": ["Analytic", "Natural Cure"]
             },
             {
                 "role": "Bulky Support",
@@ -1852,7 +1852,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aeroblast", "earthquake", "roost", "substitute", "toxic", "whirlwind"],
+                "movepool": ["aeroblast", "defog", "earthquake", "roost", "substitute", "toxic", "whirlwind"],
                 "abilities": ["Multiscale"]
             }
         ]
@@ -2147,6 +2147,11 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["earthquake", "gigaimpact", "nightslash", "retaliate"],
+                "abilities": ["Truant"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["doubleedge", "earthquake", "gigaimpact", "pursuit"],
                 "abilities": ["Truant"]
             }
         ]
@@ -2804,9 +2809,13 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "headsmash", "rockpolish", "waterfall"],
-                "abilities": ["Rock Head"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["doubleedge", "earthquake", "headsmash", "waterfall"],
+                "abilities": ["Rock Head"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["earthquake", "headsmash", "rockpolish", "waterfall"],
+                "abilities": ["Rock Head"]
             }
         ]
     },
@@ -4733,7 +4742,7 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["leechseed", "moonblast", "protect", "substitute"],
+                "movepool": ["encore", "leechseed", "moonblast", "substitute"],
                 "abilities": ["Prankster"]
             }
         ]
@@ -5629,7 +5638,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["darkpulse", "fireblast", "hypervoice", "solarbeam", "sunnyday", "willowisp", "workup"],
+                "movepool": ["fireblast", "hiddenpowergrass", "hypervoice", "solarbeam", "sunnyday", "willowisp", "workup"],
                 "abilities": ["Unnerve"],
                 "preferredTypes": ["Normal"]
             }

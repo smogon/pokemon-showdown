@@ -3177,7 +3177,7 @@
               "item": ["Assault Vest", "Choice Band"],
               "nature": "Adamant",
               "evs": {"hp": 252, "atk": 252, "spd": 4},
-              "teraType": ["Electric", "Fairy", "Fire", "Grass"],
+              "teraType": ["Electric", "Fire", "Grass"],
               "wantsTera": true,
               "ability": ["Huge Power"]
           },
