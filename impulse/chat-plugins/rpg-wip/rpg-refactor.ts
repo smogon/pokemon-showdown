@@ -4226,9 +4226,21 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const isSwitchA = a.actionType === 'switch';
 		const isSwitchB = b.actionType === 'switch';
 
-		// Switches have +6 priority
-		const priorityA = isSwitchA ? 6 : (getMove(a.moveId || 'struggle').priority);
-		const priorityB = isSwitchB ? 6 : (getMove(b.moveId || 'struggle').priority);
+		// --- NEW: Get move and base priority ---
+		const moveA = getMove(a.moveId || 'struggle');
+		const moveB = getMove(b.moveId || 'struggle');
+		
+		let priorityA = isSwitchA ? 6 : (moveA.priority);
+		let priorityB = isSwitchB ? 6 : (moveB.priority);
+
+		// --- NEW: Apply ability priority modifications ---
+		if (!isSwitchA) {
+			priorityA += RPGAbilities.applyPriorityModifier(moveA, slotA.pokemon);
+		}
+		if (!isSwitchB) {
+			priorityB += RPGAbilities.applyPriorityModifier(moveB, slotB.pokemon);
+		}
+		// --- END NEW ---
 
 		// Sort by Priority
 		if (priorityA !== priorityB) {
@@ -4238,15 +4250,11 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		// Sort by Speed
 		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
 		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
-		// --- NEW: Apply ability-based speed modifications ---
 		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
-		// --- END NEW ---
 
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
-		// --- NEW: Apply ability-based speed modifications ---
 		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
-		// --- END NEW ---
 
 		// Quick Claw: 20% chance to move first
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
