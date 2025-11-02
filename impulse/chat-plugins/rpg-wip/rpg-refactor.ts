@@ -3630,7 +3630,13 @@ function checkBattleEndCondition(
 	let opponentFainted = false;
 	const playerParticipants = getActiveSlots(battle.playerSlots);
 
-	for (let i = 0; i < battle.opponentSlots.length; i++) {
+	// --- FIX: Determine number of slots to check ---
+	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	const opponentSlotsToCheck = isDoubleBattle ? [0, 1] : [0];
+	const playerSlotsToCheck = isDoubleBattle ? [0, 1] : [0];
+	// --- END FIX ---
+
+	for (const i of opponentSlotsToCheck) { // --- MODIFIED ---
 		const slot = battle.opponentSlots[i];
 		if (slot && slot.pokemon.hp <= 0) {
 			opponentFainted = true;
@@ -3670,7 +3676,7 @@ function checkBattleEndCondition(
 
 	// --- 2. Check for Fainted Player Pokemon ---
 	let playerSwitchNeeded = false; // <-- RENAMED
-	for (let i = 0; i < battle.playerSlots.length; i++) {
+	for (const i of playerSlotsToCheck) { // --- MODIFIED ---
 		const slot = battle.playerSlots[i];
 		// --- UPDATED LOGIC: Check for null slot OR fainted Pokemon ---
 		if (slot === null || slot.pokemon.hp <= 0) {
@@ -3683,6 +3689,14 @@ function checkBattleEndCondition(
 			playerSwitchNeeded = true; // <-- RENAMED
 		}
 	}
+	
+	// --- FIX: Check slot 1 in single battles and set to null if it's not already ---
+	// This prevents the switch-in logic from ever seeing it
+	if (!isDoubleBattle && battle.playerSlots[1] !== null) {
+		battle.playerSlots[1] = null;
+	}
+	// --- END FIX ---
+
 
 	// --- 3. Check for Win/Loss/Interrupt Conditions ---
 
@@ -3774,7 +3788,7 @@ function checkBattleEndCondition(
 				messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
 			}
 
-			battle.opponentSlots[slotIndex as 2 | 3] = newSlot;
+			battle.opponentSlots[slotIndex as 0 | 1] = newSlot; // --- MODIFIED (was 2 | 3) ---
 
 			// Apply hazards on switch-in
 			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
@@ -3786,7 +3800,7 @@ function checkBattleEndCondition(
 			}
 		} else {
 			// No replacement found, pivot fails, Pokemon stays in
-			battle.opponentSlots[slotIndex as 2 | 3] = battle.aiPendingPivot.slot;
+			battle.opponentSlots[slotIndex as 0 | 1] = battle.aiPendingPivot.slot; // --- MODIFIED (was 2 | 3) ---
 			messageLog.push(`${battle.aiPendingPivot.slot.pokemon.species} had no one to switch to!`);
 		}
 		battle.aiPendingPivot = undefined; // Clear flag
@@ -5358,8 +5372,16 @@ function generateFaintSwitchHTML(battle: BattleState, message: string): string {
 	let html = `<div class="infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 
-	// Find the first empty slot
-	const slotToFill = battle.playerSlots[0] === null ? 0 : (battle.playerSlots[1] === null ? 1 : -1);
+	// --- FIX: Correctly find the empty slot based on battle type ---
+	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	
+	let slotToFill = -1;
+	if (battle.playerSlots[0] === null) {
+		slotToFill = 0;
+	} else if (isDoubleBattle && battle.playerSlots[1] === null) {
+		slotToFill = 1;
+	}
+	// --- END FIX ---
 
 	if (slotToFill === -1) {
 		// This should not happen if we got here, but it's a safe fallback.
@@ -6508,45 +6530,6 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["That is not a valid target!"])}`);
 				}
 
-				// --- NEW: Queue AI moves for other slots ---
-				battle.turn++;
-				battle.pendingActions = {}; // Clear previous actions
-
-				// Player action is "catch"
-				// We need to find which player slot to "use" for turn order, just pick the first one
-				const playerSlot = getActiveSlots(battle.playerSlots)[0];
-				if (playerSlot) {
-					const playerSlotIndex = battle.playerSlots.indexOf(playerSlot);
-					battle.pendingActions[playerSlotIndex] = {
-						actionType: 'move', // Use 'move' action with high priority
-						moveId: 'catch', // This is a placeholder
-						targetSlot: targetSlotIndex,
-						pokemonId: playerSlot.pokemon.id,
-					};
-				}
-
-				// Generate AI actions for all *other* opponents
-				getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
-					const slotIndex = battle.opponentSlots.indexOf(slot);
-					if (slotIndex !== targetSlotIndex) { // Don't generate move for the Pokemon being caught
-						battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
-					}
-				});
-
-				// Find other player Pokemon to generate a "wait" action
-				const otherPlayerSlot = getActiveSlots(battle.playerSlots)[1];
-				if (otherPlayerSlot) {
-					const otherSlotIndex = battle.playerSlots.indexOf(otherPlayerSlot);
-					battle.pendingActions[otherSlotIndex] = {
-						actionType: 'move',
-						moveId: 'wait', // Placeholder
-						targetSlot: 0,
-						pokemonId: otherPlayerSlot.pokemon.id,
-					};
-				}
-
-				// --- END NEW ---
-
 				const player = getPlayerData(battle.playerId);
 				const ballItem = player.inventory.get(ballId);
 
@@ -6608,12 +6591,47 @@ export const commands: ChatCommands = {
 						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
+					// --- FAILED CATCH PATH (FIXED) ---
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
 
-					// --- NEW: Run the rest of the turn ---
-					// The catch "action" is done. Now process the rest of the turn (AI moves).
-					// Pass messageLog so the catch failure message is displayed
-					processTurn(this, battle, room, user, messageLog);
+					// This is the fix. We queue the 'catch' action for the first available player slot.
+					// We do NOT queue 'wait' for the other slot.
+					// We do NOT call processTurn().
+					// This will queue the action and re-render the UI,
+					// allowing the player to select an action for their other Pokémon.
+
+					// Flawed logic from original: just picks the first active slot.
+					const playerSlot = getActiveSlots(battle.playerSlots)[0];
+					let playerSlotIndex = -1;
+
+					if (playerSlot) {
+						playerSlotIndex = battle.playerSlots.indexOf(playerSlot);
+					}
+
+					// If no slot is found, or one is already pending, this is an error
+					if (playerSlotIndex === -1) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Could not find a Pokémon to use the item."])}`);
+					}
+
+					// Check if action is already registered (e.g., if player double-clicks)
+					if (battle.pendingActions[playerSlotIndex]) {
+						return this.errorReply(`${playerSlot.pokemon.species} is already waiting to move.`);
+					}
+					
+					// Queue the 'catch' action. We assume 'catch' is a silent custom move.
+					// If it's not, it will default to 'Struggle'.
+					// Given your log, it seems to be a silent custom move.
+					battle.pendingActions[playerSlotIndex] = {
+						actionType: 'move',
+						moveId: 'catch', // This ID is from the original code.
+						targetSlot: targetSlotIndex,
+						pokemonId: playerSlot.pokemon.id,
+					};
+
+					messageLog.push(`${playerSlot.pokemon.species} is ready to throw the ball!`);
+
+					// Re-render the UI so the player can select an action for the *other* Pokémon.
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
 
