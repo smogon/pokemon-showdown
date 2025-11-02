@@ -514,6 +514,6 @@ export function start() {
 	void initializeCache().then(result => {
 		console.log(`TCG cache loaded on plugin start: ${result.cardCount} cards, ${result.setCount} sets`);
 	}).catch(err => {
-		console.error('Failed to initialize TCG cache on plugin start:', err);
+		console.error('Failed to initialize TCG cache on plugin start. Check database connectivity. Use /tcg loadcache to retry.', err);
 	});
 }
