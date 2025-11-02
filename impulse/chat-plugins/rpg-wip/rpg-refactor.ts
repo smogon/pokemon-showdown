@@ -4052,6 +4052,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		healBlockTurns: 0,
 		isCharged: false,
 		stockpileCount: 0,
+		flashFireBoost: false,
 	};
 }
 
