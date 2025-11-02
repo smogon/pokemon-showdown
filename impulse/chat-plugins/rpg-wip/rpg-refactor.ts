@@ -5050,7 +5050,7 @@ function generateSingleBattleHTML(
 		// --- Action Area ---
 		actionHTML +
 		`</div>`;
-		}
+}
 
 function generateDoubleBattleHTML(
 	battle: BattleState,
@@ -5060,13 +5060,84 @@ function generateDoubleBattleHTML(
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
 
+	// Helper function to generate Pokemon info for battle
+	const generateBattlePokemonInfo = (slot: ActivePokemonSlot, isPlayerSide: boolean) => {
+		const pokemon = slot.pokemon;
+		const species = Dex.species.get(pokemon.species);
+		const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
+		const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
+
+		let expBarHTML = '';
+		if (isPlayerSide) {
+			const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+			const expForNextLevel = pokemon.expToNextLevel;
+			const expProgress = pokemon.experience - expForLastLevel;
+			const expNeededForLevel = expForNextLevel - expForLastLevel;
+			const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+			expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		}
+
+		const displayStatus = slot.status || pokemon.status;
+		const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
+		const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
+		const confusedTag = slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
+		const cursedTag = slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
+		const seededTag = slot.isSeeded ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>` : '';
+		const nightmareTag = slot.hasNightmare ? `<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>` : '';
+		const trappedTag = slot.isTrapped ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>` : '';
+		const tauntTag = slot.tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
+		let chargingTag = '';
+		if (slot.chargingMove) {
+			const moveName = getMove(slot.chargingMove).name || 'Attack';
+			let chargeText = `Preparing ${moveName}!`;
+			if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
+			if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
+			if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
+			chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
+		}
+
+		const substituteTag = slot.substitute ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Substitute (${slot.substitute.hp} HP)</span>` : '';
+		const yawnTag = slot.yawnCounter ? `<span style="background-color: #9898E8; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Drowsy (${slot.yawnCounter})</span>` : '';
+		const disableTag = slot.disabledMove ? `<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Disabled: ${slot.disabledMove.moveId}</span>` : '';
+		const encoreTag = slot.encoreMove ? `<span style="background-color: #F85888; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Encored: ${slot.encoreMove.moveId}</span>` : '';
+		const tormentTag = slot.tormentActive ? `<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Tormented</span>` : '';
+		const focusEnergyTag = slot.focusEnergy ? `<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Focused</span>` : '';
+		const ingrainTag = slot.isIngrained ? `<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Ingrained</span>` : '';
+		const aquaRingTag = slot.hasAquaRing ? `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Aqua Ring</span>` : '';
+		const magnetRiseTag = slot.magnetRiseTurns > 0 ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Levitating (${slot.magnetRiseTurns})</span>` : '';
+		const telekinesisTag = slot.telekinesisCounter > 0 ? `<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Telekinesis (${slot.telekinesisCounter})</span>` : '';
+		const smackdownTag = slot.isSmackedDown ? `<span style="background-color: #B8A038; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Grounded</span>` : '';
+		const embargoTag = slot.embargoTurns > 0 ? `<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Embargo (${slot.embargoTurns})</span>` : '';
+		const healBlockTag = slot.healBlockTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (${slot.healBlockTurns})</span>` : '';
+		const chargeTag = slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '';
+		const stockpileTag = slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '';
+		const lockedMoveTag = slot.lockedMove ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked</span>` : '';
+
+		const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
+		const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
+
+		let statStageTags = '';
+		if (slot.statStages) {
+			for (const stat in slot.statStages) {
+				const stage = slot.statStages[stat as keyof typeof slot.statStages];
+				if (stage > 0) {
+					statStageTags += ` <span style="color: green; font-size: 11px;">🔼${stat.toUpperCase()}</span>`;
+				} else if (stage < 0) {
+					statStageTags += ` <span style="color: red; font-size: 11px;">🔽${stat.toUpperCase()}</span>`;
+				}
+			}
+		}
+
+		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
+	};
+
 	// Helper to generate HTML for a single slot
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
 		if (!slot) {
-			return `<div style="flex: 1; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888; display: flex; align-items: center; justify-content: center;">(Empty)</div>`;
+			return `<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888;">(Empty)</div>`;
 		}
 		if (slot.pokemon.hp <= 0) {
-			return `<div style="flex: 1; opacity: 0.5; background: #f0f0f0; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+			return `<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">${generateBattlePokemonInfo(slot, side === 'player')}</div>`;
 		}
 
 		let borderStyle = "1px solid #ccc";
@@ -5077,41 +5148,86 @@ function generateDoubleBattleHTML(
 			borderStyle = "3px solid #28a745";
 		}
 
-		return `<div style="flex: 1; border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+		return `<div style="border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generateBattlePokemonInfo(slot, side === 'player')}</div>`;
+	};
+
+	// Helper function to generate field effects HTML with side-by-side layout
+	const generateFieldEffectsDisplay = () => {
+		const fieldEffectHTML = generateFieldEffectHTML(battle);
+		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+		
+		// Parse the field effects to separate them
+		const lines = tempDiv.split('<br>').filter(line => line.trim());
+		let yourSide = '';
+		let field = '';
+		let opponentSide = '';
+		let currentSection = '';
+
+		for (const line of lines) {
+			if (line.includes('Your Side:')) {
+				currentSection = 'your';
+			} else if (line.includes('Field:')) {
+				currentSection = 'field';
+			} else if (line.includes("Opponent's Side:")) {
+				currentSection = 'opponent';
+			} else {
+				if (currentSection === 'your') {
+					yourSide += line + '<br>';
+				} else if (currentSection === 'field') {
+					field += line + '<br>';
+				} else if (currentSection === 'opponent') {
+					opponentSide += line + '<br>';
+				}
+			}
+		}
+
+		return `<table style="width: 100%; border-collapse: collapse;">` +
+			`<tr>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>${yourSide || 'Clear'}</td>` +
+			`<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>${field || 'Clear'}</td>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent's Side:</strong><br>${opponentSide || 'Clear'}</td>` +
+			`</tr>` +
+			`</table>`;
 	};
 
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
 
-	// --- Opponent Side (Top) ---
-	html += `<div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">`;
-	html += `<div style="flex: 1; max-width: 45%;">`;
+	// --- Pokemon Display (4 Pokemon in 2x2 grid) ---
+	html += `<table style="width: 100%; margin-bottom: 10px;">`;
+	// Opponent Side (Top Row)
+	html += `<tr>`;
+	html += `<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">`;
+	html += `<h3 style="margin: 5px 0;">Opponent 1</h3>`;
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
-	html += `</div>`;
-	html += `<div style="flex: 1; max-width: 45%;">`;
+	html += `</td>`;
+	html += `<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">`;
+	html += `<h3 style="margin: 5px 0;">Opponent 2</h3>`;
 	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += `</div>`;
-	html += `</div>`;
-
-	// --- Player Side (Bottom) ---
-	html += `<div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">`;
-	html += `<div style="flex: 1; max-width: 45%;">`;
+	html += `</td>`;
+	html += `</tr>`;
+	// Player Side (Bottom Row)
+	html += `<tr>`;
+	html += `<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">`;
+	html += `<h3 style="margin: 5px 0;">Your Pokémon 1</h3>`;
 	html += generateSlotHTML(pSlot0, 0, 'player');
-	html += `</div>`;
-	html += `<div style="flex: 1; max-width: 45%;">`;
+	html += `</td>`;
+	html += `<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">`;
+	html += `<h3 style="margin: 5px 0;">Your Pokémon 2</h3>`;
 	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += `</div>`;
-	html += `</div>`;
+	html += `</td>`;
+	html += `</tr>`;
+	html += `</table>`;
 
 	html += `<hr style="margin: 10px 0;" />`;
 
-	// --- Field Effects (Below Pokémon, styled like message log) ---
-	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
-		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
+	// --- Field Effects (Side by Side) ---
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
 		`</div>` +
 		`<hr style="margin: 10px 0;" />`;
 
 	// --- Message Log ---
-	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
 
 	// --- Action Area ---
 	if (targetSelection) {
@@ -5179,7 +5295,6 @@ function generateDoubleBattleHTML(
 		} else {
 			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
 		}
-
 		const catchButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
 			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
