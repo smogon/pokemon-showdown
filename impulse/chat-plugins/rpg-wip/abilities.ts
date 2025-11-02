@@ -243,13 +243,57 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 
 	// Wonder Guard - Only super-effective moves hit
 	'wonderguard': (ctx) => {
-		// This needs effectiveness calculation, which is complex
-		// For now, simplified implementation
-		if (ctx.move.category !== 'Status') {
-			// Would need to calculate effectiveness here
-			// Placeholder for now
-			return null;
+		if (ctx.move.category === 'Status') {
+			return null; // Status moves bypass Wonder Guard
 		}
+		
+		// Calculate effectiveness to check if move is super-effective
+		const defenderSpecies = Dex.species.get(ctx.defender.species);
+		let effectiveness = 1;
+		
+		// Get type chart for the move
+		const typeChart: any = {
+			Normal: { superEffective: [], notVeryEffective: ['Rock', 'Steel'], noEffect: ['Ghost'] },
+			Fire: { superEffective: ['Grass', 'Ice', 'Bug', 'Steel'], notVeryEffective: ['Fire', 'Water', 'Rock', 'Dragon'], noEffect: [] },
+			Water: { superEffective: ['Fire', 'Ground', 'Rock'], notVeryEffective: ['Water', 'Grass', 'Dragon'], noEffect: [] },
+			Grass: { superEffective: ['Water', 'Ground', 'Rock'], notVeryEffective: ['Fire', 'Grass', 'Poison', 'Flying', 'Bug', 'Dragon', 'Steel'], noEffect: [] },
+			Electric: { superEffective: ['Water', 'Flying'], notVeryEffective: ['Grass', 'Electric', 'Dragon'], noEffect: ['Ground'] },
+			Ice: { superEffective: ['Grass', 'Ground', 'Flying', 'Dragon'], notVeryEffective: ['Fire', 'Water', 'Ice', 'Steel'], noEffect: [] },
+			Fighting: { superEffective: ['Normal', 'Ice', 'Rock', 'Dark', 'Steel'], notVeryEffective: ['Poison', 'Flying', 'Psychic', 'Bug', 'Fairy'], noEffect: ['Ghost'] },
+			Poison: { superEffective: ['Grass', 'Fairy'], notVeryEffective: ['Poison', 'Ground', 'Rock', 'Ghost'], noEffect: ['Steel'] },
+			Ground: { superEffective: ['Fire', 'Electric', 'Poison', 'Rock', 'Steel'], notVeryEffective: ['Grass', 'Bug'], noEffect: ['Flying'] },
+			Flying: { superEffective: ['Grass', 'Fighting', 'Bug'], notVeryEffective: ['Electric', 'Rock', 'Steel'], noEffect: [] },
+			Psychic: { superEffective: ['Fighting', 'Poison'], notVeryEffective: ['Psychic', 'Steel'], noEffect: ['Dark'] },
+			Bug: { superEffective: ['Grass', 'Psychic', 'Dark'], notVeryEffective: ['Fire', 'Fighting', 'Poison', 'Flying', 'Ghost', 'Steel', 'Fairy'], noEffect: [] },
+			Rock: { superEffective: ['Fire', 'Ice', 'Flying', 'Bug'], notVeryEffective: ['Fighting', 'Ground', 'Steel'], noEffect: [] },
+			Ghost: { superEffective: ['Psychic', 'Ghost'], notVeryEffective: ['Dark'], noEffect: ['Normal'] },
+			Dragon: { superEffective: ['Dragon'], notVeryEffective: ['Steel'], noEffect: ['Fairy'] },
+			Dark: { superEffective: ['Psychic', 'Ghost'], notVeryEffective: ['Fighting', 'Dark', 'Fairy'], noEffect: [] },
+			Steel: { superEffective: ['Ice', 'Rock', 'Fairy'], notVeryEffective: ['Fire', 'Water', 'Electric', 'Steel'], noEffect: [] },
+			Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
+		};
+		
+		const chartEntry = typeChart[ctx.move.type];
+		if (chartEntry) {
+			for (const defenderType of defenderSpecies.types) {
+				if (chartEntry.superEffective.includes(defenderType)) {
+					effectiveness *= 2;
+				} else if (chartEntry.notVeryEffective.includes(defenderType)) {
+					effectiveness *= 0.5;
+				} else if (chartEntry.noEffect.includes(defenderType)) {
+					effectiveness *= 0;
+				}
+			}
+		}
+		
+		// Wonder Guard: Only super-effective moves hit
+		if (effectiveness <= 1) {
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Wonder Guard protected it!`
+			};
+		}
+		
 		return null;
 	},
 
@@ -408,33 +452,38 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 		return moveType;
 	},
 
-	// Pixilate - Normal moves become Fairy
+	// Pixilate - Normal moves become Fairy (with 1.2x boost)
 	'pixilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
+			// Mark that conversion happened for power boost
+			(ctx.move as any).typeConversionBoost = true;
 			return 'Fairy';
 		}
 		return moveType;
 	},
 
-	// Refrigerate - Normal moves become Ice
+	// Refrigerate - Normal moves become Ice (with 1.2x boost)
 	'refrigerate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
+			(ctx.move as any).typeConversionBoost = true;
 			return 'Ice';
 		}
 		return moveType;
 	},
 
-	// Aerilate - Normal moves become Flying
+	// Aerilate - Normal moves become Flying (with 1.2x boost)
 	'aerilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
+			(ctx.move as any).typeConversionBoost = true;
 			return 'Flying';
 		}
 		return moveType;
 	},
 
-	// Galvanize - Normal moves become Electric
+	// Galvanize - Normal moves become Electric (with 1.2x boost)
 	'galvanize': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
+			(ctx.move as any).typeConversionBoost = true;
 			return 'Electric';
 		}
 		return moveType;
@@ -768,8 +817,14 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 	const ability = toID(ctx.attacker.ability || '');
 	const handler = POWER_MODIFIER_ABILITIES[ability];
 	if (handler) {
-		return handler(ctx, basePower);
+		basePower = handler(ctx, basePower);
 	}
+	
+	// Apply 1.2x boost for type-conversion abilities
+	if ((ctx.move as any).typeConversionBoost) {
+		basePower = Math.floor(basePower * 1.2);
+	}
+	
 	return basePower;
 }
 

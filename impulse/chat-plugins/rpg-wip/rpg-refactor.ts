@@ -789,6 +789,12 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battl
 		critStage += 1;
 	}
 
+	// Super Luck ability boosts crit stage
+	const attackerAbility = toID(attacker.ability || '');
+	if (attackerAbility === 'superluck') {
+		critStage += 1;
+	}
+
 	// Critical hit chances by stage
 	const critChances = [1 / 24, 1 / 8, 1 / 2, 1 / 1]; // stages 0, 1, 2, 3+
 	return critChances[Math.min(critStage, 3)];
@@ -1093,7 +1099,9 @@ function calculateDamage(
 	}
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, move, battle);
-	const criticalMultiplier = isCritical ? 1.5 : 1;
+	// Sniper ability boosts critical hit damage from 1.5x to 2.25x
+	const attackerAbility = toID(attacker.ability || '');
+	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / finalDefenseStat)) / 50) + 2);
@@ -2963,10 +2971,14 @@ function handleDamagingMove(
 					messageLog.push(`${attacker.species} was damaged by recoil!`);
 					tookRecoil = true;
 				} else if (move.recoil) {
-					const recoilDamage = Math.max(1, Math.floor(damageDealt * (move.recoil[0] / move.recoil[1])));
-					attacker.hp = Math.max(0, attacker.hp - recoilDamage);
-					messageLog.push(`${attacker.species} was damaged by recoil!`);
-					tookRecoil = true;
+					// Check if Rock Head prevents recoil
+					const attackerAbility = toID(attacker.ability || '');
+					if (attackerAbility !== 'rockhead') {
+						const recoilDamage = Math.max(1, Math.floor(damageDealt * (move.recoil[0] / move.recoil[1])));
+						attacker.hp = Math.max(0, attacker.hp - recoilDamage);
+						messageLog.push(`${attacker.species} was damaged by recoil!`);
+						tookRecoil = true;
+					}
 				}
 				if (tookRecoil) {
 					handleHPDropEffects(attackerSlot, battle, messageLog);
