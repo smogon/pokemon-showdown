@@ -29,13 +29,6 @@ import {
 	calculateTotalExpForLevel,
 } from './utils';
 
-// Global declarations (available from Pokemon Showdown environment)
-declare const Dex: any;
-declare function toID(text: string): string;
-declare type Move = any;
-declare type CommandContext = any;
-declare type ChatRoom = any;
-declare type User = any;
 export function calculateDamage(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
