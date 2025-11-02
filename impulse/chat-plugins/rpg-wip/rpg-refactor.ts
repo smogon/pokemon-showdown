@@ -4777,8 +4777,18 @@ function generateSingleBattleHTML(
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
-	}).join('');
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" style="flex: 1; padding: 10px;" ${isDisabled ? 'disabled style="background-color:#888; flex: 1; padding: 10px;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+	});
+
+	// Create rows of 2 buttons
+	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">`;
+	for (let i = 0; i < moveButtons.length; i += 2) {
+		moveButtonsHTML += moveButtons[i];
+		if (i + 1 < moveButtons.length) {
+			moveButtonsHTML += moveButtons[i + 1];
+		}
+	}
+	moveButtonsHTML += `</div>`;
 
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
@@ -4789,29 +4799,32 @@ function generateSingleBattleHTML(
 		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
 	actionHTML = `<p style="margin-top: 15px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
-		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">${moveButtons}</div>` +
+		moveButtonsHTML +
 		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
-		`${generateFieldEffectHTML(battle)}` +
-		`<hr style="margin: 10px 0;" />` +
 		`<div style="display: flex; justify-content: space-around; gap: 15px; margin-bottom: 15px;">` +
-		// --- Opponent Pokemon (Top) ---
-		`<div style="flex: 1; text-align: center;">` +
-		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
-		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
-		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
-		`</div>` +
-		// --- VS Divider ---
-		`<div style="display: flex; align-items: center; justify-content: center; padding: 0 10px;">` +
-		`<div style="font-size: 24px; font-weight: bold; color: #999;">VS</div>` +
-		`</div>` +
-		// --- Player Pokemon (Bottom) ---
+		// --- Player Pokemon (Left) ---
 		`<div style="flex: 1; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
 		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
 		`</div>` +
+		// --- VS Divider ---
+		`<div style="display: flex; align-items: center; justify-content: center; padding: 0 10px;">` +
+		`<div style="font-size: 24px; font-weight: bold; color: #999;">VS</div>` +
+		`</div>` +
+		// --- Opponent Pokemon (Right) ---
+		`<div style="flex: 1; text-align: center;">` +
+		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
+		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
+		`</div>` +
+		`</div>` +
+		`<hr style="margin: 10px 0;" />` +
+		// --- Field Effects (Below Pokémon, styled like message log) ---
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
 		`</div>` +
 		`<hr style="margin: 10px 0;" />` +
 		// --- Message Log ---
@@ -4819,6 +4832,150 @@ function generateSingleBattleHTML(
 		// --- Action Area ---
 		actionHTML +
 		`</div>`;
+}
+
+function generateDoubleBattleHTML(
+	battle: BattleState,
+	messageLog: string[] = [],
+	targetSelection?: { attackerSlotIndex: number, moveId: string }
+): string {
+	const [pSlot0, pSlot1] = battle.playerSlots;
+	const [oSlot0, oSlot1] = battle.opponentSlots;
+
+	// Helper to generate HTML for a single slot
+	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
+		if (!slot) {
+			return `<div style="flex: 1; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888; display: flex; align-items: center; justify-content: center;">(Empty)</div>`;
+		}
+		if (slot.pokemon.hp <= 0) {
+			return `<div style="flex: 1; opacity: 0.5; background: #f0f0f0; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+		}
+
+		let borderStyle = "1px solid #ccc";
+		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
+			borderStyle = "3px dashed #007bff";
+		}
+		if (battle.pendingActions[slotIndex]) {
+			borderStyle = "3px solid #28a745";
+		}
+
+		return `<div style="flex: 1; border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+	};
+
+	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
+
+	// --- Battle Field (Player on Left, Opponent on Right) ---
+	html += `<div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 15px;">`;
+	
+	// --- Player Side (Left) ---
+	html += `<div style="flex: 1;">`;
+	html += `<h3 style="margin: 5px 0;">Your Team</h3>`;
+	html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+	html += generateSlotHTML(pSlot0, 0, 'player');
+	html += generateSlotHTML(pSlot1, 1, 'player');
+	html += `</div></div>`;
+
+	// --- Opponent Side (Right) ---
+	html += `<div style="flex: 1;">`;
+	html += `<h3 style="margin: 5px 0;">${battle.opponentName}</h3>`;
+	html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+	html += generateSlotHTML(oSlot0, 2, 'opponent');
+	html += generateSlotHTML(oSlot1, 3, 'opponent');
+	html += `</div></div>`;
+
+	html += `</div>`;
+
+	html += `<hr style="margin: 10px 0;" />`;
+
+	// --- Field Effects (Below Pokémon, styled like message log) ---
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
+		`</div>` +
+		`<hr style="margin: 10px 0;" />`;
+
+	// --- Message Log ---
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
+
+	// --- Action Area ---
+	if (targetSelection) {
+		// --- STATE 2: Target Selection ---
+		const move = getMove(targetSelection.moveId);
+		html += `<p style="margin-top: 10px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
+		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0;">`;
+
+		const targets = [
+			{ slot: pSlot0, name: "Ally 1", index: 0 },
+			{ slot: pSlot1, name: "Ally 2", index: 1 },
+			{ slot: oSlot0, name: "Opponent 1", index: 2 },
+			{ slot: oSlot1, name: "Opponent 2", index: 3 },
+		];
+
+		for (const target of targets) {
+			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex) {
+				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name}</button>`;
+			}
+		}
+		html += `</div>`;
+		html += `<p><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+	} else {
+		// --- STATE 1: Action Selection ---
+		let activeSlot: ActivePokemonSlot | null = null;
+		let activeSlotIndex = -1;
+
+		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
+			activeSlot = pSlot0;
+			activeSlotIndex = 0;
+		} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
+			activeSlot = pSlot1;
+			activeSlotIndex = 1;
+		}
+
+		if (activeSlot) {
+			const pokemon = activeSlot.pokemon;
+			html += `<p style="margin-top: 10px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
+
+			const moves = pokemon.moves.map(move => {
+				const moveData = getMove(move.id);
+
+				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+					pokemon.item === 'assaultvest' &&
+					moveData.category === 'Status';
+
+				const isTauntBlocked = activeSlot.tauntTurns > 0 &&
+					moveData.category === 'Status';
+
+				const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
+					(activeSlot.lockedMove && activeSlot.lockedMove !== move.id);
+
+				return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" style="flex: 1; padding: 10px;" ${isDisabled ? 'disabled style="background-color:#888; flex: 1; padding: 10px;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+			});
+
+			// Create rows of 2 buttons
+			html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">`;
+			for (let i = 0; i < moves.length; i += 2) {
+				html += moves[i];
+				if (i + 1 < moves.length) {
+					html += moves[i + 1];
+				}
+			}
+			html += `</div>`;
+		} else {
+			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
+		}
+
+		const catchButton = (battle.battleType === 'wild_double') ?
+			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
+			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+
+		const runButton = (battle.battleType === 'wild_double') ?
+			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
+			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+
+		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+	}
+
+	html += `</div>`;
+	return html;
 }
 
 function generateWelcomeHTML(): string {
@@ -4934,135 +5091,6 @@ function generatePokemonInfoHTML(
 	}
 
 	html += '</div>';
-	return html;
-}
-
-function generateDoubleBattleHTML(
-	battle: BattleState,
-	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string }
-): string {
-	const [pSlot0, pSlot1] = battle.playerSlots;
-	const [oSlot0, oSlot1] = battle.opponentSlots;
-
-	// Helper to generate HTML for a single slot
-	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
-		if (!slot) {
-			return `<div style="flex: 1; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888; display: flex; align-items: center; justify-content: center;">(Empty)</div>`;
-		}
-		if (slot.pokemon.hp <= 0) {
-			return `<div style="flex: 1; opacity: 0.5; background: #f0f0f0; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
-		}
-
-		let borderStyle = "1px solid #ccc";
-		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			borderStyle = "3px dashed #007bff";
-		}
-		if (battle.pendingActions[slotIndex]) {
-			borderStyle = "3px solid #28a745";
-		}
-
-		return `<div style="flex: 1; border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
-	};
-
-	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
-	html += generateFieldEffectHTML(battle);
-
-	// --- Opponent Side (Top) ---
-	html += `<div style="margin-bottom: 15px;">`;
-	html += `<h3 style="margin: 5px 0;">${battle.opponentName}</h3>`;
-	html += `<div style="display: flex; justify-content: center; gap: 10px;">`;
-	html += generateSlotHTML(oSlot0, 2, 'opponent');
-	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += `</div></div>`;
-
-	html += `<hr style="margin: 10px 0;" />`;
-
-	// --- Player Side (Bottom) ---
-	html += `<div style="margin-top: 15px;">`;
-	html += `<h3 style="margin: 5px 0;">Your Team</h3>`;
-	html += `<div style="display: flex; justify-content: center; gap: 10px;">`;
-	html += generateSlotHTML(pSlot0, 0, 'player');
-	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += `</div></div>`;
-
-	html += `<hr style="margin: 10px 0;" />`;
-
-	// --- Message Log ---
-	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
-
-	// --- Action Area ---
-	if (targetSelection) {
-		// --- STATE 2: Target Selection ---
-		const move = getMove(targetSelection.moveId);
-		html += `<p style="margin-top: 10px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
-		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0;">`;
-
-		const targets = [
-			{ slot: oSlot0, name: "Opponent 1", index: 2 },
-			{ slot: oSlot1, name: "Opponent 2", index: 3 },
-			{ slot: pSlot0, name: "Ally 1", index: 0 },
-			{ slot: pSlot1, name: "Ally 2", index: 1 },
-		];
-
-		for (const target of targets) {
-			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex) {
-				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name}</button>`;
-			}
-		}
-		html += `</div>`;
-		html += `<p><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
-	} else {
-		// --- STATE 1: Action Selection ---
-		let activeSlot: ActivePokemonSlot | null = null;
-		let activeSlotIndex = -1;
-
-		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
-			activeSlot = pSlot0;
-			activeSlotIndex = 0;
-		} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
-			activeSlot = pSlot1;
-			activeSlotIndex = 1;
-		}
-
-		if (activeSlot) {
-			const pokemon = activeSlot.pokemon;
-			html += `<p style="margin-top: 10px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
-			html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">`;
-
-			const moves = pokemon.moves;
-			for (const move of moves) {
-				const moveData = getMove(move.id);
-
-				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
-					pokemon.item === 'assaultvest' &&
-					moveData.category === 'Status';
-
-				const isTauntBlocked = activeSlot.tauntTurns > 0 &&
-					moveData.category === 'Status';
-
-				const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked ||
-					(activeSlot.lockedMove && activeSlot.lockedMove !== move.id);
-
-				html += `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
-			}
-			html += `</div>`;
-		} else {
-			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
-		}
-
-		const catchButton = (battle.battleType === 'wild_double') ?
-			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
-			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
-
-		const runButton = (battle.battleType === 'wild_double') ?
-			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
-			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
-
-		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
-	}
-
-	html += `</div>`;
 	return html;
 }
 
