@@ -4872,34 +4872,26 @@ function generateSingleBattleHTML(
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 12px; border-radius: 8px; text-align: left; display: flex; flex-direction: column;"><strong>${moveData.name}</strong><div style="display: flex; justify-content: space-between; font-size: 0.85em; margin-top: 4px;"><span>${moveData.type}</span><span>PP: ${move.pp}/${moveData.pp}</span></div></button>`;
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 15px; border-radius: 8px; text-align: center; width: 100%; margin: 8px 0;"><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
 	});
 
-	// Create 2x2 grid layout
-	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">`;
-	for (let i = 0; i < moveButtons.length; i += 2) {
-		moveButtonsHTML += moveButtons[i];
-		if (i + 1 < moveButtons.length) {
-			moveButtonsHTML += moveButtons[i + 1];
-		}
-	}
-	moveButtonsHTML += `</div>`;
+	let moveButtonsHTML = moveButtons.join('');
 
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
-		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
+		`<button class="button" disabled>⚽ Catch</button>`;
 
 	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
-		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
+		`<button class="button" disabled>🏃 Run</button>`;
 
 	actionHTML = `<p style="margin-top: 15px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
 		moveButtonsHTML +
-		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		// --- Opponent Pokemon (Top Right) ---
-		`<div style="margin-bottom: 10px;">` +
+		`<div style="margin-bottom: 40px;">` +
 		`<div style="text-align: center; width: 40%; margin-left: auto; margin-right: 0;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
 		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
@@ -4907,7 +4899,7 @@ function generateSingleBattleHTML(
 		`</div>` +
 		`</div>` +
 		// --- Player Pokemon (Bottom Left) ---
-		`<div style="margin-bottom: 10px;">` +
+		`<div style="margin-bottom: 30px;">` +
 		`<div style="text-align: center; width: 40%; margin-left: 0; margin-right: auto;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
