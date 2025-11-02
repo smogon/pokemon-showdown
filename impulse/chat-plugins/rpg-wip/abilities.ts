@@ -1076,19 +1076,18 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 export function applyDamageModifier(ctx: AbilityContext, damage: number): number {
 	const attackerAbility = toID(ctx.attacker.ability || '');
 	const defenderAbility = toID(ctx.defender.ability || '');
+	const effectiveness = ctx.effectiveness || 1; // Get effectiveness from context
 
-	// Sniper - Boosts critical hit damage
-	// Would need to know if it's a critical hit
+	// Sniper - (This is handled in calculateDamage's criticalMultiplier logic)
 
 	// Tinted Lens - Makes not very effective moves deal neutral damage
-	if (attackerAbility === 'tintedlens') {
-		// Would need effectiveness calculation
+	if (attackerAbility === 'tintedlens' && effectiveness < 1) {
+		damage = Math.floor(damage * 2); // Double the damage (0.5 -> 1.0, 0.25 -> 0.5)
 	}
 
 	// Solid Rock / Filter - Reduces super-effective damage
-	if ((defenderAbility === 'solidrock' || defenderAbility === 'filter')) {
-		// Would need effectiveness > 1 check
-		// damage = Math.floor(damage * 0.75);
+	if ((defenderAbility === 'solidrock' || defenderAbility === 'filter') && effectiveness > 1) {
+		damage = Math.floor(damage * 0.75);
 	}
 
 	// Multiscale / Shadow Shield - Reduces damage at full HP
