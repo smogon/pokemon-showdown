@@ -491,7 +491,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async loadcache(target, room, user) {
-		this.checkCan('roomowner');
+		//this.checkCan('roomowner');
 		this.sendReply('Initializing TCG cache... This may take a moment.');
 		try {
 			const { cardCount, setCount } = await initializeCache();
@@ -503,7 +503,7 @@ export const adminCommands: ChatCommands = {
 
 	cachestats(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.checkCan('roomowner');
+		//this.checkCan('roomowner');
 		const stats = getCacheStats();
 		let html = `<div class="infobox" style="padding: 15px;">`;
 		html += `<strong style="font-size: 1.2em;">TCG Cache Statistics</strong><br />`;
