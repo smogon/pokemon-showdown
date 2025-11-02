@@ -5753,7 +5753,7 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	for (const move of pokemon.moves) {
 		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}
-	html += `</div><hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="background-color: #d9534f; color: #fff;">Give Up</button>`;
+	html += `<hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="background-color: #d9534f; color: #fff;">Give Up</button></div>`;
 	return html;
 }
 
