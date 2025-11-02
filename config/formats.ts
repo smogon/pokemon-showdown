@@ -137,6 +137,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Crucibellite', 'Rage Fist'],
 	},
 	{
+		name: "[Gen 9] BSS Reg I",
+		mod: 'gen9',
+		searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
+		restricted: ['Restricted Legendary'],
+	},
+	{
 		name: "[Gen 9] BSS Reg J",
 		mod: 'gen9',
 		bestOfDefault: true,
