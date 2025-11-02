@@ -37,7 +37,7 @@ export function saveBattleStatus(battle: BattleState): void {
 	// In the future, this could save to a database
 	// For now, just update the player's party from the battle
 	const player = getPlayerData(battle.playerId);
-	
+
 	// Update player party Pokemon HP and status from battle slots
 	for (const slot of battle.playerSlots) {
 		if (slot) {

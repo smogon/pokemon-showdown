@@ -1,6 +1,6 @@
 /**
  * Pokemon RPG UI Generators
- * 
+ *
  * This module consolidates all HTML/UI generation functions in one place
  * for easy maintenance and extension of the user interface.
  */
@@ -148,7 +148,7 @@ export function generatePokemonInfoHTML(
 		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
 		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
 	}
-	
+
 	// --- NEW VOLATILE STATUS TAGS ---
 	const substituteTag = slot.substitute ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Substitute (${slot.substitute.hp} HP)</span>` : '';
 	const yawnTag = slot.yawnCounter ? `<span style="background-color: #9898E8; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Drowsy (${slot.yawnCounter})</span>` : '';
@@ -376,7 +376,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		const moveData = getMove(move.id);
 		return '<div style="text-align: center; padding: 5px; background: #f0f0f0; border-radius: 5px;">' +
 			moveData.name +
-			'<br><small>PP: ' + move.pp + '/' + moveData.pp + '</small>' +
+			'<br><small>PP: ' + String(move.pp) + '/' + String(moveData.pp) + '</small>' +
 			'</div>';
 	}).join('');
 
@@ -388,7 +388,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
 		'<div style="flex-basis: 48%;">' +
 		'<p><strong>Species:</strong> ' + pokemon.species + ' ' + genderSymbol + '</p>' +
-		'<p><strong>Level:</strong> ' + pokemon.level + '</p>' +
+		'<p><strong>Level:</strong> ' + String(pokemon.level) + '</p>' +
 		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
 		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
 		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
@@ -396,12 +396,12 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<div style="flex-basis: 48%;">' +
 		'<h4>Stats</h4>' +
 		'<table style="width: 100%; border-collapse: collapse;">' +
-		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.maxHp + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.atk + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.def + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.spa + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.spd + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.spe + '</td></tr>' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.maxHp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spe) + '</td></tr>' +
 		'</table>' +
 		'</div>' +
 		'</div>' +
@@ -411,45 +411,45 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<h4>Trainer Memo</h4>' +
 		'<p><strong>ID:</strong> ' + pokemon.id + '</p>' +
 		'<p><strong>Caught In:</strong> ' + (ITEMS_DATABASE[pokemon.caughtIn]?.name || 'a Ball') + '</p>' +
-		'<p><strong>Height:</strong> ' + pokemon.heightm + ' m</p>' +
-		'<p><strong>Weight:</strong> ' + pokemon.weightkg + ' kg</p>' +
-		'<p><strong>Friendship:</strong> ' + pokemon.friendship + '/255</p>' +
+		'<p><strong>Height:</strong> ' + String(pokemon.heightm) + ' m</p>' +
+		'<p><strong>Weight:</strong> ' + String(pokemon.weightkg) + ' kg</p>' +
+		'<p><strong>Friendship:</strong> ' + String(pokemon.friendship) + '/255</p>' +
 		'</div>' +
 		'<div style="flex-basis: 48%;">' +
 		'<h4>IVs</h4>' +
 		'<table style="width: 100%; border-collapse: collapse;">' +
-		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.hp + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.atk + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.def + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spa + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spd + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spe + '</td></tr>' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.hp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spe) + '</td></tr>' +
 		'</table>' +
 		'</div>' +
-			'</div>' +
-				'<hr />' +
-				'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
-				'<div style="flex-basis: 48%;">' +
-				'<h4>EVs</h4>' +
-				'<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
-					'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
-					'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
-					'</table>' +
-					'<small>Total: ' + totalEVs + ' / 510</small>' +
-					'</div>' +
-					'<div style="flex-basis: 48%;">' +
-				'<h4>Moves</h4>' +
-			'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
+		'</div>' +
+		'<hr />' +
+		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>EVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.hp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spe) + '</td></tr>' +
+		'</table>' +
+		'<small>Total: ' + String(totalEVs) + ' / 510</small>' +
+		'</div>' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>Moves</h4>' +
+		'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
 		movesSummary +
 		'</div>' +
 		'</div>' +
-			'</div>' +
-				'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
-				'</div>';
+		'</div>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+		'</div>';
 }
 
 export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
@@ -1356,7 +1356,7 @@ export const commands: ChatCommands = {
 					opponentFutureMoves: [],
 				});
 
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id), battleMessages)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1475,7 +1475,7 @@ export const commands: ChatCommands = {
 			});
 
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, [startMessage])}`);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id), [startMessage])}`);
 		},
 
 		battle(target, room, user) {
@@ -1731,7 +1731,7 @@ export const commands: ChatCommands = {
 					// Re-render the UI with an error message
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
 				}
-				
+
 				// --- INGRAIN CHECK ---
 				if (outgoingSlot.isIngrained) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is rooted in place by Ingrain and cannot switch out!`);

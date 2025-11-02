@@ -98,7 +98,7 @@ export function createPokemon(speciesId: string, level = 5): RPGPokemon {
 			if (learnset) {
 				const learnedMoves: { move: string, level: number }[] = [];
 				for (const moveId in learnset) {
-					// @ts-ignore - PS learnset format can be complex
+					// @ts-expect-error - PS learnset format can be complex
 					for (const learnMethod of learnset[moveId]) {
 						if (learnMethod.startsWith('8L')) {
 							const learnLevel = parseInt(learnMethod.substring(2));

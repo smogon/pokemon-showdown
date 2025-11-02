@@ -80,7 +80,7 @@ export interface ActivePokemonSlot {
 	isHelped?: boolean; // For Helping Hand
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
 	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
-	
+
 	// High-priority volatile statuses
 	substitute?: { hp: number }; // Substitute HP
 	disabledMove?: { moveId: string, turns: number }; // Disabled move and turns remaining
@@ -184,20 +184,20 @@ export interface BattleState {
 
 	// --- FIELDS FOR DELAYED MOVE EFFECTS ---
 	// Future Sight and Doom Desire - attacks that hit after 2 turns
-	playerFutureMoves: Array<{
+	playerFutureMoves: {
 		slotIndex: number, // Which slot will be hit (0 or 1)
 		moveId: 'futuresight' | 'doomdesire',
 		turnsLeft: number, // Hits when this reaches 0
 		attackerSlotIndex: number, // Who used it (for stat calculations)
 		attackerStats: { atk: number, spa: number }, // Stats when used
-	}>;
-	opponentFutureMoves: Array<{
+	}[];
+	opponentFutureMoves: {
 		slotIndex: number,
 		moveId: 'futuresight' | 'doomdesire',
 		turnsLeft: number,
 		attackerSlotIndex: number,
 		attackerStats: { atk: number, spa: number },
-	}>;
+	}[];
 }
 
 // Interface for defining a trainer in the database

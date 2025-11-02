@@ -1,6 +1,6 @@
 /**
  * Pokemon RPG Battle System
- * 
+ *
  * This module consolidates all battle-related functionality in one place
  * for easy maintenance and extension of battle mechanics.
  */
@@ -13,20 +13,20 @@ import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import {
-getCustomEffectiveness,
-getStatMultiplier,
-getCriticalHitChance,
-getMove,
-getBallBonus,
-performCatchAttempt,
+	getCustomEffectiveness,
+	getStatMultiplier,
+	getCriticalHitChance,
+	getMove,
+	getBallBonus,
+	performCatchAttempt,
 } from './battle-helpers';
 import { getPlayerData, activeBattles } from './player-data';
-import { 
-calculateStats, 
-createPokemon, 
-addItemToInventory, 
-removeItemFromInventory, 
-calculateTotalExpForLevel 
+import {
+	calculateStats,
+	createPokemon,
+	addItemToInventory,
+	removeItemFromInventory,
+	calculateTotalExpForLevel,
 } from './utils';
 
 // Global declarations (available from Pokemon Showdown environment)
@@ -174,7 +174,7 @@ export function calculateDamage(
 			basePower *= 2;
 		}
 		break;
-	
+
 	case 'present':
 		// Present has random effects: 40, 80, 120 power, or heals 80 HP
 		const presentRand = Math.random();
@@ -188,7 +188,7 @@ export function calculateDamage(
 			return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0 };
 		}
 		break;
-	
+
 	case 'magnitude':
 		// Magnitude has random power: 10, 30, 50, 70, 90, 110, 150
 		const magnitudeRoll = Math.random();
@@ -219,7 +219,7 @@ export function calculateDamage(
 	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
 		basePower *= 2;
 	}
-	
+
 	// Charge boosts next Electric move
 	if (attackerSlot.isCharged && moveType === 'Electric') {
 		basePower *= 2;
@@ -414,7 +414,6 @@ export function calculateDamage(
 
 	return { damage, message, effectiveness, berryConsumed };
 }
-
 
 export function levelUp(pokemon: RPGPokemon): string[] {
 	const levelUpMessages: string[] = [];
@@ -1070,13 +1069,37 @@ export function handleStatusMove(
 
 			// Defog clears screens from the *opposing* side
 			if (isPlayerAttacker) {
-				if (battle.opponentReflectTurns > 0) { battle.opponentReflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); clearedSomething = true; }
-				if (battle.opponentLightScreenTurns > 0) { battle.opponentLightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); clearedSomething = true; }
-				if (battle.opponentAuroraVeilTurns > 0) { battle.opponentAuroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); clearedSomething = true; }
+				if (battle.opponentReflectTurns > 0) {
+					battle.opponentReflectTurns = 0;
+					messageLog.push(`The opposing team's Reflect wore off!`);
+					clearedSomething = true;
+				}
+				if (battle.opponentLightScreenTurns > 0) {
+					battle.opponentLightScreenTurns = 0;
+					messageLog.push(`The opposing team's Light Screen wore off!`);
+					clearedSomething = true;
+				}
+				if (battle.opponentAuroraVeilTurns > 0) {
+					battle.opponentAuroraVeilTurns = 0;
+					messageLog.push(`The opposing team's Aurora Veil wore off!`);
+					clearedSomething = true;
+				}
 			} else {
-				if (battle.playerReflectTurns > 0) { battle.playerReflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); clearedSomething = true; }
-				if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); clearedSomething = true; }
-				if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); clearedSomething = true; }
+				if (battle.playerReflectTurns > 0) {
+					battle.playerReflectTurns = 0;
+					messageLog.push(`Your team's Reflect wore off!`);
+					clearedSomething = true;
+				}
+				if (battle.playerLightScreenTurns > 0) {
+					battle.playerLightScreenTurns = 0;
+					messageLog.push(`Your team's Light Screen wore off!`);
+					clearedSomething = true;
+				}
+				if (battle.playerAuroraVeilTurns > 0) {
+					battle.playerAuroraVeilTurns = 0;
+					messageLog.push(`Your team's Aurora Veil wore off!`);
+					clearedSomething = true;
+				}
 			}
 
 			// Defog lowers the target's evasion
@@ -1191,7 +1214,7 @@ export function handleStatusMove(
 				messageLog.push('But it failed!');
 				return;
 			}
-			
+
 			const givenItem = attacker.item;
 			defender.item = givenItem;
 			attacker.item = undefined;
@@ -1206,29 +1229,29 @@ export function handleStatusMove(
 				spd: defender.spd,
 				spe: defender.spe,
 			};
-			
+
 			// Copy base stats to attacker
 			attacker.atk = transformedStats.atk;
 			attacker.def = transformedStats.def;
 			attacker.spa = transformedStats.spa;
 			attacker.spd = transformedStats.spd;
 			attacker.spe = transformedStats.spe;
-			
+
 			// Copy moveset (with 5 PP each)
 			attacker.moves = defender.moves.map(m => ({ id: m.id, pp: 5 }));
-			
+
 			// Copy species name (for display)
 			const originalSpecies = attacker.species;
 			attacker.species = defender.species;
-			
+
 			// Copy ability
 			if (defender.ability) {
 				attacker.ability = defender.ability;
 			}
-			
+
 			// Reset stat stages to match target
 			attackerSlot.statStages = { ...defenderSlot.statStages };
-			
+
 			messageLog.push(`${originalSpecies} transformed into ${defender.species}!`);
 			hadEffect = true;
 		} else if (move.boosts && move.target !== 'self') {
@@ -1469,18 +1492,18 @@ export function handleStatusMove(
 	if (['futuresight', 'doomdesire'].includes(move.id)) {
 		// Determine which side's future moves array to use
 		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
-		
+
 		// Check if a future move is already scheduled for this slot
-		const targetSlotLocalIndex = isPlayerAttacker ? 
+		const targetSlotLocalIndex = isPlayerAttacker ?
 			(chosenTargetSlot - 2) : chosenTargetSlot; // Convert to 0-1 index
-		
+
 		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
-		
+
 		if (existingFutureMove) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Schedule the future move to hit in 2 turns
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
@@ -1492,7 +1515,7 @@ export function handleStatusMove(
 				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
 			},
 		});
-		
+
 		const moveName = move.id === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 		messageLog.push(`${attacker.species} foresaw an attack!`);
 		hadEffect = true;
@@ -1790,26 +1813,26 @@ export function handleDamagingMove(
 	// Handle Counter and Mirror Coat
 	if (move.id === 'counter' || move.id === 'mirrorcoat') {
 		const targetCategory = move.id === 'counter' ? 'Physical' : 'Special';
-		
+
 		if (!attackerSlot.lastDamageTaken || attackerSlot.lastDamageTaken.category !== targetCategory) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Deal double the damage received
 		const counterDamage = attackerSlot.lastDamageTaken.amount * 2;
 		defender.hp = Math.max(0, defender.hp - counterDamage);
 		messageLog.push(`${defender.species} took ${counterDamage} damage from the counter!`);
 		return;
 	}
-	
+
 	// Handle Fling
 	if (move.id === 'fling') {
 		if (battle.magicRoomTurns > 0 || !attacker.item) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Fling power is based on the item (simplified)
 		const flingPowers: Record<string, number> = {
 			'leftovers': 10, 'oranberry': 10, 'berryjuice': 10,
@@ -1824,14 +1847,14 @@ export function handleDamagingMove(
 		attacker.item = undefined;
 		return;
 	}
-	
+
 	// Handle Nature Gift (type and power based on berry)
 	if (move.id === 'naturalgift') {
-		if (!attacker.item || !attacker.item.includes('berry')) {
+		if (!attacker.item?.includes('berry')) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Nature Gift power is based on berry (simplified to 80)
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
@@ -1839,7 +1862,7 @@ export function handleDamagingMove(
 		attacker.item = undefined;
 		return;
 	}
-	
+
 	// Handle One-Hit KO moves
 	if (move.ohko) {
 		// Check level immunity
@@ -1944,7 +1967,7 @@ export function handleDamagingMove(
 		}
 
 		defender.hp = Math.max(0, defender.hp - damageDealt);
-		
+
 		// Track damage for Counter/Mirror Coat
 		if (damageDealt > 0 && move.category !== 'Status') {
 			defenderSlot.lastDamageTaken = {
@@ -1953,7 +1976,7 @@ export function handleDamagingMove(
 				from: attacker.id,
 			};
 		}
-		
+
 		if (hitCount > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else {
@@ -2565,7 +2588,7 @@ export function executeMove(
 ): void {
 	// Track last move used (for Disable, Torment, etc.)
 	attackerSlot.lastMoveUsed = move.id;
-	
+
 	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
@@ -2861,26 +2884,26 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-				
+
 				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-				
+
 				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-				
+
 				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-				
+
 				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-				
+
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
@@ -2888,7 +2911,7 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 		return true; // Keep this future move
 	});
-	
+
 	// Process opponent's future moves (hitting player)
 	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
 		fm.turnsLeft--;
@@ -2898,26 +2921,26 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-				
+
 				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-				
+
 				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-				
+
 				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-				
+
 				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-				
+
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
@@ -3500,7 +3523,7 @@ export function executeAction(
 			// First turn: Start charging
 			attackerSlot.chargingMove = move.id;
 			let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
-			
+
 			// Custom messages for specific moves
 			if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
 			else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
@@ -3515,17 +3538,16 @@ export function executeAction(
 				} else {
 					chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
 				}
-			}
-			else if (move.id === 'razorwind') chargeMessage = `${attackerSlot.pokemon.species} whipped up a whirlwind!`;
+			} else if (move.id === 'razorwind') chargeMessage = `${attackerSlot.pokemon.species} whipped up a whirlwind!`;
 			else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
 			else if (move.id === 'skullbash') chargeMessage = `${attackerSlot.pokemon.species} tucked in its head!`;
 			else if (move.id === 'freezeshock') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a freezing light!`;
 			else if (move.id === 'iceburn') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in freezing air!`;
 			else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
 			else if (move.id === 'meteorbeam') chargeMessage = `${attackerSlot.pokemon.species} is overflowing with space power!`;
-			
+
 			if (chargeMessage) messageLog.push(chargeMessage);
-			
+
 			// If still charging (not skipped), deduct PP and return
 			if (attackerSlot.chargingMove) {
 				if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
@@ -3537,7 +3559,7 @@ export function executeAction(
 			// Second turn: Execute the move
 			attackerSlot.chargingMove = undefined;
 		}
-		
+
 		// 3. PP Deduction (if not already deducted during charging)
 		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp--;
@@ -3615,15 +3637,15 @@ export function executeAction(
 
 // Export helper to check if battle is a doubles battle
 export function isDoublesBattle(battle: BattleState): boolean {
-return battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	return battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 }
 
-// Export helper to get all active player slots  
+// Export helper to get all active player slots
 export function getActivePlayerSlots(battle: BattleState): ActivePokemonSlot[] {
-return getActiveSlots(battle.playerSlots);
+	return getActiveSlots(battle.playerSlots);
 }
 
 // Export helper to get all active opponent slots
 export function getActiveOpponentSlots(battle: BattleState): ActivePokemonSlot[] {
-return getActiveSlots(battle.opponentSlots);
+	return getActiveSlots(battle.opponentSlots);
 }

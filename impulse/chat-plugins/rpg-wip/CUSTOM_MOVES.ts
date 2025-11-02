@@ -1,9 +1,9 @@
 /**
  * Custom Moves for Pokemon RPG
- * 
+ *
  * This file defines custom moves that extend beyond the standard Pokemon Showdown Dex.
  * Moves are defined in the same format as Dex moves for compatibility.
- * 
+ *
  * Move Properties Reference:
  * - id: string (lowercase, no spaces)
  * - name: string (Display name)
@@ -44,22 +44,22 @@ export interface CustomMove {
 	priority: number;
 	target: string;
 	flags: {
-		protect?: 1;
-		mirror?: 1;
-		contact?: 1;
-		charge?: 1;
-		sound?: 1;
-		powder?: 1;
-		punch?: 1;
-		bite?: 1;
-		heal?: 1;
-		metronome?: 1;
+		protect?: 1,
+		mirror?: 1,
+		contact?: 1,
+		charge?: 1,
+		sound?: 1,
+		powder?: 1,
+		punch?: 1,
+		bite?: 1,
+		heal?: 1,
+		metronome?: 1,
 	};
 	secondary?: {
-		chance?: number;
-		status?: string;
-		volatileStatus?: string;
-		boosts?: Record<string, number>;
+		chance?: number,
+		status?: string,
+		volatileStatus?: string,
+		boosts?: Record<string, number>,
 	};
 	boosts?: Record<string, number>;
 	status?: string;
@@ -77,8 +77,8 @@ export interface CustomMove {
 	ohko?: string;
 	breaksProtect?: boolean;
 	self?: {
-		boosts?: Record<string, number>;
-		volatileStatus?: string;
+		boosts?: Record<string, number>,
+		volatileStatus?: string,
 	};
 }
 

@@ -1,6 +1,6 @@
 /**
  * RPG Command Handlers
- * 
+ *
  * All /rpg command handlers that tie together the RPG system.
  * These are the user-facing commands that interact with the modules.
  */
@@ -219,7 +219,7 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			const [itemId, ...rest] = target.split(',').map(s => s.trim());
-			const targetIndex = parseInt(rest[0], 10);
+			const targetIndex = parseInt(rest[0]);
 
 			if (!itemId) {
 				return this.errorReply("Please specify an item to use.");
@@ -267,7 +267,7 @@ export const commands: ChatCommands = {
 			}
 
 			const [pokemonIndexStr, itemId] = target.split(',').map(s => s.trim());
-			const pokemonIndex = parseInt(pokemonIndexStr, 10);
+			const pokemonIndex = parseInt(pokemonIndexStr);
 
 			if (isNaN(pokemonIndex) || pokemonIndex < 0 || pokemonIndex >= player.party.length) {
 				return this.errorReply("Invalid Pokemon selected.");
@@ -304,7 +304,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
-			const pokemonIndex = parseInt(target, 10);
+			const pokemonIndex = parseInt(target);
 
 			if (isNaN(pokemonIndex) || pokemonIndex < 0 || pokemonIndex >= player.party.length) {
 				return this.errorReply("Invalid Pokemon index.");
@@ -338,7 +338,7 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			const [itemId, quantityStr] = target.split(',').map(s => s.trim());
-			const quantity = parseInt(quantityStr, 10) || 1;
+			const quantity = parseInt(quantityStr) || 1;
 
 			if (!itemId) {
 				return this.errorReply("Please specify an item to buy.");
@@ -379,7 +379,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
-			const partyIndex = parseInt(target, 10);
+			const partyIndex = parseInt(target);
 
 			if (isNaN(partyIndex) || partyIndex < 0 || partyIndex >= player.party.length) {
 				return this.errorReply("Invalid Pokemon index.");
@@ -401,7 +401,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
-			const pcIndex = parseInt(target, 10);
+			const pcIndex = parseInt(target);
 
 			if (isNaN(pcIndex) || pcIndex < 0 || pcIndex >= player.pc.length) {
 				return this.errorReply("Invalid PC box index.");
@@ -460,7 +460,7 @@ export const commands: ChatCommands = {
 			const wildPokemon = createPokemon(randomSpeciesId, level);
 
 			const battleType = zone.battleType || 'single';
-			let opponentTeam = [wildPokemon];
+			const opponentTeam = [wildPokemon];
 
 			if (battleType === 'double') {
 				const randomSpeciesId2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
@@ -558,14 +558,14 @@ export const commands: ChatCommands = {
 			}
 
 			const [slotIndexStr, moveId] = target.split(',').map(s => s.trim());
-			const slotIndex = parseInt(slotIndexStr, 10);
+			const slotIndex = parseInt(slotIndexStr);
 
 			if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= battle.player1.activeSlots.length) {
 				return this.errorReply("Invalid slot index.");
 			}
 
 			const slot = battle.player1.activeSlots[slotIndex];
-			if (!slot || !slot.pokemon) {
+			if (!slot?.pokemon) {
 				return this.errorReply("No Pokemon in that slot.");
 			}
 
@@ -583,7 +583,7 @@ export const commands: ChatCommands = {
 			}
 
 			// Check if all player slots have chosen actions
-			const allChosen = battle.player1.activeSlots.every(s => !s || !s.pokemon || s.chosenAction);
+			const allChosen = battle.player1.activeSlots.every(s => !s?.pokemon || s.chosenAction);
 
 			if (allChosen) {
 				processTurn(battle, user.id, this);
@@ -627,14 +627,14 @@ export const commands: ChatCommands = {
 			}
 
 			const [ballId, slotIndexStr] = target.split(',').map(s => s.trim());
-			const slotIndex = parseInt(slotIndexStr, 10);
+			const slotIndex = parseInt(slotIndexStr);
 
 			if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= battle.opponent.activeSlots.length) {
 				return this.errorReply("Invalid target slot.");
 			}
 
 			const targetSlot = battle.opponent.activeSlots[slotIndex];
-			if (!targetSlot || !targetSlot.pokemon) {
+			if (!targetSlot?.pokemon) {
 				return this.errorReply("No Pokemon in that slot.");
 			}
 
@@ -675,8 +675,8 @@ export const commands: ChatCommands = {
 			}
 
 			const [slotIndexStr, partyIndexStr] = target.split(',').map(s => s.trim());
-			const slotIndex = parseInt(slotIndexStr, 10);
-			const partyIndex = parseInt(partyIndexStr, 10);
+			const slotIndex = parseInt(slotIndexStr);
+			const partyIndex = parseInt(partyIndexStr);
 
 			if (isNaN(slotIndex) || slotIndex < 0 || slotIndex >= battle.player1.activeSlots.length) {
 				return this.errorReply("Invalid slot index.");
@@ -699,7 +699,7 @@ export const commands: ChatCommands = {
 			currentSlot.chosenAction = { type: 'switch', switchToIndex: partyIndex };
 
 			// Check if all player slots have chosen actions
-			const allChosen = battle.player1.activeSlots.every(s => !s || !s.pokemon || s.chosenAction);
+			const allChosen = battle.player1.activeSlots.every(s => !s?.pokemon || s.chosenAction);
 
 			if (allChosen) {
 				processTurn(battle, user.id, this);
