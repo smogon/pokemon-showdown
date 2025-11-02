@@ -70,6 +70,7 @@ interface ActivePokemonSlot {
 	isRedirecting?: boolean; // For Follow Me
 	isHelped?: boolean; // For Helping Hand
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
+	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
 }
 
 // Interface for player data
@@ -157,6 +158,23 @@ interface BattleState {
 			pokemonId: string, // To track who is acting
 		} | null,
 	};
+
+	// --- FIELDS FOR DELAYED MOVE EFFECTS ---
+	// Future Sight and Doom Desire - attacks that hit after 2 turns
+	playerFutureMoves: Array<{
+		slotIndex: number, // Which slot will be hit (0 or 1)
+		moveId: 'futuresight' | 'doomdesire',
+		turnsLeft: number, // Hits when this reaches 0
+		attackerSlotIndex: number, // Who used it (for stat calculations)
+		attackerStats: { atk: number, spa: number }, // Stats when used
+	}>;
+	opponentFutureMoves: Array<{
+		slotIndex: number,
+		moveId: 'futuresight' | 'doomdesire',
+		turnsLeft: number,
+		attackerSlotIndex: number,
+		attackerStats: { atk: number, spa: number },
+	}>;
 }
 
 // In-memory storage for player data (in production, use a database)
@@ -1572,6 +1590,30 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
 		}
 	}
+
+	// Handle Yawn counter
+	if (slot.yawnCounter !== undefined && slot.yawnCounter > 0) {
+		slot.yawnCounter--;
+		if (slot.yawnCounter === 0) {
+			// Try to inflict sleep
+			if (!slot.status) {
+				const speciesData = Dex.species.get(pokemon.species);
+				// Check immunity
+				const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(pokemon, battle);
+				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
+
+				if (!isTerrainImmune && !isAbilityImmune) {
+					slot.status = 'slp';
+					slot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
+				} else {
+					messageLog.push(`${pokemon.species} stayed awake!`);
+				}
+			}
+			// Clear the yawn counter
+			slot.yawnCounter = undefined;
+		}
+	}
 }
 
 /**
@@ -1982,6 +2024,27 @@ function handleStatusMove(
 					hadEffect = true;
 				}
 				break;
+
+			case 'yawn':
+				// Check if target can be put to sleep
+				if (!defenderSlot.status && !defenderSlot.yawnCounter) {
+					const defenderSpecies = Dex.species.get(defender.species);
+					// Check type immunity
+					const isTypeImmune = defenderSpecies.types.includes('Grass') && defenderSlot.pokemon.ability === 'Overcoat';
+					// Check terrain immunity
+					const isTerrainImmune = battle.terrain?.type === 'electric' && isGrounded(defender, battle);
+					// Check ability immunity
+					const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(defender.ability || '');
+
+					if (!isTypeImmune && !isTerrainImmune && !isAbilityImmune) {
+						defenderSlot.yawnCounter = 2; // Will fall asleep in 2 turns
+						messageLog.push(`${defender.species} grew drowsy!`);
+						hadEffect = true;
+					} else {
+						messageLog.push(`But it failed!`);
+					}
+				}
+				break;
 			}
 		} else if (move.id === 'helpinghand') {
 			if (!defenderSlot) { // Target fainted or is empty
@@ -1996,6 +2059,40 @@ function handleStatusMove(
 	}
 
 	// --- Handle moves that don't target a single defender ---
+
+	// Handle Future Sight and Doom Desire
+	if (['futuresight', 'doomdesire'].includes(move.id)) {
+		// Determine which side's future moves array to use
+		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
+		
+		// Check if a future move is already scheduled for this slot
+		const targetSlotLocalIndex = isPlayerAttacker ? 
+			(chosenTargetSlot - 2) : chosenTargetSlot; // Convert to 0-1 index
+		
+		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
+		
+		if (existingFutureMove) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
+		// Schedule the future move to hit in 2 turns
+		futureMoveArray.push({
+			slotIndex: targetSlotLocalIndex,
+			moveId: move.id as 'futuresight' | 'doomdesire',
+			turnsLeft: 2,
+			attackerSlotIndex,
+			attackerStats: {
+				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
+				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
+			},
+		});
+		
+		const moveName = move.id === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+		messageLog.push(`${attacker.species} foresaw an attack!`);
+		hadEffect = true;
+		return;
+	}
 
 	// Handle Protect and Detect
 	if (['protect', 'detect'].includes(move.id)) {
@@ -3306,6 +3403,81 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	// Get all active slots before effects start
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
+	// --- Process Future Sight / Doom Desire attacks ---
+	// Process player's future moves (hitting opponents)
+	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
+		fm.turnsLeft--;
+		if (fm.turnsLeft === 0) {
+			// Execute the future move
+			const targetSlot = battle.opponentSlots[fm.slotIndex];
+			if (targetSlot && targetSlot.pokemon.hp > 0) {
+				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+				messageLog.push(`<strong>${moveName}</strong> took effect!`);
+				
+				// Calculate damage using stored stats
+				const move = getMove(fm.moveId);
+				const basePower = move.basePower || 120;
+				const moveType = move.type;
+				
+				// Get defender's current stats
+				const defender = targetSlot.pokemon;
+				const defenderSpecies = Dex.species.get(defender.species);
+				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
+				
+				// Calculate damage
+				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
+				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
+				const damage = Math.floor(baseDamage * effectiveness);
+				
+				// Apply damage
+				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
+				messageLog.push(`${defender.species} took ${damage} damage!`);
+				
+				if (effectiveness > 1) messageLog.push(`It's super effective!`);
+				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			}
+			return false; // Remove this future move from the array
+		}
+		return true; // Keep this future move
+	});
+	
+	// Process opponent's future moves (hitting player)
+	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
+		fm.turnsLeft--;
+		if (fm.turnsLeft === 0) {
+			// Execute the future move
+			const targetSlot = battle.playerSlots[fm.slotIndex];
+			if (targetSlot && targetSlot.pokemon.hp > 0) {
+				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+				messageLog.push(`<strong>${moveName}</strong> took effect!`);
+				
+				// Calculate damage using stored stats
+				const move = getMove(fm.moveId);
+				const basePower = move.basePower || 120;
+				const moveType = move.type;
+				
+				// Get defender's current stats
+				const defender = targetSlot.pokemon;
+				const defenderSpecies = Dex.species.get(defender.species);
+				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
+				
+				// Calculate damage
+				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
+				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
+				const damage = Math.floor(baseDamage * effectiveness);
+				
+				// Apply damage
+				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
+				messageLog.push(`${defender.species} took ${damage} damage!`);
+				
+				if (effectiveness > 1) messageLog.push(`It's super effective!`);
+				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			}
+			return false; // Remove this future move from the array
+		}
+		return true; // Keep this future move
+	});
+
 	// Reset flinch status for all active slots
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
@@ -3461,6 +3633,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		activeTurns: 1,
 		lockedMove: undefined,
 		lastDamageTaken: undefined,
+		yawnCounter: undefined,
 	};
 }
 
@@ -5282,6 +5455,10 @@ export const commands: ChatCommands = {
 					gravityTurns: 0,
 					mudSportTurns: 0,
 					waterSportTurns: 0,
+
+					// --- Delayed Move Fields ---
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
 				});
 
 				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
@@ -5396,6 +5573,10 @@ export const commands: ChatCommands = {
 				gravityTurns: 0,
 				mudSportTurns: 0,
 				waterSportTurns: 0,
+
+				// --- Delayed Move Fields ---
+				playerFutureMoves: [],
+				opponentFutureMoves: [],
 			});
 
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
