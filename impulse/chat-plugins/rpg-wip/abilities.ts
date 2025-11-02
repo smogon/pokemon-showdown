@@ -1076,6 +1076,36 @@ export function shouldApplySecondaryEffects(attacker: RPGPokemon, move: Move): b
 }
 
 /**
+ * Check if Pokemon takes indirect damage (blocked by Magic Guard)
+ */
+export function takesIndirectDamage(pokemon: RPGPokemon): boolean {
+	const ability = toID(pokemon.ability || '');
+	return ability !== 'magicguard';
+}
+
+/**
+ * Check if Pokemon's ability prevents recoil damage
+ */
+export function preventsRecoil(pokemon: RPGPokemon): boolean {
+	const ability = toID(pokemon.ability || '');
+	return ability === 'rockhead';
+}
+
+/**
+ * Check if Pokemon can use its held item (not blocked by Klutz or Magic Room)
+ */
+export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolean {
+	// Magic Room prevents all held items
+	if (battle.magicRoomTurns > 0) return false;
+	
+	// Klutz prevents the Pokemon from using its held item
+	const ability = toID(pokemon.ability || '');
+	if (ability === 'klutz') return false;
+	
+	return true;
+}
+
+/**
  * Check if ability prevents a specific move
  */
 export function preventMove(ctx: AbilityContext): { prevented: boolean; message?: string } | null {
@@ -1162,6 +1192,9 @@ export const RPGAbilities = {
 	getAbilityInfo,
 	getAbilityData,
 	shouldApplySecondaryEffects,
+	takesIndirectDamage,
+	preventsRecoil,
+	canUseHeldItem,
 	
 	// Ability databases
 	IMMUNITY_ABILITIES,

@@ -1029,7 +1029,7 @@ function calculateDamage(
 		case 'hail': moveType = 'Ice'; break;
 		}
 	}
-	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.RPGAbilities.isGrounded(attacker, battle)) {
+	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
 		switch (battle.terrain.type) {
 		case 'electric': moveType = 'Electric'; break;
 		case 'grassy': moveType = 'Grass'; break;
@@ -2956,10 +2956,10 @@ function handleDamagingMove(
 					const attackerAbility = toID(attacker.ability || '');
 					// Sheer Force negates Life Orb recoil if move has secondary effect
 					const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
-					// Magic Guard prevents Life Orb recoil
-					const magicGuardActive = attackerAbility === 'magicguard';
+					// Magic Guard prevents Life Orb recoil (check using abilities system)
+					const takesRecoil = RPGAbilities.takesIndirectDamage(attacker);
 					
-					if (!sheerForceActive && !magicGuardActive) {
+					if (!sheerForceActive && takesRecoil) {
 						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 						messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
 						tookRecoil = true;
@@ -2972,8 +2972,7 @@ function handleDamagingMove(
 					tookRecoil = true;
 				} else if (move.recoil) {
 					// Check if Rock Head prevents recoil
-					const attackerAbility = toID(attacker.ability || '');
-					if (attackerAbility !== 'rockhead') {
+					if (!RPGAbilities.preventsRecoil(attacker)) {
 						const recoilDamage = Math.max(1, Math.floor(damageDealt * (move.recoil[0] / move.recoil[1])));
 						attacker.hp = Math.max(0, attacker.hp - recoilDamage);
 						messageLog.push(`${attacker.species} was damaged by recoil!`);
@@ -3284,30 +3283,6 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 	if (itemConsumed) {
 		pokemon.item = undefined;
 	}
-}
-
-/**
- * Check if a Pokemon's held item can be used
- * Returns false if Klutz ability or Magic Room is active
- */
-function canUseItem(pokemon: RPGPokemon, battle: BattleState): boolean {
-	// Magic Room prevents all held items
-	if (battle.magicRoomTurns > 0) return false;
-	
-	// Klutz prevents the Pokemon from using its held item
-	const ability = toID(pokemon.ability || '');
-	if (ability === 'klutz') return false;
-	
-	return true;
-}
-
-/**
- * Check if a Pokemon takes indirect damage
- * Returns false if Magic Guard ability
- */
-function takesIndirectDamage(pokemon: RPGPokemon): boolean {
-	const ability = toID(pokemon.ability || '');
-	return ability !== 'magicguard';
 }
 
 /**
