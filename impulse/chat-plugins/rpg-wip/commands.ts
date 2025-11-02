@@ -5,9 +5,6 @@
  * These are the user-facing commands that interact with the modules.
  */
 
-import type { ChatCommands } from '../../chat';
-import { toID } from '../../sim/dex-data';
-
 // Import all the modules we need
 import {
 	getPlayerData,
