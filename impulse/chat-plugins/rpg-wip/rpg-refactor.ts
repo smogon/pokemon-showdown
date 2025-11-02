@@ -4337,6 +4337,7 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
  * [STEP 4/6/7 Implementation]
  * Executes a single queued action (move or switch).
  */
+
 function executeAction(
 	action: NonNullable<BattleState['pendingActions'][number]>,
 	battle: BattleState,
@@ -4552,6 +4553,16 @@ function executeAction(
 
 		// 6. Execute move against all targets
 		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
+
+		// --- NEW: Handle Choice Item Lock ---
+		if (attackerSlot.pokemon.hp > 0 && move.id !== 'struggle' && !attackerSlot.lockedMove) {
+			const item = attackerSlot.pokemon.item;
+			if (battle.magicRoomTurns === 0 && (item === 'choiceband' || item === 'choicescarf' || item === 'choicespecs')) {
+				attackerSlot.lockedMove = move.id;
+				// messageLog.push(`${attackerSlot.pokemon.species} is locked into ${move.name}!`); // Optional: a bit noisy
+			}
+		}
+		// --- END NEW BLOCK ---
 
 		// 7. Handle U-turn/Volt Switch (self-switch after move)
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
