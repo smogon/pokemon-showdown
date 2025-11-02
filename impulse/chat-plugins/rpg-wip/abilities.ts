@@ -77,23 +77,26 @@ export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
 /**
  * Check if a Pokemon is grounded (affected by Ground-type moves)
  */
-export function isGrounded(slot: ActivePokemonSlot, battle: BattleState): boolean {
+export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle: BattleState): boolean {
+	// If passed RPGPokemon, wrap as needed
+	const pokemon = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot).pokemon : slotOrPokemon as RPGPokemon;
+	const slot = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot) : undefined;
+
 	// Gravity grounds everything, overriding all other effects.
 	if (battle.gravityTurns > 0) {
 		return true;
 	}
 
 	// Smack Down grounds the Pokemon, overriding immunities.
-	if (slot.isSmackedDown) {
+	if (slot && slot.isSmackedDown) {
 		return true;
 	}
 
 	// Magnet Rise provides temporary levitation.
-	if (slot.magnetRiseTurns > 0) {
+	if (slot && slot.magnetRiseTurns > 0) {
 		return false;
 	}
 
-	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
 	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
 	const ability = toID(pokemon.ability || '');
