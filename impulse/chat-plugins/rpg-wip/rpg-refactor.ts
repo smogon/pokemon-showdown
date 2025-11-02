@@ -4879,8 +4879,8 @@ function generateSingleBattleHTML(
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
 		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 8px;">${moveData.name}</div>` +
-            `<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+            `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
                 `<span>${moveData.type}</span>` +
                `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
 			`</div> `;
@@ -4915,7 +4915,7 @@ function generateSingleBattleHTML(
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		// --- Opponent Pokemon (Top Right) ---
-		`<div style="margin-bottom: 40px;">` +
+		`<div style="margin-bottom: 10px;">` +
 		`<div style="text-align: center; width: 40%; margin-left: auto; margin-right: 0;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
 		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
@@ -4923,7 +4923,7 @@ function generateSingleBattleHTML(
 		`</div>` +
 		`</div>` +
 		// --- Player Pokemon (Bottom Left) ---
-		`<div style="margin-bottom: 30px;">` +
+		`<div style="margin-bottom: 10px;">` +
 		`<div style="text-align: center; width: 40%; margin-left: 0; margin-right: auto;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
