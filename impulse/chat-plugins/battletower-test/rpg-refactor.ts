@@ -680,8 +680,20 @@ function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RPGPokemo
 	return null;
 }
 
-function getBallBonus(ballId: string, battle: BattleState): number {
-	const { opponentActivePokemon, activePokemon, turn, opponentStatus } = battle;
+function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
+	// const { opponentActivePokemon, activePokemon, turn, opponentStatus } = battle; // <-- OLD
+	
+	// --- NEW ---
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+	// Get the player's *first* active Pokemon for level/stat comparisons
+	// This is a simplification for doubles, but necessary.
+	const playerSlot = getActiveSlots(battle.playerSlots)[0];
+	if (!playerSlot) return 1; // No player pokemon?
+	const activePokemon = playerSlot.pokemon;
+	const turn = battle.turn;
+	// --- END NEW ---
+	
 	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
 
 	switch (ballId) {
@@ -710,13 +722,19 @@ function getBallBonus(ballId: string, battle: BattleState): number {
 	}
 }
 
-function performCatchAttempt(battle: BattleState, ballId: string): { success: boolean, shakes: number } {
-	const { opponentActivePokemon, opponentStatus } = battle;
+function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
+	// const { opponentActivePokemon, opponentStatus } = battle; // <-- OLD
+	
+	// --- NEW ---
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+	// --- END NEW ---
+
 	const speciesId = toID(opponentActivePokemon.species);
 	// --- FIX: Updated fallback catch rate from 45 to 150 ---
 	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
 
-	const ballBonus = getBallBonus(ballId, battle);
+	const ballBonus = getBallBonus(ballId, battle, targetSlot); // <-- Pass targetSlot
 	if (ballBonus === 255) return { success: true, shakes: 4 }; // Master Ball
 
 	let statusBonus = 1;
