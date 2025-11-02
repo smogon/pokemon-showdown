@@ -1308,6 +1308,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 /**
  * Export all ability handlers
  */
+
 export const RPGAbilities = {
 	// Core functions
 	checkImmunity: checkAbilityImmunity,
@@ -1323,6 +1324,7 @@ export const RPGAbilities = {
 	applySereneGrace,
 	isGrounded,
 	applyContactAbilityEffects,
+	applySwitchInAbilities,
 
 	// Utility functions
 	getAllImplementedAbilities,
@@ -1332,7 +1334,6 @@ export const RPGAbilities = {
 	takesIndirectDamage,
 	preventsRecoil,
 	canUseHeldItem,
-	applySwitchInAbilities,
 
 	// Ability databases
 	IMMUNITY_ABILITIES,
