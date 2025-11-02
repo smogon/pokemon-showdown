@@ -59,6 +59,7 @@ export interface AbilityContext {
 	move: Move;
 	battle: BattleState;
 	messageLog: string[];
+	effectiveness?: number;
 }
 
 /**
