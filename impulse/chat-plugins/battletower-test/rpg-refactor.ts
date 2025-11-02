@@ -135,7 +135,7 @@ interface BattleState {
 	opponentName: string; // e.g., "Wild Pikachu" or "Rival"
 	opponentParty: RPGPokemon[];
 	opponentMoney: number; // Money to win (0 for wild)
-	
+
 	// --- Pivot/Switch Flags ---
 	playerShouldSwitch?: boolean | 'copyvolatile'; // <-- This is now DEPRECATED by pendingPivot
 	pendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };
@@ -148,12 +148,12 @@ interface BattleState {
 	// New field to store player/AI commands before the turn executes
 	pendingActions: {
 		[slotIndex: number]: { // 0, 1 for player; 2, 3 for opponent
-			actionType: 'move' | 'switch';
-			moveId?: string;
-			targetSlot?: number; // 0-3
-			switchToPokemonId?: string;
-			pokemonId: string; // To track who is acting
-		} | null
+			actionType: 'move' | 'switch',
+			moveId?: string,
+			targetSlot?: number, // 0-3
+			switchToPokemonId?: string,
+			pokemonId: string, // To track who is acting
+		} | null,
 	};
 }
 
@@ -430,16 +430,16 @@ type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id
 interface TrainerSpec {
 	name: string;
 	party: {
-		species: string;
-		level: number;
-		moves?: string[]; // Optional: if not provided, uses default learnset
-		item?: string; // Optional: specify a held item
+		species: string,
+		level: number,
+		moves?: string[], // Optional: if not provided, uses default learnset
+		item?: string, // Optional: specify a held item
 	}[];
 	money: number; // Prize money for winning
 	dialogue?: {
-		start: string;
-		win: string; // Dialogue if player wins
-		lose: string; // Dialogue if opponent wins
+		start: string,
+		win: string, // Dialogue if player wins
+		lose: string, // Dialogue if opponent wins
 	};
 	battleType?: 'single' | 'double'; // <-- NEW FIELD
 }
@@ -474,13 +474,12 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	// Add more trainers, evil team members, etc. here
 };
 
-
 /****************
 * Core Functions
 ****************/
 
 function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState): number {
-    let effectiveness = 1;
+	let effectiveness = 1;
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
 	for (const defenderType of defenderTypes) {
@@ -682,7 +681,7 @@ function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RPGPokemo
 
 function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
 	// const { opponentActivePokemon, activePokemon, turn, opponentStatus } = battle; // <-- OLD
-	
+
 	// --- NEW ---
 	const opponentActivePokemon = targetSlot.pokemon;
 	const opponentStatus = targetSlot.status;
@@ -693,7 +692,7 @@ function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePok
 	const activePokemon = playerSlot.pokemon;
 	const turn = battle.turn;
 	// --- END NEW ---
-	
+
 	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
 
 	switch (ballId) {
@@ -724,7 +723,7 @@ function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePok
 
 function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
 	// const { opponentActivePokemon, opponentStatus } = battle; // <-- OLD
-	
+
 	// --- NEW ---
 	const opponentActivePokemon = targetSlot.pokemon;
 	const opponentStatus = targetSlot.status;
@@ -913,7 +912,7 @@ function calculateDamage(
 		}
 		basePower = 20 + (20 * totalBoosts);
 		break;
-		
+
 	case 'acrobatics':
 		if (!attacker.item || battle.magicRoomTurns > 0) {
 			basePower *= 2;
@@ -938,7 +937,7 @@ function calculateDamage(
 	if (move.id === 'terrainpulse' && battle.terrain && isGrounded(attacker, battle)) {
 		basePower *= 2;
 	}
-	
+
 	if (['solarbeam', 'solarblade'].includes(move.id) && battle.weather) {
 		if (['rain', 'sand', 'hail'].includes(battle.weather.type)) {
 			basePower = Math.floor(basePower * 0.5);
@@ -1114,7 +1113,7 @@ function calculateDamage(
 	if (battle.magicRoomTurns === 0 && attacker.item === 'expertbelt' && effectiveness > 1) {
 		damage = Math.floor(damage * 1.2);
 	}
-	
+
 	// --- NEW: SPREAD MOVE DAMAGE REDUCTION ---
 	damage = Math.floor(damage * spreadMultiplier);
 
@@ -1195,7 +1194,7 @@ function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
 	// --- FIX: Added fallback EV yield of { atk: 1 } ---
 	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
-	
+
 	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	for (const stat in evYield) {
 		if (totalEVs >= 510) break;
@@ -1236,27 +1235,27 @@ function gainExperience(
 
 	let leveledUp = false;
 	const messages: string[] = [];
-	
+
 	const participantNames: string[] = [];
 
 	// 1. Distribute EVs and EXP
 	for (const slot of participantSlots) {
-		if (!slot || !slot.pokemon) continue; // <-- Safety check
+		if (!slot?.pokemon) continue; // <-- Safety check
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue; // Fainted or max level
-		
+
 		participantNames.push(pokemon.species);
 		gainEffortValues(pokemon, defeatedPokemon);
 		pokemon.experience += expGained;
 	}
-	
+
 	if (participantNames.length === 0) return { messages: [], leveledUp: false };
-	
+
 	messages.push(`**${participantNames.join(' and ')}** gained ${expGained} Experience Points!`);
 
 	// 2. Handle Level-Ups for all participants
 	for (const slot of participantSlots) {
-		if (!slot || !slot.pokemon) continue; // <-- Safety check
+		if (!slot?.pokemon) continue; // <-- Safety check
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
 
@@ -1320,7 +1319,7 @@ function saveBattleStatus(battle: BattleState) {
 			}
 		}
 	}
-	
+
 	// Save opponent's active Pokemon statuses back to the battle's party array
 	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 		for (const slot of battle.opponentSlots) {
@@ -1537,7 +1536,7 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	const species = Dex.species.get(pokemon.species);
 	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
 	const isGroundedCheck = !(species.types.includes('Flying') || pokemon.ability === 'Levitate' || hasAirBalloon);
-	
+
 	// isGrounded check must also respect Gravity
 	const isGrounded = isGroundedCheck || battle.gravityTurns > 0;
 
@@ -1632,7 +1631,7 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 	for (const stat of stats) {
 		// Find the maximum positive stat boost for this stat among all opponents
 		const maxOpponentBoost = Math.max(0, ...opponentSlots.map(s => s.statStages[stat]));
-		
+
 		if (maxOpponentBoost > 0) {
 			// Copy those boosts
 			myStages[stat] = Math.min(6, myStages[stat] + maxOpponentBoost);
@@ -1686,7 +1685,7 @@ function handleStatusMove(
 				messageLog.push('The entry hazards were removed from the field!');
 				clearedSomething = true;
 			}
-	
+
 			// Defog clears screens from the *opposing* side
 			if (isPlayerAttacker) {
 				if (battle.opponentReflectTurns > 0) { battle.opponentReflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); clearedSomething = true; }
@@ -1697,7 +1696,7 @@ function handleStatusMove(
 				if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); clearedSomething = true; }
 				if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); clearedSomething = true; }
 			}
-	
+
 			// Defog lowers the target's evasion
 			if (defenderSlot.statStages.evasion > -6) {
 				defenderSlot.statStages.evasion--;
@@ -1727,7 +1726,7 @@ function handleStatusMove(
 			}
 		} else if (move.id === 'curse') {
 			const attackerSpecies = Dex.species.get(attacker.species);
-	
+
 			if (attackerSpecies.types.includes('Ghost')) {
 				if (defenderSlot.isCursed) {
 					messageLog.push(`But it failed!`);
@@ -1772,22 +1771,22 @@ function handleStatusMove(
 				messageLog.push('But it failed!');
 				return;
 			}
-	
+
 			const attackerItem = attacker.item;
 			const defenderItem = defender.item;
-	
+
 			attacker.item = defenderItem;
 			defender.item = attackerItem;
-	
+
 			hadEffect = true;
 			messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
-	
+
 			if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item].name}!`);
 			if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item].name}!`);
 		} else if (move.id === 'nightmare') {
 			const defenderStatus = defenderSlot.status;
 			const hasNightmare = defenderSlot.hasNightmare;
-	
+
 			if (defenderStatus !== 'slp') {
 				messageLog.push(`But it failed!`);
 			} else if (hasNightmare) {
@@ -1800,7 +1799,7 @@ function handleStatusMove(
 		} else if (move.boosts && move.target !== 'self') {
 			const targetSlot = defenderSlot;
 			const targetStages = targetSlot.statStages;
-	
+
 			if (battle.magicRoomTurns === 0 && targetSlot.pokemon.item === 'clearamulet') {
 				const hasNegativeBoosts = Object.values(move.boosts).some(boost => (boost || 0) < 0);
 				if (hasNegativeBoosts) {
@@ -1808,7 +1807,7 @@ function handleStatusMove(
 					return;
 				}
 			}
-	
+
 			for (const stat in move.boosts) {
 				const stage = targetStages[stat as keyof typeof targetStages];
 				const boostValue = move.boosts[stat as keyof typeof move.boosts]!;
@@ -1822,7 +1821,7 @@ function handleStatusMove(
 			const defenderCurrentStatus = defenderSlot.status;
 			let canBeAfflicted = !defenderCurrentStatus;
 			const defenderIsGrounded = isGrounded(defender, battle);
-	
+
 			if (battle.terrain?.type === 'misty' && defenderIsGrounded) {
 				canBeAfflicted = false;
 				messageLog.push('The Misty Terrain prevents status conditions!');
@@ -1831,13 +1830,13 @@ function handleStatusMove(
 				canBeAfflicted = false;
 				messageLog.push('The Electric Terrain prevents sleep!');
 			}
-	
+
 			if (canBeAfflicted) {
 				if ((move.status === 'brn' && defenderSpecies.types.includes('Fire')) || (move.status === 'par' && defenderSpecies.types.includes('Electric')) || (move.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (move.status === 'frz' && defenderSpecies.types.includes('Ice'))) {
 					canBeAfflicted = false;
 				}
 			}
-	
+
 			if (canBeAfflicted) {
 				const newStatus = move.status as Status;
 				defenderSlot.status = newStatus;
@@ -1857,7 +1856,7 @@ function handleStatusMove(
 					hadEffect = true;
 				}
 				break;
-	
+
 			case 'taunt':
 				if (defenderSlot.tauntTurns <= 0) {
 					defenderSlot.tauntTurns = 3;
@@ -1865,7 +1864,7 @@ function handleStatusMove(
 					hadEffect = true;
 				}
 				break;
-	
+
 			case 'trap':
 				if (!defenderSlot.isTrapped) {
 					defenderSlot.isTrapped = { turns: 5 };
@@ -1885,7 +1884,7 @@ function handleStatusMove(
 			hadEffect = true;
 		}
 	}
-	
+
 	// --- Handle moves that don't target a single defender ---
 
 	// Handle Protect and Detect
@@ -1915,7 +1914,7 @@ function handleStatusMove(
 			if (move.id === 'wideguard') { battle.opponentWideGuard = true; guardSet = true; }
 			if (move.id === 'craftyshield') { battle.opponentCraftyShield = true; guardSet = true; }
 		}
-		
+
 		if (guardSet) {
 			messageLog.push(`${attacker.species} is protecting its side!`);
 		} else {
@@ -1959,7 +1958,7 @@ function handleStatusMove(
 		if (!hadEffect) messageLog.push('But it failed!');
 		return;
 	}
-	
+
 	// Handle new field effects
 	if (move.id === 'gravity') {
 		if (battle.gravityTurns > 0) {
@@ -2041,7 +2040,7 @@ function handleStatusMove(
 		messageLog.push(`${attacker.species} became the center of attention!`);
 		hadEffect = true;
 	}
-	
+
 	if (move.id === 'haze') {
 		// Haze affects all slots
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
@@ -2141,7 +2140,7 @@ function handleStatusMove(
 		// We set the flag there
 		hadEffect = true;
 	}
-	
+
 	if (!hadEffect) {
 		messageLog.push(`But it failed!`);
 	}
@@ -2157,7 +2156,7 @@ function handleDamagingMove(
 ) {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
-	
+
 	// Check for semi-invulnerable state from two-turn moves
 	const defenderChargingMoveId = defenderSlot.chargingMove;
 	if (defenderChargingMoveId) {
@@ -2194,7 +2193,7 @@ function handleDamagingMove(
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		const accuracy = 30 + attacker.level - defender.level;
 		if (Math.random() * 100 < accuracy) {
 			defender.hp = 0;
@@ -2282,7 +2281,7 @@ function handleDamagingMove(
 			defender.item = undefined;
 		}
 
-		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'airballoon' && 
+		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'airballoon' &&
 			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defender.species}'s Air Balloon popped!`);
 			defender.item = undefined;
@@ -2352,14 +2351,14 @@ function handleDamagingMove(
 
 			if (attacker.hp > 0) {
 				let tookRecoil = false;
-				
+
 				if (['mindblown', 'steelbeam'].includes(move.id)) {
 					const recoilDamage = Math.floor(attacker.maxHp / 2);
 					attacker.hp = Math.max(0, attacker.hp - recoilDamage);
 					messageLog.push(`${attacker.species} was damaged by the move's recoil!`);
 					tookRecoil = true;
 				}
-				
+
 				if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 					attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 					messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
@@ -2408,13 +2407,13 @@ function handleDamagingMove(
 							const defenderCurrentStatus = defenderSlot.status;
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
-							
-							if ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) || 
-								(randomStatus === 'par' && defenderSpecies.types.includes('Electric')) || 
+
+							if ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) ||
+								(randomStatus === 'par' && defenderSpecies.types.includes('Electric')) ||
 								(randomStatus === 'frz' && defenderSpecies.types.includes('Ice'))) {
 								canBeAfflicted = false;
 							}
-							
+
 							if (canBeAfflicted) {
 								defenderSlot.status = randomStatus;
 								messageLog.push(`${defender.species} was afflicted with ${randomStatus}!`);
@@ -2491,7 +2490,7 @@ function handleDamagingMove(
 	if (attacker.hp > 0 && move.id === 'rapidspin') {
 		let clearedSomething = false;
 		const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-		
+
 		if (isPlayerAttacker) {
 			if (battle.playerHazards.length > 0) { battle.playerHazards = []; clearedSomething = true; }
 			if (attackerSlot.isSeeded) { attackerSlot.isSeeded = false; clearedSomething = true; }
@@ -2508,12 +2507,12 @@ function handleDamagingMove(
 			messageLog.push(`${attacker.species}'s Speed rose!`);
 		}
 	}
-	
+
 	// --- Trapping Move Application ---
 	if (defender.hp > 0 && move.volatileStatus === 'partiallytrapped') {
 		if (!defenderSlot.isTrapped) {
 			const turns = Math.floor(Math.random() * 3) + 4; // 4, 5, or 6 turns
-			defenderSlot.isTrapped = { turns: turns };
+			defenderSlot.isTrapped = { turns };
 			messageLog.push(`${defender.species} was trapped!`);
 		}
 	}
@@ -2558,7 +2557,7 @@ function handleDamagingMove(
 function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	// **NEW:** Magic Room disables all held items.
 	if (battle.magicRoomTurns > 0) return;
-	
+
 	const pokemon = slot.pokemon;
 
 	// No effect if fainted, no item, or if an item was already consumed this turn (prevents multiple berries activating)
@@ -2853,12 +2852,12 @@ function executeMove(
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
 	}
-	
+
 	// --- Calculate Spread Multiplier ---
 	const isSpread = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target);
 	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
-	
+
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break; // Attacker fainted mid-move (e.g. from ally recoil)
 		if (defenderSlot.pokemon.hp <= 0) continue; // Target fainted mid-move (e.g. from first hit of spread)
@@ -2885,7 +2884,7 @@ function executeMove(
 				continue; // Move fails against this target
 			}
 		}
-		
+
 		// 6. Accuracy Check
 		let moveHit = true;
 		if (['aerialace'].includes(move.id)) {
@@ -2905,17 +2904,17 @@ function executeMove(
 					moveAccuracy = 100;
 				}
 			}
-	
+
 			// Gravity increases accuracy by 5/3 (approx 1.67x)
 			if (battle.gravityTurns > 0) {
 				moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
 			}
-			
+
 			const finalAccuracy = moveAccuracy * (accuracyMultiplier / evasionMultiplier);
 			if ((Math.random() * 100) > finalAccuracy) {
 				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
-				
+
 				if (['highjumpkick', 'jumpkick'].includes(move.id)) {
 					const crashDamage = Math.floor(attackerSlot.pokemon.maxHp / 2);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - crashDamage);
@@ -2923,7 +2922,7 @@ function executeMove(
 				}
 			}
 		}
-		
+
 		if (!moveHit) {
 			continue; // Move missed this target
 		}
@@ -2962,7 +2961,7 @@ function checkBattleEndCondition(
 		if (slot && slot.pokemon.hp <= 0) {
 			opponentFainted = true;
 			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
-			
+
 			// Grant EXP to all active player Pokemon
 			if (playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
@@ -3019,18 +3018,18 @@ function checkBattleEndCondition(
 		// PLAYER LOSES
 		saveBattleStatus(battle);
 		activeBattles.delete(user.id);
-		
+
 		let moneyLost = 100;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyLost = Math.floor(battle.opponentMoney / 10) || 200;
 		}
 		moneyLost = Math.min(player.money, moneyLost);
 		player.money -= moneyLost;
-		
+
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
 		return true; // Battle ended
 	}
-	
+
 	// B. Check for Player Win (No Opponent Pokemon left in party or field)
 	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
 		p.hp > 0 &&
@@ -3042,7 +3041,7 @@ function checkBattleEndCondition(
 		// PLAYER WINS
 		saveBattleStatus(battle);
 		activeBattles.delete(user.id);
-		
+
 		let moneyGained = 0;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyGained = battle.opponentMoney;
@@ -3065,7 +3064,7 @@ function checkBattleEndCondition(
 		}
 		return true; // Battle ended
 	}
-	
+
 	// C. Check for Player Pivot Switch (U-turn, etc.)
 	if (battle.pendingPivot) {
 		// Battle is interrupted, player must switch.
@@ -3080,13 +3079,13 @@ function checkBattleEndCondition(
 			!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
 		);
 		const slotIndex = battle.aiPendingPivot.slotIndex;
-		
+
 		if (nextOpponent) {
 			messageLog.push(`**${battle.opponentName} withdrew ${battle.aiPendingPivot.slot.pokemon.species}!**`);
 			messageLog.push(`**${battle.opponentName} sent out ${nextOpponent.species}!**`);
-			
+
 			const newSlot = createActivePokemonSlot(nextOpponent);
-			
+
 			// Handle Baton Pass
 			if (battle.aiPendingPivot.isBatonPass) {
 				newSlot.statStages = { ...battle.aiPendingPivot.slot.statStages };
@@ -3095,7 +3094,7 @@ function checkBattleEndCondition(
 				newSlot.isSeeded = battle.aiPendingPivot.slot.isSeeded;
 				messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
 			}
-			
+
 			battle.opponentSlots[slotIndex as 2 | 3] = newSlot;
 
 			// Apply hazards on switch-in
@@ -3113,7 +3112,7 @@ function checkBattleEndCondition(
 		}
 		battle.aiPendingPivot = undefined; // Clear flag
 	}
-	
+
 	// E. Check for Player Faint Switch-In Needed
 	if (playerFaintSwitchNeeded && playerHasLivingPokemon) {
 		// Battle is interrupted, player must switch.
@@ -3133,7 +3132,7 @@ function checkBattleEndCondition(
 function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	// Get all active slots before effects start
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
-	
+
 	// Reset flinch status for all active slots
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
@@ -3145,7 +3144,7 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 			handleEndOfTurnEffects(slot, battle, messageLog);
 		}
 	}
-	
+
 	// Handle effects that apply to the whole field (weather, terrain, rooms)
 	handleEndOfTurnWeather(battle, messageLog);
 	handleEndOfTurnFieldEffects(battle, messageLog);
@@ -3414,7 +3413,7 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User) {
 	const messageLog: string[] = [];
 	battle.turn++;
-	
+
 	// --- Reset side-wide guards ---
 	battle.playerQuickGuard = false;
 	battle.opponentQuickGuard = false;
@@ -3422,13 +3421,12 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	battle.opponentWideGuard = false;
 	battle.playerCraftyShield = false;
 	battle.opponentCraftyShield = false;
-	
+
 	// --- Reset per-pokemon flags ---
 	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
 	});
-
 
 	// 1. Generate AI Actions
 	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
@@ -3439,7 +3437,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	});
 
 	// 2. Build and Sort Action Order
-	let actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
+	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
 	let allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
 	for (const slotIndex in battle.pendingActions) {
@@ -3461,7 +3459,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		// --- Handle switch priority ---
 		const isSwitchA = a.actionType === 'switch';
 		const isSwitchB = b.actionType === 'switch';
-		
+
 		// Switches have +6 priority
 		const priorityA = isSwitchA ? 6 : (Dex.moves.get(a.moveId || 'struggle').priority);
 		const priorityB = isSwitchB ? 6 : (Dex.moves.get(b.moveId || 'struggle').priority);
@@ -3486,7 +3484,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	// 3. Execute Actions in order
 	for (const action of actionQueue) {
 		executeAction(action, battle, room, user, messageLog);
-		
+
 		// --- Faint Check (Mid-turn) ---
 		// Check for faints caused by this action
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
@@ -3494,13 +3492,13 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 			return; // Battle ended or is waiting for a switch
 		}
 	}
-	
+
 	// 4. End-of-Turn Effects
 	if (battle.forceEnd) {
 		// Handled by checkBattleEndCondition or executeAction
 		return;
 	}
-	
+
 	messageLog.push("--- End of Turn ---");
 	processEndOfTurn(battle, messageLog);
 
@@ -3583,7 +3581,7 @@ function executeAction(
 	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
 		return;
 	}
-	
+
 	// --- Reset redirection flag at the start of a pokemon's turn ---
 	attackerSlot.isRedirecting = false;
 
@@ -3591,30 +3589,30 @@ function executeAction(
 	if (action.actionType === 'switch' && action.switchToPokemonId) {
 		const isPlayerSwitch = attackerSlotIndex <= 1;
 		const pokemonToSwitchInId = action.switchToPokemonId;
-		
+
 		if (isPlayerSwitch) {
 			const outgoingPokemon = attackerSlot.pokemon;
-			
+
 			// Find new Pokemon in party
 			const partyIndex = player.party.findIndex(p => p.id === pokemonToSwitchInId);
 			if (partyIndex === -1) {
 				messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
 				return;
 			}
-			
+
 			// Save outgoing Pokemon's status to the party
 			saveBattleStatus(battle); // This function needs to be updated in Step 7
-			
+
 			// Add outgoing Pokemon back to party
 			player.party.push(outgoingPokemon);
-			
+
 			// Remove incoming Pokemon from party
 			const [incomingPokemon] = player.party.splice(partyIndex, 1);
-			
+
 			// Create new slot
 			const newSlot = createActivePokemonSlot(incomingPokemon);
 			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
-			
+
 			messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
 
 			// Apply hazards
@@ -3628,7 +3626,7 @@ function executeAction(
 		} else {
 			// --- AI SWITCH LOGIC ---
 			const outgoingPokemon = attackerSlot.pokemon;
-			
+
 			// Find new Pokemon in party
 			const replacement = battle.opponentParty.find(p =>
 				p.hp > 0 &&
@@ -3638,9 +3636,9 @@ function executeAction(
 			if (replacement) {
 				const newSlot = createActivePokemonSlot(replacement);
 				battle.opponentSlots[attackerSlotIndex as 2 | 3] = newSlot;
-				
+
 				messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
-				
+
 				// Apply hazards
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 				if (faintedOnEntry) {
@@ -3685,7 +3683,7 @@ function executeAction(
 		let chosenTargetSlot = action.targetSlot;
 		const isPlayerAttacker = attackerSlotIndex <= 1;
 		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
-		
+
 		// --- Check for redirection ---
 		const redirector = opponentSlots.find(s => s.isRedirecting);
 		if (redirector && move.target === 'normal') { // Check move is single-target
@@ -3693,7 +3691,7 @@ function executeAction(
 			chosenTargetSlot = redirectorIndex;
 			messageLog.push(`${redirector.pokemon.species} took the attack!`);
 		}
-		
+
 		const targetSlots = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
 
 		// 4. Announce and Execute the Move
@@ -3706,7 +3704,7 @@ function executeAction(
 
 		// 5. Execute move against all targets
 		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
-		
+
 		// 6. Handle U-turn/Volt Switch (self-switch after move)
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
 			const isPlayer = attackerSlotIndex <= 1;
@@ -3762,7 +3760,7 @@ function generateSingleBattleHTML(
 		// This should not happen in a single battle
 		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>`;
 	}
-	
+
 	const playerPokemon = playerSlot.pokemon;
 
 	let actionHTML = '';
@@ -3777,9 +3775,9 @@ function generateSingleBattleHTML(
 
 		const isTauntBlocked = playerSlot.tauntTurns > 0 &&
 			moveData.category === 'Status';
-			
+
 		// --- FIX: Check Choice Item Lock ---
-		const isLocked = playerSlot.lockedMove && 
+		const isLocked = playerSlot.lockedMove &&
 			playerSlot.lockedMove !== move.id &&
 			battle.magicRoomTurns === 0 &&
 			// Check if the locked move still has PP
@@ -3792,7 +3790,7 @@ function generateSingleBattleHTML(
 		// We now send the full move command directly, hardcoding attacker=0 and target=2.
 		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
 	}).join('');
-	
+
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
 		`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
@@ -3800,25 +3798,25 @@ function generateSingleBattleHTML(
 	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
-	
+
 	actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
-	`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
-	`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
+		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
+		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
 	// --- END MODIFICATION ---
 
 	return `<div class="infobox"><h2>Battle!</h2>` +
-	`${generateFieldEffectHTML(battle)}` +
-	`<div style="display: flex; justify-content: space-around;">` +
-		// Player Pokemon
+		`${generateFieldEffectHTML(battle)}` +
+		`<div style="display: flex; justify-content: space-around;">` +
+	// Player Pokemon
 		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot, true)}</div>` +
-		// Opponent Pokemon
+	// Opponent Pokemon
 		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot, false)}</div>` +
-	`</div><hr />` +
+		`</div><hr />` +
 	// Message Log
-	`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
+		`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
 	// Action Area
-	actionHTML +
-	`</div>`;
+		actionHTML +
+		`</div>`;
 }
 
 function generateWelcomeHTML(): string {
@@ -3922,12 +3920,12 @@ function generatePokemonInfoHTML(
 
 	// --- UPDATE RENDER LINE ---
 	let html = `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon> <strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
-	
+
 	// --- MODIFICATION: Add conditional elements ---
 	if (isPlayerSide) {
 		html += `${expBarHTML}${expDisplay}${natureDisplay}${abilityDisplay}${movesDisplay}`;
 	}
-	
+
 	html += itemDisplay; // This is already conditional
 	// --- END MODIFICATION ---
 
@@ -3957,7 +3955,7 @@ function generateDoubleBattleHTML(
 		if (slot.pokemon.hp <= 0) {
 			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
 		}
-		
+
 		let borderStyle = "1px solid #ccc";
 		// Check if this slot is a pending target
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
@@ -4015,7 +4013,7 @@ function generateDoubleBattleHTML(
 	} else {
 		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
-		let activeSlotIndex: number = -1;
+		let activeSlotIndex = -1;
 
 		// Find the next player slot that needs to act
 		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
@@ -4034,11 +4032,11 @@ function generateDoubleBattleHTML(
 			const moves = pokemon.moves;
 			for (const move of moves) {
 				const moveData = Dex.moves.get(move.id);
-				
+
 				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
 					pokemon.item === 'assaultvest' &&
 					moveData.category === 'Status';
-				
+
 				const isTauntBlocked = activeSlot.tauntTurns > 0 &&
 					moveData.category === 'Status';
 
@@ -4133,40 +4131,40 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<p><strong>Friendship:</strong> ' + pokemon.friendship + '/255</p>' +
 		'</div>' +
 		'<div style="flex-basis: 48%;">' +
-			'<h4>IVs</h4>' +
-				'<table style="width: 100%; border-collapse: collapse;">' +
-				'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.hp + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.atk + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.def + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spa + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spd + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spe + '</td></tr>' +
-				'</table>' +
-				'</div>' +
-					'</div>' +
-					'<hr />' +
-					'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
-					'<div style="flex-basis: 48%;">' +
-					'<h4>EVs</h4>' +
-					'<table style="width: 100%; border-collapse: collapse;">' +
-				'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
-				'</table>' +
-				'<small>Total: ' + totalEVs + ' / 510</small>' +
-				'</div>' +
-				'<div style="flex-basis: 48%;">' +
-				'<h4>Moves</h4>' +
-				'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
-			movesSummary +
+		'<h4>IVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.hp + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.atk + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.def + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spa + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spd + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spe + '</td></tr>' +
+		'</table>' +
+		'</div>' +
 			'</div>' +
-				'</div>' +
-				'</div>' +
-					'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
-					'</div>';
+				'<hr />' +
+				'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+				'<div style="flex-basis: 48%;">' +
+				'<h4>EVs</h4>' +
+				'<table style="width: 100%; border-collapse: collapse;">' +
+			'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
+			'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
+				'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
+				'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
+					'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
+					'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
+					'</table>' +
+					'<small>Total: ' + totalEVs + ' / 510</small>' +
+					'</div>' +
+					'<div style="flex-basis: 48%;">' +
+				'<h4>Moves</h4>' +
+			'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
+		movesSummary +
+		'</div>' +
+		'</div>' +
+			'</div>' +
+				'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+				'</div>';
 }
 
 function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
@@ -4279,9 +4277,9 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 			pokeBalls.push(item);
 		}
 	}
-	
+
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
-	
+
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
@@ -4296,7 +4294,7 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 				// Singles: Hardcode target to slot 2 (the only opponent)
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
-			
+
 			html += `<div style="text-align: center; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="${command}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button></div>`;
 		}
 		html += `</div>`;
@@ -4308,26 +4306,29 @@ function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string 
 function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
 	let html = `<div class="infobox"><h2>Select a Target</h2>`;
 	html += `<p>Choose which wild Pokémon to throw the ${ITEMS_DATABASE[ballId]?.name || 'Poke Ball'} at:</p>`;
-	
+
 	// Show all active opponent Pokemon as targets
-	const activeOpponents = getActiveSlots(battle.opponentSlots);
-	
-	if (activeOpponents.length === 0) {
-		html += `<p>No targets available!</p>`;
-	} else {
-		for (const slot of activeOpponents) {
-			const slotIndex = battle.opponentSlots.indexOf(slot);
-			const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
-			const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
-			
-			html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">` +
-				`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
-				`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
-				`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
+	let hasTargets = false;
+	for (let i = 0; i < battle.opponentSlots.length; i++) {
+		const slot = battle.opponentSlots[i];
+		if (!slot || slot.pokemon.hp <= 0) continue;
+
+		hasTargets = true;
+		const slotIndex = i + 2; // Opponent slots are indices 2 and 3
+		const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
+		const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
+
+		html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">` +
+			`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
+			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
+			`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
 			`</div>`;
-		}
 	}
-	
+
+	if (!hasTargets) {
+		html += `<p>No targets available!</p>`;
+	}
+
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
@@ -4336,7 +4337,7 @@ function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="infobox"><h2>Choose a Pokémon to switch</h2>`;
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSlots;
-	
+
 	const slotToSwitchOut = parseInt(target || '');
 
 	if (isNaN(slotToSwitchOut)) {
@@ -4356,12 +4357,12 @@ function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 		}
 
 		html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
-		
+
 		const availableParty = player.party.filter(p =>
 			p.hp > 0 &&
 			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 		);
-		
+
 		if (availableParty.length === 0) {
 			html += `<p>You have no other Pokémon to switch to!</p>`;
 		} else {
@@ -4369,7 +4370,7 @@ function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 				html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
 					`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
 					`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
-				`</div>`;
+					`</div>`;
 			}
 		}
 	}
@@ -4450,7 +4451,7 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">` +
 			`<span>${pokemon.species} (Holding: ${pokemon.item ? ITEMS_DATABASE[pokemon.item].name : 'None'})</span>` +
 			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
-		`</div>`;
+			`</div>`;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
 	return html;
@@ -4484,9 +4485,9 @@ function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlot
 
 function generateFieldEffectHTML(battle: BattleState): string {
 	let html = '<div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
-	let fieldEffects: string[] = [];
-	let playerSide: string[] = [];
-	let opponentSide: string[] = [];
+	const fieldEffects: string[] = [];
+	const playerSide: string[] = [];
+	const opponentSide: string[] = [];
 
 	// --- Global Field Effects ---
 	if (battle.weather) {
@@ -4585,10 +4586,10 @@ export const commands: ChatCommands = {
 				// Create a temporary slot object to pass to the updated function.
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
-				
+
 				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
-				
+
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter pokemon!`).update();
@@ -4656,7 +4657,7 @@ export const commands: ChatCommands = {
 
 		learneggmove(target, room, user) {
 			const player = getPlayerData(user.id);
-			
+
 			// --- FIX: Correctly parse multi-word moves ---
 			const parts = target.split(' ');
 			if (parts.length < 2) {
@@ -4676,7 +4677,7 @@ export const commands: ChatCommands = {
 			}
 			const speciesId = toID(pokemon.species);
 			const eggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
-			
+
 			// This check will now correctly use "magical leaf"
 			if (!eggMoves.includes(rawMoveId)) {
 				return this.errorReply("This is not a valid Egg Move for this Pokemon.");
@@ -4806,7 +4807,7 @@ export const commands: ChatCommands = {
 					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
-				
+
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(targetPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -4882,7 +4883,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 			// --- END FIX ---
 		},
-		
+
 		shop(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
@@ -4944,7 +4945,7 @@ export const commands: ChatCommands = {
 			} else {
 				exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
 			}
-			
+
 			// --- EXAMPLE of how to add a trainer ---
 			// You would add logic here to check if the trainer should appear
 			// For example: if (!player.badges.includes('boulder')) {
@@ -5024,14 +5025,14 @@ export const commands: ChatCommands = {
 					// --- Battle Type Fields ---
 					battleType: finalBattleType,
 					opponentName: `Wild Pokémon`,
-					opponentParty: opponentParty,
+					opponentParty,
 					opponentMoney: 0,
-					
+
 					// --- New Slot-Based Fields ---
 					playerSlots,
 					opponentSlots,
 					pendingActions: {},
-					
+
 					// --- Core BattleState Fields ---
 					playerId: user.id,
 					turn: 0,
@@ -5071,7 +5072,7 @@ export const commands: ChatCommands = {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
 		},
-		
+
 		// --- NEW COMMAND ---
 		challenge(target, room, user) {
 			if (activeBattles.has(user.id)) {
@@ -5119,7 +5120,7 @@ export const commands: ChatCommands = {
 
 			// --- Opponent Pokemon ---
 			opponentSlots[0] = createActivePokemonSlot(trainerParty[0]);
-			
+
 			if (battleType === 'double') {
 				finalBattleType = 'trainer_double';
 				// Add second player Pokemon if available
@@ -5133,7 +5134,7 @@ export const commands: ChatCommands = {
 			} else {
 				finalBattleType = 'trainer';
 			}
-			
+
 			activeBattles.set(user.id, {
 				// --- Battle Type Fields ---
 				battleType: finalBattleType,
@@ -5264,7 +5265,6 @@ export const commands: ChatCommands = {
 				}
 				// --- END FIX ---
 
-
 				// --- Queue the action ---
 				battle.pendingActions[attackerSlotIndex] = {
 					actionType: 'move',
@@ -5287,7 +5287,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
-			
+
 			// --- NEW FUNCTION ---
 			selecttarget(target, room, user) {
 				const battle = activeBattles.get(user.id);
@@ -5308,7 +5308,7 @@ export const commands: ChatCommands = {
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
-				
+
 				const [slotStr, pokemonId] = target.split(' ');
 				const slotToFill = parseInt(slotStr);
 
@@ -5328,23 +5328,23 @@ export const commands: ChatCommands = {
 				}
 
 				const player = getPlayerData(battle.playerId);
-				
+
 				// Find the Pokemon in the party
 				const partyIndex = player.party.findIndex(p => p.id === pokemonId && p.hp > 0);
 				if (partyIndex === -1) {
 					return this.errorReply("Invalid Pokemon or it has fainted.");
 				}
-				
+
 				// Check if this Pokemon is already in battle
 				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonId)) {
 					return this.errorReply("This Pokemon is already in battle.");
 				}
-				
+
 				// Check if the slot is actually empty (it should be, if faint or pivot)
 				if (battle.playerSlots[slotToFill] !== null && !battle.pendingPivot) {
 					return this.errorReply("This slot is not empty.");
 				}
-				
+
 				// --- Execute the Switch ---
 				const [nextPokemon] = player.party.splice(partyIndex, 1);
 				const newSlot = createActivePokemonSlot(nextPokemon);
@@ -5370,7 +5370,7 @@ export const commands: ChatCommands = {
 					battle.pendingPivot = undefined; // Clear the pivot flag
 				}
 				// (If not a pivot, it was a faint switch. The fainted mon is already in the party at 0 HP)
-				
+
 				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
 
 				// --- Apply Hazards ---
@@ -5384,7 +5384,7 @@ export const commands: ChatCommands = {
 				// --- Check if more switches are needed ---
 				const needsAnotherSwitch = battle.playerSlots.some(s => s === null) &&
 					player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
-					
+
 				if (needsAnotherSwitch) {
 					// Another slot is empty, show the switch screen again
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
@@ -5393,7 +5393,7 @@ export const commands: ChatCommands = {
 					// Check if this switch *ended* the turn
 					const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
 					const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
-					
+
 					if (submittedPlayerActions === activePlayerSlots) {
 						// All actions for this turn are complete, process it
 						processTurn(this, battle, room, user);
@@ -5419,7 +5419,7 @@ export const commands: ChatCommands = {
 				if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) {
 					return this.errorReply("The Pokémon in that slot has fainted or is not there.");
 				}
-				
+
 				// --- NEW TRAP CHECK ---
 				if (outgoingSlot.isTrapped) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
@@ -5428,7 +5428,7 @@ export const commands: ChatCommands = {
 				}
 
 				const player = getPlayerData(battle.playerId);
-				
+
 				// Check if incoming Pokemon is valid
 				const incomingPokemon = player.party.find(p => p.id === pokemonIdIn && p.hp > 0);
 				if (!incomingPokemon) {
@@ -5481,14 +5481,14 @@ export const commands: ChatCommands = {
 				}
 				const ballId = toID(target);
 				if (!ballId) return this.errorReply("No ball selected.");
-				
+
 				// If only one target, just catch it.
 				const activeOpponents = getActiveSlots(battle.opponentSlots);
 				if (activeOpponents.length === 1) {
 					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]);
 					return this.parse(`/rpg battleaction catch ${ballId} ${slotIndex}`);
 				}
-				
+
 				// Show target selection screen
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchTargetHTML(battle, ballId)}`);
 			},
@@ -5496,30 +5496,30 @@ export const commands: ChatCommands = {
 			catch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
-				
+
 				// --- NEW: Read target ---
 				const [ballId, slotIndexStr] = target.split(' ');
 				const targetSlotIndex = parseInt(slotIndexStr);
-				
+
 				if (!ballId || isNaN(targetSlotIndex)) {
 					return this.errorReply("Invalid catch command. Usage: /rpg battleaction catch [ballId] [slotIndex]");
 				}
-				
+
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't catch a Trainer's Pokémon!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
 				}
-				
+
 				// --- NEW: Get target slot ---
 				const targetSlot = getSlotFromIndex(battle, targetSlotIndex);
 				if (!targetSlot || (targetSlotIndex !== 2 && targetSlotIndex !== 3)) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["That is not a valid target!"])}`);
 				}
-				
+
 				// --- NEW: Queue AI moves for other slots ---
 				battle.turn++;
 				battle.pendingActions = {}; // Clear previous actions
-				
+
 				// Player action is "catch"
 				// We need to find which player slot to "use" for turn order, just pick the first one
 				const playerSlot = getActiveSlots(battle.playerSlots)[0];
@@ -5532,7 +5532,7 @@ export const commands: ChatCommands = {
 						pokemonId: playerSlot.pokemon.id,
 					};
 				}
-				
+
 				// Generate AI actions for all *other* opponents
 				getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
 					const slotIndex = battle.opponentSlots.indexOf(slot);
@@ -5540,7 +5540,7 @@ export const commands: ChatCommands = {
 						battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
 					}
 				});
-				
+
 				// Find other player Pokemon to generate a "wait" action
 				const otherPlayerSlot = getActiveSlots(battle.playerSlots)[1];
 				if (otherPlayerSlot) {
@@ -5552,7 +5552,7 @@ export const commands: ChatCommands = {
 						pokemonId: otherPlayerSlot.pokemon.id,
 					};
 				}
-				
+
 				// --- END NEW ---
 
 				const player = getPlayerData(battle.playerId);
@@ -5574,7 +5574,7 @@ export const commands: ChatCommands = {
 
 				const messageLog: string[] = [];
 				messageLog.push(`<span style="color: ${playerColor};">${player.name} used a ${ballItem.name}!</span>`);
-				
+
 				// --- NEW: Pass the target slot to performCatchAttempt ---
 				const catchResult = performCatchAttempt(battle, ballId, targetSlot);
 				const shakeMessages = [
@@ -5617,7 +5617,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
-					
+
 					// --- NEW: Run the rest of the turn ---
 					// The catch "action" is done. Now process the rest of the turn (AI moves).
 					processTurn(this, battle, room, user);
@@ -5633,7 +5633,7 @@ export const commands: ChatCommands = {
 					this.errorReply("You can't run from a Trainer battle!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't run from a Trainer battle!"])}`);
 				}
-				
+
 				// --- NEW: Check if any active pokemon is trapped ---
 				const playerSlots = getActiveSlots(battle.playerSlots);
 				const trappedPokemon = playerSlots.find(slot => slot.isTrapped);
@@ -5666,12 +5666,12 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
 				}
 			},
-			
+
 			help() {
 				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|run]");
 			},
 		},
-		
+
 		heal(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot heal your Pokemon during a battle.");
@@ -5696,7 +5696,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
 		},
 
-			giveitem(target, room, user) {
+		giveitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const [pokemonId, itemId] = target.split(' ').map(toID);
@@ -5747,8 +5747,8 @@ export const commands: ChatCommands = {
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
-			
-		 takeitem(target, room, user) {
+
+		takeitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const pokemonId = toID(target);
@@ -5779,7 +5779,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
-			nickname(target, room, user) {
+		nickname(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot change nicknames during a battle.");
 			}
