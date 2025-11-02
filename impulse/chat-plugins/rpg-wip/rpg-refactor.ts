@@ -5000,7 +5000,7 @@ function generateSingleBattleHTML(
 	});
 
 	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
-	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 5px 0;">`;
+	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 10px 0;">`;
 	moveButtonsHTML += `<tr>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
