@@ -29,7 +29,7 @@
         "sets": [
             {
                 "role": "Spinner",
-                "movepool": ["icebeam", "rapidspin", "rest", "roar", "surf", "toxic"],
+                "movepool": ["icebeam", "rapidspin", "roar", "surf", "toxic"],
                 "abilities": ["Torrent"]
             },
             {
@@ -401,7 +401,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["flareblitz", "hypnosis", "megahorn", "morningsun", "willowisp"],
+                "movepool": ["flareblitz", "megahorn", "morningsun", "toxic", "willowisp"],
                 "abilities": ["Flash Fire"]
             }
         ]
@@ -1167,7 +1167,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "encore", "icebeam", "recover", "toxic", "waterfall"],
+                "movepool": ["earthquake", "icebeam", "recover", "toxic"],
+                "abilities": ["Water Absorb"]
+            },
+            {
+            
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "recover", "toxic", "waterfall"],
                 "abilities": ["Water Absorb"]
             }
         ]
@@ -1978,7 +1984,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["aquatail", "earthquake", "headsmash", "icepunch", "rockpolish", "stealthrock"],
+                "movepool": ["aquatail", "earthquake", "headsmash", "icepunch", "stealthrock"],
+                "abilities": ["Rock Head"],
+                "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["aquatail", "earthquake", "headsmash", "icepunch", "rockpolish"],
                 "abilities": ["Rock Head"],
                 "preferredTypes": ["Ground"]
             }

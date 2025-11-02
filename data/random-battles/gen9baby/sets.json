@@ -88,6 +88,17 @@
             }
         ]
     },
+    "beldum": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Iron Defense", "Iron Head", "Steel Beam", "Zen Headbutt"],
+                "abilities": ["Clear Body"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
     "bellsprout": {
         "level": 7,
         "sets": [
@@ -421,7 +432,7 @@
                 "role": "Setup Sweeper",
                 "movepool": ["Aqua Jet", "Crabhammer", "Dragon Dance", "Knock Off"],
                 "abilities": ["Adaptability"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Dark"]
             }
         ]
     },
@@ -1130,9 +1141,9 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Dragon Pulse", "Rest", "Sleep Talk", "Sludge Bomb", "Thunderbolt"],
+                "movepool": ["Dragon Pulse", "Rest", "Sleep Talk", "Sludge Bomb"],
                 "abilities": ["Sap Sipper"],
-                "teraTypes": ["Electric", "Poison", "Water"]
+                "teraTypes": ["Poison", "Water"]
             }
         ]
     },
@@ -1539,7 +1550,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Energy Ball", "Flamethrower", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
+                "movepool": ["Calm Mind", "Energy Ball", "Flame Charge", "Flamethrower", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
                 "abilities": ["Flame Body", "Flash Fire"],
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
             },
@@ -2385,7 +2396,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Dragon Dance", "Knock Off", "Poison Jab"],
+                "movepool": ["Dragon Dance", "Drain Punch", "Knock Off", "Poison Jab"],
                 "abilities": ["Intimidate", "Moxie"],
                 "teraTypes": ["Poison"]
             }
@@ -2865,7 +2876,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Double-Edge", "Earthquake", "Hypnosis", "Megahorn", "Shadow Ball", "Thunder Wave", "Trick"],
+                "movepool": ["Double-Edge", "Earthquake", "Hypnosis", "Megahorn", "Throat Chop", "Thunder Wave", "Trick"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Ground"]
             },
@@ -3130,6 +3141,12 @@
                 "movepool": ["Body Slam", "Bullet Seed", "Crunch", "Earth Power", "Shell Smash"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Grass", "Ground"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bullet Seed", "Shell Smash", "Superpower", "Zen Headbutt"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -3140,7 +3157,7 @@
                 "role": "Tera Blast user",
                 "movepool": ["Knock Off", "Spark", "Tera Blast", "Thunder Wave"],
                 "abilities": ["Levitate"],
-                "teraTypes": ["Ground", "Ice"]
+                "teraTypes": ["Ice"]
             },
             {
                 "role": "Fast Support",

@@ -699,7 +699,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["hydropump", "icebeam", "psyshock", "recover", "thunderbolt"],
-                "abilities": ["Analytic"]
+                "abilities": ["Analytic", "Natural Cure"]
             },
             {
                 "role": "Bulky Support",
@@ -1284,7 +1284,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerpsychic"],
+                "movepool": ["hiddenpowerfighting", "hiddenpowerpsychic"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -2047,9 +2047,14 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["aquatail", "earthquake", "headsmash", "heavyslam", "rockpolish", "stealthrock", "thunderwave"],
+                "movepool": ["aquatail", "earthquake", "headsmash", "heavyslam", "stealthrock", "thunderwave"],
                 "abilities": ["Rock Head"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "headsmash", "heavyslam", "rockpolish"],
+                "abilities": ["Rock Head"]
             }
         ]
     },
@@ -4040,10 +4045,14 @@
         "level": 87,
         "sets": [
             {
+                "role": "Fast Attacker",
+                "movepool": ["crunch", "facade", "return", "superpower"],
+                "abilities": ["Scrappy"]
+            },
+            {
                 "role": "Bulky Attacker",
-                "movepool": ["crunch", "return", "superpower", "thunderwave", "wildcharge"],
-                "abilities": ["Scrappy"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["crunch", "return", "superpower", "thunderwave"],
+                "abilities": ["Intimidate"]
             }
         ]
     },
@@ -4808,7 +4817,8 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["darkpulse", "dracometeor", "fireblast", "focusblast", "roost", "uturn"],
-                "abilities": ["Levitate"]
+                "abilities": ["Levitate"],
+                "preferredTypes": ["Fire"]
             }
         ]
     },
