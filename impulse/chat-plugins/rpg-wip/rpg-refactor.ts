@@ -834,7 +834,7 @@ function calculateDamage(
 	const defenderSpecies = Dex.species.get(defender.species);
 
 	// --- Ability Immunity Check (using new abilities system) ---
-	const abilityContext = {
+	const abilityContext: any = {
 		attacker,
 		defender,
 		attackerSlot,
@@ -1116,6 +1116,10 @@ function calculateDamage(
 	let berryConsumed: string | undefined = undefined;
 	let effectivenessMultiplier = effectiveness;
 
+	// --- NEW: Add effectiveness to ability context ---
+	abilityContext.effectiveness = effectiveness;
+	// --- END NEW ---
+
 	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
 		const resistedType = TYPE_RESIST_BERRIES[defender.item];
 		if (moveType === resistedType && effectiveness > 1) {
@@ -1184,6 +1188,10 @@ function calculateDamage(
 	}
 
 	let damage = Math.floor(baseDamage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
+
+	// --- NEW: Apply defensive/offensive damage-modifying abilities ---
+	damage = RPGAbilities.applyDamageModifier(abilityContext, damage);
+	// --- END NEW ---
 
 	if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 		damage = Math.floor(damage * 1.3);
