@@ -6,7 +6,7 @@ import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 import { Dex, toID } from '../../../sim/dex';
-import RPGAbilities from './abilities';
+import { RPGAbilities } from './abilities';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
