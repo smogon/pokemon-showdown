@@ -1170,9 +1170,10 @@ export function getAbilityInfo(abilityName: string): any {
 }
 
 /**
- * Apply switch-in abilities (weather/terrain setting)
+ * Apply switch-in abilities (weather/terrain setting, intimidate)
  */
-export function applySwitchInAbilities(pokemon: RPGPokemon, battle: BattleState, messageLog: string[]): void {
+export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): void {
+	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
 	// Weather-setting abilities
@@ -1230,6 +1231,78 @@ export function applySwitchInAbilities(pokemon: RPGPokemon, battle: BattleState,
 		}
 		break;
 	}
+
+	// Stat-lowering abilities (Intimidate)
+	if (ability === 'intimidate') {
+		const opponentSlots = isPlayerSwitchIn ? battle.opponentSlots : battle.playerSlots;
+		for (const opponentSlot of opponentSlots) {
+			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
+				// TODO: Check for abilities that block Intimidate (e.g., Clear Body, White Smoke)
+				if (opponentSlot.statStages.atk > -6) {
+					opponentSlot.statStages.atk--;
+					messageLog.push(`${pokemon.species}'s Intimidate lowered ${opponentSlot.pokemon.species}'s Attack!`);
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Apply effects from contact-based abilities (Static, Flame Body, etc.)
+ */
+export function applyContactAbilityEffects(ctx: AbilityContext): void {
+	const defenderAbility = toID(ctx.defender.ability || '');
+	const handler = CONTACT_ABILITIES[defenderAbility];
+
+	if (!handler) return;
+
+	const attacker = ctx.attacker;
+	const attackerSlot = ctx.attackerSlot;
+	const attackerSpecies = Dex.species.get(attacker.species);
+
+	// Handle damage-on-contact (Rough Skin, Iron Barbs)
+	if (handler.onContactDamage) {
+		const damage = Math.floor(attacker.maxHp * handler.onContactDamage);
+		attacker.hp = Math.max(0, attacker.hp - damage);
+		ctx.messageLog.push(`${attacker.species} was hurt by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
+	}
+
+	// Handle status-on-contact (Static, Flame Body, Poison Point)
+	if (handler.effect && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
+		const statusToInflict = handler.effect as Status;
+		let canBeAfflicted = true;
+
+		if ((statusToInflict === 'par' && attackerSpecies.types.includes('Electric')) ||
+			(statusToInflict === 'brn' && attackerSpecies.types.includes('Fire')) ||
+			(statusToInflict === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel')))) {
+			canBeAfflicted = false;
+		}
+
+		if (canBeAfflicted && !preventsStatus(attacker, statusToInflict)) {
+			attackerSlot.status = statusToInflict;
+			if (statusToInflict === 'slp') {
+				attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+			}
+			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
+		}
+	}
+
+	// Handle Effect Spore
+	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
+		const possibleStatuses: Status[] = [];
+		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) possibleStatuses.push('psn');
+		if (!attackerSpecies.types.includes('Electric')) possibleStatuses.push('par');
+		if (!preventsStatus(attacker, 'slp')) possibleStatuses.push('slp'); // Check Insomnia/Vital Spirit
+
+		if (possibleStatuses.length > 0) {
+			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
+			attackerSlot.status = statusToInflict;
+			if (statusToInflict === 'slp') {
+				attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+			}
+			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
+		}
+	}
 }
 
 /**
@@ -1249,6 +1322,7 @@ export const RPGAbilities = {
 	preventMove,
 	applySereneGrace,
 	isGrounded,
+	applyContactAbilityEffects,
 
 	// Utility functions
 	getAllImplementedAbilities,
