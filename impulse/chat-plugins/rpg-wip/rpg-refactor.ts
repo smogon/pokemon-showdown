@@ -4872,13 +4872,16 @@ function generateSingleBattleHTML(
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 15px; border-radius: 8px; text-align: center; flex: 1;"><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 60px;">` +
+                    `<strong style="display: block; text-align: center; margin-bottom: 8px; font-size: 1.0em;">${moveData.name}</strong>` +
+                    `<div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.9;">` +
+                        `<span>${moveData.type}</span>` +
+                        `<span>${move.pp} / ${moveData.pp}</span>` +
+                    `</div></button>`;
 	});
 
-	let moveButtonsHTML = `<div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 15px 0; justify-content: center;">`;
-	for (let i = 0; i < moveButtons.length; i++) {
-		moveButtonsHTML += `<div style="max-width: 40%;">` + moveButtons[i] + `</div>`;
-	}
+	let moveButtonsHTML = `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">`;
+	moveButtonsHTML += moveButtons.join('');
 	moveButtonsHTML += `</div>`;
 
 	const catchButton = (battle.battleType === 'wild') ?
