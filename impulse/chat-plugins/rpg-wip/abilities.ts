@@ -936,6 +936,25 @@ export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 }
 
 /**
+ * Apply priority-modifying abilities
+ */
+export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
+	const ability = toID(pokemon.ability || '');
+	
+	// Handle Prankster
+	if (ability === 'prankster' && move.category === 'Status') {
+		return 1;
+	}
+
+	// Handle Gale Wings
+	if (ability === 'galewings' && move.type === 'Flying' && pokemon.hp === pokemon.maxHp) {
+		return 1;
+	}
+
+	return 0;
+}
+
+/**
  * CRITICAL HIT ABILITIES
  */
 
@@ -1378,6 +1397,7 @@ export const RPGAbilities = {
 	isGrounded,
 	applyContactAbilityEffects,
 	applySwitchInAbilities,
+	applyPriorityModifier,
 
 	// Utility functions
 	getAllImplementedAbilities,
