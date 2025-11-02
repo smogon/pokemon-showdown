@@ -4,6 +4,7 @@ import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 
 // Interface for RPG Pokemon data
 interface RPGPokemon {
@@ -68,6 +69,7 @@ interface ActivePokemonSlot {
 	lockedMove?: string;
 	isRedirecting?: boolean; // For Follow Me
 	isHelped?: boolean; // For Helping Hand
+	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
 }
 
 // Interface for player data
@@ -626,7 +628,7 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 	}
 
 	const movesWithPP = availableMoves.map(moveId => {
-		const moveData = Dex.moves.get(moveId);
+		const moveData = getMove(moveId);
 		return { id: moveId, pp: moveData.pp || 5 };
 	});
 
@@ -793,6 +795,22 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battl
 	return critChances[Math.min(critStage, 3)];
 }
 
+/**
+ * Get a move from either Dex or Custom Moves
+ * This wrapper function checks custom moves first, then falls back to Dex
+ */
+function getMove(moveId: string): any {
+	// Check if it's a custom move
+	if (isCustomMove(moveId)) {
+		const customMove = getCustomMove(moveId);
+		// Add exists property for compatibility
+		return { ...customMove, exists: true };
+	}
+	
+	// Otherwise get from Dex
+	return getMove(moveId);
+}
+
 function calculateDamage(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -800,7 +818,7 @@ function calculateDamage(
 	battle: BattleState,
 	spreadMultiplier: number // <-- NEW PARAM
 ): { damage: number, message: string, effectiveness: number, berryConsumed?: string } {
-	const move = Dex.moves.get(moveId);
+	const move = getMove(moveId);
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 	const attackerStages = attackerSlot.statStages;
@@ -825,7 +843,20 @@ function calculateDamage(
 	}
 
 	if (!move.basePower) {
+		// Fixed damage moves
 		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1 };
+		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1 };
+		if (moveId === 'seismictoss' || moveId === 'nightshade') {
+			return { damage: attacker.level, message: '', effectiveness: 1 };
+		}
+		if (moveId === 'psywave') {
+			const damage = Math.floor(Math.random() * attacker.level * 1.5) + 1;
+			return { damage, message: '', effectiveness: 1 };
+		}
+		if (moveId === 'superfang') {
+			const damage = Math.floor(defender.hp / 2);
+			return { damage, message: '', effectiveness: 1 };
+		}
 		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1 };
 	}
 
@@ -917,6 +948,32 @@ function calculateDamage(
 		if (!attacker.item || battle.magicRoomTurns > 0) {
 			basePower *= 2;
 		}
+		break;
+	
+	case 'present':
+		// Present has random effects: 40, 80, 120 power, or heals 80 HP
+		const presentRand = Math.random();
+		if (presentRand < 0.4) basePower = 40;
+		else if (presentRand < 0.7) basePower = 80;
+		else if (presentRand < 0.8) basePower = 120;
+		else {
+			// Heal the target instead
+			const healAmount = Math.floor(defender.maxHp * 0.25);
+			defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
+			return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0 };
+		}
+		break;
+	
+	case 'magnitude':
+		// Magnitude has random power: 10, 30, 50, 70, 90, 110, 150
+		const magnitudeRoll = Math.random();
+		if (magnitudeRoll < 0.05) basePower = 10;
+		else if (magnitudeRoll < 0.15) basePower = 30;
+		else if (magnitudeRoll < 0.35) basePower = 50;
+		else if (magnitudeRoll < 0.65) basePower = 70;
+		else if (magnitudeRoll < 0.85) basePower = 90;
+		else if (magnitudeRoll < 0.95) basePower = 110;
+		else basePower = 150;
 		break;
 	}
 
@@ -1159,7 +1216,7 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 		.filter(learnable => learnable.level === pokemon.level)
 		.map(learnable => toID(learnable.move))
 		.filter(moveId => {
-			const moveData = Dex.moves.get(moveId);
+			const moveData = getMove(moveId);
 			// --- FIX: Check if move exists AND Pokemon doesn't already know it ---
 			return moveData.exists && !pokemon.moves.some(m => m.id === moveId);
 		});
@@ -1172,7 +1229,7 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 	if (openMoveSlots > 0) {
 		const movesToAutoLearn = movesLearnedAtThisLevel.slice(0, openMoveSlots);
 		for (const moveId of movesToAutoLearn) {
-			const moveData = Dex.moves.get(moveId);
+			const moveData = getMove(moveId);
 			pokemon.moves.push({ id: moveId, pp: moveData.pp || 5 });
 			messages.push(`**${pokemon.species} learned ${moveData.name}!**`);
 		}
@@ -1796,6 +1853,59 @@ function handleStatusMove(
 				messageLog.push(`${defender.species} began having a nightmare!`);
 				hadEffect = true;
 			}
+		} else if (move.id === 'bestow') {
+			if (battle.magicRoomTurns > 0) {
+				messageLog.push('But it failed!');
+				return;
+			}
+			if (!attacker.item || defender.item) {
+				messageLog.push('But it failed!');
+				return;
+			}
+			if (defender.ability === 'Sticky Hold') {
+				messageLog.push('But it failed!');
+				return;
+			}
+			
+			const givenItem = attacker.item;
+			defender.item = givenItem;
+			attacker.item = undefined;
+			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem].name} to ${defender.species}!`);
+			hadEffect = true;
+		} else if (move.id === 'transform') {
+			// Transform copies target's species, stats, moves, and ability (but not HP, status, or item)
+			const transformedStats = {
+				atk: defender.atk,
+				def: defender.def,
+				spa: defender.spa,
+				spd: defender.spd,
+				spe: defender.spe,
+			};
+			
+			// Copy base stats to attacker
+			attacker.atk = transformedStats.atk;
+			attacker.def = transformedStats.def;
+			attacker.spa = transformedStats.spa;
+			attacker.spd = transformedStats.spd;
+			attacker.spe = transformedStats.spe;
+			
+			// Copy moveset (with 5 PP each)
+			attacker.moves = defender.moves.map(m => ({ id: m.id, pp: 5 }));
+			
+			// Copy species name (for display)
+			const originalSpecies = attacker.species;
+			attacker.species = defender.species;
+			
+			// Copy ability
+			if (defender.ability) {
+				attacker.ability = defender.ability;
+			}
+			
+			// Reset stat stages to match target
+			attackerSlot.statStages = { ...defenderSlot.statStages };
+			
+			messageLog.push(`${originalSpecies} transformed into ${defender.species}!`);
+			hadEffect = true;
 		} else if (move.boosts && move.target !== 'self') {
 			const targetSlot = defenderSlot;
 			const targetStages = targetSlot.statStages;
@@ -2175,6 +2285,59 @@ function handleDamagingMove(
 		}
 	}
 
+	// Handle Counter and Mirror Coat
+	if (move.id === 'counter' || move.id === 'mirrorcoat') {
+		const targetCategory = move.id === 'counter' ? 'Physical' : 'Special';
+		
+		if (!attackerSlot.lastDamageTaken || attackerSlot.lastDamageTaken.category !== targetCategory) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
+		// Deal double the damage received
+		const counterDamage = attackerSlot.lastDamageTaken.amount * 2;
+		defender.hp = Math.max(0, defender.hp - counterDamage);
+		messageLog.push(`${defender.species} took ${counterDamage} damage from the counter!`);
+		return;
+	}
+	
+	// Handle Fling
+	if (move.id === 'fling') {
+		if (battle.magicRoomTurns > 0 || !attacker.item) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
+		// Fling power is based on the item (simplified)
+		const flingPowers: Record<string, number> = {
+			'leftovers': 10, 'oranberry': 10, 'berryjuice': 10,
+			'sitrusberry': 10, 'lumberry': 10, 'focussash': 10,
+			'choiceband': 10, 'choicescarf': 10, 'choicespecs': 10,
+			'lifeorb': 30, 'rockyhelmet': 60, 'assaultvest': 80,
+			'ironball': 130,
+		};
+		const damage = flingPowers[attacker.item] || 30;
+		defender.hp = Math.max(0, defender.hp - damage);
+		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		attacker.item = undefined;
+		return;
+	}
+	
+	// Handle Nature Gift (type and power based on berry)
+	if (move.id === 'naturalgift') {
+		if (!attacker.item || !attacker.item.includes('berry')) {
+			messageLog.push(`But it failed!`);
+			return;
+		}
+		
+		// Nature Gift power is based on berry (simplified to 80)
+		const damage = 80;
+		defender.hp = Math.max(0, defender.hp - damage);
+		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item].name} and dealt ${damage} damage!`);
+		attacker.item = undefined;
+		return;
+	}
+	
 	// Handle One-Hit KO moves
 	if (move.ohko) {
 		// Check level immunity
@@ -2263,6 +2426,16 @@ function handleDamagingMove(
 		}
 
 		defender.hp = Math.max(0, defender.hp - damageDealt);
+		
+		// Track damage for Counter/Mirror Coat
+		if (damageDealt > 0 && move.category !== 'Status') {
+			defenderSlot.lastDamageTaken = {
+				amount: damageDealt,
+				category: move.category,
+				from: attacker.id,
+			};
+		}
+		
 		if (hitCount > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else {
@@ -3287,6 +3460,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		chargingMove: undefined,
 		activeTurns: 1,
 		lockedMove: undefined,
+		lastDamageTaken: undefined,
 	};
 }
 
@@ -3461,8 +3635,8 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		const isSwitchB = b.actionType === 'switch';
 
 		// Switches have +6 priority
-		const priorityA = isSwitchA ? 6 : (Dex.moves.get(a.moveId || 'struggle').priority);
-		const priorityB = isSwitchB ? 6 : (Dex.moves.get(b.moveId || 'struggle').priority);
+		const priorityA = isSwitchA ? 6 : (getMove(a.moveId || 'struggle').priority);
+		const priorityB = isSwitchB ? 6 : (getMove(b.moveId || 'struggle').priority);
 
 		// Sort by Priority
 		if (priorityA !== priorityB) {
@@ -3536,7 +3710,7 @@ function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | nu
 function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
 	// Find valid moves (with PP)
 	const usableMoves = aiSlot.pokemon.moves.filter(m => {
-		const moveData = Dex.moves.get(m.id);
+		const moveData = getMove(m.id);
 		return m.pp > 0 && moveData.category !== 'Status'; // Simple AI: only use damaging moves
 	});
 
@@ -3655,7 +3829,7 @@ function executeAction(
 
 	// --- Handle Move Action ---
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
-		const move = Dex.moves.get(action.moveId);
+		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
 
 		// Handle Struggle
@@ -3674,12 +3848,55 @@ function executeAction(
 			return; // Attacker couldn't move
 		}
 
-		// 2. PP Deduction
-		if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+		// 2. Handle Two-Turn/Charging Moves
+		if (move.flags.charge && !attackerSlot.chargingMove) {
+			// First turn: Start charging
+			attackerSlot.chargingMove = move.id;
+			let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
+			
+			// Custom messages for specific moves
+			if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
+			else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
+			else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
+			else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
+			else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
+			else if (move.id === 'solarbeam' || move.id === 'solarblade') {
+				// Solar moves skip charging in harsh sunlight
+				if (battle.weather?.type === 'sun') {
+					attackerSlot.chargingMove = undefined; // Don't charge
+					chargeMessage = '';
+				} else {
+					chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
+				}
+			}
+			else if (move.id === 'razorwind') chargeMessage = `${attackerSlot.pokemon.species} whipped up a whirlwind!`;
+			else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
+			else if (move.id === 'skullbash') chargeMessage = `${attackerSlot.pokemon.species} tucked in its head!`;
+			else if (move.id === 'freezeshock') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a freezing light!`;
+			else if (move.id === 'iceburn') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in freezing air!`;
+			else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
+			else if (move.id === 'meteorbeam') chargeMessage = `${attackerSlot.pokemon.species} is overflowing with space power!`;
+			
+			if (chargeMessage) messageLog.push(chargeMessage);
+			
+			// If still charging (not skipped), deduct PP and return
+			if (attackerSlot.chargingMove) {
+				if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+					moveObject.pp--;
+				}
+				return;
+			}
+		} else if (attackerSlot.chargingMove === move.id) {
+			// Second turn: Execute the move
+			attackerSlot.chargingMove = undefined;
+		}
+		
+		// 3. PP Deduction (if not already deducted during charging)
+		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp--;
 		}
 
-		// 3. Resolve Targets
+		// 4. Resolve Targets
 		let chosenTargetSlot = action.targetSlot;
 		const isPlayerAttacker = attackerSlotIndex <= 1;
 		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
@@ -3694,7 +3911,7 @@ function executeAction(
 
 		const targetSlots = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
 
-		// 4. Announce and Execute the Move
+		// 5. Announce and Execute the Move
 		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
 
 		if (targetSlots.length === 0) {
@@ -3702,10 +3919,10 @@ function executeAction(
 			return;
 		}
 
-		// 5. Execute move against all targets
+		// 6. Execute move against all targets
 		executeMove(attackerSlot, targetSlots, move, moveObject, battle, messageLog);
 
-		// 6. Handle U-turn/Volt Switch (self-switch after move)
+		// 7. Handle U-turn/Volt Switch (self-switch after move)
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
@@ -3767,7 +3984,7 @@ function generateSingleBattleHTML(
 
 	// --- STATE 1: Action Selection (Target selection is now skipped) ---
 	const moveButtons = playerPokemon.moves.map(move => {
-		const moveData = Dex.moves.get(move.id);
+		const moveData = getMove(move.id);
 
 		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
 			playerPokemon.item === 'assaultvest' &&
@@ -3874,7 +4091,7 @@ function generatePokemonInfoHTML(
 	const tauntTag = slot.tauntTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>` : '';
 	let chargingTag = '';
 	if (slot.chargingMove) {
-		const moveName = Dex.moves.get(slot.chargingMove).name || 'Attack';
+		const moveName = getMove(slot.chargingMove).name || 'Attack';
 		let chargeText = `Preparing ${moveName}!`;
 		if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
 		if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
@@ -3906,7 +4123,7 @@ function generatePokemonInfoHTML(
 
 	if (isPlayerSide) {
 		movesDisplay = `Moves: ${pokemon.moves.map(m => {
-			const moveData = Dex.moves.get(m.id);
+			const moveData = getMove(m.id);
 			return `${moveData.name} (${m.pp}/${moveData.pp})`;
 		}).slice(0, 4).join(', ') || 'None'}`;
 		natureDisplay = `Nature: ${pokemon.nature}<br>`;
@@ -3990,7 +4207,7 @@ function generateDoubleBattleHTML(
 	// --- Action Area ---
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
-		const move = Dex.moves.get(targetSelection.moveId);
+		const move = getMove(targetSelection.moveId);
 		html += `<p>Select a target for <strong>${move.name}</strong>:</p>`;
 		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
 
@@ -4031,7 +4248,7 @@ function generateDoubleBattleHTML(
 
 			const moves = pokemon.moves;
 			for (const move of moves) {
-				const moveData = Dex.moves.get(move.id);
+				const moveData = getMove(move.id);
 
 				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
 					pokemon.item === 'assaultvest' &&
@@ -4088,7 +4305,7 @@ function generateBattleHTML(
 function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	const movesSummary = pokemon.moves.map(move => {
-		const moveData = Dex.moves.get(move.id);
+		const moveData = getMove(move.id);
 		return '<div style="text-align: center; padding: 5px; background: #f0f0f0; border-radius: 5px;">' +
 			moveData.name +
 			'<br><small>PP: ' + move.pp + '/' + moveData.pp + '</small>' +
@@ -4170,7 +4387,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
 	let html = `<div class="infobox"><h2>Teach an Egg Move</h2><p>Choose a move for <strong>${pokemon.species}</strong> to learn:</p>`;
 	for (const moveId of eggMoves) {
-		const move = Dex.moves.get(moveId);
+		const move = getMove(moveId);
 		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button" style="margin: 3px;">${move.name}</button> `;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Cancel</button></p></div>`;
@@ -4429,14 +4646,14 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	const queue = player.pendingMoveLearnQueue;
 	if (!queue || queue.moveIds.length === 0) return `<h2>Error: No pending moves found.</h2>`;
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
-	const newMove = Dex.moves.get(queue.moveIds[0]);
+	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
 		delete player.pendingMoveLearnQueue;
 		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
 	let html = `<div class="infobox"><h2>Move Learning</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Should a move be forgotten to make space for ${newMove.name}?</p><hr /><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
 	for (const move of pokemon.moves) {
-		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${Dex.moves.get(move.id).name}</button>`;
+		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}
 	html += `</div><hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="background-color: #d9534f; color: white;">Forget ${newMove.name}</button></div>`;
 	return html;
@@ -4626,7 +4843,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Error: Pokemon not found.");
 			}
 			const newMoveId = queue.moveIds[0];
-			const newMoveData = Dex.moves.get(newMoveId);
+			const newMoveData = getMove(newMoveId);
 
 			const newMoveName = newMoveData.name;
 			const moveToReplace = toID(target);
@@ -4638,7 +4855,7 @@ export const commands: ChatCommands = {
 				if (moveIndex === -1) {
 					return this.errorReply("That move is not known by your Pokemon.");
 				}
-				const oldMoveName = Dex.moves.get(pokemon.moves[moveIndex].id).name;
+				const oldMoveName = getMove(pokemon.moves[moveIndex].id).name;
 				pokemon.moves[moveIndex] = { id: newMoveId, pp: newMoveData.pp || 5 };
 				message = `1, 2, and... Poof! <strong>${pokemon.species}</strong> forgot <strong>${oldMoveName}</strong> and learned <strong>${newMoveName}</strong>!`;
 			}
@@ -4690,7 +4907,7 @@ export const commands: ChatCommands = {
 			const newMoveId = toID(rawMoveId); // Converts "magical leaf" to "magicalleaf"
 
 			if (pokemon.moves.length < 4) {
-				const newMoveData = Dex.moves.get(newMoveId);
+				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
@@ -5096,7 +5313,7 @@ export const commands: ChatCommands = {
 				const pokemon = createPokemon(spec.species, spec.level);
 				if (spec.moves) {
 					pokemon.moves = spec.moves.map(moveId => {
-						const moveData = Dex.moves.get(moveId);
+						const moveData = getMove(moveId);
 						return { id: moveId, pp: moveData.pp || 5 };
 					});
 				}
@@ -5237,7 +5454,7 @@ export const commands: ChatCommands = {
 				}
 
 				// Validate move
-				const moveData = Dex.moves.get(toID(moveId));
+				const moveData = getMove(toID(moveId));
 				if (!moveData.exists) {
 					return this.errorReply(`Move '${moveId}' not found.`);
 				}
@@ -5301,7 +5518,7 @@ export const commands: ChatCommands = {
 				}
 
 				// Re-render the UI in "target selection" mode
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${Dex.moves.get(moveId).name}.`], { attackerSlotIndex, moveId })}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId })}`);
 			},
 			// --- END NEW FUNCTION ---
 
@@ -5682,7 +5899,7 @@ export const commands: ChatCommands = {
 				pokemon.hp = pokemon.maxHp;
 				pokemon.status = null;
 				for (const move of pokemon.moves) {
-					const moveData = Dex.moves.get(move.id);
+					const moveData = getMove(move.id);
 					move.pp = moveData.pp || 5;
 				}
 			}
