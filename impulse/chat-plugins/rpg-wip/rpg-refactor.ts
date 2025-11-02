@@ -73,7 +73,7 @@ interface ActivePokemonSlot {
 	isHelped?: boolean; // For Helping Hand
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
 	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
-	
+
 	// High-priority volatile statuses
 	substitute?: { hp: number }; // Substitute HP
 	disabledMove?: { moveId: string, turns: number }; // Disabled move and turns remaining
@@ -180,20 +180,20 @@ interface BattleState {
 
 	// --- FIELDS FOR DELAYED MOVE EFFECTS ---
 	// Future Sight and Doom Desire - attacks that hit after 2 turns
-	playerFutureMoves: Array<{
+	playerFutureMoves: {
 		slotIndex: number, // Which slot will be hit (0 or 1)
 		moveId: 'futuresight' | 'doomdesire',
 		turnsLeft: number, // Hits when this reaches 0
 		attackerSlotIndex: number, // Who used it (for stat calculations)
 		attackerStats: { atk: number, spa: number }, // Stats when used
-	}>;
-	opponentFutureMoves: Array<{
+	}[];
+	opponentFutureMoves: {
 		slotIndex: number,
 		moveId: 'futuresight' | 'doomdesire',
 		turnsLeft: number,
 		attackerSlotIndex: number,
 		attackerStats: { atk: number, spa: number },
-	}>;
+	}[];
 }
 
 // In-memory storage for player data (in production, use a database)
@@ -230,7 +230,7 @@ function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	if (CUSTOM_ITEMS_DATABASE[itemId]) {
 		return CUSTOM_ITEMS_DATABASE[itemId];
 	}
-	
+
 	// Try to get from Dex
 	const dexItem = Dex.items.get(itemId);
 	if (dexItem.exists) {
@@ -241,10 +241,10 @@ function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 		} else if (dexItem.isBerry) {
 			category = 'berry';
 		}
-		
+
 		// Use shortDesc if available, otherwise use desc or a generic message
 		const description = dexItem.shortDesc || dexItem.desc || 'An item.';
-		
+
 		return {
 			id: itemId,
 			name: dexItem.name,
@@ -252,7 +252,7 @@ function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 			description,
 		};
 	}
-	
+
 	// Item doesn't exist in Dex or custom database
 	return null;
 }
@@ -963,7 +963,7 @@ function calculateDamage(
 			basePower *= 2;
 		}
 		break;
-	
+
 	case 'present':
 		// Present has random effects: 40, 80, 120 power, or heals 80 HP
 		const presentRand = Math.random();
@@ -977,7 +977,7 @@ function calculateDamage(
 			return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0 };
 		}
 		break;
-	
+
 	case 'magnitude':
 		// Magnitude has random power: 10, 30, 50, 70, 90, 110, 150
 		const magnitudeRoll = Math.random();
@@ -1008,7 +1008,7 @@ function calculateDamage(
 	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
 		basePower *= 2;
 	}
-	
+
 	// Charge boosts next Electric move
 	if (attackerSlot.isCharged && moveType === 'Electric') {
 		basePower *= 2;
@@ -1823,15 +1823,15 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
  */
 function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
-	
+
 	// Check if the Pokemon has any move-binding effects
-	const hasBindingEffect = 
+	const hasBindingEffect =
 		slot.tauntTurns > 0 ||
 		slot.encoreMove !== undefined ||
 		slot.disabledMove !== undefined ||
 		slot.tormentActive ||
 		(slot.healBlockTurns || 0) > 0;
-	
+
 	if (hasBindingEffect) {
 		// Cure all move-binding effects
 		slot.tauntTurns = 0;
@@ -1839,12 +1839,12 @@ function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLo
 		slot.disabledMove = undefined;
 		slot.tormentActive = false;
 		slot.healBlockTurns = 0;
-		
+
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
 		slot.pokemon.item = undefined; // Mental Herb is consumed
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -2012,7 +2012,7 @@ function handleStatusMove(
 				messageLog.push('But it failed!');
 				return;
 			}
-			
+
 			const givenItem = attacker.item;
 			defender.item = givenItem;
 			attacker.item = undefined;
@@ -2027,29 +2027,29 @@ function handleStatusMove(
 				spd: defender.spd,
 				spe: defender.spe,
 			};
-			
+
 			// Copy base stats to attacker
 			attacker.atk = transformedStats.atk;
 			attacker.def = transformedStats.def;
 			attacker.spa = transformedStats.spa;
 			attacker.spd = transformedStats.spd;
 			attacker.spe = transformedStats.spe;
-			
+
 			// Copy moveset (with 5 PP each)
 			attacker.moves = defender.moves.map(m => ({ id: m.id, pp: 5 }));
-			
+
 			// Copy species name (for display)
 			const originalSpecies = attacker.species;
 			attacker.species = defender.species;
-			
+
 			// Copy ability
 			if (defender.ability) {
 				attacker.ability = defender.ability;
 			}
-			
+
 			// Reset stat stages to match target
 			attackerSlot.statStages = { ...defenderSlot.statStages };
-			
+
 			messageLog.push(`${originalSpecies} transformed into ${defender.species}!`);
 			hadEffect = true;
 		} else if (move.boosts && move.target !== 'self') {
@@ -2301,18 +2301,18 @@ function handleStatusMove(
 	if (['futuresight', 'doomdesire'].includes(move.id)) {
 		// Determine which side's future moves array to use
 		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
-		
+
 		// Check if a future move is already scheduled for this slot
-		const targetSlotLocalIndex = isPlayerAttacker ? 
+		const targetSlotLocalIndex = isPlayerAttacker ?
 			(chosenTargetSlot - 2) : chosenTargetSlot; // Convert to 0-1 index
-		
+
 		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
-		
+
 		if (existingFutureMove) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Schedule the future move to hit in 2 turns
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
@@ -2324,7 +2324,7 @@ function handleStatusMove(
 				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
 			},
 		});
-		
+
 		const moveName = move.id === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 		messageLog.push(`${attacker.species} foresaw an attack!`);
 		hadEffect = true;
@@ -2622,26 +2622,26 @@ function handleDamagingMove(
 	// Handle Counter and Mirror Coat
 	if (move.id === 'counter' || move.id === 'mirrorcoat') {
 		const targetCategory = move.id === 'counter' ? 'Physical' : 'Special';
-		
-		if (!attackerSlot.lastDamageTaken || attackerSlot.lastDamageTaken.category !== targetCategory) {
+
+		if (attackerSlot.lastDamageTaken?.category !== targetCategory) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Deal double the damage received
 		const counterDamage = attackerSlot.lastDamageTaken.amount * 2;
 		defender.hp = Math.max(0, defender.hp - counterDamage);
 		messageLog.push(`${defender.species} took ${counterDamage} damage from the counter!`);
 		return;
 	}
-	
+
 	// Handle Fling
 	if (move.id === 'fling') {
 		if (battle.magicRoomTurns > 0 || !attacker.item) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Fling power is based on the item (simplified)
 		const flingPowers: Record<string, number> = {
 			'leftovers': 10, 'oranberry': 10, 'berryjuice': 10,
@@ -2656,14 +2656,14 @@ function handleDamagingMove(
 		attacker.item = undefined;
 		return;
 	}
-	
+
 	// Handle Nature Gift (type and power based on berry)
 	if (move.id === 'naturalgift') {
-		if (!attacker.item || !attacker.item.includes('berry')) {
+		if (!attacker.item?.includes('berry')) {
 			messageLog.push(`But it failed!`);
 			return;
 		}
-		
+
 		// Nature Gift power is based on berry (simplified to 80)
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
@@ -2671,7 +2671,7 @@ function handleDamagingMove(
 		attacker.item = undefined;
 		return;
 	}
-	
+
 	// Handle One-Hit KO moves
 	if (move.ohko) {
 		// Check level immunity
@@ -2776,7 +2776,7 @@ function handleDamagingMove(
 		}
 
 		defender.hp = Math.max(0, defender.hp - damageDealt);
-		
+
 		// Track damage for Counter/Mirror Coat
 		if (damageDealt > 0 && move.category !== 'Status') {
 			defenderSlot.lastDamageTaken = {
@@ -2785,7 +2785,7 @@ function handleDamagingMove(
 				from: attacker.id,
 			};
 		}
-		
+
 		if (hitCount > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else {
@@ -2859,18 +2859,18 @@ function handleDamagingMove(
 					// Ability-based contact effects
 					const defenderAbility = toID(defender.ability || '');
 					const attackerSpecies = Dex.species.get(attacker.species);
-					
+
 					// Rough Skin / Iron Barbs - Damages attacker
 					if (defenderAbility === 'roughskin' || defenderAbility === 'ironbarbs') {
 						const damage = Math.floor(attacker.maxHp / 8);
 						attacker.hp = Math.max(0, attacker.hp - damage);
 						messageLog.push(`${attacker.species} was hurt by ${defender.species}'s ${defender.ability}!`);
 					}
-					
+
 					// Status-inducing contact abilities
 					if (!attackerSlot.status && attacker.hp > 0) {
 						let statusToInflict: Status | null = null;
-						let triggerChance = 0.3;
+						const triggerChance = 0.3;
 
 						if (defenderAbility === 'static' && !attackerSpecies.types.includes('Electric')) {
 							statusToInflict = 'par';
@@ -2928,14 +2928,14 @@ function handleDamagingMove(
 			// Red Card: Forces attacker to switch when holder is hit
 			if (defender.hp > 0 && attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
 				const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
-				const attackerSlotIndex = isPlayerDefending ? 
-					battle.opponentSlots.indexOf(attackerSlot) : 
+				const attackerSlotIndex = isPlayerDefending ?
+					battle.opponentSlots.indexOf(attackerSlot) :
 					battle.playerSlots.indexOf(attackerSlot);
-				
+
 				if (attackerSlotIndex !== -1) {
 					messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
 					defender.item = undefined; // Red Card is consumed
-					
+
 					if (isPlayerDefending) {
 						// Force opponent to switch (AI will auto-switch)
 						// In trainer battles, opponent has backup Pokemon
@@ -2969,7 +2969,7 @@ function handleDamagingMove(
 					const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
 					// Magic Guard prevents Life Orb recoil (check using abilities system)
 					const takesRecoil = RPGAbilities.takesIndirectDamage(attacker);
-					
+
 					if (!sheerForceActive && takesRecoil) {
 						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 						messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
@@ -3009,7 +3009,7 @@ function handleDamagingMove(
 			if (defender.hp > 0) {
 				// Check if secondary effects should apply (Sheer Force removes them)
 				const shouldApplySecondary = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
-				
+
 				if (battle.magicRoomTurns === 0 && defender.item === 'covertcloak') {
 					// Covert Cloak blocks secondary effects
 				} else if (move.secondary && shouldApplySecondary) {
@@ -3046,12 +3046,12 @@ function handleDamagingMove(
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
 							const newStatus = move.secondary.status as Status;
-							
+
 							// Check ability immunity
 							if (canBeAfflicted && RPGAbilities.preventsStatus(defender, newStatus)) {
 								canBeAfflicted = false;
 							}
-							
+
 							// Check type immunity
 							if (canBeAfflicted && ((newStatus === 'brn' && defenderSpecies.types.includes('Fire')) || (newStatus === 'par' && defenderSpecies.types.includes('Electric')) || (newStatus === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (newStatus === 'frz' && defenderSpecies.types.includes('Ice')))) {
 								canBeAfflicted = false;
@@ -3321,7 +3321,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		if (pokemon.hp <= 0) continue;
 		const species = Dex.species.get(pokemon.species);
 		const ability = toID(pokemon.ability || '');
-		
+
 		// Weather healing abilities
 		if (battle.weather.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
@@ -3336,7 +3336,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
 		}
-		
+
 		// Weather damage
 		let takeDamage = false;
 		let damageAmount = Math.floor(pokemon.maxHp / 16);
@@ -3344,7 +3344,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		// Sandstorm damage
 		if (battle.weather.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
 			takeDamage = true;
-		} 
+		}
 		// Hail damage (but not if Ice Body healed)
 		else if (battle.weather.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
@@ -3518,7 +3518,7 @@ function executeMove(
 ): void {
 	// Track last move used (for Disable, Torment, etc.)
 	attackerSlot.lastMoveUsed = move.id;
-	
+
 	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
@@ -3814,26 +3814,26 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-				
+
 				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-				
+
 				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-				
+
 				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-				
+
 				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-				
+
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
@@ -3841,7 +3841,7 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 		return true; // Keep this future move
 	});
-	
+
 	// Process opponent's future moves (hitting player)
 	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
 		fm.turnsLeft--;
@@ -3851,26 +3851,26 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-				
+
 				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-				
+
 				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-				
+
 				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-				
+
 				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-				
+
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
@@ -4242,7 +4242,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		// Quick Claw: 20% chance to move first
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
-		
+
 		if (quickClawA && !quickClawB) {
 			messageLog.push(`${slotA.pokemon.species}'s Quick Claw let it move first!`);
 			return -1;
@@ -4490,7 +4490,7 @@ function executeAction(
 			// First turn: Start charging
 			attackerSlot.chargingMove = move.id;
 			let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
-			
+
 			// Custom messages for specific moves
 			if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
 			else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
@@ -4505,17 +4505,16 @@ function executeAction(
 				} else {
 					chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
 				}
-			}
-			else if (move.id === 'razorwind') chargeMessage = `${attackerSlot.pokemon.species} whipped up a whirlwind!`;
+			} else if (move.id === 'razorwind') chargeMessage = `${attackerSlot.pokemon.species} whipped up a whirlwind!`;
 			else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
 			else if (move.id === 'skullbash') chargeMessage = `${attackerSlot.pokemon.species} tucked in its head!`;
 			else if (move.id === 'freezeshock') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a freezing light!`;
 			else if (move.id === 'iceburn') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in freezing air!`;
 			else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
 			else if (move.id === 'meteorbeam') chargeMessage = `${attackerSlot.pokemon.species} is overflowing with space power!`;
-			
+
 			if (chargeMessage) messageLog.push(chargeMessage);
-			
+
 			// If still charging (not skipped), deduct PP and return
 			if (attackerSlot.chargingMove) {
 				if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
@@ -4527,7 +4526,7 @@ function executeAction(
 			// Second turn: Execute the move
 			attackerSlot.chargingMove = undefined;
 		}
-		
+
 		// 3. PP Deduction (if not already deducted during charging)
 		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp--;
@@ -4735,7 +4734,7 @@ function generatePokemonInfoHTML(
 		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
 		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
 	}
-	
+
 	// --- NEW VOLATILE STATUS TAGS ---
 	const substituteTag = slot.substitute ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Substitute (${slot.substitute.hp} HP)</span>` : '';
 	const yawnTag = slot.yawnCounter ? `<span style="background-color: #9898E8; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Drowsy (${slot.yawnCounter})</span>` : '';
@@ -5013,30 +5012,30 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spe + '</td></tr>' +
 		'</table>' +
 		'</div>' +
-			'</div>' +
-				'<hr />' +
-				'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'</div>' +
+		'<hr />' +
+		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>EVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
+			'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
+				'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
+				'</table>' +
+				'<small>Total: ' + totalEVs + ' / 510</small>' +
+				'</div>' +
 				'<div style="flex-basis: 48%;">' +
-				'<h4>EVs</h4>' +
-				'<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
-					'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
-					'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
-					'</table>' +
-					'<small>Total: ' + totalEVs + ' / 510</small>' +
-					'</div>' +
-					'<div style="flex-basis: 48%;">' +
-				'<h4>Moves</h4>' +
+			'<h4>Moves</h4>' +
 			'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
-		movesSummary +
-		'</div>' +
-		'</div>' +
-			'</div>' +
-				'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
-				'</div>';
+				movesSummary +
+				'</div>' +
+					'</div>' +
+					'</div>' +
+					'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+					'</div>';
 }
 
 function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
@@ -6133,7 +6132,7 @@ export const commands: ChatCommands = {
 				if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'assaultvest' && moveData.category === 'Status') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Your Assault Vest prevents you from using ${moveData.name}!`])}`);
 				}
-				if (moveObject && moveObject.pp === 0) {
+				if (moveObject?.pp === 0) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`There is no PP left for ${moveData.name}!`])}`);
 				}
 				// Check Disable
@@ -6211,7 +6210,7 @@ export const commands: ChatCommands = {
 				if (pokemonId === 'cancel') {
 					// This happens if a player U-turns with no Pokemon to switch to.
 					// We must clear the pivot flag.
-					if (battle.pendingPivot && battle.pendingPivot.slotIndex === slotToFill) {
+					if (battle.pendingPivot?.slotIndex === slotToFill) {
 						// Put the Pokemon back
 						battle.playerSlots[slotToFill as 0 | 1] = battle.pendingPivot.slot;
 						battle.pendingPivot = undefined;
@@ -6246,7 +6245,7 @@ export const commands: ChatCommands = {
 				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
 
 				// **NEW:** Check if this is a pivot switch
-				if (battle.pendingPivot && battle.pendingPivot.slotIndex === slotToFill) {
+				if (battle.pendingPivot?.slotIndex === slotToFill) {
 					// It's a pivot, add the pivoting pokemon back to the party
 					player.party.push(battle.pendingPivot.slot.pokemon);
 
@@ -6318,7 +6317,7 @@ export const commands: ChatCommands = {
 					// Re-render the UI with an error message
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
 				}
-				
+
 				// --- INGRAIN CHECK ---
 				if (outgoingSlot.isIngrained) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is rooted in place by Ingrain and cannot switch out!`);
@@ -6457,7 +6456,7 @@ export const commands: ChatCommands = {
 				const player = getPlayerData(battle.playerId);
 				const ballItem = player.inventory.get(ballId);
 
-				if (!ballItem || ballItem.category !== 'pokeball' || ballItem.quantity < 1) {
+				if (ballItem?.category !== 'pokeball' || ballItem.quantity < 1) {
 					return this.errorReply(`You don't have any ${ITEMS_DATABASE[ballId]?.name || 'of that item'}!`);
 				}
 
