@@ -4923,6 +4923,45 @@ function generateSingleBattleHTML(
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
 	};
 
+	// Helper function to generate field effects HTML with side-by-side layout
+	const generateFieldEffectsDisplay = () => {
+		const fieldEffectHTML = generateFieldEffectHTML(battle);
+		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+		
+		// Parse the field effects to separate them
+		const lines = tempDiv.split('<br>').filter(line => line.trim());
+		let yourSide = '';
+		let field = '';
+		let opponentSide = '';
+		let currentSection = '';
+
+		for (const line of lines) {
+			if (line.includes('Your Side:')) {
+				currentSection = 'your';
+			} else if (line.includes('Field:')) {
+				currentSection = 'field';
+			} else if (line.includes("Opponent's Side:")) {
+				currentSection = 'opponent';
+			} else {
+				if (currentSection === 'your') {
+					yourSide += line + '<br>';
+				} else if (currentSection === 'field') {
+					field += line + '<br>';
+				} else if (currentSection === 'opponent') {
+					opponentSide += line + '<br>';
+				}
+			}
+		}
+
+		return `<table style="width: 100%; border-collapse: collapse;">` +
+			`<tr>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>${yourSide || 'Clear'}</td>` +
+			`<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>${field || 'Clear'}</td>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent's Side:</strong><br>${opponentSide || 'Clear'}</td>` +
+			`</tr>` +
+			`</table>`;
+	};
+
 	let actionHTML = '';
 
 	// --- STATE 1: Action Selection ---
@@ -4950,7 +4989,7 @@ function generateSingleBattleHTML(
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
 		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">${moveData.name}</div>` +
             `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
                 `<span>${moveData.type}</span>` +
                `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
@@ -4961,7 +5000,7 @@ function generateSingleBattleHTML(
 	});
 
 	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
-	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 5px 0;">`;
 	moveButtonsHTML += `<tr>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
 	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
@@ -4980,32 +5019,32 @@ function generateSingleBattleHTML(
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled>🏃 Run</button>`;
 
-	actionHTML = `<p style="margin-top: 15px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
+	actionHTML = `<p style="margin-top: 5px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
 		moveButtonsHTML +
-		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
+		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		// --- Pokemon Display (Side by Side) ---
 		`<table style="width: 100%; margin-bottom: 5px;">` +
 		`<tr>` +
 		// --- Player Pokemon (Left) ---
-		`<td style="width: 40%; padding: 0; vertical-align: top; text-align: center;">` +
+		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
 		`${generateBattlePokemonInfo(playerSlot, true)}` +
 		`</td>` +
 		// --- Opponent Pokemon (Right) ---
-		`<td style="width: 40%; padding: 0; vertical-align: top; text-align: center;">` +
+		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
 		`${generateBattlePokemonInfo(opponentSlot, false)}` +
 		`</td>` +
 		`</tr>` +
 		`</table>` +
-		`<hr style="margin: 5px 0;" />` +
-		// --- Field Effects (Below Pokémon, styled like message log) ---
+		`<hr style="margin: 3px 0;" />` +
+		// --- Field Effects (Side by Side) ---
 		`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
-		`<strong>Field Effects:</strong><br>${generateFieldEffectHTML(battle).replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '')}` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
 		`</div>` +
-		`<hr style="margin: 5px 0;" />` +
+		`<hr style="margin: 3px 0;" />` +
 		// --- Message Log ---
 		`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
 		// --- Action Area ---
