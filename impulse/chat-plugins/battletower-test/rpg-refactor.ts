@@ -1241,6 +1241,7 @@ function gainExperience(
 
 	// 1. Distribute EVs and EXP
 	for (const slot of participantSlots) {
+		if (!slot || !slot.pokemon) continue; // <-- Safety check
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue; // Fainted or max level
 		
@@ -1255,6 +1256,7 @@ function gainExperience(
 
 	// 2. Handle Level-Ups for all participants
 	for (const slot of participantSlots) {
+		if (!slot || !slot.pokemon) continue; // <-- Safety check
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
 
