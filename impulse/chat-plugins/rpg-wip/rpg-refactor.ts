@@ -841,7 +841,7 @@ function calculateDamage(
 		defenderSlot,
 		move,
 		battle,
-		messageLog: [],
+		messageLog: [], // This is a temporary log for this check, not the main one
 	};
 
 	// Check for type immunities first (Grass-types immune to powder)
@@ -1051,8 +1051,26 @@ function calculateDamage(
 	let attackStatRaw = move.category === 'Special' ? attacker.spa : attacker.atk;
 	let defenseStatRaw = move.category === 'Special' ? defender.spd : defender.def;
 
+	// --- START FIX: Apply Guts, Huge Power, Marvel Scale, etc. ---
+	// These abilities modify the raw stat before stat stages are applied.
+	if (move.category === 'Special') {
+		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'spa', attackStatRaw);
+		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defenseStatRaw);
+	} else {
+		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'atk', attackStatRaw);
+		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defenseStatRaw);
+	}
+	// --- END FIX ---
+
+
 	if (battle.wonderRoomTurns > 0) {
-		defenseStatRaw = move.category === 'Special' ? defender.def : defender.spd;
+		// --- FIX: Apply ability modifier to the *swapped* stat ---
+		if (move.category === 'Special') {
+			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+		} else {
+			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+		}
+		// --- END FIX ---
 	}
 
 	if (battle.magicRoomTurns === 0 && defender.item === 'assaultvest' && move.category === 'Special') {
@@ -1063,11 +1081,30 @@ function calculateDamage(
 		const defenderId = toID(defender.species);
 		const species = Dex.species.get(defenderId);
 		if (species.evos && species.evos.length > 0) {
-			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
-			if (battle.wonderRoomTurns > 0 && move.category === 'Physical') {
-				const originalSpDef = defender.spd;
-				defenseStatRaw = Math.floor(originalSpDef * 1.5);
+			// --- FIX: Apply Eviolite to the *correct* stat ---
+			if (move.category === 'Special') {
+				// Eviolite boosts Sp. Def
+				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+				defenseStatRaw = Math.floor(spdWithAbility * 1.5);
+			} else {
+				// Eviolite boosts Def
+				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+				defenseStatRaw = Math.floor(defWithAbility * 1.5);
 			}
+
+			// Handle Wonder Room swap
+			if (battle.wonderRoomTurns > 0) {
+				if (move.category === 'Special') {
+					// Use Def stat instead
+					const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+					defenseStatRaw = Math.floor(defWithAbility * 1.5);
+				} else {
+					// Use Sp. Def stat instead
+					const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
+				}
+			}
+			// --- END FIX ---
 		}
 	}
 
@@ -1095,9 +1132,12 @@ function calculateDamage(
 	const defenseStat = Math.floor(defenseStatRaw * getStatMultiplier(defenseStage));
 
 	let finalAttackStat = attackStat;
-	if (attackerStatus === 'brn' && move.category === 'Physical' && move.id !== 'facade') {
+	// --- FIX: Guts ignores Burn's attack drop ---
+	const attackerAbility = toID(attacker.ability || '');
+	if (attackerStatus === 'brn' && move.category === 'Physical' && move.id !== 'facade' && attackerAbility !== 'guts') {
 		finalAttackStat = Math.floor(finalAttackStat / 2);
 	}
+	// --- END FIX ---
 
 	// --- Self-Destruct Defense Halving ---
 	let finalDefenseStat = defenseStat;
@@ -1107,7 +1147,6 @@ function calculateDamage(
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, move, battle);
 	// Sniper ability boosts critical hit damage from 1.5x to 2.25x
-	const attackerAbility = toID(attacker.ability || '');
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
