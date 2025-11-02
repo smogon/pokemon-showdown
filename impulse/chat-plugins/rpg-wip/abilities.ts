@@ -1406,7 +1406,7 @@ export const RPGAbilities = {
 	checkImmunity: checkAbilityImmunity,
 	applyPowerModifier: applyAbilityPowerModifier,
 	applyTypeModifier: applyAbilityTypeModifier,
-	applyStatModifier: applyAbilityStatModifier, // <-- ADD THIS LINE
+	applyStatModifier: applyAbilityStatModifier,
 	applySpeedModifier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
