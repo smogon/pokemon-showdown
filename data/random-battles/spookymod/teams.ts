@@ -47,6 +47,7 @@ const MOVE_PAIRS = [
 	['leechseed', 'protect'],
 	['leechseed', 'substitute'],
 	['leechseed', 'burningbulwark'],
+	['moonlight', 'moongeistbeam'],
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */

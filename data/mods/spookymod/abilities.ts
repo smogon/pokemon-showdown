@@ -82,13 +82,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	jumpscare: {
 		onStart(pokemon) {
 			if (this.effectState.scare) return;
-			let activated = false;
+			this.effectState.scare = true;
+			this.add('-ability', pokemon, 'Jumpscare');
 			for (const target of pokemon.adjacentFoes()) {
-				if (!activated) {
-					this.add('-ability', pokemon, 'Jumpscare');
-					activated = true;
-					this.effectState.scare = true;
-				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {

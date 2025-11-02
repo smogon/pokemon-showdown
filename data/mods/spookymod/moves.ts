@@ -122,7 +122,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 75,
 		onAfterHit(target, source, move) {
-			this.actions.useMove("painsplit", target, { target });
+			this.actions.useMove("painsplit", source, { target });
 		},
 	},
 	lastrespects: {
@@ -303,7 +303,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onTry(source, target) {
 			if (source.lastMove?.id && source.lastMove.id !== 'moonlight') {
 				this.add('cant', source, 'Moongeist Beam', 'Moongeist Beam');
-				return true;
+				return false;
 			}
 		},
 	},
@@ -570,6 +570,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	destinybond: {
 		inherit: true,
 		pp: 1,
+		noPPBoosts: true,
 		desc: "Returns equal damage when hit. Single use.",
 		shortDesc: "Returns equal damage when hit. Single use.",
 		condition: {
