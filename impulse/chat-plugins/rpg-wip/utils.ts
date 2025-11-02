@@ -4,10 +4,6 @@ import { ITEMS_DATABASE, NATURES, NATURE_LIST } from './constants';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 
-// Global declarations (available from Pokemon Showdown environment)
-declare const Dex: any;
-declare function toID(text: string): string;
-
 /**
  * Calculate total experience required for a Pokemon to reach a specific level
  */
