@@ -4989,7 +4989,7 @@ function generateSingleBattleHTML(
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
 		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">${moveData.name}</div>` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
             `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
                 `<span>${moveData.type}</span>` +
                `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
