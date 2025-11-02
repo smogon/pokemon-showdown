@@ -1691,12 +1691,7 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
 	if (hazards.length === 0) return false; // No hazards, no effect.
 
-	const species = Dex.species.get(pokemon.species);
-	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-	const isGroundedCheck = !(species.types.includes('Flying') || pokemon.ability === 'Levitate' || hasAirBalloon);
-
-	// isGrounded check must also respect Gravity
-	const isGrounded = isGroundedCheck || battle.gravityTurns > 0;
+	const isGrounded = RPGAbilities.isGrounded(pokemon, battle);
 
 	let totalDamage = 0;
 	let airBalloonPopped = false;
@@ -2073,6 +2068,13 @@ function handleStatusMove(
 				messageLog.push('The Electric Terrain prevents sleep!');
 			}
 
+			// Check ability immunity
+			if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status)) {
+				canBeAfflicted = false;
+				messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
+			}
+
+			// Check type immunity
 			if (canBeAfflicted) {
 				if ((move.status === 'brn' && defenderSpecies.types.includes('Fire')) || (move.status === 'par' && defenderSpecies.types.includes('Electric')) || (move.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (move.status === 'frz' && defenderSpecies.types.includes('Ice'))) {
 					canBeAfflicted = false;
@@ -2120,14 +2122,13 @@ function handleStatusMove(
 				// Check if target can be put to sleep
 				if (!defenderSlot.status && !defenderSlot.yawnCounter) {
 					const defenderSpecies = Dex.species.get(defender.species);
-					// Check type immunity
-					const isTypeImmune = defenderSpecies.types.includes('Grass') && defenderSlot.pokemon.ability === 'Overcoat';
-					// Check terrain immunity
+					// Check terrain immunity (Electric Terrain prevents sleep)
 					const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(defender, battle);
-					// Check ability immunity
-					const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(defender.ability || '');
+					// Check ability immunity (abilities that prevent sleep)
+					const sleepPreventingAbilities = ['insomnia', 'vitalspirit', 'comatose', 'sweetveil'];
+					const isAbilityImmune = sleepPreventingAbilities.includes(toID(defender.ability || ''));
 
-					if (!isTypeImmune && !isTerrainImmune && !isAbilityImmune) {
+					if (!isTerrainImmune && !isAbilityImmune) {
 						defenderSlot.yawnCounter = 2; // Will fall asleep in 2 turns
 						messageLog.push(`${defender.species} grew drowsy!`);
 						hadEffect = true;
@@ -2825,6 +2826,7 @@ function handleDamagingMove(
 				}
 
 				if (move.flags.contact) {
+					// Item-based contact effects
 					if (defender.item === 'rockyhelmet') {
 						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 6));
 						messageLog.push(`${attacker.species} was hurt by the Rocky Helmet!`);
@@ -2833,6 +2835,51 @@ function handleDamagingMove(
 						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 						messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
 						defender.item = undefined;
+					}
+
+					// Ability-based contact effects
+					const defenderAbility = toID(defender.ability || '');
+					const attackerSpecies = Dex.species.get(attacker.species);
+					
+					// Rough Skin / Iron Barbs - Damages attacker
+					if (defenderAbility === 'roughskin' || defenderAbility === 'ironbarbs') {
+						const damage = Math.floor(attacker.maxHp / 8);
+						attacker.hp = Math.max(0, attacker.hp - damage);
+						messageLog.push(`${attacker.species} was hurt by ${defender.species}'s ${defender.ability}!`);
+					}
+					
+					// Status-inducing contact abilities
+					if (!attackerSlot.status && attacker.hp > 0) {
+						let statusToInflict: Status | null = null;
+						let triggerChance = 0.3;
+
+						if (defenderAbility === 'static' && !attackerSpecies.types.includes('Electric')) {
+							statusToInflict = 'par';
+						} else if (defenderAbility === 'flamebody' && !attackerSpecies.types.includes('Fire')) {
+							statusToInflict = 'brn';
+						} else if (defenderAbility === 'poisonpoint' && !attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) {
+							statusToInflict = 'psn';
+						} else if (defenderAbility === 'effectspore' && !attackerSpecies.types.includes('Grass')) {
+							// Effect Spore can inflict poison, paralysis, or sleep
+							const possibleStatuses: Status[] = [];
+							if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel')) possibleStatuses.push('psn');
+							if (!attackerSpecies.types.includes('Electric')) possibleStatuses.push('par');
+							possibleStatuses.push('slp');
+							if (possibleStatuses.length > 0) {
+								statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
+							}
+						}
+
+						if (statusToInflict && Math.random() < triggerChance) {
+							// Check if ability prevents the status
+							if (!RPGAbilities.preventsStatus(attacker, statusToInflict)) {
+								attackerSlot.status = statusToInflict;
+								if (statusToInflict === 'slp') {
+									attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+								}
+								messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${defender.species}'s ${defender.ability}!`);
+							}
+						}
 					}
 				}
 
@@ -2944,9 +2991,15 @@ function handleDamagingMove(
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
 
-							if ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) ||
+							// Check ability immunity
+							if (canBeAfflicted && RPGAbilities.preventsStatus(defender, randomStatus)) {
+								canBeAfflicted = false;
+							}
+
+							// Check type immunity
+							if (canBeAfflicted && ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) ||
 								(randomStatus === 'par' && defenderSpecies.types.includes('Electric')) ||
-								(randomStatus === 'frz' && defenderSpecies.types.includes('Ice'))) {
+								(randomStatus === 'frz' && defenderSpecies.types.includes('Ice')))) {
 								canBeAfflicted = false;
 							}
 
@@ -2959,7 +3012,14 @@ function handleDamagingMove(
 							const defenderSpecies = Dex.species.get(defender.species);
 							let canBeAfflicted = !defenderCurrentStatus;
 							const newStatus = move.secondary.status as Status;
-							if ((newStatus === 'brn' && defenderSpecies.types.includes('Fire')) || (newStatus === 'par' && defenderSpecies.types.includes('Electric')) || (newStatus === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (newStatus === 'frz' && defenderSpecies.types.includes('Ice'))) {
+							
+							// Check ability immunity
+							if (canBeAfflicted && RPGAbilities.preventsStatus(defender, newStatus)) {
+								canBeAfflicted = false;
+							}
+							
+							// Check type immunity
+							if (canBeAfflicted && ((newStatus === 'brn' && defenderSpecies.types.includes('Fire')) || (newStatus === 'par' && defenderSpecies.types.includes('Electric')) || (newStatus === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (newStatus === 'frz' && defenderSpecies.types.includes('Ice')))) {
 								canBeAfflicted = false;
 							}
 							if (canBeAfflicted) {
