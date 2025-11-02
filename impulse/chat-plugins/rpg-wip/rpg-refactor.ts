@@ -3030,7 +3030,7 @@ function handleDamagingMove(
 						defenderSlot,
 						move,
 						battle,
-						messageLog: [],
+						messageLog,
 					};
 					chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
