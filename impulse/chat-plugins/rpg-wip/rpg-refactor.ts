@@ -4879,16 +4879,14 @@ function generateSingleBattleHTML(
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
 		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `
-            <div style="text-align: center; font-weight: bold; font-size: 1.0em; margin-bottom: 8px;">${moveData.name}</div>` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.0em; margin-bottom: 8px;">${moveData.name}</div>` +
             `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
                 `<span>${moveData.type}</span>` +
-               ` <span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
-            `</div> `;
+               `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+			`</div> `;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">
-                    ${buttonContent}
-                </button>`;
+		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
+                   ` ${buttonContent}</button>`;
 	});
 
 	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
