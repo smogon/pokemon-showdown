@@ -4899,16 +4899,16 @@ function generateSingleBattleHTML(
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		// --- Opponent Pokemon (Top Right) ---
-		`<div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">` +
-		`<div style="text-align: center; width: 45%;">` +
+		`<div style="margin-bottom: 40px;">` +
+		`<div style="text-align: center; width: 40%; margin-left: auto; margin-right: 0;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
 		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
 		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
 		`</div>` +
 		`</div>` +
 		// --- Player Pokemon (Bottom Left) ---
-		`<div style="display: flex; justify-content: flex-start; margin-bottom: 30px;">` +
-		`<div style="text-align: center; width: 45%;">` +
+		`<div style="margin-bottom: 30px;">` +
+		`<div style="text-align: center; width: 40%; margin-left: 0; margin-right: auto;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
 		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
