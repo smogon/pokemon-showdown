@@ -137,14 +137,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Crucibellite', 'Rage Fist'],
 	},
 	{
-		name: "[Gen 9] BSS Reg I",
-		mod: 'gen9',
-		searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary'],
-	},
-	{
 		name: "[Gen 9] BSS Reg J",
 		mod: 'gen9',
 		bestOfDefault: true,
@@ -271,6 +263,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary', 'Mythical'],
+	},
+	{
+		name: "[Gen 9] VGC 2026 Reg F",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
+	},
+	{
+		name: "[Gen 9] VGC 2026 Reg F (Bo3)",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
