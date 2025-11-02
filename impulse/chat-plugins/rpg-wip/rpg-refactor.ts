@@ -1079,6 +1079,14 @@ function calculateDamage(
 		attackStatRaw = Math.floor(attackStatRaw * 1.5);
 	}
 
+	// Solar Power boosts Sp. Atk in sun
+	if (move.category === 'Special' && battle.weather?.type === 'sun') {
+		const attackerAbilityCheck = toID(attacker.ability || '');
+		if (attackerAbilityCheck === 'solarpower') {
+			attackStatRaw = Math.floor(attackStatRaw * 1.5);
+		}
+	}
+
 	const attackStage = move.category === 'Special' ? attackerStages.spa : attackerStages.atk;
 	const defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderStages.def : defenderStages.spd) :
@@ -1773,6 +1781,9 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 			return true; // Pokémon fainted
 		}
 	}
+
+	// Apply switch-in abilities (weather/terrain setting)
+	RPGAbilities.applySwitchInAbilities(pokemon, battle, messageLog);
 
 	return false; // Pokémon survived
 }
@@ -3302,25 +3313,63 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	};
 	messageLog.push(weatherMessages[battle.weather.type]);
 
-	// Apply weather damage if applicable
+	// Apply weather damage and healing effects
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
 	for (const slot of allSlots) {
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0) continue;
 		const species = Dex.species.get(pokemon.species);
+		const ability = toID(pokemon.ability || '');
+		
+		// Weather healing abilities
+		if (battle.weather.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s Rain Dish restored its HP!`);
+		} else if (battle.weather.type === 'hail' && ability === 'icebody' && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s Ice Body restored its HP!`);
+		} else if (battle.weather.type === 'rain' && ability === 'dryskin' && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
+		}
+		
+		// Weather damage
 		let takeDamage = false;
+		let damageAmount = Math.floor(pokemon.maxHp / 16);
 
+		// Sandstorm damage
 		if (battle.weather.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
 			takeDamage = true;
-		} else if (battle.weather.type === 'hail' && !species.types.includes('Ice')) {
+		} 
+		// Hail damage (but not if Ice Body healed)
+		else if (battle.weather.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
 		}
+		// Sun damage for Dry Skin and Solar Power
+		else if (battle.weather.type === 'sun') {
+			if (ability === 'dryskin') {
+				takeDamage = true;
+				damageAmount = Math.floor(pokemon.maxHp / 8);
+			} else if (ability === 'solarpower') {
+				takeDamage = true;
+				damageAmount = Math.floor(pokemon.maxHp / 8);
+			}
+		}
 
-		if (takeDamage) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is buffeted by the weather!`);
+		// Apply weather damage (blocked by Magic Guard)
+		if (takeDamage && RPGAbilities.takesIndirectDamage(pokemon)) {
+			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, damageAmount));
+			if (ability === 'dryskin' && battle.weather.type === 'sun') {
+				messageLog.push(`${pokemon.species} was hurt by its Dry Skin!`);
+			} else if (ability === 'solarpower') {
+				messageLog.push(`${pokemon.species} was hurt by Solar Power!`);
+			} else {
+				messageLog.push(`${pokemon.species} is buffeted by the weather!`);
+			}
 		}
 	}
 
@@ -4338,6 +4387,18 @@ function executeAction(
 				return;
 			}
 
+			// Apply switch-out abilities before removing from battle
+			const outgoingAbility = toID(outgoingPokemon.ability || '');
+			if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
+				const healAmount = Math.floor(outgoingPokemon.maxHp / 3);
+				outgoingPokemon.hp = Math.min(outgoingPokemon.maxHp, outgoingPokemon.hp + healAmount);
+				messageLog.push(`${outgoingPokemon.species}'s Regenerator restored its HP!`);
+			} else if (outgoingAbility === 'naturalcure' && attackerSlot.status) {
+				attackerSlot.status = null;
+				outgoingPokemon.status = null;
+				messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
+			}
+
 			// Save outgoing Pokemon's status to the party
 			saveBattleStatus(battle); // This function needs to be updated in Step 7
 
@@ -4364,6 +4425,18 @@ function executeAction(
 		} else {
 			// --- AI SWITCH LOGIC ---
 			const outgoingPokemon = attackerSlot.pokemon;
+
+			// Apply switch-out abilities before removing from battle
+			const outgoingAbility = toID(outgoingPokemon.ability || '');
+			if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
+				const healAmount = Math.floor(outgoingPokemon.maxHp / 3);
+				outgoingPokemon.hp = Math.min(outgoingPokemon.maxHp, outgoingPokemon.hp + healAmount);
+				messageLog.push(`${outgoingPokemon.species}'s Regenerator restored its HP!`);
+			} else if (outgoingAbility === 'naturalcure' && attackerSlot.status) {
+				attackerSlot.status = null;
+				outgoingPokemon.status = null;
+				messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
+			}
 
 			// Find new Pokemon in party
 			const replacement = battle.opponentParty.find(p =>

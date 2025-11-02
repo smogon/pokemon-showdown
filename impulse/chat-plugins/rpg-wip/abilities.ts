@@ -1170,6 +1170,69 @@ export function getAbilityInfo(abilityName: string): any {
 }
 
 /**
+ * Apply switch-in abilities (weather/terrain setting)
+ */
+export function applySwitchInAbilities(pokemon: RPGPokemon, battle: BattleState, messageLog: string[]): void {
+	const ability = toID(pokemon.ability || '');
+	
+	// Weather-setting abilities
+	switch (ability) {
+		case 'drought':
+			if (battle.weather?.type !== 'sun') {
+				battle.weather = { type: 'sun', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Drought intensified the sun!`);
+			}
+			break;
+		case 'drizzle':
+			if (battle.weather?.type !== 'rain') {
+				battle.weather = { type: 'rain', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Drizzle caused a downpour!`);
+			}
+			break;
+		case 'sandstream':
+			if (battle.weather?.type !== 'sand') {
+				battle.weather = { type: 'sand', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Sand Stream whipped up a sandstorm!`);
+			}
+			break;
+		case 'snowwarning':
+			if (battle.weather?.type !== 'hail') {
+				battle.weather = { type: 'hail', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Snow Warning created a hailstorm!`);
+			}
+			break;
+	}
+	
+	// Terrain-setting abilities
+	switch (ability) {
+		case 'electricsurge':
+			if (battle.terrain?.type !== 'electric') {
+				battle.terrain = { type: 'electric', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Electric Surge electrified the field!`);
+			}
+			break;
+		case 'grassysurge':
+			if (battle.terrain?.type !== 'grassy') {
+				battle.terrain = { type: 'grassy', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Grassy Surge created grassy terrain!`);
+			}
+			break;
+		case 'mistysurge':
+			if (battle.terrain?.type !== 'misty') {
+				battle.terrain = { type: 'misty', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Misty Surge created misty terrain!`);
+			}
+			break;
+		case 'psychicsurge':
+			if (battle.terrain?.type !== 'psychic') {
+				battle.terrain = { type: 'psychic', turns: 5 };
+				messageLog.push(`${pokemon.species}'s Psychic Surge created psychic terrain!`);
+			}
+			break;
+	}
+}
+
+/**
  * Export all ability handlers
  */
 export const RPGAbilities = {
@@ -1195,6 +1258,7 @@ export const RPGAbilities = {
 	takesIndirectDamage,
 	preventsRecoil,
 	canUseHeldItem,
+	applySwitchInAbilities,
 	
 	// Ability databases
 	IMMUNITY_ABILITIES,
