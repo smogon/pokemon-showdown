@@ -2928,9 +2928,9 @@ function handleDamagingMove(
 						// In wild battles, this ends the battle slot (wild pokemon flees)
 						battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
 					} else {
-						// Force player to switch - set the slot to null and trigger switch UI
+						// Force player to switch - set the slot to null
 						battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
-						battle.playerShouldSwitch = true;
+						// REMOVED: battle.playerShouldSwitch = true; (This is the fix)
 					}
 				}
 			}
@@ -3177,8 +3177,8 @@ function handleDamagingMove(
 		messageLog.push(`${attacker.species} fainted!`);
 		attacker.hp = 0;
 	}
-}	
-
+}
+			
 function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	// **NEW:** Magic Room disables all held items.
 	if (battle.magicRoomTurns > 0) return;
