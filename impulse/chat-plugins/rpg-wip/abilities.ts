@@ -1402,7 +1402,7 @@ export const RPGAbilities = {
 	checkImmunity: checkAbilityImmunity,
 	applyPowerModifier: applyAbilityPowerModifier,
 	applyTypeModifier: applyAbilityTypeModifier,
-	applyAbilityStatModifier, // <-- Changed from applyStatModifier
+	applyAbilityStatModifier,
 	applySpeedModifier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
@@ -1441,3 +1441,5 @@ export const RPGAbilities = {
 	TERRAIN_ABILITIES,
 	HEALING_ABILITIES,
 };
+
+export default RPGAbilities;
