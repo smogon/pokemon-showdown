@@ -4745,21 +4745,21 @@ function executeAction(
 function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string } // This parameter is no longer used here, but kept for signature compatibility
+	targetSelection?: { attackerSlotIndex: number, moveId: string }
 ): string {
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
 	if (!playerSlot || !opponentSlot) {
-		// This should not happen in a single battle
 		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>`;
 	}
 
 	const playerPokemon = playerSlot.pokemon;
+	const opponentPokemon = opponentSlot.pokemon;
 
 	let actionHTML = '';
 
-	// --- STATE 1: Action Selection (Target selection is now skipped) ---
+	// --- STATE 1: Action Selection ---
 	const moveButtons = playerPokemon.moves.map(move => {
 		const moveData = getMove(move.id);
 
@@ -4770,18 +4770,13 @@ function generateSingleBattleHTML(
 		const isTauntBlocked = playerSlot.tauntTurns > 0 &&
 			moveData.category === 'Status';
 
-		// --- FIX: Check Choice Item Lock ---
 		const isLocked = playerSlot.lockedMove &&
 			playerSlot.lockedMove !== move.id &&
 			battle.magicRoomTurns === 0 &&
-			// Check if the locked move still has PP
 			playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
 
 		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
 
-		// --- MODIFICATION ---
-		// Command format: /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
-		// We now send the full move command directly, hardcoding attacker=0 and target=2.
 		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled style="background-color:#888;"' : ''}>${moveData.name}<br><small>PP: ${move.pp} / ${moveData.pp}</small></button>`;
 	}).join('');
 
@@ -4793,22 +4788,35 @@ function generateSingleBattleHTML(
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
-	actionHTML = `<p>What will ${playerPokemon.species} do?</p>` +
-		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">${moveButtons}</div>` +
+	actionHTML = `<p style="margin-top: 15px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
+		`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">${moveButtons}</div>` +
 		`<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button>${catchButton}${runButton}</p>`;
-	// --- END MODIFICATION ---
 
-	return `<div class="infobox"><h2>Battle!</h2>` +
+	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		`${generateFieldEffectHTML(battle)}` +
-		`<div style="display: flex; justify-content: space-around;">` +
-	// Player Pokemon
-		`<div style="flex-basis: 48%;"><h3>Your Pokemon</h3><psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(playerSlot, true)}</div>` +
-	// Opponent Pokemon
-		`<div style="flex-basis: 48%;"><h3>${battle.opponentName}</h3><psicon pokemon="${opponentSlot.pokemon.species}" style="vertical-align: middle;"></psicon> ${generatePokemonInfoHTML(opponentSlot, false)}</div>` +
-		`</div><hr />` +
-	// Message Log
-		`<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>` +
-	// Action Area
+		`<hr style="margin: 10px 0;" />` +
+		`<div style="display: flex; justify-content: space-around; gap: 15px; margin-bottom: 15px;">` +
+		// --- Opponent Pokemon (Top) ---
+		`<div style="flex: 1; text-align: center;">` +
+		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
+		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(opponentSlot, false)}` +
+		`</div>` +
+		// --- VS Divider ---
+		`<div style="display: flex; align-items: center; justify-content: center; padding: 0 10px;">` +
+		`<div style="font-size: 24px; font-weight: bold; color: #999;">VS</div>` +
+		`</div>` +
+		// --- Player Pokemon (Bottom) ---
+		`<div style="flex: 1; text-align: center;">` +
+		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
+		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`<br>${generatePokemonInfoHTML(playerSlot, true)}` +
+		`</div>` +
+		`</div>` +
+		`<hr style="margin: 10px 0;" />` +
+		// --- Message Log ---
+		`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
+		// --- Action Area ---
 		actionHTML +
 		`</div>`;
 }
@@ -4964,72 +4972,75 @@ function generateDoubleBattleHTML(
 	// Helper to generate HTML for a single slot
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
 		if (!slot) {
-			return `<div style="flex-basis: 48%; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 150px; text-align: center; color: #888;">(Empty Slot)</div>`;
+			return `<div style="flex: 1; border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888; display: flex; align-items: center; justify-content: center;">(Empty)</div>`;
 		}
 		if (slot.pokemon.hp <= 0) {
-			return `<div style="flex-basis: 48%; opacity: 0.5; background: #f0f0f0;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+			return `<div style="flex: 1; opacity: 0.5; background: #f0f0f0; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
 		}
 
 		let borderStyle = "1px solid #ccc";
-		// Check if this slot is a pending target
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			borderStyle = "3px dashed #007bff"; // Highlight as targetable
+			borderStyle = "3px dashed #007bff";
 		}
-		// Check if this slot has already acted
 		if (battle.pendingActions[slotIndex]) {
-			borderStyle = "3px solid #28a745"; // Green border for "Ready"
+			borderStyle = "3px solid #28a745";
 		}
 
-		return `<div style="flex-basis: 48%; border: ${borderStyle};">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
+		return `<div style="flex: 1; border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generatePokemonInfoHTML(slot, side === 'player')}</div>`;
 	};
 
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
 	html += generateFieldEffectHTML(battle);
 
-	// --- Opponent Side ---
-	html += `<div><h3>${battle.opponentName}</h3><div style="display: flex; justify-content: space-around;">`;
+	// --- Opponent Side (Top) ---
+	html += `<div style="margin-bottom: 15px;">`;
+	html += `<h3 style="margin: 5px 0;">${battle.opponentName}</h3>`;
+	html += `<div style="display: flex; justify-content: center; gap: 10px;">`;
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
 	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += `</div></div><hr />`;
+	html += `</div></div>`;
 
-	// --- Player Side ---
-	html += `<div><h3>Your Team</h3><div style="display: flex; justify-content: space-around;">`;
+	html += `<hr style="margin: 10px 0;" />`;
+
+	// --- Player Side (Bottom) ---
+	html += `<div style="margin-top: 15px;">`;
+	html += `<h3 style="margin: 5px 0;">Your Team</h3>`;
+	html += `<div style="display: flex; justify-content: center; gap: 10px;">`;
 	html += generateSlotHTML(pSlot0, 0, 'player');
 	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += `</div></div><hr />`;
+	html += `</div></div>`;
+
+	html += `<hr style="margin: 10px 0;" />`;
 
 	// --- Message Log ---
-	html += `<div style="padding: 5px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px;">${messageLog.join('<br>')}</div>`;
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; background: #f0f0f0; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
 
 	// --- Action Area ---
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = getMove(targetSelection.moveId);
-		html += `<p>Select a target for <strong>${move.name}</strong>:</p>`;
-		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
+		html += `<p style="margin-top: 10px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
+		html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0;">`;
 
-		// TODO: This needs to be smarter based on move.target (e.g., 'ally', 'allAdjacentFoes')
-		// For now, we'll just show all valid targets.
 		const targets = [
+			{ slot: oSlot0, name: "Opponent 1", index: 2 },
+			{ slot: oSlot1, name: "Opponent 2", index: 3 },
 			{ slot: pSlot0, name: "Ally 1", index: 0 },
 			{ slot: pSlot1, name: "Ally 2", index: 1 },
-			{ slot: oSlot0, name: "Foe 1", index: 2 },
-			{ slot: oSlot1, name: "Foe 2", index: 3 },
 		];
 
 		for (const target of targets) {
 			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex) {
-				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name} (${target.slot.pokemon.species})</button>`;
+				html += `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button">${target.name}</button>`;
 			}
 		}
 		html += `</div>`;
-		html += `<p style="margin-top: 10px;"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+		html += `<p><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
 	} else {
 		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
 		let activeSlotIndex = -1;
 
-		// Find the next player slot that needs to act
 		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
 			activeSlot = pSlot0;
 			activeSlotIndex = 0;
@@ -5040,8 +5051,8 @@ function generateDoubleBattleHTML(
 
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
-			html += `<p>What will <strong>${pokemon.species}</strong> do?</p>`;
-			html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">`;
+			html += `<p style="margin-top: 10px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
+			html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">`;
 
 			const moves = pokemon.moves;
 			for (const move of moves) {
@@ -5061,16 +5072,14 @@ function generateDoubleBattleHTML(
 			}
 			html += `</div>`;
 		} else {
-			// All player Pokemon have actions queued
-			html += `<p>Waiting for opponent...</p>`;
+			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
 		}
 
-		// --- Main Action Buttons (Catch, Switch, Run) ---
-		const catchButton = (battle.battleType === 'wild' || battle.battleType === 'wild_double') ?
+		const catchButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
 			`<button class="button" disabled style="background-color:#888;">⚽ Catch</button>`;
 
-		const runButton = (battle.battleType === 'wild' || battle.battleType === 'wild_double') ? // TODO: Add trap check
+		const runButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 			`<button class="button" disabled style="background-color:#888;">🏃 Run</button>`;
 
