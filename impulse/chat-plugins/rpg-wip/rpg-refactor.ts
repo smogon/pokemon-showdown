@@ -4874,7 +4874,7 @@ function generateSingleBattleHTML(
 
 		// Style for the button, trying to match the 2x2 image
 		// This uses simple styles, float is the only risky one.
-		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; min-height: 40px;`;
+		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
 
 		// Content inside the button
 		// `float: right` is the best bet for right-alignment without flex/grid.
@@ -4918,16 +4918,16 @@ function generateSingleBattleHTML(
 		`<table style="width: 100%; margin-bottom: 10px;">` +
 		`<tr>` +
 		// --- Player Pokemon (Left) ---
-		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
+		`<td style="width: 45%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
-		`${generatePokemonInfoHTML(playerSlot, true)}` +
 		`<psicon pokemon="${playerPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`${generatePokemonInfoHTML(playerSlot, true)}` +
 		`</td>` +
 		// --- Opponent Pokemon (Right) ---
-		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
+		`<td style="width: 45%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
-		`${generatePokemonInfoHTML(opponentSlot, false)}` +
 		`<psicon pokemon="${opponentPokemon.species}" style="vertical-align: middle;"></psicon>` +
+		`${generatePokemonInfoHTML(opponentSlot, false)}` +
 		`</td>` +
 		`</tr>` +
 		`</table>` +
