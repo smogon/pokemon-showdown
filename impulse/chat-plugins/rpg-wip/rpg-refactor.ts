@@ -4238,8 +4238,15 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		// Sort by Speed
 		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
 		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
+		// --- NEW: Apply ability-based speed modifications ---
+		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
+		// --- END NEW ---
+
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+		// --- NEW: Apply ability-based speed modifications ---
+		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
+		// --- END NEW ---
 
 		// Quick Claw: 20% chance to move first
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
@@ -4298,6 +4305,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 	}
 }
+
 
 /**
  * Gets all active (non-fainted, non-null) slots for a given side.
