@@ -1539,16 +1539,22 @@ function applyPostDamageContactEffects(
 
 	// --- Stat-boosting Berries (Kee, Maranga) ---
 	if (battle.magicRoomTurns === 0) {
-		if (move.category === 'Physical' && defender.item === 'keberry' && defenderSlot.statStages.def < 6) {
-			defenderSlot.statStages.def++;
-			messageLog.push(`${defender.species} ate its Kee Berry to raise its Defense!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
-		} else if (move.category === 'Special' && defender.item === 'marangaberry' && defenderSlot.statStages.spd < 6) {
-			defenderSlot.statStages.spd++;
-			messageLog.push(`${defender.species} ate its Maranga Berry to raise its Sp. Def!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+		if (move.category === 'Physical' && defender.item === 'keberry') {
+			// --- CONTRARY FIX ---
+			if (applyStatChange(defenderSlot, 'def', 1, battle, messageLog, defenderSlot)) {
+				messageLog[messageLog.length - 1] += ` (from Kee Berry)!`;
+				defender.item = undefined;
+				activateUnburden(defenderSlot, messageLog);
+			}
+			// --- END FIX ---
+		} else if (move.category === 'Special' && defender.item === 'marangaberry') {
+			// --- CONTRARY FIX ---
+			if (applyStatChange(defenderSlot, 'spd', 1, battle, messageLog, defenderSlot)) {
+				messageLog[messageLog.length - 1] += ` (from Maranga Berry)!`;
+				defender.item = undefined;
+				activateUnburden(defenderSlot, messageLog);
+			}
+			// --- END FIX ---
 		}
 	}
 
@@ -1585,16 +1591,17 @@ function applyPostDamageContactEffects(
 	// --- Weakness Policy ---
 	if (battle.magicRoomTurns === 0 && defender.item === 'weaknesspolicy' && effectiveness > 1) {
 		let activated = false;
-		if (defenderSlot.statStages.atk < 6) {
-			defenderSlot.statStages.atk = Math.min(6, defenderSlot.statStages.atk + 2);
+		// --- CONTRARY FIX ---
+		if (applyStatChange(defenderSlot, 'atk', 2, battle, messageLog, defenderSlot)) {
 			activated = true;
 		}
-		if (defenderSlot.statStages.spa < 6) {
-			defenderSlot.statStages.spa = Math.min(6, defenderSlot.statStages.spa + 2);
+		if (applyStatChange(defenderSlot, 'spa', 2, battle, messageLog, defenderSlot)) {
 			activated = true;
 		}
+		// --- END FIX ---
+
 		if (activated) {
-			messageLog.push(`${defender.species}'s Weakness Policy sharply boosted its Attack and Sp. Attack!`);
+			messageLog.push(`${defender.species}'s Weakness Policy was activated!`);
 			defender.item = undefined;
 			activateUnburden(defenderSlot, messageLog);
 		}
