@@ -3254,6 +3254,20 @@ function handleOpponentFaint(
 			faintedThisCheck = true;
 			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
 
+			// --- AFTERMATH CHECK ---
+			const faintedAbility = toID(slot.pokemon.ability || '');
+			const lastMove = slot.lastMoveThatHitMe;
+			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+				// Find the attacker (who must be a player participant)
+				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
+					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
+					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+					messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+				}
+			}
+			// --- END AFTERMATH CHECK ---
+
 			// --- ADDED: Moxie / Beast Boost Check ---
 			// This iterates over all player Pokemon that participated
 			for (const participantSlot of playerParticipants) {
@@ -3327,6 +3341,21 @@ function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
 		if (slot === null || slot.pokemon.hp <= 0) {
 			if (slot && slot.pokemon.hp <= 0) {
 				messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
+
+				// --- AFTERMATH CHECK ---
+				const faintedAbility = toID(slot.pokemon.ability || '');
+				const lastMove = slot.lastMoveThatHitMe;
+				if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+					// Find the attacker (who must be an opponent)
+					const opponentSlots = getActiveSlots(battle.opponentSlots);
+					const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+					if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
+						const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
+						attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+						messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+					}
+				}
+				// --- END AFTERMATH CHECK ---
 			}
 			battle.playerSlots[i as 0 | 1] = null;
 			switchNeeded = true;
