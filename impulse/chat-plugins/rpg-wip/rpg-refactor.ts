@@ -1272,6 +1272,7 @@ function saveBattleStatus(battle: BattleState) {
  * Checks for statuses that might prevent a Pokémon from moving (sleep, freeze, paralysis, confusion).
  * @returns {boolean} `true` if the Pokémon can move, `false` otherwise.
  */
+
 function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	const attacker = attackerSlot.pokemon;
 
@@ -1324,9 +1325,14 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 	}
 
 	// Check for Paralysis
-	if (attackerSlot.status === 'par' && Math.random() < 0.25) {
-		messageLog.push(`${attacker.species} is fully paralyzed!`);
-		return false;
+	if (attackerSlot.status === 'par') {
+		const attackerAbility = toID(attacker.ability || '');
+
+		// Check for full paralysis, *unless* the user has Quick Feet
+		if (attackerAbility !== 'quickfeet' && Math.random() < 0.25) {
+			messageLog.push(`${attacker.species} is fully paralyzed!`);
+			return false;
+		}
 	}
 
 	return true; // Can move
