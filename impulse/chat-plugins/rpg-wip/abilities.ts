@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* RPG Abilities Module
+*/
 import { Dex, toID } from '../../../sim/dex';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler } from './interface';
 
