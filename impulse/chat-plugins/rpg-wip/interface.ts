@@ -146,6 +146,7 @@ export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves
  * @property {boolean} [flashFireBoost]
  * @property {boolean} [unburdenActive]
  * @property {boolean} [analyticBoost]
+ * @property {boolean} [slowStartTurn]
  */
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
@@ -188,6 +189,7 @@ export interface ActivePokemonSlot {
 	flashFireBoost?: boolean;
 	unburdenActive?: boolean;
 	analyticBoost?: boolean;
+	slowStartTurns?: number;
 }
 
 /**
@@ -387,7 +389,7 @@ export interface AbilityContext {
 export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
 export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
 export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
-export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number) => number;
+export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState) => number;
 export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string) => string;
 export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityOnDamageHandler = (ctx: AbilityContext, damage: number) => void;
