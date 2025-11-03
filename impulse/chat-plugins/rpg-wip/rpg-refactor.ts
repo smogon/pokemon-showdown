@@ -1937,125 +1937,51 @@ function applySecondaryEffects(
 /**
  * REFACTORED MAIN DAMAGING MOVE HANDLER
  */
-function handleDamagingMove(
+function handleChargingMove(
 	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot,
 	move: Move,
+	moveObject: { id: string; pp: number },
 	battle: BattleState,
-	messageLog: string[],
-	spreadMultiplier: number
-) {
-	// --- 1. Preamble Checks (OHKO, Fling, Counter, Invulnerability) ---
-	if (handleDamagingMovePreamble(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return; // Move was fully handled (e.g., it was OHKO or Fling) or it failed
-	}
+	ppDeduction: number
+): boolean {
+	const messageLog = battle.messageLog;
+	if (move.flags.charge && !attackerSlot.chargingMove) {
+		// --- First turn: Start charging ---
+		attackerSlot.chargingMove = move.id;
+		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
 
-	// --- 2. Multi-Hit & Parental Bond Logic ---
-	const attacker = attackerSlot.pokemon;
-	let moveWasSuccessful = false;
-	const hitCount = RPGAbilities.getMultiHitCount(attacker, move);
-	const hasParentalBond = RPGAbilities.hasParentalBond(attacker);
-	const totalHits = hasParentalBond && hitCount === 1 ? 2 : hitCount;
-
-	if (totalHits > 1) {
-		const hitMessage = hasParentalBond ?
-			` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
-			` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
-		if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += hitMessage;
-		} else {
-			messageLog.push(hitMessage);
-		}
-	}
-
-	// --- 3. Damage Loop ---
-	for (let i = 0; i < totalHits; i++) {
-		// --- 3a. Calculate Damage ---
-		let parentalBondSpreadMultiplier = spreadMultiplier;
-		if (hasParentalBond && i === 1) {
-			parentalBondSpreadMultiplier *= 0.25; // Second hit is 25% damage
-		}
-		
-		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
-		if (attackResult.effectiveness > 0) {
-			moveWasSuccessful = true;
-		}
-
-		// --- 3b. Handle Effectiveness Berry ---
-		if (attackResult.berryConsumed) {
-			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
-			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
-				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
+		if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
+		else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
+		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
+		else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
+		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
+		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
+			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+				attackerSlot.chargingMove = undefined; // Skip charging
+				chargeMessage = '';
+			} else {
+				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
 			}
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
 		}
+		// ... (add other custom charge messages here) ...
+		else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
+		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
 
-		// --- 3c. Apply Damage (incl. Substitute, Sturdy, Sash) ---
-		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog);
+		if (chargeMessage) messageLog.push(chargeMessage);
 
-		// Track damage for Counter/Mirror Coat
-		if (damageDealt > 0 && move.category !== 'Status') {
-			defenderSlot.lastDamageTaken = {
-				amount: damageDealt,
-				category: move.category,
-				from: attacker.id,
-			};
-		}
-		
-		// Add damage message
-		if (totalHits > 1) {
-			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
-		} else if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += attackResult.message;
-		} else {
-			messageLog.push(attackResult.message);
-		}
-		
-		// --- 3d. Pop Air Balloon ---
-		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
-			damageDealt > 0 && move.category !== 'Status') {
-			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
-		}
-
-		if (attackResult.effectiveness > 0 && damageDealt > 0) {
-			// --- 3e. Attacker Drain Effects (Drain, Shell Bell) ---
-			if (move.drain && attacker.hp < attacker.maxHp) {
-				if (attackerSlot.healBlockTurns > 0) {
-					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
-				} else {
-					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
-					attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
-					messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
-				}
+		// If still charging (not skipped by sun, etc.)
+		if (attackerSlot.chargingMove) {
+			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
 			}
-			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
-				if (attackerSlot.healBlockTurns <= 0) {
-					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
-					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
-					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
-				}
-			}
-
-			// --- 3f. Defender Contact Effects (Rocky Helmet, Abilities, WP, Red Card) ---
-			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
-			// --- ANGER POINT FIX: Pass isCritical to this function ---
-			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
-			
-			// --- 3g. HP-Drop Berry Effects (Sitrus, Enigma) ---
-			handleHPDropEffects(defenderSlot, battle, messageLog);
-			
-			// --- 3h. Attacker Recoil & Self-Effects (Recoil, Life Orb, Self-Boosts, Self-Destruct) ---
-			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
-			
-			// --- 3i. Secondary Effects (Status, Stat Drops, Flinch) ---
-			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+			return true; // End turn
 		}
-		
-		if (defenderSlot.pokemon.hp <= 0) break; // Stop multi-hit if defender fainted
+	} else if (attackerSlot.chargingMove === move.id) {
+		// --- Second turn: Execute the move ---
+		attackerSlot.chargingMove = undefined;
 	}
+	
+	return false; // Execute move
 }
 
 /********************************
