@@ -1664,19 +1664,26 @@ function applyRecoilAndSelfEffects(
 		handleHPDropEffects(attackerSlot, battle, messageLog);
 	}
 
-	// --- Self-Boosts (e.g., Power-Up Punch) ---
+	// --- Self-Boosts (e.g., Power-Up Punch, Close Combat) ---
 	if (attacker.hp > 0 && move.self?.boosts) {
 		const boosts = move.self.boosts;
 		for (const stat in boosts) {
-			const boostValue = boosts[stat as keyof typeof boosts]!;
+			let boostValue = boosts[stat as keyof typeof boosts]!; // --- MODIFIED ---
+
+			// --- ADDED: Contrary Check ---
+			if (toID(attacker.ability || '') === 'contrary') {
+				boostValue *= -1;
+			}
+			// --- END ADDED ---
+
 			const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
 			if (currentStage !== undefined) {
 				const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
 				attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
 				if (boostValue > 0) {
-					messageLog.push(`${attacker.species}'s ${stat} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+					messageLog.push(`${attacker.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
 				} else if (boostValue < 0) {
-					messageLog.push(`${attacker.species}'s ${stat} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+					messageLog.push(`${attacker.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 				}
 			}
 		}
@@ -1745,18 +1752,60 @@ function applySecondaryEffects(
 
 		// --- Secondary Stat Drops ---
 		if (move.secondary.boosts) {
+			let hadEffect = false;
+			let triggeredDefiant = false;
+
 			for (const stat in move.secondary.boosts) {
-				const boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
+				let boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!; // --- MODIFIED ---
+
+				// --- ADDED: Contrary Check ---
+				if (toID(defenderSlot.pokemon.ability || '') === 'contrary') {
+					boostValue *= -1;
+				}
+				// --- END ADDED ---
+				
 				const currentStage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
-				if (currentStage !== undefined) {
-					const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
-					defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
-					if (boostValue < 0) {
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${stat} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+
+				if (boostValue < 0) { // --- Stat Drop ---
+					// --- ADDED: Check item/ability prevention ---
+					if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'clearamulet') {
+						messageLog.push(`${defenderSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+						continue;
 					}
-					// Note: Secondary boosts are almost always negative.
+					const targetAbility = toID(defenderSlot.pokemon.ability || '');
+					const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+					if (blockAbilities.includes(targetAbility)) {
+						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
+						continue;
+					}
+					if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(targetAbility)) {
+						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Attack from being lowered!`);
+						continue;
+					}
+					// --- END ADDED ---
+
+					if (currentStage > -6) {
+						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+						defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
+						messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+						hadEffect = true;
+						triggeredDefiant = true;
+					}
+				} else if (boostValue > 0) { // --- Stat Rise (e.g., Charge Beam) ---
+					if (currentStage < 6) {
+						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+						defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
+						messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+						hadEffect = true;
+					}
 				}
 			}
+
+			// --- ADDED: Defiant/Competitive Activation ---
+			if (triggeredDefiant) {
+				checkStatDropAbilities(defenderSlot, attackerSlot, battle, messageLog);
+			}
+			// --- END ADDED ---
 		}
 
 		// --- Secondary Flinch ---
