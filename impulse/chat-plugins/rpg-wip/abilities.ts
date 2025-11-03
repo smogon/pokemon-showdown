@@ -525,11 +525,11 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
  * @param {number} value
  * @returns {number}
  */
-export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number): number {
+export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
 	const ability = toID(pokemon.ability || '');
 	const handler = STAT_MODIFIER_ABILITIES[ability];
 	if (handler) {
-		return handler(pokemon, stat, value);
+		return handler(pokemon, stat, value, slot, battle);
 	}
 	return value;
 }
@@ -1227,6 +1227,7 @@ export function getAbilityInfo(abilityName: string): any {
  * @param {string[]} messageLog
  * @returns {void}
  */
+
 export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): void {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
@@ -1302,6 +1303,11 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 				}
 			}
 		}
+	}
+	
+	if (ability === 'slowstart') {
+		slot.slowStartTurns = 5;
+		messageLog.push(`${pokemon.species} is off to a slow start!`);
 	}
 }
 
