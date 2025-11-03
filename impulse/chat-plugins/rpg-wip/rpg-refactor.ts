@@ -3607,6 +3607,11 @@ function executeMove(
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
+
+			// Apply ability-based evasion modifiers
+			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
+			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
+			
 			// ... (Weather accuracy logic) ...
 			if (battle.weather) {
 				if (battle.weather.type === 'rain') {
@@ -3623,8 +3628,8 @@ function executeMove(
 			if (battle.gravityTurns > 0) {
 				moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
 			}
-
-			const finalAccuracy = moveAccuracy * (accuracyMultiplier / evasionMultiplier);
+			
+			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
 			if ((Math.random() * 100) > finalAccuracy) {
 				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
