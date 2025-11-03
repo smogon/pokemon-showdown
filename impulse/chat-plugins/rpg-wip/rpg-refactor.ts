@@ -1897,6 +1897,35 @@ function handleDamagingMove(
 // --- STATUS MOVE HELPERS ---
 
 /**
+ * Checks for abilities that trigger on stat drops (Defiant, Competitive)
+ */
+function checkStatDropAbilities(
+	targetSlot: ActivePokemonSlot,
+	sourceSlot: ActivePokemonSlot | null, // The Pokemon causing the stat drop
+	battle: BattleState,
+	messageLog: string[]
+) {
+	// Don't trigger if the source is the same as the target (self-inflicted)
+	if (sourceSlot && sourceSlot.pokemon.id === targetSlot.pokemon.id) {
+		return;
+	}
+
+	const ability = toID(targetSlot.pokemon.ability || '');
+
+	if (ability === 'defiant') {
+		if (targetSlot.statStages.atk < 6) {
+			targetSlot.statStages.atk = Math.min(6, targetSlot.statStages.atk + 2);
+			messageLog.push(`${targetSlot.pokemon.species}'s Defiant sharply raised its Attack!`);
+		}
+	} else if (ability === 'competitive') {
+		if (targetSlot.statStages.spa < 6) {
+			targetSlot.statStages.spa = Math.min(6, targetSlot.statStages.spa + 2);
+			messageLog.push(`${targetSlot.pokemon.species}'s Competitive sharply raised its Sp. Atk!`);
+		}
+	}
+}
+
+/**
  * Handles generic stat-boosting/lowering moves (move.boosts)
  * @returns {boolean} `true` if the move was handled, `false` otherwise.
  */
@@ -1911,8 +1940,9 @@ function handleGenericBoostMove(
 
 	let targetSlot: ActivePokemonSlot | null;
 	let targetName: string;
+	const isSelf = move.target === 'self';
 
-	if (move.target === 'self') {
+	if (isSelf) {
 		targetSlot = attackerSlot;
 		targetName = attackerSlot.pokemon.species;
 	} else {
@@ -1922,33 +1952,71 @@ function handleGenericBoostMove(
 		}
 		targetSlot = defenderSlot;
 		targetName = defenderSlot.pokemon.species;
-
-		// Check for Clear Amulet on opponent
-		if (battle.magicRoomTurns === 0 && targetSlot.pokemon.item === 'clearamulet') {
-			const hasNegativeBoosts = Object.values(move.boosts).some(boost => (boost || 0) < 0);
-			if (hasNegativeBoosts) {
-				messageLog.push(`${targetSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
-				return true; // Move fails
-			}
-		}
 	}
 
 	const targetStages = targetSlot.statStages;
 	let hadEffect = false;
-	
+	let triggeredDefiant = false;
+
 	for (const stat in move.boosts) {
-		const stage = targetStages[stat as keyof typeof targetStages];
-		const boostValue = move.boosts[stat as keyof typeof move.boosts]!;
+		let boostValue = move.boosts[stat as keyof typeof move.boosts]!;
 		
-		if ((stage < 6 && boostValue > 0) || (stage > -6 && boostValue < 0)) {
-			targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
-			messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue > 0 ? (boostValue > 1 ? 'sharply ' : '') + 'rose' : (boostValue < -1 ? 'sharply ' : '') + 'fell'}!`);
-			hadEffect = true;
+		// --- ADDED: Contrary Check ---
+		if (toID(targetSlot.pokemon.ability || '') === 'contrary') {
+			boostValue *= -1;
+		}
+		// --- END ADDED ---
+
+		const stage = targetStages[stat as keyof typeof targetStages];
+
+		if (boostValue > 0) { // --- Stat increase ---
+			if (stage < 6) {
+				targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
+				messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+				hadEffect = true;
+			}
+		} else if (boostValue < 0) { // --- Stat decrease ---
+			// Check if the target is the attacker (self-drop)
+			if (!isSelf) {
+				// --- ADDED: Check item/ability prevention ---
+				if (battle.magicRoomTurns === 0 && targetSlot.pokemon.item === 'clearamulet') {
+					messageLog.push(`${targetName}'s Clear Amulet prevents its stats from being lowered!`);
+					continue; // Skip this stat, but don't fail the whole move
+				}
+				const targetAbility = toID(targetSlot.pokemon.ability || '');
+				const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+				if (blockAbilities.includes(targetAbility)) {
+					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its stats from being lowered!`);
+					continue;
+				}
+				if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(targetAbility)) {
+					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its Attack from being lowered!`);
+					continue;
+				}
+				// --- END ADDED ---
+			}
+
+			if (stage > -6) {
+				targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
+				messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+				hadEffect = true;
+				
+				// --- ADDED: Defiant/Competitive Trigger ---
+				if (!isSelf) triggeredDefiant = true;
+				// --- END ADDED ---
+			}
 		}
 	}
 	
 	if (!hadEffect) messageLog.push('But it failed!');
-	return true; // Move was handled (even if it failed)
+
+	// --- ADDED: Defiant/Competitive Activation ---
+	if (triggeredDefiant) {
+		checkStatDropAbilities(targetSlot, attackerSlot, battle, messageLog);
+	}
+	// --- END ADDED ---
+	
+	return true; // Move was handled
 }
 
 /**
