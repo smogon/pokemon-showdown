@@ -1469,8 +1469,24 @@ function applyDamageAndEnduranceEffects(
 	messageLog: string[]
 ): number {
 	const defender = defenderSlot.pokemon;
+	const defenderAbility = toID(defender.ability || '');
 
-	// --- Handle Substitute ---
+	// --- 1. Check Disguise (Triggers before Substitute) ---
+	if (defenderSlot.isDisguised && damageDealt > 0 && move.category !== 'Status') {
+		defenderSlot.isDisguised = false;
+		// Form change logic (simplified)
+		if (defender.species === 'Mimikyu') {
+			defender.species = 'Mimikyu-Busted';
+		}
+		messageLog.push(`<strong>${defender.species}'s Disguise was broken!</strong>`);
+		// Disguise also deals 1/8 max HP damage to Mimikyu
+		const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
+		defender.hp = Math.max(0, defender.hp - disguiseDamage);
+		messageLog.push(`${defender.species} was hurt by the broken disguise!`);
+		return 0; // The attack's damage is negated
+	}
+
+	// --- 2. Handle Substitute ---
 	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
@@ -1484,8 +1500,7 @@ function applyDamageAndEnduranceEffects(
 		return 0; // 0 damage dealt to the Pokemon itself
 	}
 
-	// --- Handle Focus Sash & Sturdy ---
-	const defenderAbility = toID(defender.ability || '');
+	// --- 3. Handle Focus Sash & Sturdy ---
 	const isFullHP = defender.hp === defender.maxHp;
 
 	if (damageDealt >= defender.hp) {
@@ -4216,6 +4231,8 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		unburdenActive: false,
 		analyticBoost: false,
 		slowStartTurns: undefined,
+		volatileTypes: undefined,
+		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 	};
 }
 
