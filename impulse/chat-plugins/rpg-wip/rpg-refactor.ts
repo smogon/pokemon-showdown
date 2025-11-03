@@ -7109,9 +7109,13 @@ export const commands: ChatCommands = {
 					// --- Delayed Move Fields ---
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
+
+					messageLog: battleMessages,
+					currentView: 'battle',
+					battleResult: 'pending',
 				});
 
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+				// The command will handle the redirect
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -7227,10 +7231,11 @@ export const commands: ChatCommands = {
 				// --- Delayed Move Fields ---
 				playerFutureMoves: [],
 				opponentFutureMoves: [],
-			});
 
-			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, [startMessage])}`);
+				messageLog: [trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`],
+				currentView: 'battle',
+				battleResult: 'pending',
+			});
 		},
 
 		battle(target, room, user) {
@@ -7877,23 +7882,165 @@ export const commands: ChatCommands = {
 	},
 };
 
-/**************
-* HTML UI ENDS
-**************/
+/**
+ * Renders the correct Battle UI based on the BattleState's view.
+ */
+function renderBattlePage(battle: BattleState, user: User): string {
+	const player = getPlayerData(user.id);
 
-export const helpData = [
-	"/rpg start - Start your Pokemon RPG adventure",
-	"/rpg menu - Access the main RPG menu",
-	"/rpg profile - View your trainer profile",
-	"/rpg party - View your Pokemon party",
-	"/rpg summary [pokemon id] - View a detailed summary of a Pokemon in your party",
-	"/rpg battle - Access battle options",
-	"/rpg wildpokemon - Find and battle a wild Pokemon",
-	"/rpg challenge [trainer id] - Challenge a trainer to a battle",
-	"/rpg items - View your inventory",
-	"/rpg pc - Access Pokemon PC storage system",
-	"/rpg heal - Restore your party's HP, PP, and status conditions.",
-	"/rpg learnmove [move to replace | skip] - Make a decision on learning a new move",
-	"/rpg giveitem [pokemon id] [item id] - Give a held item to a Pokémon.",
-	"/rpg takeitem [pokemon id] - Take a held item from a Pokémon.",
-];
+	// 1. Check for battle end results first
+	switch (battle.battleResult) {
+	case 'win':
+		// We need to clear the battle *after* generating the HTML
+		activeBattles.delete(user.id);
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			return generateTrainerVictoryHTML(battle.opponentName, battle.messageLog, battle.opponentMoney);
+		} else {
+			const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
+			return generateVictoryHTML(defeatedNames, battle.messageLog, battle.opponentMoney, battle.zoneId);
+		}
+	case 'loss':
+		activeBattles.delete(user.id);
+		return generateDefeatHTML(battle.opponentMoney, battle.opponentName);
+	case 'run':
+		activeBattles.delete(user.id);
+		return `<div class="infobox">` +
+					`<h2>Got away safely!</h2>` +
+					`<p>You ran away from the wild Pokemon.</p>` +
+					`<p>` +
+					`<button name="send" value="/pokerpg explore" class="button">Continue Exploring</button>` +
+					`</p>` +
+					`</div>`;
+	case 'catch':
+		activeBattles.delete(user.id);
+		const caughtPokemon = player.party[player.party.length - 1] || player.pc.get(Array.from(player.pc.keys()).pop()!);
+		const location = player.party.length <= 6 ? "your party" : "PC";
+		let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
+		if (caughtPokemon.caughtIn === 'healball') successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
+		const tempSlot = createActivePokemonSlot(caughtPokemon);
+		return `<div class="infobox">` + `${successMessage}` +
+					`${generatePokemonInfoHTML(tempSlot, true)}` +
+					`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
+					`<p><button name="send" value="/pokerpg explore" class="button">Continue Exploring</button>` +
+					`<button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
+	}
+
+	// 2. If battle is pending, render the correct view
+	let html = '';
+	switch (battle.currentView) {
+	case 'battle':
+		html = generateBattleHTML(battle, battle.messageLog, undefined);
+		break;
+	case 'target_selection':
+		html = generateBattleHTML(battle, battle.messageLog, battle.viewContext);
+		break;
+	case 'switch_faint':
+		html = generateFaintSwitchHTML(battle, battle.messageLog.join('<br>'));
+		break;
+	case 'switch_pivot':
+		html = generatePivotSwitchHTML(battle, battle.messageLog.join('<br>'), battle.viewContext.slotIndex);
+		break;
+	case 'catch_menu':
+		html = generateCatchMenuHTML(player, battle);
+		break;
+	case 'catch_target':
+		html = generateCatchTargetHTML(battle, battle.viewContext.ballId);
+		break;
+	case 'learn_move':
+		html = generateMoveLearnHTML(player);
+		break;
+	default:
+		html = generateBattleHTML(battle, battle.messageLog, undefined);
+	}
+
+	// 3. Clear the log after rendering
+	battle.messageLog = [];
+	return html;
+}
+
+/**
+ * Renders the correct Menu UI based on the PlayerData's view.
+ */
+function renderMenuPage(player: PlayerData, user: User): string {
+	// Note: We don't clear viewContext here, it's cleared by the commands that set it.
+	switch (player.currentView) {
+	case 'start':
+		return generateWelcomeHTML();
+	case 'starter_selection':
+		return generateStarterSelectionHTML(player.viewContext.type);
+	case 'party':
+		let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
+		if (player.party.length === 0) {
+			partyHTML += `<p>No Pokemon in party.</p>`;
+		} else {
+			for (let i = 0; i < 6; i++) {
+				if (player.party[i]) {
+					const tempSlot = createActivePokemonSlot(player.party[i]);
+					partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
+				} else {
+					partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
+				}
+			}
+		}
+		partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/pokerpg pc" class="button">Pokemon PC</button> <button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
+		return partyHTML;
+	case 'pc':
+		return generatePCHTML(player);
+	case 'shop':
+		return generateShopHTML(player, player.viewContext?.category);
+	case 'items':
+		return generateInventoryHTML(player, player.viewContext?.category);
+	case 'summary':
+		const pokemon = player.party.find(p => p.id === player.viewContext?.pokemonId);
+		if (pokemon) {
+			return generatePokemonSummaryHTML(pokemon);
+		}
+		// Fallback if context is bad
+		RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'party', viewContext: undefined });
+		return renderMenuPage(player, user); // Re-render as party
+	case 'explore':
+		const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(toID(player.location)));
+		let exploreButtons = '';
+		if (availableZones.length > 0) {
+			for (const zoneId of availableZones) {
+				const zone = ENCOUNTER_ZONES[zoneId];
+				const icon = zone.battleType === 'double' ? '👥' : '🛤️';
+				exploreButtons += `<button name="send" value="/pokerpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+			}
+		} else {
+			exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
+		}
+		exploreButtons += `<button name="send" value="/pokerpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
+		return `<div class="infobox">` +
+				`<h2>Explore ${player.location}</h2>` +
+				`<p>Choose where to go:</p>` +
+				`<p>${exploreButtons}</p>` +
+				`<hr />` +
+				`<p>` +
+				`<button name="send" value="/pokerpg shop" class="button">🏪 Poké Mart</button>` +
+				`<button name="send" value="/pokerpg heal" class="button">🏥 Pokémon Center</button>` +
+				`</p>` +
+				`<p><button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p>` +
+				`</div>`;
+	case 'profile':
+		return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
+	case 'menu':
+		default:
+			return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/pokerpg profile" class="button">👤 Profile</button><button name="send" value="/pokerpg party" class="button">⚡ Party</button><button name="send" value="/pokerpg wildpokemon startertown_grass" class="button">⚔️ Battle</button><button name="send" value="/pokerpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/pokerpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/pokerpg items" class="button">🎒 Items</button><button name="send" value="/pokerpg pc" class="button">💻 Pokemon PC</button></p></div>`;
+	}
+}
+
+export const pages: Chat.PageTable = {
+	pokerpg(args, user) {
+		const battle = activeBattles.get(user.id);
+		if (battle) {
+			// 1. Render Battle UI
+			return renderBattlePage(battle, user);
+		}
+
+		// 2. Render Menu UI
+		const playerState = RPGPlayerState.getInstance(user.id);
+		const player = playerState.getPlayer();
+		return renderMenuPage(player, user);
+	},
+};
