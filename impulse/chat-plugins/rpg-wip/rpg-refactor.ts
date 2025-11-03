@@ -1587,12 +1587,16 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 					messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
 				}
 			} else {
-				pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
-				messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
+				if (RPGAbilities.takesIndirectDamage(pokemon)) { // <-- Add this check
+					pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
+					messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
+				}
 			}
 		} else if (pokemon.item === 'stickybarb') {
-			pokemon.hp = Math.max(0, pokemon.hp - Math.floor(pokemon.maxHp / 8));
-			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
+			if (RPGAbilities.takesIndirectDamage(pokemon)) {
+				pokemon.hp = Math.max(0, pokemon.hp - Math.floor(pokemon.maxHp / 8));
+				messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
+			}
 		}
 	}
 	if (pokemon.hp <= 0) return;
