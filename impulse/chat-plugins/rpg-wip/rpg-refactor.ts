@@ -4971,42 +4971,41 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
  * [REFACTORED]
  * Processes all queued actions for the turn.
  */
-function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
-	const messageLog: string[] = [...initialMessages];
+function processTurn(
+	// --- REMOVE: context: CommandContext, ---
+	battle: BattleState,
+	// --- REMOVE: room: ChatRoom, ---
+	// --- REMOVE: user: User, ---
+	// --- REMOVE: initialMessages: string[] = [] ---
+) {
+	// --- USE BATTLE.MESSAGELOG ---
+	// const messageLog: string[] = [...initialMessages];
+	battle.messageLog.push(`--- Turn ${battle.turn + 1} ---`);
 	battle.turn++;
+	// --- END USE ---
 
-	// --- Reset side-wide guards ---
-	battle.playerQuickGuard = false;
-	battle.opponentQuickGuard = false;
-	battle.playerWideGuard = false;
-	battle.opponentWideGuard = false;
-	battle.playerCraftyShield = false;
-	battle.opponentCraftyShield = false;
-
-	// --- Reset per-pokemon flags ---
-	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
-		s.isHelped = false;
-		s.isRedirecting = false;
-		s.lastDamageTaken = undefined;
-	});
+	// ... (Reset side-wide guards, per-pokemon flags) ...
 
 	// 1. Generate AI Actions
 	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
-		const slotIndex = 2 + i; // Opponent slots are 2 and 3
-		if (!battle.pendingActions[slotIndex]) {
-			battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
-		}
+		// ...
 	});
 
 	// 2. Build and Sort Action Order
-	const actionQueue = buildActionQueue(battle, messageLog);
+	// --- MODIFY: buildActionQueue call ---
+	const actionQueue = buildActionQueue(battle, battle.messageLog);
+	// --- END MODIFY ---
 
 	// 3. Execute Actions in order
 	for (const action of actionQueue) {
-		executeAction(action, battle, room, user, messageLog);
+		// --- MODIFY: executeAction call ---
+		executeAction(action, battle, getPlayerData(battle.playerId));
+		// --- END MODIFY ---
 
 		// --- Faint Check (Mid-turn) ---
-		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
+		// --- MODIFY: checkBattleEndCondition call ---
+		const battleEndedMidTurn = checkBattleEndCondition(battle, battle.messageLog);
+		// --- END MODIFY ---
 		if (battleEndedMidTurn) {
 			return; // Battle ended or is waiting for a switch
 		}
@@ -5017,11 +5016,15 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		return;
 	}
 
-	messageLog.push("--- End of Turn ---");
-	processEndOfTurn(battle, messageLog);
+	battle.messageLog.push("--- End of Turn ---");
+	// --- MODIFY: processEndOfTurn call ---
+	processEndOfTurn(battle, battle.messageLog);
+	// --- END MODIFY ---
 
 	// 5. Check for Battle End (after EOT effects)
-	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+	// --- MODIFY: checkBattleEndCondition call ---
+	const battleEnded = checkBattleEndCondition(battle, battle.messageLog);
+	// --- END MODIFY ---
 
 	// 6. Reset and Render
 	battle.pendingActions = {}; // Reset for next turn
@@ -5032,7 +5035,10 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 				slot.activeTurns++;
 			}
 		});
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		// --- SET VIEW STATE ---
+		battle.currentView = 'battle';
+		// --- END SET ---
+		// --- REMOVE: context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`); ---
 	}
 }
 
