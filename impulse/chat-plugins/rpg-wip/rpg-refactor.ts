@@ -5016,6 +5016,14 @@ function handleSwitchAction(
 	const isPlayerSwitch = attackerSlotIndex <= 1;
 	const pokemonToSwitchInId = action.switchToPokemonId!;
 
+	// --- ARENA TRAP / SHADOW TAG CHECK (EXECUTION TIME) ---
+	const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
+	if (trappingPokemon) {
+		messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
+		return;
+	}
+	// --- END TRAP CHECK ---
+
 	// --- Check Switch Prevention (Trapping/Ingrain) ---
 	if (attackerSlot.isIngrained) {
 		messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
