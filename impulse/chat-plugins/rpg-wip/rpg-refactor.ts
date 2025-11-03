@@ -565,7 +565,14 @@ function getStatMultiplier(stage: number): number {
 	}
 }
 
-function getCriticalHitChance(attackerSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
+function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
+	// --- ADDED: Battle Armor / Shell Armor Check ---
+	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+	if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
+		return 0; // Cannot be critically hit
+	}
+	// --- END ADDED ---
+
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
@@ -949,7 +956,7 @@ function calculateDamage(
 		finalDefenseStat = Math.floor(finalDefenseStat * 0.5);
 	}
 
-	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, move, battle);
+	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	// Sniper ability boosts critical hit damage from 1.5x to 2.25x
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
