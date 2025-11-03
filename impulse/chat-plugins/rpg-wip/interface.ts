@@ -191,7 +191,8 @@ export interface ActivePokemonSlot {
 	analyticBoost?: boolean;
 	slowStartTurns?: number;
 	volatileTypes?: string[]; // (For Protean/Libero - Not Implemented yet)
-	isDisguised?: boolean; // (For Disguise - Not Implemented yet)
+	isDisguised?: boolean; // (For Disguise)
+	lastMoveThatHitMe?: Move;
 }
 
 /**
