@@ -4322,11 +4322,96 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 	return [...new Set(targets)];
 }
 
+/********************************
+ * REFACTORED TURN PROCESSING
+ ********************************/
+
 /**
- * [STEP 4/6/7 Implementation]
+ * Builds and sorts the action queue for the turn based on priority and speed.
+ */
+function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullable<BattleState['pendingActions'][number]>[] {
+	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
+	const allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+
+	for (const slotIndex in battle.pendingActions) {
+		const action = battle.pendingActions[slotIndex];
+		if (action && allActiveSlots.some(s => s.pokemon.id === action.pokemonId)) {
+			actionQueue.push(action);
+		}
+	}
+
+	actionQueue.sort((a, b) => {
+		const slotA = allActiveSlots.find(s => s.pokemon.id === a.pokemonId);
+		const slotB = allActiveSlots.find(s => s.pokemon.id === b.pokemonId);
+
+		if (!slotA) return 1;
+		if (!slotB) return -1;
+
+		const isSwitchA = a.actionType === 'switch';
+		const isSwitchB = b.actionType === 'switch';
+		const moveA = getMove(a.moveId || 'struggle');
+		const moveB = getMove(b.moveId || 'struggle');
+		
+		let priorityA = isSwitchA ? 6 : (moveA.priority);
+		let priorityB = isSwitchB ? 6 : (moveB.priority);
+
+		if (!isSwitchA) priorityA += RPGAbilities.applyPriorityModifier(moveA, slotA.pokemon);
+		if (!isSwitchB) priorityB += RPGAbilities.applyPriorityModifier(moveB, slotB.pokemon);
+
+		if (priorityA !== priorityB) {
+			return priorityB - priorityA;
+		}
+
+		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
+		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
+		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
+
+		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
+		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
+
+		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
+
+		if (quickClawA && !quickClawB) {
+			messageLog.push(`${slotA.pokemon.species}'s Quick Claw let it move first!`);
+			return -1;
+		}
+		if (quickClawB && !quickClawA) {
+			messageLog.push(`${slotB.pokemon.species}'s Quick Claw let it move first!`);
+			return 1;
+		}
+
+		if (battle.trickRoomTurns > 0) {
+			return speedA - speedB;
+		}
+		return speedB - speedA;
+	});
+
+	// --- Analytic Check ---
+	allActiveSlots.forEach(s => s.analyticBoost = false);
+	let lastMoveAction: NonNullable<BattleState['pendingActions'][number]> | null = null;
+	for (let i = actionQueue.length - 1; i >= 0; i--) {
+		if (actionQueue[i].actionType === 'move') {
+			lastMoveAction = actionQueue[i];
+			break;
+		}
+	}
+	
+	if (lastMoveAction) {
+		const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction.pokemonId);
+		if (lastMoverSlot && toID(lastMoverSlot.pokemon.ability || '') === 'analytic') {
+			lastMoverSlot.analyticBoost = true;
+		}
+	}
+
+	return actionQueue;
+}
+
+/**
+ * [REFACTORED]
  * Processes all queued actions for the turn.
  */
-
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
@@ -4343,9 +4428,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
-		// --- START FIX: Counter/Mirror Coat ---
 		s.lastDamageTaken = undefined;
-		// --- END FIX ---
 	});
 
 	// 1. Generate AI Actions
@@ -4357,106 +4440,13 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	});
 
 	// 2. Build and Sort Action Order
-	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
-	let allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
-
-	for (const slotIndex in battle.pendingActions) {
-		const action = battle.pendingActions[slotIndex];
-		// Only queue actions for Pokemon that are still active
-		if (action && allActiveSlots.some(s => s.pokemon.id === action.pokemonId)) {
-			actionQueue.push(action);
-		}
-	}
-
-	actionQueue.sort((a, b) => {
-		const slotA = allActiveSlots.find(s => s.pokemon.id === a.pokemonId);
-		const slotB = allActiveSlots.find(s => s.pokemon.id === b.pokemonId);
-
-		// Should not happen, but as a fallback
-		if (!slotA) return 1;
-		if (!slotB) return -1;
-
-		// --- Handle switch priority ---
-		const isSwitchA = a.actionType === 'switch';
-		const isSwitchB = b.actionType === 'switch';
-
-		// --- NEW: Get move and base priority ---
-		const moveA = getMove(a.moveId || 'struggle');
-		const moveB = getMove(b.moveId || 'struggle');
-		
-		let priorityA = isSwitchA ? 6 : (moveA.priority);
-		let priorityB = isSwitchB ? 6 : (moveB.priority);
-
-		// --- NEW: Apply ability priority modifications ---
-		if (!isSwitchA) {
-			priorityA += RPGAbilities.applyPriorityModifier(moveA, slotA.pokemon);
-		}
-		if (!isSwitchB) {
-			priorityB += RPGAbilities.applyPriorityModifier(moveB, slotB.pokemon);
-		}
-		// --- END NEW ---
-
-		// Sort by Priority
-		if (priorityA !== priorityB) {
-			return priorityB - priorityA;
-		}
-
-		// Sort by Speed
-		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
-		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
-		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
-
-		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
-		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
-		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
-
-		// Quick Claw: 20% chance to move first
-		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
-		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
-
-		if (quickClawA && !quickClawB) {
-			messageLog.push(`${slotA.pokemon.species}'s Quick Claw let it move first!`);
-			return -1;
-		}
-		if (quickClawB && !quickClawA) {
-			messageLog.push(`${slotB.pokemon.species}'s Quick Claw let it move first!`);
-			return 1;
-		}
-
-		if (battle.trickRoomTurns > 0) {
-			return speedA - speedB; // Slower goes first in Trick Room
-		}
-		return speedB - speedA; // Faster goes first normally
-	});
-
-	// --- NEW: Analytic Check ---
-	// Clear all analytic flags first
-	allActiveSlots.forEach(s => s.analyticBoost = false);
-	
-	// Find the last action in the queue that is a move
-	let lastMoveAction: NonNullable<BattleState['pendingActions'][number]> | null = null;
-	for (let i = actionQueue.length - 1; i >= 0; i--) {
-		if (actionQueue[i].actionType === 'move') {
-			lastMoveAction = actionQueue[i];
-			break;
-		}
-	}
-	
-	if (lastMoveAction) {
-		const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction.pokemonId);
-		// Check if the ability is Analytic before setting the flag
-		if (lastMoverSlot && toID(lastMoverSlot.pokemon.ability || '') === 'analytic') {
-			lastMoverSlot.analyticBoost = true;
-		}
-	}
-	// --- END NEW: Analytic Check ---
+	const actionQueue = buildActionQueue(battle, messageLog);
 
 	// 3. Execute Actions in order
 	for (const action of actionQueue) {
 		executeAction(action, battle, room, user, messageLog);
 
 		// --- Faint Check (Mid-turn) ---
-		// Check for faints caused by this action
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
 		if (battleEndedMidTurn) {
 			return; // Battle ended or is waiting for a switch
@@ -4465,7 +4455,6 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 
 	// 4. End-of-Turn Effects
 	if (battle.forceEnd) {
-		// Handled by checkBattleEndCondition or executeAction
 		return;
 	}
 
@@ -4479,9 +4468,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	battle.pendingActions = {}; // Reset for next turn
 
 	if (!battleEnded) {
-		// Increment active turn counters for all active Pokemon
-		allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
-		allActiveSlots.forEach(slot => {
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
 			if (slot.pokemon.hp > 0) {
 				slot.activeTurns++;
 			}
