@@ -1920,6 +1920,7 @@ function handleStatusMove(
 			const givenItem = attacker.item;
 			defender.item = givenItem;
 			attacker.item = undefined;
+			activateUnburden(attackerSlot, messageLog);
 			messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem]?.name || givenItem} to ${defender.species}!`);
 			hadEffect = true;
 		} else if (move.id === 'transform') {
@@ -3433,6 +3434,16 @@ function executeMove(
 			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, spreadMultiplier);
 		}
 	}
+
+	// Check for form changes after move execution
+	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
+		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
+	}
+	for (const defenderSlot of targetSlots) {
+		if (defenderSlot && defenderSlot.pokemon.hp > 0) {
+			RPGAbilities.checkFormChangeAbilities(defenderSlot, battle, messageLog);
+		}
+	}
 }
 
 /**
@@ -4210,7 +4221,6 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
  * [STEP 4/6/7 Implementation]
  * Executes a single queued action (move or switch).
  */
-
 function executeAction(
 	action: NonNullable<BattleState['pendingActions'][number]>,
 	battle: BattleState,
@@ -4269,7 +4279,7 @@ function executeAction(
 			}
 
 			// Save outgoing Pokemon's status to the party
-			saveBattleStatus(battle); // This function needs to be updated in Step 7
+			saveBattleStatus(battle);
 
 			// Add outgoing Pokemon back to party
 			player.party.push(outgoingPokemon);
@@ -4290,6 +4300,8 @@ function executeAction(
 				// Faint check will run at end of turn
 			} else {
 				handleMirrorHerb(newSlot, battle, messageLog);
+				// Check for form changes after switch-in
+				RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
 			}
 		} else {
 			// --- AI SWITCH LOGIC ---
@@ -4325,6 +4337,8 @@ function executeAction(
 					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
 				} else {
 					handleMirrorHerb(newSlot, battle, messageLog);
+					// Check for form changes after switch-in
+					RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
 				}
 			} else {
 				messageLog.push(`${outgoingPokemon.species} tried to switch out, but no one was left!`);
