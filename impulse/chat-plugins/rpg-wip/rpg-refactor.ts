@@ -3672,6 +3672,55 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 }
 
 /**
+ * Handles the Synchronize ability, applying a status back to the attacker.
+ */
+function applySynchronize(
+	status: Status,
+	defenderSlot: ActivePokemonSlot,
+	attackerSlot: ActivePokemonSlot,
+	battle: BattleState,
+	messageLog: string[]
+): void {
+	const attacker = attackerSlot.pokemon;
+	if (!attacker || attacker.hp <= 0) return; // Don't apply if attacker fainted
+
+	const attackerSpecies = Dex.species.get(attacker.species);
+	let canBeAfflicted = !attackerSlot.status; // Can't afflict if already statused
+
+	if (!canBeAfflicted) return;
+
+	// Check for type immunities
+	if ((status === 'brn' && attackerSpecies.types.includes('Fire')) ||
+		(status === 'par' && attackerSpecies.types.includes('Electric')) ||
+		(status === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel'))) ||
+		(status === 'frz' && attackerSpecies.types.includes('Ice'))) {
+		canBeAfflicted = false;
+	}
+
+	// Check for ability immunities
+	if (canBeAfflicted && RPGAbilities.preventsStatus(attacker, status)) {
+		canBeAfflicted = false;
+	}
+
+	// Check for terrain immunities
+	const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
+	if (canBeAfflicted && battle.terrain?.type === 'misty' && attackerIsGrounded) {
+		canBeAfflicted = false; // Misty Terrain prevents status
+	}
+	if (canBeAfflicted && battle.terrain?.type === 'electric' && status === 'slp' && attackerIsGrounded) {
+		canBeAfflicted = false; // Electric Terrain prevents sleep
+	}
+
+	if (canBeAfflicted) {
+		attackerSlot.status = status;
+		if (status === 'slp') {
+			attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+		}
+		messageLog.push(`${defenderSlot.pokemon.species}'s Synchronize afflicted ${attacker.species} with ${status}!`);
+	}
+}
+
+/**
  * Mental Herb: Cures move-binding effects (Taunt, Encore, Disable, Torment, Heal Block)
  * Called after a move-binding effect is applied to check if Mental Herb should cure it
  */
