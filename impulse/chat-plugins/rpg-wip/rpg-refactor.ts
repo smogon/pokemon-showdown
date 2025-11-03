@@ -1218,7 +1218,7 @@ function calculateDamage(
 	moveId: string,
 	battle: BattleState,
 	spreadMultiplier: number
-): { damage: number, message: string, effectiveness: number, berryConsumed?: string } {
+): { damage: number, message: string, effectiveness: number, berryConsumed?: string, isCritical: boolean } {
 	const move = getMove(moveId);
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
@@ -1237,27 +1237,27 @@ function calculateDamage(
 
 	// --- 1. Immunity Checks (Type & Ability) ---
 	if (move.flags.powder && defenderSpecies.types.includes('Grass')) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0 };
+		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false };
 	}
 	const immunityCheck = RPGAbilities.checkImmunity(abilityContext);
 	if (immunityCheck && immunityCheck.immune) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0 };
+		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false };
 	}
 
 	// --- 2. Fixed Damage Moves ---
 	if (!move.basePower) {
-		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1 };
-		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1 };
+		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1, isCritical: false };
+		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1, isCritical: false };
 		if (moveId === 'seismictoss' || moveId === 'nightshade') {
-			return { damage: attacker.level, message: '', effectiveness: 1 };
+			return { damage: attacker.level, message: '', effectiveness: 1, isCritical: false };
 		}
 		if (moveId === 'psywave') {
-			return { damage: Math.floor(Math.random() * attacker.level * 1.5) + 1, message: '', effectiveness: 1 };
+			return { damage: Math.floor(Math.random() * attacker.level * 1.5) + 1, message: '', effectiveness: 1, isCritical: false };
 		}
 		if (moveId === 'superfang') {
-			return { damage: Math.floor(defender.hp / 2), message: '', effectiveness: 1 };
+			return { damage: Math.floor(defender.hp / 2), message: '', effectiveness: 1, isCritical: false };
 		}
-		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1 };
+		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false };
 	}
 
 	// --- 3. Get Base Power ---
@@ -1265,7 +1265,7 @@ function calculateDamage(
 	if (basePower === -1) { // Special flag for Present (Heal)
 		const healAmount = Math.floor(defender.maxHp * 0.25);
 		defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
-		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0 };
+		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false };
 	}
 
 	// --- 4. Get Move Type (after Weatherball, Pixilate, etc.) ---
@@ -1350,7 +1350,7 @@ function calculateDamage(
 	if (effectiveness < 1 && effectiveness > 0) message += ` <i style="color: #d9534f;">It's not very effective...</i>`;
 	if (effectiveness === 0) message = ` <i style="color: #6c757d;">It had no effect on ${defender.species}!</i>`;
 
-	return { damage, message, effectiveness, berryConsumed };
+	return { damage, message, effectiveness, berryConsumed, isCritical };
 }
 
 /********************************
@@ -4602,6 +4602,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		slowStartTurns: undefined,
 		volatileTypes: undefined,
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
+		lastMoveThatHitMe: undefined,
 	};
 }
 
