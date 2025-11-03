@@ -1189,7 +1189,7 @@ function calculateDamage(
 		}
 	}
 
-	if (battle.weather) {
+	if (isWeatherActive(battle)) {
 		if (battle.weather.type === 'sun') {
 			if (moveType === 'Fire') baseDamage = Math.floor(baseDamage * 1.5);
 			if (moveType === 'Water') baseDamage = Math.floor(baseDamage * 0.5);
@@ -1861,6 +1861,22 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 
 	return false; // Pokémon survived
+}
+
+/**
+ * Checks if weather effects are active (i.e., not suppressed by Cloud Nine / Air Lock)
+ */
+function isWeatherActive(battle: BattleState): boolean {
+    if (!battle.weather) return false;
+
+    const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+    for (const slot of allSlots) {
+        const ability = toID(slot.pokemon.ability || '');
+        if (ability === 'cloudnine' || ability === 'airlock') {
+            return false; // Weather is suppressed
+        }
+    }
+    return true; // Weather is active
 }
 
 function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
@@ -2790,8 +2806,12 @@ function handleDamagingMove(
 	}
 
 	let moveWasSuccessful = false; // Flag to check if the move hit for self-destruct
+	// ... inside handleDamagingMove
 	let hitCount = 1;
-	if (move.multihit) {
+	const attackerAbility = toID(attacker.ability || '');
+	if (attackerAbility === 'parentalbond' && ...) {
+		hitCount = 2;
+	} else if (move.multihit) {
 		if (typeof move.multihit === 'number') {
 			hitCount = move.multihit;
 		} else {
@@ -2800,6 +2820,11 @@ function handleDamagingMove(
 			else if (rand < 6) hitCount = 3;
 			else if (rand < 7) hitCount = 4;
 			else hitCount = 5;
+		}
+		
+		// Check for Skill Link ability
+		if (attackerAbility === 'skilllink') {
+			hitCount = 5; // Or the max number of hits for the move if it's not 5
 		}
 	}
 
@@ -3369,8 +3394,12 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
  * Processes end-of-turn effects for weather, such as damage and duration.
  */
 function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
-	if (!battle.weather) return;
-
+	if (!isWeatherActive(battle)) {
+		// Weather still counts down, but no messages or effects
+		if (battle.weather) battle.weather.turns--;
+		if (battle.weather && battle.weather.turns <= 0) battle.weather = undefined;
+		return;
+	}
 	// Decrement weather timer
 	battle.weather.turns--;
 
