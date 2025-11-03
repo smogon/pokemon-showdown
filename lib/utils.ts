@@ -312,27 +312,53 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: { exclude?: string[] } = {}) {
-	const excludes = options?.exclude || [];
-	excludes.push('/node_modules/');
+function getIsExcludedPath(excludes: string[], maybeExcluded: string) {
+	for (const exclude of excludes) {
+		if (maybeExcluded.includes(exclude)) {
+			return true;
+		}
+	}
+	return false;
+}
 
-	for (const path in require.cache) {
-		if (excludes.some(p => path.includes(p))) continue;
-		const mod = require.cache[path]; // have to ref to appease ts
-		if (!mod) continue;
-		uncacheModuleTree(mod, excludes);
-		delete require.cache[path];
+function uncacheModuleTreeAscending(mod: NodeJS.Module, excludes: string[]) {
+	const parent = mod.parent;
+	if (!parent) return;
+	if (!getIsExcludedPath(excludes, parent.filename)) {
+		delete (mod as any).parent;
+	}
+	uncacheModuleTreeAscending(parent, excludes);
+}
+
+function uncacheModuleTreeDescending(mod: NodeJS.Module, excludes: string[]) {
+	if (!mod.children?.length) return;
+	const children = mod.children.splice(0, mod.children.length);
+	delete (mod as any).children;
+	for (const child of children) {
+		if (getIsExcludedPath(excludes, child.filename)) continue;
+		uncacheModuleTree(child, excludes);
 	}
 }
 
 export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
-	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
-	for (const [i, child] of mod.children.entries()) {
-		if (excludes.some(p => child.filename.includes(p))) continue;
-		mod.children?.splice(i, 1);
-		uncacheModuleTree(child, excludes);
+	uncacheModuleTreeAscending(mod, excludes);
+	if (!getIsExcludedPath(excludes, mod.filename)) {
+		uncacheModuleTreeDescending(mod, excludes);
 	}
-	delete (mod as any).children;
+}
+
+export function clearRequireCache(options: { exclude?: string[] } = {}) {
+	const excludes = options?.exclude || [];
+	excludes.push('/node_modules/');
+
+	for (const cachedPath in require.cache) {
+		const mod = require.cache[cachedPath]; // have to ref to appease ts
+		if (!mod) continue;
+		uncacheModuleTree(mod, excludes);
+		if (!getIsExcludedPath(excludes, cachedPath)) {
+			delete require.cache[cachedPath];
+		}
+	}
 }
 
 export function deepClone(obj: any): any {
