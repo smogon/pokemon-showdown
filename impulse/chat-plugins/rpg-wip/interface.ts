@@ -224,6 +224,9 @@ export interface PlayerData {
 		pokemonId: string,
 		moveIds: string[],
 	};
+	currentView: string;
+	viewContext?: any;
+	lastAction: number;
 }
 
 /**
@@ -340,6 +343,11 @@ export interface BattleState {
 		attackerSlotIndex: number,
 		attackerStats: { atk: number, spa: number },
 	}[];
+
+	messageLog: string[];
+	currentView: string;
+	viewContext?: any;
+	battleResult: 'pending' | 'win' | 'loss' | 'run' | 'catch';
 }
 
 /**
