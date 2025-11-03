@@ -496,11 +496,12 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 	// Normalize - All moves become Normal-type
 	'normalize': (ctx, moveType) => {
 		if (ctx.move.category !== 'Status') {
+			(ctx.move as any).typeConversionBoost = true;
 			return 'Normal';
 		}
 		return moveType;
 	},
-
+	
 	// Pixilate - Normal moves become Fairy (with 1.2x boost)
 	'pixilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
