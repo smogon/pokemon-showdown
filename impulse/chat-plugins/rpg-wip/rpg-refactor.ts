@@ -3286,8 +3286,6 @@ function handleOpponentFaint(
 	battle: BattleState,
 	player: PlayerData,
 	playerParticipants: ActivePokemonSlot[],
-	room: ChatRoom,
-	user: User,
 	messageLog: string[]
 ): boolean {
 	const opponentSlotsToCheck = (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') ? [0, 1] : [0];
@@ -3343,10 +3341,12 @@ function handleOpponentFaint(
 
 			// --- Grant EXP ---
 			if (playerParticipants.length > 0) {
-				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
-				messageLog.push(...expResult.messages);
+				// --- MODIFY: gainExperience call ---
+				gainExperience(player, playerParticipants, slot.pokemon, messageLog);
+				// --- END MODIFY ---
 			}
 
+			
 			// --- Find Replacement ---
 			const nextOpponent = battle.opponentParty.find(p =>
 				p.hp > 0 &&
