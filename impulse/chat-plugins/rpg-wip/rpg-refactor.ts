@@ -1579,6 +1579,14 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		}
 	}
 
+	// Handle Slow Start
+	if (slot.slowStartTurns !== undefined && slot.slowStartTurns > 0) {
+		slot.slowStartTurns--;
+		if (slot.slowStartTurns === 0) {
+			messageLog.push(`${pokemon.species} got its act together!`);
+		}
+	}
+
 	// Clear one-turn effects
 	slot.isCharged = false; // Charge only lasts until next Electric move
 }
