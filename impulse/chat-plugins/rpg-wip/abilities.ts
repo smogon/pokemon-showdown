@@ -1,23 +1,15 @@
 /*
 * Pokemon Showdown
-* RPG Abilities Module
+* RPG Abilities
 */
 import { Dex, toID } from '../../../sim/dex';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler } from './interface';
 
-/**
- * @param {[ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined} slots
- * @returns {ActivePokemonSlot[]}
- */
 function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
 	if (!slots) return [];
 	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
 }
 
-/**
- * @param {BattleState} battle
- * @returns {boolean}
- */
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
 
@@ -31,11 +23,6 @@ export function isWeatherActive(battle: BattleState): boolean {
 	return true;
 }
 
-/**
- * @param {ActivePokemonSlot | RPGPokemon} slotOrPokemon
- * @param {BattleState} battle
- * @returns {boolean}
- */
 export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle: BattleState): boolean {
 	const pokemon = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot).pokemon : slotOrPokemon as RPGPokemon;
 	const slot = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot) : undefined;
@@ -71,10 +58,6 @@ export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle
 	return true;
 }
 
-/**
- * @param {string} abilityName
- * @returns {any}
- */
 export function getAbilityData(abilityName: string) {
 	const ability = Dex.abilities.get(abilityName);
 	if (ability.exists) {
@@ -335,8 +318,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	},
 
 	'adaptability': (ctx, basePower) => {
-		// Adaptability is handled in getSTABMultiplier, not here
-		// This is just a placeholder for tracking
 		return basePower;
 	},
 
@@ -467,7 +448,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'guts': (pokemon, stat, value, slot) => {
-		// Check slot status if available, otherwise pokemon status
 		const status = slot ? slot.status : pokemon.status;
 		if (stat === 'atk' && status) {
 			return Math.floor(value * 1.5);
@@ -476,7 +456,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'marvelscale': (pokemon, stat, value, slot) => {
-		// Check slot status if available, otherwise pokemon status
 		const status = slot ? slot.status : pokemon.status;
 		if (stat === 'def' && status) {
 			return Math.floor(value * 1.5);
@@ -485,7 +464,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'quickfeet': (pokemon, stat, value, slot) => {
-		// Check slot status if available, otherwise pokemon status
 		const status = slot ? slot.status : pokemon.status;
 		if (stat === 'spe' && status) {
 			return Math.floor(value * 1.5);
@@ -501,16 +479,11 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'slowstart': (pokemon, stat, value, slot) => {
-		// If slot is provided (in battle), check its counter
 		if (slot) {
-			// slowStartTurns is set to 5 on switch-in
-			// If it's undefined, it means it hasn't been set yet (e.g. battle start)
-			// so we treat it as active.
 			if (slot.slowStartTurns === undefined || slot.slowStartTurns > 0) {
 				if (stat === 'atk' || stat === 'spe') return Math.floor(value * 0.5);
 			}
 		} else {
-			// If no slot (e.g. summary screen), debuff is active
 			if (stat === 'atk' || stat === 'spe') {
 				return Math.floor(value * 0.5);
 			}
@@ -519,12 +492,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 };
 
-/**
- * @param {RPGPokemon} pokemon
- * @param {string} stat
- * @param {number} value
- * @returns {number}
- */
 export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
 	const ability = toID(pokemon.ability || '');
 	const handler = STAT_MODIFIER_ABILITIES[ability];
@@ -534,11 +501,6 @@ export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, valu
 	return value;
 }
 
-/**
- * @param {AbilityContext} ctx
- * @param {number} chance
- * @returns {number}
- */
 export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 	const ability = toID(ctx.attacker.ability || '');
 	if (ability === 'serenegrace') {
@@ -762,10 +724,6 @@ export const HEALING_ABILITIES = {
 	},
 };
 
-/**
- * @param {AbilityContext} ctx
- * @returns {{ immune: boolean, message?: string } | null}
- */
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
 	const ability = toID(ctx.defender.ability || '');
 	const handler = IMMUNITY_ABILITIES[ability];
@@ -775,11 +733,6 @@ export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, me
 	return null;
 }
 
-/**
- * @param {AbilityContext} ctx
- * @param {number} basePower
- * @returns {number}
- */
 export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number): number {
 	const ability = toID(ctx.attacker.ability || '');
 	const handler = POWER_MODIFIER_ABILITIES[ability];
@@ -798,11 +751,6 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 	return basePower;
 }
 
-/**
- * @param {AbilityContext} ctx
- * @param {string} moveType
- * @returns {string}
- */
 export function applyAbilityTypeModifier(ctx: AbilityContext, moveType: string): string {
 	const ability = toID(ctx.attacker.ability || '');
 	const handler = TYPE_MODIFIER_ABILITIES[ability];
@@ -812,20 +760,11 @@ export function applyAbilityTypeModifier(ctx: AbilityContext, moveType: string):
 	return moveType;
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @returns {boolean}
- */
 export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ITEM_INTERACTION_ABILITIES[ability]?.preventsItemRemoval || false;
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @param {string} moveType
- * @returns {number}
- */
 export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number {
 	const species = Dex.species.get(pokemon.species);
 	if (!species.types.includes(moveType)) {
@@ -840,11 +779,6 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number
 	return 1.5;
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @param {string} status
- * @returns {boolean}
- */
 export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	const ability = toID(pokemon.ability || '');
 	
@@ -875,11 +809,6 @@ export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	return false;
 }
 
-/**
- * @param {Move} move
- * @param {RPGPokemon} pokemon
- * @returns {number}
- */
 export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 	const ability = toID(pokemon.ability || '');
 	
@@ -894,11 +823,6 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 	return 0;
 }
 
-/**
- * @param {number} moveAccuracy
- * @param {RPGPokemon} attacker
- * @returns {number}
- */
 export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
 	const ability = toID(attacker.ability || '');
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
@@ -910,11 +834,6 @@ export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon
 	return moveAccuracy;
 }
 
-/**
- * @param {ActivePokemonSlot} defenderSlot
- * @param {BattleState} battle
- * @returns {number}
- */
 export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: BattleState): number {
 	const ability = toID(defenderSlot.pokemon.ability || '');
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
@@ -934,25 +853,16 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 	return 1;
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @param {BattleState} battle
- * @param {number} speed
- * @returns {number}
- */
 export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
-	// Find the slot to check status and unburden
 	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) || 
 		battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
 	const status = slot ? slot.status : pokemon.status;
 
-	// --- ADD QUICK FEET LOGIC ---
 	if (ability === 'quickfeet' && status) {
 		speed = Math.floor(speed * 1.5);
 	}
-	// --- END QUICK FEET LOGIC ---
 
 	const weatherActive = isWeatherActive(battle);
 
@@ -977,7 +887,6 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 	}
 
 	if (ability === 'unburden') {
-		// Use the slot variable we already found
 		if (slot?.unburdenActive) {
 			return speed * 2;
 		}
@@ -986,11 +895,6 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 	return speed;
 }
 
-/**
- * @param {AbilityContext} ctx
- * @param {number} damage
- * @returns {number}
- */
 export function applyDamageModifier(ctx: AbilityContext, damage: number): number {
 	const attackerAbility = toID(ctx.attacker.ability || '');
 	const defenderAbility = toID(ctx.defender.ability || '');
@@ -1031,11 +935,6 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	return damage;
 }
 
-/**
- * @param {RPGPokemon} attacker
- * @param {Move} move
- * @returns {boolean}
- */
 export function shouldApplySecondaryEffects(attacker: RPGPokemon, move: Move): boolean {
 	const ability = toID(attacker.ability || '');
 	if (ability === 'sheerforce' && (move.secondary || move.secondaries)) {
@@ -1044,29 +943,16 @@ export function shouldApplySecondaryEffects(attacker: RPGPokemon, move: Move): b
 	return true;
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @returns {boolean}
- */
 export function takesIndirectDamage(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ability !== 'magicguard';
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @returns {boolean}
- */
 export function preventsRecoil(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ability === 'rockhead';
 }
 
-/**
- * @param {RPGPokemon} pokemon
- * @param {BattleState} battle
- * @returns {boolean}
- */
 export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolean {
 	if (battle.magicRoomTurns > 0) return false;
 
@@ -1076,18 +962,11 @@ export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolea
 	return true;
 }
 
-/**
- * @param {ActivePokemonSlot} slot
- * @param {BattleState} battle
- * @param {string[]} messageLog
- * @returns {void}
- */
 export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
 	if (ability === 'stancechange') {
-		// Aegislash form change
 		if (pokemon.species === 'Aegislash-Blade' && slot.lastMoveUsed === 'kingsshield') {
 			pokemon.species = 'Aegislash';
 			messageLog.push(`${pokemon.nickname || pokemon.species} changed to Shield Forme!`);
@@ -1101,7 +980,6 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 	}
 
 	if (ability === 'schooling') {
-		// Wishiwashi form change
 		if (pokemon.species === 'Wishiwashi' && pokemon.level >= 20 && pokemon.hp > pokemon.maxHp * 0.25) {
 			pokemon.species = 'Wishiwashi-School';
 			messageLog.push(`${pokemon.nickname || pokemon.species} formed a school!`);
@@ -1112,7 +990,6 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 	}
 
 	if (ability === 'shieldsdown') {
-		// Minior form change
 		if (pokemon.species.startsWith('Minior-Meteor') && pokemon.hp <= pokemon.maxHp * 0.5) {
 			const color = pokemon.species.split('-')[2] || 'Red';
 			pokemon.species = `Minior-${color}`;
@@ -1121,28 +998,20 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 	}
 }
 
-/**
- * @param {RPGPokemon} attacker
- * @param {Move} move
- * @returns {number}
- */
 export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
 	
 	if (move.multihit) {
 		if (ability === 'skilllink') {
-			// Always hit maximum times
 			if (Array.isArray(move.multihit)) {
-				return move.multihit[1]; // Return max value
+				return move.multihit[1];
 			}
-			return 5; // Default max for moves like Bullet Seed
+			return 5;
 		}
 		
-		// Normal multi-hit distribution
 		if (Array.isArray(move.multihit)) {
 			const min = move.multihit[0];
 			const max = move.multihit[1];
-			// 35% for 2-3 hits, 35% for 4-5 hits
 			const rand = Math.random();
 			if (rand < 0.35) return Math.floor(Math.random() * 2) + min;
 			return Math.floor(Math.random() * 2) + min + 2;
@@ -1153,31 +1022,18 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	return 1;
 }
 
-/**
- * @param {RPGPokemon} attacker
- * @returns {boolean}
- */
 export function hasParentalBond(attacker: RPGPokemon): boolean {
 	const ability = toID(attacker.ability || '');
 	return ability === 'parentalbond';
 }
 
-/**
- * @param {number} damage
- * @param {boolean} isSecondHit
- * @returns {number}
- */
 export function applyParentalBondModifier(damage: number, isSecondHit: boolean): number {
 	if (isSecondHit) {
-		return Math.floor(damage * 0.25); // Second hit is 25% of first
+		return Math.floor(damage * 0.25);
 	}
 	return damage;
 }
 
-/**
- * @param {AbilityContext} ctx
- * @returns {{ prevented: boolean, message?: string } | null}
- */
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
@@ -1199,9 +1055,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 	return null;
 }
 
-/**
- * @returns {string[]}
- */
 export function getAllImplementedAbilities(): string[] {
 	return [
 		...Object.keys(IMMUNITY_ABILITIES),
@@ -1222,10 +1075,6 @@ export function getAllImplementedAbilities(): string[] {
 	];
 }
 
-/**
- * @param {string} abilityName
- * @returns {any}
- */
 export function getAbilityInfo(abilityName: string): any {
 	const ability = Dex.abilities.get(abilityName);
 	if (ability.exists) {
@@ -1238,13 +1087,6 @@ export function getAbilityInfo(abilityName: string): any {
 	return null;
 }
 
-/**
- * @param {ActivePokemonSlot} slot
- * @param {BattleState} battle
- * @param {boolean} isPlayerSwitchIn
- * @param {string[]} messageLog
- * @returns {void}
- */
 export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): void {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
@@ -1328,10 +1170,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 }	
 
-/*
- * @param {AbilityContext} ctx
- * @returns {void}
- */
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const defenderAbility = toID(ctx.defender.ability || '');
 	const handler = CONTACT_ABILITIES[defenderAbility];
