@@ -5136,56 +5136,6 @@ function resolveMoveTarget(
 	return finalTargetIndex;
 }
 
-/**
- * Checks for and handles two-turn charging moves.
- * @returns {boolean} `true` if the turn should end (move is charging), `false` if it should execute.
- */
-function handleChargingMove(
-	attackerSlot: ActivePokemonSlot,
-	move: Move,
-	moveObject: { id: string; pp: number },
-	battle: BattleState,
-	messageLog: string[],
-	ppDeduction: number
-): boolean {
-	if (move.flags.charge && !attackerSlot.chargingMove) {
-		// --- First turn: Start charging ---
-		attackerSlot.chargingMove = move.id;
-		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
-
-		if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
-		else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
-		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
-		else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
-		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
-		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
-			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
-				attackerSlot.chargingMove = undefined; // Skip charging
-				chargeMessage = '';
-			} else {
-				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
-			}
-		}
-		// ... (add other custom charge messages here) ...
-		else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
-		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
-
-		if (chargeMessage) messageLog.push(chargeMessage);
-
-		// If still charging (not skipped by sun, etc.)
-		if (attackerSlot.chargingMove) {
-			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
-				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
-			}
-			return true; // End turn
-		}
-	} else if (attackerSlot.chargingMove === move.id) {
-		// --- Second turn: Execute the move ---
-		attackerSlot.chargingMove = undefined;
-	}
-	
-	return false; // Execute move
-}
 
 /**
  * [REFACTORED]
