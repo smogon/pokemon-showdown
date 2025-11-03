@@ -80,9 +80,9 @@ const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem, 'quant
 
 // Starter Pokemon data organized by type
 const STARTER_POKEMON = {
-	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar'],
-	water: ['squirtle', 'totodile', 'mudkip', 'piplup'],
-	grass: ['bulbasaur', 'chikorita', 'treeko', 'turtwig'],
+	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
+	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
+	grass: ['bulbasaur', 'chikorita', 'treeko', 'turtwig', 'snivy'],
 };
 
 const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
