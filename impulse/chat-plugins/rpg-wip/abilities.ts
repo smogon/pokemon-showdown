@@ -466,22 +466,28 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	'guts': (pokemon, stat, value) => {
-		if (stat === 'atk' && pokemon.status) {
+	'guts': (pokemon, stat, value, slot) => {
+		// Check slot status if available, otherwise pokemon status
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'atk' && status) {
 			return Math.floor(value * 1.5);
 		}
 		return value;
 	},
 
-	'marvelscale': (pokemon, stat, value) => {
-		if (stat === 'def' && pokemon.status) {
+	'marvelscale': (pokemon, stat, value, slot) => {
+		// Check slot status if available, otherwise pokemon status
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'def' && status) {
 			return Math.floor(value * 1.5);
 		}
 		return value;
 	},
 
-	'quickfeet': (pokemon, stat, value) => {
-		if (stat === 'spe' && pokemon.status) {
+	'quickfeet': (pokemon, stat, value, slot) => {
+		// Check slot status if available, otherwise pokemon status
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'spe' && status) {
 			return Math.floor(value * 1.5);
 		}
 		return value;
@@ -494,9 +500,20 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	'slowstart': (pokemon, stat, value) => {
-		if (stat === 'atk' || stat === 'spe') {
-			return Math.floor(value * 0.5);
+	'slowstart': (pokemon, stat, value, slot) => {
+		// If slot is provided (in battle), check its counter
+		if (slot) {
+			// slowStartTurns is set to 5 on switch-in
+			// If it's undefined, it means it hasn't been set yet (e.g. battle start)
+			// so we treat it as active.
+			if (slot.slowStartTurns === undefined || slot.slowStartTurns > 0) {
+				if (stat === 'atk' || stat === 'spe') return Math.floor(value * 0.5);
+			}
+		} else {
+			// If no slot (e.g. summary screen), debuff is active
+			if (stat === 'atk' || stat === 'spe') {
+				return Math.floor(value * 0.5);
+			}
 		}
 		return value;
 	},
