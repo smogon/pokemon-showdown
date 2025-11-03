@@ -335,13 +335,19 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	},
 
 	'adaptability': (ctx, basePower) => {
-		const species = Dex.species.get(ctx.attacker.species);
-		if (species.types.includes(ctx.move.type)) {
-		}
+		// Adaptability is handled in getSTABMultiplier, not here
+		// This is just a placeholder for tracking
 		return basePower;
 	},
 
 	'rivalry': (ctx, basePower) => {
+		if (ctx.attacker.gender !== 'N' && ctx.defender.gender !== 'N') {
+			if (ctx.attacker.gender === ctx.defender.gender) {
+				return Math.floor(basePower * 1.25);
+			} else {
+				return Math.floor(basePower * 0.75);
+			}
+		}
 		return basePower;
 	},
 
@@ -354,6 +360,20 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	},
 
 	'analytic': (ctx, basePower) => {
+		// Check if attacker is moving last by comparing with opponent slots
+		const isPlayerAttacker = ctx.battle.playerSlots.some(slot => 
+			slot?.pokemon.id === ctx.attacker.id);
+		
+		const opponentSlots = isPlayerAttacker ? 
+			ctx.battle.opponentSlots : ctx.battle.playerSlots;
+	
+		// If all opponent active Pokemon have already moved this turn, boost power
+		const allOpponentsMoved = opponentSlots.every(slot => 
+			!slot || slot.pokemon.hp <= 0);
+	
+		if (allOpponentsMoved) {
+			return Math.floor(basePower * 1.3);
+		}
 		return basePower;
 	},
 
@@ -935,6 +955,14 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 		return speed * 2;
 	}
 
+	if (ability === 'unburden') {
+		const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) || 
+			battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
+		if (slot?.unburdenActive) {
+			return speed * 2;
+		}
+	}
+
 	return speed;
 }
 
@@ -1022,6 +1050,104 @@ export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolea
 	if (ability === 'klutz') return false;
 
 	return true;
+}
+
+/**
+ * @param {ActivePokemonSlot} slot
+ * @param {BattleState} battle
+ * @param {string[]} messageLog
+ * @returns {void}
+ */
+export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
+	const pokemon = slot.pokemon;
+	const ability = toID(pokemon.ability || '');
+
+	if (ability === 'stancechange') {
+		// Aegislash form change
+		if (pokemon.species === 'Aegislash-Blade' && slot.lastMoveUsed === 'kingsshield') {
+			pokemon.species = 'Aegislash';
+			messageLog.push(`${pokemon.nickname || pokemon.species} changed to Shield Forme!`);
+		} else if (pokemon.species === 'Aegislash' && slot.lastMoveUsed) {
+			const move = Dex.moves.get(slot.lastMoveUsed);
+			if (move.category !== 'Status') {
+				pokemon.species = 'Aegislash-Blade';
+				messageLog.push(`${pokemon.nickname || pokemon.species} changed to Blade Forme!`);
+			}
+		}
+	}
+
+	if (ability === 'schooling') {
+		// Wishiwashi form change
+		if (pokemon.species === 'Wishiwashi' && pokemon.level >= 20 && pokemon.hp > pokemon.maxHp * 0.25) {
+			pokemon.species = 'Wishiwashi-School';
+			messageLog.push(`${pokemon.nickname || pokemon.species} formed a school!`);
+		} else if (pokemon.species === 'Wishiwashi-School' && pokemon.hp <= pokemon.maxHp * 0.25) {
+			pokemon.species = 'Wishiwashi';
+			messageLog.push(`${pokemon.nickname || pokemon.species} stopped schooling!`);
+		}
+	}
+
+	if (ability === 'shieldsdown') {
+		// Minior form change
+		if (pokemon.species.startsWith('Minior-Meteor') && pokemon.hp <= pokemon.maxHp * 0.5) {
+			const color = pokemon.species.split('-')[2] || 'Red';
+			pokemon.species = `Minior-${color}`;
+			messageLog.push(`${pokemon.nickname || pokemon.species}'s shell broke off!`);
+		}
+	}
+}
+
+/**
+ * @param {RPGPokemon} attacker
+ * @param {Move} move
+ * @returns {number}
+ */
+export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
+	const ability = toID(attacker.ability || '');
+	
+	if (move.multihit) {
+		if (ability === 'skilllink') {
+			// Always hit maximum times
+			if (Array.isArray(move.multihit)) {
+				return move.multihit[1]; // Return max value
+			}
+			return 5; // Default max for moves like Bullet Seed
+		}
+		
+		// Normal multi-hit distribution
+		if (Array.isArray(move.multihit)) {
+			const min = move.multihit[0];
+			const max = move.multihit[1];
+			// 35% for 2-3 hits, 35% for 4-5 hits
+			const rand = Math.random();
+			if (rand < 0.35) return Math.floor(Math.random() * 2) + min;
+			return Math.floor(Math.random() * 2) + min + 2;
+		}
+		return move.multihit;
+	}
+	
+	return 1;
+}
+
+/**
+ * @param {RPGPokemon} attacker
+ * @returns {boolean}
+ */
+export function hasParentalBond(attacker: RPGPokemon): boolean {
+	const ability = toID(attacker.ability || '');
+	return ability === 'parentalbond';
+}
+
+/**
+ * @param {number} damage
+ * @param {boolean} isSecondHit
+ * @returns {number}
+ */
+export function applyParentalBondModifier(damage: number, isSecondHit: boolean): number {
+	if (isSecondHit) {
+		return Math.floor(damage * 0.25); // Second hit is 25% of first
+	}
+	return damage;
 }
 
 /**
@@ -1265,6 +1391,10 @@ export const RPGAbilities = {
 	applyAccuracyModifier,
 	getEvasionMultiplier,
 	isWeatherActive,
+	checkFormChangeAbilities,
+	getMultiHitCount,
+	hasParentalBond,
+	applyParentalBondModifier,
 
 	getAllImplementedAbilities,
 	getAbilityInfo,
