@@ -5078,9 +5078,9 @@ function handleSwitchAction(
 	attackerSlotIndex: number,
 	action: Extract<NonNullable<BattleState['pendingActions'][number]>, { actionType: 'switch' }>,
 	battle: BattleState,
-	player: PlayerData,
-	messageLog: string[]
+	player: PlayerData
 ) {
+	const messageLog = battle.messageLog;
 	const isPlayerSwitch = attackerSlotIndex <= 1;
 	const pokemonToSwitchInId = action.switchToPokemonId!;
 
@@ -5148,7 +5148,7 @@ function handleSwitchAction(
 
 		if (replacement) {
 			const newSlot = createActivePokemonSlot(replacement);
-			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot; // AI slots are 0/1 in this context
+			battle.opponentSlots[attackerSlotIndex - 2 as 0 | 1] = newSlot; // AI slots are 2/3 -> 0/1
 			messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
 
 			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
