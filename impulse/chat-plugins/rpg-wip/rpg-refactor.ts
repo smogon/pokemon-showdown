@@ -2985,6 +2985,245 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	slot.isCharged = false; // Charge only lasts until next Electric move
 }
 
+/********************************
+ * REFACTORED FAINT & SWITCHING
+ ********************************/
+
+/**
+ * Handles all logic for a fainted opponent, including EXP, replacements, and hazards.
+ * @returns {boolean} Returns true if the opponent's side is now empty.
+ */
+function handleOpponentFaint(
+	battle: BattleState,
+	player: PlayerData,
+	playerParticipants: ActivePokemonSlot[],
+	room: ChatRoom,
+	user: User,
+	messageLog: string[]
+): boolean {
+	const opponentSlotsToCheck = (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') ? [0, 1] : [0];
+	let faintedThisCheck = false;
+
+	for (const i of opponentSlotsToCheck) {
+		const slot = battle.opponentSlots[i];
+		if (slot && slot.pokemon.hp <= 0) {
+			faintedThisCheck = true;
+			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
+
+			// --- Grant EXP ---
+			if (playerParticipants.length > 0) {
+				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
+				messageLog.push(...expResult.messages);
+			}
+
+			// --- Find Replacement ---
+			const nextOpponent = battle.opponentParty.find(p =>
+				p.hp > 0 &&
+				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+			);
+
+			if (nextOpponent) {
+				messageLog.push(`**${battle.opponentName} is about to send in ${nextOpponent.species}!**`);
+				const newSlot = createActivePokemonSlot(nextOpponent);
+				battle.opponentSlots[i as 0 | 1] = newSlot;
+
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+				if (faintedOnEntry) {
+					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+				} else {
+					handleMirrorHerb(newSlot, battle, messageLog);
+				}
+			} else {
+				// No replacement found
+				battle.opponentSlots[i as 0 | 1] = null;
+			}
+		}
+	}
+	return faintedThisCheck;
+}
+
+/**
+ * Handles all logic for a fainted player Pokemon.
+ * @returns {boolean} Returns true if a player Pokemon fainted or a slot is empty.
+ */
+function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
+	const playerSlotsToCheck = (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') ? [0, 1] : [0];
+	let switchNeeded = false;
+
+	for (const i of playerSlotsToCheck) {
+		const slot = battle.playerSlots[i];
+		if (slot === null || slot.pokemon.hp <= 0) {
+			if (slot && slot.pokemon.hp <= 0) {
+				messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
+			}
+			battle.playerSlots[i as 0 | 1] = null;
+			switchNeeded = true;
+		}
+	}
+	return switchNeeded;
+}
+
+/**
+ * Handles AI pivot moves like U-turn or Volt Switch.
+ */
+function handleAiPivot(battle: BattleState, messageLog: string[]) {
+	if (!battle.aiPendingPivot) return;
+
+	const nextOpponent = battle.opponentParty.find(p =>
+		p.hp > 0 &&
+		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const slotIndex = battle.aiPendingPivot.slotIndex;
+	const pivotSlot = battle.aiPendingPivot.slot;
+
+	if (nextOpponent) {
+		messageLog.push(`**${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!**`);
+		messageLog.push(`**${battle.opponentName} sent out ${nextOpponent.species}!**`);
+
+		const newSlot = createActivePokemonSlot(nextOpponent);
+
+		// Handle Baton Pass
+		if (battle.aiPendingPivot.isBatonPass) {
+			newSlot.statStages = { ...pivotSlot.statStages };
+			newSlot.isConfused = pivotSlot.isConfused;
+			newSlot.confusionCounter = pivotSlot.confusionCounter;
+			newSlot.isSeeded = pivotSlot.isSeeded;
+			messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
+		}
+
+		battle.opponentSlots[slotIndex as 0 | 1] = newSlot;
+
+		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+		if (faintedOnEntry) {
+			messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+		} else {
+			handleMirrorHerb(newSlot, battle, messageLog);
+		}
+	} else {
+		// No replacement, pivot fails
+		battle.opponentSlots[slotIndex as 0 | 1] = pivotSlot;
+		messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
+	}
+	battle.aiPendingPivot = undefined; // Clear flag
+}
+
+/**
+ * Checks for win/loss conditions and sends the appropriate end-battle HTML.
+ * @returns {boolean} Returns true if the battle ended.
+ */
+function checkForWinLoss(
+	context: CommandContext,
+	battle: BattleState,
+	player: PlayerData,
+	user: User,
+	messageLog: string[]
+): boolean {
+	const playerHasLivingPokemon = player.party.some(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
+
+	// --- 1. Check for Player Loss ---
+	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
+		saveBattleStatus(battle);
+		activeBattles.delete(user.id);
+
+		let moneyLost = 100;
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			moneyLost = Math.floor(battle.opponentMoney / 10) || 200;
+		}
+		moneyLost = Math.min(player.money, moneyLost);
+		player.money -= moneyLost;
+
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
+		return true; // Battle ended
+	}
+
+	// --- 2. Check for Player Win ---
+	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
+		p.hp > 0 &&
+		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
+
+	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
+		saveBattleStatus(battle);
+		activeBattles.delete(user.id);
+
+		let moneyGained = 0;
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			moneyGained = battle.opponentMoney;
+			player.money += moneyGained;
+			if (player.pendingMoveLearnQueue?.moveIds.length) {
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+			} else {
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
+			}
+		} else {
+			// Wild battle win
+			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
+			player.money += moneyGained;
+			if (player.pendingMoveLearnQueue?.moveIds.length) {
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+			} else {
+				const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
+			}
+		}
+		return true; // Battle ended
+	}
+	
+	return false; // Battle continues
+}
+
+/**
+ * [REFACTORED]
+ * Checks the HP of all active Pokémon and handles the outcome of a faint.
+ * This can result in a win, a loss, or a prompt to switch Pokémon.
+ * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
+ */
+function checkBattleEndCondition(
+	context: CommandContext,
+	battle: BattleState,
+	room: ChatRoom,
+	user: User,
+	messageLog: string[]
+): boolean {
+	const player = getPlayerData(user.id);
+	
+	// --- 1. Handle Faints ---
+	const playerParticipants = getActiveSlots(battle.playerSlots);
+	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
+	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
+
+	// --- 2. Check for Win/Loss ---
+	const battleEnded = checkForWinLoss(context, battle, player, user, messageLog);
+	if (battleEnded) return true;
+
+	// --- 3. Handle Pivot Moves ---
+	// A. Check for Player Pivot Switch (U-turn, etc.)
+	if (battle.pendingPivot) {
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		return true; // Battle interrupted
+	}
+	// B. Check for AI Pivot Switch
+	handleAiPivot(battle, messageLog);
+
+	// --- 4. Handle Faint/Forced Switch-In ---
+	const playerHasLivingPokemon = player.party.some(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+
+	if (playerSwitchNeeded && playerHasLivingPokemon) {
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		return true; // Battle interrupted
+	}
+
+	return false; // Battle continues
+}
+
 
 /**
  * Checks for statuses that might prevent a Pokémon from moving (sleep, freeze, paralysis, confusion).
