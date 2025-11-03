@@ -3514,27 +3514,33 @@ function checkForWinLoss(
  * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
  */
 function checkBattleEndCondition(
-	context: CommandContext,
+	// --- REMOVE: context: CommandContext, ---
 	battle: BattleState,
-	room: ChatRoom,
-	user: User,
+	// --- REMOVE: room: ChatRoom, ---
+	// --- REMOVE: user: User, ---
 	messageLog: string[]
 ): boolean {
-	const player = getPlayerData(user.id);
+	const player = getPlayerData(battle.playerId);
 	
 	// --- 1. Handle Faints ---
 	const playerParticipants = getActiveSlots(battle.playerSlots);
-	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
+	// --- MODIFY: handleOpponentFaint call ---
+	handleOpponentFaint(battle, player, playerParticipants, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
 
 	// --- 2. Check for Win/Loss ---
-	const battleEnded = checkForWinLoss(context, battle, player, user, messageLog);
+	// --- MODIFY: checkForWinLoss call ---
+	const battleEnded = checkForWinLoss(battle, player, messageLog);
 	if (battleEnded) return true;
 
 	// --- 3. Handle Pivot Moves ---
 	// A. Check for Player Pivot Switch (U-turn, etc.)
 	if (battle.pendingPivot) {
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		// --- SET VIEW STATE ---
+		battle.currentView = 'switch_pivot';
+		battle.viewContext = { slotIndex: battle.pendingPivot.slotIndex };
+		battle.forceEnd = true;
+		// --- END SET ---
 		return true; // Battle interrupted
 	}
 	// B. Check for AI Pivot Switch
@@ -3547,7 +3553,10 @@ function checkBattleEndCondition(
 	);
 
 	if (playerSwitchNeeded && playerHasLivingPokemon) {
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		// --- SET VIEW STATE ---
+		battle.currentView = 'switch_faint';
+		battle.forceEnd = true;
+		// --- END SET ---
 		return true; // Battle interrupted
 	}
 
