@@ -1709,6 +1709,7 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 	if (copiedAny) {
 		messageLog.push(`${slot.pokemon.species}'s Mirror Herb copied the opponent's stat boosts!`);
 		slot.pokemon.item = undefined; // Consumed after use
+		activateUnburden(attackerSlot, messageLog);
 	}
 }
 
@@ -1737,6 +1738,7 @@ function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLo
 
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
 		slot.pokemon.item = undefined; // Mental Herb is consumed
+		activateUnburden(attackerSlot, messageLog);
 		return true;
 	}
 
