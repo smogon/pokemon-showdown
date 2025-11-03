@@ -1135,10 +1135,14 @@ function applyFinalDamageModifiers(
 	abilityContext: AbilityContext
 ): number {
 	let damage = baseDamage;
+	const attackerAbility = toID(attacker.ability || '');
 
 	// --- Screen Damage Reduction ---
 	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-	if (!isCritical) { // Critical hits bypass screens
+	// --- INFILTRATOR IMPLEMENTATION ---
+	// Infiltrator bypasses screens
+	if (!isCritical && attackerAbility !== 'infiltrator') {
+	// --- END INFILTRATOR IMPLEMENTATION ---
 		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 		if (defenderVeilTurns > 0) {
 			damage = Math.floor(damage * 0.5);
@@ -1361,110 +1365,132 @@ function calculateDamage(
  * Handles moves that are not standard damage calculations (OHKO, Counter, Fling).
  * @returns {boolean} `true` if the move was fully handled, `false` if calculation should continue.
  */
-function handleDamagingMovePreamble(
+function handleDamagingMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
 	move: Move,
 	battle: BattleState,
-	messageLog: string[]
-): boolean {
+	messageLog: string[],
+	spreadMultiplier: number
+) {
+	// --- 1. Preamble Checks (OHKO, Fling, Counter, Invulnerability) ---
+	if (handleDamagingMovePreamble(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return; // Move was fully handled (e.g., it was OHKO or Fling) or it failed
+	}
+
+	// --- 2. Multi-Hit & Parental Bond Logic ---
 	const attacker = attackerSlot.pokemon;
-	const defender = defenderSlot.pokemon;
+	let moveWasSuccessful = false;
+	const hitCount = RPGAbilities.getMultiHitCount(attacker, move);
+	const hasParentalBond = RPGAbilities.hasParentalBond(attacker);
+	const totalHits = hasParentalBond && hitCount === 1 ? 2 : hitCount;
 
-	// --- Check for semi-invulnerable state ---
-	const defenderChargingMoveId = defenderSlot.chargingMove;
-	if (defenderChargingMoveId) {
-		let isImmune = true;
-		const semiInvulnerableStates = ['fly', 'dig', 'dive', 'bounce', 'shadowforce', 'phantomforce'];
-
-		if (semiInvulnerableStates.includes(defenderChargingMoveId)) {
-			if (defenderChargingMoveId === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) isImmune = false;
-			if (defenderChargingMoveId === 'dive' && ['surf', 'whirlpool'].includes(move.id)) isImmune = false;
-			if ((defenderChargingMoveId === 'fly' || defenderChargingMoveId === 'bounce') && ['thunder', 'hurricane', 'twister', 'gust', 'skyuppercut', 'smackdown'].includes(move.id)) isImmune = false;
-		}
-		if (isImmune) {
-			messageLog.push(`But it failed! ${defender.species} avoided the attack!`);
-			return true; // Move fails, but turn is used
-		}
-	}
-
-	// --- Handle Counter and Mirror Coat ---
-	if (move.id === 'counter' || move.id === 'mirrorcoat') {
-		const targetCategory = move.id === 'counter' ? 'Physical' : 'Special';
-		if (attackerSlot.lastDamageTaken?.category !== targetCategory) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const counterDamage = attackerSlot.lastDamageTaken.amount * 2;
-		defender.hp = Math.max(0, defender.hp - counterDamage);
-		messageLog.push(`${defender.species} took ${counterDamage} damage from the counter!`);
-		return true;
-	}
-
-	// --- Handle Fling ---
-	if (move.id === 'fling') {
-		if (battle.magicRoomTurns > 0 || !attacker.item) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const flingPowers: Record<string, number> = {
-			'leftovers': 10, 'oranberry': 10, 'berryjuice': 10, 'sitrusberry': 10, 'lumberry': 10, 'focussash': 10,
-			'choiceband': 10, 'choicescarf': 10, 'choicespecs': 10, 'lifeorb': 30, 'rockyhelmet': 60, 'assaultvest': 80, 'ironball': 130,
-		};
-		const damage = flingPowers[attacker.item] || 30;
-		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
-		return true;
-	}
-
-	// --- Handle Natural Gift ---
-	if (move.id === 'naturalgift') {
-		if (!attacker.item?.includes('berry')) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const damage = 80; // Simplified
-		defender.hp = Math.max(0, defender.hp - damage);
-		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
-		return true;
-	}
-
-	// --- Handle One-Hit KO moves ---
-	if (move.ohko) {
-		const defenderAbility = toID(defender.ability || '');
-		if (defenderAbility === 'sturdy') {
-			messageLog.push(`But it failed! (${defender.species}'s Sturdy)`);
-			return true;
-		}
-		if (defender.level > attacker.level) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const defenderSpecies = Dex.species.get(defender.species);
-		if (move.ohko === 'Normal' && defenderSpecies.types.includes('Ghost')) {
-			messageLog.push(`It doesn't affect ${defender.species}...`);
-			return true;
-		}
-		if (move.ohko === 'Ice' && defenderSpecies.types.includes('Ice')) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-
-		const accuracy = 30 + attacker.level - defender.level;
-		if (Math.random() * 100 < accuracy) {
-			defender.hp = 0;
-			messageLog.push(`<i style="color: #dc3545;">It's a one-hit KO!</i>`);
+	if (totalHits > 1) {
+		const hitMessage = hasParentalBond ?
+			` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
+			` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
+		if (messageLog.length > 0) {
+			messageLog[messageLog.length - 1] += hitMessage;
 		} else {
-			messageLog.push(`${attacker.species}'s attack missed!`);
+			messageLog.push(hitMessage);
 		}
-		return true;
 	}
 
-	return false; // Standard damage calculation should proceed
+	// --- 3. Damage Loop ---
+	for (let i = 0; i < totalHits; i++) {
+		// --- 3a. Calculate Damage ---
+		let parentalBondSpreadMultiplier = spreadMultiplier;
+		if (hasParentalBond && i === 1) {
+			parentalBondSpreadMultiplier *= 0.25; // Second hit is 25% damage
+		}
+		
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
+		if (attackResult.effectiveness > 0) {
+			moveWasSuccessful = true;
+		}
+
+		// --- 3b. Handle Effectiveness Berry ---
+		if (attackResult.berryConsumed) {
+			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
+			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
+				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
+			}
+			defenderSlot.pokemon.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
+		}
+
+		// --- 3c. Apply Damage (incl. Substitute, Sturdy, Sash) ---
+		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog);
+
+		// Track damage for Counter/Mirror Coat
+		if (damageDealt > 0 && move.category !== 'Status') {
+			defenderSlot.lastDamageTaken = {
+				amount: damageDealt,
+				category: move.category,
+				from: attacker.id,
+			};
+		}
+		
+		// Add damage message
+		if (totalHits > 1) {
+			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
+		} else if (messageLog.length > 0) {
+			messageLog[messageLog.length - 1] += attackResult.message;
+		} else {
+			messageLog.push(attackResult.message);
+		}
+		
+		// --- 3d. Pop Air Balloon ---
+		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
+			damageDealt > 0 && move.category !== 'Status') {
+			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
+			defenderSlot.pokemon.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
+		}
+
+		if (attackResult.effectiveness > 0 && damageDealt > 0) {
+			// --- 3e. Attacker Drain Effects (Drain, Shell Bell) ---
+			if (move.drain && attacker.hp < attacker.maxHp) {
+				if (attackerSlot.healBlockTurns > 0) {
+					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
+				} else {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					// --- LIQUID OOZE IMPLEMENTATION ---
+					if (toID(defenderSlot.pokemon.ability || '') === 'liquid_ooze') {
+						attacker.hp = Math.max(0, attacker.hp - drainAmount);
+						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
+					} else {
+						attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
+						messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
+					}
+					// --- END IMPLEMENTATION ---
+				}
+			}
+			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
+				if (attackerSlot.healBlockTurns <= 0) {
+					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
+					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
+				}
+			}
+
+			// --- 3f. Defender Contact Effects (Rocky Helmet, Abilities, WP, Red Card) ---
+			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+			// --- ANGER POINT FIX: Pass isCritical to this function ---
+			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
+			
+			// --- 3g. HP-Drop Berry Effects (Sitrus, Enigma) ---
+			handleHPDropEffects(defenderSlot, battle, messageLog);
+			
+			// --- 3h. Attacker Recoil & Self-Effects (Recoil, Life Orb, Self-Boosts, Self-Destruct) ---
+			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
+			
+			// --- 3i. Secondary Effects (Status, Stat Drops, Flinch) ---
+			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+		}
+		
+		if (defenderSlot.pokemon.hp <= 0) break; // Stop multi-hit if defender fainted
+	}
 }
 
 /**
@@ -1480,6 +1506,12 @@ function applyDamageAndEnduranceEffects(
 ): number {
 	const defender = defenderSlot.pokemon;
 	const defenderAbility = toID(defender.ability || '');
+	// --- INFILTRATOR IMPLEMENTATION ---
+	// We need the attacker's ability here
+	const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
+	const attackerSlot = getActiveSlots(isPlayerDefender ? battle.opponentSlots : battle.playerSlots)[0]; // Note: This is a simplification for multi-battle
+	const attackerAbility = attackerSlot ? toID(attackerSlot.pokemon.ability || '') : '';
+	// --- END INFILTRATOR IMPLEMENTATION ---
 
 	// --- 1. Check Disguise (Triggers before Substitute) ---
 	if (defenderSlot.isDisguised && damageDealt > 0 && move.category !== 'Status') {
@@ -1498,7 +1530,10 @@ function applyDamageAndEnduranceEffects(
 	}
 
 	// --- 2. Handle Substitute ---
-	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
+	// --- INFILTRATOR IMPLEMENTATION ---
+	// Infiltrator bypasses substitute
+	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub && attackerAbility !== 'infiltrator') {
+	// --- END INFILTRATOR IMPLEMENTATION ---
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
 			defenderSlot.substitute = undefined;
@@ -2188,11 +2223,17 @@ function handleGenericVolatileMove(
 		return true;
 	}
 	const target = targetSlot.pokemon;
+	const ability = toID(target.ability || '');
 	let hadEffect = false;
 
 	switch (move.volatileStatus) {
 	case 'confusion':
-		if (!targetSlot.isConfused) {
+		// --- OWN TEMPO IMPLEMENTATION ---
+		if (ability === 'owntempo') {
+			messageLog.push(`${target.species}'s Own Tempo prevents confusion!`);
+			hadEffect = false;
+		} else if (!targetSlot.isConfused) {
+		// --- END IMPLEMENTATION ---
 			targetSlot.isConfused = true;
 			targetSlot.confusionCounter = Math.floor(Math.random() * 3) + 2;
 			messageLog.push(`${target.species} became confused!`);
@@ -2218,7 +2259,7 @@ function handleGenericVolatileMove(
 		if (!targetSlot.status && !targetSlot.yawnCounter) {
 			const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(target, battle);
 			const sleepPreventingAbilities = ['insomnia', 'vitalspirit', 'comatose', 'sweetveil'];
-			const isAbilityImmune = sleepPreventingAbilities.includes(toID(target.ability || ''));
+			const isAbilityImmune = sleepPreventingAbilities.includes(ability);
 			if (!isTerrainImmune && !isAbilityImmune) {
 				targetSlot.yawnCounter = 2;
 				messageLog.push(`${target.species} grew drowsy!`);
@@ -2312,6 +2353,7 @@ function handleGenericVolatileMove(
 	if (!hadEffect) messageLog.push('But it failed!');
 	return true; // Move was handled
 }
+
 
 /**
  * Handles generic healing moves (move.flags.heal)
@@ -2561,6 +2603,12 @@ function handleSpecificStatusMove(
 			messageLog.push(`But it failed!`);
 			return true;
 		}
+		// --- SUCTION CUPS IMPLEMENTATION ---
+		if (toID(defender.ability || '') === 'suctioncups') {
+			messageLog.push(`${defender.species}'s Suction Cups prevents it from being forced out!`);
+			return true;
+		}
+		// --- END IMPLEMENTATION ---
 		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
 			messageLog.push(`The wild ${defender.species} was blown away!`);
 			const oppSlotIndex = battle.opponentSlots.indexOf(defenderSlot);
@@ -3808,6 +3856,16 @@ function applyStatChange(
 				messageLog.push(`${pokemon.species}'s ${ability} prevents its Attack from being lowered!`);
 				return false;
 			}
+			// --- KEEN EYE & BIG PECKS IMPLEMENTATION ---
+			if (stat === 'accuracy' && ability === 'keeneye') {
+				messageLog.push(`${pokemon.species}'s Keen Eye prevents its accuracy from being lowered!`);
+				return false;
+			}
+			if (stat === 'def' && ability === 'bigpecks') {
+				messageLog.push(`${pokemon.species}'s Big Pecks prevents its Defense from being lowered!`);
+				return false;
+			}
+			// --- END IMPLEMENTATION ---
 		}
 
 		if (currentStage <= -6) {
@@ -3943,6 +4001,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 	if (battle.magicRoomTurns > 0) return;
 
 	const pokemon = slot.pokemon;
+	const ability = toID(pokemon.ability || '');
 
 	// No effect if fainted, no item, or if an item was already consumed this turn (prevents multiple berries activating)
 	if (pokemon.hp <= 0 || !pokemon.item) return;
@@ -4009,8 +4068,12 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			if (natureData && berryData) {
 				// Pokemon becomes confused if the berry's flavor matches what the nature dislikes
 				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
+				// --- OWN TEMPO IMPLEMENTATION ---
 				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
-					if (!slot.isConfused) {
+					if (ability === 'owntempo') {
+						messageLog.push(`${pokemon.species}'s Own Tempo prevents confusion!`);
+					} else if (!slot.isConfused) {
+				// --- END IMPLEMENTATION ---
 						slot.isConfused = true;
 						slot.confusionCounter = Math.floor(Math.random() * 3) + 2; // 2-4 turns
 						messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
