@@ -3915,6 +3915,17 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 }
 
 /**
+ * Activates Unburden ability when an item is consumed
+ */
+function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+	if (ability === 'unburden' && !slot.unburdenActive) {
+		slot.unburdenActive = true;
+		messageLog.push(`${slot.pokemon.species}'s Unburden activated!`);
+	}
+}
+
+/**
  * Helper to get a live Pokemon slot from its index.
  * Returns the slot if it exists and the Pokemon is not fainted.
  */
