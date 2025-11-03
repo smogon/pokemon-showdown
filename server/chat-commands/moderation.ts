@@ -538,7 +538,7 @@ export const commands: Chat.ChatCommands = {
 	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
 		this.checkChat();
-		if (room?.settings.isPersonal && !user.can('warn' as any)) {
+		if (room?.settings.isPersonal && !user.can('warn' as any) && !room.parent) {
 			throw new Chat.ErrorMessage("Warning is unavailable in group chats.");
 		}
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
