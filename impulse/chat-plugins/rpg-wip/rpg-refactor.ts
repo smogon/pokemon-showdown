@@ -3669,6 +3669,76 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	return false; // Pokémon survived
 }
 
+/**
+ * Applies a stat stage change to a slot, respecting Contrary and other abilities/items.
+ * @returns {boolean} `true` if the stat change had any effect.
+ */
+function applyStatChange(
+	slot: ActivePokemonSlot,
+	stat: keyof ActivePokemonSlot['statStages'],
+	value: number,
+	battle: BattleState,
+	messageLog: string[],
+	source: ActivePokemonSlot | null = null // Source of the change (null if from self)
+): boolean {
+	const pokemon = slot.pokemon;
+	const ability = toID(pokemon.ability || '');
+	let actualValue = value;
+
+	// 1. Check Contrary
+	if (ability === 'contrary') {
+		actualValue *= -1;
+	}
+
+	const currentStage = slot.statStages[stat];
+	const isSelf = !source || source.pokemon.id === pokemon.id;
+
+	if (actualValue > 0) { // Stat Rise
+		if (currentStage >= 6) {
+			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
+			return false;
+		}
+		const newStage = Math.min(6, currentStage + actualValue);
+		slot.statStages[stat] = newStage as any;
+		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
+		messageLog.push(msg);
+		return true;
+
+	} else if (actualValue < 0) { // Stat Drop
+		// 2. Check for drop-prevention (only if not self-inflicted)
+		if (!isSelf) {
+			if (battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
+				messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+				return false;
+			}
+			const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+			if (blockAbilities.includes(ability)) {
+				messageLog.push(`${pokemon.species}'s ${ability} prevents its stats from being lowered!`);
+				return false;
+			}
+			if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(ability)) {
+				messageLog.push(`${pokemon.species}'s ${ability} prevents its Attack from being lowered!`);
+				return false;
+			}
+		}
+
+		if (currentStage <= -6) {
+			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any lower!`);
+			return false;
+		}
+		const newStage = Math.max(-6, currentStage + actualValue);
+		slot.statStages[stat] = newStage as any;
+		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
+		messageLog.push(msg);
+
+		// 3. Trigger Defiant/Competitive
+		checkStatDropAbilities(slot, source, battle, messageLog);
+		return true;
+	}
+
+	return false; // value was 0
+}
+
 function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
 
