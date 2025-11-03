@@ -3612,32 +3612,65 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
  */
 function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
 	const pokemon = slot.pokemon;
-	// Heavy-Duty Boots provides total immunity to all entry hazards.
-	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
-		// Even if immune, still apply switch-in abilities
-		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
-		return false;
-	}
+	const ability = toID(pokemon.ability || '');
 
-	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
-	if (hazards.length === 0) {
-		// No hazards, but still apply switch-in abilities
+	// Helper function for switch-in abilities that run regardless of hazards
+	const runSwitchInAbilities = () => {
+		// --- 1. Weather, Terrain, Intimidate, etc. ---
 		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 
-		// --- ADD FRISK LOGIC HERE ---
-		const ability = toID(pokemon.ability || '');
+		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+
+		// --- 2. Frisk ---
 		if (ability === 'frisk') {
-			const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 			for (const opponentSlot of opponentSlots) {
 				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
-					// We are in rpg-refactor.ts, so ITEMS_DATABASE is available
 					const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
 					messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
 				}
 			}
 		}
-		// --- END FRISK LOGIC ---
 
+		// --- 3. Download ---
+		if (ability === 'download' && opponentSlots.length > 0) {
+			let totalDef = 0;
+			let totalSpd = 0;
+			for (const oppSlot of opponentSlots) {
+				totalDef += oppSlot.pokemon.def * getStatMultiplier(oppSlot.statStages.def);
+				totalSpd += oppSlot.pokemon.spd * getStatMultiplier(oppSlot.statStages.spd);
+			}
+			if (totalDef < totalSpd) {
+				applyStatChange(slot, 'atk', 1, battle, messageLog, slot);
+			} else {
+				applyStatChange(slot, 'spa', 1, battle, messageLog, slot);
+			}
+		}
+		
+		// --- 4. Trace ---
+		if (ability === 'trace') {
+			const untraceableAbilities = ['trace', 'stancechange', 'schooling', 'disguise', 'neutralizinggas', 'download', 'forecast', 'flowergift', 'imposter', 'multitype'];
+			const validTargets = opponentSlots.filter(oppSlot => 
+				oppSlot.pokemon.ability && !untraceableAbilities.includes(toID(oppSlot.pokemon.ability))
+			);
+			
+			if (validTargets.length > 0) {
+				const targetSlot = validTargets[Math.floor(Math.random() * validTargets.length)];
+				const tracedAbility = targetSlot.pokemon.ability || 'No Ability';
+				pokemon.ability = tracedAbility;
+				messageLog.push(`${pokemon.species} traced ${targetSlot.pokemon.species}'s ${tracedAbility}!`);
+			}
+		}
+	};
+
+	// Heavy-Duty Boots provides total immunity to all entry hazards.
+	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
+		runSwitchInAbilities(); // Run switch-in abilities even if immune to hazards
+		return false;
+	}
+
+	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
+	if (hazards.length === 0) {
+		runSwitchInAbilities(); // No hazards, just run switch-in abilities
 		return false;
 	}
 
@@ -3652,17 +3685,14 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	if (isGrounded) {
 		// Sticky Web lowers Speed
 		if (hazards.includes('stickyweb')) {
-			const targetStages = slot.statStages;
-			if (targetStages.spe > -6) {
-				targetStages.spe--;
-				messageLog.push(`${pokemon.species}'s Speed was lowered by the sticky web!`);
-			}
+			// --- CONTRARY FIX: Use applyStatChange ---
+			applyStatChange(slot, 'spe', -1, battle, messageLog, null); // Source is null (field hazard)
+			// --- END FIX ---
 		}
 
 		// Toxic Spikes poisons or badly poisons
 		const toxicSpikeLayers = hazards.filter(h => h === 'toxicspikes').length;
 		if (toxicSpikeLayers > 0) {
-			// Poison-type Pokémon absorb and remove Toxic Spikes from their side of the field.
 			if (species.types.includes('Poison')) {
 				if (isPlayerSwitchIn) {
 					battle.playerHazards = battle.playerHazards.filter(h => h !== 'toxicspikes');
@@ -3672,11 +3702,11 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 				messageLog.push(`The Toxic Spikes were absorbed by ${pokemon.species}!`);
 			} else {
 				const isImmune = species.types.includes('Steel');
-				const targetStatus = slot.status; // Read from slot
+				const targetStatus = slot.status; 
 
 				if (!isImmune && !targetStatus) {
-					const newStatus: Status = 'psn'; // User intentionally skipped 'tox'
-					slot.status = newStatus; // Apply to slot
+					const newStatus: Status = 'psn'; 
+					slot.status = newStatus; 
 					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
 				}
 			}
@@ -3684,7 +3714,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	}
 
 	// --- Damage-dealing hazards ---
-	// Spikes (max 3 layers) - only affect grounded Pokemon
 	if (isGrounded) {
 		const spikeLayers = hazards.filter(h => h === 'spikes').length;
 		if (spikeLayers > 0) {
@@ -3693,14 +3722,12 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
-	// Stealth Rock - affects all Pokemon, but Air Balloon pops from it
 	if (hazards.includes('stealthrock')) {
 		if (hasAirBalloon) {
 			messageLog.push(`${pokemon.species}'s Air Balloon popped from the pointed stones!`);
 			pokemon.item = undefined;
 			airBalloonPopped = true;
 		}
-		// Pass the pokemon, not the slot, to getCustomEffectiveness
 		const effectiveness = getCustomEffectiveness('Rock', species.types, pokemon, battle);
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
@@ -3718,22 +3745,8 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
-	// Apply switch-in abilities (weather/terrain setting)
-	RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
-
-	// --- ADD FRISK LOGIC HERE ---
-	const ability = toID(pokemon.ability || '');
-	if (ability === 'frisk') {
-		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
-		for (const opponentSlot of opponentSlots) {
-			if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
-				// We are in rpg-refactor.ts, so ITEMS_DATABASE is available
-				const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
-				messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
-			}
-		}
-	}
-	// --- END FRISK LOGIC ---
+	// Run switch-in abilities (weather/terrain setting)
+	runSwitchInAbilities();
 
 	return false; // Pokémon survived
 }
@@ -4658,6 +4671,39 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 		lastMoveThatHitMe: undefined,
 	};
+}
+
+/**
+ * Checks if a Pokémon is trapped by an opponent's ability (Arena Trap, Shadow Tag).
+ * @returns {ActivePokemonSlot | null} The trapping Pokémon, or null if not trapped.
+ */
+function checkTrappingAbility(
+	slotToSwitch: ActivePokemonSlot,
+	battle: BattleState
+): ActivePokemonSlot | null {
+	const isPlayer = battle.playerSlots.includes(slotToSwitch);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+	const userAbility = toID(slotToSwitch.pokemon.ability || '');
+
+	// Shadow Tag users are immune to Shadow Tag
+	if (userAbility === 'shadowtag') return null;
+
+	for (const oppSlot of opponentSlots) {
+		const oppAbility = toID(oppSlot.pokemon.ability || '');
+
+		if (oppAbility === 'shadowtag') {
+			return oppSlot; // Trapped
+		}
+		
+		if (oppAbility === 'arenatrap') {
+			// Arena Trap doesn't affect airborne Pokemon
+			if (RPGAbilities.isGrounded(slotToSwitch.pokemon, battle)) {
+				return oppSlot; // Trapped
+			}
+		}
+	}
+
+	return null; // Not trapped
 }
 
 /**
@@ -7314,17 +7360,22 @@ export const commands: ChatCommands = {
 					return this.errorReply("The Pokémon in that slot has fainted or is not there.");
 				}
 
-				// --- NEW TRAP CHECK ---
+				// --- ARENA TRAP / SHADOW TAG CHECK ---
+				const trappingPokemon = checkTrappingAbility(outgoingSlot, battle);
+				if (trappingPokemon) {
+					const trapMessage = `${outgoingSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`;
+					this.errorReply(trapMessage);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [trapMessage])}`);
+				}
+				// --- END TRAP CHECK ---
+
 				if (outgoingSlot.isTrapped) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
-					// Re-render the UI with an error message
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
 				}
 
-				// --- INGRAIN CHECK ---
 				if (outgoingSlot.isIngrained) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is rooted in place by Ingrain and cannot switch out!`);
-					// Re-render the UI with an error message
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted in place and cannot switch out!`])}`);
 				}
 
@@ -7339,10 +7390,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("This Pokemon is already in battle.");
 				}
 				
-				// --- ADDED FOR BUG 5 ---
-				// Reset choice lock on a voluntary switch
 				outgoingSlot.lockedMove = undefined;
-				// --- END ADDITION ---
 
 				// --- Queue the Switch Action ---
 				battle.pendingActions[slotToSwitchOut] = {
@@ -7531,14 +7579,23 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// --- NEW CHECK ---
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't run from a Trainer battle!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't run from a Trainer battle!"])}`);
 				}
 
-				// --- NEW: Check if any active pokemon is trapped ---
+				// --- ARENA TRAP / SHADOW TAG CHECK ---
 				const playerSlots = getActiveSlots(battle.playerSlots);
+				for (const slot of playerSlots) {
+					const trappingPokemon = checkTrappingAbility(slot, battle);
+					if (trappingPokemon) {
+						const trapMessage = `${slot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`;
+						this.errorReply(trapMessage);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [trapMessage])}`);
+					}
+				}
+				// --- END TRAP CHECK ---
+
 				const trappedPokemon = playerSlots.find(slot => slot.isTrapped);
 
 				if (trappedPokemon) {
@@ -7561,7 +7618,7 @@ export const commands: ChatCommands = {
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
 			},
-
+			
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
