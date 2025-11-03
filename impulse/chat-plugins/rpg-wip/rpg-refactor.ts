@@ -6031,6 +6031,62 @@ function generateFieldEffectHTML(battle: BattleState): string {
 * COMMANDS
 ************/
 
+/**
+ * Validates if a Pokemon can use a specific move, checking for various conditions.
+ * @returns A string error message if validation fails, or null if it's valid.
+ */
+function validateMoveAction(
+	attackerSlot: ActivePokemonSlot,
+	moveId: string,
+	battle: BattleState
+): string | null {
+	const pokemon = attackerSlot.pokemon;
+	const moveData = getMove(moveId);
+
+	// Check Taunt
+	if (attackerSlot.tauntTurns > 0 && moveData.category === 'Status') {
+		return `${pokemon.species} is taunted! It can't use ${moveData.name}!`;
+	}
+
+	// Check Assault Vest
+	if (battle.magicRoomTurns === 0 && pokemon.item === 'assaultvest' && moveData.category === 'Status') {
+		return `Your Assault Vest prevents you from using ${moveData.name}!`;
+	}
+
+	// Check PP
+	const moveObject = pokemon.moves.find(m => m.id === moveData.id);
+	if (moveObject && moveObject.pp === 0) {
+		return `There is no PP left for ${moveData.name}!`;
+	}
+
+	// Check Disable
+	if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
+		return `${moveData.name} is disabled!`;
+	}
+
+	// Check Encore
+	if (attackerSlot.encoreMove && attackerSlot.encoreMove.moveId !== moveData.id) {
+		return `${pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`;
+	}
+
+	// Check Torment
+	if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
+		return `${pokemon.species} can't use the same move twice due to Torment!`;
+	}
+
+	// Check Choice Item Lock
+	if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
+		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
+		// Check if the locked move still has PP
+		if (lockedMoveObject && lockedMoveObject.pp > 0) {
+			return `${pokemon.species} is locked into ${lockedMoveObject.id}!`;
+		}
+	}
+
+	// All checks passed
+	return null;
+}
+
 export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
@@ -6708,20 +6764,15 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// --- NEW COMMAND STRUCTURE ---
-				// /rpg battleaction move [attackerSlot] [moveId] [targetSlot]
-				// e.g., /rpg battleaction move 0 tackle 2
-				const [attackerSlotStr, moveId, targetSlotStr] = target.split(' ');
+				const [attackerSlotStr, moveIdStr, targetSlotStr] = target.split(' ');
 				const attackerSlotIndex = parseInt(attackerSlotStr);
 				const targetSlotIndex = parseInt(targetSlotStr);
+				const moveId = toID(moveIdStr);
 
 				if (isNaN(attackerSlotIndex) || !moveId || isNaN(targetSlotIndex)) {
-					// This is now a user-facing error, but we'll show it in the UI
-					// to guide them, as this command will be sent by buttons.
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Invalid move command received."])}`);
 				}
 
-				// Validate attacker slot
 				if (attackerSlotIndex !== 0 && attackerSlotIndex !== 1) {
 					return this.errorReply("Invalid attacker slot. Must be 0 or 1.");
 				}
@@ -6730,51 +6781,23 @@ export const commands: ChatCommands = {
 					return this.errorReply("This Pokémon is not in battle or has fainted.");
 				}
 
-				// Check if action is already registered
 				if (battle.pendingActions[attackerSlotIndex]) {
 					return this.errorReply(`${attackerSlot.pokemon.species} is already waiting to move.`);
 				}
 
-				// Validate move
-				const moveData = getMove(toID(moveId));
-				if (!moveData.exists) {
-					return this.errorReply(`Move '${moveId}' not found.`);
-				}
-				const moveObject = attackerSlot.pokemon.moves.find(m => m.id === moveData.id);
-				if (!moveObject && moveData.id !== 'struggle') {
+				const moveData = getMove(moveId);
+				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
+				
+				if (moveId !== 'struggle' && !attackerSlot.pokemon.moves.some(m => m.id === moveData.id)) {
 					return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
 				}
 
-				// --- Pre-action validation (send feedback to UI) ---
-				if (attackerSlot.tauntTurns > 0 && moveData.category === 'Status') {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} is taunted! It can't use ${moveData.name}!`])}`);
+				// --- REFACTORED VALIDATION ---
+				const validationError = validateMoveAction(attackerSlot, moveId, battle);
+				if (validationError) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [validationError])}`);
 				}
-				if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'assaultvest' && moveData.category === 'Status') {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Your Assault Vest prevents you from using ${moveData.name}!`])}`);
-				}
-				if (moveObject?.pp === 0) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`There is no PP left for ${moveData.name}!`])}`);
-				}
-				// Check Disable
-				if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${moveData.name} is disabled!`])}`);
-				}
-				// Check Encore
-				if (attackerSlot.encoreMove && attackerSlot.encoreMove.moveId !== moveData.id) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`])}`);
-				}
-				// Check Torment
-				if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} can't use the same move twice due to Torment!`])}`);
-				}
-				// --- FIX: Check Choice Item Lock ---
-				if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
-					const lockedMoveObject = attackerSlot.pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
-					if (lockedMoveObject && lockedMoveObject.pp > 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} is locked into ${lockedMoveObject.id}!`])}`);
-					}
-				}
-				// --- END FIX ---
+				// --- END REFACTORED VALIDATION ---
 
 				// --- Queue the action ---
 				battle.pendingActions[attackerSlotIndex] = {
@@ -6798,7 +6821,6 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
-
 			// --- NEW FUNCTION ---
 			selecttarget(target, room, user) {
 				const battle = activeBattles.get(user.id);
