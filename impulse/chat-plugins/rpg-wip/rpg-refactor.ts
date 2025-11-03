@@ -3541,7 +3541,6 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
  * Also handles hazard removal effects (e.g., Poison-type absorbing Toxic Spikes).
  * @returns {boolean} Returns true if the Pokémon fainted from hazard damage.
  */
-
 function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
 	const pokemon = slot.pokemon;
 	// Heavy-Duty Boots provides total immunity to all entry hazards.
@@ -3555,6 +3554,21 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	if (hazards.length === 0) {
 		// No hazards, but still apply switch-in abilities
 		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
+
+		// --- ADD FRISK LOGIC HERE ---
+		const ability = toID(pokemon.ability || '');
+		if (ability === 'frisk') {
+			const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+			for (const opponentSlot of opponentSlots) {
+				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
+					// We are in rpg-refactor.ts, so ITEMS_DATABASE is available
+					const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
+					messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
+				}
+			}
+		}
+		// --- END FRISK LOGIC ---
+
 		return false;
 	}
 
@@ -3637,6 +3651,20 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 
 	// Apply switch-in abilities (weather/terrain setting)
 	RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
+
+	// --- ADD FRISK LOGIC HERE ---
+	const ability = toID(pokemon.ability || '');
+	if (ability === 'frisk') {
+		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		for (const opponentSlot of opponentSlots) {
+			if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
+				// We are in rpg-refactor.ts, so ITEMS_DATABASE is available
+				const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
+				messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
+			}
+		}
+	}
+	// --- END FRISK LOGIC ---
 
 	return false; // Pokémon survived
 }
