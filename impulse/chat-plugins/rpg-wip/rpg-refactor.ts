@@ -4757,11 +4757,21 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 		}
 
 		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
-		if (slotA.status === 'par') speedA = Math.floor(speedA / 2);
+		// --- QUICK FEET FIX ---
+		const abilityA = toID(slotA.pokemon.ability || '');
+		if (slotA.status === 'par' && abilityA !== 'quickfeet') {
+			speedA = Math.floor(speedA / 2);
+		}
+		// --- END FIX ---
 		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
 
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
-		if (slotB.status === 'par') speedB = Math.floor(speedB / 2);
+		// --- QUICK FEET FIX ---
+		const abilityB = toID(slotB.pokemon.ability || '');
+		if (slotB.status === 'par' && abilityB !== 'quickfeet') {
+			speedB = Math.floor(speedB / 2);
+		}
+		// --- END FIX ---
 		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
 
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
