@@ -574,6 +574,9 @@ export class TeamValidator {
 				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
 			}
 		}
+		if (set.name && /[\u0335\u034C\u034B\u0346\u0301]/.test(set.name)) {
+			problems.push(`Nickname "${set.name}" contains invalid characters that are not allowed`);
+		}
 		set.name = dex.getName(set.name);
 		let item = dex.items.get(Utils.getString(set.item));
 		set.item = item.name;
