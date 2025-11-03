@@ -3553,33 +3553,26 @@ function checkForWinLoss(
  * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
  */
 function checkBattleEndCondition(
-	// --- REMOVE: context: CommandContext, ---
 	battle: BattleState,
-	// --- REMOVE: room: ChatRoom, ---
-	// --- REMOVE: user: User, ---
 	messageLog: string[]
 ): boolean {
 	const player = getPlayerData(battle.playerId);
 	
 	// --- 1. Handle Faints ---
 	const playerParticipants = getActiveSlots(battle.playerSlots);
-	// --- MODIFY: handleOpponentFaint call ---
 	handleOpponentFaint(battle, player, playerParticipants, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
 
 	// --- 2. Check for Win/Loss ---
-	// --- MODIFY: checkForWinLoss call ---
 	const battleEnded = checkForWinLoss(battle, player, messageLog);
 	if (battleEnded) return true;
 
 	// --- 3. Handle Pivot Moves ---
 	// A. Check for Player Pivot Switch (U-turn, etc.)
 	if (battle.pendingPivot) {
-		// --- SET VIEW STATE ---
 		battle.currentView = 'switch_pivot';
 		battle.viewContext = { slotIndex: battle.pendingPivot.slotIndex };
 		battle.forceEnd = true;
-		// --- END SET ---
 		return true; // Battle interrupted
 	}
 	// B. Check for AI Pivot Switch
@@ -3592,10 +3585,8 @@ function checkBattleEndCondition(
 	);
 
 	if (playerSwitchNeeded && playerHasLivingPokemon) {
-		// --- SET VIEW STATE ---
 		battle.currentView = 'switch_faint';
 		battle.forceEnd = true;
-		// --- END SET ---
 		return true; // Battle interrupted
 	}
 
