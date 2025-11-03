@@ -2693,23 +2693,64 @@ function handleSpecificStatusMove(
 		if (attackerSlot.stockpileCount < 3) {
 			attackerSlot.stockpileCount++;
 			messageLog.push(`${attacker.species} stockpiled ${attackerSlot.stockpileCount}!`);
-			// Let boost handler take over for Def/SpD boost
-			return false; 
+			
+			// --- ADDED: Contrary Check ---
+			let boostValue = 1;
+			if (toID(attacker.ability || '') === 'contrary') {
+				boostValue = -1;
+			}
+			
+			if (boostValue > 0) {
+				if (attackerSlot.statStages.def < 6) {
+					attackerSlot.statStages.def++;
+					messageLog.push(`${attacker.species}'s Defense rose!`);
+				}
+				if (attackerSlot.statStages.spd < 6) {
+					attackerSlot.statStages.spd++;
+					messageLog.push(`${attacker.species}'s Sp. Def rose!`);
+				}
+			} else {
+				if (attackerSlot.statStages.def > -6) {
+					attackerSlot.statStages.def--;
+					messageLog.push(`${attacker.species}'s Defense fell!`);
+				}
+				if (attackerSlot.statStages.spd > -6) {
+					attackerSlot.statStages.spd--;
+					messageLog.push(`${attacker.species}'s Sp. Def fell!`);
+				}
+			}
+			// --- END ADDED ---
+			return true; // Don't fall through, we handled the boosts here
 		} else {
 			messageLog.push(`${attacker.species} can't stockpile any more!`);
 			return true;
 		}
 		
 	case 'bellydrum':
-		if (attacker.hp <= attacker.maxHp / 2) {
-			messageLog.push(`But it failed! (Not enough HP)`);
-		} else if (attackerSlot.statStages.atk >= 6) {
-			messageLog.push(`But it failed! (Attack is already maxed out)`);
-		} else {
-			attacker.hp = Math.floor(attacker.hp - attacker.maxHp / 2);
-			attackerSlot.statStages.atk = 6;
-			messageLog.push(`${attacker.species} cut its own HP and maximized its Attack!`);
+		// --- ADDED: Contrary Check ---
+		const contraryActive = toID(attacker.ability || '') === 'contrary';
+		if (contraryActive) {
+			if (attacker.hp <= attacker.maxHp / 2) {
+				messageLog.push(`But it failed! (Not enough HP)`);
+			} else if (attackerSlot.statStages.atk <= -6) {
+				messageLog.push(`But it failed! (Attack is already minimized)`);
+			} else {
+				attacker.hp = Math.floor(attacker.hp - attacker.maxHp / 2);
+				attackerSlot.statStages.atk = -6;
+				messageLog.push(`${attacker.species} cut its own HP and minimized its Attack!`);
+			}
+		} else { // --- Original Logic ---
+			if (attacker.hp <= attacker.maxHp / 2) {
+				messageLog.push(`But it failed! (Not enough HP)`);
+			} else if (attackerSlot.statStages.atk >= 6) {
+				messageLog.push(`But it failed! (Attack is already maxed out)`);
+			} else {
+				attacker.hp = Math.floor(attacker.hp - attacker.maxHp / 2);
+				attackerSlot.statStages.atk = 6;
+				messageLog.push(`${attacker.species} cut its own HP and maximized its Attack!`);
+			}
 		}
+		// --- END ADDED ---
 		return true;
 
 	case 'futuresight':
