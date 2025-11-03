@@ -814,15 +814,31 @@ function gainExperience(
 	player: PlayerData,
 	participantSlots: ActivePokemonSlot[],
 	defeatedPokemon: RPGPokemon,
-	// --- REMOVE: room: ChatRoom, ---
-	// --- REMOVE: user: User ---
-	messageLog: string[] // --- ADD THIS PARAMETER ---
+	messageLog: string[] // This function now appends to the battle's messageLog
 ): { messages: string[], leveledUp: boolean } {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	// ...
-	// --- REMOVE: const messages: string[] = []; ---
+	// --- FIX: Added fallback base experience of 150 ---
+	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
+	// if (!baseExp) return { messages: ['No experience was gained.'], leveledUp: false }; // <-- This check is no longer needed
 
-	// ... (Distribute EVs and EXP) ...
+	const expGained = Math.floor((baseExp * defeatedPokemon.level) / 7);
+	if (expGained <= 0) return { messages: [`No Experience Points were gained.`], leveledUp: false };
+
+	let leveledUp = false;
+	// const messages: string[] = []; // Removed, using messageLog
+
+	const participantNames: string[] = [];
+
+	// 1. Distribute EVs and EXP
+	for (const slot of participantSlots) {
+		if (!slot?.pokemon) continue; // <-- Safety check
+		const pokemon = slot.pokemon;
+		if (pokemon.hp <= 0 || pokemon.level >= 100) continue; // Fainted or max level
+
+		participantNames.push(pokemon.species);
+		gainEffortValues(pokemon, defeatedPokemon);
+		pokemon.experience += expGained;
+	}
 
 	if (participantNames.length === 0) return { messages: [], leveledUp: false };
 
@@ -830,18 +846,21 @@ function gainExperience(
 
 	// 2. Handle Level-Ups for all participants
 	for (const slot of participantSlots) {
-		// ...
+		if (!slot?.pokemon) continue; // <-- Safety check
+		const pokemon = slot.pokemon;
+		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
+
 		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
 			messageLog.push(...levelUp(pokemon));
 			leveledUp = true;
-			// --- MODIFY: checkEvolution ---
 			const evolveMessage = checkEvolution(player, pokemon, messageLog);
 			if (evolveMessage) {
 				messageLog.push(evolveMessage);
 				// Stop leveling this Pokemon if it evolved, as its stats/exp curve changed
 				break;
 			}
-			// ...
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messageLog.push(...newMoveMessages);
 		}
 	}
 
@@ -849,13 +868,26 @@ function gainExperience(
 }
 
 function checkEvolution(player: PlayerData, pokemon: RPGPokemon, messageLog: string[]): string | null {
-	// ...
+	const speciesId = toID(pokemon.species);
+	const evoData = MANUAL_EVOLUTIONS[speciesId];
+	if (!evoData || pokemon.level < evoData.evoLevel) return null;
+	const evoSpecies = Dex.species.get(evoData.evoTo);
+	if (!evoSpecies.exists) return null;
+	const oldSpeciesName = pokemon.species;
+	pokemon.species = evoSpecies.name;
+	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	pokemon.maxHp = newStats.maxHp;
+	pokemon.atk = newStats.atk;
+	pokemon.def = newStats.def;
+	pokemon.spa = newStats.spa;
+	pokemon.spd = newStats.spd;
+	pokemon.spe = newStats.spe;
+	pokemon.hp = pokemon.maxHp;
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
 	const pokemonIndex = player.party.findIndex(p => p.id === pokemon.id);
 	if (pokemonIndex !== -1) player.party[pokemonIndex] = pokemon;
-	// --- REMOVE: room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update(); ---
 	messageLog.push(`What?! ${player.name}'s ${oldSpeciesName} is evolving!`);
 	return evoMessage;
 }
