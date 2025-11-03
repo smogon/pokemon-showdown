@@ -28,6 +28,8 @@ export interface ActivePokemonSlot {
 	statStages: Record<string, number>;
 	status: string | null;
 	flashFireBoost?: boolean;
+	isConfused?: boolean; // Added for Tangled Feet
+	unburdenActive?: boolean; // Added for Unburden
 	[key: string]: any;
 }
 
@@ -37,6 +39,8 @@ export interface BattleState {
 	magicRoomTurns: number;
 	wonderRoomTurns: number;
 	gravityTurns: number;
+	playerSlots?: [ActivePokemonSlot | null, ActivePokemonSlot | null]; // Added for isWeatherActive
+	opponentSlots?: [ActivePokemonSlot | null, ActivePokemonSlot | null]; // Added for isWeatherActive
 	[key: string]: any;
 }
 
@@ -73,6 +77,31 @@ export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string)
 export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityOnDamageHandler = (ctx: AbilityContext, damage: number) => void;
 export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
+
+/**
+ * Helper to get all active (non-fainted, non-null) slots for a given side.
+ * This is needed for isWeatherActive.
+ */
+function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
+	if (!slots) return [];
+	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
+}
+
+/**
+ * Checks if weather effects are active (i.e., not suppressed by Cloud Nine / Air Lock)
+ */
+export function isWeatherActive(battle: BattleState): boolean {
+	if (!battle.weather) return false;
+
+	const allSlots = getActiveSlots(battle.playerSlots).concat(getActiveSlots(battle.opponentSlots));
+	for (const slot of allSlots) {
+		const ability = toID(slot.pokemon.ability || '');
+		if (ability === 'cloudnine' || ability === 'airlock') {
+			return false; // Weather is suppressed
+		}
+	}
+	return true; // Weather is active
+}
 
 /**
  * Check if a Pokemon is grounded (affected by Ground-type moves)
@@ -297,6 +326,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		}
 
 		// Calculate effectiveness to check if move is super-effective
+		// This uses a hardcoded chart, which is intentionally skipped by the user.
 		const defenderSpecies = Dex.species.get(ctx.defender.species);
 		let effectiveness = 1;
 
@@ -441,7 +471,7 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 
 	// Sand Force - Boost Rock/Ground/Steel in sandstorm
 	'sandforce': (ctx, basePower) => {
-		if (ctx.battle.weather?.type === 'sand' &&
+		if (isWeatherActive(ctx.battle) && ctx.battle.weather?.type === 'sand' &&
 			['Rock', 'Ground', 'Steel'].includes(ctx.move.type)) {
 			return Math.floor(basePower * 1.3);
 		}
@@ -496,12 +526,14 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 	// Normalize - All moves become Normal-type
 	'normalize': (ctx, moveType) => {
 		if (ctx.move.category !== 'Status') {
+			// --- START FIX ---
 			(ctx.move as any).typeConversionBoost = true;
+			// --- END FIX ---
 			return 'Normal';
 		}
 		return moveType;
 	},
-	
+
 	// Pixilate - Normal moves become Fairy (with 1.2x boost)
 	'pixilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
@@ -606,6 +638,7 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
+	// --- START FIX ---
 	// Hustle - Boosts Attack but lowers accuracy (Attack part)
 	'hustle': (pokemon, stat, value) => {
 		if (stat === 'atk') {
@@ -613,6 +646,7 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+	// --- END FIX ---
 
 	// Slow Start - Attack and Speed halved
 	'slowstart': (pokemon, stat, value) => {
@@ -795,6 +829,9 @@ export const ACCURACY_EVASION_ABILITIES = {
 	// Hustle - Boosts Attack but lowers accuracy
 	'hustle': {
 		accuracyMultiplier: 0.8,
+		// --- START FIX ---
+		// attackMultiplier: 1.5, // <-- This was removed
+		// --- END FIX ---
 	},
 
 	// Tangled Feet - Boosts evasion when confused
@@ -987,6 +1024,48 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 }
 
 /**
+ * --- START FIX ---
+ * Apply accuracy-modifying abilities
+ */
+export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
+	const ability = toID(attacker.ability || '');
+	const handler = ACCURACY_EVASION_ABILITIES[ability];
+
+	if (handler && handler.accuracyMultiplier) {
+		return Math.floor(moveAccuracy * handler.accuracyMultiplier);
+	}
+
+	return moveAccuracy;
+}
+
+/**
+ * Apply evasion-modifying abilities
+ */
+export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: BattleState): number {
+	const ability = toID(defenderSlot.pokemon.ability || '');
+	const handler = ACCURACY_EVASION_ABILITIES[ability];
+
+	if (handler) {
+		// Sand Veil
+		if (handler.weatherEvasion === 'sand' && isWeatherActive(battle) && battle.weather?.type === 'sand') {
+			return 1.25; // Evasion is boosted by 25% in sand
+		}
+		// Snow Cloak
+		if (handler.weatherEvasion === 'hail' && isWeatherActive(battle) && battle.weather?.type === 'hail') {
+			return 1.25; // Evasion is boosted by 25% in hail
+		}
+		// Tangled Feet
+		if (handler.evasionBoost && defenderSlot.isConfused) {
+			return 1.5; // Evasion is boosted by 50% when confused
+		}
+	}
+
+	return 1; // No ability-based evasion boost
+}
+// --- END FIX ---
+
+
+/**
  * CRITICAL HIT ABILITIES
  */
 
@@ -1068,25 +1147,29 @@ export const HEALING_ABILITIES = {
 export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
+	// --- START FIX: Check if weather is active ---
+	const weatherActive = isWeatherActive(battle);
+
 	// Swift Swim - Doubles speed in rain
-	if (ability === 'swiftswim' && battle.weather?.type === 'rain') {
+	if (ability === 'swiftswim' && weatherActive && battle.weather?.type === 'rain') {
 		return speed * 2;
 	}
 
 	// Chlorophyll - Doubles speed in sun
-	if (ability === 'chlorophyll' && battle.weather?.type === 'sun') {
+	if (ability === 'chlorophyll' && weatherActive && battle.weather?.type === 'sun') {
 		return speed * 2;
 	}
 
 	// Sand Rush - Doubles speed in sandstorm
-	if (ability === 'sandrush' && battle.weather?.type === 'sand') {
+	if (ability === 'sandrush' && weatherActive && battle.weather?.type === 'sand') {
 		return speed * 2;
 	}
 
 	// Slush Rush - Doubles speed in hail
-	if (ability === 'slushrush' && battle.weather?.type === 'hail') {
+	if (ability === 'slushrush' && weatherActive && battle.weather?.type === 'hail') {
 		return speed * 2;
 	}
+	// --- END FIX ---
 
 	// Surge Surfer - Doubles speed in Electric Terrain
 	if (ability === 'surgesurfer' && battle.terrain?.type === 'electric' && isGrounded(pokemon, battle)) {
@@ -1094,7 +1177,7 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 	}
 
 	// Unburden - Doubles speed when item is lost
-	// Would need to track if item was consumed
+	// User intentionally skipped implementation
 
 	return speed;
 }
@@ -1109,10 +1192,12 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	const defenderAbility = toID(ctx.defender.ability || '');
 	const effectiveness = ctx.effectiveness || 1; // Get effectiveness from context
 
+	// --- START FIX ---
 	// Dry Skin - Takes extra damage from Fire moves
 	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
 		damage = Math.floor(damage * 1.25);
 	}
+	// --- END FIX ---
 
 	// Sniper - (This is handled in calculateDamage's criticalMultiplier logic)
 
@@ -1319,7 +1404,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 	// Stat-lowering abilities (Intimidate)
 	if (ability === 'intimidate') {
-		const opponentSlots = isPlayerSwitchIn ? battle.opponentSlots : battle.playerSlots;
+		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
 				const oppAbility = toID(opponentSlot.pokemon.ability || '');
@@ -1336,45 +1421,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 			}
 		}
 	}
-}
-
-/**
- * Apply accuracy-modifying abilities
- */
-export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
-    const ability = toID(attacker.ability || '');
-    const handler = ACCURACY_EVASION_ABILITIES[ability];
-
-    if (handler && handler.accuracyMultiplier) {
-        return Math.floor(moveAccuracy * handler.accuracyMultiplier);
-    }
-
-    return moveAccuracy;
-}
-
-/**
- * Apply evasion-modifying abilities
- */
-export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: BattleState): number {
-    const ability = toID(defenderSlot.pokemon.ability || '');
-    const handler = ACCURACY_EVASION_ABILITIES[ability];
-
-    if (handler) {
-        // Sand Veil
-        if (handler.weatherEvasion === 'sand' && battle.weather?.type === 'sand') {
-            return 1.25; // Evasion is boosted by 25% in sand
-        }
-        // Snow Cloak
-        if (handler.weatherEvasion === 'hail' && battle.weather?.type === 'hail') {
-            return 1.25; // Evasion is boosted by 25% in hail
-        }
-        // Tangled Feet
-        if (handler.evasionBoost && defenderSlot.isConfused) {
-            return 1.5; // Evasion is boosted by 50% when confused
-        }
-    }
-
-    return 1; // No ability-based evasion boost
 }
 
 /**
@@ -1402,7 +1448,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	// Handle status-on-contact (Static, Flame Body, Poison Point)
 	if (handler.effect && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const statusToInflict = handler.effect as Status;
+		const statusToInflict = handler.effect as string; // Can be 'infatuate'
 		let canBeAfflicted = true;
 
 		// Check type immunities
@@ -1417,11 +1463,17 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
+		
+		// Handle non-standard statuses (like 'infatuate')
+		if (statusToInflict === 'infatuate') {
+			// User intentionally skipped this mechanic
+			canBeAfflicted = false;
+		}
 
 		if (canBeAfflicted) {
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 2;
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
 		}
@@ -1429,7 +1481,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	// Handle Effect Spore
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const possibleStatuses: Status[] = [];
+		const possibleStatuses: string[] = [];
 		// Check immunities for each possible status
 		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel') && !preventsStatus(attacker, 'psn')) {
 			possibleStatuses.push('psn');
@@ -1445,7 +1497,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 2;
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
 		}
@@ -1459,8 +1511,6 @@ export const RPGAbilities = {
 	applyTypeModifier: applyAbilityTypeModifier,
 	applyAbilityStatModifier,
 	applySpeedModifier,
-	applyAccuracyModifier,
-	getEvasionMultiplier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
 	getSTABMultiplier,
@@ -1471,6 +1521,9 @@ export const RPGAbilities = {
 	applyContactAbilityEffects,
 	applySwitchInAbilities,
 	applyPriorityModifier,
+	applyAccuracyModifier, // <-- Added
+	getEvasionMultiplier, // <-- Added
+	isWeatherActive, // <-- Added
 
 	// Utility functions
 	getAllImplementedAbilities,

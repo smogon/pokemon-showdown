@@ -89,6 +89,7 @@ interface ActivePokemonSlot {
 	isCharged?: boolean; // Charge - next Electric move deals 2x damage
 	stockpileCount?: number; // Stockpile - stores energy (0-3)
 	flashFireBoost?: boolean; // (For Flash Fire ability)
+	unburdenActive?: boolean; // (For Unburden ability)
 }
 
 // Interface for player data
@@ -110,7 +111,7 @@ interface PlayerData {
 }
 
 // Type alias for status conditions
-type Status = 'psn' | 'brn' | 'par' | 'slp' | 'frz';
+type Status = 'psn' | 'tox' | 'brn' | 'par' | 'slp' | 'frz'; // 'tox' is intentionally skipped by user
 
 // Interface for battle state
 interface BattleState {
@@ -1001,7 +1002,9 @@ function calculateDamage(
 	if (move.id === 'venoshock' && defenderStatus === 'psn') {
 		basePower *= 2;
 	}
-	if (move.id === 'weatherball' && battle.weather) {
+	// --- START FIX: Check if weather is active ---
+	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
+	// --- END FIX ---
 		basePower *= 2;
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
@@ -1013,15 +1016,19 @@ function calculateDamage(
 		basePower *= 2;
 	}
 
-	if (['solarbeam', 'solarblade'].includes(move.id) && battle.weather) {
-		if (['rain', 'sand', 'hail'].includes(battle.weather.type)) {
+	// --- START FIX: Check if weather is active ---
+	if (['solarbeam', 'solarblade'].includes(move.id) && RPGAbilities.isWeatherActive(battle)) {
+	// --- END FIX ---
+		if (['rain', 'sand', 'hail'].includes(battle.weather!.type)) {
 			basePower = Math.floor(basePower * 0.5);
 		}
 	}
 
 	// --- Type-Changing Moves ---
-	if (move.id === 'weatherball' && battle.weather) {
-		switch (battle.weather.type) {
+	// --- START FIX: Check if weather is active ---
+	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
+	// --- END FIX ---
+		switch (battle.weather!.type) {
 		case 'sun': moveType = 'Fire'; break;
 		case 'rain': moveType = 'Water'; break;
 		case 'sand': moveType = 'Rock'; break;
@@ -1115,8 +1122,10 @@ function calculateDamage(
 		attackStatRaw = Math.floor(attackStatRaw * 1.5);
 	}
 
+	// --- START FIX: Check if weather is active ---
 	// Solar Power boosts Sp. Atk in sun
-	if (move.category === 'Special' && battle.weather?.type === 'sun') {
+	if (move.category === 'Special' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+	// --- END FIX ---
 		const attackerAbilityCheck = toID(attacker.ability || '');
 		if (attackerAbilityCheck === 'solarpower') {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
@@ -1189,11 +1198,13 @@ function calculateDamage(
 		}
 	}
 
-	if (isWeatherActive(battle)) {
-		if (battle.weather.type === 'sun') {
+	// --- START FIX: Check if weather is active ---
+	if (RPGAbilities.isWeatherActive(battle)) {
+	// --- END FIX ---
+		if (battle.weather!.type === 'sun') {
 			if (moveType === 'Fire') baseDamage = Math.floor(baseDamage * 1.5);
 			if (moveType === 'Water') baseDamage = Math.floor(baseDamage * 0.5);
-		} else if (battle.weather.type === 'rain') {
+		} else if (battle.weather!.type === 'rain') {
 			if (moveType === 'Water') baseDamage = Math.floor(baseDamage * 1.5);
 			if (moveType === 'Fire') baseDamage = Math.floor(baseDamage * 0.5);
 		}
@@ -1543,7 +1554,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was burned by its Flame Orb!</span>`);
 			status = 'brn';
 		} else if (pokemon.item === 'toxicorb' && !speciesData.types.includes('Poison') && !speciesData.types.includes('Steel')) {
-			slot.status = 'psn';
+			slot.status = 'psn'; // User intentionally skipped 'tox'
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was badly poisoned by its Toxic Orb!</span>`);
 			status = 'psn';
 		}
@@ -1562,6 +1573,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
 		if (pokemon.hp <= 0) return;
 	} else if (status === 'psn') {
+		// --- START FIX: Poison Heal ---
 		const ability = toID(pokemon.ability || '');
 		if (ability === 'poisonheal' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -1573,6 +1585,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
 		}
+		// --- END FIX ---
 		if (pokemon.hp <= 0) return;
 	}
 
@@ -1587,13 +1600,17 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 					messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
 				}
 			} else {
-				if (RPGAbilities.takesIndirectDamage(pokemon)) { // <-- Add this check
+				// --- START FIX: Magic Guard ---
+				if (RPGAbilities.takesIndirectDamage(pokemon)) {
+				// --- END FIX ---
 					pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
 					messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
 				}
 			}
 		} else if (pokemon.item === 'stickybarb') {
+			// --- START FIX: Magic Guard ---
 			if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			// --- END FIX ---
 				pokemon.hp = Math.max(0, pokemon.hp - Math.floor(pokemon.maxHp / 8));
 				messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
 			}
@@ -1602,20 +1619,24 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isCursed) {
+		// --- START FIX: Magic Guard ---
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
-		const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
-		pokemon.hp = Math.max(0, pokemon.hp - damage);
-		messageLog.push(`${pokemon.species} is afflicted by the curse!`);
+		// --- END FIX ---
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`${pokemon.species} is afflicted by the curse!`);
 		}
 	}
 	if (pokemon.hp <= 0) return;
 
 	if (slot.hasNightmare) {
 		if (slot.status === 'slp') {
+			// --- START FIX: Magic Guard ---
 			if (RPGAbilities.takesIndirectDamage(pokemon)) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is locked in a nightmare!`);
+			// --- END FIX ---
+				const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
+				pokemon.hp = Math.max(0, pokemon.hp - damage);
+				messageLog.push(`${pokemon.species} is locked in a nightmare!`);
 			}
 		} else {
 			slot.hasNightmare = false;
@@ -1624,10 +1645,12 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isTrapped) {
+		// --- START FIX: Magic Guard ---
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
-		const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-		pokemon.hp = Math.max(0, pokemon.hp - damage);
-		messageLog.push(`${pokemon.species} is hurt by the trap!`);
+		// --- END FIX ---
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`${pokemon.species} is hurt by the trap!`);
 		}
 		slot.isTrapped.turns--;
 		if (slot.isTrapped.turns <= 0) {
@@ -1644,21 +1667,23 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isSeeded && pokemon.hp > 0) {
+		// --- START FIX: Magic Guard ---
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
-		const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
-		pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
-		messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
-		}
+		// --- END FIX ---
+			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
+			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
 
-		// Find an opponent to heal (flawed 1v1 logic, but a necessary patch)
-		const isPlayer = battle.playerSlots.includes(slot);
-		const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-		const opponentToHeal = opponentSlots[0]; // Heals the first available opponent
+			// Find an opponent to heal (flawed 1v1 logic, but a necessary patch)
+			const isPlayer = battle.playerSlots.includes(slot);
+			const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+			const opponentToHeal = opponentSlots[0]; // Heals the first available opponent
 
-		if (opponentToHeal && opponentToHeal.pokemon.hp > 0) {
-			const oldHp = opponentToHeal.pokemon.hp;
-			opponentToHeal.pokemon.hp = Math.min(opponentToHeal.pokemon.maxHp, opponentToHeal.pokemon.hp + drainAmount);
-			messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
+			if (opponentToHeal && opponentToHeal.pokemon.hp > 0) {
+				const oldHp = opponentToHeal.pokemon.hp;
+				opponentToHeal.pokemon.hp = Math.min(opponentToHeal.pokemon.maxHp, opponentToHeal.pokemon.hp + drainAmount);
+				messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
+			}
 		}
 	}
 
@@ -1814,7 +1839,7 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 				const targetStatus = slot.status; // Read from slot
 
 				if (!isImmune && !targetStatus) {
-					const newStatus: Status = 'psn';
+					const newStatus: Status = 'psn'; // User intentionally skipped 'tox'
 					slot.status = newStatus; // Apply to slot
 					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
 				}
@@ -1861,22 +1886,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 
 	return false; // Pokémon survived
-}
-
-/**
- * Checks if weather effects are active (i.e., not suppressed by Cloud Nine / Air Lock)
- */
-function isWeatherActive(battle: BattleState): boolean {
-    if (!battle.weather) return false;
-
-    const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
-    for (const slot of allSlots) {
-        const ability = toID(slot.pokemon.ability || '');
-        if (ability === 'cloudnine' || ability === 'airlock') {
-            return false; // Weather is suppressed
-        }
-    }
-    return true; // Weather is active
 }
 
 function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
@@ -1953,12 +1962,14 @@ function handleStatusMove(
 	const defenderSpecies = defender ? Dex.species.get(defender.species) : null;
 	let hadEffect = false;
 
+	// --- START FIX: Prankster vs Dark-type ---
 	// Check if Prankster-boosted move is targeting a Dark-type
 	const attackerAbility = toID(attacker.ability || '');
 	if (attackerAbility === 'prankster' && defenderSpecies?.types.includes('Dark')) {
-		messageLog.push(`${defender.species} is immune to Prankster-boosted moves!`);
+		messageLog.push(`${defender!.species} is immune to Prankster-boosted moves!`);
 		return; // The move fails completely
 	}
+	// --- END FIX ---
 
 	// Handle moves that need a defender
 	if (defender && defenderSpecies) {
@@ -2483,7 +2494,7 @@ function handleStatusMove(
 				battle.playerLightScreenTurns = duration;
 				messageLog.push(`Light Screen raised your team's Special Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'auroraveil' && battle.weather?.type === 'hail' && battle.playerAuroraVeilTurns === 0) {
+			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.playerAuroraVeilTurns === 0) {
 				battle.playerAuroraVeilTurns = duration;
 				messageLog.push(`Aurora Veil raised your team's defenses!`);
 				hadEffect = true;
@@ -2497,7 +2508,7 @@ function handleStatusMove(
 				battle.opponentLightScreenTurns = duration;
 				messageLog.push(`Light Screen raised the opposing team's Special Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'auroraveil' && battle.weather?.type === 'hail' && battle.opponentAuroraVeilTurns === 0) {
+			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.opponentAuroraVeilTurns === 0) {
 				battle.opponentAuroraVeilTurns = duration;
 				messageLog.push(`Aurora Veil raised the opposing team's defenses!`);
 				hadEffect = true;
@@ -2806,12 +2817,12 @@ function handleDamagingMove(
 	}
 
 	let moveWasSuccessful = false; // Flag to check if the move hit for self-destruct
-	// ... inside handleDamagingMove
 	let hitCount = 1;
+	// --- START FIX: Skill Link ---
 	const attackerAbility = toID(attacker.ability || '');
-	if (attackerAbility === 'parentalbond' && ...) {
-		hitCount = 2;
-	} else if (move.multihit) {
+	// User skipped Parental Bond, so no check is added here.
+	if (move.multihit) {
+	// --- END FIX ---
 		if (typeof move.multihit === 'number') {
 			hitCount = move.multihit;
 		} else {
@@ -2821,11 +2832,12 @@ function handleDamagingMove(
 			else if (rand < 7) hitCount = 4;
 			else hitCount = 5;
 		}
-		
+		// --- START FIX: Skill Link ---
 		// Check for Skill Link ability
 		if (attackerAbility === 'skilllink') {
 			hitCount = 5; // Or the max number of hits for the move if it's not 5
 		}
+		// --- END FIX ---
 	}
 
 	const attackerStages = attackerSlot.statStages;
@@ -2853,6 +2865,7 @@ function handleDamagingMove(
 	}
 
 	for (let i = 0; i < hitCount; i++) {
+		// User skipped Parental Bond, so no basePower modification is needed here.
 		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, spreadMultiplier);
 
 		if (attackResult.effectiveness > 0) {
@@ -2972,13 +2985,17 @@ function handleDamagingMove(
 				if (move.flags.contact) {
 					// Item-based contact effects
 					if (defender.item === 'rockyhelmet') {
-						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 6));
-						messageLog.push(`${attacker.species} was hurt by the Rocky Helmet!`);
+						if (RPGAbilities.takesIndirectDamage(attacker)) { // Check for Magic Guard
+							attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 6));
+							messageLog.push(`${attacker.species} was hurt by the Rocky Helmet!`);
+						}
 					}
 					if (defender.item === 'jabocaberry') {
-						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
-						messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
-						defender.item = undefined;
+						if (RPGAbilities.takesIndirectDamage(attacker)) { // Check for Magic Guard
+							attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
+							messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
+							defender.item = undefined;
+						}
 					}
 
 					// Ability-based contact effects (NEW HOOK)
@@ -2988,9 +3005,11 @@ function handleDamagingMove(
 				}
 
 				if (move.category === 'Special' && defender.item === 'rowapberry') {
-					attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
-					messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Rowap Berry!`);
-					defender.item = undefined;
+					if (RPGAbilities.takesIndirectDamage(attacker)) { // Check for Magic Guard
+						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
+						messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Rowap Berry!`);
+						defender.item = undefined;
+					}
 				}
 			}
 
@@ -3394,14 +3413,17 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
  * Processes end-of-turn effects for weather, such as damage and duration.
  */
 function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
-	if (!isWeatherActive(battle)) {
+	// --- START FIX: Cloud Nine / Air Lock ---
+	if (!RPGAbilities.isWeatherActive(battle)) {
 		// Weather still counts down, but no messages or effects
 		if (battle.weather) battle.weather.turns--;
 		if (battle.weather && battle.weather.turns <= 0) battle.weather = undefined;
 		return;
 	}
-	// Decrement weather timer
-	battle.weather.turns--;
+	// --- END FIX ---
+
+	// This line is now safe because isWeatherActive checks for !battle.weather
+	battle.weather!.turns--;
 
 	const weatherMessages = {
 		'sun': 'The sunlight is harsh.',
@@ -3409,7 +3431,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		'sand': 'The sandstorm rages.',
 		'hail': 'The hail crashes down.',
 	};
-	messageLog.push(weatherMessages[battle.weather.type]);
+	messageLog.push(weatherMessages[battle.weather!.type]);
 
 	// Apply weather damage and healing effects
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
@@ -3421,15 +3443,15 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		const ability = toID(pokemon.ability || '');
 
 		// Weather healing abilities
-		if (battle.weather.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
+		if (battle.weather!.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Rain Dish restored its HP!`);
-		} else if (battle.weather.type === 'hail' && ability === 'icebody' && pokemon.hp < pokemon.maxHp) {
+		} else if (battle.weather!.type === 'hail' && ability === 'icebody' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Ice Body restored its HP!`);
-		} else if (battle.weather.type === 'rain' && ability === 'dryskin' && pokemon.hp < pokemon.maxHp) {
+		} else if (battle.weather!.type === 'rain' && ability === 'dryskin' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
@@ -3440,15 +3462,15 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		let damageAmount = Math.floor(pokemon.maxHp / 16);
 
 		// Sandstorm damage
-		if (battle.weather.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
+		if (battle.weather!.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
 			takeDamage = true;
 		}
 		// Hail damage (but not if Ice Body healed)
-		else if (battle.weather.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
+		else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
 		}
 		// Sun damage for Dry Skin and Solar Power
-		else if (battle.weather.type === 'sun') {
+		else if (battle.weather!.type === 'sun') {
 			if (ability === 'dryskin') {
 				takeDamage = true;
 				damageAmount = Math.floor(pokemon.maxHp / 8);
@@ -3461,7 +3483,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		// Apply weather damage (blocked by Magic Guard)
 		if (takeDamage && RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, damageAmount));
-			if (ability === 'dryskin' && battle.weather.type === 'sun') {
+			if (ability === 'dryskin' && battle.weather!.type === 'sun') {
 				messageLog.push(`${pokemon.species} was hurt by its Dry Skin!`);
 			} else if (ability === 'solarpower') {
 				messageLog.push(`${pokemon.species} was hurt by Solar Power!`);
@@ -3472,14 +3494,14 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	}
 
 	// Check if weather has ended
-	if (battle.weather.turns <= 0) {
+	if (battle.weather!.turns <= 0) {
 		const weatherEndMessages = {
 			'sun': 'The sunlight faded.',
 			'rain': 'The rain stopped.',
 			'sand': 'The sandstorm subsided.',
 			'hail': 'The hail stopped.',
 		};
-		messageLog.push(weatherEndMessages[battle.weather.type]);
+		messageLog.push(weatherEndMessages[battle.weather!.type]);
 		battle.weather = undefined;
 	}
 }
@@ -3659,23 +3681,29 @@ function executeMove(
 		if (['aerialace'].includes(move.id)) {
 			// Bypasses accuracy
 		} else if (move.accuracy !== true) {
+			// --- START FIX: Accuracy/Evasion Abilities ---
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
-			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
 
+			// Apply ability modifiers like Compound Eyes or Hustle
+			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
+			
 			// Apply ability-based evasion modifiers
 			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
+			// --- END FIX ---
 			
 			// ... (Weather accuracy logic) ...
-			if (battle.weather) {
-				if (battle.weather.type === 'rain') {
+			// --- START FIX: Cloud Nine ---
+			if (RPGAbilities.isWeatherActive(battle)) {
+			// --- END FIX ---
+				if (battle.weather!.type === 'rain') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
-				} else if (battle.weather.type === 'sun') {
+				} else if (battle.weather!.type === 'sun') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
 				}
-				if (battle.weather.type === 'hail' && move.id === 'blizzard') {
+				if (battle.weather!.type === 'hail' && move.id === 'blizzard') {
 					moveAccuracy = 100;
 				}
 			}
@@ -3684,8 +3712,10 @@ function executeMove(
 			if (battle.gravityTurns > 0) {
 				moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
 			}
-			
+
+			// --- START FIX: Use finalEvasionMultiplier ---
 			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
+			// --- END FIX ---
 			if ((Math.random() * 100) > finalAccuracy) {
 				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
@@ -4177,6 +4207,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		isCharged: false,
 		stockpileCount: 0,
 		flashFireBoost: false,
+		unburdenActive: false, // User skipped this
 	};
 }
 
@@ -4316,7 +4347,9 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
+		// --- START FIX: Counter/Mirror Coat ---
 		s.lastDamageTaken = undefined;
+		// --- END FIX ---
 	});
 
 	// 1. Generate AI Actions
