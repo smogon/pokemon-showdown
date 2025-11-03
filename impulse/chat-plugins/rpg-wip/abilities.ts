@@ -1,15 +1,9 @@
-/**
- * RPG Ability System
- * This file contains all ability implementations for the Pokemon RPG plugin
- * Abilities are organized by type and utilize Dex data where possible
- */
-
 import { Dex, toID } from '../../../sim/dex';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler } from './interface';
 
 /**
- * Helper to get all active (non-fainted, non-null) slots for a given side.
- * This is needed for isWeatherActive.
+ * @param {[ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined} slots
+ * @returns {ActivePokemonSlot[]}
  */
 function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
 	if (!slots) return [];
@@ -17,7 +11,8 @@ function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | nu
 }
 
 /**
- * Checks if weather effects are active (i.e., not suppressed by Cloud Nine / Air Lock)
+ * @param {BattleState} battle
+ * @returns {boolean}
  */
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
@@ -26,31 +21,29 @@ export function isWeatherActive(battle: BattleState): boolean {
 	for (const slot of allSlots) {
 		const ability = toID(slot.pokemon.ability || '');
 		if (ability === 'cloudnine' || ability === 'airlock') {
-			return false; // Weather is suppressed
+			return false;
 		}
 	}
-	return true; // Weather is active
+	return true;
 }
 
 /**
- * Check if a Pokemon is grounded (affected by Ground-type moves)
+ * @param {ActivePokemonSlot | RPGPokemon} slotOrPokemon
+ * @param {BattleState} battle
+ * @returns {boolean}
  */
 export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle: BattleState): boolean {
-	// If passed RPGPokemon, wrap as needed
 	const pokemon = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot).pokemon : slotOrPokemon as RPGPokemon;
 	const slot = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot) : undefined;
 
-	// Gravity grounds everything, overriding all other effects.
 	if (battle.gravityTurns > 0) {
 		return true;
 	}
 
-	// Smack Down grounds the Pokemon, overriding immunities.
 	if (slot && slot.isSmackedDown) {
 		return true;
 	}
 
-	// Magnet Rise provides temporary levitation.
 	if (slot && slot.magnetRiseTurns > 0) {
 		return false;
 	}
@@ -59,27 +52,24 @@ export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle
 	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
 	const ability = toID(pokemon.ability || '');
 
-	// Air Balloon provides immunity.
 	if (hasAirBalloon) {
 		return false;
 	}
 
-	// Levitate ability provides immunity.
 	if (ability === 'levitate') {
 		return false;
 	}
 
-	// Flying types are immune.
 	if (species.types.includes('Flying')) {
 		return false;
 	}
 
-	// If none of the above, the Pokemon is grounded.
 	return true;
 }
 
 /**
- * Get ability data from Dex with fallback
+ * @param {string} abilityName
+ * @returns {any}
  */
 export function getAbilityData(abilityName: string) {
 	const ability = Dex.abilities.get(abilityName);
@@ -89,13 +79,7 @@ export function getAbilityData(abilityName: string) {
 	return null;
 }
 
-/**
- * IMMUNITY ABILITIES
- * These abilities grant immunity to certain move types, effects, or conditions
- */
-
 export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
-	// Sound-based move immunity
 	'soundproof': ctx => {
 		if (ctx.move.flags.sound) {
 			return {
@@ -106,7 +90,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Powder move immunity
 	'overcoat': ctx => {
 		if (ctx.move.flags.powder) {
 			return {
@@ -117,7 +100,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Ground-type immunity
 	'levitate': ctx => {
 		if (ctx.move.type === 'Ground' && ctx.battle.gravityTurns === 0) {
 			return {
@@ -128,7 +110,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Water-type immunity (absorbs and heals)
 	'waterabsorb': ctx => {
 		if (ctx.move.type === 'Water') {
 			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
@@ -141,7 +122,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Electric-type immunity (absorbs and heals)
 	'voltabsorb': ctx => {
 		if (ctx.move.type === 'Electric') {
 			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
@@ -154,10 +134,8 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Fire-type immunity (absorbs and boosts Fire moves)
 	'flashfire': ctx => {
 		if (ctx.move.type === 'Fire') {
-			// Set a volatile on the defender slot to boost their Fire moves
 			ctx.defenderSlot.flashFireBoost = true;
 			return {
 				immune: true,
@@ -167,11 +145,9 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Grass-type immunity (boosts Attack)
 	'sapsipper': ctx => {
 		if (ctx.move.type === 'Grass') {
 			let message = `${ctx.defender.species}'s Sap Sipper absorbed the Grass move!`;
-			// Boost Attack by 1 stage
 			if (ctx.defenderSlot.statStages.atk < 6) {
 				ctx.defenderSlot.statStages.atk++;
 				message = `${ctx.defender.species}'s Sap Sipper boosted its Attack!`;
@@ -184,11 +160,9 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Storm Drain - Water moves redirect to this Pokemon (and boost SpA)
 	'stormdrain': ctx => {
 		if (ctx.move.type === 'Water') {
 			let message = `${ctx.defender.species}'s Storm Drain absorbed the Water move!`;
-			// Boost Sp. Atk by 1 stage
 			if (ctx.defenderSlot.statStages.spa < 6) {
 				ctx.defenderSlot.statStages.spa++;
 				message = `${ctx.defender.species}'s Storm Drain boosted its Sp. Atk!`;
@@ -201,11 +175,9 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Lightning Rod - Electric moves redirect to this Pokemon (and boost SpA)
 	'lightningrod': ctx => {
 		if (ctx.move.type === 'Electric') {
 			let message = `${ctx.defender.species}'s Lightning Rod absorbed the Electric move!`;
-			// Boost Sp. Atk by 1 stage
 			if (ctx.defenderSlot.statStages.spa < 6) {
 				ctx.defenderSlot.statStages.spa++;
 				message = `${ctx.defender.species}'s Lightning Rod boosted its Sp. Atk!`;
@@ -218,11 +190,9 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Motor Drive - Electric immunity with speed boost
 	'motordrive': ctx => {
 		if (ctx.move.type === 'Electric') {
 			let message = `${ctx.defender.species}'s Motor Drive absorbed the Electric move!`;
-			// Boost Speed by 1 stage
 			if (ctx.defenderSlot.statStages.spe < 6) {
 				ctx.defenderSlot.statStages.spe++;
 				message = `${ctx.defender.species}'s Motor Drive boosted its Speed!`;
@@ -235,7 +205,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Dry Skin - Water immunity with HP restore, Fire weakness
 	'dryskin': ctx => {
 		if (ctx.move.type === 'Water') {
 			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
@@ -248,18 +217,14 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Wonder Guard - Only super-effective moves hit
 	'wonderguard': ctx => {
 		if (ctx.move.category === 'Status') {
-			return null; // Status moves bypass Wonder Guard
+			return null;
 		}
 
-		// Calculate effectiveness to check if move is super-effective
-		// This uses a hardcoded chart, which is intentionally skipped by the user.
 		const defenderSpecies = Dex.species.get(ctx.defender.species);
 		let effectiveness = 1;
 
-		// Get type chart for the move
 		const typeChart: any = {
 			Normal: { superEffective: [], notVeryEffective: ['Rock', 'Steel'], noEffect: ['Ghost'] },
 			Fire: { superEffective: ['Grass', 'Ice', 'Bug', 'Steel'], notVeryEffective: ['Fire', 'Water', 'Rock', 'Dragon'], noEffect: [] },
@@ -294,7 +259,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 			}
 		}
 
-		// Wonder Guard: Only super-effective moves hit
 		if (effectiveness <= 1) {
 			return {
 				immune: true,
@@ -305,7 +269,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Bulletproof - Immunity to ball and bomb moves
 	'bulletproof': ctx => {
 		if (ctx.move.flags.bullet) {
 			return {
@@ -317,13 +280,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	},
 };
 
-/**
- * POWER MODIFIER ABILITIES
- * These abilities modify the base power of moves
- */
-
 export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandler> = {
-	// Boost punch moves
 	'ironfist': (ctx, basePower) => {
 		if (ctx.move.flags.punch) {
 			return Math.floor(basePower * 1.2);
@@ -331,7 +288,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Boost bite moves
 	'strongjaw': (ctx, basePower) => {
 		if (ctx.move.flags.bite) {
 			return Math.floor(basePower * 1.5);
@@ -339,7 +295,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Boost pulse moves
 	'megalauncher': (ctx, basePower) => {
 		if (ctx.move.flags.pulse) {
 			return Math.floor(basePower * 1.5);
@@ -347,7 +302,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Technician - Boost moves with 60 BP or less
 	'technician': (ctx, basePower) => {
 		if (ctx.move.basePower <= 60 && ctx.move.basePower > 0) {
 			return Math.floor(basePower * 1.5);
@@ -355,17 +309,13 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Sheer Force - Boost moves with secondary effects (and removes them)
 	'sheerforce': (ctx, basePower) => {
 		if (ctx.move.secondary || ctx.move.secondaries) {
-			// Power boost is applied here
-			// Secondary effect removal is handled in the move execution code
 			return Math.floor(basePower * 1.3);
 		}
 		return basePower;
 	},
 
-	// Reckless - Boost recoil moves
 	'reckless': (ctx, basePower) => {
 		if (ctx.move.recoil || ctx.move.hasCrashDamage) {
 			return Math.floor(basePower * 1.2);
@@ -373,7 +323,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Tough Claws - Boost contact moves
 	'toughclaws': (ctx, basePower) => {
 		if (ctx.move.flags.contact) {
 			return Math.floor(basePower * 1.3);
@@ -381,24 +330,17 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Adaptability - Boost STAB moves even more
 	'adaptability': (ctx, basePower) => {
 		const species = Dex.species.get(ctx.attacker.species);
 		if (species.types.includes(ctx.move.type)) {
-			// This would be applied differently - it's a STAB modifier
-			// For power calculation, return basePower unchanged
-			// The STAB multiplier changes from 1.5 to 2.0
 		}
 		return basePower;
 	},
 
-	// Rivalry - Boost/reduce based on gender
 	'rivalry': (ctx, basePower) => {
-		// Would need gender comparison logic
 		return basePower;
 	},
 
-	// Sand Force - Boost Rock/Ground/Steel in sandstorm
 	'sandforce': (ctx, basePower) => {
 		if (isWeatherActive(ctx.battle) && ctx.battle.weather?.type === 'sand' &&
 			['Rock', 'Ground', 'Steel'].includes(ctx.move.type)) {
@@ -407,13 +349,10 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Analytic - Boost if moving last
 	'analytic': (ctx, basePower) => {
-		// Would need turn order logic
 		return basePower;
 	},
 
-	// Blaze - Boost Fire moves when HP is low
 	'blaze': (ctx, basePower) => {
 		if (ctx.move.type === 'Fire' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) {
 			return Math.floor(basePower * 1.5);
@@ -421,7 +360,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Torrent - Boost Water moves when HP is low
 	'torrent': (ctx, basePower) => {
 		if (ctx.move.type === 'Water' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) {
 			return Math.floor(basePower * 1.5);
@@ -429,7 +367,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Overgrow - Boost Grass moves when HP is low
 	'overgrow': (ctx, basePower) => {
 		if (ctx.move.type === 'Grass' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) {
 			return Math.floor(basePower * 1.5);
@@ -437,7 +374,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Swarm - Boost Bug moves when HP is low
 	'swarm': (ctx, basePower) => {
 		if (ctx.move.type === 'Bug' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) {
 			return Math.floor(basePower * 1.5);
@@ -446,34 +382,23 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	},
 };
 
-/**
- * TYPE MODIFIER ABILITIES
- * These abilities change the type of moves
- */
-
 export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler> = {
-	// Normalize - All moves become Normal-type
 	'normalize': (ctx, moveType) => {
 		if (ctx.move.category !== 'Status') {
-			// --- START FIX ---
 			(ctx.move as any).typeConversionBoost = true;
-			// --- END FIX ---
 			return 'Normal';
 		}
 		return moveType;
 	},
 
-	// Pixilate - Normal moves become Fairy (with 1.2x boost)
 	'pixilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
-			// Mark that conversion happened for power boost
 			(ctx.move as any).typeConversionBoost = true;
 			return 'Fairy';
 		}
 		return moveType;
 	},
 
-	// Refrigerate - Normal moves become Ice (with 1.2x boost)
 	'refrigerate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
 			(ctx.move as any).typeConversionBoost = true;
@@ -482,7 +407,6 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 		return moveType;
 	},
 
-	// Aerilate - Normal moves become Flying (with 1.2x boost)
 	'aerilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
 			(ctx.move as any).typeConversionBoost = true;
@@ -491,7 +415,6 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 		return moveType;
 	},
 
-	// Galvanize - Normal moves become Electric (with 1.2x boost)
 	'galvanize': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
 			(ctx.move as any).typeConversionBoost = true;
@@ -501,34 +424,21 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 	},
 };
 
-/**
- * ITEM INTERACTION ABILITIES
- */
-
 export const ITEM_INTERACTION_ABILITIES = {
-	// Sticky Hold - Prevents item removal
 	'stickyhold': {
 		preventsItemRemoval: true,
 	},
 
-	// Unburden - Speed doubles when item is consumed
 	'unburden': {
 		onItemRemove: true,
 	},
 
-	// Klutz - Can't use held items
 	'klutz': {
 		preventsItemUse: true,
 	},
 };
 
-/**
- * STAT MODIFIER ABILITIES
- * These abilities modify stats in various ways
- */
-
 export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler> = {
-	// Huge Power / Pure Power - Doubles Attack
 	'hugepower': (pokemon, stat, value) => {
 		if (stat === 'atk') {
 			return value * 2;
@@ -543,7 +453,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Guts - Attack boost when statused
 	'guts': (pokemon, stat, value) => {
 		if (stat === 'atk' && pokemon.status) {
 			return Math.floor(value * 1.5);
@@ -551,7 +460,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Marvel Scale - Defense boost when statused
 	'marvelscale': (pokemon, stat, value) => {
 		if (stat === 'def' && pokemon.status) {
 			return Math.floor(value * 1.5);
@@ -559,7 +467,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Quick Feet - Speed boost when statused
 	'quickfeet': (pokemon, stat, value) => {
 		if (stat === 'spe' && pokemon.status) {
 			return Math.floor(value * 1.5);
@@ -567,26 +474,27 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// --- START FIX ---
-	// Hustle - Boosts Attack but lowers accuracy (Attack part)
 	'hustle': (pokemon, stat, value) => {
 		if (stat === 'atk') {
 			return Math.floor(value * 1.5);
 		}
 		return value;
 	},
-	// --- END FIX ---
 
-	// Slow Start - Attack and Speed halved
 	'slowstart': (pokemon, stat, value) => {
 		if (stat === 'atk' || stat === 'spe') {
-			// Would need turn counter to implement properly
 			return Math.floor(value * 0.5);
 		}
 		return value;
 	},
 };
 
+/**
+ * @param {RPGPokemon} pokemon
+ * @param {string} stat
+ * @param {number} value
+ * @returns {number}
+ */
 export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number): number {
 	const ability = toID(pokemon.ability || '');
 	const handler = STAT_MODIFIER_ABILITIES[ability];
@@ -597,9 +505,10 @@ export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, valu
 }
 
 /**
- * SECONDARY EFFECT MODIFIERS
+ * @param {AbilityContext} ctx
+ * @param {number} chance
+ * @returns {number}
  */
-
 export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 	const ability = toID(ctx.attacker.ability || '');
 	if (ability === 'serenegrace') {
@@ -608,13 +517,7 @@ export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 	return chance;
 }
 
-/**
- * WEATHER ABILITIES
- * Abilities that modify or are affected by weather
- */
-
 export const WEATHER_ABILITIES = {
-	// Drought - Sets harsh sunlight on switch-in
 	'drought': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			battle.weather = { type: 'sun', turns: 5 };
@@ -622,7 +525,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Drizzle - Sets rain on switch-in
 	'drizzle': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			battle.weather = { type: 'rain', turns: 5 };
@@ -630,7 +532,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Sand Stream - Sets sandstorm on switch-in
 	'sandstream': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			battle.weather = { type: 'sand', turns: 5 };
@@ -638,7 +539,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Snow Warning - Sets hail on switch-in
 	'snowwarning': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			battle.weather = { type: 'hail', turns: 5 };
@@ -646,7 +546,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Cloud Nine / Air Lock - Suppresses weather effects
 	'cloudnine': {
 		suppressWeather: true,
 	},
@@ -654,77 +553,56 @@ export const WEATHER_ABILITIES = {
 		suppressWeather: true,
 	},
 
-	// Solar Power - Boosts Sp. Atk in sun but takes damage
 	'solarpower': {
 		modifiesSpAtk: true,
 		weatherDamage: 'sun',
 	},
 
-	// Rain Dish - Heals in rain
 	'raindish': {
 		weatherHeal: 'rain',
 	},
 
-	// Ice Body - Heals in hail
 	'icebody': {
 		weatherHeal: 'hail',
 	},
 };
 
-/**
- * CONTACT ABILITIES
- * Abilities that trigger on contact moves
- */
-
 export const CONTACT_ABILITIES = {
-	// Static - May paralyze on contact
 	'static': {
 		onContactChance: 0.3,
 		effect: 'par',
 	},
 
-	// Flame Body - May burn on contact
 	'flamebody': {
 		onContactChance: 0.3,
 		effect: 'brn',
 	},
 
-	// Poison Point - May poison on contact
 	'poisonpoint': {
 		onContactChance: 0.3,
 		effect: 'psn',
 	},
 
-	// Effect Spore - May cause status on contact
 	'effectspore': {
 		onContactChance: 0.3,
 		effects: ['psn', 'par', 'slp'],
 	},
 
-	// Cute Charm - May infatuate on contact
 	'cutecharm': {
 		onContactChance: 0.3,
 		effect: 'infatuate',
 	},
 
-	// Rough Skin - Damages attacker on contact
 	'roughskin': {
 		onContactDamage: 1 / 8,
 	},
 
-	// Iron Barbs - Damages attacker on contact
 	'ironbarbs': {
 		onContactDamage: 1 / 8,
 	},
 };
 
-/**
- * PRIORITY ABILITIES
- * Abilities that affect move priority
- */
-
 export const PRIORITY_ABILITIES = {
-	// Prankster - Gives +1 priority to status moves
 	'prankster': {
 		modifyPriority: (move: Move) => {
 			if (move.category === 'Status') {
@@ -734,7 +612,6 @@ export const PRIORITY_ABILITIES = {
 		},
 	},
 
-	// Gale Wings - Gives +1 priority to Flying moves at full HP
 	'galewings': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
 			if (move.type === 'Flying' && pokemon.hp === pokemon.maxHp) {
@@ -745,97 +622,120 @@ export const PRIORITY_ABILITIES = {
 	},
 };
 
-/**
- * ACCURACY/EVASION ABILITIES
- */
-
 export const ACCURACY_EVASION_ABILITIES = {
-	// Compound Eyes - Boosts accuracy
 	'compoundeyes': {
 		accuracyMultiplier: 1.3,
 	},
 
-	// Hustle - Boosts Attack but lowers accuracy
 	'hustle': {
 		accuracyMultiplier: 0.8,
-		// --- START FIX ---
-		// attackMultiplier: 1.5, // <-- This was removed
-		// --- END FIX ---
 	},
 
-	// Tangled Feet - Boosts evasion when confused
 	'tangledfeet': {
 		evasionBoost: true,
 	},
 
-	// Sand Veil - Boosts evasion in sandstorm
 	'sandveil': {
 		weatherEvasion: 'sand',
 	},
 
-	// Snow Cloak - Boosts evasion in hail
 	'snowcloak': {
 		weatherEvasion: 'hail',
 	},
 };
 
-/**
- * RECOIL/DRAIN ABILITIES
- */
-
 export const RECOIL_DRAIN_ABILITIES = {
-	// Rock Head - Prevents recoil damage
 	'rockhead': {
 		preventsRecoil: true,
 	},
 
-	// Magic Guard - Prevents indirect damage
 	'magicguard': {
 		preventsIndirectDamage: true,
 	},
 };
 
-/**
- * FORM CHANGE ABILITIES
- */
-
 export const FORM_CHANGE_ABILITIES = {
-	// Stance Change - Changes form based on move used
 	'stancechange': {
 		formChange: true,
 	},
 
-	// Schooling - Changes form based on HP
 	'schooling': {
 		hpFormChange: true,
 	},
 
-	// Shields Down - Changes form based on HP
 	'shieldsdown': {
 		hpFormChange: true,
 	},
 };
 
-/**
- * MULTI-HIT ABILITIES
- */
-
 export const MULTI_HIT_ABILITIES = {
-	// Skill Link - Multi-hit moves always hit maximum times
 	'skilllink': {
 		maxHits: true,
 	},
 
-	// Parental Bond - Attacks twice
 	'parentalbond': {
 		attackTwice: true,
 	},
 };
 
-/**
- * Main ability application functions
- */
+export const CRITICAL_HIT_ABILITIES = {
+	'superluck': {
+		critBoost: 1,
+	},
 
+	'sniper': {
+		critDamageMultiplier: 1.5,
+	},
+};
+
+export const TERRAIN_ABILITIES = {
+	'electricsurge': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			battle.terrain = { type: 'electric', turns: 5 };
+			messageLog.push(`${slot.pokemon.species}'s Electric Surge electrified the field!`);
+		},
+	},
+
+	'grassysurge': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			battle.terrain = { type: 'grassy', turns: 5 };
+			messageLog.push(`${slot.pokemon.species}'s Grassy Surge created grassy terrain!`);
+		},
+	},
+
+	'mistysurge': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			battle.terrain = { type: 'misty', turns: 5 };
+			messageLog.push(`${slot.pokemon.species}'s Misty Surge created misty terrain!`);
+		},
+	},
+
+	'psychicsurge': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			battle.terrain = { type: 'psychic', turns: 5 };
+			messageLog.push(`${slot.pokemon.species}'s Psychic Surge created psychic terrain!`);
+		},
+	},
+
+	'surgesurfer': {
+		terrainSpeedBoost: 'electric',
+	},
+};
+
+export const HEALING_ABILITIES = {
+	'regenerator': {
+		onSwitchOut: 1 / 3,
+	},
+
+	'naturalcure': {
+		healStatusOnSwitch: true,
+	},
+};
+
+/**
+ * @param {AbilityContext} ctx
+ * @returns {{ immune: boolean, message?: string } | null}
+ */
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
 	const ability = toID(ctx.defender.ability || '');
 	const handler = IMMUNITY_ABILITIES[ability];
@@ -845,6 +745,11 @@ export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, me
 	return null;
 }
 
+/**
+ * @param {AbilityContext} ctx
+ * @param {number} basePower
+ * @returns {number}
+ */
 export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number): number {
 	const ability = toID(ctx.attacker.ability || '');
 	const handler = POWER_MODIFIER_ABILITIES[ability];
@@ -852,12 +757,10 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = handler(ctx, basePower);
 	}
 
-	// Apply 1.5x boost for Flash Fire
 	if (ctx.move.type === 'Fire' && ctx.attackerSlot.flashFireBoost) {
 		basePower = Math.floor(basePower * 1.5);
 	}
 
-	// Apply 1.2x boost for type-conversion abilities
 	if ((ctx.move as any).typeConversionBoost) {
 		basePower = Math.floor(basePower * 1.2);
 	}
@@ -865,6 +768,11 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 	return basePower;
 }
 
+/**
+ * @param {AbilityContext} ctx
+ * @param {string} moveType
+ * @returns {string}
+ */
 export function applyAbilityTypeModifier(ctx: AbilityContext, moveType: string): string {
 	const ability = toID(ctx.attacker.ability || '');
 	const handler = TYPE_MODIFIER_ABILITIES[ability];
@@ -874,13 +782,19 @@ export function applyAbilityTypeModifier(ctx: AbilityContext, moveType: string):
 	return moveType;
 }
 
+/**
+ * @param {RPGPokemon} pokemon
+ * @returns {boolean}
+ */
 export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ITEM_INTERACTION_ABILITIES[ability]?.preventsItemRemoval || false;
 }
 
 /**
- * Get STAB multiplier (modified by Adaptability)
+ * @param {RPGPokemon} pokemon
+ * @param {string} moveType
+ * @returns {number}
  */
 export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number {
 	const species = Dex.species.get(pokemon.species);
@@ -897,54 +811,48 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number
 }
 
 /**
- * Check if ability prevents status conditions
+ * @param {RPGPokemon} pokemon
+ * @param {string} status
+ * @returns {boolean}
  */
 export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	const ability = toID(pokemon.ability || '');
 
-	// Immunity - Prevents poison
 	if (ability === 'immunity' && (status === 'psn' || status === 'tox')) {
 		return true;
 	}
 
-	// Water Veil - Prevents burn
 	if (ability === 'waterveil' && status === 'brn') {
 		return true;
 	}
 
-	// Limber - Prevents paralysis
 	if (ability === 'limber' && status === 'par') {
 		return true;
 	}
 
-	// Insomnia / Vital Spirit - Prevents sleep
 	if ((ability === 'insomnia' || ability === 'vitalspirit') && status === 'slp') {
 		return true;
 	}
 
-	// Magma Armor - Prevents freeze
 	if (ability === 'magmaarmor' && status === 'frz') {
 		return true;
 	}
-
-	// Leaf Guard - Prevents status in sun
-	// Would need weather check
 
 	return false;
 }
 
 /**
- * Apply priority-modifying abilities
+ * @param {Move} move
+ * @param {RPGPokemon} pokemon
+ * @returns {number}
  */
 export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 	const ability = toID(pokemon.ability || '');
 	
-	// Handle Prankster
 	if (ability === 'prankster' && move.category === 'Status') {
 		return 1;
 	}
 
-	// Handle Gale Wings
 	if (ability === 'galewings' && move.type === 'Flying' && pokemon.hp === pokemon.maxHp) {
 		return 1;
 	}
@@ -953,8 +861,9 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 }
 
 /**
- * --- START FIX ---
- * Apply accuracy-modifying abilities
+ * @param {number} moveAccuracy
+ * @param {RPGPokemon} attacker
+ * @returns {number}
  */
 export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
 	const ability = toID(attacker.ability || '');
@@ -968,190 +877,94 @@ export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon
 }
 
 /**
- * Apply evasion-modifying abilities
+ * @param {ActivePokemonSlot} defenderSlot
+ * @param {BattleState} battle
+ * @returns {number}
  */
 export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: BattleState): number {
 	const ability = toID(defenderSlot.pokemon.ability || '');
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
 
 	if (handler) {
-		// Sand Veil
 		if (handler.weatherEvasion === 'sand' && isWeatherActive(battle) && battle.weather?.type === 'sand') {
-			return 1.25; // Evasion is boosted by 25% in sand
+			return 1.25;
 		}
-		// Snow Cloak
 		if (handler.weatherEvasion === 'hail' && isWeatherActive(battle) && battle.weather?.type === 'hail') {
-			return 1.25; // Evasion is boosted by 25% in hail
+			return 1.25;
 		}
-		// Tangled Feet
 		if (handler.evasionBoost && defenderSlot.isConfused) {
-			return 1.5; // Evasion is boosted by 50% when confused
+			return 1.5;
 		}
 	}
 
-	return 1; // No ability-based evasion boost
+	return 1;
 }
-// --- END FIX ---
-
 
 /**
- * CRITICAL HIT ABILITIES
+ * @param {RPGPokemon} pokemon
+ * @param {BattleState} battle
+ * @param {number} speed
+ * @returns {number}
  */
-
-export const CRITICAL_HIT_ABILITIES = {
-	// Super Luck - Boosts critical hit ratio
-	'superluck': {
-		critBoost: 1,
-	},
-
-	// Sniper - Boosts critical hit damage
-	'sniper': {
-		critDamageMultiplier: 1.5, // Total becomes 2.25x instead of 1.5x
-	},
-};
-
-/**
- * TERRAIN ABILITIES
- */
-
-export const TERRAIN_ABILITIES = {
-	// Electric Surge - Sets Electric Terrain
-	'electricsurge': {
-		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'electric', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Electric Surge electrified the field!`);
-		},
-	},
-
-	// Grassy Surge - Sets Grassy Terrain
-	'grassysurge': {
-		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'grassy', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Grassy Surge created grassy terrain!`);
-		},
-	},
-
-	// Misty Surge - Sets Misty Terrain
-	'mistysurge': {
-		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'misty', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Misty Surge created misty terrain!`);
-		},
-	},
-
-	// Psychic Surge - Sets Psychic Terrain
-	'psychicsurge': {
-		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'psychic', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Psychic Surge created psychic terrain!`);
-		},
-	},
-
-	// Surge Surfer - Doubles speed in Electric Terrain
-	'surgesurfer': {
-		terrainSpeedBoost: 'electric',
-	},
-};
-
-/**
- * HEALING ABILITIES
- */
-
-export const HEALING_ABILITIES = {
-	// Regenerator - Heals 1/3 HP on switch-out
-	'regenerator': {
-		onSwitchOut: 1 / 3,
-	},
-
-	// Natural Cure - Heals status on switch-out
-	'naturalcure': {
-		healStatusOnSwitch: true,
-	},
-};
-
-/**
- * SPEED MODIFIER ABILITIES
- */
-
 export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
-	// --- START FIX: Check if weather is active ---
 	const weatherActive = isWeatherActive(battle);
 
-	// Swift Swim - Doubles speed in rain
 	if (ability === 'swiftswim' && weatherActive && battle.weather?.type === 'rain') {
 		return speed * 2;
 	}
 
-	// Chlorophyll - Doubles speed in sun
 	if (ability === 'chlorophyll' && weatherActive && battle.weather?.type === 'sun') {
 		return speed * 2;
 	}
 
-	// Sand Rush - Doubles speed in sandstorm
 	if (ability === 'sandrush' && weatherActive && battle.weather?.type === 'sand') {
 		return speed * 2;
 	}
 
-	// Slush Rush - Doubles speed in hail
 	if (ability === 'slushrush' && weatherActive && battle.weather?.type === 'hail') {
 		return speed * 2;
 	}
-	// --- END FIX ---
 
-	// Surge Surfer - Doubles speed in Electric Terrain
 	if (ability === 'surgesurfer' && battle.terrain?.type === 'electric' && isGrounded(pokemon, battle)) {
 		return speed * 2;
 	}
-
-	// Unburden - Doubles speed when item is lost
-	// User intentionally skipped implementation
 
 	return speed;
 }
 
 /**
- * DAMAGE MODIFYING ABILITIES
- * Apply these after base damage calculation
+ * @param {AbilityContext} ctx
+ * @param {number} damage
+ * @returns {number}
  */
-
 export function applyDamageModifier(ctx: AbilityContext, damage: number): number {
 	const attackerAbility = toID(ctx.attacker.ability || '');
 	const defenderAbility = toID(ctx.defender.ability || '');
-	const effectiveness = ctx.effectiveness || 1; // Get effectiveness from context
+	const effectiveness = ctx.effectiveness || 1;
 
-	// --- START FIX ---
-	// Dry Skin - Takes extra damage from Fire moves
 	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
 		damage = Math.floor(damage * 1.25);
 	}
-	// --- END FIX ---
 
-	// Sniper - (This is handled in calculateDamage's criticalMultiplier logic)
-
-	// Tinted Lens - Makes not very effective moves deal neutral damage
 	if (attackerAbility === 'tintedlens' && effectiveness < 1) {
-		damage = Math.floor(damage * 2); // Double the damage (0.5 -> 1.0, 0.25 -> 0.5)
+		damage = Math.floor(damage * 2);
 	}
 
-	// Solid Rock / Filter - Reduces super-effective damage
 	if ((defenderAbility === 'solidrock' || defenderAbility === 'filter') && effectiveness > 1) {
 		damage = Math.floor(damage * 0.75);
 	}
 
-	// Multiscale / Shadow Shield - Reduces damage at full HP
 	if ((defenderAbility === 'multiscale' || defenderAbility === 'shadowshield') &&
 		ctx.defender.hp === ctx.defender.maxHp) {
 		damage = Math.floor(damage * 0.5);
 	}
 
-	// Fur Coat - Halves physical damage
 	if (defenderAbility === 'furcoat' && ctx.move.category === 'Physical') {
 		damage = Math.floor(damage * 0.5);
 	}
 
-	// Punk Rock - Boosts sound moves and reduces sound damage taken
 	if (attackerAbility === 'punkrock' && ctx.move.flags.sound) {
 		damage = Math.floor(damage * 1.3);
 	}
@@ -1163,19 +976,21 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 }
 
 /**
- * Check if secondary effects should be applied
- * Sheer Force removes secondary effects
+ * @param {RPGPokemon} attacker
+ * @param {Move} move
+ * @returns {boolean}
  */
 export function shouldApplySecondaryEffects(attacker: RPGPokemon, move: Move): boolean {
 	const ability = toID(attacker.ability || '');
 	if (ability === 'sheerforce' && (move.secondary || move.secondaries)) {
-		return false; // Sheer Force removes secondary effects
+		return false;
 	}
 	return true;
 }
 
 /**
- * Check if Pokemon takes indirect damage (blocked by Magic Guard)
+ * @param {RPGPokemon} pokemon
+ * @returns {boolean}
  */
 export function takesIndirectDamage(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
@@ -1183,7 +998,8 @@ export function takesIndirectDamage(pokemon: RPGPokemon): boolean {
 }
 
 /**
- * Check if Pokemon's ability prevents recoil damage
+ * @param {RPGPokemon} pokemon
+ * @returns {boolean}
  */
 export function preventsRecoil(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
@@ -1191,13 +1007,13 @@ export function preventsRecoil(pokemon: RPGPokemon): boolean {
 }
 
 /**
- * Check if Pokemon can use its held item (not blocked by Klutz or Magic Room)
+ * @param {RPGPokemon} pokemon
+ * @param {BattleState} battle
+ * @returns {boolean}
  */
 export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolean {
-	// Magic Room prevents all held items
 	if (battle.magicRoomTurns > 0) return false;
 
-	// Klutz prevents the Pokemon from using its held item
 	const ability = toID(pokemon.ability || '');
 	if (ability === 'klutz') return false;
 
@@ -1205,12 +1021,12 @@ export function canUseHeldItem(pokemon: RPGPokemon, battle: BattleState): boolea
 }
 
 /**
- * Check if ability prevents a specific move
+ * @param {AbilityContext} ctx
+ * @returns {{ prevented: boolean, message?: string } | null}
  */
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
-	// Dazzling / Queenly Majesty - Prevents priority moves
 	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty') &&
 		ctx.move.priority && ctx.move.priority > 0) {
 		return {
@@ -1219,7 +1035,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 		};
 	}
 
-	// Good as Gold - Prevents status moves
 	if (defenderAbility === 'goodasgold' && ctx.move.category === 'Status') {
 		return {
 			prevented: true,
@@ -1231,7 +1046,7 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 }
 
 /**
- * Get all implemented abilities
+ * @returns {string[]}
  */
 export function getAllImplementedAbilities(): string[] {
 	return [
@@ -1254,7 +1069,8 @@ export function getAllImplementedAbilities(): string[] {
 }
 
 /**
- * Get ability info from Dex
+ * @param {string} abilityName
+ * @returns {any}
  */
 export function getAbilityInfo(abilityName: string): any {
 	const ability = Dex.abilities.get(abilityName);
@@ -1269,13 +1085,16 @@ export function getAbilityInfo(abilityName: string): any {
 }
 
 /**
- * Apply switch-in abilities (weather/terrain setting, intimidate)
+ * @param {ActivePokemonSlot} slot
+ * @param {BattleState} battle
+ * @param {boolean} isPlayerSwitchIn
+ * @param {string[]} messageLog
+ * @returns {void}
  */
 export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): void {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
-	// Weather-setting abilities
 	switch (ability) {
 	case 'drought':
 		if (battle.weather?.type !== 'sun') {
@@ -1303,7 +1122,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		break;
 	}
 
-	// Terrain-setting abilities
 	switch (ability) {
 	case 'electricsurge':
 		if (battle.terrain?.type !== 'electric') {
@@ -1331,7 +1149,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		break;
 	}
 
-	// Stat-lowering abilities (Intimidate)
 	if (ability === 'intimidate') {
 		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		for (const opponentSlot of opponentSlots) {
@@ -1353,7 +1170,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 }
 
 /**
- * Apply effects from contact-based abilities (Static, Flame Body, etc.)
+ * @param {AbilityContext} ctx
+ * @returns {void}
  */
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const defenderAbility = toID(ctx.defender.ability || '');
@@ -1365,9 +1183,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const attackerSlot = ctx.attackerSlot;
 	const attackerSpecies = Dex.species.get(attacker.species);
 
-	// Handle damage-on-contact (Rough Skin, Iron Barbs)
 	if (handler.onContactDamage) {
-		// Check for Magic Guard
 		if (takesIndirectDamage(attacker)) {
 			const damage = Math.floor(attacker.maxHp * handler.onContactDamage);
 			attacker.hp = Math.max(0, attacker.hp - damage);
@@ -1375,27 +1191,22 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Handle status-on-contact (Static, Flame Body, Poison Point)
 	if (handler.effect && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const statusToInflict = handler.effect as string; // Can be 'infatuate'
+		const statusToInflict = handler.effect as string;
 		let canBeAfflicted = true;
 
-		// Check type immunities
 		if ((statusToInflict === 'par' && attackerSpecies.types.includes('Electric')) ||
 			(statusToInflict === 'brn' && attackerSpecies.types.includes('Fire')) ||
 			(statusToInflict === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel')))) {
 			canBeAfflicted = false;
 		}
 
-		// Check ability immunities
 		if (canBeAfflicted && preventsStatus(attacker, statusToInflict)) {
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
 		
-		// Handle non-standard statuses (like 'infatuate')
 		if (statusToInflict === 'infatuate') {
-			// User intentionally skipped this mechanic
 			canBeAfflicted = false;
 		}
 
@@ -1408,10 +1219,8 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Handle Effect Spore
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
 		const possibleStatuses: string[] = [];
-		// Check immunities for each possible status
 		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel') && !preventsStatus(attacker, 'psn')) {
 			possibleStatuses.push('psn');
 		}
@@ -1434,7 +1243,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 }
 
 export const RPGAbilities = {
-	// Core functions
 	checkImmunity: checkAbilityImmunity,
 	applyPowerModifier: applyAbilityPowerModifier,
 	applyTypeModifier: applyAbilityTypeModifier,
@@ -1450,11 +1258,10 @@ export const RPGAbilities = {
 	applyContactAbilityEffects,
 	applySwitchInAbilities,
 	applyPriorityModifier,
-	applyAccuracyModifier, // <-- Added
-	getEvasionMultiplier, // <-- Added
-	isWeatherActive, // <-- Added
+	applyAccuracyModifier,
+	getEvasionMultiplier,
+	isWeatherActive,
 
-	// Utility functions
 	getAllImplementedAbilities,
 	getAbilityInfo,
 	getAbilityData,
@@ -1463,7 +1270,6 @@ export const RPGAbilities = {
 	preventsRecoil,
 	canUseHeldItem,
 
-	// Ability databases
 	IMMUNITY_ABILITIES,
 	POWER_MODIFIER_ABILITIES,
 	TYPE_MODIFIER_ABILITIES,

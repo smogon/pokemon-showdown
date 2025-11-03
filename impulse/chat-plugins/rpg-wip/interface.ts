@@ -1,10 +1,12 @@
-/**
- * Type alias for status conditions
- */
 export type Status = 'psn' | 'tox' | 'brn' | 'par' | 'slp' | 'frz';
 
 /**
- * Interface for inventory items
+ * @typedef {Object} InventoryItem
+ * @property {string} id
+ * @property {string} name
+ * @property {'pokeball' | 'medicine' | 'berry' | 'tm' | 'key' | 'misc' | 'held'} category
+ * @property {string} description
+ * @property {number} quantity
  */
 export interface InventoryItem {
 	id: string;
@@ -15,7 +17,14 @@ export interface InventoryItem {
 }
 
 /**
- * Interface for Move data (from abilities.ts)
+ * @typedef {Object} Move
+ * @property {string} id
+ * @property {string} name
+ * @property {string} type
+ * @property {'Physical' | 'Special' | 'Status'} category
+ * @property {number} basePower
+ * @property {Record<string, boolean>} flags
+ * @property {any} [secondary]
  */
 export interface Move {
 	id: string;
@@ -28,11 +37,36 @@ export interface Move {
 	[key: string]: any;
 }
 
-// --- Pokemon & Player Types (from rpg-refactor.ts) ---
-
 /**
- * Interface for RPG Pokemon data
- * Depends on `Stats` and `Status`
+ * @typedef {Object} RPGPokemon
+ * @property {string} species
+ * @property {number} level
+ * @property {number} hp
+ * @property {number} maxHp
+ * @property {number} atk
+ * @property {number} def
+ * @property {number} spa
+ * @property {number} spd
+ * @property {number} spe
+ * @property {Record<keyof Stats, number>} ivs
+ * @property {Record<keyof Stats, number>} evs
+ * @property {number} weightkg
+ * @property {number} heightm
+ * @property {number} friendship
+ * @property {string} growthRate
+ * @property {number} experience
+ * @property {number} expToNextLevel
+ * @property {{ id: string, pp: number }[]} moves
+ * @property {string} nature
+ * @property {Status | null} status
+ * @property {string} [ability]
+ * @property {string} [item]
+ * @property {string} id
+ * @property {string} nickname
+ * @property {'M' | 'F' | 'N'} gender
+ * @property {boolean} shiny
+ * @property {string} caughtIn
+ * @property {string} [form]
  */
 export interface RPGPokemon {
 	species: string;
@@ -65,15 +99,48 @@ export interface RPGPokemon {
 	form?: string;
 }
 
-/**
- * Type alias for Stats, derived from RPGPokemon
- * (Note: This definition from rpg-refactor.ts is dependent on RPGPokemon)
- */
 export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id' | 'expToNextLevel' | 'hp' | 'ability' | 'item' | 'nature' | 'growthRate' | 'ivs' | 'evs' | 'status'>;
 
 /**
- * Interface for active battle slots
- * Depends on `RPGPokemon`, `Status`, and `Stats`
+ * @typedef {Object} ActivePokemonSlot
+ * @property {RPGPokemon} pokemon
+ * @property {Record<keyof Omit<Stats, 'maxHp'> | 'accuracy' | 'evasion', number>} statStages
+ * @property {Status | null} status
+ * @property {number} sleepCounter
+ * @property {boolean} isConfused
+ * @property {number} confusionCounter
+ * @property {boolean} isProtected
+ * @property {number} protectSuccessCounter
+ * @property {boolean} willFlinch
+ * @property {{ turns: number } | null} isTrapped
+ * @property {number} tauntTurns
+ * @property {boolean} isSeeded
+ * @property {boolean} hasNightmare
+ * @property {boolean} isCursed
+ * @property {string} [chargingMove]
+ * @property {number} activeTurns
+ * @property {string} [lockedMove]
+ * @property {boolean} [isRedirecting]
+ * @property {boolean} [isHelped]
+ * @property {{ amount: number, category: 'Physical' | 'Special', from: string }} [lastDamageTaken]
+ * @property {number} [yawnCounter]
+ * @property {{ hp: number }} [substitute]
+ * @property {{ moveId: string, turns: number }} [disabledMove]
+ * @property {{ moveId: string, turns: number }} [encoreMove]
+ * @property {boolean} [isIngrained]
+ * @property {boolean} [hasAquaRing]
+ * @property {boolean} [focusEnergy]
+ * @property {number} [magnetRiseTurns]
+ * @property {number} [telekinesisCounter]
+ * @property {boolean} [isSmackedDown]
+ * @property {string} [lastMoveUsed]
+ * @property {boolean} [tormentActive]
+ * @property {number} [embargoTurns]
+ * @property {number} [healBlockTurns]
+ * @property {boolean} [isCharged]
+ * @property {number} [stockpileCount]
+ * @property {boolean} [flashFireBoost]
+ * @property {boolean} [unburdenActive]
  */
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
@@ -93,34 +160,43 @@ export interface ActivePokemonSlot {
 	chargingMove?: string;
 	activeTurns: number;
 	lockedMove?: string;
-	isRedirecting?: boolean; // For Follow Me
-	isHelped?: boolean; // For Helping Hand
-	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string }; // For Counter/Mirror Coat
-	yawnCounter?: number; // For Yawn - inflicts sleep after counter reaches 0
+	isRedirecting?: boolean;
+	isHelped?: boolean;
+	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string };
+	yawnCounter?: number;
 
-	// High-priority volatile statuses
-	substitute?: { hp: number }; // Substitute HP
-	disabledMove?: { moveId: string, turns: number }; // Disabled move and turns remaining
-	encoreMove?: { moveId: string, turns: number }; // Encored move and turns remaining
-	isIngrained?: boolean; // Ingrain - restores HP but prevents switching
-	hasAquaRing?: boolean; // Aqua Ring - restores 1/16 HP each turn
-	focusEnergy?: boolean; // Focus Energy - increases critical hit ratio
-	magnetRiseTurns?: number; // Magnet Rise - levitates (Ground immunity)
-	telekinesisCounter?: number; // Telekinesis - moves cannot miss
-	isSmackedDown?: boolean; // Smackdown - grounded (loses Flying/Levitate)
-	lastMoveUsed?: string; // For Torment, Disable, Encore tracking
-	tormentActive?: boolean; // Torment - cannot use same move twice
-	embargoTurns?: number; // Embargo - cannot use items
-	healBlockTurns?: number; // Heal Block - cannot heal
-	isCharged?: boolean; // Charge - next Electric move deals 2x damage
-	stockpileCount?: number; // Stockpile - stores energy (0-3)
-	flashFireBoost?: boolean; // (For Flash Fire ability)
-	unburdenActive?: boolean; // (For Unburden ability)
+	substitute?: { hp: number };
+	disabledMove?: { moveId: string, turns: number };
+	encoreMove?: { moveId: string, turns: number };
+	isIngrained?: boolean;
+	hasAquaRing?: boolean;
+	focusEnergy?: boolean;
+	magnetRiseTurns?: number;
+	telekinesisCounter?: number;
+	isSmackedDown?: boolean;
+	lastMoveUsed?: string;
+	tormentActive?: boolean;
+	embargoTurns?: number;
+	healBlockTurns?: number;
+	isCharged?: boolean;
+	stockpileCount?: number;
+	flashFireBoost?: boolean;
+	unburdenActive?: boolean;
 }
 
 /**
- * Interface for player data
- * Depends on `RPGPokemon` and `InventoryItem`
+ * @typedef {Object} PlayerData
+ * @property {string} id
+ * @property {string} name
+ * @property {number} level
+ * @property {number} experience
+ * @property {number} badges
+ * @property {RPGPokemon[]} party
+ * @property {string} location
+ * @property {number} money
+ * @property {Map<string, InventoryItem>} inventory
+ * @property {Map<string, RPGPokemon>} pc
+ * @property {{ pokemonId: string, moveIds: string[] }} [pendingMoveLearnQueue]
  */
 export interface PlayerData {
 	id: string;
@@ -139,16 +215,51 @@ export interface PlayerData {
 	};
 }
 
-// --- Battle Types (from rpg-refactor.ts & abilities.ts) ---
-
 /**
- * Interface for battle state
- * Depends on `ActivePokemonSlot`
+ * @typedef {Object} BattleState
+ * @property {string} playerId
+ * @property {number} turn
+ * @property {string} zoneId
+ * @property {string[]} playerHazards
+ * @property {string[]} opponentHazards
+ * @property {{ type: 'sun' | 'rain' | 'sand' | 'hail', turns: number }} [weather]
+ * @property {number} trickRoomTurns
+ * @property {number} magicRoomTurns
+ * @property {number} wonderRoomTurns
+ * @property {{ type: 'electric' | 'grassy' | 'misty' | 'psychic', turns: number }} [terrain]
+ * @property {boolean} playerQuickGuard
+ * @property {boolean} opponentQuickGuard
+ * @property {boolean} playerWideGuard
+ * @property {boolean} opponentWideGuard
+ * @property {boolean} playerCraftyShield
+ * @property {boolean} opponentCraftyShield
+ * @property {number} playerReflectTurns
+ * @property {number} opponentReflectTurns
+ * @property {number} playerLightScreenTurns
+ * @property {number} opponentLightScreenTurns
+ * @property {number} playerAuroraVeilTurns
+ * @property {number} opponentAuroraVeilTurns
+ * @property {number} gravityTurns
+ * @property {number} mudSportTurns
+ * @property {number} waterSportTurns
+ * @property {boolean} [forceEnd]
+ * @property {'wild' | 'trainer' | 'wild_double' | 'trainer_double'} battleType
+ * @property {string} opponentName
+ * @property {RPGPokemon[]} opponentParty
+ * @property {number} opponentMoney
+ * @property {boolean | 'copyvolatile'} [playerShouldSwitch]
+ * @property {{ slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean }} [pendingPivot]
+ * @property {{ slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean }} [aiPendingPivot]
+ * @property {[ActivePokemonSlot | null, ActivePokemonSlot | null]} playerSlots
+ * @property {[ActivePokemonSlot | null, ActivePokemonSlot | null]} opponentSlots
+ * @property {{ [slotIndex: number]: { actionType: 'move' | 'switch', moveId?: string, targetSlot?: number, switchToPokemonId?: string, pokemonId: string } | null }} pendingActions
+ * @property {{ slotIndex: number, moveId: 'futuresight' | 'doomdesire', turnsLeft: number, attackerSlotIndex: number, attackerStats: { atk: number, spa: number } }[]} playerFutureMoves
+ * @property {{ slotIndex: number, moveId: 'futuresight' | 'doomdesire', turnsLeft: number, attackerSlotIndex: number, attackerStats: { atk: number, spa: number } }[]} opponentFutureMoves
  */
 export interface BattleState {
 	playerId: string;
 	turn: number;
-	zoneId: string; // Still useful for tracking location / return point
+	zoneId: string;
 	playerHazards: string[];
 	opponentHazards: string[];
 
@@ -164,7 +275,6 @@ export interface BattleState {
 		turns: number,
 	};
 
-	// --- Fields for side-wide guards ---
 	playerQuickGuard: boolean;
 	opponentQuickGuard: boolean;
 	playerWideGuard: boolean;
@@ -183,40 +293,34 @@ export interface BattleState {
 
 	forceEnd?: boolean;
 
-	// --- NEW FIELDS FOR TRAINER BATTLES ---
 	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double';
-	opponentName: string; // e.g., "Wild Pikachu" or "Rival"
+	opponentName: string;
 	opponentParty: RPGPokemon[];
-	opponentMoney: number; // Money to win (0 for wild)
+	opponentMoney: number;
 
-	// --- Pivot/Switch Flags ---
-	playerShouldSwitch?: boolean | 'copyvolatile'; // <-- This is now DEPRECATED by pendingPivot
+	playerShouldSwitch?: boolean | 'copyvolatile';
 	pendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };
 	aiPendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };
 
-	// --- NEW FIELDS FOR DOUBLE BATTLES ---
 	playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
 	opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
 
-	// New field to store player/AI commands before the turn executes
 	pendingActions: {
-		[slotIndex: number]: { // 0, 1 for player; 2, 3 for opponent
+		[slotIndex: number]: {
 			actionType: 'move' | 'switch',
 			moveId?: string,
-			targetSlot?: number, // 0-3
+			targetSlot?: number,
 			switchToPokemonId?: string,
-			pokemonId: string, // To track who is acting
+			pokemonId: string,
 		} | null,
 	};
 
-	// --- FIELDS FOR DELAYED MOVE EFFECTS ---
-	// Future Sight and Doom Desire - attacks that hit after 2 turns
 	playerFutureMoves: {
-		slotIndex: number, // Which slot will be hit (0 or 1)
+		slotIndex: number,
 		moveId: 'futuresight' | 'doomdesire',
-		turnsLeft: number, // Hits when this reaches 0
-		attackerSlotIndex: number, // Who used it (for stat calculations)
-		attackerStats: { atk: number, spa: number }, // Stats when used
+		turnsLeft: number,
+		attackerSlotIndex: number,
+		attackerStats: { atk: number, spa: number },
 	}[];
 	opponentFutureMoves: {
 		slotIndex: number,
@@ -228,30 +332,40 @@ export interface BattleState {
 }
 
 /**
- * Interface for defining a trainer in the database
+ * @typedef {Object} TrainerSpec
+ * @property {string} name
+ * @property {{ species: string, level: number, moves?: string[], item?: string }[]} party
+ * @property {number} money
+ * @property {{ start: string, win: string, lose: string }} [dialogue]
+ * @property {'single' | 'double'} [battleType]
  */
 export interface TrainerSpec {
 	name: string;
 	party: {
 		species: string,
 		level: number,
-		moves?: string[], // Optional: if not provided, uses default learnset
-		item?: string, // Optional: specify a held item
+		moves?: string[],
+		item?: string,
 	}[];
-	money: number; // Prize money for winning
+	money: number;
 	dialogue?: {
 		start: string,
-		win: string, // Dialogue if player wins
-		lose: string, // Dialogue if opponent wins
+		win: string,
+		lose: string,
 	};
-	battleType?: 'single' | 'double'; // <-- NEW FIELD
+	battleType?: 'single' | 'double';
 }
 
-// --- Ability Handler Types (from abilities.ts) ---
-
 /**
- * Context for ability functions
- * Depends on `RPGPokemon`, `ActivePokemonSlot`, `Move`, `BattleState`
+ * @typedef {Object} AbilityContext
+ * @property {RPGPokemon} attacker
+ * @property {RPGPokemon} defender
+ * @property {ActivePokemonSlot} attackerSlot
+ * @property {ActivePokemonSlot} defenderSlot
+ * @property {Move} move
+ * @property {BattleState} battle
+ * @property {string[]} messageLog
+ * @property {number} [effectiveness]
  */
 export interface AbilityContext {
 	attacker: RPGPokemon;
@@ -264,9 +378,6 @@ export interface AbilityContext {
 	effectiveness?: number;
 }
 
-/**
- * Ability Handler Types
- */
 export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
 export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
 export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
