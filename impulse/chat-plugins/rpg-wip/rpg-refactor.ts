@@ -4963,53 +4963,71 @@ function generateSingleBattleHTML(
 	};
 
 	let actionHTML = '';
+	let moveButtonsHTML = '';
 
-	// --- STATE 1: Action Selection ---
-	const moveButtons = playerPokemon.moves.map(move => {
-		const moveData = getMove(move.id);
+	// --- FIX STARTS HERE ---
+	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
-		const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
-			playerPokemon.item === 'assaultvest' &&
-			moveData.category === 'Status';
-
-		const isTauntBlocked = playerSlot.tauntTurns > 0 &&
-			moveData.category === 'Status';
-
-		const isLocked = playerSlot.lockedMove &&
-			playerSlot.lockedMove !== move.id &&
-			battle.magicRoomTurns === 0 &&
-			playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
-
-		const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
-
-		// Style for the button, trying to match the 2x2 image
-		// This uses simple styles, float is the only risky one.
+	if (allMovesOutOfPP) {
 		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
-
-		// Content inside the button
-		// `float: right` is the best bet for right-alignment without flex/grid.
-		// Added `overflow: hidden` to the container to make float work reliably
-		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
-            `<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
-                `<span>${moveData.type}</span>` +
-               `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>` +
+			`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+				`<span>Normal</span>` +
+			   `<span style="float: right;">-- / --</span>` +
 			`</div> `;
 
-		return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
-                   ` ${buttonContent}</button>`;
-	});
+		moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+		moveButtonsHTML += `<tr>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="${buttonStyle}">${buttonContent}</button></td>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+		moveButtonsHTML += `</tr>`;
+		moveButtonsHTML += `<tr>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+		moveButtonsHTML += `</tr>`;
+		moveButtonsHTML += `</table>`;
+	} else {
+		// --- Original Logic for regular moves ---
+		const moveButtons = playerPokemon.moves.map(move => {
+			const moveData = getMove(move.id);
 
-	// Use a <table> for the 2x2 grid layout to avoid CSS sanitization
-	let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
-	moveButtonsHTML += `<tr>`;
-	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
-	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
-	moveButtonsHTML += `</tr>`;
-	moveButtonsHTML += `<tr>`;
-	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
-	moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
-	moveButtonsHTML += `</tr>`;
-	moveButtonsHTML += `</table>`;
+			const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+				playerPokemon.item === 'assaultvest' &&
+				moveData.category === 'Status';
+
+			const isTauntBlocked = playerSlot.tauntTurns > 0 &&
+				moveData.category === 'Status';
+
+			const isLocked = playerSlot.lockedMove &&
+				playerSlot.lockedMove !== move.id &&
+				battle.magicRoomTurns === 0 &&
+				playerPokemon.moves.some(m => m.id === playerSlot.lockedMove && m.pp > 0);
+
+			const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
+
+			const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
+			const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+				`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+					`<span>${moveData.type}</span>` +
+				   `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+				`</div> `;
+
+			return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
+					   ` ${buttonContent}</button>`;
+		});
+
+		moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+		moveButtonsHTML += `<tr>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
+		moveButtonsHTML += `</tr>`;
+		moveButtonsHTML += `<tr>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
+		moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
+		moveButtonsHTML += `</tr>`;
+		moveButtonsHTML += `</table>`;
+	}
+	// --- FIX ENDS HERE ---
 
 	const catchButton = (battle.battleType === 'wild') ?
 		`<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>` :
@@ -5269,7 +5287,7 @@ function generateDoubleBattleHTML(
 		html += targetButtonsHTML;
 		html += `<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button" style="${buttonStyle}">Cancel</button></p>`;
 	} else {
-		// --- STATE 1: Action Selection (move buttons: match single battle UI) ---
+		// --- STATE 1: Action Selection ---
 		let activeSlot: ActivePokemonSlot | null = null;
 		let activeSlotIndex = -1;
 
@@ -5284,54 +5302,84 @@ function generateDoubleBattleHTML(
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
 			html += `<p style="margin-top: 5px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
+			
+			// --- FIX STARTS HERE ---
+			const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
+			let moveButtonsHTML = '';
 
-			const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;`;
-
-			const moveButtons = pokemon.moves.map(move => {
-				const moveData = getMove(move.id);
-
-				const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
-					pokemon.item === 'assaultvest' &&
-					moveData.category === 'Status';
-
-				const isTauntBlocked = activeSlot.tauntTurns > 0 &&
-					moveData.category === 'Status';
-
-				const isLocked = activeSlot.lockedMove &&
-					activeSlot.lockedMove !== move.id &&
-					battle.magicRoomTurns === 0 &&
-					pokemon.moves.some(m => m.id === activeSlot.lockedMove && m.pp > 0);
-
-				const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
-
-				const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+			if (allMovesOutOfPP) {
+				// If all PP is gone, show only the Struggle button
+				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;`;
+				const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>` +
 					`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
-					`<span>${moveData.type}</span>` +
-					`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+					`<span>Normal</span>` +
+					`<span style="float: right;">-- / --</span>` +
 					`</div>`;
 
-				return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">${buttonContent}</button>`;
-			});
+				const struggleButton = `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} struggle" class="button" style="${buttonStyle}">${buttonContent}</button>`;
 
-			let moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
-			moveButtonsHTML += `<tr>`;
-			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
-			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
-			moveButtonsHTML += `</tr>`;
-			moveButtonsHTML += `<tr>`;
-			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
-			moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
-			moveButtonsHTML += `</tr>`;
-			moveButtonsHTML += `</table>`;
+				moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+				moveButtonsHTML += `<tr>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${struggleButton}</td>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+				moveButtonsHTML += `</tr>`;
+				moveButtonsHTML += `<tr>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;"></td>`;
+				moveButtonsHTML += `</tr>`;
+				moveButtonsHTML += `</table>`;
+
+			} else {
+				// Original logic for when there is PP
+				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;`;
+
+				const moveButtons = pokemon.moves.map(move => {
+					const moveData = getMove(move.id);
+
+					const isAssaultVestBlocked = battle.magicRoomTurns === 0 &&
+						pokemon.item === 'assaultvest' &&
+						moveData.category === 'Status';
+
+					const isTauntBlocked = activeSlot.tauntTurns > 0 &&
+						moveData.category === 'Status';
+
+					const isLocked = activeSlot.lockedMove &&
+						activeSlot.lockedMove !== move.id &&
+						battle.magicRoomTurns === 0 &&
+						pokemon.moves.some(m => m.id === activeSlot.lockedMove && m.pp > 0);
+
+					const isDisabled = move.pp === 0 || isAssaultVestBlocked || isTauntBlocked || isLocked;
+
+					const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
+						`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
+						`<span>${moveData.type}</span>` +
+						`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+						`</div>`;
+
+					return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">${buttonContent}</button>`;
+				});
+
+				moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
+				moveButtonsHTML += `<tr>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[0] || ''}</td>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[1] || ''}</td>`;
+				moveButtonsHTML += `</tr>`;
+				moveButtonsHTML += `<tr>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[2] || ''}</td>`;
+				moveButtonsHTML += `<td style="width: 40%; padding: 0; vertical-align: top;">${moveButtons[3] || ''}</td>`;
+				moveButtonsHTML += `</tr>`;
+				moveButtonsHTML += `</table>`;
+			}
 
 			html += moveButtonsHTML;
+			// --- FIX ENDS HERE ---
+
 		} else {
 			html += `<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>`;
 		}
 
 		// --- Switch/Catch/Run Buttons (match single battle UI, same margin etc) ---
 		const buttonStyle = `width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;`;
-
 		const catchButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button" style="${buttonStyle}">⚽ Catch</button>` :
 			`<button class="button" disabled style="${buttonStyle}">⚽ Catch</button>`;
