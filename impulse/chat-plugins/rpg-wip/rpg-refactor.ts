@@ -7055,6 +7055,11 @@ export const commands: ChatCommands = {
 			}
 
 			if (pokemon.item) {
+				// --- ADDED: Sticky Hold Check ---
+				if (RPGAbilities.checkItemRemovalPrevention(pokemon)) {
+					return this.errorReply(`${pokemon.species}'s ${pokemon.ability} prevents its item from being swapped!`);
+				}
+				// --- END ADDED ---
 				addItemToInventory(player, pokemon.item, 1);
 			}
 
@@ -7067,7 +7072,7 @@ export const commands: ChatCommands = {
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
-
+		
 		takeitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
@@ -7087,6 +7092,12 @@ export const commands: ChatCommands = {
 			const pokemon = player.party.find(p => p.id === pokemonId);
 			if (!pokemon) return this.errorReply("Pokémon not found in your party.");
 			if (!pokemon.item) return this.errorReply(`${pokemon.species} is not holding an item.`);
+
+			// --- ADDED: Sticky Hold Check ---
+			if (RPGAbilities.checkItemRemovalPrevention(pokemon)) {
+				return this.errorReply(`${pokemon.species}'s ${pokemon.ability} prevents its item from being taken!`);
+			}
+			// --- END ADDED ---
 
 			const item = ITEMS_DATABASE[pokemon.item];
 			addItemToInventory(player, pokemon.item, 1);
