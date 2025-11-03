@@ -1101,19 +1101,6 @@ export const MANUAL_LEARNSETS = {
 		egg: ['crosschop', 'firepunch', 'icepunch', 'rollingkick', 'signalbeam'],
 		tm: ['toxic', 'rest', 'round', 'shadowball', 'thunderbolt'],
 	},
-	magby: {
-		levelup: [
-			{ level: 1, move: 'pound' },
-			{ level: 1, move: 'ember' },
-			{ level: 7, move: 'leer' },
-			{ level: 13, move: 'machpunch' },
-			{ level: 19, move: 'firespin' },
-			{ level: 25, move: 'flamecharge' },
-			{ level: 31, move: 'firepunch' },
-		],
-		egg: [],
-		tm: ['toxic', 'rest', 'round', 'shadowball', 'flamethrower'],
-	},
 	magnemite: {
 		levelup: [
 			{ level: 1, move: 'magnetrise' },
