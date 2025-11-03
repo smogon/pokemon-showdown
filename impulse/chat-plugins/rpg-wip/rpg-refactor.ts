@@ -856,11 +856,11 @@ function calculateDamage(
 	// --- START FIX: Apply Guts, Huge Power, Marvel Scale, etc. ---
 	// These abilities modify the raw stat before stat stages are applied.
 	if (move.category === 'Special') {
-		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'spa', attackStatRaw);
-		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defenseStatRaw);
+		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'spa', attackStatRaw, attackerSlot, battle);
+		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defenseStatRaw, defenderSlot, battle);
 	} else {
-		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'atk', attackStatRaw);
-		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defenseStatRaw);
+		attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, 'atk', attackStatRaw, attackerSlot, battle);
+		defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defenseStatRaw, defenderSlot, battle);
 	}
 	// --- END FIX ---
 
@@ -868,9 +868,9 @@ function calculateDamage(
 	if (battle.wonderRoomTurns > 0) {
 		// --- FIX: Apply ability modifier to the *swapped* stat ---
 		if (move.category === 'Special') {
-			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
 		} else {
-			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+			defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
 		}
 		// --- END FIX ---
 	}
@@ -886,11 +886,11 @@ function calculateDamage(
 			// --- FIX: Apply Eviolite to the *correct* stat ---
 			if (move.category === 'Special') {
 				// Eviolite boosts Sp. Def
-				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
 				defenseStatRaw = Math.floor(spdWithAbility * 1.5);
 			} else {
 				// Eviolite boosts Def
-				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
 				defenseStatRaw = Math.floor(defWithAbility * 1.5);
 			}
 
@@ -898,11 +898,11 @@ function calculateDamage(
 			if (battle.wonderRoomTurns > 0) {
 				if (move.category === 'Special') {
 					// Use Def stat instead
-					const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def);
+					const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
 					defenseStatRaw = Math.floor(defWithAbility * 1.5);
 				} else {
 					// Use Sp. Def stat instead
-					const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd);
+					const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
 					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
 				}
 			}
