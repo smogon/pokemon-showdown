@@ -1227,7 +1227,6 @@ export function getAbilityInfo(abilityName: string): any {
  * @param {string[]} messageLog
  * @returns {void}
  */
-
 export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): void {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
@@ -1309,19 +1308,9 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		slot.slowStartTurns = 5;
 		messageLog.push(`${pokemon.species} is off to a slow start!`);
 	}
+}	
 
-	if (ability === 'frisk') {
-		for (const opponentSlot of opponentSlots) {
-			if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
-				// In a real game, this only reveals one item, but for simplicity we'll reveal all.
-				const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
-				messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
-			}
-		}
-	}
-}
-
-/**
+/*
  * @param {AbilityContext} ctx
  * @returns {void}
  */
