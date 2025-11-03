@@ -82,7 +82,7 @@ const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem, 'quant
 const STARTER_POKEMON = {
 	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
 	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
-	grass: ['bulbasaur', 'chikorita', 'treeko', 'turtwig', 'snivy'],
+	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
 };
 
 const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
