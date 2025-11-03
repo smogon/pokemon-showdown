@@ -9,8 +9,6 @@ interface SpeciesAbility {
 	S?: string;
 }
 
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox";
-
 export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
@@ -214,9 +212,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Color. */
 	readonly color: string;
 	/**
-	 * Tags, boolean data. Currently just legendary/mythical status.
+	 * Tags, boolean "are you or are you not on this list" data.
 	 */
-	readonly tags: SpeciesTag[];
+	override readonly tags: (TableGenericTag | TableSpeciesTag)[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**

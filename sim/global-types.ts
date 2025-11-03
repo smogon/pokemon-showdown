@@ -97,6 +97,10 @@ interface CommonHandlers {
 	VoidSourceMove: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
 }
 
+type TableGenericTag = "True Past" | "Past Unobtainable";
+type TableSpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox" | "Pokestar";
+type TableTag = TableGenericTag | TableSpeciesTag;
+
 interface EffectData {
 	name?: string;
 	desc?: string;
@@ -105,6 +109,8 @@ interface EffectData {
 	effectType?: string;
 	infiltrates?: boolean;
 	isNonstandard?: Nonstandard | null;
+	/** "Are you or are you not on this list" data. */
+	tags?: TableTag[];
 	shortDesc?: string;
 }
 
