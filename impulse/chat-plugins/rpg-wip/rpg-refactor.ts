@@ -4465,10 +4465,6 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 	};
 }
 
-/**
- * [STEP 4/6/7 Implementation]
- * Executes a single queued action (move or switch).
- */
 function executeAction(
 	action: NonNullable<BattleState['pendingActions'][number]>,
 	battle: BattleState,
@@ -4616,6 +4612,43 @@ function executeAction(
 			return; // Attacker couldn't move
 		}
 
+		// --- START: Target Resolution (Moved for Pressure) ---
+		let chosenTargetSlot = action.targetSlot;
+		const isPlayerAttacker = attackerSlotIndex <= 1;
+		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
+
+		// --- NEW: Check for Ability Redirection (Storm Drain, Lightning Rod) ---
+		let abilityRedirector: ActivePokemonSlot | undefined = undefined;
+		if (move.target === 'normal') { // Only single-target moves are redirected
+			const moveType = move.type; // Use the base move type
+			
+			if (moveType === 'Water') {
+				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
+			} else if (moveType === 'Electric') {
+				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'lightningrod');
+			}
+
+			if (abilityRedirector) {
+				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(abilityRedirector);
+				chosenTargetSlot = redirectorIndex;
+				messageLog.push(`${abilityRedirector.pokemon.species}'s ${abilityRedirector.pokemon.ability} drew in the attack!`);
+			}
+		}
+		// --- END NEW ---
+
+		// --- Check for Volatile Redirection (Follow Me) ---
+		if (!abilityRedirector) {
+			const redirector = opponentSlots.find(s => s.isRedirecting);
+			if (redirector && move.target === 'normal') { // Check move is single-target
+				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
+				chosenTargetSlot = redirectorIndex;
+				messageLog.push(`${redirector.pokemon.species} took the attack!`);
+			}
+		}
+
+		const resolvedTargets = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
+		// --- END: Target Resolution ---
+
 		// 2. Handle Two-Turn/Charging Moves
 		if (move.flags.charge && !attackerSlot.chargingMove) {
 			// First turn: Start charging
@@ -4648,9 +4681,15 @@ function executeAction(
 
 			// If still charging (not skipped), deduct PP and return
 			if (attackerSlot.chargingMove) {
-				if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
-					moveObject.pp--;
+				// --- START: Pressure Check (Charging) ---
+				let ppDeduction = 1;
+				if (resolvedTargets.some(target => toID(target.pokemon.ability || '') === 'pressure')) {
+					ppDeduction = 2;
 				}
+				if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+					moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+				}
+				// --- END: Pressure Check ---
 				return;
 			}
 		} else if (attackerSlot.chargingMove === move.id) {
@@ -4669,55 +4708,17 @@ function executeAction(
 		}
 		// --- END: Pressure Check ---
 
-		// 4. Resolve Targets
-		let chosenTargetSlot = action.targetSlot;
-		const isPlayerAttacker = attackerSlotIndex <= 1;
-		const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
-
-		// --- NEW: Check for Ability Redirection (Storm Drain, Lightning Rod) ---
-		// This must be checked before Follow Me
-		let abilityRedirector: ActivePokemonSlot | undefined = undefined;
-		if (move.target === 'normal') { // Only single-target moves are redirected
-			const moveType = move.type; // Use the base move type
-			
-			if (moveType === 'Water') {
-				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
-			} else if (moveType === 'Electric') {
-				abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'lightningrod');
-			}
-
-			if (abilityRedirector) {
-				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(abilityRedirector);
-				chosenTargetSlot = redirectorIndex;
-				messageLog.push(`${abilityRedirector.pokemon.species}'s ${abilityRedirector.pokemon.ability} drew in the attack!`);
-			}
-		}
-		// --- END NEW ---
-
-		// --- Check for Volatile Redirection (Follow Me) ---
-		// Only check if an ability didn't already redirect
-		if (!abilityRedirector) {
-			const redirector = opponentSlots.find(s => s.isRedirecting);
-			if (redirector && move.target === 'normal') { // Check move is single-target
-				const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
-				chosenTargetSlot = redirectorIndex;
-				messageLog.push(`${redirector.pokemon.species} took the attack!`);
-			}
-		}
-
-		const targetSlots = getMoveTargets(attackerSlotIndex, chosenTargetSlot, move, battle);
-
-		// 5. Announce and Execute the Move
+		// 4. Announce and Execute the Move
 		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
 
-		if (targetSlots.length === 0) {
+		if (resolvedTargets.length === 0) {
 			messageLog.push(`But there was no target!`);
 			return;
 		}
 
 		// --- NEW: Check for Move-Preventing Abilities ---
 		const remainingTargets: ActivePokemonSlot[] = [];
-		for (const defenderSlot of targetSlots) {
+		for (const defenderSlot of resolvedTargets) {
 			const abilityContext = {
 				attacker: attackerSlot.pokemon,
 				defender: defenderSlot.pokemon,
@@ -4737,7 +4738,7 @@ function executeAction(
 		}
 
 		// If the move was prevented against all targets, stop.
-		if (targetSlots.length > 0 && remainingTargets.length === 0) {
+		if (resolvedTargets.length > 0 && remainingTargets.length === 0) {
 			return;
 		}
 		// --- END NEW ---
