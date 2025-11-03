@@ -2614,6 +2614,11 @@ function handleSpecificStatusMove(
 		messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
+		
+		// --- ADDED: Unburden Check ---
+		if (attackerItem !== attacker.item) activateUnburden(attackerSlot, messageLog);
+		if (defenderItem !== defender.item) activateUnburden(defenderSlot, messageLog);
+		// --- END ADDED ---
 		return true;
 
 	case 'nightmare':
