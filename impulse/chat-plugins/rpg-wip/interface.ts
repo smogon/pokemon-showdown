@@ -1,3 +1,7 @@
+/*
+* Pokemon Showdown
+* RPG Interface & Types
+*/
 export type Status = 'psn' | 'tox' | 'brn' | 'par' | 'slp' | 'frz';
 
 /**
