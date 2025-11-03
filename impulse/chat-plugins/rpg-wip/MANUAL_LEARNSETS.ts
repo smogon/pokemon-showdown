@@ -1504,7 +1504,7 @@ export const MANUAL_LEARNSETS = {
 		tm: ['toxic', 'rest', 'round', 'shadowball', 'psychic', 'flamethrower', 'thunderbolt', 'icebeam'],
 	},
 
-       // National Dex #152 - #154: Chikorita Line
+	// National Dex #152 - #154: Chikorita Line
 	chikorita: {
 		levelup: [
 			{ level: 1, move: 'tackle' },
@@ -3166,8 +3166,8 @@ export const MANUAL_LEARNSETS = {
 		egg: [],
 		tm: ['toxic', 'hiddenpower', 'sunnyday', 'protect', 'raindance', 'frustration', 'solarbeam', 'return', 'psychic', 'shadowball', 'doubleteam', 'reflect', 'facade', 'rest', 'round', 'energyball', 'grassknot', 'swagger', 'sleeptalk', 'substitute', 'confide'],
 	},
-        
-        // National Dex #252 - #254: Treecko Line
+
+	// National Dex #252 - #254: Treecko Line
 	treecko: {
 		levelup: [
 			{ level: 1, move: 'pound' },
@@ -5430,7 +5430,7 @@ export const MANUAL_LEARNSETS = {
 		tm: ['toxic', 'hiddenpower', 'sunnyday', 'taunt', 'protect', 'raindance', 'frustration', 'solarbeam', 'return', 'psychic', 'shadowball', 'doubleteam', 'facade', 'rest', 'round', 'swagger', 'sleeptalk', 'substitute', 'confide'],
 	},
 
-        // National Dex #387 - #389: Turtwig Line
+	// National Dex #387 - #389: Turtwig Line
 	turtwig: {
 		// Data is consolidated from Generation 7 (USUM) sources.
 		levelup: [
@@ -7195,8 +7195,8 @@ export const MANUAL_LEARNSETS = {
 		tm: ['toxic', 'hiddenpower', 'sunnyday', 'protect', 'raindance', 'frustration', 'solarbeam', 'return', 'psychic', 'shadowball', 'doubleteam', 'flamethrower', 'fireblast', 'facade', 'rest', 'round', 'swagger', 'sleeptalk', 'substitute', 'confide', 'earthquake'],
 	},
 
-        // Gen 5 Pokemons
-        victini: {
+	// Gen 5 Pokemons
+	victini: {
 		levelup: [
 			{ level: 1, move: 'confusion' },
 			{ level: 1, move: 'incinerate' },

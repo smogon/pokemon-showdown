@@ -31,7 +31,7 @@ export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle
 		return true;
 	}
 
-	if (slot && slot.isSmackedDown) {
+	if (slot?.isSmackedDown) {
 		return true;
 	}
 
@@ -141,7 +141,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 			}
 			return {
 				immune: true,
-				message: message,
+				message,
 			};
 		}
 		return null;
@@ -156,7 +156,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 			}
 			return {
 				immune: true,
-				message: message,
+				message,
 			};
 		}
 		return null;
@@ -171,7 +171,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 			}
 			return {
 				immune: true,
-				message: message,
+				message,
 			};
 		}
 		return null;
@@ -186,7 +186,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 			}
 			return {
 				immune: true,
-				message: message,
+				message,
 			};
 		}
 		return null;
@@ -339,7 +339,7 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		}
 		return basePower;
 	},
-	
+
 	'analytic': (ctx, basePower) => {
 		if (ctx.attackerSlot.analyticBoost) {
 			return Math.floor(basePower * 1.3);
@@ -781,11 +781,11 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number
 
 export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	const ability = toID(pokemon.ability || '');
-	
+
 	if (ability === 'purifyingsalt') {
 		return true;
 	}
-	
+
 	if (ability === 'immunity' && (status === 'psn' || status === 'tox')) {
 		return true;
 	}
@@ -811,7 +811,7 @@ export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 
 export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 	const ability = toID(pokemon.ability || '');
-	
+
 	if (ability === 'prankster' && move.category === 'Status') {
 		return 1;
 	}
@@ -827,7 +827,7 @@ export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon
 	const ability = toID(attacker.ability || '');
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
 
-	if (handler && handler.accuracyMultiplier) {
+	if (handler?.accuracyMultiplier) {
 		return Math.floor(moveAccuracy * handler.accuracyMultiplier);
 	}
 
@@ -856,7 +856,7 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
-	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) || 
+	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) ||
 		battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
 	const status = slot ? slot.status : pokemon.status;
 
@@ -1000,7 +1000,7 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 
 export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
-	
+
 	if (move.multihit) {
 		if (ability === 'skilllink') {
 			if (Array.isArray(move.multihit)) {
@@ -1008,7 +1008,7 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 			}
 			return 5;
 		}
-		
+
 		if (Array.isArray(move.multihit)) {
 			const min = move.multihit[0];
 			const max = move.multihit[1];
@@ -1018,7 +1018,7 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 		}
 		return move.multihit;
 	}
-	
+
 	return 1;
 }
 
@@ -1151,7 +1151,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
 				const oppAbility = toID(opponentSlot.pokemon.ability || '');
 				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody'];
-				
+
 				if (opponentSlot.substitute) {
 					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
 				} else if (blockAbilities.includes(oppAbility)) {
@@ -1163,12 +1163,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 			}
 		}
 	}
-	
+
 	if (ability === 'slowstart') {
 		slot.slowStartTurns = 5;
 		messageLog.push(`${pokemon.species} is off to a slow start!`);
 	}
-}	
+}
 
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const defenderAbility = toID(ctx.defender.ability || '');
@@ -1202,7 +1202,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
-		
+
 		if (statusToInflict === 'infatuate') {
 			canBeAfflicted = false;
 		}

@@ -12,7 +12,6 @@ import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
-
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
@@ -961,7 +960,7 @@ function getDamageDefense(
 			if (species.evos && species.evos.length > 0) {
 				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
 				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
-				
+
 				if (statName === 'def') {
 					defenseStatRaw = Math.floor(defWithAbility * 1.5);
 				} else {
@@ -1084,7 +1083,6 @@ function applyFinalDamageModifiers(
 	return damage;
 }
 
-
 function calculateDamage(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1176,7 +1174,7 @@ function calculateDamage(
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
-	
+
 	abilityContext.effectiveness = effectiveness;
 
 	let berryConsumed: string | undefined = undefined;
@@ -1189,7 +1187,7 @@ function calculateDamage(
 		}
 	}
 
-	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
+	const baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
 
 	let damage = applyFinalDamageModifiers(
 		baseDamage, move, moveType, attacker, defender,
@@ -1361,7 +1359,7 @@ function applyDamageAndEnduranceEffects(
 	}
 
 	defender.hp = Math.max(0, defender.hp - damageDealt);
-	
+
 	if (damageDealt > 0) {
 		defenderSlot.lastMoveThatHitMe = move;
 	}
@@ -1382,7 +1380,7 @@ function applyPostDamageContactEffects(
 ) {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
-	
+
 	if (defender.hp <= 0 || damageDealt <= 0) return;
 
 	if (isCritical && toID(defender.ability || '') === 'angerpoint') {
@@ -1482,7 +1480,7 @@ function applyRecoilAndSelfEffects(
 ) {
 	if (attackerSlot.pokemon.hp <= 0) return;
 	const attacker = attackerSlot.pokemon;
-	
+
 	let tookRecoil = false;
 
 	if (['mindblown', 'steelbeam'].includes(move.id)) {
@@ -1574,7 +1572,7 @@ function applySecondaryEffects(
 				canInflict = false;
 				messageLog.push('The Misty Terrain prevents status conditions!');
 			}
-			
+
 			if (canInflict) {
 				const newStatus = move.secondary.status as Status;
 				defenderSlot.status = newStatus;
@@ -1600,7 +1598,7 @@ function applySecondaryEffects(
 				if (toID(defenderSlot.pokemon.ability || '') === 'contrary') {
 					boostValue *= -1;
 				}
-				
+
 				const currentStage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
 
 				if (boostValue < 0) {
@@ -1681,7 +1679,7 @@ function handleDamagingMove(
 		if (hasParentalBond && i === 1) {
 			parentalBondSpreadMultiplier *= 0.25;
 		}
-		
+
 		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
 		if (attackResult.effectiveness > 0) {
 			moveWasSuccessful = true;
@@ -1705,7 +1703,7 @@ function handleDamagingMove(
 				from: attacker.id,
 			};
 		}
-		
+
 		if (totalHits > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else if (messageLog.length > 0) {
@@ -1713,7 +1711,7 @@ function handleDamagingMove(
 		} else {
 			messageLog.push(attackResult.message);
 		}
-		
+
 		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
 			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
@@ -1741,14 +1739,14 @@ function handleDamagingMove(
 
 			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
-			
+
 			handleHPDropEffects(defenderSlot, battle, messageLog);
-			
+
 			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
-			
+
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 		}
-		
+
 		if (defenderSlot.pokemon.hp <= 0) break;
 	}
 }
@@ -1809,7 +1807,7 @@ function handleGenericBoostMove(
 
 	for (const stat in move.boosts) {
 		let boostValue = move.boosts[stat as keyof typeof move.boosts]!;
-		
+
 		if (toID(targetSlot.pokemon.ability || '') === 'contrary') {
 			boostValue *= -1;
 		}
@@ -1844,18 +1842,18 @@ function handleGenericBoostMove(
 				targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
 				messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 				hadEffect = true;
-				
+
 				if (!isSelf) triggeredDefiant = true;
 			}
 		}
 	}
-	
+
 	if (!hadEffect) messageLog.push('But it failed!');
 
 	if (triggeredDefiant) {
 		checkStatDropAbilities(targetSlot, attackerSlot, battle, messageLog);
 	}
-	
+
 	return true;
 }
 
@@ -1867,7 +1865,7 @@ function handleGenericStatusInflictMove(
 	messageLog: string[]
 ): boolean {
 	if (!move.status || !defenderSlot) return false;
-	
+
 	const defender = defenderSlot.pokemon;
 	const defenderSpecies = Dex.species.get(defender.species);
 	let canBeAfflicted = !defenderSlot.status;
@@ -1909,7 +1907,7 @@ function handleGenericStatusInflictMove(
 	} else {
 		messageLog.push(`But it failed!`);
 	}
-	
+
 	return true;
 }
 
@@ -2059,7 +2057,7 @@ function handleGenericHealMove(
 	messageLog: string[]
 ): boolean {
 	if (!move.flags.heal) return false;
-	
+
 	const attacker = attackerSlot.pokemon;
 	if (attacker.hp >= attacker.maxHp) {
 		messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
@@ -2159,7 +2157,7 @@ function handleGenericFieldMove(
 		}
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -2210,7 +2208,7 @@ function handleGenericSideMove(
 	if (move.sideCondition) {
 		const targetHazards = isPlayerAttacker ? battle.opponentHazards : battle.playerHazards;
 		const hazardId = toID(move.sideCondition);
-		
+
 		switch (hazardId) {
 		case 'spikes':
 			if (targetHazards.filter(h => h === 'spikes').length < 3) {
@@ -2244,7 +2242,7 @@ function handleGenericSideMove(
 		if (!hadEffect) messageLog.push('But it failed!');
 		return true;
 	}
-	
+
 	if (['quickguard', 'wideguard', 'craftyshield'].includes(move.id)) {
 		if (isPlayerAttacker) {
 			if (move.id === 'quickguard') battle.playerQuickGuard = true;
@@ -2374,7 +2372,7 @@ function handleSpecificStatusMove(
 		messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
-		
+
 		if (attackerItem !== attacker.item) activateUnburden(attackerSlot, messageLog);
 		if (defenderItem !== defender.item) activateUnburden(defenderSlot, messageLog);
 		return true;
@@ -2455,12 +2453,12 @@ function handleSpecificStatusMove(
 		if (attackerSlot.stockpileCount < 3) {
 			attackerSlot.stockpileCount++;
 			messageLog.push(`${attacker.species} stockpiled ${attackerSlot.stockpileCount}!`);
-			
+
 			let boostValue = 1;
 			if (toID(attacker.ability || '') === 'contrary') {
 				boostValue = -1;
 			}
-			
+
 			if (boostValue > 0) {
 				if (attackerSlot.statStages.def < 6) {
 					attackerSlot.statStages.def++;
@@ -2485,7 +2483,7 @@ function handleSpecificStatusMove(
 			messageLog.push(`${attacker.species} can't stockpile any more!`);
 			return true;
 		}
-		
+
 	case 'bellydrum':
 		const contraryActive = toID(attacker.ability || '') === 'contrary';
 		if (contraryActive) {
@@ -2527,7 +2525,7 @@ function handleSpecificStatusMove(
 		const attackerSlotIndex = (isPlayerAttacker ? battle.playerSlots : battle.opponentSlots).indexOf(attackerSlot);
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
-			moveId: move.id as 'futuresight' | 'doomdesire',
+			moveId: move.id,
 			turnsLeft: 2,
 			attackerSlotIndex,
 			attackerStats: {
@@ -2550,13 +2548,13 @@ function handleSpecificStatusMove(
 			messageLog.push(`But it failed!`);
 		}
 		return true;
-		
+
 	case 'followme':
 	case 'ragepowder':
 		attackerSlot.isRedirecting = true;
 		messageLog.push(`${attacker.species} became the center of attention!`);
 		return true;
-		
+
 	case 'haze':
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
 			slot.statStages = { ...INITIAL_STAT_STAGES };
@@ -2596,7 +2594,7 @@ function handleStatusMove(
 	if (handleSpecificStatusMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
-	
+
 	if (handleGenericBoostMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
@@ -2608,15 +2606,15 @@ function handleStatusMove(
 	if (handleGenericVolatileMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
-	
+
 	if (handleGenericFieldMove(attackerSlot, move, battle, messageLog)) {
 		return;
 	}
-	
+
 	if (handleGenericSideMove(attackerSlot, move, battle, messageLog)) {
 		return;
 	}
-	
+
 	if (handleGenericHealMove(attackerSlot, move, messageLog)) {
 		return;
 	}
@@ -2653,7 +2651,7 @@ function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, mess
 
 function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return false;
-	
+
 	const pokemon = slot.pokemon;
 	const speciesData = Dex.species.get(pokemon.species);
 
@@ -2694,7 +2692,7 @@ function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
 		}
 	}
-	
+
 	return false;
 }
 
@@ -2736,7 +2734,7 @@ function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleSta
 function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
-	
+
 	if (slot.isSeeded) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -2755,7 +2753,7 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		}
 	}
 	if (pokemon.hp <= 0) return;
-	
+
 	if ((slot.healBlockTurns || 0) > 0) return;
 
 	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
@@ -2793,7 +2791,7 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 			slot.yawnCounter = undefined;
 		}
 	}
-	
+
 	if (slot.isTrapped) {
 		slot.isTrapped.turns--;
 		if (slot.isTrapped.turns <= 0) {
@@ -2852,7 +2850,7 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 			messageLog.push(`${pokemon.species} got its act together!`);
 		}
 	}
-	
+
 	const ability = toID(pokemon.ability || '');
 	if (ability === 'speedboost' && slot.statStages.spe < 6) {
 		slot.statStages.spe++;
@@ -2873,7 +2871,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 
 	applyEOTVolatileStatusDamage(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
-	
+
 	applyEOTHealingEffects(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
@@ -2912,9 +2910,9 @@ function handleOpponentFaint(
 
 			for (const participantSlot of playerParticipants) {
 				if (participantSlot.pokemon.hp <= 0) continue;
-				
+
 				const ability = toID(participantSlot.pokemon.ability || '');
-				
+
 				if (ability === 'moxie' || ability === 'chillingneigh') {
 					applyStatChange(participantSlot, 'atk', 1, battle, messageLog, participantSlot);
 				} else if (ability === 'beastboost') {
@@ -3086,7 +3084,7 @@ function checkForWinLoss(
 		}
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -3098,7 +3096,7 @@ function checkBattleEndCondition(
 	messageLog: string[]
 ): boolean {
 	const player = getPlayerData(user.id);
-	
+
 	const playerParticipants = getActiveSlots(battle.playerSlots);
 	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
@@ -3168,7 +3166,7 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 				messageLog.push(`${attacker.species}'s Tangled Feet prevents it from hurting itself!`);
 				return false;
 			}
-			
+
 			messageLog.push(`It hurt itself in its confusion!`);
 			const selfDamage = Math.floor((((2 * attacker.level / 5 + 2) * 40 * (attacker.atk / attacker.def)) / 50) + 2);
 			attacker.hp = Math.max(0, attacker.hp - selfDamage);
@@ -3220,13 +3218,13 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 				applyStatChange(slot, 'spa', 1, battle, messageLog, slot);
 			}
 		}
-		
+
 		if (ability === 'trace') {
 			const untraceableAbilities = ['trace', 'stancechange', 'schooling', 'disguise', 'neutralizinggas', 'download', 'forecast', 'flowergift', 'imposter', 'multitype'];
-			const validTargets = opponentSlots.filter(oppSlot => 
+			const validTargets = opponentSlots.filter(oppSlot =>
 				oppSlot.pokemon.ability && !untraceableAbilities.includes(toID(oppSlot.pokemon.ability))
 			);
-			
+
 			if (validTargets.length > 0) {
 				const targetSlot = validTargets[Math.floor(Math.random() * validTargets.length)];
 				const tracedAbility = targetSlot.pokemon.ability || 'No Ability';
@@ -3270,11 +3268,11 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 				messageLog.push(`The Toxic Spikes were absorbed by ${pokemon.species}!`);
 			} else {
 				const isImmune = species.types.includes('Steel');
-				const targetStatus = slot.status; 
+				const targetStatus = slot.status;
 
 				if (!isImmune && !targetStatus) {
-					const newStatus: Status = 'psn'; 
-					slot.status = newStatus; 
+					const newStatus: Status = 'psn';
+					slot.status = newStatus;
 					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
 				}
 			}
@@ -3349,7 +3347,6 @@ function applyStatChange(
 		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
 		messageLog.push(msg);
 		return true;
-
 	} else if (actualValue < 0) {
 		if (!isSelf) {
 			if (battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
@@ -3553,13 +3550,12 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			itemConsumed = true;
 		} else if (pokemon.item in pinchBerryStat) {
 			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
-			
+
 			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
 				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
 				itemConsumed = true;
 			}
-
 		} else if (pokemon.item === 'starfberry') {
 			const targetStages = slot.statStages;
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -3567,7 +3563,7 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 
 			if (availableStats.length > 0) {
 				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
-				
+
 				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
 					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
@@ -3630,11 +3626,9 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 
 		if (battle.weather!.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
 			takeDamage = true;
-		}
-		else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
+		} else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
-		}
-		else if (battle.weather!.type === 'sun') {
+		} else if (battle.weather!.type === 'sun') {
 			if (ability === 'dryskin') {
 				takeDamage = true;
 				damageAmount = Math.floor(pokemon.maxHp / 8);
@@ -3807,10 +3801,10 @@ function executeMove(
 			let moveAccuracy = move.accuracy;
 
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
-			
+
 			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
-			
+
 			if (RPGAbilities.isWeatherActive(battle)) {
 				if (battle.weather!.type === 'rain') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
@@ -4096,7 +4090,7 @@ function checkTrappingAbility(
 		if (oppAbility === 'shadowtag') {
 			return oppSlot;
 		}
-		
+
 		if (oppAbility === 'arenatrap') {
 			if (RPGAbilities.isGrounded(slotToSwitch.pokemon, battle)) {
 				return oppSlot;
@@ -4229,7 +4223,7 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 		const isSwitchB = b.actionType === 'switch';
 		const moveA = getMove(a.moveId || 'struggle');
 		const moveB = getMove(b.moveId || 'struggle');
-		
+
 		let priorityA = isSwitchA ? 6 : (moveA.priority);
 		let priorityB = isSwitchB ? 6 : (moveB.priority);
 
@@ -4280,7 +4274,7 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 			break;
 		}
 	}
-	
+
 	if (lastMoveAction) {
 		const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction.pokemonId);
 		if (lastMoverSlot && toID(lastMoverSlot.pokemon.ability || '') === 'analytic') {
@@ -4394,7 +4388,7 @@ function handleSwitchAction(
 			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
 			return;
 		}
-		
+
 		player.party.push(outgoingPokemon);
 		const [incomingPokemon] = player.party.splice(partyIndex, 1);
 		const newSlot = createActivePokemonSlot(incomingPokemon);
@@ -4443,7 +4437,7 @@ function resolveMoveTarget(
 	let abilityRedirector: ActivePokemonSlot | undefined = undefined;
 	if (move.target === 'normal') {
 		const moveType = move.type;
-		
+
 		if (moveType === 'Water') {
 			abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
 		} else if (moveType === 'Electric') {
@@ -4465,7 +4459,7 @@ function resolveMoveTarget(
 			messageLog.push(`${redirector.pokemon.species} took the attack!`);
 		}
 	}
-	
+
 	return finalTargetIndex;
 }
 
@@ -4493,8 +4487,7 @@ function handleChargingMove(
 			} else {
 				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
 			}
-		}
-		else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
+		} else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
 		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
 
 		if (chargeMessage) messageLog.push(chargeMessage);
@@ -4508,7 +4501,7 @@ function handleChargingMove(
 	} else if (attackerSlot.chargingMove === move.id) {
 		attackerSlot.chargingMove = undefined;
 	}
-	
+
 	return false;
 }
 
@@ -4561,7 +4554,7 @@ function executeAction(
 		if (handleChargingMove(attackerSlot, move, moveObject, battle, messageLog, ppDeduction)) {
 			return;
 		}
-		
+
 		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
 		}
@@ -4673,7 +4666,7 @@ function generateSharedBattlePokemonInfo(
 	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
-	
+
 	const volatileTags = [
 		slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '',
 		slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '',
@@ -4730,16 +4723,16 @@ function generateSharedBattlePokemonInfo(
 			}
 		}
 	}
-	
+
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	if (isDoubleBattle) {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
-		`<div style="background: #e0e0e0; border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
-		`${expBarHTML}` +
-		`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
-		`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
+			`<div style="background: #e0e0e0; border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
+			`${expBarHTML}` +
+			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
+			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
 	} else {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
 	}
@@ -4860,7 +4853,7 @@ function generateSingleBattleHTML(
 	const generateFieldEffectsDisplay = () => {
 		const fieldEffectHTML = generateFieldEffectHTML(battle);
 		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
-		
+
 		const lines = tempDiv.split('<br>').filter(line => line.trim());
 		let yourSide = '';
 		let field = '';
@@ -4903,8 +4896,8 @@ function generateSingleBattleHTML(
 		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
 		const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>` +
 			`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
-				`<span>Normal</span>` +
-			   `<span style="float: right;">-- / --</span>` +
+			`<span>Normal</span>` +
+			`<span style="float: right;">-- / --</span>` +
 			`</div> `;
 
 		moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
@@ -4928,12 +4921,12 @@ function generateSingleBattleHTML(
 			const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;`;
 			const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
 				`<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">` +
-					`<span>${moveData.type}</span>` +
-				   `<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
+				`<span>${moveData.type}</span>` +
+				`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
 				`</div> `;
 
 			return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
-					   ` ${buttonContent}</button>`;
+				` ${buttonContent}</button>`;
 		});
 
 		moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
@@ -5015,7 +5008,7 @@ function generateDoubleBattleHTML(
 	const generateFieldEffectsDisplay = () => {
 		const fieldEffectHTML = generateFieldEffectHTML(battle);
 		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
-		
+
 		const lines = tempDiv.split('<br>').filter(line => line.trim());
 		let yourSide = '';
 		let field = '';
@@ -5137,7 +5130,7 @@ function generateDoubleBattleHTML(
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
 			html += `<p style="margin-top: 5px; font-weight: bold;">What will <strong>${pokemon.species}</strong> do?</p>`;
-			
+
 			const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
 			let moveButtonsHTML = '';
 
@@ -5155,9 +5148,9 @@ function generateDoubleBattleHTML(
 				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;`;
 				const moveButtons = pokemon.moves.map(move => {
 					const moveData = getMove(move.id);
-					
+
 					// Use the validation function to check if a move is disabled
-					const validationError = validateMoveAction(activeSlot as ActivePokemonSlot, move.id, battle);
+					const validationError = validateMoveAction(activeSlot, move.id, battle);
 					const isDisabled = !!validationError || move.pp === 0;
 
 					const buttonContent = `<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">${moveData.name}</div>` +
@@ -5195,7 +5188,7 @@ function generateDoubleBattleHTML(
 		const runButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
 			`<button class="button" disabled style="${buttonStyle}">🏃 Run</button>`;
-		
+
 		html += `<p style="margin-top: 15px;">` +
 			`<button name="send" value="/rpg battleaction switchmenu" class="button" style="${buttonStyle}">🔄 Switch</button>` +
 			`${catchButton} ${runButton}</p>`;
@@ -5204,7 +5197,7 @@ function generateDoubleBattleHTML(
 	html += `</div>`;
 	return html;
 }
-		
+
 function generateWelcomeHTML(): string {
 	return `<div class="infobox"><h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/rpg choosetype fire" class="button">🔥 Fire</button><button name="send" value="/rpg choosetype water" class="button">💧 Water</button><button name="send" value="/rpg choosetype grass" class="button">🌱 Grass</button></p></div>`;
 }
@@ -5308,20 +5301,20 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
 		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
 		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
-			'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
-				'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
-				'</table>' +
-				'<small>Total: ' + totalEVs + ' / 510</small>' +
-				'</div>' +
-				'<div style="flex-basis: 48%;">' +
-			'<h4>Moves</h4>' +
-			'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
-				movesSummary +
-				'</div>' +
-					'</div>' +
-					'</div>' +
-					'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
-					'</div>';
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
+		'</table>' +
+		'<small>Total: ' + totalEVs + ' / 510</small>' +
+		'</div>' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>Moves</h4>' +
+		'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
+		movesSummary +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+		'</div>';
 }
 
 function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
@@ -5539,11 +5532,11 @@ function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[], moneyGained: number, zoneId: string): string {
 	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You gained ₽${moneyGained}!</p>` +
 		`<p>` +
-	`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-	`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-	`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
-	`</p>` +
-	`</div>`;
+		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
+		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+		`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 // --- NEW FUNCTION ---
@@ -5563,7 +5556,7 @@ function generateFaintSwitchHTML(battle: BattleState, message: string): string {
 
 	// --- FIX: Correctly find the empty slot based on battle type ---
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
-	
+
 	let slotToFill = -1;
 	if (battle.playerSlots[0] === null) {
 		slotToFill = 0;
@@ -6477,7 +6470,7 @@ export const commands: ChatCommands = {
 
 				const moveData = getMove(moveId);
 				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
-				
+
 				if (moveId !== 'struggle' && !attackerSlot.pokemon.moves.some(m => m.id === moveData.id)) {
 					return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
 				}
@@ -6672,7 +6665,7 @@ export const commands: ChatCommands = {
 				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonIdIn)) {
 					return this.errorReply("This Pokemon is already in battle.");
 				}
-				
+
 				outgoingSlot.lockedMove = undefined;
 
 				// --- Queue the Switch Action ---
@@ -6840,7 +6833,7 @@ export const commands: ChatCommands = {
 					if (battle.pendingActions[playerSlotIndex]) {
 						return this.errorReply(`${playerSlot.pokemon.species} is already waiting to move.`);
 					}
-					
+
 					// Queue the 'catch' action. We assume 'catch' is a silent custom move.
 					// If it's not, it will default to 'Struggle'.
 					// Given your log, it seems to be a silent custom move.
@@ -6901,7 +6894,7 @@ export const commands: ChatCommands = {
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
 			},
-			
+
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
@@ -6995,7 +6988,7 @@ export const commands: ChatCommands = {
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
-		
+
 		takeitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
