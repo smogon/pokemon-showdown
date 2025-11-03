@@ -1602,17 +1602,21 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isCursed) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 		const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
 		pokemon.hp = Math.max(0, pokemon.hp - damage);
 		messageLog.push(`${pokemon.species} is afflicted by the curse!`);
+		}
 	}
 	if (pokemon.hp <= 0) return;
 
 	if (slot.hasNightmare) {
 		if (slot.status === 'slp') {
+			if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
 			messageLog.push(`${pokemon.species} is locked in a nightmare!`);
+			}
 		} else {
 			slot.hasNightmare = false;
 		}
@@ -1620,9 +1624,11 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isTrapped) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 		const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
 		pokemon.hp = Math.max(0, pokemon.hp - damage);
 		messageLog.push(`${pokemon.species} is hurt by the trap!`);
+		}
 		slot.isTrapped.turns--;
 		if (slot.isTrapped.turns <= 0) {
 			slot.isTrapped = null;
@@ -1638,9 +1644,11 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (pokemon.hp <= 0) return;
 
 	if (slot.isSeeded && pokemon.hp > 0) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 		const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 		pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
 		messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
+		}
 
 		// Find an opponent to heal (flawed 1v1 logic, but a necessary patch)
 		const isPlayer = battle.playerSlots.includes(slot);
