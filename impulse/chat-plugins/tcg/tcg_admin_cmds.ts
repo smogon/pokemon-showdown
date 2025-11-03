@@ -55,7 +55,7 @@ export const adminCommands: ChatCommands = {
 		if (parts.length < 2) return this.errorReply("Usage: /tcg awardpack [user], [setId], [quantity]");
 
 		const targetUserId = toID(parts[0]);
-		const setId = parts[1];
+		const setId = parts[1].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 		const quantity = parts[2] ? parseInt(parts[2]) : 1;
 
 		if (!targetUserId) return this.errorReply("Please specify a user.");
@@ -278,7 +278,7 @@ export const adminCommands: ChatCommands = {
 		if (parts.length < 2) return this.errorReply("Usage: /tcg takepack [user], [setId], [quantity]");
 
 		const targetUserId = toID(parts[0]);
-		const setId = parts[1];
+		const setId = parts[1].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 		const quantity = parts[2] ? parseInt(parts[2]) : 1;
 
 		if (!targetUserId) return this.errorReply("Please specify a user.");

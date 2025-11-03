@@ -166,7 +166,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /tcg set [setid]');
 
-			const setId = target.trim();
+			const setId = target.trim().toLowerCase(); // Normalize input
 			let card: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
 
@@ -326,7 +326,7 @@ export const commands: ChatCommands = {
 
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const setId = target.trim();
+			const setId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
 			if (!setId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 
 			const packCollection = userPacksCollection;
@@ -373,7 +373,7 @@ export const commands: ChatCommands = {
 
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const rawSetId = target.trim();
+			const rawSetId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
 			if (!rawSetId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			const packCollection = userPacksCollection;
 			const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };

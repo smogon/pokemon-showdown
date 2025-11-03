@@ -207,17 +207,19 @@ export const collectionCommands: ChatCommands = {
 
 	async setprogress(target, room, user) {
 		if (!this.runBroadcast()) return;
-		const setId = target.trim();
+		const setId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
 		if (!setId) return this.errorReply('Usage: /tcg setprogress [setid]');
 		const targetUserId = user.id;
 
 		try {
 			let setInfo: TcgCard | null = null;
 			const cacheInitialized = getCacheStats().isInitialized;
-			if (cacheInitialized) setInfo = getSet(setId);
-			if (!setInfo) {
-				const cardCollection = tcgCardsCollection;
-				setInfo = await cardCollection.findOne({ setId });
+			const cardCollection = tcgCardsCollection;
+
+			if (cacheInitialized) {
+				setInfo = getSet(setId);
+			} else {
+				setInfo = await cardCollection.findOne({ setId }); // Will match lowercase DB
 			}
 			if (!setInfo) {
 				return this.errorReply(`Set with ID "${setId}" not found.`);
@@ -225,13 +227,12 @@ export const collectionCommands: ChatCommands = {
 
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
-			// Use the canonical setId from the database to ensure case-sensitive match
+			// Use the canonical setId from the database
 			const canonicalSetId = setInfo.setId;
 
 			// For sets without setTotal (like Promo sets), calculate the actual number of unique cards
 			let totalInSet = setInfo.setTotal || 0;
 			if (totalInSet === 0) {
-				const cardCollection = tcgCardsCollection;
 				totalInSet = await cardCollection.countDocuments({ setId: canonicalSetId });
 				if (totalInSet === 0) {
 					return this.errorReply(`Set with ID "${setId}" has no cards in the database.`);
@@ -265,7 +266,7 @@ export const collectionCommands: ChatCommands = {
 	async missing(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const parts = target.split(',').map(p => p.trim());
-		const setId = parts[0];
+		const setId = parts[0].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 		let targetUserId = user.id;
 		let targetUserName = user.name;
 		let page = 1;
@@ -293,11 +294,11 @@ export const collectionCommands: ChatCommands = {
 
 		try {
 			const cardCollection = tcgCardsCollection;
-			let setInfo: TcgCard | null | undefined = getSet(setId);
-			if (!setInfo) setInfo = await cardCollection.findOne({ setId });
+			let setInfo: TcgCard | null | undefined = getSet(setId); // Try cache first
+			if (!setInfo) setInfo = await cardCollection.findOne({ setId }); // Will match lowercase DB
 			if (!setInfo) return this.errorReply(`Set with ID "${setId}" not found.`);
 			const setName = setInfo.set;
-			// Use the canonical setId from the database to ensure case-sensitive match
+			// Use the canonical setId from the database
 			const canonicalSetId = setInfo.setId;
 
 			const allSetCardsCount = await cardCollection.countDocuments({ setId: canonicalSetId });
