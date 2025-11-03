@@ -1109,6 +1109,11 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	const defenderAbility = toID(ctx.defender.ability || '');
 	const effectiveness = ctx.effectiveness || 1; // Get effectiveness from context
 
+	// Dry Skin - Takes extra damage from Fire moves
+	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
+		damage = Math.floor(damage * 1.25);
+	}
+
 	// Sniper - (This is handled in calculateDamage's criticalMultiplier logic)
 
 	// Tinted Lens - Makes not very effective moves deal neutral damage
