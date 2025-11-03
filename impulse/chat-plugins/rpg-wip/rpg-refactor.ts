@@ -1,4 +1,7 @@
-// Pokemon RPG Plugin for Pokemon Showdown
+/*
+* Pokemon Showdown
+* RPG
+*/
 import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
@@ -10,14 +13,10 @@ import { RPGAbilities } from './abilities';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
 
-// In-memory storage for player data (in production, use a database)
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
-// Custom RPG items that don't exist in Dex - these are hardcoded
-// All other items (pokeballs, berries, held items) are retrieved from Dex.items
 const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
-	// Medicine (RPG-specific healing items not in competitive Pokemon)
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'A spray-type medicine. It restores 20 HP to a Pokemon.' },
 	'superpotion': { id: 'superpotion', name: 'Super Potion', category: 'medicine', description: 'A spray-type medicine. It restores 60 HP to a Pokemon.' },
 	'hyperpotion': { id: 'hyperpotion', name: 'Hyper Potion', category: 'medicine', description: 'A spray-type medicine. It restores 120 HP to a Pokemon.' },
@@ -31,32 +30,23 @@ const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'energyroot': { id: 'energyroot', name: 'Energy Root', category: 'medicine', description: 'A bitter medicinal root. It restores 200 HP to a Pokémon.' },
 	'energypowder': { id: 'energypowder', name: 'EnergyPowder', category: 'medicine', description: 'A bitter medicinal powder. It restores 50 HP to a Pokémon.' },
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
-	// Misc (RPG-specific custom item)
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
 };
 
-/**
- * Get item data from Dex with fallback to custom items
- * This function retrieves items from Dex.items where possible, and falls back to CUSTOM_ITEMS_DATABASE for RPG-specific items
- */
 function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
-	// First check if it's a custom RPG item
 	if (CUSTOM_ITEMS_DATABASE[itemId]) {
 		return CUSTOM_ITEMS_DATABASE[itemId];
 	}
 
-	// Try to get from Dex
 	const dexItem = Dex.items.get(itemId);
 	if (dexItem.exists) {
-		// Determine category based on Dex properties
-		let category: InventoryItem['category'] = 'held'; // default
+		let category: InventoryItem['category'] = 'held';
 		if (dexItem.isPokeball) {
 			category = 'pokeball';
 		} else if (dexItem.isBerry) {
 			category = 'berry';
 		}
 
-		// Use shortDesc if available, otherwise use desc or a generic message
 		const description = dexItem.shortDesc || dexItem.desc || 'An item.';
 
 		return {
@@ -67,18 +57,15 @@ function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 		};
 	}
 
-	// Item doesn't exist in Dex or custom database
 	return null;
 }
 
-// Legacy ITEMS_DATABASE for backwards compatibility - now dynamically retrieves from Dex
 const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem, 'quantity'>>, {
 	get(target, prop: string) {
 		return getItemData(prop);
 	},
 });
 
-// Starter Pokemon data organized by type
 const STARTER_POKEMON = {
 	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
 	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
@@ -104,11 +91,6 @@ const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRa
 		levelRange: [6, 8],
 		battleType: 'double',
 	},
-	// 'route2_grass': {
-	// 	name: 'Route 2 Tall Grass',
-	// 	pokemon: ['zubat', 'geodude', 'sentret'],
-	// 	levelRange: [5, 8],
-	// },
 };
 
 const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -171,15 +153,12 @@ const ITEM_PRICES: Record<string, number> = {
 };
 
 const SHOP_INVENTORY: string[] = [
-	// Poke Balls
 	'pokeball', 'greatball', 'ultraball', 'masterball', 'levelball', 'fastball', 'timerball', 'nestball', 'netball',
 	'quickball', 'dreamball', 'premierball', 'luxuryball', 'healball', 'masterball',
 
-	// Potions & Healing Items
 	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
 	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
 
-	// Berries
 	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
 	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
 	'apicotberry', 'starfberry', 'keberry', 'marangaberry', 'babiriberry', 'chartiberry', 'chilanberry',
@@ -187,7 +166,6 @@ const SHOP_INVENTORY: string[] = [
 	'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
 	'lumberry',
 
-	// Held Items
 	'leftovers', 'blacksludge', 'shellbell', 'lifeorb', 'rockyhelmet', 'stickybarb',
 	'choiceband', 'choicescarf', 'choicespecs', 'flameorb', 'toxicorb',
 	'heavydutyboots', 'focussash', 'assaultvest', 'eviolite', 'airballoon',
@@ -196,7 +174,6 @@ const SHOP_INVENTORY: string[] = [
 	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
 	'lightclay',
 
-	// Misc Items
 	'eggmovetutor',
 ];
 
@@ -208,7 +185,6 @@ const TYPE_RESIST_BERRIES: Record<string, string> = {
 	'wacanberry': 'Electric', 'yacheberry': 'Ice',
 };
 
-// Type Chart
 const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEffective: string[], noEffect: string[] } } = {
 	Normal: { superEffective: [], notVeryEffective: ['Rock', 'Steel'], noEffect: ['Ghost'] },
 	Fire: { superEffective: ['Grass', 'Ice', 'Bug', 'Steel'], notVeryEffective: ['Fire', 'Water', 'Rock', 'Dragon'], noEffect: [] },
@@ -235,7 +211,6 @@ const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> 
 };
 const NATURE_LIST = Object.keys(NATURES);
 
-// Database for all trainers
 const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	'rival_1': {
 		name: 'Rival',
@@ -262,12 +237,7 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "My Pokémon are as solid as rock!",
 		},
 	},
-	// Add more trainers, evil team members, etc. here
 };
-
-/****************
-* Core Functions
-****************/
 
 function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState): number {
 	let effectiveness = 1;
@@ -362,14 +332,10 @@ function calculateStats(species: any, level: number, nature: string, ivs: Record
 	return stats;
 }
 
-/**
- * Gets the initial moves for a newly created Pokemon based on its level.
- */
 function getInitialMoves(speciesId: string, level: number): { id: string, pp: number }[] {
-	let availableMoves: string[] = ['tackle', 'growl']; // Default fallback
+	let availableMoves: string[] = ['tackle', 'growl'];
 	const species = Dex.species.get(speciesId);
 
-	// --- 1. Try Manual Learnset First ---
 	const manualLearnset = MANUAL_LEARNSETS[toID(speciesId)];
 	if (manualLearnset?.levelup) {
 		const learnedMoves: string[] = [];
@@ -382,15 +348,12 @@ function getInitialMoves(speciesId: string, level: number): { id: string, pp: nu
 			availableMoves = [...new Set(learnedMoves)].slice(-4);
 		}
 	} else {
-		// --- 2. Fallback to Dex Learnset ---
 		try {
 			const learnset = species.learnset;
 			if (learnset) {
 				const learnedMoves: { move: string, level: number }[] = [];
 				for (const moveId in learnset) {
-					// @ts-ignore - PS learnset format can be complex
 					for (const learnMethod of learnset[moveId]) {
-						// Check for Gen 8 Level-up moves
 						if (learnMethod.startsWith('8L')) {
 							const learnLevel = parseInt(learnMethod.substring(2));
 							if (learnLevel > 0 && learnLevel <= level) {
@@ -407,11 +370,9 @@ function getInitialMoves(speciesId: string, level: number): { id: string, pp: nu
 			}
 		} catch (e) {
 			console.error(`Error processing learnset for ${speciesId}:`, e);
-			// Fallback to default moves if learnset processing fails
 		}
 	}
 
-	// --- 3. Format moves with PP ---
 	const movesWithPP = availableMoves.map(moveId => {
 		const moveData = getMove(moveId);
 		return { id: moveId, pp: moveData.pp || 5 };
@@ -424,7 +385,6 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 	const species = Dex.species.get(speciesId);
 	if (!species.exists) throw new Error('Pokemon ' + speciesId + ' not found');
 
-	// --- 1. Determine Gender ---
 	let gender: 'M' | 'F' | 'N' = 'N';
 	if (species.genderRatio) {
 		gender = Math.random() < species.genderRatio.M ? 'M' : 'F';
@@ -432,27 +392,22 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 		gender = species.gender;
 	}
 
-	// --- 2. Generate Stats & Nature ---
 	const randomNature = NATURE_LIST[Math.floor(Math.random() * NATURE_LIST.length)];
 	const ivs = { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) };
 	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	const stats = calculateStats(species, level, randomNature, ivs, evs);
 
-	// --- 3. Get Initial Moves (Refactored) ---
 	const movesWithPP = getInitialMoves(speciesId, level);
 
-	// --- 4. Get Ability ---
 	const abilities = Object.values(species.abilities);
 	const randomAbility = abilities.length ? abilities[Math.floor(Math.random() * abilities.length)] : 'No Ability';
 
-	// --- 5. Get Random Held Item (Optional) ---
 	let heldItem: string | undefined = undefined;
 	const possibleItems = ['oranberry', 'sitrusberry', 'leftovers', 'rockyhelmet', 'chopleberry', 'yacheberry', 'keberry', 'marangaberry', 'stickybarb', 'toxicorb'];
 	if (Math.random() < 0.1) {
 		heldItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
 	}
 
-	// --- 6. Assemble Pokemon ---
 	const growthRate = species.growthRate;
 	return {
 		species: species.name,
@@ -495,18 +450,12 @@ function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RPGPokemo
 }
 
 function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
-	// const { opponentActivePokemon, activePokemon, turn, opponentStatus } = battle; // <-- OLD
-
-	// --- NEW ---
 	const opponentActivePokemon = targetSlot.pokemon;
 	const opponentStatus = targetSlot.status;
-	// Get the player's *first* active Pokemon for level/stat comparisons
-	// This is a simplification for doubles, but necessary.
 	const playerSlot = getActiveSlots(battle.playerSlots)[0];
-	if (!playerSlot) return 1; // No player pokemon?
+	if (!playerSlot) return 1;
 	const activePokemon = playerSlot.pokemon;
 	const turn = battle.turn;
-	// --- END NEW ---
 
 	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
 
@@ -532,24 +481,19 @@ function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePok
 	case 'dreamball':
 		return opponentStatus === 'slp' ? 4 : 1;
 	default:
-		return 1; // pokeball, premierball, luxuryball, healball, etc.
+		return 1;
 	}
 }
 
 function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
-	// const { opponentActivePokemon, opponentStatus } = battle; // <-- OLD
-
-	// --- NEW ---
 	const opponentActivePokemon = targetSlot.pokemon;
 	const opponentStatus = targetSlot.status;
-	// --- END NEW ---
 
 	const speciesId = toID(opponentActivePokemon.species);
-	// --- FIX: Updated fallback catch rate from 45 to 150 ---
 	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
 
-	const ballBonus = getBallBonus(ballId, battle, targetSlot); // <-- Pass targetSlot
-	if (ballBonus === 255) return { success: true, shakes: 4 }; // Master Ball
+	const ballBonus = getBallBonus(ballId, battle, targetSlot);
+	if (ballBonus === 255) return { success: true, shakes: 4 };
 
 	let statusBonus = 1;
 	if (opponentStatus === 'slp' || opponentStatus === 'frz') {
@@ -565,7 +509,7 @@ function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: Ac
 		(((3 * maxHp - 2 * hp) * modifiedCatchRate * ballBonus) / (3 * maxHp)) * statusBonus
 	);
 
-	if (a >= 255) return { success: true, shakes: 4 }; // Automatic catch
+	if (a >= 255) return { success: true, shakes: 4 };
 
 	const b = Math.floor(65536 / (255 / a) ** 0.1875);
 
@@ -590,55 +534,41 @@ function getStatMultiplier(stage: number): number {
 }
 
 function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
-	// --- ADDED: Battle Armor / Shell Armor Check ---
 	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 	if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
-		return 0; // Cannot be critically hit
+		return 0;
 	}
-	// --- END ADDED ---
 
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
-	// Focus Energy boosts crit stage
 	if (attackerSlot.focusEnergy) {
 		critStage += 2;
 	}
 
-	// Base critical hit stages for certain moves
 	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
 		critStage += 1;
 	}
 
-	// Scope Lens and Razor Claw boost
 	if (battle.magicRoomTurns === 0 && (attacker.item === 'scopelens' || attacker.item === 'razorclaw')) {
 		critStage += 1;
 	}
 
-	// Super Luck ability boosts crit stage
 	const attackerAbility = toID(attacker.ability || '');
 	if (attackerAbility === 'superluck') {
 		critStage += 1;
 	}
 
-	// Critical hit chances by stage
-	const critChances = [1 / 24, 1 / 8, 1 / 2, 1 / 1]; // stages 0, 1, 2, 3+
+	const critChances = [1 / 24, 1 / 8, 1 / 2, 1 / 1];
 	return critChances[Math.min(critStage, 3)];
 }
 
-/**
- * Get a move from either Dex or Custom Moves
- * This wrapper function checks custom moves first, then falls back to Dex
- */
 function getMove(moveId: string): any {
-	// Check if it's a custom move
 	if (isCustomMove(moveId)) {
 		const customMove = getCustomMove(moveId);
-		// Add exists property for compatibility
 		return { ...customMove, exists: true };
 	}
 
-	// Otherwise get from Dex
 	return Dex.moves.get(moveId);
 }
 
@@ -674,7 +604,6 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 		.map(learnable => toID(learnable.move))
 		.filter(moveId => {
 			const moveData = getMove(moveId);
-			// --- FIX: Check if move exists AND Pokemon doesn't already know it ---
 			return moveData.exists && !pokemon.moves.some(m => m.id === moveId);
 		});
 
@@ -706,7 +635,6 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 
 function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	// --- FIX: Added fallback EV yield of { atk: 1 } ---
 	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
 
 	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
@@ -740,9 +668,7 @@ function gainExperience(
 	user: User
 ): { messages: string[], leveledUp: boolean } {
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	// --- FIX: Added fallback base experience of 150 ---
 	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
-	// if (!baseExp) return { messages: ['No experience was gained.'], leveledUp: false }; // <-- This check is no longer needed
 
 	const expGained = Math.floor((baseExp * defeatedPokemon.level) / 7);
 	if (expGained <= 0) return { messages: [`No Experience Points were gained.`], leveledUp: false };
@@ -752,11 +678,10 @@ function gainExperience(
 
 	const participantNames: string[] = [];
 
-	// 1. Distribute EVs and EXP
 	for (const slot of participantSlots) {
-		if (!slot?.pokemon) continue; // <-- Safety check
+		if (!slot?.pokemon) continue;
 		const pokemon = slot.pokemon;
-		if (pokemon.hp <= 0 || pokemon.level >= 100) continue; // Fainted or max level
+		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
 
 		participantNames.push(pokemon.species);
 		gainEffortValues(pokemon, defeatedPokemon);
@@ -767,9 +692,8 @@ function gainExperience(
 
 	messages.push(`**${participantNames.join(' and ')}** gained ${expGained} Experience Points!`);
 
-	// 2. Handle Level-Ups for all participants
 	for (const slot of participantSlots) {
-		if (!slot?.pokemon) continue; // <-- Safety check
+		if (!slot?.pokemon) continue;
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
 
@@ -779,7 +703,6 @@ function gainExperience(
 			const evolveMessage = checkEvolution(player, pokemon, room, user);
 			if (evolveMessage) {
 				messages.push(evolveMessage);
-				// Stop leveling this Pokemon if it evolved, as its stats/exp curve changed
 				break;
 			}
 			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
@@ -818,15 +741,12 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
 
-	// Save player's active Pokemon statuses back to the party
 	for (const slot of battle.playerSlots) {
 		if (slot) {
 			const pokemonInParty = player.party.find(p => p.id === slot.pokemon.id);
 			if (pokemonInParty) {
-				// Copy volatile status back to the persistent Pokemon object
-				// HP, PP, and Item should already be updated (as slot.pokemon is a reference)
 				if (slot.status === 'slp' || slot.status === 'frz') {
-					pokemonInParty.status = null; // These statuses don't persist outside battle
+					pokemonInParty.status = null;
 				} else {
 					pokemonInParty.status = slot.status;
 				}
@@ -834,7 +754,6 @@ function saveBattleStatus(battle: BattleState) {
 		}
 	}
 
-	// Save opponent's active Pokemon statuses back to the battle's party array
 	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 		for (const slot of battle.opponentSlots) {
 			if (slot) {
@@ -847,16 +766,6 @@ function saveBattleStatus(battle: BattleState) {
 	}
 }
 
-/**********************
-* Battle Logic Helpers
-**********************/
-/********************************
- * REFACTORED DAMAGE CALCULATION
- ********************************/
-
-/**
- * Calculates the final Base Power of a move, applying contextual modifiers.
- */
 function getDamageBasePower(
 	move: Move,
 	attacker: RPGPokemon,
@@ -869,12 +778,10 @@ function getDamageBasePower(
 	const attackerSpecies = Dex.species.get(attacker.species);
 	const defenderSpecies = Dex.species.get(defender.species);
 
-	// --- Helping Hand ---
 	if (attackerSlot.isHelped) {
 		basePower = Math.floor(basePower * 1.5);
 	}
 
-	// --- Semi-invulnerable targets ---
 	const defenderChargingMoveId = defenderSlot.chargingMove;
 	if (defenderChargingMoveId) {
 		if (defenderChargingMoveId === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) {
@@ -888,7 +795,6 @@ function getDamageBasePower(
 		}
 	}
 
-	// --- Variable Power moves ---
 	switch (move.id) {
 	case 'reversal':
 	case 'flail':
@@ -954,7 +860,7 @@ function getDamageBasePower(
 		if (presentRand < 0.4) basePower = 40;
 		else if (presentRand < 0.7) basePower = 80;
 		else if (presentRand < 0.8) basePower = 120;
-		else basePower = -1; // Flag for healing
+		else basePower = -1;
 		break;
 	case 'magnitude':
 		const magnitudeRoll = Math.random();
@@ -968,7 +874,6 @@ function getDamageBasePower(
 		break;
 	}
 
-	// --- Context-Dependent Power Modifications ---
 	if (move.id === 'facade' && attackerSlot.status && ['psn', 'brn', 'par'].includes(attackerSlot.status)) {
 		basePower *= 2;
 	}
@@ -999,10 +904,6 @@ function getDamageBasePower(
 	return basePower;
 }
 
-/**
- * Calculates the raw attacking stat (Atk or SpA) before stat stages are applied.
- * Applies abilities (Guts, Huge Power) and items (Choice Band).
- */
 function getDamageOffense(
 	move: Move,
 	attacker: RPGPokemon,
@@ -1013,10 +914,8 @@ function getDamageOffense(
 	const statName = isSpecial ? 'spa' : 'atk';
 	let attackStatRaw = attacker[statName];
 
-	// --- Ability Stat Modifiers ---
 	attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, statName, attackStatRaw, attackerSlot, battle);
 
-	// --- Item Stat Modifiers ---
 	if (battle.magicRoomTurns === 0) {
 		if (attacker.item === 'choiceband' && !isSpecial) {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
@@ -1026,7 +925,6 @@ function getDamageOffense(
 		}
 	}
 
-	// --- Weather Stat Modifiers ---
 	if (isSpecial && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
 		if (toID(attacker.ability || '') === 'solarpower') {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
@@ -1036,10 +934,6 @@ function getDamageOffense(
 	return attackStatRaw;
 }
 
-/**
- * Calculates the raw defensive stat (Def or SpD) before stat stages are applied.
- * Applies abilities (Marvel Scale), items (Eviolite, AVest), and Wonder Room.
- */
 function getDamageDefense(
 	move: Move,
 	defender: RPGPokemon,
@@ -1049,17 +943,14 @@ function getDamageDefense(
 	const isSpecial = move.category === 'Special';
 	let statName = isSpecial ? 'spd' : 'def';
 
-	// --- Wonder Room Swap ---
 	if (battle.wonderRoomTurns > 0) {
 		statName = isSpecial ? 'def' : 'spd';
 	}
 
 	let defenseStatRaw = defender[statName];
 
-	// --- Ability Stat Modifiers ---
 	defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, statName, defenseStatRaw, defenderSlot, battle);
 
-	// --- Item Stat Modifiers ---
 	if (battle.magicRoomTurns === 0) {
 		if (defender.item === 'assaultvest' && isSpecial && battle.wonderRoomTurns === 0) {
 			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
@@ -1068,13 +959,12 @@ function getDamageDefense(
 		if (defender.item === 'eviolite') {
 			const species = Dex.species.get(defender.species);
 			if (species.evos && species.evos.length > 0) {
-				// Eviolite boosts Def and SpD, regardless of Wonder Room
 				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
 				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
 				
-				if (statName === 'def') { // Using Def stat (either normally or via Wonder Room)
+				if (statName === 'def') {
 					defenseStatRaw = Math.floor(defWithAbility * 1.5);
-				} else { // Using SpD stat
+				} else {
 					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
 				}
 			}
@@ -1084,9 +974,6 @@ function getDamageDefense(
 	return defenseStatRaw;
 }
 
-/**
- * Calculates the move type, accounting for abilities and field effects.
- */
 function getMoveType(
 	move: Move,
 	attacker: RPGPokemon,
@@ -1095,7 +982,6 @@ function getMoveType(
 ): string {
 	let moveType = move.type;
 
-	// --- Field-based type changes ---
 	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
 		switch (battle.weather!.type) {
 		case 'sun': moveType = 'Fire'; break;
@@ -1113,14 +999,10 @@ function getMoveType(
 		}
 	}
 
-	// --- Ability-based type changes ---
 	moveType = RPGAbilities.applyTypeModifier(abilityContext, moveType);
 	return moveType;
 }
 
-/**
- * Applies final damage modifiers (weather, terrain, screens, items, abilities).
- */
 function applyFinalDamageModifiers(
 	baseDamage: number,
 	move: Move,
@@ -1136,9 +1018,8 @@ function applyFinalDamageModifiers(
 ): number {
 	let damage = baseDamage;
 
-	// --- Screen Damage Reduction ---
 	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-	if (!isCritical) { // Critical hits bypass screens
+	if (!isCritical) {
 		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 		if (defenderVeilTurns > 0) {
 			damage = Math.floor(damage * 0.5);
@@ -1153,7 +1034,6 @@ function applyFinalDamageModifiers(
 		}
 	}
 
-	// --- Weather Damage Modification ---
 	if (RPGAbilities.isWeatherActive(battle)) {
 		if (battle.weather!.type === 'sun') {
 			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
@@ -1164,7 +1044,6 @@ function applyFinalDamageModifiers(
 		}
 	}
 
-	// --- Terrain Damage Modification ---
 	if (battle.terrain) {
 		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
 		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
@@ -1184,7 +1063,6 @@ function applyFinalDamageModifiers(
 		}
 	}
 
-	// --- Mud/Water Sport Damage Reduction ---
 	if (battle.mudSportTurns > 0 && moveType === 'Electric') {
 		damage = Math.floor(damage * 0.33);
 	}
@@ -1192,10 +1070,8 @@ function applyFinalDamageModifiers(
 		damage = Math.floor(damage * 0.33);
 	}
 
-	// --- Ability Damage Modifiers (Solid Rock, Tinted Lens, etc.) ---
 	damage = RPGAbilities.applyDamageModifier(abilityContext, damage);
 
-	// --- Item Damage Modifiers (Life Orb, Expert Belt) ---
 	if (battle.magicRoomTurns === 0) {
 		if (attacker.item === 'lifeorb') {
 			damage = Math.floor(damage * 1.3);
@@ -1209,9 +1085,6 @@ function applyFinalDamageModifiers(
 }
 
 
-/**
- * REFACTORED MAIN DAMAGE FUNCTION
- */
 function calculateDamage(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1224,18 +1097,16 @@ function calculateDamage(
 	const defender = defenderSlot.pokemon;
 	const defenderSpecies = Dex.species.get(defender.species);
 
-	// --- 0. Setup Ability Context ---
 	const abilityContext: any = {
 		attacker,
 		defender,
 		attackerSlot,
 		defenderSlot,
-		move: { ...move }, // <-- THIS IS THE FIX. Creates a mutable copy of the move.
+		move: { ...move },
 		battle,
-		messageLog: [], // Temporary log
+		messageLog: [],
 	};
 
-	// --- 1. Immunity Checks (Type & Ability) ---
 	if (move.flags.powder && defenderSpecies.types.includes('Grass')) {
 		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false };
 	}
@@ -1244,7 +1115,6 @@ function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false };
 	}
 
-	// --- 2. Fixed Damage Moves ---
 	if (!move.basePower) {
 		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1, isCritical: false };
 		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1, isCritical: false };
@@ -1260,47 +1130,39 @@ function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false };
 	}
 
-	// --- 3. Get Base Power ---
 	let basePower = getDamageBasePower(move, attacker, defender, attackerSlot, defenderSlot, battle);
-	if (basePower === -1) { // Special flag for Present (Heal)
+	if (basePower === -1) {
 		const healAmount = Math.floor(defender.maxHp * 0.25);
 		defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
 		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false };
 	}
 
-	// --- 4. Get Move Type (after Weatherball, Pixilate, etc.) ---
 	const moveType = getMoveType(move, attacker, battle, abilityContext);
-	abilityContext.move.type = moveType; // Update context (on the copy) if type changed
+	abilityContext.move.type = moveType;
 
-	// --- 5. Apply Ability Power Modifiers (Technician, Sheer Force, etc.) ---
 	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
 
-	// --- 6. Get Offensive & Defensive Stats ---
 	const attackStatRaw = getDamageOffense(move, attacker, attackerSlot, battle);
 	const defenseStatRaw = getDamageDefense(move, defender, defenderSlot, battle);
 
-	// --- 7. Apply Stat Stages ---
 	let attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
 	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
 
-	// --- UNAWARE IMPLEMENTATION ---
 	const defenderAbility = toID(defender.ability || '');
 	const attackerAbility = toID(attacker.ability || '');
 
 	if (defenderAbility === 'unaware') {
-		attackStage = 0; // Defender ignores attacker's stat changes
+		attackStage = 0;
 	}
 	if (attackerAbility === 'unaware') {
-		defenseStage = 0; // Attacker ignores defender's stat changes
+		defenseStage = 0;
 	}
-	// --- END UNAWARE IMPLEMENTATION ---
 
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
 	let defenseStat = Math.floor(defenseStatRaw * getStatMultiplier(defenseStage));
 
-	// --- 8. Apply Final Stat Mods (Burn, Self-Destruct) ---
 	let finalAttackStat = attackStat;
 	if (attackerSlot.status === 'brn' && move.category === 'Physical' && move.id !== 'facade' && attackerAbility !== 'guts') {
 		finalAttackStat = Math.floor(finalAttackStat / 2);
@@ -1309,16 +1171,14 @@ function calculateDamage(
 		defenseStat = Math.floor(defenseStat * 0.5);
 	}
 
-	// --- 9. Get Core Damage Modifiers (Crit, STAB, Random, Effectiveness) ---
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 	
-	abilityContext.effectiveness = effectiveness; // Update context for final mods
+	abilityContext.effectiveness = effectiveness;
 
-	// --- 10. Check Effectiveness-modifying Berries ---
 	let berryConsumed: string | undefined = undefined;
 	let effectivenessMultiplier = effectiveness;
 	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
@@ -1329,21 +1189,17 @@ function calculateDamage(
 		}
 	}
 
-	// --- 11. Calculate Base Damage (The Formula) ---
 	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
 
-	// --- 12. Apply Final Modifiers (Weather, Terrain, Screens, Abilities, Items) ---
 	let damage = applyFinalDamageModifiers(
 		baseDamage, move, moveType, attacker, defender,
 		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
 	);
 
-	// --- 13. Apply STAB, Effectiveness, Crit, Random, Spread ---
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
-	damage = Math.floor(damage * spreadMultiplier); // Apply spread reduction last
+	damage = Math.floor(damage * spreadMultiplier);
 	damage = Math.max(1, damage);
 
-	// --- 14. Construct Message ---
 	let message = "";
 	if (isCritical) message += ` <i style="color: #28a745;">A critical hit!</i>`;
 	if (effectiveness > 1) message += ` <i style="color: #28a745;">It's super effective!</i>`;
@@ -1353,14 +1209,6 @@ function calculateDamage(
 	return { damage, message, effectiveness, berryConsumed, isCritical };
 }
 
-/********************************
- * REFACTORED DAMAGING MOVE HANDLER
- ********************************/
-
-/**
- * Handles moves that are not standard damage calculations (OHKO, Counter, Fling).
- * @returns {boolean} `true` if the move was fully handled, `false` if calculation should continue.
- */
 function handleDamagingMovePreamble(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1371,7 +1219,6 @@ function handleDamagingMovePreamble(
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 
-	// --- Check for semi-invulnerable state ---
 	const defenderChargingMoveId = defenderSlot.chargingMove;
 	if (defenderChargingMoveId) {
 		let isImmune = true;
@@ -1384,11 +1231,10 @@ function handleDamagingMovePreamble(
 		}
 		if (isImmune) {
 			messageLog.push(`But it failed! ${defender.species} avoided the attack!`);
-			return true; // Move fails, but turn is used
+			return true;
 		}
 	}
 
-	// --- Handle Counter and Mirror Coat ---
 	if (move.id === 'counter' || move.id === 'mirrorcoat') {
 		const targetCategory = move.id === 'counter' ? 'Physical' : 'Special';
 		if (attackerSlot.lastDamageTaken?.category !== targetCategory) {
@@ -1401,7 +1247,6 @@ function handleDamagingMovePreamble(
 		return true;
 	}
 
-	// --- Handle Fling ---
 	if (move.id === 'fling') {
 		if (battle.magicRoomTurns > 0 || !attacker.item) {
 			messageLog.push(`But it failed!`);
@@ -1419,13 +1264,12 @@ function handleDamagingMovePreamble(
 		return true;
 	}
 
-	// --- Handle Natural Gift ---
 	if (move.id === 'naturalgift') {
 		if (!attacker.item?.includes('berry')) {
 			messageLog.push(`But it failed!`);
 			return true;
 		}
-		const damage = 80; // Simplified
+		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
@@ -1433,7 +1277,6 @@ function handleDamagingMovePreamble(
 		return true;
 	}
 
-	// --- Handle One-Hit KO moves ---
 	if (move.ohko) {
 		const defenderAbility = toID(defender.ability || '');
 		if (defenderAbility === 'sturdy') {
@@ -1464,13 +1307,9 @@ function handleDamagingMovePreamble(
 		return true;
 	}
 
-	return false; // Standard damage calculation should proceed
+	return false;
 }
 
-/**
- * Applies the calculated damage to the defender, checking for Substitute, Focus Sash, and Sturdy.
- * @returns {number} The actual damage dealt after reductions.
- */
 function applyDamageAndEnduranceEffects(
 	defenderSlot: ActivePokemonSlot,
 	damageDealt: number,
@@ -1481,38 +1320,32 @@ function applyDamageAndEnduranceEffects(
 	const defender = defenderSlot.pokemon;
 	const defenderAbility = toID(defender.ability || '');
 
-	// --- 1. Check Disguise (Triggers before Substitute) ---
 	if (defenderSlot.isDisguised && damageDealt > 0 && move.category !== 'Status') {
 		defenderSlot.isDisguised = false;
-		// Form change logic (simplified)
 		if (defender.species === 'Mimikyu') {
 			defender.species = 'Mimikyu-Busted';
 		}
 		messageLog.push(`<strong>${defender.species}'s Disguise was broken!</strong>`);
-		// Disguise also deals 1/8 max HP damage to Mimikyu
 		const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
 		defender.hp = Math.max(0, defender.hp - disguiseDamage);
 		messageLog.push(`${defender.species} was hurt by the broken disguise!`);
-		defenderSlot.lastMoveThatHitMe = move; // <-- AFTERMATH: Tag move
-		return 0; // The attack's damage is negated
+		defenderSlot.lastMoveThatHitMe = move;
+		return 0;
 	}
 
-	// --- 2. Handle Substitute ---
 	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
 			defenderSlot.substitute = undefined;
 			messageLog.push(`The substitute took the hit and broke!`);
-			// Damage does not carry over
 		} else {
 			defenderSlot.substitute.hp -= damageDealt;
 			messageLog.push(`The substitute took the hit!`);
 		}
-		defenderSlot.lastMoveThatHitMe = move; // <-- AFTERMATH: Tag move
-		return 0; // 0 damage dealt to the Pokemon itself
+		defenderSlot.lastMoveThatHitMe = move;
+		return 0;
 	}
 
-	// --- 3. Handle Focus Sash & Sturdy ---
 	const isFullHP = defender.hp === defender.maxHp;
 
 	if (damageDealt >= defender.hp) {
@@ -1521,7 +1354,7 @@ function applyDamageAndEnduranceEffects(
 			messageLog.push(`${defender.species} held on using its Focus Sash!`);
 			defender.item = undefined;
 			activateUnburden(defenderSlot, messageLog);
-		} else if (defenderAbility === 'sturdy' && isFullHP && move.ohko !== true) { // OHKO already checked
+		} else if (defenderAbility === 'sturdy' && isFullHP && move.ohko !== true) {
 			damageDealt = defender.hp - 1;
 			messageLog.push(`${defender.species} held on using its Sturdy!`);
 		}
@@ -1529,18 +1362,13 @@ function applyDamageAndEnduranceEffects(
 
 	defender.hp = Math.max(0, defender.hp - damageDealt);
 	
-	// --- AFTERMATH: Tag the pokemon with the move that hit it ---
 	if (damageDealt > 0) {
 		defenderSlot.lastMoveThatHitMe = move;
 	}
-	// --- END AFTERMATH ---
 
 	return damageDealt;
 }
 
-/**
- * Handles effects that trigger upon being hit (Rocky Helmet, Weakness Policy, contact abilities).
- */
 function applyPostDamageContactEffects(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1550,41 +1378,33 @@ function applyPostDamageContactEffects(
 	damageDealt: number,
 	effectiveness: number,
 	abilityContext: AbilityContext,
-	isCritical: boolean // <-- ADD THIS PARAMETER
+	isCritical: boolean
 ) {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 	
 	if (defender.hp <= 0 || damageDealt <= 0) return;
 
-	// --- ANGER POINT IMPLEMENTATION ---
 	if (isCritical && toID(defender.ability || '') === 'angerpoint') {
 		applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
 	}
-	// --- END ANGER POINT IMPLEMENTATION ---
 
-	// --- Stat-boosting Berries (Kee, Maranga) ---
 	if (battle.magicRoomTurns === 0) {
 		if (move.category === 'Physical' && defender.item === 'keberry') {
-			// --- CONTRARY FIX ---
 			if (applyStatChange(defenderSlot, 'def', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Kee Berry)!`;
 				defender.item = undefined;
 				activateUnburden(defenderSlot, messageLog);
 			}
-			// --- END FIX ---
 		} else if (move.category === 'Special' && defender.item === 'marangaberry') {
-			// --- CONTRARY FIX ---
 			if (applyStatChange(defenderSlot, 'spd', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Maranga Berry)!`;
 				defender.item = undefined;
 				activateUnburden(defenderSlot, messageLog);
 			}
-			// --- END FIX ---
 		}
 	}
 
-	// --- Contact Effects (Items and Abilities) ---
 	if (move.flags.contact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
 			if (defender.item === 'rockyhelmet' && RPGAbilities.takesIndirectDamage(attacker)) {
@@ -1598,13 +1418,11 @@ function applyPostDamageContactEffects(
 				activateUnburden(defenderSlot, messageLog);
 			}
 		}
-		// Ability-based contact effects
 		if (attacker.hp > 0) {
 			RPGAbilities.applyContactAbilityEffects(abilityContext);
 		}
 	}
 
-	// --- Non-Contact Item Effects (Rowap Berry) ---
 	if (move.category === 'Special' && attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'rowapberry') {
 		if (RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
@@ -1614,26 +1432,20 @@ function applyPostDamageContactEffects(
 		}
 	}
 
-	// --- CURSED BODY IMPLEMENTATION ---
-	// Cursed Body triggers on any move, not just contact
 	const defenderAbility = toID(defender.ability || '');
 	if (defenderAbility === 'cursedbody' && attacker.hp > 0 && !attackerSlot.disabledMove && Math.random() < 0.3) {
-		attackerSlot.disabledMove = { moveId: move.id, turns: 4 }; // 4 turns (disable lasts 3 more turns)
+		attackerSlot.disabledMove = { moveId: move.id, turns: 4 };
 		messageLog.push(`${attacker.species}'s ${move.name} was disabled by ${defender.species}'s Cursed Body!`);
 	}
-	// --- END CURSED BODY IMPLEMENTATION ---
 
-	// --- Weakness Policy ---
 	if (battle.magicRoomTurns === 0 && defender.item === 'weaknesspolicy' && effectiveness > 1) {
 		let activated = false;
-		// --- CONTRARY FIX ---
 		if (applyStatChange(defenderSlot, 'atk', 2, battle, messageLog, defenderSlot)) {
 			activated = true;
 		}
 		if (applyStatChange(defenderSlot, 'spa', 2, battle, messageLog, defenderSlot)) {
 			activated = true;
 		}
-		// --- END FIX ---
 
 		if (activated) {
 			messageLog.push(`${defender.species}'s Weakness Policy was activated!`);
@@ -1642,7 +1454,6 @@ function applyPostDamageContactEffects(
 		}
 	}
 
-	// --- Red Card ---
 	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
 		const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
 		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
@@ -1661,9 +1472,6 @@ function applyPostDamageContactEffects(
 	}
 }
 
-/**
- * Handles attacker-side effects after a successful hit (Recoil, Life Orb, Self-Boosts, Self-Destruct).
- */
 function applyRecoilAndSelfEffects(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
@@ -1677,7 +1485,6 @@ function applyRecoilAndSelfEffects(
 	
 	let tookRecoil = false;
 
-	// --- Recoil & Self-Damage ---
 	if (['mindblown', 'steelbeam'].includes(move.id)) {
 		attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 2));
 		messageLog.push(`${attacker.species} was damaged by the move's recoil!`);
@@ -1706,17 +1513,14 @@ function applyRecoilAndSelfEffects(
 		handleHPDropEffects(attackerSlot, battle, messageLog);
 	}
 
-	// --- Self-Boosts (e.g., Power-Up Punch, Close Combat) ---
 	if (attacker.hp > 0 && move.self?.boosts) {
 		const boosts = move.self.boosts;
 		for (const stat in boosts) {
-			let boostValue = boosts[stat as keyof typeof boosts]!; // --- MODIFIED ---
+			let boostValue = boosts[stat as keyof typeof boosts]!;
 
-			// --- ADDED: Contrary Check ---
 			if (toID(attacker.ability || '') === 'contrary') {
 				boostValue *= -1;
 			}
-			// --- END ADDED ---
 
 			const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
 			if (currentStage !== undefined) {
@@ -1731,16 +1535,12 @@ function applyRecoilAndSelfEffects(
 		}
 	}
 
-	// --- Self-Destruct ---
 	if (moveWasSuccessful && ['selfdestruct', 'explosion', 'mistyexplosion', 'finalgambit'].includes(move.id)) {
 		attacker.hp = 0;
 		messageLog.push(`**${attacker.species} fainted from using ${move.name}!**`);
 	}
 }
 
-/**
- * Handles secondary effects of a move (Status, Stat Drops, Flinch).
- */
 function applySecondaryEffects(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1756,7 +1556,6 @@ function applySecondaryEffects(
 	chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
 	if (Math.random() * 100 < chance) {
-		// --- Secondary Status ---
 		if (move.secondary.status && !defenderSlot.status) {
 			const defender = defenderSlot.pokemon;
 			const defenderSpecies = Dex.species.get(defender.species);
@@ -1784,7 +1583,6 @@ function applySecondaryEffects(
 				}
 				messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
 
-				// Synchronize Check
 				const defenderAbility = toID(defender.ability || '');
 				if (defenderAbility === 'synchronize') {
 					applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
@@ -1792,24 +1590,20 @@ function applySecondaryEffects(
 			}
 		}
 
-		// --- Secondary Stat Drops ---
 		if (move.secondary.boosts) {
 			let hadEffect = false;
 			let triggeredDefiant = false;
 
 			for (const stat in move.secondary.boosts) {
-				let boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!; // --- MODIFIED ---
+				let boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
 
-				// --- ADDED: Contrary Check ---
 				if (toID(defenderSlot.pokemon.ability || '') === 'contrary') {
 					boostValue *= -1;
 				}
-				// --- END ADDED ---
 				
 				const currentStage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
 
-				if (boostValue < 0) { // --- Stat Drop ---
-					// --- ADDED: Check item/ability prevention ---
+				if (boostValue < 0) {
 					if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'clearamulet') {
 						messageLog.push(`${defenderSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
 						continue;
@@ -1824,7 +1618,6 @@ function applySecondaryEffects(
 						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Attack from being lowered!`);
 						continue;
 					}
-					// --- END ADDED ---
 
 					if (currentStage > -6) {
 						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
@@ -1833,7 +1626,7 @@ function applySecondaryEffects(
 						hadEffect = true;
 						triggeredDefiant = true;
 					}
-				} else if (boostValue > 0) { // --- Stat Rise (e.g., Charge Beam) ---
+				} else if (boostValue > 0) {
 					if (currentStage < 6) {
 						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
 						defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
@@ -1843,23 +1636,17 @@ function applySecondaryEffects(
 				}
 			}
 
-			// --- ADDED: Defiant/Competitive Activation ---
 			if (triggeredDefiant) {
 				checkStatDropAbilities(defenderSlot, attackerSlot, battle, messageLog);
 			}
-			// --- END ADDED ---
 		}
 
-		// --- Secondary Flinch ---
 		if (move.secondary.volatileStatus === 'flinch') {
 			defenderSlot.willFlinch = true;
 		}
 	}
 }
 
-/**
- * REFACTORED MAIN DAMAGING MOVE HANDLER
- */
 function handleDamagingMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1868,12 +1655,10 @@ function handleDamagingMove(
 	messageLog: string[],
 	spreadMultiplier: number
 ) {
-	// --- 1. Preamble Checks (OHKO, Fling, Counter, Invulnerability) ---
 	if (handleDamagingMovePreamble(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return; // Move was fully handled (e.g., it was OHKO or Fling) or it failed
+		return;
 	}
 
-	// --- 2. Multi-Hit & Parental Bond Logic ---
 	const attacker = attackerSlot.pokemon;
 	let moveWasSuccessful = false;
 	const hitCount = RPGAbilities.getMultiHitCount(attacker, move);
@@ -1891,12 +1676,10 @@ function handleDamagingMove(
 		}
 	}
 
-	// --- 3. Damage Loop ---
 	for (let i = 0; i < totalHits; i++) {
-		// --- 3a. Calculate Damage ---
 		let parentalBondSpreadMultiplier = spreadMultiplier;
 		if (hasParentalBond && i === 1) {
-			parentalBondSpreadMultiplier *= 0.25; // Second hit is 25% damage
+			parentalBondSpreadMultiplier *= 0.25;
 		}
 		
 		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
@@ -1904,7 +1687,6 @@ function handleDamagingMove(
 			moveWasSuccessful = true;
 		}
 
-		// --- 3b. Handle Effectiveness Berry ---
 		if (attackResult.berryConsumed) {
 			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
 			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
@@ -1914,10 +1696,8 @@ function handleDamagingMove(
 			activateUnburden(defenderSlot, messageLog);
 		}
 
-		// --- 3c. Apply Damage (incl. Substitute, Sturdy, Sash) ---
 		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog);
 
-		// Track damage for Counter/Mirror Coat
 		if (damageDealt > 0 && move.category !== 'Status') {
 			defenderSlot.lastDamageTaken = {
 				amount: damageDealt,
@@ -1926,7 +1706,6 @@ function handleDamagingMove(
 			};
 		}
 		
-		// Add damage message
 		if (totalHits > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else if (messageLog.length > 0) {
@@ -1935,7 +1714,6 @@ function handleDamagingMove(
 			messageLog.push(attackResult.message);
 		}
 		
-		// --- 3d. Pop Air Balloon ---
 		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
 			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
@@ -1944,7 +1722,6 @@ function handleDamagingMove(
 		}
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
-			// --- 3e. Attacker Drain Effects (Drain, Shell Bell) ---
 			if (move.drain && attacker.hp < attacker.maxHp) {
 				if (attackerSlot.healBlockTurns > 0) {
 					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
@@ -1962,41 +1739,26 @@ function handleDamagingMove(
 				}
 			}
 
-			// --- 3f. Defender Contact Effects (Rocky Helmet, Abilities, WP, Red Card) ---
 			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
-			// --- ANGER POINT FIX: Pass isCritical to this function ---
 			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
 			
-			// --- 3g. HP-Drop Berry Effects (Sitrus, Enigma) ---
 			handleHPDropEffects(defenderSlot, battle, messageLog);
 			
-			// --- 3h. Attacker Recoil & Self-Effects (Recoil, Life Orb, Self-Boosts, Self-Destruct) ---
 			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
 			
-			// --- 3i. Secondary Effects (Status, Stat Drops, Flinch) ---
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 		}
 		
-		if (defenderSlot.pokemon.hp <= 0) break; // Stop multi-hit if defender fainted
+		if (defenderSlot.pokemon.hp <= 0) break;
 	}
 }
 
-/********************************
- * REFACTORED STATUS MOVE HANDLER
- ********************************/
-
-// --- STATUS MOVE HELPERS ---
-
-/**
- * Checks for abilities that trigger on stat drops (Defiant, Competitive)
- */
 function checkStatDropAbilities(
 	targetSlot: ActivePokemonSlot,
-	sourceSlot: ActivePokemonSlot | null, // The Pokemon causing the stat drop
+	sourceSlot: ActivePokemonSlot | null,
 	battle: BattleState,
 	messageLog: string[]
 ) {
-	// Don't trigger if the source is the same as the target (self-inflicted)
 	if (sourceSlot && sourceSlot.pokemon.id === targetSlot.pokemon.id) {
 		return;
 	}
@@ -2016,13 +1778,9 @@ function checkStatDropAbilities(
 	}
 }
 
-/**
- * Handles generic stat-boosting/lowering moves (move.boosts)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericBoostMove(
 	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot | null, // Can be null
+	defenderSlot: ActivePokemonSlot | null,
 	move: Move,
 	battle: BattleState,
 	messageLog: string[]
@@ -2052,27 +1810,23 @@ function handleGenericBoostMove(
 	for (const stat in move.boosts) {
 		let boostValue = move.boosts[stat as keyof typeof move.boosts]!;
 		
-		// --- ADDED: Contrary Check ---
 		if (toID(targetSlot.pokemon.ability || '') === 'contrary') {
 			boostValue *= -1;
 		}
-		// --- END ADDED ---
 
 		const stage = targetStages[stat as keyof typeof targetStages];
 
-		if (boostValue > 0) { // --- Stat increase ---
+		if (boostValue > 0) {
 			if (stage < 6) {
 				targetStages[stat as keyof typeof targetStages] = Math.max(-6, Math.min(6, stage + boostValue));
 				messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
 				hadEffect = true;
 			}
-		} else if (boostValue < 0) { // --- Stat decrease ---
-			// Check if the target is the attacker (self-drop)
+		} else if (boostValue < 0) {
 			if (!isSelf) {
-				// --- ADDED: Check item/ability prevention ---
 				if (battle.magicRoomTurns === 0 && targetSlot.pokemon.item === 'clearamulet') {
 					messageLog.push(`${targetName}'s Clear Amulet prevents its stats from being lowered!`);
-					continue; // Skip this stat, but don't fail the whole move
+					continue;
 				}
 				const targetAbility = toID(targetSlot.pokemon.ability || '');
 				const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
@@ -2084,7 +1838,6 @@ function handleGenericBoostMove(
 					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its Attack from being lowered!`);
 					continue;
 				}
-				// --- END ADDED ---
 			}
 
 			if (stage > -6) {
@@ -2092,28 +1845,20 @@ function handleGenericBoostMove(
 				messageLog.push(`${targetName}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 				hadEffect = true;
 				
-				// --- ADDED: Defiant/Competitive Trigger ---
 				if (!isSelf) triggeredDefiant = true;
-				// --- END ADDED ---
 			}
 		}
 	}
 	
 	if (!hadEffect) messageLog.push('But it failed!');
 
-	// --- ADDED: Defiant/Competitive Activation ---
 	if (triggeredDefiant) {
 		checkStatDropAbilities(targetSlot, attackerSlot, battle, messageLog);
 	}
-	// --- END ADDED ---
 	
-	return true; // Move was handled
+	return true;
 }
 
-/**
- * Handles generic status-inflicting moves (move.status)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericStatusInflictMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot | null,
@@ -2157,7 +1902,6 @@ function handleGenericStatusInflictMove(
 		}
 		messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
 
-		// Synchronize Check
 		const defenderAbility = toID(defender.ability || '');
 		if (defenderAbility === 'synchronize') {
 			applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
@@ -2166,13 +1910,9 @@ function handleGenericStatusInflictMove(
 		messageLog.push(`But it failed!`);
 	}
 	
-	return true; // Move was handled
+	return true;
 }
 
-/**
- * Handles generic volatile status moves (move.volatileStatus)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericVolatileMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot | null,
@@ -2310,13 +2050,9 @@ function handleGenericVolatileMove(
 	}
 
 	if (!hadEffect) messageLog.push('But it failed!');
-	return true; // Move was handled
+	return true;
 }
 
-/**
- * Handles generic healing moves (move.flags.heal)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericHealMove(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
@@ -2333,13 +2069,9 @@ function handleGenericHealMove(
 		attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 		messageLog.push(`${attacker.species} restored ${attacker.hp - oldHp} HP!`);
 	}
-	return true; // Move was handled
+	return true;
 }
 
-/**
- * Handles generic field-wide moves (weather, terrain, rooms)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericFieldMove(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
@@ -2349,7 +2081,6 @@ function handleGenericFieldMove(
 	let hadEffect = false;
 	const attacker = attackerSlot.pokemon;
 
-	// --- Weather ---
 	if (move.weather) {
 		const weatherType = move.weather as 'sun' | 'rain' | 'sand' | 'hail';
 		if (battle.weather?.type === weatherType) {
@@ -2362,10 +2093,9 @@ function handleGenericFieldMove(
 			messageLog.push(weatherStartMessages[weatherType]);
 			hadEffect = true;
 		}
-		return true; // Move was handled
+		return true;
 	}
 
-	// --- Terrains & Rooms ---
 	const pseudoWeather = move.pseudoWeather || move.id;
 	switch (pseudoWeather) {
 	case 'trickroom':
@@ -2430,13 +2160,9 @@ function handleGenericFieldMove(
 		return true;
 	}
 	
-	return false; // No field move was found
+	return false;
 }
 
-/**
- * Handles generic side-condition moves (Hazards, Screens)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleGenericSideMove(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
@@ -2446,7 +2172,6 @@ function handleGenericSideMove(
 	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attackerSlot.pokemon.id);
 	let hadEffect = false;
 
-	// --- Screens ---
 	if (['reflect', 'lightscreen', 'auroraveil'].includes(move.id)) {
 		const duration = (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'lightclay') ? 8 : 5;
 		if (isPlayerAttacker) {
@@ -2463,7 +2188,7 @@ function handleGenericSideMove(
 				messageLog.push(`Aurora Veil raised your team's defenses!`);
 				hadEffect = true;
 			}
-		} else { // Opponent is attacker
+		} else {
 			if (move.id === 'reflect' && battle.opponentReflectTurns === 0) {
 				battle.opponentReflectTurns = duration;
 				messageLog.push(`Reflect raised the opposing team's Defense!`);
@@ -2479,10 +2204,9 @@ function handleGenericSideMove(
 			}
 		}
 		if (!hadEffect) messageLog.push('But it failed!');
-		return true; // Move was handled
+		return true;
 	}
 
-	// --- Hazards ---
 	if (move.sideCondition) {
 		const targetHazards = isPlayerAttacker ? battle.opponentHazards : battle.playerHazards;
 		const hazardId = toID(move.sideCondition);
@@ -2518,10 +2242,9 @@ function handleGenericSideMove(
 			break;
 		}
 		if (!hadEffect) messageLog.push('But it failed!');
-		return true; // Move was handled
+		return true;
 	}
 	
-	// --- Team Guards (Quick Guard, etc.) ---
 	if (['quickguard', 'wideguard', 'craftyshield'].includes(move.id)) {
 		if (isPlayerAttacker) {
 			if (move.id === 'quickguard') battle.playerQuickGuard = true;
@@ -2536,13 +2259,9 @@ function handleGenericSideMove(
 		return true;
 	}
 
-	return false; // No side move was found
+	return false;
 }
 
-/**
- * Handles moves with unique, hardcoded logic (Curse, Transform, Defog, etc.)
- * @returns {boolean} `true` if the move was handled, `false` otherwise.
- */
 function handleSpecificStatusMove(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot | null,
@@ -2568,7 +2287,7 @@ function handleSpecificStatusMove(
 				battle.opponentSlots[oppSlotIndex as 0 | 1] = null;
 			}
 		} else {
-			messageLog.push(`But it failed!`); // Can't force switch a trainer
+			messageLog.push(`But it failed!`);
 		}
 		return true;
 
@@ -2621,7 +2340,6 @@ function handleSpecificStatusMove(
 				messageLog.push(`${defenderSlot.pokemon.species} was cursed!`);
 			}
 		} else {
-			// Non-ghost Curse (acts as a generic boost move)
 			handleGenericBoostMove(attackerSlot, defenderSlot, move, battle, messageLog);
 		}
 		return true;
@@ -2657,10 +2375,8 @@ function handleSpecificStatusMove(
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
 		
-		// --- ADDED: Unburden Check ---
 		if (attackerItem !== attacker.item) activateUnburden(attackerSlot, messageLog);
 		if (defenderItem !== defender.item) activateUnburden(defenderSlot, messageLog);
-		// --- END ADDED ---
 		return true;
 
 	case 'nightmare':
@@ -2733,15 +2449,13 @@ function handleSpecificStatusMove(
 	case 'charge':
 		attackerSlot.isCharged = true;
 		messageLog.push(`${attacker.species} began charging power!`);
-		// Note: Charge also boosts SpD, so we let it fall through to handleGenericBoostMove
-		return false; // Let boost handler take over
+		return false;
 
 	case 'stockpile':
 		if (attackerSlot.stockpileCount < 3) {
 			attackerSlot.stockpileCount++;
 			messageLog.push(`${attacker.species} stockpiled ${attackerSlot.stockpileCount}!`);
 			
-			// --- ADDED: Contrary Check ---
 			let boostValue = 1;
 			if (toID(attacker.ability || '') === 'contrary') {
 				boostValue = -1;
@@ -2766,15 +2480,13 @@ function handleSpecificStatusMove(
 					messageLog.push(`${attacker.species}'s Sp. Def fell!`);
 				}
 			}
-			// --- END ADDED ---
-			return true; // Don't fall through, we handled the boosts here
+			return true;
 		} else {
 			messageLog.push(`${attacker.species} can't stockpile any more!`);
 			return true;
 		}
 		
 	case 'bellydrum':
-		// --- ADDED: Contrary Check ---
 		const contraryActive = toID(attacker.ability || '') === 'contrary';
 		if (contraryActive) {
 			if (attacker.hp <= attacker.maxHp / 2) {
@@ -2786,7 +2498,7 @@ function handleSpecificStatusMove(
 				attackerSlot.statStages.atk = -6;
 				messageLog.push(`${attacker.species} cut its own HP and minimized its Attack!`);
 			}
-		} else { // --- Original Logic ---
+		} else {
 			if (attacker.hp <= attacker.maxHp / 2) {
 				messageLog.push(`But it failed! (Not enough HP)`);
 			} else if (attackerSlot.statStages.atk >= 6) {
@@ -2797,7 +2509,6 @@ function handleSpecificStatusMove(
 				messageLog.push(`${attacker.species} cut its own HP and maximized its Attack!`);
 			}
 		}
-		// --- END ADDED ---
 		return true;
 
 	case 'futuresight':
@@ -2854,15 +2565,12 @@ function handleSpecificStatusMove(
 		return true;
 	}
 
-	return false; // Move was not a known specific move
+	return false;
 }
 
-/**
- * REFACTORED MAIN STATUS MOVE HANDLER
- */
 function handleStatusMove(
 	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot | null, // Can be null for 'self' or 'allySide' moves
+	defenderSlot: ActivePokemonSlot | null,
 	move: Move,
 	battle: BattleState,
 	messageLog: string[]
@@ -2871,14 +2579,12 @@ function handleStatusMove(
 	const defender = defenderSlot?.pokemon;
 	const defenderSpecies = defender ? Dex.species.get(defender.species) : null;
 
-	// --- 1. Prankster vs Dark-type Check ---
 	const attackerAbility = toID(attacker.ability || '');
 	if (attackerAbility === 'prankster' && defenderSpecies?.types.includes('Dark')) {
 		messageLog.push(`${defender!.species} is immune to Prankster-boosted moves!`);
 		return;
 	}
 
-	// --- 2. Type/Effectiveness Check (if it targets an opponent) ---
 	if (defender && defenderSpecies && move.target !== 'self' && !move.flags.heal) {
 		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle);
 		if (effectiveness === 0) {
@@ -2887,60 +2593,41 @@ function handleStatusMove(
 		}
 	}
 
-	// --- 3. Handle move by category ---
-	
-	// Handle moves with hardcoded logic first
 	if (handleSpecificStatusMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
 	
-	// Handle generic stat changes (e.g., Swords Dance, Growl)
 	if (handleGenericBoostMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
 
-	// Handle generic status infliction (e.g., Thunder Wave, Spore)
 	if (handleGenericStatusInflictMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
 
-	// Handle generic volatile status (e.g., Confuse Ray, Taunt)
 	if (handleGenericVolatileMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
 		return;
 	}
 	
-	// Handle generic field effects (e.g., Rain Dance, Trick Room)
 	if (handleGenericFieldMove(attackerSlot, move, battle, messageLog)) {
 		return;
 	}
 	
-	// Handle generic side effects (e.g., Stealth Rock, Reflect)
 	if (handleGenericSideMove(attackerSlot, move, battle, messageLog)) {
 		return;
 	}
 	
-	// Handle generic healing (e.g., Recover, Roost)
 	if (handleGenericHealMove(attackerSlot, move, messageLog)) {
 		return;
 	}
 
-	// Handle self-switching moves (Baton Pass, Teleport)
 	if (move.selfSwitch) {
-		// This will be handled by executeAction
 		return;
 	}
 
-	// If no other handler caught it, the move fails
 	messageLog.push(`But it failed!`);
 }
 
-/********************************
- * REFACTORED END OF TURN
- ********************************/
-
-/**
- * Applies end-of-turn status damage (Burn, Poison) and healing (Poison Heal).
- */
 function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
@@ -2964,37 +2651,30 @@ function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, mess
 	}
 }
 
-/**
- * Applies end-of-turn item effects (Orbs, Berries, Leftovers, Black Sludge, Sticky Barb).
- * @returns {boolean} Returns `true` if a Lum Berry was consumed, indicating other status effects should be skipped.
- */
 function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return false;
 	
 	const pokemon = slot.pokemon;
 	const speciesData = Dex.species.get(pokemon.species);
 
-	// --- Orbs (run first) ---
 	if (!slot.status) {
 		if (pokemon.item === 'flameorb' && !speciesData.types.includes('Fire')) {
 			slot.status = 'brn';
 			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was burned by its Flame Orb!</span>`);
 		} else if (pokemon.item === 'toxicorb' && !speciesData.types.includes('Poison') && !speciesData.types.includes('Steel')) {
-			slot.status = 'psn'; // User intentionally skipped 'tox'
+			slot.status = 'psn';
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was badly poisoned by its Toxic Orb!</span>`);
 		}
 	}
 
-	// --- Lum Berry (runs before status damage) ---
 	if (slot.status && pokemon.item === 'lumberry') {
 		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		pokemon.item = undefined;
 		activateUnburden(slot, messageLog);
-		return true; // Status was cured, skip status damage
+		return true;
 	}
 
-	// --- Healing/Damaging Items (run after status) ---
 	if (pokemon.item === 'leftovers' && pokemon.hp < pokemon.maxHp) {
 		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
@@ -3018,9 +2698,6 @@ function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 	return false;
 }
 
-/**
- * Applies end-of-turn damage from volatile statuses (Cursed, Nightmare, Trapped).
- */
 function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
@@ -3056,26 +2733,21 @@ function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleSta
 	}
 }
 
-/**
- * Applies end-of-turn healing from volatile statuses (Leech Seed, Aqua Ring, Ingrain).
- */
 function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 	
-	// --- Leech Seed (drains and heals opponent) ---
 	if (slot.isSeeded) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
 			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
 
-			// Find an opponent to heal
 			const isPlayer = battle.playerSlots.includes(slot);
 			const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-			const opponentToHeal = opponentSlots[0]; // Heals the first available opponent
+			const opponentToHeal = opponentSlots[0];
 
-			if (opponentToHeal && opponentToHeal.pokemon.hp > 0 && (opponentToHeal.healBlockTurns || 0) <= 0) { // Check heal block on target
+			if (opponentToHeal && opponentToHeal.pokemon.hp > 0 && (opponentToHeal.healBlockTurns || 0) <= 0) {
 				const oldHp = opponentToHeal.pokemon.hp;
 				opponentToHeal.pokemon.hp = Math.min(opponentToHeal.pokemon.maxHp, opponentToHeal.pokemon.hp + drainAmount);
 				messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
@@ -3084,7 +2756,6 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	}
 	if (pokemon.hp <= 0) return;
 	
-	// --- Self-healing effects (blocked by Heal Block) ---
 	if ((slot.healBlockTurns || 0) > 0) return;
 
 	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
@@ -3100,15 +2771,10 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	}
 }
 
-/**
- * Decrements all end-of-turn counters (Yawn, Taunt, Disable, Encore, etc.).
- * Also handles Speed Boost.
- */
 function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 
-	// --- Yawn ---
 	if (slot.yawnCounter !== undefined && slot.yawnCounter > 0) {
 		slot.yawnCounter--;
 		if (slot.yawnCounter === 0) {
@@ -3128,7 +2794,6 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 	
-	// --- Other Volatiles ---
 	if (slot.isTrapped) {
 		slot.isTrapped.turns--;
 		if (slot.isTrapped.turns <= 0) {
@@ -3181,7 +2846,6 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
-	// --- Slow Start ---
 	if (slot.slowStartTurns !== undefined && slot.slowStartTurns > 0) {
 		slot.slowStartTurns--;
 		if (slot.slowStartTurns === 0) {
@@ -3189,7 +2853,6 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 	
-	// --- Speed Boost ---
 	const ability = toID(pokemon.ability || '');
 	if (ability === 'speedboost' && slot.statStages.spe < 6) {
 		slot.statStages.spe++;
@@ -3197,46 +2860,28 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 	}
 }
 
-/**
- * [REFACTORED]
- * Processes end-of-turn effects like status damage, item healing/damage, and volatile statuses.
- */
 function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 
-	// 1. Handle EOT Item Activations (Orbs) and Cures (Lum Berry)
 	const lumCuredStatus = applyEOTItemEffects(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
-	// 2. Handle Status Damage (Burn, Poison, Poison Heal)
 	if (!lumCuredStatus) {
 		applyEOTStatusDamage(slot, battle, messageLog);
 	}
 	if (slot.pokemon.hp <= 0) return;
 
-	// 3. Handle Volatile Status Damage (Curse, Nightmare, Trap)
 	applyEOTVolatileStatusDamage(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 	
-	// 4. Handle Volatile Healing (Leech Seed, Aqua Ring, Ingrain)
 	applyEOTHealingEffects(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
-	// 5. Decrement all counters (Yawn, Taunt, Disable, Slow Start, Speed Boost, etc.)
 	decrementEOTVolatileCounters(slot, battle, messageLog);
 
-	// 6. Clear one-turn effects
-	slot.isCharged = false; // Charge only lasts until next Electric move
+	slot.isCharged = false;
 }
 
-/********************************
- * REFACTORED FAINT & SWITCHING
- ********************************/
-
-/**
- * Handles all logic for a fainted opponent, including EXP, replacements, and hazards.
- * @returns {boolean} Returns true if the opponent's side is now empty.
- */
 function handleOpponentFaint(
 	battle: BattleState,
 	player: PlayerData,
@@ -3254,11 +2899,9 @@ function handleOpponentFaint(
 			faintedThisCheck = true;
 			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
 
-			// --- AFTERMATH CHECK ---
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-				// Find the attacker (who must be a player participant)
 				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
 					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
@@ -3266,21 +2909,15 @@ function handleOpponentFaint(
 					messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
 				}
 			}
-			// --- END AFTERMATH CHECK ---
 
-			// --- ADDED: Moxie / Beast Boost Check ---
-			// This iterates over all player Pokemon that participated
 			for (const participantSlot of playerParticipants) {
 				if (participantSlot.pokemon.hp <= 0) continue;
 				
 				const ability = toID(participantSlot.pokemon.ability || '');
 				
 				if (ability === 'moxie' || ability === 'chillingneigh') {
-					// --- CONTRARY FIX ---
 					applyStatChange(participantSlot, 'atk', 1, battle, messageLog, participantSlot);
-					// --- END FIX ---
 				} else if (ability === 'beastboost') {
-					// Find highest stat
 					const stats = participantSlot.pokemon;
 					let highestStat: keyof Stats | 'accuracy' | 'evasion' = 'atk';
 					let maxStatVal = stats.atk;
@@ -3289,20 +2926,15 @@ function handleOpponentFaint(
 					if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
 					if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
 
-					// --- CONTRARY FIX ---
 					applyStatChange(participantSlot, highestStat, 1, battle, messageLog, participantSlot);
-					// --- END FIX ---
 				}
 			}
-			// --- END ADDED ---
 
-			// --- Grant EXP ---
 			if (playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
 				messageLog.push(...expResult.messages);
 			}
 
-			// --- Find Replacement ---
 			const nextOpponent = battle.opponentParty.find(p =>
 				p.hp > 0 &&
 				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
@@ -3320,7 +2952,6 @@ function handleOpponentFaint(
 					handleMirrorHerb(newSlot, battle, messageLog);
 				}
 			} else {
-				// No replacement found
 				battle.opponentSlots[i as 0 | 1] = null;
 			}
 		}
@@ -3328,10 +2959,6 @@ function handleOpponentFaint(
 	return faintedThisCheck;
 }
 
-/**
- * Handles all logic for a fainted player Pokemon.
- * @returns {boolean} Returns true if a player Pokemon fainted or a slot is empty.
- */
 function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
 	const playerSlotsToCheck = (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') ? [0, 1] : [0];
 	let switchNeeded = false;
@@ -3342,11 +2969,9 @@ function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
 			if (slot && slot.pokemon.hp <= 0) {
 				messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
 
-				// --- AFTERMATH CHECK ---
 				const faintedAbility = toID(slot.pokemon.ability || '');
 				const lastMove = slot.lastMoveThatHitMe;
 				if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-					// Find the attacker (who must be an opponent)
 					const opponentSlots = getActiveSlots(battle.opponentSlots);
 					const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 					if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
@@ -3355,7 +2980,6 @@ function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
 						messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
 					}
 				}
-				// --- END AFTERMATH CHECK ---
 			}
 			battle.playerSlots[i as 0 | 1] = null;
 			switchNeeded = true;
@@ -3364,9 +2988,6 @@ function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {
 	return switchNeeded;
 }
 
-/**
- * Handles AI pivot moves like U-turn or Volt Switch.
- */
 function handleAiPivot(battle: BattleState, messageLog: string[]) {
 	if (!battle.aiPendingPivot) return;
 
@@ -3383,7 +3004,6 @@ function handleAiPivot(battle: BattleState, messageLog: string[]) {
 
 		const newSlot = createActivePokemonSlot(nextOpponent);
 
-		// Handle Baton Pass
 		if (battle.aiPendingPivot.isBatonPass) {
 			newSlot.statStages = { ...pivotSlot.statStages };
 			newSlot.isConfused = pivotSlot.isConfused;
@@ -3401,17 +3021,12 @@ function handleAiPivot(battle: BattleState, messageLog: string[]) {
 			handleMirrorHerb(newSlot, battle, messageLog);
 		}
 	} else {
-		// No replacement, pivot fails
 		battle.opponentSlots[slotIndex as 0 | 1] = pivotSlot;
 		messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
 	}
-	battle.aiPendingPivot = undefined; // Clear flag
+	battle.aiPendingPivot = undefined;
 }
 
-/**
- * Checks for win/loss conditions and sends the appropriate end-battle HTML.
- * @returns {boolean} Returns true if the battle ended.
- */
 function checkForWinLoss(
 	context: CommandContext,
 	battle: BattleState,
@@ -3425,7 +3040,6 @@ function checkForWinLoss(
 	);
 	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
 
-	// --- 1. Check for Player Loss ---
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		saveBattleStatus(battle);
 		activeBattles.delete(user.id);
@@ -3438,10 +3052,9 @@ function checkForWinLoss(
 		player.money -= moneyLost;
 
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
-		return true; // Battle ended
+		return true;
 	}
 
-	// --- 2. Check for Player Win ---
 	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
 		p.hp > 0 &&
 		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
@@ -3462,7 +3075,6 @@ function checkForWinLoss(
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
 			}
 		} else {
-			// Wild battle win
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
 			player.money += moneyGained;
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
@@ -3472,18 +3084,12 @@ function checkForWinLoss(
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
 			}
 		}
-		return true; // Battle ended
+		return true;
 	}
 	
-	return false; // Battle continues
+	return false;
 }
 
-/**
- * [REFACTORED]
- * Checks the HP of all active Pokémon and handles the outcome of a faint.
- * This can result in a win, a loss, or a prompt to switch Pokémon.
- * @returns {boolean} Returns `true` if the battle ended or was interrupted (awaiting a switch), `false` if it continues.
- */
 function checkBattleEndCondition(
 	context: CommandContext,
 	battle: BattleState,
@@ -3493,25 +3099,19 @@ function checkBattleEndCondition(
 ): boolean {
 	const player = getPlayerData(user.id);
 	
-	// --- 1. Handle Faints ---
 	const playerParticipants = getActiveSlots(battle.playerSlots);
 	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
 
-	// --- 2. Check for Win/Loss ---
 	const battleEnded = checkForWinLoss(context, battle, player, user, messageLog);
 	if (battleEnded) return true;
 
-	// --- 3. Handle Pivot Moves ---
-	// A. Check for Player Pivot Switch (U-turn, etc.)
 	if (battle.pendingPivot) {
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
-		return true; // Battle interrupted
+		return true;
 	}
-	// B. Check for AI Pivot Switch
 	handleAiPivot(battle, messageLog);
 
-	// --- 4. Handle Faint/Forced Switch-In ---
 	const playerHasLivingPokemon = player.party.some(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
@@ -3519,30 +3119,21 @@ function checkBattleEndCondition(
 
 	if (playerSwitchNeeded && playerHasLivingPokemon) {
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
-		return true; // Battle interrupted
+		return true;
 	}
 
-	return false; // Battle continues
+	return false;
 }
-
-
-/**
- * Checks for statuses that might prevent a Pokémon from moving (sleep, freeze, paralysis, confusion).
- * @returns {boolean} `true` if the Pokémon can move, `false` otherwise.
- */
 
 function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	const attacker = attackerSlot.pokemon;
 
-	// START: Add this new block for Flinch
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
-		attackerSlot.willFlinch = false; // Reset the flag
-		return false; // Prevent the move
+		attackerSlot.willFlinch = false;
+		return false;
 	}
-	// END: New Flinch block
 
-	// Check for Freeze
 	if (attackerSlot.status === 'frz') {
 		if (Math.random() < 0.20) {
 			attackerSlot.status = null;
@@ -3553,7 +3144,6 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 		}
 	}
 
-	// Check for Sleep
 	if (attackerSlot.status === 'slp') {
 		attackerSlot.sleepCounter--;
 		if (attackerSlot.sleepCounter > 0) {
@@ -3565,7 +3155,6 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 		}
 	}
 
-	// Check for Confusion
 	if (attackerSlot.isConfused) {
 		messageLog.push(`${attacker.species} is confused!`);
 		attackerSlot.confusionCounter--;
@@ -3574,54 +3163,41 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 			attackerSlot.isConfused = false;
 			messageLog.push(`${attacker.species} snapped out of its confusion!`);
 		} else if (Math.random() < 1 / 3) {
-			// --- START: Tangled Feet Check ---
 			const attackerAbility = toID(attacker.ability || '');
 			if (attackerAbility === 'tangledfeet') {
 				messageLog.push(`${attacker.species}'s Tangled Feet prevents it from hurting itself!`);
-				return false; // Prevents self-damage, but still uses the turn
+				return false;
 			}
-			// --- END: Tangled Feet Check ---
 			
 			messageLog.push(`It hurt itself in its confusion!`);
 			const selfDamage = Math.floor((((2 * attacker.level / 5 + 2) * 40 * (attacker.atk / attacker.def)) / 50) + 2);
 			attacker.hp = Math.max(0, attacker.hp - selfDamage);
 			messageLog.push(`${attacker.species} took ${selfDamage} damage!`);
-			return false; // Turn ends after self-damage
+			return false;
 		}
 	}
 
-	// Check for Paralysis
 	if (attackerSlot.status === 'par') {
 		const attackerAbility = toID(attacker.ability || '');
 
-		// Check for full paralysis, *unless* the user has Quick Feet
 		if (attackerAbility !== 'quickfeet' && Math.random() < 0.25) {
 			messageLog.push(`${attacker.species} is fully paralyzed!`);
 			return false;
 		}
 	}
 
-	return true; // Can move
+	return true;
 }
 
-/**
- * Applies all entry hazard effects to a Pokémon switching in.
- * Handles damage, status, and stat changes from Spikes, Toxic Spikes, Stealth Rock, and Sticky Web.
- * Also handles hazard removal effects (e.g., Poison-type absorbing Toxic Spikes).
- * @returns {boolean} Returns true if the Pokémon fainted from hazard damage.
- */
 function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
-	// Helper function for switch-in abilities that run regardless of hazards
 	const runSwitchInAbilities = () => {
-		// --- 1. Weather, Terrain, Intimidate, etc. ---
 		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
 
 		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 
-		// --- 2. Frisk ---
 		if (ability === 'frisk') {
 			for (const opponentSlot of opponentSlots) {
 				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
@@ -3631,7 +3207,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 			}
 		}
 
-		// --- 3. Download ---
 		if (ability === 'download' && opponentSlots.length > 0) {
 			let totalDef = 0;
 			let totalSpd = 0;
@@ -3646,7 +3221,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 			}
 		}
 		
-		// --- 4. Trace ---
 		if (ability === 'trace') {
 			const untraceableAbilities = ['trace', 'stancechange', 'schooling', 'disguise', 'neutralizinggas', 'download', 'forecast', 'flowergift', 'imposter', 'multitype'];
 			const validTargets = opponentSlots.filter(oppSlot => 
@@ -3662,15 +3236,14 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	};
 
-	// Heavy-Duty Boots provides total immunity to all entry hazards.
 	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
-		runSwitchInAbilities(); // Run switch-in abilities even if immune to hazards
+		runSwitchInAbilities();
 		return false;
 	}
 
 	const hazards = isPlayerSwitchIn ? battle.playerHazards : battle.opponentHazards;
 	if (hazards.length === 0) {
-		runSwitchInAbilities(); // No hazards, just run switch-in abilities
+		runSwitchInAbilities();
 		return false;
 	}
 
@@ -3681,16 +3254,11 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 	let totalDamage = 0;
 	let airBalloonPopped = false;
 
-	// --- Effects that don't do direct damage (run first) ---
 	if (isGrounded) {
-		// Sticky Web lowers Speed
 		if (hazards.includes('stickyweb')) {
-			// --- CONTRARY FIX: Use applyStatChange ---
-			applyStatChange(slot, 'spe', -1, battle, messageLog, null); // Source is null (field hazard)
-			// --- END FIX ---
+			applyStatChange(slot, 'spe', -1, battle, messageLog, null);
 		}
 
-		// Toxic Spikes poisons or badly poisons
 		const toxicSpikeLayers = hazards.filter(h => h === 'toxicspikes').length;
 		if (toxicSpikeLayers > 0) {
 			if (species.types.includes('Poison')) {
@@ -3713,7 +3281,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
-	// --- Damage-dealing hazards ---
 	if (isGrounded) {
 		const spikeLayers = hazards.filter(h => h === 'spikes').length;
 		if (spikeLayers > 0) {
@@ -3732,7 +3299,6 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
 
-	// Apply final damage and add appropriate messages
 	if (totalDamage > 0) {
 		if (hazards.includes('stealthrock')) {
 			messageLog.push(`Pointed stones dug into ${pokemon.species}!`);
@@ -3741,47 +3307,39 @@ function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleSta
 		}
 		pokemon.hp = Math.max(0, pokemon.hp - totalDamage);
 		if (pokemon.hp <= 0) {
-			return true; // Pokémon fainted
+			return true;
 		}
 	}
 
-	// Run switch-in abilities (weather/terrain setting)
 	runSwitchInAbilities();
 
-	return false; // Pokémon survived
+	return false;
 }
 
-/**
- * Applies a stat stage change to a slot, respecting Contrary and other abilities/items.
- * @returns {boolean} `true` if the stat change had any effect.
- */
 function applyStatChange(
 	slot: ActivePokemonSlot,
 	stat: keyof ActivePokemonSlot['statStages'],
 	value: number,
 	battle: BattleState,
 	messageLog: string[],
-	source: ActivePokemonSlot | null = null // Source of the change (null if from self)
+	source: ActivePokemonSlot | null = null
 ): boolean {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 	let actualValue = value;
 
-	// 1. Check Contrary
 	if (ability === 'contrary') {
 		actualValue *= -1;
 	}
 
-	// --- SIMPLE IMPLEMENTATION ---
 	if (ability === 'simple') {
 		actualValue *= 2;
 	}
-	// --- END SIMPLE IMPLEMENTATION ---
 
 	const currentStage = slot.statStages[stat];
 	const isSelf = !source || source.pokemon.id === pokemon.id;
 
-	if (actualValue > 0) { // Stat Rise
+	if (actualValue > 0) {
 		if (currentStage >= 6) {
 			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
 			return false;
@@ -3792,8 +3350,7 @@ function applyStatChange(
 		messageLog.push(msg);
 		return true;
 
-	} else if (actualValue < 0) { // Stat Drop
-		// 2. Check for drop-prevention (only if not self-inflicted)
+	} else if (actualValue < 0) {
 		if (!isSelf) {
 			if (battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
 				messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
@@ -3819,12 +3376,11 @@ function applyStatChange(
 		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
 		messageLog.push(msg);
 
-		// 3. Trigger Defiant/Competitive
 		checkStatDropAbilities(slot, source, battle, messageLog);
 		return true;
 	}
 
-	return false; // value was 0
+	return false;
 }
 
 function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
@@ -3834,17 +3390,15 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 	const myStages = slot.statStages;
 	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
 
-	if (opponentSlots.length === 0) return; // No opponents to copy from
+	if (opponentSlots.length === 0) return;
 
 	let copiedAny = false;
 	const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 
 	for (const stat of stats) {
-		// Find the maximum positive stat boost for this stat among all opponents
 		const maxOpponentBoost = Math.max(0, ...opponentSlots.map(s => s.statStages[stat]));
 
 		if (maxOpponentBoost > 0) {
-			// Copy those boosts
 			myStages[stat] = Math.min(6, myStages[stat] + maxOpponentBoost);
 			copiedAny = true;
 		}
@@ -3852,14 +3406,11 @@ function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageL
 
 	if (copiedAny) {
 		messageLog.push(`${slot.pokemon.species}'s Mirror Herb copied the opponent's stat boosts!`);
-		slot.pokemon.item = undefined; // Consumed after use
-		activateUnburden(slot, messageLog); // <-- FIX: Was 'attackerSlot'
+		slot.pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
 	}
 }
 
-/**
- * Handles the Synchronize ability, applying a status back to the attacker.
- */
 function applySynchronize(
 	status: Status,
 	defenderSlot: ActivePokemonSlot,
@@ -3868,14 +3419,13 @@ function applySynchronize(
 	messageLog: string[]
 ): void {
 	const attacker = attackerSlot.pokemon;
-	if (!attacker || attacker.hp <= 0) return; // Don't apply if attacker fainted
+	if (!attacker || attacker.hp <= 0) return;
 
 	const attackerSpecies = Dex.species.get(attacker.species);
-	let canBeAfflicted = !attackerSlot.status; // Can't afflict if already statused
+	let canBeAfflicted = !attackerSlot.status;
 
 	if (!canBeAfflicted) return;
 
-	// Check for type immunities
 	if ((status === 'brn' && attackerSpecies.types.includes('Fire')) ||
 		(status === 'par' && attackerSpecies.types.includes('Electric')) ||
 		(status === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel'))) ||
@@ -3883,18 +3433,16 @@ function applySynchronize(
 		canBeAfflicted = false;
 	}
 
-	// Check for ability immunities
 	if (canBeAfflicted && RPGAbilities.preventsStatus(attacker, status)) {
 		canBeAfflicted = false;
 	}
 
-	// Check for terrain immunities
 	const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
 	if (canBeAfflicted && battle.terrain?.type === 'misty' && attackerIsGrounded) {
-		canBeAfflicted = false; // Misty Terrain prevents status
+		canBeAfflicted = false;
 	}
 	if (canBeAfflicted && battle.terrain?.type === 'electric' && status === 'slp' && attackerIsGrounded) {
-		canBeAfflicted = false; // Electric Terrain prevents sleep
+		canBeAfflicted = false;
 	}
 
 	if (canBeAfflicted) {
@@ -3906,14 +3454,9 @@ function applySynchronize(
 	}
 }
 
-/**
- * Mental Herb: Cures move-binding effects (Taunt, Encore, Disable, Torment, Heal Block)
- * Called after a move-binding effect is applied to check if Mental Herb should cure it
- */
 function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
 
-	// Check if the Pokemon has any move-binding effects
 	const hasBindingEffect =
 		slot.tauntTurns > 0 ||
 		slot.encoreMove !== undefined ||
@@ -3922,7 +3465,6 @@ function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLo
 		(slot.healBlockTurns || 0) > 0;
 
 	if (hasBindingEffect) {
-		// Cure all move-binding effects
 		slot.tauntTurns = 0;
 		slot.encoreMove = undefined;
 		slot.disabledMove = undefined;
@@ -3930,8 +3472,8 @@ function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLo
 		slot.healBlockTurns = 0;
 
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
-		slot.pokemon.item = undefined; // Mental Herb is consumed
-		activateUnburden(slot, messageLog); // <-- FIX: Was 'attackerSlot'
+		slot.pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
 		return true;
 	}
 
@@ -3939,23 +3481,19 @@ function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLo
 }
 
 function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
-	// **NEW:** Magic Room disables all held items.
 	if (battle.magicRoomTurns > 0) return;
 
 	const pokemon = slot.pokemon;
 
-	// No effect if fainted, no item, or if an item was already consumed this turn (prevents multiple berries activating)
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
 	let itemConsumed = false;
 	let consumedItemName = '';
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 
-	// **FIXED HP THRESHOLDS:** Check both 50% and 25% thresholds in one pass
 	const halfHP = pokemon.maxHp / 2;
 	const quarterHP = pokemon.maxHp / 4;
 
-	// Priority 1: 50% HP healing items (FIXED: Sitrus Berry now activates at 1/2 HP)
 	if (pokemon.hp <= halfHP && !itemConsumed) {
 		let healAmount = 0;
 		if (pokemon.item === 'berryjuice') {
@@ -3974,7 +3512,6 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'sitrusberry') {
-			// FIXED: Sitrus Berry now activates at 1/2 HP and heals 1/4 max HP
 			healAmount = Math.floor(pokemon.maxHp / 4);
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
@@ -3987,7 +3524,6 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 		}
 	}
 
-	// Priority 2: 25% HP items (only if no item consumed yet)
 	if (!itemConsumed && pokemon.hp <= quarterHP) {
 		const pinchBerryHP = ['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'];
 		const pinchBerryStat: Record<string, keyof Omit<Stats, 'maxHp'>> = {
@@ -3997,22 +3533,19 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 
 		if (pinchBerryHP.includes(pokemon.item)) {
 			const oldHp = pokemon.hp;
-			// FIXED: Now heals 1/2 max HP instead of 1/3
 			const healAmount = Math.floor(pokemon.maxHp / 2);
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
 
-			// Check for confusion based on nature
 			const berryData = BERRY_FLAVORS[pokemon.item];
 			const natureData = NATURES[pokemon.nature];
 			if (natureData && berryData) {
-				// Pokemon becomes confused if the berry's flavor matches what the nature dislikes
 				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
 				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
 					if (!slot.isConfused) {
 						slot.isConfused = true;
-						slot.confusionCounter = Math.floor(Math.random() * 3) + 2; // 2-4 turns
+						slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
 						messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
 					}
 				}
@@ -4021,14 +3554,11 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 		} else if (pokemon.item in pinchBerryStat) {
 			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
 			
-			// --- CONTRARY FIX ---
 			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
 				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-				// Message is handled by applyStatChange, but we add context
 				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
 				itemConsumed = true;
 			}
-			// --- END FIX ---
 
 		} else if (pokemon.item === 'starfberry') {
 			const targetStages = slot.statStages;
@@ -4038,41 +3568,28 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			if (availableStats.length > 0) {
 				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
 				
-				// --- CONTRARY FIX ---
 				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
 					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-					// Message is handled by applyStatChange, but we add context
 					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
 					itemConsumed = true;
 				}
-				// --- END FIX ---
 			}
 		}
 	}
 
-	// If an item was used, remove it from the Pokemon
 	if (itemConsumed) {
 		pokemon.item = undefined;
 		activateUnburden(slot, messageLog);
 	}
 }
 
-
-
-/**
- * Processes end-of-turn effects for weather, such as damage and duration.
- */
 function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
-	// --- START FIX: Cloud Nine / Air Lock ---
 	if (!RPGAbilities.isWeatherActive(battle)) {
-		// Weather still counts down, but no messages or effects
 		if (battle.weather) battle.weather.turns--;
 		if (battle.weather && battle.weather.turns <= 0) battle.weather = undefined;
 		return;
 	}
-	// --- END FIX ---
 
-	// This line is now safe because isWeatherActive checks for !battle.weather
 	battle.weather!.turns--;
 
 	const weatherMessages = {
@@ -4083,7 +3600,6 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	};
 	messageLog.push(weatherMessages[battle.weather!.type]);
 
-	// Apply weather damage and healing effects
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
 	for (const slot of allSlots) {
@@ -4092,7 +3608,6 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		const species = Dex.species.get(pokemon.species);
 		const ability = toID(pokemon.ability || '');
 
-		// Weather healing abilities
 		if (battle.weather!.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
@@ -4105,24 +3620,20 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
-		} else if (battle.weather!.type === 'rain' && ability === 'hydration' && slot.status) { // <-- ADDED THIS BLOCK
+		} else if (battle.weather!.type === 'rain' && ability === 'hydration' && slot.status) {
 			slot.status = null;
 			messageLog.push(`${pokemon.species}'s Hydration cured its status condition!`);
 		}
 
-		// Weather damage
 		let takeDamage = false;
 		let damageAmount = Math.floor(pokemon.maxHp / 16);
 
-		// Sandstorm damage
 		if (battle.weather!.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
 			takeDamage = true;
 		}
-		// Hail damage (but not if Ice Body healed)
 		else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
 		}
-		// Sun damage for Dry Skin and Solar Power
 		else if (battle.weather!.type === 'sun') {
 			if (ability === 'dryskin') {
 				takeDamage = true;
@@ -4133,7 +3644,6 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 			}
 		}
 
-		// Apply weather damage (blocked by Magic Guard)
 		if (takeDamage && RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, damageAmount));
 			if (ability === 'dryskin' && battle.weather!.type === 'sun') {
@@ -4146,7 +3656,6 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	// Check if weather has ended
 	if (battle.weather!.turns <= 0) {
 		const weatherEndMessages = {
 			'sun': 'The sunlight faded.',
@@ -4159,25 +3668,7 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	}
 }
 
-/**
- * Checks if a Pokemon's held item is usable (not suppressed by Magic Room or Embargo)
- * @param slot The Pokemon slot to check
- * @param battle The battle state
- * @returns true if items can be used, false if suppressed
- */
-function canUseItem(slot: ActivePokemonSlot, battle: BattleState): boolean {
-	// Magic Room suppresses all items
-	if (battle.magicRoomTurns > 0) return false;
-	// Embargo suppresses this Pokemon's item specifically
-	if (slot.embargoTurns > 0) return false;
-	return true;
-}
-
-/**
- * Processes end-of-turn effects for all field conditions (Rooms, Terrains).
- */
 function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) {
-	// Handle Terrain
 	if (battle.terrain) {
 		if (battle.terrain.type === 'grassy') {
 			const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
@@ -4198,7 +3689,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Screens
 	if (battle.playerReflectTurns > 0) {
 		battle.playerReflectTurns--;
 		if (battle.playerReflectTurns === 0) messageLog.push(`Your team's Reflect wore off!`);
@@ -4224,7 +3714,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		if (battle.opponentAuroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
 	}
 
-	// Handle Trick Room
 	if (battle.trickRoomTurns > 0) {
 		battle.trickRoomTurns--;
 		if (battle.trickRoomTurns <= 0) {
@@ -4232,7 +3721,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Magic Room
 	if (battle.magicRoomTurns > 0) {
 		battle.magicRoomTurns--;
 		if (battle.magicRoomTurns <= 0) {
@@ -4240,7 +3728,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Wonder Room
 	if (battle.wonderRoomTurns > 0) {
 		battle.wonderRoomTurns--;
 		if (battle.wonderRoomTurns <= 0) {
@@ -4248,7 +3735,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Gravity
 	if (battle.gravityTurns > 0) {
 		battle.gravityTurns--;
 		if (battle.gravityTurns <= 0) {
@@ -4256,7 +3742,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Mud Sport
 	if (battle.mudSportTurns > 0) {
 		battle.mudSportTurns--;
 		if (battle.mudSportTurns <= 0) {
@@ -4264,7 +3749,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 		}
 	}
 
-	// Handle Water Sport
 	if (battle.waterSportTurns > 0) {
 		battle.waterSportTurns--;
 		if (battle.waterSportTurns <= 0) {
@@ -4273,14 +3757,6 @@ function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) 
 	}
 }
 
-/***********************
-* MAIN UNIFICATION
-************************/
-/**
- * Executes a single move for a single Pokémon during a battle turn.
- * This unified function handles all turn logic, including pre-turn checks,
- * accuracy, move execution, and post-turn effects.
- */
 function executeMove(
 	attackerSlot: ActivePokemonSlot,
 	targetSlots: ActivePokemonSlot[],
@@ -4289,68 +3765,53 @@ function executeMove(
 	battle: BattleState,
 	messageLog: string[]
 ): void {
-	// Track last move used (for Disable, Torment, etc.)
 	attackerSlot.lastMoveUsed = move.id;
 
-	// Reset protect counter if a different move is used
 	if (!['protect', 'detect'].includes(move.id)) {
 		attackerSlot.protectSuccessCounter = 0;
 	}
 
-	// --- Calculate Spread Multiplier ---
 	const isSpread = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target);
 	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
 
 	for (const defenderSlot of targetSlots) {
-		if (attackerSlot.pokemon.hp <= 0) break; // Attacker fainted mid-move (e.g. from ally recoil)
-		if (defenderSlot.pokemon.hp <= 0) continue; // Target fainted mid-move (e.g. from first hit of spread)
+		if (attackerSlot.pokemon.hp <= 0) break;
+		if (defenderSlot.pokemon.hp <= 0) continue;
 
-		// --- NEW: WIDE GUARD CHECK ---
 		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
 
 		if (isSpread) {
 			if (isPlayerDefender && battle.playerWideGuard) {
 				messageLog.push(`${defenderSlot.pokemon.species} was protected by Wide Guard!`);
-				continue; // Fails against this target
+				continue;
 			}
 			if (!isPlayerDefender && battle.opponentWideGuard) {
 				messageLog.push(`${defenderSlot.pokemon.species} was protected by Wide Guard!`);
-				continue; // Fails against this target
+				continue;
 			}
 		}
-		// --- END WIDE GUARD CHECK ---
 
-		// 2. Check for Protection (Struggle bypasses this)
 		if (move.id !== 'struggle') {
 			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect) {
 				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
-				continue; // Move fails against this target
+				continue;
 			}
 		}
 
-		// 6. Accuracy Check
 		let moveHit = true;
 		if (['aerialace'].includes(move.id)) {
-			// Bypasses accuracy
 		} else if (move.accuracy !== true) {
-			// --- START FIX: Accuracy/Evasion Abilities ---
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
 
-			// Apply ability modifiers like Compound Eyes or Hustle
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
 			
-			// Apply ability-based evasion modifiers
 			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
-			// --- END FIX ---
 			
-			// ... (Weather accuracy logic) ...
-			// --- START FIX: Cloud Nine ---
 			if (RPGAbilities.isWeatherActive(battle)) {
-			// --- END FIX ---
 				if (battle.weather!.type === 'rain') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
 				} else if (battle.weather!.type === 'sun') {
@@ -4361,14 +3822,11 @@ function executeMove(
 				}
 			}
 
-			// Gravity increases accuracy by 5/3 (approx 1.67x)
 			if (battle.gravityTurns > 0) {
 				moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
 			}
 
-			// --- START FIX: Use finalEvasionMultiplier ---
 			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
-			// --- END FIX ---
 			if ((Math.random() * 100) > finalAccuracy) {
 				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
@@ -4382,12 +3840,11 @@ function executeMove(
 		}
 
 		if (!moveHit) {
-			continue; // Move missed this target
+			continue;
 		}
 
-		// 7. Execute the Move
 		if (move.id === 'struggle') {
-			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, 1.0); // Struggle doesn't spread
+			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, 1.0);
 		} else if (move.category === 'Status') {
 			handleStatusMove(attackerSlot, defenderSlot, move, battle, messageLog);
 		} else {
@@ -4395,7 +3852,6 @@ function executeMove(
 		}
 	}
 
-	// Check for form changes after move execution
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
 	}
@@ -4406,113 +3862,84 @@ function executeMove(
 	}
 }
 
-/**
- * Processes all end-of-turn effects, such as status damage,
- * weather, and field conditions, for both Pokémon.
- */
 function processEndOfTurn(battle: BattleState, messageLog: string[]) {
-	// Get all active slots before effects start
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
-	// --- Process Future Sight / Doom Desire attacks ---
-	// Process player's future moves (hitting opponents)
 	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
-			// Execute the future move
 			const targetSlot = battle.opponentSlots[fm.slotIndex];
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
-				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
 
-				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
 
-				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
 
-				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
 
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
-			return false; // Remove this future move from the array
+			return false;
 		}
-		return true; // Keep this future move
+		return true;
 	});
 
-	// Process opponent's future moves (hitting player)
 	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
-			// Execute the future move
 			const targetSlot = battle.playerSlots[fm.slotIndex];
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
-				// Calculate damage using stored stats
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
 
-				// Get defender's current stats
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
 
-				// Calculate damage
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
 
-				// Apply damage
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
 
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			}
-			return false; // Remove this future move from the array
+			return false;
 		}
-		return true; // Keep this future move
+		return true;
 	});
 
-	// Reset flinch status for all active slots
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 	}
 
-	// Handle effects that apply to each Pokémon individually (status, items)
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			handleEndOfTurnEffects(slot, battle, messageLog);
 		}
 	}
 
-	// Handle effects that apply to the whole field (weather, terrain, rooms)
 	handleEndOfTurnWeather(battle, messageLog);
 	handleEndOfTurnFieldEffects(battle, messageLog);
 }
-
-/****************
-* Core Functions
-****************/
-/**
- * Applies a healing item to a Pokémon and handles all logic.
- * @returns An object with the result of the action.
- */
 
 function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
 	if (pokemon.hp <= 0) {
@@ -4524,7 +3951,6 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		return { success: false, message: `This item cannot be used to heal.` };
 	}
 
-	// Handle status-only healing items first
 	if (itemId === 'healpowder') {
 		if (!pokemon.status) {
 			return { success: false, message: `${pokemon.species} is not affected by any status condition.` };
@@ -4534,7 +3960,6 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		return { success: true, message: `You used <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! Its status condition was healed.` };
 	}
 
-	// Handle HP restoration items
 	if (pokemon.hp >= pokemon.maxHp) {
 		return { success: false, message: `${pokemon.species} is already at full health!` };
 	}
@@ -4597,11 +4022,6 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 	return { success: true, message };
 }
 
-/**
- * Calculates accuracy/evasion multiplier from stat stage.
- * @param stage The stat stage, from -6 to +6.
- * @returns The multiplier.
- */
 function getAccuracyEvasionMultiplier(stage: number): number {
 	if (stage > 0) {
 		return (3 + stage) / 3;
@@ -4611,26 +4031,14 @@ function getAccuracyEvasionMultiplier(stage: number): number {
 	return 1;
 }
 
-/********************
-Core Functiins Ends
-*************""*"""" */
-
-// --- NEW GLOBAL CONSTANT AND HELPER FUNCTION ---
-
 const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
 
-/**
- * Creates a new ActivePokemonSlot object with default volatile statuses.
- * @param pokemon The base RPGPokemon object.
- * @returns A new ActivePokemonSlot object.
- */
-
 function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
-	const ability = toID(pokemon.ability || ''); // <-- THIS LINE WAS MISSING
+	const ability = toID(pokemon.ability || '');
 	return {
 		pokemon,
 		statStages: { ...INITIAL_STAT_STAGES },
-		status: pokemon.status, // Carry over out-of-battle status
+		status: pokemon.status,
 		sleepCounter: 0,
 		isConfused: false,
 		confusionCounter: 0,
@@ -4647,7 +4055,6 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		lockedMove: undefined,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
-		// Initialize new volatile fields
 		substitute: undefined,
 		disabledMove: undefined,
 		encoreMove: undefined,
@@ -4673,10 +4080,6 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 	};
 }
 
-/**
- * Checks if a Pokémon is trapped by an opponent's ability (Arena Trap, Shadow Tag).
- * @returns {ActivePokemonSlot | null} The trapping Pokémon, or null if not trapped.
- */
 function checkTrappingAbility(
 	slotToSwitch: ActivePokemonSlot,
 	battle: BattleState
@@ -4685,30 +4088,25 @@ function checkTrappingAbility(
 	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
 	const userAbility = toID(slotToSwitch.pokemon.ability || '');
 
-	// Shadow Tag users are immune to Shadow Tag
 	if (userAbility === 'shadowtag') return null;
 
 	for (const oppSlot of opponentSlots) {
 		const oppAbility = toID(oppSlot.pokemon.ability || '');
 
 		if (oppAbility === 'shadowtag') {
-			return oppSlot; // Trapped
+			return oppSlot;
 		}
 		
 		if (oppAbility === 'arenatrap') {
-			// Arena Trap doesn't affect airborne Pokemon
 			if (RPGAbilities.isGrounded(slotToSwitch.pokemon, battle)) {
-				return oppSlot; // Trapped
+				return oppSlot;
 			}
 		}
 	}
 
-	return null; // Not trapped
+	return null;
 }
 
-/**
- * Activates Unburden ability when an item is consumed
- */
 function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
 	if (ability === 'unburden' && !slot.unburdenActive) {
@@ -4717,10 +4115,6 @@ function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
 	}
 }
 
-/**
- * Helper to get a live Pokemon slot from its index.
- * Returns the slot if it exists and the Pokemon is not fainted.
- */
 function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
 	let slot: ActivePokemonSlot | null = null;
 	if (slotIndex === 0) slot = battle.playerSlots[0];
@@ -4734,32 +4128,21 @@ function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemon
 	return null;
 }
 
-/**
- * Resolves all targets for a move based on the move's target property.
- * @param attackerSlotIndex The slot index (0-3) of the user.
- * @param targetSlotIndex The slot index (0-3) the user *chose*.
- * @param move The move being used.
- * @param battle The current battle state.
- * @returns An array of ActivePokemonSlot objects that are the final targets.
- */
 function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
 	const targets: ActivePokemonSlot[] = [];
 	const attackerSlot = getSlotFromIndex(battle, attackerSlotIndex);
-	if (!attackerSlot) return []; // Attacker is fainted or doesn't exist
+	if (!attackerSlot) return [];
 
 	const isPlayerAttacker = attackerSlotIndex <= 1;
 
-	// Get all potential targets that are alive
 	const pSlot0 = getSlotFromIndex(battle, 0);
 	const pSlot1 = getSlotFromIndex(battle, 1);
 	const oSlot0 = getSlotFromIndex(battle, 2);
 	const oSlot1 = getSlotFromIndex(battle, 3);
 
 	const allFoes = isPlayerAttacker ? [oSlot0, oSlot1] : [pSlot0, pSlot1];
-	const allAllies = isPlayerAttacker ? [pSlot0, pSlot1] : [oSlot0, oSlot1];
 	const allOthers = [pSlot0, pSlot1, oSlot0, oSlot1];
 
-	// Helper function to add a target if it's valid
 	const addTarget = (slot: ActivePokemonSlot | null) => {
 		if (slot && slot.pokemon.hp > 0) {
 			targets.push(slot);
@@ -4767,27 +4150,23 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 	};
 
 	switch (move.target) {
-	// --- Single-target moves ---
-	case 'normal': // Hits one adjacent foe
-	case 'any': // Hits any one pokemon
-	case 'ally': // Hits one ally
-		// TODO: Add redirect logic (Follow Me, Rage Powder) here
+	case 'normal':
+	case 'any':
+	case 'ally':
 		const chosenTarget = getSlotFromIndex(battle, targetSlotIndex);
 		addTarget(chosenTarget);
 		break;
 
-	// --- User ---
 	case 'self':
 		addTarget(attackerSlot);
 		break;
 
-	// --- Spread moves ---
-	case 'allAdjacentFoes': // Hits both foes
+	case 'allAdjacentFoes':
 		allFoes.forEach(addTarget);
 		break;
 
-	case 'allAdjacent': // Hits everyone but user
-	case 'scripted': // e.g., Surf, Earthquake - hits everyone but user
+	case 'allAdjacent':
+	case 'scripted':
 		allOthers.forEach(slot => {
 			if (slot && slot.pokemon.id !== attackerSlot.pokemon.id) {
 				addTarget(slot);
@@ -4795,7 +4174,7 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 		});
 		break;
 
-	case 'randomNormal': // Hits one random adjacent foe
+	case 'randomNormal':
 		const validFoes = allFoes.filter(s => s && s.pokemon.hp > 0) as ActivePokemonSlot[];
 		if (validFoes.length > 0) {
 			const randomFoe = validFoes[Math.floor(Math.random() * validFoes.length)];
@@ -4803,43 +4182,31 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
 		}
 		break;
 
-	// --- Side-wide moves ---
-	case 'foeSide': // e.g., Stealth Rock, Spikes
-		// For damage/effect logic, we only need one target.
-		// The execution function will know to apply this to the *side*.
+	case 'foeSide':
 		const primaryFoe = getSlotFromIndex(battle, isPlayerAttacker ? 2 : 0);
 		if (primaryFoe) addTarget(primaryFoe);
 		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 3 : 1));
 		break;
 
-	case 'allySide': // e.g., Reflect, Light Screen
+	case 'allySide':
 		const primaryAlly = getSlotFromIndex(battle, isPlayerAttacker ? 0 : 2);
 		if (primaryAlly) addTarget(primaryAlly);
 		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 1 : 3));
 		break;
 
-	case 'all': // e.g., Perish Song
+	case 'all':
 		allOthers.forEach(addTarget);
 		break;
 
 	default:
-		// Default to the chosen target if type is unhandled
 		const defaultTarget = getSlotFromIndex(battle, targetSlotIndex);
 		addTarget(defaultTarget);
 		break;
 	}
 
-	// Return a unique list of targets
 	return [...new Set(targets)];
 }
 
-/********************************
- * REFACTORED TURN PROCESSING
- ********************************/
-
-/**
- * Builds and sorts the action queue for the turn based on priority and speed.
- */
 function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullable<BattleState['pendingActions'][number]>[] {
 	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
 	const allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
@@ -4874,21 +4241,17 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 		}
 
 		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
-		// --- QUICK FEET FIX ---
 		const abilityA = toID(slotA.pokemon.ability || '');
 		if (slotA.status === 'par' && abilityA !== 'quickfeet') {
 			speedA = Math.floor(speedA / 2);
 		}
-		// --- END FIX ---
 		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
 
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
-		// --- QUICK FEET FIX ---
 		const abilityB = toID(slotB.pokemon.ability || '');
 		if (slotB.status === 'par' && abilityB !== 'quickfeet') {
 			speedB = Math.floor(speedB / 2);
 		}
-		// --- END FIX ---
 		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
 
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
@@ -4909,7 +4272,6 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 		return speedB - speedA;
 	});
 
-	// --- Analytic Check ---
 	allActiveSlots.forEach(s => s.analyticBoost = false);
 	let lastMoveAction: NonNullable<BattleState['pendingActions'][number]> | null = null;
 	for (let i = actionQueue.length - 1; i >= 0; i--) {
@@ -4929,15 +4291,10 @@ function buildActionQueue(battle: BattleState, messageLog: string[]): NonNullabl
 	return actionQueue;
 }
 
-/**
- * [REFACTORED]
- * Processes all queued actions for the turn.
- */
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
 
-	// --- Reset side-wide guards ---
 	battle.playerQuickGuard = false;
 	battle.opponentQuickGuard = false;
 	battle.playerWideGuard = false;
@@ -4945,36 +4302,30 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	battle.playerCraftyShield = false;
 	battle.opponentCraftyShield = false;
 
-	// --- Reset per-pokemon flags ---
 	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
 		s.lastDamageTaken = undefined;
 	});
 
-	// 1. Generate AI Actions
 	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
-		const slotIndex = 2 + i; // Opponent slots are 2 and 3
+		const slotIndex = 2 + i;
 		if (!battle.pendingActions[slotIndex]) {
 			battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
 		}
 	});
 
-	// 2. Build and Sort Action Order
 	const actionQueue = buildActionQueue(battle, messageLog);
 
-	// 3. Execute Actions in order
 	for (const action of actionQueue) {
 		executeAction(action, battle, room, user, messageLog);
 
-		// --- Faint Check (Mid-turn) ---
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
 		if (battleEndedMidTurn) {
-			return; // Battle ended or is waiting for a switch
+			return;
 		}
 	}
 
-	// 4. End-of-Turn Effects
 	if (battle.forceEnd) {
 		return;
 	}
@@ -4982,11 +4333,9 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	messageLog.push("--- End of Turn ---");
 	processEndOfTurn(battle, messageLog);
 
-	// 5. Check for Battle End (after EOT effects)
 	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
 
-	// 6. Reset and Render
-	battle.pendingActions = {}; // Reset for next turn
+	battle.pendingActions = {};
 
 	if (!battleEnded) {
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
@@ -4998,13 +4347,6 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	}
 }
 
-/********************************
- * REFACTORED ACTION PROCESSING
- ********************************/
-
-/**
- * Handles all logic for a player or AI switching a Pokemon.
- */
 function handleSwitchAction(
 	attackerSlot: ActivePokemonSlot,
 	attackerSlotIndex: number,
@@ -5016,15 +4358,12 @@ function handleSwitchAction(
 	const isPlayerSwitch = attackerSlotIndex <= 1;
 	const pokemonToSwitchInId = action.switchToPokemonId!;
 
-	// --- ARENA TRAP / SHADOW TAG CHECK (EXECUTION TIME) ---
 	const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
 	if (trappingPokemon) {
 		messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
 		return;
 	}
-	// --- END TRAP CHECK ---
 
-	// --- Check Switch Prevention (Trapping/Ingrain) ---
 	if (attackerSlot.isIngrained) {
 		messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
 		return;
@@ -5033,11 +4372,9 @@ function handleSwitchAction(
 		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 		return;
 	}
-	// (Note: Trapping abilities are checked in the command)
 
 	const outgoingPokemon = attackerSlot.pokemon;
 
-	// --- Apply Switch-Out Abilities ---
 	const outgoingAbility = toID(outgoingPokemon.ability || '');
 	if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
 		const healAmount = Math.floor(outgoingPokemon.maxHp / 3);
@@ -5049,19 +4386,17 @@ function handleSwitchAction(
 		messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
 	}
 
-	// --- Save Status ---
-	saveBattleStatus(battle); // Saves HP/status of the switching-out mon
+	saveBattleStatus(battle);
 
 	if (isPlayerSwitch) {
-		// --- Player Switch ---
 		const partyIndex = player.party.findIndex(p => p.id === pokemonToSwitchInId);
 		if (partyIndex === -1) {
 			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
-			return; // This should not happen if command validation is correct
+			return;
 		}
 		
-		player.party.push(outgoingPokemon); // Add outgoing mon back to party
-		const [incomingPokemon] = player.party.splice(partyIndex, 1); // Remove incoming mon
+		player.party.push(outgoingPokemon);
+		const [incomingPokemon] = player.party.splice(partyIndex, 1);
 		const newSlot = createActivePokemonSlot(incomingPokemon);
 		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
 		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
@@ -5074,13 +4409,11 @@ function handleSwitchAction(
 			RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
 		}
 	} else {
-		// --- AI Switch ---
-		// AI action generation already picked a valid 'switchToPokemonId'
 		const replacement = battle.opponentParty.find(p => p.id === pokemonToSwitchInId);
 
 		if (replacement) {
 			const newSlot = createActivePokemonSlot(replacement);
-			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot; // AI slots are 0/1 in this context
+			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot;
 			messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
 
 			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
@@ -5096,10 +4429,6 @@ function handleSwitchAction(
 	}
 }
 
-/**
- * Resolves the final targets for a move, accounting for redirection abilities and volatile statuses.
- * @returns The final target slot index.
- */
 function resolveMoveTarget(
 	attackerSlotIndex: number,
 	chosenTargetSlotIndex: number,
@@ -5111,10 +4440,9 @@ function resolveMoveTarget(
 	const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
 	let finalTargetIndex = chosenTargetSlotIndex;
 
-	// --- 1. Ability Redirection (Storm Drain, Lightning Rod) ---
 	let abilityRedirector: ActivePokemonSlot | undefined = undefined;
-	if (move.target === 'normal') { // Only single-target moves are redirected
-		const moveType = move.type; // Use the base move type
+	if (move.target === 'normal') {
+		const moveType = move.type;
 		
 		if (moveType === 'Water') {
 			abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
@@ -5129,10 +4457,9 @@ function resolveMoveTarget(
 		}
 	}
 
-	// --- 2. Volatile Redirection (Follow Me, Rage Powder) ---
-	if (!abilityRedirector) { // Don't redirect if an ability already did
+	if (!abilityRedirector) {
 		const redirector = opponentSlots.find(s => s.isRedirecting);
-		if (redirector && move.target === 'normal') { // Check move is single-target
+		if (redirector && move.target === 'normal') {
 			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
 			finalTargetIndex = redirectorIndex;
 			messageLog.push(`${redirector.pokemon.species} took the attack!`);
@@ -5142,20 +4469,15 @@ function resolveMoveTarget(
 	return finalTargetIndex;
 }
 
-/**
- * Checks for and handles two-turn charging moves.
- * @returns {boolean} `true` if the turn should end (move is charging), `false` if it should execute.
- */
 function handleChargingMove(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
-	moveObject: { id: string; pp: number },
+	moveObject: { id: string, pp: number },
 	battle: BattleState,
 	messageLog: string[],
 	ppDeduction: number
 ): boolean {
 	if (move.flags.charge && !attackerSlot.chargingMove) {
-		// --- First turn: Start charging ---
 		attackerSlot.chargingMove = move.id;
 		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
 
@@ -5166,37 +4488,30 @@ function handleChargingMove(
 		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
 		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
 			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
-				attackerSlot.chargingMove = undefined; // Skip charging
+				attackerSlot.chargingMove = undefined;
 				chargeMessage = '';
 			} else {
 				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
 			}
 		}
-		// ... (add other custom charge messages here) ...
 		else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
 		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
 
 		if (chargeMessage) messageLog.push(chargeMessage);
 
-		// If still charging (not skipped by sun, etc.)
 		if (attackerSlot.chargingMove) {
 			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
 				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
 			}
-			return true; // End turn
+			return true;
 		}
 	} else if (attackerSlot.chargingMove === move.id) {
-		// --- Second turn: Execute the move ---
 		attackerSlot.chargingMove = undefined;
 	}
 	
-	return false; // Execute move
+	return false;
 }
 
-/**
- * [REFACTORED]
- * Executes a single action (move or switch) for one Pokémon.
- */
 function executeAction(
 	action: NonNullable<BattleState['pendingActions'][number]>,
 	battle: BattleState,
@@ -5210,18 +4525,16 @@ function executeAction(
 	const attackerSlot = allSlots[attackerSlotIndex];
 
 	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
-		return; // Fainted before turn
+		return;
 	}
 
-	attackerSlot.isRedirecting = false; // Reset redirection flag
+	attackerSlot.isRedirecting = false;
 
-	// --- Handle Switch Action ---
 	if (action.actionType === 'switch') {
 		handleSwitchAction(attackerSlot, attackerSlotIndex, action as any, battle, player, messageLog);
 		return;
 	}
 
-	// --- Handle Move Action ---
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
 		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
@@ -5233,39 +4546,32 @@ function executeAction(
 			messageLog.push(`${attackerSlot.pokemon.species} has no PP left for ${move.name}!`);
 		}
 
-		// 1. Pre-Turn Status Checks (Sleep, Freeze, Paralysis, Confusion, Flinch)
 		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
-			return; // Attacker couldn't move
+			return;
 		}
 
-		// 2. Resolve Targets (accounts for redirection)
 		const finalTargetIndex = resolveMoveTarget(attackerSlotIndex, action.targetSlot, move, battle, messageLog);
 		const resolvedTargets = getMoveTargets(attackerSlotIndex, finalTargetIndex, move, battle);
 
-		// 3. Calculate PP Deduction (for Pressure)
 		let ppDeduction = 1;
 		if (resolvedTargets.some(target => toID(target.pokemon.ability || '') === 'pressure')) {
 			ppDeduction = 2;
 		}
 
-		// 4. Handle Two-Turn/Charging Moves
 		if (handleChargingMove(attackerSlot, move, moveObject, battle, messageLog, ppDeduction)) {
-			return; // Move is charging, turn ends
+			return;
 		}
 		
-		// 5. Deduct PP (if not already deducted)
 		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
 		}
 
-		// 6. Announce Move
 		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
 		if (resolvedTargets.length === 0) {
 			messageLog.push(`But there was no target!`);
 			return;
 		}
 
-		// 7. Check for Move-Preventing Abilities (Dazzling, etc.)
 		const remainingTargets: ActivePokemonSlot[] = [];
 		for (const defenderSlot of resolvedTargets) {
 			const abilityContext = { attacker: attackerSlot.pokemon, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
@@ -5277,13 +4583,11 @@ function executeAction(
 			}
 		}
 		if (resolvedTargets.length > 0 && remainingTargets.length === 0) {
-			return; // All targets blocked the move
+			return;
 		}
 
-		// 8. Execute Move
 		executeMove(attackerSlot, remainingTargets, move, moveObject, battle, messageLog);
 
-		// 9. Handle Choice Item Lock
 		if (attackerSlot.pokemon.hp > 0 && move.id !== 'struggle' && !attackerSlot.lockedMove) {
 			const item = attackerSlot.pokemon.item;
 			if (battle.magicRoomTurns === 0 && (item === 'choiceband' || item === 'choicescarf' || item === 'choicespecs')) {
@@ -5291,7 +4595,6 @@ function executeAction(
 			}
 		}
 
-		// 10. Handle Self-Switch (U-turn, Volt Switch)
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
@@ -5304,7 +4607,6 @@ function executeAction(
 					messageLog.push(`But there was no one to switch to!`);
 				}
 			} else {
-				// AI U-turn
 				const hasReplacement = battle.opponentParty.some(p => p.hp > 0 && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
 				if (hasReplacement) {
 					battle.aiPendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
@@ -5318,24 +4620,14 @@ function executeAction(
 	}
 }
 
-/**
- * Gets all active (non-fainted, non-null) slots for a given side.
- * @param slots The [Slot | null, Slot | null] array.
- * @returns An array of ActivePokemonSlot.
- */
 function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null]): ActivePokemonSlot[] {
 	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
 }
 
-/**
- * [AI] Generates a simple action for an AI-controlled slot.
- * Picks a random damaging move and a random player-side target.
- */
 function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
-	// Find valid moves (with PP)
 	const usableMoves = aiSlot.pokemon.moves.filter(m => {
 		const moveData = getMove(m.id);
-		return m.pp > 0 && moveData.category !== 'Status'; // Simple AI: only use damaging moves
+		return m.pp > 0 && moveData.category !== 'Status';
 	});
 
 	let chosenMoveId = 'struggle';
@@ -5343,9 +4635,8 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 		chosenMoveId = usableMoves[Math.floor(Math.random() * usableMoves.length)].id;
 	}
 
-	// Find valid targets (player side)
 	const playerSlots = getActiveSlots(battle.playerSlots);
-	let targetSlotIndex = 0; // Default to slot 0 if no one is active
+	let targetSlotIndex = 0;
 	if (playerSlots.length > 0) {
 		const targetSlot = playerSlots[Math.floor(Math.random() * playerSlots.length)];
 		targetSlotIndex = battle.playerSlots.indexOf(targetSlot);
@@ -5359,14 +4650,6 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 	};
 }
 
-/**********************
-* HTML UI
-**********************/
-/**
- * [REFACTORED HELPER]
- * Generates the HTML for a single Pokémon's info box within a battle.
- * Used by both single and double battle UIs.
- */
 function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -5377,7 +4660,6 @@ function generateSharedBattlePokemonInfo(
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
 
-	// --- EXP Bar (Player side only) ---
 	let expBarHTML = '';
 	if (isPlayerSide) {
 		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
@@ -5388,12 +4670,10 @@ function generateSharedBattlePokemonInfo(
 		expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
-	// --- Status Tags ---
 	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
 	
-	// --- Volatile Status Tags ---
 	const volatileTags = [
 		slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '',
 		slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '',
@@ -5422,7 +4702,6 @@ function generateSharedBattlePokemonInfo(
 		slot.isHelped ? `<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>` : '',
 	].filter(Boolean).join('');
 
-	// --- Ability Status Tags ---
 	const abilityTags = [
 		slot.flashFireBoost ? `<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Fire Boost</span>` : '',
 		slot.analyticBoost ? `<span style="background-color: #6c757d; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Analytic</span>` : '',
@@ -5430,7 +4709,6 @@ function generateSharedBattlePokemonInfo(
 		slot.unburdenActive ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Unburden</span>` : '',
 	].filter(Boolean).join('');
 
-	// --- Charging Move Tag ---
 	let chargingTag = '';
 	if (slot.chargingMove) {
 		const moveName = getMove(slot.chargingMove).name || 'Attack';
@@ -5441,7 +4719,6 @@ function generateSharedBattlePokemonInfo(
 		chargingTag = `<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">${chargeText}</span>`;
 	}
 
-	// --- Stat Stage Tags ---
 	let statStageTags = '';
 	if (slot.statStages) {
 		for (const stat in slot.statStages) {
@@ -5457,7 +4734,6 @@ function generateSharedBattlePokemonInfo(
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
-	// --- Assemble HTML based on battle type ---
 	if (isDoubleBattle) {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
 		`<div style="background: #e0e0e0; border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
@@ -5465,7 +4741,6 @@ function generateSharedBattlePokemonInfo(
 		`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 		`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
 	} else {
-		// Single Battle HTML
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
 	}
 }
@@ -7798,24 +7073,3 @@ export const commands: ChatCommands = {
 		'': 'help',
 	},
 };
-
-/**************
-* HTML UI ENDS
-**************/
-
-export const helpData = [
-	"/rpg start - Start your Pokemon RPG adventure",
-	"/rpg menu - Access the main RPG menu",
-	"/rpg profile - View your trainer profile",
-	"/rpg party - View your Pokemon party",
-	"/rpg summary [pokemon id] - View a detailed summary of a Pokemon in your party",
-	"/rpg battle - Access battle options",
-	"/rpg wildpokemon - Find and battle a wild Pokemon",
-	"/rpg challenge [trainer id] - Challenge a trainer to a battle",
-	"/rpg items - View your inventory",
-	"/rpg pc - Access Pokemon PC storage system",
-	"/rpg heal - Restore your party's HP, PP, and status conditions.",
-	"/rpg learnmove [move to replace | skip] - Make a decision on learning a new move",
-	"/rpg giveitem [pokemon id] [item id] - Give a held item to a Pokémon.",
-	"/rpg takeitem [pokemon id] - Take a held item from a Pokémon.",
-];
