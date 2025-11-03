@@ -3606,6 +3606,7 @@ function executeMove(
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
+			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon);
 			// ... (Weather accuracy logic) ...
 			if (battle.weather) {
 				if (battle.weather.type === 'rain') {
