@@ -4477,6 +4477,318 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	}
 }
 
+/********************************
+ * REFACTORED ACTION PROCESSING
+ ********************************/
+
+/**
+ * Handles all logic for a player or AI switching a Pokemon.
+ */
+function handleSwitchAction(
+	attackerSlot: ActivePokemonSlot,
+	attackerSlotIndex: number,
+	action: Extract<NonNullable<BattleState['pendingActions'][number]>, { actionType: 'switch' }>,
+	battle: BattleState,
+	player: PlayerData,
+	messageLog: string[]
+) {
+	const isPlayerSwitch = attackerSlotIndex <= 1;
+	const pokemonToSwitchInId = action.switchToPokemonId!;
+
+	// --- Check Switch Prevention (Trapping/Ingrain) ---
+	if (attackerSlot.isIngrained) {
+		messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
+		return;
+	}
+	if (attackerSlot.isTrapped) {
+		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
+		return;
+	}
+	// (Note: Trapping abilities are checked in the command)
+
+	const outgoingPokemon = attackerSlot.pokemon;
+
+	// --- Apply Switch-Out Abilities ---
+	const outgoingAbility = toID(outgoingPokemon.ability || '');
+	if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
+		const healAmount = Math.floor(outgoingPokemon.maxHp / 3);
+		outgoingPokemon.hp = Math.min(outgoingPokemon.maxHp, outgoingPokemon.hp + healAmount);
+		messageLog.push(`${outgoingPokemon.species}'s Regenerator restored its HP!`);
+	} else if (outgoingAbility === 'naturalcure' && attackerSlot.status) {
+		attackerSlot.status = null;
+		outgoingPokemon.status = null;
+		messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
+	}
+
+	// --- Save Status ---
+	saveBattleStatus(battle); // Saves HP/status of the switching-out mon
+
+	if (isPlayerSwitch) {
+		// --- Player Switch ---
+		const partyIndex = player.party.findIndex(p => p.id === pokemonToSwitchInId);
+		if (partyIndex === -1) {
+			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
+			return; // This should not happen if command validation is correct
+		}
+		
+		player.party.push(outgoingPokemon); // Add outgoing mon back to party
+		const [incomingPokemon] = player.party.splice(partyIndex, 1); // Remove incoming mon
+		const newSlot = createActivePokemonSlot(incomingPokemon);
+		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
+
+		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
+		if (faintedOnEntry) {
+			messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+		} else {
+			handleMirrorHerb(newSlot, battle, messageLog);
+			RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
+		}
+	} else {
+		// --- AI Switch ---
+		// AI action generation already picked a valid 'switchToPokemonId'
+		const replacement = battle.opponentParty.find(p => p.id === pokemonToSwitchInId);
+
+		if (replacement) {
+			const newSlot = createActivePokemonSlot(replacement);
+			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot; // AI slots are 0/1 in this context
+			messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
+
+			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+			if (faintedOnEntry) {
+				messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+			} else {
+				handleMirrorHerb(newSlot, battle, messageLog);
+				RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
+			}
+		} else {
+			messageLog.push(`${outgoingPokemon.species} tried to switch out, but no one was left!`);
+		}
+	}
+}
+
+/**
+ * Resolves the final targets for a move, accounting for redirection abilities and volatile statuses.
+ * @returns The final target slot index.
+ */
+function resolveMoveTarget(
+	attackerSlotIndex: number,
+	chosenTargetSlotIndex: number,
+	move: Move,
+	battle: BattleState,
+	messageLog: string[]
+): number {
+	const isPlayerAttacker = attackerSlotIndex <= 1;
+	const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
+	let finalTargetIndex = chosenTargetSlotIndex;
+
+	// --- 1. Ability Redirection (Storm Drain, Lightning Rod) ---
+	let abilityRedirector: ActivePokemonSlot | undefined = undefined;
+	if (move.target === 'normal') { // Only single-target moves are redirected
+		const moveType = move.type; // Use the base move type
+		
+		if (moveType === 'Water') {
+			abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'stormdrain');
+		} else if (moveType === 'Electric') {
+			abilityRedirector = opponentSlots.find(s => toID(s.pokemon.ability || '') === 'lightningrod');
+		}
+
+		if (abilityRedirector) {
+			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(abilityRedirector);
+			finalTargetIndex = redirectorIndex;
+			messageLog.push(`${abilityRedirector.pokemon.species}'s ${abilityRedirector.pokemon.ability} drew in the attack!`);
+		}
+	}
+
+	// --- 2. Volatile Redirection (Follow Me, Rage Powder) ---
+	if (!abilityRedirector) { // Don't redirect if an ability already did
+		const redirector = opponentSlots.find(s => s.isRedirecting);
+		if (redirector && move.target === 'normal') { // Check move is single-target
+			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
+			finalTargetIndex = redirectorIndex;
+			messageLog.push(`${redirector.pokemon.species} took the attack!`);
+		}
+	}
+	
+	return finalTargetIndex;
+}
+
+/**
+ * Checks for and handles two-turn charging moves.
+ * @returns {boolean} `true` if the turn should end (move is charging), `false` if it should execute.
+ */
+function handleChargingMove(
+	attackerSlot: ActivePokemonSlot,
+	move: Move,
+	moveObject: { id: string; pp: number },
+	battle: BattleState,
+	messageLog: string[],
+	ppDeduction: number
+): boolean {
+	if (move.flags.charge && !attackerSlot.chargingMove) {
+		// --- First turn: Start charging ---
+		attackerSlot.chargingMove = move.id;
+		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
+
+		if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
+		else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
+		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
+		else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
+		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
+		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
+			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+				attackerSlot.chargingMove = undefined; // Skip charging
+				chargeMessage = '';
+			} else {
+				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
+			}
+		}
+		// ... (add other custom charge messages here) ...
+		else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
+		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
+
+		if (chargeMessage) messageLog.push(chargeMessage);
+
+		// If still charging (not skipped by sun, etc.)
+		if (attackerSlot.chargingMove) {
+			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+			}
+			return true; // End turn
+		}
+	} else if (attackerSlot.chargingMove === move.id) {
+		// --- Second turn: Execute the move ---
+		attackerSlot.chargingMove = undefined;
+	}
+	
+	return false; // Execute move
+}
+
+/**
+ * [REFACTORED]
+ * Executes a single action (move or switch) for one Pokémon.
+ */
+function executeAction(
+	action: NonNullable<BattleState['pendingActions'][number]>,
+	battle: BattleState,
+	room: ChatRoom,
+	user: User,
+	messageLog: string[]
+) {
+	const player = getPlayerData(battle.playerId);
+	const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
+	const attackerSlotIndex = allSlots.findIndex(s => s?.pokemon.id === action.pokemonId);
+	const attackerSlot = allSlots[attackerSlotIndex];
+
+	if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
+		return; // Fainted before turn
+	}
+
+	attackerSlot.isRedirecting = false; // Reset redirection flag
+
+	// --- Handle Switch Action ---
+	if (action.actionType === 'switch') {
+		handleSwitchAction(attackerSlot, attackerSlotIndex, action as any, battle, player, messageLog);
+		return;
+	}
+
+	// --- Handle Move Action ---
+	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
+		const move = getMove(action.moveId);
+		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
+
+		if (move.id === 'struggle') moveObject = { id: 'struggle', pp: 1 };
+		else if (!moveObject) moveObject = { id: 'struggle', pp: 1 };
+		else if (moveObject.pp === 0) {
+			moveObject = { id: 'struggle', pp: 1 };
+			messageLog.push(`${attackerSlot.pokemon.species} has no PP left for ${move.name}!`);
+		}
+
+		// 1. Pre-Turn Status Checks (Sleep, Freeze, Paralysis, Confusion, Flinch)
+		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
+			return; // Attacker couldn't move
+		}
+
+		// 2. Resolve Targets (accounts for redirection)
+		const finalTargetIndex = resolveMoveTarget(attackerSlotIndex, action.targetSlot, move, battle, messageLog);
+		const resolvedTargets = getMoveTargets(attackerSlotIndex, finalTargetIndex, move, battle);
+
+		// 3. Calculate PP Deduction (for Pressure)
+		let ppDeduction = 1;
+		if (resolvedTargets.some(target => toID(target.pokemon.ability || '') === 'pressure')) {
+			ppDeduction = 2;
+		}
+
+		// 4. Handle Two-Turn/Charging Moves
+		if (handleChargingMove(attackerSlot, move, moveObject, battle, messageLog, ppDeduction)) {
+			return; // Move is charging, turn ends
+		}
+		
+		// 5. Deduct PP (if not already deducted)
+		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
+			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+		}
+
+		// 6. Announce Move
+		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
+		if (resolvedTargets.length === 0) {
+			messageLog.push(`But there was no target!`);
+			return;
+		}
+
+		// 7. Check for Move-Preventing Abilities (Dazzling, etc.)
+		const remainingTargets: ActivePokemonSlot[] = [];
+		for (const defenderSlot of resolvedTargets) {
+			const abilityContext = { attacker: attackerSlot.pokemon, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+			const preventionCheck = RPGAbilities.preventMove(abilityContext);
+			if (preventionCheck && preventionCheck.prevented) {
+				messageLog.push(preventionCheck.message || `${defenderSlot.pokemon.species}'s ability prevented the move!`);
+			} else {
+				remainingTargets.push(defenderSlot);
+			}
+		}
+		if (resolvedTargets.length > 0 && remainingTargets.length === 0) {
+			return; // All targets blocked the move
+		}
+
+		// 8. Execute Move
+		executeMove(attackerSlot, remainingTargets, move, moveObject, battle, messageLog);
+
+		// 9. Handle Choice Item Lock
+		if (attackerSlot.pokemon.hp > 0 && move.id !== 'struggle' && !attackerSlot.lockedMove) {
+			const item = attackerSlot.pokemon.item;
+			if (battle.magicRoomTurns === 0 && (item === 'choiceband' || item === 'choicescarf' || item === 'choicespecs')) {
+				attackerSlot.lockedMove = move.id;
+			}
+		}
+
+		// 10. Handle Self-Switch (U-turn, Volt Switch)
+		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
+			const isPlayer = attackerSlotIndex <= 1;
+			if (isPlayer) {
+				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+				if (hasReplacement) {
+					battle.pendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
+					battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+					messageLog.push(`${attackerSlot.pokemon.species} is waiting to switch out!`);
+				} else {
+					messageLog.push(`But there was no one to switch to!`);
+				}
+			} else {
+				// AI U-turn
+				const hasReplacement = battle.opponentParty.some(p => p.hp > 0 && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
+				if (hasReplacement) {
+					battle.aiPendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
+					battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+					messageLog.push(`${attackerSlot.pokemon.species} is waiting to switch out!`);
+				} else {
+					messageLog.push(`But there was no one to switch to!`);
+				}
+			}
+		}
+	}
+}
+
 /**
  * Gets all active (non-fainted, non-null) slots for a given side.
  * @param slots The [Slot | null, Slot | null] array.
