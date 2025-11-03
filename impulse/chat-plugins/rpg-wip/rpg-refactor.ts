@@ -2690,6 +2690,301 @@ function handleStatusMove(
 	messageLog.push(`But it failed!`);
 }
 
+/********************************
+ * REFACTORED END OF TURN
+ ********************************/
+
+/**
+ * Applies end-of-turn status damage (Burn, Poison) and healing (Poison Heal).
+ */
+function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+	const status = slot.status;
+
+	if (status === 'brn') {
+		const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.max(0, pokemon.hp - damage);
+		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
+	} else if (status === 'psn') {
+		const ability = toID(pokemon.ability || '');
+		if (ability === 'poisonheal' && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
+		} else {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+		}
+	}
+}
+
+/**
+ * Applies end-of-turn item effects (Orbs, Berries, Leftovers, Black Sludge, Sticky Barb).
+ * @returns {boolean} Returns `true` if a Lum Berry was consumed, indicating other status effects should be skipped.
+ */
+function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return false;
+	
+	const pokemon = slot.pokemon;
+	const speciesData = Dex.species.get(pokemon.species);
+
+	// --- Orbs (run first) ---
+	if (!slot.status) {
+		if (pokemon.item === 'flameorb' && !speciesData.types.includes('Fire')) {
+			slot.status = 'brn';
+			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was burned by its Flame Orb!</span>`);
+		} else if (pokemon.item === 'toxicorb' && !speciesData.types.includes('Poison') && !speciesData.types.includes('Steel')) {
+			slot.status = 'psn'; // User intentionally skipped 'tox'
+			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was badly poisoned by its Toxic Orb!</span>`);
+		}
+	}
+
+	// --- Lum Berry (runs before status damage) ---
+	if (slot.status && pokemon.item === 'lumberry') {
+		slot.status = null;
+		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
+		pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
+		return true; // Status was cured, skip status damage
+	}
+
+	// --- Healing/Damaging Items (run after status) ---
+	if (pokemon.item === 'leftovers' && pokemon.hp < pokemon.maxHp) {
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
+		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
+	} else if (pokemon.item === 'blacksludge') {
+		if (speciesData.types.includes('Poison')) {
+			if (pokemon.hp < pokemon.maxHp) {
+				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
+				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
+			}
+		} else if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
+			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
+		}
+	} else if (pokemon.item === 'stickybarb') {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			pokemon.hp = Math.max(0, pokemon.hp - Math.floor(pokemon.maxHp / 8));
+			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
+		}
+	}
+	
+	return false;
+}
+
+/**
+ * Applies end-of-turn damage from volatile statuses (Cursed, Nightmare, Trapped).
+ */
+function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+
+	if (slot.isCursed) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`${pokemon.species} is afflicted by the curse!`);
+		}
+	}
+	if (pokemon.hp <= 0) return;
+
+	if (slot.hasNightmare) {
+		if (slot.status === 'slp') {
+			if (RPGAbilities.takesIndirectDamage(pokemon)) {
+				const damage = Math.max(1, Math.floor(pokemon.maxHp / 4));
+				pokemon.hp = Math.max(0, pokemon.hp - damage);
+				messageLog.push(`${pokemon.species} is locked in a nightmare!`);
+			}
+		} else {
+			slot.hasNightmare = false;
+		}
+	}
+	if (pokemon.hp <= 0) return;
+
+	if (slot.isTrapped) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`${pokemon.species} is hurt by the trap!`);
+		}
+	}
+}
+
+/**
+ * Applies end-of-turn healing from volatile statuses (Leech Seed, Aqua Ring, Ingrain).
+ */
+function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+	
+	// --- Leech Seed (drains and heals opponent) ---
+	if (slot.isSeeded) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
+			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
+
+			// Find an opponent to heal
+			const isPlayer = battle.playerSlots.includes(slot);
+			const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+			const opponentToHeal = opponentSlots[0]; // Heals the first available opponent
+
+			if (opponentToHeal && opponentToHeal.pokemon.hp > 0 && (opponentToHeal.healBlockTurns || 0) <= 0) { // Check heal block on target
+				const oldHp = opponentToHeal.pokemon.hp;
+				opponentToHeal.pokemon.hp = Math.min(opponentToHeal.pokemon.maxHp, opponentToHeal.pokemon.hp + drainAmount);
+				messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
+			}
+		}
+	}
+	if (pokemon.hp <= 0) return;
+	
+	// --- Self-healing effects (blocked by Heal Block) ---
+	if ((slot.healBlockTurns || 0) > 0) return;
+
+	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
+	}
+
+	if (slot.isIngrained && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
+	}
+}
+
+/**
+ * Decrements all end-of-turn counters (Yawn, Taunt, Disable, Encore, etc.).
+ * Also handles Speed Boost.
+ */
+function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+
+	// --- Yawn ---
+	if (slot.yawnCounter !== undefined && slot.yawnCounter > 0) {
+		slot.yawnCounter--;
+		if (slot.yawnCounter === 0) {
+			if (!slot.status) {
+				const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(pokemon, battle);
+				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
+
+				if (!isTerrainImmune && !isAbilityImmune) {
+					slot.status = 'slp';
+					slot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
+				} else {
+					messageLog.push(`${pokemon.species} stayed awake!`);
+				}
+			}
+			slot.yawnCounter = undefined;
+		}
+	}
+	
+	// --- Other Volatiles ---
+	if (slot.isTrapped) {
+		slot.isTrapped.turns--;
+		if (slot.isTrapped.turns <= 0) {
+			slot.isTrapped = null;
+			messageLog.push(`${pokemon.species} was freed from the trap.`);
+		}
+	}
+	if (slot.tauntTurns > 0) {
+		slot.tauntTurns--;
+		if (slot.tauntTurns <= 0) {
+			messageLog.push(`${pokemon.species}'s taunt wore off.`);
+		}
+	}
+	if (slot.disabledMove) {
+		slot.disabledMove.turns--;
+		if (slot.disabledMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s ${slot.disabledMove.moveId} is no longer disabled!`);
+			slot.disabledMove = undefined;
+		}
+	}
+	if (slot.encoreMove) {
+		slot.encoreMove.turns--;
+		if (slot.encoreMove.turns <= 0) {
+			messageLog.push(`${pokemon.species}'s encore ended!`);
+			slot.encoreMove = undefined;
+		}
+	}
+	if (slot.magnetRiseTurns > 0) {
+		slot.magnetRiseTurns--;
+		if (slot.magnetRiseTurns === 0) {
+			messageLog.push(`${pokemon.species}'s electromagnetism wore off!`);
+		}
+	}
+	if (slot.telekinesisCounter > 0) {
+		slot.telekinesisCounter--;
+		if (slot.telekinesisCounter === 0) {
+			messageLog.push(`${pokemon.species} was freed from telekinesis!`);
+		}
+	}
+	if (slot.embargoTurns > 0) {
+		slot.embargoTurns--;
+		if (slot.embargoTurns === 0) {
+			messageLog.push(`${pokemon.species} can use items again!`);
+		}
+	}
+	if (slot.healBlockTurns > 0) {
+		slot.healBlockTurns--;
+		if (slot.healBlockTurns === 0) {
+			messageLog.push(`${pokemon.species}'s Heal Block wore off!`);
+		}
+	}
+
+	// --- Slow Start ---
+	if (slot.slowStartTurns !== undefined && slot.slowStartTurns > 0) {
+		slot.slowStartTurns--;
+		if (slot.slowStartTurns === 0) {
+			messageLog.push(`${pokemon.species} got its act together!`);
+		}
+	}
+	
+	// --- Speed Boost ---
+	const ability = toID(pokemon.ability || '');
+	if (ability === 'speedboost' && slot.statStages.spe < 6) {
+		slot.statStages.spe++;
+		messageLog.push(`${pokemon.species}'s Speed Boost raised its Speed!`);
+	}
+}
+
+/**
+ * [REFACTORED]
+ * Processes end-of-turn effects like status damage, item healing/damage, and volatile statuses.
+ */
+function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+
+	// 1. Handle EOT Item Activations (Orbs) and Cures (Lum Berry)
+	const lumCuredStatus = applyEOTItemEffects(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// 2. Handle Status Damage (Burn, Poison, Poison Heal)
+	if (!lumCuredStatus) {
+		applyEOTStatusDamage(slot, battle, messageLog);
+	}
+	if (slot.pokemon.hp <= 0) return;
+
+	// 3. Handle Volatile Status Damage (Curse, Nightmare, Trap)
+	applyEOTVolatileStatusDamage(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+	
+	// 4. Handle Volatile Healing (Leech Seed, Aqua Ring, Ingrain)
+	applyEOTHealingEffects(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// 5. Decrement all counters (Yawn, Taunt, Disable, Slow Start, Speed Boost, etc.)
+	decrementEOTVolatileCounters(slot, battle, messageLog);
+
+	// 6. Clear one-turn effects
+	slot.isCharged = false; // Charge only lasts until next Electric move
+}
+
 
 /**
  * Checks for statuses that might prevent a Pokémon from moving (sleep, freeze, paralysis, confusion).
