@@ -939,6 +939,17 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
+	// Find the slot to check status and unburden
+	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) || 
+		battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
+	const status = slot ? slot.status : pokemon.status;
+
+	// --- ADD QUICK FEET LOGIC ---
+	if (ability === 'quickfeet' && status) {
+		speed = Math.floor(speed * 1.5);
+	}
+	// --- END QUICK FEET LOGIC ---
+
 	const weatherActive = isWeatherActive(battle);
 
 	if (ability === 'swiftswim' && weatherActive && battle.weather?.type === 'rain') {
@@ -962,8 +973,7 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 	}
 
 	if (ability === 'unburden') {
-		const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) || 
-			battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
+		// Use the slot variable we already found
 		if (slot?.unburdenActive) {
 			return speed * 2;
 		}
