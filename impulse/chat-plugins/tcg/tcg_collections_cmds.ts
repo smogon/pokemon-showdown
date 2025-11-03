@@ -207,7 +207,7 @@ export const collectionCommands: ChatCommands = {
 
 	async setprogress(target, room, user) {
 		if (!this.runBroadcast()) return;
-		const setId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
+		const setId = target.trim().toLowerCase();
 		if (!setId) return this.errorReply('Usage: /tcg setprogress [setid]');
 		const targetUserId = user.id;
 
@@ -219,7 +219,7 @@ export const collectionCommands: ChatCommands = {
 			if (cacheInitialized) {
 				setInfo = getSet(setId);
 			} else {
-				setInfo = await cardCollection.findOne({ setId }); // Will match lowercase DB
+				setInfo = await cardCollection.findOne({ setId });
 			}
 			if (!setInfo) {
 				return this.errorReply(`Set with ID "${setId}" not found.`);
@@ -227,10 +227,8 @@ export const collectionCommands: ChatCommands = {
 
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
-			// Use the canonical setId from the database
 			const canonicalSetId = setInfo.setId;
 
-			// For sets without setTotal (like Promo sets), calculate the actual number of unique cards
 			let totalInSet = setInfo.setTotal || 0;
 			if (totalInSet === 0) {
 				totalInSet = await cardCollection.countDocuments({ setId: canonicalSetId });
@@ -266,7 +264,7 @@ export const collectionCommands: ChatCommands = {
 	async missing(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const parts = target.split(',').map(p => p.trim());
-		const setId = parts[0].toLowerCase(); // <-- FIX: Normalize setId to lowercase
+		const setId = parts[0].toLowerCase();
 		let targetUserId = user.id;
 		let targetUserName = user.name;
 		let page = 1;
@@ -294,11 +292,10 @@ export const collectionCommands: ChatCommands = {
 
 		try {
 			const cardCollection = tcgCardsCollection;
-			let setInfo: TcgCard | null | undefined = getSet(setId); // Try cache first
-			if (!setInfo) setInfo = await cardCollection.findOne({ setId }); // Will match lowercase DB
+			let setInfo: TcgCard | null | undefined = getSet(setId);
+			if (!setInfo) setInfo = await cardCollection.findOne({ setId });
 			if (!setInfo) return this.errorReply(`Set with ID "${setId}" not found.`);
 			const setName = setInfo.set;
-			// Use the canonical setId from the database
 			const canonicalSetId = setInfo.setId;
 
 			const allSetCardsCount = await cardCollection.countDocuments({ setId: canonicalSetId });
@@ -306,10 +303,15 @@ export const collectionCommands: ChatCommands = {
 
 			const countPipeline: any[] = [
 				{ $match: { setId: canonicalSetId } },
-				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
-					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
-					{ $project: { _id: 1 } },
-				], as: 'userCollectionEntry' } },
+				{ $lookup: {
+					from: 'tcg_collections', // <-- FIX: Changed from 'user_collections'
+					let: { card_id: "$cardId" },
+					pipeline: [
+						{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
+						{ $project: { _id: 1 } },
+					],
+					as: 'userCollectionEntry',
+				} },
 				{ $match: { userCollectionEntry: { $eq: [] } } },
 				{ $count: 'total' },
 			];
@@ -324,10 +326,15 @@ export const collectionCommands: ChatCommands = {
 
 			const dataPipeline: any[] = [
 				{ $match: { setId: canonicalSetId } },
-				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
-					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
-					{ $project: { _id: 1 } },
-				], as: 'userCollectionEntry' } },
+				{ $lookup: {
+					from: 'tcg_collections', // <-- FIX: Changed from 'user_collections'
+					let: { card_id: "$cardId" },
+					pipeline: [
+						{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
+						{ $project: { _id: 1 } },
+					],
+					as: 'userCollectionEntry',
+				} },
 				{ $match: { userCollectionEntry: { $eq: [] } } },
 				{ $sort: { cardId: 1 } },
 				{ $skip: skip },
