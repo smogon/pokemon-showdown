@@ -2736,13 +2736,23 @@ function handleDamagingMove(
 			}
 		}
 
-		if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && defender.hp === defender.maxHp && damageDealt >= defender.hp) {
-			damageDealt = defender.hp - 1;
-			messageLog.push(`${defender.species} held on using its Focus Sash!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
-		}
+		// --- START STURDY/FOCUS SASH BLOCK ---
+		const defenderAbility = toID(defender.ability || '');
+		const isFullHP = defender.hp === defender.maxHp;
 
+		if (damageDealt >= defender.hp) {
+			if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && isFullHP) {
+				damageDealt = defender.hp - 1;
+				messageLog.push(`${defender.species} held on using its Focus Sash!`);
+				defender.item = undefined;
+				activateUnburden(defenderSlot, messageLog);
+			} else if (defenderAbility === 'sturdy' && isFullHP) {
+				damageDealt = defender.hp - 1;
+				messageLog.push(`${defender.species} held on using its Sturdy!`);
+			}
+		}
+		// --- END STURDY/FOCUS SASH BLOCK ---
+		
 		defender.hp = Math.max(0, defender.hp - damageDealt);
 
 		// Track damage for Counter/Mirror Coat
