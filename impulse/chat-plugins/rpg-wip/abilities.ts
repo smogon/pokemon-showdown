@@ -606,6 +606,14 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
+	// Hustle - Boosts Attack but lowers accuracy (Attack part)
+	'hustle': (pokemon, stat, value) => {
+		if (stat === 'atk') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
 	// Slow Start - Attack and Speed halved
 	'slowstart': (pokemon, stat, value) => {
 		if (stat === 'atk' || stat === 'spe') {
@@ -787,7 +795,6 @@ export const ACCURACY_EVASION_ABILITIES = {
 	// Hustle - Boosts Attack but lowers accuracy
 	'hustle': {
 		accuracyMultiplier: 0.8,
-		attackMultiplier: 1.5,
 	},
 
 	// Tangled Feet - Boosts evasion when confused
