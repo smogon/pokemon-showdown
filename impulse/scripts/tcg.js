@@ -76,8 +76,9 @@ async function loadSetsData(setsFilePath) {
 		// Build lookup map: setId -> set metadata
 		sets.forEach(set => {
 			if (set.id) {
-				setsLookup.set(set.id, {
-					id: set.id,
+                // Normalize set.id to lowercase for lookup
+				setsLookup.set(set.id.toLowerCase(), {
+					id: set.id.toLowerCase(),
 					name: set.name,
 					series: set.series,
 					releaseDate: set.releaseDate,
@@ -187,7 +188,7 @@ function determineStage(subtypes) {
  * Main transformation function - converts source format to database format
  */
 function transformCard(card) {
-	const setId = card.id.split('-')[0];
+	const setId = card.id.split('-')[0].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 	const subtypes = Array.isArray(card.subtypes) ? card.subtypes : [];
 	const stage = determineStage(subtypes);
 	
@@ -204,7 +205,7 @@ function transformCard(card) {
 		// ===== Core Identification =====
 		cardId: card.id,
 		name: card.name,
-		setId: setId,
+		setId: setId, // Already lowercase
 		set: setData?.name || setId,
 		rarity: rarity,
 		rarityPoints: rarityPoints,
