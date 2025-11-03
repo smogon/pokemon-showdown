@@ -3912,7 +3912,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		isCharged: false,
 		stockpileCount: 0,
 		flashFireBoost: false,
-		unburdenActive: false, // User skipped this
+		unburdenActive: false,
 	};
 }
 
@@ -4574,7 +4574,7 @@ function generatePokemonInfoHTML(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
-		expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
