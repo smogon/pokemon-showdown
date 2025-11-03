@@ -7,9 +7,9 @@ import { ImpulseDB, type ImpulseCollection } from '../../impulse-db';
 import type { TcgCard, TcgUser } from './interface';
 import { userCollectionsCollection, userProfilesCollection, tcgCardsCollection } from './tcg_collections';
 
-export const CACHE_SAMPLE_SIZE = 10;
-export const DB_SAMPLE_SIZE = 10;
-export const HIT_CHANCE = 0.9;
+export const CACHE_SAMPLE_SIZE = 2;
+export const DB_SAMPLE_SIZE = 2;
+export const HIT_CHANCE = 0.8;
 export const MAX_CARD_QUANTITY = 10;
 export const CREDITS_PER_DUPLICATE = 1;
 export const MAX_PACK_SIZE = 8;
