@@ -3920,6 +3920,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		flashFireBoost: false,
 		unburdenActive: false,
 		analyticBoost: false,
+		slowStartTurns: undefined,
 	};
 }
 
