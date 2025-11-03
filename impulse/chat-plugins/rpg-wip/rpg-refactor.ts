@@ -3189,6 +3189,9 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
+		} else if (battle.weather!.type === 'rain' && ability === 'hydration' && slot.status) { // <-- ADDED THIS BLOCK
+			slot.status = null;
+			messageLog.push(`${pokemon.species}'s Hydration cured its status condition!`);
 		}
 
 		// Weather damage
