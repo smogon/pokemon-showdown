@@ -47,6 +47,7 @@ const CUSTOM_UNCOMMON_RARITIES = ['Uncommon'];
 const CUSTOM_REVERSE_RARE_RARITIES = [
 	'Reverse Holo', 'Rare', 'Double Rare', 'Rare Holo', 'Classic Collection',
 	'Rare Holo 1st Edition', 'Rare SP', 'Rare Holo EX', 'Rare Holo GX', 'Rare Holo V',
+	'Promo', 'Black Star Promo', // <-- FIX: Added Promo rarities
 ];
 export const CUSTOM_RAREST_RARITIES = [
 	'Rare Prime', 'LEGEND', 'Rare BREAK', 'Prism Star', 'Rare Holo VMAX',
@@ -298,10 +299,29 @@ function generatePackFromCache(setId: string): TcgCard[] {
 		const missing = MAX_PACK_SIZE - pack.length;
 		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
-			pack.push(...getGlobalFallback(missing, excludeIds));
+			// ** FIX for Promo sets **
+			// If the main pools were empty, fill from the reverseRare pool (where promos now live)
+			// before resorting to global fallback.
+			const promoFill = getCardsFromPool(setId, 'reverseRare', missing, excludeIds);
+			pack.push(...promoFill);
+			
+			const stillMissing = MAX_PACK_SIZE - pack.length;
+			if (stillMissing > 0) {
+				excludeIds = pack.map(c => c.cardId);
+				pack.push(...getGlobalFallback(stillMissing, excludeIds));
+			}
 		}
 
 		if (pack.length > MAX_PACK_SIZE) pack.length = MAX_PACK_SIZE;
+		if (pack.length < MAX_PACK_SIZE) {
+			// If still not enough, fill with global fallback (should be rare)
+			const finalMissing = MAX_PACK_SIZE - pack.length;
+			if (finalMissing > 0) {
+				excludeIds = pack.map(c => c.cardId);
+				pack.push(...getGlobalFallback(finalMissing, excludeIds));
+			}
+		}
+
 		if (pack.length < MAX_PACK_SIZE) {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
@@ -381,10 +401,27 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 		const missing = MAX_PACK_SIZE - pack.length;
 		if (missing > 0) {
 			excludeIds = pack.map(c => c.cardId);
-			pack.push(...await getRandomCardsDB(tcgCardsCollection, null, FALLBACK_RARITIES, missing, excludeIds));
+			// ** FIX for Promo sets **
+			const promoFill = await getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_REVERSE_RARE_RARITIES, missing, excludeIds);
+			pack.push(...promoFill);
+			
+			const stillMissing = MAX_PACK_SIZE - pack.length;
+			if (stillMissing > 0) {
+				excludeIds = pack.map(c => c.cardId);
+				pack.push(...await getRandomCardsDB(tcgCardsCollection, null, FALLBACK_RARITIES, stillMissing, excludeIds));
+			}
 		}
 
 		if (pack.length > MAX_PACK_SIZE) pack.length = MAX_PACK_SIZE;
+		
+		if (pack.length < MAX_PACK_SIZE) {
+			const finalMissing = MAX_PACK_SIZE - pack.length;
+			if (finalMissing > 0) {
+				excludeIds = pack.map(c => c.cardId);
+				pack.push(...await getRandomCardsDB(tcgCardsCollection, null, FALLBACK_RARITIES, finalMissing, excludeIds));
+			}
+		}
+
 		if (pack.length < MAX_PACK_SIZE) {
 			throw new Error(`Could not generate a full ${MAX_PACK_SIZE}-card pack. Database may lack sufficient unique cards across fallback pools.`);
 		}
