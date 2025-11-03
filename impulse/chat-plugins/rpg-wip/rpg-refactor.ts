@@ -5500,7 +5500,7 @@ function generatePokemonInfoHTML(
 
 	if (showActions) {
 		const itemButton = pokemon.item ?
-			`<button name="send" value="/pokepokerpg takeitem ${pokemon.id}" class="button" style="font-size: 12px;">Take Item</button>` :
+			`<button name="send" value="/pokerpg takeitem ${pokemon.id}" class="button" style="font-size: 12px;">Take Item</button>` :
 			`<button name="send" value="/pokerpg giveitem ${pokemon.id}" class="button" style="font-size: 12px;">Give Item</button>`;
 		html += `<br><div style="margin-top: 8px;"><button name="send" value="/pokerpg summary ${pokemon.id}" class="button" style="font-size: 12px;">Summary</button> ${itemButton} <button name="send" value="/pokerpg depositpc ${pokemon.id}" class="button" style="font-size: 12px;">Deposit</button></div>`;
 	}
@@ -6449,12 +6449,12 @@ export const commands: ChatCommands = {
 		start(target, room, user) {
 			const playerState = RPGPlayerState.getInstance(user.id);
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const player = playerState.getPlayer();
 			if (player.party.length > 0) {
-				return this.parse('/pokepokerpg menu');
+				return this.parse('/pokerpg menu');
 			}
 			playerState.updatePlayer({ currentView: 'start', viewContext: undefined });
 			this.sendReply(`|uhtml|pokerpg-${user.id}|${renderMenuPage(player, user)}`);
@@ -6462,7 +6462,7 @@ export const commands: ChatCommands = {
 
 		choosetype(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const type = target.trim().toLowerCase();
@@ -6471,12 +6471,12 @@ export const commands: ChatCommands = {
 			}
 			const playerState = RPGPlayerState.getInstance(user.id);
 			playerState.updatePlayer({ currentView: 'starter_selection', viewContext: { type } });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		choosestarter(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const starterId = toID(target);
@@ -6495,7 +6495,7 @@ export const commands: ChatCommands = {
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${starterPokemon.species} as their starter pokemon!`).update();
 				}
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			} catch (error) {
 				this.errorReply(`Error creating starter Pokemon: ${error}`);
 			}
@@ -6503,20 +6503,20 @@ export const commands: ChatCommands = {
 
 		menu(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const playerState = RPGPlayerState.getInstance(user.id);
 			if (playerState.getPlayer().party.length === 0) {
-				return this.parse('/pokepokerpg start');
+				return this.parse('/pokerpg start');
 			}
 			playerState.updatePlayer({ currentView: 'menu', viewContext: undefined });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		learnmove(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const playerState = RPGPlayerState.getInstance(user.id);
@@ -6554,12 +6554,12 @@ export const commands: ChatCommands = {
 				delete player.pendingMoveLearnQueue;
 				playerState.updatePlayer({ pendingMoveLearnQueue: undefined, currentView: 'party' });
 			}
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		learneggmove(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const playerState = RPGPlayerState.getInstance(user.id);
@@ -6591,12 +6591,12 @@ export const commands: ChatCommands = {
 				player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: [newMoveId] };
 				playerState.updatePlayer({ pendingMoveLearnQueue: player.pendingMoveLearnQueue, currentView: 'learn_move' });
 			}
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		summary(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const playerState = RPGPlayerState.getInstance(user.id);
@@ -6608,30 +6608,30 @@ export const commands: ChatCommands = {
 			}
 			
 			playerState.updatePlayer({ currentView: 'summary', viewContext: { pokemonId: pokemon.id } });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		profile(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'profile', viewContext: undefined });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		party(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'party', viewContext: undefined });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		items(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const category = toID(target);
@@ -6639,12 +6639,12 @@ export const commands: ChatCommands = {
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'items', viewContext: { category: filterCategory } });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const [itemId, pokemonId] = target.split(' ').map(arg => toID(arg));
@@ -6661,20 +6661,20 @@ export const commands: ChatCommands = {
 				if (!targetPokemon) {
 					// No pokemon selected, show selection screen
 					playerState.updatePlayer({ currentView: 'items', viewContext: { ...player.viewContext, selectTargetForItem: itemId } });
-					this.parse(`/join view-pokepokerpg`); // Re-render items page with target selection logic (UI needs update)
+					this.parse(`/join view-pokerpg`); // Re-render items page with target selection logic (UI needs update)
 					return; // For now, we'll just error
 					// return this.errorReply("Please select a Pokemon to use this on.");
 				}
 				useHealingItem(player, targetPokemon, itemId);
 				playerState.updatePlayer({ party: player.party, inventory: player.inventory, currentView: 'party' });
 			} else if (item.category === 'held' || item.category === 'berry') {
-				return this.parse(`/pokepokerpg giveitem ${pokemonId || ''} ${itemId}`);
+				return this.parse(`/pokerpg giveitem ${pokemonId || ''} ${itemId}`);
 			} else if (itemId === 'eggmovetutor') {
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
 				if (!targetPokemon) {
 					// Show pokemon selection for egg move tutor
 					playerState.updatePlayer({ currentView: 'items', viewContext: { ...player.viewContext, selectTargetForItem: itemId } });
-					this.parse(`/join view-pokepokerpg`); // Re-render items page (UI needs update)
+					this.parse(`/join view-pokerpg`); // Re-render items page (UI needs update)
 					return;
 					// return this.errorReply("Please select a Pokemon to use this on.");
 				}
@@ -6689,16 +6689,16 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("This item cannot be used right now.");
 			}
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokepg`);
 		},
 
 		pc(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'pc', viewContext: undefined });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		depositpc(target, room, user) {
@@ -6715,7 +6715,7 @@ export const commands: ChatCommands = {
 			storePokemonInPC(player, pokemon); // Modifies player.pc
 			
 			playerState.updatePlayer({ party: player.party, pc: player.pc, currentView: 'pc' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -6731,12 +6731,12 @@ export const commands: ChatCommands = {
 			player.party.push(pokemon); // Modifies player.party
 			
 			playerState.updatePlayer({ party: player.party, pc: player.pc, currentView: 'pc' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		shop(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			const category = toID(target);
@@ -6744,7 +6744,7 @@ export const commands: ChatCommands = {
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'shop', viewContext: { category: filterCategory } });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		buy(target, room, user) {
@@ -6765,12 +6765,12 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity); // Modifies player.inventory
 			
 			playerState.updatePlayer({ money: player.money, inventory: player.inventory, currentView: 'shop' }); // Save changes
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		pokedex(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			// Not implemented
@@ -6779,11 +6779,11 @@ export const commands: ChatCommands = {
 
 		explore(target, room, user) {
 			if (activeBattles.has(user.id)) {
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 				return;
 			}
 			RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'explore', viewContext: undefined });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -7019,8 +7019,8 @@ export const commands: ChatCommands = {
 		},
 
 		battle(target, room, user) {
-			// DEPRECATED - use /pokepokerpg wildpokemon [zone]
-			return this.parse('/pokepokerpg wildpokemon startertown_grass');
+			// DEPRECATED - use /pokerpg wildpokemon [zone]
+			return this.parse('/pokerpg wildpokemon startertown_grass');
 		},
 
 		battleaction: {
@@ -7036,27 +7036,27 @@ export const commands: ChatCommands = {
 
 				if (isNaN(attackerSlotIndex) || !moveId || isNaN(targetSlotIndex)) {
 					battle.messageLog.push("Error: Invalid move command received.");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
 				const attackerSlot = battle.playerSlots[attackerSlotIndex as 0 | 1];
 				if (!attackerSlot || attackerSlot.pokemon.hp <= 0) {
 					battle.messageLog.push("This Pokémon is not in battle or has fainted.");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
 				if (battle.pendingActions[attackerSlotIndex]) {
 					battle.messageLog.push(`${attackerSlot.pokemon.species} is already waiting to move.`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
 				const validationError = validateMoveAction(attackerSlot, moveId, battle);
 				if (validationError) {
 					battle.messageLog.push(validationError);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
@@ -7076,7 +7076,7 @@ export const commands: ChatCommands = {
 				} else {
 					battle.currentView = 'battle'; // Stay on battle screen
 				}
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 
 			selecttarget(target, room, user) {
@@ -7089,7 +7089,7 @@ export const commands: ChatCommands = {
 
 				battle.currentView = 'target_selection';
 				battle.viewContext = { attackerSlotIndex, moveId };
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 			
 			forceswitch(target, room, user) {
@@ -7110,7 +7110,7 @@ export const commands: ChatCommands = {
 						battle.pendingPivot = undefined;
 					}
 					battle.currentView = 'battle';
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				
@@ -7156,7 +7156,7 @@ export const commands: ChatCommands = {
 					}
 				}
 				playerState.updatePlayer({ party: player.party }); // Save party changes
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 			
 			playerswitch(target, room, user) {
@@ -7171,24 +7171,24 @@ export const commands: ChatCommands = {
 				const outgoingSlot = battle.playerSlots[slotToSwitchOut as 0 | 1];
 				if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) {
 					battle.messageLog.push("The Pokémon in that slot has fainted or is not there.");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
 				const trappingPokemon = checkTrappingAbility(outgoingSlot, battle);
 				if (trappingPokemon) {
 					battle.messageLog.push(`${outgoingSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				if (outgoingSlot.isTrapped) {
 					battle.messageLog.push(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				if (outgoingSlot.isIngrained) {
 					battle.messageLog.push(`${outgoingSlot.pokemon.species} is rooted in place and cannot switch out!`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				
@@ -7196,12 +7196,12 @@ export const commands: ChatCommands = {
 				const incomingPokemon = player.party.find(p => p.id === pokemonIdIn && p.hp > 0);
 				if (!incomingPokemon) {
 					battle.messageLog.push("Invalid Pokemon or it has fainted.");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonIdIn)) {
 					battle.messageLog.push("This Pokemon is already in battle.");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				
@@ -7222,7 +7222,7 @@ export const commands: ChatCommands = {
 				} else {
 					battle.currentView = 'battle';
 				}
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 
 			switchmenu(target, room, user) {
@@ -7230,14 +7230,14 @@ export const commands: ChatCommands = {
 				if (!battle) return this.errorReply("You are not in a battle.");
 				// Not implemented in this phase, just go back
 				battle.currentView = 'battle';
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 			
 			catchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 				battle.currentView = 'catch_menu';
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 
 			selectcatchtarget(target, room, user) {
@@ -7246,7 +7246,7 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					battle.messageLog = ["You can't steal another Trainer's Pokémon!"];
 					battle.currentView = 'battle';
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				const ballId = toID(target);
@@ -7255,12 +7255,12 @@ export const commands: ChatCommands = {
 				const activeOpponents = getActiveSlots(battle.opponentSlots);
 				if (activeOpponents.length === 1) {
 					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
-					return this.parse(`/pokepokerpg battleaction catch ${ballId} ${slotIndex}`);
+					return this.parse(`/pokerpg battleaction catch ${ballId} ${slotIndex}`);
 				}
 
 				battle.currentView = 'catch_target';
 				battle.viewContext = { ballId };
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 			
 			catch(target, room, user) {
@@ -7275,7 +7275,7 @@ export const commands: ChatCommands = {
 				const targetSlot = getSlotFromIndex(battle, targetSlotIndex);
 				if (!targetSlot || (targetSlotIndex !== 2 && targetSlotIndex !== 3)) {
 					battle.messageLog.push("That is not a valid target!");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
@@ -7285,7 +7285,7 @@ export const commands: ChatCommands = {
 
 				if (ballItem?.category !== 'pokeball' || ballItem.quantity < 1) {
 					battle.messageLog.push(`You don't have any ${ITEMS_DATABASE[ballId]?.name || 'of that item'}!`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 				
@@ -7321,12 +7321,12 @@ export const commands: ChatCommands = {
 
 					if (playerSlotIndex === -1) {
 						battle.messageLog.push("Error: Could not find a Pokémon to use the item.");
-						this.parse(`/join view-pokepokerpg`);
+						this.parse(`/join view-pokerpg`);
 						return;
 					}
 					if (battle.pendingActions[playerSlotIndex]) {
 						battle.messageLog.push(`${playerSlot.pokemon.species} is already waiting to move.`);
-						this.parse(`/join view-pokepokerpg`);
+						this.parse(`/join view-pokerpg`);
 						return;
 					}
 					
@@ -7347,7 +7347,7 @@ export const commands: ChatCommands = {
 						battle.currentView = 'battle';
 					}
 				}
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 
 			run(target, room, user) {
@@ -7357,7 +7357,7 @@ export const commands: ChatCommands = {
 
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					battle.messageLog.push("You can't run from a Trainer battle!");
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
@@ -7365,28 +7365,28 @@ export const commands: ChatCommands = {
 				const trappedPokemon = getActiveSlots(battle.playerSlots).find(slot => slot.isTrapped || checkTrappingAbility(slot, battle));
 				if (trappedPokemon) {
 					battle.messageLog.push(`You can't escape! ${trappedPokemon.pokemon.species} is trapped!`);
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 					return;
 				}
 
 				saveBattleStatus(battle);
 				battle.battleResult = 'run';
-				this.parse(`/join view-pokepokerpg`);
+				this.parse(`/join view-pokerpg`);
 			},
 			
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
 					battle.currentView = 'battle';
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 				} else {
 					RPGPlayerState.getInstance(user.id).updatePlayer({ currentView: 'menu' });
-					this.parse(`/join view-pokepokerpg`);
+					this.parse(`/join view-pokerpg`);
 				}
 			},
 
 			help() {
-				this.sendReply("Battle commands: /pokepokerpg battleaction [move|switch|catchmenu|run]");
+				this.sendReply("Battle commands: /pokerpg battleaction [move|switch|catchmenu|run]");
 			},
 		},
 
@@ -7405,7 +7405,7 @@ export const commands: ChatCommands = {
 			}
 			
 			playerState.updatePlayer({ party: player.party, currentView: 'party' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		giveitem(target, room, user) {
@@ -7441,7 +7441,7 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, 1);
 			
 			playerState.updatePlayer({ party: player.party, inventory: player.inventory, currentView: 'party' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 		
 		takeitem(target, room, user) {
@@ -7463,7 +7463,7 @@ export const commands: ChatCommands = {
 			pokemon.item = undefined;
 			
 			playerState.updatePlayer({ party: player.party, inventory: player.inventory, currentView: 'party' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		nickname(target, room, user) {
@@ -7475,18 +7475,18 @@ export const commands: ChatCommands = {
 			const pokemonId = parts[0]?.trim();
 			const newNickname = parts.slice(1).join(',').trim();
 
-			if (!pokemonId || !newNickname) return this.errorReply("Usage: /pokepokerpg nickname [pokemonId], [new nickname]");
+			if (!pokemonId || !newNickname) return this.errorReply("Usage: /pokerpg nickname [pokemonId], [new nickname]");
 			const pokemon = player.party.find(p => p.id === pokemonId);
 			if (!pokemon) return this.errorReply(`Pokemon not found in your party.`);
 			if (newNickname.length > 12) return this.errorReply("Nicknames cannot be longer than 12 characters.");
 
 			pokemon.nickname = newNickname;
 			playerState.updatePlayer({ party: player.party, currentView: 'party' });
-			this.parse(`/join view-pokepokerpg`);
+			this.parse(`/join view-pokerpg`);
 		},
 
 		help() {
-			return this.parse('/help pokepokerpg');
+			return this.parse('/help pokerpg');
 		},
 		'': 'help',
 	},
@@ -7518,7 +7518,7 @@ function renderBattlePage(battle: BattleState, user: User): string {
 					`<h2>Got away safely!</h2>` +
 					`<p>You ran away from the wild Pokemon.</p>` +
 					`<p>` +
-					`<button name="send" value="/pokepokerpg explore" class="button">Continue Exploring</button>` +
+					`<button name="send" value="/pokerpg explore" class="button">Continue Exploring</button>` +
 					`</p>` +
 					`</div>`;
 	case 'catch':
@@ -7531,8 +7531,8 @@ function renderBattlePage(battle: BattleState, user: User): string {
 		return `<div class="infobox">` + `${successMessage}` +
 					`${generatePokemonInfoHTML(tempSlot, true)}` +
 					`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
-					`<p><button name="send" value="/pokepokerpg explore" class="button">Continue Exploring</button>` +
-					`<button name="send" value="/pokepokerpg menu" class="button">Back to Menu</button></p></div>`;
+					`<p><button name="send" value="/pokerpg explore" class="button">Continue Exploring</button>` +
+					`<button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
 	}
 
 	// 2. If battle is pending, render the correct view
@@ -7592,7 +7592,7 @@ function renderMenuPage(player: PlayerData, user: User): string {
 				}
 			}
 		}
-		partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/pokepokerpg pc" class="button">Pokemon PC</button> <button name="send" value="/pokepokerpg menu" class="button">Back to Menu</button></p></div>`;
+		partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/pokerpg pc" class="button">Pokemon PC</button> <button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
 		return partyHTML;
 	case 'pc':
 		return generatePCHTML(player);
@@ -7615,28 +7615,28 @@ function renderMenuPage(player: PlayerData, user: User): string {
 			for (const zoneId of availableZones) {
 				const zone = ENCOUNTER_ZONES[zoneId];
 				const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-				exploreButtons += `<button name="send" value="/pokepokerpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+				exploreButtons += `<button name="send" value="/pokerpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
 			}
 		} else {
 			exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
 		}
-		exploreButtons += `<button name="send" value="/pokepokerpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
+		exploreButtons += `<button name="send" value="/pokerpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
 		return `<div class="infobox">` +
 				`<h2>Explore ${player.location}</h2>` +
 				`<p>Choose where to go:</p>` +
 				`<p>${exploreButtons}</p>` +
 				`<hr />` +
 				`<p>` +
-				`<button name="send" value="/pokepokerpg shop" class="button">🏪 Poké Mart</button>` +
-				`<button name="send" value="/pokepokerpg heal" class="button">🏥 Pokémon Center</button>` +
+				`<button name="send" value="/pokerpg shop" class="button">🏪 Poké Mart</button>` +
+				`<button name="send" value="/pokerpg heal" class="button">🏥 Pokémon Center</button>` +
 				`</p>` +
-				`<p><button name="send" value="/pokepokerpg menu" class="button">Back to Menu</button></p>` +
+				`<p><button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p>` +
 				`</div>`;
 	case 'profile':
-		return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/pokepokerpg menu" class="button">Back to Menu</button></p></div>`;
+		return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/pokerpg menu" class="button">Back to Menu</button></p></div>`;
 	case 'menu':
 		default:
-			return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/pokepokerpg profile" class="button">👤 Profile</button><button name="send" value="/pokepokerpg party" class="button">⚡ Party</button><button name="send" value="/pokepokerpg wildpokemon startertown_grass" class="button">⚔️ Battle</button><button name="send" value="/pokepokerpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/pokepokerpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/pokepokerpg items" class="button">🎒 Items</button><button name="send" value="/pokepokerpg pc" class="button">💻 Pokemon PC</button></p></div>`;
+			return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/pokerpg profile" class="button">👤 Profile</button><button name="send" value="/pokerpg party" class="button">⚡ Party</button><button name="send" value="/pokerpg wildpokemon startertown_grass" class="button">⚔️ Battle</button><button name="send" value="/pokerpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/pokerpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/pokerpg items" class="button">🎒 Items</button><button name="send" value="/pokerpg pc" class="button">💻 Pokemon PC</button></p></div>`;
 	}
 }
 
