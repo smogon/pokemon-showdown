@@ -74,7 +74,7 @@ export const economyCommands: ChatCommands = {
 	},
 
 	async buy(target, room, user) {
-		const setId = toID(target);
+		const setId = toID(target); // toID() correctly normalizes to lowercase
 		if (!setId) return this.errorReply("Please specify a set ID to buy. Use /tcg shop to see available packs.");
 
 		const setInShop = dailyShopCache.find(s => s.setId === setId);
@@ -171,14 +171,14 @@ export const economyCommands: ChatCommands = {
 	},
 
 	async sellduplicates(target, room, user) {
-		const targetId = target;
+		const targetId = target.trim(); // Get raw target
 		const collection = userCollectionsCollection;
 		const profiles = userProfilesCollection;
 		const filter: any = { userId: user.id, quantity: { $gt: 1 } };
 		let description = "all duplicates";
 
 		if (targetId && targetId !== 'all') {
-			filter.setId = targetId;
+			filter.setId = targetId.toLowerCase(); // <-- FIX: Normalize setId to lowercase
 			description = `duplicates from set "${targetId}"`;
 		}
 
@@ -329,7 +329,7 @@ export const economyCommands: ChatCommands = {
 		}
 
 		const targetUserId = toID(parts[0]);
-		const setId = parts[1];
+		const setId = parts[1].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 		const quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
 
 		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
