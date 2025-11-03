@@ -4378,7 +4378,9 @@ const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 
  * @param pokemon The base RPGPokemon object.
  * @returns A new ActivePokemonSlot object.
  */
+
 function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
+	const ability = toID(pokemon.ability || ''); // <-- THIS LINE WAS MISSING
 	return {
 		pokemon,
 		statStages: { ...INITIAL_STAT_STAGES },
