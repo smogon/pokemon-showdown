@@ -1316,6 +1316,14 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 			attackerSlot.isConfused = false;
 			messageLog.push(`${attacker.species} snapped out of its confusion!`);
 		} else if (Math.random() < 1 / 3) {
+			// --- START: Tangled Feet Check ---
+			const attackerAbility = toID(attacker.ability || '');
+			if (attackerAbility === 'tangledfeet') {
+				messageLog.push(`${attacker.species}'s Tangled Feet prevents it from hurting itself!`);
+				return false; // Prevents self-damage, but still uses the turn
+			}
+			// --- END: Tangled Feet Check ---
+			
 			messageLog.push(`It hurt itself in its confusion!`);
 			const selfDamage = Math.floor((((2 * attacker.level / 5 + 2) * 40 * (attacker.atk / attacker.def)) / 50) + 2);
 			attacker.hp = Math.max(0, attacker.hp - selfDamage);
