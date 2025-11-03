@@ -1206,7 +1206,7 @@ function calculateDamage(
 		defender,
 		attackerSlot,
 		defenderSlot,
-		move,
+		move: { ...move }, // <-- THIS IS THE FIX. Creates a mutable copy of the move.
 		battle,
 		messageLog: [], // Temporary log
 	};
@@ -1246,7 +1246,7 @@ function calculateDamage(
 
 	// --- 4. Get Move Type (after Weatherball, Pixilate, etc.) ---
 	const moveType = getMoveType(move, attacker, battle, abilityContext);
-	abilityContext.move.type = moveType; // Update context if type changed
+	abilityContext.move.type = moveType; // Update context (on the copy) if type changed
 
 	// --- 5. Apply Ability Power Modifiers (Technician, Sheer Force, etc.) ---
 	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
