@@ -49,7 +49,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Toxic Spikes", "Toxic", "Knock Off", "Haze", "Body Press"],
+                "movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Knock Off", "Haze", "Body Press"],
                 "abilities": ["Dummy"],
                 "teraTypes": ["Ghost"]
             },
@@ -67,7 +67,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Spirit Shackle", "Close Combat", "Sucker Punch", "Bite", "Shadow Sneak", "Pursuit", "Grudge"],
-                "abilities": ["Jumpscare", "Strong Jaw"],
+                "abilities": ["Strong Jaw"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -88,7 +88,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Wish", "Protect", "Moonblast", "Ominous Wind", "Night Shade", "Lick", "Defog"],
+                "movepool": ["Wish", "Protect", "Moonblast", "Ominous Wind", "Night Shade", "Defog"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Ghost"]
             }
@@ -167,14 +167,14 @@
             },
 			{
                 "role": "Bulky Support",
-                "movepool": ["Shadow Bone", "Lick", "Crunch", "Roar", "Teleport", "Recover", "Will-O-Wisp"],
+                "movepool": ["Shadow Bone", "Crunch", "Roar", "Teleport", "Recover", "Will-O-Wisp"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Ghost"]
             },
 			{
                 "role": "Fast Attacker",
                 "movepool": ["Last Respects", "Play Rough", "Crunch", "Sucker Punch", "Trick", "Shadow Sneak"],
-                "abilities": ["Jumpscare"],
+                "abilities": ["Undead"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -207,7 +207,7 @@
             },
 			{
                 "role": "Bulky Support",
-                "movepool": ["Hex", "Confuse Ray", "Nightmare", "Recover", "Strength Sap", "Thunder Wave", "Toxic", "Will-O-Wisp"],
+                "movepool": ["Hex", "Nightmare", "Recover", "Will-O-Wisp"],
                 "abilities": ["Jankster"],
                 "teraTypes": ["Ghost"]
             },
@@ -225,13 +225,13 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Spirit Shackle", "Lash Out", "Shadow Sneak", "Superpower", "Tidy Up", "Return", "Slack Off"],
-                "abilities": ["Jumpscare"],
+                "abilities": ["No Ability"],
                 "teraTypes": ["Ghost"]
             },
 			{
                 "role": "Fast Attacker",
                 "movepool": ["Lash Out", "Shadow Sneak", "Astonish", "Parting Shot"],
-                "abilities": ["Jumpscare"],
+                "abilities": ["No Ability"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -298,7 +298,7 @@
             },
 			{
                 "role": "Bulky Support",
-                "movepool": ["Hex", "Giga Drain", "Stealth Rock", "Haze", "Strength Sap", "Will-O-Wisp"],
+                "movepool": ["Hex", "Giga Drain", "Strength Sap", "Will-O-Wisp"],
                 "abilities": ["Purifying Salt", "Solid Rock"],
                 "teraTypes": ["Ghost"]
             },
@@ -377,7 +377,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Shadow Force", "Shadow Ball", "Nightmare", "Toxic", "Will-O-Wisp", "Protect"],
+                "movepool": ["Shadow Force", "Nightmare", "Toxic", "Protect"],
                 "abilities": ["Wonder Guard"],
                 "teraTypes": ["Ghost"]
             },
