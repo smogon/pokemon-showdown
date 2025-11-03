@@ -4254,6 +4254,7 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
+		s.lastDamageTaken = undefined;
 	});
 
 	// 1. Generate AI Actions
