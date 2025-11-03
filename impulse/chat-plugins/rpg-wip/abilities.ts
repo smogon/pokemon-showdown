@@ -5,78 +5,7 @@
  */
 
 import { Dex, toID } from '../../../sim/dex';
-
-// Type definitions for the RPG system
-export interface RPGPokemon {
-	species: string;
-	level: number;
-	hp: number;
-	maxHp: number;
-	atk: number;
-	def: number;
-	spa: number;
-	spd: number;
-	spe: number;
-	ability?: string;
-	item?: string;
-	status: string | null;
-	[key: string]: any;
-}
-
-export interface ActivePokemonSlot {
-	pokemon: RPGPokemon;
-	statStages: Record<string, number>;
-	status: string | null;
-	flashFireBoost?: boolean;
-	isConfused?: boolean; // Added for Tangled Feet
-	unburdenActive?: boolean; // Added for Unburden
-	[key: string]: any;
-}
-
-export interface BattleState {
-	weather?: { type: string, turns: number };
-	terrain?: { type: string, turns: number };
-	magicRoomTurns: number;
-	wonderRoomTurns: number;
-	gravityTurns: number;
-	playerSlots?: [ActivePokemonSlot | null, ActivePokemonSlot | null]; // Added for isWeatherActive
-	opponentSlots?: [ActivePokemonSlot | null, ActivePokemonSlot | null]; // Added for isWeatherActive
-	[key: string]: any;
-}
-
-export interface Move {
-	id: string;
-	name: string;
-	type: string;
-	category: 'Physical' | 'Special' | 'Status';
-	basePower: number;
-	flags: Record<string, boolean>;
-	secondary?: any;
-	[key: string]: any;
-}
-
-export interface AbilityContext {
-	attacker: RPGPokemon;
-	defender: RPGPokemon;
-	attackerSlot: ActivePokemonSlot;
-	defenderSlot: ActivePokemonSlot;
-	move: Move;
-	battle: BattleState;
-	messageLog: string[];
-	effectiveness?: number;
-}
-
-/**
- * Ability Handler Types
- */
-export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
-export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
-export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
-export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number) => number;
-export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string) => string;
-export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityOnDamageHandler = (ctx: AbilityContext, damage: number) => void;
-export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
+import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler } from './interfaces';
 
 /**
  * Helper to get all active (non-fainted, non-null) slots for a given side.
