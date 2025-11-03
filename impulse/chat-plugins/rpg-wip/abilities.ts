@@ -358,20 +358,9 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		}
 		return basePower;
 	},
-
+	
 	'analytic': (ctx, basePower) => {
-		// Check if attacker is moving last by comparing with opponent slots
-		const isPlayerAttacker = ctx.battle.playerSlots.some(slot => 
-			slot?.pokemon.id === ctx.attacker.id);
-		
-		const opponentSlots = isPlayerAttacker ? 
-			ctx.battle.opponentSlots : ctx.battle.playerSlots;
-	
-		// If all opponent active Pokemon have already moved this turn, boost power
-		const allOpponentsMoved = opponentSlots.every(slot => 
-			!slot || slot.pokemon.hp <= 0);
-	
-		if (allOpponentsMoved) {
+		if (ctx.attackerSlot.analyticBoost) {
 			return Math.floor(basePower * 1.3);
 		}
 		return basePower;
