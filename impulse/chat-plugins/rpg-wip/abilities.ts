@@ -847,7 +847,11 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number
  */
 export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	const ability = toID(pokemon.ability || '');
-
+	
+	if (ability === 'purifyingsalt') {
+		return true;
+	}
+	
 	if (ability === 'immunity' && (status === 'psn' || status === 'tox')) {
 		return true;
 	}
