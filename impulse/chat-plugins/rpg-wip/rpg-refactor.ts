@@ -3227,24 +3227,22 @@ function handleOpponentFaint(
 				const ability = toID(participantSlot.pokemon.ability || '');
 				
 				if (ability === 'moxie' || ability === 'chillingneigh') {
-					if (participantSlot.statStages.atk < 6) {
-						participantSlot.statStages.atk++;
-						messageLog.push(`${participantSlot.pokemon.species}'s ${participantSlot.pokemon.ability} boosted its Attack!`);
-					}
+					// --- CONTRARY FIX ---
+					applyStatChange(participantSlot, 'atk', 1, battle, messageLog, participantSlot);
+					// --- END FIX ---
 				} else if (ability === 'beastboost') {
 					// Find highest stat
 					const stats = participantSlot.pokemon;
-					let highestStat: keyof Stats = 'atk';
+					let highestStat: keyof Stats | 'accuracy' | 'evasion' = 'atk';
 					let maxStatVal = stats.atk;
 					if (stats.def > maxStatVal) { maxStatVal = stats.def; highestStat = 'def'; }
 					if (stats.spa > maxStatVal) { maxStatVal = stats.spa; highestStat = 'spa'; }
 					if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
 					if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
 
-					if (participantSlot.statStages[highestStat] < 6) {
-						participantSlot.statStages[highestStat]++;
-						messageLog.push(`${participantSlot.pokemon.species}'s Beast Boost raised its ${highestStat.toUpperCase()}!`);
-					}
+					// --- CONTRARY FIX ---
+					applyStatChange(participantSlot, highestStat, 1, battle, messageLog, participantSlot);
+					// --- END FIX ---
 				}
 			}
 			// --- END ADDED ---
