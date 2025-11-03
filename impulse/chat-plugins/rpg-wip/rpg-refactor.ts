@@ -1602,6 +1602,13 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		}
 	}
 
+	// Handle Speed Boost
+	const ability = toID(pokemon.ability || '');
+	if (ability === 'speedboost' && slot.statStages.spe < 6) {
+		slot.statStages.spe++;
+		messageLog.push(`${pokemon.species}'s Speed Boost raised its Speed!`);
+	}
+
 	// Clear one-turn effects
 	slot.isCharged = false; // Charge only lasts until next Electric move
 }
