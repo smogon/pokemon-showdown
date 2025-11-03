@@ -5265,7 +5265,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	const movesSummary = pokemon.moves.map(move => {
 		const moveData = getMove(move.id);
-		return '<div style="text-align: center; padding: 5px; background: #f0f0f0; border-radius: 5px;">' +
+		return '<div style="text-align: center; padding: 5px; border-radius: 5px;">' +
 			moveData.name +
 			'<br><small>PP: ' + move.pp + '/' + moveData.pp + '</small>' +
 			'</div>';
