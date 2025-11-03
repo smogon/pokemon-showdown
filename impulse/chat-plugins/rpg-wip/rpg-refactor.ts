@@ -6445,7 +6445,7 @@ function validateMoveAction(
 }
 
 export const commands: ChatCommands = {
-	    pokepokerpg: {
+	    pokerpg: {
 		start(target, room, user) {
 			const playerState = RPGPlayerState.getInstance(user.id);
 			if (activeBattles.has(user.id)) {
@@ -7641,7 +7641,7 @@ function renderMenuPage(player: PlayerData, user: User): string {
 }
 
 export const pages: Chat.PageTable = {
-	pokepokerpg(args, user) {
+	pokerpg(args, user) {
 		const battle = activeBattles.get(user.id);
 		if (battle) {
 			// 1. Render Battle UI
