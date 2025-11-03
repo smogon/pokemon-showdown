@@ -4487,9 +4487,15 @@ function executeAction(
 		}
 
 		// 3. PP Deduction (if not already deducted during charging)
-		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
-			moveObject.pp--;
+		// --- START: Pressure Check (Normal) ---
+		let ppDeduction = 1;
+		if (resolvedTargets.some(target => toID(target.pokemon.ability || '') === 'pressure')) {
+			ppDeduction = 2;
 		}
+		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
+			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+		}
+		// --- END: Pressure Check ---
 
 		// 4. Resolve Targets
 		let chosenTargetSlot = action.targetSlot;
