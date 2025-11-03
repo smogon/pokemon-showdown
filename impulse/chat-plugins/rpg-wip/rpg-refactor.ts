@@ -1493,6 +1493,7 @@ function applyDamageAndEnduranceEffects(
 		const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
 		defender.hp = Math.max(0, defender.hp - disguiseDamage);
 		messageLog.push(`${defender.species} was hurt by the broken disguise!`);
+		defenderSlot.lastMoveThatHitMe = move; // <-- AFTERMATH: Tag move
 		return 0; // The attack's damage is negated
 	}
 
@@ -1507,6 +1508,7 @@ function applyDamageAndEnduranceEffects(
 			defenderSlot.substitute.hp -= damageDealt;
 			messageLog.push(`The substitute took the hit!`);
 		}
+		defenderSlot.lastMoveThatHitMe = move; // <-- AFTERMATH: Tag move
 		return 0; // 0 damage dealt to the Pokemon itself
 	}
 
@@ -1526,6 +1528,13 @@ function applyDamageAndEnduranceEffects(
 	}
 
 	defender.hp = Math.max(0, defender.hp - damageDealt);
+	
+	// --- AFTERMATH: Tag the pokemon with the move that hit it ---
+	if (damageDealt > 0) {
+		defenderSlot.lastMoveThatHitMe = move;
+	}
+	// --- END AFTERMATH ---
+
 	return damageDealt;
 }
 
@@ -1540,12 +1549,19 @@ function applyPostDamageContactEffects(
 	messageLog: string[],
 	damageDealt: number,
 	effectiveness: number,
-	abilityContext: AbilityContext
+	abilityContext: AbilityContext,
+	isCritical: boolean // <-- ADD THIS PARAMETER
 ) {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 	
 	if (defender.hp <= 0 || damageDealt <= 0) return;
+
+	// --- ANGER POINT IMPLEMENTATION ---
+	if (isCritical && toID(defender.ability || '') === 'angerpoint') {
+		applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
+	}
+	// --- END ANGER POINT IMPLEMENTATION ---
 
 	// --- Stat-boosting Berries (Kee, Maranga) ---
 	if (battle.magicRoomTurns === 0) {
@@ -1597,6 +1613,15 @@ function applyPostDamageContactEffects(
 			activateUnburden(defenderSlot, messageLog);
 		}
 	}
+
+	// --- CURSED BODY IMPLEMENTATION ---
+	// Cursed Body triggers on any move, not just contact
+	const defenderAbility = toID(defender.ability || '');
+	if (defenderAbility === 'cursedbody' && attacker.hp > 0 && !attackerSlot.disabledMove && Math.random() < 0.3) {
+		attackerSlot.disabledMove = { moveId: move.id, turns: 4 }; // 4 turns (disable lasts 3 more turns)
+		messageLog.push(`${attacker.species}'s ${move.name} was disabled by ${defender.species}'s Cursed Body!`);
+	}
+	// --- END CURSED BODY IMPLEMENTATION ---
 
 	// --- Weakness Policy ---
 	if (battle.magicRoomTurns === 0 && defender.item === 'weaknesspolicy' && effectiveness > 1) {
