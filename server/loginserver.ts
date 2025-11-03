@@ -9,6 +9,7 @@
 
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
+const MAX_PARALLEL_REQUESTS = 5;
 
 import { Net, FS } from '../lib';
 
@@ -19,7 +20,7 @@ class TimeoutError extends Error {}
 TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
-	if (json.startsWith(']')) json = json.substr(1);
+	if (json.startsWith(']')) json = json.slice(1);
 	const data: { error: string | null, json: any[] | null } = { error: null, json: null };
 	try {
 		data.json = JSON.parse(json);
@@ -52,7 +53,7 @@ class LoginServerInstance {
 	}
 
 	async instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
-		if (this.openRequests > 5) {
+		if (this.openRequests > MAX_PARALLEL_REQUESTS) {
 			return Promise.resolve(
 				[null, new RangeError("Request overflow")]
 			);
@@ -75,7 +76,6 @@ class LoginServerInstance {
 			if (json.error) {
 				return [null, new Error(json.error)];
 			}
-			this.openRequests--;
 			return [json.json!, null];
 		} catch (error: any) {
 			this.openRequests--;
@@ -172,7 +172,7 @@ class LoginServerInstance {
 		} else {
 			this.requestLog += `${(Date.now() - this.lastRequest) / 1000}s`;
 		}
-		this.requestLog = this.requestLog.substr(-1000);
+		this.requestLog = this.requestLog.slice(-1000);
 		this.requestTimerPoke();
 	}
 	getLog() {
