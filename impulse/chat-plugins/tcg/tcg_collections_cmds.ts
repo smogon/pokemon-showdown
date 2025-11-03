@@ -219,15 +219,25 @@ export const collectionCommands: ChatCommands = {
 				const cardCollection = tcgCardsCollection;
 				setInfo = await cardCollection.findOne({ setId });
 			}
-			if (!setInfo?.setTotal) {
-				return this.errorReply(`Set with ID "${setId}" not found or has no card total listed.`);
+			if (!setInfo) {
+				return this.errorReply(`Set with ID "${setId}" not found.`);
 			}
 
-			const totalInSet = setInfo.setTotal;
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
 			// Use the canonical setId from the database to ensure case-sensitive match
 			const canonicalSetId = setInfo.setId;
+
+			// For sets without setTotal (like Promo sets), calculate the actual number of unique cards
+			let totalInSet = setInfo.setTotal || 0;
+			if (totalInSet === 0) {
+				const cardCollection = tcgCardsCollection;
+				totalInSet = await cardCollection.countDocuments({ setId: canonicalSetId });
+				if (totalInSet === 0) {
+					return this.errorReply(`Set with ID "${setId}" has no cards in the database.`);
+				}
+			}
+
 			const userCollection = userCollectionsCollection;
 			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId: canonicalSetId });
 			const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
@@ -556,11 +566,12 @@ export const collectionCommands: ChatCommands = {
 			const userCollection = userCollectionsCollection;
 			const profileCollection = userProfilesCollection;
 
+			// Get both setTotal and actual count for each set
 			const setTotalsPipeline = [
-				{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
-				{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } },
+				{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" }, actualCount: { $sum: 1 } } },
+				{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] }, actualCount: 1 } },
 			];
-			const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
+			const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number, actualCount: number }>(setTotalsPipeline);
 			if (allSets.length === 0) return this.errorReply("Failed to fetch set totals. Aborting.");
 
 			const userProgressPipeline = [
@@ -573,9 +584,11 @@ export const collectionCommands: ChatCommands = {
 
 			let setsCompleted = 0;
 			for (const set of allSets) {
-				if (set.setTotal > 0) {
+				// Use actualCount for sets without setTotal (like Promo sets)
+				const totalInSet = set.setTotal > 0 ? set.setTotal : set.actualCount;
+				if (totalInSet > 0) {
 					const userCount = userProgressMap.get(set.setId) || 0;
-					if (userCount >= set.setTotal) setsCompleted++;
+					if (userCount >= totalInSet) setsCompleted++;
 				}
 			}
 
