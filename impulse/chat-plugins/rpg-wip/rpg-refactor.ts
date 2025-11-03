@@ -3913,6 +3913,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		stockpileCount: 0,
 		flashFireBoost: false,
 		unburdenActive: false,
+		analyticBoost: false,
 	};
 }
 
@@ -4047,6 +4048,7 @@ function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move
  * [STEP 4/6/7 Implementation]
  * Processes all queued actions for the turn.
  */
+
 function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
@@ -4149,6 +4151,28 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		return speedB - speedA; // Faster goes first normally
 	});
 
+	// --- NEW: Analytic Check ---
+	// Clear all analytic flags first
+	allActiveSlots.forEach(s => s.analyticBoost = false);
+	
+	// Find the last action in the queue that is a move
+	let lastMoveAction: NonNullable<BattleState['pendingActions'][number]> | null = null;
+	for (let i = actionQueue.length - 1; i >= 0; i--) {
+		if (actionQueue[i].actionType === 'move') {
+			lastMoveAction = actionQueue[i];
+			break;
+		}
+	}
+	
+	if (lastMoveAction) {
+		const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction.pokemonId);
+		// Check if the ability is Analytic before setting the flag
+		if (lastMoverSlot && toID(lastMoverSlot.pokemon.ability || '') === 'analytic') {
+			lastMoverSlot.analyticBoost = true;
+		}
+	}
+	// --- END NEW: Analytic Check ---
+
 	// 3. Execute Actions in order
 	for (const action of actionQueue) {
 		executeAction(action, battle, room, user, messageLog);
@@ -4187,7 +4211,6 @@ function processTurn(context: CommandContext, battle: BattleState, room: ChatRoo
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 	}
 }
-
 
 /**
  * Gets all active (non-fainted, non-null) slots for a given side.
