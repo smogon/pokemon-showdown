@@ -1562,9 +1562,17 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
 		if (pokemon.hp <= 0) return;
 	} else if (status === 'psn') {
-		const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-		pokemon.hp = Math.max(0, pokemon.hp - damage);
-		messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+		const ability = toID(pokemon.ability || '');
+		if (ability === 'poisonheal' && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
+		} else {
+			// Original damage logic for non-Poison Heal Pokemon
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+		}
 		if (pokemon.hp <= 0) return;
 	}
 
@@ -1916,6 +1924,13 @@ function handleStatusMove(
 	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
 	const defenderSpecies = defender ? Dex.species.get(defender.species) : null;
 	let hadEffect = false;
+
+	// Check if Prankster-boosted move is targeting a Dark-type
+	const attackerAbility = toID(attacker.ability || '');
+	if (attackerAbility === 'prankster' && defenderSpecies?.types.includes('Dark')) {
+		messageLog.push(`${defender.species} is immune to Prankster-boosted moves!`);
+		return; // The move fails completely
+	}
 
 	// Handle moves that need a defender
 	if (defender && defenderSpecies) {
