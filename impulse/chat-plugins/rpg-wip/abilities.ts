@@ -1013,6 +1013,10 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		damage = Math.floor(damage * 0.5);
 	}
 
+	if (defenderAbility === 'purifyingsalt' && ctx.move.type === 'Ghost') {
+		damage = Math.floor(damage * 0.5);
+	}
+
 	if (defenderAbility === 'furcoat' && ctx.move.category === 'Physical') {
 		damage = Math.floor(damage * 0.5);
 	}
