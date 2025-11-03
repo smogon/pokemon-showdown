@@ -3695,6 +3695,12 @@ function applyStatChange(
 		actualValue *= -1;
 	}
 
+	// --- SIMPLE IMPLEMENTATION ---
+	if (ability === 'simple') {
+		actualValue *= 2;
+	}
+	// --- END SIMPLE IMPLEMENTATION ---
+
 	const currentStage = slot.statStages[stat];
 	const isSelf = !source || source.pokemon.id === pokemon.id;
 
