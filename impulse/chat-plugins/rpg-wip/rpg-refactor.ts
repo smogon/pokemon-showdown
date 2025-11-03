@@ -1964,7 +1964,8 @@ function handleDamagingMove(
 
 			// --- 3f. Defender Contact Effects (Rocky Helmet, Abilities, WP, Red Card) ---
 			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
-			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext);
+			// --- ANGER POINT FIX: Pass isCritical to this function ---
+			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
 			
 			// --- 3g. HP-Drop Berry Effects (Sitrus, Enigma) ---
 			handleHPDropEffects(defenderSlot, battle, messageLog);
@@ -1979,7 +1980,6 @@ function handleDamagingMove(
 		if (defenderSlot.pokemon.hp <= 0) break; // Stop multi-hit if defender fainted
 	}
 }
-
 
 /********************************
  * REFACTORED STATUS MOVE HANDLER
