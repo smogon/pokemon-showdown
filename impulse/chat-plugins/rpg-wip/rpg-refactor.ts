@@ -3931,15 +3931,17 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 			}
 			itemConsumed = true;
 		} else if (pokemon.item in pinchBerryStat) {
-			const statToBoost = pinchBerryStat[pokemon.item];
-			const targetStages = slot.statStages;
-			if (targetStages[statToBoost] < 6) {
-				// FIXED: All stat-boosting berries now boost by exactly 1 stage
-				targetStages[statToBoost]++;
+			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
+			
+			// --- CONTRARY FIX ---
+			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
 				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to boost its ${statToBoost.toUpperCase()}!`);
+				// Message is handled by applyStatChange, but we add context
+				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
 				itemConsumed = true;
 			}
+			// --- END FIX ---
+
 		} else if (pokemon.item === 'starfberry') {
 			const targetStages = slot.statStages;
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -3947,11 +3949,15 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 
 			if (availableStats.length > 0) {
 				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
-				targetStages[randomStat] += 2; // Starf Berry boosts by 2 stages (this was correct)
-				targetStages[randomStat] = Math.min(6, targetStages[randomStat]); // Cap at +6
-				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-				messageLog.push(`${pokemon.species} ate its ${consumedItemName} to sharply boost its ${randomStat.toUpperCase()}!`);
-				itemConsumed = true;
+				
+				// --- CONTRARY FIX ---
+				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
+					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+					// Message is handled by applyStatChange, but we add context
+					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
+					itemConsumed = true;
+				}
+				// --- END FIX ---
 			}
 		}
 	}
