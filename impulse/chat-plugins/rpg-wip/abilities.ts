@@ -1327,6 +1327,20 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 }
 
 /**
+ * Apply accuracy-modifying abilities
+ */
+export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
+    const ability = toID(attacker.ability || '');
+    const handler = ACCURACY_EVASION_ABILITIES[ability];
+
+    if (handler && handler.accuracyMultiplier) {
+        return Math.floor(moveAccuracy * handler.accuracyMultiplier);
+    }
+
+    return moveAccuracy;
+}
+
+/**
  * Apply effects from contact-based abilities (Static, Flame Body, etc.)
  */
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
@@ -1408,6 +1422,7 @@ export const RPGAbilities = {
 	applyTypeModifier: applyAbilityTypeModifier,
 	applyAbilityStatModifier,
 	applySpeedModifier,
+	applyAccuracyModifier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
 	getSTABMultiplier,
