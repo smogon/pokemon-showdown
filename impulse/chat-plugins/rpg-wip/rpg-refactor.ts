@@ -362,25 +362,15 @@ function calculateStats(species: any, level: number, nature: string, ivs: Record
 	return stats;
 }
 
-function createPokemon(speciesId: string, level = 5): RPGPokemon {
+/**
+ * Gets the initial moves for a newly created Pokemon based on its level.
+ */
+function getInitialMoves(speciesId: string, level: number): { id: string, pp: number }[] {
+	let availableMoves: string[] = ['tackle', 'growl']; // Default fallback
 	const species = Dex.species.get(speciesId);
-	if (!species.exists) throw new Error('Pokemon ' + speciesId + ' not found');
 
-	// Determine Gender
-	let gender: 'M' | 'F' | 'N' = 'N';
-	if (species.genderRatio) {
-		gender = Math.random() < species.genderRatio.M ? 'M' : 'F';
-	} else if (species.gender === 'M' || species.gender === 'F' || species.gender === 'N') {
-		gender = species.gender;
-	}
-
-	const randomNature = NATURE_LIST[Math.floor(Math.random() * NATURE_LIST.length)];
-	const ivs = { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) };
-	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-	const stats = calculateStats(species, level, randomNature, ivs, evs);
-	let availableMoves: string[] = ['tackle', 'growl'];
+	// --- 1. Try Manual Learnset First ---
 	const manualLearnset = MANUAL_LEARNSETS[toID(speciesId)];
-
 	if (manualLearnset?.levelup) {
 		const learnedMoves: string[] = [];
 		for (const learnableMove of manualLearnset.levelup) {
@@ -388,8 +378,11 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 				learnedMoves.push(toID(learnableMove.move));
 			}
 		}
-		if (learnedMoves.length > 0) availableMoves = [...new Set(learnedMoves)].slice(-4);
+		if (learnedMoves.length > 0) {
+			availableMoves = [...new Set(learnedMoves)].slice(-4);
+		}
 	} else {
+		// --- 2. Fallback to Dex Learnset ---
 		try {
 			const learnset = species.learnset;
 			if (learnset) {
@@ -397,6 +390,7 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 				for (const moveId in learnset) {
 					// @ts-ignore - PS learnset format can be complex
 					for (const learnMethod of learnset[moveId]) {
+						// Check for Gen 8 Level-up moves
 						if (learnMethod.startsWith('8L')) {
 							const learnLevel = parseInt(learnMethod.substring(2));
 							if (learnLevel > 0 && learnLevel <= level) {
@@ -413,26 +407,56 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 			}
 		} catch (e) {
 			console.error(`Error processing learnset for ${speciesId}:`, e);
+			// Fallback to default moves if learnset processing fails
 		}
 	}
 
+	// --- 3. Format moves with PP ---
 	const movesWithPP = availableMoves.map(moveId => {
 		const moveData = getMove(moveId);
 		return { id: moveId, pp: moveData.pp || 5 };
 	});
 
+	return movesWithPP;
+}
+
+function createPokemon(speciesId: string, level = 5): RPGPokemon {
+	const species = Dex.species.get(speciesId);
+	if (!species.exists) throw new Error('Pokemon ' + speciesId + ' not found');
+
+	// --- 1. Determine Gender ---
+	let gender: 'M' | 'F' | 'N' = 'N';
+	if (species.genderRatio) {
+		gender = Math.random() < species.genderRatio.M ? 'M' : 'F';
+	} else if (species.gender === 'M' || species.gender === 'F' || species.gender === 'N') {
+		gender = species.gender;
+	}
+
+	// --- 2. Generate Stats & Nature ---
+	const randomNature = NATURE_LIST[Math.floor(Math.random() * NATURE_LIST.length)];
+	const ivs = { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) };
+	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+	const stats = calculateStats(species, level, randomNature, ivs, evs);
+
+	// --- 3. Get Initial Moves (Refactored) ---
+	const movesWithPP = getInitialMoves(speciesId, level);
+
+	// --- 4. Get Ability ---
+	const abilities = Object.values(species.abilities);
+	const randomAbility = abilities.length ? abilities[Math.floor(Math.random() * abilities.length)] : 'No Ability';
+
+	// --- 5. Get Random Held Item (Optional) ---
 	let heldItem: string | undefined = undefined;
 	const possibleItems = ['oranberry', 'sitrusberry', 'leftovers', 'rockyhelmet', 'chopleberry', 'yacheberry', 'keberry', 'marangaberry', 'stickybarb', 'toxicorb'];
 	if (Math.random() < 0.1) {
 		heldItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
 	}
 
-	const abilities = Object.values(species.abilities);
-	const randomAbility = abilities.length ? abilities[Math.floor(Math.random() * abilities.length)] : 'No Ability';
+	// --- 6. Assemble Pokemon ---
 	const growthRate = species.growthRate;
 	return {
 		species: species.name,
-		nickname: species.name, // Defaults to species name
+		nickname: species.name,
 		level,
 		hp: stats.maxHp,
 		growthRate,
@@ -451,7 +475,7 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 		friendship: species.baseFriendship || 70,
 		gender,
 		shiny: Math.random() < 1 / 4096,
-		caughtIn: 'pokeball', // Default for starters/gifts, will be overwritten for wild catches
+		caughtIn: 'pokeball',
 		form: species.forme,
 		...stats,
 	};
