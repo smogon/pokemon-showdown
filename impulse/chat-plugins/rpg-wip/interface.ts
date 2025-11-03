@@ -145,6 +145,7 @@ export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves
  * @property {number} [stockpileCount]
  * @property {boolean} [flashFireBoost]
  * @property {boolean} [unburdenActive]
+ * @property {boolean} [analyticBoost]
  */
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
@@ -186,6 +187,7 @@ export interface ActivePokemonSlot {
 	stockpileCount?: number;
 	flashFireBoost?: boolean;
 	unburdenActive?: boolean;
+	analyticBoost?: boolean;
 }
 
 /**
