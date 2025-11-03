@@ -9,10 +9,86 @@ import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
-
-// In-memory storage for player data (in production, use a database)
-const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
+
+// ================ Player State Management ================
+class RPGPlayerState {
+	// In-memory storage for player data
+	private static playerData = new Map<string, PlayerData>();
+	private static instances = new Map<string, RPGPlayerState>();
+	private static readonly CLEANUP_INTERVAL = 300000; // 5 minutes
+
+	private player: PlayerData;
+
+	private constructor(userId: string, playerData?: PlayerData) {
+		this.player = playerData || this.createNewPlayer(userId);
+	}
+
+	static getInstance(userId: string): RPGPlayerState {
+		if (!this.instances.has(userId)) {
+			// Try to get from in-memory map first
+			const playerData = RPGPlayerState.playerData.get(userId);
+			this.instances.set(userId, new RPGPlayerState(userId, playerData));
+		}
+		const instance = this.instances.get(userId)!;
+		instance.player.lastAction = Date.now(); // Update activity timer
+		return instance;
+	}
+
+	/**
+	 * Cleans up inactive player instances from memory (not the data itself).
+	 */
+	static cleanup(): void {
+		const now = Date.now();
+		for (const [userId, instance] of this.instances.entries()) {
+			if (now - instance.player.lastAction > this.CLEANUP_INTERVAL) {
+				this.instances.delete(userId);
+			}
+		}
+	}
+
+	private createNewPlayer(userId: string): PlayerData {
+		const newPlayer: PlayerData = {
+			id: userId,
+			name: userId,
+			level: 1,
+			experience: 0,
+			badges: 0,
+			party: [],
+			location: 'Starter Town',
+			money: 5000000,
+			inventory: new Map(),
+			pc: new Map(),
+			currentView: 'start', // Start at the 'start' screen
+			lastAction: Date.now(),
+		};
+		// Add starting items
+		// Note: We must use the newPlayer object directly since updatePlayer isn't available yet
+		const pokeball = ITEMS_DATABASE['pokeball'];
+		if (pokeball) newPlayer.inventory.set('pokeball', { ...pokeball, quantity: 5 });
+		const potion = ITEMS_DATABASE['potion'];
+		if (potion) newPlayer.inventory.set('potion', { ...potion, quantity: 3 });
+
+		// Save to the static in-memory map
+		RPGPlayerState.playerData.set(userId, newPlayer);
+		return newPlayer;
+	}
+
+	getPlayer(): PlayerData {
+		// Return the direct reference to be modified
+		return this.player;
+	}
+
+	updatePlayer(updates: Partial<PlayerData>): void {
+		// Apply updates directly to the in-memory object
+		Object.assign(this.player, updates);
+		this.player.lastAction = Date.now();
+		// No need to mark dirty, as it's just in-memory
+	}
+}
+
+// Start cleanup interval
+setInterval(() => RPGPlayerState.cleanup(), 60000); // Every minute
 
 // Custom RPG items that don't exist in Dex - these are hardcoded
 // All other items (pokeballs, berries, held items) are retrieved from Dex.items
@@ -314,14 +390,14 @@ function generateUniqueId(): string {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
+/**
+ * Gets the player data from the in-memory state manager.
+ * This is now a lightweight wrapper for RPGPlayerState.getInstance.
+ * @param userid
+ * @returns {PlayerData}
+ */
 function getPlayerData(userid: string): PlayerData {
-	if (!playerData.has(userid)) {
-		const newPlayer: PlayerData = { id: userid, name: userid, level: 1, experience: 0, badges: 0, party: [], location: 'Starter Town', money: 5000000, inventory: new Map(), pc: new Map() };
-		addItemToInventory(newPlayer, 'pokeball', 5);
-		addItemToInventory(newPlayer, 'potion', 3);
-		playerData.set(userid, newPlayer);
-	}
-	return playerData.get(userid)!;
+	return RPGPlayerState.getInstance(userid).getPlayer();
 }
 
 function addItemToInventory(player: PlayerData, itemId: string, quantity: number): boolean {
@@ -483,12 +559,14 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 
 function storePokemonInPC(player: PlayerData, pokemon: RPGPokemon): void {
 	player.pc.set(pokemon.id, pokemon);
+	// No updatePlayer call needed here as we are modifying the object reference directly
 }
 
 function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RPGPokemon | null {
 	const pokemon = player.pc.get(pokemonId);
 	if (pokemon) {
 		player.pc.delete(pokemonId);
+		// No updatePlayer call needed
 		return pokemon;
 	}
 	return null;
