@@ -3454,69 +3454,53 @@ function handleAiPivot(battle: BattleState, messageLog: string[]) {
 }
 
 /**
- * Checks for win/loss conditions and sends the appropriate end-battle HTML.
+ * Checks for win/loss conditions.
  * @returns {boolean} Returns true if the battle ended.
  */
 function checkForWinLoss(
-	context: CommandContext,
+	// --- REMOVE: context: CommandContext, ---
 	battle: BattleState,
 	player: PlayerData,
-	user: User,
+	// --- REMOVE: user: User, ---
 	messageLog: string[]
 ): boolean {
-	const playerHasLivingPokemon = player.party.some(p =>
-		p.hp > 0 &&
-		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
-	);
-	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
-
+	// ...
 	// --- 1. Check for Player Loss ---
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		saveBattleStatus(battle);
-		activeBattles.delete(user.id);
+		// --- REMOVE: activeBattles.delete(user.id); ---
 
 		let moneyLost = 100;
-		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-			moneyLost = Math.floor(battle.opponentMoney / 10) || 200;
-		}
-		moneyLost = Math.min(player.money, moneyLost);
+		// ...
 		player.money -= moneyLost;
+		battle.opponentMoney = moneyLost; // Store money lost for the UI
 
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
+		// --- SET BATTLE RESULT ---
+		battle.battleResult = 'loss';
+		battle.forceEnd = true;
+		// --- END SET ---
 		return true; // Battle ended
 	}
 
 	// --- 2. Check for Player Win ---
-	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
-		p.hp > 0 &&
-		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
-	);
-	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
-
+	// ...
 	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
 		saveBattleStatus(battle);
-		activeBattles.delete(user.id);
+		// --- REMOVE: activeBattles.delete(user.id); ---
 
 		let moneyGained = 0;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyGained = battle.opponentMoney;
-			player.money += moneyGained;
-			if (player.pendingMoveLearnQueue?.moveIds.length) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
-			}
 		} else {
-			// Wild battle win
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
-			player.money += moneyGained;
-			if (player.pendingMoveLearnQueue?.moveIds.length) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-			} else {
-				const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
-			}
 		}
+		player.money += moneyGained;
+		battle.opponentMoney = moneyGained; // Store money gained for the UI
+
+		// --- SET BATTLE RESULT ---
+		battle.battleResult = 'win';
+		battle.forceEnd = true;
+		// --- END SET ---
 		return true; // Battle ended
 	}
 	
