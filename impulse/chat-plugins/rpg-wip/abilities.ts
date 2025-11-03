@@ -1348,6 +1348,31 @@ export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon
 }
 
 /**
+ * Apply evasion-modifying abilities
+ */
+export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: BattleState): number {
+    const ability = toID(defenderSlot.pokemon.ability || '');
+    const handler = ACCURACY_EVASION_ABILITIES[ability];
+
+    if (handler) {
+        // Sand Veil
+        if (handler.weatherEvasion === 'sand' && battle.weather?.type === 'sand') {
+            return 1.25; // Evasion is boosted by 25% in sand
+        }
+        // Snow Cloak
+        if (handler.weatherEvasion === 'hail' && battle.weather?.type === 'hail') {
+            return 1.25; // Evasion is boosted by 25% in hail
+        }
+        // Tangled Feet
+        if (handler.evasionBoost && defenderSlot.isConfused) {
+            return 1.5; // Evasion is boosted by 50% when confused
+        }
+    }
+
+    return 1; // No ability-based evasion boost
+}
+
+/**
  * Apply effects from contact-based abilities (Static, Flame Body, etc.)
  */
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
@@ -1430,6 +1455,7 @@ export const RPGAbilities = {
 	applyAbilityStatModifier,
 	applySpeedModifier,
 	applyAccuracyModifier,
+	getEvasionMultiplier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
 	getSTABMultiplier,
