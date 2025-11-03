@@ -1,4 +1,4 @@
-// Auto-generated Gen 1 Pokémon Learnsets from Pokémon Ultra Sun/Ultra Moon
+// Auto-generated Pokémon Learnsets from Pokémon Ultra Sun/Ultra Moon
 // Format: { [pokemonId]: { levelup: [{level, move}, ...], egg: [move, ...], tm: [move, ...] } }
 
 export const MANUAL_LEARNSETS = {
@@ -1100,19 +1100,6 @@ export const MANUAL_LEARNSETS = {
 		],
 		egg: ['crosschop', 'firepunch', 'icepunch', 'rollingkick', 'signalbeam'],
 		tm: ['toxic', 'rest', 'round', 'shadowball', 'thunderbolt'],
-	},
-	magby: {
-		levelup: [
-			{ level: 1, move: 'pound' },
-			{ level: 1, move: 'ember' },
-			{ level: 7, move: 'leer' },
-			{ level: 13, move: 'machpunch' },
-			{ level: 19, move: 'firespin' },
-			{ level: 25, move: 'flamecharge' },
-			{ level: 31, move: 'firepunch' },
-		],
-		egg: [],
-		tm: ['toxic', 'rest', 'round', 'shadowball', 'flamethrower'],
 	},
 	magnemite: {
 		levelup: [
