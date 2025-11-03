@@ -383,18 +383,21 @@ export const adminCommands: ChatCommands = {
 				const userCollection = userCollectionsCollection;
 				const profileCollection = userProfilesCollection;
 
+				// Get both setTotal and actual count for each set
 				const setTotalsPipeline = [
-					{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" } } },
-					{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] } } },
+					{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" }, actualCount: { $sum: 1 } } },
+					{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] }, actualCount: 1 } },
 				];
-				const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number }>(setTotalsPipeline);
+				const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number, actualCount: number }>(setTotalsPipeline);
 				if (allSets.length === 0) {
 					this.sendReply(`RECALCULATION FAILED: Could not fetch set totals.`);
 					return;
 				}
 				const allSetsMap = new Map<string, number>();
 				for (const set of allSets) {
-					if (set.setTotal > 0) allSetsMap.set(set.setId, set.setTotal);
+					// Use actualCount for sets without setTotal (like Promo sets)
+					const totalInSet = set.setTotal > 0 ? set.setTotal : set.actualCount;
+					if (totalInSet > 0) allSetsMap.set(set.setId, totalInSet);
 				}
 
 				const allUserProfiles = await profileCollection.find({}, { projection: { userId: 1, userName: 1, credits: 1, favoriteCards: 1 } });
@@ -491,7 +494,7 @@ export const adminCommands: ChatCommands = {
 	},
 
 	async loadcache(target, room, user) {
-		//this.checkCan('roomowner');
+		// this.checkCan('roomowner');
 		this.sendReply('Initializing TCG cache... This may take a moment.');
 		try {
 			const { cardCount, setCount } = await initializeCache();
@@ -503,7 +506,7 @@ export const adminCommands: ChatCommands = {
 
 	cachestats(target, room, user) {
 		if (!this.runBroadcast()) return;
-		//this.checkCan('roomowner');
+		// this.checkCan('roomowner');
 		const stats = getCacheStats();
 		let html = `<div class="infobox" style="padding: 15px;">`;
 		html += `<strong style="font-size: 1.2em;">TCG Cache Statistics</strong><br />`;
