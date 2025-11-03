@@ -1280,17 +1280,28 @@ function calculateDamage(
 	const defenseStatRaw = getDamageDefense(move, defender, defenderSlot, battle);
 
 	// --- 7. Apply Stat Stages ---
-	const attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
-	const defenseStage = battle.wonderRoomTurns > 0 ?
+	let attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
+	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
+
+	// --- UNAWARE IMPLEMENTATION ---
+	const defenderAbility = toID(defender.ability || '');
+	const attackerAbility = toID(attacker.ability || '');
+
+	if (defenderAbility === 'unaware') {
+		attackStage = 0; // Defender ignores attacker's stat changes
+	}
+	if (attackerAbility === 'unaware') {
+		defenseStage = 0; // Attacker ignores defender's stat changes
+	}
+	// --- END UNAWARE IMPLEMENTATION ---
 
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
 	let defenseStat = Math.floor(defenseStatRaw * getStatMultiplier(defenseStage));
 
 	// --- 8. Apply Final Stat Mods (Burn, Self-Destruct) ---
 	let finalAttackStat = attackStat;
-	const attackerAbility = toID(attacker.ability || '');
 	if (attackerSlot.status === 'brn' && move.category === 'Physical' && move.id !== 'facade' && attackerAbility !== 'guts') {
 		finalAttackStat = Math.floor(finalAttackStat / 2);
 	}
@@ -1341,7 +1352,6 @@ function calculateDamage(
 
 	return { damage, message, effectiveness, berryConsumed };
 }
-
 
 /********************************
  * REFACTORED DAMAGING MOVE HANDLER
