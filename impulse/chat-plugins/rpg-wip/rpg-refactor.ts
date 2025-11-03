@@ -3487,35 +3487,42 @@ function handleAiPivot(battle: BattleState, messageLog: string[]) {
  * @returns {boolean} Returns true if the battle ended.
  */
 function checkForWinLoss(
-	// --- REMOVE: context: CommandContext, ---
 	battle: BattleState,
 	player: PlayerData,
-	// --- REMOVE: user: User, ---
 	messageLog: string[]
 ): boolean {
-	// ...
+	const playerHasLivingPokemon = player.party.some(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
+
 	// --- 1. Check for Player Loss ---
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		saveBattleStatus(battle);
-		// --- REMOVE: activeBattles.delete(user.id); ---
 
 		let moneyLost = 100;
-		// ...
+		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+			moneyLost = Math.floor(battle.opponentMoney / 10) || 200;
+		}
+		moneyLost = Math.min(player.money, moneyLost);
 		player.money -= moneyLost;
 		battle.opponentMoney = moneyLost; // Store money lost for the UI
 
-		// --- SET BATTLE RESULT ---
 		battle.battleResult = 'loss';
 		battle.forceEnd = true;
-		// --- END SET ---
 		return true; // Battle ended
 	}
 
 	// --- 2. Check for Player Win ---
-	// ...
+	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
+		p.hp > 0 &&
+		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+	);
+	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
+
 	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
 		saveBattleStatus(battle);
-		// --- REMOVE: activeBattles.delete(user.id); ---
 
 		let moneyGained = 0;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
@@ -3526,10 +3533,13 @@ function checkForWinLoss(
 		player.money += moneyGained;
 		battle.opponentMoney = moneyGained; // Store money gained for the UI
 
-		// --- SET BATTLE RESULT ---
-		battle.battleResult = 'win';
+		// --- Check for move learning ---
+		if (player.pendingMoveLearnQueue?.moveIds.length) {
+			battle.currentView = 'learn_move';
+		} else {
+			battle.battleResult = 'win';
+		}
 		battle.forceEnd = true;
-		// --- END SET ---
 		return true; // Battle ended
 	}
 	
