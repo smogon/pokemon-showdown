@@ -226,8 +226,10 @@ export const collectionCommands: ChatCommands = {
 			const totalInSet = setInfo.setTotal;
 			const setName = setInfo.set;
 			const setLogo = setInfo.setImages?.logo || '';
+			// Use the canonical setId from the database to ensure case-sensitive match
+			const canonicalSetId = setInfo.setId;
 			const userCollection = userCollectionsCollection;
-			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId });
+			const userUniqueCount = await userCollection.countDocuments({ userId: targetUserId, setId: canonicalSetId });
 			const percentage = (totalInSet > 0) ? (userUniqueCount / totalInSet) * 100 : 0;
 			const barWidth = 200;
 			const progressWidth = Math.max(0, (barWidth * percentage) / 100);
@@ -285,12 +287,14 @@ export const collectionCommands: ChatCommands = {
 			if (!setInfo) setInfo = await cardCollection.findOne({ setId });
 			if (!setInfo) return this.errorReply(`Set with ID "${setId}" not found.`);
 			const setName = setInfo.set;
+			// Use the canonical setId from the database to ensure case-sensitive match
+			const canonicalSetId = setInfo.setId;
 
-			const allSetCardsCount = await cardCollection.countDocuments({ setId });
+			const allSetCardsCount = await cardCollection.countDocuments({ setId: canonicalSetId });
 			if (allSetCardsCount === 0) return this.errorReply(`No cards found for set "${setId}".`);
 
 			const countPipeline: any[] = [
-				{ $match: { setId } },
+				{ $match: { setId: canonicalSetId } },
 				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
 					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
 					{ $project: { _id: 1 } },
@@ -308,7 +312,7 @@ export const collectionCommands: ChatCommands = {
 			const skip = (currentPage - 1) * limit;
 
 			const dataPipeline: any[] = [
-				{ $match: { setId } },
+				{ $match: { setId: canonicalSetId } },
 				{ $lookup: { from: 'user_collections', let: { card_id: "$cardId" }, pipeline: [
 					{ $match: { $expr: { $and: [{ $eq: ["$cardId", "$$card_id"] }, { $eq: ["$userId", targetUserId] }] } } },
 					{ $project: { _id: 1 } },
