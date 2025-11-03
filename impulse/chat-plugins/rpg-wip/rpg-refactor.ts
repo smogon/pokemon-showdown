@@ -1335,7 +1335,6 @@ function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleStat
 /**
  * Processes end-of-turn effects like status damage, item healing/damage, and volatile statuses.
  */
-
 function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 
@@ -1359,6 +1358,7 @@ function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, me
 		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
 		return;
 	}
 
@@ -2506,7 +2506,7 @@ function handleDamagingMove(
 	move: Move,
 	battle: BattleState,
 	messageLog: string[],
-	spreadMultiplier: number // <-- NEW PARAM
+	spreadMultiplier: number
 ) {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
@@ -2564,6 +2564,7 @@ function handleDamagingMove(
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
+		activateUnburden(attackerSlot, messageLog);
 		return;
 	}
 
@@ -2579,6 +2580,7 @@ function handleDamagingMove(
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 		attacker.item = undefined;
+		activateUnburden(attackerSlot, messageLog);
 		return;
 	}
 
@@ -2613,32 +2615,20 @@ function handleDamagingMove(
 
 	let moveWasSuccessful = false; // Flag to check if the move hit for self-destruct
 	let hitCount = 1;
-	// --- START FIX: Skill Link ---
 	const attackerAbility = toID(attacker.ability || '');
-	// User skipped Parental Bond, so no check is added here.
+	
 	if (move.multihit) {
-	// --- END FIX ---
-		if (typeof move.multihit === 'number') {
-			hitCount = move.multihit;
-		} else {
-			const rand = Math.random() * 8;
-			if (rand < 3) hitCount = 2;
-			else if (rand < 6) hitCount = 3;
-			else if (rand < 7) hitCount = 4;
-			else hitCount = 5;
-		}
-		// --- START FIX: Skill Link ---
-		// Check for Skill Link ability
-		if (attackerAbility === 'skilllink') {
-			hitCount = 5; // Or the max number of hits for the move if it's not 5
-		}
-		// --- END FIX ---
+		// Use the new getMultiHitCount function from RPGAbilities
+		hitCount = RPGAbilities.getMultiHitCount(attacker, move);
 	}
+
+	// Check for Parental Bond
+	const hasParentalBond = RPGAbilities.hasParentalBond(attacker);
+	const totalHits = hasParentalBond && hitCount === 1 ? 2 : hitCount;
 
 	const attackerStages = attackerSlot.statStages;
 	const defenderStages = defenderSlot.statStages;
 
-	// --- FIX: Added messageLog to the context ---
 	const abilityContext = {
 		attacker: attackerSlot.pokemon,
 		defender: defenderSlot.pokemon,
@@ -2646,22 +2636,33 @@ function handleDamagingMove(
 		defenderSlot,
 		move,
 		battle,
-		messageLog, // <-- THIS WAS THE MISSING LINE
+		messageLog,
 	};
-	// --- END FIX ---
 
-	if (hitCount > 1) {
+	if (totalHits > 1) {
 		// Ensure messageLog is not empty before trying to access last element
 		if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += ` <i style="color: #6c757d;">(It hit ${hitCount} times!)</i>`;
+			const hitMessage = hasParentalBond ? 
+				` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
+				` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
+			messageLog[messageLog.length - 1] += hitMessage;
 		} else {
-			messageLog.push(`<i style="color: #6c757d;">(It hit ${hitCount} times!)</i>`);
+			const hitMessage = hasParentalBond ? 
+				`<i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
+				`<i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
+			messageLog.push(hitMessage);
 		}
 	}
 
-	for (let i = 0; i < hitCount; i++) {
-		// User skipped Parental Bond, so no basePower modification is needed here.
-		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, spreadMultiplier);
+	for (let i = 0; i < totalHits; i++) {
+		// Apply Parental Bond damage modifier
+		let parentalBondSpreadMultiplier = spreadMultiplier;
+		if (hasParentalBond && i === 1) {
+			// Second hit of Parental Bond does 25% damage
+			parentalBondSpreadMultiplier *= 0.25;
+		}
+		
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
 
 		if (attackResult.effectiveness > 0) {
 			moveWasSuccessful = true;
@@ -2677,6 +2678,7 @@ function handleDamagingMove(
 				messageLog.push(`${defender.species}'s ${itemName} activated!`);
 			}
 			defender.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
 		}
 
 		let damageDealt = attackResult.damage;
@@ -2706,6 +2708,7 @@ function handleDamagingMove(
 			damageDealt = defender.hp - 1;
 			messageLog.push(`${defender.species} held on using its Focus Sash!`);
 			defender.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
 		}
 
 		defender.hp = Math.max(0, defender.hp - damageDealt);
@@ -2719,7 +2722,7 @@ function handleDamagingMove(
 			};
 		}
 
-		if (hitCount > 1) {
+		if (totalHits > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else {
 			if (messageLog.length > 0) {
@@ -2735,12 +2738,14 @@ function handleDamagingMove(
 			defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
 			messageLog.push(`${defender.species} ate its Enigma Berry and restored ${defender.hp - oldHp} HP!`);
 			defender.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
 		}
 
 		if (battle.magicRoomTurns === 0 && defender.hp > 0 && defender.item === 'airballoon' &&
 			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defender.species}'s Air Balloon popped!`);
 			defender.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
 		}
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
@@ -2771,10 +2776,12 @@ function handleDamagingMove(
 					defenderStages.def++;
 					messageLog.push(`${defender.species} ate its Kee Berry to raise its Defense!`);
 					defender.item = undefined;
+					activateUnburden(defenderSlot, messageLog);
 				} else if (move.category === 'Special' && defender.item === 'marangaberry' && defenderStages.spd < 6) {
 					defenderStages.spd++;
 					messageLog.push(`${defender.species} ate its Maranga Berry to raise its Sp. Def!`);
 					defender.item = undefined;
+					activateUnburden(defenderSlot, messageLog);
 				}
 
 				if (move.flags.contact) {
@@ -2790,6 +2797,7 @@ function handleDamagingMove(
 							attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 							messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
 							defender.item = undefined;
+							activateUnburden(defenderSlot, messageLog);
 						}
 					}
 
@@ -2804,6 +2812,7 @@ function handleDamagingMove(
 						attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 						messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Rowap Berry!`);
 						defender.item = undefined;
+						activateUnburden(defenderSlot, messageLog);
 					}
 				}
 			}
@@ -2821,6 +2830,7 @@ function handleDamagingMove(
 				if (activated) {
 					messageLog.push(`${defender.species}'s Weakness Policy sharply boosted its Attack and Sp. Attack!`);
 					defender.item = undefined;
+					activateUnburden(defenderSlot, messageLog);
 				}
 			}
 
@@ -2834,6 +2844,7 @@ function handleDamagingMove(
 				if (attackerSlotIndex !== -1) {
 					messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
 					defender.item = undefined; // Red Card is consumed
+					activateUnburden(defenderSlot, messageLog);
 
 					if (isPlayerDefending) {
 						// Force opponent to switch (AI will auto-switch)
@@ -2843,7 +2854,6 @@ function handleDamagingMove(
 					} else {
 						// Force player to switch - set the slot to null
 						battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
-						// REMOVED: battle.playerShouldSwitch = true; (This is the fix)
 					}
 				}
 			}
@@ -2898,200 +2908,84 @@ function handleDamagingMove(
 				const boosts = move.self.boosts;
 				for (const stat in boosts) {
 					const boostValue = boosts[stat as keyof typeof boosts]!;
-					if (attackerStages[stat as keyof typeof attackerStages] > -6 && boostValue < 0) {
-						attackerStages[stat as keyof typeof attackerStages] = Math.max(-6, attackerStages[stat as keyof typeof attackerStages] + boostValue);
-						messageLog.push(`<span style="color: #d9534f;">${attacker.species}'s ${stat.toUpperCase()} fell!</span>`);
-					}
-				}
-			}
-
-			if (defender.hp > 0) {
-				// Check if secondary effects should be applied (Sheer Force removes them)
-				const shouldApplySecondary = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
-
-				if (battle.magicRoomTurns === 0 && defender.item === 'covertcloak') {
-					// Covert Cloak blocks secondary effects
-				} else if (move.secondary && shouldApplySecondary) {
-					let chance = move.secondary.chance || 100;
-					// Apply Serene Grace using abilities system
-					const abilityContext = {
-						attacker,
-						defender,
-						attackerSlot,
-						defenderSlot,
-						move,
-						battle,
-						messageLog,
-					};
-					chance = RPGAbilities.applySereneGrace(abilityContext, chance);
-
-					if (Math.random() * 100 < chance) {
-						if (move.id === 'triattack' && move.secondary.status) {
-							const statuses = ['brn', 'par', 'frz'] as Status[];
-							const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-							const defenderCurrentStatus = defenderSlot.status;
-							const defenderSpecies = Dex.species.get(defender.species);
-							let canBeAfflicted = !defenderCurrentStatus;
-
-							// Check ability immunity
-							if (canBeAfflicted && RPGAbilities.preventsStatus(defender, randomStatus)) {
-								canBeAfflicted = false;
-							}
-
-							// Check type immunity
-							if (canBeAfflicted && ((randomStatus === 'brn' && defenderSpecies.types.includes('Fire')) ||
-								(randomStatus === 'par' && defenderSpecies.types.includes('Electric')) ||
-								(randomStatus === 'frz' && defenderSpecies.types.includes('Ice')))) {
-								canBeAfflicted = false;
-							}
-
-							if (canBeAfflicted) {
-								defenderSlot.status = randomStatus;
-								messageLog.push(`${defender.species} was afflicted with ${randomStatus}!`);
-							}
-						} else if (move.secondary.status) {
-							const defenderCurrentStatus = defenderSlot.status;
-							const defenderSpecies = Dex.species.get(defender.species);
-							let canBeAfflicted = !defenderCurrentStatus;
-							const newStatus = move.secondary.status as Status;
-
-							// Check ability immunity
-							if (canBeAfflicted && RPGAbilities.preventsStatus(defender, newStatus)) {
-								canBeAfflicted = false;
-							}
-
-							// Check type immunity
-							if (canBeAfflicted && ((newStatus === 'brn' && defenderSpecies.types.includes('Fire')) || (newStatus === 'par' && defenderSpecies.types.includes('Electric')) || (newStatus === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) || (newStatus === 'frz' && defenderSpecies.types.includes('Ice')))) {
-								canBeAfflicted = false;
-							}
-							if (canBeAfflicted) {
-								defenderSlot.status = newStatus;
-								if (newStatus === 'slp') defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
-								messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
-							}
-						}
-
-						if (move.secondary.volatileStatus) {
-							switch (move.secondary.volatileStatus) {
-							case 'flinch':
-								defenderSlot.willFlinch = true;
-								break;
-							case 'confusion':
-								if (!defenderSlot.isConfused) {
-									defenderSlot.isConfused = true;
-									defenderSlot.confusionCounter = Math.floor(Math.random() * 3) + 2;
-									messageLog.push(`${defender.species} became confused!`);
-								}
-								break;
-							}
-						}
-
-						if (move.secondary.boosts) {
-							if (battle.magicRoomTurns === 0 && defender.item === 'clearamulet' && Object.values(move.secondary.boosts).some(v => v < 0)) {
-								messageLog.push(`${defender.species}'s Clear Amulet prevents its stats from being lowered!`);
-							} else {
-								for (const stat in move.secondary.boosts) {
-									const stage = defenderStages[stat as keyof typeof defenderStages];
-									const boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
-									if ((stage < 6 && boostValue > 0) || (stage > -6 && boostValue < 0)) {
-										defenderStages[stat as keyof typeof defenderStages] = Math.max(-6, Math.min(6, stage + boostValue));
-										messageLog.push(`${defender.species}'s ${stat.toUpperCase()} ${boostValue > 0 ? 'rose' : 'fell'}!`);
-									}
-								}
-							}
+					const currentStage = attackerStages[stat as keyof typeof attackerStages];
+					if (currentStage !== undefined) {
+						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+						attackerStages[stat as keyof typeof attackerStages] = newStage as any;
+						if (boostValue > 0) {
+							messageLog.push(`${attacker.species}'s ${stat} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+						} else if (boostValue < 0) {
+							messageLog.push(`${attacker.species}'s ${stat} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 						}
 					}
 				}
 			}
-		}
 
-		if (defender.hp <= 0) break;
-		if (attacker.hp <= 0) break;
-	}
+			// Apply secondary effects (e.g., status, stat changes, flinching)
+			if (move.secondary && defender.hp > 0 && RPGAbilities.shouldApplySecondaryEffects(attacker, move)) {
+				let chance = move.secondary.chance || 100;
+				chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
-	// --- Post-damage Item Manipulation Effects ---
-	if (defender.hp > 0 && battle.magicRoomTurns === 0) {
-		if (move.id === 'knockoff' && defender.item && !RPGAbilities.checkItemRemovalPrevention(defender)) {
-			const removedItem = ITEMS_DATABASE[defender.item];
-			messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${removedItem?.name || defender.item}!`);
-			defender.item = undefined;
-		}
-		if (['thief', 'covet'].includes(move.id) && defender.item && !attacker.item && !RPGAbilities.checkItemRemovalPrevention(defender)) {
-			const stolenItem = ITEMS_DATABASE[defender.item];
-			attacker.item = defender.item;
-			defender.item = undefined;
-			messageLog.push(`${attacker.species} stole ${defender.species}'s ${stolenItem?.name || defender.item}!`);
-		}
-	}
+				if (Math.random() * 100 < chance) {
+					if (move.secondary.status && !defenderSlot.status) {
+						const defenderSpecies = Dex.species.get(defender.species);
+						let canInflict = true;
 
-	// --- Post-damage Hazard/Trap Removal & Stat Boosts ---
-	if (attacker.hp > 0 && move.id === 'rapidspin') {
-		let clearedSomething = false;
-		const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+						// Type immunities
+						if ((move.secondary.status === 'par' && defenderSpecies.types.includes('Electric')) ||
+							(move.secondary.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
+							(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
+							canInflict = false;
+						}
 
-		if (isPlayerAttacker) {
-			if (battle.playerHazards.length > 0) { battle.playerHazards = []; clearedSomething = true; }
-			if (attackerSlot.isSeeded) { attackerSlot.isSeeded = false; clearedSomething = true; }
-			if (attackerSlot.isTrapped) { attackerSlot.isTrapped = null; clearedSomething = true; }
-		} else { // Opponent is attacker
-			if (battle.opponentHazards.length > 0) { battle.opponentHazards = []; clearedSomething = true; }
-			if (attackerSlot.isSeeded) { attackerSlot.isSeeded = false; clearedSomething = true; }
-			if (attackerSlot.isTrapped) { attackerSlot.isTrapped = null; clearedSomething = true; }
-		}
-		if (clearedSomething) messageLog.push(`${attacker.species} cleared away hazards and traps!`);
+						// Ability-based status prevention
+						if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status)) {
+							canInflict = false;
+							messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
+						}
 
-		if (attackerStages.spe < 6) {
-			attackerStages.spe++;
-			messageLog.push(`${attacker.species}'s Speed rose!`);
-		}
-	}
+						if (canInflict) {
+							defenderSlot.status = move.secondary.status as Status;
+							if (move.secondary.status === 'slp') {
+								defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+							}
+							messageLog.push(`${defender.species} was ${move.secondary.status === 'par' ? 'paralyzed' : move.secondary.status === 'brn' ? 'burned' : move.secondary.status === 'psn' ? 'poisoned' : move.secondary.status}!`);
+						}
+					}
 
-	// --- Trapping Move Application ---
-	if (defender.hp > 0 && move.volatileStatus === 'partiallytrapped') {
-		if (!defenderSlot.isTrapped) {
-			const turns = Math.floor(Math.random() * 3) + 4; // 4, 5, or 6 turns
-			defenderSlot.isTrapped = { turns };
-			messageLog.push(`${defender.species} was trapped!`);
-		}
-	}
+					if (move.secondary.boosts) {
+						for (const stat in move.secondary.boosts) {
+							const boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
+							const currentStage = defenderStages[stat as keyof typeof defenderStages];
+							if (currentStage !== undefined) {
+								const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+								defenderStages[stat as keyof typeof defenderStages] = newStage as any;
+								if (boostValue > 0) {
+									messageLog.push(`${defender.species}'s ${stat} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+								} else if (boostValue < 0) {
+									messageLog.push(`${defender.species}'s ${stat} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+								}
+							}
+						}
+					}
 
-	// Handle Feint breaking protection after all hits
-	if (move.id === 'feint') {
-		if (defenderSlot.isProtected) {
-			defenderSlot.isProtected = false;
-			messageLog.push(`${defender.species}'s protection was broken!`);
-		}
-	}
-
-	// FIX #1: U-Turn / Volt Switch / Flip Turn - handle switch after damage
-	if (attacker.hp > 0 && defender.hp > 0 && (move.selfSwitch === true || move.selfSwitch === 'copyvolatile')) {
-		// This is now handled by executeAction after this function returns
-		// We set battle.playerShouldSwitch or battle.aiPendingPivot there
-	}
-
-	if (defender.hp > 0) {
-		if (['dragontail', 'circlethrow'].includes(move.id)) {
-			// --- MODIFIED ---
-			if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
-				messageLog.push(`The wild ${defender.species} was dragged away!`);
-				// Find and remove the slot
-				const oppSlotIndex = battle.opponentSlots.indexOf(defenderSlot);
-				if (oppSlotIndex !== -1) {
-					battle.opponentSlots[oppSlotIndex as 0 | 1] = null;
+					if (move.secondary.volatileStatus === 'flinch') {
+						defenderSlot.willFlinch = true;
+					}
 				}
-			} else {
-				messageLog.push(`But it failed!`); // Can't force switch a trainer
 			}
-		}
-	}
 
-	// --- Self-Destruct Fainting (after all hits) ---
-	if (move.selfdestruct === 'always' && attacker.hp > 0) {
-		messageLog.push(`${attacker.species} fainted!`);
-		attacker.hp = 0;
+			// Handle self-destruct/explosion after the move hits
+			if (moveWasSuccessful && ['selfdestruct', 'explosion', 'mistyexplosion', 'finalgambit'].includes(move.id)) {
+				attacker.hp = 0;
+				messageLog.push(`**${attacker.species} fainted from using ${move.name}!**`);
+			}
+
+			if (defender.hp <= 0) break; // Stop multi-hit if defender fainted
+		}
 	}
 }
-			
+
 function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	// **NEW:** Magic Room disables all held items.
 	if (battle.magicRoomTurns > 0) return;
@@ -3201,8 +3095,11 @@ function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messa
 	// If an item was used, remove it from the Pokemon
 	if (itemConsumed) {
 		pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
 	}
 }
+
+
 
 /**
  * Processes end-of-turn effects for weather, such as damage and duration.
