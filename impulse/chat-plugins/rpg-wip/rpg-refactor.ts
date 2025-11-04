@@ -202,7 +202,7 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
  * Get the current types of a Pokemon, accounting for terastallization.
  * When a Pokemon is terastallized, it becomes a single type (its Tera Type).
  * Otherwise, returns the Pokemon's normal type(s).
- * 
+ *
  * @param pokemon - The Pokemon to get types for
  * @param slot - The active battle slot (optional), used to check terastallization state
  * @returns Array of type strings (1 type if terastallized, 1-2 types otherwise)
@@ -1582,18 +1582,35 @@ function handleDamagingMove(
 
 			// Force switch moves (Dragon Tail, Circle Throw)
 			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot.pokemon.hp > 0) {
-				// In RPG context, force switch only makes sense in trainer battles with multiple Pokemon
-				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-					const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-					// Suction Cups and similar abilities prevent forced switches
-					if (defenderAbility !== 'suctioncups') {
-						// Mark that defender should be forced to switch
-						// This is handled in the AI/opponent logic
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				// Suction Cups and similar abilities prevent forced switches
+				if (defenderAbility === 'suctioncups') {
+					messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+				} else {
+					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
+
+					if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
+						// In wild battles, forced switch moves end the battle (like Roar/Whirlwind)
+						messageLog.push(`The wild ${defenderSlot.pokemon.species} was blown away!`);
+						if (defenderSlotIndex !== -1) {
+							if (isDefenderPlayer) {
+								messageLog.push(`But it failed!`); // Player can't be forced out in wild battles
+							} else {
+								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
+							}
+						}
+					} else if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+						// In trainer battles, force the defender to switch
 						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
-						// Note: Actual switch logic would happen in AI turn processing
-						// For wild battles, this just adds flavor text
-					} else {
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+						if (defenderSlotIndex !== -1) {
+							// Set the slot to null to trigger forced switch
+							if (isDefenderPlayer) {
+								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
+							} else {
+								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
+							}
+						}
 					}
 				}
 			}
@@ -4583,10 +4600,24 @@ function handleSwitchAction(
 			return;
 		}
 
-		player.party.push(outgoingPokemon);
-		const [incomingPokemon] = player.party.splice(partyIndex, 1);
-		const newSlot = createActivePokemonSlot(incomingPokemon);
-		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		// Find if the outgoing Pokemon is already in the party
+		const outgoingIndex = player.party.findIndex(p => p.id === outgoingPokemon.id);
+		const incomingPokemon = player.party[partyIndex];
+		let newSlot: ActivePokemonSlot;
+
+		if (outgoingIndex !== -1) {
+			// The outgoing Pokemon is in the party, swap it with the incoming Pokemon
+			player.party[outgoingIndex] = incomingPokemon;
+			player.party[partyIndex] = outgoingPokemon;
+			newSlot = createActivePokemonSlot(incomingPokemon);
+			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		} else {
+			// The outgoing Pokemon is not in the party (shouldn't normally happen, but handle it)
+			player.party.push(outgoingPokemon);
+			const [swapIncoming] = player.party.splice(partyIndex, 1);
+			newSlot = createActivePokemonSlot(swapIncoming);
+			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		}
 		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
 
 		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
@@ -5396,7 +5427,7 @@ function generateDoubleBattleHTML(
 
 		// Terastallization button - can only use once per battle
 		// In doubles, we need to determine which slot to tera (we'll use the active slot if any)
-		const canTerastallize = !battle.playerTerastallizeUsed && 
+		const canTerastallize = !battle.playerTerastallizeUsed &&
 			((pSlot0 && !pSlot0.terastallized) || (pSlot1 && !pSlot1.terastallized));
 		const teraSlotIndex = (pSlot0 && !pSlot0.terastallized) ? 0 : 1;
 		const teraButton = canTerastallize ?
@@ -6907,8 +6938,14 @@ export const commands: ChatCommands = {
 
 				// **NEW:** Check if this is a pivot switch
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
-					// It's a pivot, add the pivoting pokemon back to the party
-					player.party.push(battle.pendingPivot.slot.pokemon);
+					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
+
+					// Check if the pivoting Pokemon is already in the party to avoid duplicates
+					const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
+					if (pivotIndex === -1) {
+						// Only push if not already in party (shouldn't normally happen)
+						player.party.push(pivotingPokemon);
+					}
 
 					// Handle Baton Pass
 					if (battle.pendingPivot.isBatonPass) {
@@ -7203,7 +7240,7 @@ export const commands: ChatCommands = {
 				battle.playerTerastallizeUsed = true;
 
 				const messageLog = [
-					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`
+					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`,
 				];
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
