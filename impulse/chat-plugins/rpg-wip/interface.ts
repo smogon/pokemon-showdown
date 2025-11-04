@@ -184,6 +184,7 @@ export interface BattleState {
 			targetSlot?: number,
 			switchToPokemonId?: string,
 			pokemonId: string,
+			terastallize?: boolean,
 		} | null,
 	};
 
