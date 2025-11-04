@@ -725,29 +725,44 @@ function gainExperience(
 	return { messages, leveledUp };
 }
 
+// Update checkEvolution to mutate the original pokemon object in player.party,
+// not a copy, to be sure changes like species and stats persist in party.
+
 function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room?: ChatRoom, user?: User): string | null {
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
 	if (!evoData || pokemon.level < evoData.evoLevel) return null;
+
 	const evoSpecies = Dex.species.get(evoData.evoTo);
 	if (!evoSpecies.exists) return null;
 	const oldSpeciesName = pokemon.species;
-	pokemon.species = evoSpecies.name;
+
+	// Find the index in the party
+	const partyIndex = player.party.findIndex(p => p.id === pokemon.id);
+	if (partyIndex === -1) return null;
+
+	// Evolve in place
+	player.party[partyIndex].species = evoSpecies.name;
 	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	pokemon.maxHp = newStats.maxHp;
-	pokemon.atk = newStats.atk;
-	pokemon.def = newStats.def;
-	pokemon.spa = newStats.spa;
-	pokemon.spd = newStats.spd;
-	pokemon.spe = newStats.spe;
-	pokemon.hp = pokemon.maxHp;
-	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
+
+	player.party[partyIndex].maxHp = newStats.maxHp;
+	player.party[partyIndex].atk = newStats.atk;
+	player.party[partyIndex].def = newStats.def;
+	player.party[partyIndex].spa = newStats.spa;
+	player.party[partyIndex].spd = newStats.spd;
+	player.party[partyIndex].spe = newStats.spe;
+	player.party[partyIndex].hp = player.party[partyIndex].maxHp;
+
+	const { messages: evoMoveMessages } = handleLearningMoves(player, player.party[partyIndex]);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
-	const pokemonIndex = player.party.findIndex(p => p.id === pokemon.id);
-	if (pokemonIndex !== -1) player.party[pokemonIndex] = pokemon;
-	return evoMessage;
+
+	// Optional: still call room.add if in battle context
+	if (room && typeof room.add === 'function' && user) {
+		room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update();
 	}
+	return evoMessage;
+}
 
 function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
