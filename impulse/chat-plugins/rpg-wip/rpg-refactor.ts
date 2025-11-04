@@ -590,6 +590,7 @@ function levelUp(pokemon: RPGPokemon): string[] {
 	levelUpMessages.push(`Max HP: ${oldStats.maxHp} -> ${pokemon.maxHp}`);
 	levelUpMessages.push(`Attack: ${oldStats.atk} -> ${pokemon.atk}`);
 	levelUpMessages.push(`Defense: ${oldStats.def} -> ${pokemon.def}`);
+	pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 	pokemon.expToNextLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level + 1);
 	return levelUpMessages;
 }
