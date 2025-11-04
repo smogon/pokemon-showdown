@@ -4104,8 +4104,8 @@ function useRevivalItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 
 	switch (itemId) {
 	case 'revive':
-		// Revive restores 50% of max HP
-		hpRestored = Math.floor(pokemon.maxHp / 2);
+		// Revive restores 50% of max HP (minimum 1 HP)
+		hpRestored = Math.max(1, Math.floor(pokemon.maxHp / 2));
 		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with ${hpRestored} HP!`;
 		break;
 	case 'maxrevive':
