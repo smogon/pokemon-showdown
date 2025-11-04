@@ -5135,9 +5135,15 @@ function generateSingleBattleHTML(
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled>🏃 Run</button>`;
 
+	// Terastallization button - can only use once per battle and if not already terastallized
+	const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+	const teraButton = canTerastallize ?
+		`<button name="send" value="/rpg battleaction terastallize 0" class="button" style="background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold;">⭐ Terastallize</button>` :
+		`<button class="button" disabled style="opacity: 0.5;">⭐ Terastallize</button>`;
+
 	actionHTML = `<p style="margin-top: 5px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
 		moveButtonsHTML +
-		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
+		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${teraButton} ${catchButton} ${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		`<table style="width: 100%; margin-bottom: 5px;">` +
@@ -5378,9 +5384,18 @@ function generateDoubleBattleHTML(
 			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
 			`<button class="button" disabled style="${buttonStyle}">🏃 Run</button>`;
 
+		// Terastallization button - can only use once per battle
+		// In doubles, we need to determine which slot to tera (we'll use the active slot if any)
+		const canTerastallize = !battle.playerTerastallizeUsed && 
+			((pSlot0 && !pSlot0.terastallized) || (pSlot1 && !pSlot1.terastallized));
+		const teraSlotIndex = (pSlot0 && !pSlot0.terastallized) ? 0 : 1;
+		const teraButton = canTerastallize ?
+			`<button name="send" value="/rpg battleaction terastallize ${teraSlotIndex}" class="button" style="background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;">⭐ Terastallize</button>` :
+			`<button class="button" disabled style="${buttonStyle}; opacity: 0.5;">⭐ Terastallize</button>`;
+
 		html += `<p style="margin-top: 15px;">` +
 			`<button name="send" value="/rpg battleaction switchmenu" class="button" style="${buttonStyle}">🔄 Switch</button>` +
-			`${catchButton} ${runButton}</p>`;
+			`${teraButton} ${catchButton} ${runButton}</p>`;
 	}
 
 	html += `</div>`;
@@ -7145,6 +7160,43 @@ export const commands: ChatCommands = {
 					// The opponent gets to attack, so we need to process the turn.
 					processTurn(this, battle, room, user, messageLog);
 				}
+			},
+
+			terastallize(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const slotIndexStr = target.trim();
+				const slotIndex = parseInt(slotIndexStr);
+
+				if (isNaN(slotIndex) || (slotIndex !== 0 && slotIndex !== 1)) {
+					return this.errorReply("Invalid slot index for terastallization.");
+				}
+
+				const slot = battle.playerSlots[slotIndex];
+				if (!slot || slot.pokemon.hp <= 0) {
+					return this.errorReply("This Pokémon is not in battle or has fainted.");
+				}
+
+				// Check if terastallization has already been used this battle
+				if (battle.playerTerastallizeUsed) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+				}
+
+				// Check if this Pokemon is already terastallized
+				if (slot.terastallized) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${slot.pokemon.species} has already Terastallized!`])}`);
+				}
+
+				// Perform terastallization
+				slot.terastallized = slot.pokemon.teraType;
+				battle.playerTerastallizeUsed = true;
+
+				const messageLog = [
+					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`
+				];
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 			},
 
 			run(target, room, user) {
