@@ -268,28 +268,44 @@ function getCustomEffectiveness(moveType: string, defenderTypes: string[], defen
 }
 
 function calculateTotalExpForLevel(growthRate: string, level: number): number {
+	// Validate level parameter
+	if (level < 0) return 0;
+	if (level === 0) return 0;
+	if (!Number.isInteger(level)) level = Math.floor(level);
+	
 	const n = level;
+	let result: number;
+	
 	switch (growthRate) {
 	case 'Slow':
-		return Math.floor((5 * n ** 3) / 4);
+		result = Math.floor((5 * n ** 3) / 4);
+		break;
 	case 'Medium Fast':
-		return Math.floor(n ** 3);
+		result = Math.floor(n ** 3);
+		break;
 	case 'Fast':
-		return Math.floor((4 * n ** 3) / 5);
+		result = Math.floor((4 * n ** 3) / 5);
+		break;
 	case 'Medium Slow':
-		return Math.floor(((6 / 5) * n ** 3) - (15 * n ** 2) + (100 * n) - 140);
+		result = Math.floor(((6 / 5) * n ** 3) - (15 * n ** 2) + (100 * n) - 140);
+		break;
 	case 'Erratic':
-		if (n <= 50) return Math.floor((n ** 3 * (100 - n)) / 50);
-		if (n <= 68) return Math.floor((n ** 3 * (150 - n)) / 100);
-		if (n <= 98) return Math.floor((n ** 3 * Math.floor((1911 - 10 * n) / 3)) / 500);
-		return Math.floor((n ** 3 * (160 - n)) / 100);
+		if (n <= 50) result = Math.floor((n ** 3 * (100 - n)) / 50);
+		else if (n <= 68) result = Math.floor((n ** 3 * (150 - n)) / 100);
+		else if (n <= 98) result = Math.floor((n ** 3 * Math.floor((1911 - 10 * n) / 3)) / 500);
+		else result = Math.floor((n ** 3 * (160 - n)) / 100);
+		break;
 	case 'Fluctuating':
-		if (n <= 15) return Math.floor(n ** 3 * ((Math.floor((n + 1) / 3) + 24) / 50));
-		if (n <= 36) return Math.floor(n ** 3 * ((n + 14) / 50));
-		return Math.floor(n ** 3 * ((Math.floor(n / 2) + 32) / 50));
+		if (n <= 15) result = Math.floor(n ** 3 * ((Math.floor((n + 1) / 3) + 24) / 50));
+		else if (n <= 36) result = Math.floor(n ** 3 * ((n + 14) / 50));
+		else result = Math.floor(n ** 3 * ((Math.floor(n / 2) + 32) / 50));
+		break;
 	default:
-		return Math.floor(n ** 3);
+		result = Math.floor(n ** 3);
 	}
+	
+	// Ensure non-negative result (fixes Medium Slow at level 1 returning -54)
+	return Math.max(0, result);
 }
 
 function generateUniqueId(): string {
