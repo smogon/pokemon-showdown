@@ -13,6 +13,7 @@ export const HIT_CHANCE = 0.8;
 export const MAX_CARD_QUANTITY = 10;
 export const CREDITS_PER_DUPLICATE = 1;
 export const MAX_PACK_SIZE = 8;
+export const MAX_PACK_SIZE_FOR_SETS_CALCULATION = 50;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
@@ -253,24 +254,24 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 		const profile = await userProfilesCollection.findOne({ userId: user.id });
 		// Only recalculate sets completed if new unique cards were added
 		// Skip recalculation for large batches to avoid performance issues
-		const shouldRecalculateSets = totalUnique > 0 && pack.length < 50;
+		const shouldRecalculateSets = totalUnique > 0 && pack.length < MAX_PACK_SIZE_FOR_SETS_CALCULATION;
 		const setsCompleted = shouldRecalculateSets ? await calculateSetsCompleted(user.id) : undefined;
 
 		if (profile) {
-			const updateDoc: any = {
+			const updateDoc = {
 				$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
-				$set: { userName: user.name, lastUpdatedAt: now },
+				$set: { userName: user.name, lastUpdatedAt: now } as Record<string, any>,
 			};
 			if (setsCompleted !== undefined) {
 				updateDoc.$set.totalSetsCompleted = setsCompleted;
 			}
 			await userProfilesCollection.updateOne({ userId: user.id }, updateDoc);
 		} else {
-			const newProfile: any = {
+			const newProfile = {
 				userId: user.id, userName: user.name, credits,
 				totalUniqueCards: totalUnique, totalQuantity: totalQty,
 				collectionPoints: totalPts, lastUpdatedAt: now,
-			};
+			} as Record<string, any>;
 			if (setsCompleted !== undefined) {
 				newProfile.totalSetsCompleted = setsCompleted;
 			}
