@@ -29,6 +29,10 @@ const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'energyroot': { id: 'energyroot', name: 'Energy Root', category: 'medicine', description: 'A bitter medicinal root. It restores 200 HP to a Pokémon.' },
 	'energypowder': { id: 'energypowder', name: 'EnergyPowder', category: 'medicine', description: 'A bitter medicinal powder. It restores 50 HP to a Pokémon.' },
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
+	'revive': { id: 'revive', name: 'Revive', category: 'medicine', description: 'Revives a fainted Pokémon, restoring half its HP.' },
+	'maxrevive': { id: 'maxrevive', name: 'Max Revive', category: 'medicine', description: 'Revives a fainted Pokémon, fully restoring its HP.' },
+	'revivalherb': { id: 'revivalherb', name: 'Revival Herb', category: 'medicine', description: 'Revives a Pokémon to max HP, but lowers Friendship.' },
+	'sacredash': { id: 'sacredash', name: 'Sacred Ash', category: 'medicine', description: 'Revives all fainted Pokémon and fully restores their HP.' },
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
 	'rarecandy': { id: 'rarecandy', name: 'Rare Candy', category: 'misc', description: 'A candy that is packed with energy. When consumed, it will instantly raise the level of a single Pokémon by one.' },
 	'expcandyxs': { id: 'expcandyxs', name: 'Exp. Candy XS', category: 'misc', description: 'A candy that is packed with energy. Gives 100 Exp. Points to a Pokémon.' },
@@ -143,6 +147,10 @@ const ITEM_PRICES: Record<string, number> = {
 	'energyroot': 1200,
 	'energypowder': 500,
 	'healpowder': 450,
+	'revive': 2000,
+	'maxrevive': 4000,
+	'revivalherb': 2800,
+	'sacredash': 20000,
 	'expertbelt': 4000,
 	'weaknesspolicy': 5000,
 	'lumberry': 2000,
@@ -165,6 +173,7 @@ const SHOP_INVENTORY: string[] = [
 
 	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
 	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
+	'revive', 'maxrevive', 'revivalherb', 'sacredash',
 
 	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
 	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
@@ -4078,6 +4087,99 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 	return { success: true, message };
 }
 
+function useRevivalItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
+	// Revival items can only be used on fainted Pokemon
+	if (pokemon.hp > 0) {
+		return { success: false, message: `${pokemon.species} has not fainted!` };
+	}
+
+	const itemData = ITEMS_DATABASE[itemId];
+	if (!itemData || itemData.category !== 'medicine') {
+		return { success: false, message: `This item cannot be used to revive.` };
+	}
+
+	let hpRestored = 0;
+	let friendshipChange = 0;
+	let message = '';
+
+	switch (itemId) {
+	case 'revive':
+		// Revive restores 50% of max HP
+		hpRestored = Math.floor(pokemon.maxHp / 2);
+		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with ${hpRestored} HP!`;
+		break;
+	case 'maxrevive':
+		// Max Revive restores full HP
+		hpRestored = pokemon.maxHp;
+		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with full HP!`;
+		break;
+	case 'revivalherb':
+		// Revival Herb restores full HP but lowers friendship by 10-15 points (using 10)
+		hpRestored = pokemon.maxHp;
+		friendshipChange = -10;
+		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with full HP!`;
+		break;
+	default:
+		return { success: false, message: `The revival effect for ${itemData.name} is not defined.` };
+	}
+
+	// Restore HP
+	pokemon.hp = hpRestored;
+
+	// Clear status condition (revival removes status)
+	pokemon.status = null;
+
+	// Apply friendship change if applicable
+	if (friendshipChange !== 0) {
+		pokemon.friendship = Math.max(0, Math.min(255, pokemon.friendship + friendshipChange));
+		message += `<br>${pokemon.species}'s friendship decreased...`;
+	}
+
+	// Restore all move PP to their maximum
+	for (const move of pokemon.moves) {
+		const moveData = getMove(move.id);
+		move.pp = moveData.pp || 5;
+	}
+
+	removeItemFromInventory(player, itemId, 1);
+	return { success: true, message };
+}
+
+function useSacredAsh(player: PlayerData): { success: boolean, message: string } {
+	const itemData = ITEMS_DATABASE['sacredash'];
+	if (!itemData) {
+		return { success: false, message: `Sacred Ash not found.` };
+	}
+
+	// Check if there are any fainted Pokemon
+	const faintedPokemon = player.party.filter(p => p.hp <= 0);
+	if (faintedPokemon.length === 0) {
+		return { success: false, message: `No Pokémon need to be revived!` };
+	}
+
+	// Revive all fainted Pokemon
+	let revivedCount = 0;
+	const revivedNames: string[] = [];
+	for (const pokemon of player.party) {
+		if (pokemon.hp <= 0) {
+			pokemon.hp = pokemon.maxHp;
+			pokemon.status = null;
+			// Restore all move PP
+			for (const move of pokemon.moves) {
+				const moveData = getMove(move.id);
+				move.pp = moveData.pp || 5;
+			}
+			revivedCount++;
+			revivedNames.push(pokemon.species);
+		}
+	}
+
+	removeItemFromInventory(player, 'sacredash', 1);
+	const message = `You used <strong>${itemData.name}</strong>! All fainted Pokémon were revived with full HP!<br>` +
+		`<strong>Revived:</strong> ${revivedNames.join(', ')}`;
+	return { success: true, message };
+}
+
 function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom, user: User): { success: boolean, message: string } {
 	// Validate pokemon exists and has valid data
 	if (!pokemon?.species) {
@@ -6246,12 +6348,33 @@ export const commands: ChatCommands = {
 			const item = player.inventory.get(itemId)!;
 
 			if (item.category === 'medicine') {
+				// Special handling for Sacred Ash - revives all fainted Pokemon
+				if (itemId === 'sacredash') {
+					const result = useSacredAsh(player);
+					if (!result.success) {
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					}
+					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				}
+
+				// Check if this is a revival item
+				const isRevivalItem = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
+
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
 					for (const pokemon of player.party) {
-						// Only show Pokemon that can be healed
-						if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+						// Revival items: only show fainted Pokemon
+						// Healing items: only show Pokemon that can be healed
+						if (isRevivalItem) {
+							if (pokemon.hp <= 0) {
+								html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+							}
+						} else {
+							if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+								html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+							}
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -6260,7 +6383,8 @@ export const commands: ChatCommands = {
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
 				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
-				const result = useHealingItem(player, targetPokemon, itemId);
+				// Use the appropriate function based on item type
+				const result = isRevivalItem ? useRevivalItem(player, targetPokemon, itemId) : useHealingItem(player, targetPokemon, itemId);
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
