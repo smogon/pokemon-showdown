@@ -198,6 +198,15 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 };
 
+/**
+ * Get the current types of a Pokemon, accounting for terastallization.
+ * When a Pokemon is terastallized, it becomes a single type (its Tera Type).
+ * Otherwise, returns the Pokemon's normal type(s).
+ * 
+ * @param pokemon - The Pokemon to get types for
+ * @param slot - The active battle slot (optional), used to check terastallization state
+ * @returns Array of type strings (1 type if terastallized, 1-2 types otherwise)
+ */
 function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
 	// If terastallized, the Pokemon becomes a single type
 	if (slot?.terastallized) {

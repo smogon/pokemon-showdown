@@ -785,7 +785,7 @@ export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 	return ITEM_INTERACTION_ABILITIES[ability]?.preventsItemRemoval || false;
 }
 
-export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: any): number {
+export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: ActivePokemonSlot): number {
 	const species = Dex.species.get(pokemon.species);
 	let hasSTAB = false;
 
@@ -795,12 +795,12 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: 
 		// But if the move type matches BOTH the tera type AND one of the original types, it gets 2.0x STAB
 		hasSTAB = slot.terastallized === moveType;
 		if (hasSTAB && species.types.includes(moveType)) {
-			// Adaptability Tera Blast: 2.25x
+			// With Adaptability: 2.25x when Tera Type matches move type and original type
 			const ability = toID(pokemon.ability || '');
 			if (ability === 'adaptability') {
 				return 2.25;
 			}
-			// Normal Tera Blast with same type: 2.0x
+			// Standard: 2.0x when Tera Type matches move type and original type
 			return 2.0;
 		}
 	} else {
