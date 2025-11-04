@@ -1939,6 +1939,12 @@ function handleGenericStatusInflictMove(
 		canBeAfflicted = false;
 		messageLog.push('The Electric Terrain prevents sleep!');
 	}
+	// Check if any Pokemon is using Uproar
+	const anyUproar = [...battle.playerSlots, ...battle.opponentSlots].some(s => s && s.uproarTurns && s.uproarTurns > 0);
+	if (move.status === 'slp' && anyUproar) {
+		canBeAfflicted = false;
+		messageLog.push('But the uproar kept it awake!');
+	}
 	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status)) {
 		canBeAfflicted = false;
 		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
@@ -2925,6 +2931,15 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
 				}
 			}
+		}
+	}
+
+	// Handle Uproar
+	if (slot.uproarTurns > 0) {
+		slot.uproarTurns--;
+		if (slot.uproarTurns === 0) {
+			slot.lockedMove = undefined;
+			messageLog.push(`${pokemon.species} calmed down.`);
 		}
 	}
 
@@ -3924,6 +3939,22 @@ function executeMove(
 		attackerSlot.mustRecharge = true;
 	}
 
+	// Handle Uproar
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'uproar') {
+		if (attackerSlot.uproarTurns === 0) {
+			attackerSlot.uproarTurns = 3;
+			attackerSlot.lockedMove = move.id;
+			// Wake up all sleeping Pokemon
+			for (const slot of [...battle.playerSlots, ...battle.opponentSlots]) {
+				if (slot && slot.status === 'slp') {
+					slot.status = null;
+					slot.sleepCounter = 0;
+					messageLog.push(`${slot.pokemon.species} woke up due to the uproar!`);
+				}
+			}
+		}
+	}
+
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
 	}
@@ -4388,6 +4419,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		lockedMove: undefined,
 		lockedMoveCounter: 0,
 		mustRecharge: false,
+		uproarTurns: 0,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
 		substitute: undefined,
@@ -5031,7 +5063,8 @@ function generateSharedBattlePokemonInfo(
 		slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '',
 		slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '',
 		slot.lockedMove && slot.lockedMoveCounter ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
-		slot.lockedMove && !slot.lockedMoveCounter ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.uproarTurns && slot.uproarTurns > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Uproar (${slot.uproarTurns})</span>` : '',
+		slot.lockedMove && !slot.lockedMoveCounter && !slot.uproarTurns ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
 		slot.mustRecharge ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Must Recharge</span>` : '',
 		slot.isProtected ? `<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>` : '',
 		slot.isRedirecting ? `<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>` : '',
@@ -6105,6 +6138,13 @@ function validateMoveAction(
 		if (attackerSlot.lockedMove !== moveData.id) {
 			const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
 			return `${pokemon.species} must continue using ${lockedMoveName}!`;
+		}
+	}
+
+	// Check Uproar Lock
+	if (attackerSlot.uproarTurns && attackerSlot.uproarTurns > 0) {
+		if (attackerSlot.lockedMove !== moveData.id) {
+			return `${pokemon.species} must continue its uproar!`;
 		}
 	}
 
