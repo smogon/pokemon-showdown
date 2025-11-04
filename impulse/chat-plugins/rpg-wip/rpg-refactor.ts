@@ -2797,6 +2797,29 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 
+	// Heal Block prevents all healing
+	if ((slot.healBlockTurns || 0) > 0) return;
+
+	// Aqua Ring healing
+	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
+	}
+
+	// Ingrain healing
+	if (slot.isIngrained && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
+	}
+}
+
+function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+
+	// Leech Seed drains HP and heals the opponent
 	if (slot.isSeeded) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -2813,21 +2836,6 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 				messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
 			}
 		}
-	}
-	if (pokemon.hp <= 0) return;
-
-	if ((slot.healBlockTurns || 0) > 0) return;
-
-	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
-		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
-	}
-
-	if (slot.isIngrained && pokemon.hp < pokemon.maxHp) {
-		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
 	}
 }
 
@@ -2950,20 +2958,37 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 
+	// POKEMON BATTLE FLOW - END OF TURN ORDER:
+	// 1. Item effects (Leftovers heal, Lum Berry cure, Flame/Toxic Orb status)
+	// 2. Healing effects (Aqua Ring, Ingrain, Grassy Terrain)
+	// 3. Status damage (Burn, Poison)
+	// 4. Leech Seed damage
+	// 5. Volatile status damage (Curse, Nightmare, Trapping)
+	// 6. Counter decrements and other effects
+
+	// Step 1: Apply item effects (includes Leftovers healing)
 	const lumCuredStatus = applyEOTItemEffects(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
+	// Step 2: Apply healing effects (Aqua Ring, Ingrain)
+	applyEOTHealingEffects(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// Step 3: Apply status damage (only if not cured by Lum Berry)
 	if (!lumCuredStatus) {
 		applyEOTStatusDamage(slot, battle, messageLog);
 	}
 	if (slot.pokemon.hp <= 0) return;
 
+	// Step 4: Apply Leech Seed damage
+	applyEOTLeechSeedDamage(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// Step 5: Apply volatile status damage (Curse, Nightmare, Trapping)
 	applyEOTVolatileStatusDamage(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
-	applyEOTHealingEffects(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
-
+	// Step 6: Decrement counters and apply other end-of-turn effects
 	decrementEOTVolatileCounters(slot, battle, messageLog);
 
 	slot.isCharged = false;
@@ -3968,6 +3993,19 @@ function executeMove(
 function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
+	// POKEMON BATTLE FLOW - END OF TURN ORDER (Generation 5+):
+	// 1. Future Sight / Doom Desire resolution
+	// 2. Wish (not yet implemented)
+	// 3. Per-Pokemon effects (in speed order, but we process all):
+	//    a. Item effects (Leftovers, Lum Berry, Status Orbs)
+	//    b. Healing effects (Aqua Ring, Ingrain, Grassy Terrain)
+	//    c. Status damage (Burn, Poison)
+	//    d. Leech Seed
+	//    e. Volatile status damage (Curse, Nightmare, Trapping)
+	// 4. Weather damage (Sandstorm, Hail)
+	// 5. Field effect expiration (Screens, Terrains, Rooms)
+
+	// Step 1: Resolve Future Sight and Doom Desire
 	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
@@ -4030,17 +4068,22 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
+	// Clear flinch flags at end of turn
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 	}
 
+	// Step 2: Apply per-Pokemon end-of-turn effects
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			handleEndOfTurnEffects(slot, battle, messageLog);
 		}
 	}
 
+	// Step 3: Apply weather damage
 	handleEndOfTurnWeather(battle, messageLog);
+
+	// Step 4: Handle field effect expirations
 	handleEndOfTurnFieldEffects(battle, messageLog);
 }
 
