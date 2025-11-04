@@ -11,7 +11,7 @@ import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CU
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory } from './items';
-import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, type CheckEvolutionContext } from './utils';
+import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
 const playerData = new Map<string, PlayerData>();
@@ -169,11 +169,6 @@ const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEffective
 	Steel: { superEffective: ['Ice', 'Rock', 'Fairy'], notVeryEffective: ['Fire', 'Water', 'Electric', 'Steel'], noEffect: [] },
 	Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
 };
-
-const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
-	'Adamant': { plus: 'atk', minus: 'spa' }, 'Bashful': null, 'Brave': { plus: 'atk', minus: 'spe' }, 'Bold': { plus: 'def', minus: 'atk' }, 'Calm': { plus: 'spd', minus: 'atk' }, 'Careful': { plus: 'spd', minus: 'spa' }, 'Docile': null, 'Gentle': { plus: 'spd', minus: 'def' }, 'Hardy': null, 'Hasty': { plus: 'spe', minus: 'def' }, 'Impish': { plus: 'def', minus: 'spa' }, 'Jolly': { plus: 'spe', minus: 'spa' }, 'Lax': { plus: 'def', minus: 'spd' }, 'Lonely': { plus: 'atk', minus: 'def' }, 'Mild': { plus: 'spa', minus: 'def' }, 'Modest': { plus: 'spa', minus: 'atk' }, 'Naive': { plus: 'spe', minus: 'spd' }, 'Naughty': { plus: 'atk', minus: 'spd' }, 'Quiet': { plus: 'spa', minus: 'spe' }, 'Quirky': null, 'Rash': { plus: 'spa', minus: 'spd' }, 'Relaxed': { plus: 'def', minus: 'spe' }, 'Sassy': { plus: 'spd', minus: 'spe' }, 'Serious': null, 'Timid': { plus: 'spe', minus: 'atk' },
-};
-const NATURE_LIST = Object.keys(NATURES);
 
 const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	'rival_1': {

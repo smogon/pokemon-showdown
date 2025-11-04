@@ -56,6 +56,36 @@ export function calculateTotalExpForLevel(growthRate: string, level: number): nu
 	return Math.max(0, result);
 }
 
+export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
+	'Adamant': { plus: 'atk', minus: 'spa' },
+	'Bashful': null,
+	'Brave': { plus: 'atk', minus: 'spe' },
+	'Bold': { plus: 'def', minus: 'atk' },
+	'Calm': { plus: 'spd', minus: 'atk' },
+	'Careful': { plus: 'spd', minus: 'spa' },
+	'Docile': null,
+	'Gentle': { plus: 'spd', minus: 'def' },
+	'Hardy': null,
+	'Hasty': { plus: 'spe', minus: 'def' },
+	'Impish': { plus: 'def', minus: 'spa' },
+	'Jolly': { plus: 'spe', minus: 'spa' },
+	'Lax': { plus: 'def', minus: 'spd' },
+	'Lonely': { plus: 'atk', minus: 'def' },
+	'Mild': { plus: 'spa', minus: 'def' },
+	'Modest': { plus: 'spa', minus: 'atk' },
+	'Naive': { plus: 'spe', minus: 'spd' },
+	'Naughty': { plus: 'atk', minus: 'spd' },
+	'Quiet': { plus: 'spa', minus: 'spe' },
+	'Quirky': null,
+	'Rash': { plus: 'spa', minus: 'spd' },
+	'Relaxed': { plus: 'def', minus: 'spe' },
+	'Sassy': { plus: 'spd', minus: 'spe' },
+	'Serious': null,
+	'Timid': { plus: 'spe', minus: 'atk' },
+};
+
+export const NATURE_LIST = Object.keys(NATURES);
+
 export function calculateStats(
 	species: any,
 	level: number,
@@ -70,34 +100,6 @@ export function calculateStats(
 	stats.spa = Math.floor(((2 * species.baseStats.spa + ivs.spa + Math.floor(evs.spa / 4)) * level) / 100) + 5;
 	stats.spd = Math.floor(((2 * species.baseStats.spd + ivs.spd + Math.floor(evs.spd / 4)) * level) / 100) + 5;
 	stats.spe = Math.floor(((2 * species.baseStats.spe + ivs.spe + Math.floor(evs.spe / 4)) * level) / 100) + 5;
-
-	const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
-		'Adamant': { plus: 'atk', minus: 'spa' },
-		'Bashful': null,
-		'Brave': { plus: 'atk', minus: 'spe' },
-		'Bold': { plus: 'def', minus: 'atk' },
-		'Calm': { plus: 'spd', minus: 'atk' },
-		'Careful': { plus: 'spd', minus: 'spa' },
-		'Docile': null,
-		'Gentle': { plus: 'spd', minus: 'def' },
-		'Hardy': null,
-		'Hasty': { plus: 'spe', minus: 'def' },
-		'Impish': { plus: 'def', minus: 'spa' },
-		'Jolly': { plus: 'spe', minus: 'spa' },
-		'Lax': { plus: 'def', minus: 'spd' },
-		'Lonely': { plus: 'atk', minus: 'def' },
-		'Mild': { plus: 'spa', minus: 'def' },
-		'Modest': { plus: 'spa', minus: 'atk' },
-		'Naive': { plus: 'spe', minus: 'spd' },
-		'Naughty': { plus: 'atk', minus: 'spd' },
-		'Quiet': { plus: 'spa', minus: 'spe' },
-		'Quirky': null,
-		'Rash': { plus: 'spa', minus: 'spd' },
-		'Relaxed': { plus: 'def', minus: 'spe' },
-		'Sassy': { plus: 'spd', minus: 'spe' },
-		'Serious': null,
-		'Timid': { plus: 'spe', minus: 'atk' },
-	};
 
 	const natureEffect = NATURES[nature];
 	if (natureEffect) {
@@ -251,6 +253,8 @@ export const RPGUtils = {
 	levelUp,
 	handleLearningMoves,
 	checkEvolution,
+	NATURES,
+	NATURE_LIST,
 };
 
 export default RPGUtils;
