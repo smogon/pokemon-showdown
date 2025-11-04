@@ -1939,6 +1939,12 @@ function handleGenericStatusInflictMove(
 		canBeAfflicted = false;
 		messageLog.push('The Electric Terrain prevents sleep!');
 	}
+	// Check if any Pokemon is using Uproar
+	const anyUproar = [...battle.playerSlots, ...battle.opponentSlots].some(s => s && s.uproarTurns && s.uproarTurns > 0);
+	if (move.status === 'slp' && anyUproar) {
+		canBeAfflicted = false;
+		messageLog.push('But the uproar kept it awake!');
+	}
 	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status)) {
 		canBeAfflicted = false;
 		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
@@ -2907,6 +2913,36 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
+	// Handle rampage move counter (Outrage, Thrash, Petal Dance)
+	if (slot.lockedMoveCounter > 0) {
+		// If Pokemon falls asleep during rampage, end it immediately without confusion
+		if (slot.status === 'slp') {
+			slot.lockedMove = undefined;
+			slot.lockedMoveCounter = 0;
+		} else {
+			slot.lockedMoveCounter--;
+			if (slot.lockedMoveCounter === 0) {
+				// Rampage ends, apply confusion
+				slot.lockedMove = undefined;
+				
+				if (!slot.isConfused) {
+					slot.isConfused = true;
+					slot.confusionCounter = Math.floor(Math.random() * 4) + 2; // 2-5 turns
+					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+				}
+			}
+		}
+	}
+
+	// Handle Uproar
+	if (slot.uproarTurns > 0) {
+		slot.uproarTurns--;
+		if (slot.uproarTurns === 0) {
+			slot.lockedMove = undefined;
+			messageLog.push(`${pokemon.species} calmed down.`);
+		}
+	}
+
 	// Use the new END_OF_TURN abilities handler from abilities.ts
 	RPGAbilities.applyEndOfTurnAbilities(slot, battle, messageLog);
 }
@@ -3164,6 +3200,13 @@ function checkBattleEndCondition(
 
 function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	const attacker = attackerSlot.pokemon;
+
+	// Check if Pokemon must recharge from previous turn's move
+	if (attackerSlot.mustRecharge) {
+		messageLog.push(`${attacker.species} must recharge!`);
+		attackerSlot.mustRecharge = false;
+		return false;
+	}
 
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
@@ -3800,6 +3843,7 @@ function executeMove(
 	const isSpread = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target);
 	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
+	let moveHitAnyTarget = false;
 
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break;
@@ -3869,12 +3913,45 @@ function executeMove(
 			continue;
 		}
 
+		moveHitAnyTarget = true;
+
 		if (move.id === 'struggle') {
 			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, 1.0);
 		} else if (move.category === 'Status') {
 			handleStatusMove(attackerSlot, defenderSlot, move, battle, messageLog);
 		} else {
 			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, spreadMultiplier);
+		}
+	}
+
+	// Handle rampage moves (Outrage, Thrash, Petal Dance)
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'lockedmove') {
+		if (attackerSlot.lockedMoveCounter === 0) {
+			// Initialize rampage counter (2-3 turns)
+			attackerSlot.lockedMoveCounter = Math.floor(Math.random() * 2) + 2; // Random 2 or 3
+			attackerSlot.lockedMove = move.id;
+		}
+	}
+
+	// Handle recharge moves (Hyper Beam, Giga Impact, etc.)
+	// Only set recharge if the move actually hit at least one target
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'mustrecharge' && moveHitAnyTarget) {
+		attackerSlot.mustRecharge = true;
+	}
+
+	// Handle Uproar
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'uproar') {
+		if (attackerSlot.uproarTurns === 0) {
+			attackerSlot.uproarTurns = 3;
+			attackerSlot.lockedMove = move.id;
+			// Wake up all sleeping Pokemon
+			for (const slot of [...battle.playerSlots, ...battle.opponentSlots]) {
+				if (slot && slot.status === 'slp') {
+					slot.status = null;
+					slot.sleepCounter = 0;
+					messageLog.push(`${slot.pokemon.species} woke up due to the uproar!`);
+				}
+			}
 		}
 	}
 
@@ -4340,6 +4417,9 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		chargingMove: undefined,
 		activeTurns: 1,
 		lockedMove: undefined,
+		lockedMoveCounter: 0,
+		mustRecharge: false,
+		uproarTurns: 0,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
 		substitute: undefined,
@@ -4982,7 +5062,10 @@ function generateSharedBattlePokemonInfo(
 		slot.healBlockTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (${slot.healBlockTurns})</span>` : '',
 		slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '',
 		slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '',
-		slot.lockedMove ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.lockedMoveCounter > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
+		slot.uproarTurns > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Uproar (${slot.uproarTurns})</span>` : '',
+		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.mustRecharge ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Must Recharge</span>` : '',
 		slot.isProtected ? `<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>` : '',
 		slot.isRedirecting ? `<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>` : '',
 		slot.isHelped ? `<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>` : '',
@@ -6050,8 +6133,29 @@ function validateMoveAction(
 		return `${pokemon.species} can't use the same move twice due to Torment!`;
 	}
 
-	// Check Choice Item Lock
-	if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
+	// Check Rampage Move Lock (Outrage, Thrash, Petal Dance)
+	if (attackerSlot.lockedMoveCounter > 0) {
+		if (attackerSlot.lockedMove !== moveData.id) {
+			const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
+			return `${pokemon.species} must continue using ${lockedMoveName}!`;
+		}
+	}
+
+	// Check Uproar Lock
+	if (attackerSlot.uproarTurns > 0) {
+		if (attackerSlot.lockedMove !== moveData.id) {
+			return `${pokemon.species} must continue its uproar!`;
+		}
+	}
+
+	// Check Choice Item Lock (only if not in a rampage or uproar)
+	const hasChoiceItemLock = attackerSlot.lockedMove && 
+	                          attackerSlot.lockedMove !== moveData.id && 
+	                          battle.magicRoomTurns === 0 && 
+	                          attackerSlot.lockedMoveCounter === 0 &&
+	                          attackerSlot.uproarTurns === 0;
+	
+	if (hasChoiceItemLock) {
 		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
 		// Check if the locked move still has PP
 		if (lockedMoveObject && lockedMoveObject.pp > 0) {
@@ -7052,6 +7156,7 @@ export const commands: ChatCommands = {
 				}
 
 				outgoingSlot.lockedMove = undefined;
+				outgoingSlot.lockedMoveCounter = 0;
 
 				// --- Queue the Switch Action ---
 				battle.pendingActions[slotToSwitchOut] = {

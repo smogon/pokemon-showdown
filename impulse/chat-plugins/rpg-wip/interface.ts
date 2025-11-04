@@ -74,6 +74,9 @@ export interface ActivePokemonSlot {
 	chargingMove?: string;
 	activeTurns: number;
 	lockedMove?: string;
+	lockedMoveCounter?: number; // For rampage moves (Outrage, Thrash, Petal Dance) - counts down from 2-3
+	mustRecharge?: boolean; // For recharge moves (Hyper Beam, Giga Impact, etc.)
+	uproarTurns?: number; // For Uproar move - lasts 3 turns, prevents sleep
 	isRedirecting?: boolean;
 	isHelped?: boolean;
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string };
