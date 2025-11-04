@@ -145,25 +145,41 @@ export const adminCommands: ChatCommands = {
 				}
 			}
 
+			let setsCompleted: number | undefined = undefined;
+			if (actualQtyAdded > 0) {
+				const calculateSetsCompleted = (await import('./tcg_utils')).calculateSetsCompleted;
+				setsCompleted = await calculateSetsCompleted(targetUserId);
+			}
+
 			if (actualQtyAdded > 0 || creditsToAward > 0) {
 				const recipientProfile = await profiles.findOne({ userId: targetUserId });
+				const updateDoc: any = {
+					$inc: {
+						totalQuantity: actualQtyAdded,
+						collectionPoints: pointsToAdd,
+						totalUniqueCards: uniqueCardsChangeRecipient,
+						credits: creditsToAward,
+					},
+					$set: { lastUpdatedAt: now },
+				};
+				if (setsCompleted !== undefined) {
+					updateDoc.$set.totalSetsCompleted = setsCompleted;
+				}
 				if (recipientProfile) {
 					await profiles.updateOne(
 						{ userId: targetUserId },
-						{
-							$inc: {
-								totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
-								totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward,
-							},
-							$set: { lastUpdatedAt: now },
-						}
+						updateDoc
 					);
 				} else {
-					await profiles.insertOne({
+					const newProfile: any = {
 						userId: targetUserId, userName: targetUserId, credits: creditsToAward,
 						totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
 						totalUniqueCards: uniqueCardsChangeRecipient, lastUpdatedAt: now,
-					});
+					};
+					if (setsCompleted !== undefined) {
+						newProfile.totalSetsCompleted = setsCompleted;
+					}
+					await profiles.insertOne(newProfile);
 				}
 			}
 
