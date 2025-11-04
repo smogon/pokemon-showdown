@@ -4,7 +4,7 @@
 * @author PrinceSky-Git
 */
 import type { TcgCard, TcgUser } from './interface';
-import { getSet, getCacheStats } from './tcg_utils';
+import { getSet, getCacheStats, calculateSetsCompleted } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection,
 	userProfilesCollection, userPacksCollection } from './tcg_collections';
 const SEARCH_PAGE_LIMIT = 80;
@@ -574,35 +574,26 @@ export const collectionCommands: ChatCommands = {
 			const userCollection = userCollectionsCollection;
 			const profileCollection = userProfilesCollection;
 
-			// Get both setTotal and actual count for each set
+			const setsCompleted = await calculateSetsCompleted(targetUserId);
+
+			// Get total number of sets for reporting
 			const setTotalsPipeline = [
-				{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" }, actualCount: { $sum: 1 } } },
-				{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] }, actualCount: 1 } },
+				{ $group: { _id: "$setId" } },
+				{ $count: "totalSets" },
 			];
-			const allSets = await cardCollection.aggregate<{ setId: string, setTotal: number, actualCount: number }>(setTotalsPipeline);
-			if (allSets.length === 0) return this.errorReply("Failed to fetch set totals. Aborting.");
-
-			const userProgressPipeline = [
-				{ $match: { userId: targetUserId } },
-				{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } },
-			];
-			const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
-			const userProgressMap = new Map<string, number>();
-			for (const set of userSetCounts) userProgressMap.set(set._id, set.uniqueCount);
-
-			let setsCompleted = 0;
-			for (const set of allSets) {
-				// Use actualCount for sets without setTotal (like Promo sets)
-				const totalInSet = set.setTotal > 0 ? set.setTotal : set.actualCount;
-				if (totalInSet > 0) {
-					const userCount = userProgressMap.get(set.setId) || 0;
-					if (userCount >= totalInSet) setsCompleted++;
-				}
-			}
+			const setCountResult = await cardCollection.aggregate(setTotalsPipeline);
+			const totalSets = setCountResult[0]?.totalSets || 0;
 
 			const allStatsPipeline = [
 				{ $match: { userId: targetUserId } },
-				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } },
+				{
+					$group: {
+						_id: null,
+						totalUniqueCards: { $sum: 1 },
+						totalQuantity: { $sum: "$quantity" },
+						collectionPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } },
+					},
+				},
 			];
 			const statsResult = await userCollection.aggregate(allStatsPipeline);
 			const stats = statsResult[0] || { totalUniqueCards: 0, totalQuantity: 0, collectionPoints: 0 };
@@ -629,7 +620,7 @@ export const collectionCommands: ChatCommands = {
 			);
 
 			this.sendReply(`Recalculation complete for ${targetUserId}:`);
-			this.sendReply(`- Sets Completed: ${setsCompleted} / ${allSets.length}`);
+			this.sendReply(`- Sets Completed: ${setsCompleted} / ${totalSets}`);
 			this.sendReply(`- Total Points: ${stats.collectionPoints.toLocaleString()}`);
 			this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
 		} catch {
