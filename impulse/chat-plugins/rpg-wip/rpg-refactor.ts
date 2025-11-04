@@ -5062,9 +5062,9 @@ function generateSharedBattlePokemonInfo(
 		slot.healBlockTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (${slot.healBlockTurns})</span>` : '',
 		slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '',
 		slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '',
-		slot.lockedMove && slot.lockedMoveCounter ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
-		slot.uproarTurns && slot.uproarTurns > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Uproar (${slot.uproarTurns})</span>` : '',
-		slot.lockedMove && !slot.lockedMoveCounter && !slot.uproarTurns ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.lockedMoveCounter > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
+		slot.uproarTurns > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Uproar (${slot.uproarTurns})</span>` : '',
+		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
 		slot.mustRecharge ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Must Recharge</span>` : '',
 		slot.isProtected ? `<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>` : '',
 		slot.isRedirecting ? `<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>` : '',
@@ -6134,7 +6134,7 @@ function validateMoveAction(
 	}
 
 	// Check Rampage Move Lock (Outrage, Thrash, Petal Dance)
-	if (attackerSlot.lockedMoveCounter && attackerSlot.lockedMoveCounter > 0) {
+	if (attackerSlot.lockedMoveCounter > 0) {
 		if (attackerSlot.lockedMove !== moveData.id) {
 			const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
 			return `${pokemon.species} must continue using ${lockedMoveName}!`;
@@ -6142,17 +6142,18 @@ function validateMoveAction(
 	}
 
 	// Check Uproar Lock
-	if (attackerSlot.uproarTurns && attackerSlot.uproarTurns > 0) {
+	if (attackerSlot.uproarTurns > 0) {
 		if (attackerSlot.lockedMove !== moveData.id) {
 			return `${pokemon.species} must continue its uproar!`;
 		}
 	}
 
-	// Check Choice Item Lock (only if not in a rampage)
+	// Check Choice Item Lock (only if not in a rampage or uproar)
 	const hasChoiceItemLock = attackerSlot.lockedMove && 
 	                          attackerSlot.lockedMove !== moveData.id && 
 	                          battle.magicRoomTurns === 0 && 
-	                          attackerSlot.lockedMoveCounter === 0;
+	                          attackerSlot.lockedMoveCounter === 0 &&
+	                          attackerSlot.uproarTurns === 0;
 	
 	if (hasChoiceItemLock) {
 		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
