@@ -2797,6 +2797,29 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 
+	// Heal Block prevents all healing effects (returns early, skipping Aqua Ring and Ingrain)
+	if ((slot.healBlockTurns || 0) > 0) return;
+
+	// Aqua Ring healing
+	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
+	}
+
+	// Ingrain healing
+	if (slot.isIngrained && pokemon.hp < pokemon.maxHp) {
+		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
+	}
+}
+
+function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0) return;
+	const pokemon = slot.pokemon;
+
+	// Leech Seed drains HP from the affected Pokemon and transfers it to the opponent who used Leech Seed
 	if (slot.isSeeded) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -2813,21 +2836,6 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 				messageLog.push(`${opponentToHeal.pokemon.species} restored ${opponentToHeal.pokemon.hp - oldHp} HP!`);
 			}
 		}
-	}
-	if (pokemon.hp <= 0) return;
-
-	if ((slot.healBlockTurns || 0) > 0) return;
-
-	if (slot.hasAquaRing && pokemon.hp < pokemon.maxHp) {
-		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		messageLog.push(`${pokemon.species} was healed by Aqua Ring!`);
-	}
-
-	if (slot.isIngrained && pokemon.hp < pokemon.maxHp) {
-		const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
 	}
 }
 
@@ -2950,20 +2958,37 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
 
+	// POKEMON BATTLE FLOW - END OF TURN ORDER:
+	// 1. Item effects (Leftovers heal, Lum Berry cure, Flame/Toxic Orb status)
+	// 2. Healing effects (Aqua Ring, Ingrain, Grassy Terrain)
+	// 3. Status damage (Burn, Poison)
+	// 4. Leech Seed damage
+	// 5. Volatile status damage (Curse, Nightmare, Trapping)
+	// 6. Counter decrements and other effects
+
+	// Step 1: Apply item effects (includes Leftovers healing)
 	const lumCuredStatus = applyEOTItemEffects(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
+	// Step 2: Apply healing effects (Aqua Ring, Ingrain)
+	applyEOTHealingEffects(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// Step 3: Apply status damage (only if not cured by Lum Berry)
 	if (!lumCuredStatus) {
 		applyEOTStatusDamage(slot, battle, messageLog);
 	}
 	if (slot.pokemon.hp <= 0) return;
 
+	// Step 4: Apply Leech Seed damage
+	applyEOTLeechSeedDamage(slot, battle, messageLog);
+	if (slot.pokemon.hp <= 0) return;
+
+	// Step 5: Apply volatile status damage (Curse, Nightmare, Trapping)
 	applyEOTVolatileStatusDamage(slot, battle, messageLog);
 	if (slot.pokemon.hp <= 0) return;
 
-	applyEOTHealingEffects(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
-
+	// Step 6: Decrement counters and apply other end-of-turn effects
 	decrementEOTVolatileCounters(slot, battle, messageLog);
 
 	slot.isCharged = false;
@@ -3968,6 +3993,19 @@ function executeMove(
 function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
+	// POKEMON BATTLE FLOW - END OF TURN ORDER (Generation 5+):
+	// 1. Future Sight / Doom Desire resolution
+	// 2. Wish (not yet implemented)
+	// 3. Per-Pokemon effects (officially in speed order, but processing all simultaneously for simplicity):
+	//    a. Item effects (Leftovers, Lum Berry, Status Orbs)
+	//    b. Healing effects (Aqua Ring, Ingrain, Grassy Terrain)
+	//    c. Status damage (Burn, Poison)
+	//    d. Leech Seed
+	//    e. Volatile status damage (Curse, Nightmare, Trapping)
+	// 4. Weather damage (Sandstorm, Hail)
+	// 5. Field effect expiration (Screens, Terrains, Rooms)
+
+	// Step 1: Resolve Future Sight and Doom Desire
 	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
@@ -4030,17 +4068,22 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
+	// Clear flinch flags at end of turn
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 	}
 
+	// Step 2: Apply per-Pokemon end-of-turn effects
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			handleEndOfTurnEffects(slot, battle, messageLog);
 		}
 	}
 
+	// Step 3: Apply weather damage
 	handleEndOfTurnWeather(battle, messageLog);
+
+	// Step 4: Handle field effect expirations
 	handleEndOfTurnFieldEffects(battle, messageLog);
 }
 
@@ -5557,9 +5600,12 @@ function generateDoubleBattleHTML(
 		// --- Switch/Catch/Run Buttons ---
 		const buttonStyle = `width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;`;
 
-		const catchButton = (battle.battleType === 'wild_double') ?
+		// In double battles, catching is only allowed when one opponent remains (matches Gen 8+ Pokemon games)
+		const activeOpponents = getActiveSlots(battle.opponentSlots);
+		const canCatch = battle.battleType === 'wild_double' && activeOpponents.length === 1;
+		const catchButton = canCatch ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button" style="${buttonStyle}">⚽ Catch</button>` :
-			`<button class="button" disabled style="${buttonStyle}">⚽ Catch</button>`;
+			`<button class="button" disabled style="${buttonStyle}" title="${battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles'}">⚽ Catch</button>`;
 
 		const runButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
@@ -7188,6 +7234,16 @@ export const commands: ChatCommands = {
 			catchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// In double battles, can only catch when one opponent remains
+				if (battle.battleType === 'wild_double') {
+					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					if (activeOpponents.length > 1) {
+						const errorHTML = `<div class="infobox"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					}
+				}
+
 				const player = getPlayerData(battle.playerId);
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchMenuHTML(player, battle)}`);
 			},
@@ -7228,6 +7284,15 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't catch a Trainer's Pokémon!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+				}
+
+				// In double battles, can only catch when one opponent remains (matches Pokemon games Gen 8+)
+				if (battle.battleType === 'wild_double') {
+					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					if (activeOpponents.length > 1) {
+						this.errorReply("You can't throw a Poké Ball when there are multiple opponents!");
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't throw a Poké Ball when there are multiple wild Pokémon! Defeat one first."])}`);
+					}
 				}
 
 				// --- NEW: Get target slot ---
