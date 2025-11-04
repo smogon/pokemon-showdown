@@ -6,6 +6,7 @@ export const MANUAL_LEARNSETS = {
 		levelup: [
 			{ level: 1, move: 'tackle' },
 			{ level: 1, move: 'growl' },
+			{ level: 1, move: 'shadowstrike' },
 			{ level: 3, move: 'leechseed' },
 			{ level: 6, move: 'vinewhip' },
 			{ level: 9, move: 'poisonpowder' },
