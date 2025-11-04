@@ -7300,9 +7300,9 @@ export const commands: ChatCommands = {
 					// --- FAILED CATCH PATH (FIXED) ---
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
 
-					// The catch attempt failed. Display the failure message and return to normal battle UI.
-					// No action should be queued - the catch attempt was instant and doesn't consume a turn.
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+					// The catch attempt failed. In Pokémon games, using an item (including Pokéballs) consumes your turn.
+					// The opponent gets to attack, so we need to process the turn.
+					processTurn(this, battle, room, user, messageLog);
 				}
 			},
 
