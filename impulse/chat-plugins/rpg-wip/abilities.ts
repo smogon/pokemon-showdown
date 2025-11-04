@@ -3,12 +3,8 @@
 * RPG Abilities
 */
 import { Dex, toID } from '../../../sim/dex';
+import { getActiveSlots } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
-
-function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
-	if (!slots) return [];
-	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
-}
 
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
