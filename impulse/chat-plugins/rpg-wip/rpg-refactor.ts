@@ -7300,43 +7300,8 @@ export const commands: ChatCommands = {
 					// --- FAILED CATCH PATH (FIXED) ---
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
 
-					// This is the fix. We queue the 'catch' action for the first available player slot.
-					// We do NOT queue 'wait' for the other slot.
-					// We do NOT call processTurn().
-					// This will queue the action and re-render the UI,
-					// allowing the player to select an action for their other Pokémon.
-
-					// Flawed logic from original: just picks the first active slot.
-					const playerSlot = getActiveSlots(battle.playerSlots)[0];
-					let playerSlotIndex = -1;
-
-					if (playerSlot) {
-						playerSlotIndex = battle.playerSlots.indexOf(playerSlot);
-					}
-
-					// If no slot is found, or one is already pending, this is an error
-					if (playerSlotIndex === -1) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Could not find a Pokémon to use the item."])}`);
-					}
-
-					// Check if action is already registered (e.g., if player double-clicks)
-					if (battle.pendingActions[playerSlotIndex]) {
-						return this.errorReply(`${playerSlot.pokemon.species} is already waiting to move.`);
-					}
-
-					// Queue the 'catch' action. We assume 'catch' is a silent custom move.
-					// If it's not, it will default to 'Struggle'.
-					// Given your log, it seems to be a silent custom move.
-					battle.pendingActions[playerSlotIndex] = {
-						actionType: 'move',
-						moveId: 'catch', // This ID is from the original code.
-						targetSlot: targetSlotIndex,
-						pokemonId: playerSlot.pokemon.id,
-					};
-
-					messageLog.push(`${playerSlot.pokemon.species} is ready to throw the ball!`);
-
-					// Re-render the UI so the player can select an action for the *other* Pokémon.
+					// The catch attempt failed. Display the failure message and return to normal battle UI.
+					// No action should be queued - the catch attempt was instant and doesn't consume a turn.
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
