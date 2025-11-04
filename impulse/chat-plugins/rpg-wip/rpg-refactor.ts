@@ -4264,6 +4264,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		volatileTypes: undefined,
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 		lastMoveThatHitMe: undefined,
+		terastallized: undefined,
 	};
 }
 
