@@ -74,6 +74,7 @@ export interface ActivePokemonSlot {
 	chargingMove?: string;
 	activeTurns: number;
 	lockedMove?: string;
+	lockedMoveCounter?: number; // For rampage moves (Outrage, Thrash, Petal Dance) - counts down from 2-3
 	isRedirecting?: boolean;
 	isHelped?: boolean;
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string };

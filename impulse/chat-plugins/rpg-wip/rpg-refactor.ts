@@ -2907,6 +2907,28 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
+	// Handle rampage move counter (Outrage, Thrash, Petal Dance)
+	if (slot.lockedMoveCounter !== undefined && slot.lockedMoveCounter > 0) {
+		// If Pokemon falls asleep during rampage, end it immediately without confusion
+		if (slot.status === 'slp') {
+			slot.lockedMove = undefined;
+			slot.lockedMoveCounter = undefined;
+		} else {
+			slot.lockedMoveCounter--;
+			if (slot.lockedMoveCounter === 0) {
+				// Rampage ends, apply confusion
+				slot.lockedMove = undefined;
+				slot.lockedMoveCounter = undefined;
+				
+				if (!slot.isConfused) {
+					slot.isConfused = true;
+					slot.confusionCounter = Math.floor(Math.random() * 4) + 2; // 2-5 turns
+					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+				}
+			}
+		}
+	}
+
 	// Use the new END_OF_TURN abilities handler from abilities.ts
 	RPGAbilities.applyEndOfTurnAbilities(slot, battle, messageLog);
 }
@@ -3878,6 +3900,15 @@ function executeMove(
 		}
 	}
 
+	// Handle rampage moves (Outrage, Thrash, Petal Dance)
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'lockedmove') {
+		if (!attackerSlot.lockedMoveCounter) {
+			// Initialize rampage counter (2-3 turns)
+			attackerSlot.lockedMoveCounter = Math.floor(Math.random() * 2) + 2; // Random 2 or 3
+			attackerSlot.lockedMove = move.id;
+		}
+	}
+
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
 	}
@@ -4340,6 +4371,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		chargingMove: undefined,
 		activeTurns: 1,
 		lockedMove: undefined,
+		lockedMoveCounter: undefined,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
 		substitute: undefined,
@@ -4982,7 +5014,8 @@ function generateSharedBattlePokemonInfo(
 		slot.healBlockTurns > 0 ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (${slot.healBlockTurns})</span>` : '',
 		slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '',
 		slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '',
-		slot.lockedMove ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.lockedMove && slot.lockedMoveCounter ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
+		slot.lockedMove && !slot.lockedMoveCounter ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
 		slot.isProtected ? `<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>` : '',
 		slot.isRedirecting ? `<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>` : '',
 		slot.isHelped ? `<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>` : '',
@@ -6050,8 +6083,16 @@ function validateMoveAction(
 		return `${pokemon.species} can't use the same move twice due to Torment!`;
 	}
 
+	// Check Rampage Move Lock (Outrage, Thrash, Petal Dance)
+	if (attackerSlot.lockedMoveCounter && attackerSlot.lockedMoveCounter > 0) {
+		if (attackerSlot.lockedMove !== moveData.id) {
+			const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
+			return `${pokemon.species} must continue using ${lockedMoveName}!`;
+		}
+	}
+
 	// Check Choice Item Lock
-	if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0) {
+	if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0 && !attackerSlot.lockedMoveCounter) {
 		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
 		// Check if the locked move still has PP
 		if (lockedMoveObject && lockedMoveObject.pp > 0) {
@@ -7052,6 +7093,7 @@ export const commands: ChatCommands = {
 				}
 
 				outgoingSlot.lockedMove = undefined;
+				outgoingSlot.lockedMoveCounter = undefined;
 
 				// --- Queue the Switch Action ---
 				battle.pendingActions[slotToSwitchOut] = {
