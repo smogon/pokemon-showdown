@@ -7606,7 +7606,7 @@ export const commands: ChatCommands = {
 		},
 
 		unstuck(target, room, user) {
-		// Check if user is in a battle
+			// Check if user is in a battle
 			if (!activeBattles.has(user.id)) {
 				return this.errorReply("You are not currently in a battle.");
 			}
