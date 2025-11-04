@@ -206,6 +206,8 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		}
 
 		const defenderSpecies = Dex.species.get(ctx.defender.species);
+		// Get actual types (accounting for terastallization)
+		const defenderTypes = ctx.defenderSlot.terastallized ? [ctx.defenderSlot.terastallized] : defenderSpecies.types;
 		let effectiveness = 1;
 
 		const typeChart: any = {
@@ -231,7 +233,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 
 		const chartEntry = typeChart[ctx.move.type];
 		if (chartEntry) {
-			for (const defenderType of defenderSpecies.types) {
+			for (const defenderType of defenderTypes) {
 				if (chartEntry.superEffective.includes(defenderType)) {
 					effectiveness *= 2;
 				} else if (chartEntry.notVeryEffective.includes(defenderType)) {
@@ -783,9 +785,30 @@ export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 	return ITEM_INTERACTION_ABILITIES[ability]?.preventsItemRemoval || false;
 }
 
-export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number {
+export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: ActivePokemonSlot): number {
 	const species = Dex.species.get(pokemon.species);
-	if (!species.types.includes(moveType)) {
+	let hasSTAB = false;
+
+	// Check if terastallized
+	if (slot?.terastallized) {
+		// When terastallized, STAB is only from the tera type
+		// But if the move type matches BOTH the tera type AND one of the original types, it gets 2.0x STAB
+		hasSTAB = slot.terastallized === moveType;
+		if (hasSTAB && species.types.includes(moveType)) {
+			// With Adaptability: 2.25x when Tera Type matches move type and original type
+			const ability = toID(pokemon.ability || '');
+			if (ability === 'adaptability') {
+				return 2.25;
+			}
+			// Standard: 2.0x when Tera Type matches move type and original type
+			return 2.0;
+		}
+	} else {
+		// Normal STAB check (not terastallized)
+		hasSTAB = species.types.includes(moveType);
+	}
+
+	if (!hasSTAB) {
 		return 1;
 	}
 
@@ -1400,9 +1423,12 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const statusToInflict = handler.effect as string;
 		let canBeAfflicted = true;
 
-		if ((statusToInflict === 'par' && attackerSpecies.types.includes('Electric')) ||
-			(statusToInflict === 'brn' && attackerSpecies.types.includes('Fire')) ||
-			(statusToInflict === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel')))) {
+		// Get actual types (accounting for terastallization)
+		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
+
+		if ((statusToInflict === 'par' && attackerTypes.includes('Electric')) ||
+			(statusToInflict === 'brn' && attackerTypes.includes('Fire')) ||
+			(statusToInflict === 'psn' && (attackerTypes.includes('Poison') || attackerTypes.includes('Steel')))) {
 			canBeAfflicted = false;
 		}
 
@@ -1426,10 +1452,13 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
 		const possibleStatuses: string[] = [];
-		if (!attackerSpecies.types.includes('Poison') && !attackerSpecies.types.includes('Steel') && !preventsStatus(attacker, 'psn')) {
+		// Get actual types (accounting for terastallization)
+		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
+		
+		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn')) {
 			possibleStatuses.push('psn');
 		}
-		if (!attackerSpecies.types.includes('Electric') && !preventsStatus(attacker, 'par')) {
+		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par')) {
 			possibleStatuses.push('par');
 		}
 		if (!preventsStatus(attacker, 'slp')) {

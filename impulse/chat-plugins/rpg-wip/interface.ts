@@ -52,9 +52,10 @@ export interface RPGPokemon {
 	shiny: boolean;
 	caughtIn: string;
 	form?: string;
+	teraType: string;
 }
 
-export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id' | 'expToNextLevel' | 'hp' | 'ability' | 'item' | 'nature' | 'growthRate' | 'ivs' | 'evs' | 'status'>;
+export type Stats = Pick<RPGPokemon, 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'maxHp'>;
 
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
@@ -104,6 +105,7 @@ export interface ActivePokemonSlot {
 	volatileTypes?: string[];
 	isDisguised?: boolean;
 	lastMoveThatHitMe?: Move;
+	terastallized?: string;
 }
 
 export interface PlayerData {
@@ -159,6 +161,9 @@ export interface BattleState {
 	waterSportTurns: number;
 
 	forceEnd?: boolean;
+
+	playerTerastallizeUsed: boolean;
+	opponentTerastallizeUsed: boolean;
 
 	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double';
 	opponentName: string;
