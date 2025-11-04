@@ -4742,9 +4742,16 @@ function executeAction(
 		// Apply terastallization if requested (only for player-controlled Pokemon)
 		const isPlayerPokemon = attackerSlotIndex < battle.playerSlots.length;
 		if (action.terastallize && isPlayerPokemon) {
-			attackerSlot.terastallized = attackerSlot.pokemon.teraType;
-			battle.playerTerastallizeUsed = true;
-			messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+			// Double-check at execution time to prevent multiple terastallizations in doubles
+			if (battle.playerTerastallizeUsed) {
+				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} couldn't Terastallize because another Pokémon already did!</span>`);
+			} else if (attackerSlot.terastallized) {
+				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} has already Terastallized!</span>`);
+			} else {
+				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
+				battle.playerTerastallizeUsed = true;
+				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+			}
 		}
 
 		const move = getMove(action.moveId);
