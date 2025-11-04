@@ -4742,10 +4742,22 @@ function executeAction(
 		// Apply terastallization if requested (only for player-controlled Pokemon)
 		const isPlayerPokemon = attackerSlotIndex < battle.playerSlots.length;
 		if (action.terastallize && isPlayerPokemon) {
-			attackerSlot.terastallized = attackerSlot.pokemon.teraType;
-			battle.playerTerastallizeUsed = true;
-			messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+			// Double-check at execution time to prevent multiple terastallizations in doubles
+			if (battle.playerTerastallizeUsed) {
+				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} couldn't Terastallize because another Pokemon already did!</span>`);
+			} else if (attackerSlot.terastallized) {
+				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} has already Terastallized!</span>`);
+			} else {
+				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
+				battle.playerTerastallizeUsed = true;
+				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+			}
 		}
+		// TODO: Implement AI terastallization logic
+		// When adding AI terastallization support:
+		// 1. Update generateAiAction() to conditionally set terastallize flag based on battle strategy
+		// 2. Add similar execution-time check for opponentTerastallizeUsed flag
+		// 3. Ensure AI respects the one-terastallization-per-battle rule in doubles battles
 
 		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
