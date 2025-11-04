@@ -4029,11 +4029,10 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		if (pokemon.hp <= 0) {
 			return { success: false, message: `${pokemon.species} has fainted!` };
 		}
+		if (pokemon.hp >= pokemon.maxHp) {
+			return { success: false, message: `${pokemon.species} is already at full health!` };
+		}
 		break;
-	}
-
-	if (pokemon.hp >= pokemon.maxHp) {
-		return { success: false, message: `${pokemon.species} is already at full health!` };
 	}
 
 	switch (itemId) {
@@ -4091,7 +4090,7 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 
 	removeItemFromInventory(player, itemId, 1);
 	return { success: true, message };
-}
+	}
 
 function getAccuracyEvasionMultiplier(stage: number): number {
 	if (stage > 0) {
