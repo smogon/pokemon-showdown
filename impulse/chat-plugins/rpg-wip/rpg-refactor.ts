@@ -725,7 +725,7 @@ function gainExperience(
 	return { messages, leveledUp };
 }
 
-function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom, user: User): string | null {
+function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room?: ChatRoom, user?: User): string | null {
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
 	if (!evoData || pokemon.level < evoData.evoLevel) return null;
@@ -746,9 +746,12 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
 	const pokemonIndex = player.party.findIndex(p => p.id === pokemon.id);
 	if (pokemonIndex !== -1) player.party[pokemonIndex] = pokemon;
-	room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update();
+	// Only try to use room.add if room is defined
+	if (room && typeof room.add === 'function' && user) {
+		room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update();
+	}
 	return evoMessage;
-}
+	}
 
 function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
