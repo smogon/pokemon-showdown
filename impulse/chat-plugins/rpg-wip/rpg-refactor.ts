@@ -1582,18 +1582,35 @@ function handleDamagingMove(
 
 			// Force switch moves (Dragon Tail, Circle Throw)
 			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot.pokemon.hp > 0) {
-				// In RPG context, force switch only makes sense in trainer battles with multiple Pokemon
-				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-					const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-					// Suction Cups and similar abilities prevent forced switches
-					if (defenderAbility !== 'suctioncups') {
-						// Mark that defender should be forced to switch
-						// This is handled in the AI/opponent logic
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				// Suction Cups and similar abilities prevent forced switches
+				if (defenderAbility === 'suctioncups') {
+					messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+				} else {
+					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
+
+					if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
+						// In wild battles, forced switch moves end the battle (like Roar/Whirlwind)
+						messageLog.push(`The wild ${defenderSlot.pokemon.species} was blown away!`);
+						if (defenderSlotIndex !== -1) {
+							if (isDefenderPlayer) {
+								messageLog.push(`But it failed!`); // Player can't be forced out in wild battles
+							} else {
+								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
+							}
+						}
+					} else if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+						// In trainer battles, force the defender to switch
 						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
-						// Note: Actual switch logic would happen in AI turn processing
-						// For wild battles, this just adds flavor text
-					} else {
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+						if (defenderSlotIndex !== -1) {
+							// Set the slot to null to trigger forced switch
+							if (isDefenderPlayer) {
+								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
+							} else {
+								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
+							}
+						}
 					}
 				}
 			}
@@ -4586,17 +4603,19 @@ function handleSwitchAction(
 		// Find if the outgoing Pokemon is already in the party
 		const outgoingIndex = player.party.findIndex(p => p.id === outgoingPokemon.id);
 		const incomingPokemon = player.party[partyIndex];
+		let newSlot: ActivePokemonSlot;
+
 		if (outgoingIndex !== -1) {
 			// The outgoing Pokemon is in the party, swap it with the incoming Pokemon
 			player.party[outgoingIndex] = incomingPokemon;
 			player.party[partyIndex] = outgoingPokemon;
-			const newSlot = createActivePokemonSlot(incomingPokemon);
+			newSlot = createActivePokemonSlot(incomingPokemon);
 			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
 		} else {
 			// The outgoing Pokemon is not in the party (shouldn't normally happen, but handle it)
 			player.party.push(outgoingPokemon);
 			const [swapIncoming] = player.party.splice(partyIndex, 1);
-			const newSlot = createActivePokemonSlot(swapIncoming);
+			newSlot = createActivePokemonSlot(swapIncoming);
 			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
 		}
 		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
