@@ -114,7 +114,7 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		target: 'normal',
 		flags: { protect: 1, mirror: 1, contact: 1 },
 		secondary: {
-			chance: 30,
+			chance: 80,
 			volatileStatus: 'flinch',
 		},
 	},
