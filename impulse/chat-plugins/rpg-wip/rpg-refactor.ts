@@ -4108,7 +4108,7 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 	const messages: string[] = [];
 	try {
 		messages.push(...levelUp(pokemon));
-		
+
 		// Set experience to the minimum required for the new level (Rare Candy behavior)
 		pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 
