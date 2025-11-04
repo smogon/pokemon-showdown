@@ -186,7 +186,7 @@ const SHOP_INVENTORY: string[] = [
 	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
 	'lightclay',
 
-	'eggmovetutor',
+	'eggmovetutor', 'expcandyxs', 'expcandys', 'expcandym', 'expcandyl', 'expcandyxl', 'rarecandy',
 ];
 
 const TYPE_RESIST_BERRIES: Record<string, string> = {
