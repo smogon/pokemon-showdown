@@ -580,13 +580,20 @@ function levelUp(pokemon: RPGPokemon): string[] {
 	const oldStats = { ...pokemon };
 	const species = Dex.species.get(pokemon.species);
 	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	
+	// Calculate HP percentage before stat change
+	const hpPercentage = pokemon.hp / pokemon.maxHp;
+	
 	pokemon.maxHp = newStats.maxHp;
 	pokemon.atk = newStats.atk;
 	pokemon.def = newStats.def;
 	pokemon.spa = newStats.spa;
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
-	pokemon.hp = pokemon.maxHp;
+	
+	// Maintain HP percentage (don't heal on level up)
+	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
+	
 	levelUpMessages.push(`Max HP: ${oldStats.maxHp} -> ${pokemon.maxHp}`);
 	levelUpMessages.push(`Attack: ${oldStats.atk} -> ${pokemon.atk}`);
 	levelUpMessages.push(`Defense: ${oldStats.def} -> ${pokemon.def}`);
@@ -724,13 +731,20 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	const oldSpeciesName = pokemon.species;
 	pokemon.species = evoSpecies.name;
 	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	
+	// Calculate HP percentage before evolution
+	const hpPercentage = pokemon.hp / pokemon.maxHp;
+	
 	pokemon.maxHp = newStats.maxHp;
 	pokemon.atk = newStats.atk;
 	pokemon.def = newStats.def;
 	pokemon.spa = newStats.spa;
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
-	pokemon.hp = pokemon.maxHp;
+	
+	// Maintain HP percentage (don't heal on evolution)
+	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
+	
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
