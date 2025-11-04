@@ -13,6 +13,7 @@ export const HIT_CHANCE = 0.8;
 export const MAX_CARD_QUANTITY = 10;
 export const CREDITS_PER_DUPLICATE = 1;
 export const MAX_PACK_SIZE = 8;
+export const MAX_PACK_SIZE_FOR_SETS_CALCULATION = 50;
 
 export type RarityPool = 'common' | 'uncommon' | 'reverseRare' | 'rarest' | 'fallback';
 
@@ -135,6 +136,41 @@ export function getSet(setId: string): TcgCard | undefined {
 	return setsCache.get(setId);
 }
 
+export async function calculateSetsCompleted(userId: string): Promise<number> {
+	const cardCollection = tcgCardsCollection;
+	const userCollection = userCollectionsCollection;
+
+	// Get both setTotal and actual count for each set
+	const setTotalsPipeline = [
+		{ $group: { _id: "$setId", setTotal: { $first: "$setTotal" }, actualCount: { $sum: 1 } } },
+		{ $project: { _id: 0, setId: "$_id", setTotal: { $ifNull: ["$setTotal", 0] }, actualCount: 1 } },
+	];
+	const allSets = await cardCollection.aggregate<{
+		setId: string, setTotal: number, actualCount: number,
+	}>(setTotalsPipeline);
+	if (allSets.length === 0) return 0;
+
+	const userProgressPipeline = [
+		{ $match: { userId } },
+		{ $group: { _id: "$setId", uniqueCount: { $sum: 1 } } },
+	];
+	const userSetCounts = await userCollection.aggregate<{ _id: string, uniqueCount: number }>(userProgressPipeline);
+	const userProgressMap = new Map<string, number>();
+	for (const set of userSetCounts) userProgressMap.set(set._id, set.uniqueCount);
+
+	let setsCompleted = 0;
+	for (const set of allSets) {
+		// Use actualCount for sets without setTotal (like Promo sets)
+		const totalInSet = set.setTotal > 0 ? set.setTotal : set.actualCount;
+		if (totalInSet > 0) {
+			const userCount = userProgressMap.get(set.setId) || 0;
+			if (userCount >= totalInSet) setsCompleted++;
+		}
+	}
+
+	return setsCompleted;
+}
+
 export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise<{ creditsAwarded: number }> {
 	if (!pack.length) return { creditsAwarded: 0 };
 
@@ -216,20 +252,30 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 
 	if (totalQty > 0 || totalUnique > 0 || credits > 0) {
 		const profile = await userProfilesCollection.findOne({ userId: user.id });
+		// Only recalculate sets completed if new unique cards were added
+		// Skip recalculation for large batches to avoid performance issues
+		const shouldRecalculateSets = totalUnique > 0 && pack.length < MAX_PACK_SIZE_FOR_SETS_CALCULATION;
+		const setsCompleted = shouldRecalculateSets ? await calculateSetsCompleted(user.id) : undefined;
+
 		if (profile) {
-			await userProfilesCollection.updateOne(
-				{ userId: user.id },
-				{
-					$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
-					$set: { userName: user.name, lastUpdatedAt: now },
-				}
-			);
+			const updateDoc = {
+				$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
+				$set: { userName: user.name, lastUpdatedAt: now } as Record<string, any>,
+			};
+			if (setsCompleted !== undefined) {
+				updateDoc.$set.totalSetsCompleted = setsCompleted;
+			}
+			await userProfilesCollection.updateOne({ userId: user.id }, updateDoc);
 		} else {
-			await userProfilesCollection.insertOne({
+			const newProfile = {
 				userId: user.id, userName: user.name, credits,
 				totalUniqueCards: totalUnique, totalQuantity: totalQty,
 				collectionPoints: totalPts, lastUpdatedAt: now,
-			});
+			} as Record<string, any>;
+			if (setsCompleted !== undefined) {
+				newProfile.totalSetsCompleted = setsCompleted;
+			}
+			await userProfilesCollection.insertOne(newProfile);
 		}
 	}
 
@@ -304,7 +350,7 @@ function generatePackFromCache(setId: string): TcgCard[] {
 			// before resorting to global fallback.
 			const promoFill = getCardsFromPool(setId, 'reverseRare', missing, excludeIds);
 			pack.push(...promoFill);
-			
+
 			const stillMissing = MAX_PACK_SIZE - pack.length;
 			if (stillMissing > 0) {
 				excludeIds = pack.map(c => c.cardId);
@@ -404,7 +450,7 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 			// ** FIX for Promo sets **
 			const promoFill = await getRandomCardsDB(tcgCardsCollection, setId, CUSTOM_REVERSE_RARE_RARITIES, missing, excludeIds);
 			pack.push(...promoFill);
-			
+
 			const stillMissing = MAX_PACK_SIZE - pack.length;
 			if (stillMissing > 0) {
 				excludeIds = pack.map(c => c.cardId);
@@ -413,7 +459,7 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 		}
 
 		if (pack.length > MAX_PACK_SIZE) pack.length = MAX_PACK_SIZE;
-		
+
 		if (pack.length < MAX_PACK_SIZE) {
 			const finalMissing = MAX_PACK_SIZE - pack.length;
 			if (finalMissing > 0) {
@@ -432,7 +478,9 @@ async function generatePackFromDB(setId: string): Promise<TcgCard[]> {
 	}
 }
 
-export function renderCardGridHtml(cards: TcgCard[], title?: string, subtitle?: string, options?: { showOpenedPackHeader?: boolean }): string {
+export function renderCardGridHtml(
+	cards: TcgCard[], title?: string, subtitle?: string, options?: { showOpenedPackHeader?: boolean }
+): string {
 	let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 	if (title) html += `<strong style="font-size: 20px;">${title}</strong><br />`;
 	if (subtitle) html += `<div style="font-size: 0.95em; margin-bottom: 7px;">${subtitle}</div>`;
