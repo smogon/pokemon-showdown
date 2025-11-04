@@ -202,7 +202,7 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
  * Get the current types of a Pokemon, accounting for terastallization.
  * When a Pokemon is terastallized, it becomes a single type (its Tera Type).
  * Otherwise, returns the Pokemon's normal type(s).
- * 
+ *
  * @param pokemon - The Pokemon to get types for
  * @param slot - The active battle slot (optional), used to check terastallization state
  * @returns Array of type strings (1 type if terastallized, 1-2 types otherwise)
@@ -4583,10 +4583,23 @@ function handleSwitchAction(
 			return;
 		}
 
-		player.party.push(outgoingPokemon);
-		const [incomingPokemon] = player.party.splice(partyIndex, 1);
-		const newSlot = createActivePokemonSlot(incomingPokemon);
-		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		// Find if the outgoing Pokemon is already in the party
+		const outgoingIndex = player.party.findIndex(p => p.id === outgoingPokemon.id);
+		const incomingPokemon = player.party[partyIndex];
+		
+		if (outgoingIndex !== -1) {
+			// The outgoing Pokemon is in the party, swap it with the incoming Pokemon
+			player.party[outgoingIndex] = incomingPokemon;
+			player.party[partyIndex] = outgoingPokemon;
+			const newSlot = createActivePokemonSlot(incomingPokemon);
+			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		} else {
+			// The outgoing Pokemon is not in the party (shouldn't normally happen, but handle it)
+			player.party.push(outgoingPokemon);
+			const [swapIncoming] = player.party.splice(partyIndex, 1);
+			const newSlot = createActivePokemonSlot(swapIncoming);
+			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
+		}
 		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
 
 		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
@@ -6907,8 +6920,14 @@ export const commands: ChatCommands = {
 
 				// **NEW:** Check if this is a pivot switch
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
-					// It's a pivot, add the pivoting pokemon back to the party
-					player.party.push(battle.pendingPivot.slot.pokemon);
+					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
+					
+					// Check if the pivoting Pokemon is already in the party to avoid duplicates
+					const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
+					if (pivotIndex === -1) {
+						// Only push if not already in party (shouldn't normally happen)
+						player.party.push(pivotingPokemon);
+					}
 
 					// Handle Baton Pass
 					if (battle.pendingPivot.isBatonPass) {
