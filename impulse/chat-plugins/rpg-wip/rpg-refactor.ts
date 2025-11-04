@@ -3949,10 +3949,6 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 }
 
 function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
-	if (pokemon.hp <= 0) {
-		return { success: false, message: `${pokemon.species} has fainted!` };
-	}
-
 	const itemData = ITEMS_DATABASE[itemId];
 	if (!itemData || (itemData.category !== 'medicine' && itemId !== 'berryjuice')) {
 		return { success: false, message: `This item cannot be used to heal.` };
@@ -3967,10 +3963,9 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		return { success: true, message: `You used <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! Its status condition was healed.` };
 	}
 
-	// Rare/Exp Candy handling
 	if (itemId === 'rarecandy') {
-		if (pokemon.level >= 100) {
-			return { success: false, message: `${pokemon.species} is already at max level!` };
+		if (pokemon.level >= 100 || pokemon.hp <= 0) {
+			return { success: false, message: `${pokemon.species} is already at max level or has fainted!` };
 		}
 		levelUp(pokemon);
 		handleLearningMoves(player, pokemon);
@@ -3986,8 +3981,8 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		'expcandyxl': 30000,
 	};
 	if (expCandyAmounts[itemId]) {
-		if (pokemon.level >= 100) {
-			return { success: false, message: `${pokemon.species} is already at max level!` };
+		if (pokemon.level >= 100 || pokemon.hp <= 0) {
+			return { success: false, message: `${pokemon.species} is already at max level or has fainted!` };
 		}
 		const expGain = expCandyAmounts[itemId];
 		const previousLevel = pokemon.level;
@@ -4006,11 +4001,31 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		return { success: true, message: msg + (outputMessages.length ? '<br>' + outputMessages.join('<br>') : '') };
 	}
 
+	let healAmount = 0;
+	switch (itemId) {
+	case 'potion':
+	case 'superpotion':
+	case 'hyperpotion':
+	case 'maxpotion':
+	case 'fullrestore':
+	case 'berryjuice':
+	case 'freshwater':
+	case 'sodapop':
+	case 'lemonade':
+	case 'moomoomilk':
+	case 'tea':
+	case 'energyroot':
+	case 'energypowder':
+		if (pokemon.hp <= 0) {
+			return { success: false, message: `${pokemon.species} has fainted!` };
+		}
+		break;
+	}
+
 	if (pokemon.hp >= pokemon.maxHp) {
 		return { success: false, message: `${pokemon.species} is already at full health!` };
 	}
 
-	let healAmount = 0;
 	switch (itemId) {
 	case 'potion':
 		healAmount = 20;
@@ -6071,9 +6086,8 @@ export const commands: ChatCommands = {
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
 					for (const pokemon of player.party) {
-						// Only show Pokemon that can be healed
-						if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+						if (pokemon.hp > 0) {
+							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button" style="font-size: 12px;">Use</button></div>`;
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
