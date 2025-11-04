@@ -625,7 +625,8 @@ function levelUp(pokemon: RPGPokemon): string[] {
 	levelUpMessages.push(`Max HP: ${oldStats.maxHp} -> ${pokemon.maxHp}`);
 	levelUpMessages.push(`Attack: ${oldStats.atk} -> ${pokemon.atk}`);
 	levelUpMessages.push(`Defense: ${oldStats.def} -> ${pokemon.def}`);
-	pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+	// Don't reset experience - keep accumulated exp to allow multiple level-ups
+	// pokemon.experience is already set by the caller (gainExperience or useExpCandyItem)
 	pokemon.expToNextLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level + 1);
 	return levelUpMessages;
 }
@@ -4107,6 +4108,9 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 	const messages: string[] = [];
 	try {
 		messages.push(...levelUp(pokemon));
+		
+		// Set experience to the minimum required for the new level (Rare Candy behavior)
+		pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 
 		// Check for evolution
 		const evolveMessage = checkEvolution(player, pokemon, room, user);
