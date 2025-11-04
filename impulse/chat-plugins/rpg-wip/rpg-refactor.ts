@@ -198,6 +198,16 @@ const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 };
 
+function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
+	// If terastallized, the Pokemon becomes a single type
+	if (slot?.terastallized) {
+		return [slot.terastallized];
+	}
+	// Otherwise, return the normal types
+	const species = Dex.species.get(pokemon.species);
+	return species.types;
+}
+
 function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState): number {
 	let effectiveness = 1;
 	const chartEntry = TYPE_CHART[moveType];
@@ -305,6 +315,8 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 	}
 
 	const growthRate = species.growthRate;
+	// Assign tera type (defaults to first type)
+	const teraType = species.types[0];
 	return {
 		species: species.name,
 		nickname: species.name,
@@ -328,6 +340,7 @@ function createPokemon(speciesId: string, level = 5): RPGPokemon {
 		shiny: Math.random() < 1 / 4096,
 		caughtIn: 'pokeball',
 		form: species.forme,
+		teraType,
 		...stats,
 	};
 }
@@ -978,9 +991,10 @@ function calculateDamage(
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
-	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType);
+	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
-	const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
+	const defenderTypes = getPokemonTypes(defender, defenderSlot);
+	const effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle);
 
 	abilityContext.effectiveness = effectiveness;
 
@@ -6564,6 +6578,10 @@ export const commands: ChatCommands = {
 					aiPendingPivot: undefined,
 					forceEnd: false,
 
+					// --- Terastallization Fields ---
+					playerTerastallizeUsed: false,
+					opponentTerastallizeUsed: false,
+
 					// --- Side-Wide Fields ---
 					playerQuickGuard: false,
 					opponentQuickGuard: false,
@@ -6681,6 +6699,10 @@ export const commands: ChatCommands = {
 				pendingPivot: undefined,
 				aiPendingPivot: undefined,
 				forceEnd: false,
+
+				// --- Terastallization Fields ---
+				playerTerastallizeUsed: false,
+				opponentTerastallizeUsed: false,
 
 				// --- Side-Wide Fields ---
 				playerQuickGuard: false,
