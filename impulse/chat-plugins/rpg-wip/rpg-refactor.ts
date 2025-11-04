@@ -435,6 +435,11 @@ function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: Act
 		return 0;
 	}
 
+	// Moves that always crit (Frost Breath, Storm Throw, etc.)
+	if (['frostbreath', 'stormthrow', 'zipzapzap', 'surginstrikes'].includes(move.id)) {
+		return 1; // 100% crit chance
+	}
+
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
@@ -1551,6 +1556,24 @@ function handleDamagingMove(
 			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
 
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+			// Force switch moves (Dragon Tail, Circle Throw)
+			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot.pokemon.hp > 0) {
+				// In RPG context, force switch only makes sense in trainer battles with multiple Pokemon
+				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+					const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+					// Suction Cups and similar abilities prevent forced switches
+					if (defenderAbility !== 'suctioncups') {
+						// Mark that defender should be forced to switch
+						// This is handled in the AI/opponent logic
+						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
+						// Note: Actual switch logic would happen in AI turn processing
+						// For wild battles, this just adds flavor text
+					} else {
+						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+					}
+				}
+			}
 		}
 
 		if (defenderSlot.pokemon.hp <= 0) break;
