@@ -4744,7 +4744,7 @@ function executeAction(
 		if (action.terastallize && isPlayerPokemon) {
 			// Double-check at execution time to prevent multiple terastallizations in doubles
 			if (battle.playerTerastallizeUsed) {
-				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} couldn't Terastallize because another Pokémon already did!</span>`);
+				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} couldn't Terastallize because another Pokemon already did!</span>`);
 			} else if (attackerSlot.terastallized) {
 				messageLog.push(`<span style="color: #FF1493;">${attackerSlot.pokemon.species} has already Terastallized!</span>`);
 			} else {
