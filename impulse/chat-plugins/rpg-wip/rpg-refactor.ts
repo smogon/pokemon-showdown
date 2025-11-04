@@ -156,6 +156,7 @@ const ITEM_PRICES: Record<string, number> = {
 	'scopelens': 4000,
 	'razorclaw': 4000,
 	'lightclay': 4000,
+	'everstone': 2000,
 };
 
 const SHOP_INVENTORY: string[] = [
@@ -178,7 +179,7 @@ const SHOP_INVENTORY: string[] = [
 	'heatrock', 'damprock', 'smoothrock', 'icyrock',
 	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
 	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
-	'lightclay',
+	'lightclay', 'everstone',
 
 	'eggmovetutor',
 	'rarecandy',
@@ -758,6 +759,10 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
 	if (!evoData || pokemon.level < evoData.evoLevel) return null;
+	
+	// Check if Pokemon is holding an Everstone (prevents evolution)
+	if (pokemon.item === 'everstone') return null;
+	
 	const evoSpecies = Dex.species.get(evoData.evoTo);
 	if (!evoSpecies.exists) return null;
 	const oldSpeciesName = pokemon.species;
