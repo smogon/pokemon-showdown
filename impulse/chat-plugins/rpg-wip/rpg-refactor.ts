@@ -312,40 +312,6 @@ function generateUniqueId(): string {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-function fixCorruptedPokemonData(pokemon: RPGPokemon): void {
-	// Fix Pokemon that should have evolved but have wrong species name
-	// This happens when the old evolution bug left Pokemon in a bad state
-	const speciesId = toID(pokemon.species);
-	const evoData = MANUAL_EVOLUTIONS[speciesId];
-	
-	// Check if this Pokemon should have evolved already
-	if (evoData && pokemon.level >= evoData.evoLevel) {
-		const evoSpecies = Dex.species.get(evoData.evoTo);
-		if (evoSpecies.exists && evoSpecies.name !== pokemon.species) {
-			// Pokemon should have evolved - fix it
-			const oldSpecies = pokemon.species;
-			pokemon.species = evoSpecies.name;
-			
-			// Recalculate stats for the correct species
-			const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-			const hpPercentage = pokemon.hp / pokemon.maxHp;
-			
-			pokemon.maxHp = newStats.maxHp;
-			pokemon.atk = newStats.atk;
-			pokemon.def = newStats.def;
-			pokemon.spa = newStats.spa;
-			pokemon.spd = newStats.spd;
-			pokemon.spe = newStats.spe;
-			pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
-			
-			console.log(`Fixed corrupted Pokemon: ${oldSpecies} -> ${pokemon.species} at level ${pokemon.level}`);
-			
-			// Check if it should have evolved even further
-			fixCorruptedPokemonData(pokemon); // Recursive call for multi-stage evolutions
-		}
-	}
-}
-
 function getPlayerData(userid: string): PlayerData {
 	if (!playerData.has(userid)) {
 		const newPlayer: PlayerData = { id: userid, name: userid, level: 1, experience: 0, badges: 0, party: [], location: 'Starter Town', money: 5000000, inventory: new Map(), pc: new Map() };
@@ -353,17 +319,7 @@ function getPlayerData(userid: string): PlayerData {
 		addItemToInventory(newPlayer, 'potion', 3);
 		playerData.set(userid, newPlayer);
 	}
-	const player = playerData.get(userid)!;
-	
-	// Fix any corrupted Pokemon data (from old evolution bug)
-	for (const pokemon of player.party) {
-		fixCorruptedPokemonData(pokemon);
-	}
-	for (const [, pokemon] of player.pc) {
-		fixCorruptedPokemonData(pokemon);
-	}
-	
-	return player;
+	return playerData.get(userid)!;
 }
 
 function addItemToInventory(player: PlayerData, itemId: string, quantity: number): boolean {
