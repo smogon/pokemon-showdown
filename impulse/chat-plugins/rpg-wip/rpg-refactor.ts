@@ -273,10 +273,10 @@ function calculateTotalExpForLevel(growthRate: string, level: number): number {
 	if (level < 0) return 0;
 	if (level === 0) return 0;
 	if (!Number.isInteger(level)) level = Math.floor(level);
-	
+
 	const n = level;
 	let result: number;
-	
+
 	switch (growthRate) {
 	case 'Slow':
 		result = Math.floor((5 * n ** 3) / 4);
@@ -304,7 +304,7 @@ function calculateTotalExpForLevel(growthRate: string, level: number): number {
 	default:
 		result = Math.floor(n ** 3);
 	}
-	
+
 	// Ensure non-negative result (fixes Medium Slow at level 1 returning -54)
 	return Math.max(0, result);
 }
@@ -608,20 +608,20 @@ function levelUp(pokemon: RPGPokemon): string[] {
 	const oldStats = { ...pokemon };
 	const species = Dex.species.get(pokemon.species);
 	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	
+
 	// Calculate HP percentage before stat change
 	const hpPercentage = pokemon.hp / pokemon.maxHp;
-	
+
 	pokemon.maxHp = newStats.maxHp;
 	pokemon.atk = newStats.atk;
 	pokemon.def = newStats.def;
 	pokemon.spa = newStats.spa;
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
-	
+
 	// Maintain HP percentage (don't heal on level up)
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
-	
+
 	levelUpMessages.push(`Max HP: ${oldStats.maxHp} -> ${pokemon.maxHp}`);
 	levelUpMessages.push(`Attack: ${oldStats.atk} -> ${pokemon.atk}`);
 	levelUpMessages.push(`Defense: ${oldStats.def} -> ${pokemon.def}`);
@@ -759,29 +759,35 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
 	if (!evoData || pokemon.level < evoData.evoLevel) return null;
-	
+
 	// Check if Pokemon is holding an Everstone (prevents evolution)
 	if (pokemon.item === 'everstone') return null;
-	
+
 	const evoSpecies = Dex.species.get(evoData.evoTo);
 	if (!evoSpecies.exists) return null;
 	const oldSpeciesName = pokemon.species;
 	pokemon.species = evoSpecies.name;
+
+	// Update nickname if it matches the old species name (not custom-renamed)
+	if (pokemon.nickname === oldSpeciesName) {
+		pokemon.nickname = evoSpecies.name;
+	}
+
 	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	
+
 	// Calculate HP percentage before evolution
 	const hpPercentage = pokemon.hp / pokemon.maxHp;
-	
+
 	pokemon.maxHp = newStats.maxHp;
 	pokemon.atk = newStats.atk;
 	pokemon.def = newStats.def;
 	pokemon.spa = newStats.spa;
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
-	
+
 	// Maintain HP percentage (don't heal on evolution)
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
-	
+
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
@@ -4073,7 +4079,7 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 
 function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom, user: User): { success: boolean, message: string } {
 	// Validate pokemon exists and has valid data
-	if (!pokemon || !pokemon.species) {
+	if (!pokemon?.species) {
 		return { success: false, message: `Invalid Pokémon data!` };
 	}
 
@@ -4135,18 +4141,18 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 
 function getExpCandyAmount(itemId: string): number {
 	switch (itemId) {
-		case 'expcandyxs': return 100;
-		case 'expcandys': return 800;
-		case 'expcandym': return 3000;
-		case 'expcandyl': return 10000;
-		case 'expcandyxl': return 30000;
-		default: return 0;
+	case 'expcandyxs': return 100;
+	case 'expcandys': return 800;
+	case 'expcandym': return 3000;
+	case 'expcandyl': return 10000;
+	case 'expcandyxl': return 30000;
+	default: return 0;
 	}
 }
 
 function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: ChatRoom, user: User): { success: boolean, message: string } {
 	// Validate pokemon exists and has valid data
-	if (!pokemon || !pokemon.species) {
+	if (!pokemon?.species) {
 		return { success: false, message: `Invalid Pokémon data!` };
 	}
 
