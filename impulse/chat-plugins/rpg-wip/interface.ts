@@ -231,3 +231,7 @@ export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string)
 export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityOnDamageHandler = (ctx: AbilityContext, damage: number) => void;
 export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
+export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
+export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
+export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
+export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
