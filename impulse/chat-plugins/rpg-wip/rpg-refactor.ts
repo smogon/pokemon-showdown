@@ -10,7 +10,7 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { ITEMS_DATABASE } from './items';
+import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory } from './items';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
 const playerData = new Map<string, PlayerData>();
@@ -271,28 +271,6 @@ function getPlayerData(userid: string): PlayerData {
 		playerData.set(userid, newPlayer);
 	}
 	return playerData.get(userid)!;
-}
-
-function addItemToInventory(player: PlayerData, itemId: string, quantity: number): boolean {
-	const itemData = ITEMS_DATABASE[itemId];
-	if (!itemData) return false;
-	if (player.inventory.has(itemId)) {
-		player.inventory.get(itemId)!.quantity += quantity;
-	} else {
-		player.inventory.set(itemId, { ...itemData, quantity });
-	}
-	return true;
-}
-
-function removeItemFromInventory(player: PlayerData, itemId: string, quantity: number): boolean {
-	if (!player.inventory.has(itemId)) return false;
-	const item = player.inventory.get(itemId)!;
-	if (item.quantity < quantity) return false;
-	item.quantity -= quantity;
-	if (item.quantity === 0) {
-		player.inventory.delete(itemId);
-	}
-	return true;
 }
 
 function calculateStats(species: any, level: number, nature: string, ivs: Record<keyof Stats, number>, evs: Record<keyof Stats, number>): Stats {

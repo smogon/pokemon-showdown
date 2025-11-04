@@ -3,7 +3,7 @@
 * RPG Items
 */
 import { Dex } from '../../../sim/dex';
-import type { InventoryItem } from './interface';
+import type { InventoryItem, PlayerData } from './interface';
 
 export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'A spray-type medicine. It restores 20 HP to a Pokemon.' },
@@ -65,8 +65,32 @@ export const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem,
 	},
 });
 
+export function addItemToInventory(player: PlayerData, itemId: string, quantity: number): boolean {
+	const itemData = ITEMS_DATABASE[itemId];
+	if (!itemData) return false;
+	if (player.inventory.has(itemId)) {
+		player.inventory.get(itemId)!.quantity += quantity;
+	} else {
+		player.inventory.set(itemId, { ...itemData, quantity });
+	}
+	return true;
+}
+
+export function removeItemFromInventory(player: PlayerData, itemId: string, quantity: number): boolean {
+	if (!player.inventory.has(itemId)) return false;
+	const item = player.inventory.get(itemId)!;
+	if (item.quantity < quantity) return false;
+	item.quantity -= quantity;
+	if (item.quantity === 0) {
+		player.inventory.delete(itemId);
+	}
+	return true;
+}
+
 export const RPGItems = {
 	getItemData,
+	addItemToInventory,
+	removeItemFromInventory,
 	CUSTOM_ITEMS_DATABASE,
 	ITEMS_DATABASE,
 };
