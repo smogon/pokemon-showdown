@@ -156,6 +156,7 @@ const ITEM_PRICES: Record<string, number> = {
 	'scopelens': 4000,
 	'razorclaw': 4000,
 	'lightclay': 4000,
+	'everstone': 2000,
 };
 
 const SHOP_INVENTORY: string[] = [
@@ -178,7 +179,7 @@ const SHOP_INVENTORY: string[] = [
 	'heatrock', 'damprock', 'smoothrock', 'icyrock',
 	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
 	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
-	'lightclay',
+	'lightclay', 'everstone',
 
 	'eggmovetutor',
 	'rarecandy',
@@ -758,6 +759,10 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
 	if (!evoData || pokemon.level < evoData.evoLevel) return null;
+	
+	// Check if Pokemon is holding an Everstone (prevents evolution)
+	if (pokemon.item === 'everstone') return null;
+	
 	const evoSpecies = Dex.species.get(evoData.evoTo);
 	if (!evoSpecies.exists) return null;
 	const oldSpeciesName = pokemon.species;
@@ -780,8 +785,9 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom,
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
-	const pokemonIndex = player.party.findIndex(p => p.id === pokemon.id);
-	if (pokemonIndex !== -1) player.party[pokemonIndex] = pokemon;
+	// NOTE: We don't reassign player.party[pokemonIndex] = pokemon because pokemon is already
+	// a reference to the object in the party array. Reassigning would break references held
+	// by battle slots and other code. The pokemon object has been modified in place above.
 	room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update();
 	return evoMessage;
 }
@@ -6307,7 +6313,10 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Show the result with updated Pokemon info ---
-				const tempSlot = createActivePokemonSlot(targetPokemon);
+				// Fetch the updated Pokemon from party (in case it evolved)
+				const updatedPokemon = player.party.find(p => p.id === pokemonId);
+				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+				const tempSlot = createActivePokemonSlot(updatedPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (itemId.startsWith('expcandy')) {
@@ -6339,7 +6348,10 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Show the result with updated Pokemon info ---
-				const tempSlot = createActivePokemonSlot(targetPokemon);
+				// Fetch the updated Pokemon from party (in case it evolved)
+				const updatedPokemon = player.party.find(p => p.id === pokemonId);
+				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+				const tempSlot = createActivePokemonSlot(updatedPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
