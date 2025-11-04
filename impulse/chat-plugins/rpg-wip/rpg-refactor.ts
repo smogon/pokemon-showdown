@@ -6988,7 +6988,7 @@ export const commands: ChatCommands = {
 				// If only one target, just catch it.
 				const activeOpponents = getActiveSlots(battle.opponentSlots);
 				if (activeOpponents.length === 1) {
-					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]);
+					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
 					return this.parse(`/rpg battleaction catch ${ballId} ${slotIndex}`);
 				}
 
