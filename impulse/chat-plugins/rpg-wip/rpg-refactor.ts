@@ -5600,9 +5600,12 @@ function generateDoubleBattleHTML(
 		// --- Switch/Catch/Run Buttons ---
 		const buttonStyle = `width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;`;
 
-		const catchButton = (battle.battleType === 'wild_double') ?
+		// In double battles, catching is only allowed when one opponent remains (matches Gen 8+ Pokemon games)
+		const activeOpponents = getActiveSlots(battle.opponentSlots);
+		const canCatch = battle.battleType === 'wild_double' && activeOpponents.length === 1;
+		const catchButton = canCatch ?
 			`<button name="send" value="/rpg battleaction catchmenu" class="button" style="${buttonStyle}">⚽ Catch</button>` :
-			`<button class="button" disabled style="${buttonStyle}">⚽ Catch</button>`;
+			`<button class="button" disabled style="${buttonStyle}" title="${battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles'}">⚽ Catch</button>`;
 
 		const runButton = (battle.battleType === 'wild_double') ?
 			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
@@ -7231,6 +7234,16 @@ export const commands: ChatCommands = {
 			catchmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// In double battles, can only catch when one opponent remains
+				if (battle.battleType === 'wild_double') {
+					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					if (activeOpponents.length > 1) {
+						const errorHTML = `<div class="infobox"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					}
+				}
+
 				const player = getPlayerData(battle.playerId);
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchMenuHTML(player, battle)}`);
 			},
@@ -7271,6 +7284,15 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't catch a Trainer's Pokémon!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+				}
+
+				// In double battles, can only catch when one opponent remains (matches Pokemon games Gen 8+)
+				if (battle.battleType === 'wild_double') {
+					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					if (activeOpponents.length > 1) {
+						this.errorReply("You can't throw a Poké Ball when there are multiple opponents!");
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't throw a Poké Ball when there are multiple wild Pokémon! Defeat one first."])}`);
+					}
 				}
 
 				// --- NEW: Get target slot ---
