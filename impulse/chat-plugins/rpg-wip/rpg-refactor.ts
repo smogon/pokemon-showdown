@@ -7297,7 +7297,7 @@ export const commands: ChatCommands = {
 						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
-					// --- FAILED CATCH PATH ---
+					// --- FAILED CATCH PATH (FIXED) ---
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
 
 					// The catch attempt failed. Display the failure message and return to normal battle UI.
