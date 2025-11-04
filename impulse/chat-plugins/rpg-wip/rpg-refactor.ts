@@ -30,6 +30,12 @@ const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'energypowder': { id: 'energypowder', name: 'EnergyPowder', category: 'medicine', description: 'A bitter medicinal powder. It restores 50 HP to a Pokémon.' },
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
+	'rarecandy': { id: 'rarecandy', name: 'Rare Candy', category: 'medicine', description: 'A sweet candy that instantly raises a Pokémon\'s level by one.' },
+	'expcandyxs': { id: 'expcandyxs', name: 'Exp. Candy XS', category: 'medicine', description: 'A candy that gives 100 Exp. to a Pokémon.' },
+	'expcandys': { id: 'expcandys', name: 'Exp. Candy S', category: 'medicine', description: 'A candy that gives 800 Exp. to a Pokémon.' },
+	'expcandym': { id: 'expcandym', name: 'Exp. Candy M', category: 'medicine', description: 'A candy that gives 3000 Exp. to a Pokémon.' },
+	'expcandyl': { id: 'expcandyl', name: 'Exp. Candy L', category: 'medicine', description: 'A candy that gives 10000 Exp. to a Pokémon.' },
+	'expcandyxl': { id: 'expcandyxl', name: 'Exp. Candy XL', category: 'medicine', description: 'A candy that gives 30000 Exp. to a Pokémon.' },
 };
 
 function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
@@ -149,6 +155,13 @@ const ITEM_PRICES: Record<string, number> = {
 	'scopelens': 4000,
 	'razorclaw': 4000,
 	'lightclay': 4000,
+	'rarecandy': 1000,
+	'expcandyxs': 1000,
+	'expcandys': 1000,
+	'expcandym': 1000,
+	'expcandyl': 1000,
+	'expcandyxl': 1000
+
 };
 
 const SHOP_INVENTORY: string[] = [
