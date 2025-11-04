@@ -7281,8 +7281,6 @@ export const commands: ChatCommands = {
 				}
 			},
 
-
-
 			run(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
