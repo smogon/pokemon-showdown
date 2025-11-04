@@ -75,6 +75,7 @@ export interface ActivePokemonSlot {
 	activeTurns: number;
 	lockedMove?: string;
 	lockedMoveCounter?: number; // For rampage moves (Outrage, Thrash, Petal Dance) - counts down from 2-3
+	mustRecharge?: boolean; // For recharge moves (Hyper Beam, Giga Impact, etc.)
 	isRedirecting?: boolean;
 	isHelped?: boolean;
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string };

@@ -3187,6 +3187,13 @@ function checkBattleEndCondition(
 function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	const attacker = attackerSlot.pokemon;
 
+	// Check if Pokemon must recharge from previous turn's move
+	if (attackerSlot.mustRecharge) {
+		messageLog.push(`${attacker.species} must recharge!`);
+		attackerSlot.mustRecharge = false;
+		return false;
+	}
+
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
 		attackerSlot.willFlinch = false;
@@ -3822,6 +3829,7 @@ function executeMove(
 	const isSpread = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target);
 	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
+	let moveHitAnyTarget = false;
 
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break;
@@ -3891,6 +3899,8 @@ function executeMove(
 			continue;
 		}
 
+		moveHitAnyTarget = true;
+
 		if (move.id === 'struggle') {
 			handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, 1.0);
 		} else if (move.category === 'Status') {
@@ -3907,6 +3917,12 @@ function executeMove(
 			attackerSlot.lockedMoveCounter = Math.floor(Math.random() * 2) + 2; // Random 2 or 3
 			attackerSlot.lockedMove = move.id;
 		}
+	}
+
+	// Handle recharge moves (Hyper Beam, Giga Impact, etc.)
+	// Only set recharge if the move actually hit at least one target
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'mustrecharge' && moveHitAnyTarget) {
+		attackerSlot.mustRecharge = true;
 	}
 
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
@@ -4372,6 +4388,7 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		activeTurns: 1,
 		lockedMove: undefined,
 		lockedMoveCounter: undefined,
+		mustRecharge: undefined,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
 		substitute: undefined,
@@ -5016,6 +5033,7 @@ function generateSharedBattlePokemonInfo(
 		slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '',
 		slot.lockedMove && slot.lockedMoveCounter ? `<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage${isDoubleBattle ? '' : `: ${slot.lockedMove} (${slot.lockedMoveCounter})`}</span>` : '',
 		slot.lockedMove && !slot.lockedMoveCounter ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked${isDoubleBattle ? '' : `: ${slot.lockedMove}`}</span>` : '',
+		slot.mustRecharge ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Must Recharge</span>` : '',
 		slot.isProtected ? `<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>` : '',
 		slot.isRedirecting ? `<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>` : '',
 		slot.isHelped ? `<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>` : '',
