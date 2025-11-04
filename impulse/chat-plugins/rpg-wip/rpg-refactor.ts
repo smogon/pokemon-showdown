@@ -4753,6 +4753,11 @@ function executeAction(
 				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
 			}
 		}
+		// TODO: Implement AI terastallization logic
+		// When adding AI terastallization support:
+		// 1. Update generateAiAction() to conditionally set terastallize flag based on battle strategy
+		// 2. Add similar execution-time check for opponentTerastallizeUsed flag
+		// 3. Ensure AI respects the one-terastallization-per-battle rule in doubles battles
 
 		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
