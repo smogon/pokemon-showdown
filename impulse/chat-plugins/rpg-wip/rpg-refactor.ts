@@ -746,10 +746,6 @@ function checkEvolution(player: PlayerData, pokemon: RPGPokemon, room?: ChatRoom
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
 	const pokemonIndex = player.party.findIndex(p => p.id === pokemon.id);
 	if (pokemonIndex !== -1) player.party[pokemonIndex] = pokemon;
-	// Only try to use room.add if room is defined
-	if (room && typeof room.add === 'function' && user) {
-		room.add(`|c|~RPG Bot|What?! ${user.name}'s ${oldSpeciesName} is evolving!`).update();
-	}
 	return evoMessage;
 	}
 
