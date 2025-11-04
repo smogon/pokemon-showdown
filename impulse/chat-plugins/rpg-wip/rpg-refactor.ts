@@ -2797,7 +2797,7 @@ function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, me
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 
-	// Heal Block prevents all healing
+	// Heal Block prevents all healing effects (returns early, skipping Aqua Ring and Ingrain)
 	if ((slot.healBlockTurns || 0) > 0) return;
 
 	// Aqua Ring healing
@@ -2819,7 +2819,7 @@ function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleState, m
 	if (slot.pokemon.hp <= 0) return;
 	const pokemon = slot.pokemon;
 
-	// Leech Seed drains HP and heals the opponent
+	// Leech Seed drains HP from the affected Pokemon and transfers it to the opponent who used Leech Seed
 	if (slot.isSeeded) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const drainAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -3996,7 +3996,7 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	// POKEMON BATTLE FLOW - END OF TURN ORDER (Generation 5+):
 	// 1. Future Sight / Doom Desire resolution
 	// 2. Wish (not yet implemented)
-	// 3. Per-Pokemon effects (in speed order, but we process all):
+	// 3. Per-Pokemon effects (officially in speed order, but processing all simultaneously for simplicity):
 	//    a. Item effects (Leftovers, Lum Berry, Status Orbs)
 	//    b. Healing effects (Aqua Ring, Ingrain, Grassy Terrain)
 	//    c. Status damage (Burn, Poison)
