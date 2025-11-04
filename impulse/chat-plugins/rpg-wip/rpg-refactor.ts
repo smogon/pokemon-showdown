@@ -4034,6 +4034,11 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 }
 
 function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom, user: User): { success: boolean, message: string } {
+	// Validate pokemon exists and has valid data
+	if (!pokemon || !pokemon.species) {
+		return { success: false, message: `Invalid Pokémon data!` };
+	}
+
 	// Cannot use on fainted Pokémon
 	if (pokemon.hp <= 0) {
 		return { success: false, message: `${pokemon.species} has fainted!` };
@@ -4044,23 +4049,44 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 		return { success: false, message: `${pokemon.species} is already at level 100!` };
 	}
 
-	// Remove the Rare Candy from inventory
-	removeItemFromInventory(player, 'rarecandy', 1);
-
-	// Level up the Pokémon
-	const messages: string[] = [];
-	messages.push(...levelUp(pokemon));
-
-	// Check for evolution
-	const evolveMessage = checkEvolution(player, pokemon, room, user);
-	if (evolveMessage) {
-		messages.push(evolveMessage);
-	} else {
-		// Only check for move learning if no evolution occurred
-		// (checkEvolution already handles move learning after evolution)
-		const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
-		messages.push(...newMoveMessages);
+	// Validate level is within acceptable range
+	if (pokemon.level < 1 || pokemon.level > 99) {
+		return { success: false, message: `${pokemon.species} has an invalid level!` };
 	}
+
+	// Ensure HP doesn't exceed max HP (data integrity check)
+	if (pokemon.hp > pokemon.maxHp) {
+		pokemon.hp = pokemon.maxHp;
+	}
+
+	// Level up the Pokémon (wrapped in try-catch for safety)
+	const messages: string[] = [];
+	try {
+		messages.push(...levelUp(pokemon));
+
+		// Check for evolution
+		const evolveMessage = checkEvolution(player, pokemon, room, user);
+		if (evolveMessage) {
+			messages.push(evolveMessage);
+		} else {
+			// Only check for move learning if no evolution occurred
+			// (checkEvolution already handles move learning after evolution)
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messages.push(...newMoveMessages);
+		}
+
+		// Increase friendship (Rare Candy gives +5/+3 friendship in official games)
+		// Cap at 255 (max friendship)
+		if (pokemon.friendship < 255) {
+			pokemon.friendship = Math.min(255, pokemon.friendship + 3);
+		}
+	} catch (error) {
+		// If anything fails, don't consume the item
+		return { success: false, message: `An error occurred while using Rare Candy. Please try again.` };
+	}
+
+	// Only remove item AFTER successful level up (prevents item loss on error)
+	removeItemFromInventory(player, 'rarecandy', 1);
 
 	const resultMessage = `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>!<br>${messages.join('<br>')}`;
 	return { success: true, message: resultMessage };
