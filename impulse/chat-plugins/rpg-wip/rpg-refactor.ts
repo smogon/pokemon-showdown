@@ -4739,8 +4739,9 @@ function executeAction(
 	}
 
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
-		// Apply terastallization if requested
-		if (action.terastallize && attackerSlotIndex <= 1) {
+		// Apply terastallization if requested (only for player-controlled Pokemon)
+		const isPlayerPokemon = attackerSlotIndex < battle.playerSlots.length;
+		if (action.terastallize && isPlayerPokemon) {
 			attackerSlot.terastallized = attackerSlot.pokemon.teraType;
 			battle.playerTerastallizeUsed = true;
 			messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
@@ -5054,6 +5055,8 @@ function generatePokemonInfoHTML(
 	return html;
 }
 
+const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;';
+
 function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
@@ -5151,8 +5154,7 @@ function generateSingleBattleHTML(
 
 			// Add Tera option if can terastallize
 			if (canTerastallize && !isDisabled) {
-				const teraButtonStyle = `width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;`;
-				return `<div>${normalButton}<button name="send" value="/rpg battleaction move 0 ${move.id} 2 terastallize" class="button" style="${teraButtonStyle}">⭐ Tera + ${moveData.name}</button></div>`;
+				return `<div>${normalButton}<button name="send" value="/rpg battleaction move 0 ${move.id} 2 terastallize" class="button" style="${TERA_BUTTON_STYLE}">⭐ Tera + ${moveData.name}</button></div>`;
 			}
 			return normalButton;
 		});
@@ -5395,8 +5397,7 @@ function generateDoubleBattleHTML(
 
 					// Add Tera option if can terastallize
 					if (canTerastallizeThisSlot && !isDisabled) {
-						const teraButtonStyle = `width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;`;
-						return `<div>${normalButton}<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id} terastallize" class="button" style="${teraButtonStyle}">⭐ Tera + ${moveData.name}</button></div>`;
+						return `<div>${normalButton}<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id} terastallize" class="button" style="${TERA_BUTTON_STYLE}">⭐ Tera + ${moveData.name}</button></div>`;
 					}
 					return normalButton;
 				});
