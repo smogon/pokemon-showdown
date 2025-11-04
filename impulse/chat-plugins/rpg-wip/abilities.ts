@@ -1474,6 +1474,7 @@ export const RPGAbilities = {
 	getMultiHitCount,
 	hasParentalBond,
 	applyParentalBondModifier,
+	preventsFlinch,
 
 	getAllImplementedAbilities,
 	getAbilityInfo,
@@ -1482,6 +1483,13 @@ export const RPGAbilities = {
 	takesIndirectDamage,
 	preventsRecoil,
 	canUseHeldItem,
+
+	applyOnKOAbilities,
+	applyEndOfTurnAbilities,
+	applyStatDropResponse,
+	applyStatChangeModifier,
+	handlePoisonHeal,
+	handleHydration,
 
 	IMMUNITY_ABILITIES,
 	POWER_MODIFIER_ABILITIES,
@@ -1498,6 +1506,10 @@ export const RPGAbilities = {
 	CRITICAL_HIT_ABILITIES,
 	TERRAIN_ABILITIES,
 	HEALING_ABILITIES,
+	ON_KO_ABILITIES,
+	END_OF_TURN_ABILITIES,
+	STAT_DROP_RESPONSE_ABILITIES,
+	STATUS_INTERACTION_ABILITIES,
 };
 
 export default RPGAbilities;
