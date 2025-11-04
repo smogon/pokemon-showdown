@@ -4978,6 +4978,7 @@ function generatePokemonInfoHTML(
 	const chargeTag = slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '';
 	const stockpileTag = slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '';
 	const lockedMoveTag = slot.lockedMove ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked</span>` : '';
+	const teraTag = slot.terastallized ? `<span style="background-color: #FF1493; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">⭐ Tera: ${slot.terastallized}</span>` : '';
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
@@ -4994,7 +4995,9 @@ function generatePokemonInfoHTML(
 		}
 	}
 
-	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px; background: #f0f0f0;"><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	// Display actual types (accounting for terastallization)
+	const displayTypes = slot.terastallized ? [slot.terastallized] : species.types;
+	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px; background: #f0f0f0;"><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${teraTag}${statStageTags}<br><small>Type: ${displayTypes.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
 
 	// --- Conditional info for player Pokemon only ---
 	if (isPlayerSide) {
@@ -5442,6 +5445,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<p><strong>Level:</strong> ' + pokemon.level + '</p>' +
 		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
 		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
+		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
 		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
 		'</div>' +
 		'<div style="flex-basis: 48%;">' +

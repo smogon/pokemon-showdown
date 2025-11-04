@@ -55,7 +55,7 @@ export interface RPGPokemon {
 	teraType: string;
 }
 
-export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id' | 'expToNextLevel' | 'hp' | 'ability' | 'item' | 'nature' | 'growthRate' | 'ivs' | 'evs' | 'status'>;
+export type Stats = Omit<RPGPokemon, 'species' | 'level' | 'experience' | 'moves' | 'id' | 'expToNextLevel' | 'hp' | 'ability' | 'item' | 'nature' | 'growthRate' | 'ivs' | 'evs' | 'status' | 'nickname' | 'gender' | 'shiny' | 'caughtIn' | 'form' | 'teraType' | 'weightkg' | 'heightm' | 'friendship'>;
 
 export interface ActivePokemonSlot {
 	pokemon: RPGPokemon;
