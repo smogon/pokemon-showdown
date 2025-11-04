@@ -6081,7 +6081,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
 
-		useitem(target, room, user) {
+				useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
 			}
@@ -6110,15 +6110,17 @@ export const commands: ChatCommands = {
 				const result = useHealingItem(player, targetPokemon, itemId);
 
 				if (!result.success) {
-					// .errorReply escapes HTML, so we use sendReply with a styled error message
 					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
-				// --- FIX ---
+				// Show move learn UI if a move is pending to learn
+				if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.moveIds.length > 0) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+				}
+
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				// --- END FIX ---
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
