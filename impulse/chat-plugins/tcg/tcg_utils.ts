@@ -251,21 +251,30 @@ export async function addCardsToCollection(user: User, pack: TcgCard[]): Promise
 
 	if (totalQty > 0 || totalUnique > 0 || credits > 0) {
 		const profile = await userProfilesCollection.findOne({ userId: user.id });
-		const setsCompleted = await calculateSetsCompleted(user.id);
+		// Only recalculate sets completed if new unique cards were added
+		// Skip recalculation for large batches to avoid performance issues
+		const shouldRecalculateSets = totalUnique > 0 && pack.length < 50;
+		const setsCompleted = shouldRecalculateSets ? await calculateSetsCompleted(user.id) : undefined;
+
 		if (profile) {
-			await userProfilesCollection.updateOne(
-				{ userId: user.id },
-				{
-					$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
-					$set: { userName: user.name, lastUpdatedAt: now, totalSetsCompleted: setsCompleted },
-				}
-			);
+			const updateDoc: any = {
+				$inc: { totalQuantity: totalQty, collectionPoints: totalPts, totalUniqueCards: totalUnique, credits },
+				$set: { userName: user.name, lastUpdatedAt: now },
+			};
+			if (setsCompleted !== undefined) {
+				updateDoc.$set.totalSetsCompleted = setsCompleted;
+			}
+			await userProfilesCollection.updateOne({ userId: user.id }, updateDoc);
 		} else {
-			await userProfilesCollection.insertOne({
+			const newProfile: any = {
 				userId: user.id, userName: user.name, credits,
 				totalUniqueCards: totalUnique, totalQuantity: totalQty,
-				collectionPoints: totalPts, totalSetsCompleted: setsCompleted, lastUpdatedAt: now,
-			});
+				collectionPoints: totalPts, lastUpdatedAt: now,
+			};
+			if (setsCompleted !== undefined) {
+				newProfile.totalSetsCompleted = setsCompleted;
+			}
+			await userProfilesCollection.insertOne(newProfile);
 		}
 	}
 
