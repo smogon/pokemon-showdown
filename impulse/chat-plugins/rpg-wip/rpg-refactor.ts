@@ -3967,6 +3967,45 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 		return { success: true, message: `You used <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! Its status condition was healed.` };
 	}
 
+	// Rare/Exp Candy handling
+	if (itemId === 'rarecandy') {
+		if (pokemon.level >= 100) {
+			return { success: false, message: `${pokemon.species} is already at max level!` };
+		}
+		levelUp(pokemon);
+		handleLearningMoves(player, pokemon);
+		removeItemFromInventory(player, itemId, 1);
+		return { success: true, message: `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>! It grew to Level ${pokemon.level}.` };
+	}
+
+	const expCandyAmounts: Record<string, number> = {
+		'expcandyxs': 100,
+		'expcandys': 800,
+		'expcandym': 3000,
+		'expcandyl': 10000,
+		'expcandyxl': 30000,
+	};
+	if (expCandyAmounts[itemId]) {
+		if (pokemon.level >= 100) {
+			return { success: false, message: `${pokemon.species} is already at max level!` };
+		}
+		const expGain = expCandyAmounts[itemId];
+		const previousLevel = pokemon.level;
+		pokemon.experience += expGain;
+
+		let leveledUp = false, outputMessages = [];
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+			outputMessages = outputMessages.concat(levelUp(pokemon));
+			leveledUp = true;
+			handleLearningMoves(player, pokemon);
+		}
+
+		removeItemFromInventory(player, itemId, 1);
+		let msg = `You used <strong>${ITEMS_DATABASE[itemId]?.name || itemId}</strong> on <strong>${pokemon.species}</strong>! It gained ${expGain} Exp.`;
+		if (leveledUp) msg += `<br>${pokemon.species} grew to Level ${pokemon.level}!`;
+		return { success: true, message: msg + (outputMessages.length ? '<br>' + outputMessages.join('<br>') : '') };
+	}
+
 	if (pokemon.hp >= pokemon.maxHp) {
 		return { success: false, message: `${pokemon.species} is already at full health!` };
 	}
