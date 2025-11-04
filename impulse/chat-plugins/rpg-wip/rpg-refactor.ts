@@ -4739,6 +4739,13 @@ function executeAction(
 	}
 
 	if (action.actionType === 'move' && action.moveId && action.targetSlot !== undefined) {
+		// Apply terastallization if requested
+		if (action.terastallize && attackerSlotIndex <= 1) {
+			attackerSlot.terastallized = attackerSlot.pokemon.teraType;
+			battle.playerTerastallizeUsed = true;
+			messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+		}
+
 		const move = getMove(action.moveId);
 		let moveObject = attackerSlot.pokemon.moves.find(m => m.id === move.id);
 
@@ -5050,7 +5057,7 @@ function generatePokemonInfoHTML(
 function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
@@ -5123,6 +5130,8 @@ function generateSingleBattleHTML(
 		moveButtonsHTML += `</tr>`;
 		moveButtonsHTML += `</table>`;
 	} else {
+		const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+
 		const moveButtons = playerPokemon.moves.map(move => {
 			const moveData = getMove(move.id);
 
@@ -5137,8 +5146,15 @@ function generateSingleBattleHTML(
 				`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
 				`</div> `;
 
-			return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
+			const normalButton = `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">` +
 				` ${buttonContent}</button>`;
+
+			// Add Tera option if can terastallize
+			if (canTerastallize && !isDisabled) {
+				const teraButtonStyle = `width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;`;
+				return `<div>${normalButton}<button name="send" value="/rpg battleaction move 0 ${move.id} 2 terastallize" class="button" style="${teraButtonStyle}">⭐ Tera + ${moveData.name}</button></div>`;
+			}
+			return normalButton;
 		});
 
 		moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
@@ -5161,15 +5177,9 @@ function generateSingleBattleHTML(
 		`<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>` :
 		`<button class="button" disabled>🏃 Run</button>`;
 
-	// Terastallization button - can only use once per battle and if not already terastallized
-	const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
-	const teraButton = canTerastallize ?
-		`<button name="send" value="/rpg battleaction terastallize 0" class="button" style="background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold;">⭐ Terastallize</button>` :
-		`<button class="button" disabled style="opacity: 0.5;">⭐ Terastallize</button>`;
-
 	actionHTML = `<p style="margin-top: 5px; font-weight: bold;">What will ${playerPokemon.species} do?</p>` +
 		moveButtonsHTML +
-		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${teraButton} ${catchButton} ${runButton}</p>`;
+		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
 		`<table style="width: 100%; margin-bottom: 5px;">` +
@@ -5197,7 +5207,7 @@ function generateSingleBattleHTML(
 function generateDoubleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
@@ -5303,7 +5313,8 @@ function generateDoubleBattleHTML(
 	if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = getMove(targetSelection.moveId);
-		html += `<p style="margin-top: 5px; font-weight: bold;">Select a target for <strong>${move.name}</strong>:</p>`;
+		const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
+		html += `<p style="margin-top: 5px; font-weight: bold;">Select a target for <strong>${move.name}</strong>${teraText}:</p>`;
 
 		const targets = [
 			{ slot: pSlot0, name: "Ally 1", index: 0 },
@@ -5313,10 +5324,11 @@ function generateDoubleBattleHTML(
 		];
 
 		const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; max-height: 50px; margin: 0;`;
+		const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
 		const targetButtons = targets
 			.filter(target => target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex)
 			.map(target => {
-				return `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}" class="button" style="${buttonStyle}">${target.name}</button>`;
+				return `<button name="send" value="/rpg battleaction move ${targetSelection.attackerSlotIndex} ${targetSelection.moveId} ${target.index}${teraParam}" class="button" style="${buttonStyle}">${target.name}</button>`;
 			});
 
 		let targetButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
@@ -5363,6 +5375,8 @@ function generateDoubleBattleHTML(
 				const struggleButton = `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} struggle" class="button" style="${buttonStyle}">${buttonContent}</button>`;
 				moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;"><tr><td style="width: 40%; padding: 0; vertical-align: top;">${struggleButton}</td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr><tr><td style="width: 40%; padding: 0; vertical-align: top;"></td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr></table>`;
 			} else {
+				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
+
 				const buttonStyle = `width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;`;
 				const moveButtons = pokemon.moves.map(move => {
 					const moveData = getMove(move.id);
@@ -5377,7 +5391,14 @@ function generateDoubleBattleHTML(
 						`<span style="float: right;">${move.pp} / ${moveData.pp}</span>` +
 						`</div>`;
 
-					return `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">${buttonContent}</button>`;
+					const normalButton = `<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}">${buttonContent}</button>`;
+
+					// Add Tera option if can terastallize
+					if (canTerastallizeThisSlot && !isDisabled) {
+						const teraButtonStyle = `width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;`;
+						return `<div>${normalButton}<button name="send" value="/rpg battleaction selecttarget ${activeSlotIndex} ${move.id} terastallize" class="button" style="${teraButtonStyle}">⭐ Tera + ${moveData.name}</button></div>`;
+					}
+					return normalButton;
 				});
 
 				moveButtonsHTML = `<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">`;
@@ -5410,18 +5431,9 @@ function generateDoubleBattleHTML(
 			`<button name="send" value="/rpg battleaction run" class="button" style="${buttonStyle}">🏃 Run</button>` :
 			`<button class="button" disabled style="${buttonStyle}">🏃 Run</button>`;
 
-		// Terastallization button - can only use once per battle
-		// In doubles, we need to determine which slot to tera (we'll use the active slot if any)
-		const canTerastallize = !battle.playerTerastallizeUsed &&
-			((pSlot0 && !pSlot0.terastallized) || (pSlot1 && !pSlot1.terastallized));
-		const teraSlotIndex = (pSlot0 && !pSlot0.terastallized) ? 0 : 1;
-		const teraButton = canTerastallize ?
-			`<button name="send" value="/rpg battleaction terastallize ${teraSlotIndex}" class="button" style="background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;">⭐ Terastallize</button>` :
-			`<button class="button" disabled style="${buttonStyle}; opacity: 0.5;">⭐ Terastallize</button>`;
-
 		html += `<p style="margin-top: 15px;">` +
 			`<button name="send" value="/rpg battleaction switchmenu" class="button" style="${buttonStyle}">🔄 Switch</button>` +
-			`${teraButton} ${catchButton} ${runButton}</p>`;
+			`${catchButton} ${runButton}</p>`;
 	}
 
 	html += `</div>`;
@@ -5454,7 +5466,7 @@ function generateStarterSelectionHTML(type: string): string {
 function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	if (battle.battleType === 'wild' || battle.battleType === 'trainer') {
 		// Use single battle UI
@@ -6838,7 +6850,12 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				const [attackerSlotStr, moveIdStr, targetSlotStr] = target.split(' ');
+				const parts = target.split(' ');
+				const attackerSlotStr = parts[0];
+				const moveIdStr = parts[1];
+				const targetSlotStr = parts[2];
+				const shouldTerastallize = parts[3] === 'terastallize';
+
 				const attackerSlotIndex = parseInt(attackerSlotStr);
 				const targetSlotIndex = parseInt(targetSlotStr);
 				const moveId = toID(moveIdStr);
@@ -6866,6 +6883,16 @@ export const commands: ChatCommands = {
 					return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
 				}
 
+				// --- Terastallization validation ---
+				if (shouldTerastallize) {
+					if (battle.playerTerastallizeUsed) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+					}
+					if (attackerSlot.terastallized) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} has already Terastallized!`])}`);
+					}
+				}
+
 				// --- REFACTORED VALIDATION ---
 				const validationError = validateMoveAction(attackerSlot, moveId, battle);
 				if (validationError) {
@@ -6879,9 +6906,12 @@ export const commands: ChatCommands = {
 					moveId: moveData.id,
 					targetSlot: targetSlotIndex,
 					pokemonId: attackerSlot.pokemon.id,
+					terastallize: shouldTerastallize,
 				};
 
-				const messageLog = [`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
+				const messageLog = shouldTerastallize ?
+					[`${attackerSlot.pokemon.species} is ready to Terastallize and use ${moveData.name}!`] :
+					[`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
 
 				// --- Check if all player actions are submitted ---
 				const activePlayerSlots = battle.playerSlots.filter(s => s && s.pokemon.hp > 0).length;
@@ -6900,15 +6930,33 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				const [attackerSlotStr, moveId] = target.split(' ');
+				const parts = target.split(' ');
+				const attackerSlotStr = parts[0];
+				const moveId = parts[1];
+				const shouldTerastallize = parts[2] === 'terastallize';
+
 				const attackerSlotIndex = parseInt(attackerSlotStr);
 
 				if (isNaN(attackerSlotIndex) || !moveId) {
 					return this.errorReply("Invalid command.");
 				}
 
+				// Validate terastallization if requested
+				if (shouldTerastallize) {
+					const attackerSlot = battle.playerSlots[attackerSlotIndex];
+					if (!attackerSlot) {
+						return this.errorReply("Invalid slot.");
+					}
+					if (battle.playerTerastallizeUsed) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+					}
+					if (attackerSlot.terastallized) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} has already Terastallized!`])}`);
+					}
+				}
+
 				// Re-render the UI in "target selection" mode
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId })}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
 			},
 			// --- END NEW FUNCTION ---
 
@@ -7233,42 +7281,7 @@ export const commands: ChatCommands = {
 				}
 			},
 
-			terastallize(target, room, user) {
-				const battle = activeBattles.get(user.id);
-				if (!battle) return this.errorReply("You are not in a battle.");
 
-				const slotIndexStr = target.trim();
-				const slotIndex = parseInt(slotIndexStr);
-
-				if (isNaN(slotIndex) || (slotIndex !== 0 && slotIndex !== 1)) {
-					return this.errorReply("Invalid slot index for terastallization.");
-				}
-
-				const slot = battle.playerSlots[slotIndex];
-				if (!slot || slot.pokemon.hp <= 0) {
-					return this.errorReply("This Pokémon is not in battle or has fainted.");
-				}
-
-				// Check if terastallization has already been used this battle
-				if (battle.playerTerastallizeUsed) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
-				}
-
-				// Check if this Pokemon is already terastallized
-				if (slot.terastallized) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${slot.pokemon.species} has already Terastallized!`])}`);
-				}
-
-				// Perform terastallization
-				slot.terastallized = slot.pokemon.teraType;
-				battle.playerTerastallizeUsed = true;
-
-				const messageLog = [
-					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`,
-				];
-
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
-			},
 
 			run(target, room, user) {
 				const battle = activeBattles.get(user.id);
