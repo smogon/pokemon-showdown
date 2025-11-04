@@ -374,6 +374,14 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		}
 		return basePower;
 	},
+
+	// Phase 2: Steelworker - 1.5x power for Steel-type moves
+	'steelworker': (ctx, basePower) => {
+		if (ctx.move.type === 'Steel') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
 };
 
 export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler> = {
@@ -490,6 +498,14 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Phase 2: Gorilla Tactics - 1.5x Attack (like Choice Band effect)
+	'gorillatactics': (pokemon, stat, value) => {
+		if (stat === 'atk') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
 };
 
 export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
@@ -591,6 +607,12 @@ export const CONTACT_ABILITIES = {
 
 	'ironbarbs': {
 		onContactDamage: 1 / 8,
+	},
+
+	// Phase 2: Poison Touch - 30% chance to poison on contact
+	'poisontouch': {
+		onContactChance: 0.3,
+		effect: 'psn',
 	},
 };
 
@@ -779,6 +801,12 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string): number
 	return 1.5;
 }
 
+export function preventsFlinch(pokemon: RPGPokemon): boolean {
+	const ability = toID(pokemon.ability || '');
+	// Phase 2: Inner Focus prevents flinching
+	return ability === 'innerfocus';
+}
+
 export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 	const ability = toID(pokemon.ability || '');
 
@@ -922,6 +950,11 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	}
 
 	if (defenderAbility === 'furcoat' && ctx.move.category === 'Physical') {
+		damage = Math.floor(damage * 0.5);
+	}
+
+	// Phase 2: Thick Fat - halves Fire and Ice damage
+	if (defenderAbility === 'thickfat' && (ctx.move.type === 'Fire' || ctx.move.type === 'Ice')) {
 		damage = Math.floor(damage * 0.5);
 	}
 
@@ -1099,6 +1132,24 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			if (slot.statStages.spe < 6) {
 				slot.statStages.spe++;
 				messageLog.push(`${slot.pokemon.species}'s Speed Boost raised its Speed!`);
+			}
+		},
+	},
+
+	// Phase 2: Shed Skin - 30% chance to cure status at end of turn
+	'shedskin': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.status && Math.random() < 0.3) {
+				const statusName = {
+					psn: 'poison',
+					tox: 'toxic poison',
+					brn: 'burn',
+					par: 'paralysis',
+					slp: 'sleep',
+					frz: 'freeze',
+				}[slot.status] || 'status condition';
+				slot.status = null;
+				messageLog.push(`${slot.pokemon.species} shed its skin and cured its ${statusName}!`);
 			}
 		},
 	},

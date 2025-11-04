@@ -1711,7 +1711,11 @@ function applySecondaryEffects(
 		}
 
 		if (move.secondary.volatileStatus === 'flinch') {
-			defenderSlot.willFlinch = true;
+			if (!RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
+				defenderSlot.willFlinch = true;
+			} else {
+				messageLog.push(`${defenderSlot.pokemon.species}'s Inner Focus prevents flinching!`);
+			}
 		}
 	}
 }
