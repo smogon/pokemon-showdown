@@ -2908,17 +2908,16 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 	}
 
 	// Handle rampage move counter (Outrage, Thrash, Petal Dance)
-	if (slot.lockedMoveCounter !== undefined && slot.lockedMoveCounter > 0) {
+	if (slot.lockedMoveCounter > 0) {
 		// If Pokemon falls asleep during rampage, end it immediately without confusion
 		if (slot.status === 'slp') {
 			slot.lockedMove = undefined;
-			slot.lockedMoveCounter = undefined;
+			slot.lockedMoveCounter = 0;
 		} else {
 			slot.lockedMoveCounter--;
 			if (slot.lockedMoveCounter === 0) {
 				// Rampage ends, apply confusion
 				slot.lockedMove = undefined;
-				slot.lockedMoveCounter = undefined;
 				
 				if (!slot.isConfused) {
 					slot.isConfused = true;
@@ -3912,7 +3911,7 @@ function executeMove(
 
 	// Handle rampage moves (Outrage, Thrash, Petal Dance)
 	if (attackerSlot && attackerSlot.pokemon.hp > 0 && move.self?.volatileStatus === 'lockedmove') {
-		if (!attackerSlot.lockedMoveCounter) {
+		if (attackerSlot.lockedMoveCounter === 0) {
 			// Initialize rampage counter (2-3 turns)
 			attackerSlot.lockedMoveCounter = Math.floor(Math.random() * 2) + 2; // Random 2 or 3
 			attackerSlot.lockedMove = move.id;
@@ -4387,8 +4386,8 @@ function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 		chargingMove: undefined,
 		activeTurns: 1,
 		lockedMove: undefined,
-		lockedMoveCounter: undefined,
-		mustRecharge: undefined,
+		lockedMoveCounter: 0,
+		mustRecharge: false,
 		lastDamageTaken: undefined,
 		yawnCounter: undefined,
 		substitute: undefined,
@@ -6109,8 +6108,13 @@ function validateMoveAction(
 		}
 	}
 
-	// Check Choice Item Lock
-	if (attackerSlot.lockedMove && attackerSlot.lockedMove !== moveData.id && battle.magicRoomTurns === 0 && !attackerSlot.lockedMoveCounter) {
+	// Check Choice Item Lock (only if not in a rampage)
+	const hasChoiceItemLock = attackerSlot.lockedMove && 
+	                          attackerSlot.lockedMove !== moveData.id && 
+	                          battle.magicRoomTurns === 0 && 
+	                          attackerSlot.lockedMoveCounter === 0;
+	
+	if (hasChoiceItemLock) {
 		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
 		// Check if the locked move still has PP
 		if (lockedMoveObject && lockedMoveObject.pp > 0) {
@@ -7111,7 +7115,7 @@ export const commands: ChatCommands = {
 				}
 
 				outgoingSlot.lockedMove = undefined;
-				outgoingSlot.lockedMoveCounter = undefined;
+				outgoingSlot.lockedMoveCounter = 0;
 
 				// --- Queue the Switch Action ---
 				battle.pendingActions[slotToSwitchOut] = {
