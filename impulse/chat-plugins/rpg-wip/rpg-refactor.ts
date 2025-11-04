@@ -3968,9 +3968,16 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 			return { success: false, message: `${pokemon.species} is already at max level or has fainted!` };
 		}
 		levelUp(pokemon);
-		handleLearningMoves(player, pokemon);
+		const room = undefined;
+		const user = undefined;
+		const evoMsg = checkEvolution(player, pokemon, room, user);
+		let outputMessages = [];
+		if (evoMsg) outputMessages.push(evoMsg);
+		const { messages: learnMessages } = handleLearningMoves(player, pokemon);
+		outputMessages.push(...learnMessages);
 		removeItemFromInventory(player, itemId, 1);
-		return { success: true, message: `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>! It grew to Level ${pokemon.level}.` };
+		let msg = `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>! It grew to Level ${pokemon.level}.`;
+		return { success: true, message: msg + (outputMessages.length ? '<br>' + outputMessages.join('<br>') : '') };
 	}
 
 	const expCandyAmounts: Record<string, number> = {
@@ -3985,16 +3992,20 @@ function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string)
 			return { success: false, message: `${pokemon.species} is already at max level or has fainted!` };
 		}
 		const expGain = expCandyAmounts[itemId];
-		const previousLevel = pokemon.level;
 		pokemon.experience += expGain;
 
 		let leveledUp = false, outputMessages = [];
+		const room = undefined;
+		const user = undefined;
+
 		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
 			outputMessages = outputMessages.concat(levelUp(pokemon));
 			leveledUp = true;
-			handleLearningMoves(player, pokemon);
+			const evoMsg = checkEvolution(player, pokemon, room, user);
+			if (evoMsg) outputMessages.push(evoMsg);
+			const { messages: learnMessages } = handleLearningMoves(player, pokemon);
+			outputMessages.push(...learnMessages);
 		}
-
 		removeItemFromInventory(player, itemId, 1);
 		let msg = `You used <strong>${ITEMS_DATABASE[itemId]?.name || itemId}</strong> on <strong>${pokemon.species}</strong>! It gained ${expGain} Exp.`;
 		if (leveledUp) msg += `<br>${pokemon.species} grew to Level ${pokemon.level}!`;
