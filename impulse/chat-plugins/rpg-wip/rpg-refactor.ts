@@ -647,7 +647,12 @@ function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { message
 	}
 
 	if (movesToQueue.length > 0) {
-		player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: movesToQueue };
+		// Append to existing queue if same Pokemon, otherwise create new queue
+		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.pokemonId === pokemon.id) {
+			player.pendingMoveLearnQueue.moveIds.push(...movesToQueue);
+		} else {
+			player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: movesToQueue };
+		}
 	}
 
 	return { messages };
@@ -4087,7 +4092,10 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 		}
 
 		// Increase friendship (Rare Candy gives +5/+3 friendship in official games)
-		// Cap at 255 (max friendship)
+		// Cap at 255 (max friendship), ensure non-negative
+		if (pokemon.friendship < 0) {
+			pokemon.friendship = 0;
+		}
 		if (pokemon.friendship < 255) {
 			pokemon.friendship = Math.min(255, pokemon.friendship + 3);
 		}
@@ -4146,6 +4154,11 @@ function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string
 		pokemon.hp = pokemon.maxHp;
 	}
 
+	// Ensure experience is non-negative (data integrity check)
+	if (pokemon.experience < 0) {
+		pokemon.experience = 0;
+	}
+
 	// Add experience and handle level ups
 	const messages: string[] = [];
 	try {
@@ -4181,7 +4194,10 @@ function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string
 		}
 
 		// Increase friendship slightly (EXP Candies give +1 friendship in official games)
-		// Cap at 255 (max friendship)
+		// Cap at 255 (max friendship), ensure non-negative
+		if (pokemon.friendship < 0) {
+			pokemon.friendship = 0;
+		}
 		if (pokemon.friendship < 255) {
 			pokemon.friendship = Math.min(255, pokemon.friendship + 1);
 		}
