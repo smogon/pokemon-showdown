@@ -19,7 +19,7 @@ const SPECIAL_IMPLEMENTATION_MOVES = {
 	// Charging Moves (lines 1264-1278)
 	chargingMoves: [
 		'razorwind', 'solarbeam', 'solarblade', 'skullbash', 'skyattack',
-		'freeze shock', 'iceburn', 'bounce', 'fly', 'dig', 'dive',
+		'freezeshock', 'iceburn', 'bounce', 'fly', 'dig', 'dive',
 		'phantomforce', 'shadowforce', 'geomancy', 'meteorbeam'
 	],
 	

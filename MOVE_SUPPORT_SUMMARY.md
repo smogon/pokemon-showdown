@@ -10,6 +10,8 @@
 
 The Pokemon RPG battle system currently supports **934 out of 944 moves**, achieving **98.9% coverage**. This analysis details all supported moves, categorizes them by implementation type, and identifies the 10 remaining unsupported moves with a comprehensive implementation plan.
 
+> **Note:** The total move count (944) is based on Gen 9 move data. This may change with future Pokemon generations.
+
 ---
 
 ## Quick Stats

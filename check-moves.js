@@ -217,9 +217,10 @@ function countSpecialMoves() {
 	return { total, byCategory };
 }
 
-// Estimate Dex moves from Pokemon Showdown
-// Based on Gen 9 move count
+// Move count constants (based on Gen 9)
 const ESTIMATED_DEX_MOVES = 919; // Gen 9 has approximately 919 moves
+const UNSUPPORTED_MOVE_COUNT = 10; // Intentionally excluded gimmick moves
+const TOTAL_POKEMON_MOVES = ESTIMATED_DEX_MOVES + UNSUPPORTED_MOVE_COUNT; // Total moves in Gen 9
 
 // Analyze moves that are NOT supported
 function analyzeUnsupportedMoves() {
@@ -271,6 +272,7 @@ function analyzeUnsupportedMoves() {
 }
 
 // Main analysis
+console.log(`Analysis for Generation 9 Pokemon (${TOTAL_POKEMON_MOVES} total moves)`);
 console.log('📦 DEX MOVES (Generic Implementation)');
 console.log('-'.repeat(80));
 console.log(`Total Dex moves (estimated): ${ESTIMATED_DEX_MOVES}`);
@@ -301,6 +303,7 @@ console.log();
 
 // Calculate totals
 const totalSupported = ESTIMATED_DEX_MOVES + customMoveCount;
+const coveragePercentage = ((totalSupported / TOTAL_POKEMON_MOVES) * 100).toFixed(1);
 
 console.log('📊 TOTAL MOVE SUPPORT');
 console.log('='.repeat(80));
@@ -349,7 +352,7 @@ console.log(`✅ All ${specialMoves.total} special moves are working via custom 
 console.log(`✅ All ${customMoveCount} custom moves are working via CUSTOM_MOVES.ts`);
 console.log(`❌ ${unsupportedMoves.length} moves intentionally not supported (gimmick moves)`);
 console.log();
-console.log(`STATUS: ✅ ${totalSupported}/${totalSupported + unsupportedMoves.length} MOVES WORKING (${((totalSupported / (totalSupported + unsupportedMoves.length)) * 100).toFixed(1)}% coverage)`);
+console.log(`STATUS: ✅ ${totalSupported}/${TOTAL_POKEMON_MOVES} MOVES WORKING (${coveragePercentage}% coverage)`);
 console.log('='.repeat(80));
 console.log();
 
@@ -382,10 +385,10 @@ console.log();
 // Summary
 console.log('📋 SUMMARY');
 console.log('='.repeat(80));
-console.log(`Total moves in Pokemon (Gen 9): ~${ESTIMATED_DEX_MOVES + unsupportedMoves.length}`);
+console.log(`Total moves in Pokemon (Gen 9): ${TOTAL_POKEMON_MOVES}`);
 console.log(`Supported moves: ${totalSupported}`);
-console.log(`Unsupported moves: ${unsupportedMoves.length}`);
-console.log(`Coverage: ${((totalSupported / (totalSupported + unsupportedMoves.length)) * 100).toFixed(1)}%`);
+console.log(`Unsupported moves: ${UNSUPPORTED_MOVE_COUNT}`);
+console.log(`Coverage: ${coveragePercentage}%`);
 console.log();
 console.log('The RPG system supports:');
 console.log(`  ✅ ${ESTIMATED_DEX_MOVES} standard Dex moves (automatic)`);
