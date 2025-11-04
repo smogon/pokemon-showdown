@@ -4586,7 +4586,6 @@ function handleSwitchAction(
 		// Find if the outgoing Pokemon is already in the party
 		const outgoingIndex = player.party.findIndex(p => p.id === outgoingPokemon.id);
 		const incomingPokemon = player.party[partyIndex];
-		
 		if (outgoingIndex !== -1) {
 			// The outgoing Pokemon is in the party, swap it with the incoming Pokemon
 			player.party[outgoingIndex] = incomingPokemon;
@@ -5409,7 +5408,7 @@ function generateDoubleBattleHTML(
 
 		// Terastallization button - can only use once per battle
 		// In doubles, we need to determine which slot to tera (we'll use the active slot if any)
-		const canTerastallize = !battle.playerTerastallizeUsed && 
+		const canTerastallize = !battle.playerTerastallizeUsed &&
 			((pSlot0 && !pSlot0.terastallized) || (pSlot1 && !pSlot1.terastallized));
 		const teraSlotIndex = (pSlot0 && !pSlot0.terastallized) ? 0 : 1;
 		const teraButton = canTerastallize ?
@@ -6921,7 +6920,7 @@ export const commands: ChatCommands = {
 				// **NEW:** Check if this is a pivot switch
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
 					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
-					
+
 					// Check if the pivoting Pokemon is already in the party to avoid duplicates
 					const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
 					if (pivotIndex === -1) {
@@ -7222,7 +7221,7 @@ export const commands: ChatCommands = {
 				battle.playerTerastallizeUsed = true;
 
 				const messageLog = [
-					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`
+					`<span style="color: #FF1493; font-weight: bold;">✨ ${slot.pokemon.species} Terastallized into ${slot.pokemon.teraType} type! ✨</span>`,
 				];
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
