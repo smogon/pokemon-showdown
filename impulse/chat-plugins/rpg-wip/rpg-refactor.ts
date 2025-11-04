@@ -6080,7 +6080,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
 
-				useitem(target, room, user) {
+		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
 			}
@@ -6119,7 +6119,7 @@ export const commands: ChatCommands = {
 				}
 
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
