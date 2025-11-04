@@ -1828,23 +1828,8 @@ function checkStatDropAbilities(
 	battle: BattleState,
 	messageLog: string[]
 ) {
-	if (sourceSlot && sourceSlot.pokemon.id === targetSlot.pokemon.id) {
-		return;
-	}
-
-	const ability = toID(targetSlot.pokemon.ability || '');
-
-	if (ability === 'defiant') {
-		if (targetSlot.statStages.atk < 6) {
-			targetSlot.statStages.atk = Math.min(6, targetSlot.statStages.atk + 2);
-			messageLog.push(`${targetSlot.pokemon.species}'s Defiant sharply raised its Attack!`);
-		}
-	} else if (ability === 'competitive') {
-		if (targetSlot.statStages.spa < 6) {
-			targetSlot.statStages.spa = Math.min(6, targetSlot.statStages.spa + 2);
-			messageLog.push(`${targetSlot.pokemon.species}'s Competitive sharply raised its Sp. Atk!`);
-		}
-	}
+	// Use the new STAT_DROP_RESPONSE abilities handler from abilities.ts
+	RPGAbilities.applyStatDropResponse(targetSlot, battle, messageLog, sourceSlot);
 }
 
 function handleGenericBoostMove(
@@ -2707,12 +2692,8 @@ function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, mess
 		pokemon.hp = Math.max(0, pokemon.hp - damage);
 		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
 	} else if (status === 'psn') {
-		const ability = toID(pokemon.ability || '');
-		if (ability === 'poisonheal' && pokemon.hp < pokemon.maxHp) {
-			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-			messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
-		} else {
+		// Use the new handlePoisonHeal from abilities.ts
+		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
@@ -2922,11 +2903,8 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 		}
 	}
 
-	const ability = toID(pokemon.ability || '');
-	if (ability === 'speedboost' && slot.statStages.spe < 6) {
-		slot.statStages.spe++;
-		messageLog.push(`${pokemon.species}'s Speed Boost raised its Speed!`);
-	}
+	// Use the new END_OF_TURN abilities handler from abilities.ts
+	RPGAbilities.applyEndOfTurnAbilities(slot, battle, messageLog);
 }
 
 function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
@@ -2981,22 +2959,8 @@ function handleOpponentFaint(
 
 			for (const participantSlot of playerParticipants) {
 				if (participantSlot.pokemon.hp <= 0) continue;
-
-				const ability = toID(participantSlot.pokemon.ability || '');
-
-				if (ability === 'moxie' || ability === 'chillingneigh') {
-					applyStatChange(participantSlot, 'atk', 1, battle, messageLog, participantSlot);
-				} else if (ability === 'beastboost') {
-					const stats = participantSlot.pokemon;
-					let highestStat: keyof Stats | 'accuracy' | 'evasion' = 'atk';
-					let maxStatVal = stats.atk;
-					if (stats.def > maxStatVal) { maxStatVal = stats.def; highestStat = 'def'; }
-					if (stats.spa > maxStatVal) { maxStatVal = stats.spa; highestStat = 'spa'; }
-					if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
-					if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
-
-					applyStatChange(participantSlot, highestStat, 1, battle, messageLog, participantSlot);
-				}
+				// Use the new ON_KO abilities handler from abilities.ts
+				RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
 			}
 
 			if (playerParticipants.length > 0) {
@@ -3395,15 +3359,8 @@ function applyStatChange(
 ): boolean {
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
-	let actualValue = value;
-
-	if (ability === 'contrary') {
-		actualValue *= -1;
-	}
-
-	if (ability === 'simple') {
-		actualValue *= 2;
-	}
+	// Use the new applyStatChangeModifier from abilities.ts
+	let actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
 
 	const currentStage = slot.statStages[stat];
 	const isSelf = !source || source.pokemon.id === pokemon.id;
@@ -3687,10 +3644,10 @@ function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
-		} else if (battle.weather!.type === 'rain' && ability === 'hydration' && slot.status) {
-			slot.status = null;
-			messageLog.push(`${pokemon.species}'s Hydration cured its status condition!`);
 		}
+
+		// Use the new handleHydration from abilities.ts
+		RPGAbilities.handleHydration(slot, battle, messageLog);
 
 		let takeDamage = false;
 		let damageAmount = Math.floor(pokemon.maxHp / 16);

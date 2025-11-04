@@ -3,7 +3,7 @@
 * RPG Abilities
 */
 import { Dex, toID } from '../../../sim/dex';
-import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler } from './interface';
+import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
 function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
 	if (!slots) return [];
@@ -1055,6 +1055,162 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 	return null;
 }
 
+// On-KO Abilities - abilities that trigger when a Pokemon is KO'd
+export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
+	'moxie': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk++;
+				messageLog.push(`${slot.pokemon.species}'s Moxie raised its Attack!`);
+			}
+		},
+	},
+	'chillingneigh': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk++;
+				messageLog.push(`${slot.pokemon.species}'s Chilling Neigh raised its Attack!`);
+			}
+		},
+	},
+	'beastboost': {
+		handler: (slot, battle, messageLog) => {
+			const stats = slot.pokemon;
+			let highestStat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' = 'atk';
+			let maxStatVal = stats.atk;
+			if (stats.def > maxStatVal) { maxStatVal = stats.def; highestStat = 'def'; }
+			if (stats.spa > maxStatVal) { maxStatVal = stats.spa; highestStat = 'spa'; }
+			if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
+			if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
+
+			if (slot.statStages[highestStat] < 6) {
+				slot.statStages[highestStat]++;
+				const statNames: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+				messageLog.push(`${slot.pokemon.species}'s Beast Boost raised its ${statNames[highestStat]}!`);
+			}
+		},
+	},
+};
+
+// End of Turn Abilities - abilities that trigger at the end of each turn
+export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
+	'speedboost': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.spe < 6) {
+				slot.statStages.spe++;
+				messageLog.push(`${slot.pokemon.species}'s Speed Boost raised its Speed!`);
+			}
+		},
+	},
+};
+
+// Stat Drop Response Abilities - abilities that trigger when stats are lowered
+export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void }> = {
+	'defiant': {
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// Don't trigger if self-inflicted
+			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
+				return;
+			}
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk = Math.min(6, slot.statStages.atk + 2);
+				messageLog.push(`${slot.pokemon.species}'s Defiant sharply raised its Attack!`);
+			}
+		},
+	},
+	'competitive': {
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// Don't trigger if self-inflicted
+			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
+				return;
+			}
+			if (slot.statStages.spa < 6) {
+				slot.statStages.spa = Math.min(6, slot.statStages.spa + 2);
+				messageLog.push(`${slot.pokemon.species}'s Competitive sharply raised its Sp. Atk!`);
+			}
+		},
+	},
+};
+
+// Stat Change Modifier Abilities - abilities that modify stat changes (Contrary, Simple)
+export function applyStatChangeModifier(value: number, ability: string): number {
+	if (ability === 'contrary') {
+		return -value;
+	}
+	if (ability === 'simple') {
+		return value * 2;
+	}
+	return value;
+}
+
+// Status Interaction Abilities - abilities that interact with status conditions
+export const STATUS_INTERACTION_ABILITIES: Record<string, {
+	healFromPoison?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
+	cureStatusInRain?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
+}> = {
+	'poisonheal': {
+		healFromPoison: (slot, messageLog) => {
+			const pokemon = slot.pokemon;
+			if (pokemon.hp < pokemon.maxHp) {
+				const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
+			}
+		},
+	},
+	'hydration': {
+		cureStatusInRain: (slot, messageLog) => {
+			if (slot.status) {
+				slot.status = null;
+				messageLog.push(`${slot.pokemon.species}'s Hydration cured its status condition!`);
+			}
+		},
+	},
+};
+
+// Helper functions for the newly organized abilities
+export function applyOnKOAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+	const handler = ON_KO_ABILITIES[ability];
+	if (handler) {
+		handler.handler(slot, battle, messageLog);
+	}
+}
+
+export function applyEndOfTurnAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+	const handler = END_OF_TURN_ABILITIES[ability];
+	if (handler) {
+		handler.handler(slot, battle, messageLog);
+	}
+}
+
+export function applyStatDropResponse(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot): void {
+	const ability = toID(slot.pokemon.ability || '');
+	const handler = STAT_DROP_RESPONSE_ABILITIES[ability];
+	if (handler) {
+		handler.handler(slot, battle, messageLog, sourceSlot);
+	}
+}
+
+export function handlePoisonHeal(slot: ActivePokemonSlot, messageLog: string[]): boolean {
+	const ability = toID(slot.pokemon.ability || '');
+	if (ability === 'poisonheal' && STATUS_INTERACTION_ABILITIES['poisonheal'].healFromPoison) {
+		STATUS_INTERACTION_ABILITIES['poisonheal'].healFromPoison(slot, messageLog);
+		return true;
+	}
+	return false;
+}
+
+export function handleHydration(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	const ability = toID(slot.pokemon.ability || '');
+	if (ability === 'hydration' && battle.weather?.type === 'rain' && STATUS_INTERACTION_ABILITIES['hydration'].cureStatusInRain) {
+		STATUS_INTERACTION_ABILITIES['hydration'].cureStatusInRain(slot, messageLog);
+		return true;
+	}
+	return false;
+}
+
 export function getAllImplementedAbilities(): string[] {
 	return [
 		...Object.keys(IMMUNITY_ABILITIES),
@@ -1072,6 +1228,11 @@ export function getAllImplementedAbilities(): string[] {
 		...Object.keys(CRITICAL_HIT_ABILITIES),
 		...Object.keys(TERRAIN_ABILITIES),
 		...Object.keys(HEALING_ABILITIES),
+		...Object.keys(ON_KO_ABILITIES),
+		...Object.keys(END_OF_TURN_ABILITIES),
+		...Object.keys(STAT_DROP_RESPONSE_ABILITIES),
+		...Object.keys(STATUS_INTERACTION_ABILITIES),
+		'contrary', 'simple', // Stat change modifiers handled by applyStatChangeModifier
 	];
 }
 
