@@ -1940,7 +1940,7 @@ function handleGenericStatusInflictMove(
 		messageLog.push('The Electric Terrain prevents sleep!');
 	}
 	// Check if any Pokemon is using Uproar
-	const anyUproar = [...battle.playerSlots, ...battle.opponentSlots].some(s => s && s.uproarTurns && s.uproarTurns > 0);
+	const anyUproar = [...battle.playerSlots, ...battle.opponentSlots].some(s => s?.uproarTurns && s.uproarTurns > 0);
 	if (move.status === 'slp' && anyUproar) {
 		canBeAfflicted = false;
 		messageLog.push('But the uproar kept it awake!');
@@ -2932,7 +2932,7 @@ function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: BattleSta
 			if (slot.lockedMoveCounter === 0) {
 				// Rampage ends, apply confusion
 				slot.lockedMove = undefined;
-				
+
 				if (!slot.isConfused) {
 					slot.isConfused = true;
 					slot.confusionCounter = Math.floor(Math.random() * 4) + 2; // 2-5 turns
@@ -3432,7 +3432,7 @@ function applyStatChange(
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 	// Use the new applyStatChangeModifier from abilities.ts
-	let actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
+	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
 
 	const currentStage = slot.statStages[stat];
 	const isSelf = !source || source.pokemon.id === pokemon.id;
@@ -6195,12 +6195,12 @@ function validateMoveAction(
 	}
 
 	// Check Choice Item Lock (only if not in a rampage or uproar)
-	const hasChoiceItemLock = attackerSlot.lockedMove && 
-	                          attackerSlot.lockedMove !== moveData.id && 
-	                          battle.magicRoomTurns === 0 && 
-	                          attackerSlot.lockedMoveCounter === 0 &&
-	                          attackerSlot.uproarTurns === 0;
-	
+	const hasChoiceItemLock = attackerSlot.lockedMove &&
+		attackerSlot.lockedMove !== moveData.id &&
+		battle.magicRoomTurns === 0 &&
+		attackerSlot.lockedMoveCounter === 0 &&
+		attackerSlot.uproarTurns === 0;
+
 	if (hasChoiceItemLock) {
 		const lockedMoveObject = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
 		// Check if the locked move still has PP
@@ -7578,6 +7578,49 @@ export const commands: ChatCommands = {
 			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+		},
+
+		reset(target, room, user) {
+			const player = getPlayerData(user.id);
+
+			// Check if user has RPG data to reset
+			if (player.party.length === 0 && player.pc.size === 0 && player.inventory.size === 0) {
+				return this.errorReply("You don't have any RPG progress to reset.");
+			}
+
+			// Remove user from active battles if they're in one
+			if (activeBattles.has(user.id)) {
+				const battle = activeBattles.get(user.id);
+				if (battle) {
+					saveBattleStatus(battle);
+				}
+				activeBattles.delete(user.id);
+			}
+
+			// Clear all player data
+			playerData.delete(user.id);
+
+			// Send confirmation
+			const confirmHTML = `<div class="infobox"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+		},
+
+		unstuck(target, room, user) {
+		// Check if user is in a battle
+			if (!activeBattles.has(user.id)) {
+				return this.errorReply("You are not currently in a battle.");
+			}
+
+			// Save battle status and remove from active battles
+			const battle = activeBattles.get(user.id);
+			if (battle) {
+				saveBattleStatus(battle);
+			}
+			activeBattles.delete(user.id);
+
+			// Send confirmation
+			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
 		help() {
