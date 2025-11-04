@@ -6953,7 +6953,7 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Execute the Switch ---
-				const [nextPokemon] = player.party.splice(partyIndex, 1);
+				const nextPokemon = player.party[partyIndex];
 				const newSlot = createActivePokemonSlot(nextPokemon);
 
 				const playerColor = '#007bff';
