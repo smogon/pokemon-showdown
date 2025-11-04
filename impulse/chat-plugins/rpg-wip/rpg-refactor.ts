@@ -4594,30 +4594,15 @@ function handleSwitchAction(
 	saveBattleStatus(battle);
 
 	if (isPlayerSwitch) {
-		const partyIndex = player.party.findIndex(p => p.id === pokemonToSwitchInId);
-		if (partyIndex === -1) {
+		const incomingPokemon = player.party.find(p => p.id === pokemonToSwitchInId);
+		if (!incomingPokemon) {
 			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
 			return;
 		}
 
-		// Find if the outgoing Pokemon is already in the party
-		const outgoingIndex = player.party.findIndex(p => p.id === outgoingPokemon.id);
-		const incomingPokemon = player.party[partyIndex];
-		let newSlot: ActivePokemonSlot;
-
-		if (outgoingIndex !== -1) {
-			// The outgoing Pokemon is in the party, swap it with the incoming Pokemon
-			player.party[outgoingIndex] = incomingPokemon;
-			player.party[partyIndex] = outgoingPokemon;
-			newSlot = createActivePokemonSlot(incomingPokemon);
-			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
-		} else {
-			// The outgoing Pokemon is not in the party (shouldn't normally happen, but handle it)
-			player.party.push(outgoingPokemon);
-			const [swapIncoming] = player.party.splice(partyIndex, 1);
-			newSlot = createActivePokemonSlot(swapIncoming);
-			battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
-		}
+		// Create new slot for incoming Pokemon without modifying party order
+		const newSlot = createActivePokemonSlot(incomingPokemon);
+		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
 		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
 
 		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
@@ -6248,15 +6233,54 @@ export const commands: ChatCommands = {
 						// --- FIX ---
 						// We must wrap the RPGPokemon in an ActivePokemonSlot
 						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += `<div><strong>Slot ${i + 1}:</strong><br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
+						partyHTML += `<div><strong>Slot ${i + 1}:</strong>`;
+						// Add swap buttons (up and down arrows)
+						if (i > 0) {
+							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
+						}
+						if (i < player.party.length - 1 && player.party[i + 1]) {
+							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
+						}
+						partyHTML += `<br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
 						// --- END FIX ---
 					} else {
 						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
 					}
 				}
 			}
-			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+				partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
+		},
+
+		swapslot(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot swap party slots during a battle.");
+			}
+			const [slot1Str, slot2Str] = target.split(' ');
+			const slot1 = parseInt(slot1Str);
+			const slot2 = parseInt(slot2Str);
+
+			if (isNaN(slot1) || isNaN(slot2)) {
+				return this.errorReply("Invalid slot numbers. Usage: /rpg swapslot <slot1> <slot2>");
+			}
+
+			const player = getPlayerData(user.id);
+
+			if (slot1 < 0 || slot1 >= player.party.length || slot2 < 0 || slot2 >= player.party.length) {
+				return this.errorReply("Invalid slot numbers. Slots must be within your party.");
+			}
+
+			if (slot1 === slot2) {
+				return this.errorReply("Cannot swap a slot with itself.");
+			}
+
+			// Swap the Pokemon in the party array
+			const temp = player.party[slot1];
+			player.party[slot1] = player.party[slot2];
+			player.party[slot2] = temp;
+
+			// Show updated party
+			this.parse('/rpg party');
 		},
 
 		items(target, room, user) {
