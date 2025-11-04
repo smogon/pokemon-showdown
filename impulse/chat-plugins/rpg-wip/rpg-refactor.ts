@@ -31,6 +31,11 @@ const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'healpowder': { id: 'healpowder', name: 'Heal Powder', category: 'medicine', description: 'A bitter powder that heals all status conditions.' },
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'A special item that teaches a compatible Pokémon one of its Egg Moves.' },
 	'rarecandy': { id: 'rarecandy', name: 'Rare Candy', category: 'misc', description: 'A candy that is packed with energy. When consumed, it will instantly raise the level of a single Pokémon by one.' },
+	'expcandyxs': { id: 'expcandyxs', name: 'Exp. Candy XS', category: 'misc', description: 'A candy that is packed with energy. Gives 100 Exp. Points to a Pokémon.' },
+	'expcandys': { id: 'expcandys', name: 'Exp. Candy S', category: 'misc', description: 'A candy that is packed with energy. Gives 800 Exp. Points to a Pokémon.' },
+	'expcandym': { id: 'expcandym', name: 'Exp. Candy M', category: 'misc', description: 'A candy that is packed with energy. Gives 3,000 Exp. Points to a Pokémon.' },
+	'expcandyl': { id: 'expcandyl', name: 'Exp. Candy L', category: 'misc', description: 'A candy that is packed with energy. Gives 10,000 Exp. Points to a Pokémon.' },
+	'expcandyxl': { id: 'expcandyxl', name: 'Exp. Candy XL', category: 'misc', description: 'A candy that is packed with energy. Gives 30,000 Exp. Points to a Pokémon.' },
 };
 
 function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
@@ -107,6 +112,7 @@ const NATURE_FLAVOR_PREFERENCES: Record<keyof Stats, string> = {
 
 const ITEM_PRICES: Record<string, number> = {
 	'pokeball': 200, 'greatball': 600, 'ultraball': 800, 'potion': 300, 'superpotion': 700, 'hyperpotion': 1200, 'maxpotion': 2500, 'fullrestore': 3000, 'eggmovetutor': 3000, 'rarecandy': 4800,
+	'expcandyxs': 20, 'expcandys': 100, 'expcandym': 500, 'expcandyl': 3000, 'expcandyxl': 10000,
 	'levelball': 1000, 'fastball': 1000, 'timerball': 1000, 'nestball': 1000, 'netball': 1000, 'quickball': 1000, 'dreamball': 1000,
 	'premierball': 200, 'luxuryball': 1000, 'healball': 300,
 	'leftovers': 8000, 'blacksludge': 5000, 'shellbell': 6000, 'berryjuice': 500, 'lifeorb': 9000, 'rockyhelmet': 7000, 'stickybarb': 3000,
@@ -176,6 +182,11 @@ const SHOP_INVENTORY: string[] = [
 
 	'eggmovetutor',
 	'rarecandy',
+	'expcandyxs',
+	'expcandys',
+	'expcandym',
+	'expcandyl',
+	'expcandyxl',
 ];
 
 const TYPE_RESIST_BERRIES: Record<string, string> = {
@@ -4092,6 +4103,101 @@ function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoo
 	return { success: true, message: resultMessage };
 }
 
+function getExpCandyAmount(itemId: string): number {
+	switch (itemId) {
+		case 'expcandyxs': return 100;
+		case 'expcandys': return 800;
+		case 'expcandym': return 3000;
+		case 'expcandyl': return 10000;
+		case 'expcandyxl': return 30000;
+		default: return 0;
+	}
+}
+
+function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: ChatRoom, user: User): { success: boolean, message: string } {
+	// Validate pokemon exists and has valid data
+	if (!pokemon || !pokemon.species) {
+		return { success: false, message: `Invalid Pokémon data!` };
+	}
+
+	// Cannot use on fainted Pokémon
+	if (pokemon.hp <= 0) {
+		return { success: false, message: `${pokemon.species} has fainted!` };
+	}
+
+	// Cannot use on level 100 Pokémon (pointless, can't gain more levels)
+	if (pokemon.level >= 100) {
+		return { success: false, message: `${pokemon.species} is already at level 100!` };
+	}
+
+	// Validate level is within acceptable range
+	if (pokemon.level < 1 || pokemon.level > 99) {
+		return { success: false, message: `${pokemon.species} has an invalid level!` };
+	}
+
+	// Get EXP amount based on candy type
+	const expAmount = getExpCandyAmount(itemId);
+	if (expAmount === 0) {
+		return { success: false, message: `Invalid Exp. Candy type!` };
+	}
+
+	// Ensure HP doesn't exceed max HP (data integrity check)
+	if (pokemon.hp > pokemon.maxHp) {
+		pokemon.hp = pokemon.maxHp;
+	}
+
+	// Add experience and handle level ups
+	const messages: string[] = [];
+	try {
+		// Add experience
+		pokemon.experience += expAmount;
+		messages.push(`**${pokemon.species} gained ${expAmount} Experience Points!**`);
+
+		let leveledUp = false;
+		let evolved = false;
+
+		// Level up loop (similar to gainExperience function)
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+			messages.push(...levelUp(pokemon));
+			leveledUp = true;
+
+			// Check for evolution
+			const evolveMessage = checkEvolution(player, pokemon, room, user);
+			if (evolveMessage) {
+				messages.push(evolveMessage);
+				evolved = true;
+				break; // Stop after evolution to prevent multiple evolutions
+			}
+
+			// Check for move learning (only if no evolution)
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messages.push(...newMoveMessages);
+		}
+
+		// If no level up, show current progress
+		if (!leveledUp) {
+			const expNeeded = pokemon.expToNextLevel - pokemon.experience;
+			messages.push(`<i>${expNeeded} EXP points needed for Level ${pokemon.level + 1}.</i>`);
+		}
+
+		// Increase friendship slightly (EXP Candies give +1 friendship in official games)
+		// Cap at 255 (max friendship)
+		if (pokemon.friendship < 255) {
+			pokemon.friendship = Math.min(255, pokemon.friendship + 1);
+		}
+	} catch (error) {
+		// If anything fails, don't consume the item
+		return { success: false, message: `An error occurred while using Exp. Candy. Please try again.` };
+	}
+
+	// Only remove item AFTER successful experience gain (prevents item loss on error)
+	removeItemFromInventory(player, itemId, 1);
+
+	const itemData = ITEMS_DATABASE[itemId];
+	const resultMessage = `You used an <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>!<br>${messages.join('<br>')}`;
+	return { success: true, message: resultMessage };
+}
+
 function getAccuracyEvasionMultiplier(stage: number): number {
 	if (stage > 0) {
 		return (3 + stage) / 3;
@@ -6160,6 +6266,38 @@ export const commands: ChatCommands = {
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
 					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+				}
+
+				// Check if there are pending moves to learn (when all 4 slots are full)
+				if (player.pendingMoveLearnQueue?.moveIds.length) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+				}
+
+				// --- Show the result with updated Pokemon info ---
+				const tempSlot = createActivePokemonSlot(targetPokemon);
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			} else if (itemId.startsWith('expcandy')) {
+				if (!pokemonId) {
+					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
+					for (const pokemon of player.party) {
+						// Only show Pokemon that are not at level 100 and haven't fainted
+						if (pokemon.hp > 0 && pokemon.level < 100) {
+							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+						}
+					}
+					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				}
+				const targetPokemon = player.party.find(p => p.id === pokemonId);
+				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
+
+				const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
+
+				if (!result.success) {
+					// .errorReply escapes HTML, so we use sendReply with a styled error message
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
