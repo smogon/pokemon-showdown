@@ -346,6 +346,250 @@ export function generatePokemonInfoHTML(
 	return html;
 }
 
+/**
+ * Generates a modern Pokemon party card for grid-based display
+ * Inspired by Pokemon Scarlet/Violet party UI
+ */
+export function generateModernPartyCard(pokemon: RPGPokemon, slotIndex: number, partyLength: number): string {
+	const species = Dex.species.get(pokemon.species);
+	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
+
+	// Dynamic HP bar color based on percentage
+	let hpBarColor = '#4CAF50'; // Green
+	if (hpPercentage <= 25) hpBarColor = '#f44336'; // Red
+	else if (hpPercentage <= 50) hpBarColor = '#FF9800'; // Orange
+	else if (hpPercentage <= 75) hpBarColor = '#FFC107'; // Yellow
+
+	const isFainted = pokemon.hp <= 0;
+	const cardOpacity = isFainted ? '0.5' : '1';
+
+	// Status condition styling
+	const statusColors: Record<Status, { bg: string, text: string }> = {
+		'psn': { bg: '#A040A0', text: 'PSN' },
+		'tox': { bg: '#A040A0', text: 'TOX' },
+		'brn': { bg: '#F08030', text: 'BRN' },
+		'par': { bg: '#F8D030', text: 'PAR' },
+		'slp': { bg: '#9898E8', text: 'SLP' },
+		'frz': { bg: '#98D8D8', text: 'FRZ' },
+	};
+
+	const statusDisplay = pokemon.status && !isFainted
+		? `<span style="background-color: ${statusColors[pokemon.status].bg}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px;">${statusColors[pokemon.status].text}</span>`
+		: '';
+
+	const faintedDisplay = isFainted
+		? `<span style="background-color: #666; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px;">FNT</span>`
+		: '';
+
+	// Gender and shiny symbols
+	const genderSymbol = pokemon.gender === 'M'
+		? '<span style="color: #2196F3; font-weight: bold; margin-left: 4px;">♂</span>'
+		: pokemon.gender === 'F'
+		? '<span style="color: #E91E63; font-weight: bold; margin-left: 4px;">♀</span>'
+		: '';
+	const shinySymbol = pokemon.shiny ? '<span style="color: #FFD700; margin-left: 4px;">★</span>' : '';
+
+	// Held item indicator
+	const itemIndicator = pokemon.item
+		? `<span style="font-size: 10px; color: #666; margin-left: 8px;">📦 ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}</span>`
+		: '';
+
+	// Experience bar
+	const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+	const expForNextLevel = pokemon.expToNextLevel;
+	const expProgress = pokemon.experience - expForLastLevel;
+	const expNeededForLevel = expForNextLevel - expForLastLevel;
+	const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
+
+	// Type badges
+	const typeColors: Record<string, string> = {
+		'Normal': '#A8A878', 'Fire': '#F08030', 'Water': '#6890F0', 'Electric': '#F8D030',
+		'Grass': '#78C850', 'Ice': '#98D8D8', 'Fighting': '#C03028', 'Poison': '#A040A0',
+		'Ground': '#E0C068', 'Flying': '#A890F0', 'Psychic': '#F85888', 'Bug': '#A8B820',
+		'Rock': '#B8A038', 'Ghost': '#705898', 'Dragon': '#7038F8', 'Dark': '#705848',
+		'Steel': '#B8B8D0', 'Fairy': '#EE99AC',
+	};
+
+	const typeBadges = species.types.map(type =>
+		`<span style="background: ${typeColors[type] || '#777'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; margin-right: 3px;">${type.toUpperCase()}</span>`
+	).join('');
+
+	// Swap buttons
+	const swapUpButton = slotIndex > 0
+		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex - 1}" class="button" style="padding: 2px 8px; font-size: 11px; margin-right: 3px;">↑</button>`
+		: '';
+	const swapDownButton = slotIndex < partyLength - 1
+		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex + 1}" class="button" style="padding: 2px 8px; font-size: 11px; margin-right: 3px;">↓</button>`
+		: '';
+
+	return `
+		<div style="
+			background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+			border: 2px solid ${isFainted ? '#999' : '#4CAF50'};
+			border-radius: 12px;
+			padding: 12px;
+			opacity: ${cardOpacity};
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		">
+			<!-- Header: Slot number and swap buttons -->
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+				<span style="font-size: 11px; color: #666; font-weight: bold;">SLOT ${slotIndex + 1}</span>
+				<div style="display: flex; gap: 2px;">
+					${swapUpButton}${swapDownButton}
+				</div>
+			</div>
+
+			<!-- Main content area -->
+			<div style="display: flex; gap: 12px; margin-bottom: 8px;">
+				<!-- Left: Pokemon sprite placeholder -->
+				<div style="
+					width: 64px;
+					height: 64px;
+					background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+					border-radius: 8px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 32px;
+					border: 2px solid #ddd;
+					flex-shrink: 0;
+				">
+					${species.name.charAt(0)}
+				</div>
+
+				<!-- Right: Pokemon info -->
+				<div style="flex: 1; min-width: 0;">
+					<!-- Name and level -->
+					<div style="font-weight: bold; font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+						${pokemon.nickname || pokemon.species}${genderSymbol}${shinySymbol}
+					</div>
+
+					<!-- Level and status -->
+					<div style="font-size: 11px; color: #666; margin-bottom: 6px;">
+						Lv. ${pokemon.level}${statusDisplay}${faintedDisplay}
+					</div>
+
+					<!-- HP Bar -->
+					<div style="background: #ddd; border-radius: 6px; height: 16px; position: relative; overflow: hidden; margin-bottom: 4px;">
+						<div style="
+							background: ${hpBarColor};
+							width: ${hpPercentage}%;
+							height: 100%;
+							transition: width 0.3s ease;
+							border-radius: 6px;
+						"></div>
+						<div style="
+							position: absolute;
+							top: 0;
+							left: 0;
+							right: 0;
+							bottom: 0;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							font-size: 10px;
+							font-weight: bold;
+							color: #333;
+							text-shadow: 0 0 2px rgba(255,255,255,0.8);
+						">
+							${pokemon.hp} / ${pokemon.maxHp}
+						</div>
+					</div>
+
+					<!-- EXP Bar -->
+					<div style="background: #ddd; border-radius: 4px; height: 6px; overflow: hidden;">
+						<div style="
+							background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%);
+							width: ${expPercentage}%;
+							height: 100%;
+							transition: width 0.3s ease;
+							border-radius: 4px;
+						"></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer: Types and item -->
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+				<div>${typeBadges}</div>
+				<div>${itemIndicator}</div>
+			</div>
+
+			<!-- Action buttons -->
+			<div style="display: flex; gap: 4px; flex-wrap: wrap;">
+				<button name="send" value="/rpg summary ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Summary</button>
+				${pokemon.item
+					? `<button name="send" value="/rpg takeitem ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Take Item</button>`
+					: `<button name="send" value="/rpg giveitem ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Give Item</button>`
+				}
+				<button name="send" value="/rpg depositpc ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Deposit</button>
+			</div>
+		</div>
+	`;
+}
+
+/**
+ * Generates the complete modern party UI with grid layout
+ * Inspired by Pokemon Scarlet/Violet
+ */
+export function generateModernPartyHTML(player: PlayerData): string {
+	let html = `<div class="infobox" style="max-width: 800px; margin: 0 auto;">
+		<h2 style="text-align: center; margin-bottom: 16px; font-size: 20px;">Your Party</h2>`;
+
+	if (player.party.length === 0) {
+		html += `<p style="text-align: center; padding: 40px 0; color: #999;">No Pokémon in party.</p>`;
+	} else {
+		// Grid layout: 2 columns on larger screens
+		html += `<div style="
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+			gap: 12px;
+			margin-bottom: 16px;
+		">`;
+
+		// Display Pokemon cards
+		for (let i = 0; i < player.party.length; i++) {
+			html += generateModernPartyCard(player.party[i], i, player.party.length);
+		}
+
+		// Add empty slots
+		for (let i = player.party.length; i < 6; i++) {
+			html += `
+				<div style="
+					background: #f9f9f9;
+					border: 2px dashed #ccc;
+					border-radius: 12px;
+					padding: 12px;
+					min-height: 160px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: #999;
+					font-size: 14px;
+				">
+					<div style="text-align: center;">
+						<div style="font-size: 32px; margin-bottom: 8px;">○</div>
+						<div>Empty Slot ${i + 1}</div>
+					</div>
+				</div>
+			`;
+		}
+
+		html += `</div>`;
+	}
+
+	// Footer buttons
+	html += `
+		<div style="display: flex; gap: 8px; justify-content: center; padding-top: 16px; border-top: 1px solid #ddd;">
+			<button name="send" value="/rpg pc" class="button" style="padding: 8px 16px;">💻 Pokemon PC</button>
+			<button name="send" value="/rpg menu" class="button" style="padding: 8px 16px;">← Back to Menu</button>
+		</div>
+	</div>`;
+
+	return html;
+}
+
 export const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
 
 export function generateSingleBattleHTML(
