@@ -6249,48 +6249,6 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
 		},
 
-		profile(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You are in a battle!");
-			}
-			const player = getPlayerData(user.id);
-			const profileHTML = `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
-		},
-
-		party(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot view your party during a battle.");
-			}
-			const player = getPlayerData(user.id);
-			let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
-			if (player.party.length === 0) {
-				partyHTML += `<p>No Pokemon in party.</p>`;
-			} else {
-				for (let i = 0; i < 6; i++) {
-					if (player.party[i]) {
-						// --- FIX ---
-						// We must wrap the RPGPokemon in an ActivePokemonSlot
-						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += `<div><strong>Slot ${i + 1}:</strong>`;
-						// Add swap buttons (up and down arrows)
-						if (i > 0) {
-							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
-						}
-						if (i < player.party.length - 1 && player.party[i + 1]) {
-							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
-						}
-						partyHTML += `<br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
-						// --- END FIX ---
-					} else {
-						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
-					}
-				}
-			}
-			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
-		},
-
 		swapslot(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot swap party slots during a battle.");
@@ -6319,18 +6277,7 @@ export const commands: ChatCommands = {
 			player.party[slot2] = temp;
 
 			// Show updated party
-			this.parse('/rpg party');
-		},
-
-		items(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot access your bag in battle.");
-			}
-			const player = getPlayerData(user.id);
-			const category = toID(target);
-			const validCategories = ['pokeball', 'medicine', 'berry', 'tm', 'key', 'held', 'misc'];
-			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
+			return this.parse('/join view-rpg-party');
 		},
 
 		useitem(target, room, user) {
@@ -6495,7 +6442,7 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`);
+			return this.parse('/join view-rpg-pc');
 		},
 
 		depositpc(target, room, user) {
@@ -6513,7 +6460,7 @@ export const commands: ChatCommands = {
 			}
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/join view-rpg-pc" class="button">View PC</button><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -6532,7 +6479,7 @@ export const commands: ChatCommands = {
 			player.party.push(pokemon);
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-pc" class="button">View PC</button><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`);
 			// --- END FIX ---
 		},
 
@@ -6540,12 +6487,8 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
 			}
-			const player = getPlayerData(user.id);
 			const category = toID(target);
-			// This line has been corrected to include 'medicine' instead of 'potion'
-			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
-			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
+			return this.parse(`/join view-rpg-shop${category ? '-' + category : ''}`);
 		},
 
 		buy(target, room, user) {
@@ -6569,7 +6512,7 @@ export const commands: ChatCommands = {
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/join view-rpg-shop" class="button">Continue Shopping</button><button name="send" value="/join view-rpg-items" class="button">View Inventory</button></p></div>`);
 		},
 
 		pokedex(target, room, user) {
@@ -6582,40 +6525,7 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot explore during a battle.");
 			}
-
-			const player = getPlayerData(user.id);
-			// This logic finds all zones that match the player's current location
-			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(toID(player.location)));
-
-			let exploreButtons = '';
-			if (availableZones.length > 0) {
-				for (const zoneId of availableZones) {
-					const zone = ENCOUNTER_ZONES[zoneId];
-					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
-				}
-			} else {
-				exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
-			}
-
-			// --- EXAMPLE of how to add a trainer ---
-			// You would add logic here to check if the trainer should appear
-			// For example: if (!player.badges.includes('boulder')) {
-			exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
-			// }
-
-			const exploreHTML = `<div class="infobox">` +
-				`<h2>Explore ${player.location}</h2>` +
-				`<p>Choose where to go:</p>` +
-				`<p>${exploreButtons}</p>` +
-				`<hr />` +
-				`<p>` +
-				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
-				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
-				`</p>` +
-				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
-				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
+			return this.parse('/join view-rpg-explore');
 		},
 
 		wildpokemon(target, room, user) {
@@ -7385,7 +7295,7 @@ export const commands: ChatCommands = {
 			// The lock is on the 'ActivePokemonSlot' which is destroyed.
 			// This is fine.
 
-			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg explore" class="button">Explore</button></p></div>`;
+			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/join view-rpg-party" class="button">View Party</button><button name="send" value="/join view-rpg-explore" class="button">Explore</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
 		},
 
@@ -7621,12 +7531,26 @@ export const pages: Chat.PageTable = {
 			if (player.party.length === 0) {
 				buf += `<p>You don't have any Pokemon yet!</p>`;
 			} else {
-				for (const pokemon of player.party) {
-					const tempSlot = createActivePokemonSlot(pokemon);
-					buf += generatePokemonInfoHTML(tempSlot, true, true);
+				for (let i = 0; i < 6; i++) {
+					if (player.party[i]) {
+						const tempSlot = createActivePokemonSlot(player.party[i]);
+						buf += `<div><strong>Slot ${i + 1}:</strong>`;
+						// Add swap buttons (up and down arrows)
+						if (i > 0) {
+							buf += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
+						}
+						if (i < player.party.length - 1 && player.party[i + 1]) {
+							buf += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
+						}
+						buf += `<br>`;
+						buf += generatePokemonInfoHTML(tempSlot, true, true);
+						buf += `</div>`;
+					} else {
+						buf += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
+					}
 				}
 			}
-			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+			buf += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-pc" class="button">Pokemon PC</button> <button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
 			break;
 			
 		case 'items':
