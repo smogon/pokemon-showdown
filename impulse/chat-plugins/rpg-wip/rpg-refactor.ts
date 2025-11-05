@@ -10,15 +10,15 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory, CUSTOM_ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY } from './items';
 import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
+import { ITEMS_DATABASE, CUSTOM_ITEMS_DATABASE, addItemToInventory, removeItemFromInventory, ITEM_PRICES, SHOP_INVENTORY, useVitaminItem, useHealingItem, useRevivalItem, useSacredAsh, useRareCandyItem, useExpCandyItem } from './items';
 
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
 const STARTER_POKEMON = {
-	fire: ['pikachu', 'charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
+	fire: ['pikachu', 'harmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
 	water: ['eevee', 'squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
 };
@@ -3796,348 +3796,6 @@ function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	handleEndOfTurnFieldEffects(battle, messageLog);
 }
 
-function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
-	if (pokemon.hp <= 0) {
-		return { success: false, message: `${pokemon.species} has fainted!` };
-	}
-
-	const itemData = ITEMS_DATABASE[itemId];
-	if (!itemData || (itemData.category !== 'medicine' && itemId !== 'berryjuice')) {
-		return { success: false, message: `This item cannot be used to heal.` };
-	}
-
-	if (itemId === 'healpowder') {
-		if (!pokemon.status) {
-			return { success: false, message: `${pokemon.species} is not affected by any status condition.` };
-		}
-		pokemon.status = null;
-		removeItemFromInventory(player, itemId, 1);
-		return { success: true, message: `You used <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! Its status condition was healed.` };
-	}
-
-	if (pokemon.hp >= pokemon.maxHp) {
-		return { success: false, message: `${pokemon.species} is already at full health!` };
-	}
-
-	let healAmount = 0;
-	switch (itemId) {
-	case 'potion':
-		healAmount = 20;
-		break;
-	case 'superpotion':
-		healAmount = 60;
-		break;
-	case 'hyperpotion':
-		healAmount = 120;
-		break;
-	case 'maxpotion':
-	case 'fullrestore':
-		healAmount = pokemon.maxHp;
-		break;
-	case 'berryjuice':
-		healAmount = 20;
-		break;
-	case 'freshwater':
-		healAmount = 50;
-		break;
-	case 'sodapop':
-		healAmount = 60;
-		break;
-	case 'lemonade':
-		healAmount = 80;
-		break;
-	case 'moomoomilk':
-		healAmount = 100;
-		break;
-	case 'tea':
-		healAmount = 120;
-		break;
-	case 'energyroot':
-		healAmount = 200;
-		break;
-	case 'energypowder':
-		healAmount = 50;
-		break;
-	default:
-		return { success: false, message: `The healing effect for ${itemData.name} is not defined.` };
-	}
-
-	const previousHp = pokemon.hp;
-	pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-	const hpRestored = pokemon.hp - previousHp;
-
-	let message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It recovered ${hpRestored} HP!`;
-
-	if (itemId === 'fullrestore' && pokemon.status) {
-		pokemon.status = null;
-		message += `<br>${pokemon.species}'s status condition was healed.`;
-	}
-
-	removeItemFromInventory(player, itemId, 1);
-	return { success: true, message };
-}
-
-function useRevivalItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
-	// Revival items can only be used on fainted Pokemon
-	if (pokemon.hp > 0) {
-		return { success: false, message: `${pokemon.species} has not fainted!` };
-	}
-
-	const itemData = ITEMS_DATABASE[itemId];
-	if (!itemData || itemData.category !== 'medicine') {
-		return { success: false, message: `This item cannot be used to revive.` };
-	}
-
-	let hpRestored = 0;
-	let friendshipChange = 0;
-	let message = '';
-
-	switch (itemId) {
-	case 'revive':
-		// Revive restores 50% of max HP (minimum 1 HP)
-		hpRestored = Math.max(1, Math.floor(pokemon.maxHp / 2));
-		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with ${hpRestored} HP!`;
-		break;
-	case 'maxrevive':
-		// Max Revive restores full HP
-		hpRestored = pokemon.maxHp;
-		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with full HP!`;
-		break;
-	case 'revivalherb':
-		// Revival Herb restores full HP but lowers friendship by 10-15 points (using 10)
-		hpRestored = pokemon.maxHp;
-		friendshipChange = -10;
-		message = `You used a <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! It was revived with full HP!`;
-		break;
-	default:
-		return { success: false, message: `The revival effect for ${itemData.name} is not defined.` };
-	}
-
-	// Restore HP
-	pokemon.hp = hpRestored;
-
-	// Clear status condition (revival removes status)
-	pokemon.status = null;
-
-	// Apply friendship change if applicable
-	if (friendshipChange !== 0) {
-		pokemon.friendship = Math.max(0, Math.min(255, pokemon.friendship + friendshipChange));
-		message += `<br>${pokemon.species}'s friendship decreased...`;
-	}
-
-	// Restore all move PP to their maximum
-	for (const move of pokemon.moves) {
-		const moveData = getMove(move.id);
-		move.pp = moveData.pp || 5;
-	}
-
-	removeItemFromInventory(player, itemId, 1);
-	return { success: true, message };
-}
-
-function useSacredAsh(player: PlayerData): { success: boolean, message: string } {
-	const itemData = ITEMS_DATABASE['sacredash'];
-	if (!itemData) {
-		return { success: false, message: `Sacred Ash not found.` };
-	}
-
-	// Check if there are any fainted Pokemon
-	const faintedPokemon = player.party.filter(p => p.hp <= 0);
-	if (faintedPokemon.length === 0) {
-		return { success: false, message: `No Pokémon need to be revived!` };
-	}
-
-	// Revive all fainted Pokemon
-	let revivedCount = 0;
-	const revivedNames: string[] = [];
-	for (const pokemon of player.party) {
-		if (pokemon.hp <= 0) {
-			pokemon.hp = pokemon.maxHp;
-			pokemon.status = null;
-			// Restore all move PP
-			for (const move of pokemon.moves) {
-				const moveData = getMove(move.id);
-				move.pp = moveData.pp || 5;
-			}
-			revivedCount++;
-			revivedNames.push(pokemon.species);
-		}
-	}
-
-	removeItemFromInventory(player, 'sacredash', 1);
-	const message = `You used <strong>${itemData.name}</strong>! All fainted Pokémon were revived with full HP!<br>` +
-		`<strong>Revived:</strong> ${revivedNames.join(', ')}`;
-	return { success: true, message };
-}
-
-function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: ChatRoom, user: User): { success: boolean, message: string } {
-	// Validate pokemon exists and has valid data
-	if (!pokemon?.species) {
-		return { success: false, message: `Invalid Pokémon data!` };
-	}
-
-	// Cannot use on fainted Pokémon
-	if (pokemon.hp <= 0) {
-		return { success: false, message: `${pokemon.species} has fainted!` };
-	}
-
-	// Cannot use on level 100 Pokémon
-	if (pokemon.level >= 100) {
-		return { success: false, message: `${pokemon.species} is already at level 100!` };
-	}
-
-	// Validate level is within acceptable range
-	if (pokemon.level < 1 || pokemon.level > 99) {
-		return { success: false, message: `${pokemon.species} has an invalid level!` };
-	}
-
-	// Ensure HP doesn't exceed max HP (data integrity check)
-	if (pokemon.hp > pokemon.maxHp) {
-		pokemon.hp = pokemon.maxHp;
-	}
-
-	// Level up the Pokémon (wrapped in try-catch for safety)
-	const messages: string[] = [];
-	try {
-		messages.push(...levelUp(pokemon));
-
-		// Set experience to the minimum required for the new level (Rare Candy behavior)
-		pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
-
-		// Check for evolution
-		const evolveMessage = checkEvolution(player, pokemon, { room, user });
-		if (evolveMessage) {
-			messages.push(evolveMessage);
-		} else {
-			// Only check for move learning if no evolution occurred
-			// (checkEvolution already handles move learning after evolution)
-			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
-			messages.push(...newMoveMessages);
-		}
-
-		// Increase friendship (Rare Candy gives +5/+3 friendship in official games)
-		// Cap at 255 (max friendship), ensure non-negative
-		if (pokemon.friendship < 0) {
-			pokemon.friendship = 0;
-		}
-		if (pokemon.friendship < 255) {
-			pokemon.friendship = Math.min(255, pokemon.friendship + 3);
-		}
-	} catch (error) {
-		// If anything fails, don't consume the item
-		return { success: false, message: `An error occurred while using Rare Candy. Please try again.` };
-	}
-
-	// Only remove item AFTER successful level up (prevents item loss on error)
-	removeItemFromInventory(player, 'rarecandy', 1);
-
-	const resultMessage = `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>!<br>${messages.join('<br>')}`;
-	return { success: true, message: resultMessage };
-}
-
-function getExpCandyAmount(itemId: string): number {
-	switch (itemId) {
-	case 'expcandyxs': return 100;
-	case 'expcandys': return 800;
-	case 'expcandym': return 3000;
-	case 'expcandyl': return 10000;
-	case 'expcandyxl': return 30000;
-	default: return 0;
-	}
-}
-
-function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: ChatRoom, user: User): { success: boolean, message: string } {
-	// Validate pokemon exists and has valid data
-	if (!pokemon?.species) {
-		return { success: false, message: `Invalid Pokémon data!` };
-	}
-
-	// Cannot use on fainted Pokémon
-	if (pokemon.hp <= 0) {
-		return { success: false, message: `${pokemon.species} has fainted!` };
-	}
-
-	// Cannot use on level 100 Pokémon (pointless, can't gain more levels)
-	if (pokemon.level >= 100) {
-		return { success: false, message: `${pokemon.species} is already at level 100!` };
-	}
-
-	// Validate level is within acceptable range
-	if (pokemon.level < 1 || pokemon.level > 99) {
-		return { success: false, message: `${pokemon.species} has an invalid level!` };
-	}
-
-	// Get EXP amount based on candy type
-	const expAmount = getExpCandyAmount(itemId);
-	if (expAmount === 0) {
-		return { success: false, message: `Invalid Exp. Candy type!` };
-	}
-
-	// Ensure HP doesn't exceed max HP (data integrity check)
-	if (pokemon.hp > pokemon.maxHp) {
-		pokemon.hp = pokemon.maxHp;
-	}
-
-	// Ensure experience is non-negative (data integrity check)
-	if (pokemon.experience < 0) {
-		pokemon.experience = 0;
-	}
-
-	// Add experience and handle level ups
-	const messages: string[] = [];
-	try {
-		// Add experience
-		pokemon.experience += expAmount;
-		messages.push(`**${pokemon.species} gained ${expAmount} Experience Points!**`);
-
-		let leveledUp = false;
-		let evolved = false;
-
-		// Level up loop (similar to gainExperience function)
-		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
-			messages.push(...levelUp(pokemon));
-			leveledUp = true;
-
-			// Check for evolution
-			const evolveMessage = checkEvolution(player, pokemon, { room, user });
-			if (evolveMessage) {
-				messages.push(evolveMessage);
-				evolved = true;
-				break; // Stop after evolution to prevent multiple evolutions
-			}
-
-			// Check for move learning (only if no evolution)
-			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
-			messages.push(...newMoveMessages);
-		}
-
-		// If no level up, show current progress
-		if (!leveledUp) {
-			const expNeeded = pokemon.expToNextLevel - pokemon.experience;
-			messages.push(`<i>${expNeeded} EXP points needed for Level ${pokemon.level + 1}.</i>`);
-		}
-
-		// Increase friendship slightly (EXP Candies give +1 friendship in official games)
-		// Cap at 255 (max friendship), ensure non-negative
-		if (pokemon.friendship < 0) {
-			pokemon.friendship = 0;
-		}
-		if (pokemon.friendship < 255) {
-			pokemon.friendship = Math.min(255, pokemon.friendship + 1);
-		}
-	} catch (error) {
-		// If anything fails, don't consume the item
-		return { success: false, message: `An error occurred while using Exp. Candy. Please try again.` };
-	}
-
-	// Only remove item AFTER successful experience gain (prevents item loss on error)
-	removeItemFromInventory(player, itemId, 1);
-
-	const itemData = ITEMS_DATABASE[itemId];
-	const resultMessage = `You used an <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>!<br>${messages.join('<br>')}`;
-	return { success: true, message: resultMessage };
-}
-
 function getAccuracyEvasionMultiplier(stage: number): number {
 	if (stage > 0) {
 		return (3 + stage) / 3;
@@ -6267,6 +5925,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
 		
+		
 		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
@@ -6300,6 +5959,7 @@ export const commands: ChatCommands = {
 					const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
 					const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
 					const isPPRestore = ['ether', 'maxether', 'elixir', 'maxelixir'].includes(itemId);
+					const isVitamin = ['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId);
 
 					for (const pokemon of player.party) {
 						let show = false;
@@ -6316,8 +5976,15 @@ export const commands: ChatCommands = {
 						if (isStatusHeal && pokemon.hp > 0 && pokemon.status) {
 							show = true;
 						}
-						if (isPPRestore && pokemon.hp > 0) { // Can use PP items on fainted Pokemon in some gens, but let's restrict to conscious ones.
+						if (isPPRestore && pokemon.hp > 0) {
 							show = true;
+						}
+						if (isVitamin && pokemon.hp > 0) {
+							const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+							if (totalEVs < 510) {
+								show = true;
+								details += `<br/><small>EVs: ${totalEVs}/510</small>`;
+							}
 						}
 
 						if (show) {
@@ -6438,6 +6105,16 @@ export const commands: ChatCommands = {
 							result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
 						}
 						break;
+					
+					// Vitamins
+					case 'hpup':
+					case 'protein':
+					case 'iron':
+					case 'calcium':
+					case 'zinc':
+					case 'carbos':
+						result = useVitaminItem(player, targetPokemon, itemId);
+						break;
 				}
 
 				if (requiresMoveSelection) {
@@ -6451,7 +6128,11 @@ export const commands: ChatCommands = {
 				}
 
 				// If successful, remove item and show result
-				removeItemFromInventory(player, itemId, 1);
+				// (Vitamin function already removes item, so skip for them)
+				if (!['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId)) {
+					removeItemFromInventory(player, itemId, 1);
+				}
+				
 				const tempSlot = createActivePokemonSlot(targetPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
