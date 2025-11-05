@@ -92,12 +92,14 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const type = target.trim().toLowerCase();
-			if (!['fire', 'water', 'grass'].includes(type)) {
-				return this.errorReply("Invalid type.");
+			const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON]; // Get the starters
+			if (!starters) { // Check if the starters exist
+				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type)}`);
+			// Pass both the type and the starters list to the HTML function
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
-
+		
 		choosestarter(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
