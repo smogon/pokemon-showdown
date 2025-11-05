@@ -103,3 +103,23 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 	},
 };
+
+export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
+	'figyberry': { flavor: 'Spicy', stat: 'atk' },
+	'wikiberry': { flavor: 'Dry', stat: 'spa' },
+	'magoberry': { flavor: 'Sweet', stat: 'spe' },
+	'aguavberry': { flavor: 'Bitter', stat: 'spd' },
+	'iapapaberry': { flavor: 'Sour', stat: 'def' },
+};
+
+export const NATURE_FLAVOR_PREFERENCES: Record<keyof Stats, string> = {
+	atk: 'Spicy', def: 'Sour', spa: 'Dry', spd: 'Bitter', spe: 'Sweet', maxHp: '',
+};
+
+export const TYPE_RESIST_BERRIES: Record<string, string> = {
+	'babiriberry': 'Steel', 'chartiberry': 'Rock', 'chilanberry': 'Normal', 'chopleberry': 'Fighting',
+	'cobaberry': 'Flying', 'colburberry': 'Dark', 'habanberry': 'Dragon', 'kasibberry': 'Ghost',
+	'kebiaberry': 'Poison', 'occaberry': 'Fire', 'passhoberry': 'Water', 'payapaberry': 'Psychic',
+	'rindoberry': 'Grass', 'roseliberry': 'Fairy', 'shucaberry': 'Ground', 'tangaberry': 'Bug',
+	'wacanberry': 'Electric', 'yacheberry': 'Ice',
+};
