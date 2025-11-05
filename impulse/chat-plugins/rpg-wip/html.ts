@@ -475,6 +475,177 @@ export function generateModernPartyHTML(player: PlayerData): string {
 	return html;
 }
 
+/**
+ * Generates a modern Pokemon summary page for detailed Pokemon information
+ * Inspired by Pokemon Scarlet/Violet summary UI
+ */
+export function generateModernPokemonSummaryHTML(pokemon: RPGPokemon): string {
+	const species = Dex.species.get(pokemon.species);
+	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
+
+	const genderSymbol = pokemon.gender === 'M'
+		? '<span class="rpg-gender-male">♂</span>'
+		: pokemon.gender === 'F'
+		? '<span class="rpg-gender-female">♀</span>'
+		: '';
+	const shinySymbol = pokemon.shiny ? '<span class="rpg-shiny">★</span>' : '';
+
+	let html = '';
+	html += `<div class="infobox rpg-summary-container">`;
+
+	html += `<div class="rpg-summary-header">`;
+	html += `<div class="rpg-summary-sprite">`;
+	html += `<psicon pokemon="${species.id}" />`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-header-info">`;
+	html += `<h2 class="rpg-summary-title">${pokemon.nickname || pokemon.species}${genderSymbol}${shinySymbol}</h2>`;
+	html += `<div class="rpg-summary-subtitle">${pokemon.species} - Lv. ${pokemon.level}</div>`;
+	html += `<div class="rpg-summary-hp">`;
+	html += `<div class="rpg-summary-hp-label">HP: ${pokemon.hp} / ${pokemon.maxHp}</div>`;
+	html += `<div class="rpg-hp-bar-container">`;
+	let hpBarClass = 'rpg-hp-bar high';
+	if (hpPercentage <= 25) hpBarClass = 'rpg-hp-bar critical';
+	else if (hpPercentage <= 50) hpBarClass = 'rpg-hp-bar low';
+	else if (hpPercentage <= 75) hpBarClass = 'rpg-hp-bar medium';
+	html += `<div class="${hpBarClass}" style="width: ${hpPercentage}%;"></div>`;
+	html += `</div>`;
+	html += `</div>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-grid">`;
+
+	html += `<div class="rpg-summary-section">`;
+	html += `<h3 class="rpg-summary-section-title">Basic Info</h3>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Nature:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.nature}</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Ability:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.ability || 'Unknown'}</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Tera Type:</span>`;
+	html += `<span class="rpg-tera-badge">⭐ ${pokemon.teraType}</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Held Item:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'}</span>`;
+	html += `</div>`;
+	const typeBadges = species.types.map(type =>
+		`<span class="rpg-type-badge rpg-type-${type.toLowerCase()}">${type.toUpperCase()}</span>`
+	).join('');
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Type:</span>`;
+	html += `<span class="rpg-summary-value">${typeBadges}</span>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-section">`;
+	html += `<h3 class="rpg-summary-section-title">Stats</h3>`;
+	const stats = [
+		{ name: 'HP', value: pokemon.maxHp, max: 714 },
+		{ name: 'Attack', value: pokemon.atk, max: 614 },
+		{ name: 'Defense', value: pokemon.def, max: 614 },
+		{ name: 'Sp. Atk', value: pokemon.spa, max: 614 },
+		{ name: 'Sp. Def', value: pokemon.spd, max: 614 },
+		{ name: 'Speed', value: pokemon.spe, max: 614 }
+	];
+	for (const stat of stats) {
+		const percentage = Math.min(100, Math.floor((stat.value / stat.max) * 100));
+		html += `<div class="rpg-stat-row">`;
+		html += `<span class="rpg-stat-name">${stat.name}</span>`;
+		html += `<span class="rpg-stat-value">${stat.value}</span>`;
+		html += `<div class="rpg-stat-bar-container">`;
+		html += `<div class="rpg-stat-bar" style="width: ${percentage}%;"></div>`;
+		html += `</div>`;
+		html += `</div>`;
+	}
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-section">`;
+	html += `<h3 class="rpg-summary-section-title">IVs</h3>`;
+	html += `<div class="rpg-iv-grid">`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">HP:</span> <span class="rpg-iv-value">${pokemon.ivs.hp}</span></div>`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">Atk:</span> <span class="rpg-iv-value">${pokemon.ivs.atk}</span></div>`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">Def:</span> <span class="rpg-iv-value">${pokemon.ivs.def}</span></div>`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">SpA:</span> <span class="rpg-iv-value">${pokemon.ivs.spa}</span></div>`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">SpD:</span> <span class="rpg-iv-value">${pokemon.ivs.spd}</span></div>`;
+	html += `<div class="rpg-iv-item"><span class="rpg-iv-label">Spe:</span> <span class="rpg-iv-value">${pokemon.ivs.spe}</span></div>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-section">`;
+	html += `<h3 class="rpg-summary-section-title">EVs</h3>`;
+	html += `<div class="rpg-ev-grid">`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">HP:</span> <span class="rpg-ev-value">${pokemon.evs.hp}</span></div>`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">Atk:</span> <span class="rpg-ev-value">${pokemon.evs.atk}</span></div>`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">Def:</span> <span class="rpg-ev-value">${pokemon.evs.def}</span></div>`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">SpA:</span> <span class="rpg-ev-value">${pokemon.evs.spa}</span></div>`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">SpD:</span> <span class="rpg-ev-value">${pokemon.evs.spd}</span></div>`;
+	html += `<div class="rpg-ev-item"><span class="rpg-ev-label">Spe:</span> <span class="rpg-ev-value">${pokemon.evs.spe}</span></div>`;
+	html += `</div>`;
+	html += `<div class="rpg-ev-total">Total: ${totalEVs} / 510</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-section rpg-summary-moves">`;
+	html += `<h3 class="rpg-summary-section-title">Moves</h3>`;
+	html += `<div class="rpg-moves-grid">`;
+	for (const move of pokemon.moves) {
+		const moveData = getMove(move.id);
+		const ppPercentage = Math.floor((move.pp / moveData.pp) * 100);
+		let ppClass = 'rpg-move-pp high';
+		if (ppPercentage <= 25) ppClass = 'rpg-move-pp critical';
+		else if (ppPercentage <= 50) ppClass = 'rpg-move-pp low';
+		html += `<div class="rpg-move-card">`;
+		html += `<div class="rpg-move-name">${moveData.name}</div>`;
+		html += `<div class="rpg-move-type rpg-type-${moveData.type.toLowerCase()}">${moveData.type.toUpperCase()}</div>`;
+		html += `<div class="${ppClass}">PP: ${move.pp} / ${moveData.pp}</div>`;
+		html += `</div>`;
+	}
+	while (pokemon.moves.length < 4) {
+		html += `<div class="rpg-move-card rpg-move-empty">Empty Move Slot</div>`;
+		pokemon.moves.push({ id: '', pp: 0 } as any);
+	}
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-section">`;
+	html += `<h3 class="rpg-summary-section-title">Trainer Memo</h3>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">ID:</span>`;
+	html += `<span class="rpg-summary-value rpg-mono">${pokemon.id}</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Caught In:</span>`;
+	html += `<span class="rpg-summary-value">${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'a Ball'}</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Height:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.heightm} m</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Weight:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.weightkg} kg</span>`;
+	html += `</div>`;
+	html += `<div class="rpg-summary-row">`;
+	html += `<span class="rpg-summary-label">Friendship:</span>`;
+	html += `<span class="rpg-summary-value">${pokemon.friendship} / 255</span>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `</div>`;
+
+	html += `<div class="rpg-summary-footer">`;
+	html += `<button name="send" value="/rpg party" class="button rpg-footer-btn">← Back to Party</button>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	return html;
+}
+
 export const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
 
 export function generateSingleBattleHTML(

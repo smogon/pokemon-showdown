@@ -55,6 +55,7 @@ import {
     generateWelcomeHTML,
     generateStarterSelectionHTML,
     generatePokemonSummaryHTML,
+    generateModernPokemonSummaryHTML,
     generateEggMoveSelectionHTML,
     generateInventoryHTML,
     generateShopHTML,
@@ -262,7 +263,7 @@ export const commands: ChatCommands = {
 			if (!pokemon) {
 				return this.errorReply("Pokemon not found in your party.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModernPokemonSummaryHTML(pokemon)}`);
 		},
 
 		profile(target, room, user) {
