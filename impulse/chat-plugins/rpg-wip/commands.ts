@@ -64,7 +64,8 @@ import {
     generateSwitchMenuHTML,
     generateMoveLearnHTML,
     generateGiveItemPokemonSelectionHTML,
-    generateFaintSwitchHTML
+    generateFaintSwitchHTML,
+    generateModernPartyHTML
 } from './html';
 import {
     STARTER_POKEMON,
@@ -278,24 +279,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot view your party during a battle.");
 			}
 			const player = getPlayerData(user.id);
-			let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
-			if (player.party.length === 0) {
-				partyHTML += `<p>No Pokemon in party.</p>`;
-			} else {
-				for (let i = 0; i < 6; i++) {
-					if (player.party[i]) {
-						// --- THIS IS THE FIX ---
-						// We pass the slot info directly to the HTML generator
-						// and no longer wrap it in an extra <div>
-						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += generatePokemonInfoHTML(tempSlot, true, true, { index: i, partyLength: player.party.length });
-						// --- END FIX ---
-					} else {
-						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
-					}
-				}
-			}
-			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			const partyHTML = generateModernPartyHTML(player);
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
