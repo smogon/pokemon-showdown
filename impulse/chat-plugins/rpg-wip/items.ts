@@ -33,7 +33,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'terashard': { id: 'terashard', name: 'Tera Shard', category: 'misc', description: 'A mysterious shard. When used on a Pokémon, it changes its Tera Type to a new, random type.' },
 };
 
-export const ITEM_PRICES: Record<string, number> = {
+const ITEM_PRICES: Record<string, number> = {
 	'pokeball': 200, 'greatball': 600, 'ultraball': 800, 'potion': 300, 'superpotion': 700, 'hyperpotion': 1200, 'maxpotion': 2500, 'fullrestore': 3000, 'eggmovetutor': 3000, 'rarecandy': 4800,
 	'expcandyxs': 20, 'expcandys': 100, 'expcandym': 500, 'expcandyl': 3000, 'expcandyxl': 10000,
 	'levelball': 1000, 'fastball': 1000, 'timerball': 1000, 'nestball': 1000, 'netball': 1000, 'quickball': 1000, 'dreamball': 1000,
@@ -84,6 +84,7 @@ export const ITEM_PRICES: Record<string, number> = {
 	'razorclaw': 4000,
 	'lightclay': 4000,
 	'everstone': 2000,
+	'terashard': 5000,
 };
 
 export const SHOP_INVENTORY: string[] = [
