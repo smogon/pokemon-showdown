@@ -59,6 +59,7 @@ import {
     generateEggMoveSelectionHTML,
     generateInventoryHTML,
     generateShopHTML,
+    generateModernShopHTML,
     generatePCHTML,
     generateCatchMenuHTML,
     generateCatchTargetHTML,
@@ -752,7 +753,7 @@ export const commands: ChatCommands = {
 			// This line has been corrected to include 'medicine' instead of 'potion'
 			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModernShopHTML(player, filterCategory)}`);
 		},
 
 		buy(target, room, user) {
