@@ -5142,7 +5142,7 @@ function generateSingleBattleHTML(
 			expBarHTML = `<div style="background: #555; height: 4px; border-radius: 2px; margin-top: 3px; overflow: hidden;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 100%;"></div></div>`;
 		}
 
-		return `<div style="background: ${isPlayer ? '#E8F4F8' : '#F8E8E8'}; border: 2px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); min-height: 80px;">` +
+		return `<div style="background: ${isPlayer ? '#E8F4F8' : '#F8E8E8'}; border: 2px solid #333; border-radius: 12px; padding: 14px; margin: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); min-height: 80px;">` +
 			`<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">` +
 			`<div style="font-weight: bold; font-size: 14px;">${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}${teraIndicator}</div>` +
 			`<div style="font-size: 13px; color: #666;">Lv${pokemon.level}</div>` +
@@ -5156,7 +5156,7 @@ function generateSingleBattleHTML(
 			`</div>` +
 			(statusText ? `<div style="background: ${statusColors[displayStatus!]}; color: white; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold;">${statusText}</div>` : '') +
 			`</div>` +
-			(isPlayer ? `<div style="font-size: 12px; color: #333; font-weight: 500;">${pokemon.hp} / ${pokemon.maxHp} HP</div>` : '') +
+			`<div style="font-size: 12px; color: #333; font-weight: 500;">${pokemon.hp} / ${pokemon.maxHp} HP</div>` +
 			expBarHTML +
 			`</div>`;
 	};
@@ -5210,21 +5210,29 @@ function generateSingleBattleHTML(
 
 			const moveButtonStyle = `background: linear-gradient(to bottom, ${isDisabled ? '#A0A0A0' : '#E8F0F8'}, ${isDisabled ? '#808080' : '#C8D8E8'}); border: 2px solid ${isDisabled ? '#555' : '#4A90E2'}; border-radius: 8px; padding: 10px; font-weight: bold; color: ${isDisabled ? '#555' : '#333'}; text-align: center; cursor: ${isDisabled ? 'not-allowed' : 'pointer'}; box-shadow: 0 2px 4px rgba(0,0,0,0.2); width: 100%;`;
 
-			const normalButton = `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${moveButtonStyle}">${moveData.name.toUpperCase()}<br><span style="font-size: 11px; font-weight: normal;">${moveData.type.toUpperCase()} • ${move.pp} / ${moveData.pp}</span></button>`;
-
-			// Add Tera option if can terastallize
-			if (canTerastallize && !isDisabled) {
-				const teraButtonStyle = `background: linear-gradient(135deg, #FF1493, #9400D3); border: 2px solid #FF1493; border-radius: 6px; padding: 6px; color: white; font-weight: bold; text-align: center; cursor: pointer; margin-top: 4px; font-size: 11px; box-shadow: 0 2px 4px rgba(255,20,147,0.4); width: 100%;`;
-				return `<div>${normalButton}<button name="send" value="/rpg battleaction move 0 ${move.id} 2 terastallize" class="button" style="${teraButtonStyle}">⭐ TERASTALLIZE</button></div>`;
-			}
-			return normalButton;
+			return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2" class="button" ${isDisabled ? 'disabled' : ''} style="${moveButtonStyle}">${moveData.name.toUpperCase()}<br><span style="font-size: 11px; font-weight: normal;">${moveData.type.toUpperCase()} • ${move.pp} / ${moveData.pp}</span></button>`;
 		});
+
+		let teraButtonHTML = '';
+		if (canTerastallize) {
+			const teraButtonStyle = `background: linear-gradient(135deg, #FF1493, #9400D3); border: 2px solid #FF1493; border-radius: 8px; padding: 10px; color: white; font-weight: bold; text-align: center; cursor: pointer; font-size: 12px; box-shadow: 0 2px 4px rgba(255,20,147,0.4); width: 100%;`;
+			teraButtonHTML = `<div style="margin-top: 10px; text-align: center;"><p style="font-size: 12px; margin-bottom: 5px; color: #FF1493; font-weight: bold;">⭐ Terastallize Option Available</p><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">` +
+				playerPokemon.moves.map(move => {
+					const moveData = getMove(move.id);
+					const validationError = validateMoveAction(playerSlot, move.id, battle);
+					const isDisabled = !!validationError || move.pp === 0;
+					if (isDisabled) return '';
+					return `<button name="send" value="/rpg battleaction move 0 ${move.id} 2 terastallize" class="button" style="${teraButtonStyle}">${moveData.name.toUpperCase()} + TERA</button>`;
+				}).filter(Boolean).join('') +
+				`</div></div>`;
+		}
 
 		actionHTML = `<div style="margin-top: 10px;">` +
 			`<p style="font-weight: bold; font-size: 14px; margin-bottom: 8px; background: #E8F0F8; padding: 8px; border-radius: 8px; border: 2px solid #4A90E2;">What will ${playerPokemonName} do?</p>` +
 			`<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">` +
 			moveButtons.join('') +
 			`</div>` +
+			teraButtonHTML +
 			`</div>`;
 	}
 
@@ -5549,7 +5557,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<p><strong>Level:</strong> ' + pokemon.level + '</p>' +
 		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
 		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
-		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
+		'<p><strong>Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
 		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
 		'</div>' +
 		'<div style="flex-basis: 48%;">' +
