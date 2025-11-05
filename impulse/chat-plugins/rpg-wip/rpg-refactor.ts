@@ -4886,7 +4886,7 @@ function generateSharedBattlePokemonInfo(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
-		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div style="border-radius: 8px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -4961,7 +4961,7 @@ function generateSharedBattlePokemonInfo(
 
 	if (isDoubleBattle) {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br><small>Type: ${typeDisplay}</small><br>` +
-			`<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
+			`<div style="border-radius: 8px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
 			`${expBarHTML}` +
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
