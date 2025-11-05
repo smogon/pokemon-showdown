@@ -436,77 +436,17 @@ export function generateModernPartyCard(pokemon: RPGPokemon, slotIndex: number, 
 }
 
 /**
- * Generates the complete modern party UI with grid layout and embedded CSS
- * Inspired by Pokemon Scarlet/Violet - Compact version with max-height: 360px
+ * Generates the complete modern party UI with grid layout
+ * Inspired by Pokemon Scarlet/Violet - Uses external CSS from impulse/css/rpg-party.css
+ * Note: All styles are defined in impulse/css/rpg-party.css to avoid inline style sanitization
  */
 export function generateModernPartyHTML(player: PlayerData): string {
-	let html = '<style>';
-	html += '.rpg-party-card { background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); border: 2px solid #4CAF50; border-radius: 12px; padding: 12px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }';
-	html += '.rpg-party-card.fainted { border-color: #999; opacity: 0.5; }';
-	html += '.rpg-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }';
-	html += '.rpg-slot-label { font-size: 11px; color: #666; font-weight: bold; }';
-	html += '.rpg-swap-buttons { display: flex; gap: 2px; }';
-	html += '.rpg-swap-btn { padding: 2px 8px; font-size: 11px; margin-right: 3px; }';
-	html += '.rpg-card-content { display: flex; gap: 12px; margin-bottom: 8px; }';
-	html += '.rpg-sprite-box { width: 64px; height: 64px; background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 2px solid #ddd; flex-shrink: 0; }';
-	html += '.rpg-pokemon-info { flex: 1; min-width: 0; }';
-	html += '.rpg-pokemon-name { font-weight: bold; font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }';
-	html += '.rpg-gender-male { color: #2196F3; font-weight: bold; margin-left: 4px; }';
-	html += '.rpg-gender-female { color: #E91E63; font-weight: bold; margin-left: 4px; }';
-	html += '.rpg-shiny { color: #FFD700; margin-left: 4px; }';
-	html += '.rpg-pokemon-level { font-size: 11px; color: #666; margin-bottom: 6px; }';
-	html += '.rpg-status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px; color: white; }';
-	html += '.rpg-status-psn, .rpg-status-tox { background-color: #A040A0; }';
-	html += '.rpg-status-brn { background-color: #F08030; }';
-	html += '.rpg-status-par { background-color: #F8D030; }';
-	html += '.rpg-status-slp { background-color: #9898E8; }';
-	html += '.rpg-status-frz { background-color: #98D8D8; }';
-	html += '.rpg-status-fnt { background-color: #666; }';
-	html += '.rpg-hp-bar-container { background: #ddd; border-radius: 6px; height: 16px; position: relative; overflow: hidden; margin-bottom: 4px; }';
-	html += '.rpg-hp-bar { height: 100%; transition: width 0.3s ease; border-radius: 6px; }';
-	html += '.rpg-hp-bar.high { background: #4CAF50; }';
-	html += '.rpg-hp-bar.medium { background: #FFC107; }';
-	html += '.rpg-hp-bar.low { background: #FF9800; }';
-	html += '.rpg-hp-bar.critical { background: #f44336; }';
-	html += '.rpg-hp-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #333; text-shadow: 0 0 2px rgba(255,255,255,0.8); }';
-	html += '.rpg-exp-bar-container { background: #ddd; border-radius: 4px; height: 6px; overflow: hidden; }';
-	html += '.rpg-exp-bar { background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%); height: 100%; transition: width 0.3s ease; border-radius: 4px; }';
-	html += '.rpg-card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }';
-	html += '.rpg-type-badge { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; margin-right: 3px; color: white; }';
-	html += '.rpg-type-normal { background: #A8A878; }';
-	html += '.rpg-type-fire { background: #F08030; }';
-	html += '.rpg-type-water { background: #6890F0; }';
-	html += '.rpg-type-electric { background: #F8D030; }';
-	html += '.rpg-type-grass { background: #78C850; }';
-	html += '.rpg-type-ice { background: #98D8D8; }';
-	html += '.rpg-type-fighting { background: #C03028; }';
-	html += '.rpg-type-poison { background: #A040A0; }';
-	html += '.rpg-type-ground { background: #E0C068; }';
-	html += '.rpg-type-flying { background: #A890F0; }';
-	html += '.rpg-type-psychic { background: #F85888; }';
-	html += '.rpg-type-bug { background: #A8B820; }';
-	html += '.rpg-type-rock { background: #B8A038; }';
-	html += '.rpg-type-ghost { background: #705898; }';
-	html += '.rpg-type-dragon { background: #7038F8; }';
-	html += '.rpg-type-dark { background: #705848; }';
-	html += '.rpg-type-steel { background: #B8B8D0; }';
-	html += '.rpg-type-fairy { background: #EE99AC; }';
-	html += '.rpg-item-indicator { font-size: 10px; color: #666; margin-left: 8px; }';
-	html += '.rpg-action-buttons { display: flex; gap: 4px; flex-wrap: wrap; }';
-	html += '.rpg-action-btn { flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px; }';
-	html += '.rpg-empty-slot { background: #f9f9f9; border: 2px dashed #ccc; border-radius: 12px; padding: 12px; min-height: 160px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; }';
-	html += '.rpg-empty-slot-content { text-align: center; }';
-	html += '.rpg-empty-slot-icon { font-size: 32px; margin-bottom: 8px; }';
-	html += '.rpg-party-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; margin-bottom: 16px; max-height: 360px; overflow-y: auto; }';
-	html += '.rpg-party-footer { display: flex; gap: 8px; justify-content: center; padding-top: 16px; border-top: 1px solid #ddd; }';
-	html += '.rpg-footer-btn { padding: 8px 16px; }';
-	html += '</style>';
-
-	html += `<div class="infobox" style="max-width: 800px; margin: 0 auto;">`;
-	html += `<h2 style="text-align: center; margin-bottom: 16px; font-size: 20px;">Your Party</h2>`;
+	let html = '';
+	html += `<div class="infobox rpg-party-container">`;
+	html += `<h2 class="rpg-party-title">Your Party</h2>`;
 
 	if (player.party.length === 0) {
-		html += `<p style="text-align: center; padding: 40px 0; color: #999;">No Pokémon in party.</p>`;
+		html += `<p class="rpg-party-empty">No Pokémon in party.</p>`;
 	} else {
 		html += `<div class="rpg-party-grid">`;
 

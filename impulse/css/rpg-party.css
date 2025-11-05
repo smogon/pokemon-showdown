@@ -1,0 +1,395 @@
+/**
+ * Custom CSS for Pokemon Showdown Server
+ * RPG Party UI Styles - Modern Pokemon Scarlet/Violet inspired design
+ */
+
+/* Default widths for bars (will be overridden by JavaScript) */
+.rpg-hp-bar[data-width],
+.rpg-exp-bar[data-width] {
+	width: 0%;
+}
+
+/* JavaScript to apply data-width attributes */
+/* This script runs on the client to set bar widths from data attributes */
+/* Place this in a <script> tag or in client-side code */
+/*
+document.addEventListener('DOMContentLoaded', function() {
+	function applyDataWidths() {
+		document.querySelectorAll('[data-width]').forEach(function(el) {
+			el.style.width = el.getAttribute('data-width') + '%';
+		});
+	}
+	applyDataWidths();
+	// Re-apply when content updates (for uhtmlchange)
+	const observer = new MutationObserver(applyDataWidths);
+	observer.observe(document.body, { childList: true, subtree: true });
+});
+*/
+
+/* Party Card Styles */
+.rpg-party-card {
+	background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+	border: 2px solid #4CAF50;
+	border-radius: 12px;
+	padding: 12px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rpg-party-card.fainted {
+	border-color: #999;
+	opacity: 0.5;
+}
+
+/* Card Header */
+.rpg-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.rpg-slot-label {
+	font-size: 11px;
+	color: #666;
+	font-weight: bold;
+}
+
+.rpg-swap-buttons {
+	display: flex;
+	gap: 2px;
+}
+
+.rpg-swap-btn {
+	padding: 2px 8px;
+	font-size: 11px;
+	margin-right: 3px;
+}
+
+/* Card Content */
+.rpg-card-content {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 8px;
+}
+
+.rpg-sprite-box {
+	width: 64px;
+	height: 64px;
+	background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 32px;
+	border: 2px solid #ddd;
+	flex-shrink: 0;
+}
+
+.rpg-pokemon-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.rpg-pokemon-name {
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.rpg-gender-male {
+	color: #2196F3;
+	font-weight: bold;
+	margin-left: 4px;
+}
+
+.rpg-gender-female {
+	color: #E91E63;
+	font-weight: bold;
+	margin-left: 4px;
+}
+
+.rpg-shiny {
+	color: #FFD700;
+	margin-left: 4px;
+}
+
+.rpg-pokemon-level {
+	font-size: 11px;
+	color: #666;
+	margin-bottom: 6px;
+}
+
+/* Status Badges */
+.rpg-status-badge {
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-size: 10px;
+	font-weight: bold;
+	margin-left: 8px;
+	color: white;
+}
+
+.rpg-status-psn,
+.rpg-status-tox {
+	background-color: #A040A0;
+}
+
+.rpg-status-brn {
+	background-color: #F08030;
+}
+
+.rpg-status-par {
+	background-color: #F8D030;
+}
+
+.rpg-status-slp {
+	background-color: #9898E8;
+}
+
+.rpg-status-frz {
+	background-color: #98D8D8;
+}
+
+.rpg-status-fnt {
+	background-color: #666;
+}
+
+/* HP Bar */
+.rpg-hp-bar-container {
+	background: #ddd;
+	border-radius: 6px;
+	height: 16px;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 4px;
+}
+
+.rpg-hp-bar {
+	height: 100%;
+	transition: width 0.3s ease;
+	border-radius: 6px;
+}
+
+.rpg-hp-bar.high {
+	background: #4CAF50;
+}
+
+.rpg-hp-bar.medium {
+	background: #FFC107;
+}
+
+.rpg-hp-bar.low {
+	background: #FF9800;
+}
+
+.rpg-hp-bar.critical {
+	background: #f44336;
+}
+
+.rpg-hp-text {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: 0 0 2px rgba(255,255,255,0.8);
+}
+
+/* EXP Bar */
+.rpg-exp-bar-container {
+	background: #ddd;
+	border-radius: 4px;
+	height: 6px;
+	overflow: hidden;
+}
+
+.rpg-exp-bar {
+	background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%);
+	height: 100%;
+	transition: width 0.3s ease;
+	border-radius: 4px;
+}
+
+/* Card Footer */
+.rpg-card-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+/* Type Badges */
+.rpg-type-badge {
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 9px;
+	font-weight: bold;
+	margin-right: 3px;
+	color: white;
+}
+
+.rpg-type-normal {
+	background: #A8A878;
+}
+
+.rpg-type-fire {
+	background: #F08030;
+}
+
+.rpg-type-water {
+	background: #6890F0;
+}
+
+.rpg-type-electric {
+	background: #F8D030;
+}
+
+.rpg-type-grass {
+	background: #78C850;
+}
+
+.rpg-type-ice {
+	background: #98D8D8;
+}
+
+.rpg-type-fighting {
+	background: #C03028;
+}
+
+.rpg-type-poison {
+	background: #A040A0;
+}
+
+.rpg-type-ground {
+	background: #E0C068;
+}
+
+.rpg-type-flying {
+	background: #A890F0;
+}
+
+.rpg-type-psychic {
+	background: #F85888;
+}
+
+.rpg-type-bug {
+	background: #A8B820;
+}
+
+.rpg-type-rock {
+	background: #B8A038;
+}
+
+.rpg-type-ghost {
+	background: #705898;
+}
+
+.rpg-type-dragon {
+	background: #7038F8;
+}
+
+.rpg-type-dark {
+	background: #705848;
+}
+
+.rpg-type-steel {
+	background: #B8B8D0;
+}
+
+.rpg-type-fairy {
+	background: #EE99AC;
+}
+
+.rpg-item-indicator {
+	font-size: 10px;
+	color: #666;
+	margin-left: 8px;
+}
+
+/* Action Buttons */
+.rpg-action-buttons {
+	display: flex;
+	gap: 4px;
+	flex-wrap: wrap;
+}
+
+.rpg-action-btn {
+	flex: 1;
+	padding: 4px 8px;
+	font-size: 11px;
+	min-width: 60px;
+}
+
+/* Empty Slots */
+.rpg-empty-slot {
+	background: #f9f9f9;
+	border: 2px dashed #ccc;
+	border-radius: 12px;
+	padding: 12px;
+	min-height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #999;
+	font-size: 14px;
+}
+
+.rpg-empty-slot-content {
+	text-align: center;
+}
+
+.rpg-empty-slot-icon {
+	font-size: 32px;
+	margin-bottom: 8px;
+}
+
+/* Party Grid */
+.rpg-party-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 12px;
+	margin-bottom: 16px;
+	max-height: 360px;
+	overflow-y: auto;
+}
+
+/* Party Footer */
+.rpg-party-footer {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	padding-top: 16px;
+	border-top: 1px solid #ddd;
+}
+
+.rpg-footer-btn {
+	padding: 8px 16px;
+}
+
+/* Container Styles */
+.rpg-party-container {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.rpg-party-title {
+	text-align: center;
+	margin-bottom: 16px;
+	font-size: 20px;
+}
+
+.rpg-party-empty {
+	text-align: center;
+	padding: 40px 0;
+	color: #999;
+}
