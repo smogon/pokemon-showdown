@@ -31,11 +31,9 @@ import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 // Import functions from battle-core that are used in this file
 import {
 	activateUnburden,
-	applyStatChange,
 	applySynchronize,
+	applyStatChange,
 	checkMentalHerb,
-	createActivePokemonSlot,
-	executeMove,
 	gainExperience,
 	getCustomEffectiveness,
 	getStatMultiplier,
@@ -747,63 +745,6 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 	return false;
 }
 
-export function applyStatChange(
-	slot: ActivePokemonSlot,
-	stat: keyof ActivePokemonSlot['statStages'],
-	value: number,
-	battle: BattleState,
-	messageLog: string[],
-	source: ActivePokemonSlot | null = null
-): boolean {
-	const pokemon = slot.pokemon;
-	const ability = toID(pokemon.ability || '');
-	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
-
-	const currentStage = slot.statStages[stat];
-	const isSelf = !source || source.pokemon.id === pokemon.id;
-
-	if (actualValue > 0) {
-		if (currentStage >= 6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
-			return false;
-		}
-		const newStage = Math.min(6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
-		messageLog.push(msg);
-		return true;
-	} else if (actualValue < 0) {
-		if (!isSelf) {
-			if (battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
-				messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
-				return false;
-			}
-			const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
-			if (blockAbilities.includes(ability)) {
-				messageLog.push(`${pokemon.species}'s ${ability} prevents its stats from being lowered!`);
-				return false;
-			}
-			if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(ability)) {
-				messageLog.push(`${pokemon.species}'s ${ability} prevents its Attack from being lowered!`);
-				return false;
-			}
-		}
-
-		if (currentStage <= -6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any lower!`);
-			return false;
-		}
-		const newStage = Math.max(-6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
-		messageLog.push(msg);
-
-		checkStatDropAbilities(slot, source, battle, messageLog);
-		return true;
-	}
-
-	return false;
-}
 
 export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
