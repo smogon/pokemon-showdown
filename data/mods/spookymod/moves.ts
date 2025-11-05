@@ -378,12 +378,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "A statused target is hurt 1/4 max HP per turn.",
 		shortDesc: "A statused target is hurt 1/4 max HP per turn.",
 		volatileStatus: 'nightmare',
+		onTryHit(target, source, move) {
+			if (!target?.status && !target.hasAbility('comatose')) return false;
+		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				if (!pokemon.status && !pokemon.hasAbility('comatose')) {
-					return false;
-				}
 				this.add('-start', pokemon, 'Nightmare');
 			},
 			onResidualOrder: 11,
@@ -475,8 +475,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				case 2:
 					this.actions.useMove("Trick", source, { target });
 					break;
-				default:
+				case 3:
 					this.damage(source.baseMaxhp / 4, source);
+					break;
 				}
 			} else {
 				const random2 = this.random(2);
@@ -548,14 +549,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
-			// censored all of these, left the originals in for reference (ana some of these are CRAZY!!!)
-			/* const curses = [
-				"Ass", "Asshole", "Bastard", "Bitch", "Bloody", "Bollocks", "Bugger", "Cock", "Crap", "Cunt", "Damn", "Dick", "Douche",
-				"Fart", "Fuck", "Heck", "Hell", "Motherfucker", "Piss", "Prick", "Pussy", "Shit", "Shut up", "Twat", "Wanker",
-			]; */
 			const curses = [
-				"butt", "booty", "blasted", "beach", "bloody HECK", "balls", "bugger", "doodoo", "carp", "dang",
-				"fart", "frick", "HECK", "heck", "mf", "piss", "prickly", "nitwit", "shoot", "shut up", "twerp", "silly sausage",
+				"butt", "booty", "blasted", "beach", "bloody HECK", "bugger", "doodoo", "carp", "dang",
+				"frick", "HECK", "heck", "mf", "prickly", "nitwit", "shoot", "shut up", "twerp", "silly sausage",
 			];
 			this.add('-message', `${this.sample(curses)}!`);
 			if (!source.set.shiny) {
@@ -651,7 +647,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				'L 🇱 RATIO ➗ READ MARX 🧔‍♂️ 📕 NO TOUHOU GIRLS 🔫 👧 🚫 CISHET 👨‍👩‍👦 NEUROTYPICAL 🧠 👨‍💼 CRINGE 😬 NO DRIP 🌧️ 🚫 GAME FUN HAPPY TIMES 游戏乐趣快乐时光 🎲 🎮 ACCELERATE ⏩ ACCELERATE ⏩ ACCELERATE ⏩ 🧞‍♂️ 🎣 🌇 🔋 🪡 SQUID GAMES ‼️',
 				'Are you kidding ??? What the **** are you talking about man ? You are a biggest looser i ever seen in my life ! You was doing PIPI in your pampers when i was beating players much more stronger then you! You are not proffesional, because proffesionals knew how to lose and congratulate opponents, you are like a noob crying after i beat you! Be brave, be honest to yourself and stop this trush talkings!!! Everybody know that i am very good bh player, i can win anyone in the world in single game! And "c"ity "s"c is nobody for me, just a player who are crying every single time when loosing, ( remember what you say about Sevag ) !!! Stop playing with my name, i deserve to have a good name during whole my bh carrier, I am Officially inviting you to NDBH match with the Prize fund! Both of us will invest 5000$ and winner takes it all! I suggest all other people who\'s intrested in this situation, just take a look at my results in OMPL 8 and 9 tournaments, and that should be enough... No need to listen for every crying babe, ChampionLeonOM is always play Fair ! And if someone will continue Officially talk about me like that, we will meet in Court! God bless with true! True will never die ! Liers will kicked off...',
 				'megas for all mismagius torment confusion alchemist araquanid no recover parasex flavor town megas for all sharting pot dragon heaven big button is watching pet mods gluke smogon kero megas for all dimrah pumpkin joltemons sylvemons farfetchd acid rock hematite boomer mentality flavor drama sexcadrill pet mods smogon pet mods bubble dies from cringe purple frong bat silvally pet mods',
-				'免费塔普乐乐 Free Tapu Lele 格鲁克伯爵配对 The Earl G-Luke Pairing 厄尔哈克斯大屠杀 The Earl Hax Massacre 反乔尔特蒙斯斗争 The Anti-Joltemons Struggle 适合所有城市的大型大型设施 The Great M4A Tourban 伟大的南瓜史诗嵌入失败 The Great Gourgeist 0-8 大按钮 Big Button 霍普朗 Hooporant 副性交 Parasex 细胞器 Cellsius 多转麻痹 Multi-turn paralysis 罗托姆风扇 Rotom Fan 库诺之门 Cunogate 四万五千斯科帕帕 Scoopapa 推出樱桃 Rollout Cherrim 围巾电钻 Scarf Vikadrill 老板联系方式 The Bossaru Contact 永恒光束 Eternabeam 壁虎奶酪宣传 Gekokeso Propaganda 奇多 Cheeto',
 				// 'Right here it says "UPS: Our Fastest Ground Shipping Ever." You know, what if it said "Our fastest and hardest boner?" Quickest, uh, speed for getting a boner? Alright, thanks guys.',
 				'Pog sussy balls means nothing to you!?!? WTF! That’s one epic fail! You’re in the quite the pickle there Rick! Im rofling on the floor laughing AND firing my lazor AND you sir win teh interwebs AND le reddit gold if i do say so myself yessir yessir!',
 			];
@@ -815,6 +810,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-message', `Amplus Tripudio!`);
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "High Jump Kick", target);
+		},
+		self: {
+			onHit(pokemon) {
+				this.heal(50, pokemon);
+			},
 		},
 		target: "normal",
 		type: "Fighting",
