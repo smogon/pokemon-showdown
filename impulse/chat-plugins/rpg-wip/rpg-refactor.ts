@@ -13,7 +13,6 @@ import { RPGAbilities } from './abilities';
 import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory } from './items';
 import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
-import { Utils } from '../../../lib';
 
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
@@ -5079,7 +5078,7 @@ function generateSingleBattleHTML(
 	const opponentSlot = battle.opponentSlots[0];
 
 	if (!playerSlot || !opponentSlot) {
-		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/join view-rpg" class="button">Flee</button></p></div>`;
+		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>`;
 	}
 
 	const playerPokemon = playerSlot.pokemon;
@@ -5455,21 +5454,21 @@ function generateDoubleBattleHTML(
 }
 
 function generateWelcomeHTML(): string {
-	return `<h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/join view-rpg-choosetype-fire" class="button">🔥 Fire</button><button name="send" value="/join view-rpg-choosetype-water" class="button">💧 Water</button><button name="send" value="/join view-rpg-choosetype-grass" class="button">🌱 Grass</button></p>`;
+	return `<div class="infobox"><h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/rpg choosetype fire" class="button">🔥 Fire</button><button name="send" value="/rpg choosetype water" class="button">💧 Water</button><button name="send" value="/rpg choosetype grass" class="button">🌱 Grass</button></p></div>`;
 }
 
 function generateStarterSelectionHTML(type: string): string {
 	const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON];
 	if (!starters) return '';
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let html = `<h2>${typeTitle} Type Starters</h2><p>Choose your starter pokemon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+	let html = `<div class="infobox"><h2>${typeTitle} Type Starters</h2><p>Choose your starter pokemon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 	for (const starterId of starters) {
 		const species = Dex.species.get(starterId);
 		if (species.exists) {
 			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><strong>${species.name}</strong><br><small>Type: ${species.types.join('/')}</small><br><button name="send" value="/rpg choosestarter ${starterId}" class="button" style="margin-top: 5px;">Choose</button></div>`;
 		}
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/join view-rpg" class="button">← Back to Type Selection</button></p>`;
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg start" class="button">← Back to Type Selection</button></p></div>`;
 	return html;
 }
 
@@ -5570,7 +5569,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'</div>' +
 		'</div>' +
 		'</div>' +
-		'<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-party" class="button">← Back to Party</button></p>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
 		'</div>';
 }
 
@@ -5580,16 +5579,17 @@ function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): 
 		const move = getMove(moveId);
 		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button" style="margin: 3px;">${move.name}</button> `;
 	}
-	html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Cancel</button></p></div>`;
+	html += `<hr /><p><button name="send" value="/rpg items" class="button">Cancel</button></p></div>`;
 	return html;
 }
 
 function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<h2>Inventory</h2>`;
+	let html = `<div class="infobox">`;
+	html += `<h2>Inventory</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
 
 	// Category Buttons
-	html += `<div style="margin: 10px 0;"><button name="send" value="/join view-rpg-items" class="button">All</button> <button name="send" value="/join view-rpg-items-pokeball" class="button">Poké Balls</button> <button name="send" value="/join view-rpg-items-medicine" class="button">Medicines</button> <button name="send" value="/join view-rpg-items-held" class="button">Held Items</button> <button name="send" value="/join view-rpg-items-berry" class="button">Berries</button> <button name="send" value="/join view-rpg-items-tm" class="button">TMs</button> <button name="send" value="/join view-rpg-items-key" class="button">Key Items</button> <button name="send" value="/join view-rpg-items-misc" class="button">Misc.</button></div>`;
+	html += `<div style="margin: 10px 0;"><button name="send" value="/rpg items" class="button">All</button> <button name="send" value="/rpg items pokeball" class="button">Poké Balls</button> <button name="send" value="/rpg items medicine" class="button">Medicines</button> <button name="send" value="/rpg items held" class="button">Held Items</button> <button name="send" value="/rpg items berry" class="button">Berries</button> <button name="send" value="/rpg items tm" class="button">TMs</button> <button name="send" value="/rpg items key" class="button">Key Items</button> <button name="send" value="/rpg items misc" class="button">Misc.</button></div>`;
 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
 
@@ -5610,23 +5610,25 @@ function generateInventoryHTML(player: PlayerData, category?: string): string {
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
+	html += `</div>`;
 	return html;
 }
 
 function generateShopHTML(player: PlayerData, category?: string): string {
-	let html = `<h2>Poké Mart</h2>`;
+	let html = `<div class="infobox">`;
+	html += `<h2>Poké Mart</h2>`;
 	html += `<p>Welcome! What would you like to buy?</p>`;
 	html += `<p><strong>Your Money:</strong> ₽${player.money}</p>`;
 
 	// Category Buttons
 	html += `<div style="margin: 10px 0;">`;
-	html += `<button name="send" value="/join view-rpg-shop" class="button">All</button> `;
-	html += `<button name="send" value="/join view-rpg-shop-pokeball" class="button">Poké Balls</button> `;
-	html += `<button name="send" value="/join view-rpg-shop-medicine" class="button">Medicines</button> `;
-	html += `<button name="send" value="/join view-rpg-shop-held" class="button">Held Items</button> `;
-	html += `<button name="send" value="/join view-rpg-shop-berry" class="button">Berries</button> `;
-	html += `<button name="send" value="/join view-rpg-shop-misc" class="button">Misc.</button>`;
+	html += `<button name="send" value="/rpg shop" class="button">All</button> `;
+	html += `<button name="send" value="/rpg shop pokeball" class="button">Poké Balls</button> `;
+	html += `<button name="send" value="/rpg shop medicine" class="button">Medicines</button> `;
+	html += `<button name="send" value="/rpg shop held" class="button">Held Items</button> `;
+	html += `<button name="send" value="/rpg shop berry" class="button">Berries</button> `;
+	html += `<button name="send" value="/rpg shop misc" class="button">Misc.</button>`;
 	html += `</div>`;
 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
@@ -5653,12 +5655,13 @@ function generateShopHTML(player: PlayerData, category?: string): string {
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-explore" class="button">Back to Explore</button></p>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `</div>`;
 	return html;
 }
 
 function generatePCHTML(player: PlayerData): string {
-	let html = `<h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
+	let html = `<div class="infobox"><h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
 	if (player.pc.size === 0) {
 		html += `<p>No Pokemon stored in PC.</p>`;
 	} else {
@@ -5668,7 +5671,7 @@ function generatePCHTML(player: PlayerData): string {
 		}
 		html += `</div>`;
 	}
-	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-party" class="button">View Party</button> <button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 	return html;
 }
 
@@ -5786,21 +5789,21 @@ function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[
 	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You gained ₽${moneyGained}!</p>` +
 		`<p>` +
 		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-		`<button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button>` +
-		`<button name="send" value="/join view-rpg" class="button">Back to Menu</button>` +
+		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+		`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
 		`</p>` +
 		`</div>`;
 }
 
 // --- NEW FUNCTION ---
 function generateTrainerVictoryHTML(opponentName: string, expMessages: string[], moneyGained: number): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 }
 
 // --- MODIFIED FUNCTION ---
 function generateDefeatHTML(moneyLost: number, opponentName?: string): string {
 	const opponentMessage = opponentName ? `You lost to ${opponentName}!` : "You have no more Pokemon that can fight!";
-	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
+	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 }
 
 function generateFaintSwitchHTML(battle: BattleState, message: string): string {
@@ -5849,7 +5852,7 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
 		delete player.pendingMoveLearnQueue;
-		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
 	let html = `<div class="infobox"><h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
 	for (const move of pokemon.moves) {
@@ -5870,7 +5873,7 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
 			`</div>`;
 	}
-	html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Back to Bag</button></p></div>`;
+	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
 	return html;
 }
 
@@ -6051,7 +6054,10 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
-			return this.parse('/join view-rpg');
+			if (player.party.length > 0) {
+				return this.parse('/rpg menu');
+			}
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
 		choosetype(target, room, user) {
@@ -6062,7 +6068,7 @@ export const commands: ChatCommands = {
 			if (!['fire', 'water', 'grass'].includes(type)) {
 				return this.errorReply("Invalid type.");
 			}
-			return this.parse(`/join view-rpg-choosetype-${type}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type)}`);
 		},
 
 		choosestarter(target, room, user) {
@@ -6088,7 +6094,7 @@ export const commands: ChatCommands = {
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
+				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
@@ -6108,29 +6114,8 @@ export const commands: ChatCommands = {
 			if (player.party.length === 0) {
 				return this.parse('/rpg start');
 			}
-			return this.parse('/join view-rpg');
-		},
-		
-		profile(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You are in a battle!");
-			}
-			return this.parse('/join view-rpg-profile');
-		},
-		
-		party(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You are in a battle!");
-			}
-			return this.parse('/join view-rpg-party');
-		},
-		
-		items(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot access items during a battle.");
-			}
-			const category = target ? toID(target) : '';
-			return this.parse(`/join view-rpg-items${category ? '-' + category : ''}`);
+			const menuHTML = `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${menuHTML}`);
 		},
 
 		learnmove(target, room, user) {
@@ -6171,7 +6156,7 @@ export const commands: ChatCommands = {
 				delete player.pendingMoveLearnQueue;
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			}
@@ -6216,7 +6201,7 @@ export const commands: ChatCommands = {
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
@@ -6240,7 +6225,7 @@ export const commands: ChatCommands = {
 						html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
 					});
 				}
-				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">← Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 			const pokemon = player.party.find(p => p.id === targetId);
@@ -6248,6 +6233,48 @@ export const commands: ChatCommands = {
 				return this.errorReply("Pokemon not found in your party.");
 			}
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
+		},
+
+		profile(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You are in a battle!");
+			}
+			const player = getPlayerData(user.id);
+			const profileHTML = `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
+		},
+
+		party(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot view your party during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
+			if (player.party.length === 0) {
+				partyHTML += `<p>No Pokemon in party.</p>`;
+			} else {
+				for (let i = 0; i < 6; i++) {
+					if (player.party[i]) {
+						// --- FIX ---
+						// We must wrap the RPGPokemon in an ActivePokemonSlot
+						const tempSlot = createActivePokemonSlot(player.party[i]);
+						partyHTML += `<div><strong>Slot ${i + 1}:</strong>`;
+						// Add swap buttons (up and down arrows)
+						if (i > 0) {
+							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
+						}
+						if (i < player.party.length - 1 && player.party[i + 1]) {
+							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
+						}
+						partyHTML += `<br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
+						// --- END FIX ---
+					} else {
+						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
+					}
+				}
+			}
+			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
 		swapslot(target, room, user) {
@@ -6278,7 +6305,18 @@ export const commands: ChatCommands = {
 			player.party[slot2] = temp;
 
 			// Show updated party
-			return this.parse('/join view-rpg-party');
+			this.parse('/rpg party');
+		},
+
+		items(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot access your bag in battle.");
+			}
+			const player = getPlayerData(user.id);
+			const category = toID(target);
+			const validCategories = ['pokeball', 'medicine', 'berry', 'tm', 'key', 'held', 'misc'];
+			const filterCategory = validCategories.includes(category) ? category : undefined;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
 
 		useitem(target, room, user) {
@@ -6298,10 +6336,10 @@ export const commands: ChatCommands = {
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/join view-rpg-party" class="button">View Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 
@@ -6323,7 +6361,7 @@ export const commands: ChatCommands = {
 							}
 						}
 					}
-					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6334,13 +6372,13 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
@@ -6351,7 +6389,7 @@ export const commands: ChatCommands = {
 					for (const pokemon of player.party) {
 						html += `<button name="send" value="/rpg useitem eggmovetutor ${pokemon.id}" class="button" style="margin: 3px;">${pokemon.species}</button>`;
 					}
-					html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6361,7 +6399,7 @@ export const commands: ChatCommands = {
 				const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
 
 				if (learnableEggMoves.length === 0) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 				}
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 			} else if (itemId === 'rarecandy') {
@@ -6373,7 +6411,7 @@ export const commands: ChatCommands = {
 							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem rarecandy ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
-					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6383,7 +6421,7 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
@@ -6397,7 +6435,7 @@ export const commands: ChatCommands = {
 				const updatedPokemon = player.party.find(p => p.id === pokemonId);
 				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (itemId.startsWith('expcandy')) {
 				if (!pokemonId) {
@@ -6408,7 +6446,7 @@ export const commands: ChatCommands = {
 							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
-					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6418,7 +6456,7 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
@@ -6432,7 +6470,7 @@ export const commands: ChatCommands = {
 				const updatedPokemon = player.party.find(p => p.id === pokemonId);
 				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				return this.errorReply("This item cannot be used right now.");
@@ -6443,7 +6481,7 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
-			return this.parse('/join view-rpg-pc');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`);
 		},
 
 		depositpc(target, room, user) {
@@ -6461,7 +6499,7 @@ export const commands: ChatCommands = {
 			}
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/join view-rpg-pc" class="button">View PC</button><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -6480,7 +6518,7 @@ export const commands: ChatCommands = {
 			player.party.push(pokemon);
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-pc" class="button">View PC</button><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 			// --- END FIX ---
 		},
 
@@ -6488,8 +6526,12 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
 			}
+			const player = getPlayerData(user.id);
 			const category = toID(target);
-			return this.parse(`/join view-rpg-shop${category ? '-' + category : ''}`);
+			// This line has been corrected to include 'medicine' instead of 'potion'
+			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
+			const filterCategory = validCategories.includes(category) ? category : undefined;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
 
 		buy(target, room, user) {
@@ -6513,7 +6555,7 @@ export const commands: ChatCommands = {
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/join view-rpg-shop" class="button">Continue Shopping</button><button name="send" value="/join view-rpg-items" class="button">View Inventory</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`);
 		},
 
 		pokedex(target, room, user) {
@@ -6526,7 +6568,40 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot explore during a battle.");
 			}
-			return this.parse('/join view-rpg-explore');
+
+			const player = getPlayerData(user.id);
+			// This logic finds all zones that match the player's current location
+			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(toID(player.location)));
+
+			let exploreButtons = '';
+			if (availableZones.length > 0) {
+				for (const zoneId of availableZones) {
+					const zone = ENCOUNTER_ZONES[zoneId];
+					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
+					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+				}
+			} else {
+				exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
+			}
+
+			// --- EXAMPLE of how to add a trainer ---
+			// You would add logic here to check if the trainer should appear
+			// For example: if (!player.badges.includes('boulder')) {
+			exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
+			// }
+
+			const exploreHTML = `<div class="infobox">` +
+				`<h2>Explore ${player.location}</h2>` +
+				`<p>Choose where to go:</p>` +
+				`<p>${exploreButtons}</p>` +
+				`<hr />` +
+				`<p>` +
+				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
+				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
+				`</p>` +
+				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -7207,7 +7282,7 @@ export const commands: ChatCommands = {
 						`${generatePokemonInfoHTML(tempSlot, true)}` +
 						`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
 						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-						`<button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
+						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
 					// --- FAILED CATCH PATH (FIXED) ---
@@ -7257,7 +7332,7 @@ export const commands: ChatCommands = {
 					`<p>You ran away from the wild Pokemon.</p>` +
 					`<p>` +
 					`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-					`<button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button>` +
+					`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
 					`</p>` +
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
@@ -7296,7 +7371,7 @@ export const commands: ChatCommands = {
 			// The lock is on the 'ActivePokemonSlot' which is destroyed.
 			// This is fine.
 
-			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/join view-rpg-party" class="button">View Party</button><button name="send" value="/join view-rpg-explore" class="button">Explore</button></p></div>`;
+			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg explore" class="button">Explore</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
 		},
 
@@ -7310,7 +7385,7 @@ export const commands: ChatCommands = {
 				for (const pokemon of player.party) {
 					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
 				}
-				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
@@ -7352,7 +7427,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7369,7 +7444,7 @@ export const commands: ChatCommands = {
 						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
 					}
 				}
-				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
@@ -7389,7 +7464,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7423,7 +7498,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7467,7 +7542,7 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
+			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
@@ -7475,139 +7550,5 @@ export const commands: ChatCommands = {
 			return this.parse('/help rpg');
 		},
 		'': 'help',
-	},
-};
-
-export const pages: Chat.PageTable = {
-	rpg(query, user, connection) {
-		this.title = '[RPG]';
-		const player = getPlayerData(user.id);
-		
-		// Parse the query to determine which view to show
-		const [view, ...params] = query;
-		
-		let buf = '<div class="pad">';
-		
-		// Add a refresh button that maintains current view
-		const refreshUrl = `/view-rpg${query.length ? '-' + query.join('-') : ''}`;
-		buf += `<button style="float:right;" class="button" name="send" value="/join ${refreshUrl}">`;
-		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-		
-		switch (view) {
-		case '':
-		case 'menu':
-			if (player.party.length === 0) {
-				// Show welcome/starter selection
-				buf += generateWelcomeHTML();
-			} else {
-				// Show main menu
-				buf += `<h2>RPG Menu - ${player.name}</h2>`;
-				buf += `<p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p>`;
-				buf += `<p>What would you like to do?</p>`;
-				buf += `<p>`;
-				buf += `<button name="send" value="/join view-rpg-profile" class="button">👤 Profile</button>`;
-				buf += `<button name="send" value="/join view-rpg-party" class="button">⚡ Party</button>`;
-				buf += `<button name="send" value="/join view-rpg-explore" class="button">🗺️ Explore</button>`;
-				buf += `</p><p>`;
-				buf += `<button name="send" value="/join view-rpg-items" class="button">🎒 Items</button>`;
-				buf += `<button name="send" value="/join view-rpg-pc" class="button">💻 Pokemon PC</button>`;
-				buf += `</p>`;
-			}
-			break;
-			
-		case 'profile':
-			buf += `<h2>Player Profile</h2>`;
-			buf += `<p><strong>Name:</strong> ${player.name}</p>`;
-			buf += `<p><strong>Level:</strong> ${player.level}</p>`;
-			buf += `<p><strong>Location:</strong> ${player.location}</p>`;
-			buf += `<p><strong>Money:</strong> ₽${player.money}</p>`;
-			buf += `<p><strong>Badges:</strong> ${player.badges}</p>`;
-			buf += `<p><strong>Party Size:</strong> ${player.party.length}/6</p>`;
-			buf += `<p><strong>PC Storage:</strong> ${player.pc.size} Pokemon</p>`;
-			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
-			break;
-			
-		case 'party':
-			buf += `<h2>Your Party</h2>`;
-			if (player.party.length === 0) {
-				buf += `<p>You don't have any Pokemon yet!</p>`;
-			} else {
-				for (let i = 0; i < 6; i++) {
-					if (player.party[i]) {
-						const tempSlot = createActivePokemonSlot(player.party[i]);
-						buf += `<div><strong>Slot ${i + 1}:</strong>`;
-						// Add swap buttons (up and down arrows)
-						if (i > 0) {
-							buf += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
-						}
-						if (i < player.party.length - 1 && player.party[i + 1]) {
-							buf += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
-						}
-						buf += `<br>`;
-						buf += generatePokemonInfoHTML(tempSlot, true, true);
-						buf += `</div>`;
-					} else {
-						buf += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
-					}
-				}
-			}
-			buf += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-pc" class="button">Pokemon PC</button> <button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
-			break;
-			
-		case 'items':
-			const category = params[0] as string | undefined;
-			buf += generateInventoryHTML(player, category);
-			break;
-			
-		case 'pc':
-			buf += generatePCHTML(player);
-			break;
-			
-		case 'explore':
-			buf += `<h2>Explore ${player.location}</h2>`;
-			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(
-				zoneId => zoneId.startsWith(toID(player.location))
-			);
-			buf += `<p>Choose where to go:</p><p>`;
-			if (availableZones.length > 0) {
-				for (const zoneId of availableZones) {
-					const zone = ENCOUNTER_ZONES[zoneId];
-					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-					buf += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
-				}
-			} else {
-				buf += `<p>There's nowhere to explore here right now.</p>`;
-			}
-			buf += `</p>`;
-			buf += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
-			buf += `<hr /><p>`;
-			buf += `<button name="send" value="/join view-rpg-shop" class="button">🏪 Poké Mart</button>`;
-			buf += `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>`;
-			buf += `</p>`;
-			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
-			break;
-			
-		case 'shop':
-			const shopCategory = params[0] as string | undefined;
-			buf += generateShopHTML(player, shopCategory);
-			break;
-			
-		case 'choosetype':
-			const starterType = params[0] || '';
-			if (['fire', 'water', 'grass'].includes(starterType)) {
-				buf += generateStarterSelectionHTML(starterType);
-			} else {
-				buf += generateWelcomeHTML();
-			}
-			break;
-			
-		default:
-			buf += `<h2>Page Not Found</h2>`;
-			buf += `<p>The view "${Utils.escapeHTML(view)}" does not exist.</p>`;
-			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
-		}
-		
-		buf += '</div>';
-		return buf;
 	},
 };
