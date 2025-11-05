@@ -8,6 +8,36 @@ import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot } from './interface';
 
+export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
+	'Adamant': { plus: 'atk', minus: 'spa' },
+	'Bashful': null,
+	'Brave': { plus: 'atk', minus: 'spe' },
+	'Bold': { plus: 'def', minus: 'atk' },
+	'Calm': { plus: 'spd', minus: 'atk' },
+	'Careful': { plus: 'spd', minus: 'spa' },
+	'Docile': null,
+	'Gentle': { plus: 'spd', minus: 'def' },
+	'Hardy': null,
+	'Hasty': { plus: 'spe', minus: 'def' },
+	'Impish': { plus: 'def', minus: 'spa' },
+	'Jolly': { plus: 'spe', minus: 'spa' },
+	'Lax': { plus: 'def', minus: 'spd' },
+	'Lonely': { plus: 'atk', minus: 'def' },
+	'Mild': { plus: 'spa', minus: 'def' },
+	'Modest': { plus: 'spa', minus: 'atk' },
+	'Naive': { plus: 'spe', minus: 'spd' },
+	'Naughty': { plus: 'atk', minus: 'spd' },
+	'Quiet': { plus: 'spa', minus: 'spe' },
+	'Quirky': null,
+	'Rash': { plus: 'spa', minus: 'spd' },
+	'Relaxed': { plus: 'def', minus: 'spe' },
+	'Sassy': { plus: 'spd', minus: 'spe' },
+	'Serious': null,
+	'Timid': { plus: 'spe', minus: 'atk' },
+};
+
+export const NATURE_LIST = Object.keys(NATURES);
+
 export function getActiveSlots(
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
 ): ActivePokemonSlot[] {
@@ -55,36 +85,6 @@ export function calculateTotalExpForLevel(growthRate: string, level: number): nu
 	// Ensure non-negative result (fixes Medium Slow at level 1 returning -54)
 	return Math.max(0, result);
 }
-
-export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
-	'Adamant': { plus: 'atk', minus: 'spa' },
-	'Bashful': null,
-	'Brave': { plus: 'atk', minus: 'spe' },
-	'Bold': { plus: 'def', minus: 'atk' },
-	'Calm': { plus: 'spd', minus: 'atk' },
-	'Careful': { plus: 'spd', minus: 'spa' },
-	'Docile': null,
-	'Gentle': { plus: 'spd', minus: 'def' },
-	'Hardy': null,
-	'Hasty': { plus: 'spe', minus: 'def' },
-	'Impish': { plus: 'def', minus: 'spa' },
-	'Jolly': { plus: 'spe', minus: 'spa' },
-	'Lax': { plus: 'def', minus: 'spd' },
-	'Lonely': { plus: 'atk', minus: 'def' },
-	'Mild': { plus: 'spa', minus: 'def' },
-	'Modest': { plus: 'spa', minus: 'atk' },
-	'Naive': { plus: 'spe', minus: 'spd' },
-	'Naughty': { plus: 'atk', minus: 'spd' },
-	'Quiet': { plus: 'spa', minus: 'spe' },
-	'Quirky': null,
-	'Rash': { plus: 'spa', minus: 'spd' },
-	'Relaxed': { plus: 'def', minus: 'spe' },
-	'Sassy': { plus: 'spd', minus: 'spe' },
-	'Serious': null,
-	'Timid': { plus: 'spe', minus: 'atk' },
-};
-
-export const NATURE_LIST = Object.keys(NATURES);
 
 export function calculateStats(
 	species: any,

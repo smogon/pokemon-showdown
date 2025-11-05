@@ -213,6 +213,17 @@ export function removeItemFromInventory(player: PlayerData, itemId: string, quan
 	return true;
 }
 
+function getExpCandyAmount(itemId: string): number {
+	switch (itemId) {
+	case 'expcandyxs': return 100;
+	case 'expcandys': return 800;
+	case 'expcandym': return 3000;
+	case 'expcandyl': return 10000;
+	case 'expcandyxl': return 30000;
+	default: return 0;
+	}
+}
+
 export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
 	if (pokemon.hp <= 0) {
 		return { success: false, message: `${pokemon.species} has fainted!` };
@@ -450,17 +461,6 @@ export function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: 
 
 	const resultMessage = `You used a <strong>Rare Candy</strong> on <strong>${pokemon.species}</strong>!<br>${messages.join('<br>')}`;
 	return { success: true, message: resultMessage };
-}
-
-function getExpCandyAmount(itemId: string): number {
-	switch (itemId) {
-	case 'expcandyxs': return 100;
-	case 'expcandys': return 800;
-	case 'expcandym': return 3000;
-	case 'expcandyl': return 10000;
-	case 'expcandyxl': return 30000;
-	default: return 0;
-	}
 }
 
 export function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: CheckEvolutionContext['room'], user: CheckEvolutionContext['user']): { success: boolean, message: string } {

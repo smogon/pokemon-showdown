@@ -6,62 +6,6 @@ import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
-export function isWeatherActive(battle: BattleState): boolean {
-	if (!battle.weather) return false;
-
-	const allSlots = getActiveSlots(battle.playerSlots).concat(getActiveSlots(battle.opponentSlots));
-	for (const slot of allSlots) {
-		const ability = toID(slot.pokemon.ability || '');
-		if (ability === 'cloudnine' || ability === 'airlock') {
-			return false;
-		}
-	}
-	return true;
-}
-
-export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle: BattleState): boolean {
-	const pokemon = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot).pokemon : slotOrPokemon as RPGPokemon;
-	const slot = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot) : undefined;
-
-	if (battle.gravityTurns > 0) {
-		return true;
-	}
-
-	if (slot?.isSmackedDown) {
-		return true;
-	}
-
-	if (slot && slot.magnetRiseTurns > 0) {
-		return false;
-	}
-
-	const species = Dex.species.get(pokemon.species);
-	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-	const ability = toID(pokemon.ability || '');
-
-	if (hasAirBalloon) {
-		return false;
-	}
-
-	if (ability === 'levitate') {
-		return false;
-	}
-
-	if (species.types.includes('Flying')) {
-		return false;
-	}
-
-	return true;
-}
-
-export function getAbilityData(abilityName: string) {
-	const ability = Dex.abilities.get(abilityName);
-	if (ability.exists) {
-		return ability;
-	}
-	return null;
-}
-
 export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	'soundproof': ctx => {
 		if (ctx.move.flags.sound) {
@@ -506,23 +450,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 };
 
-export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
-	const ability = toID(pokemon.ability || '');
-	const handler = STAT_MODIFIER_ABILITIES[ability];
-	if (handler) {
-		return handler(pokemon, stat, value, slot, battle);
-	}
-	return value;
-}
-
-export function applySereneGrace(ctx: AbilityContext, chance: number): number {
-	const ability = toID(ctx.attacker.ability || '');
-	if (ability === 'serenegrace') {
-		return Math.min(100, chance * 2);
-	}
-	return chance;
-}
-
 export const WEATHER_ABILITIES = {
 	'drought': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
@@ -743,6 +670,199 @@ export const HEALING_ABILITIES = {
 		healStatusOnSwitch: true,
 	},
 };
+
+// On-KO Abilities - abilities that trigger when a Pokemon is KO'd
+export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
+	'moxie': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk++;
+				messageLog.push(`${slot.pokemon.species}'s Moxie raised its Attack!`);
+			}
+		},
+	},
+	'chillingneigh': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk++;
+				messageLog.push(`${slot.pokemon.species}'s Chilling Neigh raised its Attack!`);
+			}
+		},
+	},
+	'beastboost': {
+		handler: (slot, battle, messageLog) => {
+			const stats = slot.pokemon;
+			let highestStat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' = 'atk';
+			let maxStatVal = stats.atk;
+			if (stats.def > maxStatVal) { maxStatVal = stats.def; highestStat = 'def'; }
+			if (stats.spa > maxStatVal) { maxStatVal = stats.spa; highestStat = 'spa'; }
+			if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
+			if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
+
+			if (slot.statStages[highestStat] < 6) {
+				slot.statStages[highestStat]++;
+				const statNames: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+				messageLog.push(`${slot.pokemon.species}'s Beast Boost raised its ${statNames[highestStat]}!`);
+			}
+		},
+	},
+};
+
+// End of Turn Abilities - abilities that trigger at the end of each turn
+export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
+	'speedboost': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.spe < 6) {
+				slot.statStages.spe++;
+				messageLog.push(`${slot.pokemon.species}'s Speed Boost raised its Speed!`);
+			}
+		},
+	},
+
+	// Phase 2: Shed Skin - 30% chance to cure status at end of turn
+	'shedskin': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.status && Math.random() < 0.3) {
+				const statusName = {
+					psn: 'poison',
+					tox: 'toxic poison',
+					brn: 'burn',
+					par: 'paralysis',
+					slp: 'sleep',
+					frz: 'freeze',
+				}[slot.status] || 'status condition';
+				slot.status = null;
+				messageLog.push(`${slot.pokemon.species} shed its skin and cured its ${statusName}!`);
+			}
+		},
+	},
+};
+
+// Stat Drop Response Abilities - abilities that trigger when stats are lowered
+export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void }> = {
+	'defiant': {
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// Don't trigger if self-inflicted
+			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
+				return;
+			}
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk = Math.min(6, slot.statStages.atk + 2);
+				messageLog.push(`${slot.pokemon.species}'s Defiant sharply raised its Attack!`);
+			}
+		},
+	},
+	'competitive': {
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// Don't trigger if self-inflicted
+			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
+				return;
+			}
+			if (slot.statStages.spa < 6) {
+				slot.statStages.spa = Math.min(6, slot.statStages.spa + 2);
+				messageLog.push(`${slot.pokemon.species}'s Competitive sharply raised its Sp. Atk!`);
+			}
+		},
+	},
+};
+
+// Status Interaction Abilities - abilities that interact with status conditions
+export const STATUS_INTERACTION_ABILITIES: Record<string, {
+	healFromPoison?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
+	cureStatusInRain?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
+}> = {
+	'poisonheal': {
+		healFromPoison: (slot, messageLog) => {
+			const pokemon = slot.pokemon;
+			if (pokemon.hp < pokemon.maxHp) {
+				const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
+				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
+			}
+		},
+	},
+	'hydration': {
+		cureStatusInRain: (slot, messageLog) => {
+			if (slot.status) {
+				slot.status = null;
+				messageLog.push(`${slot.pokemon.species}'s Hydration cured its status condition!`);
+			}
+		},
+	},
+};
+
+export function isWeatherActive(battle: BattleState): boolean {
+	if (!battle.weather) return false;
+
+	const allSlots = getActiveSlots(battle.playerSlots).concat(getActiveSlots(battle.opponentSlots));
+	for (const slot of allSlots) {
+		const ability = toID(slot.pokemon.ability || '');
+		if (ability === 'cloudnine' || ability === 'airlock') {
+			return false;
+		}
+	}
+	return true;
+}
+
+export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle: BattleState): boolean {
+	const pokemon = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot).pokemon : slotOrPokemon as RPGPokemon;
+	const slot = (slotOrPokemon as any).pokemon ? (slotOrPokemon as ActivePokemonSlot) : undefined;
+
+	if (battle.gravityTurns > 0) {
+		return true;
+	}
+
+	if (slot?.isSmackedDown) {
+		return true;
+	}
+
+	if (slot && slot.magnetRiseTurns > 0) {
+		return false;
+	}
+
+	const species = Dex.species.get(pokemon.species);
+	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
+	const ability = toID(pokemon.ability || '');
+
+	if (hasAirBalloon) {
+		return false;
+	}
+
+	if (ability === 'levitate') {
+		return false;
+	}
+
+	if (species.types.includes('Flying')) {
+		return false;
+	}
+
+	return true;
+}
+
+export function getAbilityData(abilityName: string) {
+	const ability = Dex.abilities.get(abilityName);
+	if (ability.exists) {
+		return ability;
+	}
+	return null;
+}
+
+export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
+	const ability = toID(pokemon.ability || '');
+	const handler = STAT_MODIFIER_ABILITIES[ability];
+	if (handler) {
+		return handler(pokemon, stat, value, slot, battle);
+	}
+	return value;
+}
+
+export function applySereneGrace(ctx: AbilityContext, chance: number): number {
+	const ability = toID(ctx.attacker.ability || '');
+	if (ability === 'serenegrace') {
+		return Math.min(100, chance * 2);
+	}
+	return chance;
+}
 
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
 	const ability = toID(ctx.defender.ability || '');
@@ -1107,101 +1227,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 	return null;
 }
 
-// On-KO Abilities - abilities that trigger when a Pokemon is KO'd
-export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
-	'moxie': {
-		handler: (slot, battle, messageLog) => {
-			if (slot.statStages.atk < 6) {
-				slot.statStages.atk++;
-				messageLog.push(`${slot.pokemon.species}'s Moxie raised its Attack!`);
-			}
-		},
-	},
-	'chillingneigh': {
-		handler: (slot, battle, messageLog) => {
-			if (slot.statStages.atk < 6) {
-				slot.statStages.atk++;
-				messageLog.push(`${slot.pokemon.species}'s Chilling Neigh raised its Attack!`);
-			}
-		},
-	},
-	'beastboost': {
-		handler: (slot, battle, messageLog) => {
-			const stats = slot.pokemon;
-			let highestStat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' = 'atk';
-			let maxStatVal = stats.atk;
-			if (stats.def > maxStatVal) { maxStatVal = stats.def; highestStat = 'def'; }
-			if (stats.spa > maxStatVal) { maxStatVal = stats.spa; highestStat = 'spa'; }
-			if (stats.spd > maxStatVal) { maxStatVal = stats.spd; highestStat = 'spd'; }
-			if (stats.spe > maxStatVal) { maxStatVal = stats.spe; highestStat = 'spe'; }
-
-			if (slot.statStages[highestStat] < 6) {
-				slot.statStages[highestStat]++;
-				const statNames: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
-				messageLog.push(`${slot.pokemon.species}'s Beast Boost raised its ${statNames[highestStat]}!`);
-			}
-		},
-	},
-};
-
-// End of Turn Abilities - abilities that trigger at the end of each turn
-export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
-	'speedboost': {
-		handler: (slot, battle, messageLog) => {
-			if (slot.statStages.spe < 6) {
-				slot.statStages.spe++;
-				messageLog.push(`${slot.pokemon.species}'s Speed Boost raised its Speed!`);
-			}
-		},
-	},
-
-	// Phase 2: Shed Skin - 30% chance to cure status at end of turn
-	'shedskin': {
-		handler: (slot, battle, messageLog) => {
-			if (slot.status && Math.random() < 0.3) {
-				const statusName = {
-					psn: 'poison',
-					tox: 'toxic poison',
-					brn: 'burn',
-					par: 'paralysis',
-					slp: 'sleep',
-					frz: 'freeze',
-				}[slot.status] || 'status condition';
-				slot.status = null;
-				messageLog.push(`${slot.pokemon.species} shed its skin and cured its ${statusName}!`);
-			}
-		},
-	},
-};
-
-// Stat Drop Response Abilities - abilities that trigger when stats are lowered
-export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void }> = {
-	'defiant': {
-		handler: (slot, battle, messageLog, sourceSlot) => {
-			// Don't trigger if self-inflicted
-			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
-				return;
-			}
-			if (slot.statStages.atk < 6) {
-				slot.statStages.atk = Math.min(6, slot.statStages.atk + 2);
-				messageLog.push(`${slot.pokemon.species}'s Defiant sharply raised its Attack!`);
-			}
-		},
-	},
-	'competitive': {
-		handler: (slot, battle, messageLog, sourceSlot) => {
-			// Don't trigger if self-inflicted
-			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
-				return;
-			}
-			if (slot.statStages.spa < 6) {
-				slot.statStages.spa = Math.min(6, slot.statStages.spa + 2);
-				messageLog.push(`${slot.pokemon.species}'s Competitive sharply raised its Sp. Atk!`);
-			}
-		},
-	},
-};
-
 // Stat Change Modifier Abilities - abilities that modify stat changes (Contrary, Simple)
 export function applyStatChangeModifier(value: number, ability: string): number {
 	if (ability === 'contrary') {
@@ -1212,31 +1237,6 @@ export function applyStatChangeModifier(value: number, ability: string): number 
 	}
 	return value;
 }
-
-// Status Interaction Abilities - abilities that interact with status conditions
-export const STATUS_INTERACTION_ABILITIES: Record<string, {
-	healFromPoison?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
-	cureStatusInRain?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
-}> = {
-	'poisonheal': {
-		healFromPoison: (slot, messageLog) => {
-			const pokemon = slot.pokemon;
-			if (pokemon.hp < pokemon.maxHp) {
-				const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
-				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
-			}
-		},
-	},
-	'hydration': {
-		cureStatusInRain: (slot, messageLog) => {
-			if (slot.status) {
-				slot.status = null;
-				messageLog.push(`${slot.pokemon.species}'s Hydration cured its status condition!`);
-			}
-		},
-	},
-};
 
 // Helper functions for the newly organized abilities
 export function applyOnKOAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
