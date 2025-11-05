@@ -400,6 +400,280 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 /* ====================================
+   SUMMARY UI STYLES
+   ==================================== */
+
+.rpg-summary-container {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.rpg-summary-header {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	padding: 20px;
+	background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+	border-radius: 12px;
+	margin-bottom: 20px;
+	border: 2px solid #4CAF50;
+}
+
+.rpg-summary-sprite {
+	width: 96px;
+	height: 96px;
+	background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px solid #ddd;
+	flex-shrink: 0;
+}
+
+.rpg-summary-sprite psicon {
+	transform: scale(2);
+}
+
+.rpg-summary-header-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.rpg-summary-title {
+	font-size: 24px;
+	margin: 0 0 8px 0;
+	font-weight: bold;
+}
+
+.rpg-summary-subtitle {
+	color: #666;
+	font-size: 14px;
+	margin-bottom: 12px;
+}
+
+.rpg-summary-hp {
+	margin-top: 8px;
+}
+
+.rpg-summary-hp-label {
+	font-size: 12px;
+	margin-bottom: 4px;
+	font-weight: bold;
+}
+
+.rpg-summary-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.rpg-summary-section {
+	background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	padding: 16px;
+}
+
+.rpg-summary-moves {
+	grid-column: 1 / -1;
+}
+
+.rpg-summary-section-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 12px 0;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #4CAF50;
+	color: #333;
+}
+
+.rpg-summary-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 0;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.rpg-summary-row:last-child {
+	border-bottom: none;
+}
+
+.rpg-summary-label {
+	font-weight: bold;
+	color: #666;
+	font-size: 13px;
+}
+
+.rpg-summary-value {
+	color: #333;
+	font-size: 13px;
+}
+
+.rpg-mono {
+	font-family: monospace;
+	font-size: 11px;
+}
+
+.rpg-tera-badge {
+	background: #FF1493;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+/* Stat Bars */
+.rpg-stat-row {
+	display: grid;
+	grid-template-columns: 70px 50px 1fr;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.rpg-stat-name {
+	font-size: 12px;
+	font-weight: bold;
+	color: #666;
+}
+
+.rpg-stat-value {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333;
+	text-align: right;
+}
+
+.rpg-stat-bar-container {
+	background: #e0e0e0;
+	border-radius: 4px;
+	height: 8px;
+	overflow: hidden;
+}
+
+.rpg-stat-bar {
+	background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%);
+	height: 100%;
+	transition: width 0.3s ease;
+	border-radius: 4px;
+}
+
+/* IV Grid */
+.rpg-iv-grid,
+.rpg-ev-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+}
+
+.rpg-iv-item,
+.rpg-ev-item {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 8px;
+	text-align: center;
+	font-size: 12px;
+}
+
+.rpg-iv-label,
+.rpg-ev-label {
+	font-weight: bold;
+	color: #666;
+}
+
+.rpg-iv-value,
+.rpg-ev-value {
+	color: #333;
+	font-weight: bold;
+	margin-left: 4px;
+}
+
+.rpg-ev-total {
+	margin-top: 12px;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	color: #666;
+}
+
+/* Moves Grid */
+.rpg-moves-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
+
+.rpg-move-card {
+	background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	padding: 12px;
+	text-align: center;
+	transition: all 0.2s ease;
+}
+
+.rpg-move-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.rpg-move-empty {
+	background: #f9f9f9;
+	border: 2px dashed #ccc;
+	color: #999;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 80px;
+}
+
+.rpg-move-name {
+	font-weight: bold;
+	font-size: 13px;
+	margin-bottom: 8px;
+	color: #333;
+}
+
+.rpg-move-type {
+	display: inline-block;
+	padding: 3px 8px;
+	border-radius: 4px;
+	font-size: 10px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	color: white;
+}
+
+.rpg-move-pp {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.rpg-move-pp.high {
+	color: #4CAF50;
+}
+
+.rpg-move-pp.low {
+	color: #FF9800;
+}
+
+.rpg-move-pp.critical {
+	color: #f44336;
+}
+
+.rpg-summary-footer {
+	text-align: center;
+	padding-top: 16px;
+	border-top: 2px solid #ddd;
+}
+
+/* ====================================
    DARK MODE STYLES
    ==================================== */
 
@@ -464,4 +738,100 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .dark .rpg-party-empty {
 	color: #777;
+}
+
+/* Summary UI Dark Mode */
+.dark .rpg-summary-header {
+	background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+	border: 2px solid #4CAF50;
+}
+
+.dark .rpg-summary-sprite {
+	background: linear-gradient(135deg, #3a3a3a 0%, #2f2f2f 100%);
+	border: 2px solid #444;
+}
+
+.dark .rpg-summary-title {
+	color: #e0e0e0;
+}
+
+.dark .rpg-summary-subtitle {
+	color: #aaa;
+}
+
+.dark .rpg-summary-hp-label {
+	color: #e0e0e0;
+}
+
+.dark .rpg-summary-section {
+	background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
+	border: 2px solid #444;
+}
+
+.dark .rpg-summary-section-title {
+	color: #e0e0e0;
+	border-bottom: 2px solid #4CAF50;
+}
+
+.dark .rpg-summary-row {
+	border-bottom: 1px solid #333;
+}
+
+.dark .rpg-summary-label {
+	color: #aaa;
+}
+
+.dark .rpg-summary-value {
+	color: #e0e0e0;
+}
+
+.dark .rpg-stat-name {
+	color: #aaa;
+}
+
+.dark .rpg-stat-value {
+	color: #e0e0e0;
+}
+
+.dark .rpg-stat-bar-container {
+	background: #444;
+}
+
+.dark .rpg-iv-item,
+.dark .rpg-ev-item {
+	background: #333;
+	border: 1px solid #555;
+}
+
+.dark .rpg-iv-label,
+.dark .rpg-ev-label {
+	color: #aaa;
+}
+
+.dark .rpg-iv-value,
+.dark .rpg-ev-value {
+	color: #e0e0e0;
+}
+
+.dark .rpg-ev-total {
+	color: #aaa;
+}
+
+.dark .rpg-move-card {
+	background: linear-gradient(135deg, #333 0%, #2a2a2a 100%);
+	border: 2px solid #555;
+}
+
+.dark .rpg-move-empty {
+	background: #2a2a2a;
+	border: 2px dashed #555;
+	color: #777;
+}
+
+.dark .rpg-move-name {
+	color: #e0e0e0;
+}
+
+.dark .rpg-summary-footer {
+	border-top: 2px solid #444;
 }
