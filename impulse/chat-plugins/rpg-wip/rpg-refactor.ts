@@ -4886,7 +4886,7 @@ function generateSharedBattlePokemonInfo(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
-		expBarHTML = `<div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -4958,12 +4958,12 @@ function generateSharedBattlePokemonInfo(
 
 	if (isDoubleBattle) {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
-			`<div style="background: #e0e0e0; border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
+			`<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
 			`${expBarHTML}` +
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
 	} else {
-		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
+		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${species.types.join('/')}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
 	}
 }
 
@@ -5043,7 +5043,7 @@ function generatePokemonInfoHTML(
 
 	// Display actual types (accounting for terastallization)
 	const displayTypes = slot.terastallized ? [slot.terastallized] : species.types;
-	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px; background: #f0f0f0;"><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${teraTag}${statStageTags}<br><small>Type: ${displayTypes.join('/')}</small><br><div style="background: #f0f0f0; border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${teraTag}${statStageTags}<br><small>Type: ${displayTypes.join('/')}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
 
 	// --- Conditional info for player Pokemon only ---
 	if (isPlayerSide) {
@@ -5067,7 +5067,7 @@ function generatePokemonInfoHTML(
 	return html;
 }
 
-const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #FF1493 0%, #9370DB 100%); color: white; font-weight: bold; margin-top: 4px; font-size: 0.85em;';
+const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
 
 function generateSingleBattleHTML(
 	battle: BattleState,
@@ -5797,7 +5797,7 @@ function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[
 
 // --- NEW FUNCTION ---
 function generateTrainerVictoryHTML(opponentName: string, expMessages: string[], moneyGained: number): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="background: #f0f0f0; padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 }
 
 // --- MODIFIED FUNCTION ---
@@ -5858,7 +5858,7 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	for (const move of pokemon.moves) {
 		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}
-	html += `<hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="background-color: #d9534f; color: #fff;">Give Up</button></div>`;
+	html += `<hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button" style="color: #d9534f;">Give Up</button></div>`;
 	return html;
 }
 
@@ -5904,7 +5904,7 @@ function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlot
 }
 
 function generateFieldEffectHTML(battle: BattleState): string {
-	let html = '<div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
+	let html = '<div style="border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
 	const fieldEffects: string[] = [];
 	const playerSide: string[] = [];
 	const opponentSide: string[] = [];
