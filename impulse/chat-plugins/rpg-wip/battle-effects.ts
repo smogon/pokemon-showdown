@@ -774,6 +774,7 @@ export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, m
 	}
 }
 
+export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 	if (!RPGAbilities.isWeatherActive(battle)) {
 		if (battle.weather) battle.weather.turns--;
 		if (battle.weather && battle.weather.turns <= 0) battle.weather = undefined;

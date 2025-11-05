@@ -2400,7 +2400,6 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	}
 }
 
-export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
 export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
 	if (ability === 'unburden' && !slot.unburdenActive) {
