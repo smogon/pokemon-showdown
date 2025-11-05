@@ -67,44 +67,14 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'duskstone': { id: 'duskstone', name: 'Dusk Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It holds a darkness within.' },
 	'dawnstone': { id: 'dawnstone', name: 'Dawn Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It sparkles like a glimmer of hope.' },
 	'icestone': { id: 'icestone', name: 'Ice Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is cold to the touch.' },
+
+	// Valuable Items
+	'nugget': { id: 'nugget', name: 'Nugget', category: 'misc', description: 'A nugget of pure gold. It can be sold at a high price to shops.' },
+	'bignugget': { id: 'bignugget', name: 'Big Nugget', category: 'misc', description: 'A very large nugget of pure gold. It can be sold at a very high price to shops.' },
+	'pearl': { id: 'pearl', name: 'Pearl', category: 'misc', description: 'A small, pretty pearl. It can be sold cheaply to shops.' },
+	'bigpearl': { id: 'bigpearl', name: 'Big Pearl', category: 'misc', description: 'A large, lustrous pearl. It can be sold at a high price to shops.' },
+	'starpiece': { id: 'starpiece', name: 'Star Piece', category: 'misc', description: 'A shard of a red gem. It can be sold at a high price to shops.' },
 };
-
-export const SHOP_INVENTORY: string[] = [
-	'pokeball', 'greatball', 'ultraball', 'masterball', 'levelball', 'fastball', 'timerball', 'nestball', 'netball',
-	'quickball', 'dreamball', 'premierball', 'luxuryball', 'healball', 'masterball',
-
-	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
-	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
-	'revive', 'maxrevive', 'revivalherb', 'sacredash',
-	// Status Healers
-	'antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal',
-	// PP Restore
-	'ether', 'maxether', 'elixir', 'maxelixir',
-	// Vitamins
-	'hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos',
-
-	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
-	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
-	'apicotberry', 'starfberry', 'keberry', 'marangaberry', 'babiriberry', 'chartiberry', 'chilanberry',
-	'chopleberry', 'cobaberry', 'colburberry', 'habanberry', 'kasibberry', 'kebiaberry', 'occaberry',
-	'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
-	'lumberry',
-
-	'leftovers', 'blacksludge', 'shellbell', 'lifeorb', 'rockyhelmet', 'stickybarb',
-	'choiceband', 'choicescarf', 'choicespecs', 'flameorb', 'toxicorb',
-	'heavydutyboots', 'focussash', 'assaultvest', 'eviolite', 'airballoon',
-	'heatrock', 'damprock', 'smoothrock', 'icyrock',
-	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
-	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
-	'lightclay', 'everstone',
-
-	'eggmovetutor',
-	'rarecandy',
-	'expcandyxs', 'expcandys', 'expcandym', 'expcandyl', 'expcandyxl',
-	'terashard',
-	// Evo Stones
-	'firestone', 'waterstone', 'thunderstone', 'leafstone', 'moonstone', 'sunstone', 'shinystone', 'duskstone', 'dawnstone', 'icestone',
-];
 
 export const ITEM_PRICES: Record<string, number> = {
 	'pokeball': 200, 'greatball': 600, 'ultraball': 800, 'potion': 300, 'superpotion': 700, 'hyperpotion': 1200, 'maxpotion': 2500, 'fullrestore': 3000, 'eggmovetutor': 3000, 'rarecandy': 4800,
@@ -147,7 +117,46 @@ export const ITEM_PRICES: Record<string, number> = {
 	'moonstone': 5000, 'sunstone': 3000, 'shinystone': 5000, 'duskstone': 5000, 'dawnstone': 5000, 'icestone': 3000,
 	// Vitamins
 	'hpup': 9800, 'protein': 9800, 'iron': 9800, 'calcium': 9800, 'zinc': 9800, 'carbos': 9800,
+	// Valuable Items (Sell Price)
+	'nugget': 5000, 'bignugget': 10000, 'pearl': 700, 'bigpearl': 3750, 'starpiece': 6000,
 };
+
+export const SHOP_INVENTORY: string[] = [
+	'pokeball', 'greatball', 'ultraball', 'masterball', 'levelball', 'fastball', 'timerball', 'nestball', 'netball',
+	'quickball', 'dreamball', 'premierball', 'luxuryball', 'healball', 'masterball',
+
+	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
+	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
+	'revive', 'maxrevive', 'revivalherb', 'sacredash',
+	// Status Healers
+	'antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal',
+	// PP Restore
+	'ether', 'maxether', 'elixir', 'maxelixir',
+	// Vitamins
+	'hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos',
+
+	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
+	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
+	'apicotberry', 'starfberry', 'keberry', 'marangaberry', 'babiriberry', 'chartiberry', 'chilanberry',
+	'chopleberry', 'cobaberry', 'colburberry', 'habanberry', 'kasibberry', 'kebiaberry', 'occaberry',
+	'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
+	'lumberry',
+
+	'leftovers', 'blacksludge', 'shellbell', 'lifeorb', 'rockyhelmet', 'stickybarb',
+	'choiceband', 'choicescarf', 'choicespecs', 'flameorb', 'toxicorb',
+	'heavydutyboots', 'focussash', 'assaultvest', 'eviolite', 'airballoon',
+	'heatrock', 'damprock', 'smoothrock', 'icyrock',
+	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
+	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
+	'lightclay', 'everstone',
+
+	'eggmovetutor',
+	'rarecandy',
+	'expcandyxs', 'expcandys', 'expcandym', 'expcandyl', 'expcandyxl',
+	'terashard',
+	// Evo Stones
+	'firestone', 'waterstone', 'thunderstone', 'leafstone', 'moonstone', 'sunstone', 'shinystone', 'duskstone', 'dawnstone', 'icestone',
+];
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	if (CUSTOM_ITEMS_DATABASE[itemId]) {

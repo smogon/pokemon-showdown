@@ -4530,11 +4530,13 @@ function generateSharedBattlePokemonInfo(
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	if (isDoubleBattle) {
-		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
+		// --- THIS IS THE FIX ---
+		// Removed the wrapper div from this return statement.
+		return `<psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
 			`<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
 			`${expBarHTML}` +
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
-			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
+			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}`;
 	} else {
 		const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
@@ -4544,7 +4546,8 @@ function generateSharedBattlePokemonInfo(
 function generatePokemonInfoHTML(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
-	showActions = false
+	showActions = false,
+	slotInfo?: { index: number, partyLength: number }
 ): string {
 	const pokemon = slot.pokemon;
 	const statStages = slot.statStages;
@@ -4614,9 +4617,25 @@ function generatePokemonInfoHTML(
 		}
 	}
 
-	// Display actual types (accounting for terastallization)
+	// --- THIS IS THE FIX ---
+	// Start the main div
+	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">`;
+
+	// Add the optional slot/swap button header
+	if (slotInfo) {
+		html += `<div style="margin-bottom: 5px;"><strong>Slot ${slotInfo.index + 1}:</strong>`;
+		if (slotInfo.index > 0) {
+			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index - 1}" class="button" style="font-size: 12px;">↑</button>`;
+		}
+		if (slotInfo.index < slotInfo.partyLength - 1) {
+			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index + 1}" class="button" style="font-size: 12px;">↓</button>`;
+		}
+		html += `</div>`;
+	}
+
+	// Add the rest of the Pokemon info
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
 
 	// --- Conditional info for player Pokemon only ---
 	if (isPlayerSide) {
@@ -5191,11 +5210,14 @@ function generateInventoryHTML(player: PlayerData, category?: string): string {
 function generateShopHTML(player: PlayerData, category?: string): string {
 	let html = `<div class="infobox">`;
 	html += `<h2>Poké Mart</h2>`;
-	html += `<p>Welcome! What would you like to buy?</p>`;
+	html += `<p>Welcome! What would you like to do?</p>`;
 	html += `<p><strong>Your Money:</strong> ₽${player.money}</p>`;
 
+	// --- NEW: Added Sell Button ---
+	html += `<p><button name="send" value="/rpg sell" class="button" style="background-color: #28a745; color: white;">Sell Items</button></p>`;
+
 	// Category Buttons
-	html += `<div style="margin: 10px 0;">`;
+	html += `<h3>Buy Items</h3><div style="margin: 10px 0;">`;
 	html += `<button name="send" value="/rpg shop" class="button">All</button> `;
 	html += `<button name="send" value="/rpg shop pokeball" class="button">Poké Balls</button> `;
 	html += `<button name="send" value="/rpg shop medicine" class="button">Medicines</button> `;
@@ -5861,18 +5883,11 @@ export const commands: ChatCommands = {
 			} else {
 				for (let i = 0; i < 6; i++) {
 					if (player.party[i]) {
-						// --- FIX ---
-						// We must wrap the RPGPokemon in an ActivePokemonSlot
+						// --- THIS IS THE FIX ---
+						// We pass the slot info directly to the HTML generator
+						// and no longer wrap it in an extra <div>
 						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += `<div><strong>Slot ${i + 1}:</strong>`;
-						// Add swap buttons (up and down arrows)
-						if (i > 0) {
-							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button" style="font-size: 12px;">↑</button>`;
-						}
-						if (i < player.party.length - 1 && player.party[i + 1]) {
-							partyHTML += ` <button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button" style="font-size: 12px;">↓</button>`;
-						}
-						partyHTML += `<br>${generatePokemonInfoHTML(tempSlot, true, true)}</div>`;
+						partyHTML += generatePokemonInfoHTML(tempSlot, true, true, { index: i, partyLength: player.party.length });
 						// --- END FIX ---
 					} else {
 						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
@@ -5924,7 +5939,6 @@ export const commands: ChatCommands = {
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
-		
 		
 		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
@@ -6140,7 +6154,7 @@ export const commands: ChatCommands = {
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (item.category === 'misc') {
-				// --- NEW BLOCK TO HANDLE MISC ITEMS ---
+				// --- BLOCK TO HANDLE MISC ITEMS ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
 					for (const pokemon of player.party) {
@@ -6377,6 +6391,63 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`);
+		},
+		
+		sell(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot sell items during a battle.");
+			}
+			const [itemId, quantityStr] = target.split(' ');
+			const quantity = parseInt(quantityStr) || 1;
+			const player = getPlayerData(user.id);
+
+			if (!itemId) {
+				// If no item specified, show sell menu
+				let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
+				html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
+				let sellableItems = 0;
+				for (const [id, item] of player.inventory) {
+					const sellPrice = ITEM_PRICES[id]; // Using ITEM_PRICES as sell price for now
+					if (sellPrice && item.category === 'misc') { // Only allow selling 'misc' items
+						sellableItems++;
+						html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
+						html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;
+						html += `<small>Sell for: ₽${sellPrice} each</small><br>`;
+						html += `<button name="send" value="/rpg sell ${id} 1" class="button" style="font-size: 12px; margin-top: 5px;">Sell 1</button>`;
+						if (item.quantity >= 5) {
+							html += `<button name="send" value="/rpg sell ${id} 5" class="button" style="font-size: 12px; margin-top: 5px;">Sell 5</button>`;
+						}
+						html += `</div>`;
+					}
+				}
+				if (sellableItems === 0) {
+					html += `<p>You have no valuable items to sell.</p>`;
+				}
+				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			}
+
+			const itemInBag = player.inventory.get(itemId);
+			if (!itemInBag) {
+				return this.errorReply("You don't have that item.");
+			}
+			if (itemInBag.quantity < quantity) {
+				return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
+			}
+			if (itemInBag.category !== 'misc') {
+				return this.errorReply("You can only sell items from the 'Misc.' category.");
+			}
+
+			const sellPrice = ITEM_PRICES[itemId];
+			if (!sellPrice) {
+				return this.errorReply("This item cannot be sold.");
+			}
+
+			const totalGain = sellPrice * quantity;
+			removeItemFromInventory(player, itemId, quantity);
+			player.money += totalGain;
+
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`);
 		},
 
 		pokedex(target, room, user) {
