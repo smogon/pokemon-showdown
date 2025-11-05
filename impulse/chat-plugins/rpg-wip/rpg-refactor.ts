@@ -5078,7 +5078,7 @@ function generateSingleBattleHTML(
 	const opponentSlot = battle.opponentSlots[0];
 
 	if (!playerSlot || !opponentSlot) {
-		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>`;
+		return `<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/join view-rpg" class="button">Flee</button></p></div>`;
 	}
 
 	const playerPokemon = playerSlot.pokemon;
@@ -5454,21 +5454,21 @@ function generateDoubleBattleHTML(
 }
 
 function generateWelcomeHTML(): string {
-	return `<div class="infobox"><h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/rpg choosetype fire" class="button">🔥 Fire</button><button name="send" value="/rpg choosetype water" class="button">💧 Water</button><button name="send" value="/rpg choosetype grass" class="button">🌱 Grass</button></p></div>`;
+	return `<h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/join view-rpg-choosetype-fire" class="button">🔥 Fire</button><button name="send" value="/join view-rpg-choosetype-water" class="button">💧 Water</button><button name="send" value="/join view-rpg-choosetype-grass" class="button">🌱 Grass</button></p>`;
 }
 
 function generateStarterSelectionHTML(type: string): string {
 	const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON];
 	if (!starters) return '';
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let html = `<div class="infobox"><h2>${typeTitle} Type Starters</h2><p>Choose your starter pokemon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+	let html = `<h2>${typeTitle} Type Starters</h2><p>Choose your starter pokemon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 	for (const starterId of starters) {
 		const species = Dex.species.get(starterId);
 		if (species.exists) {
 			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><strong>${species.name}</strong><br><small>Type: ${species.types.join('/')}</small><br><button name="send" value="/rpg choosestarter ${starterId}" class="button" style="margin-top: 5px;">Choose</button></div>`;
 		}
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg start" class="button">← Back to Type Selection</button></p></div>`;
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/join view-rpg" class="button">← Back to Type Selection</button></p>`;
 	return html;
 }
 
@@ -5569,7 +5569,7 @@ function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'</div>' +
 		'</div>' +
 		'</div>' +
-		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-party" class="button">← Back to Party</button></p>' +
 		'</div>';
 }
 
@@ -5579,17 +5579,16 @@ function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): 
 		const move = getMove(moveId);
 		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button" style="margin: 3px;">${move.name}</button> `;
 	}
-	html += `<hr /><p><button name="send" value="/rpg items" class="button">Cancel</button></p></div>`;
+	html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Cancel</button></p></div>`;
 	return html;
 }
 
 function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="infobox">`;
-	html += `<h2>Inventory</h2>`;
+	let html = `<h2>Inventory</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
 
 	// Category Buttons
-	html += `<div style="margin: 10px 0;"><button name="send" value="/rpg items" class="button">All</button> <button name="send" value="/rpg items pokeball" class="button">Poké Balls</button> <button name="send" value="/rpg items medicine" class="button">Medicines</button> <button name="send" value="/rpg items held" class="button">Held Items</button> <button name="send" value="/rpg items berry" class="button">Berries</button> <button name="send" value="/rpg items tm" class="button">TMs</button> <button name="send" value="/rpg items key" class="button">Key Items</button> <button name="send" value="/rpg items misc" class="button">Misc.</button></div>`;
+	html += `<div style="margin: 10px 0;"><button name="send" value="/join view-rpg-items" class="button">All</button> <button name="send" value="/join view-rpg-items-pokeball" class="button">Poké Balls</button> <button name="send" value="/join view-rpg-items-medicine" class="button">Medicines</button> <button name="send" value="/join view-rpg-items-held" class="button">Held Items</button> <button name="send" value="/join view-rpg-items-berry" class="button">Berries</button> <button name="send" value="/join view-rpg-items-tm" class="button">TMs</button> <button name="send" value="/join view-rpg-items-key" class="button">Key Items</button> <button name="send" value="/join view-rpg-items-misc" class="button">Misc.</button></div>`;
 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
 
@@ -5610,25 +5609,23 @@ function generateInventoryHTML(player: PlayerData, category?: string): string {
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
-	html += `</div>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
 	return html;
 }
 
 function generateShopHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="infobox">`;
-	html += `<h2>Poké Mart</h2>`;
+	let html = `<h2>Poké Mart</h2>`;
 	html += `<p>Welcome! What would you like to buy?</p>`;
 	html += `<p><strong>Your Money:</strong> ₽${player.money}</p>`;
 
 	// Category Buttons
 	html += `<div style="margin: 10px 0;">`;
-	html += `<button name="send" value="/rpg shop" class="button">All</button> `;
-	html += `<button name="send" value="/rpg shop pokeball" class="button">Poké Balls</button> `;
-	html += `<button name="send" value="/rpg shop medicine" class="button">Medicines</button> `;
-	html += `<button name="send" value="/rpg shop held" class="button">Held Items</button> `;
-	html += `<button name="send" value="/rpg shop berry" class="button">Berries</button> `;
-	html += `<button name="send" value="/rpg shop misc" class="button">Misc.</button>`;
+	html += `<button name="send" value="/join view-rpg-shop" class="button">All</button> `;
+	html += `<button name="send" value="/join view-rpg-shop-pokeball" class="button">Poké Balls</button> `;
+	html += `<button name="send" value="/join view-rpg-shop-medicine" class="button">Medicines</button> `;
+	html += `<button name="send" value="/join view-rpg-shop-held" class="button">Held Items</button> `;
+	html += `<button name="send" value="/join view-rpg-shop-berry" class="button">Berries</button> `;
+	html += `<button name="send" value="/join view-rpg-shop-misc" class="button">Misc.</button>`;
 	html += `</div>`;
 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
@@ -5655,13 +5652,12 @@ function generateShopHTML(player: PlayerData, category?: string): string {
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
-	html += `</div>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-explore" class="button">Back to Explore</button></p>`;
 	return html;
 }
 
 function generatePCHTML(player: PlayerData): string {
-	let html = `<div class="infobox"><h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
+	let html = `<h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
 	if (player.pc.size === 0) {
 		html += `<p>No Pokemon stored in PC.</p>`;
 	} else {
@@ -5671,7 +5667,7 @@ function generatePCHTML(player: PlayerData): string {
 		}
 		html += `</div>`;
 	}
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/join view-rpg-party" class="button">View Party</button> <button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
 	return html;
 }
 
@@ -5789,21 +5785,21 @@ function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[
 	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You gained ₽${moneyGained}!</p>` +
 		`<p>` +
 		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-		`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
+		`<button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button>` +
+		`<button name="send" value="/join view-rpg" class="button">Back to Menu</button>` +
 		`</p>` +
 		`</div>`;
 }
 
 // --- NEW FUNCTION ---
 function generateTrainerVictoryHTML(opponentName: string, expMessages: string[], moneyGained: number): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
 }
 
 // --- MODIFIED FUNCTION ---
 function generateDefeatHTML(moneyLost: number, opponentName?: string): string {
 	const opponentMessage = opponentName ? `You lost to ${opponentName}!` : "You have no more Pokemon that can fight!";
-	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
 }
 
 function generateFaintSwitchHTML(battle: BattleState, message: string): string {
@@ -5852,7 +5848,7 @@ function generateMoveLearnHTML(player: PlayerData): string {
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
 		delete player.pendingMoveLearnQueue;
-		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
+		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
 	}
 	let html = `<div class="infobox"><h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
 	for (const move of pokemon.moves) {
@@ -5873,7 +5869,7 @@ function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId: string
 			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
 			`</div>`;
 	}
-	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
+	html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Back to Bag</button></p></div>`;
 	return html;
 }
 
@@ -6054,10 +6050,7 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
-			if (player.party.length > 0) {
-				return this.parse('/rpg menu');
-			}
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
+			return this.parse('/join view-rpg');
 		},
 
 		choosetype(target, room, user) {
@@ -6068,7 +6061,7 @@ export const commands: ChatCommands = {
 			if (!['fire', 'water', 'grass'].includes(type)) {
 				return this.errorReply("Invalid type.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type)}`);
+			return this.parse(`/join view-rpg-choosetype-${type}`);
 		},
 
 		choosestarter(target, room, user) {
@@ -6094,7 +6087,7 @@ export const commands: ChatCommands = {
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
@@ -6114,8 +6107,29 @@ export const commands: ChatCommands = {
 			if (player.party.length === 0) {
 				return this.parse('/rpg start');
 			}
-			const menuHTML = `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${menuHTML}`);
+			return this.parse('/join view-rpg');
+		},
+		
+		profile(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You are in a battle!");
+			}
+			return this.parse('/join view-rpg-profile');
+		},
+		
+		party(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You are in a battle!");
+			}
+			return this.parse('/join view-rpg-party');
+		},
+		
+		items(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot access items during a battle.");
+			}
+			const category = target ? toID(target) : '';
+			return this.parse(`/join view-rpg-items${category ? '-' + category : ''}`);
 		},
 
 		learnmove(target, room, user) {
@@ -6156,7 +6170,7 @@ export const commands: ChatCommands = {
 				delete player.pendingMoveLearnQueue;
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			}
@@ -7550,5 +7564,125 @@ export const commands: ChatCommands = {
 			return this.parse('/help rpg');
 		},
 		'': 'help',
+	},
+};
+
+export const pages: Chat.PageTable = {
+	rpg(query, user, connection) {
+		this.title = '[RPG]';
+		const player = getPlayerData(user.id);
+		
+		// Parse the query to determine which view to show
+		const [view, ...params] = query;
+		
+		let buf = '<div class="pad">';
+		
+		// Add a refresh button that maintains current view
+		const refreshUrl = `/view-rpg${query.length ? '-' + query.join('-') : ''}`;
+		buf += `<button style="float:right;" class="button" name="send" value="/join ${refreshUrl}">`;
+		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+		
+		switch (view) {
+		case '':
+		case 'menu':
+			if (player.party.length === 0) {
+				// Show welcome/starter selection
+				buf += generateWelcomeHTML();
+			} else {
+				// Show main menu
+				buf += `<h2>RPG Menu - ${player.name}</h2>`;
+				buf += `<p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p>`;
+				buf += `<p>What would you like to do?</p>`;
+				buf += `<p>`;
+				buf += `<button name="send" value="/join view-rpg-profile" class="button">👤 Profile</button>`;
+				buf += `<button name="send" value="/join view-rpg-party" class="button">⚡ Party</button>`;
+				buf += `<button name="send" value="/join view-rpg-explore" class="button">🗺️ Explore</button>`;
+				buf += `</p><p>`;
+				buf += `<button name="send" value="/join view-rpg-items" class="button">🎒 Items</button>`;
+				buf += `<button name="send" value="/join view-rpg-pc" class="button">💻 Pokemon PC</button>`;
+				buf += `</p>`;
+			}
+			break;
+			
+		case 'profile':
+			buf += `<h2>Player Profile</h2>`;
+			buf += `<p><strong>Name:</strong> ${player.name}</p>`;
+			buf += `<p><strong>Level:</strong> ${player.level}</p>`;
+			buf += `<p><strong>Location:</strong> ${player.location}</p>`;
+			buf += `<p><strong>Money:</strong> ₽${player.money}</p>`;
+			buf += `<p><strong>Badges:</strong> ${player.badges}</p>`;
+			buf += `<p><strong>Party Size:</strong> ${player.party.length}/6</p>`;
+			buf += `<p><strong>PC Storage:</strong> ${player.pc.size} Pokemon</p>`;
+			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+			break;
+			
+		case 'party':
+			buf += `<h2>Your Party</h2>`;
+			if (player.party.length === 0) {
+				buf += `<p>You don't have any Pokemon yet!</p>`;
+			} else {
+				for (const pokemon of player.party) {
+					const tempSlot = createActivePokemonSlot(pokemon);
+					buf += generatePokemonInfoHTML(tempSlot, true, true);
+				}
+			}
+			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+			break;
+			
+		case 'items':
+			const category = params[0] as string | undefined;
+			buf += generateInventoryHTML(player, category);
+			break;
+			
+		case 'pc':
+			buf += generatePCHTML(player);
+			break;
+			
+		case 'explore':
+			buf += `<h2>Explore ${player.location}</h2>`;
+			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(
+				zoneId => zoneId.startsWith(toID(player.location))
+			);
+			buf += `<p>Choose where to go:</p><p>`;
+			if (availableZones.length > 0) {
+				for (const zoneId of availableZones) {
+					const zone = ENCOUNTER_ZONES[zoneId];
+					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
+					buf += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+				}
+			} else {
+				buf += `<p>There's nowhere to explore here right now.</p>`;
+			}
+			buf += `</p>`;
+			buf += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
+			buf += `<hr /><p>`;
+			buf += `<button name="send" value="/join view-rpg-shop" class="button">🏪 Poké Mart</button>`;
+			buf += `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>`;
+			buf += `</p>`;
+			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+			break;
+			
+		case 'shop':
+			const shopCategory = params[0] as string | undefined;
+			buf += generateShopHTML(player, shopCategory);
+			break;
+			
+		case 'choosetype':
+			const starterType = params[0] || '';
+			if (['fire', 'water', 'grass'].includes(starterType)) {
+				buf += generateStarterSelectionHTML(starterType);
+			} else {
+				buf += generateWelcomeHTML();
+			}
+			break;
+			
+		default:
+			buf += `<h2>Page Not Found</h2>`;
+			buf += `<p>The view "${Utils.escapeHTML(view)}" does not exist.</p>`;
+			buf += `<p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p>`;
+		}
+		
+		buf += '</div>';
+		return buf;
 	},
 };
