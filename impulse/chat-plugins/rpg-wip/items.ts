@@ -68,6 +68,42 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'dawnstone': { id: 'dawnstone', name: 'Dawn Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It sparkles like a glimmer of hope.' },
 	'icestone': { id: 'icestone', name: 'Ice Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is cold to the touch.' },
 
+	// Evolution Items (Held items that trigger evolution)
+	'dragonscale': { id: 'dragonscale', name: 'Dragon Scale', category: 'misc', description: 'A thick, hard scale. When held by Seadra, it triggers evolution into Kingdra.' },
+	'kingsrock': { id: 'kingsrock', name: 'King\'s Rock', category: 'misc', description: 'A peculiar rock that makes certain species of Pokémon evolve. Can make foes flinch when held.' },
+	'metalcoat': { id: 'metalcoat', name: 'Metal Coat', category: 'misc', description: 'A special metallic coating. When held by Onix or Scyther, it triggers evolution.' },
+	'upgrade': { id: 'upgrade', name: 'Up-Grade', category: 'misc', description: 'A transparent device. When held by Porygon, it triggers evolution into Porygon2.' },
+	'dubiousdisc': { id: 'dubiousdisc', name: 'Dubious Disc', category: 'misc', description: 'A transparent device. When held by Porygon2, it triggers evolution into Porygon-Z.' },
+	'protector': { id: 'protector', name: 'Protector', category: 'misc', description: 'A protective item. When held by Rhydon, it triggers evolution into Rhyperior.' },
+	'electirizer': { id: 'electirizer', name: 'Electirizer', category: 'misc', description: 'An electric box. When held by Electabuzz, it triggers evolution into Electivire.' },
+	'magmarizer': { id: 'magmarizer', name: 'Magmarizer', category: 'misc', description: 'A magma box. When held by Magmar, it triggers evolution into Magmortar.' },
+	'reapercloth': { id: 'reapercloth', name: 'Reaper Cloth', category: 'misc', description: 'A cloth imbued with horrifyingly strong spiritual energy. When held by Dusclops, it triggers evolution into Dusknoir.' },
+	'razorclaw': { id: 'razorclaw', name: 'Razor Claw', category: 'misc', description: 'A sharply hooked claw. When held by Sneasel, it triggers evolution into Weavile.' },
+	'ovalstone': { id: 'ovalstone', name: 'Oval Stone', category: 'misc', description: 'A peculiar stone that makes Happiny evolve. It is shaped like an egg.' },
+	'sachet': { id: 'sachet', name: 'Sachet', category: 'misc', description: 'A sachet filled with perfumes. When held by Spritzee, it triggers evolution into Aromatisse.' },
+	'whippeddream': { id: 'whippeddream', name: 'Whipped Dream', category: 'misc', description: 'A soft and sweet treat. When held by Swirlix, it triggers evolution into Slurpuff.' },
+	'blackaugurite': { id: 'blackaugurite', name: 'Black Augurite', category: 'misc', description: 'A glassy black stone. When held by Scyther, it triggers evolution into Kleavor.' },
+	'metalalloy': { id: 'metalalloy', name: 'Metal Alloy', category: 'misc', description: 'A peculiar metal that makes Duraludon evolve into Archaludon.' },
+
+	// Special Evolution Items
+	'magnet': { id: 'magnet', name: 'Magnet', category: 'misc', description: 'A powerful magnet. When held by certain Pokémon, it triggers evolution. Also boosts Electric-type moves.' },
+	'chipseal': { id: 'chipseal', name: 'Chipped Pot', category: 'misc', description: 'A cracked teapot. When used on Sinistea, it triggers evolution into Polteageist.' },
+	'masterpiece': { id: 'masterpiece', name: 'Unremarkable Teacup', category: 'misc', description: 'An unremarkable teacup. When used on certain Ghost-type Pokémon, it triggers evolution.' },
+
+	// Apple Items (for Applin evolutions)
+	'tartapple': { id: 'tartapple', name: 'Tart Apple', category: 'misc', description: 'A very sour apple. When held by Applin, it triggers evolution into Flapple.' },
+	'sweetapple': { id: 'sweetapple', name: 'Sweet Apple', category: 'misc', description: 'A very sweet apple. When held by Applin, it triggers evolution into Appletun.' },
+	'syruppyapple': { id: 'syruppyapple', name: 'Syrupy Apple', category: 'misc', description: 'A peculiar apple. When held by Applin, it triggers evolution into Dipplin.' },
+	'dragonchesto': { id: 'dragonchesto', name: 'Dragon Chesto', category: 'misc', description: 'A rare dragon fruit. When held by Dipplin, it triggers evolution into Hydrapple.' },
+
+	// Trade Evolution Items (Special cases for trade evolutions converted to item-based)
+	'tradehelmet': { id: 'tradehelmet', name: 'Shelmet Shell', category: 'misc', description: 'A discarded Shelmet shell. When held by Karrablast, it triggers evolution into Escavalier.' },
+	'tradekarrablast': { id: 'tradekarrablast', name: 'Karrablast Shell', category: 'misc', description: 'A discarded Karrablast shell. When held by Shelmet, it triggers evolution into Accelgor.' },
+
+	// Legendary/Mythical Evolution Items
+	'towerscrolls': { id: 'towerscrolls', name: 'Tower Scroll', category: 'misc', description: 'An ancient scroll from the Tower of Darkness. When held by Kubfu, it triggers evolution into Urshifu (Single Strike).' },
+	'waterscroll': { id: 'waterscroll', name: 'Water Scroll', category: 'misc', description: 'An ancient scroll from the Tower of Waters. When held by Kubfu, it triggers evolution into Urshifu (Rapid Strike).' },
+
 	// Valuable Items
 	'nugget': { id: 'nugget', name: 'Nugget', category: 'misc', description: 'A nugget of pure gold. It can be sold at a high price to shops.' },
 	'bignugget': { id: 'bignugget', name: 'Big Nugget', category: 'misc', description: 'A very large nugget of pure gold. It can be sold at a very high price to shops.' },
@@ -115,6 +151,17 @@ export const ITEM_PRICES: Record<string, number> = {
 	// Evo Stones
 	'firestone': 3000, 'waterstone': 3000, 'thunderstone': 3000, 'leafstone': 3000,
 	'moonstone': 5000, 'sunstone': 3000, 'shinystone': 5000, 'duskstone': 5000, 'dawnstone': 5000, 'icestone': 3000,
+	// Evolution Items
+	'dragonscale': 4000, 'metalcoat': 4000, 'upgrade': 4000, 'dubiousdisc': 4000,
+	'protector': 4000, 'electirizer': 4000, 'magmarizer': 4000, 'reapercloth': 4000,
+	'ovalstone': 3000, 'sachet': 4000, 'whippeddream': 4000, 'blackaugurite': 5000,
+	'metalalloy': 5000, 'magnet': 3000, 'chipseal': 3500, 'masterpiece': 5000,
+	// Apple Items
+	'tartapple': 3500, 'sweetapple': 3500, 'syruppyapple': 4000, 'dragonchesto': 5000,
+	// Trade Evolution Items
+	'tradehelmet': 4500, 'tradekarrablast': 4500,
+	// Legendary Items
+	'towerscrolls': 10000, 'waterscroll': 10000,
 	// Vitamins
 	'hpup': 9800, 'protein': 9800, 'iron': 9800, 'calcium': 9800, 'zinc': 9800, 'carbos': 9800,
 	// Valuable Items (Sell Price)
@@ -156,6 +203,15 @@ export const SHOP_INVENTORY: string[] = [
 	'terashard',
 	// Evo Stones
 	'firestone', 'waterstone', 'thunderstone', 'leafstone', 'moonstone', 'sunstone', 'shinystone', 'duskstone', 'dawnstone', 'icestone',
+	// Evolution Items
+	'dragonscale', 'metalcoat', 'upgrade', 'dubiousdisc', 'protector', 'electirizer', 'magmarizer', 'reapercloth',
+	'ovalstone', 'sachet', 'whippeddream', 'blackaugurite', 'metalalloy', 'magnet', 'chipseal', 'masterpiece',
+	// Apple Items
+	'tartapple', 'sweetapple', 'syruppyapple', 'dragonchesto',
+	// Trade Evolution Items
+	'tradehelmet', 'tradekarrablast',
+	// Legendary Items
+	'towerscrolls', 'waterscroll',
 ];
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
