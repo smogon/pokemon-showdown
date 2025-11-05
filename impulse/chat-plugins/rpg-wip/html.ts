@@ -129,7 +129,7 @@ export function generateSharedBattlePokemonInfo(
 		const expForNextLevel = pokemon.expToNextLevel;
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+		const expPercentage = Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
@@ -233,7 +233,7 @@ export function generatePokemonInfoHTML(
 		const expForNextLevel = pokemon.expToNextLevel;
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+		const expPercentage = Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
