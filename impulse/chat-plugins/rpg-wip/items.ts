@@ -46,7 +46,54 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'expcandyl': { id: 'expcandyl', name: 'Exp. Candy L', category: 'misc', description: 'A candy that is packed with energy. Gives 10,000 Exp. Points to a Pokémon.' },
 	'expcandyxl': { id: 'expcandyxl', name: 'Exp. Candy XL', category: 'misc', description: 'A candy that is packed with energy. Gives 30,000 Exp. Points to a Pokémon.' },
 	'terashard': { id: 'terashard', name: 'Tera Shard', category: 'misc', description: 'A mysterious shard. When used on a Pokémon, it changes its Tera Type to a new, random type.' },
+	
+	// Evolution Stones
+	'firestone': { id: 'firestone', name: 'Fire Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is orange.' },
+	'waterstone': { id: 'waterstone', name: 'Water Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is blue.' },
+	'thunderstone': { id: 'thunderstone', name: 'Thunder Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It has a lightning bolt pattern.' },
+	'leafstone': { id: 'leafstone', name: 'Leaf Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It has a leaf pattern.' },
+	'moonstone': { id: 'moonstone', name: 'Moon Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is as black as the night sky.' },
+	'sunstone': { id: 'sunstone', name: 'Sun Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It glows like the sun.' },
+	'shinystone': { id: 'shinystone', name: 'Shiny Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It shines with a dazzling light.' },
+	'duskstone': { id: 'duskstone', name: 'Dusk Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It holds a darkness within.' },
+	'dawnstone': { id: 'dawnstone', name: 'Dawn Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It sparkles like a glimmer of hope.' },
+	'icestone': { id: 'icestone', name: 'Ice Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is cold to the touch.' },
 };
+
+export const SHOP_INVENTORY: string[] = [
+	'pokeball', 'greatball', 'ultraball', 'masterball', 'levelball', 'fastball', 'timerball', 'nestball', 'netball',
+	'quickball', 'dreamball', 'premierball', 'luxuryball', 'healball', 'masterball',
+
+	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
+	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
+	'revive', 'maxrevive', 'revivalherb', 'sacredash',
+	// Status Healers
+	'antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal',
+	// PP Restore
+	'ether', 'maxether', 'elixir', 'maxelixir',
+
+	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
+	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
+	'apicotberry', 'starfberry', 'keberry', 'marangaberry', 'babiriberry', 'chartiberry', 'chilanberry',
+	'chopleberry', 'cobaberry', 'colburberry', 'habanberry', 'kasibberry', 'kebiaberry', 'occaberry',
+	'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
+	'lumberry',
+
+	'leftovers', 'blacksludge', 'shellbell', 'lifeorb', 'rockyhelmet', 'stickybarb',
+	'choiceband', 'choicescarf', 'choicespecs', 'flameorb', 'toxicorb',
+	'heavydutyboots', 'focussash', 'assaultvest', 'eviolite', 'airballoon',
+	'heatrock', 'damprock', 'smoothrock', 'icyrock',
+	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
+	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
+	'lightclay', 'everstone',
+
+	'eggmovetutor',
+	'rarecandy',
+	'expcandyxs', 'expcandys', 'expcandym', 'expcandyl', 'expcandyxl',
+	'terashard',
+	// Evo Stones
+	'firestone', 'waterstone', 'thunderstone', 'leafstone', 'moonstone', 'sunstone', 'shinystone', 'duskstone', 'dawnstone', 'icestone',
+];
 
 export const ITEM_PRICES: Record<string, number> = {
 	'pokeball': 200, 'greatball': 600, 'ultraball': 800, 'potion': 300, 'superpotion': 700, 'hyperpotion': 1200, 'maxpotion': 2500, 'fullrestore': 3000, 'eggmovetutor': 3000, 'rarecandy': 4800,
@@ -79,40 +126,15 @@ export const ITEM_PRICES: Record<string, number> = {
 	'kingsrock': 3500, 'scopelens': 4000, 'razorclaw': 4000,
 	'lightclay': 4000, 'everstone': 2000,
 	'terashard': 5000,
+
+	// Status Healers
 	'antidote': 100, 'paralyzeheal': 200, 'awakening': 250, 'burnheal': 250, 'iceheal': 250, 'fullheal': 600,
+	// PP Restore
 	'ether': 1200, 'maxether': 2000, 'elixir': 3000, 'maxelixir': 4500,
+	// Evo Stones
+	'firestone': 3000, 'waterstone': 3000, 'thunderstone': 3000, 'leafstone': 3000,
+	'moonstone': 5000, 'sunstone': 3000, 'shinystone': 5000, 'duskstone': 5000, 'dawnstone': 5000, 'icestone': 3000,
 };
-
-export const SHOP_INVENTORY: string[] = [
-	'pokeball', 'greatball', 'ultraball', 'masterball', 'levelball', 'fastball', 'timerball', 'nestball', 'netball',
-	'quickball', 'dreamball', 'premierball', 'luxuryball', 'healball', 'masterball',
-
-	'potion', 'superpotion', 'hyperpotion', 'maxpotion', 'berryjuice', 'fullrestore',
-	'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'healpowder',
-	'revive', 'maxrevive', 'revivalherb', 'sacredash',
-	'antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal',
-	'ether', 'maxether', 'elixir', 'maxelixir',
-
-	'oranberry', 'sitrusberry', 'goldberry', 'aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
-	'enigmaberry', 'jabocaberry', 'rowapberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry',
-	'apicotberry', 'starfberry', 'keberry', 'marangaberry', 'babiriberry', 'chartiberry', 'chilanberry',
-	'chopleberry', 'cobaberry', 'colburberry', 'habanberry', 'kasibberry', 'kebiaberry', 'occaberry',
-	'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
-	'lumberry',
-
-	'leftovers', 'blacksludge', 'shellbell', 'lifeorb', 'rockyhelmet', 'stickybarb',
-	'choiceband', 'choicescarf', 'choicespecs', 'flameorb', 'toxicorb',
-	'heavydutyboots', 'focussash', 'assaultvest', 'eviolite', 'airballoon',
-	'heatrock', 'damprock', 'smoothrock', 'icyrock',
-	'expertbelt', 'weaknesspolicy', 'mentalherb', 'redcard',
-	'quickclaw', 'mirrorherb', 'clearamulet', 'covertcloak', 'kingsrock', 'scopelens', 'razorclaw',
-	'lightclay', 'everstone',
-
-	'eggmovetutor',
-	'rarecandy',
-	'expcandyxs', 'expcandys', 'expcandym', 'expcandyl', 'expcandyxl',
-	'terashard',
-];
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	if (CUSTOM_ITEMS_DATABASE[itemId]) {

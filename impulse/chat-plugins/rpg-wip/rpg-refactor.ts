@@ -6458,126 +6458,109 @@ export const commands: ChatCommands = {
 
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
-			} else if (itemId === 'eggmovetutor') {
-				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use Egg Move Tutor</h2><p>Select a Pokémon to teach an Egg Move:</p>`;
-					for (const pokemon of player.party) {
-						html += `<button name="send" value="/rpg useitem eggmovetutor ${pokemon.id}" class="button" style="margin: 3px;">${pokemon.species}</button>`;
-					}
-					html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
-				}
-				const targetPokemon = player.party.find(p => p.id === pokemonId);
-				if (!targetPokemon) return this.errorReply("Pokemon not found in your party.");
-				const speciesId = toID(targetPokemon.species);
-				const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
-				const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
-
-				if (learnableEggMoves.length === 0) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
-				}
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
-			} else if (itemId === 'rarecandy') {
-				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use Rare Candy</h2><p>Select a Pokémon to use this item on:</p>`;
-					for (const pokemon of player.party) {
-						// Only show Pokemon that are not at level 100 and haven't fainted
-						if (pokemon.hp > 0 && pokemon.level < 100) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem rarecandy ${pokemon.id}" class="button">Use</button></div>`;
-						}
-					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
-				}
-				const targetPokemon = player.party.find(p => p.id === pokemonId);
-				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
-
-				const result = useRareCandyItem(player, targetPokemon, room, user);
-
-				if (!result.success) {
-					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
-				}
-
-				// Check if there are pending moves to learn (when all 4 slots are full)
-				if (player.pendingMoveLearnQueue?.moveIds.length) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-				}
-
-				// --- Show the result with updated Pokemon info ---
-				// Fetch the updated Pokemon from party (in case it evolved)
-				const updatedPokemon = player.party.find(p => p.id === pokemonId);
-				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
-			} else if (itemId.startsWith('expcandy')) {
+			} else if (item.category === 'misc') {
+				// --- NEW BLOCK TO HANDLE MISC ITEMS ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
 					for (const pokemon of player.party) {
-						// Only show Pokemon that are not at level 100 and haven't fainted
-						if (pokemon.hp > 0 && pokemon.level < 100) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+						let canUse = true;
+						let details = `(Lvl ${pokemon.level})`;
+						
+						if (itemId === 'rarecandy' || itemId.startsWith('expcandy')) {
+							if (pokemon.level >= 100) canUse = false;
+							details = `(Lvl ${pokemon.level}, ${pokemon.experience}/${pokemon.expToNextLevel} EXP)`;
+						}
+						if (itemId === 'terashard') {
+							details = `(Tera Type: ${pokemon.teraType})`;
+						}
+
+						if (canUse) {
+							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
+
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
 				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
-				const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
-
-				if (!result.success) {
-					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
-				}
-
-				// Check if there are pending moves to learn (when all 4 slots are full)
-				if (player.pendingMoveLearnQueue?.moveIds.length) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-				}
-
-				// --- Show the result with updated Pokemon info ---
-				// Fetch the updated Pokemon from party (in case it evolved)
-				const updatedPokemon = player.party.find(p => p.id === pokemonId);
-				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
-			} else if (itemId === 'terashard') {
-				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use Tera Shard</h2><p>Select a Pokémon to change its Tera Type:</p>`;
-					for (const pokemon of player.party) {
-						html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>Current Tera Type: ${pokemon.teraType}</small></div><button name="send" value="/rpg useitem terashard ${pokemon.id}" class="button">Use</button></div>`;
+				// Handle specific misc items
+				if (itemId === 'rarecandy') {
+					const result = useRareCandyItem(player, targetPokemon, room, user);
+					if (!result.success) {
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+					if (player.pendingMoveLearnQueue?.moveIds.length) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+					}
+					const updatedPokemon = player.party.find(p => p.id === pokemonId);
+					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+					const tempSlot = createActivePokemonSlot(updatedPokemon);
+					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				} else if (itemId.startsWith('expcandy')) {
+					const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
+					if (!result.success) {
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					}
+					if (player.pendingMoveLearnQueue?.moveIds.length) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+					}
+					const updatedPokemon = player.party.find(p => p.id === pokemonId);
+					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+					const tempSlot = createActivePokemonSlot(updatedPokemon);
+					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				} else if (itemId === 'terashard') {
+					const allTypes = Object.keys(TYPE_CHART);
+					if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
+					const newTeraType = allTypes[Math.floor(Math.random() * allTypes.length)];
+					const oldTeraType = targetPokemon.teraType;
+					targetPokemon.teraType = newTeraType;
+					removeItemFromInventory(player, 'terashard', 1);
+					const tempSlot = createActivePokemonSlot(targetPokemon);
+					const resultHTML = `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${targetPokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				} else if (itemId === 'eggmovetutor') {
+					const speciesId = toID(targetPokemon.species);
+					const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
+					const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
+					if (learnableEggMoves.length === 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					}
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
+				} else if (item.id.endsWith('stone')) {
+					// --- EVOLUTION STONE LOGIC ---
+					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
+					
+					if (evoMessage) {
+						// Evolution was successful
+						removeItemFromInventory(player, itemId, 1);
+						const updatedPokemon = player.party.find(p => p.id === pokemonId); // Refetch in case of evolution
+						const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
+						let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+						
+						// Check if new moves were queued
+						if (player.pendingMoveLearnQueue?.moveIds.length) {
+							resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
+						} else {
+							resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
+						}
+						resultHTML += `</div>`;
+						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					} else {
+						// Evolution failed
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">It had no effect... (${targetPokemon.species} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					}
+				} else {
+					return this.errorReply("This item cannot be used right now.");
 				}
-
-				const targetPokemon = player.party.find(p => p.id === pokemonId);
-				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
-
-				// Get all available types from the TYPE_CHART constant in this file
-				const allTypes = Object.keys(TYPE_CHART);
-				if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
-
-				// Select a random type
-				const newTeraType = allTypes[Math.floor(Math.random() * allTypes.length)];
-				const oldTeraType = targetPokemon.teraType;
-				targetPokemon.teraType = newTeraType;
-
-				// Consume the item
-				removeItemFromInventory(player, 'terashard', 1);
-
-				// Show success message
-				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${targetPokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
-				return this.errorReply("This item cannot be used right now.");
+				return this.errorReply("This item category cannot be used from the bag.");
 			}
 		},
 		

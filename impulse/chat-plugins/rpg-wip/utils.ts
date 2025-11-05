@@ -201,11 +201,24 @@ export interface CheckEvolutionContext {
 export function checkEvolution(
 	player: PlayerData,
 	pokemon: RPGPokemon,
-	context: CheckEvolutionContext
+	context: CheckEvolutionContext,
+	itemUsed?: string
 ): string | null {
 	const speciesId = toID(pokemon.species);
 	const evoData = MANUAL_EVOLUTIONS[speciesId];
-	if (!evoData || pokemon.level < evoData.evoLevel) return null;
+	
+	// Check for level-up evolution
+	if (evoData && itemUsed === undefined) {
+		if (pokemon.level < evoData.evoLevel) return null;
+	}
+	// Check for item evolution
+	else if (evoData && itemUsed) {
+		if (evoData.evoItem !== itemUsed) return null;
+	}
+	// No evolution data
+	else {
+		return null;
+	}
 
 	// Check if Pokemon is holding an Everstone (prevents evolution)
 	if (pokemon.item === 'everstone') return null;
