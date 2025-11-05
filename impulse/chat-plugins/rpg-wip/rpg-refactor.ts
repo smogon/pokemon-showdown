@@ -10,7 +10,7 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { CUSTOM_MOVES, isCustomMove, getCustomMove, type CustomMove } from './CUSTOM_MOVES';
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory, ITEM_PRICES, SHOP_INVENTORY } from './items';
+import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory, CUSTOM_ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY } from './items';
 import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
 
