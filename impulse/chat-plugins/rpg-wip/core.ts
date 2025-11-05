@@ -169,7 +169,7 @@ function generateUniqueId(): string {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-function getPlayerData(userid: string): PlayerData {
+export function getPlayerData(userid: string): PlayerData {
 	if (!playerData.has(userid)) {
 		const newPlayer: PlayerData = { id: userid, name: userid, level: 1, experience: 0, badges: 0, party: [], location: 'Starter Town', money: 5000000, inventory: new Map(), pc: new Map() };
 		addItemToInventory(newPlayer, 'pokeball', 5);
