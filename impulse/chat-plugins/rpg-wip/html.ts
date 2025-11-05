@@ -405,7 +405,7 @@ export function generateModernPartyCard(pokemon: RPGPokemon, slotIndex: number, 
 	html += `<div class="rpg-swap-buttons">${swapUpButton}${swapDownButton}</div>`;
 	html += `</div>`;
 	html += `<div class="rpg-card-content">`;
-	html += `<div class="rpg-sprite-box">${species.name.charAt(0)}</div>`;
+	html += `<div class="rpg-sprite-box"><psicon pokemon="${species.id}" /></div>`;
 	html += `<div class="rpg-pokemon-info">`;
 	html += `<div class="rpg-pokemon-name">${pokemon.nickname || pokemon.species}${genderSymbol}${shinySymbol}</div>`;
 	html += `<div class="rpg-pokemon-level">Lv. ${pokemon.level}${statusDisplay}${faintedDisplay}</div>`;

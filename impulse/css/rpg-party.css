@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .rpg-sprite-box {
-	width: 64px;
-	height: 64px;
+	width: 68px;
+	height: 68px;
 	background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
 	border-radius: 8px;
 	display: flex;
@@ -84,6 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	font-size: 32px;
 	border: 2px solid #ddd;
 	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.rpg-sprite-box psicon {
+	transform: scale(1.2);
 }
 
 .rpg-pokemon-info {
@@ -392,4 +397,71 @@ document.addEventListener('DOMContentLoaded', function() {
 	text-align: center;
 	padding: 40px 0;
 	color: #999;
+}
+
+/* ====================================
+   DARK MODE STYLES
+   ==================================== */
+
+.dark .rpg-party-card {
+	background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+	border: 2px solid #4CAF50;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.dark .rpg-party-card.fainted {
+	border-color: #666;
+	opacity: 0.5;
+}
+
+.dark .rpg-slot-label {
+	color: #aaa;
+}
+
+.dark .rpg-sprite-box {
+	background: linear-gradient(135deg, #3a3a3a 0%, #2f2f2f 100%);
+	border: 2px solid #444;
+}
+
+.dark .rpg-pokemon-name {
+	color: #e0e0e0;
+}
+
+.dark .rpg-pokemon-level {
+	color: #aaa;
+}
+
+.dark .rpg-hp-bar-container {
+	background: #444;
+}
+
+.dark .rpg-hp-text {
+	color: #f0f0f0;
+	text-shadow: 0 0 2px rgba(0,0,0,0.8);
+}
+
+.dark .rpg-exp-bar-container {
+	background: #444;
+}
+
+.dark .rpg-item-indicator {
+	color: #aaa;
+}
+
+.dark .rpg-empty-slot {
+	background: #2a2a2a;
+	border: 2px dashed #555;
+	color: #777;
+}
+
+.dark .rpg-party-footer {
+	border-top: 1px solid #444;
+}
+
+.dark .rpg-party-title {
+	color: #e0e0e0;
+}
+
+.dark .rpg-party-empty {
+	color: #777;
 }
