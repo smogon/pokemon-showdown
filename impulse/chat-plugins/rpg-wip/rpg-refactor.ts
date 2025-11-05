@@ -5881,6 +5881,39 @@ function generateFieldEffectHTML(battle: BattleState): string {
 	return html;
 }
 
+function generateMoveSelectionHTML(player: PlayerData, pokemonId: string, itemId: string): string {
+	const pokemon = player.party.find(p => p.id === pokemonId);
+	const item = ITEMS_DATABASE[itemId];
+	if (!pokemon || !item) return `<h2>Error: Pokémon or item not found.</h2>`;
+
+	let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a move to restore PP for <strong>${pokemon.species}</strong>:</p>`;
+	
+	let canRestoreAny = false;
+	for (const move of pokemon.moves) {
+		const moveData = getMove(move.id);
+		const maxPP = moveData.pp || 5;
+		if (move.pp < maxPP) {
+			canRestoreAny = true;
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">` +
+				`<div><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${maxPP}</small></div>` +
+				`<button name="send" value="/rpg restorepp ${pokemon.id} ${move.id} ${itemId}" class="button">Restore</button>` +
+				`</div>`;
+		} else {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; opacity: 0.6;">` +
+				`<div><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${maxPP} (Full)</small></div>` +
+				`<button class="button" disabled>Restore</button>` +
+				`</div>`;
+		}
+	}
+
+	if (!canRestoreAny) {
+		html += `<p>All of ${pokemon.species}'s moves are already at full PP!</p>`;
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg useitem ${itemId}" class="button">Back to Pokémon</button></p></div>`;
+	return html;
+}
+
 /************
 * COMMANDS
 ************/
@@ -6233,7 +6266,7 @@ export const commands: ChatCommands = {
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
-
+		
 		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
@@ -6247,7 +6280,7 @@ export const commands: ChatCommands = {
 			const item = player.inventory.get(itemId)!;
 
 			if (item.category === 'medicine') {
-				// Special handling for Sacred Ash - revives all fainted Pokemon
+				// Special handling for Sacred Ash (affects all Pokemon)
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
@@ -6258,44 +6291,171 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 
-				// Check if this is a revival item
-				const isRevivalItem = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
-
+				// --- All other medicines require a Pokemon target ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
+					
+					// Determine what kind of Pokemon to show (fainted, status, etc.)
+					const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
+					const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
+					const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
+					const isPPRestore = ['ether', 'maxether', 'elixir', 'maxelixir'].includes(itemId);
+
 					for (const pokemon of player.party) {
-						// Revival items: only show fainted Pokemon
-						// Healing items: only show Pokemon that can be healed
-						if (isRevivalItem) {
-							if (pokemon.hp <= 0) {
-								html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
-							}
-						} else {
-							if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
-								html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
-							}
+						let show = false;
+						let details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp}</small>`;
+						if (pokemon.status) details += ` <small style="color: red;">(${pokemon.status.toUpperCase()})</small>`;
+
+						if (isRevival && pokemon.hp <= 0) {
+							show = true;
+							details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small>`;
+						}
+						if (isHealing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+							show = true;
+						}
+						if (isStatusHeal && pokemon.hp > 0 && pokemon.status) {
+							show = true;
+						}
+						if (isPPRestore && pokemon.hp > 0) { // Can use PP items on fainted Pokemon in some gens, but let's restrict to conscious ones.
+							show = true;
+						}
+
+						if (show) {
+							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
+
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
 				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
-				// Use the appropriate function based on item type
-				const result = isRevivalItem ? useRevivalItem(player, targetPokemon, itemId) : useHealingItem(player, targetPokemon, itemId);
+				let result: { success: boolean, message: string } = { success: false, message: "This item cannot be used." };
+				let requiresMoveSelection = false;
+
+				switch (itemId) {
+					// Revival
+					case 'revive':
+					case 'maxrevive':
+					case 'revivalherb':
+						result = useRevivalItem(player, targetPokemon, itemId);
+						break;
+					
+					// HP Healing
+					case 'potion':
+					case 'superpotion':
+					case 'hyperpotion':
+					case 'maxpotion':
+					case 'fullrestore':
+					case 'berryjuice':
+					case 'freshwater':
+					case 'sodapop':
+					case 'lemonade':
+					case 'moomoomilk':
+					case 'tea':
+					case 'energyroot':
+					case 'energypowder':
+						result = useHealingItem(player, targetPokemon, itemId);
+						break;
+					
+					// Specific Status
+					case 'antidote':
+						if (targetPokemon.status === 'psn') {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species} was cured of poison!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} is not poisoned.` };
+						}
+						break;
+					case 'paralyzeheal':
+						if (targetPokemon.status === 'par') {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species} was cured of paralysis!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} is not paralyzed.` };
+						}
+						break;
+					case 'awakening':
+						if (targetPokemon.status === 'slp') {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species} woke up!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} is not asleep.` };
+						}
+						break;
+					case 'burnheal':
+						if (targetPokemon.status === 'brn') {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species} was cured of its burn!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} is not burned.` };
+						}
+						break;
+					case 'iceheal':
+						if (targetPokemon.status === 'frz') {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species} was thawed out!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} is not frozen.` };
+						}
+						break;
+					
+					// Full Status
+					case 'fullheal':
+					case 'healpowder':
+						if (targetPokemon.status) {
+							targetPokemon.status = null;
+							result = { success: true, message: `${targetPokemon.species}'s status was healed!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species} has no status condition.` };
+						}
+						break;
+					
+					// PP Restore (Single Move)
+					case 'ether':
+					case 'maxether':
+						requiresMoveSelection = true;
+						break;
+					
+					// PP Restore (All Moves)
+					case 'elixir':
+					case 'maxelixir':
+						let totalPPRestored = 0;
+						for (const move of targetPokemon.moves) {
+							const moveData = getMove(move.id);
+							const maxPP = moveData.pp || 5;
+							if (move.pp < maxPP) {
+								const restoreAmount = (itemId === 'elixir') ? 10 : maxPP;
+								const oldPP = move.pp;
+								move.pp = Math.min(maxPP, move.pp + restoreAmount);
+								totalPPRestored += (move.pp - oldPP);
+							}
+						}
+						if (totalPPRestored > 0) {
+							result = { success: true, message: `${targetPokemon.species}'s moves had their PP restored!` };
+						} else {
+							result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
+						}
+						break;
+				}
+
+				if (requiresMoveSelection) {
+					// Show the move selection UI
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveSelectionHTML(player, pokemonId, itemId)}`);
+				}
 
 				if (!result.success) {
-					// .errorReply escapes HTML, so we use sendReply with a styled error message
 					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
-				// --- FIX ---
+				// If successful, remove item and show result
+				removeItemFromInventory(player, itemId, 1);
 				const tempSlot = createActivePokemonSlot(targetPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (itemId === 'eggmovetutor') {
@@ -6419,6 +6579,59 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("This item cannot be used right now.");
 			}
+		},
+		
+		restorepp(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot do this during a battle.");
+			}
+			
+			const [pokemonId, moveId, itemId] = target.split(' ').map(arg => toID(arg));
+			if (!pokemonId || !moveId || !itemId) {
+				return this.errorReply("Invalid command parameters.");
+			}
+
+			const player = getPlayerData(user.id);
+			if (!player.inventory.has(itemId)) {
+				return this.errorReply("You do not have that item.");
+			}
+
+			const pokemon = player.party.find(p => p.id === pokemonId);
+			if (!pokemon) {
+				return this.errorReply("Pokemon not found in your party.");
+			}
+
+			const move = pokemon.moves.find(m => m.id === moveId);
+			if (!move) {
+				return this.errorReply("Pokemon does not know that move.");
+			}
+
+			const moveData = getMove(moveId);
+			const maxPP = moveData.pp || 5;
+
+			if (move.pp >= maxPP) {
+				return this.errorReply("That move already has full PP.");
+			}
+
+			let restoreAmount = 0;
+			if (itemId === 'ether') {
+				restoreAmount = 10;
+			} else if (itemId === 'maxether') {
+				restoreAmount = maxPP;
+			} else {
+				return this.errorReply("That is not a valid PP-restoring item for a single move.");
+			}
+			
+			const oldPP = move.pp;
+			move.pp = Math.min(maxPP, move.pp + restoreAmount);
+			const restored = move.pp - oldPP;
+
+			removeItemFromInventory(player, itemId, 1);
+			const item = ITEMS_DATABASE[itemId];
+
+			const tempSlot = createActivePokemonSlot(pokemon);
+			const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>You used an <strong>${item.name}</strong> on <strong>${pokemon.species}</strong>!</p><p><strong>${moveData.name}</strong>'s PP was restored by ${restored}.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
 		pc(target, room, user) {
