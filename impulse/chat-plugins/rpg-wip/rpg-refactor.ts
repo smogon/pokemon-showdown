@@ -6387,6 +6387,35 @@ export const commands: ChatCommands = {
 				const tempSlot = createActivePokemonSlot(updatedPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			} else if (itemId === 'terashard') {
+				if (!pokemonId) {
+					let html = `<div class="infobox"><h2>Use Tera Shard</h2><p>Select a Pokémon to change its Tera Type:</p>`;
+					for (const pokemon of player.party) {
+						html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>Current Tera Type: ${pokemon.teraType}</small></div><button name="send" value="/rpg useitem terashard ${pokemon.id}" class="button">Use</button></div>`;
+					}
+					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				}
+
+				const targetPokemon = player.party.find(p => p.id === pokemonId);
+				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
+
+				// Get all available types from the TYPE_CHART constant in this file
+				const allTypes = Object.keys(TYPE_CHART);
+				if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
+
+				// Select a random type
+				const newTeraType = allTypes[Math.floor(Math.random() * allTypes.length)];
+				const oldTeraType = targetPokemon.teraType;
+				targetPokemon.teraType = newTeraType;
+
+				// Consume the item
+				removeItemFromInventory(player, 'terashard', 1);
+
+				// Show success message
+				const tempSlot = createActivePokemonSlot(targetPokemon);
+				const resultHTML = `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${targetPokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				return this.errorReply("This item cannot be used right now.");
 			}
