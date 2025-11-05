@@ -34,26 +34,6 @@ import { ITEMS_DATABASE, CUSTOM_ITEMS_DATABASE, addItemToInventory, removeItemFr
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
-const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
-	'figyberry': { flavor: 'Spicy', stat: 'atk' },
-	'wikiberry': { flavor: 'Dry', stat: 'spa' },
-	'magoberry': { flavor: 'Sweet', stat: 'spe' },
-	'aguavberry': { flavor: 'Bitter', stat: 'spd' },
-	'iapapaberry': { flavor: 'Sour', stat: 'def' },
-};
-
-const NATURE_FLAVOR_PREFERENCES: Record<keyof Stats, string> = {
-	atk: 'Spicy', def: 'Sour', spa: 'Dry', spd: 'Bitter', spe: 'Sweet', maxHp: '',
-};
-
-const TYPE_RESIST_BERRIES: Record<string, string> = {
-	'babiriberry': 'Steel', 'chartiberry': 'Rock', 'chilanberry': 'Normal', 'chopleberry': 'Fighting',
-	'cobaberry': 'Flying', 'colburberry': 'Dark', 'habanberry': 'Dragon', 'kasibberry': 'Ghost',
-	'kebiaberry': 'Poison', 'occaberry': 'Fire', 'passhoberry': 'Water', 'payapaberry': 'Psychic',
-	'rindoberry': 'Grass', 'roseliberry': 'Fairy', 'shucaberry': 'Ground', 'tangaberry': 'Bug',
-	'wacanberry': 'Electric', 'yacheberry': 'Ice',
-};
-
 /**
  * Get the current types of a Pokemon, accounting for terastallization.
  * When a Pokemon is terastallized, it becomes a single type (its Tera Type).
