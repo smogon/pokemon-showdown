@@ -55,19 +55,16 @@ import {
     generateWelcomeHTML,
     generateStarterSelectionHTML,
     generatePokemonSummaryHTML,
-    generateModernPokemonSummaryHTML,
     generateEggMoveSelectionHTML,
     generateInventoryHTML,
     generateShopHTML,
-    generateModernShopHTML,
     generatePCHTML,
     generateCatchMenuHTML,
     generateCatchTargetHTML,
     generateSwitchMenuHTML,
     generateMoveLearnHTML,
     generateGiveItemPokemonSelectionHTML,
-    generateFaintSwitchHTML,
-    generateModernPartyHTML
+    generateFaintSwitchHTML
 } from './html';
 import {
     STARTER_POKEMON,
@@ -264,7 +261,7 @@ export const commands: ChatCommands = {
 			if (!pokemon) {
 				return this.errorReply("Pokemon not found in your party.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModernPokemonSummaryHTML(pokemon)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
 		},
 
 		profile(target, room, user) {
@@ -281,7 +278,24 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot view your party during a battle.");
 			}
 			const player = getPlayerData(user.id);
-			const partyHTML = generateModernPartyHTML(player);
+			let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
+			if (player.party.length === 0) {
+				partyHTML += `<p>No Pokemon in party.</p>`;
+			} else {
+				for (let i = 0; i < 6; i++) {
+					if (player.party[i]) {
+						// --- THIS IS THE FIX ---
+						// We pass the slot info directly to the HTML generator
+						// and no longer wrap it in an extra <div>
+						const tempSlot = createActivePokemonSlot(player.party[i]);
+						partyHTML += generatePokemonInfoHTML(tempSlot, true, true, { index: i, partyLength: player.party.length });
+						// --- END FIX ---
+					} else {
+						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
+					}
+				}
+			}
+			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
@@ -753,7 +767,7 @@ export const commands: ChatCommands = {
 			// This line has been corrected to include 'medicine' instead of 'potion'
 			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModernShopHTML(player, filterCategory)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
 
 		buy(target, room, user) {
