@@ -13,6 +13,7 @@ import { RPGAbilities } from './abilities';
 import { ITEMS_DATABASE, addItemToInventory, removeItemFromInventory } from './items';
 import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, TrainerSpec, Move } from './interface';
+import { Utils } from '../../..lib';
 
 const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
