@@ -4869,6 +4869,23 @@ function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle
 	};
 }
 
+/**
+ * Generate Pokemon sprite URL for battle display
+ * Uses Pokemon Showdown's animated BW sprites
+ */
+function getPokemonSpriteURL(speciesId: string, isPlayerSide: boolean, shiny = false): string {
+	// Convert species ID to lowercase and remove special characters
+	const spriteId = toID(speciesId);
+	
+	// Use back sprites for player's Pokemon, front sprites for opponent
+	const spriteType = isPlayerSide ? 'ani-back' : 'ani';
+	
+	// Add shiny suffix if applicable
+	const shinyPrefix = shiny ? 'shiny/' : '';
+	
+	return `https://play.pokemonshowdown.com/sprites/${spriteType}/${shinyPrefix}${spriteId}.gif`;
+}
+
 function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -4886,7 +4903,7 @@ function generateSharedBattlePokemonInfo(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
-		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div style="border-radius: 8px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -4961,7 +4978,7 @@ function generateSharedBattlePokemonInfo(
 
 	if (isDoubleBattle) {
 		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br><small>Type: ${typeDisplay}</small><br>` +
-			`<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
+			`<div style="border-radius: 8px; padding: 2px; margin: 5px 0;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
 			`${expBarHTML}` +
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}</div>`;
@@ -5197,19 +5214,35 @@ function generateSingleBattleHTML(
 		moveButtonsHTML +
 		`<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ${catchButton} ${runButton}</p>`;
 
+	// Generate sprite URLs
+	const playerSpriteURL = getPokemonSpriteURL(playerSlot.pokemon.species, true, playerSlot.pokemon.shiny);
+	const opponentSpriteURL = getPokemonSpriteURL(opponentSlot.pokemon.species, false, opponentSlot.pokemon.shiny);
+
 	return `<div class="infobox"><h2>${battle.opponentName} vs ${playerPokemon.species}</h2>` +
+		// Pokemon Info Boxes
 		`<table style="width: 100%; margin-bottom: 5px;">` +
 		`<tr>` +
 		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">Your Pokémon</h3>` +
-		`${generateSharedBattlePokemonInfo(playerSlot, true, false)}` + // <-- Use shared helper
+		`${generateSharedBattlePokemonInfo(playerSlot, true, false)}` +
 		`</td>` +
 		`<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">` +
 		`<h3 style="margin: 5px 0;">${battle.opponentName}</h3>` +
-		`${generateSharedBattlePokemonInfo(opponentSlot, false, false)}` + // <-- Use shared helper
+		`${generateSharedBattlePokemonInfo(opponentSlot, false, false)}` +
 		`</td>` +
 		`</tr>` +
 		`</table>` +
+		// Battle Scene with Sprites (below info)
+		`<div style="position: relative; width: 100%; height: 200px; background: linear-gradient(to bottom, #87CEEB 0%, #98D8C8 50%, #6B8E23 50%, #8B7355 100%); border-radius: 8px; margin-bottom: 10px; overflow: hidden;">` +
+		// Opponent sprite (top-right)
+		`<div style="position: absolute; top: 20px; right: 80px; text-align: center;">` +
+		`<img src="${opponentSpriteURL}" alt="${opponentSlot.pokemon.species}" style="width: 32px; height: 32px; image-rendering: pixelated;" onerror="this.style.display='none'" />` +
+		`</div>` +
+		// Player sprite (bottom-left)
+		`<div style="position: absolute; bottom: 20px; left: 80px; text-align: center;">` +
+		`<img src="${playerSpriteURL}" alt="${playerSlot.pokemon.species}" style="width: 32px; height: 32px; image-rendering: pixelated;" onerror="this.style.display='none'" />` +
+		`</div>` +
+		`</div>` +
 		`<hr style="margin: 3px 0;" />` +
 		`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
 		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
