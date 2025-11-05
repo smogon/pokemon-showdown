@@ -18,8 +18,8 @@ const playerData = new Map<string, PlayerData>();
 const activeBattles = new Map<string, BattleState>();
 
 const STARTER_POKEMON = {
-	fire: ['charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
-	water: ['squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
+	fire: ['pikachu', 'charmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
+	water: ['eevee', 'squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
 };
 
