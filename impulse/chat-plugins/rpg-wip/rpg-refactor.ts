@@ -5121,9 +5121,15 @@ function generateSingleBattleHTML(
 		const shinySymbol = pokemon.shiny ? '★' : '';
 		const genderSymbol = pokemon.gender === 'M' ? '♂' : pokemon.gender === 'F' ? '♀' : '';
 
+		// Get current types (accounting for Terastallization)
+		const currentTypes = getPokemonTypes(pokemon, slot);
+		const typeDisplay = slot.terastallized ? 
+			`Tera ${slot.terastallized}` : 
+			currentTypes.join(' / ');
+
 		// Terastallization indicator
 		const teraIndicator = slot.terastallized ? 
-			`<span style="background: linear-gradient(135deg, #FF1493, #9400D3); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-left: 4px;">⭐ ${slot.terastallized}</span>` : '';
+			`<span style="background: linear-gradient(135deg, #FF1493, #9400D3); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-left: 4px;">⭐ TERA</span>` : '';
 
 		// Experience bar for player
 		let expBarHTML = '';
@@ -5141,6 +5147,7 @@ function generateSingleBattleHTML(
 			`<div style="font-weight: bold; font-size: 14px;">${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}${teraIndicator}</div>` +
 			`<div style="font-size: 13px; color: #666;">Lv${pokemon.level}</div>` +
 			`</div>` +
+			`<div style="font-size: 11px; color: #555; margin-bottom: 4px;">Type: ${typeDisplay}</div>` +
 			`<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">` +
 			`<div style="flex: 1;">` +
 			`<div style="background: #555; height: 6px; border-radius: 3px; overflow: hidden; border: 1px solid #333;">` +
