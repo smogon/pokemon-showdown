@@ -676,6 +676,180 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 /* ====================================
+   SHOP UI STYLES
+   ==================================== */
+
+.rpg-shop-container {
+	max-width: 900px;
+	margin: 0 auto;
+	max-height: 350px;
+	overflow-y: auto;
+}
+
+.rpg-shop-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+	border-radius: 12px;
+	margin-bottom: 16px;
+	border: 2px solid #4CAF50;
+}
+
+.rpg-shop-title {
+	font-size: 22px;
+	margin: 0;
+	font-weight: bold;
+	color: #333;
+}
+
+.rpg-shop-money {
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFD700;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.rpg-shop-actions {
+	margin-bottom: 16px;
+	text-align: center;
+}
+
+.rpg-shop-sell-btn {
+	background: #28a745;
+	color: white;
+	font-weight: bold;
+	padding: 10px 24px;
+	border-radius: 8px;
+}
+
+.rpg-shop-categories {
+	margin-bottom: 16px;
+}
+
+.rpg-shop-section-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 12px 0;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #4CAF50;
+	color: #333;
+}
+
+.rpg-category-buttons {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.rpg-category-btn {
+	padding: 8px 16px;
+	font-size: 13px;
+	border-radius: 6px;
+	border: 2px solid #ddd;
+	background: #fff;
+	transition: all 0.2s ease;
+}
+
+.rpg-category-btn:hover {
+	background: #f5f5f5;
+	transform: translateY(-1px);
+}
+
+.rpg-category-btn.rpg-category-active {
+	background: #4CAF50;
+	color: white;
+	border-color: #4CAF50;
+}
+
+.rpg-shop-items {
+	margin-bottom: 16px;
+}
+
+.rpg-items-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 12px;
+}
+
+.rpg-shop-item-card {
+	background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	padding: 12px;
+	transition: all 0.2s ease;
+}
+
+.rpg-shop-item-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+	border-color: #4CAF50;
+}
+
+.rpg-item-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.rpg-item-name {
+	font-weight: bold;
+	font-size: 14px;
+	color: #333;
+}
+
+.rpg-item-price {
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFD700;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.rpg-item-description {
+	font-size: 12px;
+	color: #666;
+	margin-bottom: 10px;
+	min-height: 36px;
+	line-height: 1.4;
+}
+
+.rpg-item-actions {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.rpg-buy-btn {
+	flex: 1;
+	min-width: 60px;
+	padding: 6px 10px;
+	font-size: 11px;
+	border-radius: 6px;
+	background: #4CAF50;
+	color: white;
+	font-weight: bold;
+}
+
+.rpg-buy-btn:hover {
+	background: #45a049;
+}
+
+.rpg-shop-empty {
+	text-align: center;
+	padding: 40px 20px;
+	color: #999;
+	font-size: 14px;
+}
+
+.rpg-shop-footer {
+	text-align: center;
+	padding-top: 16px;
+	border-top: 2px solid #ddd;
+}
+
+/* ====================================
    DARK MODE STYLES
    ==================================== */
 
@@ -835,5 +1009,62 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .dark .rpg-summary-footer {
+	border-top: 2px solid #444;
+}
+
+/* Shop UI Dark Mode */
+.dark .rpg-shop-header {
+	background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+	border: 2px solid #4CAF50;
+}
+
+.dark .rpg-shop-title {
+	color: #e0e0e0;
+}
+
+.dark .rpg-shop-section-title {
+	color: #e0e0e0;
+	border-bottom: 2px solid #4CAF50;
+}
+
+.dark .rpg-category-btn {
+	background: #333;
+	border: 2px solid #555;
+	color: #e0e0e0;
+}
+
+.dark .rpg-category-btn:hover {
+	background: #3a3a3a;
+}
+
+.dark .rpg-category-btn.rpg-category-active {
+	background: #4CAF50;
+	color: white;
+	border-color: #4CAF50;
+}
+
+.dark .rpg-shop-item-card {
+	background: linear-gradient(135deg, #333 0%, #2a2a2a 100%);
+	border: 2px solid #555;
+}
+
+.dark .rpg-shop-item-card:hover {
+	border-color: #4CAF50;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.dark .rpg-item-name {
+	color: #e0e0e0;
+}
+
+.dark .rpg-item-description {
+	color: #aaa;
+}
+
+.dark .rpg-shop-empty {
+	color: #777;
+}
+
+.dark .rpg-shop-footer {
 	border-top: 2px solid #444;
 }

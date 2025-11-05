@@ -646,6 +646,85 @@ export function generateModernPokemonSummaryHTML(pokemon: RPGPokemon): string {
 	return html;
 }
 
+/**
+ * Generates a modern Poké Mart shop UI with categories and item cards
+ * Inspired by Pokemon Scarlet/Violet shop interface
+ */
+export function generateModernShopHTML(player: PlayerData, category?: string): string {
+	let html = '';
+	html += `<div class="infobox rpg-shop-container">`;
+
+	html += `<div class="rpg-shop-header">`;
+	html += `<h2 class="rpg-shop-title">🏪 Poké Mart</h2>`;
+	html += `<div class="rpg-shop-money">💰 ₽${player.money.toLocaleString()}</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-shop-actions">`;
+	html += `<button name="send" value="/rpg sell" class="button rpg-shop-sell-btn">💼 Sell Items</button>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-shop-categories">`;
+	html += `<h3 class="rpg-shop-section-title">Categories</h3>`;
+	html += `<div class="rpg-category-buttons">`;
+	const categories = [
+		{ id: '', label: 'All', icon: '🏬' },
+		{ id: 'pokeball', label: 'Poké Balls', icon: '⚾' },
+		{ id: 'medicine', label: 'Medicine', icon: '💊' },
+		{ id: 'held', label: 'Held Items', icon: '🎒' },
+		{ id: 'berry', label: 'Berries', icon: '🍓' },
+		{ id: 'misc', label: 'Misc.', icon: '📦' }
+	];
+
+	for (const cat of categories) {
+		const isActive = (category === cat.id) || (!category && !cat.id);
+		const activeClass = isActive ? ' rpg-category-active' : '';
+		html += `<button name="send" value="/rpg shop ${cat.id}" class="button rpg-category-btn${activeClass}">${cat.icon} ${cat.label}</button>`;
+	}
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-shop-items">`;
+	html += `<h3 class="rpg-shop-section-title">Items for Sale</h3>`;
+	html += `<div class="rpg-items-grid">`;
+
+	let itemsFound = false;
+	for (const itemId of SHOP_INVENTORY) {
+		const item = ITEMS_DATABASE[itemId];
+		const price = ITEM_PRICES[itemId];
+		if (!item || !price) continue;
+
+		if (!category || item.category === category) {
+			itemsFound = true;
+			html += `<div class="rpg-shop-item-card">`;
+			html += `<div class="rpg-item-header">`;
+			html += `<div class="rpg-item-name">${item.name}</div>`;
+			html += `<div class="rpg-item-price">₽${price}</div>`;
+			html += `</div>`;
+			html += `<div class="rpg-item-description">${item.description}</div>`;
+			html += `<div class="rpg-item-actions">`;
+			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button rpg-buy-btn">Buy 1</button>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 5" class="button rpg-buy-btn">Buy 5</button>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 10" class="button rpg-buy-btn">Buy 10</button>`;
+			html += `</div>`;
+			html += `</div>`;
+		}
+	}
+
+	if (!itemsFound) {
+		html += `<div class="rpg-shop-empty">No items found in this category.</div>`;
+	}
+
+	html += `</div>`;
+	html += `</div>`;
+
+	html += `<div class="rpg-shop-footer">`;
+	html += `<button name="send" value="/rpg explore" class="button rpg-footer-btn">← Back to Explore</button>`;
+	html += `</div>`;
+	html += `</div>`;
+
+	return html;
+}
+
 export const TERA_BUTTON_STYLE = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
 
 export function generateSingleBattleHTML(
