@@ -347,245 +347,190 @@ export function generatePokemonInfoHTML(
 }
 
 /**
- * Generates a modern Pokemon party card for grid-based display
+ * Generates a modern Pokemon party card for grid-based display using CSS classes
  * Inspired by Pokemon Scarlet/Violet party UI
  */
 export function generateModernPartyCard(pokemon: RPGPokemon, slotIndex: number, partyLength: number): string {
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 
-	// Dynamic HP bar color based on percentage
-	let hpBarColor = '#4CAF50'; // Green
-	if (hpPercentage <= 25) hpBarColor = '#f44336'; // Red
-	else if (hpPercentage <= 50) hpBarColor = '#FF9800'; // Orange
-	else if (hpPercentage <= 75) hpBarColor = '#FFC107'; // Yellow
+	let hpBarClass = 'rpg-hp-bar high';
+	if (hpPercentage <= 25) hpBarClass = 'rpg-hp-bar critical';
+	else if (hpPercentage <= 50) hpBarClass = 'rpg-hp-bar low';
+	else if (hpPercentage <= 75) hpBarClass = 'rpg-hp-bar medium';
 
 	const isFainted = pokemon.hp <= 0;
-	const cardOpacity = isFainted ? '0.5' : '1';
-
-	// Status condition styling
-	const statusColors: Record<Status, { bg: string, text: string }> = {
-		'psn': { bg: '#A040A0', text: 'PSN' },
-		'tox': { bg: '#A040A0', text: 'TOX' },
-		'brn': { bg: '#F08030', text: 'BRN' },
-		'par': { bg: '#F8D030', text: 'PAR' },
-		'slp': { bg: '#9898E8', text: 'SLP' },
-		'frz': { bg: '#98D8D8', text: 'FRZ' },
-	};
+	const cardClass = isFainted ? 'rpg-party-card fainted' : 'rpg-party-card';
 
 	const statusDisplay = pokemon.status && !isFainted
-		? `<span style="background-color: ${statusColors[pokemon.status].bg}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px;">${statusColors[pokemon.status].text}</span>`
+		? `<span class="rpg-status-badge rpg-status-${pokemon.status}">${pokemon.status.toUpperCase()}</span>`
 		: '';
 
 	const faintedDisplay = isFainted
-		? `<span style="background-color: #666; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px;">FNT</span>`
+		? `<span class="rpg-status-badge rpg-status-fnt">FNT</span>`
 		: '';
 
-	// Gender and shiny symbols
 	const genderSymbol = pokemon.gender === 'M'
-		? '<span style="color: #2196F3; font-weight: bold; margin-left: 4px;">♂</span>'
+		? '<span class="rpg-gender-male">♂</span>'
 		: pokemon.gender === 'F'
-		? '<span style="color: #E91E63; font-weight: bold; margin-left: 4px;">♀</span>'
+		? '<span class="rpg-gender-female">♀</span>'
 		: '';
-	const shinySymbol = pokemon.shiny ? '<span style="color: #FFD700; margin-left: 4px;">★</span>' : '';
+	const shinySymbol = pokemon.shiny ? '<span class="rpg-shiny">★</span>' : '';
 
-	// Held item indicator
 	const itemIndicator = pokemon.item
-		? `<span style="font-size: 10px; color: #666; margin-left: 8px;">📦 ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}</span>`
+		? `<span class="rpg-item-indicator">📦 ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}</span>`
 		: '';
 
-	// Experience bar
 	const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 	const expForNextLevel = pokemon.expToNextLevel;
 	const expProgress = pokemon.experience - expForLastLevel;
 	const expNeededForLevel = expForNextLevel - expForLastLevel;
 	const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
 
-	// Type badges
-	const typeColors: Record<string, string> = {
-		'Normal': '#A8A878', 'Fire': '#F08030', 'Water': '#6890F0', 'Electric': '#F8D030',
-		'Grass': '#78C850', 'Ice': '#98D8D8', 'Fighting': '#C03028', 'Poison': '#A040A0',
-		'Ground': '#E0C068', 'Flying': '#A890F0', 'Psychic': '#F85888', 'Bug': '#A8B820',
-		'Rock': '#B8A038', 'Ghost': '#705898', 'Dragon': '#7038F8', 'Dark': '#705848',
-		'Steel': '#B8B8D0', 'Fairy': '#EE99AC',
-	};
-
 	const typeBadges = species.types.map(type =>
-		`<span style="background: ${typeColors[type] || '#777'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; margin-right: 3px;">${type.toUpperCase()}</span>`
+		`<span class="rpg-type-badge rpg-type-${type.toLowerCase()}">${type.toUpperCase()}</span>`
 	).join('');
 
-	// Swap buttons
 	const swapUpButton = slotIndex > 0
-		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex - 1}" class="button" style="padding: 2px 8px; font-size: 11px; margin-right: 3px;">↑</button>`
+		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex - 1}" class="button rpg-swap-btn">↑</button>`
 		: '';
 	const swapDownButton = slotIndex < partyLength - 1
-		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex + 1}" class="button" style="padding: 2px 8px; font-size: 11px; margin-right: 3px;">↓</button>`
+		? `<button name="send" value="/rpg swapslot ${slotIndex} ${slotIndex + 1}" class="button rpg-swap-btn">↓</button>`
 		: '';
 
-	return `
-		<div style="
-			background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-			border: 2px solid ${isFainted ? '#999' : '#4CAF50'};
-			border-radius: 12px;
-			padding: 12px;
-			opacity: ${cardOpacity};
-			transition: all 0.3s ease;
-			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-		">
-			<!-- Header: Slot number and swap buttons -->
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-				<span style="font-size: 11px; color: #666; font-weight: bold;">SLOT ${slotIndex + 1}</span>
-				<div style="display: flex; gap: 2px;">
-					${swapUpButton}${swapDownButton}
-				</div>
-			</div>
-
-			<!-- Main content area -->
-			<div style="display: flex; gap: 12px; margin-bottom: 8px;">
-				<!-- Left: Pokemon sprite placeholder -->
-				<div style="
-					width: 64px;
-					height: 64px;
-					background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-					border-radius: 8px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 32px;
-					border: 2px solid #ddd;
-					flex-shrink: 0;
-				">
-					${species.name.charAt(0)}
-				</div>
-
-				<!-- Right: Pokemon info -->
-				<div style="flex: 1; min-width: 0;">
-					<!-- Name and level -->
-					<div style="font-weight: bold; font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-						${pokemon.nickname || pokemon.species}${genderSymbol}${shinySymbol}
-					</div>
-
-					<!-- Level and status -->
-					<div style="font-size: 11px; color: #666; margin-bottom: 6px;">
-						Lv. ${pokemon.level}${statusDisplay}${faintedDisplay}
-					</div>
-
-					<!-- HP Bar -->
-					<div style="background: #ddd; border-radius: 6px; height: 16px; position: relative; overflow: hidden; margin-bottom: 4px;">
-						<div style="
-							background: ${hpBarColor};
-							width: ${hpPercentage}%;
-							height: 100%;
-							transition: width 0.3s ease;
-							border-radius: 6px;
-						"></div>
-						<div style="
-							position: absolute;
-							top: 0;
-							left: 0;
-							right: 0;
-							bottom: 0;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-							font-size: 10px;
-							font-weight: bold;
-							color: #333;
-							text-shadow: 0 0 2px rgba(255,255,255,0.8);
-						">
-							${pokemon.hp} / ${pokemon.maxHp}
-						</div>
-					</div>
-
-					<!-- EXP Bar -->
-					<div style="background: #ddd; border-radius: 4px; height: 6px; overflow: hidden;">
-						<div style="
-							background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%);
-							width: ${expPercentage}%;
-							height: 100%;
-							transition: width 0.3s ease;
-							border-radius: 4px;
-						"></div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Footer: Types and item -->
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-				<div>${typeBadges}</div>
-				<div>${itemIndicator}</div>
-			</div>
-
-			<!-- Action buttons -->
-			<div style="display: flex; gap: 4px; flex-wrap: wrap;">
-				<button name="send" value="/rpg summary ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Summary</button>
-				${pokemon.item
-					? `<button name="send" value="/rpg takeitem ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Take Item</button>`
-					: `<button name="send" value="/rpg giveitem ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Give Item</button>`
-				}
-				<button name="send" value="/rpg depositpc ${pokemon.id}" class="button" style="flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px;">Deposit</button>
-			</div>
-		</div>
-	`;
+	let html = '';
+	html += `<div class="${cardClass}">`;
+	html += `<div class="rpg-card-header">`;
+	html += `<span class="rpg-slot-label">SLOT ${slotIndex + 1}</span>`;
+	html += `<div class="rpg-swap-buttons">${swapUpButton}${swapDownButton}</div>`;
+	html += `</div>`;
+	html += `<div class="rpg-card-content">`;
+	html += `<div class="rpg-sprite-box">${species.name.charAt(0)}</div>`;
+	html += `<div class="rpg-pokemon-info">`;
+	html += `<div class="rpg-pokemon-name">${pokemon.nickname || pokemon.species}${genderSymbol}${shinySymbol}</div>`;
+	html += `<div class="rpg-pokemon-level">Lv. ${pokemon.level}${statusDisplay}${faintedDisplay}</div>`;
+	html += `<div class="rpg-hp-bar-container">`;
+	html += `<div class="${hpBarClass}" style="width: ${hpPercentage}%;"></div>`;
+	html += `<div class="rpg-hp-text">${pokemon.hp} / ${pokemon.maxHp}</div>`;
+	html += `</div>`;
+	html += `<div class="rpg-exp-bar-container">`;
+	html += `<div class="rpg-exp-bar" style="width: ${expPercentage}%;"></div>`;
+	html += `</div>`;
+	html += `</div>`;
+	html += `</div>`;
+	html += `<div class="rpg-card-footer">`;
+	html += `<div>${typeBadges}</div>`;
+	html += `<div>${itemIndicator}</div>`;
+	html += `</div>`;
+	html += `<div class="rpg-action-buttons">`;
+	html += `<button name="send" value="/rpg summary ${pokemon.id}" class="button rpg-action-btn">Summary</button>`;
+	if (pokemon.item) {
+		html += `<button name="send" value="/rpg takeitem ${pokemon.id}" class="button rpg-action-btn">Take Item</button>`;
+	} else {
+		html += `<button name="send" value="/rpg giveitem ${pokemon.id}" class="button rpg-action-btn">Give Item</button>`;
+	}
+	html += `<button name="send" value="/rpg depositpc ${pokemon.id}" class="button rpg-action-btn">Deposit</button>`;
+	html += `</div>`;
+	html += `</div>`;
+	return html;
 }
 
 /**
- * Generates the complete modern party UI with grid layout
- * Inspired by Pokemon Scarlet/Violet
+ * Generates the complete modern party UI with grid layout and embedded CSS
+ * Inspired by Pokemon Scarlet/Violet - Compact version with max-height: 360px
  */
 export function generateModernPartyHTML(player: PlayerData): string {
-	let html = `<div class="infobox" style="max-width: 800px; margin: 0 auto;">
-		<h2 style="text-align: center; margin-bottom: 16px; font-size: 20px;">Your Party</h2>`;
+	let html = '<style>';
+	html += '.rpg-party-card { background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); border: 2px solid #4CAF50; border-radius: 12px; padding: 12px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }';
+	html += '.rpg-party-card.fainted { border-color: #999; opacity: 0.5; }';
+	html += '.rpg-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }';
+	html += '.rpg-slot-label { font-size: 11px; color: #666; font-weight: bold; }';
+	html += '.rpg-swap-buttons { display: flex; gap: 2px; }';
+	html += '.rpg-swap-btn { padding: 2px 8px; font-size: 11px; margin-right: 3px; }';
+	html += '.rpg-card-content { display: flex; gap: 12px; margin-bottom: 8px; }';
+	html += '.rpg-sprite-box { width: 64px; height: 64px; background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 2px solid #ddd; flex-shrink: 0; }';
+	html += '.rpg-pokemon-info { flex: 1; min-width: 0; }';
+	html += '.rpg-pokemon-name { font-weight: bold; font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }';
+	html += '.rpg-gender-male { color: #2196F3; font-weight: bold; margin-left: 4px; }';
+	html += '.rpg-gender-female { color: #E91E63; font-weight: bold; margin-left: 4px; }';
+	html += '.rpg-shiny { color: #FFD700; margin-left: 4px; }';
+	html += '.rpg-pokemon-level { font-size: 11px; color: #666; margin-bottom: 6px; }';
+	html += '.rpg-status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 8px; color: white; }';
+	html += '.rpg-status-psn, .rpg-status-tox { background-color: #A040A0; }';
+	html += '.rpg-status-brn { background-color: #F08030; }';
+	html += '.rpg-status-par { background-color: #F8D030; }';
+	html += '.rpg-status-slp { background-color: #9898E8; }';
+	html += '.rpg-status-frz { background-color: #98D8D8; }';
+	html += '.rpg-status-fnt { background-color: #666; }';
+	html += '.rpg-hp-bar-container { background: #ddd; border-radius: 6px; height: 16px; position: relative; overflow: hidden; margin-bottom: 4px; }';
+	html += '.rpg-hp-bar { height: 100%; transition: width 0.3s ease; border-radius: 6px; }';
+	html += '.rpg-hp-bar.high { background: #4CAF50; }';
+	html += '.rpg-hp-bar.medium { background: #FFC107; }';
+	html += '.rpg-hp-bar.low { background: #FF9800; }';
+	html += '.rpg-hp-bar.critical { background: #f44336; }';
+	html += '.rpg-hp-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: #333; text-shadow: 0 0 2px rgba(255,255,255,0.8); }';
+	html += '.rpg-exp-bar-container { background: #ddd; border-radius: 4px; height: 6px; overflow: hidden; }';
+	html += '.rpg-exp-bar { background: linear-gradient(90deg, #4FC3F7 0%, #2196F3 100%); height: 100%; transition: width 0.3s ease; border-radius: 4px; }';
+	html += '.rpg-card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }';
+	html += '.rpg-type-badge { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; margin-right: 3px; color: white; }';
+	html += '.rpg-type-normal { background: #A8A878; }';
+	html += '.rpg-type-fire { background: #F08030; }';
+	html += '.rpg-type-water { background: #6890F0; }';
+	html += '.rpg-type-electric { background: #F8D030; }';
+	html += '.rpg-type-grass { background: #78C850; }';
+	html += '.rpg-type-ice { background: #98D8D8; }';
+	html += '.rpg-type-fighting { background: #C03028; }';
+	html += '.rpg-type-poison { background: #A040A0; }';
+	html += '.rpg-type-ground { background: #E0C068; }';
+	html += '.rpg-type-flying { background: #A890F0; }';
+	html += '.rpg-type-psychic { background: #F85888; }';
+	html += '.rpg-type-bug { background: #A8B820; }';
+	html += '.rpg-type-rock { background: #B8A038; }';
+	html += '.rpg-type-ghost { background: #705898; }';
+	html += '.rpg-type-dragon { background: #7038F8; }';
+	html += '.rpg-type-dark { background: #705848; }';
+	html += '.rpg-type-steel { background: #B8B8D0; }';
+	html += '.rpg-type-fairy { background: #EE99AC; }';
+	html += '.rpg-item-indicator { font-size: 10px; color: #666; margin-left: 8px; }';
+	html += '.rpg-action-buttons { display: flex; gap: 4px; flex-wrap: wrap; }';
+	html += '.rpg-action-btn { flex: 1; padding: 4px 8px; font-size: 11px; min-width: 60px; }';
+	html += '.rpg-empty-slot { background: #f9f9f9; border: 2px dashed #ccc; border-radius: 12px; padding: 12px; min-height: 160px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; }';
+	html += '.rpg-empty-slot-content { text-align: center; }';
+	html += '.rpg-empty-slot-icon { font-size: 32px; margin-bottom: 8px; }';
+	html += '.rpg-party-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; margin-bottom: 16px; max-height: 360px; overflow-y: auto; }';
+	html += '.rpg-party-footer { display: flex; gap: 8px; justify-content: center; padding-top: 16px; border-top: 1px solid #ddd; }';
+	html += '.rpg-footer-btn { padding: 8px 16px; }';
+	html += '</style>';
+
+	html += `<div class="infobox" style="max-width: 800px; margin: 0 auto;">`;
+	html += `<h2 style="text-align: center; margin-bottom: 16px; font-size: 20px;">Your Party</h2>`;
 
 	if (player.party.length === 0) {
 		html += `<p style="text-align: center; padding: 40px 0; color: #999;">No Pokémon in party.</p>`;
 	} else {
-		// Grid layout: 2 columns on larger screens
-		html += `<div style="
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-			gap: 12px;
-			margin-bottom: 16px;
-		">`;
+		html += `<div class="rpg-party-grid">`;
 
-		// Display Pokemon cards
 		for (let i = 0; i < player.party.length; i++) {
 			html += generateModernPartyCard(player.party[i], i, player.party.length);
 		}
 
-		// Add empty slots
 		for (let i = player.party.length; i < 6; i++) {
-			html += `
-				<div style="
-					background: #f9f9f9;
-					border: 2px dashed #ccc;
-					border-radius: 12px;
-					padding: 12px;
-					min-height: 160px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: #999;
-					font-size: 14px;
-				">
-					<div style="text-align: center;">
-						<div style="font-size: 32px; margin-bottom: 8px;">○</div>
-						<div>Empty Slot ${i + 1}</div>
-					</div>
-				</div>
-			`;
+			html += `<div class="rpg-empty-slot">`;
+			html += `<div class="rpg-empty-slot-content">`;
+			html += `<div class="rpg-empty-slot-icon">○</div>`;
+			html += `<div>Empty Slot ${i + 1}</div>`;
+			html += `</div>`;
+			html += `</div>`;
 		}
 
 		html += `</div>`;
 	}
 
-	// Footer buttons
-	html += `
-		<div style="display: flex; gap: 8px; justify-content: center; padding-top: 16px; border-top: 1px solid #ddd;">
-			<button name="send" value="/rpg pc" class="button" style="padding: 8px 16px;">💻 Pokemon PC</button>
-			<button name="send" value="/rpg menu" class="button" style="padding: 8px 16px;">← Back to Menu</button>
-		</div>
-	</div>`;
+	html += `<div class="rpg-party-footer">`;
+	html += `<button name="send" value="/rpg pc" class="button rpg-footer-btn">💻 Pokemon PC</button>`;
+	html += `<button name="send" value="/rpg menu" class="button rpg-footer-btn">← Back to Menu</button>`;
+	html += `</div>`;
+	html += `</div>`;
 
 	return html;
 }
