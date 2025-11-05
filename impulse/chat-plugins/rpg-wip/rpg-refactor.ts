@@ -6215,7 +6215,7 @@ export const commands: ChatCommands = {
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
@@ -6239,7 +6239,7 @@ export const commands: ChatCommands = {
 						html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
 					});
 				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">← Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 			const pokemon = player.party.find(p => p.id === targetId);
@@ -6297,10 +6297,10 @@ export const commands: ChatCommands = {
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/join view-rpg-party" class="button">View Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 
@@ -6322,7 +6322,7 @@ export const commands: ChatCommands = {
 							}
 						}
 					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6333,13 +6333,13 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
@@ -6350,7 +6350,7 @@ export const commands: ChatCommands = {
 					for (const pokemon of player.party) {
 						html += `<button name="send" value="/rpg useitem eggmovetutor ${pokemon.id}" class="button" style="margin: 3px;">${pokemon.species}</button>`;
 					}
-					html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					html += `<hr /><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6360,7 +6360,7 @@ export const commands: ChatCommands = {
 				const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
 
 				if (learnableEggMoves.length === 0) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`);
 				}
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 			} else if (itemId === 'rarecandy') {
@@ -6372,7 +6372,7 @@ export const commands: ChatCommands = {
 							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg useitem rarecandy ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6382,7 +6382,7 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
@@ -6396,7 +6396,7 @@ export const commands: ChatCommands = {
 				const updatedPokemon = player.party.find(p => p.id === pokemonId);
 				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (itemId.startsWith('expcandy')) {
 				if (!pokemonId) {
@@ -6407,7 +6407,7 @@ export const commands: ChatCommands = {
 							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br><small>EXP: ${pokemon.experience}/${pokemon.expToNextLevel}</small></div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					html += `<p><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -6417,7 +6417,7 @@ export const commands: ChatCommands = {
 
 				if (!result.success) {
 					// .errorReply escapes HTML, so we use sendReply with a styled error message
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
@@ -6431,7 +6431,7 @@ export const commands: ChatCommands = {
 				const updatedPokemon = player.party.find(p => p.id === pokemonId);
 				if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 				const tempSlot = createActivePokemonSlot(updatedPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button><button name="send" value="/join view-rpg-items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				return this.errorReply("This item cannot be used right now.");
@@ -7206,7 +7206,7 @@ export const commands: ChatCommands = {
 						`${generatePokemonInfoHTML(tempSlot, true)}` +
 						`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
 						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+						`<button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
 					// --- FAILED CATCH PATH (FIXED) ---
@@ -7256,7 +7256,7 @@ export const commands: ChatCommands = {
 					`<p>You ran away from the wild Pokemon.</p>` +
 					`<p>` +
 					`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-					`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+					`<button name="send" value="/join view-rpg-explore" class="button">Continue Exploring</button>` +
 					`</p>` +
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
@@ -7309,7 +7309,7 @@ export const commands: ChatCommands = {
 				for (const pokemon of player.party) {
 					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
 				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
@@ -7351,7 +7351,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7368,7 +7368,7 @@ export const commands: ChatCommands = {
 						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
 					}
 				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
@@ -7388,7 +7388,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7422,7 +7422,7 @@ export const commands: ChatCommands = {
 
 			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/join view-rpg-party" class="button">Back to Party</button></p></div>`;
 			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
@@ -7466,7 +7466,7 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/join view-rpg" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
