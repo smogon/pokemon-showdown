@@ -12,6 +12,22 @@ import { TYPE_CHART } from './data';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
+// --- UTILITY FUNCTIONS ---
+
+/**
+ * Calculate the experience bar percentage for display.
+ * @param expProgress - Current exp progress within the level (experience - expForLastLevel)
+ * @param expNeededForLevel - Total exp needed for the level (expForNextLevel - expForLastLevel)
+ * @returns A percentage between 0 and 100
+ */
+function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
+	// Handle edge cases: if expNeededForLevel is 0 or negative, show 100%
+	if (expNeededForLevel <= 0) return 100;
+	
+	// Calculate percentage and clamp between 0 and 100
+	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
+}
+
 // --- START INLINE HTML FUNCTIONS (from commands) ---
 // These were previously inline in the commands and are now dedicated functions.
 
@@ -129,7 +145,7 @@ export function generateSharedBattlePokemonInfo(
 		const expForNextLevel = pokemon.expToNextLevel;
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
 		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
@@ -233,7 +249,7 @@ export function generatePokemonInfoHTML(
 		const expForNextLevel = pokemon.expToNextLevel;
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100));
+		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
 		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
