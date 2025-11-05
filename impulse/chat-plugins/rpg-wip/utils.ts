@@ -8,36 +8,6 @@ import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot } from './interface';
 
-export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
-	'Adamant': { plus: 'atk', minus: 'spa' },
-	'Bashful': null,
-	'Brave': { plus: 'atk', minus: 'spe' },
-	'Bold': { plus: 'def', minus: 'atk' },
-	'Calm': { plus: 'spd', minus: 'atk' },
-	'Careful': { plus: 'spd', minus: 'spa' },
-	'Docile': null,
-	'Gentle': { plus: 'spd', minus: 'def' },
-	'Hardy': null,
-	'Hasty': { plus: 'spe', minus: 'def' },
-	'Impish': { plus: 'def', minus: 'spa' },
-	'Jolly': { plus: 'spe', minus: 'spa' },
-	'Lax': { plus: 'def', minus: 'spd' },
-	'Lonely': { plus: 'atk', minus: 'def' },
-	'Mild': { plus: 'spa', minus: 'def' },
-	'Modest': { plus: 'spa', minus: 'atk' },
-	'Naive': { plus: 'spe', minus: 'spd' },
-	'Naughty': { plus: 'atk', minus: 'spd' },
-	'Quiet': { plus: 'spa', minus: 'spe' },
-	'Quirky': null,
-	'Rash': { plus: 'spa', minus: 'spd' },
-	'Relaxed': { plus: 'def', minus: 'spe' },
-	'Sassy': { plus: 'spd', minus: 'spe' },
-	'Serious': null,
-	'Timid': { plus: 'spe', minus: 'atk' },
-};
-
-export const NATURE_LIST = Object.keys(NATURES);
-
 export function getActiveSlots(
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
 ): ActivePokemonSlot[] {
@@ -85,6 +55,36 @@ export function calculateTotalExpForLevel(growthRate: string, level: number): nu
 	// Ensure non-negative result (fixes Medium Slow at level 1 returning -54)
 	return Math.max(0, result);
 }
+
+export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
+	'Adamant': { plus: 'atk', minus: 'spa' },
+	'Bashful': null,
+	'Brave': { plus: 'atk', minus: 'spe' },
+	'Bold': { plus: 'def', minus: 'atk' },
+	'Calm': { plus: 'spd', minus: 'atk' },
+	'Careful': { plus: 'spd', minus: 'spa' },
+	'Docile': null,
+	'Gentle': { plus: 'spd', minus: 'def' },
+	'Hardy': null,
+	'Hasty': { plus: 'spe', minus: 'def' },
+	'Impish': { plus: 'def', minus: 'spa' },
+	'Jolly': { plus: 'spe', minus: 'spa' },
+	'Lax': { plus: 'def', minus: 'spd' },
+	'Lonely': { plus: 'atk', minus: 'def' },
+	'Mild': { plus: 'spa', minus: 'def' },
+	'Modest': { plus: 'spa', minus: 'atk' },
+	'Naive': { plus: 'spe', minus: 'spd' },
+	'Naughty': { plus: 'atk', minus: 'spd' },
+	'Quiet': { plus: 'spa', minus: 'spe' },
+	'Quirky': null,
+	'Rash': { plus: 'spa', minus: 'spd' },
+	'Relaxed': { plus: 'def', minus: 'spe' },
+	'Sassy': { plus: 'spd', minus: 'spe' },
+	'Serious': null,
+	'Timid': { plus: 'spe', minus: 'atk' },
+};
+
+export const NATURE_LIST = Object.keys(NATURES);
 
 export function calculateStats(
 	species: any,
@@ -139,9 +139,6 @@ export function levelUp(pokemon: RPGPokemon): string[] {
 	// Maintain HP percentage (don't heal on level up)
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
 
-	levelUpMessages.push(`Max HP: ${oldStats.maxHp} -> ${pokemon.maxHp}`);
-	levelUpMessages.push(`Attack: ${oldStats.atk} -> ${pokemon.atk}`);
-	levelUpMessages.push(`Defense: ${oldStats.def} -> ${pokemon.def}`);
 	// Don't reset experience - keep accumulated exp to allow multiple level-ups
 	// pokemon.experience is already set by the caller (gainExperience or useExpCandyItem)
 	pokemon.expToNextLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level + 1);
@@ -205,25 +202,39 @@ export function checkEvolution(
 	itemUsed?: string
 ): string | null {
 	const speciesId = toID(pokemon.species);
-	const evoData = MANUAL_EVOLUTIONS[speciesId];
+	const evolutionList = MANUAL_EVOLUTIONS[speciesId];
 	
-	// Check for level-up evolution
-	if (evoData && itemUsed === undefined) {
-		if (pokemon.level < evoData.evoLevel) return null;
-	}
-	// Check for item evolution
-	else if (evoData && itemUsed) {
-		if (evoData.evoItem !== itemUsed) return null;
-	}
-	// No evolution data
-	else {
-		return null;
-	}
+	if (!evolutionList) return null;
 
 	// Check if Pokemon is holding an Everstone (prevents evolution)
 	if (pokemon.item === 'everstone') return null;
 
-	const evoSpecies = Dex.species.get(evoData.evoTo);
+	let foundEvo = null;
+
+	for (const evoData of evolutionList) {
+		const isLevelEvo = itemUsed === undefined && pokemon.level >= evoData.evoLevel && !evoData.evoItem;
+		const isItemEvo = itemUsed !== undefined && evoData.evoItem === itemUsed;
+		const isLevelItemEvo = itemUsed === evoData.evoItem && pokemon.level >= evoData.evoLevel;
+		
+		// Priority check: If an item is used, we only look for item-based evolutions.
+		if (itemUsed) {
+			if (isItemEvo || isLevelItemEvo) {
+				foundEvo = evoData;
+				break;
+			}
+		} 
+		// Secondary check: Level up evolution (only if no item was explicitly used)
+		else if (isLevelEvo) {
+			foundEvo = evoData;
+			// For multi-evolutions (like Wurmple, Eevee), we prioritize non-item level evolutions.
+			// Since there's no way to distinguish further without items/conditions, the first match is used.
+			break;
+		}
+	}
+
+	if (!foundEvo) return null;
+
+	const evoSpecies = Dex.species.get(foundEvo.evoTo);
 	if (!evoSpecies.exists) return null;
 	const oldSpeciesName = pokemon.species;
 	pokemon.species = evoSpecies.name;
@@ -251,9 +262,7 @@ export function checkEvolution(
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
-	// NOTE: We don't reassign player.party[pokemonIndex] = pokemon because pokemon is already
-	// a reference to the object in the party array. Reassigning would break references held
-	// by battle slots and other code. The pokemon object has been modified in place above.
+	
 	context.room.add(`|c|~RPG Bot|What?! ${context.user.name}'s ${oldSpeciesName} is evolving!`).update();
 	return evoMessage;
 }
