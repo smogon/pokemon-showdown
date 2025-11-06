@@ -18,7 +18,7 @@ interface OntimeBlockDocument {
 const ONTIME_DATA_PATH = 'impulse/db/ontime.json';
 const ONTIME_BLOCK_PATH = 'impulse/db/ontimeblocks.json';
 const ONTIME_LEADERBOARD_SIZE = 100;
-const ONTIME_CACHE_TTL_MS = 360 * 60 * 1000; // 6 hours, changeable as needed
+const ONTIME_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours, changeable as needed
 
 const convertTime = (time: number): { h: number, m: number, s: number } => {
 	const s = Math.floor((time / 1000) % 60);
