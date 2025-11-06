@@ -566,24 +566,66 @@ export function handleGenericFieldMove(
 	battle: BattleState,
 	messageLog: string[]
 ): boolean {
-	let hadEffect = false;
 	const attacker = attackerSlot.pokemon;
 
+	// Handle weather moves
 	if (move.weather) {
-		const weatherType = move.weather as 'sun' | 'rain' | 'sand' | 'hail';
-		if (battle.weather?.type === weatherType) {
+		// Normalize weather values from Dex format to internal format
+		// Dex returns: 'RainDance', 'sunnyday', 'Sandstorm', 'hail'
+		// Internal format: 'rain', 'sun', 'sand', 'hail'
+		const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
+			'raindance': 'rain',
+			'sunnyday': 'sun',
+			'sandstorm': 'sand',
+			'hail': 'hail',
+		};
+		const normalizedWeather = weatherMap[toID(move.weather)] ||
+			toID(move.weather) as 'sun' | 'rain' | 'sand' | 'hail';
+
+		if (battle.weather?.type === normalizedWeather) {
 			messageLog.push(`But it failed!`);
 		} else {
-			const weatherItems: Record<string, string> = { 'damprock': 'rain', 'heatrock': 'sun', 'smoothrock': 'sand', 'icyrock': 'hail' };
-			const turns = (battle.magicRoomTurns === 0 && attacker.item && weatherItems[attacker.item] === weatherType) ? 8 : 5;
-			battle.weather = { type: weatherType, turns };
-			const weatherStartMessages = { 'sun': 'The sunlight turned harsh!', 'rain': 'It started to rain!', 'sand': 'A sandstorm kicked up!', 'hail': 'It started to hail!' };
-			messageLog.push(weatherStartMessages[weatherType]);
-			hadEffect = true;
+			const weatherItems: Record<string, string> = {
+				'damprock': 'rain', 'heatrock': 'sun', 'smoothrock': 'sand', 'icyrock': 'hail',
+			};
+			const turns = (battle.magicRoomTurns === 0 && attacker.item &&
+				weatherItems[attacker.item] === normalizedWeather) ? 8 : 5;
+			battle.weather = { type: normalizedWeather, turns };
+			const weatherStartMessages = {
+				'sun': 'The sunlight turned harsh!',
+				'rain': 'It started to rain!',
+				'sand': 'A sandstorm kicked up!',
+				'hail': 'It started to hail!',
+			};
+			messageLog.push(weatherStartMessages[normalizedWeather]);
 		}
 		return true;
 	}
 
+	// Handle terrain moves (check move.terrain property from Dex)
+	if (move.terrain) {
+		const terrainId = toID(move.terrain);
+		const terrainMap: Record<string, 'electric' | 'grassy' | 'misty' | 'psychic'> = {
+			'electricterrain': 'electric',
+			'grassyterrain': 'grassy',
+			'mistyterrain': 'misty',
+			'psychicterrain': 'psychic',
+		};
+		const terrainType = terrainMap[terrainId];
+
+		if (terrainType) {
+			if (battle.terrain) {
+				messageLog.push('But it failed! (A terrain is already active)');
+			} else {
+				battle.terrain = { type: terrainType, turns: 5 };
+				messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
+			}
+			return true;
+		}
+	}
+
+	// Handle pseudo-weather moves (rooms, gravity, etc.)
+	// Check both move.pseudoWeather (for custom moves) and move.id (for Dex moves)
 	const pseudoWeather = move.pseudoWeather || move.id;
 	switch (pseudoWeather) {
 	case 'trickroom':
@@ -617,6 +659,7 @@ export function handleGenericFieldMove(
 	case 'grassyterrain':
 	case 'mistyterrain':
 	case 'psychicterrain':
+		// This case handles custom moves with pseudoWeather property
 		const terrainType = pseudoWeather.replace('terrain', '') as 'electric' | 'grassy' | 'misty' | 'psychic';
 		if (battle.terrain) {
 			messageLog.push('But it failed! (A terrain is already active)');
@@ -1097,7 +1140,6 @@ export function handleChargingMove(
 
 	return false;
 }
-
 
 export const RPGMoves = {
 	getDamageBasePower,
