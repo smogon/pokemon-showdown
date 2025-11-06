@@ -290,7 +290,7 @@ export function checkBattleEndCondition(
 	return false;
 }
 
-export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[], move?: Move): boolean {
 	const attacker = attackerSlot.pokemon;
 
 	if (attackerSlot.mustRecharge) {
@@ -316,6 +316,12 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 	}
 
 	if (attackerSlot.status === 'slp') {
+		// Check if move is sleep-usable (Sleep Talk, Snore)
+		if (move && move.sleepUsable) {
+			// Move can be used while asleep
+			return true;
+		}
+		
 		attackerSlot.sleepCounter--;
 		if (attackerSlot.sleepCounter > 0) {
 			messageLog.push(`${attacker.species} is fast asleep.`);
@@ -947,7 +953,7 @@ export function executeAction(
 			messageLog.push(`${attackerSlot.pokemon.species} has no PP left for ${move.name}!`);
 		}
 
-		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
+		if (!handlePreTurnChecks(attackerSlot, battle, messageLog, move)) {
 			return;
 		}
 
