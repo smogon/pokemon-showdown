@@ -698,6 +698,20 @@ export function handleGenericFieldMove(
 			messageLog.push('Fire\'s power was weakened!');
 		}
 		return true;
+	case 'fairylock':
+		if (battle.fairyLockTurns > 0) messageLog.push('But it failed!');
+		else {
+			battle.fairyLockTurns = 1; // Fairy Lock only lasts 1 turn (prevents switching next turn)
+			messageLog.push('No one will be able to run away during the next turn!');
+		}
+		return true;
+	case 'iondeluge':
+		if (battle.ionDelugeTurns > 0) messageLog.push('But it failed!');
+		else {
+			battle.ionDelugeTurns = 1; // Ion Deluge only affects the current turn
+			messageLog.push('A deluge of ions showers the battlefield!');
+		}
+		return true;
 	}
 
 	return false;
@@ -1102,6 +1116,127 @@ export function handleSpecificStatusMove(
 			slot.statStages = { ...INITIAL_STAT_STAGES };
 		});
 		messageLog.push('All stat changes were eliminated!');
+		return true;
+
+	case 'perishsong':
+		let affectedCount = 0;
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			const slotAbility = toID(slot.pokemon.ability || '');
+			if (slotAbility !== 'soundproof' && !slot.perishSongCounter) {
+				slot.perishSongCounter = 3;
+				affectedCount++;
+			}
+		});
+		if (affectedCount > 0) {
+			messageLog.push('All Pokémon that heard the song will faint in three turns!');
+		} else {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'courtchange':
+		// Swap hazards and screens between both sides
+		const tempHazards = [...battle.playerHazards];
+		battle.playerHazards = [...battle.opponentHazards];
+		battle.opponentHazards = tempHazards;
+
+		const tempReflect = battle.playerReflectTurns;
+		battle.playerReflectTurns = battle.opponentReflectTurns;
+		battle.opponentReflectTurns = tempReflect;
+
+		const tempLightScreen = battle.playerLightScreenTurns;
+		battle.playerLightScreenTurns = battle.opponentLightScreenTurns;
+		battle.opponentLightScreenTurns = tempLightScreen;
+
+		const tempAuroraVeil = battle.playerAuroraVeilTurns;
+		battle.playerAuroraVeilTurns = battle.opponentAuroraVeilTurns;
+		battle.opponentAuroraVeilTurns = tempAuroraVeil;
+
+		messageLog.push(`${attacker.species} swapped the battle effects on both sides of the field!`);
+		return true;
+
+	case 'flowershield':
+		let flowershieldAffected = 0;
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			const slotSpecies = Dex.species.get(slot.pokemon.species);
+			if (slotSpecies.types.includes('Grass') && slot.statStages.def < 6) {
+				slot.statStages.def++;
+				messageLog.push(`${slot.pokemon.species}'s Defense rose!`);
+				flowershieldAffected++;
+			}
+		});
+		if (flowershieldAffected === 0) {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'rototiller':
+		let rototillerAffected = 0;
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			const slotSpecies = Dex.species.get(slot.pokemon.species);
+			if (slotSpecies.types.includes('Grass') && RPGAbilities.isGrounded(slot.pokemon, battle)) {
+				let boosted = false;
+				if (slot.statStages.atk < 6) {
+					slot.statStages.atk++;
+					boosted = true;
+				}
+				if (slot.statStages.spa < 6) {
+					slot.statStages.spa++;
+					boosted = true;
+				}
+				if (boosted) {
+					messageLog.push(`${slot.pokemon.species}'s Attack and Sp. Atk rose!`);
+					rototillerAffected++;
+				}
+			}
+		});
+		if (rototillerAffected === 0) {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'teatime':
+		let teatimeAffected = 0;
+		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			// Check if item exists and is a berry (items ending with 'berry' suffix)
+			if (slot.pokemon.item) {
+				const itemData = ITEMS_DATABASE[slot.pokemon.item];
+				// Berry items have category 'berry' or their ID ends with 'berry'
+				if (itemData?.category === 'berry' || slot.pokemon.item.endsWith('berry')) {
+					messageLog.push(`${slot.pokemon.species} consumed its ${itemData?.name || slot.pokemon.item}!`);
+					// TODO: Implement actual berry effects (healing, stat boosts, status cure, etc.)
+					// For now, berries are just consumed without applying their effects
+					slot.pokemon.item = undefined;
+					activateUnburden(slot, messageLog);
+					teatimeAffected++;
+				}
+			}
+		});
+		if (teatimeAffected === 0) {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'healbell':
+	case 'aromatherapy':
+		const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+		const teamSlots = isPlayerAttacker ? battle.playerSlots : battle.opponentSlots;
+		let healedCount = 0;
+		teamSlots.forEach(slot => {
+			if (slot && slot.status) {
+				slot.status = null;
+				slot.sleepCounter = 0;
+				healedCount++;
+			}
+		});
+		if (healedCount > 0) {
+			const message = move.id === 'aromatherapy' ?
+				'A soothing aroma wafted through the area! The team\'s status conditions were healed!' :
+				'A bell chimed! The team\'s status conditions were healed!';
+			messageLog.push(message);
+		} else {
+			messageLog.push('But it failed!');
+		}
 		return true;
 	}
 

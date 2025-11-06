@@ -290,7 +290,7 @@ export function checkBattleEndCondition(
 	return false;
 }
 
-export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[], move?: Move): boolean {
 	const attacker = attackerSlot.pokemon;
 
 	if (attackerSlot.mustRecharge) {
@@ -316,6 +316,12 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 	}
 
 	if (attackerSlot.status === 'slp') {
+		// Check if move is sleep-usable (Sleep Talk, Snore)
+		if (move && move.sleepUsable) {
+			// Move can be used while asleep
+			return true;
+		}
+		
 		attackerSlot.sleepCounter--;
 		if (attackerSlot.sleepCounter > 0) {
 			messageLog.push(`${attacker.species} is fast asleep.`);
@@ -505,6 +511,22 @@ export function executeMove(
 	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
 	let moveHitAnyTarget = false;
+
+	// Handle field effect moves (weather, terrain, rooms, global effects) only once before the target loop
+	// These moves affect the entire field or all Pokemon globally, not individual targets
+	const isFieldEffectMove = move.category === 'Status' && (
+		move.weather ||
+		move.terrain ||
+		move.pseudoWeather ||
+		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport',
+		 'haze', 'perishsong', 'courtchange'].includes(move.id)
+	);
+
+	if (isFieldEffectMove) {
+		// Field effect moves should execute once, not per target
+		handleStatusMove(attackerSlot, null, move, battle, messageLog);
+		return;
+	}
 
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break;
@@ -785,6 +807,10 @@ export function handleSwitchAction(
 		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 		return;
 	}
+	if (battle.fairyLockTurns > 0) {
+		messageLog.push(`${attackerSlot.pokemon.species} can't switch out due to Fairy Lock!`);
+		return;
+	}
 
 	const outgoingPokemon = attackerSlot.pokemon;
 
@@ -927,7 +953,7 @@ export function executeAction(
 			messageLog.push(`${attackerSlot.pokemon.species} has no PP left for ${move.name}!`);
 		}
 
-		if (!handlePreTurnChecks(attackerSlot, battle, messageLog)) {
+		if (!handlePreTurnChecks(attackerSlot, battle, messageLog, move)) {
 			return;
 		}
 

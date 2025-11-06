@@ -467,10 +467,33 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 			messageLog.push('The effects of Water Sport wore off.');
 		}
 	}
+
+	if (battle.fairyLockTurns > 0) {
+		battle.fairyLockTurns--;
+		if (battle.fairyLockTurns <= 0) {
+			messageLog.push('The Fairy Lock wore off!');
+		}
+	}
+
+	if (battle.ionDelugeTurns > 0) {
+		battle.ionDelugeTurns--;
+	}
 }
 
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+
+	// Handle Perish Song counters
+	allSlots.forEach(slot => {
+		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
+			slot.perishSongCounter--;
+			messageLog.push(`${slot.pokemon.species}'s perish count fell to ${slot.perishSongCounter}!`);
+			if (slot.perishSongCounter === 0) {
+				slot.pokemon.hp = 0;
+				messageLog.push(`${slot.pokemon.species} fainted from Perish Song!`);
+			}
+		}
+	});
 
 	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
 		fm.turnsLeft--;
