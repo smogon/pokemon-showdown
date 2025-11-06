@@ -424,7 +424,7 @@ export const commands: Chat.ChatCommands = {
 
 		ladder(target, room, user) {
 			if (!this.runBroadcast()) return;
-			return this.parse(`/join view-expladder`);
+			this.parse(`/join view-expladder`);
 		},
 
 		clearcache(target, room, user) {
