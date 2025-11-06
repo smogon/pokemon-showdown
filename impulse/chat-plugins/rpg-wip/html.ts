@@ -146,11 +146,11 @@ export function generateSharedBattlePokemonInfo(
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
 		
-		// --- NEW EXP BAR STYLE (matches HP bar height, but with centered EXP label) ---
+		// --- EXP BAR (15px height) ---
 		expBarHTML =
-			'<div style="max-width: 120px; height: 14px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-				'<div style="background: #6c9be8; width: ' + expPercentage + '%; height: 100%; border-radius: 8px;"></div>' +
-				'<span style="position: absolute; left: 0; right: 0; top: 0; color: #fff; font-size: 11px; font-weight: bold; line-height: 18px; height: 100%; text-shadow: 1px 1px 1px #333; text-align: center;">' +
+			'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+				'<div style="background: #6c9be8; width: ' + expPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
+				'<span style="position: absolute; left: 0; right: 0; top: 0; color: #fff; font-size: 10px; font-weight: bold; line-height: 15px; height: 100%; text-shadow: 1px 1px 1px #333; text-align: center;">' +
 					'EXP' +
 				'</span>' +
 			'</div>';
@@ -232,11 +232,11 @@ export function generateSharedBattlePokemonInfo(
 		return html;
 	} else {
 		// New layout based on Cramorant screenshot
-		// HP Bar: A container, a bar inside, and an absolutely positioned text label
+		// HP Bar: A container, a bar inside, and an absolutely positioned text label (15px height)
 		const hpBarHTML =
-			'<div style="max-width: 120px; height: 14px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-				'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 8px;"></div>' +
-				'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 11px; font-weight: bold; padding: 0 6px; line-height: 18px; height: 100%; border-radius: 0 8px 8px 0;">' +
+			'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+				'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
+				'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 10px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
 					hpPercentage + '%' +
 				'</span>' +
 			'</div>';
@@ -248,9 +248,9 @@ export function generateSharedBattlePokemonInfo(
 		const statusDisplay = allStatusTags || '&nbsp;';
 
 		// --- NEW: Placeholder for the new EXP bar style ---
-		// The bar has height: 18px + 1px border-top + 1px border-bottom = 20px total height.
+		// The bar has height: 15px + 1px border-top + 1px border-bottom = 17px total height.
 		// It also has margin-top: 4px.
-		const placeholderExpBar = '<div style="height: 16px; margin-top: 4px;"></div>';
+		const placeholderExpBar = '<div style="height: 17px; margin-top: 4px;"></div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
