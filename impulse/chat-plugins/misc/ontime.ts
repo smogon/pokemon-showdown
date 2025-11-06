@@ -71,7 +71,7 @@ async function writeOntimeUpdate(): Promise<void> {
 	await FS(ONTIME_DATA_PATH).writeUpdate(() => JSON.stringify(cachedOntime || [], null, 2));
 }
 
-async function getOntimeBlockData(): Promise<OntimeBlockDocument[]> {
+async function getOntimeBlockData() {
 	const now = Date.now();
 	if (cachedOntimeBlocks && (now - cachedOntimeBlocksTimestamp < ONTIME_CACHE_TTL_MS)) return cachedOntimeBlocks;
 	const data = await FS(ONTIME_BLOCK_PATH).readIfExists();
