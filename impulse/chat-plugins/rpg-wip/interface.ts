@@ -106,6 +106,7 @@ export interface ActivePokemonSlot {
 	isDisguised?: boolean;
 	lastMoveThatHitMe?: Move;
 	terastallized?: string;
+	perishSongCounter?: number;
 }
 
 export interface PlayerData {
@@ -159,6 +160,8 @@ export interface BattleState {
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;
+	fairyLockTurns: number;
+	ionDelugeTurns: number;
 
 	forceEnd?: boolean;
 

@@ -1002,6 +1002,8 @@ export const commands: ChatCommands = {
 					gravityTurns: 0,
 					mudSportTurns: 0,
 					waterSportTurns: 0,
+					fairyLockTurns: 0,
+					ionDelugeTurns: 0,
 
 					// --- Delayed Move Fields ---
 					playerFutureMoves: [],
@@ -1124,6 +1126,8 @@ export const commands: ChatCommands = {
 				gravityTurns: 0,
 				mudSportTurns: 0,
 				waterSportTurns: 0,
+				fairyLockTurns: 0,
+				ionDelugeTurns: 0,
 
 				// --- Delayed Move Fields ---
 				playerFutureMoves: [],

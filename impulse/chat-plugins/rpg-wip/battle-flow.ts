@@ -801,6 +801,10 @@ export function handleSwitchAction(
 		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 		return;
 	}
+	if (battle.fairyLockTurns > 0) {
+		messageLog.push(`${attackerSlot.pokemon.species} can't switch out due to Fairy Lock!`);
+		return;
+	}
 
 	const outgoingPokemon = attackerSlot.pokemon;
 
