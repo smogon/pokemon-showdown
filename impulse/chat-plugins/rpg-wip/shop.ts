@@ -32,8 +32,6 @@ export const LOCATION_SHOPS: Record<string, ShopInventory[]> = {
 				'paralyzeheal',
 				'awakening',
 				'burnheal',
-				// Misc
-				'repel',
 			],
 		},
 	],
@@ -52,9 +50,6 @@ export const LOCATION_SHOPS: Record<string, ShopInventory[]> = {
 				'awakening',
 				'burnheal',
 				'iceheal',
-				// Misc
-				'repel',
-				'escaperope',
 			],
 		},
 	],
@@ -76,10 +71,6 @@ export const LOCATION_SHOPS: Record<string, ShopInventory[]> = {
 				'iceheal',
 				'fullheal',
 				'revive',
-				// Misc
-				'repel',
-				'superrepel',
-				'escaperope',
 			],
 			requiresBadges: 1,
 		},
@@ -94,8 +85,6 @@ export const LOCATION_SHOPS: Record<string, ShopInventory[]> = {
 				'antidote',
 				'paralyzeheal',
 				'awakening',
-				'escaperope',
-				'repel',
 			],
 		},
 	],
@@ -109,8 +98,6 @@ export const DEFAULT_SHOP: string[] = [
 	'paralyzeheal',
 	'awakening',
 	'burnheal',
-	'escaperope',
-	'repel',
 ];
 
 // Special shops that unlock with badges (department stores, etc.)
@@ -120,7 +107,7 @@ export const BADGE_UNLOCKED_ITEMS: Record<number, string[]> = {
 	2: ['ultraball', 'hyperpotion', 'fullheal'], // Cascade Badge
 	3: ['netball', 'nestball', 'maxpotion'], // Thunder Badge
 	4: ['timerball', 'quickball', 'maxrevive'], // Rainbow Badge
-	5: ['repeatball', 'duskball', 'fullrestore'], // Soul Badge
+	5: ['fullrestore'], // Soul Badge  
 	6: ['luxuryball', 'healball', 'sacredash'], // Marsh Badge
 	7: ['premierball', 'fastball'], // Volcano Badge
 	8: ['masterball'], // Earth Badge - Master Ball available
