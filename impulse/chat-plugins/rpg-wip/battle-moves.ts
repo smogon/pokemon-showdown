@@ -13,13 +13,13 @@ import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 // --- UPDATED IMPORTS ---
 import {
-	applyStatChange,
 	checkStatDropAbilities,
 	checkMentalHerb,
 	activateUnburden,
 	applySynchronize,
 	INITIAL_STAT_STAGES,
 } from './battle-shared';
+import { getStatMultiplier } from './battle-core';
 // --- END UPDATED IMPORTS ---
 
 export function getDamageBasePower(
@@ -46,7 +46,10 @@ export function getDamageBasePower(
 		if (defenderChargingMoveId === 'dive' && ['surf', 'whirlpool'].includes(move.id)) {
 			basePower *= 2;
 		}
-		if ((defenderChargingMoveId === 'fly' || defenderChargingMoveId === 'bounce') && ['twister', 'gust', 'skyuppercut'].includes(move.id)) {
+		if (
+			(defenderChargingMoveId === 'fly' || defenderChargingMoveId === 'bounce') &&
+			['twister', 'gust', 'skyuppercut'].includes(move.id)
+		) {
 			basePower *= 2;
 		}
 	}
@@ -88,8 +91,8 @@ export function getDamageBasePower(
 		else basePower = 40;
 		break;
 	case 'gyroball':
-		const attackerSpe = attacker.spe * RPGAbilities.getStatMultiplier(attackerSlot.statStages.spe);
-		const defenderSpe = defender.spe * RPGAbilities.getStatMultiplier(defenderSlot.statStages.spe);
+		const attackerSpe = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
+		const defenderSpe = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
 		if (defenderSpe > 0) {
 			basePower = Math.min(150, Math.floor(25 * (defenderSpe / attackerSpe)) + 1);
 		} else {
@@ -157,6 +160,54 @@ export function getDamageBasePower(
 		basePower = Math.floor(basePower * 1.5);
 	}
 
+	// Punishment: Power increases with target's positive stat boosts (60 + 20 per boost, max 200)
+	if (move.id === 'punishment') {
+		let totalBoosts = 0;
+		for (const stat in defenderSlot.statStages) {
+			const stage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
+			if (stage > 0) totalBoosts += stage;
+		}
+		basePower = Math.min(200, 60 + (20 * totalBoosts));
+	}
+
+	// Trump Card: Power increases as PP decreases
+	if (move.id === 'trumpcard') {
+		const moveData = attacker.moves.find(m => m.id === move.id);
+		if (moveData) {
+			if (moveData.pp === 0) basePower = 200;
+			else if (moveData.pp === 1) basePower = 80;
+			else if (moveData.pp === 2) basePower = 60;
+			else if (moveData.pp === 3) basePower = 50;
+			else basePower = 40;
+		}
+	}
+
+	// Wring Out / Crush Grip: Power based on target's current HP% (1-121)
+	if (move.id === 'wringout' || move.id === 'crushgrip') {
+		const hpPercent = defender.hp / defender.maxHp;
+		basePower = Math.floor(120 * hpPercent) + 1;
+	}
+
+	// Assurance: Power doubles if target took damage this turn
+	if (move.id === 'assurance' && defenderSlot.lastDamageTaken) {
+		basePower *= 2;
+	}
+
+	// Avalanche / Revenge: Power doubles if user took damage this turn
+	if ((move.id === 'avalanche' || move.id === 'revenge') && attackerSlot.lastDamageTaken) {
+		basePower *= 2;
+	}
+
+	// Payback: Power doubles if user moves after target
+	// This would need turn order tracking, for now we'll check speed
+	if (move.id === 'payback') {
+		const attackerSpe = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
+		const defenderSpe = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
+		if (attackerSpe < defenderSpe) {
+			basePower *= 2;
+		}
+	}
+
 	return basePower;
 }
 
@@ -176,14 +227,41 @@ export function handleDamagingMovePreamble(
 		const semiInvulnerableStates = ['fly', 'dig', 'dive', 'bounce', 'shadowforce', 'phantomforce'];
 
 		if (semiInvulnerableStates.includes(defenderChargingMoveId)) {
-			if (defenderChargingMoveId === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) isImmune = false;
-			if (defenderChargingMoveId === 'dive' && ['surf', 'whirlpool'].includes(move.id)) isImmune = false;
-			if ((defenderChargingMoveId === 'fly' || defenderChargingMoveId === 'bounce') && ['thunder', 'hurricane', 'twister', 'gust', 'skyuppercut', 'smackdown'].includes(move.id)) isImmune = false;
+			if (defenderChargingMoveId === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) {
+				isImmune = false;
+			}
+			if (defenderChargingMoveId === 'dive' && ['surf', 'whirlpool'].includes(move.id)) {
+				isImmune = false;
+			}
+			if (
+				(defenderChargingMoveId === 'fly' || defenderChargingMoveId === 'bounce') &&
+				['thunder', 'hurricane', 'twister', 'gust', 'skyuppercut', 'smackdown'].includes(move.id)
+			) {
+				isImmune = false;
+			}
 		}
 		if (isImmune) {
 			messageLog.push(`But it failed! ${defender.species} avoided the attack!`);
 			return true;
 		}
+	}
+
+	// Explosion/Self-Destruct: Halve defender's Defense for damage calculation
+	if (move.id === 'explosion' || move.id === 'selfdestruct') {
+		// This is handled in damage calculation by temporarily modifying defense
+		// The actual fainting happens in handleSpecificStatusMove
+	}
+
+	// Foul Play: Uses target's Attack stat instead of user's
+	if (move.id === 'foulplay') {
+		// This needs to be handled in damage calculation
+		// For now, we note it here
+	}
+
+	// Psyshock/Psystrike/Secret Sword: Special attacks that target Defense
+	if (['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
+		// These are Special category but use target's Defense instead of Sp. Def
+		// This needs to be handled in damage calculation
 	}
 
 	if (move.id === 'counter' || move.id === 'mirrorcoat') {
@@ -1066,7 +1144,7 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'futuresight':
-	case 'doomdesire':
+	case 'doomdesire': {
 		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
 		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSlots : battle.playerSlots).indexOf(defenderSlot);
 		if (targetSlotLocalIndex === -1) {
@@ -1078,12 +1156,12 @@ export function handleSpecificStatusMove(
 			messageLog.push(`But it failed!`);
 			return true;
 		}
-		const attackerSlotIndex = (isPlayerAttacker ? battle.playerSlots : battle.opponentSlots).indexOf(attackerSlot);
+		const futureAttackerSlotIndex = (isPlayerAttacker ? battle.playerSlots : battle.opponentSlots).indexOf(attackerSlot);
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
 			moveId: move.id,
 			turnsLeft: 2,
-			attackerSlotIndex,
+			attackerSlotIndex: futureAttackerSlotIndex,
 			attackerStats: {
 				atk: attacker.atk * RPGAbilities.getStatMultiplier(attackerSlot.statStages.atk),
 				spa: attacker.spa * RPGAbilities.getStatMultiplier(attackerSlot.statStages.spa),
@@ -1091,6 +1169,7 @@ export function handleSpecificStatusMove(
 		});
 		messageLog.push(`${attacker.species} foresaw an attack!`);
 		return true;
+	}
 
 	case 'protect':
 	case 'detect':
@@ -1202,7 +1281,7 @@ export function handleSpecificStatusMove(
 			if (slot.pokemon.item) {
 				const itemData = ITEMS_DATABASE[slot.pokemon.item];
 				// Berry items have category 'berry' or their ID ends with 'berry'
-				if (itemData?.category === 'berry' || slot.pokemon.item.endsWith('berry')) {
+				if (itemData?.category === 'berry' || slot.pokemon.item?.endsWith('berry')) {
 					messageLog.push(`${slot.pokemon.species} consumed its ${itemData?.name || slot.pokemon.item}!`);
 					// TODO: Implement actual berry effects (healing, stat boosts, status cure, etc.)
 					// For now, berries are just consumed without applying their effects
@@ -1218,12 +1297,12 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'healbell':
-	case 'aromatherapy':
-		const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-		const teamSlots = isPlayerAttacker ? battle.playerSlots : battle.opponentSlots;
+	case 'aromatherapy': {
+		const isPlayerHealingUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+		const teamSlots = isPlayerHealingUser ? battle.playerSlots : battle.opponentSlots;
 		let healedCount = 0;
 		teamSlots.forEach(slot => {
-			if (slot && slot.status) {
+			if (slot?.status) {
 				slot.status = null;
 				slot.sleepCounter = 0;
 				healedCount++;
@@ -1238,6 +1317,362 @@ export function handleSpecificStatusMove(
 			messageLog.push('But it failed!');
 		}
 		return true;
+	}
+
+	case 'rest':
+		if (attacker.hp >= attacker.maxHp) {
+			messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
+		} else if (attackerSlot.status === 'slp') {
+			messageLog.push(`But it failed! (${attacker.species} is already asleep!)`);
+		} else {
+			const oldHp = attacker.hp;
+			attacker.hp = attacker.maxHp;
+			attackerSlot.status = 'slp';
+			attackerSlot.sleepCounter = 2;
+			messageLog.push(`${attacker.species} went to sleep and restored ${attacker.hp - oldHp} HP!`);
+		}
+		return true;
+
+	case 'roost':
+		if (attacker.hp >= attacker.maxHp) {
+			messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
+		} else {
+			const healAmount = Math.floor(attacker.maxHp / 2);
+			const oldHp = attacker.hp;
+			attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+			messageLog.push(`${attacker.species} landed and restored ${attacker.hp - oldHp} HP!`);
+			// TODO: Temporarily remove Flying type (would need type tracking in slot)
+		}
+		return true;
+
+	case 'synthesis':
+	case 'moonlight':
+	case 'morningsun':
+		if (attacker.hp >= attacker.maxHp) {
+			messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
+		} else {
+			let healRatio = 0.5;
+			if (RPGAbilities.isWeatherActive(battle)) {
+				if (battle.weather?.type === 'sun') healRatio = 0.667;
+				else if (['rain', 'sand', 'hail'].includes(battle.weather!.type)) healRatio = 0.25;
+			}
+			const healAmount = Math.floor(attacker.maxHp * healRatio);
+			const oldHp = attacker.hp;
+			attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+			messageLog.push(`${attacker.species} restored ${attacker.hp - oldHp} HP!`);
+		}
+		return true;
+
+	case 'shoreup':
+		if (attacker.hp >= attacker.maxHp) {
+			messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
+		} else {
+			let healRatio = 0.5;
+			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sand') {
+				healRatio = 0.667;
+			}
+			const healAmount = Math.floor(attacker.maxHp * healRatio);
+			const oldHp = attacker.hp;
+			attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+			messageLog.push(`${attacker.species} restored ${attacker.hp - oldHp} HP!`);
+		}
+		return true;
+
+	case 'painsplit':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const averageHP = Math.floor((attacker.hp + defender.hp) / 2);
+		const attackerChange = averageHP - attacker.hp;
+		const defenderChange = averageHP - defender.hp;
+		attacker.hp = averageHP;
+		defender.hp = averageHP;
+		messageLog.push(`The battlers shared their pain!`);
+		if (attackerChange > 0) messageLog.push(`${attacker.species} gained ${attackerChange} HP!`);
+		else if (attackerChange < 0) messageLog.push(`${attacker.species} lost ${-attackerChange} HP!`);
+		if (defenderChange > 0) messageLog.push(`${defender.species} gained ${defenderChange} HP!`);
+		else if (defenderChange < 0) messageLog.push(`${defender.species} lost ${-defenderChange} HP!`);
+		return true;
+
+	case 'rapidspin':
+		if (!defenderSlot) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// Rapid Spin deals damage (handled separately), then removes hazards and raises Speed
+		const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+		const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
+		if (userHazards.length > 0) {
+			userHazards.length = 0;
+			messageLog.push(`${attacker.species} blew away the hazards!`);
+		}
+		if (attackerSlot.statStages.spe < 6) {
+			attackerSlot.statStages.spe++;
+			messageLog.push(`${attacker.species}'s Speed rose!`);
+		}
+		return false; // Return false so damage is still calculated
+
+	case 'uturn':
+	case 'voltswitch':
+	case 'flipturn':
+		// These moves deal damage then switch out (would need switching implementation)
+		messageLog.push(`${attacker.species} went back to switch!`);
+		// TODO: Implement actual switching mechanic
+		return false; // Return false so damage is still calculated
+
+	case 'partingshot':
+		if (!defenderSlot) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		let partingShotWorked = false;
+		if (defenderSlot.statStages.atk > -6) {
+			defenderSlot.statStages.atk--;
+			partingShotWorked = true;
+		}
+		if (defenderSlot.statStages.spa > -6) {
+			defenderSlot.statStages.spa--;
+			partingShotWorked = true;
+		}
+		if (partingShotWorked) {
+			messageLog.push(`${defender.species}'s Attack and Sp. Atk fell!`);
+			messageLog.push(`${attacker.species} went back to switch!`);
+			// TODO: Implement actual switching
+		} else {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'batonpass':
+		messageLog.push(`${attacker.species} passed its stat changes!`);
+		// TODO: Implement stat passing to next Pokemon
+		return true;
+
+	case 'teleport':
+		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
+			messageLog.push(`${attacker.species} fled from battle!`);
+			const attackerSlotIndex = battle.playerSlots.indexOf(attackerSlot);
+			if (attackerSlotIndex !== -1) {
+				battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+			}
+		} else {
+			messageLog.push(`${attacker.species} switched out!`);
+			// TODO: Implement switching
+		}
+		return true;
+
+	case 'explosion':
+	case 'selfdestruct':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// Damage is calculated separately with halved Defense
+		// After damage, user faints
+		attacker.hp = 0;
+		messageLog.push(`${attacker.species} fainted from the explosion!`);
+		return false; // Return false so damage is still calculated
+
+	case 'finalgambit':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const gambitDamage = attacker.hp;
+		attacker.hp = 0;
+		defender.hp = Math.max(0, defender.hp - gambitDamage);
+		messageLog.push(`${attacker.species} took the target down with it and dealt ${gambitDamage} damage!`);
+		return true;
+
+	case 'memento':
+		if (!defenderSlot) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		let mementoWorked = false;
+		if (defenderSlot.statStages.atk > -6) {
+			defenderSlot.statStages.atk = Math.max(-6, defenderSlot.statStages.atk - 2);
+			mementoWorked = true;
+		}
+		if (defenderSlot.statStages.spa > -6) {
+			defenderSlot.statStages.spa = Math.max(-6, defenderSlot.statStages.spa - 2);
+			mementoWorked = true;
+		}
+		if (mementoWorked) {
+			messageLog.push(`${defender.species}'s Attack and Sp. Atk harshly fell!`);
+			attacker.hp = 0;
+			messageLog.push(`${attacker.species} fainted!`);
+		} else {
+			messageLog.push('But it failed!');
+		}
+		return true;
+
+	case 'healingwish':
+		attacker.hp = 0;
+		messageLog.push(`${attacker.species} fainted to grant a healing wish!`);
+		// TODO: Mark next Pokemon to be fully healed when switched in
+		return true;
+
+	case 'lunardance':
+		attacker.hp = 0;
+		messageLog.push(`${attacker.species} fainted and will fully restore the next Pokemon!`);
+		// TODO: Mark next Pokemon to be fully healed (HP/PP/status) when switched in
+		return true;
+
+	case 'seismictoss':
+	case 'nightshade':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const fixedDamage = attacker.level;
+		defender.hp = Math.max(0, defender.hp - fixedDamage);
+		messageLog.push(`${defender.species} took ${fixedDamage} damage!`);
+		return true;
+
+	case 'dragonrage':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		defender.hp = Math.max(0, defender.hp - 40);
+		messageLog.push(`${defender.species} took 40 damage!`);
+		return true;
+
+	case 'sonicboom':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		defender.hp = Math.max(0, defender.hp - 20);
+		messageLog.push(`${defender.species} took 20 damage!`);
+		return true;
+
+	case 'superfang':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const superfangDamage = Math.floor(defender.hp / 2);
+		defender.hp = Math.max(1, defender.hp - superfangDamage);
+		messageLog.push(`${defender.species} took ${superfangDamage} damage!`);
+		return true;
+
+	case 'endeavor':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		if (attacker.hp >= defender.hp) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const endeavorDamage = defender.hp - attacker.hp;
+		defender.hp = attacker.hp;
+		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
+		return true;
+
+	case 'psywave':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const psywaveMultiplier = 0.5 + Math.random(); // 0.5 to 1.5
+		const psywaveDamage = Math.floor(attacker.level * psywaveMultiplier);
+		defender.hp = Math.max(0, defender.hp - psywaveDamage);
+		messageLog.push(`${defender.species} took ${psywaveDamage} damage!`);
+		return true;
+
+	case 'metronome':
+		// TODO: Pick and execute random move
+		messageLog.push(`${attacker.species} wagged its finger!`);
+		messageLog.push(`(Metronome not fully implemented yet)`);
+		return true;
+
+	case 'sleeptalk':
+		if (attackerSlot.status !== 'slp') {
+			messageLog.push(`But it failed! (${attacker.species} is not asleep)`);
+			return true;
+		}
+		// TODO: Pick and execute random move from Pokemon's moveset
+		messageLog.push(`${attacker.species} used a move in its sleep!`);
+		messageLog.push(`(Sleep Talk not fully implemented yet)`);
+		return true;
+
+	case 'fakeout':
+		if (attackerSlot.activeTurns > 1) {
+			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
+			return true;
+		}
+		if (defenderSlot) {
+			defenderSlot.willFlinch = true;
+		}
+		return false; // Return false so damage is still calculated
+
+	case 'suckerpunch':
+		// Check if target is using a damaging move
+		// This would need to be checked in battle flow before moves execute
+		// For now, we'll let it work normally
+		return false; // Return false so damage is still calculated
+
+	case 'soak':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// Change target to pure Water type
+		messageLog.push(`${defender.species} transformed into the Water type!`);
+		// TODO: Implement type changing in battle slot
+		return true;
+
+	case 'reflecttype':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// const defenderSpeciesReflect = Dex.species.get(defender.species);
+		messageLog.push(`${attacker.species} became the same type as ${defender.species}!`);
+		// TODO: Copy defender's types to attacker (defenderSpeciesReflect.types)
+		return true;
+
+	case 'conversion':
+		if (attacker.moves.length === 0) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const firstMoveType = getMove(attacker.moves[0].id).type;
+		messageLog.push(`${attacker.species} transformed into the ${firstMoveType} type!`);
+		// TODO: Change attacker's type to match first move
+		return true;
+
+	case 'forestscurse':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		messageLog.push(`${defender.species} was afflicted with the Grass type!`);
+		// TODO: Add Grass type to defender
+		return true;
+
+	case 'trickortreat':
+		if (!defender) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		messageLog.push(`${defender.species} was afflicted with the Ghost type!`);
+		// TODO: Add Ghost type to defender
+		return true;
+
+	case 'burnup':
+		const attackerSpeciesBurnup = Dex.species.get(attacker.species);
+		if (!attackerSpeciesBurnup.types.includes('Fire')) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		messageLog.push(`${attacker.species} burned itself out!`);
+		// TODO: Remove Fire type from attacker
+		return false; // Return false so damage is still calculated
 	}
 
 	return false;
