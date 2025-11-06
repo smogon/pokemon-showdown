@@ -234,7 +234,7 @@ export const chatfilter = async function (message, user, room, connection, pmTar
 
 export const commands: Chat.ChatCommands = {
 	emoticon: {
-		async add(target, room, user): Promise<void> {
+		async add(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
@@ -250,7 +250,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|Emoticon ${Chat.escapeHTML(name)} added: <img src="${url}" width="40" height="40">`);
 		},
 
-		async delete(target, room, user): Promise<void> {
+		async delete(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
@@ -263,7 +263,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Emoticon removed.");
 		},
 
-		toggle(target, room, user): void {
+		toggle(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('roommod');
 			room.disableEmoticons = !room.disableEmoticons;
@@ -272,7 +272,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(`(${user.name} ${action.toLowerCase()} emoticons.)`);
 		},
 
-		''(target, room, user): void {
+		''(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const emoteKeys = Object.keys(emoticons);
 			if (emoteKeys.length === 0) return this.sendReplyBox('No emoticons available.');
@@ -290,19 +290,19 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
-		async ignore(target, room, user): Promise<void> {
+		async ignore(target, room, user) {
 			if ((await getIgnoreEmotes())[user.id]) return this.errorReply('Already ignoring emoticons.');
 			await ignoreEmote(user.id);
 			this.sendReply('Ignoring emoticons. Note: Chat history may still show emoticons when rejoining.');
 		},
 
-		async unignore(target, room, user): Promise<void> {
+		async unignore(target, room, user) {
 			if (!(await getIgnoreEmotes())[user.id]) return this.errorReply('Not ignoring emoticons.');
 			await unignoreEmote(user.id);
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
-		async size(target, room, user): Promise<void> {
+		async size(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.errorReply('Specify a size (16-256).');
 
@@ -314,7 +314,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Emoticon size set to ${size}px.`);
 		},
 
-		async info(target, room, user): Promise<void> {
+		async info(target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /emoticon info <name>');
 
@@ -331,19 +331,19 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
-		clearcache(target, room, user): void {
+		clearcache(target, room, user) {
 			this.checkCan('roomowner');
 			clearEmoticonCache();
 			this.sendReplyBox("Emoticon cache cleared.");
 		},
 
-		async loadcache(target, room, user): Promise<void> {
+		async loadcache(target, room, user) {
 			this.checkCan('roomowner');
 			await loadEmoticonCache();
 			this.sendReplyBox("Emoticon cache loaded from disk.");
 		},
 
-		cachestats(target, room, user): void {
+		cachestats(target, room, user) {
 			this.checkCan('roomowner');
 			const stats = getEmoticonCacheStats();
 			const html =
@@ -360,7 +360,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
-		help(): void {
+		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/emoticon", desc: "Shows all emoticons" },

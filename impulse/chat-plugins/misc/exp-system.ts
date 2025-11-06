@@ -254,7 +254,7 @@ export const pages: Chat.PageTable = {
 export const commands: Chat.ChatCommands = {
 	exp: {
 		'': 'level',
-		async level(target, room, user): Promise<void> {
+		async level(target, room, user) {
 			if (!target) target = user.name;
 			if (!this.runBroadcast()) return;
 			const userid = toID(target);
@@ -270,7 +270,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 
-		async give(target, room, user): Promise<void> {
+		async give(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.sendReply(`Usage: /exp give [user], [amount], [reason]`);
 			const parts = target.split(',').map(p => p.trim());
@@ -307,7 +307,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async take(target, room, user): Promise<void> {
+		async take(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.sendReply(`Usage: /exp take [user], [amount], [reason]`);
 			const parts = target.split(',').map(p => p.trim());
@@ -344,7 +344,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async reset(target, room, user): Promise<void> {
+		async reset(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.sendReply(`Usage: /exp reset [user], [reason]`);
 			const parts = target.split(',').map(p => p.trim());
@@ -369,7 +369,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async resetall(target, room, user): Promise<void> {
+		async resetall(target, room, user) {
 			this.checkCan('bypassall');
 			const reason = target.trim() || 'No reason specified.';
 			await ExpSystem.resetAllExp();
@@ -389,7 +389,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		toggledouble(target, room, user): void {
+		toggledouble(target, room, user) {
 			this.checkCan('roomowner');
 
 			if (!target) {
@@ -422,25 +422,25 @@ export const commands: Chat.ChatCommands = {
 			setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 		},
 
-		ladder(target, room, user): void {
+		ladder(target, room, user) {
 			if (!this.runBroadcast()) return;
 			return this.parse(`/join view-expladder`);
 		},
 
-		clearcache(target, room, user): void {
+		clearcache(target, room, user) {
 			this.checkCan('roomowner');
 			expCache = {};
 			cacheDirty = true;
 			this.sendReplyBox("Exp cache cleared.");
 		},
 
-		async loadcache(target, room, user): Promise<void> {
+		async loadcache(target, room, user) {
 			this.checkCan('roomowner');
 			await ExpSystem.loadCache();
 			this.sendReplyBox("Exp cache loaded from disk.");
 		},
 
-		cachestats(target, room, user): void {
+		cachestats(target, room, user) {
 			this.checkCan('roomowner');
 			const html =
 				`<strong>Exp Cache Stats:</strong><br>` +
@@ -449,13 +449,13 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
-		async flush(target, room, user): Promise<void> {
+		async flush(target, room, user) {
 			this.checkCan('roomowner');
 			await ExpSystem.flushNow();
 			this.sendReplyBox("Exp cache flushed to disk.");
 		},
 
-		help(target, room, user): void {
+		help(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{

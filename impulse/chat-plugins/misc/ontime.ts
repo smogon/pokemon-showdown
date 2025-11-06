@@ -174,7 +174,7 @@ export const handlers: Chat.Handlers = {
 export const commands: Chat.ChatCommands = {
 	ontime: {
 		'': 'check',
-		async check(target, room, user): Promise<void> {
+		async check(target, room, user) {
 			if (!this.runBroadcast()) return;
 
 			const targetId = toID(target) || user.id;
@@ -202,7 +202,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		async ladder(target, room, user): Promise<void> {
+		async ladder(target, room, user) {
 			if (!this.runBroadcast()) return;
 
 			const blockedUsers = await getBlockedOntimeUsers();
@@ -239,7 +239,7 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply(`|raw|${tableHTML}`);
 		},
 
-		help(): void {
+		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/ontime [user]", desc: "Check user's online time." },
@@ -259,7 +259,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
-		async block(target, room, user): Promise<void> {
+		async block(target, room, user) {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to block.");
@@ -273,7 +273,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
 		},
 
-		async unblock(target, room, user): Promise<void> {
+		async unblock(target, room, user) {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to unblock.");
@@ -290,7 +290,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
 		},
 
-		async blocked(target, room, user): Promise<void> {
+		async blocked(target, room, user) {
 			this.checkCan('roomowner');
 			const blockedUsers = await getBlockedOntimeUsers();
 			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
@@ -299,17 +299,17 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
-		async clearcache(target, room, user): Promise<void> {
+		async clearcache(target, room, user) {
 			this.checkCan('roomowner');
 			clearOntimeCache();
 			this.sendReplyBox("Ontime cache cleared.");
 		},
-		async loadcache(target, room, user): Promise<void> {
+		async loadcache(target, room, user) {
 			this.checkCan('roomowner');
 			await loadOntimeCache();
 			this.sendReplyBox("Ontime cache loaded from disk.");
 		},
-		cachestats(target, room, user): void {
+		cachestats(target, room, user) {
 			this.checkCan('roomowner');
 			const stats = getOntimeCacheStats();
 			const html = `<strong>Ontime Cache Stats:</strong><br>Loaded: <b>${stats.loaded}</b><br>Records: <b>${stats.count}</b><br>Last update: <b>${stats.lastUpdate ? new Date(stats.lastUpdate).toLocaleString() : 'Never'}</b>`;

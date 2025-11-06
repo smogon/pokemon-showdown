@@ -111,7 +111,7 @@ export const commands: Chat.ChatCommands = {
 	servernews: {
 		'': 'view',
 		display: 'view',
-		async view(target, room, user): Promise<void> {
+		async view(target, room, user) {
 			const news = await NewsManager.generateNewsDisplay();
 			const output = news.length ?
 				`<center><strong>Server News:</strong></center>${news.join('<hr>')}` :
@@ -120,7 +120,7 @@ export const commands: Chat.ChatCommands = {
 			user.send(`|popup||html|<div class="infobox">${output}</div>`);
 		},
 
-		async add(target, room, user): Promise<void> {
+		async add(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
@@ -132,7 +132,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Added: "${title}"`);
 		},
 
-		async update(target, room, user): Promise<void> {
+		async update(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
@@ -145,7 +145,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		remove: 'delete',
-		async delete(target, room, user): Promise<void> {
+		async delete(target, room, user) {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
@@ -156,7 +156,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Deleted: "${target}"`);
 		},
 
-		async cleanup(target, room, user): Promise<void> {
+		async cleanup(target, room, user) {
 			this.checkCan('bypassall');
 			const days = Math.max(parseInt(target) || 90, 1);
 
@@ -167,7 +167,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	svn: 'servernews',
 
-	servernewshelp(): void {
+	servernewshelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{ cmd: "/servernews view", desc: "View the latest 3 server news." },
