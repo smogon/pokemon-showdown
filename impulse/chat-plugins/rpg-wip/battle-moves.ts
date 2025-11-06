@@ -1341,7 +1341,6 @@ export function handleSpecificStatusMove(
 			const oldHp = attacker.hp;
 			attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 			messageLog.push(`${attacker.species} landed and restored ${attacker.hp - oldHp} HP!`);
-			// TODO: Temporarily remove Flying type (would need type tracking in slot)
 		}
 		return true;
 
@@ -1436,18 +1435,6 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-	case 'healingwish':
-		attacker.hp = 0;
-		messageLog.push(`${attacker.species} fainted to grant a healing wish!`);
-		// TODO: Mark next Pokemon to be fully healed when switched in
-		return true;
-
-	case 'lunardance':
-		attacker.hp = 0;
-		messageLog.push(`${attacker.species} fainted and will fully restore the next Pokemon!`);
-		// TODO: Mark next Pokemon to be fully healed (HP/PP/status) when switched in
-		return true;
-
 	case 'endeavor':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
@@ -1462,22 +1449,6 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
 		return true;
 
-	case 'metronome':
-		// TODO: Pick and execute random move
-		messageLog.push(`${attacker.species} wagged its finger!`);
-		messageLog.push(`(Metronome not fully implemented yet)`);
-		return true;
-
-	case 'sleeptalk':
-		if (attackerSlot.status !== 'slp') {
-			messageLog.push(`But it failed! (${attacker.species} is not asleep)`);
-			return true;
-		}
-		// TODO: Pick and execute random move from Pokemon's moveset
-		messageLog.push(`${attacker.species} used a move in its sleep!`);
-		messageLog.push(`(Sleep Talk not fully implemented yet)`);
-		return true;
-
 	case 'fakeout':
 		if (attackerSlot.activeTurns > 1) {
 			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
@@ -1488,69 +1459,6 @@ export function handleSpecificStatusMove(
 		}
 		return false; // Return false so damage is still calculated
 
-	case 'suckerpunch':
-		// Check if target is using a damaging move
-		// This would need to be checked in battle flow before moves execute
-		// For now, we'll let it work normally
-		return false; // Return false so damage is still calculated
-
-	case 'soak':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		// Change target to pure Water type
-		messageLog.push(`${defender.species} transformed into the Water type!`);
-		// TODO: Implement type changing in battle slot
-		return true;
-
-	case 'reflecttype':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		// const defenderSpeciesReflect = Dex.species.get(defender.species);
-		messageLog.push(`${attacker.species} became the same type as ${defender.species}!`);
-		// TODO: Copy defender's types to attacker (defenderSpeciesReflect.types)
-		return true;
-
-	case 'conversion':
-		if (attacker.moves.length === 0) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const firstMoveType = getMove(attacker.moves[0].id).type;
-		messageLog.push(`${attacker.species} transformed into the ${firstMoveType} type!`);
-		// TODO: Change attacker's type to match first move
-		return true;
-
-	case 'forestscurse':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		messageLog.push(`${defender.species} was afflicted with the Grass type!`);
-		// TODO: Add Grass type to defender
-		return true;
-
-	case 'trickortreat':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		messageLog.push(`${defender.species} was afflicted with the Ghost type!`);
-		// TODO: Add Ghost type to defender
-		return true;
-
-	case 'burnup':
-		const attackerSpeciesBurnup = Dex.species.get(attacker.species);
-		if (!attackerSpeciesBurnup.types.includes('Fire')) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		messageLog.push(`${attacker.species} burned itself out!`);
-		// TODO: Remove Fire type from attacker
-		return false; // Return false so damage is still calculated
 	}
 
 	return false;
