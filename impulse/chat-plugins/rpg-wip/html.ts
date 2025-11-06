@@ -146,7 +146,7 @@ export function generateSharedBattlePokemonInfo(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
-		expBarHTML = `EXP: ${pokemon.experience} / ${pokemon.expToNextLevel}<br>`;
+		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -220,12 +220,13 @@ export function generateSharedBattlePokemonInfo(
 		// --- THIS IS THE FIX ---
 		// Removed the wrapper div from this return statement.
 		return `<psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol}<br>Lvl ${pokemon.level}<br>` +
+			`<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div></div>` +
 			`${expBarHTML}` +
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}`;
 	} else {
 		const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br>HP: ${pokemon.hp}/${pokemon.maxHp}<br>${isPlayerSide ? expBarHTML : ''}</div>`;
+		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
 	}
 }
 
@@ -321,10 +322,11 @@ export function generatePokemonInfoHTML(
 	// Add the rest of the Pokemon info
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
 	
-	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br>HP: ${pokemon.hp}/${pokemon.maxHp}<br>`;
+	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
 
 	// --- Conditional info for player Pokemon only ---
 	if (isPlayerSide) {
+		html += `${expBarHTML}`;
 		html += `EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>`;
 		html += `Nature: ${pokemon.nature}<br>`;
 		html += `Ability: ${pokemon.ability || 'Unknown'}<br>`;
@@ -360,15 +362,43 @@ export function generateSingleBattleHTML(
 
 	const playerPokemon = playerSlot.pokemon;
 
-	// Check for field effects
-	const effectsList = generateFieldEffectHTML(battle);
-	let fieldEffectsBoxHTML = '';
-	if (effectsList !== '<em>Clear</em>') {
-		fieldEffectsBoxHTML = `<hr style="margin: 3px 0;" />` +
-			`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
-			`<strong>Field Effects:</strong><br><div style="text-align: center;">${effectsList}</div>` +
-			`</div>`;
-	}
+	// Helper function to generate field effects HTML with side-by-side layout
+	const generateFieldEffectsDisplay = () => {
+		const fieldEffectHTML = generateFieldEffectHTML(battle);
+		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+
+		const lines = tempDiv.split('<br>').filter(line => line.trim());
+		let yourSide = '';
+		let field = '';
+		let opponentSide = '';
+		let currentSection = '';
+
+		for (const line of lines) {
+			if (line.includes('Your Side:')) {
+				currentSection = 'your';
+			} else if (line.includes('Field:')) {
+				currentSection = 'field';
+			} else if (line.includes("Opponent's Side:")) {
+				currentSection = 'opponent';
+			} else {
+				if (currentSection === 'your') {
+					yourSide += line + '<br>';
+				} else if (currentSection === 'field') {
+					field += line + '<br>';
+				} else if (currentSection === 'opponent') {
+					opponentSide += line + '<br>';
+				}
+			}
+		}
+
+		return `<table style="width: 100%; border-collapse: collapse;">` +
+			`<tr>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>${yourSide || 'Clear'}</td>` +
+			`<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>${field || 'Clear'}</td>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent's Side:</strong><br>${opponentSide || 'Clear'}</td>` +
+			`</tr>` +
+			`</table>`;
+	};
 
 	let actionHTML = '';
 	let moveButtonsHTML = '';
@@ -465,7 +495,10 @@ export function generateSingleBattleHTML(
 		`</td>` +
 		`</tr>` +
 		`</table>` +
-		`${fieldEffectsBoxHTML}` + // <-- Conditionally rendered field effects
+		`<hr style="margin: 3px 0;" />` +
+		`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
+		`</div>` +
 		`<hr style="margin: 3px 0;" />` +
 		`<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>` +
 		actionHTML +
@@ -500,15 +533,43 @@ export function generateDoubleBattleHTML(
 		return `<div style="border: ${borderStyle}; padding: 10px; margin: 5px; border-radius: 5px;">${generateSharedBattlePokemonInfo(slot, side === 'player', true)}</div>`;
 	};
 
-	// Check for field effects
-	const effectsList = generateFieldEffectHTML(battle);
-	let fieldEffectsBoxHTML = '';
-	if (effectsList !== '<em>Clear</em>') {
-		fieldEffectsBoxHTML = `<hr style="margin: 5px 0;" />` +
-			`<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
-			`<strong>Field Effects:</strong><br><div style="text-align: center;">${effectsList}</div>` +
-			`</div>`;
-	}
+	// Helper function to generate field effects HTML with side-by-side layout
+	const generateFieldEffectsDisplay = () => {
+		const fieldEffectHTML = generateFieldEffectHTML(battle);
+		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+
+		const lines = tempDiv.split('<br>').filter(line => line.trim());
+		let yourSide = '';
+		let field = '';
+		let opponentSide = '';
+		let currentSection = '';
+
+		for (const line of lines) {
+			if (line.includes('Your Side:')) {
+				currentSection = 'your';
+			} else if (line.includes('Field:')) {
+				currentSection = 'field';
+			} else if (line.includes("Opponent's Side:")) {
+				currentSection = 'opponent';
+			} else {
+				if (currentSection === 'your') {
+					yourSide += line + '<br>';
+				} else if (currentSection === 'field') {
+					field += line + '<br>';
+				} else if (currentSection === 'opponent') {
+					opponentSide += line + '<br>';
+				}
+			}
+		}
+
+		return `<table style="width: 100%; border-collapse: collapse;">` +
+			`<tr>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>${yourSide || 'Clear'}</td>` +
+			`<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>${field || 'Clear'}</td>` +
+			`<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent's Side:</strong><br>${opponentSide || 'Clear'}</td>` +
+			`</tr>` +
+			`</table>`;
+	};
 
 	let html = `<div class="infobox"><h2>Battle! (${battle.battleType})</h2>`;
 
@@ -538,8 +599,13 @@ export function generateDoubleBattleHTML(
 	html += `</tr>`;
 	html += `</table>`;
 
-	html += `${fieldEffectsBoxHTML}`; // <-- Conditionally rendered field effects
 	html += `<hr style="margin: 5px 0;" />`;
+
+	// --- Field Effects (Side by Side) ---
+	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 40px; border-radius: 5px; font-size: 12px;">` +
+		`<strong>Field Effects:</strong><br>${generateFieldEffectsDisplay()}` +
+		`</div>` +
+		`<hr style="margin: 5px 0;" />`;
 
 	// --- Message Log ---
 	html += `<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">${messageLog.join('<br>')}</div>`;
@@ -717,59 +783,85 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 }
 
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
+	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	const movesSummary = pokemon.moves.map(move => {
 		const moveData = getMove(move.id);
-		// @ts-ignore - TYPE_CHART is not typed to have color, but we assume it does.
-		const typeColor = TYPE_CHART[moveData.type]?.color || '#68A090'; // Get type color, default to Normal
-		return '<div style="border: 1px solid #ccc; padding: 5px 8px; border-radius: 5px; background: #f9f9f9;">' +
-			`<div style="font-weight: bold; color: ${typeColor};">${moveData.name}</div>` +
-			`<div style="font-size: 0.9em;"><small>${moveData.type} | ${moveData.category}</small></div>` +
-			'<div style="font-size: 0.9em;"><small>PP: ' + move.pp + '/' + moveData.pp + '</small></div>' +
+		return '<div style="text-align: center; padding: 5px; border-radius: 5px;">' +
+			moveData.name +
+			'<br><small>PP: ' + move.pp + '/' + moveData.pp + '</small>' +
 			'</div>';
 	}).join('');
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
-	// Add max-height and overflow-y to the main infobox div
-	return '<div class="infobox" style="max-height: 360px; overflow-y: auto;">' +
-		// Header
-		'<h2>' + pokemon.nickname + ' ' + shinySymbol + '</h2>' +
-		'<p style="margin-top: -10px; margin-bottom: 10px;"><strong>' + pokemon.species + '</strong> ' + genderSymbol + ' | Lvl ' + pokemon.level + '</p>' +
-		
-		'<div style="display: flex; justify-content: space-between; gap: 15px;">' +
-			
-			// --- Column 1: Info & Stats ---
-			'<div style="flex-basis: 48%;">' +
-				'<h4>Info</h4>' +
-				'<p style="margin: 3px 0;"><strong style="min-width: 60px; display: inline-block;">Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
-				'<p style="margin: 3px 0;"><strong style="min-width: 60px; display: inline-block;">Nature:</strong> ' + pokemon.nature + '</p>' +
-				'<p style="margin: 3px 0;"><strong style="min-width: 60px; display: inline-block;">Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
-				'<p style="margin: 3px 0;"><strong style="min-width: 60px; display: inline-block;">Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
-				
-				'<h4 style="margin-top: 15px;">Stats</h4>' +
-				'<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">' +
-				'<tr><td style="padding: 3px; border-bottom: 1px solid #eee;">HP</td><td style="padding: 3px; border-bottom: 1px solid #eee; text-align: right;">' + pokemon.hp + '/' + pokemon.maxHp + '</td></tr>' +
-				'<tr><td style="padding: 3px; border-bottom: 1px solid #eee;">Attack</td><td style="padding: 3px; border-bottom: 1px solid #eee; text-align: right;">' + pokemon.atk + '</td></tr>' +
-				'<tr><td style="padding: 3px; border-bottom: 1px solid #eee;">Defense</td><td style="padding: 3px; border-bottom: 1px solid #eee; text-align: right;">' + pokemon.def + '</td></tr>' +
-				'<tr><td style="padding: 3px; border-bottom: 1px solid #eee;">Sp. Atk</td><td style="padding: 3px; border-bottom: 1px solid #eee; text-align: right;">' + pokemon.spa + '</td></tr>' +
-				'<tr><td style="padding: 3px; border-bottom: 1px solid #eee;">Sp. Def</td><td style="padding: 3px; border-bottom: 1px solid #eee; text-align: right;">' + pokemon.spd + '</td></tr>' +
-				'<tr><td style="padding: 3px;">Speed</td><td style="padding: 3px; text-align: right;">' + pokemon.spe + '</td></tr>' +
-				'</table>' +
-			'</div>' +
-			
-			// --- Column 2: Moves ---
-			'<div style="flex-basis: 48%;">' +
-				'<h4>Moves</h4>' +
-				'<div style="display: grid; grid-template-columns: 1fr; gap: 8px;">' +
-					movesSummary +
-				'</div>' +
-			'</div>' +
-
+	return '<div class="infobox">' +
+		'<h2>' + pokemon.nickname + '\'s Summary ' + shinySymbol + '</h2>' +
+		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'<div style="flex-basis: 48%;">' +
+		'<p><strong>Species:</strong> ' + pokemon.species + ' ' + genderSymbol + '</p>' +
+		'<p><strong>Level:</strong> ' + pokemon.level + '</p>' +
+		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
+		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
+		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
+		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
 		'</div>' +
-		
-		// Footer Button
-		'<p style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>Stats</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.maxHp + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.atk + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.def + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.spa + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.spd + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.spe + '</td></tr>' +
+		'</table>' +
+		'</div>' +
+		'</div>' +
+		'<hr />' +
+		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>Trainer Memo</h4>' +
+		'<p><strong>ID:</strong> ' + pokemon.id + '</p>' +
+		'<p><strong>Caught In:</strong> ' + (ITEMS_DATABASE[pokemon.caughtIn]?.name || 'a Ball') + '</p>' +
+		'<p><strong>Height:</strong> ' + pokemon.heightm + ' m</p>' +
+		'<p><strong>Weight:</strong> ' + pokemon.weightkg + ' kg</p>' +
+		'<p><strong>Friendship:</strong> ' + pokemon.friendship + '/255</p>' +
+		'</div>' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>IVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.hp + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.atk + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.def + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spa + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spd + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.ivs.spe + '</td></tr>' +
+		'</table>' +
+		'</div>' +
+		'</div>' +
+		'<hr />' +
+		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>EVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.hp + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.atk + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.def + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spa + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spd + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + pokemon.evs.spe + '</td></tr>' +
+		'</table>' +
+		'<small>Total: ' + totalEVs + ' / 510</small>' +
+		'</div>' +
+		'<div style="flex-basis: 48%;">' +
+		'<h4>Moves</h4>' +
+		'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
+		movesSummary +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
 		'</div>';
 }
 
@@ -929,7 +1021,7 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 
 		html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">` +
 			`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
-			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp}<br>` +
+			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
 			`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
 			`</div>`;
 	}
@@ -1107,9 +1199,10 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 }
 
 export function generateFieldEffectHTML(battle: BattleState): string {
-	// This function now just returns the string of global field effects,
-	// not the full HTML wrapper. The wrapper is applied in the battle HTML functions.
+	let html = '<div style="border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
 	const fieldEffects: string[] = [];
+	const playerSide: string[] = [];
+	const opponentSide: string[] = [];
 
 	// --- Global Field Effects ---
 	if (battle.weather) {
@@ -1127,16 +1220,41 @@ export function generateFieldEffectHTML(battle: BattleState): string {
 	if (battle.mudSportTurns > 0) fieldEffects.push(`💩 <strong>Mud Sport</strong> (${battle.mudSportTurns} turns)`);
 	if (battle.waterSportTurns > 0) fieldEffects.push(`💧 <strong>Water Sport</strong> (${battle.waterSportTurns} turns)`);
 
-	// --- Player Side Effects (REMOVED as per request) ---
+	// --- Player Side Effects ---
+	if (battle.playerReflectTurns > 0) playerSide.push(`🛡️ Reflect (${battle.playerReflectTurns})`);
+	if (battle.playerLightScreenTurns > 0) playerSide.push(`💡 Light Screen (${battle.playerLightScreenTurns})`);
+	if (battle.playerAuroraVeilTurns > 0) playerSide.push(`🌈 Aurora Veil (${battle.playerAuroraVeilTurns})`);
+	if (battle.playerQuickGuard) playerSide.push(`💨 Quick Guard`);
+	if (battle.playerWideGuard) playerSide.push(`🛡️ Wide Guard`);
+	if (battle.playerCraftyShield) playerSide.push(`✨ Crafty Shield`);
+	if (battle.playerHazards.includes('stealthrock')) playerSide.push(`💎 Stealth Rock`);
+	const spikes = battle.playerHazards.filter(h => h === 'spikes').length;
+	if (spikes > 0) playerSide.push(`📌 Spikes (x${spikes})`);
+	const toxicSpikes = battle.playerHazards.filter(h => h === 'toxicspikes').length;
+	if (toxicSpikes > 0) playerSide.push(`☠️ Toxic Spikes (x${toxicSpikes})`);
+	if (battle.playerHazards.includes('stickyweb')) playerSide.push(`🕸️ Sticky Web`);
 
-	// --- Opponent Side Effects (REMOVED as per request) ---
+	// --- Opponent Side Effects ---
+	if (battle.opponentReflectTurns > 0) opponentSide.push(`🛡️ Reflect (${battle.opponentReflectTurns})`);
+	if (battle.opponentLightScreenTurns > 0) opponentSide.push(`💡 Light Screen (${battle.opponentLightScreenTurns})`);
+	if (battle.opponentAuroraVeilTurns > 0) opponentSide.push(`🌈 Aurora Veil (${battle.opponentAuroraVeilTurns})`);
+	if (battle.opponentQuickGuard) opponentSide.push(`💨 Quick Guard`);
+	if (battle.opponentWideGuard) opponentSide.push(`🛡️ Wide Guard`);
+	if (battle.opponentCraftyShield) opponentSide.push(`✨ Crafty Shield`);
+	if (battle.opponentHazards.includes('stealthrock')) opponentSide.push(`💎 Stealth Rock`);
+	const oppSpikes = battle.opponentHazards.filter(h => h === 'spikes').length;
+	if (oppSpikes > 0) opponentSide.push(`📌 Spikes (x${oppSpikes})`); // Corrected variable name
+	const oppToxicSpikes = battle.opponentHazards.filter(h => h === 'toxicspikes').length;
+	if (oppToxicSpikes > 0) opponentSide.push(`☠️ Toxic Spikes (x${oppToxicSpikes})`);
+	if (battle.opponentHazards.includes('stickyweb')) opponentSide.push(`🕸️ Sticky Web`);
 
 	// --- Assemble HTML ---
-	if (fieldEffects.length > 0) {
-		return fieldEffects.join('<br>');
-	} else {
-		return '<em>Clear</em>';
-	}
+	html += `<div><strong>Your Side:</strong><br>${playerSide.length > 0 ? playerSide.join('<br>') : '<em>Clear</em>'}</div>`;
+	html += `<div><strong>Field:</strong><br>${fieldEffects.length > 0 ? fieldEffects.join('<br>') : '<em>Clear</em>'}</div>`;
+	html += `<div><strong>Opponent's Side:</strong><br>${opponentSide.length > 0 ? opponentSide.join('<br>') : '<em>Clear</em>'}</div>`;
+
+	html += '</div>';
+	return html;
 }
 
 export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string, itemId: string): string {
