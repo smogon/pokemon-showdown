@@ -6,7 +6,7 @@ export const MANUAL_LEARNSETS = {
 		levelup: [
 			{ level: 1, move: 'tackle' },
 			{ level: 1, move: 'growl' },
-			{ level: 1, move: 'shadowstrike' },
+			{ level: 1, move: 'sunnyday' },
 			{ level: 3, move: 'leechseed' },
 			{ level: 6, move: 'vinewhip' },
 			{ level: 9, move: 'poisonpowder' },
@@ -98,9 +98,9 @@ export const MANUAL_LEARNSETS = {
 	squirtle: {
 		levelup: [
 			{ level: 1, move: 'tackle' },
-			{ level: 1, move: 'tailwhip' },
-			{ level: 3, move: 'flipturn' },
-			{ level: 4, move: 'withdraw' },
+			{ level: 1, move: 'raindance' },
+			{ level: 3, move: 'hail' },
+			{ level: 4, move: 'flipturn' },
 			{ level: 8, move: 'bubble' },
 			{ level: 13, move: 'bite' },
 			{ level: 19, move: 'bubblebeam' },
