@@ -1237,6 +1237,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
+
 			// --- NEW FUNCTION ---
 			selecttarget(target, room, user) {
 				const battle = activeBattles.get(user.id);
@@ -1267,10 +1268,17 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				// Re-render the UI in "target selection" mode
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
+				// --- THIS IS THE FIX ---
+				// The third argument must be the uiState ('main').
+				// The fourth argument is the targetSelection object.
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(
+					battle, 
+					[shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], 
+					'main', // <-- Explicitly pass 'main' as the uiState
+					{ attackerSlotIndex, moveId, shouldTerastallize } // <-- Pass targetSelection as the 4th arg
+				)}`);
+				// --- END FIX ---
 			},
-			// --- END NEW FUNCTION ---
 
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
@@ -1640,9 +1648,41 @@ export const commands: ChatCommands = {
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
-					// --- FIX: Call the router function with no targetSelection ---
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
 				}
+			},
+
+			uistate(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// This command is only for single battles, which use the new UI
+				if (battle.battleType !== 'wild' && battle.battleType !== 'trainer') {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["This action is not available in this battle."])}`);
+				}
+
+				const newState = toID(target) as 'main' | 'fight' | 'fight-tera';
+                
+				if (newState !== 'main' && newState !== 'fight' && newState !== 'fight-tera') {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid UI state."], 'main')}`);
+				}
+
+				// If going to 'fight-tera', validate terastallization
+				if (newState === 'fight-tera') {
+					const playerSlot = battle.playerSlots[0]; // Single battle slot
+					if (!playerSlot) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid player slot."], 'main')}`);
+					}
+					if (battle.playerTerastallizeUsed) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"], 'main')}`);
+					}
+					if (playerSlot.terastallized) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${playerSlot.pokemon.species} has already Terastallized!`], 'main')}`);
+					}
+				}
+
+				// Re-render the UI with the new state
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], newState)}`);
 			},
 
 			help() {
