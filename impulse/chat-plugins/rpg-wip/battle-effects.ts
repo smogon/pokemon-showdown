@@ -27,21 +27,29 @@ import {
 import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
+import { RPGMoves } from './battle-moves';
 
-// Import functions from battle-core that are used in this file
+// --- UPDATED IMPORTS ---
+// Import shared helpers from battle-shared.ts
 import {
 	activateUnburden,
 	applySynchronize,
 	applyStatChange,
 	checkMentalHerb,
+	handleHPDropEffects,
+	INITIAL_STAT_STAGES,
+} from './battle-shared';
+
+// Import core functions from battle-core.ts
+import {
 	gainExperience,
 	getCustomEffectiveness,
 	getStatMultiplier,
 	handleDamagingMove,
-	handleHPDropEffects,
 	handleStatusMove,
 	saveBattleStatus,
 } from './battle-core';
+// --- END UPDATED IMPORTS ---
 
 export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0) return;
@@ -1166,13 +1174,11 @@ export function getAccuracyEvasionMultiplier(stage: number): number {
 	return 1;
 }
 
-export const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-
 export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 	const ability = toID(pokemon.ability || '');
 	return {
 		pokemon,
-		statStages: { ...INITIAL_STAT_STAGES },
+		statStages: { ...INITIAL_STAT_STAGES }, // --- Uses imported constant ---
 		status: pokemon.status,
 		sleepCounter: 0,
 		isConfused: false,
@@ -1598,48 +1604,6 @@ export function resolveMoveTarget(
 	return finalTargetIndex;
 }
 
-export function handleChargingMove(
-	attackerSlot: ActivePokemonSlot,
-	move: Move,
-	moveObject: { id: string, pp: number },
-	battle: BattleState,
-	messageLog: string[],
-	ppDeduction: number
-): boolean {
-	if (move.flags.charge && !attackerSlot.chargingMove) {
-		attackerSlot.chargingMove = move.id;
-		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
-
-		if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
-		else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
-		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
-		else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
-		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
-		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
-			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
-				attackerSlot.chargingMove = undefined;
-				chargeMessage = '';
-			} else {
-				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
-			}
-		} else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
-		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
-
-		if (chargeMessage) messageLog.push(chargeMessage);
-
-		if (attackerSlot.chargingMove) {
-			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
-				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
-			}
-			return true;
-		}
-	} else if (attackerSlot.chargingMove === move.id) {
-		attackerSlot.chargingMove = undefined;
-	}
-
-	return false;
-}
-
 export function executeAction(
 	action: NonNullable<BattleState['pendingActions'][number]>,
 	battle: BattleState,
@@ -1699,7 +1663,7 @@ export function executeAction(
 			ppDeduction = 2;
 		}
 
-		if (handleChargingMove(attackerSlot, move, moveObject, battle, messageLog, ppDeduction)) {
+		if (RPGMoves.handleChargingMove(attackerSlot, move, moveObject, battle, messageLog, ppDeduction)) {
 			return;
 		}
 
