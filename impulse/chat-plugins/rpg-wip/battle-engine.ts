@@ -4,7 +4,8 @@
 *
 * This file re-exports all battle-related functionality from:
 * - battle-core.ts: Core battle mechanics, damage calculation
-* - battle-effects.ts: End-of-turn effects, status effects, battle flow
+* - battle-flow.ts: Turn processing, action execution, and battle state
+* - battle-eot.ts: End-of-turn effects, status effects, battle flow
 * - battle-moves.ts: Specific logic for individual move effects
 * - battle-shared.ts: Shared helper functions used by all battle files
 *
@@ -15,8 +16,11 @@
 // Re-export everything from battle-core
 export * from './battle-core';
 
-// Re-export everything from battle-effects
-export * from './battle-effects';
+// Re-export everything from battle-flow
+export * from './battle-flow';
+
+// Re-export everything from battle-eot
+export * from './battle-eot';
 
 // Re-export everything from battle-moves
 export * from './battle-moves';
