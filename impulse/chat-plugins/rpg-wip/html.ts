@@ -127,7 +127,6 @@ export function generateUnstuckHTML(): string {
 	return `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 }
 
-// --- END INLINE HTML FUNCTIONS ---
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -207,39 +206,39 @@ export function generateSharedBattlePokemonInfo(
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
+	// --- HP Bar (15px height) ---
+	const hpBarHTML =
+		'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+			'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
+			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 10px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
+				hpPercentage + '%' +
+			'</span>' +
+		'</div>';
+	
+	// --- Pokemon Sprite ---
+	const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
+	const spriteHTML = 
+		'<div style="text-align: center; margin-top: 4px;">' + // Centering container
+			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
+		'</div>';
+
+	// --- Status tags ---
+	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
+	const statusDisplay = allStatusTags || '&nbsp;'; // Non-breaking space for height
+		
 	if (isDoubleBattle) {
-		let html = '<psicon pokemon="' + pokemon.species + '" style="vertical-align: middle;"></psicon><br><strong>' + (pokemon.nickname || pokemon.species) + '</strong> ' + genderSymbol + ' ' + shinySymbol + '<br>Lvl ' + pokemon.level + '<br>';
-		html += '<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 10px; border-radius: 8px;"></div></div>';
-		// --- EXP BAR REMOVED ---
-		html += 'HP: ' + pokemon.hp + ' / ' + pokemon.maxHp + '<br>';
-		html += '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
+		// --- NEW DOUBLE BATTLE UI ---
+		let html = ''; // Start with an empty string
+		html += '<div style="font-weight: bold; font-size: 1.1em;">';
+		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
+		html += '</div>';
+		html += hpBarHTML;
+		html += spriteHTML; // --- ADDED SPRITE ---
+		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
+		// --- EXP BAR AND PLACEHOLDER REMOVED ---
 		return html;
 	} else {
-		// New layout based on Cramorant screenshot
-		// HP Bar: A container, a bar inside, and an absolutely positioned text label (15px height)
-		const hpBarHTML =
-			'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-				'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
-				'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 10px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
-					hpPercentage + '%' +
-				'</span>' +
-			'</div>';
-
-		// --- NEW: Pokemon Sprite ---
-        const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
-        const spriteHTML = 
-            '<div style="text-align: center; margin-top: 4px;">' + // Centering container
-                '<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
-            '</div>';
-
-		// Status tags go on their own line below the HP bar
-		const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
-
-		// Added a non-breaking space if no status tags, to maintain height
-		const statusDisplay = allStatusTags || '&nbsp;';
-
-		// --- PLACEHOLDER REMOVED ---
-
+		// --- SINGLE BATTLE UI ---
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
 		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
