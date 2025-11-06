@@ -145,7 +145,15 @@ export function generateSharedBattlePokemonInfo(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
-		expBarHTML = '<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ' + expPercentage + '%; height: 8px; border-radius: 8px;"></div></div>';
+		
+		// --- NEW EXP BAR STYLE ---
+		expBarHTML =
+			'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 6px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+				'<div style="background: #6c9be8; width: ' + expPercentage + '%; height: 100%; border-radius: 5px;"></div>' +
+				'<span style="position: absolute; left: 0; right: 0; top: 0; color: #fff; font-size: 9px; font-weight: bold; line-height: 12px; height: 100%; text-shadow: 1px 1px 1px #333;">' +
+					'EXP' +
+				'</span>' +
+			'</div>';
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -225,7 +233,6 @@ export function generateSharedBattlePokemonInfo(
 	} else {
 		// New layout based on Cramorant screenshot
 		// HP Bar: A container, a bar inside, and an absolutely positioned text label
-		// --- FIX: Added margin-left: auto; margin-right: auto; to center the block element ---
 		const hpBarHTML =
 			'<div style="max-width: 120px; height: 18px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
 				'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 8px;"></div>' +
@@ -240,12 +247,18 @@ export function generateSharedBattlePokemonInfo(
 		// Added a non-breaking space if no status tags, to maintain height
 		const statusDisplay = allStatusTags || '&nbsp;';
 
+		// --- NEW: Placeholder for the new EXP bar style ---
+		// It has margin-top: 4px and height: 12px + 2px border = 14px total height.
+		const placeholderExpBar = '<div style="height: 14px; margin-top: 4px;"></div>';
+
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
 		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
 		html += '</div>';
 		html += hpBarHTML;
 		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
+		// --- Use new exp bar or placeholder ---
+		html += isPlayerSide ? expBarHTML : placeholderExpBar;
 		html += '</div>';
 		return html;
 	}
