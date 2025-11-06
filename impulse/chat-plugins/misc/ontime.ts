@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * Ontime Commands
 */
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib/fs';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
@@ -15,9 +15,10 @@ interface OntimeBlockDocument {
 	_id: string;
 }
 
-const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
-const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>('ontimeblocks');
+const ONTIME_DATA_PATH = 'impulse/db/ontime.json';
+const ONTIME_BLOCK_PATH = 'impulse/db/ontimeblocks.json';
 const ONTIME_LEADERBOARD_SIZE = 100;
+const ONTIME_CACHE_TTL_MS = 360 * 60 * 1000; // 6 hours, changeable as needed
 
 const convertTime = (time: number): { h: number, m: number, s: number } => {
 	const s = Math.floor((time / 1000) % 60);
@@ -34,13 +35,117 @@ const displayTime = (t: { h: number, m: number, s: number }): string => {
 	return parts.length ? parts.join(', ') : '0 seconds';
 };
 
+let cachedOntime: OntimeDocument[] | null = null;
+let cachedOntimeBlocks: OntimeBlockDocument[] | null = null;
+let cachedOntimeTimestamp: number = 0;
+let cachedOntimeBlocksTimestamp: number = 0;
+
+async function getOntimeData(): Promise<OntimeDocument[]> {
+	const now = Date.now();
+	if (cachedOntime && (now - cachedOntimeTimestamp < ONTIME_CACHE_TTL_MS)) return cachedOntime;
+	const data = await FS(ONTIME_DATA_PATH).readIfExists();
+	if (!data) {
+		cachedOntime = [];
+		cachedOntimeTimestamp = now;
+		return [];
+	}
+	try {
+		const parsed = JSON.parse(data);
+		if (Array.isArray(parsed)) {
+			cachedOntime = parsed;
+			cachedOntimeTimestamp = now;
+			return parsed;
+		}
+		return [];
+	} catch {
+		return [];
+	}
+}
+
+function setOntimeData(ontime: OntimeDocument[]): void {
+	cachedOntime = ontime;
+	cachedOntimeTimestamp = Date.now();
+}
+
+async function writeOntimeUpdate(): Promise<void> {
+	await FS(ONTIME_DATA_PATH).writeUpdate(() => JSON.stringify(cachedOntime || [], null, 2));
+}
+
+async function getOntimeBlockData(): Promise<OntimeBlockDocument[]> {
+	const now = Date.now();
+	if (cachedOntimeBlocks && (now - cachedOntimeBlocksTimestamp < ONTIME_CACHE_TTL_MS)) return cachedOntimeBlocks;
+	const data = await FS(ONTIME_BLOCK_PATH).readIfExists();
+	if (!data) {
+		cachedOntimeBlocks = [];
+		cachedOntimeBlocksTimestamp = now;
+		return [];
+	}
+	try {
+		const parsed = JSON.parse(data);
+		if (Array.isArray(parsed)) {
+			cachedOntimeBlocks = parsed;
+			cachedOntimeBlocksTimestamp = now;
+			return parsed;
+		}
+		return [];
+	} catch {
+		return [];
+	}
+}
+
+function setOntimeBlockData(blocks: OntimeBlockDocument[]): void {
+	cachedOntimeBlocks = blocks;
+	cachedOntimeBlocksTimestamp = Date.now();
+}
+
+async function writeOntimeBlockUpdate(): Promise<void> {
+	await FS(ONTIME_BLOCK_PATH).writeUpdate(() => JSON.stringify(cachedOntimeBlocks || [], null, 2));
+}
+
 async function isBlockedOntime(userid: string): Promise<boolean> {
-	return !!(await OntimeBlockDB.findOne({ _id: userid }));
+	const blocks = await getOntimeBlockData();
+	return !!blocks.find(b => b._id === userid);
 }
 
 async function getBlockedOntimeUsers(): Promise<string[]> {
-	const docs = await OntimeBlockDB.find({});
+	const docs = await getOntimeBlockData();
 	return docs.map(d => d._id);
+}
+
+function clearOntimeCache(): void {
+	cachedOntime = null;
+	cachedOntimeTimestamp = 0;
+}
+
+async function loadOntimeCache(): Promise<void> {
+	const now = Date.now();
+	const data = await FS(ONTIME_DATA_PATH).readIfExists();
+	if (!data) {
+		cachedOntime = [];
+		cachedOntimeTimestamp = now;
+		return;
+	}
+	try {
+		const parsed = JSON.parse(data);
+		if (Array.isArray(parsed)) {
+			cachedOntime = parsed;
+			cachedOntimeTimestamp = now;
+		} else {
+			cachedOntime = [];
+			cachedOntimeTimestamp = now;
+		}
+	} catch {
+		cachedOntime = [];
+		cachedOntimeTimestamp = now;
+	}
+}
+
+function getOntimeCacheStats(): { loaded: boolean, count: number, lastUpdate: number } {
+	return {
+		loaded: !!cachedOntime,
+		count: Array.isArray(cachedOntime) ? cachedOntime.length : 0,
+		lastUpdate: cachedOntimeTimestamp,
+	};
 }
 
 export const handlers: Chat.Handlers = {
@@ -51,7 +156,15 @@ export const handlers: Chat.Handlers = {
 				if (await isBlockedOntime(user.id)) return;
 				const sessionTime = user.lastDisconnected - user.lastConnected;
 				if (sessionTime > 0) {
-					void OntimeDB.updateOne({ _id: user.id }, { $inc: { ontime: sessionTime } }, { upsert: true });
+					const arr = await getOntimeData();
+					const idx = arr.findIndex(d => d._id === user.id);
+					if (idx >= 0) {
+						arr[idx].ontime += sessionTime;
+					} else {
+						arr.push({ _id: user.id, ontime: sessionTime });
+					}
+					setOntimeData(arr);
+					await writeOntimeUpdate();
 				}
 			})();
 		}
@@ -75,8 +188,9 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(`${nameColor(targetId, true)} is blocked from gaining ontime.`);
 			}
 
-			const ontimeDoc = await OntimeDB.findOne({ _id: targetId });
-			const totalOntime = ontimeDoc?.ontime || 0;
+			const arr = await getOntimeData();
+			const doc = arr.find(d => d._id === targetId);
+			const totalOntime = doc?.ontime || 0;
 
 			if (!totalOntime && !targetUser?.connected) {
 				return this.sendReplyBox(`${nameColor(targetId, true)} has never been online.`);
@@ -94,8 +208,8 @@ export const commands: Chat.ChatCommands = {
 			const blockedUsers = await getBlockedOntimeUsers();
 			const blockedSet = new Set(blockedUsers);
 
-			const ontimeData = await OntimeDB.find({}, { sort: { ontime: -1 }, limit: ONTIME_LEADERBOARD_SIZE * 2 });
-			const ontimeMap = new Map(ontimeData.map(d => [d._id, d.ontime]));
+			const arr = await getOntimeData();
+			const ontimeMap = new Map(arr.map(d => [d._id, d.ontime]));
 
 			for (const u of Users.users.values()) {
 				if (u.connected && u.named && !ontimeMap.has(u.id) && !u.isPublicBot && !blockedSet.has(u.id)) {
@@ -133,6 +247,9 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/ontime block [user]", desc: "Block user from gaining ontime. Requires: &." },
 				{ cmd: "/ontime unblock [user]", desc: "Unblock user from gaining ontime. Requires: &." },
 				{ cmd: "/ontime blocked", desc: "List blocked users. Requires: &." },
+				{ cmd: "/ontime clearcache", desc: "Clear the cached ontime data. Requires: &." },
+				{ cmd: "/ontime loadcache", desc: "Reload ontime cache from disk. Requires: &." },
+				{ cmd: "/ontime cachestats", desc: "Show cache stats for ontime data. Requires: &." },
 			];
 			const html = `<center><strong>Ontime Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
@@ -149,7 +266,10 @@ export const commands: Chat.ChatCommands = {
 			if (await isBlockedOntime(targetId)) {
 				return this.errorReply(`${nameColor(targetId, true)} is already blocked from gaining ontime.`);
 			}
-			await OntimeBlockDB.updateOne({ _id: targetId }, { $set: { _id: targetId } }, { upsert: true });
+			const arr = await getOntimeBlockData();
+			arr.push({ _id: targetId });
+			setOntimeBlockData(arr);
+			await writeOntimeBlockUpdate();
 			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
 		},
 
@@ -160,7 +280,13 @@ export const commands: Chat.ChatCommands = {
 			if (!(await isBlockedOntime(targetId))) {
 				return this.errorReply(`${nameColor(targetId, true)} is not blocked from gaining ontime.`);
 			}
-			await OntimeBlockDB.deleteOne({ _id: targetId });
+			const arr = await getOntimeBlockData();
+			const idx = arr.findIndex(d => d._id === targetId);
+			if (idx >= 0) {
+				arr.splice(idx, 1);
+			}
+			setOntimeBlockData(arr);
+			await writeOntimeBlockUpdate();
 			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
 		},
 
@@ -171,6 +297,23 @@ export const commands: Chat.ChatCommands = {
 			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
 			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
 			this.sendReply(`|html|${tableHTML}`);
+		},
+
+		async clearcache(target, room, user): Promise<void> {
+			this.checkCan('roomowner');
+			clearOntimeCache();
+			this.sendReplyBox("Ontime cache cleared.");
+		},
+		async loadcache(target, room, user): Promise<void> {
+			this.checkCan('roomowner');
+			await loadOntimeCache();
+			this.sendReplyBox("Ontime cache loaded from disk.");
+		},
+		cachestats(target, room, user): void {
+			this.checkCan('roomowner');
+			const stats = getOntimeCacheStats();
+			const html = `<strong>Ontime Cache Stats:</strong><br>Loaded: <b>${stats.loaded}</b><br>Records: <b>${stats.count}</b><br>Last update: <b>${stats.lastUpdate ? new Date(stats.lastUpdate).toLocaleString() : 'Never'}</b>`;
+			this.sendReplyBox(html);
 		},
 	},
 
