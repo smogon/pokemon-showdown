@@ -128,7 +128,6 @@ export function generateUnstuckHTML(): string {
 }
 
 // --- END INLINE HTML FUNCTIONS ---
-
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -225,8 +224,30 @@ export function generateSharedBattlePokemonInfo(
 			`HP: ${pokemon.hp} / ${pokemon.maxHp}<br>` +
 			`${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}`;
 	} else {
-		const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;"><psicon pokemon="${pokemon.species}" style="vertical-align: middle;"></psicon><br><strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>${isPlayerSide ? expBarHTML : ''}</div>`;
+		// New layout based on Cramorant screenshot
+		// HP Bar: A container, a bar inside, and an absolutely positioned text label
+		const hpBarHTML = `
+            <div style="max-width: 120px; height: 18px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px;">
+                <div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 100%; border-radius: 8px;"></div>
+                <span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 11px; font-weight: bold; padding: 0 6px; line-height: 18px; height: 100%; border-radius: 0 8px 8px 0;">
+                    ${hpPercentage}%
+                </span>
+            </div>
+        `;
+		
+		// Status tags go on their own line below the HP bar
+		const allStatusTags = `${statusTag}${volatileTags}${abilityTags}${chargingTag}${statStageTags}`;
+
+		// Added a non-breaking space if no status tags, to maintain height
+		const statusDisplay = allStatusTags || '&nbsp;';
+
+		return `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">
+            <div style="font-weight: bold; font-size: 1.1em;">
+                ${pokemon.nickname || pokemon.species} ${genderSymbol}${shinySymbol} L${pokemon.level}
+            </div>
+            ${hpBarHTML}
+            <div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">${statusDisplay}</div>
+        </div>`;
 	}
 }
 
