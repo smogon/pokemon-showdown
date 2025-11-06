@@ -566,24 +566,75 @@ export function handleGenericFieldMove(
 	battle: BattleState,
 	messageLog: string[]
 ): boolean {
-	let hadEffect = false;
 	const attacker = attackerSlot.pokemon;
+	const FIELD_EFFECT_DURATION = 5;
+	const EXTENDED_FIELD_EFFECT_DURATION = 8;
 
+	// Handle weather moves
 	if (move.weather) {
-		const weatherType = move.weather as 'sun' | 'rain' | 'sand' | 'hail';
-		if (battle.weather?.type === weatherType) {
+		// Normalize weather values from Dex format to internal format
+		// Dex returns: 'RainDance', 'sunnyday', 'Sandstorm', 'hail'
+		// Internal format: 'rain', 'sun', 'sand', 'hail'
+		const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
+			'raindance': 'rain',
+			'sunnyday': 'sun',
+			'sandstorm': 'sand',
+			'hail': 'hail',
+		};
+		const weatherId = toID(move.weather);
+		const normalizedWeather = weatherMap[weatherId];
+
+		// Validate that we have a recognized weather type
+		if (!normalizedWeather) {
+			messageLog.push(`But it failed! (Unknown weather type)`);
+			return true;
+		}
+
+		if (battle.weather?.type === normalizedWeather) {
 			messageLog.push(`But it failed!`);
 		} else {
-			const weatherItems: Record<string, string> = { 'damprock': 'rain', 'heatrock': 'sun', 'smoothrock': 'sand', 'icyrock': 'hail' };
-			const turns = (battle.magicRoomTurns === 0 && attacker.item && weatherItems[attacker.item] === weatherType) ? 8 : 5;
-			battle.weather = { type: weatherType, turns };
-			const weatherStartMessages = { 'sun': 'The sunlight turned harsh!', 'rain': 'It started to rain!', 'sand': 'A sandstorm kicked up!', 'hail': 'It started to hail!' };
-			messageLog.push(weatherStartMessages[weatherType]);
-			hadEffect = true;
+			const weatherItems: Record<string, string> = {
+				'damprock': 'rain', 'heatrock': 'sun', 'smoothrock': 'sand', 'icyrock': 'hail',
+			};
+			const turns = (battle.magicRoomTurns === 0 && attacker.item &&
+				weatherItems[attacker.item] === normalizedWeather) ?
+				EXTENDED_FIELD_EFFECT_DURATION : FIELD_EFFECT_DURATION;
+			battle.weather = { type: normalizedWeather, turns };
+			const weatherStartMessages = {
+				'sun': 'The sunlight turned harsh!',
+				'rain': 'It started to rain!',
+				'sand': 'A sandstorm kicked up!',
+				'hail': 'It started to hail!',
+			};
+			messageLog.push(weatherStartMessages[normalizedWeather]);
 		}
 		return true;
 	}
 
+	// Handle terrain moves (check move.terrain property from Dex)
+	if (move.terrain) {
+		const terrainId = toID(move.terrain);
+		const terrainMap: Record<string, 'electric' | 'grassy' | 'misty' | 'psychic'> = {
+			'electricterrain': 'electric',
+			'grassyterrain': 'grassy',
+			'mistyterrain': 'misty',
+			'psychicterrain': 'psychic',
+		};
+		const terrainType = terrainMap[terrainId];
+
+		if (terrainType) {
+			if (battle.terrain) {
+				messageLog.push('But it failed! (A terrain is already active)');
+			} else {
+				battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
+				messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
+			}
+			return true;
+		}
+	}
+
+	// Handle pseudo-weather moves (rooms, gravity, etc.)
+	// Check both move.pseudoWeather (for custom moves) and move.id (for Dex moves)
 	const pseudoWeather = move.pseudoWeather || move.id;
 	switch (pseudoWeather) {
 	case 'trickroom':
@@ -591,7 +642,7 @@ export function handleGenericFieldMove(
 			battle.trickRoomTurns = 0;
 			messageLog.push('The twisted dimensions returned to normal.');
 		} else {
-			battle.trickRoomTurns = 5;
+			battle.trickRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push(`${attacker.species} twisted the dimensions!`);
 		}
 		return true;
@@ -600,7 +651,7 @@ export function handleGenericFieldMove(
 			battle.magicRoomTurns = 0;
 			messageLog.push('The bizarre dimensions disappeared.');
 		} else {
-			battle.magicRoomTurns = 5;
+			battle.magicRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push('It created a bizarre area where held items lose their effects!');
 		}
 		return true;
@@ -609,7 +660,7 @@ export function handleGenericFieldMove(
 			battle.wonderRoomTurns = 0;
 			messageLog.push('The bizarre dimensions disappeared.');
 		} else {
-			battle.wonderRoomTurns = 5;
+			battle.wonderRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push('It created a bizarre area where Defense and Sp. Def stats are swapped!');
 		}
 		return true;
@@ -617,32 +668,33 @@ export function handleGenericFieldMove(
 	case 'grassyterrain':
 	case 'mistyterrain':
 	case 'psychicterrain':
+		// This case handles custom moves with pseudoWeather property
 		const terrainType = pseudoWeather.replace('terrain', '') as 'electric' | 'grassy' | 'misty' | 'psychic';
 		if (battle.terrain) {
 			messageLog.push('But it failed! (A terrain is already active)');
 		} else {
-			battle.terrain = { type: terrainType, turns: 5 };
+			battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
 			messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
 		}
 		return true;
 	case 'gravity':
 		if (battle.gravityTurns > 0) messageLog.push('But it failed!');
 		else {
-			battle.gravityTurns = 5;
+			battle.gravityTurns = FIELD_EFFECT_DURATION;
 			messageLog.push('Gravity intensified!');
 		}
 		return true;
 	case 'mudsport':
 		if (battle.mudSportTurns > 0) messageLog.push('But it failed!');
 		else {
-			battle.mudSportTurns = 5;
+			battle.mudSportTurns = FIELD_EFFECT_DURATION;
 			messageLog.push('Electricity\'s power was weakened!');
 		}
 		return true;
 	case 'watersport':
 		if (battle.waterSportTurns > 0) messageLog.push('But it failed!');
 		else {
-			battle.waterSportTurns = 5;
+			battle.waterSportTurns = FIELD_EFFECT_DURATION;
 			messageLog.push('Fire\'s power was weakened!');
 		}
 		return true;
@@ -1097,7 +1149,6 @@ export function handleChargingMove(
 
 	return false;
 }
-
 
 export const RPGMoves = {
 	getDamageBasePower,
