@@ -429,7 +429,8 @@ export function generateSingleBattleHTML(
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
-		const buttonStyle = 'width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;';
+		// --- FIX: Reduced padding from 12px to 8px and removed max-height ---
+		const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>' +
 			'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
 			'<span>Normal</span>' +
@@ -464,7 +465,8 @@ export function generateSingleBattleHTML(
 				(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 				move.pp === 0;
 
-			const buttonStyle = 'width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px;';
+			// --- FIX: Reduced padding from 12px to 8px and removed max-height ---
+			const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">' + moveData.name + '</div>' +
 				'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
 				'<span>' + moveData.type + '</span>' +
@@ -535,7 +537,8 @@ export function generateDoubleBattleHTML(
 	// Helper to generate HTML for a single slot, handling styling
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
 		if (!slot) {
-			return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; min-height: 120px; text-align: center; color: #888;">(Empty)</div>';
+			// --- FIX: Removed min-height: 120px; ---
+			return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; text-align: center; color: #888;">(Empty)</div>';
 		}
 		if (slot.pokemon.hp <= 0) {
 			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true) + '</div>';
@@ -636,7 +639,8 @@ export function generateDoubleBattleHTML(
 			{ slot: oSlot1, name: "Opponent 2", index: 3 },
 		];
 
-		const buttonStyle = 'width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; max-height: 50px; margin: 0;';
+		// --- FIX: Reduced padding from 12px to 8px and removed max-height ---
+		const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0;';
 		const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
 		const targetButtons = targets
 			.filter(target => target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex)
@@ -678,7 +682,8 @@ export function generateDoubleBattleHTML(
 			let moveButtonsHTML = '';
 
 			if (allMovesOutOfPP) {
-				const buttonStyle = 'width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;';
+				// --- FIX: Reduced padding from 12px to 8px and removed max-height ---
+				const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>' +
 					'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
 					'<span>Normal</span>' +
@@ -690,7 +695,8 @@ export function generateDoubleBattleHTML(
 			} else {
 				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
 
-				const buttonStyle = 'width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: left; max-height: 50px; margin: 0;';
+				// --- FIX: Reduced padding from 12px to 8px and removed max-height ---
+				const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const moveButtons = pokemon.moves.map(move => {
 					const moveData = getMove(move.id);
 
@@ -737,7 +743,8 @@ export function generateDoubleBattleHTML(
 		}
 
 		// --- Switch/Catch/Run Buttons ---
-		const buttonStyle = 'width: auto; min-width:120px; padding: 12px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;';
+		// --- FIX: Reduced padding from 12px to 8px ---
+		const buttonStyle = 'width: auto; min-width:120px; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;';
 
 		// In double battles, catching is only allowed when one opponent remains (matches Gen 8+ Pokemon games)
 		const activeOpponents = getActiveSlots(battle.opponentSlots);
