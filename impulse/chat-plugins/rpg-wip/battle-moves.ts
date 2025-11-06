@@ -1413,78 +1413,6 @@ export function handleSpecificStatusMove(
 		}
 		return false; // Return false so damage is still calculated
 
-	case 'uturn':
-	case 'voltswitch':
-	case 'flipturn':
-		// These moves deal damage then switch out (would need switching implementation)
-		messageLog.push(`${attacker.species} went back to switch!`);
-		// TODO: Implement actual switching mechanic
-		return false; // Return false so damage is still calculated
-
-	case 'partingshot':
-		if (!defenderSlot) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		let partingShotWorked = false;
-		if (defenderSlot.statStages.atk > -6) {
-			defenderSlot.statStages.atk--;
-			partingShotWorked = true;
-		}
-		if (defenderSlot.statStages.spa > -6) {
-			defenderSlot.statStages.spa--;
-			partingShotWorked = true;
-		}
-		if (partingShotWorked) {
-			messageLog.push(`${defender.species}'s Attack and Sp. Atk fell!`);
-			messageLog.push(`${attacker.species} went back to switch!`);
-			// TODO: Implement actual switching
-		} else {
-			messageLog.push('But it failed!');
-		}
-		return true;
-
-	case 'batonpass':
-		messageLog.push(`${attacker.species} passed its stat changes!`);
-		// TODO: Implement stat passing to next Pokemon
-		return true;
-
-	case 'teleport':
-		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
-			messageLog.push(`${attacker.species} fled from battle!`);
-			const attackerSlotIndex = battle.playerSlots.indexOf(attackerSlot);
-			if (attackerSlotIndex !== -1) {
-				battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
-			}
-		} else {
-			messageLog.push(`${attacker.species} switched out!`);
-			// TODO: Implement switching
-		}
-		return true;
-
-	case 'explosion':
-	case 'selfdestruct':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		// Damage is calculated separately with halved Defense
-		// After damage, user faints
-		attacker.hp = 0;
-		messageLog.push(`${attacker.species} fainted from the explosion!`);
-		return false; // Return false so damage is still calculated
-
-	case 'finalgambit':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const gambitDamage = attacker.hp;
-		attacker.hp = 0;
-		defender.hp = Math.max(0, defender.hp - gambitDamage);
-		messageLog.push(`${attacker.species} took the target down with it and dealt ${gambitDamage} damage!`);
-		return true;
-
 	case 'memento':
 		if (!defenderSlot) {
 			messageLog.push(`But it failed!`);
@@ -1520,45 +1448,6 @@ export function handleSpecificStatusMove(
 		// TODO: Mark next Pokemon to be fully healed (HP/PP/status) when switched in
 		return true;
 
-	case 'seismictoss':
-	case 'nightshade':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const fixedDamage = attacker.level;
-		defender.hp = Math.max(0, defender.hp - fixedDamage);
-		messageLog.push(`${defender.species} took ${fixedDamage} damage!`);
-		return true;
-
-	case 'dragonrage':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		defender.hp = Math.max(0, defender.hp - 40);
-		messageLog.push(`${defender.species} took 40 damage!`);
-		return true;
-
-	case 'sonicboom':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		defender.hp = Math.max(0, defender.hp - 20);
-		messageLog.push(`${defender.species} took 20 damage!`);
-		return true;
-
-	case 'superfang':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const superfangDamage = Math.floor(defender.hp / 2);
-		defender.hp = Math.max(1, defender.hp - superfangDamage);
-		messageLog.push(`${defender.species} took ${superfangDamage} damage!`);
-		return true;
-
 	case 'endeavor':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
@@ -1571,17 +1460,6 @@ export function handleSpecificStatusMove(
 		const endeavorDamage = defender.hp - attacker.hp;
 		defender.hp = attacker.hp;
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
-		return true;
-
-	case 'psywave':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const psywaveMultiplier = 0.5 + Math.random(); // 0.5 to 1.5
-		const psywaveDamage = Math.floor(attacker.level * psywaveMultiplier);
-		defender.hp = Math.max(0, defender.hp - psywaveDamage);
-		messageLog.push(`${defender.species} took ${psywaveDamage} damage!`);
 		return true;
 
 	case 'metronome':
