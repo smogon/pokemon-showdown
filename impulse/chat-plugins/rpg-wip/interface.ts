@@ -114,6 +114,7 @@ export interface PlayerData {
 	level: number;
 	experience: number;
 	badges: number;
+	badgeList?: string[]; // List of badge IDs earned
 	party: RPGPokemon[];
 	location: string;
 	money: number;
@@ -123,6 +124,16 @@ export interface PlayerData {
 		pokemonId: string,
 		moveIds: string[],
 	};
+	quests?: {
+		active: Map<string, QuestProgress>;
+		completed: Set<string>;
+	};
+	pokedex?: {
+		seen: Set<string>; // Pokemon species IDs seen
+		caught: Set<string>; // Pokemon species IDs caught
+	};
+	visitedLocations?: Set<string>; // Locations player has visited
+	achievements?: Set<string>; // Achievement IDs earned
 }
 
 export interface BattleState {
@@ -244,3 +255,96 @@ export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, 
 export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
+
+// --- QUEST & NPC SYSTEM INTERFACES ---
+
+export type QuestType = 'main' | 'side';
+export type QuestStatus = 'not_started' | 'in_progress' | 'completed' | 'failed';
+
+export type QuestObjectiveType = 
+	| 'defeat_trainer' 
+	| 'catch_pokemon' 
+	| 'collect_item' 
+	| 'reach_location' 
+	| 'talk_to_npc'
+	| 'defeat_wild_pokemon'
+	| 'have_pokemon_in_party';
+
+export interface QuestObjective {
+	id: string;
+	type: QuestObjectiveType;
+	description: string;
+	target?: string; // trainer id, pokemon species, item id, location name, npc id
+	targetCount?: number; // how many needed
+	currentCount?: number; // progress
+	completed?: boolean;
+}
+
+export interface QuestReward {
+	money?: number;
+	items?: { id: string, quantity: number }[];
+	experience?: number;
+	badges?: number;
+	unlockLocation?: string;
+}
+
+export interface Quest {
+	id: string;
+	name: string;
+	type: QuestType;
+	description: string;
+	objectives: QuestObjective[];
+	rewards: QuestReward;
+	prerequisiteQuests?: string[]; // quest ids that must be completed first
+	prerequisiteBadges?: number; // minimum badges required
+	location?: string; // where the quest is available
+	givenBy?: string; // npc id
+	dialogue?: {
+		start: string;
+		progress?: string;
+		complete: string;
+	};
+}
+
+export interface QuestProgress {
+	questId: string;
+	status: QuestStatus;
+	objectives: QuestObjective[];
+	startedAt?: number; // timestamp
+	completedAt?: number; // timestamp
+}
+
+export type NPCActionType = 'give_item' | 'take_item' | 'start_battle' | 'give_quest' | 'heal_party' | 'shop' | 'dialogue_only';
+
+export interface NPCAction {
+	type: NPCActionType;
+	// For give_item
+	giveItem?: { id: string, quantity: number };
+	// For take_item
+	takeItem?: { id: string, quantity: number };
+	// For start_battle
+	trainerId?: string;
+	// For give_quest
+	questId?: string;
+	// For dialogue_only or any action
+	dialogue?: string;
+	// Requirements to perform this action
+	requirements?: {
+		hasItem?: { id: string, quantity: number };
+		hasQuest?: string; // quest id
+		questCompleted?: string; // quest id
+		minBadges?: number;
+		doesNotHaveQuest?: string; // quest id (to avoid giving duplicates)
+	};
+}
+
+export interface NPC {
+	id: string;
+	name: string;
+	location: string;
+	sprite?: string; // optional sprite/icon
+	dialogue: string; // default dialogue
+	actions: NPCAction[];
+	oneTimeOnly?: boolean; // if true, can only interact once
+	interactedWith?: boolean; // track if already interacted (for one-time NPCs)
+}

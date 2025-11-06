@@ -26,7 +26,7 @@ export function generateUniqueId(): string {
 
 export function getPlayerData(userid: string): PlayerData {
 	if (!playerData.has(userid)) {
-		const newPlayer: PlayerData = { id: userid, name: userid, level: 1, experience: 0, badges: 0, party: [], location: 'Starter Town', money: 5000000, inventory: new Map(), pc: new Map() };
+		const newPlayer: PlayerData = { id: userid, name: userid, level: 1, experience: 0, badges: 0, party: [], location: 'Pallet Town', money: 3000, inventory: new Map(), pc: new Map() };
 		addItemToInventory(newPlayer, 'pokeball', 5);
 		addItemToInventory(newPlayer, 'potion', 3);
 		playerData.set(userid, newPlayer);

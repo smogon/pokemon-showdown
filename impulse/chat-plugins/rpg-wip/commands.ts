@@ -118,12 +118,22 @@ export const commands: ChatCommands = {
 				player.name = user.name;
 				const species = Dex.species.get(starterId);
 
+				// --- CHECK QUEST PROGRESS ---
+				const { checkPartyObjectives } = require('./quests');
+				const questUpdates = checkPartyObjectives(player);
+
 				// --- FIX ---
 				// Create a temporary slot object to pass to the updated function.
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				let confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+				
+				if (questUpdates.length > 0) {
+					confirmHTML += `<br><div style="color: green; font-weight: bold;">${questUpdates.join('<br>')}</div>`;
+				}
+				
+				confirmHTML += `<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
@@ -855,6 +865,163 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use the Pokedex during a battle.");
 			}
+			const player = getPlayerData(user.id);
+			const { getPokedexStats } = require('./helpers');
+			const stats = getPokedexStats(player);
+			
+			let html = `<div class="infobox"><h2>📖 Pokédex</h2>`;
+			html += `<p><strong>Seen:</strong> ${stats.seen} | <strong>Caught:</strong> ${stats.caught}</p>`;
+			html += `<div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">`;
+			html += `<div style="background: #4CAF50; width: ${Math.floor((stats.caught / 151) * 100)}%; height: 20px; border-radius: 3px; text-align: center; color: white; line-height: 20px;">${Math.floor((stats.caught / 151) * 100)}%</div>`;
+			html += `</div>`;
+			html += `<p style="font-size: 12px; color: #666;">Progress towards completing the Pokédex (151 total)</p>`;
+			html += `<hr />`;
+			
+			if (stats.caught > 0) {
+				html += `<p><strong>Recently Caught:</strong></p>`;
+				const recentlyCaught = Array.from(player.pokedex!.caught).slice(-10);
+				html += `<div style="display: flex; flex-wrap: wrap; gap: 5px;">`;
+				for (const species of recentlyCaught) {
+					html += `<span style="background: #e3f2fd; padding: 5px 10px; border-radius: 15px; font-size: 12px;">${species}</span>`;
+				}
+				html += `</div>`;
+			}
+			
+			html += `<p style="margin-top: 15px;"><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+		},
+
+		badges(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot view badges during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { getBadgeList } = require('./helpers');
+			const badges = getBadgeList(player);
+			
+			let html = `<div class="infobox"><h2>🏆 Gym Badges</h2>`;
+			html += `<p><strong>Badges Earned:</strong> ${badges.length} / 8</p>`;
+			
+			if (badges.length === 0) {
+				html += `<p style="color: #666; font-style: italic;">You haven't earned any badges yet. Challenge Gym Leaders to earn badges!</p>`;
+			} else {
+				html += `<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0;">`;
+				for (const badge of badges) {
+					html += `<div style="text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">`;
+					html += `<div style="font-size: 32px;">${badge.icon}</div>`;
+					html += `<div style="font-weight: bold; margin-top: 5px;">${badge.name}</div>`;
+					html += `<div style="font-size: 11px; opacity: 0.9;">${badge.description}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+			}
+			
+			html += `<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+		},
+
+		travel(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot travel during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			
+			if (!target) {
+				// Show travel menu
+				const { getConnectedLocations, canAccessLocation } = require('./helpers');
+				const locations = getConnectedLocations(player);
+				
+				let html = `<div class="infobox"><h2>🗺️ Travel</h2>`;
+				html += `<p><strong>Current Location:</strong> ${player.location}</p>`;
+				html += `<p>Where would you like to go?</p>`;
+				
+				if (locations.length === 0) {
+					html += `<p style="color: #666; font-style: italic;">No connected locations available.</p>`;
+				} else {
+					for (const location of locations) {
+						const access = canAccessLocation(player, location.id);
+						if (access.canAccess) {
+							html += `<div style="border: 1px solid #4CAF50; padding: 10px; margin: 10px 0; border-radius: 5px; background: #f1f8f4;">`;
+							html += `<h4 style="margin: 0 0 5px 0;">${location.name}</h4>`;
+							html += `<p style="margin: 0; font-size: 12px; color: #666;">${location.description}</p>`;
+							html += `<button name="send" value="/rpg travel ${location.id}" class="button" style="margin-top: 5px;">Travel Here</button>`;
+							html += `</div>`;
+						} else {
+							html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 5px; background: #f5f5f5; opacity: 0.6;">`;
+							html += `<h4 style="margin: 0 0 5px 0;">🔒 ${location.name}</h4>`;
+							html += `<p style="margin: 0; font-size: 12px; color: #666;">${access.reason}</p>`;
+							html += `</div>`;
+						}
+					}
+				}
+				
+				html += `<p style="margin-top: 15px;"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			} else {
+				// Travel to location
+				const { visitLocation } = require('./helpers');
+				const result = visitLocation(player, toID(target));
+				
+				if (!result.success) {
+					return this.errorReply(result.message);
+				}
+				
+				// Update quest objectives for location visit
+				const { updateQuestObjective, checkInventoryObjectives } = require('./quests');
+				const questUpdates = updateQuestObjective(player, 'reach_location', toID(target));
+				
+				let html = `<div class="infobox"><h2>🗺️ ${result.message}</h2>`;
+				if (questUpdates.length > 0) {
+					html += `<div style="color: green; font-weight: bold; margin: 10px 0;">${questUpdates.join('<br>')}</div>`;
+				}
+				html += `<p><button name="send" value="/rpg explore" class="button">Explore</button> <button name="send" value="/rpg menu" class="button">Menu</button></p></div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			}
+		},
+
+		achievements(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot view achievements during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { getAchievements, ACHIEVEMENTS } = require('./helpers');
+			const earned = getAchievements(player);
+			const totalAchievements = Object.keys(ACHIEVEMENTS).length;
+			
+			let html = `<div class="infobox"><h2>🏅 Achievements</h2>`;
+			html += `<p><strong>Unlocked:</strong> ${earned.length} / ${totalAchievements}</p>`;
+			
+			if (earned.length === 0) {
+				html += `<p style="color: #666; font-style: italic;">You haven't unlocked any achievements yet. Keep playing to earn them!</p>`;
+			} else {
+				html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">`;
+				for (const achievement of earned) {
+					html += `<div style="border: 1px solid #FFD700; padding: 10px; border-radius: 5px; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">`;
+					html += `<div style="font-size: 24px; text-align: center;">${achievement.icon}</div>`;
+					html += `<div style="font-weight: bold; text-align: center; margin-top: 5px;">${achievement.name}</div>`;
+					html += `<div style="font-size: 11px; text-align: center; color: #555;">${achievement.description}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+			}
+			
+			// Show locked achievements
+			const locked = Object.values(ACHIEVEMENTS).filter((a: any) => !earned.some(e => e.id === a.id));
+			if (locked.length > 0) {
+				html += `<hr /><h3>🔒 Locked</h3>`;
+				html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">`;
+				for (const achievement of locked.slice(0, 6)) {
+					html += `<div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background: #f5f5f5; opacity: 0.6;">`;
+					html += `<div style="font-size: 24px; text-align: center; filter: grayscale(100%);">${achievement.icon}</div>`;
+					html += `<div style="font-weight: bold; text-align: center; margin-top: 5px;">???</div>`;
+					html += `<div style="font-size: 11px; text-align: center; color: #555;">${achievement.description}</div>`;
+					html += `</div>`;
+				}
+				html += `</div>`;
+			}
+			
+			html += `<p style="margin-top: 15px;"><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 		},
 
 		explore(target, room, user) {
@@ -888,6 +1055,10 @@ export const commands: ChatCommands = {
 				`<p>Choose where to go:</p>` +
 				`<p>${exploreButtons}</p>` +
 				`<hr />` +
+				`<p>` +
+				`<button name="send" value="/rpg travel" class="button">🗺️ Travel</button>` +
+				`<button name="send" value="/rpg npcs" class="button">💬 Talk to NPCs</button>` +
+				`</p>` +
 				`<p>` +
 				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
 				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
@@ -931,6 +1102,10 @@ export const commands: ChatCommands = {
 				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
 				opponentSlots[0] = createActivePokemonSlot(wildPokemon1);
 
+				// --- REGISTER POKEMON AS SEEN ---
+				const { registerPokemonSeen } = require('./helpers');
+				registerPokemonSeen(player, wildPokemon1.species);
+
 				if (battleType === 'double') {
 					finalBattleType = 'wild_double';
 					// Add second player Pokemon if available
@@ -943,6 +1118,11 @@ export const commands: ChatCommands = {
 					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
 					opponentSlots[1] = createActivePokemonSlot(wildPokemon2);
+					
+					// --- REGISTER SECOND POKEMON AS SEEN ---
+					const { registerPokemonSeen } = require('./helpers');
+					registerPokemonSeen(player, wildPokemon2.species);
+					
 					battleMessages.push(`A wild ${wildPokemon1.species} and ${wildPokemon2.species} appeared!`);
 				} else {
 					finalBattleType = 'wild';
@@ -1566,8 +1746,25 @@ export const commands: ChatCommands = {
 					const location = player.party.length < 6 ? "your party" : "PC";
 					if (player.party.length < 6) { player.party.push(caughtPokemon); } else { storePokemonInPC(player, caughtPokemon); }
 
+					// --- UPDATE POKEDEX ---
+					const { registerPokemonCaught, checkAchievements } = require('./helpers');
+					registerPokemonCaught(player, caughtPokemon.species);
+
+					// --- UPDATE QUEST PROGRESS ---
+					const { updateQuestObjective } = require('./quests');
+					const questUpdates = updateQuestObjective(player, 'catch_pokemon', toID(caughtPokemon.species));
+
+					// --- CHECK ACHIEVEMENTS ---
+					const achievementUpdates = checkAchievements(player);
+
 					let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
 					if (ballId === 'healball') successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
+					if (questUpdates.length > 0) {
+						successMessage += `<br><div style="color: green; font-weight: bold;">${questUpdates.join('<br>')}</div>`;
+					}
+					if (achievementUpdates.length > 0) {
+						successMessage += `<br><div style="color: gold; font-weight: bold;">${achievementUpdates.join('<br>')}</div>`;
+					}
 
 					// --- FIX: Use createActivePokemonSlot ---
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
@@ -1837,6 +2034,101 @@ export const commands: ChatCommands = {
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+		},
+
+		// --- QUEST SYSTEM COMMANDS ---
+		quests(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot view quests during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { generateQuestsHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateQuestsHTML(player)}`);
+		},
+
+		// --- NPC SYSTEM COMMANDS ---
+		npcs(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot interact with NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { generateNPCListHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCListHTML(player, player.location)}`);
+		},
+
+		talknpc(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot talk to NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const npcId = toID(target);
+			if (!npcId) {
+				return this.errorReply("Please specify an NPC to talk to.");
+			}
+			const { generateNPCInteractionHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(player, npcId)}`);
+		},
+
+		npcaction(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot interact with NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const [npcId, actionIndexStr] = target.split(' ');
+			const actionIndex = parseInt(actionIndexStr);
+
+			if (!npcId || isNaN(actionIndex)) {
+				return this.errorReply("Invalid command format.");
+			}
+
+			const { getNPC, getAvailableActions, performNPCAction } = require('./npcs');
+			const { updateQuestObjective, checkInventoryObjectives } = require('./quests');
+			
+			const npc = getNPC(npcId);
+			if (!npc) {
+				return this.errorReply("NPC not found.");
+			}
+
+			const availableActions = getAvailableActions(player, npc);
+			if (actionIndex < 0 || actionIndex >= availableActions.length) {
+				return this.errorReply("Invalid action.");
+			}
+
+			const action = availableActions[actionIndex];
+			const result = performNPCAction(player, npc, action);
+
+			if (!result.success) {
+				const errorHTML = `<div class="infobox"><h2>Error</h2><p>${result.message}</p><p><button name="send" value="/rpg talknpc ${npcId}" class="button">Back</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+			}
+
+			// Handle special cases
+			if (result.additionalInfo?.startBattle) {
+				// Start a trainer battle
+				return this.parse(`/rpg challenge ${result.additionalInfo.startBattle}`);
+			}
+
+			if (result.additionalInfo?.openShop) {
+				// Open shop
+				return this.parse('/rpg shop');
+			}
+
+			// Check if this action completes a quest objective (e.g., talk_to_npc)
+			let questUpdates = updateQuestObjective(player, 'talk_to_npc', npcId);
+			
+			// If an item was given or taken, check inventory-based objectives
+			if (action.type === 'give_item' || action.type === 'take_item') {
+				const inventoryUpdates = checkInventoryObjectives(player);
+				questUpdates = questUpdates.concat(inventoryUpdates);
+			}
+
+			let successMessage = result.message;
+			if (questUpdates.length > 0) {
+				successMessage += '<br><br>' + questUpdates.join('<br>');
+			}
+
+			const successHTML = `<div class="infobox"><h2>${npc.name}</h2><p>${successMessage}</p><p><button name="send" value="/rpg talknpc ${npcId}" class="button">Continue</button> <button name="send" value="/rpg npcs" class="button">Back to NPCs</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 		},
 
 		help() {
