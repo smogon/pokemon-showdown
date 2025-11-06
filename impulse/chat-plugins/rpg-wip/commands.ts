@@ -118,12 +118,22 @@ export const commands: ChatCommands = {
 				player.name = user.name;
 				const species = Dex.species.get(starterId);
 
+				// --- CHECK QUEST PROGRESS ---
+				const { checkPartyObjectives } = require('./quests');
+				const questUpdates = checkPartyObjectives(player);
+
 				// --- FIX ---
 				// Create a temporary slot object to pass to the updated function.
 				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				let confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+				
+				if (questUpdates.length > 0) {
+					confirmHTML += `<br><div style="color: green; font-weight: bold;">${questUpdates.join('<br>')}</div>`;
+				}
+				
+				confirmHTML += `<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
 				// --- END FIX ---
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
@@ -1893,7 +1903,7 @@ export const commands: ChatCommands = {
 			}
 
 			const { getNPC, getAvailableActions, performNPCAction } = require('./npcs');
-			const { updateQuestObjective } = require('./quests');
+			const { updateQuestObjective, checkInventoryObjectives } = require('./quests');
 			
 			const npc = getNPC(npcId);
 			if (!npc) {
@@ -1925,7 +1935,13 @@ export const commands: ChatCommands = {
 			}
 
 			// Check if this action completes a quest objective (e.g., talk_to_npc)
-			const questUpdates = updateQuestObjective(player, 'talk_to_npc', npcId);
+			let questUpdates = updateQuestObjective(player, 'talk_to_npc', npcId);
+			
+			// If an item was given or taken, check inventory-based objectives
+			if (action.type === 'give_item' || action.type === 'take_item') {
+				const inventoryUpdates = checkInventoryObjectives(player);
+				questUpdates = questUpdates.concat(inventoryUpdates);
+			}
 
 			let successMessage = result.message;
 			if (questUpdates.length > 0) {

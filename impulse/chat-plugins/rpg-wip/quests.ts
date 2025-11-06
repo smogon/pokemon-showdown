@@ -121,6 +121,32 @@ export const QUEST_DATABASE: Record<string, Quest> = {
 			complete: 'Thank you so much! Here\'s a reward for your help!',
 		},
 	},
+	'side_wild_training': {
+		id: 'side_wild_training',
+		name: 'Wild Training',
+		type: 'side',
+		description: 'Defeat wild Pokémon to gain experience',
+		objectives: [
+			{
+				id: 'defeat_wild',
+				type: 'defeat_wild_pokemon',
+				description: 'Defeat 5 wild Pokémon',
+				targetCount: 5,
+				currentCount: 0,
+				completed: false,
+			},
+		],
+		rewards: {
+			money: 750,
+			items: [{ id: 'potion', quantity: 5 }],
+		},
+		location: 'Starter Town',
+		givenBy: 'youngster_joey',
+		dialogue: {
+			start: 'Want to get stronger? Battle some wild Pokémon!',
+			complete: 'Nice! You\'re getting the hang of it!',
+		},
+	},
 };
 
 // --- QUEST MANAGEMENT FUNCTIONS ---
@@ -331,4 +357,94 @@ export function isQuestCompleted(player: PlayerData, questId: string): boolean {
 export function isQuestActive(player: PlayerData, questId: string): boolean {
 	initializeQuests(player);
 	return player.quests!.active.has(questId);
+}
+
+// Check inventory-based quest objectives (for collect_item type)
+export function checkInventoryObjectives(player: PlayerData): string[] {
+	initializeQuests(player);
+	
+	const updates: string[] = [];
+
+	for (const [questId, progress] of player.quests!.active) {
+		if (progress.status !== 'in_progress') continue;
+
+		let questUpdated = false;
+
+		for (const objective of progress.objectives) {
+			if (objective.completed) continue;
+			if (objective.type !== 'collect_item') continue;
+			if (!objective.target) continue;
+
+			// Check if player has the required items
+			const item = player.inventory.get(objective.target);
+			const currentAmount = item?.quantity || 0;
+			
+			// Update the current count
+			if (objective.currentCount !== currentAmount) {
+				objective.currentCount = currentAmount;
+			}
+
+			// Check if objective is completed
+			if (objective.targetCount && objective.currentCount >= objective.targetCount) {
+				if (!objective.completed) {
+					objective.completed = true;
+					updates.push(`Quest objective completed: ${objective.description}`);
+					questUpdated = true;
+				}
+			}
+		}
+
+		// Check if all objectives are completed
+		if (questUpdated && progress.objectives.every(obj => obj.completed)) {
+			const quest = QUEST_DATABASE[questId];
+			if (quest) {
+				completeQuest(player, questId);
+				updates.push(`Quest completed: ${quest.name}!`);
+			}
+		}
+	}
+
+	return updates;
+}
+
+// Check if player has required Pokemon in party (for have_pokemon_in_party type)
+export function checkPartyObjectives(player: PlayerData): string[] {
+	initializeQuests(player);
+	
+	const updates: string[] = [];
+
+	for (const [questId, progress] of player.quests!.active) {
+		if (progress.status !== 'in_progress') continue;
+
+		let questUpdated = false;
+
+		for (const objective of progress.objectives) {
+			if (objective.completed) continue;
+			if (objective.type !== 'have_pokemon_in_party') continue;
+
+			// Check party size
+			const currentCount = player.party.length;
+			objective.currentCount = currentCount;
+
+			// Check if objective is completed
+			if (objective.targetCount && objective.currentCount >= objective.targetCount) {
+				if (!objective.completed) {
+					objective.completed = true;
+					updates.push(`Quest objective completed: ${objective.description}`);
+					questUpdated = true;
+				}
+			}
+		}
+
+		// Check if all objectives are completed
+		if (questUpdated && progress.objectives.every(obj => obj.completed)) {
+			const quest = QUEST_DATABASE[questId];
+			if (quest) {
+				completeQuest(player, questId);
+				updates.push(`Quest completed: ${quest.name}!`);
+			}
+		}
+	}
+
+	return updates;
 }

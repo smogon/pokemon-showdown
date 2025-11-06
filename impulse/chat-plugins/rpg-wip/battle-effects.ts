@@ -511,6 +511,17 @@ export function checkForWinLoss(
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
 			player.money += moneyGained;
+			
+			// --- UPDATE QUEST PROGRESS FOR WILD POKEMON DEFEAT ---
+			const { updateQuestObjective } = require('./quests');
+			const numWildDefeated = battle.opponentParty.length;
+			const questUpdates = updateQuestObjective(player, 'defeat_wild_pokemon', undefined, numWildDefeated);
+			
+			// Add quest updates to messages
+			if (questUpdates.length > 0) {
+				messageLog.push('<br><div style="color: green; font-weight: bold;">' + questUpdates.join('<br>') + '</div>');
+			}
+			
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
