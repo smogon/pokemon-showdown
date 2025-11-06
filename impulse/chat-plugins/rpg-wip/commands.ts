@@ -37,7 +37,9 @@ import {
     checkTrappingAbility,
     saveBattleStatus,
     performCatchAttempt,
-    getSlotFromIndex
+    getSlotFromIndex,
+    applyHazardEffectsOnSwitchIn,
+    handleMirrorHerb
 } from './battle-engine';
 import {
     generateMenuHTML,

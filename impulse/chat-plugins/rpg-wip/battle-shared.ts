@@ -445,3 +445,30 @@ export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: numbe
 
 	return [...new Set(targets)];
 }
+
+export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
+	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
+
+	const isPlayer = battle.playerSlots.includes(slot);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+
+	let copiedAnyBoost = false;
+
+	for (const oppSlot of opponentSlots) {
+		const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+		for (const stat of stats) {
+			const oppStage = oppSlot.statStages[stat];
+			if (oppStage > 0 && slot.statStages[stat] < 6) {
+				const stagesToCopy = Math.min(oppStage, 6 - slot.statStages[stat]);
+				slot.statStages[stat] = Math.min(6, slot.statStages[stat] + stagesToCopy) as any;
+				copiedAnyBoost = true;
+			}
+		}
+	}
+
+	if (copiedAnyBoost) {
+		messageLog.push(`${slot.pokemon.species}'s Mirror Herb copied the stat boosts!`);
+		slot.pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
+	}
+}
