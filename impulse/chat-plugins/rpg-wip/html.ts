@@ -225,8 +225,9 @@ export function generateSharedBattlePokemonInfo(
 	} else {
 		// New layout based on Cramorant screenshot
 		// HP Bar: A container, a bar inside, and an absolutely positioned text label
+		// --- FIX: Added margin-left: auto; margin-right: auto; to center the block element ---
 		const hpBarHTML =
-			'<div style="max-width: 120px; height: 18px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px;">' +
+			'<div style="max-width: 120px; height: 18px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 9px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
 				'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 8px;"></div>' +
 				'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 11px; font-weight: bold; padding: 0 6px; line-height: 18px; height: 100%; border-radius: 0 8px 8px 0;">' +
 					hpPercentage + '%' +
