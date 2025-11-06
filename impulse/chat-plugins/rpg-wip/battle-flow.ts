@@ -519,7 +519,7 @@ export function executeMove(
 		move.terrain ||
 		move.pseudoWeather ||
 		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport',
-		 'haze', 'perishsong', 'courtchange', 'chillyreception'].includes(move.id)
+		 'haze', 'perishsong', 'courtchange'].includes(move.id)
 	);
 
 	if (isFieldEffectMove) {

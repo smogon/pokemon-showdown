@@ -1198,11 +1198,14 @@ export function handleSpecificStatusMove(
 	case 'teatime':
 		let teatimeAffected = 0;
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
-			if (slot.pokemon.item && slot.pokemon.item.includes('berry')) {
-				const berry = ITEMS_DATABASE[slot.pokemon.item];
-				if (berry) {
-					messageLog.push(`${slot.pokemon.species} consumed its ${berry.name}!`);
-					// The berry effect would be applied here - simplified for now
+			// Check if item exists and is a berry (items ending with 'berry' suffix)
+			if (slot.pokemon.item) {
+				const itemData = ITEMS_DATABASE[slot.pokemon.item];
+				// Berry items have category 'berry' or their ID ends with 'berry'
+				if (itemData?.category === 'berry' || slot.pokemon.item.endsWith('berry')) {
+					messageLog.push(`${slot.pokemon.species} consumed its ${itemData?.name || slot.pokemon.item}!`);
+					// TODO: Implement actual berry effects (healing, stat boosts, status cure, etc.)
+					// For now, berries are just consumed without applying their effects
 					slot.pokemon.item = undefined;
 					activateUnburden(slot, messageLog);
 					teatimeAffected++;
@@ -1227,7 +1230,10 @@ export function handleSpecificStatusMove(
 			}
 		});
 		if (healedCount > 0) {
-			messageLog.push(`A bell chimed! The team's status conditions were healed!`);
+			const message = move.id === 'aromatherapy' ?
+				'A soothing aroma wafted through the area! The team\'s status conditions were healed!' :
+				'A bell chimed! The team\'s status conditions were healed!';
+			messageLog.push(message);
 		} else {
 			messageLog.push('But it failed!');
 		}
