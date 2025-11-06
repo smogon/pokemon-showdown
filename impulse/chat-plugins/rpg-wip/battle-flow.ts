@@ -506,12 +506,14 @@ export function executeMove(
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
 	let moveHitAnyTarget = false;
 
-	// Handle field effect moves (weather, terrain, rooms) only once before the target loop
-	// These moves affect the entire field, not individual targets
+	// Handle field effect moves (weather, terrain, rooms, global effects) only once before the target loop
+	// These moves affect the entire field or all Pokemon globally, not individual targets
 	const isFieldEffectMove = move.category === 'Status' && (
 		move.weather ||
 		move.terrain ||
-		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport'].includes(move.id)
+		move.pseudoWeather ||
+		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport',
+		 'haze', 'perishsong', 'courtchange', 'chillyreception'].includes(move.id)
 	);
 
 	if (isFieldEffectMove) {
