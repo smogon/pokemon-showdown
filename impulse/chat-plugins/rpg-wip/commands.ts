@@ -889,6 +889,7 @@ export const commands: ChatCommands = {
 				`<p>${exploreButtons}</p>` +
 				`<hr />` +
 				`<p>` +
+				`<button name="send" value="/rpg npcs" class="button">💬 Talk to NPCs</button>` +
 				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
 				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
 				`</p>` +
@@ -1566,8 +1567,15 @@ export const commands: ChatCommands = {
 					const location = player.party.length < 6 ? "your party" : "PC";
 					if (player.party.length < 6) { player.party.push(caughtPokemon); } else { storePokemonInPC(player, caughtPokemon); }
 
+					// --- UPDATE QUEST PROGRESS ---
+					const { updateQuestObjective } = require('./quests');
+					const questUpdates = updateQuestObjective(player, 'catch_pokemon', toID(caughtPokemon.species));
+
 					let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
 					if (ballId === 'healball') successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
+					if (questUpdates.length > 0) {
+						successMessage += `<br><div style="color: green; font-weight: bold;">${questUpdates.join('<br>')}</div>`;
+					}
 
 					// --- FIX: Use createActivePokemonSlot ---
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
@@ -1837,6 +1845,95 @@ export const commands: ChatCommands = {
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+		},
+
+		// --- QUEST SYSTEM COMMANDS ---
+		quests(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot view quests during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { generateQuestsHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateQuestsHTML(player)}`);
+		},
+
+		// --- NPC SYSTEM COMMANDS ---
+		npcs(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot interact with NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const { generateNPCListHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCListHTML(player, player.location)}`);
+		},
+
+		talknpc(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot talk to NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const npcId = toID(target);
+			if (!npcId) {
+				return this.errorReply("Please specify an NPC to talk to.");
+			}
+			const { generateNPCInteractionHTML } = require('./html');
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(player, npcId)}`);
+		},
+
+		npcaction(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot interact with NPCs during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			const [npcId, actionIndexStr] = target.split(' ');
+			const actionIndex = parseInt(actionIndexStr);
+
+			if (!npcId || isNaN(actionIndex)) {
+				return this.errorReply("Invalid command format.");
+			}
+
+			const { getNPC, getAvailableActions, performNPCAction } = require('./npcs');
+			const { updateQuestObjective } = require('./quests');
+			
+			const npc = getNPC(npcId);
+			if (!npc) {
+				return this.errorReply("NPC not found.");
+			}
+
+			const availableActions = getAvailableActions(player, npc);
+			if (actionIndex < 0 || actionIndex >= availableActions.length) {
+				return this.errorReply("Invalid action.");
+			}
+
+			const action = availableActions[actionIndex];
+			const result = performNPCAction(player, npc, action);
+
+			if (!result.success) {
+				const errorHTML = `<div class="infobox"><h2>Error</h2><p>${result.message}</p><p><button name="send" value="/rpg talknpc ${npcId}" class="button">Back</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+			}
+
+			// Handle special cases
+			if (result.additionalInfo?.startBattle) {
+				// Start a trainer battle
+				return this.parse(`/rpg challenge ${result.additionalInfo.startBattle}`);
+			}
+
+			if (result.additionalInfo?.openShop) {
+				// Open shop
+				return this.parse('/rpg shop');
+			}
+
+			// Check if this action completes a quest objective (e.g., talk_to_npc)
+			const questUpdates = updateQuestObjective(player, 'talk_to_npc', npcId);
+
+			let successMessage = result.message;
+			if (questUpdates.length > 0) {
+				successMessage += '<br><br>' + questUpdates.join('<br>');
+			}
+
+			const successHTML = `<div class="infobox"><h2>${npc.name}</h2><p>${successMessage}</p><p><button name="send" value="/rpg talknpc ${npcId}" class="button">Continue</button> <button name="send" value="/rpg npcs" class="button">Back to NPCs</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 		},
 
 		help() {

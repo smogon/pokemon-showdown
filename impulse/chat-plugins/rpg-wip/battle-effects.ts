@@ -492,6 +492,17 @@ export function checkForWinLoss(
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyGained = battle.opponentMoney;
 			player.money += moneyGained;
+			
+			// --- UPDATE QUEST PROGRESS FOR TRAINER DEFEAT ---
+			const { updateQuestObjective } = require('./quests');
+			const trainerId = toID(battle.opponentName); // Assuming trainer name maps to trainer ID
+			const questUpdates = updateQuestObjective(player, 'defeat_trainer', trainerId);
+			
+			// Add quest updates to messages
+			if (questUpdates.length > 0) {
+				messageLog.push('<br><div style="color: green; font-weight: bold;">' + questUpdates.join('<br>') + '</div>');
+			}
+			
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {

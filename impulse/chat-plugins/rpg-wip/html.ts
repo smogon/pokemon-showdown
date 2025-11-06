@@ -32,7 +32,7 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 // These were previously inline in the commands and are now dedicated functions.
 
 export function generateMenuHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p></div>`;
+	return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg quests" class="button">📋 Quests</button><button name="send" value="/rpg npcs" class="button">💬 NPCs</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p></div>`;
 }
 
 export function generateProfileHTML(player: PlayerData): string {
@@ -1287,5 +1287,170 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 	}
 
 	html += `<hr /><p><button name="send" value="/rpg useitem ${itemId}" class="button">Back to Pokémon</button></p></div>`;
+	return html;
+}
+
+// --- QUEST SYSTEM HTML ---
+
+export function generateQuestsHTML(player: PlayerData): string {
+	const { QUEST_DATABASE, getActiveQuests, getCompletedQuests } = require('./quests');
+	
+	const activeQuests = getActiveQuests(player);
+	const completedQuestIds = getCompletedQuests(player);
+
+	let html = `<div class="infobox"><h2>Quest Log</h2>`;
+
+	// Active Quests
+	html += `<h3>📋 Active Quests (${activeQuests.length})</h3>`;
+	if (activeQuests.length === 0) {
+		html += `<p><em>No active quests. Talk to NPCs to find new quests!</em></p>`;
+	} else {
+		for (const progress of activeQuests) {
+			const quest = QUEST_DATABASE[progress.questId];
+			if (!quest) continue;
+
+			const questIcon = quest.type === 'main' ? '⭐' : '📌';
+			html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 5px; background: ${quest.type === 'main' ? '#fff3cd' : '#e7f3ff'};">`;
+			html += `<h4>${questIcon} ${quest.name}</h4>`;
+			html += `<p style="margin: 5px 0;"><em>${quest.description}</em></p>`;
+			html += `<div style="margin-top: 10px;">`;
+			
+			for (const objective of progress.objectives) {
+				const checkmark = objective.completed ? '✅' : '⏳';
+				const progressText = objective.targetCount 
+					? `(${objective.currentCount || 0}/${objective.targetCount})` 
+					: '';
+				html += `<div style="margin: 5px 0;">${checkmark} ${objective.description} ${progressText}</div>`;
+			}
+			
+			html += `</div>`;
+			
+			// Show rewards
+			if (quest.rewards) {
+				html += `<div style="margin-top: 10px; font-size: 12px; color: #666;">`;
+				html += `<strong>Rewards:</strong> `;
+				const rewards = [];
+				if (quest.rewards.money) rewards.push(`₽${quest.rewards.money}`);
+				if (quest.rewards.badges) rewards.push(`${quest.rewards.badges} badge(s)`);
+				if (quest.rewards.items) {
+					for (const item of quest.rewards.items) {
+						rewards.push(`${item.quantity}x ${item.id}`);
+					}
+				}
+				html += rewards.join(', ');
+				html += `</div>`;
+			}
+			
+			html += `</div>`;
+		}
+	}
+
+	// Completed Quests
+	html += `<h3>✅ Completed Quests (${completedQuestIds.length})</h3>`;
+	if (completedQuestIds.length === 0) {
+		html += `<p><em>No completed quests yet.</em></p>`;
+	} else {
+		html += `<div style="max-height: 200px; overflow-y: auto;">`;
+		for (const questId of completedQuestIds) {
+			const quest = QUEST_DATABASE[questId];
+			if (!quest) continue;
+			const questIcon = quest.type === 'main' ? '⭐' : '📌';
+			html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">${questIcon} ${quest.name}</div>`;
+		}
+		html += `</div>`;
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return html;
+}
+
+// --- NPC SYSTEM HTML ---
+
+export function generateNPCListHTML(player: PlayerData, location: string): string {
+	const { getNPCsInLocation } = require('./npcs');
+	const npcs = getNPCsInLocation(location);
+
+	let html = `<div class="infobox"><h2>NPCs in ${location}</h2>`;
+
+	if (npcs.length === 0) {
+		html += `<p><em>There are no NPCs here.</em></p>`;
+	} else {
+		html += `<p>Choose an NPC to interact with:</p>`;
+		for (const npc of npcs) {
+			// Skip one-time NPCs that have been interacted with
+			if (npc.oneTimeOnly && npc.interactedWith) continue;
+			
+			html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 5px;">`;
+			html += `<h4>💬 ${npc.name}</h4>`;
+			html += `<p style="font-style: italic; color: #666;">"${npc.dialogue}"</p>`;
+			html += `<button name="send" value="/rpg talknpc ${npc.id}" class="button">Talk</button>`;
+			html += `</div>`;
+		}
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+	return html;
+}
+
+export function generateNPCInteractionHTML(player: PlayerData, npcId: string): string {
+	const { getNPC, getAvailableActions } = require('./npcs');
+	const npc = getNPC(npcId);
+	
+	if (!npc) {
+		return `<div class="infobox"><h2>Error</h2><p>NPC not found.</p><p><button name="send" value="/rpg npcs" class="button">Back</button></p></div>`;
+	}
+
+	const availableActions = getAvailableActions(player, npc);
+
+	let html = `<div class="infobox"><h2>💬 ${npc.name}</h2>`;
+	html += `<p style="font-style: italic; color: #666; border-left: 3px solid #ccc; padding-left: 10px; margin: 15px 0;">"${npc.dialogue}"</p>`;
+
+	if (availableActions.length === 0) {
+		html += `<p><em>Nothing more to do here right now.</em></p>`;
+	} else {
+		html += `<p><strong>What would you like to do?</strong></p>`;
+		for (let i = 0; i < availableActions.length; i++) {
+			const action = availableActions[i];
+			let actionText = '';
+			let actionIcon = '';
+
+			switch (action.type) {
+				case 'give_quest':
+					actionText = 'Accept Quest';
+					actionIcon = '📋';
+					break;
+				case 'give_item':
+					actionText = `Receive ${action.giveItem?.id || 'Item'}`;
+					actionIcon = '🎁';
+					break;
+				case 'take_item':
+					actionText = `Give ${action.takeItem?.id || 'Item'}`;
+					actionIcon = '🤝';
+					break;
+				case 'start_battle':
+					actionText = 'Battle';
+					actionIcon = '⚔️';
+					break;
+				case 'heal_party':
+					actionText = 'Heal Party';
+					actionIcon = '❤️';
+					break;
+				case 'shop':
+					actionText = 'Browse Shop';
+					actionIcon = '🏪';
+					break;
+				case 'dialogue_only':
+					actionText = 'Continue Talking';
+					actionIcon = '💬';
+					break;
+			}
+
+			html += `<div style="margin: 10px 0;">`;
+			html += `<button name="send" value="/rpg npcaction ${npcId} ${i}" class="button">${actionIcon} ${actionText}</button>`;
+			html += `</div>`;
+		}
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg npcs" class="button">Back to NPCs</button></p></div>`;
 	return html;
 }
