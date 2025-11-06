@@ -10,7 +10,8 @@ import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { NATURES, BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES } from './data';
 import { ITEMS_DATABASE } from './items';
-import type { ActivePokemonSlot, BattleState, Stats, Status } from './interface';
+import type { ActivePokemonSlot, BattleState, Stats, Status, Move, RPGPokemon } from './interface';
+import { getActiveSlots } from './utils';
 
 // --- CONSTANTS ---
 
@@ -262,4 +263,185 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 		pokemon.item = undefined;
 		activateUnburden(slot, messageLog);
 	}
+}
+
+// --- NEWLY MOVED FUNCTIONS ---
+
+export function getAccuracyEvasionMultiplier(stage: number): number {
+	if (stage > 0) {
+		return (3 + stage) / 3;
+	} else if (stage < 0) {
+		return 3 / (3 - stage);
+	}
+	return 1;
+}
+
+export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
+	const ability = toID(pokemon.ability || '');
+	return {
+		pokemon,
+		statStages: { ...INITIAL_STAT_STAGES },
+		status: pokemon.status,
+		sleepCounter: 0,
+		isConfused: false,
+		confusionCounter: 0,
+		isProtected: false,
+		protectSuccessCounter: 0,
+		willFlinch: false,
+		isTrapped: null,
+		tauntTurns: 0,
+		isSeeded: false,
+		hasNightmare: false,
+		isCursed: false,
+		chargingMove: undefined,
+		activeTurns: 1,
+		lockedMove: undefined,
+		lockedMoveCounter: 0,
+		mustRecharge: false,
+		uproarTurns: 0,
+		lastDamageTaken: undefined,
+		yawnCounter: undefined,
+		substitute: undefined,
+		disabledMove: undefined,
+		encoreMove: undefined,
+		isIngrained: false,
+		hasAquaRing: false,
+		focusEnergy: false,
+		magnetRiseTurns: 0,
+		telekinesisCounter: 0,
+		isSmackedDown: false,
+		lastMoveUsed: undefined,
+		tormentActive: false,
+		embargoTurns: 0,
+		healBlockTurns: 0,
+		isCharged: false,
+		stockpileCount: 0,
+		flashFireBoost: false,
+		unburdenActive: false,
+		analyticBoost: false,
+		slowStartTurns: undefined,
+		volatileTypes: undefined,
+		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
+		lastMoveThatHitMe: undefined,
+		terastallized: undefined,
+	};
+}
+
+export function checkTrappingAbility(
+	slotToSwitch: ActivePokemonSlot,
+	battle: BattleState
+): ActivePokemonSlot | null {
+	const isPlayer = battle.playerSlots.includes(slotToSwitch);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+	const userAbility = toID(slotToSwitch.pokemon.ability || '');
+
+	if (userAbility === 'shadowtag') return null;
+
+	for (const oppSlot of opponentSlots) {
+		const oppAbility = toID(oppSlot.pokemon.ability || '');
+
+		if (oppAbility === 'shadowtag') {
+			return oppSlot;
+		}
+
+		if (oppAbility === 'arenatrap') {
+			if (RPGAbilities.isGrounded(slotToSwitch.pokemon, battle)) {
+				return oppSlot;
+			}
+		}
+	}
+
+	return null;
+}
+
+export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
+	let slot: ActivePokemonSlot | null = null;
+	if (slotIndex === 0) slot = battle.playerSlots[0];
+	else if (slotIndex === 1) slot = battle.playerSlots[1];
+	else if (slotIndex === 2) slot = battle.opponentSlots[0];
+	else if (slotIndex === 3) slot = battle.opponentSlots[1];
+
+	if (slot && slot.pokemon.hp > 0) {
+		return slot;
+	}
+	return null;
+}
+
+export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
+	const targets: ActivePokemonSlot[] = [];
+	const attackerSlot = getSlotFromIndex(battle, attackerSlotIndex);
+	if (!attackerSlot) return [];
+
+	const isPlayerAttacker = attackerSlotIndex <= 1;
+
+	const pSlot0 = getSlotFromIndex(battle, 0);
+	const pSlot1 = getSlotFromIndex(battle, 1);
+	const oSlot0 = getSlotFromIndex(battle, 2);
+	const oSlot1 = getSlotFromIndex(battle, 3);
+
+	const allFoes = isPlayerAttacker ? [oSlot0, oSlot1] : [pSlot0, pSlot1];
+	const allOthers = [pSlot0, pSlot1, oSlot0, oSlot1];
+
+	const addTarget = (slot: ActivePokemonSlot | null) => {
+		if (slot && slot.pokemon.hp > 0) {
+			targets.push(slot);
+		}
+	};
+
+	switch (move.target) {
+	case 'normal':
+	case 'any':
+	case 'ally':
+		const chosenTarget = getSlotFromIndex(battle, targetSlotIndex);
+		addTarget(chosenTarget);
+		break;
+
+	case 'self':
+		addTarget(attackerSlot);
+		break;
+
+	case 'allAdjacentFoes':
+		allFoes.forEach(addTarget);
+		break;
+
+	case 'allAdjacent':
+	case 'scripted':
+		allOthers.forEach(slot => {
+			if (slot && slot.pokemon.id !== attackerSlot.pokemon.id) {
+				addTarget(slot);
+			}
+		});
+		break;
+
+	case 'randomNormal':
+		const validFoes = allFoes.filter(s => s && s.pokemon.hp > 0) as ActivePokemonSlot[];
+		if (validFoes.length > 0) {
+			const randomFoe = validFoes[Math.floor(Math.random() * validFoes.length)];
+			addTarget(randomFoe);
+		}
+		break;
+
+	case 'foeSide':
+		const primaryFoe = getSlotFromIndex(battle, isPlayerAttacker ? 2 : 0);
+		if (primaryFoe) addTarget(primaryFoe);
+		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 3 : 1));
+		break;
+
+	case 'allySide':
+		const primaryAlly = getSlotFromIndex(battle, isPlayerAttacker ? 0 : 2);
+		if (primaryAlly) addTarget(primaryAlly);
+		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 1 : 3));
+		break;
+
+	case 'all':
+		allOthers.forEach(addTarget);
+		break;
+
+	default:
+		const defaultTarget = getSlotFromIndex(battle, targetSlotIndex);
+		addTarget(defaultTarget);
+		break;
+	}
+
+	return [...new Set(targets)];
 }
