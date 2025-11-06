@@ -506,6 +506,20 @@ export function executeMove(
 	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
 	let moveHitAnyTarget = false;
 
+	// Handle field effect moves (weather, terrain, rooms) only once before the target loop
+	// These moves affect the entire field, not individual targets
+	const isFieldEffectMove = move.category === 'Status' && (
+		move.weather ||
+		move.terrain ||
+		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport'].includes(move.id)
+	);
+
+	if (isFieldEffectMove) {
+		// Field effect moves should execute once, not per target
+		handleStatusMove(attackerSlot, null, move, battle, messageLog);
+		return;
+	}
+
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break;
 		if (defenderSlot.pokemon.hp <= 0) continue;
