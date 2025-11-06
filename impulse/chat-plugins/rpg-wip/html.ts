@@ -910,9 +910,13 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 }
 
 export function generateShopHTML(player: PlayerData, category?: string): string {
+	const { getAvailableShopItems, getShopWelcomeMessage } = require('./shop');
+	const shopInventory = getAvailableShopItems(player);
+	const welcomeMessage = getShopWelcomeMessage(player);
+	
 	let html = `<div class="infobox">`;
 	html += `<h2>Poké Mart</h2>`;
-	html += `<p>Welcome! What would you like to do?</p>`;
+	html += `<p>${welcomeMessage}</p>`;
 	html += `<p><strong>Your Money:</strong> ₽${player.money}</p>`;
 
 	// --- NEW: Added Sell Button ---
@@ -931,7 +935,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
 
 	let itemsFound = false;
-	for (const itemId of SHOP_INVENTORY) {
+	for (const itemId of shopInventory) {
 		const item = ITEMS_DATABASE[itemId];
 		const price = ITEM_PRICES[itemId];
 		if (!item || !price) continue;
