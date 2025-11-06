@@ -460,7 +460,7 @@ export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, m
 			const oppStage = oppSlot.statStages[stat];
 			if (oppStage > 0 && slot.statStages[stat] < 6) {
 				const stagesToCopy = Math.min(oppStage, 6 - slot.statStages[stat]);
-				slot.statStages[stat] = Math.min(6, slot.statStages[stat] + stagesToCopy) as any;
+				slot.statStages[stat] = Math.min(6, slot.statStages[stat] + stagesToCopy);
 				copiedAnyBoost = true;
 			}
 		}
