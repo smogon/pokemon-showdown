@@ -32,9 +32,9 @@ interface EmoticonCacheStats {
 	lastIgnoreLoad: number;
 }
 
-const EMOTICON_PATH = 'config/emoticons.json';
-const EMOTICON_SIZE_PATH = 'config/emoticonsize.json';
-const IGNORE_EMOTES_PATH = 'config/ignoreemotes.json';
+const EMOTICON_PATH = 'impulse/db/emoticons.json';
+const EMOTICON_SIZE_PATH = 'impulse/db/emoticonsize.json';
+const IGNORE_EMOTES_PATH = 'impulse/db/ignoreemotes.json';
 const EMOTICON_CACHE_TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 
 let emoticons: { [key: string]: string } = {};
