@@ -103,3 +103,163 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 	},
 };
+
+// Badge definitions
+export interface Badge {
+	id: string;
+	name: string;
+	description: string;
+	givenBy: string; // Trainer ID
+	icon: string;
+}
+
+export const BADGE_DATABASE: Record<string, Badge> = {
+	'boulder': {
+		id: 'boulder',
+		name: 'Boulder Badge',
+		description: 'Proof of victory over Brock',
+		givenBy: 'gym_brock',
+		icon: '🪨',
+	},
+	'cascade': {
+		id: 'cascade',
+		name: 'Cascade Badge',
+		description: 'Proof of victory over Misty',
+		givenBy: 'gym_misty',
+		icon: '💧',
+	},
+	'thunder': {
+		id: 'thunder',
+		name: 'Thunder Badge',
+		description: 'Proof of victory over Lt. Surge',
+		givenBy: 'gym_surge',
+		icon: '⚡',
+	},
+	'rainbow': {
+		id: 'rainbow',
+		name: 'Rainbow Badge',
+		description: 'Proof of victory over Erika',
+		givenBy: 'gym_erika',
+		icon: '🌈',
+	},
+	'soul': {
+		id: 'soul',
+		name: 'Soul Badge',
+		description: 'Proof of victory over Koga',
+		givenBy: 'gym_koga',
+		icon: '☠️',
+	},
+	'marsh': {
+		id: 'marsh',
+		name: 'Marsh Badge',
+		description: 'Proof of victory over Sabrina',
+		givenBy: 'gym_sabrina',
+		icon: '🔮',
+	},
+	'volcano': {
+		id: 'volcano',
+		name: 'Volcano Badge',
+		description: 'Proof of victory over Blaine',
+		givenBy: 'gym_blaine',
+		icon: '🌋',
+	},
+	'earth': {
+		id: 'earth',
+		name: 'Earth Badge',
+		description: 'Proof of victory over Giovanni',
+		givenBy: 'gym_giovanni',
+		icon: '🌍',
+	},
+};
+
+// Location/Region system
+export interface Location {
+	id: string;
+	name: string;
+	description: string;
+	region: string;
+	connectedTo: string[]; // Location IDs
+	requiresBadge?: string; // Badge ID needed to access
+	requiresItem?: string; // Key item needed to access
+}
+
+export const LOCATION_DATABASE: Record<string, Location> = {
+	'starter_town': {
+		id: 'starter_town',
+		name: 'Starter Town',
+		description: 'A peaceful town where your journey begins',
+		region: 'Kanto',
+		connectedTo: ['route_1'],
+	},
+	'route_1': {
+		id: 'route_1',
+		name: 'Route 1',
+		description: 'A route connecting Starter Town to Pewter City',
+		region: 'Kanto',
+		connectedTo: ['starter_town', 'pewter_city'],
+	},
+	'pewter_city': {
+		id: 'pewter_city',
+		name: 'Pewter City',
+		description: 'A city with a Rock-type Gym',
+		region: 'Kanto',
+		connectedTo: ['route_1', 'route_2'],
+	},
+	'route_2': {
+		id: 'route_2',
+		name: 'Route 2',
+		description: 'A forested route',
+		region: 'Kanto',
+		connectedTo: ['pewter_city', 'cerulean_city'],
+	},
+	'cerulean_city': {
+		id: 'cerulean_city',
+		name: 'Cerulean City',
+		description: 'A city with a Water-type Gym',
+		region: 'Kanto',
+		connectedTo: ['route_2', 'route_3'],
+		requiresBadge: 'boulder',
+	},
+	'route_3': {
+		id: 'route_3',
+		name: 'Route 3',
+		description: 'A mountainous route',
+		region: 'Kanto',
+		connectedTo: ['cerulean_city'],
+		requiresBadge: 'cascade',
+	},
+};
+
+// Key Items (story-critical items)
+export const KEY_ITEMS: Record<string, { id: string, name: string, description: string }> = {
+	'bicycle': {
+		id: 'bicycle',
+		name: 'Bicycle',
+		description: 'A folding bicycle that allows you to travel faster',
+	},
+	'oldrod': {
+		id: 'oldrod',
+		name: 'Old Rod',
+		description: 'An old fishing rod that can catch water Pokemon',
+	},
+	'goodrod': {
+		id: 'goodrod',
+		name: 'Good Rod',
+		description: 'A decent fishing rod',
+	},
+	'superrod': {
+		id: 'superrod',
+		name: 'Super Rod',
+		description: 'The best fishing rod',
+	},
+	'itemfinder': {
+		id: 'itemfinder',
+		name: 'Itemfinder',
+		description: 'A device that signals the presence of hidden items',
+	},
+	'pokeflute': {
+		id: 'pokeflute',
+		name: 'Poké Flute',
+		description: 'A flute that awakens sleeping Pokemon',
+	},
+};

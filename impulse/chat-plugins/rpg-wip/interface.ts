@@ -114,6 +114,7 @@ export interface PlayerData {
 	level: number;
 	experience: number;
 	badges: number;
+	badgeList?: string[]; // List of badge IDs earned
 	party: RPGPokemon[];
 	location: string;
 	money: number;
@@ -127,6 +128,12 @@ export interface PlayerData {
 		active: Map<string, QuestProgress>;
 		completed: Set<string>;
 	};
+	pokedex?: {
+		seen: Set<string>; // Pokemon species IDs seen
+		caught: Set<string>; // Pokemon species IDs caught
+	};
+	visitedLocations?: Set<string>; // Locations player has visited
+	achievements?: Set<string>; // Achievement IDs earned
 }
 
 export interface BattleState {

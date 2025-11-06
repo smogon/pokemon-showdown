@@ -493,14 +493,35 @@ export function checkForWinLoss(
 			moneyGained = battle.opponentMoney;
 			player.money += moneyGained;
 			
+			// --- AWARD BADGE IF GYM LEADER ---
+			const { awardBadge, checkAchievements } = require('./helpers');
+			const { BADGE_DATABASE } = require('./data');
+			const trainerId = toID(battle.opponentName);
+			
+			// Check if this trainer gives a badge
+			const badge = Object.values(BADGE_DATABASE).find((b: any) => b.givenBy === trainerId);
+			if (badge) {
+				const badgeResult = awardBadge(player, badge.id);
+				if (badgeResult.success) {
+					messageLog.push('<br><div style="color: gold; font-weight: bold; font-size: 16px;">🏆 ' + badgeResult.message + '</div>');
+				}
+			}
+			
 			// --- UPDATE QUEST PROGRESS FOR TRAINER DEFEAT ---
 			const { updateQuestObjective } = require('./quests');
-			const trainerId = toID(battle.opponentName); // Assuming trainer name maps to trainer ID
 			const questUpdates = updateQuestObjective(player, 'defeat_trainer', trainerId);
+			
+			// --- CHECK ACHIEVEMENTS ---
+			const achievementUpdates = checkAchievements(player);
 			
 			// Add quest updates to messages
 			if (questUpdates.length > 0) {
 				messageLog.push('<br><div style="color: green; font-weight: bold;">' + questUpdates.join('<br>') + '</div>');
+			}
+			
+			// Add achievement updates to messages
+			if (achievementUpdates.length > 0) {
+				messageLog.push('<br><div style="color: gold; font-weight: bold;">' + achievementUpdates.join('<br>') + '</div>');
 			}
 			
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
