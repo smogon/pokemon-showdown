@@ -4,7 +4,7 @@
 * @author PrinceSky-Git
 */
 
-import { FS } from '../../../lib/fs';
+import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
 interface NewsEntry {
@@ -17,52 +17,29 @@ interface NewsEntry {
 }
 
 const serverName = Config.serverName || 'Impulse';
-const NEWS_PATH = 'impulse/db/news.json';
+
+const NewsDB = ImpulseDB<NewsEntry>('news');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const formatDate = (date: Date = new Date()): string =>
-	`${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
-
-async function getNewsData(): Promise<NewsEntry[]> {
-	const data = await FS(NEWS_PATH).readIfExists();
-	if (!data) return [];
-	try {
-		const parsed = JSON.parse(data);
-		if (Array.isArray(parsed)) return parsed;
-		return [];
-	} catch {
-		return [];
-	}
-}
-
-async function saveNewsData(news: NewsEntry[]): Promise<void> {
-	await FS(NEWS_PATH).writeUpdate(() => JSON.stringify(news, null, 2));
-}
+const formatDate = (date: Date = new Date()): string => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
 class NewsManager {
 	static async generateNewsDisplay(): Promise<string[]> {
-		const news = await getNewsData();
-		const sorted = [...news].sort((a, b) => b.timestamp - a.timestamp).slice(0, 3);
-		return sorted.map(entry =>
-			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
-			`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
+		const news = await NewsDB.find({}, { sort: { timestamp: -1 }, limit: 3, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } });
+		return news.map(entry =>
+			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br><small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
 		);
 	}
 
 	static async onUserConnect(user: User): Promise<void> {
-		const news = await getNewsData();
-		if (!news.length) return;
-		const display = await this.generateNewsDisplay();
-		if (display.length) {
-			user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${display.join('<hr>')}`);
+		if (!await NewsDB.exists({})) return;
+		const news = await this.generateNewsDisplay();
+		if (news.length) {
+			user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
 		}
 	}
 
 	static async addNews(title: string, desc: string, user: User): Promise<string> {
-		const news = await getNewsData();
-		if (news.some(n => n.title === title)) {
-			return `News "${title}" exists. Use /servernews update.`;
-		}
 		const newsEntry: NewsEntry = {
 			title,
 			postedBy: user.name,
@@ -70,36 +47,24 @@ class NewsManager {
 			postTime: formatDate(),
 			timestamp: Date.now(),
 		};
-		news.push(newsEntry);
-		await saveNewsData(news);
+		await NewsDB.insertOne(newsEntry);
 		return `Added: ${title}`;
 	}
 
 	static async deleteNews(title: string): Promise<string | null> {
-		const news = await getNewsData();
-		const index = news.findIndex(n => n.title === title);
-		if (index === -1) return `News "${title}" not found.`;
-		news.splice(index, 1);
-		await saveNewsData(news);
-		return `Deleted: ${title}`;
+		const result = await NewsDB.deleteOne({ title });
+		return result.deletedCount === 0 ? `News "${title}" not found.` : `Deleted: ${title}`;
 	}
 
 	static async updateNews(title: string, newDesc: string): Promise<string | null> {
-		const news = await getNewsData();
-		const entry = news.find(n => n.title === title);
-		if (!entry) return `News "${title}" not found.`;
-		entry.desc = newDesc;
-		await saveNewsData(news);
-		return `Updated: ${title}`;
+		const result = await NewsDB.updateOne({ title }, { $set: { desc: newDesc } });
+		return result.matchedCount === 0 ? `News "${title}" not found.` : `Updated: ${title}`;
 	}
 
 	static async deleteOldNews(daysOld = 90): Promise<number> {
 		const cutoff = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
-		const news = await getNewsData();
-		const oldLength = news.length;
-		const filtered = news.filter(n => n.timestamp >= cutoff);
-		await saveNewsData(filtered);
-		return oldLength - filtered.length;
+		const result = await NewsDB.deleteMany({ timestamp: { $lt: cutoff } });
+		return result.deletedCount || 0;
 	}
 }
 
@@ -111,7 +76,7 @@ export const commands: Chat.ChatCommands = {
 	servernews: {
 		'': 'view',
 		display: 'view',
-		async view(target, room, user) {
+		async view(target, room, user): Promise<void> {
 			const news = await NewsManager.generateNewsDisplay();
 			const output = news.length ?
 				`<center><strong>Server News:</strong></center>${news.join('<hr>')}` :
@@ -120,32 +85,35 @@ export const commands: Chat.ChatCommands = {
 			user.send(`|popup||html|<div class="infobox">${output}</div>`);
 		},
 
-		async add(target, room, user) {
+		async add(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews add [title], [desc]");
 
-			const result = await NewsManager.addNews(title, descParts.join(',').trim(), user);
+			if (await NewsDB.exists({ title })) {
+				return this.errorReply(`"${title}" exists. Use /servernews update.`);
+			}
 
-			if (result.includes("exists")) return this.errorReply(result);
+			await NewsManager.addNews(title, descParts, user);
+
 			this.sendReply(`Added: "${title}"`);
 		},
 
-		async update(target, room, user) {
+		async update(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews update [title], [new desc]");
 
-			const result = await NewsManager.updateNews(title, descParts.join(',').trim());
+			const result = await NewsManager.updateNews(title, descParts.join(','));
 			if (result?.includes('not found')) return this.errorReply(result);
 
 			this.sendReply(`Updated: "${title}"`);
 		},
 
 		remove: 'delete',
-		async delete(target, room, user) {
+		async delete(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
@@ -156,7 +124,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Deleted: "${target}"`);
 		},
 
-		async cleanup(target, room, user) {
+		async cleanup(target, room, user): Promise<void> {
 			this.checkCan('bypassall');
 			const days = Math.max(parseInt(target) || 90, 1);
 
@@ -167,7 +135,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	svn: 'servernews',
 
-	servernewshelp() {
+	servernewshelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{ cmd: "/servernews view", desc: "View the latest 3 server news." },
