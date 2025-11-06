@@ -181,11 +181,13 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(targetId);
 
 			if (targetUser?.isPublicBot) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} is a bot and does not track ontime.`);
+				this.sendReplyBox(`${nameColor(targetId, true)} is a bot and does not track ontime.`);
+				return;
 			}
 
 			if (await isBlockedOntime(targetId)) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} is blocked from gaining ontime.`);
+				this.sendReplyBox(`${nameColor(targetId, true)} is blocked from gaining ontime.`);
+				return;
 			}
 
 			const arr = await getOntimeData();
@@ -193,7 +195,8 @@ export const commands: Chat.ChatCommands = {
 			const totalOntime = doc?.ontime || 0;
 
 			if (!totalOntime && !targetUser?.connected) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} has never been online.`);
+				this.sendReplyBox(`${nameColor(targetId, true)} has never been online.`);
+				return;
 			}
 
 			const currentOntime = targetUser?.connected && targetUser.lastConnected ? Date.now() - targetUser.lastConnected : 0;
@@ -227,7 +230,10 @@ export const commands: Chat.ChatCommands = {
 				.sort((a, b) => b.time - a.time)
 				.slice(0, ONTIME_LEADERBOARD_SIZE);
 
-			if (!ladderData.length) return this.sendReplyBox("Leaderboard empty.");
+			if (!ladderData.length) {
+				this.sendReplyBox("Leaderboard empty.");
+				return;
+			}
 
 			const rows = ladderData.map((entry, i) => [
 				(i + 1).toString(),
@@ -264,7 +270,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to block.");
 			if (await isBlockedOntime(targetId)) {
-				return this.errorReply(`${nameColor(targetId, true)} is already blocked from gaining ontime.`);
+				this.errorReply(`${nameColor(targetId, true)} is already blocked from gaining ontime.`);
+				return;
 			}
 			const arr = await getOntimeBlockData();
 			arr.push({ _id: targetId });
@@ -278,7 +285,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to unblock.");
 			if (!(await isBlockedOntime(targetId))) {
-				return this.errorReply(`${nameColor(targetId, true)} is not blocked from gaining ontime.`);
+				this.errorReply(`${nameColor(targetId, true)} is not blocked from gaining ontime.`);
+				return;
 			}
 			const arr = await getOntimeBlockData();
 			const idx = arr.findIndex(d => d._id === targetId);
@@ -293,7 +301,10 @@ export const commands: Chat.ChatCommands = {
 		async blocked(target, room, user) {
 			this.checkCan('roomowner');
 			const blockedUsers = await getBlockedOntimeUsers();
-			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
+			if (!blockedUsers.length) {
+				this.sendReplyBox("No users are currently blocked from gaining ontime.");
+				return;
+			}
 			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
 			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
 			this.sendReply(`|html|${tableHTML}`);
@@ -312,7 +323,7 @@ export const commands: Chat.ChatCommands = {
 		cachestats(target, room, user) {
 			this.checkCan('roomowner');
 			const stats = getOntimeCacheStats();
-			const html = `<strong>Ontime Cache Stats:</strong><br>Loaded: <b>${stats.loaded}</b><br>Records: <b>${stats.count}</b><br>Last update: <b>${stats.lastUpdate ? new Date(stats.lastUpdate).toLocaleString() : 'Never'}</b>`;
+			const html = `<strong>Ontime Cache Stats:</strong><br>Loaded: <b>${stats.loaded}</b><br>Records: <b>${stats.count}</b><br>Last update: <b>${stats.lastUpdate ? new Date(stats.lastUpdate).toLocaleString() : 'Never'}</b><br>`;
 			this.sendReplyBox(html);
 		},
 	},
