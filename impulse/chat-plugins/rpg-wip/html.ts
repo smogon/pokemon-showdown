@@ -138,23 +138,7 @@ export function generateSharedBattlePokemonInfo(
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
 
-	let expBarHTML = '';
-	if (isPlayerSide) {
-		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
-		const expForNextLevel = pokemon.expToNextLevel;
-		const expProgress = pokemon.experience - expForLastLevel;
-		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
-		
-		// --- EXP BAR (15px height) ---
-		expBarHTML =
-			'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-				'<div style="background: #6c9be8; width: ' + expPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
-				'<span style="position: absolute; left: 0; right: 0; top: 0; color: #fff; font-size: 10px; font-weight: bold; line-height: 15px; height: 100%; text-shadow: 1px 1px 1px #333; text-align: center;">' +
-					'EXP' +
-				'</span>' +
-			'</div>';
-	}
+	// --- EXP BAR REMOVED ---
 
 	const displayStatus = slot.status || pokemon.status;
 	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
@@ -226,7 +210,7 @@ export function generateSharedBattlePokemonInfo(
 	if (isDoubleBattle) {
 		let html = '<psicon pokemon="' + pokemon.species + '" style="vertical-align: middle;"></psicon><br><strong>' + (pokemon.nickname || pokemon.species) + '</strong> ' + genderSymbol + ' ' + shinySymbol + '<br>Lvl ' + pokemon.level + '<br>';
 		html += '<div style="border-radius: 8px; margin: 6px 0; width: 100%; height: 10px; overflow: hidden;"><div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 10px; border-radius: 8px;"></div></div>';
-		html += expBarHTML;
+		// --- EXP BAR REMOVED ---
 		html += 'HP: ' + pokemon.hp + ' / ' + pokemon.maxHp + '<br>';
 		html += '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
 		return html;
@@ -241,25 +225,29 @@ export function generateSharedBattlePokemonInfo(
 				'</span>' +
 			'</div>';
 
+		// --- NEW: Pokemon Sprite ---
+        const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
+        const spriteHTML = 
+            '<div style="text-align: center; margin-top: 4px;">' + // Centering container
+                '<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
+            '</div>';
+
 		// Status tags go on their own line below the HP bar
 		const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
 
 		// Added a non-breaking space if no status tags, to maintain height
 		const statusDisplay = allStatusTags || '&nbsp;';
 
-		// --- NEW: Placeholder for the new EXP bar style ---
-		// The bar has height: 15px + 1px border-top + 1px border-bottom = 17px total height.
-		// It also has margin-top: 4px.
-		const placeholderExpBar = '<div style="height: 17px; margin-top: 4px;"></div>';
+		// --- PLACEHOLDER REMOVED ---
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
 		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
 		html += '</div>';
 		html += hpBarHTML;
+		html += spriteHTML; // --- ADDED SPRITE ---
 		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
-		// --- Use new exp bar or placeholder ---
-		html += isPlayerSide ? expBarHTML : placeholderExpBar;
+		// --- EXP BAR AND PLACEHOLDER REMOVED ---
 		html += '</div>';
 		return html;
 	}
