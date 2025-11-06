@@ -236,7 +236,7 @@ export const commands: Chat.ChatCommands = {
 			]);
 
 			const tableHTML = generateThemedTable('Ontime Leaderboard', ['Rank', 'User', 'Time'], rows);
-			return this.sendReply(`|raw|${tableHTML}`);
+			this.sendReply(`|raw|${tableHTML}`);
 		},
 
 		help() {
