@@ -756,16 +756,403 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Science always wins!",
 		},
 	},
+	
+	// Additional Route Trainers
+	'camper_ricky': {
+		name: 'Camper Ricky',
+		money: 480,
+		party: [
+			{ species: 'nidorino', level: 20 },
+			{ species: 'raticate', level: 20 },
+		],
+		dialogue: {
+			start: "I've been camping out here for days!",
+			win: "Guess I need more training...",
+			lose: "Camping makes you strong!",
+		},
+	},
+	'picnicker_diana': {
+		name: 'Picnicker Diana',
+		money: 440,
+		party: [
+			{ species: 'bulbasaur', level: 18 },
+			{ species: 'oddish', level: 18 },
+			{ species: 'bellsprout', level: 18 },
+		],
+		dialogue: {
+			start: "I love Grass-type Pokémon!",
+			win: "Oh no! My flowers...",
+			lose: "Grass types are the best!",
+		},
+	},
+	'swimmer_jack': {
+		name: 'Swimmer Jack',
+		money: 560,
+		party: [
+			{ species: 'goldeen', level: 24 },
+			{ species: 'tentacool', level: 24 },
+			{ species: 'staryu', level: 26 },
+		],
+		dialogue: {
+			start: "I train with my Water Pokémon every day!",
+			win: "You made a big splash!",
+			lose: "Water is the source of life!",
+		},
+	},
+	'fisherman_ned': {
+		name: 'Fisherman Ned',
+		money: 720,
+		party: [
+			{ species: 'magikarp', level: 15 },
+			{ species: 'magikarp', level: 15 },
+			{ species: 'gyarados', level: 30 },
+		],
+		dialogue: {
+			start: "I finally evolved one of my Magikarp!",
+			win: "My pride and joy...",
+			lose: "See? Magikarp can be strong!",
+		},
+	},
+	'birdkeeper_robert': {
+		name: 'Bird Keeper Robert',
+		money: 880,
+		party: [
+			{ species: 'pidgeotto', level: 28 },
+			{ species: 'fearow', level: 28 },
+			{ species: 'dodrio', level: 30 },
+		],
+		dialogue: {
+			start: "My Flying-type Pokémon soar above all others!",
+			win: "Grounded...",
+			lose: "The sky is mine!",
+		},
+	},
+	'twins_amy_may': {
+		name: 'Twins Amy & May',
+		money: 640,
+		party: [
+			{ species: 'clefairy', level: 22 },
+			{ species: 'jigglypuff', level: 22 },
+		],
+		dialogue: {
+			start: "We battle together as one!",
+			win: "We'll train harder!",
+			lose: "Teamwork makes the dream work!",
+		},
+	},
+	'gentleman_thomas': {
+		name: 'Gentleman Thomas',
+		money: 1800,
+		party: [
+			{ species: 'growlithe', level: 35 },
+			{ species: 'ponyta', level: 35 },
+		],
+		dialogue: {
+			start: "A gentleman never backs down from a challenge!",
+			win: "A most splendid battle, good sir!",
+			lose: "Quite right, quite right!",
+		},
+	},
+	'beauty_grace': {
+		name: 'Beauty Grace',
+		money: 1600,
+		party: [
+			{ species: 'clefairy', level: 36 },
+			{ species: 'wigglytuff', level: 36 },
+			{ species: 'persian', level: 38 },
+		],
+		dialogue: {
+			start: "My beautiful Pokémon will dazzle you!",
+			win: "Your Pokémon are lovely too...",
+			lose: "Beauty and power combined!",
+		},
+	},
+	'psychic_johan': {
+		name: 'Psychic Johan',
+		money: 1440,
+		party: [
+			{ species: 'abra', level: 31 },
+			{ species: 'kadabra', level: 31 },
+			{ species: 'drowzee', level: 33 },
+		],
+		dialogue: {
+			start: "I foresaw this battle... but not the outcome!",
+			win: "My visions were clouded...",
+			lose: "The future is clear to me!",
+		},
+	},
+	'channeler_paula': {
+		name: 'Channeler Paula',
+		money: 1200,
+		party: [
+			{ species: 'gastly', level: 32 },
+			{ species: 'haunter', level: 32 },
+			{ species: 'gastly', level: 32 },
+		],
+		dialogue: {
+			start: "The spirits guide my path...",
+			win: "The spirits have spoken...",
+			lose: "Beware the ghostly curse!",
+		},
+	},
+	'rocker_vincent': {
+		name: 'Rocker Vincent',
+		money: 960,
+		party: [
+			{ species: 'voltorb', level: 29 },
+			{ species: 'electrode', level: 29 },
+		],
+		dialogue: {
+			start: "Let's rock and roll!",
+			win: "That was electrifying!",
+			lose: "Feel the power of rock!",
+		},
+	},
+	'juggler_shawn': {
+		name: 'Juggler Shawn',
+		money: 1360,
+		party: [
+			{ species: 'voltorb', level: 31 },
+			{ species: 'voltorb', level: 31 },
+			{ species: 'electrode', level: 33 },
+			{ species: 'mr.mime', level: 33 },
+		],
+		dialogue: {
+			start: "Watch carefully! Don't blink!",
+			win: "I dropped the ball...",
+			lose: "The hand is quicker than the eye!",
+		},
+	},
+	'engineer_bernie': {
+		name: 'Engineer Bernie',
+		money: 1920,
+		party: [
+			{ species: 'magnemite', level: 42 },
+			{ species: 'magnemite', level: 42 },
+			{ species: 'magneton', level: 44 },
+		],
+		dialogue: {
+			start: "My Electric Pokémon are well-engineered!",
+			win: "System overload!",
+			lose: "Perfect engineering!",
+		},
+	},
+	'burglar_simon': {
+		name: 'Burglar Simon',
+		money: 2160,
+		party: [
+			{ species: 'growlithe', level: 44 },
+			{ species: 'vulpix', level: 44 },
+			{ species: 'ninetales', level: 46 },
+		],
+		dialogue: {
+			start: "I'll steal this victory!",
+			win: "Caught red-handed!",
+			lose: "Clean getaway!",
+		},
+	},
+	'firebreather_ray': {
+		name: 'Firebreather Ray',
+		money: 1280,
+		party: [
+			{ species: 'magmar', level: 36 },
+			{ species: 'flareon', level: 36 },
+		],
+		dialogue: {
+			start: "Feel the heat of my flames!",
+			win: "Extinguished...",
+			lose: "I'm on fire!",
+		},
+	},
+	'pokemaniac_mark': {
+		name: 'Pokémaniac Mark',
+		money: 2000,
+		party: [
+			{ species: 'rhyhorn', level: 38 },
+			{ species: 'rhydon', level: 38 },
+			{ species: 'nidoking', level: 40 },
+		],
+		dialogue: {
+			start: "I'm obsessed with powerful Pokémon!",
+			win: "I need to catch more!",
+			lose: "My collection is unbeatable!",
+		},
+	},
+	'supernerd_glenn': {
+		name: 'Super Nerd Glenn',
+		money: 1080,
+		party: [
+			{ species: 'grimer', level: 28 },
+			{ species: 'muk', level: 28 },
+			{ species: 'koffing', level: 30 },
+		],
+		dialogue: {
+			start: "My studies have prepared me for this!",
+			win: "Back to the books...",
+			lose: "Knowledge is power!",
+		},
+	},
+	'gambler_rich': {
+		name: 'Gambler Rich',
+		money: 2800,
+		party: [
+			{ species: 'farfetchd', level: 46 },
+			{ species: 'mr.mime', level: 46 },
+		],
+		dialogue: {
+			start: "Let's make this interesting!",
+			win: "I bet on the wrong Pokémon...",
+			lose: "The house always wins!",
+		},
+	},
+	'sailor_duncan': {
+		name: 'Sailor Duncan',
+		money: 920,
+		party: [
+			{ species: 'machop', level: 27 },
+			{ species: 'machoke', level: 27 },
+			{ species: 'poliwrath', level: 29 },
+		],
+		dialogue: {
+			start: "Ahoy! Ready for a sea battle?",
+			win: "Anchors aweigh...",
+			lose: "Smooth sailing!",
+		},
+	},
+	'aromalady_nikki': {
+		name: 'Aroma Lady Nikki',
+		money: 1440,
+		party: [
+			{ species: 'roselia', level: 36 },
+			{ species: 'bellossom', level: 36 },
+		],
+		dialogue: {
+			start: "My Pokémon smell wonderful!",
+			win: "The sweet scent of defeat...",
+			lose: "A bouquet of victory!",
+		},
+	},
+	'ruinmaniac_dusty': {
+		name: 'Ruin Maniac Dusty',
+		money: 1920,
+		party: [
+			{ species: 'geodude', level: 44 },
+			{ species: 'graveler', level: 44 },
+			{ species: 'sandslash', level: 46 },
+		],
+		dialogue: {
+			start: "I explore ancient ruins and train!",
+			win: "Another ruin to explore...",
+			lose: "History repeats itself!",
+		},
+	},
+	'dragon_tamer_nicolas': {
+		name: 'Dragon Tamer Nicolas',
+		money: 2160,
+		party: [
+			{ species: 'dratini', level: 42 },
+			{ species: 'dragonair', level: 42 },
+			{ species: 'seadra', level: 44 },
+		],
+		dialogue: {
+			start: "Dragons are the ultimate Pokémon!",
+			win: "Even dragons can fall...",
+			lose: "Feel the dragon's fury!",
+		},
+	},
+	'cooltrainer_mary': {
+		name: 'Cool Trainer Mary',
+		money: 2400,
+		party: [
+			{ species: 'persian', level: 48 },
+			{ species: 'dewgong', level: 48 },
+			{ species: 'ninetales', level: 48 },
+		],
+		dialogue: {
+			start: "Only the coolest trainers make it this far!",
+			win: "You're cooler than I thought!",
+			lose: "Stay cool!",
+		},
+	},
+	'cooltrainer_samuel': {
+		name: 'Cool Trainer Samuel',
+		money: 2400,
+		party: [
+			{ species: 'sandslash', level: 47 },
+			{ species: 'cloyster', level: 47 },
+			{ species: 'electrode', level: 49 },
+		],
+		dialogue: {
+			start: "I'm one of the best trainers around!",
+			win: "You're even better!",
+			lose: "That's how Cool Trainers do it!",
+		},
+	},
+	'youngster_ben': {
+		name: 'Youngster Ben',
+		money: 280,
+		party: [
+			{ species: 'ekans', level: 11 },
+			{ species: 'sandshrew', level: 11 },
+		],
+		dialogue: {
+			start: "I'm gonna be the best trainer!",
+			win: "I have a lot to learn...",
+			lose: "I'm getting stronger!",
+		},
+	},
+	'lass_robin': {
+		name: 'Lass Robin',
+		money: 320,
+		party: [
+			{ species: 'jigglypuff', level: 14 },
+			{ species: 'meowth', level: 14 },
+		],
+		dialogue: {
+			start: "My cute Pokémon are tough!",
+			win: "They're still cute though!",
+			lose: "Cute and strong!",
+		},
+	},
+	'hiker_clark': {
+		name: 'Hiker Clark',
+		money: 800,
+		party: [
+			{ species: 'geodude', level: 22 },
+			{ species: 'geodude', level: 22 },
+			{ species: 'graveler', level: 24 },
+		],
+		dialogue: {
+			start: "I hike these mountains every day!",
+			win: "Time for a break...",
+			lose: "Nothing beats mountain training!",
+		},
+	},
+	'picnicker_kelsey': {
+		name: 'Picnicker Kelsey',
+		money: 520,
+		party: [
+			{ species: 'nidoranf', level: 21 },
+			{ species: 'pidgeotto', level: 21 },
+		],
+		dialogue: {
+			start: "Let's have a fun picnic battle!",
+			win: "That was still fun!",
+			lose: "Perfect picnic!",
+		},
+	},
 };
 
 // Trainer locations - maps trainers to locations where they can be challenged
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	'route1': ['youngster_joey', 'lass_alice', 'bug_catcher_rick'],
-	'route2': ['picnicker_liz', 'hiker_dan'],
-	'route3': ['blackbelt_koji'],
-	'route4': ['cooltrainer_jake'],
-	'route5': ['ace_trainer_sarah'],
-	'route6': ['scientist_ted'],
+	'route1': ['youngster_joey', 'lass_alice', 'bug_catcher_rick', 'youngster_ben', 'lass_robin', 'camper_ricky'],
+	'route2': ['picnicker_liz', 'hiker_dan', 'hiker_clark', 'picnicker_kelsey', 'picnicker_diana'],
+	'route3': ['blackbelt_koji', 'swimmer_jack', 'fisherman_ned', 'birdkeeper_robert', 'twins_amy_may'],
+	'route4': ['cooltrainer_jake', 'gentleman_thomas', 'beauty_grace', 'psychic_johan'],
+	'route5': ['ace_trainer_sarah', 'channeler_paula', 'rocker_vincent', 'juggler_shawn'],
+	'route6': ['scientist_ted', 'engineer_bernie', 'burglar_simon', 'firebreather_ray'],
+	'route7': ['pokemaniac_mark', 'supernerd_glenn', 'gambler_rich', 'sailor_duncan'],
+	'victoryroad': ['aromalady_nikki', 'ruinmaniac_dusty', 'dragon_tamer_nicolas', 'cooltrainer_mary', 'cooltrainer_samuel'],
 	'pokemonleague': ['elite_lorelei', 'elite_bruno', 'elite_agatha', 'elite_lance', 'champion_blue'],
 };
 

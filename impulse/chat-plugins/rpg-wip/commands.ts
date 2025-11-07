@@ -2036,11 +2036,58 @@ export const commands: ChatCommands = {
 					location: 'pewtercity',
 					dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
 				},
+				'nurse_cerulean': {
+					name: 'Nurse Joy',
+					location: 'ceruleancity',
+					dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+				},
+				'hiker_route2': {
+					name: 'Friendly Hiker',
+					location: 'route2',
+					dialogue: "This route has tougher Pokémon! Make sure your team is at least level 10 before continuing. Good luck!",
+				},
+				'girl_vermilion': {
+					name: 'Little Girl',
+					location: 'vermilioncity',
+					dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
+				},
+				'shopkeeper_celadon': {
+					name: 'Shop Keeper',
+					location: 'celadoncity',
+					dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
+				},
+				'trainer_fuchsia': {
+					name: 'Expert Trainer',
+					location: 'fuchsiacity',
+					dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
+				},
+				'scientist_cinnabar': {
+					name: 'Lab Scientist',
+					location: 'cinnabarisland',
+					dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
+				},
+				'guard_viridian': {
+					name: 'City Guard',
+					location: 'viridiancity',
+					dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
+				},
+				'veteran_victoryroad': {
+					name: 'Veteran Hiker',
+					location: 'victoryroad',
+					dialogue: "Only trainers with all 8 badges can enter here. The Pokémon are level 48+. Make sure you're prepared!",
+					flags: ['all_badges'],
+				},
 				'champion_guide': {
-					name: 'Veteran Trainer',
+					name: 'Elite Four Guide',
 					location: 'pokemonleague',
 					dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",
 					flags: ['all_badges'],
+				},
+				'congratulations': {
+					name: 'Champion\'s Aide',
+					location: 'pokemonleague',
+					dialogue: "Congratulations, Champion! You've completed your journey. You can explore, catch more Pokémon, or challenge trainers again!",
+					flags: ['champion'],
 				},
 			};
 			
