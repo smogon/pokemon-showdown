@@ -81,6 +81,7 @@ Impulse.parseEmoticons = parseEmoticons;
 
 const loadEmoticons = async (): Promise<void> => {
 	try {
+		console.log("EMOTICONS: Attempting to load emoticon data from disk...");
 		await FS('impulse/db').mkdirp();
 
 		const emoteJSON = await EMOTICONS_FILE.readIfExists();
@@ -99,36 +100,46 @@ const loadEmoticons = async (): Promise<void> => {
 		Impulse.ignoreEmotes = ignoreJSON ? JSON.parse(ignoreJSON) : {};
 
 		buildEmoteRegex();
-	} catch (err) {
+		console.log(`EMOTICONS: Successfully loaded ${Object.keys(emoticons).length} emoticons.`);
+	} catch (err: any) {
 		Monitor.error(`Failed to load emoticons: ${err}`);
+		// Add more detailed logging for permission issues
+		console.error(`EMOTICONS: FAILED TO LOAD DATA. THIS MAY BE A PERMISSIONS OR DISK ISSUE.`);
+		console.error(`EMOTICONS ERROR DETAILS: ${err.message}`);
+		console.error(err.stack);
 	}
 };
 
-const saveEmoteSize = async (size: number): Promise<void> => {
+const saveEmoteSize = (size: number): void => {
 	try {
 		emoteSize = size;
 		const config: EmoticonConfigData = { emoteSize };
-		await CONFIG_FILE.safeWrite(JSON.stringify(config));
-	} catch (err) {
+		console.log("EMOTICONS: Attempting to save emoticon size...");
+		CONFIG_FILE.writeUpdate(() => JSON.stringify(config), { throttle: 1000 });
+	} catch (err: any) {
 		Monitor.error(`Failed to save emoticon size: ${err}`);
+		console.error(`EMOTICONS: FAILED TO SAVE EMOTICON SIZE (sync error).`);
+		console.error(err.stack);
 	}
 };
 
-const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
+const addEmoticon = (name: string, url: string, user: User): void => {
 	emoticonData[name] = {
 		url,
 		addedBy: user.name,
 		addedAt: new Date(),
 	};
-	await EMOTICONS_FILE.safeWrite(JSON.stringify(emoticonData, null, 2));
+	console.log(`EMOTICONS: Attempting to save new emoticon: ${name}`);
+	EMOTICONS_FILE.writeUpdate(() => JSON.stringify(emoticonData, null, 2), { throttle: 1000 });
 
 	emoticons[name] = url;
 	buildEmoteRegex();
 };
 
-const deleteEmoticon = async (name: string): Promise<void> => {
+const deleteEmoticon = (name: string): void => {
 	delete emoticonData[name];
-	await EMOTICONS_FILE.safeWrite(JSON.stringify(emoticonData, null, 2));
+	console.log(`EMOTICONS: Attempting to delete emoticon: ${name}`);
+	EMOTICONS_FILE.writeUpdate(() => JSON.stringify(emoticonData, null, 2), { throttle: 1000 });
 
 	delete emoticons[name];
 	buildEmoteRegex();
@@ -146,7 +157,7 @@ export const chatfilter = function (message, user, room, connection, pmTarget, o
 
 export const commands: Chat.ChatCommands = {
 	emoticon: {
-		async add(target, room, user): Promise<void> {
+		add(target, room, user): void {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
@@ -156,12 +167,12 @@ export const commands: Chat.ChatCommands = {
 			if (name.length > 10) return this.errorReply("Emoticons may not be longer than 10 characters.");
 			if (emoticonData[name]) return this.errorReply(`${name} is already an emoticon.`);
 
-			await addEmoticon(name, url, user);
+			addEmoticon(name, url, user);
 
 			this.sendReply(`|raw|Emoticon ${Chat.escapeHTML(name)} added: <img src="${url}" width="40" height="40">`);
 		},
 
-		async delete(target, room, user): Promise<void> {
+		delete(target, room, user): void {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
@@ -169,7 +180,7 @@ export const commands: Chat.ChatCommands = {
 			const emote = emoticonData[target];
 			if (!emote) return this.errorReply("That emoticon does not exist.");
 
-			await deleteEmoticon(target);
+			deleteEmoticon(target);
 
 			this.sendReply("Emoticon removed.");
 		},
@@ -236,28 +247,30 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
-		async ignore(target, room, user): Promise<void> {
+		ignore(target, room, user): void {
 			if (Impulse.ignoreEmotes[user.id]) return this.errorReply('Already ignoring emoticons.');
 			Impulse.ignoreEmotes[user.id] = true;
-			await IGNORE_FILE.safeWrite(JSON.stringify(Impulse.ignoreEmotes, null, 2));
+			console.log(`EMOTICONS: Attempting to save ignore list (add ${user.id})`);
+			IGNORE_FILE.writeUpdate(() => JSON.stringify(Impulse.ignoreEmotes, null, 2), { throttle: 1000 });
 			this.sendReply('Ignoring emoticons. Note: Chat history may still show emoticons when rejoining.');
 		},
 
-		async unignore(target, room, user): Promise<void> {
+		unignore(target, room, user): void {
 			if (!Impulse.ignoreEmotes[user.id]) return this.errorReply('Not ignoring emoticons.');
 			delete Impulse.ignoreEmotes[user.id];
-			await IGNORE_FILE.safeWrite(JSON.stringify(Impulse.ignoreEmotes, null, 2));
+			console.log(`EMOTICONS: Attempting to save ignore list (remove ${user.id})`);
+			IGNORE_FILE.writeUpdate(() => JSON.stringify(Impulse.ignoreEmotes, null, 2), { throttle: 1000 });
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
-		async size(target, room, user): Promise<void> {
+		size(target, room, user): void {
 			this.checkCan('roomowner');
 			if (!target) return this.errorReply('Specify a size (16-256).');
 
 			const size = parseInt(target);
 			if (isNaN(size) || size < 16 || size > 256) return this.errorReply('Size must be 16-256.');
 
-			await saveEmoteSize(size);
+			saveEmoteSize(size);
 
 			this.sendReply(`Emoticon size set to ${size}px.`);
 		},
