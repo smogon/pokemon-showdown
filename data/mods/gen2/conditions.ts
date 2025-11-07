@@ -234,7 +234,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onRestart() {
 			this.effectState.counter /= 2;
-			this.effectState.removeStall = false;
 		},
 	},
 	residualdmg: {

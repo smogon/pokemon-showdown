@@ -443,33 +443,23 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart() {
 			this.effectState.counter = 3;
 		},
-		onBeforeMovePriority: 150,
-		onBeforeMove() {
-			this.effectState.removeStall = true;
-		},
 		onStallMove(pokemon) {
 			// this.effectState.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			const counter = this.effectState.counter || 1;
 			this.debug(`Success chance: ${Math.round(100 / counter)}%`);
 			const success = this.randomChance(1, counter);
-			if (!success) {
-				delete pokemon.volatiles['stall'];
-			}
+			if (!success) delete pokemon.volatiles['stall'];
 			return success;
 		},
 		onRestart() {
 			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
 				this.effectState.counter *= 3;
 			}
-			this.effectState.removeStall = false;
 		},
-		onResidual(pokemon) {
-			if (this.effectState.removeStall) {
-				delete pokemon.volatiles['stall'];
-			}
-			delete this.effectState.removeStall;
-		}
+		onAfterMove(pokemon, target, move) {
+			if (!move.stallingMove) delete pokemon.volatiles['stall'];
+		},
 	},
 	gem: {
 		name: 'gem',

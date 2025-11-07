@@ -43,7 +43,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
 				this.effectState.counter *= 2;
 			}
-			this.effectState.removeStall = false;
 		},
 	},
 	gem: {
