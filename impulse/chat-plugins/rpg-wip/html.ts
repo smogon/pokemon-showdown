@@ -626,47 +626,9 @@ export function generateDoubleBattleHTML(
 		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>'; // <-- MODIFIED CALL
 	};
 
-	// Helper function to generate field effects HTML with side-by-side layout
-	const generateFieldEffectsDisplay = () => {
-		const fieldEffectHTML = generateFieldEffectHTML(battle);
-		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+	// --- FIELD EFFECTS HELPER REMOVED ---
 
-		const lines = tempDiv.split('<br>').filter(line => line.trim());
-		let yourSide = '';
-		let field = '';
-		let opponentSide = '';
-		let currentSection = '';
-
-		for (const line of lines) {
-			if (line.includes('Your Side:')) {
-				currentSection = 'your';
-			} else if (line.includes('Field:')) {
-				currentSection = 'field';
-			} else if (line.includes("Opponent's Side:")) {
-				currentSection = 'opponent';
-			} else {
-				if (currentSection === 'your') {
-					yourSide += line + '<br>';
-				} else if (currentSection === 'field') {
-					field += line + '<br>';
-				} else if (currentSection === 'opponent') {
-					opponentSide += line + '<br>';
-				}
-			}
-		}
-
-		return '<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>' + (yourSide || 'Clear') + '</td>' +
-			'<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>' + (field || 'Clear') + '</td>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent\'s Side:</strong><br>' + (opponentSide || 'Clear') + '</td>' +
-			'</tr>' +
-			'</table>';
-	};
-
-	// --- ADDED: Get side effect tags ---
-	const playerEffects = generateSideEffectTags(battle, 'player');
-	const opponentEffects = generateSideEffectTags(battle, 'opponent');
+	// --- FIELD EFFECTS TAGS REMOVED ---
 
 	// --- REMOVED HEADER ---
 	let html = '<div class="infobox">';
@@ -676,26 +638,22 @@ export function generateDoubleBattleHTML(
 	// Opponent Side (Top Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: Added &nbsp; to prevent collapse ---
-	html += '<h3 style="margin: 5px 0;">' + opponentEffects + '&nbsp;</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: Removed text, added nbsp for spacing ---
-	html += '<h3 style="margin: 5px 0;">&nbsp;</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(oSlot1, 3, 'opponent');
 	html += '</td>';
 	html += '</tr>';
 	// Player Side (Bottom Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: Added &nbsp; to prevent collapse ---
-	html += '<h3 style="margin: 5px 0;">' + playerEffects + '&nbsp;</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(pSlot0, 0, 'player');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: Removed text, added nbsp for spacing ---
-	html += '<h3 style="margin: 5px 0;">&nbsp;</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(pSlot1, 1, 'player');
 	html += '</td>';
 	html += '</tr>';
@@ -845,6 +803,7 @@ export function generateDoubleBattleHTML(
 	html += '</div>';
 	return html;
 }
+
 
 /**
  * [NEW ROUTER]
