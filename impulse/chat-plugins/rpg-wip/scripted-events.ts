@@ -9,6 +9,26 @@ import type { PlayerData, RPGPokemon, ScriptedEvent } from './interface';
 import { Dex } from '../../../sim/dex';
 
 /**
+ * Utility: Parse timestamp from flag string
+ * Flags follow format: prefix_suffix_timestamp
+ */
+function parseTimestampFromFlag(flagStr: string): number {
+	const parts = flagStr.split('_');
+	const timestamp = parts[parts.length - 1];
+	return parseInt(timestamp) || 0;
+}
+
+/**
+ * Utility: Parse numeric value from flag string
+ * Flags follow format: prefix_suffix_number
+ */
+function parseNumberFromFlag(flagStr: string): number {
+	const parts = flagStr.split('_');
+	const value = parts[parts.length - 1];
+	return parseInt(value) || 0;
+}
+
+/**
  * Cutscene Event
  * Display a cinematic cutscene
  */
@@ -86,11 +106,15 @@ export function handlePuzzle(
 	event: ScriptedEvent,
 	solution: string
 ): { success: boolean, message: string, solved: boolean } {
-	if (!event.correctAnswer) {
+	if (!event.answers || event.answers.length === 0 || event.correctAnswer === undefined) {
 		return { success: false, message: 'Puzzle not configured.', solved: false };
 	}
 
-	const solved = solution.toLowerCase() === event.answers![event.correctAnswer].toLowerCase();
+	if (event.correctAnswer < 0 || event.correctAnswer >= event.answers.length) {
+		return { success: false, message: 'Puzzle configuration error.', solved: false };
+	}
+
+	const solved = solution.toLowerCase() === event.answers[event.correctAnswer].toLowerCase();
 
 	return {
 		success: true,
@@ -302,7 +326,7 @@ export function checkActiveSwarm(player: PlayerData, species: string): boolean {
 
 	if (!swarmStr) return false;
 
-	const expiryTime = parseInt(swarmStr.split('_').pop() || '0');
+	const expiryTime = parseTimestampFromFlag(swarmStr);
 	const now = Date.now();
 
 	if (now >= expiryTime) {
@@ -351,7 +375,7 @@ export function handleTournament(
 
 	let currentRound = 0;
 	if (roundStr) {
-		currentRound = parseInt(roundStr.split('_').pop() || '0');
+		currentRound = parseNumberFromFlag(roundStr);
 	}
 
 	if (currentRound >= event.tournamentOpponents.length) {
@@ -380,7 +404,7 @@ export function advanceTournamentRound(player: PlayerData, eventId: string): voi
 
 	let currentRound = 0;
 	if (roundStr) {
-		currentRound = parseInt(roundStr.split('_').pop() || '0');
+		currentRound = parseNumberFromFlag(roundStr);
 		player.storyFlags.delete(roundStr);
 	}
 
@@ -783,7 +807,7 @@ export function handleTimeLoop(
 
 	let loopCount = 1;
 	if (loopStr) {
-		loopCount = parseInt(loopStr.split('_').pop() || '1') + 1;
+		loopCount = parseNumberFromFlag(loopStr) + 1;
 		player.storyFlags.delete(loopStr);
 	}
 

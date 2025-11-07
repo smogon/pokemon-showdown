@@ -11,6 +11,26 @@ import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
 
 /**
+ * Utility: Parse timestamp from flag string
+ * Flags follow format: prefix_suffix_timestamp
+ */
+function parseTimestampFromFlag(flagStr: string): number {
+	const parts = flagStr.split('_');
+	const timestamp = parts[parts.length - 1];
+	return parseInt(timestamp) || 0;
+}
+
+/**
+ * Utility: Parse numeric value from flag string
+ * Flags follow format: prefix_suffix_number
+ */
+function parseNumberFromFlag(flagStr: string): number {
+	const parts = flagStr.split('_');
+	const value = parts[parts.length - 1];
+	return parseInt(value) || 0;
+}
+
+/**
  * Fossil Revival Action
  * Revives a fossil item into a Pokemon
  */
@@ -89,7 +109,7 @@ export function handleDailyReward(
 
 	let lastClaimTime = 0;
 	if (lastClaimStr) {
-		lastClaimTime = parseInt(lastClaimStr.split('_').pop() || '0');
+		lastClaimTime = parseTimestampFromFlag(lastClaimStr);
 	}
 
 	const now = Date.now();
@@ -108,7 +128,7 @@ export function handleDailyReward(
 	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
 	let streak = 1;
 	if (streakStr) {
-		streak = parseInt(streakStr.split('_').pop() || '1') + 1;
+		streak = parseNumberFromFlag(streakStr) + 1;
 		player.storyFlags.delete(streakStr);
 	}
 
@@ -605,8 +625,16 @@ export function handleEVTrainer(
 		return { success: false, message: `Training ${evAmount} EVs costs ₽${totalCost}.` };
 	}
 
+	// Validate stat is a valid EV key
+	type EVKey = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+	const validEVKeys: EVKey[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+	if (!validEVKeys.includes(stat as EVKey)) {
+		return { success: false, message: 'Invalid stat specified.' };
+	}
+
 	// Check current EVs
-	const currentEVs = pokemon.evs[stat as keyof typeof pokemon.evs] || 0;
+	const evKey = stat as EVKey;
+	const currentEVs = pokemon.evs[evKey] || 0;
 	const totalEVs = Object.values(pokemon.evs).reduce((sum, ev) => sum + ev, 0);
 
 	if (currentEVs >= 252) {
@@ -623,7 +651,7 @@ export function handleEVTrainer(
 	}
 
 	player.money -= costPerEV * canGain;
-	(pokemon.evs as any)[stat] = currentEVs + canGain;
+	pokemon.evs[evKey] = currentEVs + canGain;
 
 	return {
 		success: true,

@@ -259,7 +259,7 @@ export type AbilityStatChangeModifierHandler = (value: number, ability: string) 
 export interface NPCAction {
 	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon' |
 		'fossilrevival' | 'dailyreward' | 'battlerequest' | 'questchain' | 'itemcraft' | 'berryplant' | 'pokemongrooming' |
-		'fortuneteller' | 'pokemonbreeder' | 'moverelearner' | 'abilitycapsule' | 'evtrainer' | 'ivchecker' | 
+		'fortuneteller' | 'pokemonbreeder' | 'moverelearner' | 'abilitycapsule' | 'evtrainer' | 'ivchecker' |
 		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer';
 	itemId?: string;
 	quantity?: number;
@@ -337,7 +337,7 @@ export interface NPCData {
 	dialogue: string;
 	flags?: string[];
 	action?: NPCAction;
-	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' | 
+	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' |
 		'elitefoura' | 'champion' | 'rival' | 'professor' | 'scientist' | 'fossildiscoverer' | 'daycareworker' |
 		'battlefacilityhost' | 'contestjudge' | 'trader' | 'questgiver' | 'storyteller' | 'gymtrainer' |
 		'cooltrainer' | 'veteran' | 'collector' | 'breeder' | 'ranger' | 'sage' | 'mystic' | 'fortuneteller' |
@@ -351,7 +351,7 @@ export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' |
 	'powerplant' | 'factory' | 'warehouse' | 'radio' | 'tvstation' | 'theater' | 'arcade' | 'casino' |
 	'pokemonfancyclub' | 'namereater' | 'movedeleterhouse' | 'movetutorshop' | 'salon' | 'spa' | 'gym_training' |
 	'fossillab' | 'pokemoncenter_mega' | 'tradestation' | 'berry_shop' | 'incubator' |
-	'pokeathalon' | 'ranchhouse' | 'hideout' | 'abandonedbuilding' | 'ruins' | 'tower';;
+	'pokeathalon' | 'ranchhouse' | 'hideout' | 'abandonedbuilding' | 'ruins' | 'tower';
 
 export interface Building {
 	id: string;
