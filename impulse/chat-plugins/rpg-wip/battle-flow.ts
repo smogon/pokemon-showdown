@@ -1084,10 +1084,16 @@ export function executeAction(
 }
 
 export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
-	const usableMoves = aiSlot.pokemon.moves.filter(m => {
+	// First try to find damaging moves
+	let usableMoves = aiSlot.pokemon.moves.filter(m => {
 		const moveData = getMove(m.id);
 		return m.pp > 0 && moveData.category !== 'Status';
 	});
+
+	// If no damaging moves available, use any move with PP
+	if (usableMoves.length === 0) {
+		usableMoves = aiSlot.pokemon.moves.filter(m => m.pp > 0);
+	}
 
 	let chosenMoveId = 'struggle';
 	if (usableMoves.length > 0) {
