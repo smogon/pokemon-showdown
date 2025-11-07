@@ -13,7 +13,7 @@ import { RPGAbilities } from './abilities';
 import { getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
-import { LOCATIONS } from './data';
+import { LOCATIONS } from './locations';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
