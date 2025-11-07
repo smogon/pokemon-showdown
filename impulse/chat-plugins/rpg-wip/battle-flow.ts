@@ -265,6 +265,13 @@ export function checkForWinLoss(
 						}
 					}
 				}
+				
+				// Check if Champion was defeated
+				if (battle.trainerId === 'champion_blue') {
+					player.storyFlags.add('champion');
+					player.storyFlags.add('game_complete');
+					messageLog.push(`<strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong>`);
+				}
 			}
 			
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
