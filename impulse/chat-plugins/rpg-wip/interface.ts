@@ -129,6 +129,7 @@ export interface PlayerData {
 	defeatedTrainers: Set<string>;
 	obtainedBadges: string[];
 	visitedLocations: Set<string>;
+	lastPokemonCenter?: string; // Track the last Pokemon Center visited for respawn
 }
 
 export interface BattleState {

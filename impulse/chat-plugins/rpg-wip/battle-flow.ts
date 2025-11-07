@@ -13,6 +13,7 @@ import { RPGAbilities } from './abilities';
 import { getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
+import { LOCATIONS } from './data';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
@@ -215,6 +216,23 @@ export function checkForWinLoss(
 		}
 		moneyLost = Math.min(player.money, moneyLost);
 		player.money -= moneyLost;
+
+		// Heal all Pokemon (like in Pokemon games)
+		for (const pokemon of player.party) {
+			pokemon.hp = pokemon.maxHp;
+			pokemon.status = null;
+			for (const move of pokemon.moves) {
+				const moveData = getMove(move.id);
+				move.pp = moveData.pp || 5;
+			}
+		}
+
+		// Transport player to last Pokemon Center visited
+		const respawnLocation = player.lastPokemonCenter || 'startertown';
+		const respawnLocationData = LOCATIONS[respawnLocation];
+		if (respawnLocationData) {
+			player.location = respawnLocationData.name;
+		}
 
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
 		return true;

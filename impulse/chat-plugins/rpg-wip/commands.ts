@@ -1824,6 +1824,9 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 
+			// Update last Pokemon Center visited
+			player.lastPokemonCenter = toID(player.location);
+
 			for (const pokemon of player.party) {
 				pokemon.hp = pokemon.maxHp;
 				pokemon.status = null;
