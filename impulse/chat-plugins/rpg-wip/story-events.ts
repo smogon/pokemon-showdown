@@ -73,5 +73,3 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		dialogue: "Congratulations! You are the new Pokémon League Champion! You've proven yourself as one of the greatest trainers!",
 	},
 };
-
-// NPC Database with dialogue and actions

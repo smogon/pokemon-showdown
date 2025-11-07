@@ -771,5 +771,3 @@ export const TRAINER_LOCATIONS: Record<string, string[]> = {
 	'victoryroad': ['aromaladynikki', 'ruinmaniacdusty', 'dragontamernicolas', 'cooltrainermary', 'cooltrainersamuel'],
 	'pokemonleague': ['elitelorelei', 'elitebruno', 'eliteagatha', 'elitelance', 'championblue'],
 };
-
-// Story events - triggered at specific points in the game

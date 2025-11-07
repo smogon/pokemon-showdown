@@ -8,10 +8,10 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { NATURES, BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES } from './data';
+import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES } from './data';
 import { ITEMS_DATABASE } from './items';
 import type { ActivePokemonSlot, BattleState, Stats, Status, Move, RPGPokemon } from './interface';
-import { getActiveSlots } from './utils';
+import { getActiveSlots, NATURES } from './utils';
 
 // --- CONSTANTS ---
 
