@@ -6,7 +6,6 @@
 * Items are unlocked based on badges earned, similar to the Pokemon games.
 */
 
-import type { PlayerData } from './interface';
 import { ITEMS_DATABASE } from './items';
 
 export interface ShopTier {
@@ -411,8 +410,8 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 			},
 		],
 	},
-	'viridian city': {
-		locationId: 'viridian city',
+	'viridiancity': {
+		locationId: 'viridiancity',
 		tiers: [
 			{
 				requiredBadges: 7,
@@ -519,8 +518,8 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 			},
 		],
 	},
-	'indigoplateaumart': {
-		locationId: 'indigoplateaumart',
+	'pokemonleague': {
+		locationId: 'pokemonleague',
 		tiers: [
 			{
 				requiredBadges: 8,
@@ -572,7 +571,7 @@ export function getShopInventory(locationId: string, playerBadges: number): stri
 	}
 
 	const availableItems: string[] = [];
-	
+
 	// Collect items from all unlocked tiers
 	for (const tier of shopData.tiers) {
 		if (playerBadges >= tier.requiredBadges) {
@@ -591,7 +590,9 @@ export function getShopInventory(locationId: string, playerBadges: number): stri
 /**
  * Get the next tier of items that will unlock
  */
-export function getNextShopTier(locationId: string, playerBadges: number): { requiredBadges: number, itemCount: number } | null {
+export function getNextShopTier(
+	locationId: string, playerBadges: number
+): { requiredBadges: number, itemCount: number } | null {
 	const shopData = SHOP_INVENTORIES[locationId];
 	if (!shopData) return null;
 
