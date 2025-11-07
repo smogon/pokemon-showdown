@@ -424,43 +424,7 @@ export function generateSingleBattleHTML(
 	const playerPokemon = playerSlot.pokemon;
 	const player = getPlayerData(battle.playerId); 
 
-	// Helper function to generate field effects HTML with side-by-side layout
-	const generateFieldEffectsDisplay = () => {
-		const fieldEffectHTML = generateFieldEffectHTML(battle);
-		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
-
-		const lines = tempDiv.split('<br>').filter(line => line.trim());
-		let yourSide = '';
-		let field = '';
-		let opponentSide = '';
-		let currentSection = '';
-
-		for (const line of lines) {
-			if (line.includes('Your Side:')) {
-				currentSection = 'your';
-			} else if (line.includes('Field:')) {
-				currentSection = 'field';
-			} else if (line.includes("Opponent's Side:")) {
-				currentSection = 'opponent';
-			} else {
-				if (currentSection === 'your') {
-					yourSide += line + '<br>';
-				} else if (currentSection === 'field') {
-					field += line + '<br>';
-				} else if (currentSection === 'opponent') {
-					opponentSide += line + '<br>';
-				}
-			}
-		}
-
-		return '<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>' + (yourSide || 'Clear') + '</td>' +
-			'<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>' + (field || 'Clear') + '</td>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent\'s Side:</strong><br>' + (opponentSide || 'Clear') + '</td>' +
-			'</tr>' +
-			'</table>';
-	};
+	// --- FIELD EFFECTS HELPER REMOVED ---
 
 	let actionHTML = '';
 	let moveButtonsHTML = '';
@@ -535,21 +499,26 @@ export function generateSingleBattleHTML(
 		moveButtonsHTML += '</table>';
 	}
 
+	// --- MODIFIED: Added styles and centered p tag ---
+	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
+	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
+
 	const catchButton = (battle.battleType === 'wild') ?
-		'<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>' :
-		'<button class="button" disabled>⚽ Catch</button>';
+		'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
 
 	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
-		'<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>' :
-		'<button class="button" disabled>🏃 Run</button>';
+		'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
 	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
 		moveButtonsHTML +
-		'<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ' + catchButton + ' ' + runButton + '</p>';
+		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+	// --- END MODIFICATION ---
 
-	// --- ADDED: Get side effect tags ---
-	const playerEffects = generateSideEffectTags(battle, 'player');
-	const opponentEffects = generateSideEffectTags(battle, 'opponent');
+	// --- FIELD EFFECTS TAGS REMOVED ---
 
 	const playerName = player ? player.name : "Your";
 
@@ -564,13 +533,11 @@ export function generateSingleBattleHTML(
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- MODIFIED: Added &nbsp; to prevent collapse ---
-		'<h3 style="margin: 5px 0;">' + playerEffects + '&nbsp;</h3>' +
+		// --- H3 TAG REMOVED ---
 		'' + generateSharedBattlePokemonInfo(playerSlot, true, false, playerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- MODIFIED: Added &nbsp; to prevent collapse ---
-		'<h3 style="margin: 5px 0;">' + opponentEffects + '&nbsp;</h3>' +
+		// --- H3 TAG REMOVED ---
 		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'</tr>' +
@@ -780,30 +747,31 @@ export function generateDoubleBattleHTML(
 			html += '<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>';
 		}
 
-		// --- Switch/Catch/Run Buttons ---
-		// --- FIX: Reduced padding from 12px to 8px ---
-		const buttonStyle = 'width: auto; min-width:120px; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;';
+		// --- MODIFIED: Added styles and centered p tag ---
+		const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
+		const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+
+		const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
 
 		// In double battles, catching is only allowed when one opponent remains (matches Gen 8+ Pokemon games)
 		const activeOpponents = getActiveSlots(battle.opponentSlots);
 		const canCatch = battle.battleType === 'wild_double' && activeOpponents.length === 1;
 		const catchButton = canCatch ?
-			'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + buttonStyle + '">⚽ Catch</button>' :
-			'<button class="button" disabled style="' + buttonStyle + '" title="' + (battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles') + '">⚽ Catch</button>';
+			'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '" title="' + (battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles') + '">⚽ Catch</button>';
 
 		const runButton = (battle.battleType === 'wild_double') ?
-			'<button name="send" value="/rpg battleaction run" class="button" style="' + buttonStyle + '">🏃 Run</button>' :
-			'<button class="button" disabled style="' + buttonStyle + '">🏃 Run</button>';
+			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
-		html += '<p style="margin-top: 15px;">' +
-			'<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + buttonStyle + '">🔄 Switch</button>' +
-			'' + catchButton + ' ' + runButton + '</p>';
+		html += '<p style="margin-top: 15px; text-align: center;">' +
+			switchButton + catchButton + runButton + '</p>';
+		// --- END MODIFICATION ---
 	}
 
 	html += '</div>';
 	return html;
 }
-
 
 /**
  * [NEW ROUTER]
