@@ -1,3 +1,6 @@
+/*
+* Auto Generated Learnsets
+*/
 export const MANUAL_LEARNSETS = {
 	bulbasaur: {
 		levelup: [
