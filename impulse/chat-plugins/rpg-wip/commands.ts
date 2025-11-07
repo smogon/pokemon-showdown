@@ -82,6 +82,8 @@ import {
 	NPC_DATABASE,
 } from './data';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import * as NPCActions from './npc-actions';
+import * as ScriptedEvents from './scripted-events';
 
 export const commands: ChatCommands = {
 	rpg: {
@@ -1078,24 +1080,24 @@ export const commands: ChatCommands = {
 				for (const event of targetLocation.scriptedEvents) {
 					// Check if event should trigger
 					const eventFlagId = `scripted_${event.id}`;
-					
+
 					// Skip if already triggered and marked as triggerOnce
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-					
+
 					// Skip if required flag is not present
 					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
-					
+
 					// Skip if player doesn't have enough badges
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
-					
+
 					// Skip if player has too many badges (for early-game only events)
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-					
+
 					// Skip if preventIfFlag is set and player has that flag
 					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 
 					triggeredEvents.push(event);
-					
+
 					// Mark as triggered if it's a once-only event
 					if (event.triggerOnce) {
 						player.storyFlags.add(eventFlagId);
@@ -1113,7 +1115,7 @@ export const commands: ChatCommands = {
 				const firstEvent = triggeredEvents[0];
 				let eventHTML = `<div class="infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
 				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
-				
+
 				if (firstEvent.type === 'dialogue') {
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue}</p>`;
@@ -1154,7 +1156,7 @@ export const commands: ChatCommands = {
 					// Scripted wild Pokemon encounter
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'A wild Pokemon appeared!'}</p>`;
-					
+
 					// Create the wild Pokemon
 					const wildPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
 					if (firstEvent.pokemon.moves) {
@@ -1166,11 +1168,11 @@ export const commands: ChatCommands = {
 					if (firstEvent.pokemon.shiny) {
 						wildPokemon.shiny = true;
 					}
-					
+
 					// Store the wild Pokemon temporarily
 					const tempWildId = `scripted_wild_${firstEvent.id}`;
 					player.pc.set(tempWildId, wildPokemon);
-					
+
 					const species = Dex.species.get(firstEvent.pokemon.species);
 					eventHTML += `<p>A wild ${wildPokemon.shiny ? '✨ ' : ''}${species.name} (Lv. ${wildPokemon.level}) appeared!</p>`;
 					eventHTML += `<p><button name="send" value="/rpg scriptedbattle ${tempWildId}" class="button">⚔️ Battle!</button></p>`;
@@ -1180,8 +1182,25 @@ export const commands: ChatCommands = {
 					eventHTML += `<p>${firstEvent.dialogue || 'A trainer wants to battle!'}</p>`;
 					eventHTML += `<p><button name="send" value="/rpg challenge ${firstEvent.trainerId}" class="button">⚔️ Battle!</button></p>`;
 					eventHTML += `<p><em>(You can't avoid this battle)</em></p>`;
+				} else {
+					// NOTE: Additional scripted event types can be integrated here using scripted-events.ts handlers
+					// Examples:
+					// case 'cutscene': {
+					//   const result = ScriptedEvents.handleCutscene(player, firstEvent);
+					//   if (result.success && result.script) { ... }
+					// }
+					// case 'pokemonswarm': {
+					//   const result = ScriptedEvents.handlePokemonSwarm(player, firstEvent);
+					//   if (result.success) { ... }
+					// }
+					// See scripted-events.ts for all 42 handler functions
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
+					eventHTML += `<p style="color: orange;">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
+					eventHTML += `<p><em>Handler exists in scripted-events.ts but needs to be wired up here.</em></p>`;
+					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 				}
-				
+
 				eventHTML += `</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
@@ -1401,7 +1420,7 @@ export const commands: ChatCommands = {
 			// Get the temporarily stored wild Pokemon
 			const tempWildId = target.trim();
 			const wildPokemon = player.pc.get(tempWildId);
-			
+
 			if (!wildPokemon) {
 				return this.errorReply("This scripted encounter is no longer available.");
 			}
@@ -2118,7 +2137,7 @@ export const commands: ChatCommands = {
 			// Update last Pokemon Center visited (check if any building in current location is a pokecenter)
 			const currentLocationId = toID(player.location);
 			const currentLocationData = LOCATIONS[currentLocationId];
-			if (currentLocationData && currentLocationData.buildings) {
+			if (currentLocationData?.buildings) {
 				const hasPokeCenter = currentLocationData.buildings.some(b => b.type === 'pokecenter');
 				if (hasPokeCenter) {
 					player.lastPokemonCenter = currentLocationId;
@@ -2326,9 +2345,9 @@ export const commands: ChatCommands = {
 				// Show available NPCs in current location (including buildings)
 				const currentLocationId = toID(player.location);
 				const currentLocation = LOCATIONS[currentLocationId];
-				
+
 				const availableNPCs: [string, NPCData][] = [];
-				
+
 				// Find NPCs in the current location
 				for (const [id, npc] of Object.entries(NPC_DATABASE)) {
 					// Check if NPC is in this location (directly or in a building)
@@ -2341,7 +2360,7 @@ export const commands: ChatCommands = {
 					} else if (currentLocation?.buildings) {
 						// Check if NPC is in a building in this location
 						const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-						if (building && building.npcs?.includes(id)) {
+						if (building?.npcs?.includes(id)) {
 							if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) {
 								availableNPCs.push([id, npc]);
 							}
@@ -2370,13 +2389,13 @@ export const commands: ChatCommands = {
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
 			const npcLocationId = toID(npc.location);
-			
+
 			let npcAccessible = false;
 			if (npcLocationId === currentLocationId) {
 				npcAccessible = true;
 			} else if (currentLocation?.buildings) {
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-				if (building && building.npcs?.includes(npcId)) {
+				if (building?.npcs?.includes(npcId)) {
 					npcAccessible = true;
 				}
 			}
@@ -2496,13 +2515,13 @@ export const commands: ChatCommands = {
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
 			const npcLocationId = toID(npc.location);
-			
+
 			let npcAccessible = false;
 			if (npcLocationId === currentLocationId) {
 				npcAccessible = true;
 			} else if (currentLocation?.buildings) {
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-				if (building && building.npcs?.includes(npcId)) {
+				if (building?.npcs?.includes(npcId)) {
 					npcAccessible = true;
 				}
 			}
@@ -2544,7 +2563,7 @@ export const commands: ChatCommands = {
 					if (action.pokemon.moves && action.pokemon.moves.length > 0) {
 						pokemon.moves = action.pokemon.moves.map(moveId => {
 							const moveData = getMove(moveId);
-							if (!moveData || !moveData.exists) {
+							if (!moveData?.exists) {
 								// Fallback to default pp if move data not found
 								return { id: moveId, pp: 5 };
 							}
@@ -2617,6 +2636,24 @@ export const commands: ChatCommands = {
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
+				break;
+
+			// NOTE: Additional NPC action types can be integrated here using npc-actions.ts handlers
+			// Examples:
+			// case 'fossilrevival': {
+			//   const result = NPCActions.handleFossilRevival(player, action, fossilId);
+			//   if (result.success && result.pokemon) { ... }
+			//   break;
+			// }
+			// case 'dailyreward': {
+			//   const result = NPCActions.handleDailyReward(player, action, npcId);
+			//   if (result.success && result.rewards) { ... }
+			//   break;
+			// }
+			// See npc-actions.ts for all 18 handler functions
+			default:
+				resultHTML += `<p style="color: orange;">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
+				resultHTML += `<p><em>The handler exists in npc-actions.ts but needs to be wired up here.</em></p>`;
 				break;
 			}
 

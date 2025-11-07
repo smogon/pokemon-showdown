@@ -29,7 +29,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_startertown'],
+				npcs: ['nursejoystartertown'],
 			},
 			{
 				id: 'startertown_pokemart',
@@ -120,7 +120,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_pewter'],
+				npcs: ['nursejoypewter'],
 			},
 			{
 				id: 'pewtercity_pokemart',
@@ -202,7 +202,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursecerulean'],
+				npcs: ['nursejoycerulean'],
 			},
 			{
 				id: 'ceruleancity_pokemart',
@@ -264,7 +264,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_vermilion'],
+				npcs: ['nursejoyvermilion'],
 			},
 			{
 				id: 'vermilioncity_pokemart',
@@ -316,7 +316,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_celadon'],
+				npcs: ['nursejoyceladon'],
 			},
 			{
 				id: 'celadoncity_department',
@@ -369,7 +369,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_fuchsia'],
+				npcs: ['nursejoyfuchsia'],
 			},
 			{
 				id: 'fuchsiacity_pokemart',
@@ -421,7 +421,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_cinnabar'],
+				npcs: ['nursejoycinnabar'],
 			},
 			{
 				id: 'cinnabarisland_pokemart',
@@ -489,7 +489,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'A place to heal your Pokemon and access your PC.',
-				npcs: ['nursejoy_viridian'],
+				npcs: ['nursejoyviridian'],
 			},
 			{
 				id: 'viridiancity_pokemart',
@@ -556,7 +556,7 @@ export const LOCATIONS: Record<string, Location> = {
 				name: 'Pokemon Center',
 				type: 'pokecenter',
 				description: 'The final Pokemon Center before the Elite Four.',
-				npcs: ['nursejoy_league'],
+				npcs: ['nursejoyleague'],
 			},
 			{
 				id: 'pokemonleague_pokemart',
@@ -1584,56 +1584,56 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		location: 'startertown_lab',
 		dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
 	},
-	'nursejoy_startertown': {
-		id: 'nursejoy_startertown',
+	'nursejoystartertown': {
+		id: 'nursejoystartertown',
 		name: 'Nurse Joy',
 		location: 'startertown_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! We can heal your Pokémon to perfect health. Use /rpg heal anytime!",
 	},
-	'nursejoy_pewter': {
-		id: 'nursejoy_pewter',
+	'nursejoypewter': {
+		id: 'nursejoypewter',
 		name: 'Nurse Joy',
 		location: 'pewtercity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Your Pokémon look tired. Would you like me to heal them?",
 	},
-	'nursejoy_cerulean': {
-		id: 'nursejoy_cerulean',
+	'nursejoycerulean': {
+		id: 'nursejoycerulean',
 		name: 'Nurse Joy',
 		location: 'ceruleancity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
 	},
-	'nursejoy_vermilion': {
-		id: 'nursejoy_vermilion',
+	'nursejoyvermilion': {
+		id: 'nursejoyvermilion',
 		name: 'Nurse Joy',
 		location: 'vermilioncity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Trainers who challenge Lt. Surge need to be prepared!",
 	},
-	'nursejoy_celadon': {
-		id: 'nursejoy_celadon',
+	'nursejoyceladon': {
+		id: 'nursejoyceladon',
 		name: 'Nurse Joy',
 		location: 'celadoncity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Celadon City is such a lovely place, isn't it?",
 	},
-	'nursejoy_fuchsia': {
-		id: 'nursejoy_fuchsia',
+	'nursejoyfuchsia': {
+		id: 'nursejoyfuchsia',
 		name: 'Nurse Joy',
 		location: 'fuchsiacity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Be careful of Poison-type moves in this city!",
 	},
-	'nursejoy_cinnabar': {
-		id: 'nursejoy_cinnabar',
+	'nursejoycinnabar': {
+		id: 'nursejoycinnabar',
 		name: 'Nurse Joy',
 		location: 'cinnabarisland_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! The volcano here can be quite intense, just like Blaine's battles!",
 	},
-	'nursejoy_viridian': {
-		id: 'nursejoy_viridian',
+	'nursejoyviridian': {
+		id: 'nursejoyviridian',
 		name: 'Nurse Joy',
 		location: 'viridiancity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Giovanni's Gym is very challenging. Make sure you're prepared!",
 	},
-	'nursejoy_league': {
-		id: 'nursejoy_league',
+	'nursejoyleague': {
+		id: 'nursejoyleague',
 		name: 'Nurse Joy',
 		location: 'pokemonleague_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! This is your last chance to prepare before facing the Elite Four. Good luck!",
@@ -1776,8 +1776,8 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		dialogue: "I'm the Name Rater! I can help you change your Pokémon's nickname.",
 		npcType: 'namerater',
 	},
-	'movetutor_surf': {
-		id: 'movetutor_surf',
+	'movetutorsurf': {
+		id: 'movetutorsurf',
 		name: 'Move Tutor',
 		location: 'ceruleancity',
 		dialogue: "I can teach Surf to your Water-type Pokémon for ₽10,000!",
@@ -1788,8 +1788,8 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 			cost: 10000,
 		},
 	},
-	'movetutor_thunderbolt': {
-		id: 'movetutor_thunderbolt',
+	'movetutorthunderbolt': {
+		id: 'movetutorthunderbolt',
 		name: 'Move Tutor',
 		location: 'vermilioncity_house1',
 		dialogue: "I can teach Thunderbolt to your Electric-type Pokémon for ₽15,000!",
@@ -1802,8 +1802,8 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	},
 	
 	// Trade NPCs
-	'trader_machop': {
-		id: 'trader_machop',
+	'tradermachop': {
+		id: 'tradermachop',
 		name: 'Trade Enthusiast',
 		location: 'pewtercity',
 		dialogue: "I'm looking for a Geodude! I'll trade you my Machop for it!",
@@ -1817,8 +1817,8 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 			onceOnly: true,
 		},
 	},
-	'trader_haunter': {
-		id: 'trader_haunter',
+	'traderhaunter': {
+		id: 'traderhaunter',
 		name: 'Spooky Trader',
 		location: 'celadoncity',
 		dialogue: "I have a Haunter I'd love to trade! Do you have a Kadabra?",
