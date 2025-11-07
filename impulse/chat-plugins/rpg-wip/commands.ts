@@ -2028,58 +2028,58 @@ export const commands: ChatCommands = {
 					location: 'startertown',
 					dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
 				},
-				'aide_route1': {
+				'aideroute1': {
 					name: 'Professor\'s Aide',
 					location: 'route1',
 					dialogue: "Wild Pokémon live in tall grass! If you want to catch them, weaken them first, then throw a Poké Ball!",
 				},
-				'old_man_pewter': {
+				'oldmanpewter': {
 					name: 'Old Man',
 					location: 'pewtercity',
 					dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
 				},
-				'nurse_cerulean': {
+				'nursecerulean': {
 					name: 'Nurse Joy',
 					location: 'ceruleancity',
 					dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
 				},
-				'hiker_route2': {
+				'hikerroute2': {
 					name: 'Friendly Hiker',
 					location: 'route2',
 					dialogue: "This route has tougher Pokémon! Make sure your team is at least level 10 before continuing. Good luck!",
 				},
-				'girl_vermilion': {
+				'girlvermilion': {
 					name: 'Little Girl',
 					location: 'vermilioncity',
 					dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
 				},
-				'shopkeeper_celadon': {
+				'shopkeeperceladon': {
 					name: 'Shop Keeper',
 					location: 'celadoncity',
 					dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
 				},
-				'trainer_fuchsia': {
+				'trainerfuchsia': {
 					name: 'Expert Trainer',
 					location: 'fuchsiacity',
 					dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
 				},
-				'scientist_cinnabar': {
+				'scientistcinnabar': {
 					name: 'Lab Scientist',
 					location: 'cinnabarisland',
 					dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
 				},
-				'guard_viridian': {
+				'guardviridian': {
 					name: 'City Guard',
 					location: 'viridiancity',
 					dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
 				},
-				'veteran_victoryroad': {
+				'veteranvictoryroad': {
 					name: 'Veteran Hiker',
 					location: 'victoryroad',
 					dialogue: "Only trainers with all 8 badges can enter here. The Pokémon are level 48+. Make sure you're prepared!",
 					flags: ['all_badges'],
 				},
-				'champion_guide': {
+				'championguide': {
 					name: 'Elite Four Guide',
 					location: 'pokemonleague',
 					dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",

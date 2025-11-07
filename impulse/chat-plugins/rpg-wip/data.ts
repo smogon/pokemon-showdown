@@ -57,7 +57,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_brock',
+		hasGym: 'gymbrock',
 	},
 	'route2': {
 		id: 'route2',
@@ -80,7 +80,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_misty',
+		hasGym: 'gymmisty',
 	},
 	'route3': {
 		id: 'route3',
@@ -103,7 +103,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_ltsurge',
+		hasGym: 'gymltsurge',
 	},
 	'route4': {
 		id: 'route4',
@@ -126,7 +126,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_erika',
+		hasGym: 'gymerika',
 	},
 	'route5': {
 		id: 'route5',
@@ -149,7 +149,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_koga',
+		hasGym: 'gymkoga',
 	},
 	'route6': {
 		id: 'route6',
@@ -172,7 +172,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_blaine',
+		hasGym: 'gymblaine',
 	},
 	'route7': {
 		id: 'route7',
@@ -195,7 +195,7 @@ export const LOCATIONS: Record<string, Location> = {
 		],
 		hasPokeCenter: true,
 		hasPokeMart: true,
-		hasGym: 'gym_giovanni',
+		hasGym: 'gymgiovanni',
 	},
 	'victoryroad': {
 		id: 'victoryroad',
@@ -393,7 +393,7 @@ export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEf
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	// Rival Battles
-	'rival_1': {
+	'rival1': {
 		name: 'Rival',
 		money: 500,
 		party: [
@@ -405,7 +405,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Heh! I'm stronger than you!",
 		},
 	},
-	'rival_2': {
+	'rival2': {
 		name: 'Rival',
 		money: 1500,
 		party: [
@@ -418,7 +418,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "See? I'm getting stronger!",
 		},
 	},
-	'rival_3': {
+	'rival3': {
 		name: 'Rival',
 		money: 2500,
 		party: [
@@ -434,7 +434,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Gym Leaders
-	'gym_brock': {
+	'gymbrock': {
 		name: 'Gym Leader Brock',
 		money: 1680,
 		party: [
@@ -447,7 +447,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The best offense is a good defense! That's my way!",
 		},
 	},
-	'gym_misty': {
+	'gymmisty': {
 		name: 'Gym Leader Misty',
 		money: 2520,
 		party: [
@@ -460,7 +460,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Was it too easy for you? Hahaha!",
 		},
 	},
-	'gym_ltsurge': {
+	'gymltsurge': {
 		name: 'Gym Leader Lt. Surge',
 		money: 3360,
 		party: [
@@ -474,7 +474,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Hahaha! That was electrifying!",
 		},
 	},
-	'gym_erika': {
+	'gymerika': {
 		name: 'Gym Leader Erika',
 		money: 4200,
 		party: [
@@ -488,7 +488,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "You may go now.",
 		},
 	},
-	'gym_koga': {
+	'gymkoga': {
 		name: 'Gym Leader Koga',
 		money: 5040,
 		party: [
@@ -503,7 +503,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Confusion, poison... Ninjutsu is all about strategy!",
 		},
 	},
-	'gym_blaine': {
+	'gymblaine': {
 		name: 'Gym Leader Blaine',
 		money: 5880,
 		party: [
@@ -517,7 +517,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Haha! Intense heat makes intense battles!",
 		},
 	},
-	'gym_sabrina': {
+	'gymsabrina': {
 		name: 'Gym Leader Sabrina',
 		money: 5040,
 		party: [
@@ -531,7 +531,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Everyone has psychic power! People just don't realize it!",
 		},
 	},
-	'gym_giovanni': {
+	'gymgiovanni': {
 		name: 'Gym Leader Giovanni',
 		money: 6720,
 		party: [
@@ -548,7 +548,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Regular Trainers - Route 1
-	'youngster_joey': {
+	'youngsterjoey': {
 		name: 'Youngster Joey',
 		money: 240,
 		party: [
@@ -560,7 +560,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "See? Top percentage!",
 		},
 	},
-	'lass_alice': {
+	'lassalice': {
 		name: 'Lass Alice',
 		money: 280,
 		party: [
@@ -575,7 +575,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Elite Four
-	'elite_lorelei': {
+	'elitelorelei': {
 		name: 'Elite Four Lorelei',
 		money: 10000,
 		party: [
@@ -591,7 +591,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "That's the way a true master does it!",
 		},
 	},
-	'elite_bruno': {
+	'elitebruno': {
 		name: 'Elite Four Bruno',
 		money: 10000,
 		party: [
@@ -607,7 +607,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Discipline and training are the keys to victory!",
 		},
 	},
-	'elite_agatha': {
+	'eliteagatha': {
 		name: 'Elite Four Agatha',
 		money: 10000,
 		party: [
@@ -623,7 +623,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Ghosts and Poison are the perfect combination!",
 		},
 	},
-	'elite_lance': {
+	'elitelance': {
 		name: 'Elite Four Lance',
 		money: 10000,
 		party: [
@@ -641,7 +641,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Champion
-	'champion_blue': {
+	'championblue': {
 		name: 'Champion Blue',
 		money: 15000,
 		party: [
@@ -660,7 +660,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Route Trainers - More variety
-	'bug_catcher_rick': {
+	'bugcatcherrick': {
 		name: 'Bug Catcher Rick',
 		money: 120,
 		party: [
@@ -673,7 +673,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Bug types are the best!",
 		},
 	},
-	'picnicker_liz': {
+	'picnickerliz': {
 		name: 'Picnicker Liz',
 		money: 320,
 		party: [
@@ -686,7 +686,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Nothing beats a victory picnic!",
 		},
 	},
-	'hiker_dan': {
+	'hikerdan': {
 		name: 'Hiker Dan',
 		money: 640,
 		party: [
@@ -700,7 +700,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Rock solid victory!",
 		},
 	},
-	'cooltrainer_jake': {
+	'cooltrainerjake': {
 		name: 'Cool Trainer Jake',
 		money: 1600,
 		party: [
@@ -714,7 +714,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Cool Trainers never lose!",
 		},
 	},
-	'ace_trainer_sarah': {
+	'acetrainersarah': {
 		name: 'Ace Trainer Sarah',
 		money: 2800,
 		party: [
@@ -728,7 +728,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "That's the mark of an Ace Trainer!",
 		},
 	},
-	'blackbelt_koji': {
+	'blackbeltkoji': {
 		name: 'Black Belt Koji',
 		money: 1200,
 		party: [
@@ -742,7 +742,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The path of martial arts is superior!",
 		},
 	},
-	'scientist_ted': {
+	'scientistted': {
 		name: 'Scientist Ted',
 		money: 2400,
 		party: [
@@ -758,7 +758,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 	
 	// Additional Route Trainers
-	'camper_ricky': {
+	'camperricky': {
 		name: 'Camper Ricky',
 		money: 480,
 		party: [
@@ -771,7 +771,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Camping makes you strong!",
 		},
 	},
-	'picnicker_diana': {
+	'picnickerdiana': {
 		name: 'Picnicker Diana',
 		money: 440,
 		party: [
@@ -785,7 +785,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Grass types are the best!",
 		},
 	},
-	'swimmer_jack': {
+	'swimmerjack': {
 		name: 'Swimmer Jack',
 		money: 560,
 		party: [
@@ -799,7 +799,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Water is the source of life!",
 		},
 	},
-	'fisherman_ned': {
+	'fisherned': {
 		name: 'Fisherman Ned',
 		money: 720,
 		party: [
@@ -813,7 +813,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "See? Magikarp can be strong!",
 		},
 	},
-	'birdkeeper_robert': {
+	'birdkeeperrobert': {
 		name: 'Bird Keeper Robert',
 		money: 880,
 		party: [
@@ -827,7 +827,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The sky is mine!",
 		},
 	},
-	'twins_amy_may': {
+	'twinsamymay': {
 		name: 'Twins Amy & May',
 		money: 640,
 		party: [
@@ -840,7 +840,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Teamwork makes the dream work!",
 		},
 	},
-	'gentleman_thomas': {
+	'gentlemanthomas': {
 		name: 'Gentleman Thomas',
 		money: 1800,
 		party: [
@@ -853,7 +853,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Quite right, quite right!",
 		},
 	},
-	'beauty_grace': {
+	'beautygrace': {
 		name: 'Beauty Grace',
 		money: 1600,
 		party: [
@@ -867,7 +867,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Beauty and power combined!",
 		},
 	},
-	'psychic_johan': {
+	'psychicjohan': {
 		name: 'Psychic Johan',
 		money: 1440,
 		party: [
@@ -881,7 +881,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The future is clear to me!",
 		},
 	},
-	'channeler_paula': {
+	'channelerpaula': {
 		name: 'Channeler Paula',
 		money: 1200,
 		party: [
@@ -895,7 +895,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Beware the ghostly curse!",
 		},
 	},
-	'rocker_vincent': {
+	'rockervincent': {
 		name: 'Rocker Vincent',
 		money: 960,
 		party: [
@@ -908,7 +908,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Feel the power of rock!",
 		},
 	},
-	'juggler_shawn': {
+	'jugglershawn': {
 		name: 'Juggler Shawn',
 		money: 1360,
 		party: [
@@ -923,7 +923,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The hand is quicker than the eye!",
 		},
 	},
-	'engineer_bernie': {
+	'engineerbernie': {
 		name: 'Engineer Bernie',
 		money: 1920,
 		party: [
@@ -937,7 +937,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Perfect engineering!",
 		},
 	},
-	'burglar_simon': {
+	'burglarsimon': {
 		name: 'Burglar Simon',
 		money: 2160,
 		party: [
@@ -951,7 +951,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Clean getaway!",
 		},
 	},
-	'firebreather_ray': {
+	'firebreatherray': {
 		name: 'Firebreather Ray',
 		money: 1280,
 		party: [
@@ -964,7 +964,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "I'm on fire!",
 		},
 	},
-	'pokemaniac_mark': {
+	'pokemaniacmark': {
 		name: 'Pokémaniac Mark',
 		money: 2000,
 		party: [
@@ -978,7 +978,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "My collection is unbeatable!",
 		},
 	},
-	'supernerd_glenn': {
+	'supernerdglenn': {
 		name: 'Super Nerd Glenn',
 		money: 1080,
 		party: [
@@ -992,7 +992,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Knowledge is power!",
 		},
 	},
-	'gambler_rich': {
+	'gamblerrich': {
 		name: 'Gambler Rich',
 		money: 2800,
 		party: [
@@ -1005,7 +1005,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The house always wins!",
 		},
 	},
-	'sailor_duncan': {
+	'sailorduncan': {
 		name: 'Sailor Duncan',
 		money: 920,
 		party: [
@@ -1019,7 +1019,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Smooth sailing!",
 		},
 	},
-	'aromalady_nikki': {
+	'aromaladynikki': {
 		name: 'Aroma Lady Nikki',
 		money: 1440,
 		party: [
@@ -1032,7 +1032,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "A bouquet of victory!",
 		},
 	},
-	'ruinmaniac_dusty': {
+	'ruinmaniacdusty': {
 		name: 'Ruin Maniac Dusty',
 		money: 1920,
 		party: [
@@ -1046,7 +1046,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "History repeats itself!",
 		},
 	},
-	'dragon_tamer_nicolas': {
+	'dragontamernicolas': {
 		name: 'Dragon Tamer Nicolas',
 		money: 2160,
 		party: [
@@ -1060,7 +1060,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Feel the dragon's fury!",
 		},
 	},
-	'cooltrainer_mary': {
+	'cooltrainermary': {
 		name: 'Cool Trainer Mary',
 		money: 2400,
 		party: [
@@ -1074,7 +1074,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Stay cool!",
 		},
 	},
-	'cooltrainer_samuel': {
+	'cooltrainersamuel': {
 		name: 'Cool Trainer Samuel',
 		money: 2400,
 		party: [
@@ -1088,7 +1088,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "That's how Cool Trainers do it!",
 		},
 	},
-	'youngster_ben': {
+	'youngsterben': {
 		name: 'Youngster Ben',
 		money: 280,
 		party: [
@@ -1101,7 +1101,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "I'm getting stronger!",
 		},
 	},
-	'lass_robin': {
+	'lassrobin': {
 		name: 'Lass Robin',
 		money: 320,
 		party: [
@@ -1114,7 +1114,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Cute and strong!",
 		},
 	},
-	'hiker_clark': {
+	'hikerclark': {
 		name: 'Hiker Clark',
 		money: 800,
 		party: [
@@ -1128,7 +1128,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Nothing beats mountain training!",
 		},
 	},
-	'picnicker_kelsey': {
+	'picnickerkelsey': {
 		name: 'Picnicker Kelsey',
 		money: 520,
 		party: [
@@ -1145,15 +1145,15 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 
 // Trainer locations - maps trainers to locations where they can be challenged
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	'route1': ['youngster_joey', 'lass_alice', 'bug_catcher_rick', 'youngster_ben', 'lass_robin', 'camper_ricky'],
-	'route2': ['picnicker_liz', 'hiker_dan', 'hiker_clark', 'picnicker_kelsey', 'picnicker_diana'],
-	'route3': ['blackbelt_koji', 'swimmer_jack', 'fisherman_ned', 'birdkeeper_robert', 'twins_amy_may'],
-	'route4': ['cooltrainer_jake', 'gentleman_thomas', 'beauty_grace', 'psychic_johan'],
-	'route5': ['ace_trainer_sarah', 'channeler_paula', 'rocker_vincent', 'juggler_shawn'],
-	'route6': ['scientist_ted', 'engineer_bernie', 'burglar_simon', 'firebreather_ray'],
-	'route7': ['pokemaniac_mark', 'supernerd_glenn', 'gambler_rich', 'sailor_duncan'],
-	'victoryroad': ['aromalady_nikki', 'ruinmaniac_dusty', 'dragon_tamer_nicolas', 'cooltrainer_mary', 'cooltrainer_samuel'],
-	'pokemonleague': ['elite_lorelei', 'elite_bruno', 'elite_agatha', 'elite_lance', 'champion_blue'],
+	'route1': ['youngsterjoey', 'lassalice', 'bugcatcherrick', 'youngsterben', 'lassrobin', 'camperricky'],
+	'route2': ['picnickerliz', 'hikerdan', 'hikerclark', 'picnickerkelsey', 'picnickerdiana'],
+	'route3': ['blackbeltkoji', 'swimmerjack', 'fisherned', 'birdkeeperrobert', 'twinsamymay'],
+	'route4': ['cooltrainerjake', 'gentlemanthomas', 'beautygrace', 'psychicjohan'],
+	'route5': ['acetrainersarah', 'channelerpaula', 'rockervincent', 'jugglershawn'],
+	'route6': ['scientistted', 'engineerbernie', 'burglarsimon', 'firebreatherray'],
+	'route7': ['pokemaniacmark', 'supernerdglenn', 'gamblerrich', 'sailorduncan'],
+	'victoryroad': ['aromaladynikki', 'ruinmaniacdusty', 'dragontamernicolas', 'cooltrainermary', 'cooltrainersamuel'],
+	'pokemonleague': ['elitelorelei', 'elitebruno', 'eliteagatha', 'elitelance', 'championblue'],
 };
 
 // Story events - triggered at specific points in the game
@@ -1206,8 +1206,8 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		flagsSet: ['all_badges'],
 		dialogue: 'You have all eight badges! Victory Road awaits. The Elite Four will test everything you have learned!',
 	},
-	'elite_four_ready': {
-		id: 'elite_four_ready',
+	'elitefourready': {
+		id: 'elitefourready',
 		name: 'Ready for Elite Four',
 		description: 'Entered the Pokémon League',
 		trigger: 'location_enter',
@@ -1215,12 +1215,12 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		flagsRequired: ['all_badges'],
 		dialogue: 'This is it! The Elite Four await. Only the strongest trainers make it past here. Are you ready?',
 	},
-	'champion_defeated': {
-		id: 'champion_defeated',
+	'championdefeated': {
+		id: 'championdefeated',
 		name: 'Champion Defeated',
 		description: 'You defeated the Champion and became the new Champion',
 		trigger: 'trainer_defeat',
-		trainerId: 'champion_blue',
+		trainerId: 'championblue',
 		flagsSet: ['champion', 'game_complete'],
 		dialogue: "Congratulations! You are the new Pokémon League Champion! You've proven yourself as one of the greatest trainers!",
 	},
