@@ -330,10 +330,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
+		this.isPrimal = this.forme === 'Primal' || undefined;
 		this.canGigantamax = data.canGigantamax || undefined;
 		this.gmaxUnreleased = !!data.gmaxUnreleased;
 		this.cannotDynamax = !!data.cannotDynamax;
-		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
+		this.battleOnly = data.battleOnly || (this.isMega || this.isPrimal ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
@@ -346,11 +347,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
-			} else if (this.forme === 'Primal') {
-				this.gen = 6;
-				this.isPrimal = true;
-				this.battleOnly = this.baseSpecies;
-			} else if (this.num >= 650 || this.isMega) {
+			} else if (this.num >= 650 || this.isMega || this.isPrimal) {
 				this.gen = 6;
 			} else if (this.num >= 494) {
 				this.gen = 5;
@@ -397,6 +394,18 @@ export class Learnset {
 		this.eventData = data.eventData || undefined;
 		this.encounters = data.encounters || undefined;
 		this.species = species;
+
+		const eventData = Utils.deepClone(this.eventData);
+		let update = false;
+		if (eventData) {
+			for (const eventInfo of eventData) {
+				if (eventInfo.source === 'gen8legends') {
+					eventInfo.pokeball = 'strangeball';
+					update = true;
+				}
+			}
+		}
+		if (update) this.eventData = Utils.deepFreeze(eventData);
 	}
 }
 
@@ -561,8 +570,8 @@ export class DexSpecies {
 			}
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
-					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.gen <= 7 && (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme || species.isMega || (['Alola', 'Starter'].includes(species.forme) &&
 						species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';

@@ -3309,6 +3309,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
+			pokemon.canMegaEvo = pokemon.canMegaEvo === false ? false : this.actions.canMegaEvo(pokemon);
 			pokemon.formeRegression = true;
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
@@ -5477,7 +5478,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wonderguard: {
 		onTryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (target === source || move.category === 'Status' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {

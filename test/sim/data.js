@@ -236,7 +236,7 @@ describe('Dex data', () => {
 
 	it('should have valid Learnsets entries', function () {
 		this.timeout(0);
-		const mods = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex];
+		const mods = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex.mod('gen9legends'), Dex];
 		for (const mod of mods) {
 			for (const speciesid in mod.data.Learnsets) {
 				const species = Dex.species.get(speciesid);
@@ -298,7 +298,7 @@ describe('Dex data', () => {
 								}
 								assert.equal(eventMove, toID(eventMove), `${species.name}'s event move "${eventMove}" must be an ID`);
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
-								const effectiveMod = ['gen8bdsp', 'gen8legends'].includes(mod.currentMod) ? mod.currentMod : undefined;
+								const effectiveMod = ['gen8bdsp', 'gen8legends', 'gen9legends'].includes(mod.currentMod) ? mod.currentMod : undefined;
 								if (eventEntry.source === effectiveMod) assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
 							}
 						}
@@ -355,7 +355,7 @@ describe('Dex data', () => {
 	// Pikachu (6) + Mega (48) [Floette (1)]
 	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
-	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
+	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1) +
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
 	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3;
 	// Silvally (17) + Rotom (5) + Basculin (1) + Meowstic (1) +
@@ -389,6 +389,28 @@ describe('Dex data', () => {
 			const count = countPokemon(Dex.forGen(gen));
 			assert.equal(count.species, species[gen]);
 			assert.equal(count.formes, formes[gen]);
+		});
+	}
+
+	species['gen7letsgo'] = species[1] + 2; // Meltan + Melmetal
+	formes['gen7letsgo'] = 15 + 18 + 2; // Mega (15) + Alola (18) + Starter (2)
+	species['gen8bdsp'] = species[4];
+	formes['gen8bdsp'] = formes[4] + 1 - 1; // Arceus (1) - Pichu (1)
+	species['gen8legends'] = 242 - 16 + 1 - 1; // - Hisui (16) + Sneasel (1) - Basculin (1)
+	// Vulpix (1) + Ninetales (1) + Wormadam (2) + Cherrim (1) + Rotom (5) + Origin (3) + Arceus (17) +
+	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
+	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
+	species['gen9legends'] = 231;
+	// Mega (65) + Vivillon (2) + Floette (1) + Meowstic (1) + Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) +
+	// Zygarde (2) + Alola (1) + Galar (4)
+	formes['gen9legends'] = 65 + 2 + 1 + 1 + 1 + 3 + 3 + 2 + 1 + 4;
+
+	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
+		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {
+			const existenceFunction = mod.includes('legends') ? s => s.exists && !s.isNonstandard : undefined;
+			const count = countPokemon(Dex.mod(mod), existenceFunction);
+			assert.equal(count.species, species[mod]);
+			assert.equal(count.formes, formes[mod]);
 		});
 	}
 
