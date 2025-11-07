@@ -242,10 +242,12 @@ export function generatePokemonInfoHTML(
 	html += '</div>';
 	return html;
 }
+
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
-	isDoubleBattle: boolean
+	isDoubleBattle: boolean,
+	ownerName?: string // <-- NEW PARAMETER
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
@@ -321,11 +323,14 @@ export function generateSharedBattlePokemonInfo(
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
-	// --- HP Bar (15px height) ---
+	// --- NEW: Prepare owner name prefix ---
+	const namePrefix = ownerName ? ownerName + "'s " : '';
+
+	// --- HP Bar (12px height) ---
 	const hpBarHTML =
-		'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
 			'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
-			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 10px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
+			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
 				hpPercentage + '%' +
 			'</span>' +
 		'</div>';
@@ -340,7 +345,7 @@ export function generateSharedBattlePokemonInfo(
 		// Add psicon next to name
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
 		html += '<psicon pokemon="' + species.id + '" style="vertical-align: -5px;"></psicon> '; // <-- ADD ICON
-		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
+		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level; // <-- MODIFIED LINE
 		html += '</div>';
 		html += hpBarHTML; // Keep the new HP bar
 		// --- 64x64 SPRITE IS REMOVED ---
@@ -358,7 +363,7 @@ export function generateSharedBattlePokemonInfo(
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
 		html += '<div style="font-weight: bold; font-size: 1.1em;">';
-		html += (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level;
+		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + pokemon.level; // <-- MODIFIED LINE
 		html += '</div>';
 		html += hpBarHTML;
 		html += spriteHTML; // --- ADDED SPRITE (for singles) ---
@@ -368,8 +373,7 @@ export function generateSharedBattlePokemonInfo(
 	}
 }
 
-
-export const TERA_BUTTON_STYLE = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
+export const TERA_BUTTON_STYLE = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.8em; border: 2px solid #FF1493;';
 
 /**
  * [NEW HELPER]
@@ -418,44 +422,9 @@ export function generateSingleBattleHTML(
 	}
 
 	const playerPokemon = playerSlot.pokemon;
+	const player = getPlayerData(battle.playerId); 
 
-	// Helper function to generate field effects HTML with side-by-side layout
-	const generateFieldEffectsDisplay = () => {
-		const fieldEffectHTML = generateFieldEffectHTML(battle);
-		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
-
-		const lines = tempDiv.split('<br>').filter(line => line.trim());
-		let yourSide = '';
-		let field = '';
-		let opponentSide = '';
-		let currentSection = '';
-
-		for (const line of lines) {
-			if (line.includes('Your Side:')) {
-				currentSection = 'your';
-			} else if (line.includes('Field:')) {
-				currentSection = 'field';
-			} else if (line.includes("Opponent's Side:")) {
-				currentSection = 'opponent';
-			} else {
-				if (currentSection === 'your') {
-					yourSide += line + '<br>';
-				} else if (currentSection === 'field') {
-					field += line + '<br>';
-				} else if (currentSection === 'opponent') {
-					opponentSide += line + '<br>';
-				}
-			}
-		}
-
-		return '<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>' + (yourSide || 'Clear') + '</td>' +
-			'<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>' + (field || 'Clear') + '</td>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent\'s Side:</strong><br>' + (opponentSide || 'Clear') + '</td>' +
-			'</tr>' +
-			'</table>';
-	};
+	// --- FIELD EFFECTS HELPER REMOVED ---
 
 	let actionHTML = '';
 	let moveButtonsHTML = '';
@@ -463,22 +432,22 @@ export function generateSingleBattleHTML(
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
-		// --- FIX: Reduced padding from 8px to 6px ---
-		const buttonStyle = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>' +
-			'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
+		// --- MODIFIED: Button style and content for new size ---
+		const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+			'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 			'<span>Normal</span>' +
 			'<span style="float: right;">-- / --</span>' +
 			'</div> ';
 
-		moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
@@ -499,10 +468,10 @@ export function generateSingleBattleHTML(
 				(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 				move.pp === 0;
 
-			// --- FIX: Reduced padding from 8px to 6px ---
-			const buttonStyle = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">' + moveData.name + '</div>' +
-				'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
+			// --- MODIFIED: Button style and content for new size ---
+			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 				'<span>' + moveData.type + '</span>' +
 				'<span style="float: right;">' + move.pp + ' / ' + moveData.pp + '</span>' +
 				'</div> ';
@@ -512,52 +481,64 @@ export function generateSingleBattleHTML(
 
 			// Add Tera option if can terastallize
 			if (canTerastallize && !isDisabled) {
-				return '<div>' + normalButton + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+				// --- MODIFIED: Added <br> to force Tera button below ---
+				return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 			}
 			return normalButton;
 		});
 
-		moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	}
 
+	// --- MODIFIED: Added styles and centered p tag ---
+	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
+	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
+
 	const catchButton = (battle.battleType === 'wild') ?
-		'<button name="send" value="/rpg battleaction catchmenu" class="button">⚽ Catch</button>' :
-		'<button class="button" disabled>⚽ Catch</button>';
+		'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
 
 	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
-		'<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>' :
-		'<button class="button" disabled>🏃 Run</button>';
+		'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + playerPokemon.species + ' do?</p>' +
+	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
 		moveButtonsHTML +
-		'<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ' + catchButton + ' ' + runButton + '</p>';
+		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+	// --- END MODIFICATION ---
 
-	// --- ADDED: Get side effect tags ---
-	const playerEffects = generateSideEffectTags(battle, 'player');
-	const opponentEffects = generateSideEffectTags(battle, 'opponent');
+	// --- FIELD EFFECTS TAGS REMOVED ---
+
+	const playerName = player ? player.name : "Your";
+
+	// --- NEW: Determine opponent owner name ---
+	let opponentOwnerName: string | undefined = battle.opponentName;
+	if (battle.battleType === 'wild') {
+		opponentOwnerName = 'Wild';
+	}
 
 	// --- REMOVED HEADER ---
 	return '<div class="infobox">' +
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- ADDED: playerEffects ---
-		'<h3 style="margin: 5px 0;">Your Pokémon ' + playerEffects + '</h3>' +
-		'' + generateSharedBattlePokemonInfo(playerSlot, true, false) + '' + // <-- Use shared helper
+		// --- H3 TAG REMOVED ---
+		'' + generateSharedBattlePokemonInfo(playerSlot, true, false, playerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- ADDED: opponentEffects ---
-		'<h3 style="margin: 5px 0;">' + battle.opponentName + ' ' + opponentEffects + '</h3>' +
-		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false) + '' + // <-- Use shared helper
+		// --- H3 TAG REMOVED ---
+		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'</tr>' +
 		'</table>' +
@@ -573,6 +554,14 @@ export function generateDoubleBattleHTML(
 ): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
+	const player = getPlayerData(battle.playerId); 
+	const playerName = player ? player.name : "Your"; 
+
+	// --- NEW: Determine opponent owner name ---
+	let opponentOwnerName: string | undefined = battle.opponentName;
+	if (battle.battleType === 'wild_double') {
+		opponentOwnerName = 'Wild';
+	}
 
 	// Helper to generate HTML for a single slot, handling styling
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
@@ -580,8 +569,17 @@ export function generateDoubleBattleHTML(
 			// --- FIX: Removed min-height: 120px; ---
 			return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; text-align: center; color: #888;">(Empty)</div>';
 		}
+		
+		// --- Determine owner name ---
+		let ownerName: string | undefined = undefined;
+		if (side === 'player') {
+			ownerName = playerName;
+		} else {
+			ownerName = opponentOwnerName; // Use the new logic
+		}
+
 		if (slot.pokemon.hp <= 0) {
-			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true) + '</div>';
+			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>'; // <-- MODIFIED CALL
 		}
 
 		let borderStyle = "1px solid #ccc";
@@ -592,50 +590,12 @@ export function generateDoubleBattleHTML(
 			borderStyle = "3px solid #28a745";
 		}
 
-		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true) + '</div>';
+		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>'; // <-- MODIFIED CALL
 	};
 
-	// Helper function to generate field effects HTML with side-by-side layout
-	const generateFieldEffectsDisplay = () => {
-		const fieldEffectHTML = generateFieldEffectHTML(battle);
-		const tempDiv = fieldEffectHTML.replace(/<div style="background: #f8f9fa;[^>]*>|<\/div>/g, '').replace(/<div style="[^"]*">/g, '').replace(/<\/div>/g, '');
+	// --- FIELD EFFECTS HELPER REMOVED ---
 
-		const lines = tempDiv.split('<br>').filter(line => line.trim());
-		let yourSide = '';
-		let field = '';
-		let opponentSide = '';
-		let currentSection = '';
-
-		for (const line of lines) {
-			if (line.includes('Your Side:')) {
-				currentSection = 'your';
-			} else if (line.includes('Field:')) {
-				currentSection = 'field';
-			} else if (line.includes("Opponent's Side:")) {
-				currentSection = 'opponent';
-			} else {
-				if (currentSection === 'your') {
-					yourSide += line + '<br>';
-				} else if (currentSection === 'field') {
-					field += line + '<br>';
-				} else if (currentSection === 'opponent') {
-					opponentSide += line + '<br>';
-				}
-			}
-		}
-
-		return '<table style="width: 100%; border-collapse: collapse;">' +
-			'<tr>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: left;"><strong>Your Side:</strong><br>' + (yourSide || 'Clear') + '</td>' +
-			'<td style="width: 34%; padding: 5px; vertical-align: top; text-align: center;"><strong>Field:</strong><br>' + (field || 'Clear') + '</td>' +
-			'<td style="width: 33%; padding: 5px; vertical-align: top; text-align: right;"><strong>Opponent\'s Side:</strong><br>' + (opponentSide || 'Clear') + '</td>' +
-			'</tr>' +
-			'</table>';
-	};
-
-	// --- ADDED: Get side effect tags ---
-	const playerEffects = generateSideEffectTags(battle, 'player');
-	const opponentEffects = generateSideEffectTags(battle, 'opponent');
+	// --- FIELD EFFECTS TAGS REMOVED ---
 
 	// --- REMOVED HEADER ---
 	let html = '<div class="infobox">';
@@ -645,24 +605,22 @@ export function generateDoubleBattleHTML(
 	// Opponent Side (Top Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- ADDED: opponentEffects (only to the first opponent header) ---
-	html += '<h3 style="margin: 5px 0;">Opponent 1 ' + opponentEffects + '</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += '<h3 style="margin: 5px 0;">Opponent 2</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(oSlot1, 3, 'opponent');
 	html += '</td>';
 	html += '</tr>';
 	// Player Side (Bottom Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- ADDED: playerEffects (only to the first player header) ---
-	html += '<h3 style="margin: 5px 0;">Your Pokémon 1 ' + playerEffects + '</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(pSlot0, 0, 'player');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += '<h3 style="margin: 5px 0;">Your Pokémon 2</h3>';
+	// --- H3 TAG REMOVED ---
 	html += generateSlotHTML(pSlot1, 1, 'player');
 	html += '</td>';
 	html += '</tr>';
@@ -694,14 +652,14 @@ export function generateDoubleBattleHTML(
 				return '<button name="send" value="/rpg battleaction move ' + targetSelection.attackerSlotIndex + ' ' + targetSelection.moveId + ' ' + target.index + teraParam + '" class="button" style="' + buttonStyle + '">' + target.name + '</button>';
 			});
 
-		let targetButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		let targetButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[0] || '') + '</td>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[1] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[0] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[1] || '') + '</td>';
 		targetButtonsHTML += '</tr>';
 		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[2] || '') + '</td>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[3] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[2] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[3] || '') + '</td>';
 		targetButtonsHTML += '</tr>';
 		targetButtonsHTML += '</table>';
 
@@ -722,27 +680,27 @@ export function generateDoubleBattleHTML(
 
 		if (activeSlot) {
 			const pokemon = activeSlot.pokemon;
-			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + pokemon.species + '</strong> do?</p>';
+			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
 
 			const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
 			let moveButtonsHTML = '';
 
 			if (allMovesOutOfPP) {
-				// --- FIX: Reduced padding from 8px to 6px ---
-				const buttonStyle = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">Struggle</div>' +
-					'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
+				// --- MODIFIED: Button style and content for new size ---
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
+				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 					'<span>Normal</span>' +
 					'<span style="float: right;">-- / --</span>' +
 					'</div>';
 
 				const struggleButton = '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' struggle" class="button" style="' + buttonStyle + '">' + buttonContent + '</button>';
-				moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;"><tr><td style="width: 40%; padding: 0; vertical-align: top;">' + struggleButton + '</td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr><tr><td style="width: 40%; padding: 0; vertical-align: top;"></td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr></table>';
+				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;"><tr><td style="padding: 0; vertical-align: top;">' + struggleButton + '</td><td style="padding: 0; vertical-align: top;"></td></tr><tr><td style="padding: 0; vertical-align: top;"></td><td style="padding: 0; vertical-align: top;"></td></tr></table>';
 			} else {
 				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
 
-				// --- FIX: Reduced padding from 8px to 6px ---
-				const buttonStyle = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
+				// --- MODIFIED: Button style and content for new size ---
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const moveButtons = pokemon.moves.map(move => {
 					const moveData = getMove(move.id);
 
@@ -757,8 +715,8 @@ export function generateDoubleBattleHTML(
 						(activeSlot.lockedMove && activeSlot.lockedMoveCounter === 0 && activeSlot.uproarTurns === 0 && activeSlot.lockedMove !== move.id) ||
 						move.pp === 0;
 
-					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">' + moveData.name + '</div>' +
-						'<div style="font-size: 0.9em; opacity: 0.9; overflow: hidden;">' +
+					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+						'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 						'<span>' + moveData.type + '</span>' +
 						'<span style="float: right;">' + move.pp + ' / ' + moveData.pp + '</span>' +
 						'</div>';
@@ -767,20 +725,21 @@ export function generateDoubleBattleHTML(
 
 					// Add Tera option if can terastallize
 					if (canTerastallizeThisSlot && !isDisabled) {
-						return '<div>' + normalButton + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+						// --- MODIFIED: Added <br> to force Tera button below ---
+						return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 					}
 					return normalButton;
 				});
 
-				moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 				moveButtonsHTML += '<tr>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
-				moveButtonsHTML += '</tr>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '<tr>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
-				moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '</table>';
 			}
 			html += moveButtonsHTML;
@@ -788,24 +747,26 @@ export function generateDoubleBattleHTML(
 			html += '<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>';
 		}
 
-		// --- Switch/Catch/Run Buttons ---
-		// --- FIX: Reduced padding from 12px to 8px ---
-		const buttonStyle = 'width: auto; min-width:120px; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0 8px 0 0;';
+		// --- MODIFIED: Added styles and centered p tag ---
+		const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
+		const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+
+		const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
 
 		// In double battles, catching is only allowed when one opponent remains (matches Gen 8+ Pokemon games)
 		const activeOpponents = getActiveSlots(battle.opponentSlots);
 		const canCatch = battle.battleType === 'wild_double' && activeOpponents.length === 1;
 		const catchButton = canCatch ?
-			'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + buttonStyle + '">⚽ Catch</button>' :
-			'<button class="button" disabled style="' + buttonStyle + '" title="' + (battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles') + '">⚽ Catch</button>';
+			'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '" title="' + (battle.battleType === 'wild_double' ? 'Can only catch when one opponent remains' : 'Cannot catch in trainer battles') + '">⚽ Catch</button>';
 
 		const runButton = (battle.battleType === 'wild_double') ?
-			'<button name="send" value="/rpg battleaction run" class="button" style="' + buttonStyle + '">🏃 Run</button>' :
-			'<button class="button" disabled style="' + buttonStyle + '">🏃 Run</button>';
+			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
-		html += '<p style="margin-top: 15px;">' +
-			'<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + buttonStyle + '">🔄 Switch</button>' +
-			'' + catchButton + ' ' + runButton + '</p>';
+		html += '<p style="margin-top: 15px; text-align: center;">' +
+			switchButton + catchButton + runButton + '</p>';
+		// --- END MODIFICATION ---
 	}
 
 	html += '</div>';
