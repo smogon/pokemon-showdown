@@ -28,7 +28,9 @@ import {
     storePokemonInPC,
     withdrawPokemonFromPC,
     playerData,
-    getInitialMoves
+    getInitialMoves,
+    savePlayerToString,
+    loadPlayer
 } from './core';
 import {
     createActivePokemonSlot,
@@ -2134,6 +2136,58 @@ export const commands: ChatCommands = {
 				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
+		},
+
+		save(target, room, user) {
+			const player = getPlayerData(user.id);
+			
+			try {
+				const saveData = savePlayerToString(player);
+				
+				const saveHTML = `<div class="infobox">` +
+					`<h2>Save Game</h2>` +
+					`<p>Your game has been saved! Copy the text below to save your progress:</p>` +
+					`<textarea readonly style="width: 100%; height: 150px; font-family: monospace; font-size: 10px;">${saveData}</textarea>` +
+					`<p><small>Save this text somewhere safe. Use /rpg load [save data] to restore your progress.</small></p>` +
+					`<p><strong>Warning:</strong> This save contains your entire game state. Keep it private!</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
+			} catch (error) {
+				return this.errorReply("Error saving game: " + error);
+			}
+		},
+
+		load(target, room, user) {
+			if (!target) {
+				const loadHTML = `<div class="infobox">` +
+					`<h2>Load Game</h2>` +
+					`<p>To load a saved game, use: <code>/rpg load [save data]</code></p>` +
+					`<p><strong>Warning:</strong> Loading will replace your current progress!</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					`</div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${loadHTML}`);
+			}
+			
+			try {
+				const loadedPlayer = loadPlayer(user.id, target);
+				
+				const confirmHTML = `<div class="infobox">` +
+					`<h2>Game Loaded!</h2>` +
+					`<p>Your saved game has been loaded successfully!</p>` +
+					`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
+					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
+					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
+					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Continue Adventure</button></p>` +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			} catch (error) {
+				return this.errorReply("Error loading game. Make sure you pasted the complete save data.");
+			}
 		},
 
 		help() {

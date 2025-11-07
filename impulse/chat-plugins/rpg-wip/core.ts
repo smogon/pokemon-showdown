@@ -168,6 +168,85 @@ export function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RP
 	return null;
 }
 
+// --- SAVE/LOAD SYSTEM ---
+
+/**
+ * Serialize player data to JSON-compatible format
+ * Converts Maps and Sets to arrays for storage
+ */
+export function serializePlayerData(player: PlayerData): any {
+	return {
+		id: player.id,
+		name: player.name,
+		level: player.level,
+		experience: player.experience,
+		badges: player.badges,
+		party: player.party,
+		location: player.location,
+		money: player.money,
+		inventory: Array.from(player.inventory.entries()),
+		pc: Array.from(player.pc.entries()),
+		storyFlags: Array.from(player.storyFlags),
+		defeatedTrainers: Array.from(player.defeatedTrainers),
+		obtainedBadges: player.obtainedBadges,
+		visitedLocations: Array.from(player.visitedLocations),
+		pendingMoveLearnQueue: player.pendingMoveLearnQueue,
+	};
+}
+
+/**
+ * Deserialize player data from JSON format
+ * Converts arrays back to Maps and Sets
+ */
+export function deserializePlayerData(data: any): PlayerData {
+	return {
+		id: data.id,
+		name: data.name,
+		level: data.level,
+		experience: data.experience,
+		badges: data.badges,
+		party: data.party,
+		location: data.location,
+		money: data.money,
+		inventory: new Map(data.inventory),
+		pc: new Map(data.pc),
+		storyFlags: new Set(data.storyFlags || []),
+		defeatedTrainers: new Set(data.defeatedTrainers || []),
+		obtainedBadges: data.obtainedBadges || [],
+		visitedLocations: new Set(data.visitedLocations || [data.location]),
+		pendingMoveLearnQueue: data.pendingMoveLearnQueue,
+	};
+}
+
+/**
+ * Save player data to a JSON string
+ * Can be stored in a database or file
+ */
+export function savePlayerToString(player: PlayerData): string {
+	const serialized = serializePlayerData(player);
+	return JSON.stringify(serialized);
+}
+
+/**
+ * Load player data from a JSON string
+ * Returns the deserialized PlayerData
+ */
+export function loadPlayerFromString(jsonString: string): PlayerData {
+	const data = JSON.parse(jsonString);
+	return deserializePlayerData(data);
+}
+
+/**
+ * Load player data into the game
+ * Replaces existing data for the user
+ */
+export function loadPlayer(userid: string, savedData: string): PlayerData {
+	const player = loadPlayerFromString(savedData);
+	player.id = userid; // Ensure ID matches current user
+	playerData.set(userid, player);
+	return player;
+}
+
 // --- COMMANDS EXPORT ---
 // Export the commands from the new commands.ts file
 // This is what the Showdown server will import.
