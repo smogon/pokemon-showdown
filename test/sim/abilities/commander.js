@@ -288,7 +288,7 @@ describe('Commander', () => {
 		battle.makeChoices('move thunderbolt 1, move thunderbolt 1', 'auto');
 		assert.fainted(battle.p2.active[0]);
 
-		battle = common.createBattle({ gameType: 'doubles', seed: [0, 0, 0, 0] }, [[
+		battle = common.createBattle({ gameType: 'doubles', seed: [0, 0, 0, 1] }, [[
 			{ species: 'regieleki', moves: ['thunderbolt', 'sleeptalk'] },
 			{ species: 'registeel', moves: ['thunderbolt', 'sleeptalk'] },
 		], [
