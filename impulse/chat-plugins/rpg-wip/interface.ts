@@ -257,7 +257,10 @@ export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: B
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
 
 export interface NPCAction {
-	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon';
+	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon' |
+		'fossilrevival' | 'dailyreward' | 'battlerequest' | 'questchain' | 'itemcraft' | 'berryplant' | 'pokemongrooming' |
+		'fortuneteller' | 'pokemonbreeder' | 'moverelearner' | 'abilitycapsule' | 'evtrainer' | 'ivchecker' | 
+		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
@@ -270,6 +273,61 @@ export interface NPCAction {
 	// Trade pokemon
 	wantedSpecies?: string; // Pokemon player must give
 	offeredPokemon?: { species: string, level: number, moves?: string[] }; // Pokemon NPC offers
+	// Fossil revival
+	fossils?: string[]; // List of accepted fossil items
+	revivalCost?: number; // Cost to revive fossil
+	// Daily reward
+	rewards?: { itemId: string, quantity: number, days?: number }[]; // Daily login rewards
+	lastClaimTime?: number; // Timestamp of last claim
+	// Battle request
+	trainerId?: string; // Trainer to battle
+	battleCooldown?: number; // Hours between battles
+	battleReward?: { itemId?: string, money?: number }; // Reward for winning
+	// Quest chain
+	questId?: string; // Quest identifier
+	questStages?: { stage: number, description: string, requiredFlag?: string, reward?: any }[];
+	currentStage?: number; // Current stage of quest
+	// Item craft
+	recipes?: { inputs: { itemId: string, quantity: number }[], output: { itemId: string, quantity: number } }[];
+	// Berry planting
+	berryId?: string; // Berry to plant
+	growthTime?: number; // Hours to grow
+	yieldQuantity?: number; // Number of berries harvested
+	// Pokemon grooming
+	groomingCost?: number; // Cost to groom
+	friendshipBoost?: number; // Friendship increase
+	// Fortune teller
+	fortuneTypes?: string[]; // Types of fortunes (luck, battle, catch)
+	fortuneDuration?: number; // Hours fortune lasts
+	// Pokemon breeder
+	breedingCost?: number; // Cost per breeding
+	eggGroupCompatibility?: boolean; // Check egg group
+	// Move relearner
+	relearnerCost?: number; // Cost per move
+	allowEggMoves?: boolean; // Can relearn egg moves
+	// Ability capsule
+	capsuleCost?: number; // Cost to change ability
+	// EV trainer
+	evStat?: string; // Stat to train (atk, def, etc.)
+	evCost?: number; // Cost per EV point
+	evAmount?: number; // EVs to add
+	// IV checker
+	showIVs?: boolean; // Display exact IVs
+	// Mystery gift
+	mysteryGiftId?: string; // Gift identifier
+	giftContents?: { pokemon?: any, item?: any }; // Contents of gift
+	// Lottery
+	lotteryTicketCost?: number; // Cost per ticket
+	lotteryPrizes?: { itemId: string, chance: number }[]; // Possible prizes
+	// Masseuse
+	massageCost?: number; // Cost for massage
+	massageFriendshipBoost?: number; // Friendship increase
+	// Hair cutter
+	haircutCost?: number; // Cost for haircut
+	haircutFriendshipBoost?: number; // Friendship increase
+	// Photographer
+	photographyCost?: number; // Cost to take photo
+	photoReward?: { itemId: string, quantity: number }; // Reward for photo
 }
 
 export interface NPCData {
@@ -279,10 +337,21 @@ export interface NPCData {
 	dialogue: string;
 	flags?: string[];
 	action?: NPCAction;
-	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse'; // Identifies special NPCs
+	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' | 
+		'elitefoura' | 'champion' | 'rival' | 'professor' | 'scientist' | 'fossildiscoverer' | 'daycareworker' |
+		'battlefacilityhost' | 'contestjudge' | 'trader' | 'questgiver' | 'storyteller' | 'gymtrainer' |
+		'cooltrainer' | 'veteran' | 'collector' | 'breeder' | 'ranger' | 'sage' | 'mystic' | 'fortuneteller' |
+		'artist' | 'musician' | 'chef' | 'fashiondesigner' | 'photographer' | 'journalist' | 'athlete' |
+		'teamrocket' | 'teamadmin' | 'teamboss' | 'policeOfficer' | 'detective' | 'guard' | 'gatekeeper'; // Identifies special NPCs
 }
 
-export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department';
+export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department' |
+	'daycare' | 'battlefacility' | 'battletower' | 'battlefrontier' | 'contesthall' | 'secretbase' | 'cafe' |
+	'restaurant' | 'hotel' | 'library' | 'school' | 'dojo' | 'temple' | 'shrine' | 'lighthouse' | 'windmill' |
+	'powerplant' | 'factory' | 'warehouse' | 'radio' | 'tvstation' | 'theater' | 'arcade' | 'casino' |
+	'pokemonfancyclub' | 'namereater' | 'movedeleterhouse' | 'movetutorshop' | 'salon' | 'spa' | 'gym_training' |
+	'fossillab' | 'pokemoncenter_mega' | 'tradestation' | 'berry_shop' | 'incubator' |
+	'pokeathalon' | 'ranchhouse' | 'hideout' | 'abandonedbuilding' | 'ruins' | 'tower';;
 
 export interface Building {
 	id: string;
@@ -299,7 +368,11 @@ export interface Building {
 export interface Location {
 	id: string;
 	name: string;
-	type: 'town' | 'city' | 'route' | 'special';
+	type: 'town' | 'city' | 'route' | 'special' | 'cave' | 'forest' | 'mountain' | 'beach' | 'island' | 'desert' |
+		'volcano' | 'lake' | 'river' | 'ocean' | 'underwater' | 'sky' | 'space' | 'distortionworld' | 'dreamworld' |
+		'safari' | 'park' | 'ruins' | 'dungeon' | 'tower' | 'powerplant' | 'factory' | 'mansion' | 'castle' |
+		'bridge' | 'tunnel' | 'pathway' | 'meadow' | 'swamp' | 'tundra' | 'glacier' | 'ravine' | 'plateau' |
+		'canyon' | 'oasis' | 'graveyard' | 'battlefield' | 'colosseum' | 'stadium';
 	description: string;
 	connectedLocations: { id: string, name: string, requiredBadge?: string, requiredFlag?: string }[];
 	buildings?: Building[]; // Only for towns/cities
@@ -317,11 +390,46 @@ export interface ScriptedEvent {
 	requiredBadgeCount?: number; // Only triggers if player has at least this many badges
 	maxBadgeCount?: number; // Only triggers if player has at most this many badges
 	preventIfFlag?: string; // Won't trigger if player has this flag
-	type: 'trainer' | 'dialogue' | 'item' | 'pokemon' | 'wildbattle';
+	type: 'trainer' | 'dialogue' | 'item' | 'pokemon' | 'wildbattle' | 'cutscene' | 'choice' |
+		'quiz' | 'puzzle' | 'riddle' | 'minigame' | 'weather_change' | 'earthquake' | 'explosion' | 'flood' |
+		'meteor' | 'eclipse' | 'timewarp' | 'dimensionrift' | 'pokemonswarm' |
+		'bossbattle' | 'tournament' | 'contest' | 'race' | 'scavengerhunt' | 'investigation' | 'stealth' |
+		'escape' | 'rescue' | 'defense' | 'ambush' | 'betrayal' | 'alliance' | 'negotiation' |
+		'discovery' | 'revelation' | 'transformation' | 'evolution_ceremony' | 'legendary_awakening' |
+		'ancient_seal' | 'portal_opening' | 'dimension_merge' | 'timeloop' | 'prophecy';
 	trainerId?: string; // For trainer battles
 	dialogue?: string; // Text to display
 	itemId?: string; // Item to give
 	itemQuantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[], shiny?: boolean }; // For 'pokemon' (gift) or 'wildbattle' types
 	setFlag?: string; // Flag to set after event completes
+	// Cutscene
+	cutsceneScript?: string[]; // Array of dialogue/actions
+	cinematicMode?: boolean; // Full screen cutscene
+	// Choice events
+	choices?: { text: string, resultFlag?: string, resultDialogue?: string }[];
+	// Quiz/Puzzle
+	question?: string;
+	answers?: string[];
+	correctAnswer?: number; // Index of correct answer
+	// Weather change
+	newWeather?: 'sun' | 'rain' | 'sandstorm' | 'hail' | 'fog' | 'clear';
+	weatherDuration?: number; // Turns or minutes
+	// Pokemon swarm
+	swarmSpecies?: string; // Pokemon that swarms
+	swarmDuration?: number; // How long swarm lasts
+	// Boss battle
+	bossTrainerId?: string; // Special boss trainer
+	bossPhases?: number; // Number of phases in boss battle
+	// Tournament
+	tournamentRounds?: number;
+	tournamentOpponents?: string[]; // Trainer IDs (single-player tournament)
+	// Contest
+	contestType?: 'cool' | 'beauty' | 'cute' | 'smart' | 'tough';
+	contestRounds?: number;
+	// Investigation
+	clues?: string[]; // Clues to find
+	mysteryToSolve?: string; // Mystery description
+	// Transformation
+	transformationType?: 'mega' | 'dynamax' | 'zmove' | 'terastal' | 'fusion';
 }
