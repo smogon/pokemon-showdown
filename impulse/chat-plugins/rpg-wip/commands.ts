@@ -75,14 +75,10 @@ import {
 	STARTER_POKEMON,
 	TYPE_CHART,
 } from './data';
-import {
-	ENCOUNTER_ZONES,
-	TRAINER_DATABASE,
-	LOCATIONS,
-	TRAINER_LOCATIONS,
-	STORY_EVENTS,
-	NPC_DATABASE,
-} from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
+import { STORY_EVENTS } from './story-events';
+import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
