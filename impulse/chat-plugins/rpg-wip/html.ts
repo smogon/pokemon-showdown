@@ -1166,7 +1166,7 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	return html;
 }
 
-export function generateMoveLearnHTML(player: PlayerData): string {
+export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
 	const queue = player.pendingMoveLearnQueue;
 	if (!queue || queue.moveIds.length === 0) return `<h2>Error: No pending moves found.</h2>`;
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
@@ -1175,7 +1175,14 @@ export function generateMoveLearnHTML(player: PlayerData): string {
 		delete player.pendingMoveLearnQueue;
 		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
-	let html = `<div class="infobox"><h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
+	let html = `<div class="infobox">`;
+	
+	// Display additional messages if provided (e.g., badge notifications)
+	if (additionalMessages && additionalMessages.length > 0) {
+		html += `<div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;">${additionalMessages.join('<br>')}</div>`;
+	}
+	
+	html += `<h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
 	for (const move of pokemon.moves) {
 		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}
