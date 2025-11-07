@@ -6,7 +6,7 @@
 * type charts, trainer definitions, and starter Pokemon lists.
 */
 
-import type { Stats, TrainerSpec, NPCData } from './interface';
+import type { Stats, TrainerSpec, NPCData, Location } from './interface';
 
 export const STARTER_POKEMON = {
 	fire: ['pikachu', 'harmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
@@ -14,209 +14,559 @@ export const STARTER_POKEMON = {
 	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
 };
 
-// Location system with connections
-export interface Location {
-	id: string;
-	name: string;
-	description: string;
-	connectedLocations: { id: string, name: string, requiredBadge?: string, requiredFlag?: string }[];
-	hasPokeCenter: boolean;
-	hasPokeMart: boolean;
-	hasGym?: string; // Gym leader ID if present
-}
-
 export const LOCATIONS: Record<string, Location> = {
 	'startertown': {
 		id: 'startertown',
 		name: 'Starter Town',
+		type: 'town',
 		description: 'A peaceful town where your journey begins. The air is fresh and the Pokemon are friendly.',
 		connectedLocations: [
 			{ id: 'route1', name: 'Route 1' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
+		buildings: [
+			{
+				id: 'startertown_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_startertown'],
+			},
+			{
+				id: 'startertown_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 1,
+			},
+			{
+				id: 'startertown_lab',
+				name: 'Professor\'s Lab',
+				type: 'lab',
+				description: 'The lab where Professor Oak conducts his research.',
+				npcs: ['professor'],
+			},
+			{
+				id: 'startertown_house1',
+				name: 'Friendly House',
+				type: 'house',
+				description: 'A cozy house with a friendly resident.',
+				npcs: ['itemcollector'],
+			},
+		],
+		encounterZones: ['startertown_grass', 'startertown_pond', 'startertown_doubles_grass'],
+		scriptedEvents: [
+			{
+				id: 'welcome_to_startertown',
+				name: 'Professor Oak\'s Welcome',
+				triggerOnce: true,
+				type: 'dialogue',
+				dialogue: 'Welcome to Starter Town! I\'m Professor Oak. I see you\'re ready to begin your Pokémon journey. Make sure to visit the Pokémon Center if your Pokémon need healing!',
+			},
+		],
 	},
 	'route1': {
 		id: 'route1',
 		name: 'Route 1',
+		type: 'route',
 		description: 'A scenic route filled with tall grass. Wild Pokemon can be found here.',
 		connectedLocations: [
 			{ id: 'startertown', name: 'Starter Town' },
 			{ id: 'pewtercity', name: 'Pewter City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route1_grass', 'route1_forest'],
+		scriptedEvents: [
+			{
+				id: 'route1_first_visit',
+				name: 'First Route Experience',
+				triggerOnce: true,
+				maxBadgeCount: 0, // Only triggers before getting first badge
+				type: 'dialogue',
+				dialogue: 'This is your first route! Wild Pokémon hide in the tall grass. Be careful and catch some new friends!',
+			},
+			{
+				id: 'route1_return_with_badge',
+				name: 'Rival Returns',
+				triggerOnce: true,
+				requiredBadgeCount: 1, // Only triggers when player has at least 1 badge
+				type: 'trainer',
+				trainerId: 'rival1',
+				dialogue: 'Hey! I heard you beat Brock! Let\'s see if you\'ve really gotten stronger!',
+				setFlag: 'route1_rival_defeated',
+			},
+			{
+				id: 'route1_gift_after_rival',
+				name: 'Helpful Trainer',
+				triggerOnce: true,
+				requiredFlag: 'route1_rival_defeated',
+				type: 'item',
+				itemId: 'superpotion',
+				itemQuantity: 2,
+				dialogue: 'I saw your battle! You\'re getting really strong. Here, take these Super Potions!',
+			},
+		],
 	},
 	'pewtercity': {
 		id: 'pewtercity',
 		name: 'Pewter City',
+		type: 'city',
 		description: 'A city known for its stone and rock Pokemon. The Pewter Gym awaits challengers.',
 		connectedLocations: [
 			{ id: 'route1', name: 'Route 1' },
 			{ id: 'route2', name: 'Route 2', requiredBadge: 'Boulder Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymbrock',
+		buildings: [
+			{
+				id: 'pewtercity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_pewter'],
+			},
+			{
+				id: 'pewtercity_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 1,
+			},
+			{
+				id: 'pewtercity_gym',
+				name: 'Pewter City Gym',
+				type: 'gym',
+				description: 'The Pewter City Gym, where Brock tests trainers with Rock-type Pokemon.',
+				gymLeaderId: 'gymbrock',
+			},
+			{
+				id: 'pewtercity_museum',
+				name: 'Pewter Museum of Science',
+				type: 'museum',
+				description: 'A museum showcasing ancient Pokemon fossils.',
+				npcs: ['oldmanpewter'],
+			},
+		],
+		encounterZones: ['pewtercity_museum'],
 	},
 	'route2': {
 		id: 'route2',
 		name: 'Route 2',
+		type: 'route',
 		description: 'A longer route with stronger Pokemon. Only accessible after defeating the Pewter Gym.',
 		connectedLocations: [
 			{ id: 'pewtercity', name: 'Pewter City' },
 			{ id: 'ceruleancity', name: 'Cerulean City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route2_grass', 'route2_cave'],
+		scriptedEvents: [
+			{
+				id: 'rival_battle_route2',
+				name: 'Rival Encounter',
+				triggerOnce: true,
+				type: 'trainer',
+				trainerId: 'rival2',
+				dialogue: 'Hey! I\'ve been training hard since we last met. Let\'s battle!',
+				setFlag: 'rival2_defeated',
+			},
+			{
+				id: 'route2_gift',
+				name: 'Hiker\'s Gift',
+				triggerOnce: true,
+				requiredFlag: 'rival2_defeated',
+				type: 'item',
+				itemId: 'potion',
+				itemQuantity: 3,
+				dialogue: 'You look like a strong trainer! Here, take these potions for your journey.',
+			},
+			{
+				// Example of a REPEATABLE event (no triggerOnce)
+				// This will happen every time the player enters Route 2
+				id: 'route2_warning',
+				name: 'Cave Warning',
+				type: 'dialogue',
+				dialogue: 'Be careful in the cave! Rock and Ground-type Pokemon are common here.',
+				// Note: No triggerOnce property means this repeats every visit
+			},
+		],
 	},
 	'ceruleancity': {
 		id: 'ceruleancity',
 		name: 'Cerulean City',
+		type: 'city',
 		description: 'A city surrounded by water. The Cerulean Gym specializes in Water-type Pokemon.',
 		connectedLocations: [
 			{ id: 'route2', name: 'Route 2' },
 			{ id: 'route3', name: 'Route 3', requiredBadge: 'Cascade Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymmisty',
+		buildings: [
+			{
+				id: 'ceruleancity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursecerulean'],
+			},
+			{
+				id: 'ceruleancity_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 2,
+			},
+			{
+				id: 'ceruleancity_gym',
+				name: 'Cerulean City Gym',
+				type: 'gym',
+				description: 'The Cerulean City Gym, where Misty tests trainers with Water-type Pokemon.',
+				gymLeaderId: 'gymmisty',
+			},
+		],
+		encounterZones: ['ceruleancity_water'],
+		scriptedEvents: [
+			{
+				id: 'red_gyarados',
+				name: 'Strange Pokemon',
+				triggerOnce: true,
+				requiredBadgeCount: 2, // After defeating Misty
+				type: 'wildbattle',
+				pokemon: {
+					species: 'gyarados',
+					level: 30,
+					moves: ['waterfall', 'bite', 'icefang', 'dragondance'],
+					shiny: true, // Guaranteed shiny!
+				},
+				dialogue: 'A strange red Gyarados appears in the water! It seems unusually aggressive!',
+				setFlag: 'red_gyarados_encountered',
+			},
+		],
 	},
 	'route3': {
 		id: 'route3',
 		name: 'Route 3',
+		type: 'route',
 		description: 'A mountainous route leading to Vermilion City. Electric Pokemon are common here.',
 		connectedLocations: [
 			{ id: 'ceruleancity', name: 'Cerulean City' },
 			{ id: 'vermilioncity', name: 'Vermilion City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route3_grass', 'route3_mountain'],
 	},
 	'vermilioncity': {
 		id: 'vermilioncity',
 		name: 'Vermilion City',
-		description: 'A port city with a electric atmosphere. The Vermilion Gym tests trainers with Electric-types.',
+		type: 'city',
+		description: 'A port city with an electric atmosphere. The Vermilion Gym tests trainers with Electric-types.',
 		connectedLocations: [
 			{ id: 'route3', name: 'Route 3' },
 			{ id: 'route4', name: 'Route 4', requiredBadge: 'Thunder Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymltsurge',
+		buildings: [
+			{
+				id: 'vermilioncity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_vermilion'],
+			},
+			{
+				id: 'vermilioncity_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 3,
+			},
+			{
+				id: 'vermilioncity_gym',
+				name: 'Vermilion City Gym',
+				type: 'gym',
+				description: 'The Vermilion City Gym, where Lt. Surge tests trainers with Electric-type Pokemon.',
+				gymLeaderId: 'gymltsurge',
+			},
+			{
+				id: 'vermilioncity_house1',
+				name: 'Port House',
+				type: 'house',
+				description: 'A house near the port.',
+				npcs: ['girlvermilion'],
+			},
+		],
+		encounterZones: [],
 	},
 	'route4': {
 		id: 'route4',
 		name: 'Route 4',
+		type: 'route',
 		description: 'A grassy route with diverse Pokemon. Leads to the next major city.',
 		connectedLocations: [
 			{ id: 'vermilioncity', name: 'Vermilion City' },
 			{ id: 'celadoncity', name: 'Celadon City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route4_grass'],
 	},
 	'celadoncity': {
 		id: 'celadoncity',
 		name: 'Celadon City',
+		type: 'city',
 		description: 'The largest city in the region. Home to the Celadon Gym and a massive department store.',
 		connectedLocations: [
 			{ id: 'route4', name: 'Route 4' },
 			{ id: 'route5', name: 'Route 5', requiredBadge: 'Rainbow Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymerika',
+		buildings: [
+			{
+				id: 'celadoncity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_celadon'],
+			},
+			{
+				id: 'celadoncity_department',
+				name: 'Celadon Department Store',
+				type: 'department',
+				description: 'A massive department store with the best items in the region.',
+				shopTier: 4,
+				npcs: ['shopkeeperceladon'],
+			},
+			{
+				id: 'celadoncity_gym',
+				name: 'Celadon City Gym',
+				type: 'gym',
+				description: 'The Celadon City Gym, where Erika tests trainers with Grass-type Pokemon.',
+				gymLeaderId: 'gymerika',
+			},
+			{
+				id: 'celadoncity_gamecorner',
+				name: 'Game Corner',
+				type: 'gameCorner',
+				description: 'A place where trainers can play games and win prizes.',
+				npcs: ['mysteryman'],
+			},
+		],
+		encounterZones: [],
 	},
 	'route5': {
 		id: 'route5',
 		name: 'Route 5',
+		type: 'route',
 		description: 'A foggy route with mysterious Pokemon lurking in the mist.',
 		connectedLocations: [
 			{ id: 'celadoncity', name: 'Celadon City' },
 			{ id: 'fuchsiacity', name: 'Fuchsia City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route5_grass'],
 	},
 	'fuchsiacity': {
 		id: 'fuchsiacity',
 		name: 'Fuchsia City',
+		type: 'city',
 		description: 'A city known for its Safari Zone. The Fuchsia Gym specializes in Poison-type Pokemon.',
 		connectedLocations: [
 			{ id: 'route5', name: 'Route 5' },
 			{ id: 'route6', name: 'Route 6', requiredBadge: 'Soul Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymkoga',
+		buildings: [
+			{
+				id: 'fuchsiacity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_fuchsia'],
+			},
+			{
+				id: 'fuchsiacity_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 5,
+			},
+			{
+				id: 'fuchsiacity_gym',
+				name: 'Fuchsia City Gym',
+				type: 'gym',
+				description: 'The Fuchsia City Gym, where Koga tests trainers with Poison-type Pokemon.',
+				gymLeaderId: 'gymkoga',
+			},
+			{
+				id: 'fuchsiacity_house1',
+				name: 'Expert Trainer\'s House',
+				type: 'house',
+				description: 'The home of an expert trainer.',
+				npcs: ['trainerfuchsia'],
+			},
+		],
+		encounterZones: ['fuchsiacity_safari'],
 	},
 	'route6': {
 		id: 'route6',
 		name: 'Route 6',
+		type: 'route',
 		description: 'A rugged path leading towards the coast.',
 		connectedLocations: [
 			{ id: 'fuchsiacity', name: 'Fuchsia City' },
 			{ id: 'cinnabarisland', name: 'Cinnabar Island' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route6_grass'],
 	},
 	'cinnabarisland': {
 		id: 'cinnabarisland',
 		name: 'Cinnabar Island',
+		type: 'city',
 		description: 'A volcanic island with a famous research lab. The Cinnabar Gym uses Fire-type Pokemon.',
 		connectedLocations: [
 			{ id: 'route6', name: 'Route 6' },
 			{ id: 'route7', name: 'Route 7', requiredBadge: 'Volcano Badge' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymblaine',
+		buildings: [
+			{
+				id: 'cinnabarisland_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_cinnabar'],
+			},
+			{
+				id: 'cinnabarisland_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 6,
+			},
+			{
+				id: 'cinnabarisland_gym',
+				name: 'Cinnabar Island Gym',
+				type: 'gym',
+				description: 'The Cinnabar Island Gym, where Blaine tests trainers with Fire-type Pokemon.',
+				gymLeaderId: 'gymblaine',
+			},
+			{
+				id: 'cinnabarisland_lab',
+				name: 'Pokemon Lab',
+				type: 'lab',
+				description: 'A research lab studying Pokemon.',
+				npcs: ['scientistcinnabar'],
+			},
+		],
+		encounterZones: ['cinnabarisland_volcano'],
 	},
 	'route7': {
 		id: 'route7',
 		name: 'Route 7',
+		type: 'route',
 		description: 'The final route before reaching Viridian City and the last gym.',
 		connectedLocations: [
 			{ id: 'cinnabarisland', name: 'Cinnabar Island' },
 			{ id: 'viridiancity', name: 'Viridian City' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['route7_grass'],
+		scriptedEvents: [
+			{
+				id: 'snorlax_encounter',
+				name: 'Sleeping Snorlax',
+				triggerOnce: true,
+				requiredBadgeCount: 7, // Late game encounter
+				type: 'wildbattle',
+				pokemon: {
+					species: 'snorlax',
+					level: 45,
+					moves: ['bodyslam', 'rest', 'snore', 'amnesia'],
+				},
+				dialogue: 'A huge Snorlax is blocking the path! You\'ll need to battle it to pass!',
+				setFlag: 'snorlax_defeated',
+			},
+		],
 	},
 	'viridiancity': {
 		id: 'viridiancity',
 		name: 'Viridian City',
+		type: 'city',
 		description: 'A historic city home to the final gym. Beyond lies Victory Road and the Pokemon League.',
 		connectedLocations: [
 			{ id: 'route7', name: 'Route 7' },
 			{ id: 'victoryroad', name: 'Victory Road', requiredBadge: 'Earth Badge', requiredFlag: 'all_badges' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
-		hasGym: 'gymgiovanni',
+		buildings: [
+			{
+				id: 'viridiancity_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokemon and access your PC.',
+				npcs: ['nursejoy_viridian'],
+			},
+			{
+				id: 'viridiancity_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'A shop where you can buy items for your journey.',
+				shopTier: 7,
+			},
+			{
+				id: 'viridiancity_gym',
+				name: 'Viridian City Gym',
+				type: 'gym',
+				description: 'The Viridian City Gym, where Giovanni tests trainers with Ground-type Pokemon.',
+				gymLeaderId: 'gymgiovanni',
+			},
+			{
+				id: 'viridiancity_house1',
+				name: 'Guard House',
+				type: 'house',
+				description: 'The house of the city guard.',
+				npcs: ['guardviridian'],
+			},
+		],
+		encounterZones: [],
 	},
 	'victoryroad': {
 		id: 'victoryroad',
 		name: 'Victory Road',
+		type: 'special',
 		description: 'A treacherous cave filled with powerful trainers. Only those with all 8 badges may enter.',
 		connectedLocations: [
 			{ id: 'viridiancity', name: 'Viridian City' },
 			{ id: 'pokemonleague', name: 'Pokemon League' },
 		],
-		hasPokeCenter: false,
-		hasPokeMart: false,
+		encounterZones: ['victoryroad_cave', 'victoryroad_doubles'],
+		scriptedEvents: [
+			{
+				id: 'moltres_encounter',
+				name: 'Legendary Bird',
+				triggerOnce: true,
+				requiredBadgeCount: 8, // Post-game legendary
+				type: 'wildbattle',
+				pokemon: {
+					species: 'moltres',
+					level: 50,
+					moves: ['fireblast', 'airslash', 'heatwave', 'roost'],
+				},
+				dialogue: 'A legendary bird Pokemon appears from the flames! It\'s Moltres!',
+				setFlag: 'moltres_encountered',
+			},
+		],
 	},
 	'pokemonleague': {
 		id: 'pokemonleague',
 		name: 'Pokemon League',
+		type: 'special',
 		description: 'The ultimate challenge. Face the Elite Four and become the Champion!',
 		connectedLocations: [
 			{ id: 'victoryroad', name: 'Victory Road' },
 		],
-		hasPokeCenter: true,
-		hasPokeMart: true,
+		buildings: [
+			{
+				id: 'pokemonleague_pokecenter',
+				name: 'Pokemon Center',
+				type: 'pokecenter',
+				description: 'The final Pokemon Center before the Elite Four.',
+				npcs: ['nursejoy_league'],
+			},
+			{
+				id: 'pokemonleague_pokemart',
+				name: 'Poke Mart',
+				type: 'pokemart',
+				description: 'The final shop before the ultimate challenge.',
+				shopTier: 8,
+			},
+		],
+		encounterZones: [],
 	},
 };
 
@@ -1231,8 +1581,62 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'professor': {
 		id: 'professor',
 		name: 'Professor Oak',
-		location: 'startertown',
+		location: 'startertown_lab',
 		dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
+	},
+	'nursejoy_startertown': {
+		id: 'nursejoy_startertown',
+		name: 'Nurse Joy',
+		location: 'startertown_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! We can heal your Pokémon to perfect health. Use /rpg heal anytime!",
+	},
+	'nursejoy_pewter': {
+		id: 'nursejoy_pewter',
+		name: 'Nurse Joy',
+		location: 'pewtercity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Your Pokémon look tired. Would you like me to heal them?",
+	},
+	'nursejoy_cerulean': {
+		id: 'nursejoy_cerulean',
+		name: 'Nurse Joy',
+		location: 'ceruleancity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+	},
+	'nursejoy_vermilion': {
+		id: 'nursejoy_vermilion',
+		name: 'Nurse Joy',
+		location: 'vermilioncity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Trainers who challenge Lt. Surge need to be prepared!",
+	},
+	'nursejoy_celadon': {
+		id: 'nursejoy_celadon',
+		name: 'Nurse Joy',
+		location: 'celadoncity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Celadon City is such a lovely place, isn't it?",
+	},
+	'nursejoy_fuchsia': {
+		id: 'nursejoy_fuchsia',
+		name: 'Nurse Joy',
+		location: 'fuchsiacity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Be careful of Poison-type moves in this city!",
+	},
+	'nursejoy_cinnabar': {
+		id: 'nursejoy_cinnabar',
+		name: 'Nurse Joy',
+		location: 'cinnabarisland_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! The volcano here can be quite intense, just like Blaine's battles!",
+	},
+	'nursejoy_viridian': {
+		id: 'nursejoy_viridian',
+		name: 'Nurse Joy',
+		location: 'viridiancity_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! Giovanni's Gym is very challenging. Make sure you're prepared!",
+	},
+	'nursejoy_league': {
+		id: 'nursejoy_league',
+		name: 'Nurse Joy',
+		location: 'pokemonleague_pokecenter',
+		dialogue: "Welcome to the Pokémon Center! This is your last chance to prepare before facing the Elite Four. Good luck!",
 	},
 	'aideroute1': {
 		id: 'aideroute1',
@@ -1249,14 +1653,14 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'oldmanpewter': {
 		id: 'oldmanpewter',
 		name: 'Old Man',
-		location: 'pewtercity',
+		location: 'pewtercity_museum',
 		dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
 	},
 	'nursecerulean': {
 		id: 'nursecerulean',
-		name: 'Nurse Joy',
+		name: 'City Guide',
 		location: 'ceruleancity',
-		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+		dialogue: "Welcome to Cerulean City! Make sure to visit the Pokémon Center and challenge Misty at the Gym!",
 	},
 	'hikerroute2': {
 		id: 'hikerroute2',
@@ -1275,19 +1679,19 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'girlvermilion': {
 		id: 'girlvermilion',
 		name: 'Little Girl',
-		location: 'vermilioncity',
+		location: 'vermilioncity_house1',
 		dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
 	},
 	'shopkeeperceladon': {
 		id: 'shopkeeperceladon',
 		name: 'Shop Keeper',
-		location: 'celadoncity',
+		location: 'celadoncity_department',
 		dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
 	},
 	'trainerfuchsia': {
 		id: 'trainerfuchsia',
 		name: 'Expert Trainer',
-		location: 'fuchsiacity',
+		location: 'fuchsiacity_house1',
 		dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
 		action: {
 			type: 'givepokemon',
@@ -1301,13 +1705,13 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'scientistcinnabar': {
 		id: 'scientistcinnabar',
 		name: 'Lab Scientist',
-		location: 'cinnabarisland',
+		location: 'cinnabarisland_lab',
 		dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
 	},
 	'guardviridian': {
 		id: 'guardviridian',
 		name: 'City Guard',
-		location: 'viridiancity',
+		location: 'viridiancity_house1',
 		dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
 	},
 	'veteranvictoryroad': {
@@ -1334,7 +1738,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'itemcollector': {
 		id: 'itemcollector',
 		name: 'Item Collector',
-		location: 'startertown',
+		location: 'startertown_house1',
 		dialogue: "I collect rare berries! If you bring me 5 Oran Berries, I'll give you a Sitrus Berry!",
 		action: {
 			type: 'exchangeitems',
@@ -1347,12 +1751,84 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'mysteryman': {
 		id: 'mysteryman',
 		name: 'Mysterious Man',
-		location: 'celadoncity',
+		location: 'celadoncity_gamecorner',
 		dialogue: "I need rare candies for my research! Bring me 3 Rare Candies and I'll give you something special.",
 		action: {
 			type: 'takeitem',
 			itemId: 'rarecandy',
 			quantity: 3,
+			onceOnly: true,
+		},
+	},
+	
+	// Special NPCs - Move services
+	'movedeleter': {
+		id: 'movedeleter',
+		name: 'Move Deleter',
+		location: 'fuchsiacity_house1',
+		dialogue: "I can help your Pokémon forget moves. This is useful for removing HMs or unwanted moves.",
+		npcType: 'movedeleter',
+	},
+	'namerater': {
+		id: 'namerater',
+		name: 'Name Rater',
+		location: 'vermilioncity_house1',
+		dialogue: "I'm the Name Rater! I can help you change your Pokémon's nickname.",
+		npcType: 'namerater',
+	},
+	'movetutor_surf': {
+		id: 'movetutor_surf',
+		name: 'Move Tutor',
+		location: 'ceruleancity',
+		dialogue: "I can teach Surf to your Water-type Pokémon for ₽10,000!",
+		npcType: 'movetutor',
+		action: {
+			type: 'movetutor',
+			moveId: 'surf',
+			cost: 10000,
+		},
+	},
+	'movetutor_thunderbolt': {
+		id: 'movetutor_thunderbolt',
+		name: 'Move Tutor',
+		location: 'vermilioncity_house1',
+		dialogue: "I can teach Thunderbolt to your Electric-type Pokémon for ₽15,000!",
+		npcType: 'movetutor',
+		action: {
+			type: 'movetutor',
+			moveId: 'thunderbolt',
+			cost: 15000,
+		},
+	},
+	
+	// Trade NPCs
+	'trader_machop': {
+		id: 'trader_machop',
+		name: 'Trade Enthusiast',
+		location: 'pewtercity',
+		dialogue: "I'm looking for a Geodude! I'll trade you my Machop for it!",
+		action: {
+			type: 'tradepokemon',
+			wantedSpecies: 'geodude',
+			offeredPokemon: {
+				species: 'machop',
+				level: 15,
+			},
+			onceOnly: true,
+		},
+	},
+	'trader_haunter': {
+		id: 'trader_haunter',
+		name: 'Spooky Trader',
+		location: 'celadoncity',
+		dialogue: "I have a Haunter I'd love to trade! Do you have a Kadabra?",
+		action: {
+			type: 'tradepokemon',
+			wantedSpecies: 'kadabra',
+			offeredPokemon: {
+				species: 'haunter',
+				level: 25,
+			},
 			onceOnly: true,
 		},
 	},

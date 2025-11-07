@@ -923,8 +923,8 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Unknown location: ${player.location}`);
 			}
 
-			// This logic finds all zones that match the player's current location
-			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(currentLocationId));
+			// Get encounter zones from location's encounterZones array
+			const availableZones = currentLocation.encounterZones || [];
 
 			let exploreButtons = '';
 
@@ -933,20 +933,31 @@ export const commands: ChatCommands = {
 				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
 				for (const zoneId of availableZones) {
 					const zone = ENCOUNTER_ZONES[zoneId];
-					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
+					if (zone) {
+						const icon = zone.battleType === 'double' ? '👥' : '🛤️';
+						exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
+					}
 				}
 			}
 
-			// Gym challenge
-			if (currentLocation.hasGym) {
-				const gymLeaderId = currentLocation.hasGym;
-				const gymData = TRAINER_DATABASE[gymLeaderId];
-				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
-					exploreButtons += `<p><strong>Gym Challenge:</strong></p>`;
-					exploreButtons += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button>`;
-				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
-					exploreButtons += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+			// Buildings (for towns/cities)
+			if (currentLocation.buildings && currentLocation.buildings.length > 0) {
+				exploreButtons += '<p><strong>Buildings:</strong></p>';
+				for (const building of currentLocation.buildings) {
+					// Check if building is accessible
+					if (building.accessible === false) continue;
+					if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
+
+					let icon = '🏠';
+					if (building.type === 'pokecenter') icon = '🏥';
+					else if (building.type === 'pokemart') icon = '🏪';
+					else if (building.type === 'gym') icon = '⚔️';
+					else if (building.type === 'lab') icon = '🔬';
+					else if (building.type === 'museum') icon = '🏛️';
+					else if (building.type === 'department') icon = '🏬';
+					else if (building.type === 'gameCorner') icon = '🎰';
+
+					exploreButtons += `<button name="send" value="/rpg building ${building.id}" class="button">${icon} ${building.name}</button> `;
 				}
 			}
 
@@ -967,17 +978,11 @@ export const commands: ChatCommands = {
 
 			const exploreHTML = `<div class="infobox">` +
 				`<h2>${currentLocation.name}</h2>` +
-				`<p>${currentLocation.description}</p>` +
+				`<p><em>${currentLocation.description}</em></p>` +
 				`${exploreButtons}` +
 				`<hr />` +
-				`<p><strong>Facilities:</strong></p>` +
-				`<p>` +
-				(currentLocation.hasPokeMart ? `<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button> ` : '') +
-				(currentLocation.hasPokeCenter ? `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button> ` : '') +
-				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button> ` +
-				`</p>` +
-				`<hr />` +
 				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
+				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button> ` +
 				`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
@@ -1067,12 +1072,202 @@ export const commands: ChatCommands = {
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
+			// Check for scripted events
+			const triggeredEvents = [];
+			if (targetLocation.scriptedEvents) {
+				for (const event of targetLocation.scriptedEvents) {
+					// Check if event should trigger
+					const eventFlagId = `scripted_${event.id}`;
+					
+					// Skip if already triggered and marked as triggerOnce
+					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
+					
+					// Skip if required flag is not present
+					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					
+					// Skip if player doesn't have enough badges
+					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					
+					// Skip if player has too many badges (for early-game only events)
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					
+					// Skip if preventIfFlag is set and player has that flag
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+
+					triggeredEvents.push(event);
+					
+					// Mark as triggered if it's a once-only event
+					if (event.triggerOnce) {
+						player.storyFlags.add(eventFlagId);
+					}
+
+					// Set flag if specified
+					if (event.setFlag) {
+						player.storyFlags.add(event.setFlag);
+					}
+				}
+			}
+
+			// If there are triggered events, show them
+			if (triggeredEvents.length > 0) {
+				const firstEvent = triggeredEvents[0];
+				let eventHTML = `<div class="infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
+				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
+				
+				if (firstEvent.type === 'dialogue') {
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue}</p>`;
+					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+				} else if (firstEvent.type === 'item') {
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'You found an item!'}</p>`;
+					if (firstEvent.itemId && firstEvent.itemQuantity) {
+						addItemToInventory(player, firstEvent.itemId, firstEvent.itemQuantity);
+						const itemData = ITEMS_DATABASE[firstEvent.itemId];
+						eventHTML += `<p>You received ${firstEvent.itemQuantity}x ${itemData?.name || firstEvent.itemId}!</p>`;
+					}
+					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+				} else if (firstEvent.type === 'pokemon') {
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'You received a Pokemon!'}</p>`;
+					if (firstEvent.pokemon) {
+						const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+						if (firstEvent.pokemon.moves) {
+							newPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
+								const moveData = getMove(moveId);
+								return { id: moveId, pp: moveData.pp || 5 };
+							});
+						}
+						if (firstEvent.pokemon.shiny) {
+							newPokemon.shiny = true;
+						}
+						if (player.party.length < 6) {
+							player.party.push(newPokemon);
+							eventHTML += `<p>${newPokemon.species} joined your party!</p>`;
+						} else {
+							storePokemonInPC(player, newPokemon);
+							eventHTML += `<p>${newPokemon.species} was sent to your PC!</p>`;
+						}
+					}
+					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+				} else if (firstEvent.type === 'wildbattle' && firstEvent.pokemon) {
+					// Scripted wild Pokemon encounter
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'A wild Pokemon appeared!'}</p>`;
+					
+					// Create the wild Pokemon
+					const wildPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+					if (firstEvent.pokemon.moves) {
+						wildPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
+							const moveData = getMove(moveId);
+							return { id: moveId, pp: moveData.pp || 5 };
+						});
+					}
+					if (firstEvent.pokemon.shiny) {
+						wildPokemon.shiny = true;
+					}
+					
+					// Store the wild Pokemon temporarily
+					const tempWildId = `scripted_wild_${firstEvent.id}`;
+					player.pc.set(tempWildId, wildPokemon);
+					
+					const species = Dex.species.get(firstEvent.pokemon.species);
+					eventHTML += `<p>A wild ${wildPokemon.shiny ? '✨ ' : ''}${species.name} (Lv. ${wildPokemon.level}) appeared!</p>`;
+					eventHTML += `<p><button name="send" value="/rpg scriptedbattle ${tempWildId}" class="button">⚔️ Battle!</button></p>`;
+					eventHTML += `<p><em>(This is a special encounter!)</em></p>`;
+				} else if (firstEvent.type === 'trainer' && firstEvent.trainerId) {
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'A trainer wants to battle!'}</p>`;
+					eventHTML += `<p><button name="send" value="/rpg challenge ${firstEvent.trainerId}" class="button">⚔️ Battle!</button></p>`;
+					eventHTML += `<p><em>(You can't avoid this battle)</em></p>`;
+				}
+				
+				eventHTML += `</div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
+			}
+
 			const arrivalHTML = `<div class="infobox">` +
 				`<h2>Arrived at ${targetLocation.name}</h2>` +
 				`<p>${targetLocation.description}</p>` +
 				`<p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
+		},
+
+		building(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot enter a building during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+
+			if (!currentLocation) {
+				return this.errorReply(`Unknown location: ${player.location}`);
+			}
+
+			if (!target) {
+				return this.errorReply("Please specify which building to enter.");
+			}
+
+			const buildingId = toID(target);
+			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
+
+			if (!building) {
+				return this.errorReply("That building doesn't exist in this location.");
+			}
+
+			// Check accessibility
+			if (building.accessible === false) {
+				return this.errorReply("This building is currently locked.");
+			}
+			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) {
+				return this.errorReply("You can't access this building yet.");
+			}
+
+			// Handle different building types
+			let buildingHTML = `<div class="infobox"><h2>${building.name}</h2><p><em>${building.description}</em></p>`;
+
+			// NPCs in this building
+			if (building.npcs && building.npcs.length > 0) {
+				buildingHTML += '<p><strong>People here:</strong></p>';
+				for (const npcId of building.npcs) {
+					const npc = NPC_DATABASE[npcId];
+					if (npc) {
+						// Check if NPC is accessible based on flags
+						if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) {
+							continue;
+						}
+						buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+					}
+				}
+			}
+
+			// Building-specific actions
+			buildingHTML += '<p><strong>Actions:</strong></p>';
+
+			if (building.type === 'pokecenter') {
+				buildingHTML += `<button name="send" value="/rpg heal" class="button">🏥 Heal Pokemon</button> `;
+				buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			}
+
+			if (building.type === 'pokemart' || building.type === 'department') {
+				buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+			}
+
+			if (building.type === 'gym' && building.gymLeaderId) {
+				const gymLeaderId = building.gymLeaderId;
+				const gymData = TRAINER_DATABASE[gymLeaderId];
+				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button> `;
+				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				}
+			}
+
+			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -1189,6 +1384,95 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
+			}
+		},
+
+		},
+
+		scriptedbattle(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You are already in a battle!");
+			}
+
+			const player = getPlayerData(user.id);
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) {
+				return this.errorReply("All your Pokémon have fainted!");
+			}
+
+			// Get the temporarily stored wild Pokemon
+			const tempWildId = target.trim();
+			const wildPokemon = player.pc.get(tempWildId);
+			
+			if (!wildPokemon) {
+				return this.errorReply("This scripted encounter is no longer available.");
+			}
+
+			// Remove from PC (it was only temporarily stored)
+			player.pc.delete(tempWildId);
+
+			const battleMessages: string[] = [];
+			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+
+			try {
+				// --- Player Pokemon ---
+				playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+
+				// --- Scripted Wild Pokemon ---
+				opponentSlots[0] = createActivePokemonSlot(wildPokemon);
+				battleMessages.push(`A wild ${wildPokemon.shiny ? '✨ ' : ''}${wildPokemon.species} appeared!`);
+
+				const opponentParty = [wildPokemon];
+
+				activeBattles.set(user.id, {
+					// --- Battle Type Fields ---
+					battleType: 'wild',
+					opponentName: `Wild ${wildPokemon.species}`,
+					opponentParty,
+					opponentMoney: 0,
+
+					// --- New Slot-Based Fields ---
+					playerSlots,
+					opponentSlots,
+					pendingActions: {},
+
+					// --- Core BattleState Fields ---
+					playerId: user.id,
+					turn: 0,
+					zoneId: 'scripted',
+					playerHazards: [],
+					opponentHazards: [],
+					trickRoomTurns: 0,
+					magicRoomTurns: 0,
+					wonderRoomTurns: 0,
+					gravityTurns: 0,
+					mudSportTurns: 0,
+					waterSportTurns: 0,
+					fairyLockTurns: 0,
+					ionDelugeTurns: 0,
+					playerQuickGuard: false,
+					opponentQuickGuard: false,
+					playerWideGuard: false,
+					opponentWideGuard: false,
+					playerCraftyShield: false,
+					opponentCraftyShield: false,
+					playerReflectTurns: 0,
+					opponentReflectTurns: 0,
+					playerLightScreenTurns: 0,
+					opponentLightScreenTurns: 0,
+					playerAuroraVeilTurns: 0,
+					opponentAuroraVeilTurns: 0,
+					playerTerastallizeUsed: false,
+					opponentTerastallizeUsed: false,
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
+				});
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+			} catch (error) {
+				activeBattles.delete(user.id);
+				return this.errorReply("An error occurred while starting the battle: " + error);
 			}
 		},
 
@@ -1833,11 +2117,14 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 
-			// Update last Pokemon Center visited (only if current location has one)
+			// Update last Pokemon Center visited (check if any building in current location is a pokecenter)
 			const currentLocationId = toID(player.location);
 			const currentLocationData = LOCATIONS[currentLocationId];
-			if (currentLocationData && currentLocationData.hasPokeCenter) {
-				player.lastPokemonCenter = currentLocationId;
+			if (currentLocationData && currentLocationData.buildings) {
+				const hasPokeCenter = currentLocationData.buildings.some(b => b.type === 'pokecenter');
+				if (hasPokeCenter) {
+					player.lastPokemonCenter = currentLocationId;
+				}
 			}
 
 			for (const pokemon of player.party) {
@@ -2038,12 +2325,31 @@ export const commands: ChatCommands = {
 			const npcId = toID(target);
 
 			if (!npcId) {
-				// Show available NPCs in current location
+				// Show available NPCs in current location (including buildings)
 				const currentLocationId = toID(player.location);
-				const availableNPCs = Object.entries(NPC_DATABASE).filter(([id, npc]) =>
-					npc.location === currentLocationId &&
-					(!npc.flags || npc.flags.every(f => player.storyFlags.has(f)))
-				);
+				const currentLocation = LOCATIONS[currentLocationId];
+				
+				const availableNPCs: [string, NPCData][] = [];
+				
+				// Find NPCs in the current location
+				for (const [id, npc] of Object.entries(NPC_DATABASE)) {
+					// Check if NPC is in this location (directly or in a building)
+					const npcLocationId = toID(npc.location);
+					if (npcLocationId === currentLocationId) {
+						// NPC is in the main location
+						if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) {
+							availableNPCs.push([id, npc]);
+						}
+					} else if (currentLocation?.buildings) {
+						// Check if NPC is in a building in this location
+						const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
+						if (building && building.npcs?.includes(id)) {
+							if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) {
+								availableNPCs.push([id, npc]);
+							}
+						}
+					}
+				}
 
 				if (availableNPCs.length === 0) {
 					return this.errorReply("There are no NPCs to talk to here.");
@@ -2062,8 +2368,22 @@ export const commands: ChatCommands = {
 				return this.errorReply("That NPC doesn't exist.");
 			}
 
-			// Check location
-			if (npc.location !== toID(player.location)) {
+			// Check location (NPC can be in the location directly or in a building in this location)
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+			const npcLocationId = toID(npc.location);
+			
+			let npcAccessible = false;
+			if (npcLocationId === currentLocationId) {
+				npcAccessible = true;
+			} else if (currentLocation?.buildings) {
+				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
+				if (building && building.npcs?.includes(npcId)) {
+					npcAccessible = true;
+				}
+			}
+
+			if (!npcAccessible) {
 				return this.errorReply("That NPC is not in this location.");
 			}
 
@@ -2174,8 +2494,22 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid NPC or no action available.");
 			}
 
-			// Check location
-			if (npc.location !== toID(player.location)) {
+			// Check location (NPC can be in the location directly or in a building in this location)
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+			const npcLocationId = toID(npc.location);
+			
+			let npcAccessible = false;
+			if (npcLocationId === currentLocationId) {
+				npcAccessible = true;
+			} else if (currentLocation?.buildings) {
+				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
+				if (building && building.npcs?.includes(npcId)) {
+					npcAccessible = true;
+				}
+			}
+
+			if (!npcAccessible) {
 				return this.errorReply("That NPC is not in this location.");
 			}
 
@@ -2352,5 +2686,7 @@ export const commands: ChatCommands = {
 			return this.parse('/help rpg');
 		},
 		'': 'help',
+
+		talknpc: 'npc',
 	},
 };

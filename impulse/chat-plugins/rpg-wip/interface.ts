@@ -257,13 +257,19 @@ export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: B
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
 
 export interface NPCAction {
-	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem';
+	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
 	requiredItem?: string;
 	requiredQuantity?: number;
 	onceOnly?: boolean;
+	// Move tutor
+	moveId?: string; // Move to teach
+	cost?: number; // Cost in money
+	// Trade pokemon
+	wantedSpecies?: string; // Pokemon player must give
+	offeredPokemon?: { species: string, level: number, moves?: string[] }; // Pokemon NPC offers
 }
 
 export interface NPCData {
@@ -273,4 +279,49 @@ export interface NPCData {
 	dialogue: string;
 	flags?: string[];
 	action?: NPCAction;
+	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse'; // Identifies special NPCs
+}
+
+export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department';
+
+export interface Building {
+	id: string;
+	name: string;
+	type: BuildingType;
+	description: string;
+	npcs?: string[]; // NPC IDs that are in this building
+	gymLeaderId?: string; // For gyms
+	shopTier?: number; // For pokemarts
+	accessible?: boolean; // Default true, can be locked behind flags
+	requiredFlag?: string;
+}
+
+export interface Location {
+	id: string;
+	name: string;
+	type: 'town' | 'city' | 'route' | 'special';
+	description: string;
+	connectedLocations: { id: string, name: string, requiredBadge?: string, requiredFlag?: string }[];
+	buildings?: Building[]; // Only for towns/cities
+	encounterZones?: string[]; // IDs of encounter zones available here
+	scriptedEvents?: ScriptedEvent[]; // Events that trigger when entering this location
+	weather?: 'sun' | 'rain' | 'sandstorm' | 'hail' | 'fog'; // Permanent weather in this location
+	music?: string; // Background music theme
+}
+
+export interface ScriptedEvent {
+	id: string;
+	name: string;
+	triggerOnce?: boolean; // If true, only triggers the first time (sets 'scripted_<id>' flag)
+	requiredFlag?: string; // Only triggers if player has this flag
+	requiredBadgeCount?: number; // Only triggers if player has at least this many badges
+	maxBadgeCount?: number; // Only triggers if player has at most this many badges
+	preventIfFlag?: string; // Won't trigger if player has this flag
+	type: 'trainer' | 'dialogue' | 'item' | 'pokemon' | 'wildbattle';
+	trainerId?: string; // For trainer battles
+	dialogue?: string; // Text to display
+	itemId?: string; // Item to give
+	itemQuantity?: number;
+	pokemon?: { species: string, level: number, moves?: string[], shiny?: boolean }; // For 'pokemon' (gift) or 'wildbattle' types
+	setFlag?: string; // Flag to set after event completes
 }
