@@ -6,7 +6,7 @@
 * type charts, trainer definitions, and starter Pokemon lists.
 */
 
-import type { Stats, TrainerSpec } from './interface';
+import type { Stats, TrainerSpec, NPCData } from './interface';
 
 export const STARTER_POKEMON = {
 	fire: ['pikachu', 'harmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
@@ -432,7 +432,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "I'm on my way to becoming Champion!",
 		},
 	},
-	
+
 	// Gym Leaders
 	'gymbrock': {
 		name: 'Gym Leader Brock',
@@ -546,7 +546,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "This is the power of earth itself!",
 		},
 	},
-	
+
 	// Regular Trainers - Route 1
 	'youngsterjoey': {
 		name: 'Youngster Joey',
@@ -573,7 +573,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Yay! I won!",
 		},
 	},
-	
+
 	// Elite Four
 	'elitelorelei': {
 		name: 'Elite Four Lorelei',
@@ -639,7 +639,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "The might of dragons is unmatched!",
 		},
 	},
-	
+
 	// Champion
 	'championblue': {
 		name: 'Champion Blue',
@@ -658,7 +658,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "I'm the Champion for a reason!",
 		},
 	},
-	
+
 	// Route Trainers - More variety
 	'bugcatcherrick': {
 		name: 'Bug Catcher Rick',
@@ -756,7 +756,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Science always wins!",
 		},
 	},
-	
+
 	// Additional Route Trainers
 	'camperricky': {
 		name: 'Camper Ricky',
@@ -1223,5 +1223,137 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		trainerId: 'championblue',
 		flagsSet: ['champion', 'game_complete'],
 		dialogue: "Congratulations! You are the new Pokémon League Champion! You've proven yourself as one of the greatest trainers!",
+	},
+};
+
+// NPC Database with dialogue and actions
+export const NPC_DATABASE: Record<string, NPCData> = {
+	'professor': {
+		id: 'professor',
+		name: 'Professor Oak',
+		location: 'startertown',
+		dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
+	},
+	'aideroute1': {
+		id: 'aideroute1',
+		name: 'Professor\'s Aide',
+		location: 'route1',
+		dialogue: "Wild Pokémon live in tall grass! If you want to catch them, weaken them first, then throw a Poké Ball!",
+		action: {
+			type: 'giveitem',
+			itemId: 'potion',
+			quantity: 5,
+			onceOnly: true,
+		},
+	},
+	'oldmanpewter': {
+		id: 'oldmanpewter',
+		name: 'Old Man',
+		location: 'pewtercity',
+		dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
+	},
+	'nursecerulean': {
+		id: 'nursecerulean',
+		name: 'Nurse Joy',
+		location: 'ceruleancity',
+		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+	},
+	'hikerroute2': {
+		id: 'hikerroute2',
+		name: 'Friendly Hiker',
+		location: 'route2',
+		dialogue: "This route has tougher Pokémon! Make sure your team is at least level 10 before continuing. Good luck!",
+		action: {
+			type: 'exchangeitems',
+			itemId: 'greatball',
+			quantity: 3,
+			requiredItem: 'pokeball',
+			requiredQuantity: 10,
+			onceOnly: true,
+		},
+	},
+	'girlvermilion': {
+		id: 'girlvermilion',
+		name: 'Little Girl',
+		location: 'vermilioncity',
+		dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
+	},
+	'shopkeeperceladon': {
+		id: 'shopkeeperceladon',
+		name: 'Shop Keeper',
+		location: 'celadoncity',
+		dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
+	},
+	'trainerfuchsia': {
+		id: 'trainerfuchsia',
+		name: 'Expert Trainer',
+		location: 'fuchsiacity',
+		dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
+		action: {
+			type: 'givepokemon',
+			pokemon: {
+				species: 'eevee',
+				level: 25,
+			},
+			onceOnly: true,
+		},
+	},
+	'scientistcinnabar': {
+		id: 'scientistcinnabar',
+		name: 'Lab Scientist',
+		location: 'cinnabarisland',
+		dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
+	},
+	'guardviridian': {
+		id: 'guardviridian',
+		name: 'City Guard',
+		location: 'viridiancity',
+		dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
+	},
+	'veteranvictoryroad': {
+		id: 'veteranvictoryroad',
+		name: 'Veteran Hiker',
+		location: 'victoryroad',
+		dialogue: "Only trainers with all 8 badges can enter here. The Pokémon are level 48+. Make sure you're prepared!",
+		flags: ['all_badges'],
+	},
+	'championguide': {
+		id: 'championguide',
+		name: 'Elite Four Guide',
+		location: 'pokemonleague',
+		dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",
+		flags: ['all_badges'],
+	},
+	'congratulations': {
+		id: 'congratulations',
+		name: 'Champion\'s Aide',
+		location: 'pokemonleague',
+		dialogue: "Congratulations, Champion! You've completed your journey. You can explore, catch more Pokémon, or challenge trainers again!",
+		flags: ['champion'],
+	},
+	'itemcollector': {
+		id: 'itemcollector',
+		name: 'Item Collector',
+		location: 'startertown',
+		dialogue: "I collect rare berries! If you bring me 5 Oran Berries, I'll give you a Sitrus Berry!",
+		action: {
+			type: 'exchangeitems',
+			itemId: 'sitrusberry',
+			quantity: 1,
+			requiredItem: 'oranberry',
+			requiredQuantity: 5,
+		},
+	},
+	'mysteryman': {
+		id: 'mysteryman',
+		name: 'Mysterious Man',
+		location: 'celadoncity',
+		dialogue: "I need rare candies for my research! Bring me 3 Rare Candies and I'll give you something special.",
+		action: {
+			type: 'takeitem',
+			itemId: 'rarecandy',
+			quantity: 3,
+			onceOnly: true,
+		},
 	},
 };
