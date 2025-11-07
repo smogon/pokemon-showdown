@@ -476,14 +476,14 @@ export function generateSingleBattleHTML(
 			'<span style="float: right;">-- / --</span>' +
 			'</div> ';
 
-		moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
@@ -523,14 +523,14 @@ export function generateSingleBattleHTML(
 			return normalButton;
 		});
 
-		moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	}
@@ -712,14 +712,14 @@ export function generateDoubleBattleHTML(
 				return '<button name="send" value="/rpg battleaction move ' + targetSelection.attackerSlotIndex + ' ' + targetSelection.moveId + ' ' + target.index + teraParam + '" class="button" style="' + buttonStyle + '">' + target.name + '</button>';
 			});
 
-		let targetButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+		let targetButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[0] || '') + '</td>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[1] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[0] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[1] || '') + '</td>';
 		targetButtonsHTML += '</tr>';
 		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[2] || '') + '</td>';
-		targetButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (targetButtons[3] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[2] || '') + '</td>';
+		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[3] || '') + '</td>';
 		targetButtonsHTML += '</tr>';
 		targetButtonsHTML += '</table>';
 
@@ -755,7 +755,7 @@ export function generateDoubleBattleHTML(
 					'</div>';
 
 				const struggleButton = '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' struggle" class="button" style="' + buttonStyle + '">' + buttonContent + '</button>';
-				moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;"><tr><td style="width: 40%; padding: 0; vertical-align: top;">' + struggleButton + '</td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr><tr><td style="width: 40%; padding: 0; vertical-align: top;"></td><td style="width: 40%; padding: 0; vertical-align: top;"></td></tr></table>';
+				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;"><tr><td style="padding: 0; vertical-align: top;">' + struggleButton + '</td><td style="padding: 0; vertical-align: top;"></td></tr><tr><td style="padding: 0; vertical-align: top;"></td><td style="padding: 0; vertical-align: top;"></td></tr></table>';
 			} else {
 				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
 
@@ -791,15 +791,15 @@ export function generateDoubleBattleHTML(
 					return normalButton;
 				});
 
-				moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
+				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 				moveButtonsHTML += '<tr>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
-				moveButtonsHTML += '</tr>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '<tr>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-				moveButtonsHTML += '<td style="width: 40%; padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
-				moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '</table>';
 			}
 			html += moveButtonsHTML;
