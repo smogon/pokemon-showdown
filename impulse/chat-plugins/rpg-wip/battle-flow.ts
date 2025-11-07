@@ -229,10 +229,8 @@ export function checkForWinLoss(
 
 		// Transport player to last Pokemon Center visited
 		const respawnLocation = player.lastPokemonCenter || 'startertown';
-		const respawnLocationData = LOCATIONS[respawnLocation];
-		if (respawnLocationData) {
-			player.location = respawnLocationData.name;
-		}
+		const respawnLocationData = LOCATIONS[respawnLocation] || LOCATIONS['startertown'];
+		player.location = respawnLocationData.name;
 
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
 		return true;

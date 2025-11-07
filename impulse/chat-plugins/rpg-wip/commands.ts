@@ -21,6 +21,7 @@ import {
     ITEMS_DATABASE,
     ITEM_PRICES
 } from './items';
+import { getShopInventory, getNextShopTier } from './shop';
 import {
     getPlayerData,
     createPokemon,
@@ -824,6 +825,14 @@ export const commands: ChatCommands = {
 			if (!itemId || !ITEMS_DATABASE[itemId]) {
 				return this.errorReply("Invalid item specified.");
 			}
+			
+			// Check if item is available in current location's shop
+			const locationId = toID(player.location);
+			const shopInventory = getShopInventory(locationId, player.badges);
+			if (!shopInventory.includes(itemId)) {
+				return this.errorReply("This item is not available in this shop. You may need more badges to unlock it!");
+			}
+			
 			const itemPrice = ITEM_PRICES[itemId];
 			if (!itemPrice) {
 				return this.errorReply("This item is not for sale.");
@@ -1824,8 +1833,12 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 
-			// Update last Pokemon Center visited
-			player.lastPokemonCenter = toID(player.location);
+			// Update last Pokemon Center visited (only if current location has one)
+			const currentLocationId = toID(player.location);
+			const currentLocationData = LOCATIONS[currentLocationId];
+			if (currentLocationData && currentLocationData.hasPokeCenter) {
+				player.lastPokemonCenter = currentLocationId;
+			}
 
 			for (const pokemon of player.party) {
 				pokemon.hp = pokemon.maxHp;
