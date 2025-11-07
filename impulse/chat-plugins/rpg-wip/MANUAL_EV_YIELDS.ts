@@ -1,3 +1,6 @@
+/*
+* Auto Generated Evs Yields
+*/
 export const MANUAL_EV_YIELDS: Record<string, {
 	hp?: number,
 	atk?: number,
