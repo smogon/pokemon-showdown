@@ -16,7 +16,7 @@ interface NewsEntry {
 }
 
 const serverName = Config.serverName || 'Impulse';
-const NEWS_FILE = 'databases/server-news.json';
+const NEWS_FILE = 'impulse/db/server-news.json';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
