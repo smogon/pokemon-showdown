@@ -564,13 +564,13 @@ export function generateSingleBattleHTML(
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- MODIFIED: H3 now only shows effects ---
-		'<h3 style="margin: 5px 0;">' + playerEffects + '</h3>' +
+		// --- MODIFIED: Added &nbsp; to prevent collapse ---
+		'<h3 style="margin: 5px 0;">' + playerEffects + '&nbsp;</h3>' +
 		'' + generateSharedBattlePokemonInfo(playerSlot, true, false, playerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		// --- MODIFIED: H3 now only shows effects ---
-		'<h3 style="margin: 5px 0;">' + opponentEffects + '</h3>' +
+		// --- MODIFIED: Added &nbsp; to prevent collapse ---
+		'<h3 style="margin: 5px 0;">' + opponentEffects + '&nbsp;</h3>' +
 		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'</tr>' +
@@ -676,8 +676,8 @@ export function generateDoubleBattleHTML(
 	// Opponent Side (Top Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: H3 now only shows effects ---
-	html += '<h3 style="margin: 5px 0;">' + opponentEffects + '</h3>';
+	// --- MODIFIED: Added &nbsp; to prevent collapse ---
+	html += '<h3 style="margin: 5px 0;">' + opponentEffects + '&nbsp;</h3>';
 	html += generateSlotHTML(oSlot0, 2, 'opponent');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
@@ -689,8 +689,8 @@ export function generateDoubleBattleHTML(
 	// Player Side (Bottom Row)
 	html += '<tr>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// --- MODIFIED: H3 now only shows effects ---
-	html += '<h3 style="margin: 5px 0;">' + playerEffects + '</h3>';
+	// --- MODIFIED: Added &nbsp; to prevent collapse ---
+	html += '<h3 style="margin: 5px 0;">' + playerEffects + '&nbsp;</h3>';
 	html += generateSlotHTML(pSlot0, 0, 'player');
 	html += '</td>';
 	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
