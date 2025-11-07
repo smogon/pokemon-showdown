@@ -902,7 +902,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Lingering Aroma, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
 		},
 
-		changeAbility: "  A lingering aroma clings to [TARGET]!",
+		changeAbility: "  A lingering aroma clings to [POKEMON]!",
 	},
 	liquidooze: {
 		name: "Liquid Ooze",
@@ -1093,7 +1093,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the Multitype or Mummy Abilities.",
 		},
 
-		changeAbility: "  [TARGET]'s Ability became Mummy!",
+		changeAbility: "  [POKEMON]'s Ability became Mummy!",
 	},
 	myceliummight: {
 		name: "Mycelium Might",
