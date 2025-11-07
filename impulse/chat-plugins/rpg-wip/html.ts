@@ -7,7 +7,8 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
-import { ITEMS_DATABASE, ITEM_PRICES, SHOP_INVENTORY } from './items';
+import { ITEMS_DATABASE, ITEM_PRICES } from './items';
+import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
@@ -934,10 +935,19 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 }
 
 export function generateShopHTML(player: PlayerData, category?: string): string {
+	const locationId = toID(player.location);
+	const shopInventory = getShopInventory(locationId, player.badges);
+	const nextTier = getNextShopTier(locationId, player.badges);
+	
 	let html = `<div class="infobox">`;
-	html += `<h2>Poké Mart</h2>`;
+	html += `<h2>Poké Mart - ${player.location}</h2>`;
 	html += `<p>Welcome! What would you like to do?</p>`;
-	html += `<p><strong>Your Money:</strong> ₽${player.money}</p>`;
+	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/8</p>`;
+
+	// Show next tier info if available
+	if (nextTier) {
+		html += `<p style="color: #666; font-size: 12px;">🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</p>`;
+	}
 
 	// --- NEW: Added Sell Button ---
 	html += `<p><button name="send" value="/rpg sell" class="button" style="background-color: #28a745; color: white;">Sell Items</button></p>`;
@@ -955,7 +965,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
 
 	let itemsFound = false;
-	for (const itemId of SHOP_INVENTORY) {
+	for (const itemId of shopInventory) {
 		const item = ITEMS_DATABASE[itemId];
 		const price = ITEM_PRICES[itemId];
 		if (!item || !price) continue;
@@ -1166,7 +1176,7 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	return html;
 }
 
-export function generateMoveLearnHTML(player: PlayerData): string {
+export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
 	const queue = player.pendingMoveLearnQueue;
 	if (!queue || queue.moveIds.length === 0) return `<h2>Error: No pending moves found.</h2>`;
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
@@ -1175,7 +1185,14 @@ export function generateMoveLearnHTML(player: PlayerData): string {
 		delete player.pendingMoveLearnQueue;
 		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
-	let html = `<div class="infobox"><h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
+	let html = `<div class="infobox">`;
+	
+	// Display additional messages if provided (e.g., badge notifications)
+	if (additionalMessages && additionalMessages.length > 0) {
+		html += `<div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;">${additionalMessages.join('<br>')}</div>`;
+	}
+	
+	html += `<h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
 	for (const move of pokemon.moves) {
 		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
 	}

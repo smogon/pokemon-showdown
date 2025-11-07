@@ -13,6 +13,7 @@ import { RPGAbilities } from './abilities';
 import { getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
+import { LOCATIONS } from './data';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
@@ -216,6 +217,21 @@ export function checkForWinLoss(
 		moneyLost = Math.min(player.money, moneyLost);
 		player.money -= moneyLost;
 
+		// Heal all Pokemon (like in Pokemon games)
+		for (const pokemon of player.party) {
+			pokemon.hp = pokemon.maxHp;
+			pokemon.status = null;
+			for (const move of pokemon.moves) {
+				const moveData = getMove(move.id);
+				move.pp = moveData.pp || 5;
+			}
+		}
+
+		// Transport player to last Pokemon Center visited
+		const respawnLocation = player.lastPokemonCenter || 'startertown';
+		const respawnLocationData = LOCATIONS[respawnLocation] || LOCATIONS['startertown'];
+		player.location = respawnLocationData.name;
+
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
 		return true;
 	}
@@ -234,14 +250,14 @@ export function checkForWinLoss(
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyGained = battle.opponentMoney;
 			player.money += moneyGained;
-			
+
 			// Track defeated trainer
 			if (battle.trainerId) {
 				player.defeatedTrainers.add(battle.trainerId);
-				
+
 				// Award badge if it's a gym leader
-				if (battle.trainerId.startsWith('gym_')) {
-					const gymName = battle.trainerId.replace('gym_', '');
+				if (battle.trainerId.startsWith('gym')) {
+					const gymName = battle.trainerId.replace('gym', '');
 					const badgeNames: Record<string, string> = {
 						'brock': 'Boulder Badge',
 						'misty': 'Cascade Badge',
@@ -257,7 +273,7 @@ export function checkForWinLoss(
 						player.obtainedBadges.push(badgeName);
 						player.badges = player.obtainedBadges.length;
 						messageLog.push(`<strong>You obtained the ${badgeName}!</strong>`);
-						
+
 						// Check if player has all 8 badges
 						if (player.obtainedBadges.length === 8) {
 							player.storyFlags.add('all_badges');
@@ -265,7 +281,7 @@ export function checkForWinLoss(
 						}
 					}
 				}
-				
+
 				// Check if Champion was defeated
 				if (battle.trainerId === 'champion_blue') {
 					player.storyFlags.add('champion');
@@ -273,9 +289,9 @@ export function checkForWinLoss(
 					messageLog.push(`<strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong>`);
 				}
 			}
-			
+
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
 			}
@@ -283,7 +299,7 @@ export function checkForWinLoss(
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
 			player.money += moneyGained;
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
 				const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
