@@ -303,9 +303,11 @@ export interface Location {
 export interface ScriptedEvent {
 	id: string;
 	name: string;
-	triggerOnce?: boolean; // If true, only triggers the first time
+	triggerOnce?: boolean; // If true, only triggers the first time (sets 'scripted_<id>' flag)
 	requiredFlag?: string; // Only triggers if player has this flag
 	requiredBadgeCount?: number; // Only triggers if player has at least this many badges
+	maxBadgeCount?: number; // Only triggers if player has at most this many badges
+	preventIfFlag?: string; // Won't trigger if player has this flag
 	type: 'trainer' | 'dialogue' | 'item' | 'pokemon';
 	trainerId?: string; // For trainer battles
 	dialogue?: string; // Text to display

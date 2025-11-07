@@ -79,8 +79,29 @@ export const LOCATIONS: Record<string, Location> = {
 				id: 'route1_first_visit',
 				name: 'First Route Experience',
 				triggerOnce: true,
+				maxBadgeCount: 0, // Only triggers before getting first badge
 				type: 'dialogue',
 				dialogue: 'This is your first route! Wild Pokémon hide in the tall grass. Be careful and catch some new friends!',
+			},
+			{
+				id: 'route1_return_with_badge',
+				name: 'Rival Returns',
+				triggerOnce: true,
+				requiredBadgeCount: 1, // Only triggers when player has at least 1 badge
+				type: 'trainer',
+				trainerId: 'rival1',
+				dialogue: 'Hey! I heard you beat Brock! Let\'s see if you\'ve really gotten stronger!',
+				setFlag: 'route1_rival_defeated',
+			},
+			{
+				id: 'route1_gift_after_rival',
+				name: 'Helpful Trainer',
+				triggerOnce: true,
+				requiredFlag: 'route1_rival_defeated',
+				type: 'item',
+				itemId: 'superpotion',
+				itemQuantity: 2,
+				dialogue: 'I saw your battle! You\'re getting really strong. Here, take these Super Potions!',
 			},
 		],
 	},
@@ -154,6 +175,15 @@ export const LOCATIONS: Record<string, Location> = {
 				itemId: 'potion',
 				itemQuantity: 3,
 				dialogue: 'You look like a strong trainer! Here, take these potions for your journey.',
+			},
+			{
+				// Example of a REPEATABLE event (no triggerOnce)
+				// This will happen every time the player enters Route 2
+				id: 'route2_warning',
+				name: 'Cave Warning',
+				type: 'dialogue',
+				dialogue: 'Be careful in the cave! Rock and Ground-type Pokemon are common here.',
+				// Note: No triggerOnce property means this repeats every visit
 			},
 		],
 	},

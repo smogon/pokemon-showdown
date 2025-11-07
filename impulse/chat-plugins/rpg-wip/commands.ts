@@ -1078,9 +1078,21 @@ export const commands: ChatCommands = {
 				for (const event of targetLocation.scriptedEvents) {
 					// Check if event should trigger
 					const eventFlagId = `scripted_${event.id}`;
+					
+					// Skip if already triggered and marked as triggerOnce
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
+					
+					// Skip if required flag is not present
 					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					
+					// Skip if player doesn't have enough badges
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					
+					// Skip if player has too many badges (for early-game only events)
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					
+					// Skip if preventIfFlag is set and player has that flag
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 
 					triggeredEvents.push(event);
 					
