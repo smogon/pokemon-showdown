@@ -73,14 +73,12 @@ import {
 } from './html';
 import {
 	STARTER_POKEMON,
-	ENCOUNTER_ZONES,
-	TRAINER_DATABASE,
 	TYPE_CHART,
-	LOCATIONS,
-	TRAINER_LOCATIONS,
-	STORY_EVENTS,
-	NPC_DATABASE,
 } from './data';
+import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
+import { STORY_EVENTS } from './story-events';
+import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
