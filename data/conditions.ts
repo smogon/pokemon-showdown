@@ -439,10 +439,17 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	stall: {
 		// Protect, Detect, Endure counter
 		name: 'stall',
-		duration: 2,
 		counterMax: 729,
 		onStart() {
+			this.effectState.time = 2;
 			this.effectState.counter = 3;
+		},
+		onBeforeTurn(pokemon) {
+			if (pokemon.volatiles['commanding']) return;
+			this.effectState.time--;
+			if (this.effectState.time <= 0) {
+				pokemon.removeVolatile('stall');
+			}
 		},
 		onStallMove(pokemon) {
 			// this.effectState.counter should never be undefined here.
@@ -457,7 +464,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
 				this.effectState.counter *= 3;
 			}
-			this.effectState.duration = 2;
+			this.effectState.time = 2;
 		},
 	},
 	gem: {
