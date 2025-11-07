@@ -130,6 +130,7 @@ export interface PlayerData {
 	obtainedBadges: string[];
 	visitedLocations: Set<string>;
 	lastPokemonCenter?: string; // Track the last Pokemon Center visited for respawn
+	completedNPCActions: Set<string>; // Track NPCs that have completed one-time actions
 }
 
 export interface BattleState {
@@ -254,3 +255,22 @@ export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, 
 export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
+
+export interface NPCAction {
+	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem';
+	itemId?: string;
+	quantity?: number;
+	pokemon?: { species: string, level: number, moves?: string[] };
+	requiredItem?: string;
+	requiredQuantity?: number;
+	onceOnly?: boolean;
+}
+
+export interface NPCData {
+	id: string;
+	name: string;
+	location: string;
+	dialogue: string;
+	flags?: string[];
+	action?: NPCAction;
+}

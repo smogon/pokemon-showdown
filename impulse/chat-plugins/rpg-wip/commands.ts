@@ -10,75 +10,76 @@ import { RPGAbilities } from './abilities';
 import { getMove, checkEvolution, handleLearningMoves, getActiveSlots } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState } from './interface';
 import {
-    addItemToInventory,
-    removeItemFromInventory,
-    useSacredAsh,
-    useRevivalItem,
-    useHealingItem,
-    useVitaminItem,
-    useRareCandyItem,
-    useExpCandyItem,
-    ITEMS_DATABASE,
-    ITEM_PRICES
+	addItemToInventory,
+	removeItemFromInventory,
+	useSacredAsh,
+	useRevivalItem,
+	useHealingItem,
+	useVitaminItem,
+	useRareCandyItem,
+	useExpCandyItem,
+	ITEMS_DATABASE,
+	ITEM_PRICES,
 } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import {
-    getPlayerData,
-    createPokemon,
-    activeBattles,
-    storePokemonInPC,
-    withdrawPokemonFromPC,
-    playerData,
-    getInitialMoves,
-    savePlayerToString,
-    loadPlayer
+	getPlayerData,
+	createPokemon,
+	activeBattles,
+	storePokemonInPC,
+	withdrawPokemonFromPC,
+	playerData,
+	getInitialMoves,
+	savePlayerToString,
+	loadPlayer,
 } from './core';
 import {
-    createActivePokemonSlot,
-    validateMoveAction,
-    processTurn,
-    checkTrappingAbility,
-    saveBattleStatus,
-    performCatchAttempt,
-    getSlotFromIndex,
-    applyHazardEffectsOnSwitchIn,
-    handleMirrorHerb
+	createActivePokemonSlot,
+	validateMoveAction,
+	processTurn,
+	checkTrappingAbility,
+	saveBattleStatus,
+	performCatchAttempt,
+	getSlotFromIndex,
+	applyHazardEffectsOnSwitchIn,
+	handleMirrorHerb,
 } from './battle-engine';
 import {
-    generateMenuHTML,
-    generateProfileHTML,
-    generateBuyHTML,
-    generateSellMenuHTML,
-    generateSellConfirmHTML,
-    generateExploreHTML,
-    generateRunHTML,
-    generateHealHTML,
-    generateResetHTML,
-    generateUnstuckHTML,
-    generatePokemonInfoHTML,
-    generateBattleHTML,
-    generateWelcomeHTML,
-    generateStarterSelectionHTML,
-    generatePokemonSummaryHTML,
-    generateEggMoveSelectionHTML,
-    generateInventoryHTML,
-    generateShopHTML,
-    generatePCHTML,
-    generateCatchMenuHTML,
-    generateCatchTargetHTML,
-    generateSwitchMenuHTML,
-    generateMoveLearnHTML,
-    generateGiveItemPokemonSelectionHTML,
-    generateFaintSwitchHTML
+	generateMenuHTML,
+	generateProfileHTML,
+	generateBuyHTML,
+	generateSellMenuHTML,
+	generateSellConfirmHTML,
+	generateExploreHTML,
+	generateRunHTML,
+	generateHealHTML,
+	generateResetHTML,
+	generateUnstuckHTML,
+	generatePokemonInfoHTML,
+	generateBattleHTML,
+	generateWelcomeHTML,
+	generateStarterSelectionHTML,
+	generatePokemonSummaryHTML,
+	generateEggMoveSelectionHTML,
+	generateInventoryHTML,
+	generateShopHTML,
+	generatePCHTML,
+	generateCatchMenuHTML,
+	generateCatchTargetHTML,
+	generateSwitchMenuHTML,
+	generateMoveLearnHTML,
+	generateGiveItemPokemonSelectionHTML,
+	generateFaintSwitchHTML,
 } from './html';
 import {
-    STARTER_POKEMON,
-    ENCOUNTER_ZONES,
-    TRAINER_DATABASE,
-    TYPE_CHART,
-    LOCATIONS,
-    TRAINER_LOCATIONS,
-    STORY_EVENTS
+	STARTER_POKEMON,
+	ENCOUNTER_ZONES,
+	TRAINER_DATABASE,
+	TYPE_CHART,
+	LOCATIONS,
+	TRAINER_LOCATIONS,
+	STORY_EVENTS,
+	NPC_DATABASE,
 } from './data';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 
@@ -107,7 +108,7 @@ export const commands: ChatCommands = {
 			// Pass both the type and the starters list to the HTML function
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
-		
+
 		choosestarter(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
@@ -277,7 +278,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You are in a battle!");
 			}
 			const player = getPlayerData(user.id);
-			
+
 			// Badge display
 			let badgeHTML = '';
 			if (player.obtainedBadges.length > 0) {
@@ -289,7 +290,7 @@ export const commands: ChatCommands = {
 			} else {
 				badgeHTML = `<p><strong>Gym Badges:</strong> None yet</p>`;
 			}
-			
+
 			// Story progress
 			let progressHTML = '<p><strong>Progress:</strong> ';
 			if (player.storyFlags.has('champion')) {
@@ -303,7 +304,7 @@ export const commands: ChatCommands = {
 			} else {
 				progressHTML += 'Just starting out</p>';
 			}
-			
+
 			const profileHTML = `<div class="infobox"><h2>Player Profile</h2>` +
 				`<p><strong>Trainer:</strong> ${player.name}</p>` +
 				`<p><strong>Level:</strong> ${player.level}</p>` +
@@ -385,7 +386,7 @@ export const commands: ChatCommands = {
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
-		
+
 		useitem(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
@@ -413,7 +414,7 @@ export const commands: ChatCommands = {
 				// --- All other medicines require a Pokemon target ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
-					
+
 					// Determine what kind of Pokemon to show (fainted, status, etc.)
 					const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
 					const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
@@ -462,119 +463,119 @@ export const commands: ChatCommands = {
 				let requiresMoveSelection = false;
 
 				switch (itemId) {
-					// Revival
-					case 'revive':
-					case 'maxrevive':
-					case 'revivalherb':
-						result = useRevivalItem(player, targetPokemon, itemId);
-						break;
-					
+				// Revival
+				case 'revive':
+				case 'maxrevive':
+				case 'revivalherb':
+					result = useRevivalItem(player, targetPokemon, itemId);
+					break;
+
 					// HP Healing
-					case 'potion':
-					case 'superpotion':
-					case 'hyperpotion':
-					case 'maxpotion':
-					case 'fullrestore':
-					case 'berryjuice':
-					case 'freshwater':
-					case 'sodapop':
-					case 'lemonade':
-					case 'moomoomilk':
-					case 'tea':
-					case 'energyroot':
-					case 'energypowder':
-						result = useHealingItem(player, targetPokemon, itemId);
-						break;
-					
+				case 'potion':
+				case 'superpotion':
+				case 'hyperpotion':
+				case 'maxpotion':
+				case 'fullrestore':
+				case 'berryjuice':
+				case 'freshwater':
+				case 'sodapop':
+				case 'lemonade':
+				case 'moomoomilk':
+				case 'tea':
+				case 'energyroot':
+				case 'energypowder':
+					result = useHealingItem(player, targetPokemon, itemId);
+					break;
+
 					// Specific Status
-					case 'antidote':
-						if (targetPokemon.status === 'psn') {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species} was cured of poison!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} is not poisoned.` };
-						}
-						break;
-					case 'paralyzeheal':
-						if (targetPokemon.status === 'par') {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species} was cured of paralysis!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} is not paralyzed.` };
-						}
-						break;
-					case 'awakening':
-						if (targetPokemon.status === 'slp') {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species} woke up!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} is not asleep.` };
-						}
-						break;
-					case 'burnheal':
-						if (targetPokemon.status === 'brn') {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species} was cured of its burn!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} is not burned.` };
-						}
-						break;
-					case 'iceheal':
-						if (targetPokemon.status === 'frz') {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species} was thawed out!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} is not frozen.` };
-						}
-						break;
-					
+				case 'antidote':
+					if (targetPokemon.status === 'psn') {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species} was cured of poison!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} is not poisoned.` };
+					}
+					break;
+				case 'paralyzeheal':
+					if (targetPokemon.status === 'par') {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species} was cured of paralysis!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} is not paralyzed.` };
+					}
+					break;
+				case 'awakening':
+					if (targetPokemon.status === 'slp') {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species} woke up!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} is not asleep.` };
+					}
+					break;
+				case 'burnheal':
+					if (targetPokemon.status === 'brn') {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species} was cured of its burn!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} is not burned.` };
+					}
+					break;
+				case 'iceheal':
+					if (targetPokemon.status === 'frz') {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species} was thawed out!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} is not frozen.` };
+					}
+					break;
+
 					// Full Status
-					case 'fullheal':
-					case 'healpowder':
-						if (targetPokemon.status) {
-							targetPokemon.status = null;
-							result = { success: true, message: `${targetPokemon.species}'s status was healed!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species} has no status condition.` };
-						}
-						break;
-					
+				case 'fullheal':
+				case 'healpowder':
+					if (targetPokemon.status) {
+						targetPokemon.status = null;
+						result = { success: true, message: `${targetPokemon.species}'s status was healed!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species} has no status condition.` };
+					}
+					break;
+
 					// PP Restore (Single Move)
-					case 'ether':
-					case 'maxether':
-						requiresMoveSelection = true;
-						break;
-					
+				case 'ether':
+				case 'maxether':
+					requiresMoveSelection = true;
+					break;
+
 					// PP Restore (All Moves)
-					case 'elixir':
-					case 'maxelixir':
-						let totalPPRestored = 0;
-						for (const move of targetPokemon.moves) {
-							const moveData = getMove(move.id);
-							const maxPP = moveData.pp || 5;
-							if (move.pp < maxPP) {
-								const restoreAmount = (itemId === 'elixir') ? 10 : maxPP;
-								const oldPP = move.pp;
-								move.pp = Math.min(maxPP, move.pp + restoreAmount);
-								totalPPRestored += (move.pp - oldPP);
-							}
+				case 'elixir':
+				case 'maxelixir':
+					let totalPPRestored = 0;
+					for (const move of targetPokemon.moves) {
+						const moveData = getMove(move.id);
+						const maxPP = moveData.pp || 5;
+						if (move.pp < maxPP) {
+							const restoreAmount = (itemId === 'elixir') ? 10 : maxPP;
+							const oldPP = move.pp;
+							move.pp = Math.min(maxPP, move.pp + restoreAmount);
+							totalPPRestored += (move.pp - oldPP);
 						}
-						if (totalPPRestored > 0) {
-							result = { success: true, message: `${targetPokemon.species}'s moves had their PP restored!` };
-						} else {
-							result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
-						}
-						break;
-					
+					}
+					if (totalPPRestored > 0) {
+						result = { success: true, message: `${targetPokemon.species}'s moves had their PP restored!` };
+					} else {
+						result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
+					}
+					break;
+
 					// Vitamins
-					case 'hpup':
-					case 'protein':
-					case 'iron':
-					case 'calcium':
-					case 'zinc':
-					case 'carbos':
-						result = useVitaminItem(player, targetPokemon, itemId);
-						break;
+				case 'hpup':
+				case 'protein':
+				case 'iron':
+				case 'calcium':
+				case 'zinc':
+				case 'carbos':
+					result = useVitaminItem(player, targetPokemon, itemId);
+					break;
 				}
 
 				if (requiresMoveSelection) {
@@ -592,11 +593,10 @@ export const commands: ChatCommands = {
 				if (!['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId)) {
 					removeItemFromInventory(player, itemId, 1);
 				}
-				
+
 				const tempSlot = createActivePokemonSlot(targetPokemon);
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
-
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (item.category === 'misc') {
@@ -606,7 +606,7 @@ export const commands: ChatCommands = {
 					for (const pokemon of player.party) {
 						let canUse = true;
 						let details = `(Lvl ${pokemon.level})`;
-						
+
 						if (itemId === 'rarecandy' || itemId.startsWith('expcandy')) {
 							if (pokemon.level >= 100) canUse = false;
 							details = `(Lvl ${pokemon.level}, ${pokemon.experience}/${pokemon.expToNextLevel} EXP)`;
@@ -676,14 +676,14 @@ export const commands: ChatCommands = {
 				} else if (item.id.endsWith('stone')) {
 					// --- EVOLUTION STONE LOGIC ---
 					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
-					
+
 					if (evoMessage) {
 						// Evolution was successful
 						removeItemFromInventory(player, itemId, 1);
 						const updatedPokemon = player.party.find(p => p.id === pokemonId); // Refetch in case of evolution
 						const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
 						let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
-						
+
 						// Check if new moves were queued
 						if (player.pendingMoveLearnQueue?.moveIds.length) {
 							resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
@@ -704,12 +704,12 @@ export const commands: ChatCommands = {
 				return this.errorReply("This item category cannot be used from the bag.");
 			}
 		},
-		
+
 		restorepp(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this during a battle.");
 			}
-			
+
 			const [pokemonId, moveId, itemId] = target.split(' ').map(arg => toID(arg));
 			if (!pokemonId || !moveId || !itemId) {
 				return this.errorReply("Invalid command parameters.");
@@ -745,7 +745,7 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("That is not a valid PP-restoring item for a single move.");
 			}
-			
+
 			const oldPP = move.pp;
 			move.pp = Math.min(maxPP, move.pp + restoreAmount);
 			const restored = move.pp - oldPP;
@@ -825,14 +825,14 @@ export const commands: ChatCommands = {
 			if (!itemId || !ITEMS_DATABASE[itemId]) {
 				return this.errorReply("Invalid item specified.");
 			}
-			
+
 			// Check if item is available in current location's shop
 			const locationId = toID(player.location);
 			const shopInventory = getShopInventory(locationId, player.badges);
 			if (!shopInventory.includes(itemId)) {
 				return this.errorReply("This item is not available in this shop. You may need more badges to unlock it!");
 			}
-			
+
 			const itemPrice = ITEM_PRICES[itemId];
 			if (!itemPrice) {
 				return this.errorReply("This item is not for sale.");
@@ -846,7 +846,7 @@ export const commands: ChatCommands = {
 			const item = ITEMS_DATABASE[itemId];
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`);
 		},
-		
+
 		sell(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot sell items during a battle.");
@@ -918,7 +918,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
-			
+
 			if (!currentLocation) {
 				return this.errorReply(`Unknown location: ${player.location}`);
 			}
@@ -927,7 +927,7 @@ export const commands: ChatCommands = {
 			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(currentLocationId));
 
 			let exploreButtons = '';
-			
+
 			// Wild Pokemon zones
 			if (availableZones.length > 0) {
 				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
@@ -937,7 +937,7 @@ export const commands: ChatCommands = {
 					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
 				}
 			}
-			
+
 			// Gym challenge
 			if (currentLocation.hasGym) {
 				const gymLeaderId = currentLocation.hasGym;
@@ -949,7 +949,7 @@ export const commands: ChatCommands = {
 					exploreButtons += `<p><em>You already defeated ${gymData.name}!</em></p>`;
 				}
 			}
-			
+
 			// Route trainers
 			const locationTrainers = TRAINER_LOCATIONS[currentLocationId];
 			if (locationTrainers && locationTrainers.length > 0) {
@@ -990,7 +990,7 @@ export const commands: ChatCommands = {
 
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
-			
+
 			// If no target, show travel menu
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
@@ -1000,7 +1000,7 @@ export const commands: ChatCommands = {
 
 				let travelHTML = `<div class="infobox"><h2>Travel from ${currentLocation.name}</h2>`;
 				travelHTML += `<p>Where would you like to go?</p>`;
-				
+
 				if (currentLocation.connectedLocations.length === 0) {
 					travelHTML += `<p>There are no paths from this location yet.</p>`;
 				} else {
@@ -1008,21 +1008,21 @@ export const commands: ChatCommands = {
 						// Check if location is accessible
 						let canAccess = true;
 						let lockReason = '';
-						
+
 						if (connection.requiredBadge) {
 							if (!player.obtainedBadges.includes(connection.requiredBadge)) {
 								canAccess = false;
 								lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
 							}
 						}
-						
+
 						if (connection.requiredFlag) {
 							if (!player.storyFlags.has(connection.requiredFlag)) {
 								canAccess = false;
 								lockReason = ` 🔒 (Not accessible yet)`;
 							}
 						}
-						
+
 						if (canAccess) {
 							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 						} else {
@@ -1030,7 +1030,7 @@ export const commands: ChatCommands = {
 						}
 					}
 				}
-				
+
 				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
@@ -1039,34 +1039,34 @@ export const commands: ChatCommands = {
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
-			
+
 			if (!targetLocation) {
 				return this.errorReply("That location doesn't exist.");
 			}
-			
+
 			if (!currentLocation) {
 				return this.errorReply("Your current location is invalid.");
 			}
-			
+
 			// Check if the location is connected
 			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
 			if (!connection) {
 				return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
 			}
-			
+
 			// Check requirements
 			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
 				return this.errorReply(`You need the ${connection.requiredBadge} to travel to ${targetLocation.name}.`);
 			}
-			
+
 			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
 				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
 			}
-			
+
 			// Perform travel
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
-			
+
 			const arrivalHTML = `<div class="infobox">` +
 				`<h2>Arrived at ${targetLocation.name}</h2>` +
 				`<p>${targetLocation.description}</p>` +
@@ -1260,7 +1260,7 @@ export const commands: ChatCommands = {
 				opponentName: trainerSpec.name,
 				opponentParty: trainerParty, // The full party
 				opponentMoney: trainerSpec.money,
-				trainerId: trainerId, // Add trainer ID for badge tracking
+				trainerId, // Add trainer ID for badge tracking
 
 				// --- New Slot-Based Fields ---
 				playerSlots,
@@ -2033,94 +2033,22 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot talk to NPCs during a battle.");
 			}
-			
+
 			const player = getPlayerData(user.id);
 			const npcId = toID(target);
-			
-			// Simple NPC dialogue system
-			const npcs: Record<string, { name: string, location: string, dialogue: string, flags?: string[] }> = {
-				'professor': {
-					name: 'Professor Oak',
-					location: 'startertown',
-					dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
-				},
-				'aideroute1': {
-					name: 'Professor\'s Aide',
-					location: 'route1',
-					dialogue: "Wild Pokémon live in tall grass! If you want to catch them, weaken them first, then throw a Poké Ball!",
-				},
-				'oldmanpewter': {
-					name: 'Old Man',
-					location: 'pewtercity',
-					dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
-				},
-				'nursecerulean': {
-					name: 'Nurse Joy',
-					location: 'ceruleancity',
-					dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
-				},
-				'hikerroute2': {
-					name: 'Friendly Hiker',
-					location: 'route2',
-					dialogue: "This route has tougher Pokémon! Make sure your team is at least level 10 before continuing. Good luck!",
-				},
-				'girlvermilion': {
-					name: 'Little Girl',
-					location: 'vermilioncity',
-					dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
-				},
-				'shopkeeperceladon': {
-					name: 'Shop Keeper',
-					location: 'celadoncity',
-					dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
-				},
-				'trainerfuchsia': {
-					name: 'Expert Trainer',
-					location: 'fuchsiacity',
-					dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
-				},
-				'scientistcinnabar': {
-					name: 'Lab Scientist',
-					location: 'cinnabarisland',
-					dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
-				},
-				'guardviridian': {
-					name: 'City Guard',
-					location: 'viridiancity',
-					dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
-				},
-				'veteranvictoryroad': {
-					name: 'Veteran Hiker',
-					location: 'victoryroad',
-					dialogue: "Only trainers with all 8 badges can enter here. The Pokémon are level 48+. Make sure you're prepared!",
-					flags: ['all_badges'],
-				},
-				'championguide': {
-					name: 'Elite Four Guide',
-					location: 'pokemonleague',
-					dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",
-					flags: ['all_badges'],
-				},
-				'congratulations': {
-					name: 'Champion\'s Aide',
-					location: 'pokemonleague',
-					dialogue: "Congratulations, Champion! You've completed your journey. You can explore, catch more Pokémon, or challenge trainers again!",
-					flags: ['champion'],
-				},
-			};
-			
+
 			if (!npcId) {
 				// Show available NPCs in current location
 				const currentLocationId = toID(player.location);
-				const availableNPCs = Object.entries(npcs).filter(([id, npc]) => 
-					npc.location === currentLocationId && 
+				const availableNPCs = Object.entries(NPC_DATABASE).filter(([id, npc]) =>
+					npc.location === currentLocationId &&
 					(!npc.flags || npc.flags.every(f => player.storyFlags.has(f)))
 				);
-				
+
 				if (availableNPCs.length === 0) {
 					return this.errorReply("There are no NPCs to talk to here.");
 				}
-				
+
 				let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
 				for (const [id, npc] of availableNPCs) {
 					html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
@@ -2128,38 +2056,241 @@ export const commands: ChatCommands = {
 				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
-			
-			const npc = npcs[npcId];
+
+			const npc = NPC_DATABASE[npcId];
 			if (!npc) {
 				return this.errorReply("That NPC doesn't exist.");
 			}
-			
+
 			// Check location
 			if (npc.location !== toID(player.location)) {
 				return this.errorReply("That NPC is not in this location.");
 			}
-			
+
 			// Check flags
 			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) {
 				return this.errorReply("You cannot talk to this NPC yet.");
 			}
-			
-			const dialogueHTML = `<div class="infobox">` +
+
+			// Build base dialogue HTML
+			let dialogueHTML = `<div class="infobox">` +
 				`<h2>${npc.name}</h2>` +
-				`<p>"${npc.dialogue}"</p>` +
-				`<hr />` +
+				`<p>"${npc.dialogue}"</p>`;
+
+			// Handle NPC actions
+			if (npc.action) {
+				const action = npc.action;
+				const actionCompleted = player.completedNPCActions.has(npcId);
+
+				// Check if action is available
+				if (!action.onceOnly || !actionCompleted) {
+					dialogueHTML += `<hr />`;
+
+					switch (action.type) {
+					case 'giveitem':
+						if (action.itemId && action.quantity) {
+							const item = ITEMS_DATABASE[action.itemId];
+							dialogueHTML += `<p><strong>Offer:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
+							dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Gift</button> `;
+						}
+						break;
+
+					case 'givepokemon':
+						if (action.pokemon) {
+							const species = Dex.species.get(action.pokemon.species);
+							dialogueHTML += `<p><strong>Offer:</strong> ${species.name} (Lvl ${action.pokemon.level})</p>`;
+
+							// Check if player has space
+							if (player.party.length >= 6 && player.pc.size >= 100) {
+								dialogueHTML += `<p style="color: red;">❌ Your party and PC are both full! Free up space first.</p>`;
+							} else {
+								if (player.party.length >= 6) {
+									dialogueHTML += `<p style="color: orange;">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
+								}
+								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Pokémon</button> `;
+							}
+						}
+						break;
+
+					case 'exchangeitems':
+						if (action.requiredItem && action.requiredQuantity && action.itemId && action.quantity) {
+							const requiredItem = ITEMS_DATABASE[action.requiredItem];
+							const rewardItem = ITEMS_DATABASE[action.itemId];
+							const hasRequired = player.inventory.get(action.requiredItem)?.quantity || 0;
+
+							dialogueHTML += `<p><strong>Trade:</strong> ${requiredItem?.name || action.requiredItem} x${action.requiredQuantity} → ${rewardItem?.name || action.itemId} x${action.quantity}</p>`;
+
+							if (hasRequired >= action.requiredQuantity) {
+								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🔄 Make Trade</button> `;
+							} else {
+								dialogueHTML += `<p style="color: red;">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
+							}
+						}
+						break;
+
+					case 'takeitem':
+						if (action.itemId && action.quantity) {
+							const item = ITEMS_DATABASE[action.itemId];
+							const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
+
+							dialogueHTML += `<p><strong>Request:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
+
+							if (hasItem >= action.quantity) {
+								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🎁 Give Items</button> `;
+							} else {
+								dialogueHTML += `<p style="color: red;">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
+							}
+						}
+						break;
+					}
+				} else {
+					dialogueHTML += `<hr /><p style="color: gray;"><em>You've already completed this NPC's request.</em></p>`;
+				}
+			}
+
+			dialogueHTML += `<hr />` +
 				`<p><button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
 				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
 		},
 
+		npcaction(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot interact with NPCs during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const npcId = toID(target);
+
+			const npc = NPC_DATABASE[npcId];
+			if (!npc?.action) {
+				return this.errorReply("Invalid NPC or no action available.");
+			}
+
+			// Check location
+			if (npc.location !== toID(player.location)) {
+				return this.errorReply("That NPC is not in this location.");
+			}
+
+			// Check if already completed
+			const actionCompleted = player.completedNPCActions.has(npcId);
+			if (npc.action.onceOnly && actionCompleted) {
+				return this.errorReply("You've already completed this NPC's request.");
+			}
+
+			const action = npc.action;
+			let resultHTML = `<div class="infobox"><h2>${npc.name}</h2>`;
+
+			switch (action.type) {
+			case 'giveitem':
+				if (action.itemId && action.quantity) {
+					addItemToInventory(player, action.itemId, action.quantity);
+					const item = ITEMS_DATABASE[action.itemId];
+					resultHTML += `<p>"Here you go!"</p>`;
+					resultHTML += `<p style="color: green;">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					if (action.onceOnly) player.completedNPCActions.add(npcId);
+				}
+				break;
+
+			case 'givepokemon':
+				if (action.pokemon) {
+					// Check if player has space
+					if (player.party.length >= 6 && player.pc.size >= 100) {
+						return this.errorReply("Your party and PC are both full! Free up space first.");
+					}
+
+					const pokemon = createPokemon(action.pokemon.species, action.pokemon.level);
+
+					// Apply custom moves if specified
+					if (action.pokemon.moves && action.pokemon.moves.length > 0) {
+						pokemon.moves = action.pokemon.moves.map(moveId => {
+							const moveData = getMove(moveId);
+							return { id: moveId, pp: moveData.pp || 5 };
+						});
+					}
+
+					const species = Dex.species.get(action.pokemon.species);
+
+					if (player.party.length < 6) {
+						player.party.push(pokemon);
+						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
+						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> joined your party!</p>`;
+					} else {
+						storePokemonInPC(player, pokemon);
+						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
+						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
+					}
+
+					// Show Pokemon info
+					const tempSlot = createActivePokemonSlot(pokemon);
+					resultHTML += generatePokemonInfoHTML(tempSlot, true);
+
+					if (action.onceOnly) player.completedNPCActions.add(npcId);
+				}
+				break;
+
+			case 'exchangeitems':
+				if (action.requiredItem && action.requiredQuantity && action.itemId && action.quantity) {
+					const hasRequired = player.inventory.get(action.requiredItem)?.quantity || 0;
+
+					if (hasRequired < action.requiredQuantity) {
+						return this.errorReply("You don't have enough of the required items.");
+					}
+
+					removeItemFromInventory(player, action.requiredItem, action.requiredQuantity);
+					addItemToInventory(player, action.itemId, action.quantity);
+
+					const requiredItem = ITEMS_DATABASE[action.requiredItem];
+					const rewardItem = ITEMS_DATABASE[action.itemId];
+
+					resultHTML += `<p>"Here's your trade!"</p>`;
+					resultHTML += `<p style="color: green;">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+
+					if (action.onceOnly) player.completedNPCActions.add(npcId);
+				}
+				break;
+
+			case 'takeitem':
+				if (action.itemId && action.quantity) {
+					const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
+
+					if (hasItem < action.quantity) {
+						return this.errorReply("You don't have enough of the required items.");
+					}
+
+					removeItemFromInventory(player, action.itemId, action.quantity);
+					const item = ITEMS_DATABASE[action.itemId];
+
+					resultHTML += `<p>"Thank you so much!"</p>`;
+					resultHTML += `<p style="color: green;">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
+
+					// Give a reward (example: money)
+					const reward = action.quantity * 1000; // 1000 per item
+					player.money += reward;
+					resultHTML += `<p style="color: gold;">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
+
+					if (action.onceOnly) player.completedNPCActions.add(npcId);
+				}
+				break;
+			}
+
+			resultHTML += `<hr />` +
+				`<p><button name="send" value="/rpg npc ${npcId}" class="button">Talk Again</button> ` +
+				`<button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
+				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+		},
+
 		save(target, room, user) {
 			const player = getPlayerData(user.id);
-			
+
 			try {
 				const saveData = savePlayerToString(player);
-				
+
 				const saveHTML = `<div class="infobox">` +
 					`<h2>Save Game</h2>` +
 					`<p>Your game has been saved! Copy the text below to save your progress:</p>` +
@@ -2186,10 +2317,10 @@ export const commands: ChatCommands = {
 					`</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${loadHTML}`);
 			}
-			
+
 			try {
 				const loadedPlayer = loadPlayer(user.id, target);
-				
+
 				const confirmHTML = `<div class="infobox">` +
 					`<h2>Game Loaded!</h2>` +
 					`<p>Your saved game has been loaded successfully!</p>` +

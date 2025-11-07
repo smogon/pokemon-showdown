@@ -42,6 +42,7 @@ export function getPlayerData(userid: string): PlayerData {
 			obtainedBadges: [],
 			visitedLocations: new Set(['Starter Town']),
 			lastPokemonCenter: 'startertown', // Initialize to starter town
+			completedNPCActions: new Set(),
 		};
 		addItemToInventory(newPlayer, 'pokeball', 5);
 		addItemToInventory(newPlayer, 'potion', 3);
@@ -193,6 +194,7 @@ export function serializePlayerData(player: PlayerData): any {
 		visitedLocations: Array.from(player.visitedLocations),
 		pendingMoveLearnQueue: player.pendingMoveLearnQueue,
 		lastPokemonCenter: player.lastPokemonCenter,
+		completedNPCActions: Array.from(player.completedNPCActions),
 	};
 }
 
@@ -218,6 +220,7 @@ export function deserializePlayerData(data: any): PlayerData {
 		visitedLocations: new Set(data.visitedLocations || [data.location]),
 		pendingMoveLearnQueue: data.pendingMoveLearnQueue,
 		lastPokemonCenter: data.lastPokemonCenter || 'startertown',
+		completedNPCActions: new Set(data.completedNPCActions || []),
 	};
 }
 
