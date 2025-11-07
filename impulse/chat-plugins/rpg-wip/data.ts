@@ -591,4 +591,250 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "That's the way a true master does it!",
 		},
 	},
+	'elite_bruno': {
+		name: 'Elite Four Bruno',
+		money: 10000,
+		party: [
+			{ species: 'onix', level: 55, moves: ['earthquake', 'stoneedge', 'stealthrock', 'explosion'], item: 'custapberry' },
+			{ species: 'hitmonchan', level: 55, moves: ['drainpunch', 'icepunch', 'thunderpunch', 'machpunch'], item: 'expertbelt' },
+			{ species: 'hitmonlee', level: 55, moves: ['highjumpkick', 'stoneedge', 'blazekick', 'suckerpunch'], item: 'lifeorb' },
+			{ species: 'machamp', level: 57, moves: ['dynamicpunch', 'stoneedge', 'payback', 'bulletpunch'], item: 'focussash' },
+			{ species: 'poliwrath', level: 58, moves: ['waterfall', 'icepunch', 'earthquake', 'circlethrow'], item: 'leftovers' },
+		],
+		dialogue: {
+			start: "I am Bruno of the Elite Four! Through rigorous training, my Fighting Pokémon have become true champions!",
+			win: "My training wasn't enough... You have great strength!",
+			lose: "Discipline and training are the keys to victory!",
+		},
+	},
+	'elite_agatha': {
+		name: 'Elite Four Agatha',
+		money: 10000,
+		party: [
+			{ species: 'gengar', level: 56, moves: ['shadowball', 'sludgebomb', 'focusblast', 'taunt'], item: 'blacksludge' },
+			{ species: 'golbat', level: 56, moves: ['bravebird', 'crosspoison', 'uturn', 'roost'], item: 'lifeorb' },
+			{ species: 'haunter', level: 55, moves: ['shadowball', 'sludgebomb', 'willowisp', 'substitute'], item: 'focussash' },
+			{ species: 'arbok', level: 57, moves: ['gunkshot', 'earthquake', 'suckerpunch', 'coil'], item: 'blacksludge' },
+			{ species: 'gengar', level: 60, moves: ['shadowball', 'sludgebomb', 'thunderbolt', 'destinybond'], item: 'lifeorb' },
+		],
+		dialogue: {
+			start: "Kekeke! I am Agatha of the Elite Four! I'll show you how frightening Poison and Ghost-type Pokémon can be!",
+			win: "Oh my! You're something special...",
+			lose: "Ghosts and Poison are the perfect combination!",
+		},
+	},
+	'elite_lance': {
+		name: 'Elite Four Lance',
+		money: 10000,
+		party: [
+			{ species: 'gyarados', level: 58, moves: ['waterfall', 'icefang', 'earthquake', 'dragondance'], item: 'lumberry' },
+			{ species: 'dragonair', level: 56, moves: ['dragonpulse', 'icebeam', 'thunderbolt', 'agility'], item: 'leftovers' },
+			{ species: 'dragonair', level: 56, moves: ['outrage', 'aquatail', 'extremespeed', 'dragondance'], item: 'lumberry' },
+			{ species: 'aerodactyl', level: 58, moves: ['stoneedge', 'earthquake', 'firefang', 'wingattack'], item: 'focussash' },
+			{ species: 'dragonite', level: 62, moves: ['outrage', 'earthquake', 'extremespeed', 'fireblast'], item: 'choiceband' },
+		],
+		dialogue: {
+			start: "I am Lance, the Dragon Master! I've been waiting for a trainer strong enough to face me!",
+			win: "I still can't believe it... You are truly a Dragon Master now!",
+			lose: "The might of dragons is unmatched!",
+		},
+	},
+	
+	// Champion
+	'champion_blue': {
+		name: 'Champion Blue',
+		money: 15000,
+		party: [
+			{ species: 'pidgeot', level: 61, moves: ['hurricane', 'heatwave', 'uturn', 'roost'], item: 'sharpbeak' },
+			{ species: 'alakazam', level: 61, moves: ['psychic', 'shadowball', 'focusblast', 'calmmind'], item: 'lifeorb' },
+			{ species: 'rhydon', level: 61, moves: ['earthquake', 'stoneedge', 'megahorn', 'swordsdance'], item: 'softsand' },
+			{ species: 'exeggutor', level: 63, moves: ['gigadrain', 'psychic', 'sleeppowder', 'explosion'], item: 'leftovers' },
+			{ species: 'gyarados', level: 63, moves: ['waterfall', 'earthquake', 'icefang', 'dragondance'], item: 'lumberry' },
+			{ species: 'blastoise', level: 65, moves: ['hydropump', 'icebeam', 'earthquake', 'rapidspin'], item: 'sitrusberry' },
+		],
+		dialogue: {
+			start: "I've been waiting for you! I'm Blue, the Pokémon League Champion! Your rival from the very beginning!",
+			win: "What!? I lost!? No way! You are the new Champion!",
+			lose: "I'm the Champion for a reason!",
+		},
+	},
+	
+	// Route Trainers - More variety
+	'bug_catcher_rick': {
+		name: 'Bug Catcher Rick',
+		money: 120,
+		party: [
+			{ species: 'weedle', level: 6 },
+			{ species: 'caterpie', level: 6 },
+		],
+		dialogue: {
+			start: "I love Bug Pokémon! Want to see my collection?",
+			win: "My bugs need more training...",
+			lose: "Bug types are the best!",
+		},
+	},
+	'picnicker_liz': {
+		name: 'Picnicker Liz',
+		money: 320,
+		party: [
+			{ species: 'nidoranf', level: 14 },
+			{ species: 'nidoranm', level: 14 },
+		],
+		dialogue: {
+			start: "Nice day for a picnic and a battle!",
+			win: "You're really strong!",
+			lose: "Nothing beats a victory picnic!",
+		},
+	},
+	'hiker_dan': {
+		name: 'Hiker Dan',
+		money: 640,
+		party: [
+			{ species: 'geodude', level: 15 },
+			{ species: 'machop', level: 16 },
+			{ species: 'onix', level: 17 },
+		],
+		dialogue: {
+			start: "I've been training in these mountains for years!",
+			win: "You've got the strength of a mountain!",
+			lose: "Rock solid victory!",
+		},
+	},
+	'cooltrainer_jake': {
+		name: 'Cool Trainer Jake',
+		money: 1600,
+		party: [
+			{ species: 'nidoking', level: 38, moves: ['earthquake', 'megahorn', 'icebeam', 'thunderbolt'] },
+			{ species: 'arcanine', level: 39, moves: ['flareblitz', 'extremespeed', 'wildcharge', 'crunch'] },
+			{ species: 'starmie', level: 40, moves: ['hydropump', 'psychic', 'thunderbolt', 'rapidspin'] },
+		],
+		dialogue: {
+			start: "I'm a Cool Trainer! Are you cool enough to beat me?",
+			win: "You're cooler than I thought!",
+			lose: "Cool Trainers never lose!",
+		},
+	},
+	'ace_trainer_sarah': {
+		name: 'Ace Trainer Sarah',
+		money: 2800,
+		party: [
+			{ species: 'kangaskhan', level: 46, moves: ['return', 'earthquake', 'suckerpunch', 'fakeout'], item: 'silkscarf' },
+			{ species: 'vaporeon', level: 46, moves: ['surf', 'icebeam', 'shadowball', 'acidarmor'], item: 'leftovers' },
+			{ species: 'alakazam', level: 47, moves: ['psychic', 'shadowball', 'focusblast', 'calmmind'], item: 'twistedspoon' },
+		],
+		dialogue: {
+			start: "Ace Trainers only use the best strategies! Prepare yourself!",
+			win: "You've truly mastered Pokémon battling!",
+			lose: "That's the mark of an Ace Trainer!",
+		},
+	},
+	'blackbelt_koji': {
+		name: 'Black Belt Koji',
+		money: 1200,
+		party: [
+			{ species: 'machoke', level: 32 },
+			{ species: 'primeape', level: 32 },
+			{ species: 'hitmonlee', level: 34 },
+		],
+		dialogue: {
+			start: "My fighting spirit burns bright! Face my martial arts!",
+			win: "Your spirit was stronger...",
+			lose: "The path of martial arts is superior!",
+		},
+	},
+	'scientist_ted': {
+		name: 'Scientist Ted',
+		money: 2400,
+		party: [
+			{ species: 'magneton', level: 43, moves: ['thunderbolt', 'flashcannon', 'triattack', 'lightscreen'] },
+			{ species: 'electrode', level: 43, moves: ['thunderbolt', 'signalbeam', 'taunt', 'explosion'] },
+			{ species: 'porygon', level: 45, moves: ['triattack', 'thunderbolt', 'icebeam', 'recover'] },
+		],
+		dialogue: {
+			start: "Science will prevail! Let me demonstrate!",
+			win: "My hypothesis was incorrect...",
+			lose: "Science always wins!",
+		},
+	},
+};
+
+// Trainer locations - maps trainers to locations where they can be challenged
+export const TRAINER_LOCATIONS: Record<string, string[]> = {
+	'route1': ['youngster_joey', 'lass_alice', 'bug_catcher_rick'],
+	'route2': ['picnicker_liz', 'hiker_dan'],
+	'route3': ['blackbelt_koji'],
+	'route4': ['cooltrainer_jake'],
+	'route5': ['ace_trainer_sarah'],
+	'route6': ['scientist_ted'],
+	'pokemonleague': ['elite_lorelei', 'elite_bruno', 'elite_agatha', 'elite_lance', 'champion_blue'],
+};
+
+// Story events - triggered at specific points in the game
+export interface StoryEvent {
+	id: string;
+	name: string;
+	description: string;
+	trigger: 'location_enter' | 'trainer_defeat' | 'badge_obtain' | 'manual';
+	location?: string;
+	trainerId?: string;
+	badgeName?: string;
+	flagsRequired?: string[];
+	flagsSet?: string[];
+	dialogue?: string;
+}
+
+export const STORY_EVENTS: Record<string, StoryEvent> = {
+	'welcome': {
+		id: 'welcome',
+		name: 'Welcome to the World',
+		description: 'Your journey begins',
+		trigger: 'manual',
+		flagsSet: ['game_started'],
+		dialogue: 'Welcome to the world of Pokémon! Your adventure is about to begin!',
+	},
+	'first_badge': {
+		id: 'first_badge',
+		name: 'First Badge Earned',
+		description: 'You earned your first gym badge',
+		trigger: 'badge_obtain',
+		badgeName: 'Boulder Badge',
+		flagsSet: ['first_badge_earned'],
+		dialogue: 'Congratulations on earning your first badge! The road ahead will be challenging, but I believe in you!',
+	},
+	'halfway_badges': {
+		id: 'halfway_badges',
+		name: 'Four Badges',
+		description: 'You have earned four badges',
+		trigger: 'manual',
+		flagsRequired: [],
+		flagsSet: ['halfway_badges'],
+		dialogue: "You're halfway to the Pokémon League! Keep training and you'll make it!",
+	},
+	'all_badges': {
+		id: 'all_badges',
+		name: 'All Badges Obtained',
+		description: 'You have earned all eight gym badges',
+		trigger: 'badge_obtain',
+		badgeName: 'Earth Badge',
+		flagsSet: ['all_badges'],
+		dialogue: 'You have all eight badges! Victory Road awaits. The Elite Four will test everything you have learned!',
+	},
+	'elite_four_ready': {
+		id: 'elite_four_ready',
+		name: 'Ready for Elite Four',
+		description: 'Entered the Pokémon League',
+		trigger: 'location_enter',
+		location: 'pokemonleague',
+		flagsRequired: ['all_badges'],
+		dialogue: 'This is it! The Elite Four await. Only the strongest trainers make it past here. Are you ready?',
+	},
+	'champion_defeated': {
+		id: 'champion_defeated',
+		name: 'Champion Defeated',
+		description: 'You defeated the Champion and became the new Champion',
+		trigger: 'trainer_defeat',
+		trainerId: 'champion_blue',
+		flagsSet: ['champion', 'game_complete'],
+		dialogue: "Congratulations! You are the new Pokémon League Champion! You've proven yourself as one of the greatest trainers!",
+	},
 };

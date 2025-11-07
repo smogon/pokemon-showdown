@@ -73,7 +73,9 @@ import {
     ENCOUNTER_ZONES,
     TRAINER_DATABASE,
     TYPE_CHART,
-    LOCATIONS
+    LOCATIONS,
+    TRAINER_LOCATIONS,
+    STORY_EVENTS
 } from './data';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 
@@ -272,7 +274,44 @@ export const commands: ChatCommands = {
 				return this.errorReply("You are in a battle!");
 			}
 			const player = getPlayerData(user.id);
-			const profileHTML = `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			
+			// Badge display
+			let badgeHTML = '';
+			if (player.obtainedBadges.length > 0) {
+				badgeHTML = `<p><strong>Gym Badges:</strong></p><p>`;
+				for (const badge of player.obtainedBadges) {
+					badgeHTML += `🏆 ${badge} `;
+				}
+				badgeHTML += `</p>`;
+			} else {
+				badgeHTML = `<p><strong>Gym Badges:</strong> None yet</p>`;
+			}
+			
+			// Story progress
+			let progressHTML = '<p><strong>Progress:</strong> ';
+			if (player.storyFlags.has('champion')) {
+				progressHTML += 'Champion! 🏆</p>';
+			} else if (player.storyFlags.has('all_badges')) {
+				progressHTML += 'Ready for Elite Four</p>';
+			} else if (player.badges >= 4) {
+				progressHTML += `${player.badges}/8 Badges - Halfway there!</p>`;
+			} else if (player.badges > 0) {
+				progressHTML += `${player.badges}/8 Badges - On your journey</p>`;
+			} else {
+				progressHTML += 'Just starting out</p>';
+			}
+			
+			const profileHTML = `<div class="infobox"><h2>Player Profile</h2>` +
+				`<p><strong>Trainer:</strong> ${player.name}</p>` +
+				`<p><strong>Level:</strong> ${player.level}</p>` +
+				`<p><strong>Location:</strong> ${player.location}</p>` +
+				`${badgeHTML}` +
+				`${progressHTML}` +
+				`<p><strong>Pokemon in Party:</strong> ${player.party.length}/6</p>` +
+				`<p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>` +
+				`<p><strong>Money:</strong> ₽${player.money}</p>` +
+				`<p><strong>Trainers Defeated:</strong> ${player.defeatedTrainers.size}</p>` +
+				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
 		},
 
@@ -899,6 +938,21 @@ export const commands: ChatCommands = {
 					exploreButtons += `<p><em>You already defeated ${gymData.name}!</em></p>`;
 				}
 			}
+			
+			// Route trainers
+			const locationTrainers = TRAINER_LOCATIONS[currentLocationId];
+			if (locationTrainers && locationTrainers.length > 0) {
+				const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
+				if (availableTrainers.length > 0) {
+					exploreButtons += `<p><strong>Trainers:</strong></p>`;
+					for (const trainerId of availableTrainers) {
+						const trainerData = TRAINER_DATABASE[trainerId];
+						if (trainerData) {
+							exploreButtons += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
+						}
+					}
+				}
+			}
 
 			const exploreHTML = `<div class="infobox">` +
 				`<h2>${currentLocation.name}</h2>` +
@@ -907,8 +961,9 @@ export const commands: ChatCommands = {
 				`<hr />` +
 				`<p><strong>Facilities:</strong></p>` +
 				`<p>` +
-				(currentLocation.hasPokeMart ? `<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` : '') +
-				(currentLocation.hasPokeCenter ? `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` : '') +
+				(currentLocation.hasPokeMart ? `<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button> ` : '') +
+				(currentLocation.hasPokeCenter ? `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button> ` : '') +
+				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button> ` +
 				`</p>` +
 				`<hr />` +
 				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
@@ -1954,6 +2009,84 @@ export const commands: ChatCommands = {
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+		},
+
+		npc(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot talk to NPCs during a battle.");
+			}
+			
+			const player = getPlayerData(user.id);
+			const npcId = toID(target);
+			
+			// Simple NPC dialogue system
+			const npcs: Record<string, { name: string, location: string, dialogue: string, flags?: string[] }> = {
+				'professor': {
+					name: 'Professor Oak',
+					location: 'startertown',
+					dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
+				},
+				'aide_route1': {
+					name: 'Professor\'s Aide',
+					location: 'route1',
+					dialogue: "Wild Pokémon live in tall grass! If you want to catch them, weaken them first, then throw a Poké Ball!",
+				},
+				'old_man_pewter': {
+					name: 'Old Man',
+					location: 'pewtercity',
+					dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
+				},
+				'champion_guide': {
+					name: 'Veteran Trainer',
+					location: 'pokemonleague',
+					dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",
+					flags: ['all_badges'],
+				},
+			};
+			
+			if (!npcId) {
+				// Show available NPCs in current location
+				const currentLocationId = toID(player.location);
+				const availableNPCs = Object.entries(npcs).filter(([id, npc]) => 
+					npc.location === currentLocationId && 
+					(!npc.flags || npc.flags.every(f => player.storyFlags.has(f)))
+				);
+				
+				if (availableNPCs.length === 0) {
+					return this.errorReply("There are no NPCs to talk to here.");
+				}
+				
+				let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
+				for (const [id, npc] of availableNPCs) {
+					html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
+				}
+				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			}
+			
+			const npc = npcs[npcId];
+			if (!npc) {
+				return this.errorReply("That NPC doesn't exist.");
+			}
+			
+			// Check location
+			if (npc.location !== toID(player.location)) {
+				return this.errorReply("That NPC is not in this location.");
+			}
+			
+			// Check flags
+			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) {
+				return this.errorReply("You cannot talk to this NPC yet.");
+			}
+			
+			const dialogueHTML = `<div class="infobox">` +
+				`<h2>${npc.name}</h2>` +
+				`<p>"${npc.dialogue}"</p>` +
+				`<hr />` +
+				`<p><button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
+				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
 		},
 
 		help() {
