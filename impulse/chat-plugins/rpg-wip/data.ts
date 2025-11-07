@@ -1760,4 +1760,76 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 			onceOnly: true,
 		},
 	},
+	
+	// Special NPCs - Move services
+	'movedeleter': {
+		id: 'movedeleter',
+		name: 'Move Deleter',
+		location: 'fuchsiacity_house1',
+		dialogue: "I can help your Pokémon forget moves. This is useful for removing HMs or unwanted moves.",
+		npcType: 'movedeleter',
+	},
+	'namerater': {
+		id: 'namerater',
+		name: 'Name Rater',
+		location: 'vermilioncity_house1',
+		dialogue: "I'm the Name Rater! I can help you change your Pokémon's nickname.",
+		npcType: 'namerater',
+	},
+	'movetutor_surf': {
+		id: 'movetutor_surf',
+		name: 'Move Tutor',
+		location: 'ceruleancity',
+		dialogue: "I can teach Surf to your Water-type Pokémon for ₽10,000!",
+		npcType: 'movetutor',
+		action: {
+			type: 'movetutor',
+			moveId: 'surf',
+			cost: 10000,
+		},
+	},
+	'movetutor_thunderbolt': {
+		id: 'movetutor_thunderbolt',
+		name: 'Move Tutor',
+		location: 'vermilioncity_house1',
+		dialogue: "I can teach Thunderbolt to your Electric-type Pokémon for ₽15,000!",
+		npcType: 'movetutor',
+		action: {
+			type: 'movetutor',
+			moveId: 'thunderbolt',
+			cost: 15000,
+		},
+	},
+	
+	// Trade NPCs
+	'trader_machop': {
+		id: 'trader_machop',
+		name: 'Trade Enthusiast',
+		location: 'pewtercity',
+		dialogue: "I'm looking for a Geodude! I'll trade you my Machop for it!",
+		action: {
+			type: 'tradepokemon',
+			wantedSpecies: 'geodude',
+			offeredPokemon: {
+				species: 'machop',
+				level: 15,
+			},
+			onceOnly: true,
+		},
+	},
+	'trader_haunter': {
+		id: 'trader_haunter',
+		name: 'Spooky Trader',
+		location: 'celadoncity',
+		dialogue: "I have a Haunter I'd love to trade! Do you have a Kadabra?",
+		action: {
+			type: 'tradepokemon',
+			wantedSpecies: 'kadabra',
+			offeredPokemon: {
+				species: 'haunter',
+				level: 25,
+			},
+			onceOnly: true,
+		},
+	},
 };

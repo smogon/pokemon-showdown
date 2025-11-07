@@ -257,13 +257,19 @@ export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: B
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
 
 export interface NPCAction {
-	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem';
+	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
 	requiredItem?: string;
 	requiredQuantity?: number;
 	onceOnly?: boolean;
+	// Move tutor
+	moveId?: string; // Move to teach
+	cost?: number; // Cost in money
+	// Trade pokemon
+	wantedSpecies?: string; // Pokemon player must give
+	offeredPokemon?: { species: string, level: number, moves?: string[] }; // Pokemon NPC offers
 }
 
 export interface NPCData {
@@ -273,6 +279,7 @@ export interface NPCData {
 	dialogue: string;
 	flags?: string[];
 	action?: NPCAction;
+	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse'; // Identifies special NPCs
 }
 
 export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department';
@@ -298,6 +305,8 @@ export interface Location {
 	buildings?: Building[]; // Only for towns/cities
 	encounterZones?: string[]; // IDs of encounter zones available here
 	scriptedEvents?: ScriptedEvent[]; // Events that trigger when entering this location
+	weather?: 'sun' | 'rain' | 'sandstorm' | 'hail' | 'fog'; // Permanent weather in this location
+	music?: string; // Background music theme
 }
 
 export interface ScriptedEvent {
