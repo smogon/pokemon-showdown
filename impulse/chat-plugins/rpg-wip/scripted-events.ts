@@ -6,7 +6,6 @@
 */
 
 import type { PlayerData, RPGPokemon, ScriptedEvent } from './interface';
-import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
 
 /**
@@ -42,7 +41,7 @@ export function handleChoice(
 	}
 
 	const choice = event.choices[choiceIndex];
-	
+
 	// Set result flag if specified
 	if (choice.resultFlag) {
 		player.storyFlags.add(choice.resultFlag);
@@ -70,7 +69,7 @@ export function handleQuiz(
 	}
 
 	const correct = answerIndex === event.correctAnswer;
-	
+
 	return {
 		success: true,
 		message: correct ? 'Correct answer!' : 'Incorrect answer!',
@@ -92,7 +91,7 @@ export function handlePuzzle(
 	}
 
 	const solved = solution.toLowerCase() === event.answers![event.correctAnswer].toLowerCase();
-	
+
 	return {
 		success: true,
 		message: solved ? 'Puzzle solved!' : 'That\'s not quite right...',
@@ -114,7 +113,7 @@ export function handleRiddle(
 	}
 
 	const solved = event.answers.some(a => a.toLowerCase() === answer.toLowerCase());
-	
+
 	return {
 		success: true,
 		message: solved ? 'Correct! The riddle is solved!' : 'That\'s not the answer...',
@@ -300,7 +299,7 @@ export function handlePokemonSwarm(
 export function checkActiveSwarm(player: PlayerData, species: string): boolean {
 	const swarmFlag = `swarm_${species}_active`;
 	const swarmStr = Array.from(player.storyFlags).find(f => f.startsWith(swarmFlag));
-	
+
 	if (!swarmStr) return false;
 
 	const expiryTime = parseInt(swarmStr.split('_').pop() || '0');
@@ -349,7 +348,7 @@ export function handleTournament(
 
 	const tournamentFlag = `tournament_${eventId}_round`;
 	const roundStr = Array.from(player.storyFlags).find(f => f.startsWith(tournamentFlag));
-	
+
 	let currentRound = 0;
 	if (roundStr) {
 		currentRound = parseInt(roundStr.split('_').pop() || '0');
@@ -378,13 +377,13 @@ export function handleTournament(
 export function advanceTournamentRound(player: PlayerData, eventId: string): void {
 	const tournamentFlag = `tournament_${eventId}_round`;
 	const roundStr = Array.from(player.storyFlags).find(f => f.startsWith(tournamentFlag));
-	
+
 	let currentRound = 0;
 	if (roundStr) {
 		currentRound = parseInt(roundStr.split('_').pop() || '0');
 		player.storyFlags.delete(roundStr);
 	}
-	
+
 	player.storyFlags.add(`${tournamentFlag}_${currentRound + 1}`);
 }
 
@@ -447,7 +446,7 @@ export function handleRace(
 
 	return {
 		success: true,
-		message: won ? 
+		message: won ?
 			`${pokemon.nickname} finished the race in ${time} seconds! Victory!` :
 			`${pokemon.nickname} finished the race in ${time} seconds. Not quite fast enough...`,
 		time,
@@ -470,7 +469,7 @@ export function handleScavengerHunt(
 
 	const huntFlag = `scavengerhunt_${eventId}_found`;
 	const foundFlags = Array.from(player.storyFlags).filter(f => f.startsWith(huntFlag));
-	
+
 	return {
 		success: true,
 		message: 'Scavenger hunt in progress!',
@@ -781,13 +780,13 @@ export function handleTimeLoop(
 ): { success: boolean, message: string, loopCount?: number } {
 	const loopFlag = `timeloop_${eventId}_count`;
 	const loopStr = Array.from(player.storyFlags).find(f => f.startsWith(loopFlag));
-	
+
 	let loopCount = 1;
 	if (loopStr) {
 		loopCount = parseInt(loopStr.split('_').pop() || '1') + 1;
 		player.storyFlags.delete(loopStr);
 	}
-	
+
 	player.storyFlags.add(`${loopFlag}_${loopCount}`);
 
 	return {

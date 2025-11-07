@@ -19,7 +19,7 @@ export function handleFossilRevival(
 	action: NPCAction,
 	fossilItemId: string
 ): { success: boolean, message: string, pokemon?: RPGPokemon } {
-	if (!action.fossils || !action.fossils.includes(fossilItemId)) {
+	if (!action.fossils?.includes(fossilItemId)) {
 		return { success: false, message: 'This NPC cannot revive that fossil.' };
 	}
 
@@ -55,7 +55,7 @@ export function handleFossilRevival(
 
 	// Create the Pokemon
 	const revivedPokemon = createPokemon(fossilData.species, fossilData.level);
-	
+
 	// Remove fossil and deduct money
 	fossilItem.quantity -= 1;
 	if (fossilItem.quantity === 0) {
@@ -86,7 +86,7 @@ export function handleDailyReward(
 	// Track last claim time using a special flag
 	const lastClaimFlag = `dailyreward_${npcId}_lastclaim`;
 	const lastClaimStr = Array.from(player.storyFlags).find(f => f.startsWith(lastClaimFlag));
-	
+
 	let lastClaimTime = 0;
 	if (lastClaimStr) {
 		lastClaimTime = parseInt(lastClaimStr.split('_').pop() || '0');
@@ -147,7 +147,7 @@ export function handleBattleRequest(
 
 	const cooldownFlag = `battlerequest_${npcId}_lastbattle`;
 	const lastBattleStr = Array.from(player.storyFlags).find(f => f.startsWith(cooldownFlag));
-	
+
 	let lastBattleTime = 0;
 	if (lastBattleStr) {
 		lastBattleTime = parseInt(lastBattleStr.split('_').pop() || '0');
@@ -179,7 +179,7 @@ export function handleBattleRequest(
 export function completeBattleRequest(player: PlayerData, npcId: string): void {
 	const cooldownFlag = `battlerequest_${npcId}_lastbattle`;
 	const lastBattleStr = Array.from(player.storyFlags).find(f => f.startsWith(cooldownFlag));
-	
+
 	if (lastBattleStr) player.storyFlags.delete(lastBattleStr);
 	player.storyFlags.add(`${cooldownFlag}_${Date.now()}`);
 }
@@ -199,7 +199,7 @@ export function handleQuestChain(
 
 	const questFlag = `quest_${action.questId}_stage`;
 	const questStageStr = Array.from(player.storyFlags).find(f => f.startsWith(questFlag));
-	
+
 	let currentStage = 0;
 	if (questStageStr) {
 		currentStage = parseInt(questStageStr.split('_').pop() || '0');
@@ -213,7 +213,7 @@ export function handleQuestChain(
 	}
 
 	const stageInfo = action.questStages[currentStage];
-	
+
 	// Check if requirements are met
 	if (stageInfo.requiredFlag && !player.storyFlags.has(stageInfo.requiredFlag)) {
 		return {
@@ -238,13 +238,13 @@ export function handleQuestChain(
 export function advanceQuestStage(player: PlayerData, questId: string): void {
 	const questFlag = `quest_${questId}_stage`;
 	const questStageStr = Array.from(player.storyFlags).find(f => f.startsWith(questFlag));
-	
+
 	let currentStage = 0;
 	if (questStageStr) {
 		currentStage = parseInt(questStageStr.split('_').pop() || '0');
 		player.storyFlags.delete(questStageStr);
 	}
-	
+
 	player.storyFlags.add(`${questFlag}_${currentStage + 1}`);
 }
 
@@ -262,7 +262,7 @@ export function handleItemCraft(
 	}
 
 	const recipe = action.recipes[recipeIndex];
-	
+
 	// Check if player has all inputs
 	for (const input of recipe.inputs) {
 		const item = player.inventory.get(input.itemId);
@@ -342,7 +342,7 @@ export function checkBerryHarvest(
 ): { canHarvest: boolean, hoursRemaining?: number, yield?: number } {
 	const plantFlag = `berryplant_${npcId}_planted`;
 	const plantedStr = Array.from(player.storyFlags).find(f => f.startsWith(plantFlag));
-	
+
 	if (!plantedStr) {
 		return { canHarvest: false };
 	}
@@ -404,7 +404,7 @@ export function handleFortuneTeller(
 	npcId: string,
 	fortuneType: string
 ): { success: boolean, message: string, fortune?: string } {
-	if (!action.fortuneTypes || !action.fortuneTypes.includes(fortuneType)) {
+	if (!action.fortuneTypes?.includes(fortuneType)) {
 		return { success: false, message: 'This fortune is not available.' };
 	}
 
@@ -421,7 +421,7 @@ export function handleFortuneTeller(
 	}
 
 	player.money -= cost;
-	
+
 	const duration = action.fortuneDuration || 24; // hours
 	const expiryTime = Date.now() + (duration * 60 * 60 * 1000);
 	player.storyFlags.add(`${fortuneFlag}_${expiryTime}`);
@@ -445,7 +445,7 @@ export function handleFortuneTeller(
 export function checkActiveFortune(player: PlayerData, fortuneType: string): boolean {
 	const fortuneFlag = `fortune_${fortuneType}_active`;
 	const fortuneStr = Array.from(player.storyFlags).find(f => f.startsWith(fortuneFlag));
-	
+
 	if (!fortuneStr) return false;
 
 	const expiryTime = parseInt(fortuneStr.split('_').pop() || '0');
@@ -530,9 +530,9 @@ export function handleMoveRelearner(
 	// Check if move is in learnset
 	const species = Dex.species.get(pokemon.species);
 	const learnset = species.learnset;
-	
+
 	let canLearn = false;
-	if (learnset && learnset[moveId]) {
+	if (learnset?.[moveId]) {
 		canLearn = true;
 	}
 
@@ -541,7 +541,7 @@ export function handleMoveRelearner(
 	}
 
 	player.money -= cost;
-	
+
 	return {
 		success: true,
 		message: `${pokemon.nickname} can relearn ${moveId}!`,
@@ -564,7 +564,7 @@ export function handleAbilityCapsule(
 
 	const species = Dex.species.get(pokemon.species);
 	const abilities = Object.values(species.abilities).filter(a => a !== 'H'); // Exclude hidden ability
-	
+
 	if (abilities.length <= 1) {
 		return { success: false, message: 'This Pokemon has only one regular ability!' };
 	}
@@ -695,7 +695,7 @@ export function handleLottery(
 	// Determine prize based on chances
 	const roll = Math.random();
 	let cumulativeChance = 0;
-	
+
 	for (const prize of action.lotteryPrizes) {
 		cumulativeChance += prize.chance;
 		if (roll <= cumulativeChance) {
