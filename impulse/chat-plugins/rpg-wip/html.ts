@@ -422,7 +422,7 @@ export function generateSingleBattleHTML(
 	}
 
 	const playerPokemon = playerSlot.pokemon;
-	const player = getPlayerData(battle.playerId); // <-- ADDED
+	const player = getPlayerData(battle.playerId); 
 
 	// Helper function to generate field effects HTML with side-by-side layout
 	const generateFieldEffectsDisplay = () => {
@@ -517,8 +517,8 @@ export function generateSingleBattleHTML(
 
 			// Add Tera option if can terastallize
 			if (canTerastallize && !isDisabled) {
-				// --- MODIFIED: Tera button text ---
-				return '<div>' + normalButton + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+				// --- MODIFIED: Added <br> to force Tera button below ---
+				return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 			}
 			return normalButton;
 		});
@@ -543,7 +543,7 @@ export function generateSingleBattleHTML(
 		'<button name="send" value="/rpg battleaction run" class="button">🏃 Run</button>' :
 		'<button class="button" disabled>🏃 Run</button>';
 
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + playerPokemon.species + ' do?</p>' +
+	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
 		moveButtonsHTML +
 		'<p style="margin-top: 5px;"><button name="send" value="/rpg battleaction switchmenu" class="button">🔄 Switch</button> ' + catchButton + ' ' + runButton + '</p>';
 
@@ -551,7 +551,13 @@ export function generateSingleBattleHTML(
 	const playerEffects = generateSideEffectTags(battle, 'player');
 	const opponentEffects = generateSideEffectTags(battle, 'opponent');
 
-	const playerName = player ? player.name : "Your"; // <-- ADDED
+	const playerName = player ? player.name : "Your";
+
+	// --- NEW: Determine opponent owner name ---
+	let opponentOwnerName: string | undefined = battle.opponentName;
+	if (battle.battleType === 'wild') {
+		opponentOwnerName = 'Wild';
+	}
 
 	// --- REMOVED HEADER ---
 	return '<div class="infobox">' +
@@ -565,7 +571,7 @@ export function generateSingleBattleHTML(
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
 		// --- MODIFIED: H3 now only shows effects ---
 		'<h3 style="margin: 5px 0;">' + opponentEffects + '</h3>' +
-		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false, battle.opponentName) + '' + // <-- MODIFIED CALL
+		'' + generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) + '' + // <-- MODIFIED CALL
 		'</td>' +
 		'</tr>' +
 		'</table>' +
@@ -581,8 +587,14 @@ export function generateDoubleBattleHTML(
 ): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
-	const player = getPlayerData(battle.playerId); // <-- ADDED
-	const playerName = player ? player.name : "Your"; // <-- ADDED
+	const player = getPlayerData(battle.playerId); 
+	const playerName = player ? player.name : "Your"; 
+
+	// --- NEW: Determine opponent owner name ---
+	let opponentOwnerName: string | undefined = battle.opponentName;
+	if (battle.battleType === 'wild_double') {
+		opponentOwnerName = 'Wild';
+	}
 
 	// Helper to generate HTML for a single slot, handling styling
 	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
@@ -593,8 +605,11 @@ export function generateDoubleBattleHTML(
 		
 		// --- Determine owner name ---
 		let ownerName: string | undefined = undefined;
-		if (side === 'player') ownerName = playerName;
-		else if (battle.opponentName) ownerName = battle.opponentName; // Use main opponent name for both
+		if (side === 'player') {
+			ownerName = playerName;
+		} else {
+			ownerName = opponentOwnerName; // Use the new logic
+		}
 
 		if (slot.pokemon.hp <= 0) {
 			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>'; // <-- MODIFIED CALL
@@ -785,8 +800,8 @@ export function generateDoubleBattleHTML(
 
 					// Add Tera option if can terastallize
 					if (canTerastallizeThisSlot && !isDisabled) {
-						// --- MODIFIED: Tera button text ---
-						return '<div>' + normalButton + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+						// --- MODIFIED: Added <br> to force Tera button below ---
+						return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 					}
 					return normalButton;
 				});
