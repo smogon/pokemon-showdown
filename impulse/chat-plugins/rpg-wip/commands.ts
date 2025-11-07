@@ -1387,8 +1387,6 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		},
-
 		scriptedbattle(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You are already in a battle!");
