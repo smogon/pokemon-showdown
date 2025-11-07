@@ -274,3 +274,43 @@ export interface NPCData {
 	flags?: string[];
 	action?: NPCAction;
 }
+
+export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department';
+
+export interface Building {
+	id: string;
+	name: string;
+	type: BuildingType;
+	description: string;
+	npcs?: string[]; // NPC IDs that are in this building
+	gymLeaderId?: string; // For gyms
+	shopTier?: number; // For pokemarts
+	accessible?: boolean; // Default true, can be locked behind flags
+	requiredFlag?: string;
+}
+
+export interface Location {
+	id: string;
+	name: string;
+	type: 'town' | 'city' | 'route' | 'special';
+	description: string;
+	connectedLocations: { id: string, name: string, requiredBadge?: string, requiredFlag?: string }[];
+	buildings?: Building[]; // Only for towns/cities
+	encounterZones?: string[]; // IDs of encounter zones available here
+	scriptedEvents?: ScriptedEvent[]; // Events that trigger when entering this location
+}
+
+export interface ScriptedEvent {
+	id: string;
+	name: string;
+	triggerOnce?: boolean; // If true, only triggers the first time
+	requiredFlag?: string; // Only triggers if player has this flag
+	requiredBadgeCount?: number; // Only triggers if player has at least this many badges
+	type: 'trainer' | 'dialogue' | 'item' | 'pokemon';
+	trainerId?: string; // For trainer battles
+	dialogue?: string; // Text to display
+	itemId?: string; // Item to give
+	itemQuantity?: number;
+	pokemon?: { species: string, level: number, moves?: string[] };
+	setFlag?: string; // Flag to set after event completes
+}
