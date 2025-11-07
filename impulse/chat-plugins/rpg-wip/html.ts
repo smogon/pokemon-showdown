@@ -373,8 +373,7 @@ export function generateSharedBattlePokemonInfo(
 	}
 }
 
-
-export const TERA_BUTTON_STYLE = 'width: 100%; padding: 6px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.85em; border: 2px solid #FF1493;';
+export const TERA_BUTTON_STYLE = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.8em; border: 2px solid #FF1493;';
 
 /**
  * [NEW HELPER]
@@ -469,12 +468,12 @@ export function generateSingleBattleHTML(
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
-		// --- FIX: Reduced padding from 8px to 6px ---
-		const buttonStyle = 'width: 40px; height: 155px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; word-wrap: break-word; overflow: hidden;';
-		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 4px;">Struggle</div>' +
-			'<div style="font-size: 0.7em; opacity: 0.9; overflow: hidden;">' +
-			'<span>Normal</span><br>' +
-			'<span>-- / --</span>' +
+		// --- MODIFIED: Button style and content for new size ---
+		const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+			'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+			'<span>Normal</span>' +
+			'<span style="float: right;">-- / --</span>' +
 			'</div> ';
 
 		moveButtonsHTML = '<table style="width: 100%; border-collapse: separate; border-spacing: 8px; margin: 15px 0;">';
@@ -505,12 +504,12 @@ export function generateSingleBattleHTML(
 				(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 				move.pp === 0;
 
-			// --- FIX: Reduced padding from 8px to 6px ---
-			const buttonStyle = 'width: 40px; height: 155px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; word-wrap: break-word; overflow: hidden;';
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 4px;">' + moveData.name + '</div>' +
-				'<div style="font-size: 0.7em; opacity: 0.9; overflow: hidden;">' +
-				'<span>' + moveData.type + '</span><br>' +
-				'<span style="">' + move.pp + ' / ' + moveData.pp + '</span>' +
+			// --- MODIFIED: Button style and content for new size ---
+			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+				'<span>' + moveData.type + '</span>' +
+				'<span style="float: right;">' + move.pp + ' / ' + moveData.pp + '</span>' +
 				'</div> ';
 
 			const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
@@ -518,7 +517,8 @@ export function generateSingleBattleHTML(
 
 			// Add Tera option if can terastallize
 			if (canTerastallize && !isDisabled) {
-				return '<div>' + normalButton + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐<br>Tera<br>+<br>' + moveData.name + '</button></div>';
+				// --- MODIFIED: Tera button text ---
+				return '<div>' + normalButton + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 			}
 			return normalButton;
 		});
@@ -746,12 +746,12 @@ export function generateDoubleBattleHTML(
 			let moveButtonsHTML = '';
 
 			if (allMovesOutOfPP) {
-				// --- FIX: Reduced padding from 8px to 6px ---
-				const buttonStyle = 'width: 40px; height: 155px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0; word-wrap: break-word; overflow: hidden;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 4px;">Struggle</div>' +
-					'<div style="font-size: 0.7em; opacity: 0.9; overflow: hidden;">' +
-					'<span>Normal</span><br>' +
-					'<span>-- / --</span>' +
+				// --- MODIFIED: Button style and content for new size ---
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
+				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+					'<span>Normal</span>' +
+					'<span style="float: right;">-- / --</span>' +
 					'</div>';
 
 				const struggleButton = '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' struggle" class="button" style="' + buttonStyle + '">' + buttonContent + '</button>';
@@ -759,8 +759,8 @@ export function generateDoubleBattleHTML(
 			} else {
 				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
 
-				// --- FIX: Reduced padding from 8px to 6px ---
-				const buttonStyle = 'width: 40px; height: 155px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0; word-wrap: break-word; overflow: hidden;';
+				// --- MODIFIED: Button style and content for new size ---
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const moveButtons = pokemon.moves.map(move => {
 					const moveData = getMove(move.id);
 
@@ -775,17 +775,18 @@ export function generateDoubleBattleHTML(
 						(activeSlot.lockedMove && activeSlot.lockedMoveCounter === 0 && activeSlot.uproarTurns === 0 && activeSlot.lockedMove !== move.id) ||
 						move.pp === 0;
 
-					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 0.8em; margin-bottom: 4px;">' + moveData.name + '</div>' +
-						'<div style="font-size: 0.7em; opacity: 0.9; overflow: hidden;">' +
-						'<span>' + moveData.type + '</span><br>' +
-						'<span>' + move.pp + ' / ' + moveData.pp + '</span>' +
+					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+						'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+						'<span>' + moveData.type + '</span>' +
+						'<span style="float: right;">' + move.pp + ' / ' + moveData.pp + '</span>' +
 						'</div>';
 
 					const normalButton = '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + '" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' + buttonContent + '</button>';
 
 					// Add Tera option if can terastallize
 					if (canTerastallizeThisSlot && !isDisabled) {
-						return '<div>' + normalButton + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐<br>Tera<br>+<br>' + moveData.name + '</button></div>';
+						// --- MODIFIED: Tera button text ---
+						return '<div>' + normalButton + '<button name="send" value="/rpg battleaction selecttarget ' + activeSlotIndex + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
 					}
 					return normalButton;
 				});
