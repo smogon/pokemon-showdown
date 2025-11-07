@@ -441,15 +441,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'stall',
 		counterMax: 729,
 		onStart() {
-			this.effectState.time = 2;
 			this.effectState.counter = 3;
 		},
-		onBeforeTurn(pokemon) {
-			if (pokemon.volatiles['commanding']) return;
-			this.effectState.time--;
-			if (this.effectState.time <= 0) {
-				pokemon.removeVolatile('stall');
-			}
+		onBeforeMovePriority: 150,
+		onBeforeMove() {
+			this.effectState.removeStall = true;
 		},
 		onStallMove(pokemon) {
 			// this.effectState.counter should never be undefined here.
@@ -457,15 +453,23 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const counter = this.effectState.counter || 1;
 			this.debug(`Success chance: ${Math.round(100 / counter)}%`);
 			const success = this.randomChance(1, counter);
-			if (!success) delete pokemon.volatiles['stall'];
+			if (!success) {
+				delete pokemon.volatiles['stall'];
+			}
 			return success;
 		},
 		onRestart() {
 			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
 				this.effectState.counter *= 3;
 			}
-			this.effectState.time = 2;
+			this.effectState.removeStall = false;
 		},
+		onResidual(pokemon) {
+			if (this.effectState.removeStall) {
+				delete pokemon.volatiles['stall'];
+			}
+			delete this.effectState.removeStall;
+		}
 	},
 	gem: {
 		name: 'gem',
