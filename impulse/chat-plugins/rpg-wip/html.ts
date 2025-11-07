@@ -323,9 +323,9 @@ export function generateSharedBattlePokemonInfo(
 
 	// --- HP Bar (15px height) ---
 	const hpBarHTML =
-		'<div style="max-width: 120px; height: 15px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
 			'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
-			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 10px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
+			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 8px; font-weight: bold; padding: 0 6px; line-height: 15px; height: 100%; border-radius: 0 7px 7px 0;">' +
 				hpPercentage + '%' +
 			'</span>' +
 		'</div>';
