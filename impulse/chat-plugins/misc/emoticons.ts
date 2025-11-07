@@ -4,7 +4,7 @@
 * @author PrinceSky-Git
 */
 import Autolinker from 'autolinker';
-import { FS } from '../../fs';
+import { FS } from '../../../lib/fs';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
