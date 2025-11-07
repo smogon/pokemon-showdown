@@ -124,6 +124,11 @@ export interface PlayerData {
 		pokemonId: string,
 		moveIds: string[],
 	};
+	// Story progression tracking
+	storyFlags: Set<string>;
+	defeatedTrainers: Set<string>;
+	obtainedBadges: string[];
+	visitedLocations: Set<string>;
 }
 
 export interface BattleState {
@@ -172,6 +177,7 @@ export interface BattleState {
 	opponentName: string;
 	opponentParty: RPGPokemon[];
 	opponentMoney: number;
+	trainerId?: string; // For tracking which trainer was defeated (for badges/story)
 
 	playerShouldSwitch?: boolean | 'copyvolatile';
 	pendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };

@@ -72,7 +72,8 @@ import {
     STARTER_POKEMON,
     ENCOUNTER_ZONES,
     TRAINER_DATABASE,
-    TYPE_CHART
+    TYPE_CHART,
+    LOCATIONS
 } from './data';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 
@@ -865,38 +866,147 @@ export const commands: ChatCommands = {
 			}
 
 			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+			
+			if (!currentLocation) {
+				return this.errorReply(`Unknown location: ${player.location}`);
+			}
+
 			// This logic finds all zones that match the player's current location
-			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(toID(player.location)));
+			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(currentLocationId));
 
 			let exploreButtons = '';
+			
+			// Wild Pokemon zones
 			if (availableZones.length > 0) {
+				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
 				for (const zoneId of availableZones) {
 					const zone = ENCOUNTER_ZONES[zoneId];
 					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
 				}
-			} else {
-				exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
+			}
+			
+			// Gym challenge
+			if (currentLocation.hasGym) {
+				const gymLeaderId = currentLocation.hasGym;
+				const gymData = TRAINER_DATABASE[gymLeaderId];
+				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
+					exploreButtons += `<p><strong>Gym Challenge:</strong></p>`;
+					exploreButtons += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button>`;
+				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
+					exploreButtons += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				}
 			}
 
-			// --- EXAMPLE of how to add a trainer ---
-			// You would add logic here to check if the trainer should appear
-			// For example: if (!player.badges.includes('boulder')) {
-			exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
-			// }
-
 			const exploreHTML = `<div class="infobox">` +
-				`<h2>Explore ${player.location}</h2>` +
-				`<p>Choose where to go:</p>` +
-				`<p>${exploreButtons}</p>` +
+				`<h2>${currentLocation.name}</h2>` +
+				`<p>${currentLocation.description}</p>` +
+				`${exploreButtons}` +
 				`<hr />` +
+				`<p><strong>Facilities:</strong></p>` +
 				`<p>` +
-				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
-				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
+				(currentLocation.hasPokeMart ? `<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` : '') +
+				(currentLocation.hasPokeCenter ? `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` : '') +
 				`</p>` +
-				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+				`<hr />` +
+				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
+				`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
+		},
+
+		travel(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot travel during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			
+			// If no target, show travel menu
+			if (!target) {
+				const currentLocation = LOCATIONS[currentLocationId];
+				if (!currentLocation) {
+					return this.errorReply(`Unknown location: ${player.location}`);
+				}
+
+				let travelHTML = `<div class="infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				travelHTML += `<p>Where would you like to go?</p>`;
+				
+				if (currentLocation.connectedLocations.length === 0) {
+					travelHTML += `<p>There are no paths from this location yet.</p>`;
+				} else {
+					for (const connection of currentLocation.connectedLocations) {
+						// Check if location is accessible
+						let canAccess = true;
+						let lockReason = '';
+						
+						if (connection.requiredBadge) {
+							if (!player.obtainedBadges.includes(connection.requiredBadge)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
+							}
+						}
+						
+						if (connection.requiredFlag) {
+							if (!player.storyFlags.has(connection.requiredFlag)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Not accessible yet)`;
+							}
+						}
+						
+						if (canAccess) {
+							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
+						} else {
+							travelHTML += `<button class="button" disabled style="opacity: 0.5;">${connection.name}${lockReason}</button> `;
+						}
+					}
+				}
+				
+				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
+			}
+
+			// Travel to target location
+			const targetLocationId = toID(target);
+			const targetLocation = LOCATIONS[targetLocationId];
+			const currentLocation = LOCATIONS[currentLocationId];
+			
+			if (!targetLocation) {
+				return this.errorReply("That location doesn't exist.");
+			}
+			
+			if (!currentLocation) {
+				return this.errorReply("Your current location is invalid.");
+			}
+			
+			// Check if the location is connected
+			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
+			if (!connection) {
+				return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
+			}
+			
+			// Check requirements
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
+				return this.errorReply(`You need the ${connection.requiredBadge} to travel to ${targetLocation.name}.`);
+			}
+			
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
+				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
+			}
+			
+			// Perform travel
+			player.location = targetLocation.name;
+			player.visitedLocations.add(targetLocationId);
+			
+			const arrivalHTML = `<div class="infobox">` +
+				`<h2>Arrived at ${targetLocation.name}</h2>` +
+				`<p>${targetLocation.description}</p>` +
+				`<p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -1084,6 +1194,7 @@ export const commands: ChatCommands = {
 				opponentName: trainerSpec.name,
 				opponentParty: trainerParty, // The full party
 				opponentMoney: trainerSpec.money,
+				trainerId: trainerId, // Add trainer ID for badge tracking
 
 				// --- New Slot-Based Fields ---
 				playerSlots,
