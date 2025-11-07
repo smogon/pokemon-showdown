@@ -1138,6 +1138,9 @@ export const commands: ChatCommands = {
 								return { id: moveId, pp: moveData.pp || 5 };
 							});
 						}
+						if (firstEvent.pokemon.shiny) {
+							newPokemon.shiny = true;
+						}
 						if (player.party.length < 6) {
 							player.party.push(newPokemon);
 							eventHTML += `<p>${newPokemon.species} joined your party!</p>`;
@@ -1147,6 +1150,31 @@ export const commands: ChatCommands = {
 						}
 					}
 					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+				} else if (firstEvent.type === 'wildbattle' && firstEvent.pokemon) {
+					// Scripted wild Pokemon encounter
+					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
+					eventHTML += `<p>${firstEvent.dialogue || 'A wild Pokemon appeared!'}</p>`;
+					
+					// Create the wild Pokemon
+					const wildPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+					if (firstEvent.pokemon.moves) {
+						wildPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
+							const moveData = getMove(moveId);
+							return { id: moveId, pp: moveData.pp || 5 };
+						});
+					}
+					if (firstEvent.pokemon.shiny) {
+						wildPokemon.shiny = true;
+					}
+					
+					// Store the wild Pokemon temporarily
+					const tempWildId = `scripted_wild_${firstEvent.id}`;
+					player.pc.set(tempWildId, wildPokemon);
+					
+					const species = Dex.species.get(firstEvent.pokemon.species);
+					eventHTML += `<p>A wild ${wildPokemon.shiny ? '✨ ' : ''}${species.name} (Lv. ${wildPokemon.level}) appeared!</p>`;
+					eventHTML += `<p><button name="send" value="/rpg scriptedbattle ${tempWildId}" class="button">⚔️ Battle!</button></p>`;
+					eventHTML += `<p><em>(This is a special encounter!)</em></p>`;
 				} else if (firstEvent.type === 'trainer' && firstEvent.trainerId) {
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'A trainer wants to battle!'}</p>`;
@@ -1356,6 +1384,95 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
+			}
+		},
+
+		},
+
+		scriptedbattle(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You are already in a battle!");
+			}
+
+			const player = getPlayerData(user.id);
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) {
+				return this.errorReply("All your Pokémon have fainted!");
+			}
+
+			// Get the temporarily stored wild Pokemon
+			const tempWildId = target.trim();
+			const wildPokemon = player.pc.get(tempWildId);
+			
+			if (!wildPokemon) {
+				return this.errorReply("This scripted encounter is no longer available.");
+			}
+
+			// Remove from PC (it was only temporarily stored)
+			player.pc.delete(tempWildId);
+
+			const battleMessages: string[] = [];
+			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+
+			try {
+				// --- Player Pokemon ---
+				playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+
+				// --- Scripted Wild Pokemon ---
+				opponentSlots[0] = createActivePokemonSlot(wildPokemon);
+				battleMessages.push(`A wild ${wildPokemon.shiny ? '✨ ' : ''}${wildPokemon.species} appeared!`);
+
+				const opponentParty = [wildPokemon];
+
+				activeBattles.set(user.id, {
+					// --- Battle Type Fields ---
+					battleType: 'wild',
+					opponentName: `Wild ${wildPokemon.species}`,
+					opponentParty,
+					opponentMoney: 0,
+
+					// --- New Slot-Based Fields ---
+					playerSlots,
+					opponentSlots,
+					pendingActions: {},
+
+					// --- Core BattleState Fields ---
+					playerId: user.id,
+					turn: 0,
+					zoneId: 'scripted',
+					playerHazards: [],
+					opponentHazards: [],
+					trickRoomTurns: 0,
+					magicRoomTurns: 0,
+					wonderRoomTurns: 0,
+					gravityTurns: 0,
+					mudSportTurns: 0,
+					waterSportTurns: 0,
+					fairyLockTurns: 0,
+					ionDelugeTurns: 0,
+					playerQuickGuard: false,
+					opponentQuickGuard: false,
+					playerWideGuard: false,
+					opponentWideGuard: false,
+					playerCraftyShield: false,
+					opponentCraftyShield: false,
+					playerReflectTurns: 0,
+					opponentReflectTurns: 0,
+					playerLightScreenTurns: 0,
+					opponentLightScreenTurns: 0,
+					playerAuroraVeilTurns: 0,
+					opponentAuroraVeilTurns: 0,
+					playerTerastallizeUsed: false,
+					opponentTerastallizeUsed: false,
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
+				});
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+			} catch (error) {
+				activeBattles.delete(user.id);
+				return this.errorReply("An error occurred while starting the battle: " + error);
 			}
 		},
 

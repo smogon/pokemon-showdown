@@ -220,6 +220,23 @@ export const LOCATIONS: Record<string, Location> = {
 			},
 		],
 		encounterZones: ['ceruleancity_water'],
+		scriptedEvents: [
+			{
+				id: 'red_gyarados',
+				name: 'Strange Pokemon',
+				triggerOnce: true,
+				requiredBadgeCount: 2, // After defeating Misty
+				type: 'wildbattle',
+				pokemon: {
+					species: 'gyarados',
+					level: 30,
+					moves: ['waterfall', 'bite', 'icefang', 'dragondance'],
+					shiny: true, // Guaranteed shiny!
+				},
+				dialogue: 'A strange red Gyarados appears in the water! It seems unusually aggressive!',
+				setFlag: 'red_gyarados_encountered',
+			},
+		],
 	},
 	'route3': {
 		id: 'route3',
@@ -440,6 +457,22 @@ export const LOCATIONS: Record<string, Location> = {
 			{ id: 'viridiancity', name: 'Viridian City' },
 		],
 		encounterZones: ['route7_grass'],
+		scriptedEvents: [
+			{
+				id: 'snorlax_encounter',
+				name: 'Sleeping Snorlax',
+				triggerOnce: true,
+				requiredBadgeCount: 7, // Late game encounter
+				type: 'wildbattle',
+				pokemon: {
+					species: 'snorlax',
+					level: 45,
+					moves: ['bodyslam', 'rest', 'snore', 'amnesia'],
+				},
+				dialogue: 'A huge Snorlax is blocking the path! You\'ll need to battle it to pass!',
+				setFlag: 'snorlax_defeated',
+			},
+		],
 	},
 	'viridiancity': {
 		id: 'viridiancity',
@@ -492,6 +525,22 @@ export const LOCATIONS: Record<string, Location> = {
 			{ id: 'pokemonleague', name: 'Pokemon League' },
 		],
 		encounterZones: ['victoryroad_cave', 'victoryroad_doubles'],
+		scriptedEvents: [
+			{
+				id: 'moltres_encounter',
+				name: 'Legendary Bird',
+				triggerOnce: true,
+				requiredBadgeCount: 8, // Post-game legendary
+				type: 'wildbattle',
+				pokemon: {
+					species: 'moltres',
+					level: 50,
+					moves: ['fireblast', 'airslash', 'heatwave', 'roost'],
+				},
+				dialogue: 'A legendary bird Pokemon appears from the flames! It\'s Moltres!',
+				setFlag: 'moltres_encountered',
+			},
+		],
 	},
 	'pokemonleague': {
 		id: 'pokemonleague',

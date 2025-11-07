@@ -43,7 +43,8 @@ Scripted events are automatic encounters/dialogues/gifts that trigger when enter
 1. **dialogue** - Display text to the player
 2. **trainer** - Initiate a trainer battle
 3. **item** - Give an item to the player
-4. **pokemon** - Give a Pokemon to the player
+4. **pokemon** - Give a Pokemon to the player (gift)
+5. **wildbattle** - Trigger a scripted wild Pokemon encounter
 
 ### Event Properties
 
@@ -246,3 +247,84 @@ Timeline:
 
 ### Event Triggering
 Events trigger automatically when using `/rpg travel <location>` to enter a new location.
+
+### Scripted Wild Pokemon Encounters
+
+Scripted wild Pokemon encounters are special battles against specific Pokemon that appear under certain conditions. Unlike random encounters, these are guaranteed encounters with pre-determined Pokemon.
+
+```typescript
+{
+  id: 'legendary_encounter',
+  name: 'Legendary Bird',
+  triggerOnce: true,
+  requiredBadgeCount: 8,
+  type: 'wildbattle',
+  pokemon: {
+    species: 'moltres',
+    level: 50,
+    moves: ['fireblast', 'airslash', 'heatwave', 'roost'],
+    shiny: false, // Can be set to true for guaranteed shiny
+  },
+  dialogue: 'A legendary Pokemon appears!',
+  setFlag: 'moltres_encountered',
+}
+```
+
+**Features:**
+- Specific Pokemon with custom level and moves
+- Can be guaranteed shiny (shiny: true)
+- Perfect for legendary encounters, special events, or story battles
+- Can be caught like normal wild Pokemon
+
+**Examples:**
+
+#### Blocking Pokemon (like Snorlax)
+```typescript
+{
+  id: 'snorlax_encounter',
+  name: 'Sleeping Snorlax',
+  triggerOnce: true,
+  type: 'wildbattle',
+  pokemon: {
+    species: 'snorlax',
+    level: 45,
+    moves: ['bodyslam', 'rest', 'snore', 'amnesia'],
+  },
+  dialogue: 'A huge Snorlax is blocking the path!',
+}
+```
+
+#### Guaranteed Shiny
+```typescript
+{
+  id: 'red_gyarados',
+  name: 'Strange Pokemon',
+  triggerOnce: true,
+  requiredBadgeCount: 2,
+  type: 'wildbattle',
+  pokemon: {
+    species: 'gyarados',
+    level: 30,
+    shiny: true, // Guaranteed shiny!
+  },
+  dialogue: 'A strange red Gyarados appears!',
+}
+```
+
+#### Legendary with Conditions
+```typescript
+{
+  id: 'mewtwo_encounter',
+  name: 'The Ultimate Pokemon',
+  triggerOnce: true,
+  requiredFlag: 'defeated_elite_four',
+  type: 'wildbattle',
+  pokemon: {
+    species: 'mewtwo',
+    level: 70,
+    moves: ['psychic', 'aurasphere', 'recover', 'calmmind'],
+  },
+  dialogue: 'The legendary Mewtwo stands before you!',
+}
+```
+

@@ -308,11 +308,11 @@ export interface ScriptedEvent {
 	requiredBadgeCount?: number; // Only triggers if player has at least this many badges
 	maxBadgeCount?: number; // Only triggers if player has at most this many badges
 	preventIfFlag?: string; // Won't trigger if player has this flag
-	type: 'trainer' | 'dialogue' | 'item' | 'pokemon';
+	type: 'trainer' | 'dialogue' | 'item' | 'pokemon' | 'wildbattle';
 	trainerId?: string; // For trainer battles
 	dialogue?: string; // Text to display
 	itemId?: string; // Item to give
 	itemQuantity?: number;
-	pokemon?: { species: string, level: number, moves?: string[] };
+	pokemon?: { species: string, level: number, moves?: string[], shiny?: boolean }; // For 'pokemon' (gift) or 'wildbattle' types
 	setFlag?: string; // Flag to set after event completes
 }
