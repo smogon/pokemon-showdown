@@ -2098,6 +2098,10 @@ export const commands: ChatCommands = {
 					case 'givepokemon':
 						if (action.pokemon) {
 							const species = Dex.species.get(action.pokemon.species);
+							if (!species.exists) {
+								dialogueHTML += `<p style="color: red;">❌ Invalid Pokemon species.</p>`;
+								break;
+							}
 							dialogueHTML += `<p><strong>Offer:</strong> ${species.name} (Lvl ${action.pokemon.level})</p>`;
 
 							// Check if player has space
@@ -2208,11 +2212,18 @@ export const commands: ChatCommands = {
 					if (action.pokemon.moves && action.pokemon.moves.length > 0) {
 						pokemon.moves = action.pokemon.moves.map(moveId => {
 							const moveData = getMove(moveId);
+							if (!moveData || !moveData.exists) {
+								// Fallback to default pp if move data not found
+								return { id: moveId, pp: 5 };
+							}
 							return { id: moveId, pp: moveData.pp || 5 };
 						});
 					}
 
 					const species = Dex.species.get(action.pokemon.species);
+					if (!species.exists) {
+						return this.errorReply("Invalid Pokemon species.");
+					}
 
 					if (player.party.length < 6) {
 						player.party.push(pokemon);
