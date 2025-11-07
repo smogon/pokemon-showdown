@@ -28,7 +28,9 @@ import {
     storePokemonInPC,
     withdrawPokemonFromPC,
     playerData,
-    getInitialMoves
+    getInitialMoves,
+    savePlayerToString,
+    loadPlayer
 } from './core';
 import {
     createActivePokemonSlot,
@@ -72,7 +74,10 @@ import {
     STARTER_POKEMON,
     ENCOUNTER_ZONES,
     TRAINER_DATABASE,
-    TYPE_CHART
+    TYPE_CHART,
+    LOCATIONS,
+    TRAINER_LOCATIONS,
+    STORY_EVENTS
 } from './data';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 
@@ -271,7 +276,44 @@ export const commands: ChatCommands = {
 				return this.errorReply("You are in a battle!");
 			}
 			const player = getPlayerData(user.id);
-			const profileHTML = `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			
+			// Badge display
+			let badgeHTML = '';
+			if (player.obtainedBadges.length > 0) {
+				badgeHTML = `<p><strong>Gym Badges:</strong></p><p>`;
+				for (const badge of player.obtainedBadges) {
+					badgeHTML += `🏆 ${badge} `;
+				}
+				badgeHTML += `</p>`;
+			} else {
+				badgeHTML = `<p><strong>Gym Badges:</strong> None yet</p>`;
+			}
+			
+			// Story progress
+			let progressHTML = '<p><strong>Progress:</strong> ';
+			if (player.storyFlags.has('champion')) {
+				progressHTML += 'Champion! 🏆</p>';
+			} else if (player.storyFlags.has('all_badges')) {
+				progressHTML += 'Ready for Elite Four</p>';
+			} else if (player.badges >= 4) {
+				progressHTML += `${player.badges}/8 Badges - Halfway there!</p>`;
+			} else if (player.badges > 0) {
+				progressHTML += `${player.badges}/8 Badges - On your journey</p>`;
+			} else {
+				progressHTML += 'Just starting out</p>';
+			}
+			
+			const profileHTML = `<div class="infobox"><h2>Player Profile</h2>` +
+				`<p><strong>Trainer:</strong> ${player.name}</p>` +
+				`<p><strong>Level:</strong> ${player.level}</p>` +
+				`<p><strong>Location:</strong> ${player.location}</p>` +
+				`${badgeHTML}` +
+				`${progressHTML}` +
+				`<p><strong>Pokemon in Party:</strong> ${player.party.length}/6</p>` +
+				`<p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>` +
+				`<p><strong>Money:</strong> ₽${player.money}</p>` +
+				`<p><strong>Trainers Defeated:</strong> ${player.defeatedTrainers.size}</p>` +
+				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
 		},
 
@@ -865,38 +907,163 @@ export const commands: ChatCommands = {
 			}
 
 			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+			
+			if (!currentLocation) {
+				return this.errorReply(`Unknown location: ${player.location}`);
+			}
+
 			// This logic finds all zones that match the player's current location
-			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(toID(player.location)));
+			const availableZones = Object.keys(ENCOUNTER_ZONES).filter(zoneId => zoneId.startsWith(currentLocationId));
 
 			let exploreButtons = '';
+			
+			// Wild Pokemon zones
 			if (availableZones.length > 0) {
+				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
 				for (const zoneId of availableZones) {
 					const zone = ENCOUNTER_ZONES[zoneId];
 					const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+					exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
 				}
-			} else {
-				exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
+			}
+			
+			// Gym challenge
+			if (currentLocation.hasGym) {
+				const gymLeaderId = currentLocation.hasGym;
+				const gymData = TRAINER_DATABASE[gymLeaderId];
+				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
+					exploreButtons += `<p><strong>Gym Challenge:</strong></p>`;
+					exploreButtons += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button>`;
+				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
+					exploreButtons += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				}
+			}
+			
+			// Route trainers
+			const locationTrainers = TRAINER_LOCATIONS[currentLocationId];
+			if (locationTrainers && locationTrainers.length > 0) {
+				const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
+				if (availableTrainers.length > 0) {
+					exploreButtons += `<p><strong>Trainers:</strong></p>`;
+					for (const trainerId of availableTrainers) {
+						const trainerData = TRAINER_DATABASE[trainerId];
+						if (trainerData) {
+							exploreButtons += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
+						}
+					}
+				}
 			}
 
-			// --- EXAMPLE of how to add a trainer ---
-			// You would add logic here to check if the trainer should appear
-			// For example: if (!player.badges.includes('boulder')) {
-			exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
-			// }
-
 			const exploreHTML = `<div class="infobox">` +
-				`<h2>Explore ${player.location}</h2>` +
-				`<p>Choose where to go:</p>` +
-				`<p>${exploreButtons}</p>` +
+				`<h2>${currentLocation.name}</h2>` +
+				`<p>${currentLocation.description}</p>` +
+				`${exploreButtons}` +
 				`<hr />` +
+				`<p><strong>Facilities:</strong></p>` +
 				`<p>` +
-				`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
-				`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
+				(currentLocation.hasPokeMart ? `<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button> ` : '') +
+				(currentLocation.hasPokeCenter ? `<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button> ` : '') +
+				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button> ` +
 				`</p>` +
-				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+				`<hr />` +
+				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
+				`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
+		},
+
+		travel(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot travel during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			
+			// If no target, show travel menu
+			if (!target) {
+				const currentLocation = LOCATIONS[currentLocationId];
+				if (!currentLocation) {
+					return this.errorReply(`Unknown location: ${player.location}`);
+				}
+
+				let travelHTML = `<div class="infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				travelHTML += `<p>Where would you like to go?</p>`;
+				
+				if (currentLocation.connectedLocations.length === 0) {
+					travelHTML += `<p>There are no paths from this location yet.</p>`;
+				} else {
+					for (const connection of currentLocation.connectedLocations) {
+						// Check if location is accessible
+						let canAccess = true;
+						let lockReason = '';
+						
+						if (connection.requiredBadge) {
+							if (!player.obtainedBadges.includes(connection.requiredBadge)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
+							}
+						}
+						
+						if (connection.requiredFlag) {
+							if (!player.storyFlags.has(connection.requiredFlag)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Not accessible yet)`;
+							}
+						}
+						
+						if (canAccess) {
+							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
+						} else {
+							travelHTML += `<button class="button" disabled style="opacity: 0.5;">${connection.name}${lockReason}</button> `;
+						}
+					}
+				}
+				
+				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
+			}
+
+			// Travel to target location
+			const targetLocationId = toID(target);
+			const targetLocation = LOCATIONS[targetLocationId];
+			const currentLocation = LOCATIONS[currentLocationId];
+			
+			if (!targetLocation) {
+				return this.errorReply("That location doesn't exist.");
+			}
+			
+			if (!currentLocation) {
+				return this.errorReply("Your current location is invalid.");
+			}
+			
+			// Check if the location is connected
+			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
+			if (!connection) {
+				return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
+			}
+			
+			// Check requirements
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
+				return this.errorReply(`You need the ${connection.requiredBadge} to travel to ${targetLocation.name}.`);
+			}
+			
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
+				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
+			}
+			
+			// Perform travel
+			player.location = targetLocation.name;
+			player.visitedLocations.add(targetLocationId);
+			
+			const arrivalHTML = `<div class="infobox">` +
+				`<h2>Arrived at ${targetLocation.name}</h2>` +
+				`<p>${targetLocation.description}</p>` +
+				`<p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -1084,6 +1251,7 @@ export const commands: ChatCommands = {
 				opponentName: trainerSpec.name,
 				opponentParty: trainerParty, // The full party
 				opponentMoney: trainerSpec.money,
+				trainerId: trainerId, // Add trainer ID for badge tracking
 
 				// --- New Slot-Based Fields ---
 				playerSlots,
@@ -1843,6 +2011,183 @@ export const commands: ChatCommands = {
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+		},
+
+		npc(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot talk to NPCs during a battle.");
+			}
+			
+			const player = getPlayerData(user.id);
+			const npcId = toID(target);
+			
+			// Simple NPC dialogue system
+			const npcs: Record<string, { name: string, location: string, dialogue: string, flags?: string[] }> = {
+				'professor': {
+					name: 'Professor Oak',
+					location: 'startertown',
+					dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
+				},
+				'aide_route1': {
+					name: 'Professor\'s Aide',
+					location: 'route1',
+					dialogue: "Wild Pokémon live in tall grass! If you want to catch them, weaken them first, then throw a Poké Ball!",
+				},
+				'old_man_pewter': {
+					name: 'Old Man',
+					location: 'pewtercity',
+					dialogue: "Brock, the Pewter Gym Leader, uses Rock-type Pokémon. Water and Grass moves work well against them!",
+				},
+				'nurse_cerulean': {
+					name: 'Nurse Joy',
+					location: 'ceruleancity',
+					dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+				},
+				'hiker_route2': {
+					name: 'Friendly Hiker',
+					location: 'route2',
+					dialogue: "This route has tougher Pokémon! Make sure your team is at least level 10 before continuing. Good luck!",
+				},
+				'girl_vermilion': {
+					name: 'Little Girl',
+					location: 'vermilioncity',
+					dialogue: "Lt. Surge is really tough! His Electric Pokémon can paralyze yours. Ground types work great against them!",
+				},
+				'shopkeeper_celadon': {
+					name: 'Shop Keeper',
+					location: 'celadoncity',
+					dialogue: "Welcome to Celadon City! We have the biggest department store in the region. Check out /rpg shop for great deals!",
+				},
+				'trainer_fuchsia': {
+					name: 'Expert Trainer',
+					location: 'fuchsiacity',
+					dialogue: "Koga specializes in Poison types. They can badly poison your Pokémon! Psychic and Ground moves work well here.",
+				},
+				'scientist_cinnabar': {
+					name: 'Lab Scientist',
+					location: 'cinnabarisland',
+					dialogue: "Blaine's Fire types are no joke! Water, Rock, and Ground moves are super effective. Prepare well!",
+				},
+				'guard_viridian': {
+					name: 'City Guard',
+					location: 'viridiancity',
+					dialogue: "Giovanni, the Viridian Gym Leader, is incredibly strong! His Ground types are tough. Use Water, Grass, or Ice types!",
+				},
+				'veteran_victoryroad': {
+					name: 'Veteran Hiker',
+					location: 'victoryroad',
+					dialogue: "Only trainers with all 8 badges can enter here. The Pokémon are level 48+. Make sure you're prepared!",
+					flags: ['all_badges'],
+				},
+				'champion_guide': {
+					name: 'Elite Four Guide',
+					location: 'pokemonleague',
+					dialogue: "You've made it to the Pokémon League! The Elite Four specialize in Ice, Fighting, Ghost/Poison, and Dragon types. The Champion uses a balanced team. Good luck!",
+					flags: ['all_badges'],
+				},
+				'congratulations': {
+					name: 'Champion\'s Aide',
+					location: 'pokemonleague',
+					dialogue: "Congratulations, Champion! You've completed your journey. You can explore, catch more Pokémon, or challenge trainers again!",
+					flags: ['champion'],
+				},
+			};
+			
+			if (!npcId) {
+				// Show available NPCs in current location
+				const currentLocationId = toID(player.location);
+				const availableNPCs = Object.entries(npcs).filter(([id, npc]) => 
+					npc.location === currentLocationId && 
+					(!npc.flags || npc.flags.every(f => player.storyFlags.has(f)))
+				);
+				
+				if (availableNPCs.length === 0) {
+					return this.errorReply("There are no NPCs to talk to here.");
+				}
+				
+				let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
+				for (const [id, npc] of availableNPCs) {
+					html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
+				}
+				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			}
+			
+			const npc = npcs[npcId];
+			if (!npc) {
+				return this.errorReply("That NPC doesn't exist.");
+			}
+			
+			// Check location
+			if (npc.location !== toID(player.location)) {
+				return this.errorReply("That NPC is not in this location.");
+			}
+			
+			// Check flags
+			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) {
+				return this.errorReply("You cannot talk to this NPC yet.");
+			}
+			
+			const dialogueHTML = `<div class="infobox">` +
+				`<h2>${npc.name}</h2>` +
+				`<p>"${npc.dialogue}"</p>` +
+				`<hr />` +
+				`<p><button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
+				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
+				`</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
+		},
+
+		save(target, room, user) {
+			const player = getPlayerData(user.id);
+			
+			try {
+				const saveData = savePlayerToString(player);
+				
+				const saveHTML = `<div class="infobox">` +
+					`<h2>Save Game</h2>` +
+					`<p>Your game has been saved! Copy the text below to save your progress:</p>` +
+					`<textarea readonly style="width: 100%; height: 150px; font-family: monospace; font-size: 10px;">${saveData}</textarea>` +
+					`<p><small>Save this text somewhere safe. Use /rpg load [save data] to restore your progress.</small></p>` +
+					`<p><strong>Warning:</strong> This save contains your entire game state. Keep it private!</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
+			} catch (error) {
+				return this.errorReply("Error saving game: " + error);
+			}
+		},
+
+		load(target, room, user) {
+			if (!target) {
+				const loadHTML = `<div class="infobox">` +
+					`<h2>Load Game</h2>` +
+					`<p>To load a saved game, use: <code>/rpg load [save data]</code></p>` +
+					`<p><strong>Warning:</strong> Loading will replace your current progress!</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					`</div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${loadHTML}`);
+			}
+			
+			try {
+				const loadedPlayer = loadPlayer(user.id, target);
+				
+				const confirmHTML = `<div class="infobox">` +
+					`<h2>Game Loaded!</h2>` +
+					`<p>Your saved game has been loaded successfully!</p>` +
+					`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
+					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
+					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
+					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg menu" class="button">Continue Adventure</button></p>` +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			} catch (error) {
+				return this.errorReply("Error loading game. Make sure you pasted the complete save data.");
+			}
 		},
 
 		help() {

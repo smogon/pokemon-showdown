@@ -234,6 +234,46 @@ export function checkForWinLoss(
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 			moneyGained = battle.opponentMoney;
 			player.money += moneyGained;
+			
+			// Track defeated trainer
+			if (battle.trainerId) {
+				player.defeatedTrainers.add(battle.trainerId);
+				
+				// Award badge if it's a gym leader
+				if (battle.trainerId.startsWith('gym_')) {
+					const gymName = battle.trainerId.replace('gym_', '');
+					const badgeNames: Record<string, string> = {
+						'brock': 'Boulder Badge',
+						'misty': 'Cascade Badge',
+						'ltsurge': 'Thunder Badge',
+						'erika': 'Rainbow Badge',
+						'koga': 'Soul Badge',
+						'sabrina': 'Marsh Badge',
+						'blaine': 'Volcano Badge',
+						'giovanni': 'Earth Badge',
+					};
+					const badgeName = badgeNames[gymName];
+					if (badgeName && !player.obtainedBadges.includes(badgeName)) {
+						player.obtainedBadges.push(badgeName);
+						player.badges = player.obtainedBadges.length;
+						messageLog.push(`<strong>You obtained the ${badgeName}!</strong>`);
+						
+						// Check if player has all 8 badges
+						if (player.obtainedBadges.length === 8) {
+							player.storyFlags.add('all_badges');
+							messageLog.push(`<strong>You now have all 8 gym badges! Victory Road is now accessible!</strong>`);
+						}
+					}
+				}
+				
+				// Check if Champion was defeated
+				if (battle.trainerId === 'champion_blue') {
+					player.storyFlags.add('champion');
+					player.storyFlags.add('game_complete');
+					messageLog.push(`<strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong>`);
+				}
+			}
+			
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
