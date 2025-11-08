@@ -2,8 +2,9 @@ function checkMegaForme(species: Species, forme: string, battle: Battle) {
 	const baseSpecies = battle.dex.species.get(species.baseSpecies);
 	const altForme = battle.dex.species.get(`${baseSpecies.name}-${forme}`);
 	if (
-		altForme.exists && !battle.ruleTable.isBannedSpecies(altForme) &&
-		!battle.ruleTable.isBanned('pokemontag:mega')
+		altForme.exists && (altForme.gen <= 7 || battle.ruleTable.has('+pokemontag:past') ||
+		battle.ruleTable.has('+pokemontag:future')) && !battle.ruleTable.isBannedSpecies(altForme) &&
+		!battle.ruleTable.isBanned('pokemontag:mega') 
 	) {
 		return altForme.name;
 	}
