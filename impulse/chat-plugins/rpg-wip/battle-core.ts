@@ -497,7 +497,7 @@ export function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false };
 	}
 	const immunityCheck = RPGAbilities.checkImmunity(abilityContext);
-	if (immunityCheck && immunityCheck.immune) {
+	if (immunityCheck?.immune) {
 		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false };
 	}
 
@@ -1039,7 +1039,7 @@ export function handleDamagingMove(
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
 			// Force switch moves (Dragon Tail, Circle Throw)
-			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot.pokemon.hp > 0) {
+			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
 				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 				// Suction Cups and similar abilities prevent forced switches
 				if (defenderAbility === 'suctioncups') {
