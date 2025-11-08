@@ -315,7 +315,7 @@ export const commands: ChatCommands = {
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
 				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
@@ -922,7 +922,8 @@ export const commands: ChatCommands = {
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`);
+			const purchaseHTML = `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>${generateBottomNavigation()}</div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${purchaseHTML}`);
 		},
 
 		sell(target, room, user) {
@@ -1114,7 +1115,8 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+				travelHTML += generateBottomNavigation() + `</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
@@ -2261,7 +2263,7 @@ export const commands: ChatCommands = {
 			// The lock is on the 'ActivePokemonSlot' which is destroyed.
 			// This is fine.
 
-			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg explore" class="button">Explore</button></p></div>`;
+			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg explore" class="button">Explore</button></p>${generateBottomNavigation()}</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
 		},
 
@@ -2480,7 +2482,8 @@ export const commands: ChatCommands = {
 				for (const [id, npc] of availableNPCs) {
 					html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
 				}
-				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></div>`;
+				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+				html += generateBottomNavigation() + `</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
@@ -2598,6 +2601,7 @@ export const commands: ChatCommands = {
 			dialogueHTML += `<hr />` +
 				`<p><button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
 				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
+				generateBottomNavigation() +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
 		},
