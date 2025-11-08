@@ -127,6 +127,19 @@ function getLocationWeatherData(player: PlayerData): {
 	};
 }
 
+/**
+ * Get the weather message for the start of a battle based on weather type
+ */
+function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'hail'): string {
+	const weatherStartMessages: Record<string, string> = {
+		'sun': 'The sunlight is strong.',
+		'rain': 'It started to rain!',
+		'sand': 'A sandstorm is raging!',
+		'hail': 'It started to hail!',
+	};
+	return weatherStartMessages[weatherType];
+}
+
 export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
@@ -1387,6 +1400,10 @@ export const commands: ChatCommands = {
 				if (opponentSlots[1]) opponentParty.push(opponentSlots[1].pokemon);
 
 				const locationWeatherData = getLocationWeatherData(player);
+				// Add weather message if there is location weather
+				if (locationWeatherData.weather) {
+					battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
+				}
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: finalBattleType,
@@ -1487,6 +1504,10 @@ export const commands: ChatCommands = {
 				const opponentParty = [wildPokemon];
 
 				const locationWeatherData3 = getLocationWeatherData(player);
+				// Add weather message if there is location weather
+				if (locationWeatherData3.weather) {
+					battleMessages.push(getWeatherStartMessage(locationWeatherData3.weather.type));
+				}
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: 'wild',
@@ -1667,7 +1688,12 @@ export const commands: ChatCommands = {
 			});
 
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, [startMessage])}`);
+			const challengeMessages = [startMessage];
+			// Add weather message if there is location weather
+			if (locationWeatherData2.weather) {
+				challengeMessages.push(getWeatherStartMessage(locationWeatherData2.weather.type));
+			}
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, challengeMessages)}`);
 		},
 
 		battle(target, room, user) {
