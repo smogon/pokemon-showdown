@@ -10,7 +10,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
-import { ENCOUNTER_ZONES } from './locations';
+import { type ENCOUNTER_ZONES } from './locations';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
@@ -25,7 +25,7 @@ import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
 	// Handle edge cases: if expNeededForLevel is 0 or negative, show 100%
 	if (expNeededForLevel <= 0) return 100;
-	
+
 	// Calculate percentage and clamp between 0 and 100
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 }
@@ -220,7 +220,7 @@ export function generatePokemonInfoHTML(
 
 	// Add the rest of the Pokemon info
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-	
+
 	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
 
 	// --- Conditional info for player Pokemon only ---
@@ -331,16 +331,16 @@ export function generateSharedBattlePokemonInfo(
 	// --- HP Bar (12px height) ---
 	const hpBarHTML =
 		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-			'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
-			'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
-				hpPercentage + '%' +
-			'</span>' +
+		'<div style="background: ' + hpBarColor + '; width: ' + hpPercentage + '%; height: 100%; border-radius: 7px;"></div>' +
+		'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
+		hpPercentage + '%' +
+		'</span>' +
 		'</div>';
 
 	// --- Status tags ---
 	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
 	const statusDisplay = allStatusTags || '&nbsp;'; // Non-breaking space for height
-		
+
 	if (isDoubleBattle) {
 		// --- NEW COMPACT DOUBLE BATTLE UI ---
 		let html = ''; // Start with an empty string
@@ -355,12 +355,12 @@ export function generateSharedBattlePokemonInfo(
 		return html;
 	} else {
 		// --- SINGLE BATTLE UI (The "perfect" layout) ---
-		
+
 		// --- Pokemon Sprite (ONLY for single battles) ---
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
-		const spriteHTML = 
+		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' + // Centering container
-				'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
+			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
 			'</div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
@@ -400,7 +400,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	if (quickGuard) effects.push('<span style="background-color: #F08030; ' + tagStyle + '">Quick Guard</span>');
 	if (wideGuard) effects.push('<span style="background-color: #6890F0; ' + tagStyle + '">Wide Guard</span>');
 	if (craftyShield) effects.push('<span style="background-color: #F85888; ' + tagStyle + '">Crafty Shield</span>');
-	
+
 	if (hazards.includes('stealthrock')) effects.push('<span style="background-color: #B8A038; ' + tagStyle + '">SR</span>');
 	const spikes = hazards.filter(h => h === 'spikes').length;
 	if (spikes > 0) effects.push('<span style="background-color: #A8A878; ' + tagStyle + '">Spikes ' + spikes + '</span>');
@@ -424,7 +424,7 @@ export function generateSingleBattleHTML(
 	}
 
 	const playerPokemon = playerSlot.pokemon;
-	const player = getPlayerData(battle.playerId); 
+	const player = getPlayerData(battle.playerId);
 
 	// --- FIELD EFFECTS HELPER REMOVED ---
 
@@ -556,8 +556,8 @@ export function generateDoubleBattleHTML(
 ): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
-	const player = getPlayerData(battle.playerId); 
-	const playerName = player ? player.name : "Your"; 
+	const player = getPlayerData(battle.playerId);
+	const playerName = player ? player.name : "Your";
 
 	// --- NEW: Determine opponent owner name ---
 	let opponentOwnerName: string | undefined = battle.opponentName;
@@ -571,7 +571,7 @@ export function generateDoubleBattleHTML(
 			// --- FIX: Removed min-height: 120px; ---
 			return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; text-align: center; color: #888;">(Empty)</div>';
 		}
-		
+
 		// --- Determine owner name ---
 		let ownerName: string | undefined = undefined;
 		if (side === 'player') {
@@ -737,11 +737,11 @@ export function generateDoubleBattleHTML(
 				moveButtonsHTML += '<tr>';
 				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
 				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
+				moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+				moveButtonsHTML += '</tr>';
 				moveButtonsHTML += '</table>';
 			}
 			html += moveButtonsHTML;
@@ -794,19 +794,56 @@ export function generateBattleHTML(
 }
 
 export function generateWelcomeHTML(): string {
-	return `<div class="infobox"><h2>Welcome to World of Impulse</h2><p>You must choose your starter pokemon before starting your adventure.</p><h3>Choose Type:</h3><p><button name="send" value="/rpg choosetype fire" class="button">🔥 Fire</button><button name="send" value="/rpg choosetype water" class="button">💧 Water</button><button name="send" value="/rpg choosetype grass" class="button">🌱 Grass</button></p></div>`;
+	return `<div class="infobox">` +
+		`<h2>Developer Note</h2>` +
+		`<p>Welcome to the World of Impulse RPG System!</p>` +
+		`<p>This is an immersive Pokémon-style adventure where you'll battle trainers, catch Pokémon, explore locations, and become the Champion!</p>` +
+		`<p><strong>Features:</strong></p>` +
+		`<ul>` +
+		`<li>🎮 Story Mode with 8 Gym Leaders and Elite Four</li>` +
+		`<li>⚔️ Wild Pokémon battles and trainer challenges</li>` +
+		`<li>📦 Item management and PC storage system</li>` +
+		`<li>🌍 Multiple locations to explore</li>` +
+		`<li>✨ Evolution, moves, and abilities system</li>` +
+		`</ul>` +
+		`<p>Ready to begin your adventure?</p>` +
+		`<p><button name="send" value="/rpg continue" class="button">Continue</button></p>` +
+		`</div>`;
+}
+
+export function generateRPGModeSelectionHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>RPG Menu</h2>` +
+		`<p>Select a game mode to begin:</p>` +
+		`<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>` +
+		`<p><em>More modes will be added in future updates!</em></p>` +
+		`</div>`;
+}
+
+export function generateStoryModeStartHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>Story Mode</h2>` +
+		`<p>Welcome to your Pokémon adventure!</p>` +
+		`<p>Professor Oak is waiting to give you your first Pokémon. Choose your starter:</p>` +
+		`<h3>Choose Your Starter Type:</h3>` +
+		`<p>` +
+		`<button name="send" value="/rpg choosestarter fire" class="button">🔥 Fire Type</button>` +
+		`<button name="send" value="/rpg choosestarter water" class="button">💧 Water Type</button>` +
+		`<button name="send" value="/rpg choosestarter grass" class="button">🌱 Grass Type</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateStarterSelectionHTML(type: string, starters: string[]): string {
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let html = `<div class="infobox"><h2>${typeTitle} Type Starters</h2><p>Choose your starter pokemon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+	let html = `<div class="infobox"><h2>${typeTitle} Type Starters</h2><p>Choose your starter Pokémon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 	for (const starterId of starters) {
 		const species = Dex.species.get(starterId);
 		if (species.exists) {
-			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><strong>${species.name}</strong><br><small>Type: ${species.types.join('/')}</small><br><button name="send" value="/rpg choosestarter ${starterId}" class="button" style="margin-top: 5px;">Choose</button></div>`;
+			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><strong>${species.name}</strong><br><small>Type: ${species.types.join('/')}</small><br><button name="send" value="/rpg selectstarter ${starterId}" class="button" style="margin-top: 5px;">Choose</button></div>`;
 		}
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg start" class="button">← Back to Type Selection</button></p></div>`;
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
 	return html;
 }
 
@@ -939,7 +976,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	const locationId = toID(player.location);
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
-	
+
 	let html = `<div class="infobox">`;
 	html += `<h2>Poké Mart - ${player.location}</h2>`;
 	html += `<p>Welcome! What would you like to do?</p>`;
@@ -1187,12 +1224,12 @@ export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: s
 		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
 	}
 	let html = `<div class="infobox">`;
-	
+
 	// Display additional messages if provided (e.g., badge notifications)
 	if (additionalMessages && additionalMessages.length > 0) {
 		html += `<div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;">${additionalMessages.join('<br>')}</div>`;
 	}
-	
+
 	html += `<h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
 	for (const move of pokemon.moves) {
 		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
@@ -1307,7 +1344,7 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 	if (!pokemon || !item) return `<h2>Error: Pokémon or item not found.</h2>`;
 
 	let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a move to restore PP for <strong>${pokemon.species}</strong>:</p>`;
-	
+
 	let canRestoreAny = false;
 	for (const move of pokemon.moves) {
 		const moveData = getMove(move.id);
