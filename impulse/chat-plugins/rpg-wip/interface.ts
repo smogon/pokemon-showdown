@@ -246,14 +246,18 @@ export interface AbilityContext {
 export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
 export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
 export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
-export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState) => number;
+export type AbilityStatModifierHandler = (
+	pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState
+) => number;
 export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string) => string;
 export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityOnDamageHandler = (ctx: AbilityContext, damage: number) => void;
 export type AbilityOnMoveHandler = (ctx: AbilityContext) => void;
 export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
 export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
+export type AbilityStatDropResponseHandler = (
+	slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot
+) => void;
 export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;
 
 export interface NPCAction {
@@ -395,11 +399,12 @@ export interface NPCData {
 		'tamer' | 'birdkeeper' | 'tuber' | 'waiter' | 'waitress' | 'clown' | 'burglar' | 'ruinmaniac' |
 		'dragontamer' | 'hexmaniac' | 'medium' | 'channeler' | 'aromalady' | 'parasollady' | 'skier' |
 		'snowboarder' | 'twins' | 'sisters' | 'brothers' | 'pkmntrainer' | 'acetrainer' | 'youngster' |
-		'lass' | 'bugcatcher' | 'blackbelt' | 'psychic' | 'beauty' | 'gentleman' | 'schoolboy' |
-		'schoolgirl' | 'preschooler'; // Identifies special NPCs
+		'lass' | 'bugcatcher' | 'blackbelt' | 'psychic' | 'beauty' | 'gentleman' |
+		'schoolboy' | 'schoolgirl' | 'preschooler'; // Identifies special NPCs
 }
 
-export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department' |
+export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' |
+	'gameCorner' | 'department' |
 	'daycare' | 'battlefacility' | 'battletower' | 'battlefrontier' | 'contesthall' | 'secretbase' | 'cafe' |
 	'restaurant' | 'hotel' | 'library' | 'school' | 'dojo' | 'temple' | 'shrine' | 'lighthouse' | 'windmill' |
 	'powerplant' | 'factory' | 'warehouse' | 'radio' | 'tvstation' | 'theater' | 'arcade' | 'casino' |
@@ -458,7 +463,8 @@ export interface ScriptedEvent {
 	dialogue?: string; // Text to display
 	itemId?: string; // Item to give
 	itemQuantity?: number;
-	pokemon?: { species: string, level: number, moves?: string[], shiny?: boolean }; // For 'pokemon' (gift) or 'wildbattle' types
+	// For 'pokemon' (gift) or 'wildbattle' types
+	pokemon?: { species: string, level: number, moves?: string[], shiny?: boolean };
 	setFlag?: string; // Flag to set after event completes
 	// Cutscene
 	cutsceneScript?: string[]; // Array of dialogue/actions
