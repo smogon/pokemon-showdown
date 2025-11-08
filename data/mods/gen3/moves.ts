@@ -130,6 +130,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			foe.removeSideCondition('reflect');
 			foe.removeSideCondition('lightscreen');
 		},
+		onTryMove() {},
 	},
 	charge: {
 		inherit: true,
