@@ -260,7 +260,10 @@ export interface NPCAction {
 	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon' |
 		'fossilrevival' | 'dailyreward' | 'battlerequest' | 'questchain' | 'itemcraft' | 'berryplant' | 'pokemongrooming' |
 		'fortuneteller' | 'pokemonbreeder' | 'moverelearner' | 'abilitycapsule' | 'evtrainer' | 'ivchecker' |
-		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer';
+		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer' |
+		'fishing' | 'bikeshop' | 'coinexchange' | 'tutorcombo' | 'apricorncrafter' | 'pokeathlon' | 'musicalprops' |
+		'berryblender' | 'pokeblockmixer' | 'poffincooking' | 'rivalbattle' | 'gymrematch' | 'shardtrader' |
+		'wingcollector' | 'scalecollector' | 'opower';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
@@ -328,6 +331,51 @@ export interface NPCAction {
 	// Photographer
 	photographyCost?: number; // Cost to take photo
 	photoReward?: { itemId: string, quantity: number }; // Reward for photo
+	// Fishing
+	fishingRodType?: 'old' | 'good' | 'super'; // Type of fishing rod
+	fishingRodCost?: number; // Cost to purchase fishing rod
+	// Bike shop
+	bikeCost?: number; // Cost to purchase bike
+	bikeType?: 'regular' | 'mach' | 'acro'; // Type of bike
+	// Coin exchange
+	coinRate?: number; // Coins per money unit
+	prizeList?: { itemId: string, coinCost: number }[]; // Items purchasable with coins
+	// Tutor combo
+	comboMoves?: string[]; // Multiple moves that can be taught
+	comboMoveCost?: number; // Cost per move
+	// Apricorn crafter
+	apricornRecipes?: { apricorn: string, resultBall: string }[]; // Apricorn to Pokeball recipes
+	craftingCost?: number; // Cost to craft
+	// Pokeathlon
+	pokeathlonEvents?: string[]; // Available events
+	pokeathlonRewards?: { itemId: string, score: number }[]; // Rewards for scores
+	// Musical props
+	musicalPropsList?: string[]; // Available props
+	musicalPropCost?: number; // Cost per prop
+	// Berry blender
+	berryBlenderRecipes?: { berries: string[], result: string }[]; // Berry blend recipes
+	// Pokeblock mixer
+	pokeblockRecipes?: { berries: string[], result: string, stats: string[] }[]; // Pokeblock recipes
+	// Poffin cooking
+	poffinRecipes?: { berries: string[], result: string, quality: number }[]; // Poffin recipes
+	// Rival battle
+	rivalTeam?: { species: string, level: number, moves?: string[] }[]; // Rival's team
+	rivalDialogue?: { pre: string, win: string, lose: string }; // Rival dialogue
+	// Gym rematch
+	rematchTeam?: { species: string, level: number, moves?: string[] }[]; // Rematch team (higher level)
+	rematchAvailable?: boolean; // Whether rematch is available
+	// Shard trader
+	shardTrades?: { shardColor: string, moveId?: string, itemId?: string }[]; // Shard trade options
+	// Wing collector
+	wingTypes?: string[]; // Types of wings accepted
+	wingReward?: { itemId: string, quantity: number }; // Reward for wings
+	// Scale collector
+	scaleType?: string; // Type of scale (heart, etc.)
+	scaleReward?: { itemId: string, quantity: number }; // Reward for scales
+	// O-Power
+	opowerType?: string; // Type of O-Power (attack, defense, capture, etc.)
+	opowerDuration?: number; // Duration in minutes
+	opowerCooldown?: number; // Cooldown in minutes
 }
 
 export interface NPCData {
@@ -342,7 +390,13 @@ export interface NPCData {
 		'battlefacilityhost' | 'contestjudge' | 'trader' | 'questgiver' | 'storyteller' | 'gymtrainer' |
 		'cooltrainer' | 'veteran' | 'collector' | 'breeder' | 'ranger' | 'sage' | 'mystic' | 'fortuneteller' |
 		'artist' | 'musician' | 'chef' | 'fashiondesigner' | 'photographer' | 'journalist' | 'athlete' |
-		'teamrocket' | 'teamadmin' | 'teamboss' | 'policeOfficer' | 'detective' | 'guard' | 'gatekeeper'; // Identifies special NPCs
+		'teamrocket' | 'teamadmin' | 'teamboss' | 'policeOfficer' | 'detective' | 'guard' | 'gatekeeper' |
+		'fisherman' | 'hiker' | 'swimmer' | 'biker' | 'camper' | 'picnicker' | 'pokefan' | 'juggler' |
+		'tamer' | 'birdkeeper' | 'tuber' | 'waiter' | 'waitress' | 'clown' | 'burglar' | 'ruinmaniac' |
+		'dragontamer' | 'hexmaniac' | 'medium' | 'channeler' | 'aromalady' | 'parasollady' | 'skier' |
+		'snowboarder' | 'twins' | 'sisters' | 'brothers' | 'pkmntrainer' | 'acetrainer' | 'youngster' |
+		'lass' | 'bugcatcher' | 'blackbelt' | 'psychic' | 'beauty' | 'gentleman' | 'schoolboy' |
+		'schoolgirl' | 'preschooler'; // Identifies special NPCs
 }
 
 export type BuildingType = 'pokecenter' | 'pokemart' | 'gym' | 'house' | 'lab' | 'museum' | 'gameCorner' | 'department' |
@@ -396,7 +450,10 @@ export interface ScriptedEvent {
 		'bossbattle' | 'tournament' | 'contest' | 'race' | 'scavengerhunt' | 'investigation' | 'stealth' |
 		'escape' | 'rescue' | 'defense' | 'ambush' | 'betrayal' | 'alliance' | 'negotiation' |
 		'discovery' | 'revelation' | 'transformation' | 'evolution_ceremony' | 'legendary_awakening' |
-		'ancient_seal' | 'portal_opening' | 'dimension_merge' | 'timeloop' | 'prophecy';
+		'ancient_seal' | 'portal_opening' | 'dimension_merge' | 'timeloop' | 'prophecy' |
+		'fishing' | 'surfing' | 'diving' | 'itemball' | 'hiddenitem' | 'roaming' | 'multibattle' |
+		'photoop' | 'festival' | 'secretarea' | 'warp' | 'gymchallenge' | 'elitefourchallenge' |
+		'halloffame' | 'safarizone' | 'bugcatchingcontest' | 'battlefrontier';
 	trainerId?: string; // For trainer battles
 	dialogue?: string; // Text to display
 	itemId?: string; // Item to give
@@ -432,4 +489,55 @@ export interface ScriptedEvent {
 	mysteryToSolve?: string; // Mystery description
 	// Transformation
 	transformationType?: 'mega' | 'dynamax' | 'zmove' | 'terastal' | 'fusion';
+	// Fishing
+	fishingEncounters?: { species: string, level: number, rarity: number }[]; // Pokemon available when fishing
+	fishingRodRequired?: 'old' | 'good' | 'super'; // Required fishing rod
+	// Surfing
+	surfingEncounters?: { species: string, level: number, rarity: number }[]; // Pokemon available when surfing
+	// Diving
+	divingEncounters?: { species: string, level: number, rarity: number }[]; // Pokemon available when diving
+	divingDepth?: number; // Depth level for diving
+	// Item ball
+	itemBallContents?: { itemId: string, quantity: number }; // Item found in pokeball
+	// Hidden item
+	hiddenItemLocation?: string; // Description of hidden item location
+	hiddenItemRequirement?: string; // Item finder or specific ability needed
+	// Roaming
+	roamingPokemon?: { species: string, level: number, shiny?: boolean }; // Roaming Pokemon
+	roamingLocations?: string[]; // Locations where Pokemon can appear
+	// Multi battle
+	partnerTrainerId?: string; // Partner trainer for tag battle
+	opponentTrainerIds?: string[]; // Multiple opponents
+	// Photo op
+	photoSubject?: string; // What is being photographed
+	photoReward?: { itemId: string, quantity: number }; // Reward for photo
+	// Festival
+	festivalName?: string; // Name of festival
+	festivalActivities?: string[]; // Activities available
+	festivalRewards?: { itemId: string, quantity: number }[]; // Festival rewards
+	// Secret area
+	secretAreaId?: string; // ID of secret area to unlock
+	secretAreaRequirement?: string; // Requirement to unlock (item, Pokemon, etc.)
+	// Warp
+	warpDestination?: string; // Location ID to warp to
+	warpType?: 'teleport' | 'fly' | 'dig' | 'escape rope'; // Type of warp
+	// Gym challenge
+	gymLeaderId?: string; // Gym leader to challenge
+	gymTrainers?: string[]; // Trainers to defeat before leader
+	// Elite Four challenge
+	eliteFourOrder?: string[]; // Order of Elite Four members
+	championId?: string; // Champion trainer ID
+	// Hall of Fame
+	hallOfFameEntry?: boolean; // Whether to create Hall of Fame entry
+	// Safari zone
+	safariSteps?: number; // Number of steps allowed
+	safariBallCount?: number; // Number of Safari Balls given
+	safariEncounters?: { species: string, level: number, rarity: number }[]; // Pokemon in Safari Zone
+	// Bug catching contest
+	contestDuration?: number; // Contest duration in minutes
+	contestPrizes?: { itemId: string, rank: number }[]; // Prizes by rank
+	// Battle Frontier
+	frontierFacility?: string; // Facility name (Tower, Factory, etc.)
+	frontierRules?: string[]; // Special rules for facility
+	frontierRewards?: { itemId: string, winStreak: number }[]; // Rewards by win streak
 }
