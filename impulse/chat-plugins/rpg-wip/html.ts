@@ -821,7 +821,7 @@ export function generateWelcomeHTML(): string {
 		`<li>✨ Evolution, moves, and abilities system</li>` +
 		`</ul>` +
 		`<p>Ready to begin your adventure?</p>` +
-		`<p><button name="send" value="/rpg continue" class="button">Continue</button></p>` +
+		`<p><button name="send" value="/rpg storymode" class="button">Continue</button></p>` +
 		`</div>`;
 }
 
