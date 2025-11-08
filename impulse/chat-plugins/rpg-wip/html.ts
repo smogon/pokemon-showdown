@@ -446,7 +446,18 @@ export function generateSingleBattleHTML(
 	let actionHTML = '';
 	let moveButtonsHTML = '';
 
-	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
+	// Check if battle has ended
+	if (battle.battleEnded) {
+		// Show only Continue button when battle ends
+		const continueCommand = battle.battleResult === 'victory' ?
+			(battle.battleType === 'wild' ? '/rpg explore' : '/rpg explore') :
+			'/rpg explore';
+		actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
+			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+			'</p>';
+	} else {
+		// Normal battle actions
+		const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
 		// --- MODIFIED: Button style and content for new size ---
@@ -530,10 +541,11 @@ export function generateSingleBattleHTML(
 		'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
 		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
-		moveButtonsHTML +
-		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
-	// --- END MODIFICATION ---
+		actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
+			moveButtonsHTML +
+			'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+		// --- END MODIFICATION ---
+	}
 
 	// --- FIELD EFFECTS TAGS REMOVED ---
 
@@ -647,7 +659,16 @@ export function generateDoubleBattleHTML(
 	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>';
 
 	// --- Action Area ---
-	if (targetSelection) {
+	// Check if battle has ended
+	if (battle.battleEnded) {
+		// Show only Continue button when battle ends
+		const continueCommand = battle.battleResult === 'victory' ?
+			(battle.battleType === 'wild_double' ? '/rpg explore' : '/rpg explore') :
+			'/rpg explore';
+		html += '<p style="margin-top: 15px; text-align: center;">' +
+			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+			'</p>';
+	} else if (targetSelection) {
 		// --- STATE 2: Target Selection ---
 		const move = getMove(targetSelection.moveId);
 		const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';

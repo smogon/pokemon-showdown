@@ -17,10 +17,7 @@ import { LOCATIONS } from './locations';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
-	generateDefeatHTML,
 	generateMoveLearnHTML,
-	generateTrainerVictoryHTML,
-	generateVictoryHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
 } from './html';
@@ -208,7 +205,8 @@ export function checkForWinLoss(
 
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		saveBattleStatus(battle);
-		activeBattles.delete(user.id);
+		battle.battleEnded = true;
+		battle.battleResult = 'defeat';
 
 		let moneyLost = 100;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
@@ -232,7 +230,16 @@ export function checkForWinLoss(
 		const respawnLocationData = LOCATIONS[respawnLocation] || LOCATIONS['startertown'];
 		player.location = respawnLocationData.name;
 
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDefeatHTML(moneyLost, battle.opponentName)}`);
+		// Add defeat messages to battle log
+		messageLog.push('--- Battle Ended ---');
+		messageLog.push(`<h2 style="color: #d9534f;">Defeat!</h2>`);
+		const opponentMessage = battle.opponentName ? `You lost to ${battle.opponentName}!` : "You have no more Pokemon that can fight!";
+		messageLog.push(`<p>${opponentMessage}</p>`);
+		messageLog.push(`<p>You blacked out and rushed to the nearest Pokemon Center...</p>`);
+		messageLog.push(`<p>You lost ₽${moneyLost}!</p>`);
+
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		activeBattles.delete(user.id);
 		return true;
 	}
 
@@ -244,7 +251,8 @@ export function checkForWinLoss(
 
 	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
 		saveBattleStatus(battle);
-		activeBattles.delete(user.id);
+		battle.battleEnded = true;
+		battle.battleResult = 'victory';
 
 		let moneyGained = 0;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
@@ -290,21 +298,35 @@ export function checkForWinLoss(
 				}
 			}
 
+			// Add victory messages to battle log
+			messageLog.push('--- Battle Ended ---');
+			messageLog.push(`<h2 style="color: #5cb85c;">Victory!</h2>`);
+			messageLog.push(`<p>You defeated <strong>${battle.opponentName}</strong>!</p>`);
+			messageLog.push(`<p>You received ₽${moneyGained} for winning!</p>`);
+
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTrainerVictoryHTML(battle.opponentName, messageLog, moneyGained)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
 			player.money += moneyGained;
+
+			// Add victory messages to battle log
+			messageLog.push('--- Battle Ended ---');
+			messageLog.push(`<h2 style="color: #5cb85c;">Victory!</h2>`);
+			const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
+			messageLog.push(`<p>You defeated the wild <strong>${defeatedNames}</strong>!</p>`);
+			messageLog.push(`<p>You gained ₽${moneyGained}!</p>`);
+
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateVictoryHTML(defeatedNames, messageLog, moneyGained, battle.zoneId)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 			}
 		}
+		activeBattles.delete(user.id);
 		return true;
 	}
 

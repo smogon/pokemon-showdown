@@ -174,6 +174,8 @@ export interface BattleState {
 	ionDelugeTurns: number;
 
 	forceEnd?: boolean;
+	battleEnded?: boolean;
+	battleResult?: 'victory' | 'defeat';
 
 	playerTerastallizeUsed: boolean;
 	opponentTerastallizeUsed: boolean;
