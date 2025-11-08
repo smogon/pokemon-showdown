@@ -10403,6 +10403,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field"],
 		otherFormes: ["Zorua-Hisui"],
 		formeOrder: ["Zorua", "Zorua-Hisui"],
+		cosmeticFormes: ["Zorua-Halloween"],
 	},
 	zoruahisui: {
 		num: 570,
