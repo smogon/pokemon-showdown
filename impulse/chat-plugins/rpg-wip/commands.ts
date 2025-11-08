@@ -2648,7 +2648,7 @@ export const commands: ChatCommands = {
 			//   if (result.success && result.rewards) { ... }
 			//   break;
 			// }
-			// See npc-actions.ts for all 18 handler functions
+			// See npc-actions.ts for all 34+ handler functions
 			default:
 				resultHTML += `<p style="color: orange;">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
 				resultHTML += `<p><em>The handler exists in npc-actions.ts but needs to be wired up here.</em></p>`;
