@@ -190,7 +190,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 			onceOnly: true,
 		},
 	},
-	
+
 	// Special NPCs - Move services
 	'movedeleter': {
 		id: 'movedeleter',
@@ -230,7 +230,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 			cost: 15000,
 		},
 	},
-	
+
 	// Trade NPCs
 	'tradermachop': {
 		id: 'tradermachop',

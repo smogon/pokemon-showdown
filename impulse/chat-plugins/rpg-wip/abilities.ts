@@ -1454,7 +1454,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const possibleStatuses: string[] = [];
 		// Get actual types (accounting for terastallization)
 		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
-		
+
 		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn')) {
 			possibleStatuses.push('psn');
 		}

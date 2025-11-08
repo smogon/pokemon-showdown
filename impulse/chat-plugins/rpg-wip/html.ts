@@ -17,6 +17,17 @@ import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, 
 // --- UTILITY FUNCTIONS ---
 
 /**
+ * Generate bottom navigation buttons for story UI
+ * These appear below all story UI screens separated by an HR
+ */
+export function generateBottomNavigation(): string {
+	return `<hr /><p><button name="send" value="/rpg profile" class="button">👤 Profile</button> ` +
+		`<button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button> ` +
+		`<button name="send" value="/rpg party" class="button">⚡ Party</button> ` +
+		`<button name="send" value="/rpg items" class="button">🎒 Items</button></p>`;
+}
+
+/**
  * Calculate the experience bar percentage for display.
  * @param expProgress - Current exp progress within the level (experience - expForLastLevel)
  * @param expNeededForLevel - Total exp needed for the level (expForNextLevel - expForLastLevel)
@@ -38,7 +49,8 @@ export function generateMenuHTML(player: PlayerData): string {
 }
 
 export function generateProfileHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p>` +
+		generateBottomNavigation() + `</div>`;
 }
 
 export function generateBuyHTML(player: PlayerData, item: Omit<InventoryItem, 'quantity'>, quantity: number, totalCost: number): string {
@@ -101,7 +113,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 		`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
 		`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
 		`</p>` +
-		`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+		generateBottomNavigation() +
 		`</div>`;
 	return exploreHTML;
 }
@@ -126,7 +138,8 @@ export function generateResetHTML(): string {
 }
 
 export function generateUnstuckHTML(): string {
-	return `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
+		generateBottomNavigation() + `</div>`;
 }
 
 export function generatePokemonInfoHTML(
@@ -420,7 +433,8 @@ export function generateSingleBattleHTML(
 	const opponentSlot = battle.opponentSlots[0];
 
 	if (!playerSlot || !opponentSlot) {
-		return '<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p><p><button name="send" value="/rpg menu" class="button">Flee</button></p></div>';
+		return '<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p>' +
+			generateBottomNavigation() + '</div>';
 	}
 
 	const playerPokemon = playerSlot.pokemon;
@@ -822,10 +836,11 @@ export function generateRPGModeSelectionHTML(): string {
 
 export function generateStoryModeStartHTML(): string {
 	return `<div class="infobox">` +
-		`<h2>Story Mode</h2>` +
-		`<p>Welcome to your Pokémon adventure!</p>` +
-		`<p>Professor Oak is waiting to give you your first Pokémon. Choose your starter:</p>` +
-		`<h3>Choose Your Starter Type:</h3>` +
+		`<h2>Professor Oak's Laboratory</h2>` +
+		`<p><strong>Professor Oak:</strong> "Ah, welcome! I've been expecting you. I'm Professor Oak, and I've dedicated my life to the study of Pokémon."</p>` +
+		`<p>"The world of Pokémon is a vast and wonderful place, filled with creatures of all shapes and sizes. Some people train them, others befriend them, but all share a special bond."</p>` +
+		`<p>"Before you begin your journey, you'll need a Pokémon partner. I have three Pokémon here that are perfect for beginning trainers."</p>` +
+		`<p><strong>Choose your starter type:</strong></p>` +
 		`<p>` +
 		`<button name="send" value="/rpg choosestarter fire" class="button">🔥 Fire Type</button>` +
 		`<button name="send" value="/rpg choosestarter water" class="button">💧 Water Type</button>` +
@@ -836,11 +851,29 @@ export function generateStoryModeStartHTML(): string {
 
 export function generateStarterSelectionHTML(type: string, starters: string[]): string {
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let html = `<div class="infobox"><h2>${typeTitle} Type Starters</h2><p>Choose your starter Pokémon:</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+	let typeDescription = '';
+	if (type === 'fire') {
+		typeDescription = '"Fire-type Pokémon are passionate and strong! They\'re excellent for trainers who like to take the offensive approach."';
+	} else if (type === 'water') {
+		typeDescription = '"Water-type Pokémon are versatile and adaptable! They can handle many different situations with grace."';
+	} else if (type === 'grass') {
+		typeDescription = '"Grass-type Pokémon are resilient and strategic! They excel at wearing down opponents over time."';
+	}
+	
+	let html = `<div class="infobox">` +
+		`<h2>Professor Oak's Laboratory</h2>` +
+		`<p><strong>Professor Oak:</strong> ${typeDescription}</p>` +
+		`<p>"Now, which ${typeTitle}-type Pokémon would you like to choose as your partner?"</p>` +
+		`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+	
 	for (const starterId of starters) {
 		const species = Dex.species.get(starterId);
 		if (species.exists) {
-			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"><strong>${species.name}</strong><br><small>Type: ${species.types.join('/')}</small><br><button name="send" value="/rpg selectstarter ${starterId}" class="button" style="margin-top: 5px;">Choose</button></div>`;
+			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
+				`<strong>${species.name}</strong><br>` +
+				`<small>Type: ${species.types.join('/')}</small><br>` +
+				`<button name="send" value="/rpg selectstarter ${starterId}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
+				`</div>`;
 		}
 	}
 	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
@@ -967,7 +1000,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
+	html += generateBottomNavigation();
 	html += `</div>`;
 	return html;
 }
@@ -1040,7 +1073,9 @@ export function generatePCHTML(player: PlayerData): string {
 		}
 		html += `</div>`;
 	}
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button></p>`;
+	html += generateBottomNavigation();
+	html += `</div>`;
 	return html;
 }
 
@@ -1157,22 +1192,24 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 export function generateVictoryHTML(defeatedOpponentNames: string, expMessages: string[], moneyGained: number, zoneId: string): string {
 	return `<div class="infobox"><h2>Victory!</h2><p>You defeated the wild <strong>${defeatedOpponentNames}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You gained ₽${moneyGained}!</p>` +
 		`<p>` +
-		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
+		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
 		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-		`<button name="send" value="/rpg menu" class="button">Back to Menu</button>` +
 		`</p>` +
+		generateBottomNavigation() +
 		`</div>`;
 }
 
 // --- NEW FUNCTION ---
 export function generateTrainerVictoryHTML(opponentName: string, expMessages: string[], moneyGained: number): string {
-	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+	return `<div class="infobox"><h2>Victory!</h2><p>You defeated <strong>${opponentName}</strong>!</p><div style="padding: 10px; border-radius: 5px;">${expMessages.join('<br>')}</div><p>You received ₽${moneyGained} for winning!</p><p><button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
+		generateBottomNavigation() + `</div>`;
 }
 
 // --- MODIFIED FUNCTION ---
 export function generateDefeatHTML(moneyLost: number, opponentName?: string): string {
 	const opponentMessage = opponentName ? `You lost to ${opponentName}!` : "You have no more Pokemon that can fight!";
-	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+	return `<div class="infobox"><h2>Defeat!</h2><p>${opponentMessage}</p><p>You blacked out and rushed to the nearest Pokemon Center...</p><p>You lost ₽${moneyLost}!</p>` +
+		generateBottomNavigation() + `</div>`;
 }
 
 export function generateFaintSwitchHTML(battle: BattleState, message: string): string {
@@ -1221,7 +1258,7 @@ export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: s
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
 		delete player.pendingMoveLearnQueue;
-		return `<h2>Error: Invalid Pokemon or move data.</h2><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>`;
+		return `<h2>Error: Invalid Pokemon or move data.</h2>` + generateBottomNavigation();
 	}
 	let html = `<div class="infobox">`;
 

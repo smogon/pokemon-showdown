@@ -693,3 +693,16 @@ export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], 
 		battleType: 'single',
 	},
 };
+
+/**
+ * Get the starting location for new players.
+ * Returns the first location from LOCATIONS object.
+ */
+export function getStartingLocation(): { id: string, name: string } {
+	const firstLocationId = Object.keys(LOCATIONS)[0];
+	const firstLocation = LOCATIONS[firstLocationId];
+	return {
+		id: firstLocationId,
+		name: firstLocation.name,
+	};
+}

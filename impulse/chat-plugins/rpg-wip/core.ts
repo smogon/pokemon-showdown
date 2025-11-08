@@ -13,6 +13,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
 import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
 import { addItemToInventory } from './items';
+import { getStartingLocation } from './locations';
 
 // --- GLOBAL STATE ---
 export const playerData = new Map<string, PlayerData>();
@@ -26,6 +27,7 @@ export function generateUniqueId(): string {
 
 export function getPlayerData(userid: string): PlayerData {
 	if (!playerData.has(userid)) {
+		const startingLocation = getStartingLocation();
 		const newPlayer: PlayerData = {
 			id: userid,
 			name: userid,
@@ -33,15 +35,15 @@ export function getPlayerData(userid: string): PlayerData {
 			experience: 0,
 			badges: 0,
 			party: [],
-			location: 'Starter Town',
+			location: startingLocation.name,
 			money: 5000000,
 			inventory: new Map(),
 			pc: new Map(),
 			storyFlags: new Set(),
 			defeatedTrainers: new Set(),
 			obtainedBadges: [],
-			visitedLocations: new Set(['Starter Town']),
-			lastPokemonCenter: 'startertown', // Initialize to starter town
+			visitedLocations: new Set([startingLocation.name]),
+			lastPokemonCenter: startingLocation.id,
 			completedNPCActions: new Set(),
 		};
 		addItemToInventory(newPlayer, 'pokeball', 5);

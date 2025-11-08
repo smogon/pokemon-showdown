@@ -21,7 +21,7 @@ import {
 	generateTrainerVictoryHTML,
 	generateVictoryHTML,
 	generatePivotSwitchHTML,
-	generateFaintSwitchHTML
+	generateFaintSwitchHTML,
 } from './html';
 import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
@@ -34,7 +34,7 @@ import {
 	checkStatDropAbilities,
 	activateUnburden,
 	applySynchronize,
-	handleHPDropEffects
+	handleHPDropEffects,
 } from './battle-shared';
 // --- END NEW/UPDATED IMPORTS ---
 

@@ -699,7 +699,6 @@ export class CommandContext extends MessageContext {
 
 		// Exp Rewards
 		if (this.user.registered) ExpSystem.addExp(this.user.id, 1);
-		
 
 		this.update();
 

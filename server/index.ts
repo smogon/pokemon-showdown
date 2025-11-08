@@ -164,7 +164,7 @@ async function initializeDatabase() {
 
 export const readyPromise = cleanupStale().then(() => {
 	return initializeDatabase();
-}).then((dbReady) => {
+}).then(dbReady => {
 	if (dbReady) {
 		console.log('ImpulseDB: Database ready');
 	}
@@ -172,14 +172,14 @@ export const readyPromise = cleanupStale().then(() => {
 }).then(() => {
 	if (Config.usesqlite) {
 		require('./modlog').start(Config.subprocessescache);
-}
+	}
 
-/*export const readyPromise = cleanupStale().then(() => {
+	/* export const readyPromise = cleanupStale().then(() => {
 	setupGlobals();
 }).then(() => {
 	if (Config.usesqlite) {
 		require('./modlog').start(Config.subprocessescache);
-	}*/
+	} */
 
 	Rooms.global.start(Config.subprocessescache);
 	Verifier.start(Config.subprocessescache);
