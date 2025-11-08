@@ -225,11 +225,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart() {
 			this.effectState.counter = 127;
 		},
+		// if Protect is used and the user gets paralyzed, the stall counter doesn't change
 		onBeforeMovePriority: 300,
-		onBeforeMove(pokemon, target, move) {
-			// if Protect is used and the user gets paralyzed, the stall counter doesn't change
-			if (!move.stallingMove) delete pokemon.volatiles['stall'];
-		},
+		onMoveAborted() {},
 		onStallMove(pokemon) {
 			const counter = Math.floor(this.effectState.counter) || 127;
 			this.debug(`Success chance: ${Math.round(counter * 1000 / 255) / 10}% (${counter}/255)`);
@@ -240,7 +238,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onRestart() {
 			this.effectState.counter /= 2;
 		},
-		onAfterMove() {},
 	},
 	residualdmg: {
 		name: 'residualdmg',

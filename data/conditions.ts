@@ -443,6 +443,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart() {
 			this.effectState.counter = 3;
 		},
+		onBeforeMove(pokemon, target, move) {
+			if (!move.stallingMove && !move.isExternal) {
+				delete pokemon.volatiles['stall'];
+			}
+		},
+		onMoveAborted(pokemon, target, move) {
+			if (!move.isExternal) {
+				delete pokemon.volatiles['stall'];
+			}
+		},
 		onStallMove(pokemon) {
 			// this.effectState.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
@@ -455,11 +465,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onRestart() {
 			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
 				this.effectState.counter *= 3;
-			}
-		},
-		onAfterMove(pokemon, target, move) {
-			if ((!move.stallingMove || !pokemon.moveThisTurnResult) && !move.isExternal) {
-				delete pokemon.volatiles['stall'];
 			}
 		},
 	},
