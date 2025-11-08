@@ -1086,34 +1086,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// NPCs in current location
-			const availableNPCs: [string, NPCData][] = [];
-			for (const [id, npc] of Object.entries(NPC_DATABASE)) {
-				// Check if NPC is in this location (directly or in a building)
-				const npcLocationId = toID(npc.location);
-				if (npcLocationId === currentLocationId) {
-					// NPC is in the main location
-					if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) {
-						availableNPCs.push([id, npc]);
-					}
-				} else if (currentLocation?.buildings) {
-					// Check if NPC is in a building in this location
-					const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-					if (building?.npcs?.includes(id)) {
-						if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) {
-							availableNPCs.push([id, npc]);
-						}
-					}
-				}
-			}
-
-			if (availableNPCs.length > 0) {
-				exploreButtons += '<p><strong>NPCs:</strong></p>';
-				for (const [id, npc] of availableNPCs) {
-					exploreButtons += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
-				}
-			}
-
 			const exploreHTML = `<div class="infobox">` +
 				`<h2>${currentLocation.name}</h2>` +
 				`<p><em>${currentLocation.description}</em></p>` +
