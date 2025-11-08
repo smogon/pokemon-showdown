@@ -58,6 +58,8 @@ import {
 	generatePokemonInfoHTML,
 	generateBattleHTML,
 	generateWelcomeHTML,
+	generateRPGModeSelectionHTML,
+	generateStoryModeStartHTML,
 	generateStarterSelectionHTML,
 	generatePokemonSummaryHTML,
 	generateEggMoveSelectionHTML,
@@ -153,30 +155,51 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
-		choosetype(target, room, user) {
+		continue(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
-			const type = target.trim().toLowerCase();
-			const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON]; // Get the starters
-			if (!starters) { // Check if the starters exist
-				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
+			const player = getPlayerData(user.id);
+			if (player.party.length > 0) {
+				return this.parse('/rpg menu');
 			}
-			// Pass both the type and the starters list to the HTML function
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRPGModeSelectionHTML()}`);
+		},
+
+		storymode(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot do this while in a battle.");
+			}
+			const player = getPlayerData(user.id);
+			if (player.party.length > 0) {
+				return this.errorReply("You have already started your adventure!");
+			}
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStoryModeStartHTML()}`);
 		},
 
 		choosestarter(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
+			const type = target.trim().toLowerCase();
+			const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON];
+			if (!starters) {
+				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
+			}
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
+		},
+
+		selectstarter(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot do this while in a battle.");
+			}
 			const starterId = toID(target);
 			const player = getPlayerData(user.id);
 			if (player.party.length > 0) {
-				return this.errorReply("You already have a starter Pokemon!");
+				return this.errorReply("You already have a starter Pokémon!");
 			}
 			if (!Object.values(STARTER_POKEMON).flat().includes(starterId)) {
-				return this.errorReply("Invalid starter Pokemon.");
+				return this.errorReply("Invalid starter Pokémon.");
 			}
 			try {
 				const starterPokemon = createPokemon(starterId, 5);
@@ -184,20 +207,16 @@ export const commands: ChatCommands = {
 				player.name = user.name;
 				const species = Dex.species.get(starterId);
 
-				// --- FIX ---
-				// Create a temporary slot object to pass to the updated function.
-				// This provides the default volatile statuses that generatePokemonInfoHTML expects.
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
 				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
-				// --- END FIX ---
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				if (room?.roomid !== 'lobby') {
-					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter pokemon!`).update();
+					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
 				}
 			} catch (error) {
-				this.errorReply(`Error creating starter Pokemon: ${error}`);
+				this.errorReply(`Error creating starter Pokémon: ${error}`);
 			}
 		},
 
