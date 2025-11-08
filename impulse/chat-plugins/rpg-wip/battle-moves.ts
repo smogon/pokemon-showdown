@@ -1458,7 +1458,6 @@ export function handleSpecificStatusMove(
 			defenderSlot.willFlinch = true;
 		}
 		return false; // Return false so damage is still calculated
-
 	}
 
 	return false;

@@ -30,7 +30,7 @@ describe('RPG Items Module', function () {
 			player.inventory.clear();
 		});
 
-		it('should add item to empty inventory', function () {
+		it('should add item to empty inventory', () => {
 			items.addItemToInventory(player, 'potion', 5);
 
 			const item = player.inventory.get('potion');
@@ -38,7 +38,7 @@ describe('RPG Items Module', function () {
 			assert.equal(item.quantity, 5);
 		});
 
-		it('should stack items of same type', function () {
+		it('should stack items of same type', () => {
 			items.addItemToInventory(player, 'potion', 5);
 			items.addItemToInventory(player, 'potion', 3);
 
@@ -46,7 +46,7 @@ describe('RPG Items Module', function () {
 			assert.equal(item.quantity, 8);
 		});
 
-		it('should add multiple different items', function () {
+		it('should add multiple different items', () => {
 			items.addItemToInventory(player, 'potion', 5);
 			items.addItemToInventory(player, 'superpotion', 3);
 			items.addItemToInventory(player, 'pokeball', 10);
@@ -57,7 +57,7 @@ describe('RPG Items Module', function () {
 			assert.equal(player.inventory.get('pokeball').quantity, 10);
 		});
 
-		it('should remove item from inventory', function () {
+		it('should remove item from inventory', () => {
 			items.addItemToInventory(player, 'potion', 10);
 
 			const removed = items.removeItemFromInventory(player, 'potion', 5);
@@ -66,7 +66,7 @@ describe('RPG Items Module', function () {
 			assert.equal(player.inventory.get('potion').quantity, 5);
 		});
 
-		it('should remove all items when quantity matches', function () {
+		it('should remove all items when quantity matches', () => {
 			items.addItemToInventory(player, 'potion', 5);
 
 			const removed = items.removeItemFromInventory(player, 'potion', 5);
@@ -76,7 +76,7 @@ describe('RPG Items Module', function () {
 			assert(!item || item.quantity === 0);
 		});
 
-		it('should fail to remove more items than available', function () {
+		it('should fail to remove more items than available', () => {
 			items.addItemToInventory(player, 'potion', 5);
 
 			const removed = items.removeItemFromInventory(player, 'potion', 10);
@@ -85,20 +85,20 @@ describe('RPG Items Module', function () {
 			assert.equal(player.inventory.get('potion').quantity, 5);
 		});
 
-		it('should handle removing non-existent item', function () {
+		it('should handle removing non-existent item', () => {
 			const removed = items.removeItemFromInventory(player, 'potion', 1);
 
 			assert.equal(removed, false);
 		});
 
-		it('should handle adding 0 quantity', function () {
+		it('should handle adding 0 quantity', () => {
 			items.addItemToInventory(player, 'potion', 0);
 
 			const item = player.inventory.get('potion');
 			assert(!item || item.quantity === 0);
 		});
 
-		it('should handle removing 0 quantity', function () {
+		it('should handle removing 0 quantity', () => {
 			items.addItemToInventory(player, 'potion', 5);
 
 			const removed = items.removeItemFromInventory(player, 'potion', 0);
@@ -107,7 +107,7 @@ describe('RPG Items Module', function () {
 			assert.equal(player.inventory.get('potion').quantity, 5);
 		});
 
-		it('should handle large quantities', function () {
+		it('should handle large quantities', () => {
 			items.addItemToInventory(player, 'potion', 999);
 
 			assert.equal(player.inventory.get('potion').quantity, 999);
@@ -120,12 +120,12 @@ describe('RPG Items Module', function () {
 	});
 
 	describe('Item Database', () => {
-		it('should have ITEMS_DATABASE defined', function () {
+		it('should have ITEMS_DATABASE defined', () => {
 			assert(items.ITEMS_DATABASE);
 			assert(typeof items.ITEMS_DATABASE === 'object');
 		});
 
-		it('should have common items defined', function () {
+		it('should have common items defined', () => {
 			const commonItems = ['potion', 'superpotion', 'hyperpotion', 'pokeball', 'greatball', 'ultraball'];
 
 			for (const itemId of commonItems) {
@@ -137,7 +137,7 @@ describe('RPG Items Module', function () {
 			}
 		});
 
-		it('should have items with valid properties', function () {
+		it('should have items with valid properties', () => {
 			const potion = items.ITEMS_DATABASE['potion'];
 			if (potion) {
 				assert(potion.name);
@@ -152,7 +152,7 @@ describe('RPG Items Module', function () {
 			}
 		});
 
-		it('should have items with correct categories', function () {
+		it('should have items with correct categories', () => {
 			const potion = items.ITEMS_DATABASE['potion'];
 			if (potion && potion.category) {
 				const validCategories = ['medicine', 'pokeball', 'tm', 'held', 'key', 'berry'];
@@ -360,7 +360,7 @@ describe('RPG Items Module', function () {
 			player.inventory.clear();
 		});
 
-		it('should handle negative quantity gracefully', function () {
+		it('should handle negative quantity gracefully', () => {
 			items.addItemToInventory(player, 'potion', -5);
 
 			const item = player.inventory.get('potion');
@@ -368,7 +368,7 @@ describe('RPG Items Module', function () {
 			assert(item === undefined || item.quantity <= 0 || item.quantity >= 0);
 		});
 
-		it('should handle very large inventory', function () {
+		it('should handle very large inventory', () => {
 			for (let i = 0; i < 100; i++) {
 				items.addItemToInventory(player, `item${i}`, 1);
 			}
@@ -377,7 +377,7 @@ describe('RPG Items Module', function () {
 			assert(player.inventory.size >= 0);
 		});
 
-		it('should handle item with special characters in ID', function () {
+		it('should handle item with special characters in ID', () => {
 			items.addItemToInventory(player, 'x-attack', 5);
 
 			const item = player.inventory.get('x-attack');
@@ -386,13 +386,13 @@ describe('RPG Items Module', function () {
 			}
 		});
 
-		it('should handle undefined item gracefully', function () {
+		it('should handle undefined item gracefully', () => {
 			const removed = items.removeItemFromInventory(player, undefined, 1);
 
 			assert.equal(removed, false);
 		});
 
-		it('should handle null player gracefully', function () {
+		it('should handle null player gracefully', () => {
 			try {
 				items.addItemToInventory(null, 'potion', 1);
 			} catch (e) {

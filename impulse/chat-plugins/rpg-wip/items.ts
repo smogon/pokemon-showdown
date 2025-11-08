@@ -38,7 +38,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'maxether': { id: 'maxether', name: 'Max Ether', category: 'medicine', description: 'Fully restores PP for one of a Pokémon\'s moves.' },
 	'elixir': { id: 'elixir', name: 'Elixir', category: 'medicine', description: 'Restores 10 PP for all of a Pokémon\'s moves.' },
 	'maxelixir': { id: 'maxelixir', name: 'Max Elixir', category: 'medicine', description: 'Fully restores PP for all of a Pokémon\'s moves.' },
-	
+
 	// EV Vitamins
 	'hpup': { id: 'hpup', name: 'HP Up', category: 'medicine', description: 'A nutritious drink. It raises the base HP EVs of a single Pokémon.' },
 	'protein': { id: 'protein', name: 'Protein', category: 'medicine', description: 'A nutritious drink. It raises the base Attack EVs of a single Pokémon.' },
@@ -55,7 +55,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'expcandyl': { id: 'expcandyl', name: 'Exp. Candy L', category: 'misc', description: 'A candy that is packed with energy. Gives 10,000 Exp. Points to a Pokémon.' },
 	'expcandyxl': { id: 'expcandyxl', name: 'Exp. Candy XL', category: 'misc', description: 'A candy that is packed with energy. Gives 30,000 Exp. Points to a Pokémon.' },
 	'terashard': { id: 'terashard', name: 'Tera Shard', category: 'misc', description: 'A mysterious shard. When used on a Pokémon, it changes its Tera Type to a new, random type.' },
-	
+
 	// Evolution Stones
 	'firestone': { id: 'firestone', name: 'Fire Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is orange.' },
 	'waterstone': { id: 'waterstone', name: 'Water Stone', category: 'misc', description: 'A peculiar stone that makes certain species of Pokémon evolve. It is blue.' },
@@ -661,7 +661,7 @@ export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 	// Recalculate stats immediately
 	const species = Dex.species.get(pokemon.species);
 	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	
+
 	const hpDiff = newStats.maxHp - pokemon.maxHp;
 	// If HP stat was boosted, add the difference to current HP
 	if (hpDiff > 0 && pokemon.hp > 0) {
@@ -673,7 +673,7 @@ export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 	pokemon.spa = newStats.spa;
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
-	
+
 	removeItemFromInventory(player, itemId, 1);
 	return { success: true, message: `You used an <strong>${itemData.name}</strong> on <strong>${pokemon.species}</strong>! Its ${evStat.toUpperCase()} EVs rose!` };
 }

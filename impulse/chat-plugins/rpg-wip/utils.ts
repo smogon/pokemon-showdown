@@ -203,7 +203,7 @@ export function checkEvolution(
 ): string | null {
 	const speciesId = toID(pokemon.species);
 	const evolutionList = MANUAL_EVOLUTIONS[speciesId];
-	
+
 	if (!evolutionList) return null;
 
 	// Check if Pokemon is holding an Everstone (prevents evolution)
@@ -215,14 +215,14 @@ export function checkEvolution(
 		const isLevelEvo = itemUsed === undefined && pokemon.level >= evoData.evoLevel && !evoData.evoItem;
 		const isItemEvo = itemUsed !== undefined && evoData.evoItem === itemUsed;
 		const isLevelItemEvo = itemUsed === evoData.evoItem && pokemon.level >= evoData.evoLevel;
-		
+
 		// Priority check: If an item is used, we only look for item-based evolutions.
 		if (itemUsed) {
 			if (isItemEvo || isLevelItemEvo) {
 				foundEvo = evoData;
 				break;
 			}
-		} 
+		}
 		// Secondary check: Level up evolution (only if no item was explicitly used)
 		else if (isLevelEvo) {
 			foundEvo = evoData;
@@ -262,7 +262,7 @@ export function checkEvolution(
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
 	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
 	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
-	
+
 	context.room.add(`|c|~RPG Bot|What?! ${context.user.name}'s ${oldSpeciesName} is evolving!`).update();
 	return evoMessage;
 }

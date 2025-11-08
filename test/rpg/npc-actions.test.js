@@ -192,7 +192,7 @@ describe('RPG NPC Actions Module', function () {
 			if (result1 && result1.success) {
 				// Complete the battle first to set the cooldown
 				npcActions.completeBattleRequest(player, 'battlenpc');
-				
+
 				// Now check cooldown is enforced
 				const result2 = npcActions.handleBattleRequest(player, action, 'battlenpc');
 				assert(result2);

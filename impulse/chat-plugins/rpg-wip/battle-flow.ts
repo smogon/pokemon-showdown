@@ -22,7 +22,7 @@ import {
 	generateTrainerVictoryHTML,
 	generateVictoryHTML,
 	generatePivotSwitchHTML,
-	generateFaintSwitchHTML
+	generateFaintSwitchHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
 
@@ -373,11 +373,11 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 
 	if (attackerSlot.status === 'slp') {
 		// Check if move is sleep-usable (Sleep Talk, Snore)
-		if (move && move.sleepUsable) {
+		if (move?.sleepUsable) {
 			// Move can be used while asleep
 			return true;
 		}
-		
+
 		attackerSlot.sleepCounter--;
 		if (attackerSlot.sleepCounter > 0) {
 			messageLog.push(`${attacker.species} is fast asleep.`);
@@ -506,7 +506,7 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 				const targetStatus = slot.status;
 
 				if (!isImmune && !targetStatus) {
-					const newStatus = 'psn' as 'psn';
+					const newStatus = 'psn';
 					slot.status = newStatus;
 					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
 				}
@@ -575,7 +575,7 @@ export function executeMove(
 		move.terrain ||
 		move.pseudoWeather ||
 		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport',
-		 'haze', 'perishsong', 'courtchange'].includes(move.id)
+			'haze', 'perishsong', 'courtchange'].includes(move.id)
 	);
 
 	if (isFieldEffectMove) {

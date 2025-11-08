@@ -23,7 +23,7 @@ describe('RPG Core Module', function () {
 	});
 
 	describe('Player Data Management', () => {
-		it('should create new player data with correct defaults', function () {
+		it('should create new player data with correct defaults', () => {
 			const player = core.getPlayerData('testuser001');
 
 			assert.equal(player.id, 'testuser001');
@@ -39,7 +39,7 @@ describe('RPG Core Module', function () {
 			assert(player.completedNPCActions instanceof Set);
 		});
 
-		it('should return existing player data when called again', function () {
+		it('should return existing player data when called again', () => {
 			const player1 = core.getPlayerData('testuser002');
 			player1.money = 10000;
 			player1.badges = 3;
@@ -50,7 +50,7 @@ describe('RPG Core Module', function () {
 			assert.equal(player2.badges, 3);
 		});
 
-		it('should serialize player data correctly', function () {
+		it('should serialize player data correctly', () => {
 			const player = core.getPlayerData('testuser003');
 			player.money = 7500;
 			player.badges = 5;
@@ -70,7 +70,7 @@ describe('RPG Core Module', function () {
 			assert(serialized.completedNPCActions.includes('npc1'));
 		});
 
-		it('should deserialize player data correctly', function () {
+		it('should deserialize player data correctly', () => {
 			const serialized = {
 				id: 'testuser004',
 				name: 'Test User 4',
@@ -100,7 +100,7 @@ describe('RPG Core Module', function () {
 			assert(player.completedNPCActions.has('npc1'));
 		});
 
-		it('should handle edge case: empty storyFlags and completedNPCActions', function () {
+		it('should handle edge case: empty storyFlags and completedNPCActions', () => {
 			const serialized = {
 				id: 'testuser005',
 				storyFlags: [],
@@ -117,7 +117,7 @@ describe('RPG Core Module', function () {
 	});
 
 	describe('Pokemon Creation', () => {
-		it('should create Pokemon with valid species', function () {
+		it('should create Pokemon with valid species', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 
 			assert.equal(pokemon.species, 'Pikachu');
@@ -129,7 +129,7 @@ describe('RPG Core Module', function () {
 			assert(pokemon.moves.length > 0);
 		});
 
-		it('should create Pokemon with level 1', function () {
+		it('should create Pokemon with level 1', () => {
 			const pokemon = core.createPokemon('bulbasaur', 1);
 
 			assert.equal(pokemon.level, 1);
@@ -137,7 +137,7 @@ describe('RPG Core Module', function () {
 			assert(pokemon.atk > 0);
 		});
 
-		it('should create Pokemon with level 100', function () {
+		it('should create Pokemon with level 100', () => {
 			const pokemon = core.createPokemon('charizard', 100);
 
 			assert.equal(pokemon.level, 100);
@@ -145,7 +145,7 @@ describe('RPG Core Module', function () {
 			assert(pokemon.atk > 50);
 		});
 
-		it('should create Pokemon with valid stats', function () {
+		it('should create Pokemon with valid stats', () => {
 			const pokemon = core.createPokemon('mewtwo', 50);
 
 			assert(pokemon.maxHp > 0);
@@ -156,7 +156,7 @@ describe('RPG Core Module', function () {
 			assert(pokemon.spe > 0);
 		});
 
-		it('should create Pokemon with valid IVs (0-31)', function () {
+		it('should create Pokemon with valid IVs (0-31)', () => {
 			const pokemon = core.createPokemon('eevee', 25);
 
 			assert(pokemon.ivs);
@@ -168,7 +168,7 @@ describe('RPG Core Module', function () {
 			assert(pokemon.ivs.spe >= 0 && pokemon.ivs.spe <= 31);
 		});
 
-		it('should create Pokemon with valid EVs (all 0 initially)', function () {
+		it('should create Pokemon with valid EVs (all 0 initially)', () => {
 			const pokemon = core.createPokemon('snorlax', 30);
 
 			assert(pokemon.evs);
@@ -180,7 +180,7 @@ describe('RPG Core Module', function () {
 			assert.equal(pokemon.evs.spe, 0);
 		});
 
-		it('should create shiny Pokemon with shiny flag', function () {
+		it('should create shiny Pokemon with shiny flag', () => {
 			// createPokemon doesn't accept shiny parameter directly
 			// Shiny is determined randomly internally
 			const pokemon = core.createPokemon('pikachu', 10);
@@ -188,13 +188,13 @@ describe('RPG Core Module', function () {
 			assert.equal(typeof pokemon.shiny, 'boolean');
 		});
 
-		it('should create non-shiny Pokemon by default', function () {
+		it('should create non-shiny Pokemon by default', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 
 			assert.equal(pokemon.shiny, false);
 		});
 
-		it('should assign valid nature to Pokemon', function () {
+		it('should assign valid nature to Pokemon', () => {
 			const pokemon = core.createPokemon('ditto', 15);
 
 			const validNatures = [
@@ -208,20 +208,20 @@ describe('RPG Core Module', function () {
 			assert(validNatures.includes(pokemon.nature));
 		});
 
-		it('should assign ability to Pokemon', function () {
+		it('should assign ability to Pokemon', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 
 			assert(pokemon.ability);
 			assert.equal(typeof pokemon.ability, 'string');
 		});
 
-		it('should create Pokemon with valid friendship (70 default)', function () {
+		it('should create Pokemon with valid friendship (70 default)', () => {
 			const pokemon = core.createPokemon('eevee', 10);
 
 			assert.equal(pokemon.friendship, 70);
 		});
 
-		it('should handle invalid species gracefully', function () {
+		it('should handle invalid species gracefully', () => {
 			try {
 				const pokemon = core.createPokemon('invalidspecies', 10);
 				// If no error thrown, check if it falls back to a default
@@ -232,14 +232,14 @@ describe('RPG Core Module', function () {
 			}
 		});
 
-		it('should create Pokemon with experience value', function () {
+		it('should create Pokemon with experience value', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 
 			assert(pokemon.experience >= 0);
 			assert(pokemon.expToNextLevel > pokemon.experience);
 		});
 
-		it('should assign growth rate to Pokemon', function () {
+		it('should assign growth rate to Pokemon', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 
 			// Growth rate might not be set in the interface, check if it exists
@@ -257,7 +257,7 @@ describe('RPG Core Module', function () {
 	});
 
 	describe('PC Storage', () => {
-		it('should store Pokemon in PC', function () {
+		it('should store Pokemon in PC', () => {
 			const player = core.getPlayerData('testuser006');
 			player.pc.clear();
 
@@ -268,7 +268,7 @@ describe('RPG Core Module', function () {
 			assert(player.pc.has(pokemon.id));
 		});
 
-		it('should store multiple Pokemon in PC', function () {
+		it('should store multiple Pokemon in PC', () => {
 			const player = core.getPlayerData('testuser007');
 			player.pc.clear();
 
@@ -280,7 +280,7 @@ describe('RPG Core Module', function () {
 			assert.equal(player.pc.size, 10);
 		});
 
-		it('should retrieve Pokemon from PC by ID', function () {
+		it('should retrieve Pokemon from PC by ID', () => {
 			const player = core.getPlayerData('testuser008');
 			player.pc.clear();
 
@@ -294,7 +294,7 @@ describe('RPG Core Module', function () {
 			assert.equal(retrieved.level, 25);
 		});
 
-		it('should handle PC with maximum capacity (999 Pokemon)', function () {
+		it('should handle PC with maximum capacity (999 Pokemon)', () => {
 			const player = core.getPlayerData('testuser009');
 			player.pc.clear();
 
@@ -370,7 +370,7 @@ describe('RPG Core Module', function () {
 	});
 
 	describe('Edge Cases', () => {
-		it('should handle player with full party (6 Pokemon)', function () {
+		it('should handle player with full party (6 Pokemon)', () => {
 			const player = core.getPlayerData('testuser010');
 			player.party = [];
 
@@ -390,7 +390,7 @@ describe('RPG Core Module', function () {
 			assert(player.pc.has(newPokemon.id));
 		});
 
-		it('should handle Pokemon with 0 HP', function () {
+		it('should handle Pokemon with 0 HP', () => {
 			const pokemon = core.createPokemon('pikachu', 10);
 			pokemon.hp = 0;
 
@@ -398,21 +398,21 @@ describe('RPG Core Module', function () {
 			assert(pokemon.maxHp > 0);
 		});
 
-		it('should handle player with no money', function () {
+		it('should handle player with no money', () => {
 			const player = core.getPlayerData('testuser011');
 			player.money = 0;
 
 			assert.equal(player.money, 0);
 		});
 
-		it('should handle player with maximum money', function () {
+		it('should handle player with maximum money', () => {
 			const player = core.getPlayerData('testuser012');
 			player.money = 999999;
 
 			assert.equal(player.money, 999999);
 		});
 
-		it('should handle player with all 8 badges', function () {
+		it('should handle player with all 8 badges', () => {
 			const player = core.getPlayerData('testuser013');
 			player.badges = 8;
 

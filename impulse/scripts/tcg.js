@@ -29,7 +29,7 @@ let db;
 let collection;
 
 // Set metadata lookup
-let setsLookup = new Map();
+const setsLookup = new Map();
 
 // ==================== DATABASE CONNECTION ====================
 async function connect() {
@@ -64,19 +64,19 @@ async function disconnect() {
  */
 async function loadSetsData(setsFilePath) {
 	console.log(`\n📚 Loading sets metadata from: ${setsFilePath}`);
-	
+
 	try {
 		const content = await fs.readFile(setsFilePath, 'utf8');
 		const sets = JSON.parse(content);
-		
+
 		if (!Array.isArray(sets)) {
 			throw new Error('Sets file must contain an array of set objects');
 		}
-		
+
 		// Build lookup map: setId -> set metadata
 		sets.forEach(set => {
 			if (set.id) {
-                // Normalize set.id to lowercase for lookup
+				// Normalize set.id to lowercase for lookup
 				setsLookup.set(set.id.toLowerCase(), {
 					id: set.id.toLowerCase(),
 					name: set.name,
@@ -85,20 +85,19 @@ async function loadSetsData(setsFilePath) {
 					printedTotal: set.printedTotal,
 					total: set.total,
 					ptcgoCode: set.ptcgoCode,
-					images: set.images
+					images: set.images,
 				});
 			}
 		});
-		
+
 		console.log(`✅ Loaded ${setsLookup.size} sets metadata`);
-		
+
 		// Show sample sets
 		const sampleSets = Array.from(setsLookup.entries()).slice(0, 3);
 		console.log('\n📋 Sample sets loaded:');
 		sampleSets.forEach(([id, set]) => {
 			console.log(`  ${id}: ${set.name} (${set.series}, ${set.releaseDate})`);
 		});
-		
 	} catch (error) {
 		console.error(`❌ Failed to load sets data: ${error.message}`);
 		console.log('⚠️  Continuing without set metadata...');
@@ -157,7 +156,7 @@ function getSubtypePoints(subtypes) {
  */
 function getSetPoints(setPrintedTotal) {
 	if (!setPrintedTotal) return 1;
-	
+
 	if (setPrintedTotal <= 20) return 50;
 	if (setPrintedTotal <= 50) return 30;
 	if (setPrintedTotal <= 75) return 20;
@@ -172,7 +171,7 @@ function getSetPoints(setPrintedTotal) {
  */
 function determineStage(subtypes) {
 	if (!subtypes || !Array.isArray(subtypes)) return undefined;
-	
+
 	if (subtypes.includes('Basic')) return 'basic';
 	if (subtypes.includes('Stage 1')) return 'stage1';
 	if (subtypes.includes('Stage 2')) return 'stage2';
@@ -180,7 +179,7 @@ function determineStage(subtypes) {
 	if (subtypes.includes('BREAK')) return 'break';
 	if (subtypes.includes('Level-Up')) return 'levelup';
 	if (subtypes.includes('Restored')) return 'restored';
-	
+
 	return undefined;
 }
 
@@ -191,45 +190,45 @@ function transformCard(card) {
 	const setId = card.id.split('-')[0].toLowerCase(); // <-- FIX: Normalize setId to lowercase
 	const subtypes = Array.isArray(card.subtypes) ? card.subtypes : [];
 	const stage = determineStage(subtypes);
-	
+
 	const rarity = card.rarity || 'Common';
 	const rarityPoints = getRarityPoints(rarity);
 	const subtypePoints = getSubtypePoints(subtypes);
-	
+
 	// Get set metadata from lookup
 	const setData = setsLookup.get(setId);
 	const setPoints = getSetPoints(setData?.printedTotal);
 	const totalPoints = rarityPoints + subtypePoints + setPoints;
-	
+
 	const transformed = {
 		// ===== Core Identification =====
 		cardId: card.id,
 		name: card.name,
-		setId: setId, // Already lowercase
+		setId, // Already lowercase
 		set: setData?.name || setId,
-		rarity: rarity,
-		rarityPoints: rarityPoints,
+		rarity,
+		rarityPoints,
 		supertype: card.supertype || 'Pokémon',
-		subtypes: subtypes,
-		subtypePoints: subtypePoints,
-		setPoints: setPoints,
-		totalPoints: totalPoints,
-		
+		subtypes,
+		subtypePoints,
+		setPoints,
+		totalPoints,
+
 		// ===== Type Information =====
 		types: Array.isArray(card.types) ? card.types : [],
-		
+
 		// ===== Basic Stats =====
 		hp: card.hp ? parseInt(card.hp) : undefined,
 		level: card.level || undefined,
-		stage: stage,
-		
+		stage,
+
 		// ===== Images =====
 		imageUrl: card.images?.large || card.images?.small || undefined,
-		
+
 		// ===== Evolution Chain =====
 		evolvesFrom: card.evolvesFrom || undefined,
 		evolvesTo: Array.isArray(card.evolvesTo) && card.evolvesTo.length > 0 ? card.evolvesTo : undefined,
-		
+
 		// ===== Gameplay Data =====
 		abilities: Array.isArray(card.abilities) && card.abilities.length > 0 ? card.abilities : undefined,
 		attacks: Array.isArray(card.attacks) && card.attacks.length > 0 ? card.attacks : undefined,
@@ -237,16 +236,16 @@ function transformCard(card) {
 		resistances: Array.isArray(card.resistances) && card.resistances.length > 0 ? card.resistances : undefined,
 		retreatCost: Array.isArray(card.retreatCost) && card.retreatCost.length > 0 ? card.retreatCost : undefined,
 		convertedRetreatCost: card.convertedRetreatCost !== undefined ? card.convertedRetreatCost : undefined,
-		
+
 		// ===== Additional Metadata =====
 		cardText: card.flavorText || undefined,
 		ruleText: card.rules && Array.isArray(card.rules) ? card.rules.join(' ') : undefined,
 		artist: card.artist || undefined,
-		nationalPokedexNumbers: Array.isArray(card.nationalPokedexNumbers) && card.nationalPokedexNumbers.length > 0 
-			? card.nationalPokedexNumbers 
-			: undefined,
+		nationalPokedexNumbers: Array.isArray(card.nationalPokedexNumbers) && card.nationalPokedexNumbers.length > 0 ?
+			card.nationalPokedexNumbers :
+			undefined,
 		ancientTrait: card.ancientTrait || undefined,
-		
+
 		// ===== Set Information (from sets lookup) =====
 		number: card.number || undefined,
 		setSeries: setData?.series || undefined,
@@ -255,23 +254,23 @@ function transformCard(card) {
 		setTotal: setData?.total || undefined,
 		setPtcgoCode: setData?.ptcgoCode || undefined,
 		setImages: setData?.images || undefined,
-		
+
 		// ===== Legalities =====
 		legalities: card.legalities || undefined,
 		regulationMark: card.regulationMark || undefined,
-		
+
 		// ===== Import Tracking =====
 		importedAt: new Date().toISOString(),
-		dataVersion: '4.0'
+		dataVersion: '4.0',
 	};
-	
+
 	// Remove undefined values
 	Object.keys(transformed).forEach(key => {
 		if (transformed[key] === undefined) {
 			delete transformed[key];
 		}
 	});
-	
+
 	return transformed;
 }
 
@@ -283,11 +282,11 @@ function validateCard(card) {
 		console.warn(`⚠️  Missing essential fields: ${card.name || 'Unknown'} (${card.cardId || 'No ID'})`);
 		return false;
 	}
-	
+
 	if (card.supertype === 'Pokémon' && !card.hp) {
 		console.warn(`⚠️  Pokémon missing HP: ${card.name} (${card.cardId})`);
 	}
-	
+
 	return true;
 }
 
@@ -298,13 +297,13 @@ function validateCard(card) {
  */
 async function readCardsFromDirectory(dirPath) {
 	const cards = [];
-	
+
 	try {
 		const files = await fs.readdir(dirPath);
 		const jsonFiles = files.filter(file => file.endsWith('.json'));
-		
+
 		console.log(`📁 Found ${jsonFiles.length} JSON files in ${path.basename(dirPath)}`);
-		
+
 		for (const file of jsonFiles) {
 			const filePath = path.join(dirPath, file);
 			try {
@@ -316,11 +315,10 @@ async function readCardsFromDirectory(dirPath) {
 			}
 		}
 		console.log('');
-		
 	} catch (error) {
 		throw new Error(`Failed to read directory ${dirPath}: ${error.message}`);
 	}
-	
+
 	return cards;
 }
 
@@ -331,7 +329,7 @@ async function readCardsFromFile(filePath) {
 	try {
 		const content = await fs.readFile(filePath, 'utf8');
 		const data = JSON.parse(content);
-		
+
 		if (Array.isArray(data)) {
 			return data;
 		} else if (data.data && Array.isArray(data.data)) {
@@ -352,7 +350,7 @@ async function readCardsFromFile(filePath) {
  */
 async function importCards(cards) {
 	console.log(`\n📊 Processing ${cards.length} cards...`);
-	
+
 	if (cards.length > 0) {
 		console.log('\n📋 Sample card (original format):');
 		console.log(JSON.stringify({
@@ -365,7 +363,7 @@ async function importCards(cards) {
 	}
 
 	const transformedCards = cards.map(transformCard);
-	
+
 	if (transformedCards.length > 0) {
 		console.log('\n📋 Sample card (transformed format):');
 		console.log(JSON.stringify({
@@ -385,29 +383,29 @@ async function importCards(cards) {
 
 	const validCards = transformedCards.filter(validateCard);
 	const invalidCount = transformedCards.length - validCards.length;
-	
+
 	if (invalidCount > 0) {
 		console.log(`\n⚠️  ${invalidCount} cards failed validation and will be skipped`);
 	}
 
 	console.log(`\n💾 Importing ${validCards.length} valid cards in batches of ${BATCH_SIZE}...`);
-	
+
 	let imported = 0;
 	let updated = 0;
 	let errors = 0;
-	
+
 	const stats = {
 		pokemonCount: 0,
 		trainerCount: 0,
 		energyCount: 0,
 		withAbilities: 0,
 		withAttacks: 0,
-		withSetMetadata: 0
+		withSetMetadata: 0,
 	};
-	
+
 	for (let i = 0; i < validCards.length; i += BATCH_SIZE) {
 		const batch = validCards.slice(i, i + BATCH_SIZE);
-		
+
 		batch.forEach(card => {
 			if (card.supertype === 'Pokémon') {
 				stats.pokemonCount++;
@@ -420,30 +418,29 @@ async function importCards(cards) {
 			}
 			if (card.setSeries) stats.withSetMetadata++;
 		});
-		
+
 		try {
 			const operations = batch.map(card => ({
 				updateOne: {
 					filter: { cardId: card.cardId },
 					update: { $set: card },
-					upsert: true
-				}
+					upsert: true,
+				},
 			}));
-			
+
 			const result = await collection.bulkWrite(operations, { ordered: false });
 			imported += result.upsertedCount;
 			updated += result.modifiedCount;
-			
+
 			const progress = Math.min(i + BATCH_SIZE, validCards.length);
 			const percentage = Math.round((progress / validCards.length) * 100);
 			process.stdout.write(`\r⏳ Progress: ${progress}/${validCards.length} (${percentage}%) - Imported: ${imported}, Updated: ${updated}`);
-			
 		} catch (error) {
 			errors += batch.length;
 			console.error(`\n❌ Error in batch ${Math.floor(i / BATCH_SIZE) + 1}:`, error.message);
 		}
 	}
-	
+
 	console.log('\n');
 	console.log('═'.repeat(60));
 	console.log('📊 IMPORT SUMMARY');
@@ -462,7 +459,7 @@ async function importCards(cards) {
 	console.log(`⚡ Energy cards: ${stats.energyCount}`);
 	console.log(`📚 Cards with set metadata: ${stats.withSetMetadata}`);
 	console.log('═'.repeat(60));
-	
+
 	return { imported, updated, errors, stats };
 }
 
@@ -473,7 +470,7 @@ async function importCards(cards) {
  */
 async function createIndexes() {
 	console.log('\n🔧 Creating database indexes...');
-	
+
 	const indexes = [
 		{ key: { cardId: 1 }, options: { unique: true, name: 'cardId_unique' } },
 		{ key: { setId: 1, rarity: 1 }, options: { name: 'setId_rarity' } },
@@ -489,7 +486,7 @@ async function createIndexes() {
 		{ key: { regulationMark: 1 }, options: { name: 'regulationMark', sparse: true } },
 		{ key: { setSeries: 1 }, options: { name: 'setSeries', sparse: true } },
 	];
-	
+
 	try {
 		for (const { key, options } of indexes) {
 			await collection.createIndex(key, options);
@@ -507,35 +504,35 @@ async function createIndexes() {
 async function generateStatistics() {
 	console.log('\n📈 DATABASE STATISTICS');
 	console.log('═'.repeat(60));
-	
+
 	try {
 		const totalCards = await collection.countDocuments();
 		const uniqueSets = await collection.distinct('set');
 		const uniqueRarities = await collection.distinct('rarity');
-		
+
 		console.log(`📊 Total cards: ${totalCards}`);
 		console.log(`📦 Unique sets: ${uniqueSets.length}`);
 		console.log(`💎 Unique rarities: ${uniqueRarities.length}`);
 		console.log('');
-		
+
 		const supertypes = await collection.aggregate([
 			{ $group: { _id: '$supertype', count: { $sum: 1 } } },
-			{ $sort: { count: -1 } }
+			{ $sort: { count: -1 } },
 		]).toArray();
-		
+
 		console.log('🎴 Card Type Distribution:');
 		supertypes.forEach(type => {
 			const percentage = Math.round((type.count / totalCards) * 100);
 			console.log(`  ${type._id}: ${type.count} (${percentage}%)`);
 		});
 		console.log('');
-		
+
 		const highestTotal = await collection.find()
 			.sort({ totalPoints: -1 })
 			.limit(10)
 			.project({ name: 1, rarity: 1, totalPoints: 1, subtypes: 1 })
 			.toArray();
-			
+
 		if (highestTotal.length > 0) {
 			console.log('🏆 Top 10 Cards (by TOTAL points):');
 			highestTotal.forEach((card, idx) => {
@@ -543,9 +540,8 @@ async function generateStatistics() {
 			});
 			console.log('');
 		}
-		
+
 		console.log('═'.repeat(60));
-		
 	} catch (error) {
 		console.error('❌ Error generating statistics:', error.message);
 	}
@@ -555,7 +551,7 @@ async function generateStatistics() {
 
 async function main() {
 	const args = process.argv.slice(2);
-	
+
 	if (args.length < 2) {
 		console.log('╔═══════════════════════════════════════════════════════════╗');
 		console.log('║   Pokemon TCG Card Import Script v4.0                    ║');
@@ -576,22 +572,22 @@ async function main() {
 	const cardsPath = args[0];
 	const setsPath = args[1];
 	const startTime = Date.now();
-	
+
 	console.log('╔═══════════════════════════════════════════════════════════╗');
 	console.log('║   Pokemon TCG Card Import Script v4.0                    ║');
 	console.log('╚═══════════════════════════════════════════════════════════╝');
 	console.log('');
-	
+
 	try {
 		await connect();
-		
+
 		// Load sets metadata first
 		await loadSetsData(setsPath);
-		
+
 		// Load cards
 		const stats = await fs.stat(cardsPath);
 		let cards;
-		
+
 		if (stats.isDirectory()) {
 			console.log(`\n📂 Reading from directory: ${cardsPath}\n`);
 			cards = await readCardsFromDirectory(cardsPath);
@@ -608,15 +604,14 @@ async function main() {
 		}
 
 		console.log(`\n✅ Loaded ${cards.length} cards from source\n`);
-		
+
 		await importCards(cards);
 		await createIndexes();
 		await generateStatistics();
-		
+
 		const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 		console.log(`\n⏱️  Total time: ${duration} seconds`);
 		console.log('✅ Import completed successfully!\n');
-		
 	} catch (error) {
 		if (error.code === 'ENOENT') {
 			console.error(`\n❌ Error: Path not found`);
@@ -632,7 +627,7 @@ async function main() {
 	}
 }
 
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
 	console.error('\n❌ Unhandled rejection:', error);
 	process.exit(1);
 });

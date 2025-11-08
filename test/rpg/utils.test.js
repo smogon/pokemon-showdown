@@ -22,19 +22,19 @@ describe('RPG Utils Module', function () {
 	});
 
 	describe('Experience Calculations', () => {
-		it('should calculate total exp for level 1 correctly', function () {
+		it('should calculate total exp for level 1 correctly', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', 1);
 			// Level 1 might return 1 or 0 depending on implementation
 			assert(exp >= 0 && exp <= 1);
 		});
 
-		it('should calculate total exp for level 100 correctly', function () {
+		it('should calculate total exp for level 100 correctly', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', 100);
 			assert(exp > 0);
 			assert(exp === 1000000);
 		});
 
-		it('should calculate exp for Medium Fast growth rate', function () {
+		it('should calculate exp for Medium Fast growth rate', () => {
 			const exp5 = utils.calculateTotalExpForLevel('Medium Fast', 5);
 			const exp10 = utils.calculateTotalExpForLevel('Medium Fast', 10);
 			const exp50 = utils.calculateTotalExpForLevel('Medium Fast', 50);
@@ -44,21 +44,21 @@ describe('RPG Utils Module', function () {
 			assert(exp50 > exp10);
 		});
 
-		it('should calculate exp for Fast growth rate', function () {
+		it('should calculate exp for Fast growth rate', () => {
 			const exp50Fast = utils.calculateTotalExpForLevel('Fast', 50);
 			const exp50MediumFast = utils.calculateTotalExpForLevel('Medium Fast', 50);
 
 			assert(exp50Fast < exp50MediumFast);
 		});
 
-		it('should calculate exp for Slow growth rate', function () {
+		it('should calculate exp for Slow growth rate', () => {
 			const exp50Slow = utils.calculateTotalExpForLevel('Slow', 50);
 			const exp50MediumFast = utils.calculateTotalExpForLevel('Medium Fast', 50);
 
 			assert(exp50Slow > exp50MediumFast);
 		});
 
-		it('should handle all growth rates', function () {
+		it('should handle all growth rates', () => {
 			const growthRates = ['Erratic', 'Fast', 'Medium Fast', 'Medium Slow', 'Slow', 'Fluctuating'];
 
 			for (const rate of growthRates) {
@@ -67,12 +67,12 @@ describe('RPG Utils Module', function () {
 			}
 		});
 
-		it('should handle edge case: level 0', function () {
+		it('should handle edge case: level 0', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', 0);
 			assert.equal(exp, 0);
 		});
 
-		it('should handle edge case: level > 100', function () {
+		it('should handle edge case: level > 100', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', 150);
 			assert(exp >= utils.calculateTotalExpForLevel('Medium Fast', 100));
 		});
@@ -353,12 +353,12 @@ describe('RPG Utils Module', function () {
 	});
 
 	describe('Edge Cases and Error Handling', () => {
-		it('should handle negative level gracefully', function () {
+		it('should handle negative level gracefully', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', -1);
 			assert(exp >= 0);
 		});
 
-		it('should handle invalid growth rate', function () {
+		it('should handle invalid growth rate', () => {
 			try {
 				const exp = utils.calculateTotalExpForLevel('Invalid', 50);
 				assert(exp >= 0); // Should default or handle gracefully
@@ -367,7 +367,7 @@ describe('RPG Utils Module', function () {
 			}
 		});
 
-		it('should handle very large numbers', function () {
+		it('should handle very large numbers', () => {
 			const exp = utils.calculateTotalExpForLevel('Medium Fast', 999);
 			assert(exp > 0);
 		});

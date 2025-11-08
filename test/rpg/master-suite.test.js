@@ -42,13 +42,13 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Complete Game Flow Integration', () => {
-		it('should handle new player creation through badge collection', function () {
+		it('should handle new player creation through badge collection', () => {
 			// Create new player
 			const player = core.getPlayerData('flowtest001');
 			player.party = [];
 			player.inventory.clear();
 			player.badges = 0;
-			
+
 			assert.equal(player.badges, 0);
 			assert.equal(player.party.length, 0);
 
@@ -80,7 +80,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert(player.inventory.size > 0);
 		});
 
-		it('should handle catching Pokemon and PC storage', function () {
+		it('should handle catching Pokemon and PC storage', () => {
 			// Fill party
 			for (let i = 0; i < 6; i++) {
 				testPlayer.party.push(core.createPokemon('pikachu', 10));
@@ -100,7 +100,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert.equal(pcPokemon.species, 'Eevee');
 		});
 
-		it('should handle NPC interactions and rewards', function () {
+		it('should handle NPC interactions and rewards', () => {
 			// Interact with item-giving NPC
 			items.addItemToInventory(testPlayer, 'potion', 10);
 
@@ -115,7 +115,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert.equal(canInteract, false);
 		});
 
-		it('should handle story progression with flags', function () {
+		it('should handle story progression with flags', () => {
 			// Set initial flag
 			testPlayer.storyFlags.add('met_professor');
 
@@ -171,8 +171,8 @@ describe('RPG System - Master Integration Suite', function () {
 				pokemon1.atk,
 				pokemon2.def,
 				1.5, // STAB
-				2,   // Super effective
-				1    // No crit
+				2, // Super effective
+				1 // No crit
 			);
 
 			assert(damage > 0);
@@ -196,7 +196,7 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Weather System Integration', () => {
-		it('should apply location weather to battles', function () {
+		it('should apply location weather to battles', () => {
 			testPlayer.location = 'desertroutе';
 
 			// Simulate getting location weather
@@ -208,7 +208,7 @@ describe('RPG System - Master Integration Suite', function () {
 			}
 		});
 
-		it('should restore location weather after temporary weather', function () {
+		it('should restore location weather after temporary weather', () => {
 			const locationWeather = 'rain';
 			let currentWeather = locationWeather;
 
@@ -223,7 +223,7 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Economy System Integration', () => {
-		it('should handle buying and selling items', function () {
+		it('should handle buying and selling items', () => {
 			const initialMoney = testPlayer.money;
 
 			// Buy items
@@ -240,7 +240,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert.equal(testPlayer.inventory.get('potion').quantity, 3);
 		});
 
-		it('should prevent buying without enough money', function () {
+		it('should prevent buying without enough money', () => {
 			testPlayer.money = 100;
 
 			const canBuy = testPlayer.money >= 5000;
@@ -274,7 +274,7 @@ describe('RPG System - Master Integration Suite', function () {
 			npcActions.advanceQuestStage(testPlayer, questId);
 
 			// Check progression - advanceQuestStage sets flags with format quest_{id}_stage_{number}
-			const hasStageFlag = Array.from(testPlayer.storyFlags).some(flag => 
+			const hasStageFlag = Array.from(testPlayer.storyFlags).some(flag =>
 				flag.startsWith(`quest_${questId}_stage`)
 			);
 			assert(hasStageFlag);
@@ -343,7 +343,7 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Serialization Integration', () => {
-		it('should serialize and deserialize complete player data', function () {
+		it('should serialize and deserialize complete player data', () => {
 			// Setup player with full data
 			testPlayer.party.push(core.createPokemon('pikachu', 25));
 			testPlayer.party.push(core.createPokemon('charizard', 40));
@@ -380,7 +380,7 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Edge Cases and Error Handling', () => {
-		it('should handle extreme scenarios gracefully', function () {
+		it('should handle extreme scenarios gracefully', () => {
 			// Maximum money
 			testPlayer.money = 999999;
 			assert.equal(testPlayer.money, 999999);
@@ -406,7 +406,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert.equal(testPlayer.storyFlags.size, 100);
 		});
 
-		it('should maintain data integrity through operations', function () {
+		it('should maintain data integrity through operations', () => {
 			const initialId = testPlayer.id;
 			const initialName = testPlayer.name;
 
@@ -422,10 +422,10 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	describe('Performance and Scalability', () => {
-		it('should handle large inventories efficiently', function () {
+		it('should handle large inventories efficiently', () => {
 			// Clear inventory first
 			testPlayer.inventory.clear();
-			
+
 			const startTime = Date.now();
 
 			// Add many instances of the same valid item
@@ -443,7 +443,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert(duration < 1000); // Should complete in less than 1 second
 		});
 
-		it('should handle large PC efficiently', function () {
+		it('should handle large PC efficiently', () => {
 			const startTime = Date.now();
 
 			// Add many Pokemon to PC

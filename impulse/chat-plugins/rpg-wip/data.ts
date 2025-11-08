@@ -9,9 +9,9 @@
 import type { Stats } from './interface';
 
 export const STARTER_POKEMON = {
-fire: ['pikachu', 'harmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
-water: ['eevee', 'squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
-grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
+	fire: ['pikachu', 'harmander', 'cyndaquil', 'torchic', 'chimchar', 'tepig'],
+	water: ['eevee', 'squirtle', 'totodile', 'mudkip', 'piplup', 'oshawott'],
+	grass: ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy'],
 };
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
