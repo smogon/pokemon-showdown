@@ -21,11 +21,11 @@ import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, 
  * These appear below all story UI screens separated by an HR
  */
 export function generateBottomNavigation(): string {
-	return `<hr /><p><button name="send" value="/rpg explore" class="button">🗺️ Explore</button> ` +
+	return `<hr /><center><p><button name="send" value="/rpg explore" class="button">🗺️ Explore</button> ` +
 		`<button name="send" value="/rpg profile" class="button">👤 Profile</button> ` +
 		`<button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button> ` +
 		`<button name="send" value="/rpg party" class="button">⚡ Party</button> ` +
-		`<button name="send" value="/rpg items" class="button">🎒 Items</button></p>`;
+		`<button name="send" value="/rpg items" class="button">🎒 Items</button></p></center>`;
 }
 
 /**
