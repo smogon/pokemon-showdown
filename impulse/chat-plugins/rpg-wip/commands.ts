@@ -83,6 +83,50 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
+/**
+ * Get the initial weather for a battle based on the player's location
+ * Converts location weather format to battle weather format
+ * Returns both the active weather and the location weather type for restoration
+ */
+function getLocationWeatherData(player: PlayerData): {
+	weather: BattleState['weather'],
+	locationWeather: BattleState['locationWeather'],
+} {
+	const locationId = toID(player.location);
+	const location = LOCATIONS[locationId];
+
+	if (!location?.weather) {
+		return { weather: undefined, locationWeather: undefined };
+	}
+
+	// Convert location weather to battle weather format
+	// Exclude 'fog' as per requirements
+	const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
+		'sun': 'sun',
+		'rain': 'rain',
+		'sandstorm': 'sand',
+		'hail': 'hail',
+	};
+
+	const battleWeatherType = weatherMap[location.weather];
+	if (!battleWeatherType) {
+		return { weather: undefined, locationWeather: undefined };
+	}
+
+	// Return weather with very high turn count (9999) for permanent location weather
+	// This effectively makes it permanent since battles rarely last that long
+	// Also return locationWeather for restoration after temporary weather expires
+	return {
+		weather: {
+			type: battleWeatherType,
+			turns: 9999, // Very high number for permanent location-based weather
+		},
+		locationWeather: {
+			type: battleWeatherType,
+		},
+	};
+}
+
 export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
@@ -1342,6 +1386,7 @@ export const commands: ChatCommands = {
 				const opponentParty = [opponentSlots[0].pokemon];
 				if (opponentSlots[1]) opponentParty.push(opponentSlots[1].pokemon);
 
+				const locationWeatherData = getLocationWeatherData(player);
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: finalBattleType,
@@ -1440,6 +1485,7 @@ export const commands: ChatCommands = {
 
 				const opponentParty = [wildPokemon];
 
+				const locationWeatherData3 = getLocationWeatherData(player);
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: 'wild',
@@ -1458,6 +1504,13 @@ export const commands: ChatCommands = {
 					zoneId: 'scripted',
 					playerHazards: [],
 					opponentHazards: [],
+					weather: locationWeatherData3.weather,
+					locationWeather: locationWeatherData3.locationWeather,
+					terrain: undefined,
+					playerShouldSwitch: undefined,
+					pendingPivot: undefined,
+					aipPendingPivot: undefined,
+					forceEnd: false,
 					trickRoomTurns: 0,
 					magicRoomTurns: 0,
 					wonderRoomTurns: 0,
@@ -1553,6 +1606,7 @@ export const commands: ChatCommands = {
 				finalBattleType = 'trainer';
 			}
 
+			const locationWeatherData2 = getLocationWeatherData(player);
 			activeBattles.set(user.id, {
 				// --- Battle Type Fields ---
 				battleType: finalBattleType,
@@ -1572,7 +1626,8 @@ export const commands: ChatCommands = {
 				zoneId: 'trainer_battle', // Or any identifier
 				playerHazards: [],
 				opponentHazards: [],
-				weather: undefined,
+				weather: locationWeatherData2.weather,
+				locationWeather: locationWeatherData2.locationWeather,
 				trickRoomTurns: 0,
 				magicRoomTurns: 0,
 				wonderRoomTurns: 0,

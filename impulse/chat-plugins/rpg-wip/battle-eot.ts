@@ -376,7 +376,23 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			'hail': 'The hail stopped.',
 		};
 		messageLog.push(weatherEndMessages[battle.weather!.type]);
-		battle.weather = undefined;
+
+		// Restore location weather if it exists
+		if (battle.locationWeather) {
+			battle.weather = {
+				type: battle.locationWeather.type,
+				turns: 9999, // Restore with high turn count for permanent location weather
+			};
+			const weatherRestoreMessages = {
+				'sun': 'The harsh sunlight returned!',
+				'rain': 'The rain resumed!',
+				'sand': 'The sandstorm picked up again!',
+				'hail': 'It started hailing again!',
+			};
+			messageLog.push(weatherRestoreMessages[battle.locationWeather.type]);
+		} else {
+			battle.weather = undefined;
+		}
 	}
 }
 

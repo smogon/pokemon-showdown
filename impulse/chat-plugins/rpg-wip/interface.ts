@@ -144,6 +144,9 @@ export interface BattleState {
 		type: 'sun' | 'rain' | 'sand' | 'hail',
 		turns: number,
 	};
+	locationWeather?: {
+		type: 'sun' | 'rain' | 'sand' | 'hail',
+	}; // Original location weather for restoration after temporary weather expires
 	trickRoomTurns: number;
 	magicRoomTurns: number;
 	wonderRoomTurns: number;
