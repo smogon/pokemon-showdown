@@ -398,16 +398,42 @@ case 'tournament':
 
 ---
 
+### 4. **Location Weather System** (NEW)
+Comprehensive weather integration with location-based battles.
+
+**Features:**
+- Automatic weather application based on player location
+- Weather restoration after temporary weather expires
+- Support for sun, rain, sandstorm, and hail (fog excluded)
+- Weather override by moves and abilities
+- Permanent location weather (9999 turns)
+- Temporary move/ability weather (5-8 turns)
+
+**Files Modified:**
+- `interface.ts` - Added `locationWeather` field to BattleState
+- `commands.ts` - Added `getLocationWeatherData()` helper function
+- `battle-eot.ts` - Added weather restoration logic
+- `WEATHER_SYSTEM_DOCUMENTATION.md` - Comprehensive documentation
+
+**Integration Points:**
+- Wild Pokemon battles
+- Trainer battles  
+- Scripted battles
+- Weather moves (Rain Dance, Sunny Day, Sandstorm, Hail)
+- Weather abilities (Drought, Drizzle, Sand Stream, Snow Warning)
+
 ## Conclusion
 
 ✅ **240+ new types** successfully added and implemented
 ✅ **92+ handler functions** created with full logic (34 NPC + 58 Event)
 ✅ **42 new trainer classes** comprehensively covering Pokemon games
+✅ **Location weather system** fully integrated with restoration
 ✅ **Single-player focus** maintained throughout
 ✅ **Backwards compatible** with existing code
 ✅ **Well documented** with examples and guides
 ✅ **Type-safe** with full TypeScript support
 ✅ **Production ready** for integration
 ✅ **Linted and built** successfully
+✅ **Test suite updated** with weather system tests
 
-The RPG system now has a comprehensive framework for creating rich, varied gameplay experiences with minimal additional code. All handlers are production-ready and can be integrated into the command system with straightforward adaptations. The system now covers virtually all NPC types, actions, and scripted events found in official Pokemon games.
+The RPG system now has a comprehensive framework for creating rich, varied gameplay experiences with minimal additional code. All handlers are production-ready and can be integrated into the command system with straightforward adaptations. The system now covers virtually all NPC types, actions, and scripted events found in official Pokemon games, plus a fully functional location-based weather system that enhances strategic depth.

@@ -382,13 +382,62 @@ case 'fishing':
 
 ---
 
+## Location Weather System
+
+### Overview
+All battles now automatically start with location-based weather. When temporary weather from moves or abilities expires, the original location weather is restored.
+
+### Weather Types Supported
+- **Sun** (`'sun'`) - Harsh sunlight
+- **Rain** (`'rain'`) - Heavy rain
+- **Sandstorm** (`'sandstorm'` → `'sand'`) - Sandstorm
+- **Hail** (`'hail'`) - Hail
+- **Fog** - Excluded per requirements
+
+### Implementation Details
+**Helper Function**: `getLocationWeatherData(player: PlayerData)`
+- Returns both initial weather and location weather type
+- Maps location weather format to battle format
+- Handles all edge cases (no location, no weather, fog, etc.)
+
+**Weather Duration**:
+- Location weather: 9999 turns (effectively permanent)
+- Move weather: 5 turns (8 with weather rocks)
+- Ability weather: 5 turns
+
+**Weather Restoration**:
+When temporary weather expires (turns <= 0):
+- If `locationWeather` exists: Restore to location weather with 9999 turns
+- If no `locationWeather`: Clear weather (set to undefined)
+
+### Integration Points
+1. **Wild Pokemon Battles** (`commands.ts` - `wildpokemon`)
+2. **Trainer Battles** (`commands.ts` - `challenge`)
+3. **Scripted Battles** (`commands.ts` - `scriptedbattle`)
+4. **Weather Expiration** (`battle-eot.ts` - `handleEndOfTurnWeather`)
+
+### Files Modified
+- `interface.ts`: Added `locationWeather` field to BattleState
+- `commands.ts`: Added `getLocationWeatherData()` helper, updated all battle initializations
+- `battle-eot.ts`: Added weather restoration logic
+- `WEATHER_SYSTEM_DOCUMENTATION.md`: Complete documentation
+
+### Testing
+- All edge cases verified
+- Weather override working correctly
+- Weather restoration functional
+- Test suite updated with weather tests
+
 ## File Statistics
 
-- **interface.ts**: +111 lines, +58 new types
+- **interface.ts**: +115 lines, +59 new types
 - **npc-actions.ts**: +426 lines, +16 handlers
 - **scripted-events.ts**: +236 lines, +16 handlers
-- **commands.ts**: Minor update to handler count comment
-- **Total additions**: ~780 lines of production-ready code
+- **commands.ts**: +44 lines for weather system, handler count updates
+- **battle-eot.ts**: +15 lines for weather restoration
+- **test/rpg-suite.js**: +140 lines for weather tests
+- **WEATHER_SYSTEM_DOCUMENTATION.md**: 450 lines of comprehensive documentation
+- **Total additions**: ~1400+ lines of production-ready code
 
 ---
 
