@@ -11,7 +11,6 @@ import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, Stats } from './
 import { getMove, getActiveSlots } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
-// --- UPDATED IMPORTS ---
 import {
 	checkStatDropAbilities,
 	checkMentalHerb,
@@ -20,7 +19,6 @@ import {
 	INITIAL_STAT_STAGES,
 } from './battle-shared';
 import { getStatMultiplier } from './battle-core';
-// --- END UPDATED IMPORTS ---
 
 export function getDamageBasePower(
 	move: Move,

@@ -15,11 +15,8 @@ import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
 import { addItemToInventory } from './items';
 import { getStartingLocation } from './locations';
 
-// --- GLOBAL STATE ---
 export const playerData = new Map<string, PlayerData>();
 export const activeBattles = new Map<string, BattleState>();
-
-// --- CORE FUNCTIONS ---
 
 export function generateUniqueId(): string {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -172,8 +169,6 @@ export function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RP
 	return null;
 }
 
-// --- SAVE/LOAD SYSTEM ---
-
 /**
  * Serialize player data to JSON-compatible format
  * Converts Maps and Sets to arrays for storage
@@ -255,7 +250,6 @@ export function loadPlayer(userid: string, savedData: string): PlayerData {
 	return player;
 }
 
-// --- COMMANDS EXPORT ---
 // Export the commands from the new commands.ts file
 // This is what the Showdown server will import.
 import { commands } from './commands';

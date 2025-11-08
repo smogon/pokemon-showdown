@@ -280,14 +280,12 @@ export const commands: ChatCommands = {
 		learneggmove(target, room, user) {
 			const player = getPlayerData(user.id);
 
-			// --- FIX: Correctly parse multi-word moves ---
 			const parts = target.split(' ');
 			if (parts.length < 2) {
 				return this.errorReply("Invalid command parameters.");
 			}
 			const pokemonId = parts[0];
 			const rawMoveId = parts.slice(1).join(' '); // This correctly becomes "magical leaf"
-			// --- END FIX ---
 
 			if (!pokemonId || !rawMoveId) {
 				return this.errorReply("Invalid command parameters.");
@@ -314,10 +312,8 @@ export const commands: ChatCommands = {
 			if (pokemon.moves.length < 4) {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
-				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
 				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
-				// --- END FIX ---
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: [newMoveId] };
@@ -408,12 +404,10 @@ export const commands: ChatCommands = {
 			} else {
 				for (let i = 0; i < 6; i++) {
 					if (player.party[i]) {
-						// --- THIS IS THE FIX ---
 						// We pass the slot info directly to the HTML generator
 						// and no longer wrap it in an extra <div>
 						const tempSlot = createActivePokemonSlot(player.party[i]);
 						partyHTML += generatePokemonInfoHTML(tempSlot, true, true, { index: i, partyLength: player.party.length });
-						// --- END FIX ---
 					} else {
 						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
 					}
@@ -489,7 +483,6 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 
-				// --- All other medicines require a Pokemon target ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
 
@@ -547,8 +540,6 @@ export const commands: ChatCommands = {
 				case 'revivalherb':
 					result = useRevivalItem(player, targetPokemon, itemId);
 					break;
-
-					// HP Healing
 				case 'potion':
 				case 'superpotion':
 				case 'hyperpotion':
@@ -678,7 +669,6 @@ export const commands: ChatCommands = {
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (item.category === 'misc') {
-				// --- BLOCK TO HANDLE MISC ITEMS ---
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
 					for (const pokemon of player.party) {
@@ -752,7 +742,6 @@ export const commands: ChatCommands = {
 					}
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 				} else if (item.id.endsWith('stone')) {
-					// --- EVOLUTION STONE LOGIC ---
 					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
 
 					if (evoMessage) {
@@ -875,10 +864,8 @@ export const commands: ChatCommands = {
 				return this.errorReply("Pokemon not found in PC.");
 			}
 			player.party.push(pokemon);
-			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
-			// --- END FIX ---
 		},
 
 		shop(target, room, user) {
@@ -2350,10 +2337,8 @@ export const commands: ChatCommands = {
 			pokemon.item = itemId;
 			removeItemFromInventory(player, itemId, 1);
 
-			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
 			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
@@ -2387,10 +2372,8 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, pokemon.item, 1);
 			pokemon.item = undefined;
 
-			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
 			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
@@ -2421,10 +2404,8 @@ export const commands: ChatCommands = {
 			const oldNickname = pokemon.nickname;
 			pokemon.nickname = newNickname;
 
-			// --- FIX ---
 			const tempSlot = createActivePokemonSlot(pokemon);
 			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			// --- END FIX ---
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
