@@ -72,6 +72,7 @@ import {
 	generateMoveLearnHTML,
 	generateGiveItemPokemonSelectionHTML,
 	generateFaintSwitchHTML,
+	generateBottomNavigation,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -149,21 +150,19 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
+			
+			// Returning players: send to their last location
 			if (player.party.length > 0) {
-				return this.parse('/rpg menu');
+				return this.parse('/rpg explore');
 			}
+			
+			// New players: show welcome screen
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
 		continue(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot do this while in a battle.");
-			}
-			const player = getPlayerData(user.id);
-			if (player.party.length > 0) {
-				return this.parse('/rpg menu');
-			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRPGModeSelectionHTML()}`);
+			// Continue now redirects to start which handles the flow
+			return this.parse('/rpg start');
 		},
 
 		storymode(target, room, user) {
@@ -205,11 +204,21 @@ export const commands: ChatCommands = {
 				const starterPokemon = createPokemon(starterId, 5);
 				player.party.push(starterPokemon);
 				player.name = user.name;
+				player.location = 'Starter Town'; // Ensure player starts in Starter Town
 				const species = Dex.species.get(starterId);
 
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox"><h2>Congratulations!</h2><p>You have chosen <strong>${species.name}</strong> as your starter!</p>${generatePokemonInfoHTML(tempSlot, true)}<p>Your adventure begins now...</p><p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
+				const confirmHTML = `<div class="infobox">` +
+					`<h2>Congratulations!</h2>` +
+					`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${species.name}</strong> will be a great partner for you."</p>` +
+					`${generatePokemonInfoHTML(tempSlot, true)}` +
+					`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${species.name}!"</p>` +
+					`<p>"Now, head out into Starter Town and begin your journey. Good luck!"</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				if (room?.roomid !== 'lobby') {
@@ -221,15 +230,8 @@ export const commands: ChatCommands = {
 		},
 
 		menu(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You are in a battle!");
-			}
-			const player = getPlayerData(user.id);
-			if (player.party.length === 0) {
-				return this.parse('/rpg start');
-			}
-			const menuHTML = `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${menuHTML}`);
+			// Menu command is removed - redirect to explore which is the new main hub
+			return this.parse('/rpg explore');
 		},
 
 		learnmove(target, room, user) {
@@ -268,10 +270,8 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
 				delete player.pendingMoveLearnQueue;
-				// --- FIX ---
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg menu" class="button">Continue</button></p></div>`;
-				// --- END FIX ---
+				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			}
 		},
@@ -391,7 +391,8 @@ export const commands: ChatCommands = {
 				`<p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>` +
 				`<p><strong>Money:</strong> ₽${player.money}</p>` +
 				`<p><strong>Trainers Defeated:</strong> ${player.defeatedTrainers.size}</p>` +
-				`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+				generateBottomNavigation() +
+				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
 		},
 
@@ -417,7 +418,8 @@ export const commands: ChatCommands = {
 					}
 				}
 			}
-			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button> <button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button></p>` +
+				generateBottomNavigation() + `</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
@@ -1058,8 +1060,8 @@ export const commands: ChatCommands = {
 				`${exploreButtons}` +
 				`<hr />` +
 				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
-				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button> ` +
-				`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button></p>` +
+				generateBottomNavigation() +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
 		},
@@ -2157,8 +2159,10 @@ export const commands: ChatCommands = {
 					const successHTML = `<div class="infobox">` + `${successMessage}` +
 						`${generatePokemonInfoHTML(tempSlot, true)}` +
 						`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
-						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-						`<button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
+						`<button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
+						generateBottomNavigation() +
+						`</div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 				} else {
 					// --- FAILED CATCH PATH (FIXED) ---
@@ -2428,7 +2432,8 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p><p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p></div>`;
+			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
+				generateBottomNavigation() + `</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
@@ -2776,8 +2781,7 @@ export const commands: ChatCommands = {
 					`<textarea readonly style="width: 100%; height: 150px; font-family: monospace; font-size: 10px;">${saveData}</textarea>` +
 					`<p><small>Save this text somewhere safe. Use /rpg load [save data] to restore your progress.</small></p>` +
 					`<p><strong>Warning:</strong> This save contains your entire game state. Keep it private!</p>` +
-					`<hr />` +
-					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					generateBottomNavigation() +
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
 			} catch (error) {
@@ -2791,8 +2795,7 @@ export const commands: ChatCommands = {
 					`<h2>Load Game</h2>` +
 					`<p>To load a saved game, use: <code>/rpg load [save data]</code></p>` +
 					`<p><strong>Warning:</strong> Loading will replace your current progress!</p>` +
-					`<hr />` +
-					`<p><button name="send" value="/rpg menu" class="button">Back to Menu</button></p>` +
+					generateBottomNavigation() +
 					`</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${loadHTML}`);
 			}
@@ -2807,8 +2810,8 @@ export const commands: ChatCommands = {
 					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
 					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
 					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
-					`<hr />` +
-					`<p><button name="send" value="/rpg menu" class="button">Continue Adventure</button></p>` +
+					`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
+					generateBottomNavigation() +
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 			} catch (error) {
