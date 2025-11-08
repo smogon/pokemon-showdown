@@ -2901,16 +2901,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Blank Canvas Random Battle",
-		desc: `A Gen 9 micrometa feautring only Fakemon made by teams of players with a limited budget.`,
-		mod: 'blankcanvas',
-		team: 'randomBLC',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause', 'Data Preview', 'Sprite Viewer'],
+		name: "[Gen 9] spookymod Random Battle",
+		desc: `A Gen 9 Halloween-themed solomod comprised of entirely Ghost-types, some with more than 2 types.`,
+		mod: 'spookymod',
+		team: 'randomSPM',
+		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause', 'Data Preview', 'Sprite Viewer', 'Spokymod'],
 		onBegin() {
-			this.add('-message', `Welcome to Blank Canvas Random Battle!`);
-			this.add('-message', `This is a Gen 9 micrometa feautring only Fakemon made by teams of players with a limited budget!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3748841/`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1gE9pr0ghm1_Y8kPk0c-jXP93X57xlEr1OzzyXUVH90w/edit#gid=0" target="_blank">spookymod Spreadsheet</a> or use /dt!</b></div>`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
@@ -2922,31 +2919,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Blank Canvas Expanded", // roomtours
-		desc: `A Gen 9 micrometa feautring only Fakemon made by teams of players with a limited budget.`,
-		mod: 'blankcanvas',
+		name: "[Gen 9] spookymod", // roomtours
+		desc: `A Gen 9 Halloween-themed solomod comprised of entirely Ghost-types, some with more than 2 types.`,
+		mod: 'spookymod',
 		searchShow: false,
-		ruleset: ['Standard', 'Terastal Clause', 'Data Preview', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Sprite Viewer'],
-		banlist: ['All Pokemon', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Razor Fang', 'Light Clay'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview', 'Sprite Viewer', 'Spokymod'],
+		banlist: ['All Pokemon'],
 		unbanlist: [
-			'Actaniathan', 'Flarenheit', 'Groundead', 'Deadward', 'Obaki', 'Sylravage', 'Twinkaton', 'Fausteil', 'Geoporka',
-			'Porcupyre', 'Plasmage', 'Seaode', 'Bellolysk', 'Tryonite', 'Scarachnid', 'Serpvoltidae', 'Maldractice', 'Geigeramp',
-			'Bufferfly', 'Dastard', 'Sheepquake', 'Cottentration', 'Sorrowcean', 'Psyllapse', 'Haarstorm', 'Borealis', 'Bazhigangquan',
-			'Leechmonner', 'Iron Crest', 'Odonata', 'Hebicikuga', 'Devestial', 'Lundicare', 'Lyvamp', 'Strumorthio', 'Iron Mike',
-			'Badjur', 'Eolikopter', 'Freightmare', 'Frostengu', 'Goblantern', 'Hippaint', 'Jackoswarm', 'Jokerpent', 'Kadraoke',
-			'Treatmint', 'Turvarpega', 'Goodjur', 'Liftaton', 'Triceracotta', 'Woolverine', 'Combustoad', 'Hearthind', 'Koiryu',
-			'Pestiligy', 'Saxum', 'Sascratch', 'Guttergar', 'Rakasa', 'Thermostatic', 'Formaldehydra', 'Arachnode', 'Arsenstorm',
-			'Blobbiam', 'Brasspecter', 'Bugswarm', 'Bulionage', 'Capricorrie', 'Copperhead', 'Craggon', 'Crystuit', 'Drakkannon',
-			'Faeruin', 'Karmalice', 'Martorse', 'Massassin', 'Mohawtter', 'Mon Mothra', 'Parasike', 'Pinaturbo', 'Piss', 'Vipult',
-			'Fettogre', 'Florustitia', 'Searytch', 'Sleet Shell', 'Snabterra', 'Socknbuskn', 'Thaumaton', 'Versalyre',
-			'Lavalisk', 'Llanfairwyrm', 'Primordialith', 'Reversadusa', 'Sculptera', 'Wizhazard', 'Yamateraph',
-			'Whalestro', 'Urslag', 'Centaghoul', 'Noirwark', 'Metarachne',
+			'Aegislash', 'Banette-Mega', 'Ceruledge', 'Dofagrigus', 'Eddy Azbear', 'Flutter Mane', 'Flutter Mane 2',
+			'Gourgeist-Tiny', 'Gourgeist', 'Gourgeist-Large', 'Gourgeist-Gigantic', 'Houndstone', 'Indeedee', 'Jableye',
+			'JOB APPLICATION', 'Kilotic', 'Lanturn-Evil', 'MERASMUS', 'Nursola', 'Okestar Spirit', 'PPiritomb', 'Quagsire-Dead',
+			'Rotom', 'Shedinja', 'Trevenant', 'Ursaluna-Bloodmoon', 'Vampharos', 'Wunala', 'XORygon-Z', 'Yveltal', 'Zoroark-Hisui',
 		],
 		onBegin() {
-			this.add('-message', `Welcome to Blank Canvas!`);
-			this.add('-message', `This is a Gen 9 micrometa feautring only Fakemon made by teams of players with a limited budget!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3748841/`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1gE9pr0ghm1_Y8kPk0c-jXP93X57xlEr1OzzyXUVH90w/edit#gid=0" target="_blank">spookymod Spreadsheet</a> or use /dt!</b></div>`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
