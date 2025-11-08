@@ -233,9 +233,8 @@ export function checkForWinLoss(
 		// Add defeat messages to battle log
 		messageLog.push(`<hr><center><b>Defeat!</b></center>`);
 		const opponentMessage = battle.opponentName ? `You lost to ${battle.opponentName}!` : "You have no more Pokemon that can fight!";
-		messageLog.push(`<p>${opponentMessage}</p>`);
-		messageLog.push(`<p>You blacked out and rushed to the nearest Pokemon Center...</p>`);
-		messageLog.push(`<p>You lost ₽${moneyLost}!</p>`);
+		messageLog.push(`<center><b>${opponentMessage}</b></center>`);
+		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 		activeBattles.delete(user.id);
