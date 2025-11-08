@@ -424,9 +424,9 @@ export function generateSingleBattleHTML(
 		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
 			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
 			'</p>';
-		
+
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 250px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -450,68 +450,68 @@ export function generateSingleBattleHTML(
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
+		const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+			'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+			'<span>Normal</span>' +
+			'<span style="float: right;">-- / --</span>' +
+			'</div> ';
+
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+		moveButtonsHTML += '<tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '<tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '</table>';
+	} else {
+		const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+
+		const moveButtons = playerPokemon.moves.map(move => {
+			const moveData = getMove(move.id);
+
+			// Use the validation function to check if a move is disabled
+			// We need to import validateMoveAction, but that's in battle-engine.ts
+			// For now, we will do a simple check.
+			// const validationError = validateMoveAction(playerSlot, move.id, battle);
+			const isDisabled = (playerSlot.disabledMove && playerSlot.disabledMove.moveId === move.id) ||
+				(playerSlot.encoreMove && playerSlot.encoreMove.moveId !== move.id) ||
+				(playerSlot.tauntTurns > 0 && moveData.category === 'Status') ||
+				(playerSlot.lockedMoveCounter > 0 && playerSlot.lockedMove !== move.id) ||
+				(playerSlot.uproarTurns > 0 && playerSlot.lockedMove !== move.id) ||
+				(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
+				move.pp === 0;
+
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
+			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
-				'<span>Normal</span>' +
-				'<span style="float: right;">-- / --</span>' +
+				'<span>' + moveData.type + '</span>' +
+				'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
 				'</div> ';
 
-			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
-			moveButtonsHTML += '<tr>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
-			moveButtonsHTML += '</tr>';
-			moveButtonsHTML += '<tr>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
-			moveButtonsHTML += '</tr>';
-			moveButtonsHTML += '</table>';
-		} else {
-			const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+			const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
+				' ' + buttonContent + '</button>';
 
-			const moveButtons = playerPokemon.moves.map(move => {
-				const moveData = getMove(move.id);
+			// Add Tera option if can terastallize
+			if (canTerastallize && !isDisabled) {
+				return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+			}
+			return normalButton;
+		});
 
-				// Use the validation function to check if a move is disabled
-				// We need to import validateMoveAction, but that's in battle-engine.ts
-				// For now, we will do a simple check.
-				// const validationError = validateMoveAction(playerSlot, move.id, battle);
-				const isDisabled = (playerSlot.disabledMove && playerSlot.disabledMove.moveId === move.id) ||
-					(playerSlot.encoreMove && playerSlot.encoreMove.moveId !== move.id) ||
-					(playerSlot.tauntTurns > 0 && moveData.category === 'Status') ||
-					(playerSlot.lockedMoveCounter > 0 && playerSlot.lockedMove !== move.id) ||
-					(playerSlot.uproarTurns > 0 && playerSlot.lockedMove !== move.id) ||
-					(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
-					move.pp === 0;
-
-				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
-					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
-					'<span>' + moveData.type + '</span>' +
-					'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
-					'</div> ';
-
-				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
-					' ' + buttonContent + '</button>';
-
-				// Add Tera option if can terastallize
-				if (canTerastallize && !isDisabled) {
-					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
-				}
-				return normalButton;
-			});
-
-			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
-			moveButtonsHTML += '<tr>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
-			moveButtonsHTML += '</tr>';
-			moveButtonsHTML += '<tr>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
-			moveButtonsHTML += '</tr>';
-			moveButtonsHTML += '</table>';
+		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+		moveButtonsHTML += '<tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '<tr>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '</tr>';
+		moveButtonsHTML += '</table>';
 	}
 
 	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
@@ -549,7 +549,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 350px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -559,6 +559,23 @@ export function generateDoubleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
+	// Check if battle has ended first - slots may be null after fainting
+	if (battle.battleEnded) {
+		// For ended battles, we only need to show the message log and Continue button
+		const continueCommand = battle.battleResult === 'victory' ?
+			(battle.battleType === 'wild_double' ? '/rpg explore' : '/rpg explore') :
+			'/rpg explore';
+		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
+			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+			'</p>';
+
+		return '<div class="infobox">' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 250px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+			actionHTML +
+			'</div>';
+	}
+
+	// Battle is ongoing - need slots to display Pokemon info
 	const [pSlot0, pSlot1] = battle.playerSlots;
 	const [oSlot0, oSlot1] = battle.opponentSlots;
 	const player = getPlayerData(battle.playerId);
@@ -620,18 +637,10 @@ export function generateDoubleBattleHTML(
 	html += '</tr>';
 	html += '</table>';
 
-	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>';
+	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 350px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>';
 
-	// Check if battle has ended
-	if (battle.battleEnded) {
-		// Show only Continue button when battle ends
-		const continueCommand = battle.battleResult === 'victory' ?
-			(battle.battleType === 'wild_double' ? '/rpg explore' : '/rpg explore') :
-			'/rpg explore';
-		html += '<p style="margin-top: 15px; text-align: center;">' +
-			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
-			'</p>';
-	} else if (targetSelection) {
+	// Battle is ongoing - show action buttons
+	if (targetSelection) {
 		const move = getMove(targetSelection.moveId);
 		const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
 		html += '<p style="margin-top: 5px; font-weight: bold;">Select a target for <strong>' + move.name + '</strong>' + teraText + ':</p>';
