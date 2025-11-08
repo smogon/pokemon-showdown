@@ -415,6 +415,23 @@ export function generateSingleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
+	// Check if battle has ended first - slots may be null after fainting
+	if (battle.battleEnded) {
+		// For ended battles, we only need to show the message log and Continue button
+		const continueCommand = battle.battleResult === 'victory' ?
+			(battle.battleType === 'wild' ? '/rpg explore' : '/rpg explore') :
+			'/rpg explore';
+		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
+			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+			'</p>';
+		
+		return '<div class="infobox">' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+			actionHTML +
+			'</div>';
+	}
+
+	// Battle is ongoing - need slots to display Pokemon info
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
@@ -429,20 +446,10 @@ export function generateSingleBattleHTML(
 	let actionHTML = '';
 	let moveButtonsHTML = '';
 
-	// Check if battle has ended
-	if (battle.battleEnded) {
-		// Show only Continue button when battle ends
-		const continueCommand = battle.battleResult === 'victory' ?
-			(battle.battleType === 'wild' ? '/rpg explore' : '/rpg explore') :
-			'/rpg explore';
-		actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
-			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
-			'</p>';
-	} else {
-		// Normal battle actions
-		const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
+	// Normal battle actions
+	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
-		if (allMovesOutOfPP) {
+	if (allMovesOutOfPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -505,25 +512,24 @@ export function generateSingleBattleHTML(
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
 			moveButtonsHTML += '</tr>';
 			moveButtonsHTML += '</table>';
-		}
-
-		const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
-		const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
-
-		const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
-
-		const catchButton = (battle.battleType === 'wild') ?
-			'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
-			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
-
-		const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
-			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
-			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
-
-		actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
-			moveButtonsHTML +
-			'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
 	}
+
+	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
+	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
+
+	const catchButton = (battle.battleType === 'wild') ?
+		'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
+
+	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
+		'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+
+	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
+		moveButtonsHTML +
+		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
 
 	const playerName = player ? player.name : "Your";
 
