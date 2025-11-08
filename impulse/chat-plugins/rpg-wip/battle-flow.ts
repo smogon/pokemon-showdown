@@ -231,8 +231,7 @@ export function checkForWinLoss(
 		player.location = respawnLocationData.name;
 
 		// Add defeat messages to battle log
-		messageLog.push('--- Battle Ended ---');
-		messageLog.push(`<h2 style="color: #d9534f;">Defeat!</h2>`);
+		messageLog.push(`<hr><center><b>Defeat!</b></center>`);
 		const opponentMessage = battle.opponentName ? `You lost to ${battle.opponentName}!` : "You have no more Pokemon that can fight!";
 		messageLog.push(`<p>${opponentMessage}</p>`);
 		messageLog.push(`<p>You blacked out and rushed to the nearest Pokemon Center...</p>`);
@@ -280,12 +279,12 @@ export function checkForWinLoss(
 					if (badgeName && !player.obtainedBadges.includes(badgeName)) {
 						player.obtainedBadges.push(badgeName);
 						player.badges = player.obtainedBadges.length;
-						messageLog.push(`<strong>You obtained the ${badgeName}!</strong>`);
+						messageLog.push(`<hr><center><strong>You obtained the ${badgeName}!</strong></center><hr>`);
 
 						// Check if player has all 8 badges
 						if (player.obtainedBadges.length === 8) {
 							player.storyFlags.add('all_badges');
-							messageLog.push(`<strong>You now have all 8 gym badges! Victory Road is now accessible!</strong>`);
+							messageLog.push(`<hr><center><strong>You now have all 8 gym badges! Victory Road is now accessible!</strong></center>`);
 						}
 					}
 				}
@@ -294,13 +293,12 @@ export function checkForWinLoss(
 				if (battle.trainerId === 'champion_blue') {
 					player.storyFlags.add('champion');
 					player.storyFlags.add('game_complete');
-					messageLog.push(`<strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong>`);
+					messageLog.push(`<hr><center><strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong></center><hr>`);
 				}
 			}
 
 			// Add victory messages to battle log
-			messageLog.push('--- Battle Ended ---');
-			messageLog.push(`<h2 style="color: #5cb85c;">Victory!</h2>`);
+			messageLog.push(`<hr><center><b>Victory!</b></center>`);
 			messageLog.push(`<p>You defeated <strong>${battle.opponentName}</strong>!</p>`);
 			messageLog.push(`<p>You received ₽${moneyGained} for winning!</p>`);
 
@@ -314,8 +312,7 @@ export function checkForWinLoss(
 			player.money += moneyGained;
 
 			// Add victory messages to battle log
-			messageLog.push('--- Battle Ended ---');
-			messageLog.push(`<h2 style="color: #5cb85c;">Victory!</h2>`);
+			messageLog.push(`<hr><center><b>Victory!</b></center>`);
 			const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
 			messageLog.push(`<p>You defeated the wild <strong>${defeatedNames}</strong>!</p>`);
 			messageLog.push(`<p>You gained ₽${moneyGained}!</p>`);
