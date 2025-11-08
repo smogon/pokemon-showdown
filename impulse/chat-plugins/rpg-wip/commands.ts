@@ -1009,6 +1009,7 @@ export const commands: ChatCommands = {
 
 			// Wild Pokemon zones
 			if (availableZones.length > 0) {
+				exploreButtons += '<hr />';
 				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
 				for (const zoneId of availableZones) {
 					const zone = ENCOUNTER_ZONES[zoneId];
