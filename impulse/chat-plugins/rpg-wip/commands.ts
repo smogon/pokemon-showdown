@@ -150,12 +150,12 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
-			
+
 			// Returning players: send to their last location
 			if (player.party.length > 0) {
 				return this.parse('/rpg explore');
 			}
-			
+
 			// New players: show welcome screen
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
@@ -1586,7 +1586,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
-				return this.errorReply("An error occurred while starting the battle: " + error);
+				return this.errorReply("An error occurred while starting the battle: " + String(error));
 			}
 		},
 
@@ -2790,7 +2790,7 @@ export const commands: ChatCommands = {
 					`</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
 			} catch (error) {
-				return this.errorReply("Error saving game: " + error);
+				return this.errorReply("Error saving game: " + String(error));
 			}
 		},
 

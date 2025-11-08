@@ -222,9 +222,8 @@ export function checkEvolution(
 				foundEvo = evoData;
 				break;
 			}
-		}
+		} else if (isLevelEvo) {
 		// Secondary check: Level up evolution (only if no item was explicitly used)
-		else if (isLevelEvo) {
 			foundEvo = evoData;
 			// For multi-evolutions (like Wurmple, Eevee), we prioritize non-item level evolutions.
 			// Since there's no way to distinguish further without items/conditions, the first match is used.
