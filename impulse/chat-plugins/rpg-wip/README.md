@@ -75,13 +75,13 @@ A comprehensive Pokemon-style RPG system for Impulse with location-based gamepla
 - Weather move/ability overrides
 
 ### NPC System
-- 34+ NPC action types (giving items, trading, teaching moves, etc.)
-- 42+ trainer class types (covering all Pokemon games)
+- 39 NPC action types (giving items, trading, teaching moves, etc.)
+- 78 trainer class types (covering all Pokemon games)
 - Service NPCs (Nurse Joy, Move Tutor, Name Rater, etc.)
 - Special NPCs (fossil revival, daily rewards, battle requests, etc.)
 
 ### Event System
-- 58+ scripted event types
+- 57 scripted event types
 - Conditional triggers (flags, badges, one-time events)
 - Interactive events (cutscenes, choices, quizzes)
 - Battle events (tournaments, boss battles, rival encounters)
@@ -117,10 +117,10 @@ Use the following commands:
 ## 🔧 Technical Details
 
 ### Handler Counts
-- **NPC Actions**: 34+ handlers implemented
-- **Scripted Events**: 58+ handlers implemented
-- **Total Types**: 240+ type definitions
-- **Trainer Classes**: 42+ types
+- **NPC Actions**: 38 functions (34 main handlers + 4 helpers)
+- **Scripted Events**: 60 functions (56 main handlers + 4 helpers)
+- **Total Handler Functions**: 98 functions
+- **Total Type Definitions**: 220+ types (39 actions + 78 NPCs + 46 buildings + 57 events)
 
 ### Weather System
 - Automatic weather application from location
@@ -148,8 +148,8 @@ Use the following commands:
 - Weather system (automatic application and restoration)
 
 ### ⚠️ Ready for Integration (Handlers Implemented)
-- 30+ additional NPC action handlers
-- 53+ additional scripted event handlers
+- 30 additional NPC action handlers ready
+- 52 additional scripted event handlers ready
 - All handlers are production-ready
 - Integration requires adding case statements in `commands.ts`
 
