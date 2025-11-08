@@ -1448,7 +1448,7 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'fakeout':
-		if (attackerSlot.activeTurns > 1) {
+		if (attackerSlot.activeTurns !== 1) {
 			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
 			return true;
 		}
