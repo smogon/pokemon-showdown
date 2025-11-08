@@ -8,7 +8,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { getMove, checkEvolution, handleLearningMoves, getActiveSlots } from './utils';
-import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState } from './interface';
+import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData } from './interface';
 import {
 	addItemToInventory,
 	removeItemFromInventory,
@@ -1056,13 +1056,41 @@ export const commands: ChatCommands = {
 				}
 			}
 
+			// Connected Locations (Travel destinations)
+			if (currentLocation.connectedLocations && currentLocation.connectedLocations.length > 0) {
+				exploreButtons += '<p><strong>Travel to:</strong></p>';
+				for (const connection of currentLocation.connectedLocations) {
+					// Check if location is accessible
+					let canAccess = true;
+					let lockReason = '';
+
+					if (connection.requiredBadge) {
+						if (!player.obtainedBadges.includes(connection.requiredBadge)) {
+							canAccess = false;
+							lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
+						}
+					}
+
+					if (connection.requiredFlag) {
+						if (!player.storyFlags.has(connection.requiredFlag)) {
+							canAccess = false;
+							lockReason = ` 🔒 (Not accessible yet)`;
+						}
+					}
+
+					if (canAccess) {
+						exploreButtons += `<button name="send" value="/rpg travel ${connection.id}" class="button">🗺️ ${connection.name}</button> `;
+					} else {
+						exploreButtons += `<button class="button" disabled style="opacity: 0.5;">🗺️ ${connection.name}${lockReason}</button> `;
+					}
+				}
+			}
+
 			const exploreHTML = `<div class="infobox">` +
 				`<h2>${currentLocation.name}</h2>` +
 				`<p><em>${currentLocation.description}</em></p>` +
 				`${exploreButtons}` +
 				`<hr />` +
-				`<p><button name="send" value="/rpg travel" class="button">🗺️ Travel</button> ` +
-				`<button name="send" value="/rpg npc" class="button">💬 Talk to NPCs</button></p>` +
 				generateBottomNavigation() +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
