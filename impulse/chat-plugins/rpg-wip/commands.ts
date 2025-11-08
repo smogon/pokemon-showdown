@@ -78,7 +78,7 @@ import {
 	STARTER_POKEMON,
 	TYPE_CHART,
 } from './data';
-import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { STORY_EVENTS } from './story-events';
 import { NPC_DATABASE } from './npcs';
@@ -204,7 +204,8 @@ export const commands: ChatCommands = {
 				const starterPokemon = createPokemon(starterId, 5);
 				player.party.push(starterPokemon);
 				player.name = user.name;
-				player.location = 'Starter Town'; // Ensure player starts in Starter Town
+				const startingLocation = getStartingLocation();
+				player.location = startingLocation.name;
 				const species = Dex.species.get(starterId);
 
 				const tempSlot = createActivePokemonSlot(starterPokemon);
@@ -214,7 +215,7 @@ export const commands: ChatCommands = {
 					`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${species.name}</strong> will be a great partner for you."</p>` +
 					`${generatePokemonInfoHTML(tempSlot, true)}` +
 					`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${species.name}!"</p>` +
-					`<p>"Now, head out into Starter Town and begin your journey. Good luck!"</p>` +
+					`<p>"Now, head out into ${startingLocation.name} and begin your journey. Good luck!"</p>` +
 					`<hr />` +
 					`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
 					generateBottomNavigation() +
