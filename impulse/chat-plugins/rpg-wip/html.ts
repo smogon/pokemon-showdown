@@ -794,44 +794,44 @@ export function generateBattleHTML(
 }
 
 export function generateWelcomeHTML(): string {
-	return `<div class="infobox">
-		<h2>Developer Note</h2>
-		<p>Welcome to the World of Impulse RPG System!</p>
-		<p>This is an immersive Pokémon-style adventure where you'll battle trainers, catch Pokémon, explore locations, and become the Champion!</p>
-		<p><strong>Features:</strong></p>
-		<ul>
-			<li>🎮 Story Mode with 8 Gym Leaders and Elite Four</li>
-			<li>⚔️ Wild Pokémon battles and trainer challenges</li>
-			<li>📦 Item management and PC storage system</li>
-			<li>🌍 Multiple locations to explore</li>
-			<li>✨ Evolution, moves, and abilities system</li>
-		</ul>
-		<p>Ready to begin your adventure?</p>
-		<p><button name="send" value="/rpg continue" class="button">Continue</button></p>
-	</div>`;
+	return `<div class="infobox">` +
+		`<h2>Developer Note</h2>` +
+		`<p>Welcome to the World of Impulse RPG System!</p>` +
+		`<p>This is an immersive Pokémon-style adventure where you'll battle trainers, catch Pokémon, explore locations, and become the Champion!</p>` +
+		`<p><strong>Features:</strong></p>` +
+		`<ul>` +
+		`<li>🎮 Story Mode with 8 Gym Leaders and Elite Four</li>` +
+		`<li>⚔️ Wild Pokémon battles and trainer challenges</li>` +
+		`<li>📦 Item management and PC storage system</li>` +
+		`<li>🌍 Multiple locations to explore</li>` +
+		`<li>✨ Evolution, moves, and abilities system</li>` +
+		`</ul>` +
+		`<p>Ready to begin your adventure?</p>` +
+		`<p><button name="send" value="/rpg continue" class="button">Continue</button></p>` +
+		`</div>`;
 }
 
 export function generateRPGModeSelectionHTML(): string {
-	return `<div class="infobox">
-		<h2>RPG Menu</h2>
-		<p>Select a game mode to begin:</p>
-		<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>
-		<p><em>More modes will be added in future updates!</em></p>
-	</div>`;
+	return `<div class="infobox">` +
+		`<h2>RPG Menu</h2>` +
+		`<p>Select a game mode to begin:</p>` +
+		`<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>` +
+		`<p><em>More modes will be added in future updates!</em></p>` +
+		`</div>`;
 }
 
 export function generateStoryModeStartHTML(): string {
-	return `<div class="infobox">
-		<h2>Story Mode</h2>
-		<p>Welcome to your Pokémon adventure!</p>
-		<p>Professor Oak is waiting to give you your first Pokémon. Choose your starter:</p>
-		<h3>Choose Your Starter Type:</h3>
-		<p>
-			<button name="send" value="/rpg choosestarter fire" class="button">🔥 Fire Type</button>
-			<button name="send" value="/rpg choosestarter water" class="button">💧 Water Type</button>
-			<button name="send" value="/rpg choosestarter grass" class="button">🌱 Grass Type</button>
-		</p>
-	</div>`;
+	return `<div class="infobox">` +
+		`<h2>Story Mode</h2>` +
+		`<p>Welcome to your Pokémon adventure!</p>` +
+		`<p>Professor Oak is waiting to give you your first Pokémon. Choose your starter:</p>` +
+		`<h3>Choose Your Starter Type:</h3>` +
+		`<p>` +
+		`<button name="send" value="/rpg choosestarter fire" class="button">🔥 Fire Type</button>` +
+		`<button name="send" value="/rpg choosestarter water" class="button">💧 Water Type</button>` +
+		`<button name="send" value="/rpg choosestarter grass" class="button">🌱 Grass Type</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateStarterSelectionHTML(type: string, starters: string[]): string {
