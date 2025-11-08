@@ -419,8 +419,7 @@ export const commands: ChatCommands = {
 					}
 				}
 			}
-			partyHTML += `<p style="margin-top: 15px;"><button name="send" value="/rpg pc" class="button">Pokemon PC</button></p>` +
-				generateBottomNavigation() + `</div>`;
+			partyHTML += `${generateBottomNavigation()}`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
