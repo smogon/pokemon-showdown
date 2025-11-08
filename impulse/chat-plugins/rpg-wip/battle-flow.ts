@@ -278,7 +278,7 @@ export function checkForWinLoss(
 					if (badgeName && !player.obtainedBadges.includes(badgeName)) {
 						player.obtainedBadges.push(badgeName);
 						player.badges = player.obtainedBadges.length;
-						messageLog.push(`<hr><center><strong>You obtained the ${badgeName}!</strong></center><hr>`);
+						messageLog.push(`<hr><center><strong>You obtained the ${badgeName}!</strong></center>`);
 
 						// Check if player has all 8 badges
 						if (player.obtainedBadges.length === 8) {
@@ -292,14 +292,14 @@ export function checkForWinLoss(
 				if (battle.trainerId === 'champion_blue') {
 					player.storyFlags.add('champion');
 					player.storyFlags.add('game_complete');
-					messageLog.push(`<hr><center><strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong></center><hr>`);
+					messageLog.push(`<hr><center><strong>🏆 Congratulations! You are the new Pokémon League Champion! 🏆</strong></center>`);
 				}
 			}
 
 			// Add victory messages to battle log
 			messageLog.push(`<hr><center><b>Victory!</b></center>`);
-			messageLog.push(`<p>You defeated <strong>${battle.opponentName}</strong>!</p>`);
-			messageLog.push(`<p>You received ₽${moneyGained} for winning!</p>`);
+			messageLog.push(`<center><strong>You defeated ${battle.opponentName}!</strong></center>`);
+			messageLog.push(`<center><b>You received ₽${moneyGained} for winning!</b></center>`);
 
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
@@ -313,8 +313,8 @@ export function checkForWinLoss(
 			// Add victory messages to battle log
 			messageLog.push(`<hr><center><b>Victory!</b></center>`);
 			const defeatedNames = battle.opponentParty.map(p => p.species).join(' and ');
-			messageLog.push(`<p>You defeated the wild <strong>${defeatedNames}</strong>!</p>`);
-			messageLog.push(`<p>You gained ₽${moneyGained}!</p>`);
+			messageLog.push(`<center><strong>You defeated the wild ${defeatedNames}!</strong></center>`);
+			messageLog.push(`<center><b>You gained ₽${moneyGained}!</b></center>`);
 
 			if (player.pendingMoveLearnQueue?.moveIds.length) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
