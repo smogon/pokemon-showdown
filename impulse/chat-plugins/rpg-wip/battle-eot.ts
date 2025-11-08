@@ -575,6 +575,7 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
+		slot.isProtected = false;
 	}
 
 	for (const slot of allSlots) {
