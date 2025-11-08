@@ -13,6 +13,8 @@ describe('RPG System - Master Integration Suite', function () {
 	let core, utils, items, npcActions, scriptedEvents, Dex;
 	let testPlayer;
 
+	let battleShared;
+
 	before(function () {
 		try {
 			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
@@ -20,6 +22,7 @@ describe('RPG System - Master Integration Suite', function () {
 			items = require('../../dist/impulse/chat-plugins/rpg-wip/items');
 			npcActions = require('../../dist/impulse/chat-plugins/rpg-wip/npc-actions');
 			scriptedEvents = require('../../dist/impulse/chat-plugins/rpg-wip/scripted-events');
+			battleShared = require('../../dist/impulse/chat-plugins/rpg-wip/battle-shared');
 			Dex = require('../../dist/sim/dex').Dex;
 		} catch (e) {
 			console.log('RPG modules not found, skipping master suite:', e.message);
@@ -135,8 +138,13 @@ describe('RPG System - Master Integration Suite', function () {
 		});
 
 		it('should create valid battle-ready Pokemon', function () {
-			const slot1 = core.createActivePokemonSlot(pokemon1);
-			const slot2 = core.createActivePokemonSlot(pokemon2);
+			if (!battleShared || !battleShared.createActivePokemonSlot) {
+				this.skip();
+				return;
+			}
+
+			const slot1 = battleShared.createActivePokemonSlot(pokemon1);
+			const slot2 = battleShared.createActivePokemonSlot(pokemon2);
 
 			assert.equal(slot1.pokemon.species, 'Pikachu');
 			assert.equal(slot2.pokemon.species, 'Charizard');
@@ -144,8 +152,8 @@ describe('RPG System - Master Integration Suite', function () {
 			assert(slot1.pokemon.moves.length > 0);
 			assert(slot2.pokemon.moves.length > 0);
 
-			assert.equal(slot1.statBoosts.atk, 0);
-			assert.equal(slot2.statBoosts.atk, 0);
+			assert.equal(slot1.statStages.atk, 0);
+			assert.equal(slot2.statStages.atk, 0);
 		});
 
 		it('should handle damage calculations correctly', function () {
