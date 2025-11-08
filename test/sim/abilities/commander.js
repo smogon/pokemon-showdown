@@ -272,7 +272,7 @@ describe('Commander', () => {
 		assert.equal(tatsugiri.status, 'psn');
 	});
 
-	it('should retain Stall counter when commanded', () => {
+	it('should retain Stall counter while commanding', () => {
 		battle = common.createBattle({ gameType: 'doubles', seed: [0, 0, 0, 0] }, [[
 			{ species: 'regieleki', moves: ['thunderbolt', 'sleeptalk'] },
 			{ species: 'registeel', moves: ['thunderbolt', 'sleeptalk'] },

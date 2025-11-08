@@ -458,7 +458,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onAfterMove(pokemon, target, move) {
-			if (!move.stallingMove || !pokemon.moveThisTurnResult) delete pokemon.volatiles['stall'];
+			if ((!move.stallingMove || !pokemon.moveThisTurnResult) && !move.isExternal) {
+				delete pokemon.volatiles['stall'];
+			}
 		},
 	},
 	gem: {
