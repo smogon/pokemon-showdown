@@ -829,3 +829,381 @@ export function handlePhotographer(
 		reward: action.photoReward,
 	};
 }
+
+/**
+ * Fishing Action
+ * Give or use fishing rods
+ */
+export function handleFishing(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, rodType?: string } {
+	const rodType = action.fishingRodType || 'old';
+	const cost = action.fishingRodCost || 0;
+
+	if (cost > 0 && player.money < cost) {
+		return { success: false, message: `A ${rodType} Rod costs ₽${cost}.` };
+	}
+
+	if (cost > 0) player.money -= cost;
+
+	return {
+		success: true,
+		message: `You received a ${rodType.charAt(0).toUpperCase() + rodType.slice(1)} Rod!`,
+		rodType,
+	};
+}
+
+/**
+ * Bike Shop Action
+ * Purchase bikes
+ */
+export function handleBikeShop(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, bikeType?: string } {
+	const bikeType = action.bikeType || 'regular';
+	const cost = action.bikeCost || 0;
+
+	if (cost > 0 && player.money < cost) {
+		return { success: false, message: `A ${bikeType} Bike costs ₽${cost}.` };
+	}
+
+	if (cost > 0) player.money -= cost;
+
+	return {
+		success: true,
+		message: `You received a ${bikeType.charAt(0).toUpperCase() + bikeType.slice(1)} Bike!`,
+		bikeType,
+	};
+}
+
+/**
+ * Coin Exchange Action
+ * Exchange money for coins or buy prizes
+ */
+export function handleCoinExchange(
+	player: PlayerData,
+	action: NPCAction,
+	mode: 'buy' | 'redeem',
+	itemIdOrAmount?: string | number
+): { success: boolean, message: string, coins?: number, item?: string } {
+	if (mode === 'buy' && typeof itemIdOrAmount === 'number') {
+		const coinsToBuy = itemIdOrAmount;
+		const rate = action.coinRate || 50; // Default: 50 coins per money unit
+		const cost = Math.ceil(coinsToBuy / rate);
+
+		if (player.money < cost) {
+			return { success: false, message: `You need ₽${cost} to buy ${coinsToBuy} coins.` };
+		}
+
+		player.money -= cost;
+		return { success: true, message: `You bought ${coinsToBuy} coins!`, coins: coinsToBuy };
+	} else if (mode === 'redeem' && typeof itemIdOrAmount === 'string') {
+		const prize = action.prizeList?.find(p => p.itemId === itemIdOrAmount);
+		if (!prize) {
+			return { success: false, message: 'That item is not available.' };
+		}
+
+		// Assume coins are tracked in player inventory or flags (implementation detail)
+		return {
+			success: true,
+			message: `You redeemed ${prize.itemId} for ${prize.coinCost} coins!`,
+			item: prize.itemId,
+		};
+	}
+
+	return { success: false, message: 'Invalid coin exchange operation.' };
+}
+
+/**
+ * Tutor Combo Action
+ * Teach multiple moves
+ */
+export function handleTutorCombo(
+	player: PlayerData,
+	action: NPCAction,
+	pokemon: RPGPokemon,
+	moveId: string
+): { success: boolean, message: string } {
+	if (!action.comboMoves?.includes(moveId)) {
+		return { success: false, message: 'This move is not available from this tutor.' };
+	}
+
+	const cost = action.comboMoveCost || 0;
+	if (cost > 0 && player.money < cost) {
+		return { success: false, message: `Teaching this move costs ₽${cost}.` };
+	}
+
+	if (cost > 0) player.money -= cost;
+
+	return {
+		success: true,
+		message: `${pokemon.nickname} learned ${moveId}!`,
+	};
+}
+
+/**
+ * Apricorn Crafter Action
+ * Craft Pokeballs from Apricorns
+ */
+export function handleApricornCrafter(
+	player: PlayerData,
+	action: NPCAction,
+	apricorn: string
+): { success: boolean, message: string, ball?: string } {
+	const recipe = action.apricornRecipes?.find(r => r.apricorn === apricorn);
+	if (!recipe) {
+		return { success: false, message: 'Cannot craft a ball from that Apricorn.' };
+	}
+
+	const cost = action.craftingCost || 0;
+	if (cost > 0 && player.money < cost) {
+		return { success: false, message: `Crafting costs ₽${cost}.` };
+	}
+
+	if (cost > 0) player.money -= cost;
+
+	return {
+		success: true,
+		message: `Crafted a ${recipe.resultBall} from ${apricorn}!`,
+		ball: recipe.resultBall,
+	};
+}
+
+/**
+ * Pokeathlon Action
+ * Participate in Pokeathlon events
+ */
+export function handlePokeathlon(
+	player: PlayerData,
+	action: NPCAction,
+	eventName: string,
+	score: number
+): { success: boolean, message: string, reward?: { itemId: string, quantity: number } } {
+	if (!action.pokeathlonEvents?.includes(eventName)) {
+		return { success: false, message: 'That event is not available.' };
+	}
+
+	const reward = action.pokeathlonRewards?.find(r => r.score <= score);
+
+	return {
+		success: true,
+		message: `You scored ${score} points in ${eventName}!`,
+		reward,
+	};
+}
+
+/**
+ * Musical Props Action
+ * Get props for Pokemon Musical
+ */
+export function handleMusicalProps(
+	player: PlayerData,
+	action: NPCAction,
+	propName: string
+): { success: boolean, message: string } {
+	if (!action.musicalPropsList?.includes(propName)) {
+		return { success: false, message: 'That prop is not available.' };
+	}
+
+	const cost = action.musicalPropCost || 0;
+	if (cost > 0 && player.money < cost) {
+		return { success: false, message: `This prop costs ₽${cost}.` };
+	}
+
+	if (cost > 0) player.money -= cost;
+
+	return {
+		success: true,
+		message: `You got the ${propName} prop!`,
+	};
+}
+
+/**
+ * Berry Blender Action
+ * Blend berries together
+ */
+export function handleBerryBlender(
+	player: PlayerData,
+	action: NPCAction,
+	berries: string[]
+): { success: boolean, message: string, result?: string } {
+	const recipe = action.berryBlenderRecipes?.find(r =>
+		r.berries.length === berries.length && r.berries.every(b => berries.includes(b))
+	);
+
+	if (!recipe) {
+		return { success: false, message: 'Those berries cannot be blended together.' };
+	}
+
+	return {
+		success: true,
+		message: `Created ${recipe.result}!`,
+		result: recipe.result,
+	};
+}
+
+/**
+ * Pokeblock Mixer Action
+ * Mix berries into Pokeblocks
+ */
+export function handlePokeblockMixer(
+	player: PlayerData,
+	action: NPCAction,
+	berries: string[]
+): { success: boolean, message: string, result?: string, stats?: string[] } {
+	const recipe = action.pokeblockRecipes?.find(r =>
+		r.berries.length === berries.length && r.berries.every(b => berries.includes(b))
+	);
+
+	if (!recipe) {
+		return { success: false, message: 'Those berries cannot be mixed into Pokeblocks.' };
+	}
+
+	return {
+		success: true,
+		message: `Created ${recipe.result} Pokeblock!`,
+		result: recipe.result,
+		stats: recipe.stats,
+	};
+}
+
+/**
+ * Poffin Cooking Action
+ * Cook berries into Poffins
+ */
+export function handlePoffinCooking(
+	player: PlayerData,
+	action: NPCAction,
+	berries: string[]
+): { success: boolean, message: string, result?: string, quality?: number } {
+	const recipe = action.poffinRecipes?.find(r =>
+		r.berries.length === berries.length && r.berries.every(b => berries.includes(b))
+	);
+
+	if (!recipe) {
+		return { success: false, message: 'Those berries cannot be cooked into Poffins.' };
+	}
+
+	return {
+		success: true,
+		message: `Created ${recipe.result} Poffin!`,
+		result: recipe.result,
+		quality: recipe.quality,
+	};
+}
+
+/**
+ * Rival Battle Action
+ * Trigger rival battles
+ */
+export function handleRivalBattle(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, rivalTeam?: any[], dialogue?: any } {
+	return {
+		success: true,
+		message: `Your rival wants to battle!`,
+		rivalTeam: action.rivalTeam,
+		dialogue: action.rivalDialogue,
+	};
+}
+
+/**
+ * Gym Rematch Action
+ * Rematch gym leaders
+ */
+export function handleGymRematch(
+	player: PlayerData,
+	action: NPCAction,
+	gymLeaderId: string
+): { success: boolean, message: string, rematchTeam?: any[] } {
+	if (!action.rematchAvailable) {
+		return { success: false, message: 'This gym leader is not available for a rematch.' };
+	}
+
+	return {
+		success: true,
+		message: `The gym leader accepts your rematch challenge!`,
+		rematchTeam: action.rematchTeam,
+	};
+}
+
+/**
+ * Shard Trader Action
+ * Trade shards for moves or items
+ */
+export function handleShardTrader(
+	player: PlayerData,
+	action: NPCAction,
+	shardColor: string
+): { success: boolean, message: string, moveId?: string, itemId?: string } {
+	const trade = action.shardTrades?.find(t => t.shardColor === shardColor);
+	if (!trade) {
+		return { success: false, message: 'That shard cannot be traded here.' };
+	}
+
+	return {
+		success: true,
+		message: `Traded ${shardColor} Shard!`,
+		moveId: trade.moveId,
+		itemId: trade.itemId,
+	};
+}
+
+/**
+ * Wing Collector Action
+ * Collect wings for stat boosts
+ */
+export function handleWingCollector(
+	player: PlayerData,
+	action: NPCAction,
+	wingType: string
+): { success: boolean, message: string, reward?: { itemId: string, quantity: number } } {
+	if (!action.wingTypes?.includes(wingType)) {
+		return { success: false, message: 'That wing type is not collected here.' };
+	}
+
+	return {
+		success: true,
+		message: `Collected ${wingType} Wing!`,
+		reward: action.wingReward,
+	};
+}
+
+/**
+ * Scale Collector Action
+ * Collect scales (like Heart Scales) for rewards
+ */
+export function handleScaleCollector(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, reward?: { itemId: string, quantity: number } } {
+	return {
+		success: true,
+		message: `Collected ${action.scaleType || 'Heart'} Scale!`,
+		reward: action.scaleReward,
+	};
+}
+
+/**
+ * O-Power Action
+ * Distribute O-Powers
+ */
+export function handleOPower(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, powerType?: string, duration?: number } {
+	const powerFlag = `opower_${npcId}_${Date.now()}`;
+	player.storyFlags.add(powerFlag);
+
+	return {
+		success: true,
+		message: `You received ${action.opowerType || 'Attack'} O-Power!`,
+		powerType: action.opowerType,
+		duration: action.opowerDuration,
+	};
+}

@@ -833,3 +833,275 @@ export function handleProphecy(
 		message: 'An ancient prophecy speaks of events to come...',
 	};
 }
+
+/**
+ * Fishing Event
+ * Fishing encounter
+ */
+export function handleFishingEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, encounters?: any[] } {
+	const rodRequired = event.fishingRodRequired || 'old';
+	return {
+		success: true,
+		message: `You cast your ${rodRequired} Rod...`,
+		encounters: event.fishingEncounters,
+	};
+}
+
+/**
+ * Surfing Event
+ * Surfing encounter
+ */
+export function handleSurfingEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, encounters?: any[] } {
+	return {
+		success: true,
+		message: 'You surf across the water...',
+		encounters: event.surfingEncounters,
+	};
+}
+
+/**
+ * Diving Event
+ * Diving encounter
+ */
+export function handleDivingEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, encounters?: any[], depth?: number } {
+	return {
+		success: true,
+		message: `You dive to depth ${event.divingDepth || 1}...`,
+		encounters: event.divingEncounters,
+		depth: event.divingDepth,
+	};
+}
+
+/**
+ * Item Ball Event
+ * Finding items in pokeballs
+ */
+export function handleItemBall(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, item?: { itemId: string, quantity: number } } {
+	return {
+		success: true,
+		message: 'You found an item ball!',
+		item: event.itemBallContents,
+	};
+}
+
+/**
+ * Hidden Item Event
+ * Hidden item pickup
+ */
+export function handleHiddenItemEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, location?: string } {
+	return {
+		success: true,
+		message: `You found a hidden item at ${event.hiddenItemLocation || 'this location'}!`,
+		location: event.hiddenItemLocation,
+	};
+}
+
+/**
+ * Roaming Event
+ * Roaming Pokemon encounter
+ */
+export function handleRoamingEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, pokemon?: any, locations?: string[] } {
+	return {
+		success: true,
+		message: `A roaming ${event.roamingPokemon?.species || 'Pokemon'} appeared!`,
+		pokemon: event.roamingPokemon,
+		locations: event.roamingLocations,
+	};
+}
+
+/**
+ * Multi Battle Event
+ * Tag team battle event
+ */
+export function handleMultiBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, partnerId?: string, opponentIds?: string[] } {
+	return {
+		success: true,
+		message: 'A multi battle is starting!',
+		partnerId: event.partnerTrainerId,
+		opponentIds: event.opponentTrainerIds,
+	};
+}
+
+/**
+ * Photo Op Event
+ * Photo opportunity event
+ */
+export function handlePhotoOpEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, subject?: string, reward?: any } {
+	return {
+		success: true,
+		message: `Take a photo of ${event.photoSubject || 'this moment'}!`,
+		subject: event.photoSubject,
+		reward: event.photoReward,
+	};
+}
+
+/**
+ * Festival Event
+ * Festival/celebration event
+ */
+export function handleFestivalEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, festivalName?: string, activities?: string[] } {
+	return {
+		success: true,
+		message: `Welcome to the ${event.festivalName || 'Festival'}!`,
+		festivalName: event.festivalName,
+		activities: event.festivalActivities,
+	};
+}
+
+/**
+ * Secret Area Event
+ * Unlocking secret areas
+ */
+export function handleSecretArea(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, areaId?: string } {
+	return {
+		success: true,
+		message: `You discovered a secret area!`,
+		areaId: event.secretAreaId,
+	};
+}
+
+/**
+ * Warp Event
+ * Teleportation/warp events
+ */
+export function handleWarpEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, destination?: string, warpType?: string } {
+	const warpType = event.warpType || 'teleport';
+	return {
+		success: true,
+		message: `You ${warpType} to ${event.warpDestination || 'another location'}!`,
+		destination: event.warpDestination,
+		warpType: event.warpType,
+	};
+}
+
+/**
+ * Gym Challenge Event
+ * Formal gym challenge start
+ */
+export function handleGymChallengeEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, gymLeaderId?: string, trainers?: string[] } {
+	return {
+		success: true,
+		message: 'The gym challenge begins!',
+		gymLeaderId: event.gymLeaderId,
+		trainers: event.gymTrainers,
+	};
+}
+
+/**
+ * Elite Four Challenge Event
+ * Elite Four gauntlet
+ */
+export function handleEliteFourChallengeEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, eliteFour?: string[], championId?: string } {
+	return {
+		success: true,
+		message: 'You challenge the Elite Four!',
+		eliteFour: event.eliteFourOrder,
+		championId: event.championId,
+	};
+}
+
+/**
+ * Hall of Fame Event
+ * Hall of Fame induction
+ */
+export function handleHallOfFameEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string } {
+	if (event.hallOfFameEntry) {
+		player.storyFlags.add('hall_of_fame_inducted');
+	}
+
+	return {
+		success: true,
+		message: 'Congratulations! You are now in the Hall of Fame!',
+	};
+}
+
+/**
+ * Safari Zone Event
+ * Safari Zone special event
+ */
+export function handleSafariZoneEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, steps?: number, balls?: number, encounters?: any[] } {
+	return {
+		success: true,
+		message: `Welcome to the Safari Zone! You have ${event.safariSteps || 500} steps.`,
+		steps: event.safariSteps,
+		balls: event.safariBallCount,
+		encounters: event.safariEncounters,
+	};
+}
+
+/**
+ * Bug Catching Contest Event
+ * Bug Catching Contest
+ */
+export function handleBugCatchingContestEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, duration?: number, prizes?: any[] } {
+	return {
+		success: true,
+		message: `The Bug Catching Contest begins! You have ${event.contestDuration || 20} minutes.`,
+		duration: event.contestDuration,
+		prizes: event.contestPrizes,
+	};
+}
+
+/**
+ * Battle Frontier Event
+ * Battle Frontier event
+ */
+export function handleBattleFrontierEvent(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, facility?: string, rules?: string[] } {
+	return {
+		success: true,
+		message: `Welcome to the Battle ${event.frontierFacility || 'Tower'}!`,
+		facility: event.frontierFacility,
+		rules: event.frontierRules,
+	};
+}

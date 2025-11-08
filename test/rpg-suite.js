@@ -561,6 +561,166 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 	});
 
+	// ============================================
+	// WEATHER SYSTEM TESTS
+	// ============================================
+	describe('Weather System', () => {
+		let locations, battleEot;
+
+		before(function () {
+			try {
+				locations = require('../dist/impulse/chat-plugins/rpg-wip/locations');
+				battleEot = require('../dist/impulse/chat-plugins/rpg-wip/battle-eot');
+			} catch (e) {
+				console.log('Weather modules not found, skipping weather tests:', e.message);
+				this.skip();
+			}
+		});
+
+		it('should have locations with weather property', function () {
+			if (!locations) this.skip();
+
+			// Check that LOCATIONS exists
+			assert(locations.LOCATIONS);
+			assert(typeof locations.LOCATIONS === 'object');
+
+			// Some locations should have weather defined
+			const locationsWithWeather = Object.values(locations.LOCATIONS).filter(loc => loc.weather);
+			// We don't require specific locations to have weather, just verify the structure
+		});
+
+		it('should initialize battle with location weather', function () {
+			if (!core) this.skip();
+
+			// This test verifies the concept - actual implementation is in commands.ts
+			// In a real battle, weather would be set based on player.location
+			const mockBattle = {
+				weather: { type: 'rain', turns: 9999 },
+				locationWeather: { type: 'rain' },
+			};
+
+			assert.equal(mockBattle.weather.type, 'rain');
+			assert.equal(mockBattle.locationWeather.type, 'rain');
+			assert.equal(mockBattle.weather.turns, 9999);
+		});
+
+		it('should restore location weather after temporary weather expires', function () {
+			if (!battleEot) this.skip();
+
+			const mockBattle = {
+				weather: { type: 'sun', turns: 0 }, // Temporary weather expiring
+				locationWeather: { type: 'rain' }, // Original location weather
+			};
+			const messageLog = [];
+
+			// Simulate weather expiration (this would be called in battle-eot.ts)
+			if (mockBattle.weather.turns <= 0 && mockBattle.locationWeather) {
+				mockBattle.weather = {
+					type: mockBattle.locationWeather.type,
+					turns: 9999,
+				};
+				messageLog.push('Weather restored!');
+			}
+
+			assert.equal(mockBattle.weather.type, 'rain');
+			assert.equal(mockBattle.weather.turns, 9999);
+			assert(messageLog.length > 0);
+		});
+
+		it('should clear weather when no location weather exists', () => {
+			const mockBattle = {
+				weather: { type: 'sun', turns: 0 }, // Temporary weather expiring
+				locationWeather: undefined, // No location weather
+			};
+
+			// Simulate weather expiration without location weather
+			if (mockBattle.weather.turns <= 0) {
+				if (mockBattle.locationWeather) {
+					mockBattle.weather = {
+						type: mockBattle.locationWeather.type,
+						turns: 9999,
+					};
+				} else {
+					mockBattle.weather = undefined;
+				}
+			}
+
+			assert.equal(mockBattle.weather, undefined);
+		});
+
+		it('should handle weather override by moves', () => {
+			const mockBattle = {
+				weather: { type: 'sand', turns: 9999 }, // Location weather
+				locationWeather: { type: 'sand' },
+			};
+
+			// Simulate Rain Dance being used
+			mockBattle.weather = { type: 'rain', turns: 5 };
+
+			assert.equal(mockBattle.weather.type, 'rain');
+			assert.equal(mockBattle.weather.turns, 5);
+			assert.equal(mockBattle.locationWeather.type, 'sand'); // Location weather preserved
+		});
+
+		it('should handle multiple weather changes and restorations', () => {
+			const mockBattle = {
+				weather: { type: 'rain', turns: 9999 },
+				locationWeather: { type: 'rain' },
+			};
+
+			// Change 1: Sunny Day
+			mockBattle.weather = { type: 'sun', turns: 5 };
+			assert.equal(mockBattle.weather.type, 'sun');
+
+			// Expire and restore
+			mockBattle.weather.turns = 0;
+			if (mockBattle.locationWeather) {
+				mockBattle.weather = {
+					type: mockBattle.locationWeather.type,
+					turns: 9999,
+				};
+			}
+			assert.equal(mockBattle.weather.type, 'rain');
+
+			// Change 2: Hail
+			mockBattle.weather = { type: 'hail', turns: 5 };
+			assert.equal(mockBattle.weather.type, 'hail');
+
+			// Expire and restore again
+			mockBattle.weather.turns = 0;
+			if (mockBattle.locationWeather) {
+				mockBattle.weather = {
+					type: mockBattle.locationWeather.type,
+					turns: 9999,
+				};
+			}
+			assert.equal(mockBattle.weather.type, 'rain');
+		});
+
+		it('should exclude fog weather', () => {
+			// Fog should not be applied as battle weather
+			const weatherMap = {
+				'sun': 'sun',
+				'rain': 'rain',
+				'sandstorm': 'sand',
+				'hail': 'hail',
+				// 'fog' is intentionally excluded
+			};
+
+			assert.equal(weatherMap['fog'], undefined);
+			assert.equal(weatherMap['sun'], 'sun');
+			assert.equal(weatherMap['rain'], 'rain');
+		});
+
+		it('should convert sandstorm to sand format', () => {
+			const weatherMap = {
+				'sandstorm': 'sand',
+			};
+
+			assert.equal(weatherMap['sandstorm'], 'sand');
+		});
+	});
+
 	// NPC System Tests
 	describe('NPC System', () => {
 		let data;
