@@ -176,7 +176,7 @@ describe('RPG NPC Actions Module', function () {
 		});
 
 		it('should enforce cooldown', function () {
-			if (!npcActions.handleBattleRequest) {
+			if (!npcActions.handleBattleRequest || !npcActions.completeBattleRequest) {
 				this.skip();
 				return;
 			}
@@ -190,6 +190,10 @@ describe('RPG NPC Actions Module', function () {
 			const result1 = npcActions.handleBattleRequest(player, action, 'battlenpc');
 
 			if (result1 && result1.success) {
+				// Complete the battle first to set the cooldown
+				npcActions.completeBattleRequest(player, 'battlenpc');
+				
+				// Now check cooldown is enforced
 				const result2 = npcActions.handleBattleRequest(player, action, 'battlenpc');
 				assert(result2);
 				assert.equal(result2.success, false);
@@ -349,13 +353,13 @@ describe('RPG NPC Actions Module', function () {
 			};
 
 			// Plant
-			npcActions.handleBerryPlant(player, action, 'berryplot1', 'plant');
+			npcActions.handleBerryPlant(player, action, 'berryplot1', 'oran');
 
 			// Check harvest immediately (with short growth time)
-			const result = npcActions.checkBerryHarvest(player, 'berryplot1');
+			const result = npcActions.checkBerryHarvest(player, action, 'berryplot1');
 
 			assert(result);
-			assert.equal(typeof result.ready, 'boolean');
+			assert.equal(typeof result.canHarvest, 'boolean');
 		});
 	});
 
@@ -394,12 +398,7 @@ describe('RPG NPC Actions Module', function () {
 				return;
 			}
 
-			const action = {
-				type: 'ivchecker',
-				showIVs: true,
-			};
-
-			const result = npcActions.handleIVChecker(player, action, player.party[0].id);
+			const result = npcActions.handleIVChecker(player.party[0]);
 
 			assert(result);
 			assert.equal(typeof result.success, 'boolean');
@@ -421,7 +420,7 @@ describe('RPG NPC Actions Module', function () {
 
 			player.money = 5000;
 
-			const result = npcActions.handleMoveRelearner(player, action, player.party[0].id, 'thunderbolt');
+			const result = npcActions.handleMoveRelearner(player, action, player.party[0], 'thunderbolt');
 
 			assert(result);
 			assert.equal(typeof result.success, 'boolean');
