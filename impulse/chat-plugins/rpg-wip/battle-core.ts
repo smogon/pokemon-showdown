@@ -16,10 +16,7 @@ import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, TYPE_CHA
 import { getPlayerData, activeBattles, playerData } from './core';
 import {
 	generateBattleHTML,
-	generateDefeatHTML,
 	generateMoveLearnHTML,
-	generateTrainerVictoryHTML,
-	generateVictoryHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
 } from './html';
@@ -27,7 +24,6 @@ import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
 import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
 import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
 import { RPGMoves } from './battle-moves';
-// --- NEW/UPDATED IMPORTS ---
 import {
 	INITIAL_STAT_STAGES,
 	applyStatChange,
@@ -36,7 +32,6 @@ import {
 	applySynchronize,
 	handleHPDropEffects,
 } from './battle-shared';
-// --- END NEW/UPDATED IMPORTS ---
 
 /**
  * Get the current types of a Pokemon, accounting for terastallization.

@@ -13,11 +13,7 @@ import { ITEMS_DATABASE } from './items';
 import type { ActivePokemonSlot, BattleState, Stats, Status, Move, RPGPokemon } from './interface';
 import { getActiveSlots, NATURES } from './utils';
 
-// --- CONSTANTS ---
-
 export const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-
-// --- HELPER FUNCTIONS ---
 
 export function applyStatChange(
 	slot: ActivePokemonSlot,
@@ -264,8 +260,6 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 		activateUnburden(slot, messageLog);
 	}
 }
-
-// --- NEWLY MOVED FUNCTIONS ---
 
 export function getAccuracyEvasionMultiplier(stage: number): number {
 	if (stage > 0) {
