@@ -12,6 +12,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'startertown',
 		name: 'Starter Town',
 		type: 'town',
+		weather: 'sun',
 		description: 'A peaceful town where your journey begins. The air is fresh and the Pokemon are friendly.',
 		connectedLocations: [
 			{ id: 'route1', name: 'Route 1' },
