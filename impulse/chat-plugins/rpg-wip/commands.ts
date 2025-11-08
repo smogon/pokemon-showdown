@@ -1017,6 +1017,7 @@ export const commands: ChatCommands = {
 						exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
 					}
 				}
+				exploreButtons += '<hr />';
 			}
 
 			// Buildings (for towns/cities)
@@ -1038,6 +1039,7 @@ export const commands: ChatCommands = {
 
 					exploreButtons += `<button name="send" value="/rpg building ${building.id}" class="button">${icon} ${building.name}</button> `;
 				}
+				exploreButtons += '<hr />';
 			}
 
 			// Route trainers
@@ -1052,6 +1054,7 @@ export const commands: ChatCommands = {
 							exploreButtons += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
 						}
 					}
+					exploreButtons += '<hr />';
 				}
 			}
 
@@ -1083,6 +1086,7 @@ export const commands: ChatCommands = {
 						exploreButtons += `<button class="button" disabled style="opacity: 0.5;">🗺️ ${connection.name}${lockReason}</button> `;
 					}
 				}
+				exploreButtons += '<hr />';
 			}
 
 			const exploreHTML = `<div class="infobox">` +
