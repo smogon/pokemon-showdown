@@ -1,6 +1,7 @@
 /*
 * Pokemon Showdown
-* RPG Utilities
+* RPG Utility Functions
+* @author MusaddikTemkar
 */
 import { Dex, toID } from '../../../sim/dex';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
@@ -16,7 +17,6 @@ export function getActiveSlots(
 }
 
 export function calculateTotalExpForLevel(growthRate: string, level: number): number {
-	// Validate level parameter
 	if (level < 0) return 0;
 	if (level === 0) return 0;
 	if (!Number.isInteger(level)) level = Math.floor(level);
@@ -52,7 +52,6 @@ export function calculateTotalExpForLevel(growthRate: string, level: number): nu
 		result = Math.floor(n ** 3);
 	}
 
-	// Ensure non-negative result (fixes Medium Slow at level 1 returning -54)
 	return Math.max(0, result);
 }
 
@@ -126,7 +125,6 @@ export function levelUp(pokemon: RPGPokemon): string[] {
 	const species = Dex.species.get(pokemon.species);
 	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
 
-	// Calculate HP percentage before stat change
 	const hpPercentage = pokemon.hp / pokemon.maxHp;
 
 	pokemon.maxHp = newStats.maxHp;
@@ -136,11 +134,8 @@ export function levelUp(pokemon: RPGPokemon): string[] {
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
 
-	// Maintain HP percentage (don't heal on level up)
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
 
-	// Don't reset experience - keep accumulated exp to allow multiple level-ups
-	// pokemon.experience is already set by the caller (gainExperience or useExpCandyItem)
 	pokemon.expToNextLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level + 1);
 	return levelUpMessages;
 }
@@ -179,7 +174,6 @@ export function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { 
 	}
 
 	if (movesToQueue.length > 0) {
-		// Append to existing queue if same Pokemon, otherwise create new queue
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.pokemonId === pokemon.id) {
 			player.pendingMoveLearnQueue.moveIds.push(...movesToQueue);
 		} else {
@@ -205,8 +199,6 @@ export function checkEvolution(
 	const evolutionList = MANUAL_EVOLUTIONS[speciesId];
 
 	if (!evolutionList) return null;
-
-	// Check if Pokemon is holding an Everstone (prevents evolution)
 	if (pokemon.item === 'everstone') return null;
 
 	let foundEvo = null;
@@ -216,17 +208,13 @@ export function checkEvolution(
 		const isItemEvo = itemUsed !== undefined && evoData.evoItem === itemUsed;
 		const isLevelItemEvo = itemUsed === evoData.evoItem && pokemon.level >= evoData.evoLevel;
 
-		// Priority check: If an item is used, we only look for item-based evolutions.
 		if (itemUsed) {
 			if (isItemEvo || isLevelItemEvo) {
 				foundEvo = evoData;
 				break;
 			}
 		} else if (isLevelEvo) {
-		// Secondary check: Level up evolution (only if no item was explicitly used)
 			foundEvo = evoData;
-			// For multi-evolutions (like Wurmple, Eevee), we prioritize non-item level evolutions.
-			// Since there's no way to distinguish further without items/conditions, the first match is used.
 			break;
 		}
 	}
@@ -238,14 +226,12 @@ export function checkEvolution(
 	const oldSpeciesName = pokemon.species;
 	pokemon.species = evoSpecies.name;
 
-	// Update nickname if it matches the old species name (not custom-renamed)
 	if (pokemon.nickname === oldSpeciesName) {
 		pokemon.nickname = evoSpecies.name;
 	}
 
 	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
 
-	// Calculate HP percentage before evolution
 	const hpPercentage = pokemon.hp / pokemon.maxHp;
 
 	pokemon.maxHp = newStats.maxHp;
@@ -255,7 +241,6 @@ export function checkEvolution(
 	pokemon.spd = newStats.spd;
 	pokemon.spe = newStats.spe;
 
-	// Maintain HP percentage (don't heal on evolution)
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
 
 	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
