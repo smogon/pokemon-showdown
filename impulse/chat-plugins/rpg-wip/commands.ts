@@ -1961,18 +1961,12 @@ export const commands: ChatCommands = {
 					// Another slot is empty, show the switch screen again
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 				} else {
-					// All slots are filled, continue the battle
-					// Check if this switch *ended* the turn
-					const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
-					const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
-
-					if (submittedPlayerActions === activePlayerSlots) {
-						// All actions for this turn are complete, process it
-						processTurn(this, battle, room, user);
-					} else {
-						// Turn is not over, just update the UI
-						this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
-					}
+					// All slots are filled, the forced switch is complete
+					// A forced switch (due to fainting) ends the turn
+					// Clear any pending actions since the turn is over
+					battle.pendingActions = {};
+					// Show the battle screen for the next turn
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
 
