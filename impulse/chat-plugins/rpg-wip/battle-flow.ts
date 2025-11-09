@@ -75,7 +75,7 @@ export function handleOpponentFaint(
 		const slot = battle.opponentSlots[i];
 		if (slot && slot.pokemon.hp <= 0) {
 			faintedThisCheck = true;
-			messageLog.push(`**The opposing ${slot.pokemon.species} fainted!**`);
+			messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
 
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
@@ -110,7 +110,7 @@ export function handleOpponentFaint(
 
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 				if (faintedOnEntry) {
-					messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+					messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
 				} else {
 					handleMirrorHerb(newSlot, battle, messageLog);
 				}
@@ -130,7 +130,7 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 		const slot = battle.playerSlots[i];
 		if (slot === null || slot.pokemon.hp <= 0) {
 			if (slot && slot.pokemon.hp <= 0) {
-				messageLog.push(`**Your ${slot.pokemon.species} fainted!**`);
+				messageLog.push(`<b>Your ${slot.pokemon.species} fainted!</b>`);
 
 				const faintedAbility = toID(slot.pokemon.ability || '');
 				const lastMove = slot.lastMoveThatHitMe;
@@ -162,8 +162,8 @@ export function handleAiPivot(battle: BattleState, messageLog: string[]) {
 	const pivotSlot = battle.aiPendingPivot.slot;
 
 	if (nextOpponent) {
-		messageLog.push(`**${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!**`);
-		messageLog.push(`**${battle.opponentName} sent out ${nextOpponent.species}!**`);
+		messageLog.push(`<b>${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!</b>`);
+		messageLog.push(`<b>${battle.opponentName} sent out ${nextOpponent.species}!</b>`);
 
 		const newSlot = createActivePokemonSlot(nextOpponent);
 
@@ -179,7 +179,7 @@ export function handleAiPivot(battle: BattleState, messageLog: string[]) {
 
 		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 		if (faintedOnEntry) {
-			messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+			messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
 		} else {
 			handleMirrorHerb(newSlot, battle, messageLog);
 		}
