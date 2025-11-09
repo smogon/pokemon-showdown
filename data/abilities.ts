@@ -4724,7 +4724,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 33,
 	},
-  swordofruin: {
+	swordofruin: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Sword of Ruin');
 			this.field.addSourcedPseudoWeather('swordofruin', pokemon, this.effect);
