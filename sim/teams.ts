@@ -113,6 +113,14 @@ export interface PokemonSet {
 	 * Tera Type
 	 */
 	teraType?: string;
+	/**
+	 * Starter HP Percentage (custom field)
+	 */
+	starterHpPercent?: number;
+	/**
+	 * Starter status condition (custom field; e.g. 'par', 'slp', etc.)
+	 */
+	starterStatus?: string;
 }
 
 export const Teams = new class Teams {
@@ -127,26 +135,14 @@ export const Teams = new class Teams {
 		for (const set of team) {
 			if (buf) buf += ']';
 
-			// name
 			buf += (set.name || set.species);
-
-			// species
 			const id = this.packName(set.species || set.name);
 			buf += `|${this.packName(set.name || set.species) === id ? '' : id}`;
-
-			// item
 			buf += `|${this.packName(set.item)}`;
-
-			// ability
 			buf += `|${this.packName(set.ability)}`;
-
-			// moves
 			buf += '|' + set.moves.map(this.packName).join(',');
-
-			// nature
 			buf += `|${set.nature || ''}`;
 
-			// evs
 			let evs = '|';
 			if (set.evs) {
 				evs = `|${set.evs['hp'] || ''},${set.evs['atk'] || ''},${set.evs['def'] || ''},` +
@@ -158,14 +154,12 @@ export const Teams = new class Teams {
 				buf += evs;
 			}
 
-			// gender
 			if (set.gender) {
 				buf += `|${set.gender}`;
 			} else {
 				buf += '|';
 			}
 
-			// ivs
 			let ivs = '|';
 			if (set.ivs) {
 				ivs = `|${getIv(set.ivs, 'hp')},${getIv(set.ivs, 'atk')},${getIv(set.ivs, 'def')},` +
@@ -177,23 +171,34 @@ export const Teams = new class Teams {
 				buf += ivs;
 			}
 
-			// shiny
 			if (set.shiny) {
 				buf += '|S';
 			} else {
 				buf += '|';
 			}
 
-			// level
 			if (set.level && set.level !== 100) {
 				buf += `|${set.level}`;
 			} else {
 				buf += '|';
 			}
 
-			// happiness
 			if (set.happiness !== undefined && set.happiness !== 255) {
 				buf += `|${set.happiness}`;
+			} else {
+				buf += '|';
+			}
+
+			// starterHpPercent
+			if (set.starterHpPercent !== undefined && set.starterHpPercent !== 100) {
+				buf += `|${set.starterHpPercent}`;
+			} else {
+				buf += '|';
+			}
+
+			// starterStatus
+			if (set.starterStatus !== undefined && set.starterStatus !== '') {
+				buf += `|${set.starterStatus}`;
 			} else {
 				buf += '|';
 			}
@@ -226,30 +231,25 @@ export const Teams = new class Teams {
 		let i = 0;
 		let j = 0;
 
-		// limit to 24
 		for (let count = 0; count < 24; count++) {
 			const set: PokemonSet = {} as PokemonSet;
 			team.push(set);
 
-			// name
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.name = buf.substring(i, j);
 			i = j + 1;
 
-			// species
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.species = this.unpackName(buf.substring(i, j), Dex.species) || set.name;
 			i = j + 1;
 
-			// item
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.item = this.unpackName(buf.substring(i, j), Dex.items);
 			i = j + 1;
 
-			// ability
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
@@ -259,19 +259,16 @@ export const Teams = new class Teams {
 				this.unpackName(ability, Dex.abilities);
 			i = j + 1;
 
-			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
 			i = j + 1;
 
-			// nature
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.nature = this.unpackName(buf.substring(i, j), Dex.natures);
 			i = j + 1;
 
-			// evs
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			if (j !== i) {
@@ -287,13 +284,11 @@ export const Teams = new class Teams {
 			}
 			i = j + 1;
 
-			// gender
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			if (i !== j) set.gender = buf.substring(i, j);
 			i = j + 1;
 
-			// ivs
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			if (j !== i) {
@@ -309,19 +304,40 @@ export const Teams = new class Teams {
 			}
 			i = j + 1;
 
-			// shiny
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			if (i !== j) set.shiny = true;
 			i = j + 1;
 
-			// level
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			if (i !== j) set.level = parseInt(buf.substring(i, j));
 			i = j + 1;
 
+			// Extra fields: happiness | starterHpPercent | starterStatus | ...misc
+			let miscFields = [];
+			for (let extraCount = 0; extraCount < 3; extraCount++) {
+				j = buf.indexOf('|', i);
+				if (j < 0) break;
+				miscFields.push(buf.substring(i, j));
+				i = j + 1;
+			}
+
 			// happiness
+			set.happiness = (miscFields[0] ? Number(miscFields[0]) : 255);
+
+			// starterHpPercent
+			if (miscFields[1] !== undefined && miscFields[1] !== '') {
+				set.starterHpPercent = Number(miscFields[1]);
+				if (isNaN(set.starterHpPercent)) set.starterHpPercent = undefined;
+			}
+
+			// starterStatus
+			if (miscFields[2] !== undefined && miscFields[2] !== '') {
+				set.starterStatus = miscFields[2];
+			}
+
+			// Remaining misc fields
 			j = buf.indexOf(']', i);
 			let misc;
 			if (j < 0) {
@@ -330,12 +346,11 @@ export const Teams = new class Teams {
 				if (i !== j) misc = buf.substring(i, j).split(',', 6);
 			}
 			if (misc) {
-				set.happiness = (misc[0] ? Number(misc[0]) : 255);
-				set.hpType = misc[1] || '';
-				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
-				set.gigantamax = !!misc[3];
-				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
-				set.teraType = misc[5];
+				set.hpType = misc[0] || '';
+				set.pokeball = this.unpackName(misc[1] || '', Dex.items);
+				set.gigantamax = !!misc[2];
+				set.dynamaxLevel = (misc[3] ? Number(misc[3]) : 10);
+				set.teraType = misc[4];
 			}
 			if (j < 0) break;
 			i = j + 1;
@@ -401,6 +416,12 @@ export const Teams = new class Teams {
 		}
 		if (typeof set.happiness === 'number' && set.happiness !== 255 && !isNaN(set.happiness)) {
 			out += `Happiness: ${set.happiness}  \n`;
+		}
+		if (set.starterHpPercent !== undefined && set.starterHpPercent !== 100) {
+			out += `Starter HP: ${set.starterHpPercent}%  \n`;
+		}
+		if (set.starterStatus !== undefined && set.starterStatus !== '') {
+			out += `Starter Status: ${set.starterStatus}  \n`;
 		}
 		if (set.pokeball) {
 			out += `Pokeball: ${set.pokeball}  \n`;
@@ -492,6 +513,11 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('Happiness: ')) {
 			line = line.slice(11);
 			set.happiness = +line;
+		} else if (line.startsWith('Starter HP: ')) {
+			line = line.slice(12);
+			set.starterHpPercent = parseInt(line);
+		} else if (line.startsWith('Starter Status: ')) {
+			set.starterStatus = line.slice('Starter Status: '.length).trim();
 		} else if (line.startsWith('Pokeball: ')) {
 			line = line.slice(10);
 			set.pokeball = aggressive ? toID(line) : line;
