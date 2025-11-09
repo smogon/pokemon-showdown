@@ -346,17 +346,52 @@ export const Teams = new class Teams {
 			i = j + 1;
 
 			// happiness
+			// Skip the pipe character that starts the happiness field
+			if (buf[i] === '|') i++;
+
 			j = buf.indexOf(']', i);
 			let misc;
+			let happinessEnd = j;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',', 8);
+				if (i >= buf.length) {
+					// No more data
+				} else {
+					// Find comma to separate happiness from misc array
+					const commaIndex = buf.indexOf(',', i);
+					if (commaIndex >= 0) {
+						happinessEnd = commaIndex;
+						// Extract misc array starting from the comma (format: ,val1,val2,...)
+						// When split by comma, first element is empty, so actual values start at index 1
+						misc = buf.substring(commaIndex).split(',', 8);
+					} else {
+						happinessEnd = buf.length;
+					}
+				}
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',', 8);
+				// Find comma to separate happiness from misc array
+				const commaIndex = buf.indexOf(',', i);
+				if (commaIndex >= 0 && commaIndex < j) {
+					happinessEnd = commaIndex;
+					// Extract misc array starting from the comma (format: ,val1,val2,...)
+					// When split by comma, first element is empty, so actual values start at index 1
+					misc = buf.substring(commaIndex, j).split(',', 8);
+				} else {
+					happinessEnd = j;
+				}
 			}
+
+			// Extract happiness value (after pipe, before comma or ])
+			if (i !== happinessEnd) {
+				const happinessStr = buf.substring(i, happinessEnd);
+				const happinessNum = Number(happinessStr);
+				set.happiness = (happinessStr && !isNaN(happinessNum)) ? happinessNum : 255;
+			}
+
 			// Unpack extended properties from the misc array
 			// These properties are optional and stored after the standard team format fields
+			// The misc array is split from ",val1,val2,..." so misc[0] is empty, values start at misc[1]
+			// Format: ['', hpType, pokeball, gigantamax, dynamaxLevel, teraType, hpPercentage, status]
 			if (misc) {
-				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1] || '';
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
 				set.gigantamax = !!misc[3];
