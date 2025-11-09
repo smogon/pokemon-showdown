@@ -235,7 +235,7 @@ export function gainExperience(
 
 	if (participantNames.length === 0) return { messages: [], leveledUp: false };
 
-	messages.push(`**${participantNames.join(' and ')}** gained ${expGained} Experience Points!`);
+	messages.push(`<b>${participantNames.join(' and ')} gained ${expGained} Experience Points!</b>`);
 
 	for (const slot of participantSlots) {
 		if (!slot?.pokemon) continue;
