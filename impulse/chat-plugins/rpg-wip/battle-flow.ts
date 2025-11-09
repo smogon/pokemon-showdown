@@ -550,18 +550,24 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
 
+
 	if (totalDamage > 0) {
-		if (hazards.includes('stealthrock')) {
-			messageLog.push(`Pointed stones dug into ${pokemon.species}!`);
-		} else if (hazards.includes('spikes')) {
-			messageLog.push(`${pokemon.species} was hurt by the spikes!`);
-		}
-		pokemon.hp = Math.max(0, pokemon.hp - totalDamage);
-		if (pokemon.hp <= 0) {
-			return true;
+		// Check for Magic Guard before applying hazard damage
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			if (hazards.includes('stealthrock')) {
+				messageLog.push(`Pointed stones dug into ${pokemon.species}!`);
+			} else if (hazards.includes('spikes')) {
+				messageLog.push(`${pokemon.species} was hurt by the spikes!`);
+			}
+			pokemon.hp = Math.max(0, pokemon.hp - totalDamage);
+			if (pokemon.hp <= 0) {
+				return true;
+			}
+		} else {
+			messageLog.push(`${pokemon.species}'s Magic Guard prevents hazard damage!`);
 		}
 	}
-
+	
 	runSwitchInAbilities();
 
 	return false;
