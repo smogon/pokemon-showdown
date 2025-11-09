@@ -41,20 +41,21 @@ export function applyStatChange(
 		messageLog.push(msg);
 		return true;
 	} else if (actualValue < 0) {
-		if (!isSelf) {
-			if (battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
-				messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
-				return false;
-			}
-			const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
-			if (blockAbilities.includes(ability)) {
-				messageLog.push(`${pokemon.species}'s ${ability} prevents its stats from being lowered!`);
-				return false;
-			}
-			if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(ability)) {
-				messageLog.push(`${pokemon.species}'s ${ability} prevents its Attack from being lowered!`);
-				return false;
-			}
+		// Clear Amulet only blocks drops from others
+		if (!isSelf && battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
+			messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+			return false;
+		}
+
+		// Abilities like Clear Body block all drops, including self-inflicted ones
+		const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+		if (blockAbilities.includes(ability)) {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
+			return false;
+		}
+		if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(ability)) {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Attack from being lowered!`);
+			return false;
 		}
 
 		if (currentStage <= -6) {
