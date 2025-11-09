@@ -561,10 +561,18 @@ export function calculateDamage(
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	const defenderTypes = getPokemonTypes(defender, defenderSlot);
-	const effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle);
+	
+	let effectiveness: number;
+	if (moveId === 'struggle') {
+		// Struggle is typeless and always hits neutrally
+		effectiveness = 1;
+	} else {
+		// All other moves calculate effectiveness normally
+		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle);
+	}
 
 	abilityContext.effectiveness = effectiveness;
-
+	
 	let berryConsumed: string | undefined = undefined;
 	let effectivenessMultiplier = effectiveness;
 	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
