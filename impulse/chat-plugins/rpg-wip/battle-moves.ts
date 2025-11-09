@@ -362,6 +362,14 @@ export function handleGenericBoostMove(
 		targetName = defenderSlot.pokemon.species;
 	}
 
+	if (!isSelf && targetSlot.substitute) {
+		const hasLoweringBoost = Object.values(move.boosts).some(val => val < 0);
+		if (hasLoweringBoost) {
+			messageLog.push(`But it failed! (${targetName}'s Substitute blocked the move!)`);
+			return true;
+		}
+	}
+
 	const targetStages = targetSlot.statStages;
 	let hadEffect = false;
 	let triggeredDefiant = false;
@@ -426,6 +434,11 @@ export function handleGenericStatusInflictMove(
 	messageLog: string[]
 ): boolean {
 	if (!move.status || !defenderSlot) return false;
+
+	if (defenderSlot.substitute) {
+		messageLog.push(`But it failed! (${defenderSlot.pokemon.species}'s Substitute blocked the move!)`);
+		return true;
+	}
 
 	const defender = defenderSlot.pokemon;
 	const defenderSpecies = Dex.species.get(defender.species);
