@@ -638,6 +638,11 @@ export function handleGenericHealMove(
 ): boolean {
 	if (!move.flags.heal) return false;
 
+	if (attackerSlot.healBlockTurns > 0) {
+		messageLog.push(`But it failed! (${attackerSlot.pokemon.species} is prevented from healing!)`);
+		return true;
+	}
+
 	const attacker = attackerSlot.pokemon;
 	if (attacker.hp >= attacker.maxHp) {
 		messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
