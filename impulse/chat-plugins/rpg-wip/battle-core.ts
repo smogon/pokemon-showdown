@@ -290,12 +290,23 @@ export function getDamageOffense(
 	move: Move,
 	attacker: RPGPokemon,
 	attackerSlot: ActivePokemonSlot,
-	battle: BattleState
+	battle: BattleState,
+	abilityContext: AbilityContext
 ): number {
 	const isSpecial = move.category === 'Special';
-	const statName = isSpecial ? 'spa' : 'atk';
-	let attackStatRaw = attacker[statName];
+	let statName = isSpecial ? 'spa' : 'atk';
+	let attackStatRaw: number;
 
+	if (move.id === 'foulplay') {
+		// Foul Play uses the defender's Attack stat
+		const defender = abilityContext.defender; // We need to get the defender context
+		attackStatRaw = defender.atk;
+		statName = 'atk'; // Ensure it uses 'atk' stat stages
+	} else {
+		// Standard moves use the attacker's stats
+		attackStatRaw = attacker[statName];
+	}
+	
 	attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, statName, attackStatRaw, attackerSlot, battle);
 
 	if (battle.magicRoomTurns === 0) {
@@ -324,6 +335,11 @@ export function getDamageDefense(
 ): number {
 	const isSpecial = move.category === 'Special';
 	let statName = isSpecial ? 'spd' : 'def';
+
+	// Handle Psyshock, Psystrike, Secret Sword (Special moves that target Defense)
+	if (isSpecial && ['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
+		statName = 'def';
+	}
 
 	if (battle.wonderRoomTurns > 0) {
 		statName = isSpecial ? 'def' : 'spd';
@@ -523,10 +539,15 @@ export function calculateDamage(
 
 	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
 
-	const attackStatRaw = getDamageOffense(move, attacker, attackerSlot, battle);
+	const attackStatRaw = getDamageOffense(move, attacker, attackerSlot, battle, abilityContext);
 	const defenseStatRaw = getDamageDefense(move, defender, defenderSlot, battle);
 
-	let attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
+	let attackStage: number;
+	if (move.id === 'foulplay') {
+		attackStage = defenderSlot.statStages.atk;
+	} else {
+		attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
+	}
 	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
