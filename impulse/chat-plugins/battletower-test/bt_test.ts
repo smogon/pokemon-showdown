@@ -2,20 +2,6 @@ import { createBattle } from './bt_utils';
 
 // Array of all possible pack teams for testing
 const PACK_TEAMS = [
-	// Team 10: Hyper offense (Weavile at 50% HP + Azumarill with freeze status)
-	//
-	// WHY WEAVILE IS AT 50% HP (not 0%):
-	// This team demonstrates the custom HP percentage feature (hpPercentage) which allows
-	// pokemon to start battles with reduced HP for testing scenarios like:
-	// - Low-HP abilities (Emergency Exit, Berserk, etc.)
-	// - Berry activation thresholds
-	// - Revenge killing scenarios
-	//
-	// Originally this team had Weavile at 0% HP, but this was changed to 50% HP because:
-	// 1. Battles cannot start with fainted pokemon (HP <= 0) - this is now validated
-	// 2. 50% HP still demonstrates the custom HP feature working correctly
-	// 3. It creates a valid battle scenario for testing
-	//
 	// WHY AZUMARILL HAS FREEZE STATUS:
 	// The 'frz' (freeze) status demonstrates the custom status condition feature, allowing
 	// pokemon to start with status conditions for testing status-related abilities and moves.
