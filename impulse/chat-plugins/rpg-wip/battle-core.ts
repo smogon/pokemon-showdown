@@ -140,7 +140,7 @@ export function getStatMultiplier(stage: number): number {
 	if (stage >= 0) {
 		return (2 + stage) / 2;
 	} else {
-		return 2 / (2 - Math.abs(stage));
+		return 2 / (2 + Math.abs(stage));
 	}
 }
 
@@ -551,6 +551,10 @@ export function calculateDamage(
 	if (['explosion', 'selfdestruct'].includes(move.id)) {
 		defenseStat = Math.floor(defenseStat * 0.5);
 	}
+	
+	// Safety check: Ensure defenseStat is always at least 1 to prevent division issues
+	defenseStat = Math.max(1, defenseStat);
+	finalAttackStat = Math.max(1, finalAttackStat);
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
@@ -580,6 +584,11 @@ export function calculateDamage(
 
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
 	damage = Math.floor(damage * spreadMultiplier);
+	
+	// Safety check: Handle any invalid damage values (Infinity, NaN, or negative)
+	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
+		damage = 1;
+	}
 	damage = Math.max(1, damage);
 
 	let message = "";
