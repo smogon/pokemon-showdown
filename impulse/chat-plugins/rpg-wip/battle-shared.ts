@@ -327,21 +327,34 @@ export function checkTrappingAbility(
 ): ActivePokemonSlot | null {
 	const isPlayer = battle.playerSlots.includes(slotToSwitch);
 	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-	const userAbility = toID(slotToSwitch.pokemon.ability || '');
+	const userPokemon = slotToSwitch.pokemon;
+	const userAbility = toID(userPokemon.ability || '');
+	const userTypes = Dex.species.get(userPokemon.species).types;
 
+	// User's own Shadow Tag allows switching
 	if (userAbility === 'shadowtag') return null;
 
 	for (const oppSlot of opponentSlots) {
 		const oppAbility = toID(oppSlot.pokemon.ability || '');
+		if (!oppAbility) continue;
 
-		if (oppAbility === 'shadowtag') {
+		switch (oppAbility) {
+		case 'shadowtag':
 			return oppSlot;
-		}
 
-		if (oppAbility === 'arenatrap') {
-			if (RPGAbilities.isGrounded(slotToSwitch.pokemon, battle)) {
+		case 'arenatrap':
+			// Ghost-types are immune to Arena Trap
+			if (RPGAbilities.isGrounded(userPokemon, battle) && !userTypes.includes('Ghost')) {
 				return oppSlot;
 			}
+			break;
+
+		case 'magnetpull':
+			// Ghost-types are immune to Magnet Pull
+			if (userTypes.includes('Steel') && !userTypes.includes('Ghost')) {
+				return oppSlot;
+			}
+			break;
 		}
 	}
 
