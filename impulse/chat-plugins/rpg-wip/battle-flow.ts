@@ -877,7 +877,7 @@ export function handleSwitchAction(
 		messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
 		return;
 	}
-	if (attackerSlot.isTrapped) {
+	if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
 		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 		return;
 	}

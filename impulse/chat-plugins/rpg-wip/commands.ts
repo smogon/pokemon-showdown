@@ -2000,6 +2000,11 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
 				}
 
+				if (outgoingSlot.partiallyTrapped) {
+					this.errorReply(`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped and cannot switch out!`])}`);
+				}
+
 				if (outgoingSlot.isIngrained) {
 					this.errorReply(`${outgoingSlot.pokemon.species} is rooted in place by Ingrain and cannot switch out!`);
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted in place and cannot switch out!`])}`);
@@ -2209,7 +2214,7 @@ export const commands: ChatCommands = {
 				}
 				// --- END TRAP CHECK ---
 
-				const trappedPokemon = playerSlots.find(slot => slot.isTrapped);
+				const trappedPokemon = playerSlots.find(slot => slot.isTrapped || slot.partiallyTrapped);
 
 				if (trappedPokemon) {
 					this.errorReply(`${trappedPokemon.pokemon.species} is trapped and cannot escape!`);

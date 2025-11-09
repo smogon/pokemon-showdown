@@ -611,6 +611,20 @@ export function handleGenericVolatileMove(
 			checkMentalHerb(targetSlot, battle, messageLog);
 		}
 		break;
+	case 'partiallytrapped':
+		if (!targetSlot.partiallyTrapped) {
+			const attacker = attackerSlot.pokemon;
+			// Duration: 4-6 turns normally, 7 turns with Grip Claw
+			const hasGripClaw = attacker.item === 'gripclaw';
+			const turns = hasGripClaw ? 7 : Math.floor(Math.random() * 3) + 4; // 4-6 turns
+			// Damage divisor: 1/8 normally, 1/6 with Binding Band
+			const hasBindingBand = attacker.item === 'bindingband';
+			const damage = hasBindingBand ? 6 : 8;
+			targetSlot.partiallyTrapped = { turns, moveId: move.id, damage };
+			messageLog.push(`${target.species} was trapped by ${move.name}!`);
+			hadEffect = true;
+		}
+		break;
 	}
 
 	if (!hadEffect) messageLog.push('But it failed!');
