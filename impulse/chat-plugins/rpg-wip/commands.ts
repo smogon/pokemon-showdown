@@ -1445,6 +1445,68 @@ export const commands: ChatCommands = {
 				if (locationWeatherData.weather) {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 				}
+				
+				// Create temporary battle state to apply switch-in abilities
+				const tempBattle: BattleState = {
+					battleType: finalBattleType,
+					opponentName: `Wild Pokémon`,
+					opponentParty,
+					opponentMoney: 0,
+					playerSlots,
+					opponentSlots,
+					pendingActions: {},
+					playerId: user.id,
+					turn: 0,
+					zoneId,
+					playerHazards: [],
+					opponentHazards: [],
+					weather: locationWeatherData.weather,
+					locationWeather: locationWeatherData.locationWeather,
+					trickRoomTurns: 0,
+					magicRoomTurns: 0,
+					wonderRoomTurns: 0,
+					terrain: undefined,
+					playerShouldSwitch: undefined,
+					pendingPivot: undefined,
+					aiPendingPivot: undefined,
+					forceEnd: false,
+					playerTerastallizeUsed: false,
+					opponentTerastallizeUsed: false,
+					playerQuickGuard: false,
+					opponentQuickGuard: false,
+					playerWideGuard: false,
+					opponentWideGuard: false,
+					playerCraftyShield: false,
+					opponentCraftyShield: false,
+					playerReflectTurns: 0,
+					opponentReflectTurns: 0,
+					playerLightScreenTurns: 0,
+					opponentLightScreenTurns: 0,
+					playerAuroraVeilTurns: 0,
+					opponentAuroraVeilTurns: 0,
+					gravityTurns: 0,
+					mudSportTurns: 0,
+					waterSportTurns: 0,
+					fairyLockTurns: 0,
+					ionDelugeTurns: 0,
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
+				};
+				
+				// Apply switch-in abilities for all active Pokemon at battle start
+				if (playerSlots[0]) {
+					RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle, true, battleMessages);
+				}
+				if (playerSlots[1]) {
+					RPGAbilities.applySwitchInAbilities(playerSlots[1], tempBattle, true, battleMessages);
+				}
+				if (opponentSlots[0]) {
+					RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle, false, battleMessages);
+				}
+				if (opponentSlots[1]) {
+					RPGAbilities.applySwitchInAbilities(opponentSlots[1], tempBattle, false, battleMessages);
+				}
+				
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: finalBattleType,
@@ -1549,6 +1611,62 @@ export const commands: ChatCommands = {
 				if (locationWeatherData3.weather) {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData3.weather.type));
 				}
+				
+				// Create temporary battle state to apply switch-in abilities
+				const tempBattle2: BattleState = {
+					battleType: 'wild',
+					opponentName: `Wild ${wildPokemon.species}`,
+					opponentParty,
+					opponentMoney: 0,
+					playerSlots,
+					opponentSlots,
+					pendingActions: {},
+					playerId: user.id,
+					turn: 0,
+					zoneId: 'scripted',
+					playerHazards: [],
+					opponentHazards: [],
+					weather: locationWeatherData3.weather,
+					locationWeather: locationWeatherData3.locationWeather,
+					terrain: undefined,
+					playerShouldSwitch: undefined,
+					pendingPivot: undefined,
+					aipPendingPivot: undefined,
+					forceEnd: false,
+					trickRoomTurns: 0,
+					magicRoomTurns: 0,
+					wonderRoomTurns: 0,
+					gravityTurns: 0,
+					mudSportTurns: 0,
+					waterSportTurns: 0,
+					fairyLockTurns: 0,
+					ionDelugeTurns: 0,
+					playerQuickGuard: false,
+					opponentQuickGuard: false,
+					playerWideGuard: false,
+					opponentWideGuard: false,
+					playerCraftyShield: false,
+					opponentCraftyShield: false,
+					playerReflectTurns: 0,
+					opponentReflectTurns: 0,
+					playerLightScreenTurns: 0,
+					opponentLightScreenTurns: 0,
+					playerAuroraVeilTurns: 0,
+					opponentAuroraVeilTurns: 0,
+					playerTerastallizeUsed: false,
+					opponentTerastallizeUsed: false,
+					playerFutureMoves: [],
+					opponentFutureMoves: [],
+				};
+				
+				// Apply switch-in abilities for all active Pokemon at battle start
+				if (playerSlots[0]) {
+					RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle2, true, battleMessages);
+				}
+				if (opponentSlots[0]) {
+					RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle2, false, battleMessages);
+				}
+				
 				activeBattles.set(user.id, {
 					// --- Battle Type Fields ---
 					battleType: 'wild',
@@ -1670,6 +1788,72 @@ export const commands: ChatCommands = {
 			}
 
 			const locationWeatherData2 = getLocationWeatherData(player);
+			
+			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
+			const challengeMessages = [startMessage];
+			
+			// Create temporary battle state to apply switch-in abilities
+			const tempBattle3: BattleState = {
+				battleType: finalBattleType,
+				opponentName: trainerSpec.name,
+				opponentParty: trainerParty,
+				opponentMoney: trainerSpec.money,
+				trainerId,
+				playerSlots,
+				opponentSlots,
+				pendingActions: {},
+				playerId: user.id,
+				turn: 0,
+				zoneId: 'trainer_battle',
+				playerHazards: [],
+				opponentHazards: [],
+				weather: locationWeatherData2.weather,
+				locationWeather: locationWeatherData2.locationWeather,
+				trickRoomTurns: 0,
+				magicRoomTurns: 0,
+				wonderRoomTurns: 0,
+				terrain: undefined,
+				playerShouldSwitch: undefined,
+				pendingPivot: undefined,
+				aiPendingPivot: undefined,
+				forceEnd: false,
+				playerTerastallizeUsed: false,
+				opponentTerastallizeUsed: false,
+				playerQuickGuard: false,
+				opponentQuickGuard: false,
+				playerWideGuard: false,
+				opponentWideGuard: false,
+				playerCraftyShield: false,
+				opponentCraftyShield: false,
+				playerReflectTurns: 0,
+				opponentReflectTurns: 0,
+				playerLightScreenTurns: 0,
+				opponentLightScreenTurns: 0,
+				playerAuroraVeilTurns: 0,
+				opponentAuroraVeilTurns: 0,
+				gravityTurns: 0,
+				mudSportTurns: 0,
+				waterSportTurns: 0,
+				fairyLockTurns: 0,
+				ionDelugeTurns: 0,
+				playerFutureMoves: [],
+				opponentFutureMoves: [],
+			};
+			
+			// Apply switch-in abilities for all active Pokemon at battle start
+			if (playerSlots[0]) {
+				RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle3, true, challengeMessages);
+			}
+			if (playerSlots[1]) {
+				RPGAbilities.applySwitchInAbilities(playerSlots[1], tempBattle3, true, challengeMessages);
+			}
+			if (opponentSlots[0]) {
+				RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle3, false, challengeMessages);
+			}
+			if (opponentSlots[1]) {
+				RPGAbilities.applySwitchInAbilities(opponentSlots[1], tempBattle3, false, challengeMessages);
+			}
+			
 			activeBattles.set(user.id, {
 				// --- Battle Type Fields ---
 				battleType: finalBattleType,
@@ -1728,8 +1912,6 @@ export const commands: ChatCommands = {
 				opponentFutureMoves: [],
 			});
 
-			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
-			const challengeMessages = [startMessage];
 			// Add weather message if there is location weather
 			if (locationWeatherData2.weather) {
 				challengeMessages.push(getWeatherStartMessage(locationWeatherData2.weather.type));
