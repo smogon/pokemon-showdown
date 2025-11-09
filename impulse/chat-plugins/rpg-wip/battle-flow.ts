@@ -104,7 +104,7 @@ export function handleOpponentFaint(
 			);
 
 			if (nextOpponent) {
-				messageLog.push(`**${battle.opponentName} is about to send in ${nextOpponent.species}!**`);
+				messageLog.push(`<b>${battle.opponentName} is about to send in ${nextOpponent.species}!</b>`);
 				const newSlot = createActivePokemonSlot(nextOpponent);
 				battle.opponentSlots[i as 0 | 1] = newSlot;
 
@@ -910,11 +910,11 @@ export function handleSwitchAction(
 
 		const newSlot = createActivePokemonSlot(incomingPokemon);
 		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
-		messageLog.push(`**${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!**`);
+		messageLog.push(`<b>${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!</b>`);
 
 		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
 		if (faintedOnEntry) {
-			messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+			messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
 		} else {
 			handleMirrorHerb(newSlot, battle, messageLog);
 			RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
@@ -925,11 +925,11 @@ export function handleSwitchAction(
 		if (replacement) {
 			const newSlot = createActivePokemonSlot(replacement);
 			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot;
-			messageLog.push(`**${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!**`);
+			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
 
 			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 			if (faintedOnEntry) {
-				messageLog.push(`**${newSlot.pokemon.species} fainted upon entry!**`);
+				messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
 			} else {
 				handleMirrorHerb(newSlot, battle, messageLog);
 				RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
