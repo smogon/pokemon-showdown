@@ -1106,7 +1106,9 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	const effectiveness = ctx.effectiveness || 1;
 
 	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
-		damage = Math.floor(damage * 1.25);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 1.25);
+		}
 	}
 
 	if (attackerAbility === 'tintedlens' && effectiveness < 1) {
@@ -1114,32 +1116,44 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	}
 
 	if ((defenderAbility === 'solidrock' || defenderAbility === 'filter') && effectiveness > 1) {
-		damage = Math.floor(damage * 0.75);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.75);
+		}
 	}
 
 	if ((defenderAbility === 'multiscale' || defenderAbility === 'shadowshield') &&
 		ctx.defender.hp === ctx.defender.maxHp) {
-		damage = Math.floor(damage * 0.5);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
 	}
 
 	if (defenderAbility === 'purifyingsalt' && ctx.move.type === 'Ghost') {
-		damage = Math.floor(damage * 0.5);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
 	}
 
 	if (defenderAbility === 'furcoat' && ctx.move.category === 'Physical') {
-		damage = Math.floor(damage * 0.5);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
 	}
 
 	// Phase 2: Thick Fat - halves Fire and Ice damage
 	if (defenderAbility === 'thickfat' && (ctx.move.type === 'Fire' || ctx.move.type === 'Ice')) {
-		damage = Math.floor(damage * 0.5);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
 	}
 
 	if (attackerAbility === 'punkrock' && ctx.move.flags.sound) {
 		damage = Math.floor(damage * 1.3);
 	}
 	if (defenderAbility === 'punkrock' && ctx.move.flags.sound) {
-		damage = Math.floor(damage * 0.5);
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
 	}
 
 	return damage;
