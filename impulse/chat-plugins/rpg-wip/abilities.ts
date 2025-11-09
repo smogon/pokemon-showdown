@@ -453,29 +453,37 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 export const WEATHER_ABILITIES = {
 	'drought': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.weather = { type: 'sun', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Drought intensified the sun!`);
+			if (battle.weather?.type !== 'sun') {
+				battle.weather = { type: 'sun', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Drought intensified the sun!`);
+			}
 		},
 	},
 
 	'drizzle': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.weather = { type: 'rain', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Drizzle caused a downpour!`);
+			if (battle.weather?.type !== 'rain') {
+				battle.weather = { type: 'rain', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Drizzle caused a downpour!`);
+			}
 		},
 	},
 
 	'sandstream': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.weather = { type: 'sand', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Sand Stream whipped up a sandstorm!`);
+			if (battle.weather?.type !== 'sand') {
+				battle.weather = { type: 'sand', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Sand Stream whipped up a sandstorm!`);
+			}
 		},
 	},
 
 	'snowwarning': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.weather = { type: 'hail', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Snow Warning created a hailstorm!`);
+			if (battle.weather?.type !== 'hail') {
+				battle.weather = { type: 'hail', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Snow Warning created a hailstorm!`);
+			}
 		},
 	},
 
@@ -630,29 +638,37 @@ export const CRITICAL_HIT_ABILITIES = {
 export const TERRAIN_ABILITIES = {
 	'electricsurge': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'electric', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Electric Surge electrified the field!`);
+			if (battle.terrain?.type !== 'electric') {
+				battle.terrain = { type: 'electric', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Electric Surge electrified the field!`);
+			}
 		},
 	},
 
 	'grassysurge': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'grassy', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Grassy Surge created grassy terrain!`);
+			if (battle.terrain?.type !== 'grassy') {
+				battle.terrain = { type: 'grassy', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Grassy Surge created grassy terrain!`);
+			}
 		},
 	},
 
 	'mistysurge': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'misty', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Misty Surge created misty terrain!`);
+			if (battle.terrain?.type !== 'misty') {
+				battle.terrain = { type: 'misty', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Misty Surge created misty terrain!`);
+			}
 		},
 	},
 
 	'psychicsurge': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
-			battle.terrain = { type: 'psychic', turns: 5 };
-			messageLog.push(`${slot.pokemon.species}'s Psychic Surge created psychic terrain!`);
+			if (battle.terrain?.type !== 'psychic') {
+				battle.terrain = { type: 'psychic', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Psychic Surge created psychic terrain!`);
+			}
 		},
 	},
 
@@ -1322,58 +1338,16 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
-	switch (ability) {
-	case 'drought':
-		if (battle.weather?.type !== 'sun') {
-			battle.weather = { type: 'sun', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Drought intensified the sun!`);
-		}
-		break;
-	case 'drizzle':
-		if (battle.weather?.type !== 'rain') {
-			battle.weather = { type: 'rain', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Drizzle caused a downpour!`);
-		}
-		break;
-	case 'sandstream':
-		if (battle.weather?.type !== 'sand') {
-			battle.weather = { type: 'sand', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Sand Stream whipped up a sandstorm!`);
-		}
-		break;
-	case 'snowwarning':
-		if (battle.weather?.type !== 'hail') {
-			battle.weather = { type: 'hail', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Snow Warning created a hailstorm!`);
-		}
-		break;
+	// Apply weather abilities
+	const weatherAbility = WEATHER_ABILITIES[ability];
+	if (weatherAbility?.onSwitchIn) {
+		weatherAbility.onSwitchIn(slot, battle, messageLog);
 	}
 
-	switch (ability) {
-	case 'electricsurge':
-		if (battle.terrain?.type !== 'electric') {
-			battle.terrain = { type: 'electric', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Electric Surge electrified the field!`);
-		}
-		break;
-	case 'grassysurge':
-		if (battle.terrain?.type !== 'grassy') {
-			battle.terrain = { type: 'grassy', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Grassy Surge created grassy terrain!`);
-		}
-		break;
-	case 'mistysurge':
-		if (battle.terrain?.type !== 'misty') {
-			battle.terrain = { type: 'misty', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Misty Surge created misty terrain!`);
-		}
-		break;
-	case 'psychicsurge':
-		if (battle.terrain?.type !== 'psychic') {
-			battle.terrain = { type: 'psychic', turns: 5 };
-			messageLog.push(`${pokemon.species}'s Psychic Surge created psychic terrain!`);
-		}
-		break;
+	// Apply terrain abilities
+	const terrainAbility = TERRAIN_ABILITIES[ability];
+	if (terrainAbility?.onSwitchIn) {
+		terrainAbility.onSwitchIn(slot, battle, messageLog);
 	}
 
 	if (ability === 'intimidate') {
