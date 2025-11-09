@@ -1906,7 +1906,31 @@ export class Battle {
 			throw new Error('Battle not started: A player has an empty team.');
 		}
 
-		// Check for fainted pokemon (0% HP) in teams before starting the battle
+		// VALIDATION: Prevent battles from starting with fainted pokemon (0% HP)
+		//
+		// WHY THIS IS NEEDED:
+		// The custom HP percentage feature (hpPercentage in PokemonSet) allows pokemon to start
+		// with reduced HP for testing low-HP abilities like Emergency Exit or Berserk. However,
+		// this also allows pokemon to be initialized with 0% HP, which means they are fainted.
+		// Pokemon games and competitive battling rules do not allow battles to start with fainted
+		// pokemon in the team - all pokemon must have at least 1 HP to be considered valid.
+		//
+		// WHY THIS IS IN THIS LOCATION:
+		// This validation is placed in battle.start() after team creation but before battle
+		// initialization begins. At this point:
+		// 1. All pokemon objects have been created with their HP values set
+		// 2. The battle hasn't started yet, so we can safely throw an error
+		// 3. It's after the empty team check, following the pattern of pre-battle validations
+		// 4. It's before runPickTeam() and the actual battle loop begins
+		//
+		// HOW IT WORKS:
+		// 1. Iterate through each side (player) in the battle
+		// 2. Filter each side's pokemon to find any with HP <= 0 (fainted)
+		// 3. If fainted pokemon are found on any side:
+		//    - Count them and get their names for the error message
+		//    - Throw an error that prevents battle initialization
+		//    - Include which side, how many, and which pokemon are fainted
+		// 4. The error bubbles up through the battle stream and is displayed to users
 		for (const side of this.sides) {
 			const faintedPokemon = side.pokemon.filter(pokemon => pokemon.hp <= 0);
 			if (faintedPokemon.length > 0) {
