@@ -628,6 +628,7 @@ export function executeMove(
 
 		let moveHit = true;
 		if (['aerialace'].includes(move.id)) {
+			// Moves like Aerial Ace always hit
 		} else if (move.accuracy !== true) {
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
@@ -781,7 +782,7 @@ export function buildActionQueue(battle: BattleState, messageLog: string[]): Non
 		return speedB - speedA;
 	});
 
-	allActiveSlots.forEach(s => s.analyticBoost = false);
+	allActiveSlots.forEach(s => { s.analyticBoost = false; });
 	let lastMoveAction: NonNullable<BattleState['pendingActions'][number]> | null = null;
 	for (let i = actionQueue.length - 1; i >= 0; i--) {
 		if (actionQueue[i].actionType === 'move') {
@@ -1057,7 +1058,7 @@ export function executeAction(
 		for (const defenderSlot of resolvedTargets) {
 			const abilityContext = { attacker: attackerSlot.pokemon, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 			const preventionCheck = RPGAbilities.preventMove(abilityContext);
-			if (preventionCheck && preventionCheck.prevented) {
+			if (preventionCheck?.prevented) {
 				messageLog.push(preventionCheck.message || `${defenderSlot.pokemon.species}'s ability prevented the move!`);
 			} else {
 				remainingTargets.push(defenderSlot);
