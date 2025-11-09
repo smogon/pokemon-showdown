@@ -1494,17 +1494,18 @@ export const commands: ChatCommands = {
 				};
 				
 				// Apply switch-in abilities for all active Pokemon at battle start
+				// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
 				if (playerSlots[0]) {
-					RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle, true, battleMessages);
 				}
 				if (playerSlots[1]) {
-					RPGAbilities.applySwitchInAbilities(playerSlots[1], tempBattle, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[1], tempBattle, true, battleMessages);
 				}
 				if (opponentSlots[0]) {
-					RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle, false, battleMessages);
 				}
 				if (opponentSlots[1]) {
-					RPGAbilities.applySwitchInAbilities(opponentSlots[1], tempBattle, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[1], tempBattle, false, battleMessages);
 				}
 				
 				activeBattles.set(user.id, {
@@ -1660,11 +1661,12 @@ export const commands: ChatCommands = {
 				};
 				
 				// Apply switch-in abilities for all active Pokemon at battle start
+				// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
 				if (playerSlots[0]) {
-					RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle2, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle2, true, battleMessages);
 				}
 				if (opponentSlots[0]) {
-					RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle2, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle2, false, battleMessages);
 				}
 				
 				activeBattles.set(user.id, {
@@ -1841,17 +1843,18 @@ export const commands: ChatCommands = {
 			};
 			
 			// Apply switch-in abilities for all active Pokemon at battle start
+			// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
 			if (playerSlots[0]) {
-				RPGAbilities.applySwitchInAbilities(playerSlots[0], tempBattle3, true, challengeMessages);
+				applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle3, true, challengeMessages);
 			}
 			if (playerSlots[1]) {
-				RPGAbilities.applySwitchInAbilities(playerSlots[1], tempBattle3, true, challengeMessages);
+				applyHazardEffectsOnSwitchIn(playerSlots[1], tempBattle3, true, challengeMessages);
 			}
 			if (opponentSlots[0]) {
-				RPGAbilities.applySwitchInAbilities(opponentSlots[0], tempBattle3, false, challengeMessages);
+				applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle3, false, challengeMessages);
 			}
 			if (opponentSlots[1]) {
-				RPGAbilities.applySwitchInAbilities(opponentSlots[1], tempBattle3, false, challengeMessages);
+				applyHazardEffectsOnSwitchIn(opponentSlots[1], tempBattle3, false, challengeMessages);
 			}
 			
 			activeBattles.set(user.id, {
