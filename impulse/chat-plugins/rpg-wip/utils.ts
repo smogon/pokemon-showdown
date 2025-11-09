@@ -10,7 +10,7 @@ import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot } from './interface';
 
 export function getActiveSlots(
-	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
+	slots: (ActivePokemonSlot | null)[] | undefined
 ): ActivePokemonSlot[] {
 	if (!slots) return [];
 	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
