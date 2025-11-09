@@ -29,7 +29,8 @@ const activeBattles = new Map<string, ActiveBattleMeta>();
  * @param team The raw team array.
  * @returns The packed team string or the original array.
  */
-function packTeam(team: any[]) {
+function packTeam(team: any[] | string) {
+	if (typeof team === 'string') return team;
 	if (typeof Teams?.pack === 'function') return Teams.pack(team);
 	return team;
 }
