@@ -850,6 +850,11 @@ export function applySecondaryEffects(
 	if (defenderSlot.pokemon.hp <= 0) return;
 	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
 
+	// Substitute blocks all secondary effects
+	if (defenderSlot.substitute) {
+		return;
+	}
+
 	let chance = move.secondary.chance || 100;
 	chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
