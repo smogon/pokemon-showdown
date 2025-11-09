@@ -1364,7 +1364,6 @@ export const commands: ChatCommands = {
 			buildingHTML += '<p><strong>Actions:</strong></p>';
 
 			if (building.type === 'pokecenter') {
-				buildingHTML += `<button name="send" value="/rpg heal" class="button">🏥 Heal Pokemon</button> `;
 				buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
 			}
 
@@ -2252,8 +2251,6 @@ export const commands: ChatCommands = {
 			},
 		},
 
-
-
 		giveitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
@@ -2744,7 +2741,7 @@ export const commands: ChatCommands = {
 							player.lastPokemonCenter = currentLocationId;
 						}
 					}
-					
+
 					resultHTML += `<p>"${result.message}"</p>`;
 					resultHTML += `<p style="color: green;">✅ Your Pokémon have been restored to full health!</p>`;
 				} else {
