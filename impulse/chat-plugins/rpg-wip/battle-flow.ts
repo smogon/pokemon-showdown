@@ -1078,6 +1078,22 @@ export function executeAction(
 		}
 
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
+			const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
+			if (trappingPokemon) {
+				messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
+				return; // Stop the switch
+			}
+	
+			if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
+				messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
+				return; // Stop the switch
+			}
+	
+			if (attackerSlot.isIngrained) {
+				messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
+				return; // Stop the switch
+			}
+			
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
 				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
