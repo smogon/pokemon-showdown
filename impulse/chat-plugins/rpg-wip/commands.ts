@@ -1446,8 +1446,8 @@ export const commands: ChatCommands = {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 				}
 				
-				// Create temporary battle state to apply switch-in abilities
-				const tempBattle: BattleState = {
+				// Create the battle state object
+				const battle: BattleState = {
 					battleType: finalBattleType,
 					opponentName: `Wild Pokémon`,
 					opponentParty,
@@ -1465,7 +1465,7 @@ export const commands: ChatCommands = {
 					trickRoomTurns: 0,
 					magicRoomTurns: 0,
 					wonderRoomTurns: 0,
-					terrain: undefined,
+					terrain: undefined, // Will be set by abilities
 					playerShouldSwitch: undefined,
 					pendingPivot: undefined,
 					aiPendingPivot: undefined,
@@ -1493,79 +1493,25 @@ export const commands: ChatCommands = {
 					opponentFutureMoves: [],
 				};
 				
-				// Apply switch-in abilities for all active Pokemon at battle start
-				// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
+				// Apply switch-in abilities (which modifies the 'battle' object)
 				if (playerSlots[0]) {
-					applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
 				}
 				if (playerSlots[1]) {
-					applyHazardEffectsOnSwitchIn(playerSlots[1], tempBattle, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, battleMessages);
 				}
 				if (opponentSlots[0]) {
-					applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
 				}
 				if (opponentSlots[1]) {
-					applyHazardEffectsOnSwitchIn(opponentSlots[1], tempBattle, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, battleMessages);
 				}
 				
-				activeBattles.set(user.id, {
-					// --- Battle Type Fields ---
-					battleType: finalBattleType,
-					opponentName: `Wild Pokémon`,
-					opponentParty,
-					opponentMoney: 0,
+				// Set the modified battle object as the active battle
+				activeBattles.set(user.id, battle);
 
-					// --- New Slot-Based Fields ---
-					playerSlots,
-					opponentSlots,
-					pendingActions: {},
-
-					// --- Core BattleState Fields ---
-					playerId: user.id,
-					turn: 0,
-					zoneId,
-					playerHazards: [],
-					opponentHazards: [],
-					weather: locationWeatherData.weather,
-					locationWeather: locationWeatherData.locationWeather,
-					trickRoomTurns: 0,
-					magicRoomTurns: 0,
-					wonderRoomTurns: 0,
-					terrain: undefined,
-					playerShouldSwitch: undefined,
-					pendingPivot: undefined,
-					aiPendingPivot: undefined,
-					forceEnd: false,
-
-					// --- Terastallization Fields ---
-					playerTerastallizeUsed: false,
-					opponentTerastallizeUsed: false,
-
-					// --- Side-Wide Fields ---
-					playerQuickGuard: false,
-					opponentQuickGuard: false,
-					playerWideGuard: false,
-					opponentWideGuard: false,
-					playerCraftyShield: false,
-					opponentCraftyShield: false,
-					playerReflectTurns: 0,
-					opponentReflectTurns: 0,
-					playerLightScreenTurns: 0,
-					opponentLightScreenTurns: 0,
-					playerAuroraVeilTurns: 0,
-					opponentAuroraVeilTurns: 0,
-					gravityTurns: 0,
-					mudSportTurns: 0,
-					waterSportTurns: 0,
-					fairyLockTurns: 0,
-					ionDelugeTurns: 0,
-
-					// --- Delayed Move Fields ---
-					playerFutureMoves: [],
-					opponentFutureMoves: [],
-				});
-
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+				// Generate HTML using the modified battle object
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, battleMessages)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1613,8 +1559,8 @@ export const commands: ChatCommands = {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData3.weather.type));
 				}
 				
-				// Create temporary battle state to apply switch-in abilities
-				const tempBattle2: BattleState = {
+				// Create the battle state object
+				const battle: BattleState = {
 					battleType: 'wild',
 					opponentName: `Wild ${wildPokemon.species}`,
 					opponentParty,
@@ -1629,10 +1575,10 @@ export const commands: ChatCommands = {
 					opponentHazards: [],
 					weather: locationWeatherData3.weather,
 					locationWeather: locationWeatherData3.locationWeather,
-					terrain: undefined,
+					terrain: undefined, // Will be set by abilities
 					playerShouldSwitch: undefined,
 					pendingPivot: undefined,
-					aipPendingPivot: undefined,
+					aiPendingPivot: undefined, // Corrected property name from source
 					forceEnd: false,
 					trickRoomTurns: 0,
 					magicRoomTurns: 0,
@@ -1660,74 +1606,25 @@ export const commands: ChatCommands = {
 					opponentFutureMoves: [],
 				};
 				
-				// Apply switch-in abilities for all active Pokemon at battle start
-				// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
+				// Apply switch-in abilities (which modifies the 'battle' object)
 				if (playerSlots[0]) {
-					applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle2, true, battleMessages);
+					applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
 				}
 				if (opponentSlots[0]) {
-					applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle2, false, battleMessages);
+					applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
 				}
 				
-				activeBattles.set(user.id, {
-					// --- Battle Type Fields ---
-					battleType: 'wild',
-					opponentName: `Wild ${wildPokemon.species}`,
-					opponentParty,
-					opponentMoney: 0,
+				// Set the modified battle object as the active battle
+				activeBattles.set(user.id, battle);
 
-					// --- New Slot-Based Fields ---
-					playerSlots,
-					opponentSlots,
-					pendingActions: {},
-
-					// --- Core BattleState Fields ---
-					playerId: user.id,
-					turn: 0,
-					zoneId: 'scripted',
-					playerHazards: [],
-					opponentHazards: [],
-					weather: locationWeatherData3.weather,
-					locationWeather: locationWeatherData3.locationWeather,
-					terrain: undefined,
-					playerShouldSwitch: undefined,
-					pendingPivot: undefined,
-					aipPendingPivot: undefined,
-					forceEnd: false,
-					trickRoomTurns: 0,
-					magicRoomTurns: 0,
-					wonderRoomTurns: 0,
-					gravityTurns: 0,
-					mudSportTurns: 0,
-					waterSportTurns: 0,
-					fairyLockTurns: 0,
-					ionDelugeTurns: 0,
-					playerQuickGuard: false,
-					opponentQuickGuard: false,
-					playerWideGuard: false,
-					opponentWideGuard: false,
-					playerCraftyShield: false,
-					opponentCraftyShield: false,
-					playerReflectTurns: 0,
-					opponentReflectTurns: 0,
-					playerLightScreenTurns: 0,
-					opponentLightScreenTurns: 0,
-					playerAuroraVeilTurns: 0,
-					opponentAuroraVeilTurns: 0,
-					playerTerastallizeUsed: false,
-					opponentTerastallizeUsed: false,
-					playerFutureMoves: [],
-					opponentFutureMoves: [],
-				});
-
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, battleMessages)}`);
+				// Generate HTML using the modified battle object
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, battleMessages)}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
 			}
 		},
 
-		// --- NEW COMMAND ---
 		challenge(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You are already in a battle!");
@@ -1794,8 +1691,8 @@ export const commands: ChatCommands = {
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
 			const challengeMessages = [startMessage];
 			
-			// Create temporary battle state to apply switch-in abilities
-			const tempBattle3: BattleState = {
+			// Create the battle state object
+			const battle: BattleState = {
 				battleType: finalBattleType,
 				opponentName: trainerSpec.name,
 				opponentParty: trainerParty,
@@ -1814,7 +1711,7 @@ export const commands: ChatCommands = {
 				trickRoomTurns: 0,
 				magicRoomTurns: 0,
 				wonderRoomTurns: 0,
-				terrain: undefined,
+				terrain: undefined, // Will be set by abilities
 				playerShouldSwitch: undefined,
 				pendingPivot: undefined,
 				aiPendingPivot: undefined,
@@ -1842,86 +1739,32 @@ export const commands: ChatCommands = {
 				opponentFutureMoves: [],
 			};
 			
-			// Apply switch-in abilities for all active Pokemon at battle start
-			// This includes weather/terrain abilities, Intimidate, Frisk, Download, Trace, etc.
+			// Apply switch-in abilities (which modifies the 'battle' object)
 			if (playerSlots[0]) {
-				applyHazardEffectsOnSwitchIn(playerSlots[0], tempBattle3, true, challengeMessages);
+				applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, challengeMessages);
 			}
 			if (playerSlots[1]) {
-				applyHazardEffectsOnSwitchIn(playerSlots[1], tempBattle3, true, challengeMessages);
+				applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, challengeMessages);
 			}
 			if (opponentSlots[0]) {
-				applyHazardEffectsOnSwitchIn(opponentSlots[0], tempBattle3, false, challengeMessages);
+				applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, challengeMessages);
 			}
 			if (opponentSlots[1]) {
-				applyHazardEffectsOnSwitchIn(opponentSlots[1], tempBattle3, false, challengeMessages);
+				applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, challengeMessages);
 			}
 			
-			activeBattles.set(user.id, {
-				// --- Battle Type Fields ---
-				battleType: finalBattleType,
-				opponentName: trainerSpec.name,
-				opponentParty: trainerParty, // The full party
-				opponentMoney: trainerSpec.money,
-				trainerId, // Add trainer ID for badge tracking
-
-				// --- New Slot-Based Fields ---
-				playerSlots,
-				opponentSlots,
-				pendingActions: {},
-
-				// --- Core BattleState Fields ---
-				playerId: user.id,
-				turn: 0,
-				zoneId: 'trainer_battle', // Or any identifier
-				playerHazards: [],
-				opponentHazards: [],
-				weather: locationWeatherData2.weather,
-				locationWeather: locationWeatherData2.locationWeather,
-				trickRoomTurns: 0,
-				magicRoomTurns: 0,
-				wonderRoomTurns: 0,
-				terrain: undefined,
-				playerShouldSwitch: undefined,
-				pendingPivot: undefined,
-				aiPendingPivot: undefined,
-				forceEnd: false,
-
-				// --- Terastallization Fields ---
-				playerTerastallizeUsed: false,
-				opponentTerastallizeUsed: false,
-
-				// --- Side-Wide Fields ---
-				playerQuickGuard: false,
-				opponentQuickGuard: false,
-				playerWideGuard: false,
-				opponentWideGuard: false,
-				playerCraftyShield: false,
-				opponentCraftyShield: false,
-				playerReflectTurns: 0,
-				opponentReflectTurns: 0,
-				playerLightScreenTurns: 0,
-				opponentLightScreenTurns: 0,
-				playerAuroraVeilTurns: 0,
-				opponentAuroraVeilTurns: 0,
-				gravityTurns: 0,
-				mudSportTurns: 0,
-				waterSportTurns: 0,
-				fairyLockTurns: 0,
-				ionDelugeTurns: 0,
-
-				// --- Delayed Move Fields ---
-				playerFutureMoves: [],
-				opponentFutureMoves: [],
-			});
+			// Set the modified battle object as the active battle
+			activeBattles.set(user.id, battle);
 
 			// Add weather message if there is location weather
 			if (locationWeatherData2.weather) {
 				challengeMessages.push(getWeatherStartMessage(locationWeatherData2.weather.type));
 			}
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(activeBattles.get(user.id)!, challengeMessages)}`);
+			
+			// Generate HTML using the modified battle object
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, challengeMessages)}`);
 		},
-
+		
 		battle(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You are already in a battle!");
