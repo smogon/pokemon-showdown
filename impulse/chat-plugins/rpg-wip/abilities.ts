@@ -1258,6 +1258,11 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
+	// Check for Mold Breaker
+	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+		return null;
+	}
+
 	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty') &&
 		ctx.move.priority && ctx.move.priority > 0) {
 		return {
