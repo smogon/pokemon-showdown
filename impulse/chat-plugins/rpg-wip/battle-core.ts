@@ -1004,8 +1004,12 @@ export function handleDamagingMove(
 			parentalBondSpreadMultiplier *= 0.25;
 		}
 
-		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, spreadMultiplier);
 		if (attackResult.effectiveness > 0) {
+			moveWasSuccessful = true;
+		}
+		// Allow Spit Up to run its logic even if it fails
+		if (move.id === 'spitup') {
 			moveWasSuccessful = true;
 		}
 
