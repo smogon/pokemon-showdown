@@ -1182,6 +1182,44 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${attacker.species} can't stockpile any more!`);
 			return true;
 		}
+			
+	case 'spitup':
+		if (attackerSlot.stockpileCount === 0) {
+			messageLog.push(`But it failed! (No stockpiles)`);
+			return true;
+		}
+		// Reset stockpile boosts and count
+		// Note: Damage is handled in handleDamagingMove, this just resets
+		attackerSlot.statStages.def -= attackerSlot.stockpileCount;
+		attackerSlot.statStages.spd -= attackerSlot.stockpileCount;
+		attackerSlot.stockpileCount = 0;
+		messageLog.push(`${attacker.species} released its stockpiled power!`);
+		return false; // Return false so handleDamagingMove will execute
+
+	case 'swallow':
+		if (attackerSlot.stockpileCount === 0) {
+			messageLog.push(`But it failed! (No stockpiles)`);
+			return true;
+		}
+		if (attacker.hp >= attacker.maxHp) {
+			messageLog.push(`But it failed! (${attacker.species}'s HP is already full!)`);
+			return true;
+		}
+
+		let healAmount = 0;
+		if (attackerSlot.stockpileCount === 1) healAmount = Math.floor(attacker.maxHp / 4);
+		if (attackerSlot.stockpileCount === 2) healAmount = Math.floor(attacker.maxHp / 2);
+		if (attackerSlot.stockpileCount === 3) healAmount = attacker.maxHp;
+
+		const oldHp = attacker.hp;
+		attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+		messageLog.push(`${attacker.species} restored ${attacker.hp - oldHp} HP!`);
+
+		// Reset stockpile boosts and count
+		attackerSlot.statStages.def -= attackerSlot.stockpileCount;
+		attackerSlot.statStages.spd -= attackerSlot.stockpileCount;
+		attackerSlot.stockpileCount = 0;
+		return true;
 
 	case 'bellydrum':
 		if (attackerSlot.substitute) {
