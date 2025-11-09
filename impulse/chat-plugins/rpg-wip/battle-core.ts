@@ -416,8 +416,11 @@ export function applyFinalDamageModifiers(
 ): number {
 	let damage = baseDamage;
 
+	const attackerAbility = toID(attacker.ability || '');
 	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-	if (!isCritical) {
+
+	// Check for screens only if the attacker does not have Infiltrator
+	if (attackerAbility !== 'infiltrator' && !isCritical) {
 		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 		if (defenderVeilTurns > 0) {
 			damage = Math.floor(damage * 0.5);
@@ -634,7 +637,8 @@ export function applyDamageAndEnduranceEffects(
 	damageDealt: number,
 	move: Move,
 	battle: BattleState,
-	messageLog: string[]
+	messageLog: string[],
+	abilityContext: AbilityContext
 ): number {
 	const defender = defenderSlot.pokemon;
 	const defenderAbility = toID(defender.ability || '');
@@ -653,7 +657,8 @@ export function applyDamageAndEnduranceEffects(
 		return 0; // The original attack's damage is still nullified
 	}
 
-	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
+	const attackerAbility = toID(abilityContext.attacker.ability || ''); // Get attacker's ability from context
+	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub && attackerAbility !== 'infiltrator') {
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
 			defenderSlot.substitute = undefined;
