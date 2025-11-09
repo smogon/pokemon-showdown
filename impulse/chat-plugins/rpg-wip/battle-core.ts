@@ -994,9 +994,9 @@ export function handleDamagingMove(
 		if (totalHits > 1) {
 			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
 		} else if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += attackResult.message;
+			messageLog[messageLog.length - 1] += ` <i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message;
 		} else {
-			messageLog.push(attackResult.message);
+			messageLog.push(`<i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message);
 		}
 
 		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
