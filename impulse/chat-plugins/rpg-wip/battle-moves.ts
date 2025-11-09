@@ -524,6 +524,11 @@ export function handleGenericVolatileMove(
 	const target = targetSlot.pokemon;
 	let hadEffect = false;
 
+	if (move.target !== 'self' && targetSlot.substitute) {
+		messageLog.push(`But it failed! (${target.species}'s Substitute blocked the move!)`);
+		return true;
+	}
+
 	switch (move.volatileStatus) {
 	case 'confusion':
 		if (!targetSlot.isConfused) {
