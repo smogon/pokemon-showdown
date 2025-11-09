@@ -272,7 +272,7 @@ export interface NPCAction {
 		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer' |
 		'fishing' | 'bikeshop' | 'coinexchange' | 'tutorcombo' | 'apricorncrafter' | 'pokeathlon' | 'musicalprops' |
 		'berryblender' | 'pokeblockmixer' | 'poffincooking' | 'rivalbattle' | 'gymrematch' | 'shardtrader' |
-		'wingcollector' | 'scalecollector' | 'opower';
+		'wingcollector' | 'scalecollector' | 'opower' | 'heal';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };

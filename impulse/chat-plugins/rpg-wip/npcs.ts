@@ -18,55 +18,82 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		id: 'nursejoystartertown',
 		name: 'Nurse Joy',
 		location: 'startertown_pokecenter',
-		dialogue: "Welcome to the Pokémon Center! We can heal your Pokémon to perfect health. Use /rpg heal anytime!",
+		dialogue: "Welcome to the Pokémon Center! We can heal your Pokémon to perfect health.",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoypewter': {
 		id: 'nursejoypewter',
 		name: 'Nurse Joy',
 		location: 'pewtercity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Your Pokémon look tired. Would you like me to heal them?",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoycerulean': {
 		id: 'nursejoycerulean',
 		name: 'Nurse Joy',
 		location: 'ceruleancity_pokecenter',
-		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often. You can use /rpg heal anytime!",
+		dialogue: "Welcome to the Pokémon Center! Remember to heal your Pokémon often.",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoyvermilion': {
 		id: 'nursejoyvermilion',
 		name: 'Nurse Joy',
 		location: 'vermilioncity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Trainers who challenge Lt. Surge need to be prepared!",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoyceladon': {
 		id: 'nursejoyceladon',
 		name: 'Nurse Joy',
 		location: 'celadoncity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Celadon City is such a lovely place, isn't it?",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoyfuchsia': {
 		id: 'nursejoyfuchsia',
 		name: 'Nurse Joy',
 		location: 'fuchsiacity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Be careful of Poison-type moves in this city!",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoycinnabar': {
 		id: 'nursejoycinnabar',
 		name: 'Nurse Joy',
 		location: 'cinnabarisland_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! The volcano here can be quite intense, just like Blaine's battles!",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoyviridian': {
 		id: 'nursejoyviridian',
 		name: 'Nurse Joy',
 		location: 'viridiancity_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! Giovanni's Gym is very challenging. Make sure you're prepared!",
+		action: {
+			type: 'heal',
+		},
 	},
 	'nursejoyleague': {
 		id: 'nursejoyleague',
 		name: 'Nurse Joy',
 		location: 'pokemonleague_pokecenter',
 		dialogue: "Welcome to the Pokémon Center! This is your last chance to prepare before facing the Elite Four. Good luck!",
+		action: {
+			type: 'heal',
+		},
 	},
 	'aideroute1': {
 		id: 'aideroute1',

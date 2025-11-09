@@ -52,7 +52,6 @@ import {
 	generateSellConfirmHTML,
 	generateExploreHTML,
 	generateRunHTML,
-	generateHealHTML,
 	generateResetHTML,
 	generateUnstuckHTML,
 	generatePokemonInfoHTML,
@@ -2253,39 +2252,7 @@ export const commands: ChatCommands = {
 			},
 		},
 
-		heal(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot heal your Pokemon during a battle.");
-			}
-			const player = getPlayerData(user.id);
 
-			// Update last Pokemon Center visited (check if any building in current location is a pokecenter)
-			const currentLocationId = toID(player.location);
-			const currentLocationData = LOCATIONS[currentLocationId];
-			if (currentLocationData?.buildings) {
-				const hasPokeCenter = currentLocationData.buildings.some(b => b.type === 'pokecenter');
-				if (hasPokeCenter) {
-					player.lastPokemonCenter = currentLocationId;
-				}
-			}
-
-			for (const pokemon of player.party) {
-				pokemon.hp = pokemon.maxHp;
-				pokemon.status = null;
-				for (const move of pokemon.moves) {
-					const moveData = getMove(move.id);
-					move.pp = moveData.pp || 5;
-				}
-			}
-
-			// Reset any active choice locks since PP was restored
-			// Note: This won't work, activeBattles is empty.
-			// The lock is on the 'ActivePokemonSlot' which is destroyed.
-			// This is fine.
-
-			const healHTML = `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg explore" class="button">Explore</button></p>${generateBottomNavigation()}</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${healHTML}`);
-		},
 
 		giveitem(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
@@ -2606,6 +2573,11 @@ export const commands: ChatCommands = {
 							}
 						}
 						break;
+
+					case 'heal':
+						dialogueHTML += `<p><strong>Service:</strong> Heal all Pokémon</p>`;
+						dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">💊 Heal Party</button> `;
+						break;
 					}
 				} else {
 					dialogueHTML += `<hr /><p style="color: gray;"><em>You've already completed this NPC's request.</em></p>`;
@@ -2759,6 +2731,27 @@ export const commands: ChatCommands = {
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
 				break;
+
+			case 'heal': {
+				const result = NPCActions.handleHeal(player);
+				if (result.success) {
+					// Update last Pokemon Center visited
+					const currentLocationId = toID(player.location);
+					const currentLocationData = LOCATIONS[currentLocationId];
+					if (currentLocationData?.buildings) {
+						const hasPokeCenter = currentLocationData.buildings.some(b => b.type === 'pokecenter');
+						if (hasPokeCenter) {
+							player.lastPokemonCenter = currentLocationId;
+						}
+					}
+					
+					resultHTML += `<p>"${result.message}"</p>`;
+					resultHTML += `<p style="color: green;">✅ Your Pokémon have been restored to full health!</p>`;
+				} else {
+					resultHTML += `<p style="color: red;">❌ ${result.message}</p>`;
+				}
+				break;
+			}
 
 			// NOTE: Additional NPC action types can be integrated here using npc-actions.ts handlers
 			// Examples:
