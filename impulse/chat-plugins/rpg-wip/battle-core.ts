@@ -624,11 +624,12 @@ export function applyDamageAndEnduranceEffects(
 			defender.species = 'Mimikyu-Busted';
 		}
 		messageLog.push(`<strong>${defender.species}'s Disguise was broken!</strong>`);
-		const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
-		defender.hp = Math.max(0, defender.hp - disguiseDamage);
-		messageLog.push(`${defender.species} was hurt by the broken disguise!`);
+		// Mimikyu no longer takes damage from its disguise breaking (Gen 8+)
+		// const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
+		// defender.hp = Math.max(0, defender.hp - disguiseDamage);
+		// messageLog.push(`${defender.species} was hurt by the broken disguise!`);
 		defenderSlot.lastMoveThatHitMe = move;
-		return 0;
+		return 0; // The original attack's damage is still nullified
 	}
 
 	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub) {
