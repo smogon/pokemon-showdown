@@ -1105,25 +1105,25 @@ export function handleDamagingMove(
 				// Suction Cups and similar abilities prevent forced switches
 				if (defenderAbility === 'suctioncups') {
 					messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+				} else if (defenderSlot.isIngrained) {
+					messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
 				} else {
 					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
 					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
+					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+					
+					const availableReplacements = party.filter(p =>
+						p.hp > 0 &&
+						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
+						!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+					);
 
-					if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
-						// In wild battles, forced switch moves end the battle (like Roar/Whirlwind)
-						messageLog.push(`The wild ${defenderSlot.pokemon.species} was blown away!`);
-						if (defenderSlotIndex !== -1) {
-							if (isPlayerDefending) {
-								messageLog.push(`But it failed!`); // Player can't be forced out in wild battles
-							} else {
-								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
-							}
-						}
-					} else if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-						// In trainer battles, force the defender to switch
+					if (availableReplacements.length === 0) {
+						messageLog.push(`But it failed! (No Pokémon to switch to!)`);
+					} else {
 						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
 						if (defenderSlotIndex !== -1) {
-							// Set the slot to null to trigger forced switch
+							// Set the slot to null to trigger forced switch logic in battle-flow
 							if (isDefenderPlayer) {
 								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
 							} else {
