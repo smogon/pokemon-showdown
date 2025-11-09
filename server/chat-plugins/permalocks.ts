@@ -564,6 +564,6 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/perma(noms?)? ');
-});
+}

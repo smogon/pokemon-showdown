@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 
-import { SQL, PGDatabase } from '../../lib/database';
+import { SQL, PGDatabase, type DatabaseTable } from '../../lib/database';
 import { FS, Utils } from '../../lib';
 import * as crypto from 'crypto';
 
@@ -14,10 +14,8 @@ const MAX_TEAMS = 200;
 const MAX_SEARCH = 3000;
 const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
 
-export const teamsDB = Config.usepostgres ? new PGDatabase(Config.usepostgres) : null!;
-export const teamsTable = teamsDB?.getTable<
-	StoredTeam
->('teams', 'teamid');
+let teamsDB: null | PGDatabase = null;
+let teamsTable: undefined | DatabaseTable<StoredTeam, PGDatabase>;
 
 export interface StoredTeam {
 	teamid: string;
@@ -55,6 +53,7 @@ export const TeamsHandler = new class {
 			await teamsDB.query(SQL(FS(`databases/schemas/teams.sql`).readSync()));
 		}
 	})() : null;
+
 	destroy() {
 		void teamsDB?.close();
 	}
@@ -63,6 +62,9 @@ export const TeamsHandler = new class {
 		const where = [];
 		if (count > 500) {
 			throw new Chat.ErrorMessage("Cannot search more than 500 teams.");
+		}
+		if (!teamsTable) {
+			throw new Chat.ErrorMessage(`Server-side teams are not available because PostgreSQL is disabled`);
 		}
 		if (search.format) {
 			where.push(where.length ? SQL` AND ` : SQL`WHERE `);
@@ -145,6 +147,10 @@ export const TeamsHandler = new class {
 		const format = Dex.formats.get(toID(team.format));
 		if (format.effectType !== 'Format' || format.team) {
 			connection.popup("Invalid format:\n\n" + team.format);
+			return null;
+		}
+		if (!teamsTable) {
+			connection.popup("Server-side teams are not available.");
 			return null;
 		}
 		let existing = null;
@@ -292,11 +298,11 @@ export const TeamsHandler = new class {
 		return pw;
 	}
 	updateViews(teamid: string) {
-		return teamsTable.updateOne(SQL`views = views + 1`)`WHERE teamid = ${teamid}`;
+		return teamsTable!.updateOne(SQL`views = views + 1`)`WHERE teamid = ${teamid}`;
 	}
 	list(userid: ID, count: number, publicOnly = false) {
 		const publicOnlyQuery = publicOnly ? SQL`AND private IS NULL ` : SQL``;
-		return teamsTable.selectAll()`WHERE ownerid = ${userid} ${publicOnlyQuery} ORDER BY date DESC LIMIT ${count}`;
+		return teamsTable!.selectAll()`WHERE ownerid = ${userid} ${publicOnlyQuery} ORDER BY date DESC LIMIT ${count}`;
 	}
 	preview(teamData: StoredTeam, user?: User | null, isFull = false) {
 		let buf = Utils.html`<strong>${teamData.title || `Untitled ${teamData.teamid}`}`;
@@ -386,13 +392,13 @@ export const TeamsHandler = new class {
 	}
 	async count(user: string | User) {
 		const id = toID(user);
-		const result = await teamsTable.queryOne<{ count: number }>(
+		const result = await teamsTable!.queryOne<{ count: number }>(
 		)`SELECT count(*) AS count FROM teams WHERE ownerid = ${id}`;
 		return result?.count || 0;
 	}
 	async get(teamid: number | string): Promise<StoredTeam | null> {
 		teamid = Number(teamid);
-		if (isNaN(teamid)) {
+		if (isNaN(teamid) || !teamsTable) {
 			throw new Chat.ErrorMessage(`Invalid team ID.`);
 		}
 		const team = await teamsTable.get(teamid);
@@ -400,7 +406,7 @@ export const TeamsHandler = new class {
 	}
 	async delete(id: string | number) {
 		id = Number(id);
-		if (isNaN(id)) {
+		if (isNaN(id) || !teamsTable) {
 			throw new Chat.ErrorMessage("Invalid team ID");
 		}
 		await teamsTable.delete(id);
@@ -489,6 +495,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		async setprivacy(target, room, user, connection) {
+			if (!teamsTable) {
+				return this.popupReply(`Server-side teams feature is disabled.`);
+			}
 			TeamsHandler.validateAccess(connection, true);
 			const [teamId, rawPrivacy] = target.split(',').map(toID);
 			let privacy: string | null;
@@ -575,6 +584,7 @@ export const pages: Chat.PageTable = {
 		},
 		async filtered(query, user, connection) {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+			if (!teamsTable) return `<div class="message-error">This feature is disabled.</div>`;
 			const type = query.shift() || "";
 			TeamsHandler.validateAccess(connection);
 			let count = Number(query.shift()) || 50;
@@ -769,6 +779,7 @@ export const pages: Chat.PageTable = {
 		},
 		async browse(query, user, connection) {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+			if (!teamsTable) return `<div class="message-error">This feature is disabled.</div>`;
 			TeamsHandler.validateAccess(connection, true);
 			const sorter = toID(query.shift()) || 'latest';
 			let count = Number(toID(query.shift())) || 50;
@@ -812,6 +823,10 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
+	if (Config.usepostgres && Config.usepostgresteams) {
+		teamsDB = new PGDatabase(Config.usepostgres);
+		teamsTable = teamsDB.getTable<StoredTeam>('teams', 'teamid');
+	}
 	Chat.multiLinePattern.register('/teams save ', '/teams update ');
-});
+}

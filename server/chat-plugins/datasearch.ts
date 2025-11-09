@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
@@ -3063,7 +3064,7 @@ function runRandtype(target: string, cmd: string, message: string) {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, query => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>('dexsearch', module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -3097,8 +3098,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 });
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -3116,9 +3116,7 @@ if (!PM.isParentProcess) {
 	Dex.includeData();
 
 	// eslint-disable-next-line no-eval
-	require('../../lib/repl').Repl.start('dexsearch', (cmd: string) => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.datasearch ?? 1);
+	PM.startRepl((cmd: string) => eval(cmd));
 }
 
 export const testables = {
@@ -3129,3 +3127,11 @@ export const testables = {
 	runMovesearch: (target: string, cmd: string, message: string) =>
 		runMovesearch(target, cmd, message, true),
 };
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['datasearch'] ?? 1);
+}
+
+export function destroy() {
+	void PM.destroy();
+}
