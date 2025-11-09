@@ -1461,6 +1461,21 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
 		return true;
 
+	case 'block':
+	case 'meanlook':
+	case 'spiderweb':
+		if (!defenderSlot) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+		if (defenderSlot.isTrapped) {
+			messageLog.push(`${defender.species} is already trapped!`);
+		} else {
+			defenderSlot.isTrapped = { turns: 5 };
+			messageLog.push(`${defender.species} can no longer escape!`);
+		}
+		return true;
+
 	case 'fakeout':
 		if (attackerSlot.activeTurns !== 1) {
 			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
