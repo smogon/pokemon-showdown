@@ -1095,6 +1095,25 @@ export function handleDamagingMove(
 				}
 			}
 
+			// Handle Rapid Spin effects (clearing hazards and raising speed)
+			if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
+				const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+				const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
+				if (userHazards.length > 0) {
+					userHazards.length = 0; // Clear the array
+					messageLog.push(`${attacker.species} blew away the hazards!`);
+				}
+				// Also remove Leech Seed
+				if (attackerSlot.isSeeded) {
+					attackerSlot.isSeeded = false;
+					messageLog.push(`${attacker.species} shook off the Leech Seed!`);
+				}
+				// Raise Speed
+				if (applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot)) {
+					// applyStatChange already adds its own message
+				}
+			}
+
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
 			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
