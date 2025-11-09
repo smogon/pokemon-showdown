@@ -627,7 +627,7 @@ export function executeMove(
 		}
 
 		let moveHit = true;
-		if (['aerialace'].includes(move.id)) {
+		if (['aerialace', 'struggle'].includes(move.id)) {
 			// Moves like Aerial Ace always hit
 		} else if (move.accuracy !== true) {
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
