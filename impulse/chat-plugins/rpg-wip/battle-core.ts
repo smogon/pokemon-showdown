@@ -1042,15 +1042,21 @@ export function handleDamagingMove(
 
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
+			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+			const isGhost = defenderSpecies.types.includes('Ghost');
+
 			// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
 			if (['anchorshot', 'spiritshackle', 'thousandwaves'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
-				if (!defenderSlot.isTrapped) {
+				// Spirit Shackle can trap Ghosts, other moves cannot
+				if (!defenderSlot.isTrapped && (move.id === 'spiritshackle' || !isGhost)) {
 					defenderSlot.isTrapped = { turns: 5 };
 					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
 				}
 			}
+
 			if (move.id === 'jawlock' && defenderSlot?.pokemon.hp > 0 && attackerSlot?.pokemon.hp > 0) {
-				if (!defenderSlot.isTrapped) {
+				// Jaw Lock cannot trap Ghost-types
+				if (!defenderSlot.isTrapped && !isGhost) {
 					defenderSlot.isTrapped = { turns: 5 };
 					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
 				}
