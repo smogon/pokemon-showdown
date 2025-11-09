@@ -841,22 +841,10 @@ export function applyRecoilAndSelfEffects(
 	if (attacker.hp > 0 && move.self?.boosts) {
 		const boosts = move.self.boosts;
 		for (const stat in boosts) {
-			let boostValue = boosts[stat as keyof typeof boosts]!;
-
-			if (toID(attacker.ability || '') === 'contrary') {
-				boostValue *= -1;
-			}
-
-			const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
-			if (currentStage !== undefined) {
-				const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
-				attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
-				if (boostValue > 0) {
-					messageLog.push(`${attacker.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
-				} else if (boostValue < 0) {
-					messageLog.push(`${attacker.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
-				}
-			}
+			const statKey = stat as keyof ActivePokemonSlot['statStages'];
+			const boostValue = boosts[statKey]!;
+			// Use the central applyStatChange function to handle all abilities (Clear Body, Simple, Contrary)
+			applyStatChange(attackerSlot, statKey, boostValue, battle, messageLog, attackerSlot);
 		}
 	}
 
