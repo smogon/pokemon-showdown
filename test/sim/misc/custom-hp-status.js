@@ -3,11 +3,14 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-let battle;
+let battle = null;
 
 describe('Custom HP Percentage and Status Conditions', () => {
 	afterEach(() => {
-		battle.destroy();
+		if (battle) {
+			battle.destroy();
+			battle = null;
+		}
 	});
 
 	it('should start Pokemon with custom HP percentage', () => {
@@ -113,13 +116,25 @@ describe('Custom HP Percentage and Status Conditions', () => {
 		assert.equal(pikachu.hp, pikachu.maxhp);
 	});
 
-	it('should start Pokemon at 0 HP when hpPercentage is 0', () => {
-		battle = common.createBattle([
-			[{ species: 'Pikachu', ability: 'static', moves: ['thunderbolt'], hpPercentage: 0 }],
-			[{ species: 'Charmander', ability: 'blaze', moves: ['ember'] }],
-		]);
-		const pikachu = battle.p1.active[0];
-		assert.equal(pikachu.hp, 0);
+	it('should prevent battle from starting when a Pokemon has 0% HP', () => {
+		assert.throws(() => {
+			battle = common.createBattle([
+				[{ species: 'Pikachu', ability: 'static', moves: ['thunderbolt'], hpPercentage: 0 }],
+				[{ species: 'Charmander', ability: 'blaze', moves: ['ember'] }],
+			]);
+		}, /Battle not started.*fainted.*Pokémon/i);
+	});
+
+	it('should prevent battle from starting when multiple Pokemon have 0% HP', () => {
+		assert.throws(() => {
+			battle = common.createBattle([
+				[
+					{ species: 'Pikachu', ability: 'static', moves: ['thunderbolt'], hpPercentage: 0 },
+					{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'], hpPercentage: 0 },
+				],
+				[{ species: 'Charmander', ability: 'blaze', moves: ['ember'] }],
+			]);
+		}, /Battle not started.*2 fainted.*Pokémon/i);
 	});
 
 	it('should handle status name with proper casing (BRN -> brn)', () => {

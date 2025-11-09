@@ -1906,6 +1906,20 @@ export class Battle {
 			throw new Error('Battle not started: A player has an empty team.');
 		}
 
+		// Check for fainted pokemon (0% HP) in teams before starting the battle
+		for (const side of this.sides) {
+			const faintedPokemon = side.pokemon.filter(pokemon => pokemon.hp <= 0);
+			if (faintedPokemon.length > 0) {
+				const count = faintedPokemon.length;
+				const plural = count === 1 ? '' : 's';
+				const pokemonNames = faintedPokemon.map(p => p.name).join(', ');
+				throw new Error(
+					`Battle not started: ${side.name} has ${count} fainted Pokémon${plural} (${pokemonNames}). ` +
+					`Battles cannot be started with fainted Pokémon in the team.`
+				);
+			}
+		}
+
 		if (this.debugMode) {
 			this.checkEVBalance();
 		}
