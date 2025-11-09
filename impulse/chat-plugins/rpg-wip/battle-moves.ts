@@ -1473,6 +1473,11 @@ export function handleSpecificStatusMove(
 			messageLog.push('But it failed!');
 			return true;
 		}
+		const defenderSpecies = Dex.species.get(defender!.species);
+		if (defenderSpecies.types.includes('Ghost')) {
+			messageLog.push(`It doesn't affect ${defender!.species}...`);
+			return true;
+		}
 		if (defenderSlot.isTrapped) {
 			messageLog.push(`${defender.species} is already trapped!`);
 		} else {
