@@ -713,8 +713,8 @@ export function handleGenericFieldMove(
 		const terrainType = terrainMap[terrainId];
 
 		if (terrainType) {
-			if (battle.terrain) {
-				messageLog.push('But it failed! (A terrain is already active)');
+			if (battle.terrain?.type === terrainType) {
+				messageLog.push('But it failed!');
 			} else {
 				battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
 				messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
@@ -760,8 +760,8 @@ export function handleGenericFieldMove(
 	case 'psychicterrain':
 		// This case handles custom moves with pseudoWeather property
 		const terrainType = pseudoWeather.replace('terrain', '') as 'electric' | 'grassy' | 'misty' | 'psychic';
-		if (battle.terrain) {
-			messageLog.push('But it failed! (A terrain is already active)');
+		if (battle.terrain?.type === terrainType) {
+			messageLog.push('But it failed!');
 		} else {
 			battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
 			messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
