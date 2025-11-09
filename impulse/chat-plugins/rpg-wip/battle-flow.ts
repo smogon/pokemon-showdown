@@ -1015,6 +1015,10 @@ export function executeAction(
 				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
 				battle.playerTerastallizeUsed = true;
 				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+				if (toID(attackerSlot.pokemon.ability || '') === 'slowstart' && attackerSlot.slowStartTurns && attackerSlot.slowStartTurns > 0) {
+					attackerSlot.slowStartTurns = 0;
+					messageLog.push(`${attackerSlot.pokemon.species} got its act together due to Terastallization!`);
+				}
 			}
 		}
 
