@@ -1177,6 +1177,10 @@ export function handleSpecificStatusMove(
 		}
 
 	case 'bellydrum':
+		if (attackerSlot.substitute) {
+			messageLog.push(`But it failed! (${attacker.species} can't use this move behind a substitute!)`);
+			return true;
+		}
 		const contraryActive = toID(attacker.ability || '') === 'contrary';
 		if (contraryActive) {
 			if (attacker.hp <= attacker.maxHp / 2) {
