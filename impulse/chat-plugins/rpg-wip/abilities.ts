@@ -1190,20 +1190,31 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
 
 	if (move.multihit) {
+		// Skill Link always grants the maximum number of hits
 		if (ability === 'skilllink') {
 			if (Array.isArray(move.multihit)) {
 				return move.multihit[1];
 			}
-			return 5;
+			return 5; // Fallback for moves that just say "multihit: 5"
 		}
 
+		// This handles moves that hit 2-5 times with the standard Gen 5+ distribution
+		if (Array.isArray(move.multihit) && move.multihit[0] === 2 && move.multihit[1] === 5) {
+			const rand = Math.random() * 100;
+			if (rand < 35) return 2; // 35% chance
+			if (rand < 70) return 3; // 35% chance
+			if (rand < 85) return 4; // 15% chance
+			return 5;                // 15% chance
+		}
+
+		// This handles other multi-hit moves, like Triple Kick or simple ranges
 		if (Array.isArray(move.multihit)) {
 			const min = move.multihit[0];
 			const max = move.multihit[1];
-			const rand = Math.random();
-			if (rand < 0.35) return Math.floor(Math.random() * 2) + min;
-			return Math.floor(Math.random() * 2) + min + 2;
+			return min + Math.floor(Math.random() * (max - min + 1));
 		}
+
+		// Fallback for moves where multihit is just a number (e.g., Double Slap)
 		return move.multihit;
 	}
 
