@@ -611,6 +611,20 @@ export function handleGenericVolatileMove(
 			checkMentalHerb(targetSlot, battle, messageLog);
 		}
 		break;
+	case 'partiallytrapped':
+		if (!targetSlot.partiallyTrapped) {
+			const attacker = attackerSlot.pokemon;
+			// Duration: 4-6 turns normally, 7 turns with Grip Claw
+			const hasGripClaw = attacker.item === 'gripclaw';
+			const turns = hasGripClaw ? 7 : Math.floor(Math.random() * 3) + 4; // 4-6 turns
+			// Damage divisor: 1/8 normally, 1/6 with Binding Band
+			const hasBindingBand = attacker.item === 'bindingband';
+			const damage = hasBindingBand ? 6 : 8;
+			targetSlot.partiallyTrapped = { turns, moveId: move.id, damage };
+			messageLog.push(`${target.species} was trapped by ${move.name}!`);
+			hadEffect = true;
+		}
+		break;
 	}
 
 	if (!hadEffect) messageLog.push('But it failed!');
@@ -1445,6 +1459,21 @@ export function handleSpecificStatusMove(
 		const endeavorDamage = defender.hp - attacker.hp;
 		defender.hp = attacker.hp;
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
+		return true;
+
+	case 'block':
+	case 'meanlook':
+	case 'spiderweb':
+		if (!defenderSlot) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+		if (defenderSlot.isTrapped) {
+			messageLog.push(`${defender.species} is already trapped!`);
+		} else {
+			defenderSlot.isTrapped = { turns: 5 };
+			messageLog.push(`${defender.species} can no longer escape!`);
+		}
 		return true;
 
 	case 'fakeout':

@@ -119,6 +119,15 @@ export function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: Ba
 			messageLog.push(`${pokemon.species} is hurt by the trap!`);
 		}
 	}
+
+	if (slot.partiallyTrapped) {
+		if (RPGAbilities.takesIndirectDamage(pokemon)) {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / slot.partiallyTrapped.damage));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			const moveData = getMove(slot.partiallyTrapped.moveId);
+			messageLog.push(`${pokemon.species} is hurt by ${moveData?.name || 'the trap'}!`);
+		}
+	}
 }
 
 export function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
@@ -191,6 +200,15 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 		if (slot.isTrapped.turns <= 0) {
 			slot.isTrapped = null;
 			messageLog.push(`${pokemon.species} was freed from the trap.`);
+		}
+	}
+
+	if (slot.partiallyTrapped) {
+		slot.partiallyTrapped.turns--;
+		if (slot.partiallyTrapped.turns <= 0) {
+			const moveData = getMove(slot.partiallyTrapped.moveId);
+			slot.partiallyTrapped = null;
+			messageLog.push(`${pokemon.species} was freed from ${moveData?.name || 'the trap'}!`);
 		}
 	}
 	if (slot.tauntTurns > 0) {
