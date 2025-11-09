@@ -498,6 +498,39 @@ export class Pokemon {
 		this.hp = 0;
 		this.clearVolatile();
 		this.hp = this.maxhp;
+
+		// CUSTOM HP PERCENTAGE INITIALIZATION
+		// This allows Pokemon to start battles with a specific HP percentage (0-100).
+		// Applied here in the constructor AFTER clearVolatile() sets hp = maxhp (line 500).
+		// This is the correct location because:
+		// 1. clearVolatile() calls setSpecies() which initializes maxhp
+		// 2. This only runs once during Pokemon object creation
+		// 3. Subsequent switch-ins won't reset HP because setSpecies() only sets hp = maxhp
+		//    when !this.maxhp (initial construction only)
+		// Use cases: Testing low-HP abilities (Emergency Exit, Berserk), berries, etc.
+		if (this.set.hpPercentage !== undefined) {
+			const percentage = this.battle.clampIntRange(this.set.hpPercentage, 0, 100);
+			this.hp = Math.floor(this.maxhp * percentage / 100);
+		}
+
+		// CUSTOM STATUS CONDITION INITIALIZATION
+		// This allows Pokemon to start battles with a status condition (brn, psn, par, slp, frz, tox).
+		// Applied here in the constructor AFTER status is initialized to '' (line 373).
+		// This is the correct location because:
+		// 1. Status is set to '' in line 373 before this point
+		// 2. This only runs once during Pokemon object creation
+		// 3. Status persists through switch-outs (not reset by clearVolatile)
+		// 4. We validate the status to ensure only legal status conditions are applied
+		// Use cases: Testing status-related abilities (Guts, Synchronize, Natural Cure),
+		// status moves (Facade), or specific battle scenarios.
+		if (this.set.status) {
+			const statusid = toID(this.set.status);
+			// Only allow valid major status conditions that exist in Pokemon games
+			if (['brn', 'par', 'slp', 'frz', 'psn', 'tox'].includes(statusid)) {
+				this.status = statusid;
+				this.statusState = this.battle.initEffectState({ id: statusid });
+			}
+		}
 	}
 
 	toJSON(): AnyObject {
