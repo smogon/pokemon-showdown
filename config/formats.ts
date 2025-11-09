@@ -1039,6 +1039,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Bio Mech Mons",
+		desc: `Change this later tbh`,
+		mod: 'biomechmons',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
+		banlist: [
+		],
+		validateSet(set, teamHas) {
+			return null;
+		},
+	},
+	{
 		name: "[Gen 9] Category Swap",
 		desc: `All Special moves become Physical, and all Physical moves become Special.`,
 		mod: 'gen9',
