@@ -1207,3 +1207,27 @@ export function handleOPower(
 		duration: action.opowerDuration,
 	};
 }
+
+/**
+ * Heal Action
+ * Heal all Pokemon in player's party to full health (like Pokemon Centers)
+ */
+export function handleHeal(
+	player: PlayerData
+): { success: boolean, message: string } {
+	// Heal all Pokemon in party
+	for (const pokemon of player.party) {
+		pokemon.hp = pokemon.maxHp;
+		pokemon.status = null;
+		// Restore PP for all moves
+		for (const move of pokemon.moves) {
+			const moveData = Dex.moves.get(move.id);
+			move.pp = moveData.pp || 5;
+		}
+	}
+
+	return {
+		success: true,
+		message: "We've restored your Pokémon to full health. We hope to see you again!",
+	};
+}

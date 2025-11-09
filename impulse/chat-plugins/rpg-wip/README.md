@@ -173,7 +173,7 @@ rpg-wip/
 - `/rpg party` - View your party
 - `/rpg items` - View inventory
 - `/rpg shop` - Visit the shop
-- `/rpg heal` - Heal at Pokemon Center
+- `/rpg npc` - Talk to NPCs (including Nurse Joy for healing)
 - `/rpg explore` - View current location
 - `/rpg profile` - View trainer profile
 
