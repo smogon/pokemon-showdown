@@ -13,7 +13,7 @@ export const commands: Chat.ChatCommands = {
         }
 
         const targetUserId = args[0];
-        const teamPacked = "Charizard||leftovers|blaze|flamethrower,airslash,solarbeam,dragonclaw|timid|,0,,252,4,252|M|,,,,,|S|||100|60|psn|,,,,]Blastoise||sitrusberry|torrent|hydropump,icebeam,darkpulse,rapidspin|modest|252,,,252,4,0|M|,,,,,|S|||100|90|par|,,,,]Venusaur||blacksludge|overgrow|gigadrain,sludgebomb,synthesis,leechseed|bold|252,,,252,4,0|F|,,,,,|S|||100|40|slp|,,,,]Pikachu||lightball|static|volttackle,irontail,grassknot,quickattack|jolly|,252,,4,,252|M|,,,,,|S|||100|||,,,,]Gengar||focussash|cursedbody|shadowball,sludgewave,focusblast,destinybond|timid|,0,,252,4,252|F|,,,,,|S|||100|||frz|,,,,";
+        const teamPacked = "Testmon1|Blissey|Leftovers|NaturalCure|SoftBoiled,SeismicToss,ThunderWave,HealBell|Bold|252,,252,,,4,|F||| |100||||,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|33,brn]Testmon2|Umbreon|Leftovers|Synchronize|Wish,Protect,FoulPlay,Toxic|Careful|252,,4,,,252,|M||| |100||||,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|,,|50,psn";
 
         const commandUser = user;
         const targetUser = Users.get(targetUserId);
