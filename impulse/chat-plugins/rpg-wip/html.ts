@@ -108,7 +108,6 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 		`<hr />` +
 		`<p>` +
 		`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
-		`<button name="send" value="/rpg heal" class="button">🏥 Pokémon Center</button>` +
 		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
