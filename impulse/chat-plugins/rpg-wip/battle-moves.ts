@@ -129,6 +129,7 @@ export function getDamageBasePower(
 		else if (magnitudeRoll < 0.95) basePower = 110;
 		else basePower = 150;
 		break;
+
 	case 'spitup':
 		if (attackerSlot.stockpileCount === 0) {
 			basePower = 0; // Move will fail
@@ -369,6 +370,7 @@ export function handleGenericBoostMove(
 		targetName = defenderSlot.pokemon.species;
 	}
 
+	// Block stat-lowering moves if the target has a substitute
 	if (!isSelf && targetSlot.substitute) {
 		const hasLoweringBoost = Object.values(move.boosts).some(val => val < 0);
 		if (hasLoweringBoost) {
@@ -479,8 +481,16 @@ export function handleGenericStatusInflictMove(
 	}
 
 	if (canBeAfflicted) {
-		const newStatus = move.status as 'psn' | 'brn' | 'par' | 'slp' | 'frz';
+		let newStatus = move.status as 'psn' | 'brn' | 'par' | 'slp' | 'frz' | 'tox';
+		// Special check for Toxic
+		if (move.id === 'toxic') {
+			newStatus = 'tox';
+		}
+
 		defenderSlot.status = newStatus;
+		if (newStatus === 'tox') {
+			defenderSlot.toxicCounter = 1;
+		}
 		if (newStatus === 'slp') {
 			defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 		}
@@ -1182,7 +1192,7 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${attacker.species} can't stockpile any more!`);
 			return true;
 		}
-			
+
 	case 'spitup':
 		if (attackerSlot.stockpileCount === 0) {
 			messageLog.push(`But it failed! (No stockpiles)`);
@@ -1226,6 +1236,7 @@ export function handleSpecificStatusMove(
 			messageLog.push(`But it failed! (${attacker.species} can't use this move behind a substitute!)`);
 			return true;
 		}
+
 		const contraryActive = toID(attacker.ability || '') === 'contrary';
 		if (contraryActive) {
 			if (attacker.hp <= attacker.maxHp / 2) {
@@ -1500,7 +1511,7 @@ export function handleSpecificStatusMove(
 		if (defenderChange > 0) messageLog.push(`${defender.species} gained ${defenderChange} HP!`);
 		else if (defenderChange < 0) messageLog.push(`${defender.species} lost ${-defenderChange} HP!`);
 		return true;
-			
+
 	case 'memento':
 		if (!defenderSlot) {
 			messageLog.push(`But it failed!`);
@@ -1545,8 +1556,8 @@ export function handleSpecificStatusMove(
 			messageLog.push('But it failed!');
 			return true;
 		}
-		const defenderSpecies = Dex.species.get(defender!.species);
-		if (defenderSpecies.types.includes('Ghost')) {
+		const defenderSpeciesTrap = Dex.species.get(defender!.species);
+		if (defenderSpeciesTrap.types.includes('Ghost')) {
 			messageLog.push(`It doesn't affect ${defender!.species}...`);
 			return true;
 		}

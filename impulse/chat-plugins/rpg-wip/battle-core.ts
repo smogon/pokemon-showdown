@@ -146,7 +146,9 @@ export function getStatMultiplier(stage: number): number {
 
 export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
 	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-	if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
+	if (RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
+		// Continue if ability is ignored
+	} else if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
 		return 0;
 	}
 
@@ -291,7 +293,7 @@ export function getDamageOffense(
 	attacker: RPGPokemon,
 	attackerSlot: ActivePokemonSlot,
 	battle: BattleState,
-	abilityContext: AbilityContext
+	abilityContext: AbilityContext // Added for Foul Play
 ): number {
 	const isSpecial = move.category === 'Special';
 	let statName = isSpecial ? 'spa' : 'atk';
@@ -306,7 +308,7 @@ export function getDamageOffense(
 		// Standard moves use the attacker's stats
 		attackStatRaw = attacker[statName];
 	}
-	
+
 	attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, statName, attackStatRaw, attackerSlot, battle);
 
 	if (battle.magicRoomTurns === 0) {
@@ -551,9 +553,15 @@ export function calculateDamage(
 	} else {
 		attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
 	}
+	
 	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
+	
+	// Handle Psyshock / Psystrike / Secret Sword
+	if (['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
+		defenseStage = battle.wonderRoomTurns > 0 ? defenderSlot.statStages.spd : defenderSlot.statStages.def;
+	}
 
 	const defenderAbility = toID(defender.ability || '');
 	const attackerAbility = toID(attacker.ability || '');
@@ -596,7 +604,7 @@ export function calculateDamage(
 	}
 
 	abilityContext.effectiveness = effectiveness;
-	
+
 	let berryConsumed: string | undefined = undefined;
 	let effectivenessMultiplier = effectiveness;
 	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
@@ -638,10 +646,11 @@ export function applyDamageAndEnduranceEffects(
 	move: Move,
 	battle: BattleState,
 	messageLog: string[],
-	abilityContext: AbilityContext
+	abilityContext: AbilityContext // Added for Infiltrator
 ): number {
 	const defender = defenderSlot.pokemon;
 	const defenderAbility = toID(defender.ability || '');
+	const attackerAbility = toID(abilityContext.attacker.ability || ''); // Get attacker's ability
 
 	if (defenderSlot.isDisguised && damageDealt > 0 && move.category !== 'Status') {
 		defenderSlot.isDisguised = false;
@@ -650,14 +659,10 @@ export function applyDamageAndEnduranceEffects(
 		}
 		messageLog.push(`<strong>${defender.species}'s Disguise was broken!</strong>`);
 		// Mimikyu no longer takes damage from its disguise breaking (Gen 8+)
-		// const disguiseDamage = Math.max(1, Math.floor(defender.maxHp / 8));
-		// defender.hp = Math.max(0, defender.hp - disguiseDamage);
-		// messageLog.push(`${defender.species} was hurt by the broken disguise!`);
 		defenderSlot.lastMoveThatHitMe = move;
-		return 0; // The original attack's damage is still nullified
+		return 0;
 	}
 
-	const attackerAbility = toID(abilityContext.attacker.ability || ''); // Get attacker's ability from context
 	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub && attackerAbility !== 'infiltrator') {
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
@@ -680,8 +685,10 @@ export function applyDamageAndEnduranceEffects(
 			defender.item = undefined;
 			activateUnburden(defenderSlot, messageLog);
 		} else if (defenderAbility === 'sturdy' && isFullHP && move.ohko !== true) {
-			damageDealt = defender.hp - 1;
-			messageLog.push(`${defender.species} held on using its Sturdy!`);
+			if (!RPGAbilities.isAbilityIgnored(abilityContext.attacker, defender, defenderAbility)) {
+				damageDealt = defender.hp - 1;
+				messageLog.push(`${defender.species} held on using its Sturdy!`);
+			}
 		}
 	}
 
@@ -711,7 +718,9 @@ export function applyPostDamageContactEffects(
 	if (defender.hp <= 0 || damageDealt <= 0) return;
 
 	if (isCritical && toID(defender.ability || '') === 'angerpoint') {
-		applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
+		if (!RPGAbilities.isAbilityIgnored(attacker, defender, 'angerpoint')) {
+			applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
+		}
 	}
 
 	if (battle.magicRoomTurns === 0) {
@@ -759,8 +768,10 @@ export function applyPostDamageContactEffects(
 
 	const defenderAbility = toID(defender.ability || '');
 	if (defenderAbility === 'cursedbody' && attacker.hp > 0 && !attackerSlot.disabledMove && Math.random() < 0.3) {
-		attackerSlot.disabledMove = { moveId: move.id, turns: 4 };
-		messageLog.push(`${attacker.species}'s ${move.name} was disabled by ${defender.species}'s Cursed Body!`);
+		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
+			attackerSlot.disabledMove = { moveId: move.id, turns: 4 };
+			messageLog.push(`${attacker.species}'s ${move.name} was disabled by ${defender.species}'s Cursed Body!`);
+		}
 	}
 
 	if (battle.magicRoomTurns === 0 && defender.item === 'weaknesspolicy' && effectiveness > 1) {
@@ -863,12 +874,10 @@ export function applySecondaryEffects(
 	abilityContext: AbilityContext
 ) {
 	if (defenderSlot.pokemon.hp <= 0) return;
-	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
-
-	// Substitute blocks all secondary effects
 	if (defenderSlot.substitute) {
 		return;
 	}
+	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
 
 	let chance = move.secondary.chance || 100;
 	chance = RPGAbilities.applySereneGrace(abilityContext, chance);
@@ -896,6 +905,9 @@ export function applySecondaryEffects(
 			if (canInflict) {
 				const newStatus = move.secondary.status as Status;
 				defenderSlot.status = newStatus;
+				if (newStatus === 'tox') {
+					defenderSlot.toxicCounter = 1;
+				}
 				if (newStatus === 'slp') {
 					defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 				}
@@ -1004,7 +1016,7 @@ export function handleDamagingMove(
 			parentalBondSpreadMultiplier *= 0.25;
 		}
 
-		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, spreadMultiplier);
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
 		if (attackResult.effectiveness > 0) {
 			moveWasSuccessful = true;
 		}
@@ -1022,7 +1034,9 @@ export function handleDamagingMove(
 			activateUnburden(defenderSlot, messageLog);
 		}
 
-		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog);
+		// We need the ability context here for Infiltrator
+		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog, abilityContext);
 
 		if (damageDealt > 0 && move.category !== 'Status') {
 			defenderSlot.lastDamageTaken = {
@@ -1065,58 +1079,69 @@ export function handleDamagingMove(
 				}
 			}
 
-			const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
 
 			handleHPDropEffects(defenderSlot, battle, messageLog);
+		}
 
-			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
+		// Moved all post-hit effects that don't depend on effectiveness > 0
+		// This ensures they run even on 0 damage hits (like a failed Spit Up)
+		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
 
-			// Handle Knock Off item removal
-			if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item) {
-				const defender = defenderSlot.pokemon;
-				if (defenderSlot.substitute) {
-					// Substitute blocks item removal
-					messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
-				} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
-					// Abilities like Sticky Hold block item removal
-					messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
-				} else {
-					// Remove the item
-					const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
-					messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
-					defender.item = undefined;
-					
-					// Activate Unburden if the defender had it
-					activateUnburden(defenderSlot, messageLog);
-				}
+		// Handle Knock Off item removal
+		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
+			const defender = defenderSlot.pokemon;
+			if (defenderSlot.substitute) {
+				// Substitute blocks item removal
+				messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
+			} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
+				// Abilities like Sticky Hold block item removal
+				messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
+			} else {
+				// Remove the item
+				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
+				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
+				defender.item = undefined;
+				
+				// Activate Unburden if the defender had it
+				activateUnburden(defenderSlot, messageLog);
 			}
+		}
 
-			// Handle Rapid Spin effects (clearing hazards and raising speed)
-			if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
-				const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-				const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
-				if (userHazards.length > 0) {
-					userHazards.length = 0; // Clear the array
-					messageLog.push(`${attacker.species} blew away the hazards!`);
-				}
-				// Also remove Leech Seed
-				if (attackerSlot.isSeeded) {
-					attackerSlot.isSeeded = false;
-					messageLog.push(`${attacker.species} shook off the Leech Seed!`);
-				}
-				// Raise Speed
-				if (applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot)) {
-					// applyStatChange already adds its own message
-				}
+		// Handle Rapid Spin effects (clearing hazards and raising speed)
+		if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
+			const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+			const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
+			if (userHazards.length > 0) {
+				userHazards.length = 0; // Clear the array
+				messageLog.push(`${attacker.species} blew away the hazards!`);
 			}
+			// Also remove Leech Seed
+			if (attackerSlot.isSeeded) {
+				attackerSlot.isSeeded = false;
+				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
+			}
+			// Raise Speed
+			if (applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot)) {
+				// applyStatChange already adds its own message
+			}
+		}
 
-			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+		// Handle Clear Smog stat reset effect
+		if (move.id === 'clearsmog' && defenderSlot.pokemon.hp > 0 && moveWasSuccessful) {
+			// This effect bypasses abilities like Clear Body and Substitute in official games
+			defenderSlot.statStages = { ...INITIAL_STAT_STAGES };
+			messageLog.push(`${defenderSlot.pokemon.species}'s stat changes were reset!`);
+		}
 
+		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+		// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
+		if (attackResult.effectiveness > 0 && damageDealt > 0) {
 			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
 			const isGhost = defenderSpecies.types.includes('Ghost');
 
-			// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
+			// Special trap moves (Anchor Shot, Spirit Shackle, Thousand Waves)
 			if (['anchorshot', 'spiritshackle', 'thousandwaves'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
 				// Spirit Shackle can trap Ghosts, other moves cannot
 				if (!defenderSlot.isTrapped && (move.id === 'spiritshackle' || !isGhost)) {
@@ -1124,7 +1149,6 @@ export function handleDamagingMove(
 					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
 				}
 			}
-
 			if (move.id === 'jawlock' && defenderSlot?.pokemon.hp > 0 && attackerSlot?.pokemon.hp > 0) {
 				// Jaw Lock cannot trap Ghost-types
 				if (!defenderSlot.isTrapped && !isGhost) {

@@ -550,7 +550,6 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
 
-
 	if (totalDamage > 0) {
 		// Check for Magic Guard before applying hazard damage
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
@@ -567,7 +566,7 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 			messageLog.push(`${pokemon.species}'s Magic Guard prevents hazard damage!`);
 		}
 	}
-	
+
 	runSwitchInAbilities();
 
 	return false;
@@ -1021,10 +1020,13 @@ export function executeAction(
 				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
 				battle.playerTerastallizeUsed = true;
 				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
+				
+				// --- NEW: Add Slow Start check after Terastallization ---
 				if (toID(attackerSlot.pokemon.ability || '') === 'slowstart' && attackerSlot.slowStartTurns && attackerSlot.slowStartTurns > 0) {
 					attackerSlot.slowStartTurns = 0;
 					messageLog.push(`${attackerSlot.pokemon.species} got its act together due to Terastallization!`);
 				}
+				// --- End of new check ---
 			}
 		}
 
@@ -1103,7 +1105,7 @@ export function executeAction(
 				messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
 				return; // Stop the switch
 			}
-			
+
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
 				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));

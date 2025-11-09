@@ -6,6 +6,20 @@ import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
+// --- NEW HELPER FUNCTION ---
+export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
+	const attackerAbility = toID(attacker.ability || '');
+	if (['moldbreaker', 'turboblaze', 'teravolt'].includes(attackerAbility)) {
+		// These abilities ignore most defensive abilities
+		// Add any abilities that CANNOT be ignored here
+		if (['disguise', 'stancechange', 'schooling', 'comatose'].includes(defenderAbilityId)) {
+			return false;
+		}
+		return true;
+	}
+	return false;
+}
+
 export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	'soundproof': ctx => {
 		if (ctx.move.flags.sound) {
@@ -863,20 +877,6 @@ export function getAbilityData(abilityName: string) {
 	return null;
 }
 
-// Add this helper function somewhere inside the RPGAbilities object or as a standalone export
-export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
-	const attackerAbility = toID(attacker.ability || '');
-	if (['moldbreaker', 'turboblaze', 'teravolt'].includes(attackerAbility)) {
-		// These abilities ignore most defensive abilities
-		// Add any abilities that CANNOT be ignored here (e.g., 'disguise')
-		if (['disguise', 'stancechange', 'schooling', 'comatose'].includes(defenderAbilityId)) {
-			return false;
-		}
-		return true;
-	}
-	return false;
-}
-
 export function applyAbilityStatModifier(pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState): number {
 	const ability = toID(pokemon.ability || '');
 	const handler = STAT_MODIFIER_ABILITIES[ability];
@@ -895,8 +895,6 @@ export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 }
 
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
-	const ability = toID(ctx.defender.ability || '');
-	const handler = IMMUNITY_ABILITIES[ability];
 	const ability = toID(ctx.defender.ability || '');
 
 	// Check for Mold Breaker
@@ -1429,6 +1427,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const defenderAbility = toID(ctx.defender.ability || '');
+
+	// Check for Mold Breaker
+	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+		return;
+	}
+
 	const handler = CONTACT_ABILITIES[defenderAbility];
 
 	if (!handler) return;
@@ -1515,7 +1519,6 @@ export const RPGAbilities = {
 	preventMove,
 	applySereneGrace,
 	isGrounded,
-	isAbilityIgnored,
 	applyContactAbilityEffects,
 	applySwitchInAbilities,
 	applyPriorityModifier,
@@ -1542,6 +1545,8 @@ export const RPGAbilities = {
 	applyStatChangeModifier,
 	handlePoisonHeal,
 	handleHydration,
+	
+	isAbilityIgnored,
 
 	IMMUNITY_ABILITIES,
 	POWER_MODIFIER_ABILITIES,
