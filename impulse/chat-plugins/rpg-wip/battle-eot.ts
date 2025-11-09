@@ -316,7 +316,7 @@ export function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleSt
 	slot.isCharged = false;
 }
 
-export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]) {
+export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[], allSlots: ActivePokemonSlot[]) {
 	if (!RPGAbilities.isWeatherActive(battle)) {
 		if (battle.weather) battle.weather.turns--;
 		if (battle.weather && battle.weather.turns <= 0) battle.weather = undefined;
@@ -332,8 +332,6 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		'hail': 'The hail crashes down.',
 	};
 	messageLog.push(weatherMessages[battle.weather!.type]);
-
-	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
 	for (const slot of allSlots) {
 		const pokemon = slot.pokemon;
@@ -414,10 +412,9 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 	}
 }
 
-export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[]) {
+export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: string[], allSlots: ActivePokemonSlot[]) {
 	if (battle.terrain) {
 		if (battle.terrain.type === 'grassy') {
-			const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 			for (const slot of allSlots) {
 				const pokemon = slot.pokemon;
 				if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp && RPGAbilities.isGrounded(pokemon, battle)) {
@@ -602,6 +599,6 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	handleEndOfTurnWeather(battle, messageLog);
-	handleEndOfTurnFieldEffects(battle, messageLog);
+	handleEndOfTurnWeather(battle, messageLog, allSlots);
+	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 }
