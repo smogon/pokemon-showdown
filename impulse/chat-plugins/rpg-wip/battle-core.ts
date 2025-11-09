@@ -1040,6 +1040,26 @@ export function handleDamagingMove(
 
 			applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
 
+			// Handle Knock Off item removal
+			if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item) {
+				const defender = defenderSlot.pokemon;
+				if (defenderSlot.substitute) {
+					// Substitute blocks item removal
+					messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
+				} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
+					// Abilities like Sticky Hold block item removal
+					messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
+				} else {
+					// Remove the item
+					const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
+					messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
+					defender.item = undefined;
+					
+					// Activate Unburden if the defender had it
+					activateUnburden(defenderSlot, messageLog);
+				}
+			}
+
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
 			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
