@@ -2,8 +2,8 @@ import { createBattle } from './bt_utils';
 
 // Array of all possible pack teams for testing
 const PACK_TEAMS = [
-	// Team 10: Hyper offense (Weavile + Azumarill with freeze status)
-	"Testmon1|Weavile|ChoiceBand|Pickpocket|IceShard,KnockOff,IcicleCrash,LowKick|Jolly|,252,,,4,252|M||||,,,,,,0,]Testmon2|Azumarill|ChoiceBand|HugePower|AquaJet,PlayRough,Waterfall,Superpower|Adamant|252,252,,,4,|M||||,,,,,,,frz",
+	// Team 10: Hyper offense (Weavile at 50% HP + Azumarill with freeze status)
+	"Testmon1|Weavile|ChoiceBand|Pickpocket|IceShard,KnockOff,IcicleCrash,LowKick|Jolly|,252,,,4,252|M||||,,,,,,50,]Testmon2|Azumarill|ChoiceBand|HugePower|AquaJet,PlayRough,Waterfall,Superpower|Adamant|252,252,,,4,|M||||,,,,,,,frz",
 ];
 
 export const commands: Chat.ChatCommands = {
