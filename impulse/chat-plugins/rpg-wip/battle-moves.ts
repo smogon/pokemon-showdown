@@ -1175,8 +1175,8 @@ export function handleSpecificStatusMove(
 			turnsLeft: 2,
 			attackerSlotIndex: futureAttackerSlotIndex,
 			attackerStats: {
-				atk: attacker.atk * RPGAbilities.getStatMultiplier(attackerSlot.statStages.atk),
-				spa: attacker.spa * RPGAbilities.getStatMultiplier(attackerSlot.statStages.spa),
+				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
+				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
 			},
 		});
 		messageLog.push(`${attacker.species} foresaw an attack!`);
