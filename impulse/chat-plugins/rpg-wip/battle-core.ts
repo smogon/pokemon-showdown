@@ -1033,6 +1033,24 @@ export function handleDamagingMove(
 
 			applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
+			// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
+			if (['anchorshot', 'spiritshackle', 'thousandwaves'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
+				if (!defenderSlot.isTrapped) {
+					defenderSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
+				}
+			}
+			if (move.id === 'jawlock' && defenderSlot?.pokemon.hp > 0 && attackerSlot?.pokemon.hp > 0) {
+				if (!defenderSlot.isTrapped) {
+					defenderSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
+				}
+				if (!attackerSlot.isTrapped) {
+					attackerSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${attackerSlot.pokemon.species} can no longer escape!`);
+				}
+			}
+
 			// Force switch moves (Dragon Tail, Circle Throw)
 			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
 				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
