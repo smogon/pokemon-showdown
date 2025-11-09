@@ -24,6 +24,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Dragon's Maw" },
 	},
+	ampharosmega: {
+		inherit: true,
+		abilities: { 0: "Fluffy" },
+	},
 	skarmorymega: {
 		inherit: true,
 		abilities: { 0: "Tough Claws" },
@@ -70,7 +74,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	chandeluremega: {
 		inherit: true,
-		abilities: { 0: "Flash Fire" },
+		abilities: { 0: "Magic Guard" },
 	},
 	chesnaughtmega: {
 		inherit: true,
@@ -82,7 +86,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	greninjamega: {
 		inherit: true,
-		abilities: { 0: "Technician" },
+		abilities: { 0: "Protean" },
 	},
 	pyroarmega: {
 		inherit: true,

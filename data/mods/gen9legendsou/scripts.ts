@@ -4,12 +4,12 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		const legalItems = [
 			'assaultvest', 'bigroot', 'blackbelt', 'blackglasses', 'charcoal', 'dragonfang', 'eviolite', 'expertbelt', 'fairyfeather',
-			'focusband', 'focussash', 'hardstone', 'kingsrock', 'leftovers', 'lifeorb', 'magnet', 'metalcoat', 'miracleseed', 'muscleband',
-			'mysticwater', 'nevermeltice', 'normalgem', 'poisonbarb', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer', 'powerlens',
-			'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder', 'softsand',
-			'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone', 'duskstone',
-			'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone', 'sunstone',
-			'thunderstone', 'waterstone', 'whippeddream', 'bignugget',
+			'focusband', 'focussash', 'hardstone', 'kingsrock', 'leftovers', 'lifeorb', 'lightball', 'magnet', 'metalcoat', 'miracleseed',
+			'muscleband', 'mysticwater', 'nevermeltice', 'normalgem', 'poisonbarb', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer',
+			'powerlens', 'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder',
+			'softsand', 'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone',
+			'duskstone', 'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone',
+			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget',
 		];
 		const legalBerries = [
 			'aspearberry', 'babiriberry', 'chartiberry', 'cheriberry', 'chestoberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry',
@@ -50,9 +50,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	actions: {
-		canTerastallize(pokemon) {
-			return null;
-		},
 		canMegaEvo(pokemon) {
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
@@ -61,7 +58,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
 				this.battle.ruleTable.has('+pokemontag:future')) &&
 				altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
 			if (item.megaEvolves === species.name) {

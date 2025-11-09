@@ -1187,7 +1187,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	moltresgalar: {
 		tier: "UUBL",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "RUBL",
 	},
 	dratini: {
 		tier: "LC",
@@ -5398,7 +5398,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	tatsugiri: {
 		tier: "PU",
-		doublesTier: "DUU",
+		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	cyclizar: {
@@ -5703,7 +5703,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "Uber",
 	},
 	ogerponcornerstone: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 		natDexTier: "UUBL",
 	},
