@@ -129,6 +129,13 @@ export function getDamageBasePower(
 		else if (magnitudeRoll < 0.95) basePower = 110;
 		else basePower = 150;
 		break;
+	case 'spitup':
+		if (attackerSlot.stockpileCount === 0) {
+			basePower = 0; // Move will fail
+		} else {
+			basePower = 100 * attackerSlot.stockpileCount;
+		}
+		break;
 	}
 
 	if (move.id === 'facade' && attackerSlot.status && ['psn', 'brn', 'par'].includes(attackerSlot.status)) {
