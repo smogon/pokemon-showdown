@@ -549,6 +549,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
+		generateFieldEffectHTML(battle) +
 		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 350px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
 		actionHTML +
 		'</div>';
