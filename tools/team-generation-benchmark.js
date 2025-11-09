@@ -21,4 +21,4 @@ for (let i = 0; i < n; i++) {
 	newGenerator.getTeam();
 }
 const delta = Date.now() - start;
-console.log(`${format.name}: ${Math.round((delta / n) * 1000)}ns per team (${n} teams in ${delta}ms)`);
+console.log(`${format.name}: ${Math.round((delta / n) * 1000)}\u03BCs per team (${n} teams in ${delta}ms)`);

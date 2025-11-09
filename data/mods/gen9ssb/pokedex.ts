@@ -220,6 +220,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Huge Power" },
 	},
 
+	// Cassiopeia
+	mewtwo: {
+		inherit: true,
+		abilities: { 0: "Hacking" },
+	},
+	mewtwomegax: {
+		inherit: true,
+		abilities: { 0: "Hacking" },
+	},
+
 	// chaos
 	ironjugulis: {
 		inherit: true,
@@ -396,16 +406,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Mensis Cage" },
 	},
 
-	// Hecate
-	mewtwo: {
-		inherit: true,
-		abilities: { 0: "Hacking" },
-	},
-	mewtwomegax: {
-		inherit: true,
-		abilities: { 0: "Hacking" },
-	},
-
 	// HiZo
 	zoroarkhisui: {
 		inherit: true,
@@ -557,12 +557,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	shuckle: {
 		inherit: true,
 		abilities: { 0: "Persistent" },
-	},
-
-	// Lily
-	togedemaru: {
-		inherit: true,
-		abilities: { 0: "Unaware" },
 	},
 
 	// Loethalion

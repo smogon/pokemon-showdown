@@ -199,7 +199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
 			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
@@ -231,10 +231,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
 		tryMoveHit(target, pokemon, move) {
@@ -368,10 +366,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			return damage;
 		},

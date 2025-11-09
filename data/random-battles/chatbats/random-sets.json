@@ -1,0 +1,1078 @@
+{
+    "volcarona": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Whirlwind", "Fiery Dance", "Will-o-wisp", "Morning Sun"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Water", "Steel"]
+            }
+        ]
+    },
+    "golemalola": {
+        "level": 94,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Double-Edge", "Rock Polish", "Earthquake", "Stone Edge"],
+                "abilities": ["Galvanize"],
+                "teraTypes": ["Electric", "Grass"]
+            }
+        ]
+    },
+    "lurantis": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Leaf Storm", "Power Whip", "Superpower", "Ice Hammer", "Synthesis"],
+                "abilities": ["Contrary"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "ironcrown": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Future Sight", "Volt Switch", "Tachyon Cutter", "King's Shield", "Stealth Rock", "Rest"],
+                "abilities": ["Queenly Majesty"],
+                "teraTypes": ["Water", "Steel"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Iron Defense", "Body Press", "Tachyon Cutter", "Rest", "Stealth Rock"],
+                "abilities": ["Battle Armor"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "mamoswine": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Icicle Crash", "Ice Shard", "Earthquake", "Ancient Power"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Ice", "Ground"]
+            }
+        ]
+    },
+    "ceruledge": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bitter Blade", "Close Combat", "Poltergeist", "Shadow Sneak", "Swords Dance"],
+                "abilities": ["Weak Armor"],
+                "teraTypes": ["Fighting", "Fire", "Ghost"]
+            }
+        ]
+    },
+    "carbink": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Iron Defense", "Body Press", "Moonblast", "Moonlight"],
+                "abilities": ["Magic Bounce"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Volt Switch", "Moonlight", "Spikes", "Stealth Rock", "Body Press", "Moonblast"],
+                "abilities": ["Magic Bounce"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    }, 
+    "moltres": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Brave Bird", "Flare Blitz", "Wood Hammer", "Wave Crash", "Defog", "U-Turn"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "kommoo": {
+        "level": 72,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Clangorous Soul", "Aura Sphere", "Close Combat", "Clanging Scales", "Boomburst"],
+                "abilities": ["Punk Rock"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "illumise": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bug Buzz", "Quiver Dance", "Ice Beam", "Thunderbolt"],
+                "abilities": ["Call Volbeat"],
+                "teraTypes": ["Electric"]
+            }
+        ]
+    },
+    "volbeat": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Victory Dance", "Lunge", "Mighty Cleave", "Earthquake"],
+                "abilities": ["Call Illumise"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "abomasnow": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Aurora Veil", "Blizzard", "Apple Acid", "Parting Shot"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Dragon"]
+            }
+        ]
+    },
+    "abomasnowmega": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Glacial Lance", "Wood Hammer", "Earthquake", "Ice Shard", "Snowscape"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "dugtrio": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Sucker Punch", "Mighty Cleave", "Earthquake", "Salt Cure", "Acrobatics", "Swords Dance"],
+                "abilities": ["Arena Trap"],
+                "teraTypes": ["Flying", "Ground"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Sucker Punch", "Mighty Cleave", "Earthquake", "Tera Blast"],
+                "abilities": ["Arena Trap"],
+                "teraTypes": ["Flying"]
+            }
+        ]
+    },
+    "altariamega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Return", "Dragon Dance", "Earthquake", "Roost"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Beak Blast", "Roost", "Return", "Draco Meteor", "Explosion"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "tyranitar": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Stone Axe", "Ceaseless Edge", "Kowtow Cleave", "Pursuit", "Switcheroo", "Accelerock", "Earthquake"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Rock", "Dark", "Ghost"]
+            }
+        ]
+    },
+    "tyranitarmega": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Sandsear Storm", "Power Gem", "Ice Beam", "Draco Meteor", "Dragon Pulse", "Mystical Power"],
+                "abilities": ["Sand Stream"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "mimikyu": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Spirit Shackle", "Play Rough", "Drain Punch", "Taunt", "Destiny Bond", "Obstruct", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Disguise"],
+                "teraTypes": ["Dark"]
+            }
+        ]
+    },
+    "mesprit": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Agility", "Psychic", "Stored Power", "Freeze-Dry", "Torch Song"],
+                "abilities": ["Liquid Voice"],
+                "teraTypes": ["Poison", "Water"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Cosmic Power", "Stored Power", "Torch Song", "Aqua Ring"],
+                "abilities": ["Liquid Voice"],
+                "teraTypes": ["Poison"]
+            }
+        ]
+    },
+    "electrode": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Volt Switch", "Supercell Slam", "Double-Edge", "Encore", "Rapid Spin"],
+                "abilities": ["Short Fuse"],
+                "teraTypes": ["Electric", "Grass"]
+            }
+        ]
+    },
+    "taurospaldeacombat": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Raging Bull", "Extreme Speed", "U-turn", "Knock Off"],
+                "abilities": ["Adaptability"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "chiyu": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Splash", "Triple Dive", "Pyro Ball", "Sucker Punch", "Knock Off"],
+                "abilities": ["Water Absorb"],
+                "teraTypes": ["Water", "Fire"]
+            }
+        ]
+    },
+    "wochien": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Leech Seed", "Strength Sap", "Giga Drain", "Ruination", "Ingrain", "Parting Shot", "Bouncy Bubble"],
+                "abilities": ["Liquid Ooze"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "staraptor": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Brave Bird", "Jump Kick", "U-turn", "Head Smash", "Wave Crash", "Flare Blitz"],
+                "abilities": ["Reckless"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "archaludon": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Electro Shot", "Flash Cannon", "Hydro Pump", "Scald", "Draco Meteor"],
+                "abilities": ["Hydroelectric Dam"],
+                "teraTypes": ["Water", "Electric"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Press", "Draco Meteor", "Flash Cannon", "Stealth Rock", "Scald", "Thunderbolt"],
+                "abilities": ["Stamina"],
+                "teraTypes": ["Fighting", "Flying", "Fairy"]
+            }
+        ]
+    },
+    "malamar": {
+        "level": 94,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Will-O-Wisp", "Recover", "Knock Off", "Psychic Noise", "Eerie Spell", "Spirit Break", "Sweet Kiss"],
+                "abilities": ["Flip Flop"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "empoleon": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Tachyon Cutter", "Air Slash", "Secret Sword", "Roost"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Steel", "Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Tachyon Cutter", "Air Slash", "Water Shuriken"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Steel", "Ground"]
+            }
+        ]
+    },
+    "glastrier": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Swords Dance", "Close Combat", "Icicle Crash", "High Horsepower", "Heavy Slam"],
+                "abilities": ["Frozen Armor"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Close Combat", "Icicle Crash", "High Horsepower", "Heavy Slam"],
+                "abilities": ["Frozen Armor"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "regieleki": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Explosion", "Extreme Speed", "Volt Switch", "Rapid Spin", "Soak"],
+                "abilities": ["Galvanize"],
+                "teraTypes": ["Electric"]
+            }
+        ]
+    },
+    "lycanrocmidnight": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Swords Dance", "Bone Rush", "Storm Throw", "Rock Blast", "Accelerock"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Rock", "Flying", "Fighting"]
+            }
+        ]
+    },
+    "lycanroc": {
+        "level": 92,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Stone Edge", "Fire Lash", "U-turn", "Spikes", "Close Combat", "Stealth Rock", "Accelerock"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Water", "Fire"]
+            }
+        ]
+    },
+    "lycanrocdusk": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Mountain Maw", "Crunch", "Fire Fang", "Ice Fang", "Thunder Fang", "Psychic Fangs"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "dodrio": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Triple Arrows", "Brave Bird", "Knock Off", "Obstruct"],
+                "abilities": ["Speed Boost"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Triple Arrows", "Drill Peck", "Knock Off", "Obstruct"],
+                "abilities": ["Speed Boost"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "whiscash": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Stealth Rock", "Spikes", "Flip Turn", "Scald", "Earthquake", "Toxic"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Poison"]
+            }
+        ]
+    },
+    "hippowdon": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Stealth Rock", "Salt Cure", "Sand Tomb", "Slack Off"],
+                "abilities": ["Earth Eater"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "cramorant": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Defog", "Roost", "Beak Blast", "Surf"],
+                "abilities": ["Gulp Missile"],
+                "teraTypes": ["Ground", "Dragon"]
+            }
+        ]
+    },
+    "grafaiai": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Bulk Up", "Double-Edge", "Drain Punch", "Scavenge"],
+                "abilities": ["Unburden"],
+                "teraTypes": ["Fighting", "Flying"]
+            }
+        ]
+    },
+    "tatsugiri": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Switcheroo", "Sashimi Shuffle", "Twister", "Water Spout"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "kyurem": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Scale Shot", "Icicle Spear", "Earthquake"],
+                "abilities": ["Skill Link"],
+                "teraTypes": ["Dragon"]
+            }
+        ]
+    },
+    "roaringmoon": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["U-turn", "Jaw Lock", "Glaive Rush", "Fire Lash", "Roost"],
+                "abilities": ["Shadow Shield"],
+                "teraTypes": ["Fire", "Poison"]
+            }
+        ]
+    },
+    "milotic": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bouncy Bubble", "Recover", "Haze", "Moonblast"],
+                "abilities": ["Aqua Veil"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "gogoat": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Milk Drink", "Horn Leech", "Head Smash", "High Horsepower", "Grassy Glide"],
+                "abilities": ["Grass Pelt"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "clodsire": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Barb Barrage", "Earthquake", "Recover", "Spikes", "Stealth Rock", "Toxic Spikes"],
+                "abilities": ["Still Water"],
+                "teraTypes": ["Flying", "Dark"]
+            }
+        ]
+    },
+    "masquerain": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Sticky Web", "Hurricane", "Bug Buzz", "U-turn", "Roost"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "masquerainmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Quiver Dance", "Weather Ball", "Bug Buzz", "Dark Pulse", "Hurricane", "Ice Beam"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "kyuremblack": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Fusion Bolt", "Ice Hammer", "Dragon Hammer", "Earthquake", "Rock Slide", "Roost"],
+                "abilities": ["Teravolt"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "ironthorns": {
+        "level": 92,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Sand Tomb", "Stealth Rock", "Iron Strike", "Knock Off"],
+                "abilities": ["Iron Barbs"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "dudunsparce": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Stomping Tantrum", "Boomburst", "Stealth Rock", "Roost", "Glare"],
+                "abilities": ["Earth Eater"],
+                "teraTypes": ["Poison"]
+            }
+        ]
+    },
+    "chienpao": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Icicle Storm", "Swords Dance", "Sacred Sword", "Throat Chop"],
+                "abilities": ["Tablets of Ruin"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "pelipper": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Weather Ball", "Bleakwind Storm", "Sandsear Storm", "Wildbolt Storm", "Springtide Storm", "U-turn"],
+                "abilities": ["Drizzle"],
+                "teraTypes": ["Ground", "Electric", "Fairy"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Weather Ball", "Bleakwind Storm", "Sandsear Storm", "Wildbolt Storm", "Springtide Storm", "Roost"],
+                "abilities": ["Drizzle"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "kleavor": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Stone Axe", "X-Scissor", "U-turn", "Close Combat"],
+                "abilities": ["King of the Hill"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Stone Axe", "X-Scissor", "U-turn", "Close Combat"],
+                "abilities": ["King of the Hill"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "araquanid": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Silk Trap", "Surging Strikes", "Flip Turn", "First Impression"],
+                "abilities": ["Water Bubble"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "avalugghisui": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Rapid Spin", "Mountain Maw", "Mountain Gale", "Body Press", "Recover", "Stealth Rock"],
+                "abilities": ["Multiscale"],
+                "teraTypes": ["Ghost", "Fighting"]
+            }
+        ]
+    },
+    "swalot": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Spit Up", "Swallow", "Toxic Spikes", "Earth Power"],
+                "abilities": ["Omnivore"],
+                "teraTypes": ["Dark"]
+            }
+        ]
+    },
+    "zapdosgalar": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Thunderous Kick", "Knock Off", "U-turn", "Wild Charge"],
+                "abilities": ["Defiant"],
+                "teraTypes": ["Dark"]
+            }
+        ]
+    },
+    "phione": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Geyser", "Tidal Surge", "Rest", "Work Up"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "sudowoodo": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Bonsai Bounce", "Earthquake", "Wood Hammer", "Head Smash"],
+                "abilities": ["Pseudowoodo"],
+                "teraTypes": ["Rock", "Grass"]
+            }
+        ]
+    },
+    "dondozo": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Wave Crash", "Order Up", "Earthquake", "Horn Leech"],
+                "abilities": ["Unaware"],
+                "teraTypes": ["Dragon"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Recover", "Fishious Rend", "Flip Turn", "Body Slam", "Body Press"],
+                "abilities": ["Unaware"],
+                "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "golurk": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Trick Room", "Headlong Rush", "Shattered Seal", "Ice Punch", "Dynamic Punch"],
+                "abilities": ["Iron Fist"],
+                "teraTypes": ["Fighting", "Ground"]
+            }
+        ]
+    },
+    "meowscarada": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Flower Trick", "Spectral Thief", "Knock Off", "U-turn", "Encore", "Spikes", "Toxic Spikes"],
+                "abilities": ["Protean"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+    "infernape": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["All-Out Assault", "Mind Blown", "Bitter Blade", "Grass Knot", "Gunk Shot", "Earthquake", "Vacuum Wave", "U-turn"],
+                "abilities": ["Berserk"],
+                "teraTypes": ["Fire", "Stellar"]
+            }
+        ]
+    },
+    "salamence": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Blood Moon", "Hyper Voice", "Hydro Pump", "Fire Blast", "Roost", "Twister"],
+                "abilities": ["Aerilate"],
+                "teraTypes": ["Steel", "Flying"]
+            }
+        ]
+    },
+    "salamencemega": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dragon Ascent", "Dragon Claw", "Earthquake", "U-turn", "Dragon Dance"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "urshifu": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Wicked Blow", "Close Combat", "Aqua Jet", "Sucker Punch", "U-turn"],
+                "abilities": ["Sniper"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Wicked Blow", "Close Combat", "Aqua Jet", "Sucker Punch", "Swords Dance", "Agility"],
+                "abilities": ["Sniper"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "urshifurapidstrike": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Surging Strikes", "Close Combat", "Aqua Jet", "Sucker Punch", "U-turn"],
+                "abilities": ["Sniper"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Surging Strikes", "Close Combat", "Aqua Jet", "Sucker Punch", "Swords Dance", "Agility"],
+                "abilities": ["Sniper"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "stonjourner": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Rock Wrecker", "Giga Impact", "Meteor Assault", "Sky Attack", "Solar Blade"],
+                "abilities": ["Power Spot"],
+                "teraTypes": ["Rock", "Grass", "Fighting"]
+            }
+        ]
+    },
+    "veluza": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Waterfall", "Rage Fist", "Fillet Away", "Stored Power"],
+                "abilities": ["Mold Breaker"],
+                "teraTypes": ["Water", "Ghost", "Psychic", "Dark"]
+            }
+        ]
+    },
+    "ogerponhearthflame": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Focus Energy", "Ivy Cudgel", "Stone Edge", "Leaf Blade", "Crabhammer"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
+    "dachsbun": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Nuzzle", "Body Press", "Spirit Break", "Morning Sun"],
+                "abilities": ["Well-Baked Body"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "mew": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Acrobatics", "Air Slash", "Agility", "Avalanche"],
+                "abilities": ["Biogenesis"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "magneton": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Magnet Rise", "Thunderbolt", "Magnet Bomb", "Volt Switch", "Thunder Wave"],
+                "abilities": ["Magnet Pull"],
+                "teraTypes": ["Ghost", "Water"]
+            }
+        ]
+    },
+    "delibird": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Icicle Storm", "Brave Bird", "Aerial Ace", "Drill Run"],
+                "abilities": ["Hail Mary"],
+                "teraTypes": ["Ice", "Ground"]
+            }
+        ]
+    },
+    "hitmontop": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Triple Axel", "Triple Kick", "Bulk Up", "Rapid Spin", "Bullet Seed"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "articunogalar": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Freezing Glare", "Aeroblast", "Roost", "Calm Mind"],
+                "abilities": ["Brain Freeze"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Freezing Glare", "Oblivion Wing", "Aura Sphere", "U-turn"],
+                "abilities": ["Brain Freeze"],
+                "teraTypes": ["Fighting", "Psychic"]
+            }
+        ]
+    },
+    "vaporeon": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Volt Switch", "Burn Out", "Recover", "Scald"],
+                "abilities": ["Marvel Scale"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "garganacl": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Thunder Wave", "Salt Curse", "Purify", "Earthquake"],
+                "abilities": ["Purifying Salt"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+    "swanna": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Steam Eruption", "Bleakwind Storm", "Roost", "Defog", "Fly-by"],
+                "abilities": ["Serene Grace"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "typhlosionmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Eruption", "Steam Eruption", "Matcha Gotcha", "Morning Sun"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Heat Sink", "Steam Eruption", "Calm Mind", "Morning Sun"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "terapagos": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Rest", "Sleep Talk", "Calm Mind", "Tera Starstorm"],
+                "abilities": ["Tera Shift"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Rapid Spin", "Nasty Plot", "Protect", "Tera Starstorm"],
+                "abilities": ["Tera Shift"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "flapple": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Grab Apple", "Flare Blitz"],
+                "abilities": ["Ripen"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
+    "genesectburn": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Earthquake", "Sunsteel Strike", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
+    "genesectchill": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Earthquake", "Behemoth Blade", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "genesectdouse": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Thunder", "Make It Rain", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "genesectshock": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Ice Beam", "Tachyon Cutter", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Electric"]
+            }
+        ]
+    },
+    "honchkrow": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crowverload", "Sucker Punch", "Oblivion Wing", "U-turn"],
+                "abilities": ["Supreme Overlord"],
+                "teraTypes": ["Dark"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crowverload", "Sucker Punch", "Oblivion Wing", "Close Combat"],
+                "abilities": ["Supreme Overlord"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "primeape": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Drain Punch", "Taunt", "Knock Off", "Iron Head", "Earthquake"],
+                "abilities": ["Battle Rage"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "rillaboom": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Nature's Fury", "Wood Hammer", "Land's Wrath", "U-turn"],
+                "abilities": ["Terrain Shift"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "mandibuzz": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Fling", "Scavenge", "Bonemerang", "Roost"],
+                "abilities": ["Weak Armor"],
+                "teraTypes": ["Poison"]
+            }
+        ]
+    }
+}
