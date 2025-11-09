@@ -1180,6 +1180,10 @@ export function validateMoveAction(
 		}
 	}
 
+	if (attackerSlot.healBlockTurns > 0 && moveData.flags.heal) {
+		return `${pokemon.species} is prevented from healing by Heal Block!`;
+	}
+
 	const hasChoiceItemLock = attackerSlot.lockedMove &&
 		attackerSlot.lockedMove !== moveData.id &&
 		battle.magicRoomTurns === 0 &&
