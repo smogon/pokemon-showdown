@@ -9,7 +9,7 @@ const PACK_TEAMS = [
 	"Testmon1|Garchomp|ChoiceScarf|RoughSkin|Outrage,Earthquake,StoneEdge,FireFang|Jolly|,252,,,4,252|M||||]Testmon2|TapuKoko|LifeOrb|ElectricSurge|Thunderbolt,DazzlingGleam,HiddenPower,Uturn|Timid|,,,252,4,252|||||",
 
 	// Team 3: Balanced team (Ferrothorn + Toxapex with low HP)
-	"Testmon1|Ferrothorn|Leftovers|IronBarbs|StealthRock,LeechSeed,PowerWhip,KnockOff|Relaxed|252,,252,,,|M||||]Testmon2|Toxapex|BlackSludge|Regenerator|Scald,Toxic,Recover,Haze|Bold|252,,,252,4,|F||||,,,,,,25,",
+	"Testmon1|Ferrothorn|Leftovers|IronBarbs|StealthRock,LeechSeed,PowerWhip,KnockOff|Relaxed|252,,252,,,|M||||,,,,,,60,brn]Testmon2|Toxapex|BlackSludge|Regenerator|Scald,Toxic,Recover,Haze|Bold|252,,,252,4,|F||||,,,,,,25,",
 
 	// Team 4: Setup sweeper team (Dragonite + Volcarona)
 	"Testmon1|Dragonite|WeaknessPolicy|Multiscale|DragonDance,Outrage,Earthquake,ExtremeSpeed|Adamant|,252,,,4,252|M||||]Testmon2|Volcarona|HeavyDutyBoots|FlameBody|QuiverDance,Flamethrower,BugBuzz,GigaDrain|Modest|,,,252,4,252|M||||",
