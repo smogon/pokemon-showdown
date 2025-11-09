@@ -938,18 +938,46 @@ export function handleSpecificStatusMove(
 	switch (move.id) {
 	case 'roar':
 	case 'whirlwind':
-		if (!defender) {
+		if (!defenderSlot || !defender) {
 			messageLog.push(`But it failed!`);
 			return true;
 		}
-		if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
-			messageLog.push(`The wild ${defender.species} was blown away!`);
-			const oppSlotIndex = battle.opponentSlots.indexOf(defenderSlot);
-			if (oppSlotIndex !== -1) {
-				battle.opponentSlots[oppSlotIndex as 0 | 1] = null;
+
+		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+		// Suction Cups and similar abilities prevent forced switches
+		if (defenderAbility === 'suctioncups') {
+			messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+			return true;
+		}
+		// Ingrain also prevents forced switches
+		if (defenderSlot.isIngrained) {
+			messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
+			return true;
+		}
+
+		const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+		const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
+		const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+		
+		const availableReplacements = party.filter(p =>
+			p.hp > 0 &&
+			!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
+			!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+		);
+
+		if (availableReplacements.length === 0) {
+			messageLog.push(`But it failed! (No Pokémon to switch to!)`);
+			return true;
+		}
+
+		messageLog.push(`${defender.species} was blown away!`);
+		if (defenderSlotIndex !== -1) {
+			// Set the slot to null to trigger forced switch logic in battle-flow
+			if (isDefenderPlayer) {
+				battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
+			} else {
+				battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
 			}
-		} else {
-			messageLog.push(`But it failed!`);
 		}
 		return true;
 
