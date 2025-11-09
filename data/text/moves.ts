@@ -2129,15 +2129,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
 		shortDesc: "100% chance to raise the user's Speed by 1.",
 	},
-	flamewheel: {
-		name: "Flame Wheel",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target. Thaws user.",
-	},
 	flamethrower: {
 		name: "Flamethrower",
 		desc: "Has a 10% chance to burn the target.",
 		shortDesc: "10% chance to burn the target.",
+	},
+	flamewheel: {
+		name: "Flame Wheel",
+		desc: "Has a 10% chance to burn the target.",
+		shortDesc: "10% chance to burn the target. Thaws user.",
 	},
 	flareblitz: {
 		name: "Flare Blitz",
@@ -4349,6 +4349,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
 		shortDesc: "30% chance to lower the target's accuracy by 1.",
 	},
+	muddywater: {
+		name: "Muddy Water",
+		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
+		shortDesc: "30% chance to lower the foe(s) accuracy by 1.",
+	},
 	mudshot: {
 		name: "Mud Shot",
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
@@ -4371,11 +4376,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "While the user is active, all Electric-type attacks used by any active Pokemon have their power halved. Fails if this effect is already active for the user. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "Weakens Electric-type attacks to 1/2 their power.",
 		},
-	},
-	muddywater: {
-		name: "Muddy Water",
-		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "30% chance to lower the foe(s) accuracy by 1.",
 	},
 	multiattack: {
 		name: "Multi-Attack",
@@ -4915,14 +4915,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If the current terrain is Electric Terrain, this move's power is multiplied by 1.5.",
 		shortDesc: "During Electric Terrain: 1.5x power.",
 	},
-	psychup: {
-		name: "Psych Up",
-		desc: "The user copies all of the target's current stat stage changes.",
-		shortDesc: "Copies the target's current stat stages.",
-		gen2: {
-			desc: "The user copies all of the target's current stat stage changes. Fails if the target's stat stages are 0.",
-		},
-	},
 	psychic: {
 		name: "Psychic",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
@@ -4964,6 +4956,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Psycho Shift",
 		desc: "The user's non-volatile status condition is transferred to the target, and the user is then cured. Fails if the user has no non-volatile status condition or if the target already has one.",
 		shortDesc: "Transfers the user's status ailment to the target.",
+	},
+	psychup: {
+		name: "Psych Up",
+		desc: "The user copies all of the target's current stat stage changes.",
+		shortDesc: "Copies the target's current stat stages.",
+		gen2: {
+			desc: "The user copies all of the target's current stat stage changes. Fails if the target's stat stages are 0.",
+		},
 	},
 	psyshieldbash: {
 		name: "Psyshield Bash",
@@ -6243,17 +6243,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
 	},
-	spitup: {
-		name: "Spit Up",
-		desc: "Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
-		shortDesc: "More power with more uses of Stockpile.",
-		gen4: {
-			desc: "Power is equal to 100 times the user's Stockpile count. This move does not apply damage variance. Fails if the user's Stockpile count is 0. Unless there is no target, whether or not this move is successful the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
-		},
-		gen3: {
-			desc: "Damage is multiplied by the user's Stockpile count. This move does not apply damage variance and cannot be a critical hit. Fails if the user's Stockpile count is 0. Unless this move misses, the user's Stockpile count resets to 0.",
-		},
-	},
 	spite: {
 		name: "Spite",
 		desc: "Causes the target's last move used to lose 4 PP. Fails if the target has not made a move, if the move has 0 PP, or if it no longer knows the move.",
@@ -6267,6 +6256,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		activate: "  It reduced the PP of [TARGET]'s [MOVE] by [NUMBER]!",
+	},
+	spitup: {
+		name: "Spit Up",
+		desc: "Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		shortDesc: "More power with more uses of Stockpile.",
+		gen4: {
+			desc: "Power is equal to 100 times the user's Stockpile count. This move does not apply damage variance. Fails if the user's Stockpile count is 0. Unless there is no target, whether or not this move is successful the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		},
+		gen3: {
+			desc: "Damage is multiplied by the user's Stockpile count. This move does not apply damage variance and cannot be a critical hit. Fails if the user's Stockpile count is 0. Unless this move misses, the user's Stockpile count resets to 0.",
+		},
 	},
 	splash: {
 		name: "Splash",
@@ -7206,19 +7206,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "20% chance to make the target flinch.",
 		},
 	},
-	uturn: {
-		name: "U-turn",
-		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
-		shortDesc: "User switches out after damaging the target.",
-		gen6: {
-			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button.",
-		},
-		gen4: {
-			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		},
-
-		switchOut: "[POKEMON] went back to [TRAINER]!",
-	},
 	upperhand: {
 		name: "Upper Hand",
 		desc: "Has a 100% chance to make the target flinch. Fails if the target did not select a priority move for use this turn, or if the target moves before the user.",
@@ -7245,6 +7232,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		upkeep: "  [POKEMON] is making an uproar!",
 		block: "  But the uproar kept [POKEMON] awake!",
 		blockSelf: "  [POKEMON] can't sleep in an uproar!",
+	},
+	uturn: {
+		name: "U-turn",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
+		shortDesc: "User switches out after damaging the target.",
+		gen6: {
+			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button.",
+		},
+		gen4: {
+			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		},
+
+		switchOut: "[POKEMON] went back to [TRAINER]!",
 	},
 	vacuumwave: {
 		name: "Vacuum Wave",

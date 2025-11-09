@@ -252,11 +252,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
-	berserkgene: {
+	berry: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	berry: {
+	berserkgene: {
 		inherit: true,
 		isNonstandard: null,
 	},
