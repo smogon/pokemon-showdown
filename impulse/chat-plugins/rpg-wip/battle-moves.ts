@@ -1455,25 +1455,7 @@ export function handleSpecificStatusMove(
 		if (defenderChange > 0) messageLog.push(`${defender.species} gained ${defenderChange} HP!`);
 		else if (defenderChange < 0) messageLog.push(`${defender.species} lost ${-defenderChange} HP!`);
 		return true;
-
-	case 'rapidspin':
-		if (!defenderSlot) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		// Rapid Spin deals damage (handled separately), then removes hazards and raises Speed
-		const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-		const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
-		if (userHazards.length > 0) {
-			userHazards.length = 0;
-			messageLog.push(`${attacker.species} blew away the hazards!`);
-		}
-		if (attackerSlot.statStages.spe < 6) {
-			attackerSlot.statStages.spe++;
-			messageLog.push(`${attacker.species}'s Speed rose!`);
-		}
-		return false; // Return false so damage is still calculated
-
+			
 	case 'memento':
 		if (!defenderSlot) {
 			messageLog.push(`But it failed!`);
