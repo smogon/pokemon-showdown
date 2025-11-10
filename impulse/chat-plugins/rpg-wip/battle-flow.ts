@@ -1176,6 +1176,22 @@ export function executeAction(
 				}
 			}
 
+			// Check if the move is immune against the primary target
+			const primaryTargetSlot = getSlotFromIndex(battle, action.targetSlot);
+			if (primaryTargetSlot) {
+				const defenderTypes = getPokemonTypes(primaryTargetSlot.pokemon, primaryTargetSlot);
+				// We must get the move type *after* abilities like Pixilate
+				const moveType = getMoveType(move, attackerSlot.pokemon, battle, { attacker: attackerSlot.pokemon, defender: primaryTargetSlot.pokemon, attackerSlot, defenderSlot: primaryTargetSlot, move, battle, messageLog });
+				const effectiveness = getCustomEffectiveness(moveType, defenderTypes, primaryTargetSlot.pokemon, battle);
+
+				if (effectiveness === 0) {
+					// The move failed due to immunity, so the pivot also fails.
+					// The "But it failed!" message will be added by executeMove.
+					// We just need to stop the pivot from happening.
+					return; 
+				}
+			}
+
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
 				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
