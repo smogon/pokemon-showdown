@@ -217,27 +217,60 @@ export function gainExperience(
 	const defeatedSpeciesId = toID(defeatedPokemon.species);
 	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
 
-	const expGained = Math.floor((baseExp * defeatedPokemon.level) / 7);
-	if (expGained <= 0) return { messages: [`No Experience Points were gained.`], leveledUp: false };
-
 	let leveledUp = false;
 	const messages: string[] = [];
+	const participantExpGains: Map<string, number> = new Map();
 
-	const participantNames: string[] = [];
+	// Gen 5-9 Scaled Experience Formula
+	// Formula: ExpGained = floor((X^1.5 * Z) / (Y^1.5)) + 1
+	// Where: X = 2 * OpponentLevel + 10
+	//        Y = OpponentLevel + ParticipantLevel + 10
+	//        Z = floor((BaseExp * OpponentLevel) / 5)
+	//        X^1.5 = sqrt(X) * X * X (same for Y^1.5)
+	const opponentLevel = defeatedPokemon.level;
+	const X = 2 * opponentLevel + 10;
+	const Z = Math.floor((baseExp * opponentLevel) / 5);
 
 	for (const slot of participantSlots) {
 		if (!slot?.pokemon) continue;
 		const pokemon = slot.pokemon;
 		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
 
-		participantNames.push(pokemon.species);
+		// Calculate level-scaled experience for this participant
+		const participantLevel = pokemon.level;
+		const Y = opponentLevel + participantLevel + 10;
+
+		// Calculate scaling factor: (X^1.5) / (Y^1.5)
+		const scalingFactor = (Math.sqrt(X) * X * X) / (Math.sqrt(Y) * Y * Y);
+		const expGained = Math.floor(scalingFactor * Z) + 1;
+
+		participantExpGains.set(pokemon.species, expGained);
 		gainEffortValues(pokemon, defeatedPokemon);
 		pokemon.experience += expGained;
 	}
 
-	if (participantNames.length === 0) return { messages: [], leveledUp: false };
+	if (participantExpGains.size === 0) return { messages: [], leveledUp: false };
 
-	messages.push(`<b>${participantNames.join(' and ')} gained ${expGained} Experience Points!</b>`);
+	// Create exp gain message
+	if (participantExpGains.size === 1) {
+		const [species, exp] = Array.from(participantExpGains.entries())[0];
+		messages.push(`<b>${species} gained ${exp} Experience Points!</b>`);
+	} else {
+		// Check if all participants gained the same exp
+		const expValues = Array.from(participantExpGains.values());
+		const allSame = expValues.every(v => v === expValues[0]);
+
+		if (allSame) {
+			const participantNames = Array.from(participantExpGains.keys());
+			messages.push(`<b>${participantNames.join(' and ')} gained ${expValues[0]} Experience Points!</b>`);
+		} else {
+			// Different exp amounts - show individual gains
+			const expStrings = Array.from(participantExpGains.entries()).map(([name, exp]) =>
+				`${name} gained ${exp} Experience Points`
+			);
+			messages.push(`<b>${expStrings.join(' and ')}!</b>`);
+		}
+	}
 
 	for (const slot of participantSlots) {
 		if (!slot?.pokemon) continue;
