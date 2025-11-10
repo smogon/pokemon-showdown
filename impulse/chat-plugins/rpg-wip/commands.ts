@@ -1445,7 +1445,7 @@ export const commands: ChatCommands = {
 				if (locationWeatherData.weather) {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 				}
-				
+
 				// Create the battle state object
 				const battle: BattleState = {
 					battleType: finalBattleType,
@@ -1493,7 +1493,7 @@ export const commands: ChatCommands = {
 					opponentFutureMoves: [],
 					battleLog: [],
 				};
-				
+
 				// Apply switch-in abilities (which modifies the 'battle' object)
 				if (playerSlots[0]) {
 					applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
@@ -1507,7 +1507,7 @@ export const commands: ChatCommands = {
 				if (opponentSlots[1]) {
 					applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, battleMessages);
 				}
-				
+
 				// Set the modified battle object as the active battle
 				activeBattles.set(user.id, battle);
 
@@ -1562,7 +1562,7 @@ export const commands: ChatCommands = {
 				if (locationWeatherData3.weather) {
 					battleMessages.push(getWeatherStartMessage(locationWeatherData3.weather.type));
 				}
-				
+
 				// Create the battle state object
 				const battle: BattleState = {
 					battleType: 'wild',
@@ -1610,7 +1610,7 @@ export const commands: ChatCommands = {
 					opponentFutureMoves: [],
 					battleLog: [],
 				};
-				
+
 				// Apply switch-in abilities (which modifies the 'battle' object)
 				if (playerSlots[0]) {
 					applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
@@ -1618,7 +1618,7 @@ export const commands: ChatCommands = {
 				if (opponentSlots[0]) {
 					applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
 				}
-				
+
 				// Set the modified battle object as the active battle
 				activeBattles.set(user.id, battle);
 
@@ -1695,10 +1695,10 @@ export const commands: ChatCommands = {
 			}
 
 			const locationWeatherData2 = getLocationWeatherData(player);
-			
+
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
 			const challengeMessages = [startMessage];
-			
+
 			// Create the battle state object
 			const battle: BattleState = {
 				battleType: finalBattleType,
@@ -1747,7 +1747,7 @@ export const commands: ChatCommands = {
 				opponentFutureMoves: [],
 				battleLog: [],
 			};
-			
+
 			// Apply switch-in abilities (which modifies the 'battle' object)
 			if (playerSlots[0]) {
 				applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, challengeMessages);
@@ -1761,7 +1761,7 @@ export const commands: ChatCommands = {
 			if (opponentSlots[1]) {
 				applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, challengeMessages);
 			}
-			
+
 			// Set the modified battle object as the active battle
 			activeBattles.set(user.id, battle);
 
@@ -1772,11 +1772,11 @@ export const commands: ChatCommands = {
 
 			// Add initial messages to battle log
 			battle.battleLog.push(...challengeMessages);
-			
+
 			// Generate HTML using the modified battle object
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 		},
-		
+
 		battle(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You are already in a battle!");
@@ -1994,7 +1994,10 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Check if more switches are needed ---
-				const needsAnotherSwitch = battle.playerSlots.some(s => s === null) &&
+				// In single battles, only check slot 0. In double battles, check both slots 0 and 1.
+				const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
+				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
 					player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 
 				if (needsAnotherSwitch) {
@@ -2280,7 +2283,12 @@ export const commands: ChatCommands = {
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
-					// --- FIX: Call the router function with no targetSelection ---
+					// Clear any stale pending actions for fainted Pokemon to prevent "already waiting to move" error
+					for (let i = 0; i < battle.playerSlots.length; i++) {
+						if (battle.playerSlots[i] === null || battle.playerSlots[i]?.pokemon.hp === 0) {
+							delete battle.pendingActions[i];
+						}
+					}
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
 				}
 			},

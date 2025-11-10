@@ -357,6 +357,12 @@ export function checkBattleEndCondition(
 	);
 
 	if (playerSwitchNeeded && playerHasLivingPokemon) {
+		// Clear pending actions for fainted Pokemon slots to prevent "already waiting to move" error
+		for (let i = 0; i < battle.playerSlots.length; i++) {
+			if (battle.playerSlots[i] === null || battle.playerSlots[i]?.pokemon.hp === 0) {
+				delete battle.pendingActions[i];
+			}
+		}
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		return true;
 	}

@@ -1233,9 +1233,12 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
 	let slotToFill = -1;
-	if (battle.playerSlots[0] === null) {
+	// Check slot 0 (always used in both single and double battles)
+	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	} else if (isDoubleBattle && battle.playerSlots[1] === null) {
+	}
+	// In double battles, also check slot 1 if slot 0 is already filled
+	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
 		slotToFill = 1;
 	}
 	// --- END FIX ---
