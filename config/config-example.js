@@ -779,6 +779,20 @@ exports.grouplist = [
 		hiderank: true,
 	},
 	{
+		symbol: '㆜',
+		id: "contributor",
+		name: "Contributor",
+		inherit: ' ',
+
+		altsself: true,
+		makegroupchat: true,
+		joinbattle: true,
+		show: true,
+		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
+	},
+	{
 		// Bots are ranked below Driver/Mod so that Global Bots can be kept out
 		// of modjoin % rooms (namely, Staff).
 		// (They were previously above Driver/Mod so they can have game management

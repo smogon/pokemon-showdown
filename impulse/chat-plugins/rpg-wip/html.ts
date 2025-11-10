@@ -473,50 +473,80 @@ export function generateSingleBattleHTML(
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
-		const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+		// Check if locked into a rampage move or Uproar with no PP
+		const isRampagingWithNoPP = (playerSlot.lockedMoveCounter > 0 || playerSlot.uproarTurns > 0) &&
+			playerSlot.lockedMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
 
-		const moveButtons = playerPokemon.moves.map(move => {
-			const moveData = getMove(move.id);
+		// Check if encored into a move with no PP
+		const isEncoredWithNoPP = playerSlot.encoreMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
-			// Use the validation function to check if a move is disabled
-			// We need to import validateMoveAction, but that's in battle-engine.ts
-			// For now, we will do a simple check.
-			// const validationError = validateMoveAction(playerSlot, move.id, battle);
-			const isDisabled = (playerSlot.disabledMove && playerSlot.disabledMove.moveId === move.id) ||
-				(playerSlot.encoreMove && playerSlot.encoreMove.moveId !== move.id) ||
-				(playerSlot.tauntTurns > 0 && moveData.category === 'Status') ||
-				(playerSlot.lockedMoveCounter > 0 && playerSlot.lockedMove !== move.id) ||
-				(playerSlot.uproarTurns > 0 && playerSlot.lockedMove !== move.id) ||
-				(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
-				move.pp === 0;
-
+		// If locked into a move with no PP, show only Struggle button
+		if (isRampagingWithNoPP || isEncoredWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
-				'<span>' + moveData.type + '</span>' +
-				'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
+				'<span>Normal</span>' +
+				'<span style="float: right;">-- / --</span>' +
 				'</div> ';
 
-			const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
-				' ' + buttonContent + '</button>';
+			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+			moveButtonsHTML += '<tr>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+			moveButtonsHTML += '</tr>';
+			moveButtonsHTML += '<tr>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+			moveButtonsHTML += '</tr>';
+			moveButtonsHTML += '</table>';
+		} else {
+			const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
 
-			// Add Tera option if can terastallize
-			if (canTerastallize && !isDisabled) {
-				return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
-			}
-			return normalButton;
-		});
+			const moveButtons = playerPokemon.moves.map(move => {
+				const moveData = getMove(move.id);
 
-		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '</table>';
+				// Use the validation function to check if a move is disabled
+				// We need to import validateMoveAction, but that's in battle-engine.ts
+				// For now, we will do a simple check.
+				// const validationError = validateMoveAction(playerSlot, move.id, battle);
+				const isDisabled = (playerSlot.disabledMove && playerSlot.disabledMove.moveId === move.id) ||
+					(playerSlot.encoreMove && playerSlot.encoreMove.moveId !== move.id) ||
+					(playerSlot.tauntTurns > 0 && moveData.category === 'Status') ||
+					(playerSlot.lockedMoveCounter > 0 && playerSlot.lockedMove !== move.id) ||
+					(playerSlot.uproarTurns > 0 && playerSlot.lockedMove !== move.id) ||
+					(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
+					move.pp === 0;
+
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
+				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+					'<span>' + moveData.type + '</span>' +
+					'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
+					'</div> ';
+
+				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
+					' ' + buttonContent + '</button>';
+
+				// Add Tera option if can terastallize
+				if (canTerastallize && !isDisabled) {
+					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+				}
+				return normalButton;
+			});
+
+			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+			moveButtonsHTML += '<tr>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+			moveButtonsHTML += '</tr>';
+			moveButtonsHTML += '<tr>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+			moveButtonsHTML += '</tr>';
+			moveButtonsHTML += '</table>';
+		}
 	}
 
 	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
@@ -700,9 +730,19 @@ export function generateDoubleBattleHTML(
 			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
 
 			const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
+
+			// Check if locked into a rampage move or Uproar with no PP
+			const isRampagingWithNoPP = (activeSlot.lockedMoveCounter > 0 || activeSlot.uproarTurns > 0) &&
+				activeSlot.lockedMove &&
+				pokemon.moves.find(m => m.id === activeSlot.lockedMove)?.pp === 0;
+
+			// Check if encored into a move with no PP
+			const isEncoredWithNoPP = activeSlot.encoreMove &&
+				pokemon.moves.find(m => m.id === activeSlot.encoreMove!.moveId)?.pp === 0;
+
 			let moveButtonsHTML = '';
 
-			if (allMovesOutOfPP) {
+			if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP) {
 				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -1193,9 +1233,12 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
 	let slotToFill = -1;
-	if (battle.playerSlots[0] === null) {
+	// Check slot 0 (always used in both single and double battles)
+	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	} else if (isDoubleBattle && battle.playerSlots[1] === null) {
+	}
+	// In double battles, also check slot 1 if slot 0 is already filled
+	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
 		slotToFill = 1;
 	}
 	// --- END FIX ---

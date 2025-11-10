@@ -357,6 +357,12 @@ export function checkBattleEndCondition(
 	);
 
 	if (playerSwitchNeeded && playerHasLivingPokemon) {
+		// Clear pending actions for fainted Pokemon slots to prevent "already waiting to move" error
+		for (let i = 0; i < battle.playerSlots.length; i++) {
+			if (battle.playerSlots[i] === null || battle.playerSlots[i]?.pokemon.hp === 0) {
+				delete battle.pendingActions[i];
+			}
+		}
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		return true;
 	}
@@ -631,7 +637,7 @@ export function executeMove(
 
 		if (battle.terrain?.type === 'psychic' && truePriority > 0) {
 			const isDefenderGrounded = RPGAbilities.isGrounded(defenderSlot.pokemon, battle);
-			
+
 			// Check if attacker and defender are on different teams
 			const isAttackerPlayer = battle.playerSlots.includes(attackerSlot);
 			const isDefenderPlayerCheck = battle.playerSlots.includes(defenderSlot);
@@ -641,7 +647,7 @@ export function executeMove(
 				continue; // Skip this target
 			}
 		}
-		
+
 		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
 
 		if (isSpread) {
@@ -671,7 +677,7 @@ export function executeMove(
 			let moveAccuracy = move.accuracy;
 
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon, move);
-			
+
 			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
 
@@ -848,9 +854,6 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
 
-	// Add turn header to cumulative battle log
-	battle.battleLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
-
 	battle.playerQuickGuard = false;
 	battle.opponentQuickGuard = false;
 	battle.playerWideGuard = false;
@@ -878,6 +881,8 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
 		if (battleEndedMidTurn) {
+			// Add turn header at end so it appears before actions when reversed
+			messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 			// Append current turn logs to battle log
 			battle.battleLog.push(...messageLog);
 			return;
@@ -885,6 +890,8 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	}
 
 	if (battle.forceEnd) {
+		// Add turn header at end so it appears before actions when reversed
+		messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 		// Append current turn logs to battle log
 		battle.battleLog.push(...messageLog);
 		return;
@@ -894,6 +901,9 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	processEndOfTurn(battle, messageLog);
 
 	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+
+	// Add turn header at end so it appears before actions when reversed
+	messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 
 	// Append current turn logs to cumulative battle log
 	battle.battleLog.push(...messageLog);
@@ -1079,7 +1089,7 @@ export function executeAction(
 				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
 				battle.playerTerastallizeUsed = true;
 				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
-				
+
 				// --- NEW: Add Slow Start check after Terastallization ---
 				if (toID(attackerSlot.pokemon.ability || '') === 'slowstart' && attackerSlot.slowStartTurns && attackerSlot.slowStartTurns > 0) {
 					attackerSlot.slowStartTurns = 0;
@@ -1164,12 +1174,12 @@ export function executeAction(
 					messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
 					return; // Stop the switch
 				}
-		
+
 				if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
 					messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 					return; // Stop the switch
 				}
-		
+
 				if (attackerSlot.isIngrained) {
 					messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
 					return; // Stop the switch
@@ -1188,7 +1198,7 @@ export function executeAction(
 					// The move failed due to immunity, so the pivot also fails.
 					// The "But it failed!" message will be added by executeMove.
 					// We just need to stop the pivot from happening.
-					return; 
+					return;
 				}
 			}
 
@@ -1217,20 +1227,83 @@ export function executeAction(
 }
 
 export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
-	// First try to find damaging moves
-	let usableMoves = aiSlot.pokemon.moves.filter(m => {
-		const moveData = getMove(m.id);
-		return m.pp > 0 && moveData.category !== 'Status';
-	});
+	let chosenMoveId = 'struggle';
 
-	// If no damaging moves available, use any move with PP
-	if (usableMoves.length === 0) {
-		usableMoves = aiSlot.pokemon.moves.filter(m => m.pp > 0);
+	// Check if locked into a rampage move (Outrage, Thrash, Petal Dance, Raging Fury)
+	if (aiSlot.lockedMoveCounter && aiSlot.lockedMoveCounter > 0 && aiSlot.lockedMove) {
+		const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);
+		if (lockedMoveObj && lockedMoveObj.pp > 0) {
+			chosenMoveId = aiSlot.lockedMove;
+		} else {
+			// Locked move has no PP, use Struggle
+			chosenMoveId = 'struggle';
+		}
+	}
+	// Check if locked into Uproar
+	else if (aiSlot.uproarTurns && aiSlot.uproarTurns > 0 && aiSlot.lockedMove) {
+		const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);
+		if (lockedMoveObj && lockedMoveObj.pp > 0) {
+			chosenMoveId = aiSlot.lockedMove;
+		} else {
+			// Uproar has no PP, use Struggle
+			chosenMoveId = 'struggle';
+		}
+	}
+	// Check if Encored into a specific move
+	else if (aiSlot.encoreMove?.moveId) {
+		const encoredMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.encoreMove!.moveId);
+		if (encoredMoveObj && encoredMoveObj.pp > 0) {
+			chosenMoveId = aiSlot.encoreMove.moveId;
+		} else {
+			// Encored move has no PP, use Struggle
+			chosenMoveId = 'struggle';
+		}
+	}
+	// Check if locked by Choice item
+	else if (aiSlot.lockedMove && battle.magicRoomTurns === 0) {
+		const choiceItems = ['choiceband', 'choicescarf', 'choicespecs'];
+		if (choiceItems.includes(aiSlot.pokemon.item || '')) {
+			const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);
+			if (lockedMoveObj && lockedMoveObj.pp > 0) {
+				chosenMoveId = aiSlot.lockedMove;
+			} else {
+				// Choice locked move has no PP, use Struggle
+				chosenMoveId = 'struggle';
+			}
+		}
 	}
 
-	let chosenMoveId = 'struggle';
-	if (usableMoves.length > 0) {
-		chosenMoveId = usableMoves[Math.floor(Math.random() * usableMoves.length)].id;
+	// Normal move selection if not locked
+	if (chosenMoveId === 'struggle' && !aiSlot.lockedMoveCounter && !aiSlot.uproarTurns && !aiSlot.encoreMove) {
+		// First try to find damaging moves
+		let usableMoves = aiSlot.pokemon.moves.filter(m => {
+			const moveData = getMove(m.id);
+			// Skip disabled moves
+			if (aiSlot.disabledMove && aiSlot.disabledMove.moveId === m.id) return false;
+			// Skip moves prevented by Torment
+			if (aiSlot.tormentActive && aiSlot.lastMoveUsed === m.id) return false;
+			// Skip status moves if Taunted
+			if (aiSlot.tauntTurns > 0 && moveData.category === 'Status') return false;
+			return m.pp > 0 && moveData.category !== 'Status';
+		});
+
+		// If no damaging moves available, use any move with PP
+		if (usableMoves.length === 0) {
+			usableMoves = aiSlot.pokemon.moves.filter(m => {
+				// Skip disabled moves
+				if (aiSlot.disabledMove && aiSlot.disabledMove.moveId === m.id) return false;
+				// Skip moves prevented by Torment
+				if (aiSlot.tormentActive && aiSlot.lastMoveUsed === m.id) return false;
+				// Skip status moves if Taunted
+				const moveData = getMove(m.id);
+				if (aiSlot.tauntTurns > 0 && moveData.category === 'Status') return false;
+				return m.pp > 0;
+			});
+		}
+
+		if (usableMoves.length > 0) {
+			chosenMoveId = usableMoves[Math.floor(Math.random() * usableMoves.length)].id;
+		}
 	}
 
 	const playerSlots = getActiveSlots(battle.playerSlots);
@@ -1256,6 +1329,11 @@ export function validateMoveAction(
 	const pokemon = attackerSlot.pokemon;
 	const moveData = getMove(moveId);
 
+	// Allow Struggle in all cases
+	if (moveId === 'struggle') {
+		return null;
+	}
+
 	if (attackerSlot.tauntTurns > 0 && moveData.category === 'Status') {
 		return `${pokemon.species} is taunted! It can't use ${moveData.name}!`;
 	}
@@ -1274,7 +1352,12 @@ export function validateMoveAction(
 	}
 
 	if (attackerSlot.encoreMove && attackerSlot.encoreMove.moveId !== moveData.id) {
-		return `${pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`;
+		// Check if the encored move has PP left
+		const encoredMoveObj = pokemon.moves.find(m => m.id === attackerSlot.encoreMove!.moveId);
+		if (encoredMoveObj && encoredMoveObj.pp > 0) {
+			return `${pokemon.species} must use ${attackerSlot.encoreMove.moveId}!`;
+		}
+		// If encored move has no PP, allow other moves (Struggle will be used)
 	}
 
 	if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
@@ -1283,14 +1366,26 @@ export function validateMoveAction(
 
 	if (attackerSlot.lockedMoveCounter > 0) {
 		if (attackerSlot.lockedMove !== moveData.id) {
-			const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
-			return `${pokemon.species} must continue using ${lockedMoveName}!`;
+			// Check if the locked rampage move has PP left
+			const lockedMoveObj = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
+			if (lockedMoveObj && lockedMoveObj.pp > 0) {
+				const lockedMoveName = getMove(attackerSlot.lockedMove!).name;
+				return `${pokemon.species} must continue using ${lockedMoveName}!`;
+			}
+			// If locked rampage move has no PP, allow Struggle (but no other moves)
+			return `${pokemon.species} has no PP left for its rampage move!`;
 		}
 	}
 
 	if (attackerSlot.uproarTurns > 0) {
 		if (attackerSlot.lockedMove !== moveData.id) {
-			return `${pokemon.species} must continue its uproar!`;
+			// Check if Uproar has PP left
+			const lockedMoveObj = pokemon.moves.find(m => m.id === attackerSlot.lockedMove);
+			if (lockedMoveObj && lockedMoveObj.pp > 0) {
+				return `${pokemon.species} must continue its uproar!`;
+			}
+			// If Uproar has no PP, allow Struggle (but no other moves)
+			return `${pokemon.species} has no PP left for Uproar!`;
 		}
 	}
 
@@ -1309,6 +1404,7 @@ export function validateMoveAction(
 		if (lockedMoveObject && lockedMoveObject.pp > 0) {
 			return `${pokemon.species} is locked into ${lockedMoveObject.id}!`;
 		}
+		// If Choice locked move has no PP, allow other moves
 	}
 
 	return null;
