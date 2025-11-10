@@ -417,8 +417,7 @@ export function generateSingleBattleHTML(
 ): string {
 	// Combine cumulative battle log with any temporary messages
 	const allLogs = [...battle.battleLog, ...messageLog];
-	// Reverse the logs so they display correctly with column-reverse (newest at bottom)
-	const displayLog = allLogs.length > 0 ? allLogs.reverse().join('<br>') : 'Battle started...';
+	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
 	// Check if battle has ended first - slots may be null after fainting
 	if (battle.battleEnded) {
@@ -431,7 +430,9 @@ export function generateSingleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="display: flex; flex-direction: column-reverse; padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; overflow-x: hidden; word-break: break-word; border-radius: 5px; display: flex; flex-direction: column; justify-content: flex-end;">' +
+			'<div>' + displayLog + '</div>' +
+			'</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -554,7 +555,9 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="display: flex; flex-direction: column-reverse; padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; overflow-x: hidden; word-break: break-word; border-radius: 5px; display: flex; flex-direction: column; justify-content: flex-end;">' +
+		'<div>' + displayLog + '</div>' +
+		'</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -566,8 +569,7 @@ export function generateDoubleBattleHTML(
 ): string {
 	// Combine cumulative battle log with any temporary messages
 	const allLogs = [...battle.battleLog, ...messageLog];
-	// Reverse the logs so they display correctly with column-reverse (newest at bottom)
-	const displayLog = allLogs.length > 0 ? allLogs.reverse().join('<br>') : 'Battle started...';
+	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
 	// Check if battle has ended first - slots may be null after fainting
 	if (battle.battleEnded) {
@@ -580,7 +582,9 @@ export function generateDoubleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="display: flex; flex-direction: column-reverse; padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; overflow-x: hidden; word-break: break-word; border-radius: 5px; display: flex; flex-direction: column; justify-content: flex-end;">' +
+			'<div>' + displayLog + '</div>' +
+			'</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -647,7 +651,9 @@ export function generateDoubleBattleHTML(
 	html += '</tr>';
 	html += '</table>';
 
-	html += '<div style="display: flex; flex-direction: column-reverse; padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
+	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; overflow-x: hidden; word-break: break-word; border-radius: 5px; display: flex; flex-direction: column; justify-content: flex-end;">' +
+		'<div>' + displayLog + '</div>' +
+		'</div>';
 
 	// Battle is ongoing - show action buttons
 	if (targetSelection) {
