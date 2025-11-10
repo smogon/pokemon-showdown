@@ -823,6 +823,9 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
 
+	// Add turn header to cumulative battle log
+	battle.battleLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
+
 	battle.playerQuickGuard = false;
 	battle.opponentQuickGuard = false;
 	battle.playerWideGuard = false;
@@ -850,11 +853,15 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
 		if (battleEndedMidTurn) {
+			// Append current turn logs to battle log
+			battle.battleLog.push(...messageLog);
 			return;
 		}
 	}
 
 	if (battle.forceEnd) {
+		// Append current turn logs to battle log
+		battle.battleLog.push(...messageLog);
 		return;
 	}
 
@@ -862,6 +869,9 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	processEndOfTurn(battle, messageLog);
 
 	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+
+	// Append current turn logs to cumulative battle log
+	battle.battleLog.push(...messageLog);
 
 	battle.pendingActions = {};
 
@@ -871,7 +881,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 				slot.activeTurns++;
 			}
 		});
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
 	}
 }
 

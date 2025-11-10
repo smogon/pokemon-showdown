@@ -1491,6 +1491,7 @@ export const commands: ChatCommands = {
 					ionDelugeTurns: 0,
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
+					battleLog: [],
 				};
 				
 				// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1510,8 +1511,11 @@ export const commands: ChatCommands = {
 				// Set the modified battle object as the active battle
 				activeBattles.set(user.id, battle);
 
+				// Add initial messages to battle log
+				battle.battleLog.push(...battleMessages);
+
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, battleMessages)}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1604,6 +1608,7 @@ export const commands: ChatCommands = {
 					opponentTerastallizeUsed: false,
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
+					battleLog: [],
 				};
 				
 				// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1617,8 +1622,11 @@ export const commands: ChatCommands = {
 				// Set the modified battle object as the active battle
 				activeBattles.set(user.id, battle);
 
+				// Add initial messages to battle log
+				battle.battleLog.push(...battleMessages);
+
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, battleMessages)}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
@@ -1737,6 +1745,7 @@ export const commands: ChatCommands = {
 				ionDelugeTurns: 0,
 				playerFutureMoves: [],
 				opponentFutureMoves: [],
+				battleLog: [],
 			};
 			
 			// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1760,9 +1769,12 @@ export const commands: ChatCommands = {
 			if (locationWeatherData2.weather) {
 				challengeMessages.push(getWeatherStartMessage(locationWeatherData2.weather.type));
 			}
+
+			// Add initial messages to battle log
+			battle.battleLog.push(...challengeMessages);
 			
 			// Generate HTML using the modified battle object
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, challengeMessages)}`);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 		},
 		
 		battle(target, room, user) {
