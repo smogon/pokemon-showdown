@@ -283,6 +283,7 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 		isProtected: false,
 		protectSuccessCounter: 0,
 		willFlinch: false,
+		isLoafing: false,
 		isTrapped: null,
 		tauntTurns: 0,
 		isSeeded: false,
