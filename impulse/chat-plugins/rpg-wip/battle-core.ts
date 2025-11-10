@@ -822,9 +822,13 @@ export function applyRecoilAndSelfEffects(
 	let tookRecoil = false;
 
 	if (['mindblown', 'steelbeam'].includes(move.id)) {
-		attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 2));
-		messageLog.push(`${attacker.species} was damaged by the move's recoil!`);
-		tookRecoil = true;
+		if (!RPGAbilities.preventsRecoil(attacker)) {
+			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 2));
+			messageLog.push(`${attacker.species} was damaged by the move's recoil!`);
+			tookRecoil = true;
+		} else {
+			messageLog.push(`${attacker.species}'s ${attacker.ability} prevents recoil!`);
+		}
 	} else if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 		const attackerAbility = toID(attacker.ability || '');
 		const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
