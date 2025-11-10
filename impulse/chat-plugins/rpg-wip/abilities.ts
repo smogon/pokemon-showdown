@@ -1033,6 +1033,10 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 		return 1;
 	}
 
+	if (ability === 'triage' && move.flags.heal) {
+		return 3;
+	}
+
 	return 0;
 }
 
