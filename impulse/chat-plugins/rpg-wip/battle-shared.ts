@@ -92,45 +92,43 @@ export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]):
 }
 
 export function applySynchronize(
-	status: Status,
-	defenderSlot: ActivePokemonSlot,
-	attackerSlot: ActivePokemonSlot,
+	statusToInflict: Status,
+	sourceSlot: ActivePokemonSlot,
+	targetSlot: ActivePokemonSlot,
 	battle: BattleState,
 	messageLog: string[]
-): void {
-	const attacker = attackerSlot.pokemon;
-	if (!attacker || attacker.hp <= 0) return;
+) {
+	if (!targetSlot || targetSlot.pokemon.hp <= 0) return;
 
-	const attackerSpecies = Dex.species.get(attacker.species);
-	let canBeAfflicted = !attackerSlot.status;
+	const targetPokemon = targetSlot.pokemon;
+	const targetAbility = toID(targetPokemon.ability || '');
+	if (targetAbility === 'synchronize') {
+		if (['psn', 'par', 'brn', 'tox'].includes(statusToInflict)) {
+			// Check if the source can be afflicted
+			if (!sourceSlot.status) {
+				const sourceSpecies = Dex.species.get(sourceSlot.pokemon.species);
+				let canBeAfflicted = true;
 
-	if (!canBeAfflicted) return;
+				if ((statusToInflict === 'brn' && sourceSpecies.types.includes('Fire')) ||
+					(statusToInflict === 'par' && sourceSpecies.types.includes('Electric')) ||
+					((statusToInflict === 'psn' || statusToInflict === 'tox') &&
+						(sourceSpecies.types.includes('Poison') || sourceSpecies.types.includes('Steel')))) {
+					canBeAfflicted = false;
+				}
 
-	if ((status === 'brn' && attackerSpecies.types.includes('Fire')) ||
-		(status === 'par' && attackerSpecies.types.includes('Electric')) ||
-		(status === 'psn' && (attackerSpecies.types.includes('Poison') || attackerSpecies.types.includes('Steel'))) ||
-		(status === 'frz' && attackerSpecies.types.includes('Ice'))) {
-		canBeAfflicted = false;
-	}
+				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict)) {
+					canBeAfflicted = false;
+				}
 
-	if (canBeAfflicted && RPGAbilities.preventsStatus(attacker, status)) {
-		canBeAfflicted = false;
-	}
-
-	const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
-	if (canBeAfflicted && battle.terrain?.type === 'misty' && attackerIsGrounded) {
-		canBeAfflicted = false;
-	}
-	if (canBeAfflicted && battle.terrain?.type === 'electric' && status === 'slp' && attackerIsGrounded) {
-		canBeAfflicted = false;
-	}
-
-	if (canBeAfflicted) {
-		attackerSlot.status = status;
-		if (status === 'slp') {
-			attackerSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+				if (canBeAfflicted) {
+					sourceSlot.status = statusToInflict;
+					if (statusToInflict === 'tox') {
+						sourceSlot.toxicCounter = 1;
+					}
+					messageLog.push(`${targetPokemon.species}'s Synchronize afflicted ${sourceSlot.pokemon.species} with ${statusToInflict}!`);
+				}
+			}
 		}
-		messageLog.push(`${defenderSlot.pokemon.species}'s Synchronize afflicted ${attacker.species} with ${status}!`);
 	}
 }
 
