@@ -1600,11 +1600,23 @@ export function handleChargingMove(
 		attackerSlot.chargingMove = move.id;
 		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
 
-		if (move.id === 'fly') chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
-		else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
+		if (move.id === 'fly') {
+			if (battle.gravityTurns > 0) {
+				messageLog.push(`But it failed! (Gravity)`);
+				attackerSlot.chargingMove = undefined; // Clear the charge
+				return false; // Move fails
+			}
+			chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
+		} else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
 		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
-		else if (move.id === 'bounce') chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
-		else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
+		else if (move.id === 'bounce') {
+			if (battle.gravityTurns > 0) {
+				messageLog.push(`But it failed! (Gravity)`);
+				attackerSlot.chargingMove = undefined; // Clear the charge
+				return false; // Move fails
+			}
+			chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
+		} else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
 		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
 			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
 				attackerSlot.chargingMove = undefined;
