@@ -620,7 +620,11 @@ export function executeMove(
 		if (attackerSlot.pokemon.hp <= 0) break;
 		if (defenderSlot.pokemon.hp <= 0) continue;
 
-		if (battle.terrain?.type === 'psychic' && move.priority > 0) {
+		// Calculate the move's true priority, including ability modifiers
+		let truePriority = move.priority;
+		truePriority += RPGAbilities.applyPriorityModifier(move, attackerSlot.pokemon);
+
+		if (battle.terrain?.type === 'psychic' && truePriority > 0) {
 			const isDefenderGrounded = RPGAbilities.isGrounded(defenderSlot.pokemon, battle);
 			
 			// Check if attacker and defender are on different teams
@@ -632,7 +636,7 @@ export function executeMove(
 				continue; // Skip this target
 			}
 		}
-
+		
 		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
 
 		if (isSpread) {
