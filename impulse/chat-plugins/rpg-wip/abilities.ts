@@ -4,9 +4,9 @@
 */
 import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots } from './utils';
+import { applyStatChange } from './battle-shared';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
-// --- NEW HELPER FUNCTION ---
 export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
 	const attackerAbility = toID(attacker.ability || '');
 	if (['moldbreaker', 'turboblaze', 'teravolt'].includes(attackerAbility)) {
@@ -1464,6 +1464,18 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
+	// New logic for stat-lowering contact abilities
+	if (handler.onContactStat && attacker.hp > 0) {
+		const stat = handler.onContactStat as keyof ActivePokemonSlot['statStages'];
+		const value = handler.value as number;
+		// Use applyStatChange on the attacker, sourced from the defender
+		// This will be correctly blocked by abilities like Clear Body
+		if (applyStatChange(attackerSlot, stat, value, ctx.battle, ctx.messageLog, ctx.defenderSlot)) {
+			// applyStatChange already adds the "fell!" message, we just add the cause.
+			ctx.messageLog[ctx.messageLog.length - 1] += ` (from ${ctx.defender.species}'s ${ctx.defender.ability})!`;
+		}
+	}
+
 	if (handler.effect && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
 		const statusToInflict = handler.effect as string;
 		let canBeAfflicted = true;
@@ -1477,7 +1489,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			canBeAfflicted = false;
 		}
 
-		if (canBeAfflicted && preventsStatus(attacker, statusToInflict)) {
+		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle)) { // Added ctx.battle
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
@@ -1500,13 +1512,13 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		// Get actual types (accounting for terastallization)
 		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
 
-		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn')) {
+		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle)) { // Added ctx.battle
 			possibleStatuses.push('psn');
 		}
-		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par')) {
+		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle)) { // Added ctx.battle
 			possibleStatuses.push('par');
 		}
-		if (!preventsStatus(attacker, 'slp')) {
+		if (!preventsStatus(attacker, 'slp', ctx.battle)) { // Added ctx.battle
 			possibleStatuses.push('slp');
 		}
 
