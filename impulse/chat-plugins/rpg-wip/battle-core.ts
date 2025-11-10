@@ -728,8 +728,9 @@ export function applyPostDamageContactEffects(
 
 	if (defender.hp <= 0 || damageDealt <= 0) return;
 
-	if (isCritical && toID(defender.ability || '') === 'angerpoint') {
-		if (!RPGAbilities.isAbilityIgnored(attacker, defender, 'angerpoint')) {
+	const defenderAbility = toID(defender.ability || ''); // Get defender ability ID once
+	if (isCritical && defenderAbility === 'angerpoint') {
+		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 			applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
 		}
 	}
@@ -777,7 +778,6 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
-	const defenderAbility = toID(defender.ability || '');
 	if (defenderAbility === 'cursedbody' && attacker.hp > 0 && !attackerSlot.disabledMove && Math.random() < 0.3) {
 		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 			attackerSlot.disabledMove = { moveId: move.id, turns: 4 };
