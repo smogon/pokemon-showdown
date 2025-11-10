@@ -430,7 +430,7 @@ export function generateSingleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -553,7 +553,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -578,7 +578,7 @@ export function generateDoubleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -645,7 +645,7 @@ export function generateDoubleBattleHTML(
 	html += '</tr>';
 	html += '</table>';
 
-	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
+	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
 
 	// Battle is ongoing - show action buttons
 	if (targetSelection) {
