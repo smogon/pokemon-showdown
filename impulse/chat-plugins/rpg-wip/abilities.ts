@@ -1114,6 +1114,10 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 		}
 	}
 
+	if (battle.magicRoomTurns === 0 && pokemon.item === 'choicescarf') {
+		speed = Math.floor(speed * 1.5);
+	}
+
 	return speed;
 }
 
