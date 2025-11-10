@@ -1225,12 +1225,17 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 }
 
 export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
-	const queue = player.pendingMoveLearnQueue;
-	if (!queue || queue.moveIds.length === 0) return `<h2>Error: No pending moves found.</h2>`;
+	const queueArray = player.pendingMoveLearnQueue;
+	if (!queueArray || queueArray.length === 0) return `<h2>Error: No pending moves found.</h2>`;
+	const queue = queueArray[0]; // Process first Pokemon in queue
+	if (!queue || queue.moveIds.length === 0) {
+		player.pendingMoveLearnQueue?.shift(); // Remove empty entry
+		return `<h2>Error: No pending moves found.</h2>`;
+	}
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
-		delete player.pendingMoveLearnQueue;
+		player.pendingMoveLearnQueue?.shift(); // Remove invalid entry
 		return `<h2>Error: Invalid Pokemon or move data.</h2>` + generateBottomNavigation();
 	}
 	let html = `<div class="infobox">`;

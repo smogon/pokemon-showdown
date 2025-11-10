@@ -301,7 +301,7 @@ export function checkForWinLoss(
 			messageLog.push(`<center><strong>You defeated ${battle.opponentName}!</strong></center>`);
 			messageLog.push(`<center><b>You received ₽${moneyGained} for winning!</b></center>`);
 
-			if (player.pendingMoveLearnQueue?.moveIds.length) {
+			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
@@ -316,7 +316,7 @@ export function checkForWinLoss(
 			messageLog.push(`<center><strong>You defeated the wild ${defeatedNames}!</strong></center>`);
 			messageLog.push(`<center><b>You gained ₽${moneyGained}!</b></center>`);
 
-			if (player.pendingMoveLearnQueue?.moveIds.length) {
+			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);

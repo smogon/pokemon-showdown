@@ -174,10 +174,16 @@ export function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { 
 	}
 
 	if (movesToQueue.length > 0) {
-		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.pokemonId === pokemon.id) {
-			player.pendingMoveLearnQueue.moveIds.push(...movesToQueue);
+		if (!player.pendingMoveLearnQueue) {
+			player.pendingMoveLearnQueue = [];
+		}
+
+		// Find existing queue entry for this Pokemon
+		const existingEntry = player.pendingMoveLearnQueue.find(q => q.pokemonId === pokemon.id);
+		if (existingEntry) {
+			existingEntry.moveIds.push(...movesToQueue);
 		} else {
-			player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: movesToQueue };
+			player.pendingMoveLearnQueue.push({ pokemonId: pokemon.id, moveIds: movesToQueue });
 		}
 	}
 
