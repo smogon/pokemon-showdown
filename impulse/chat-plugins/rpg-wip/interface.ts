@@ -67,6 +67,7 @@ export interface ActivePokemonSlot {
 	isProtected: boolean;
 	protectSuccessCounter: number;
 	willFlinch: boolean;
+	isLoafing: boolean;
 	isTrapped: { turns: number } | null;
 	partiallyTrapped?: { turns: number, moveId: string, damage: number } | null;
 	tauntTurns: number;
