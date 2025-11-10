@@ -1607,6 +1607,15 @@ export function handleChargingMove(
 	messageLog: string[],
 	ppDeduction: number
 ): boolean {
+	
+	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
+		const attacker = attackerSlot.pokemon;
+		messageLog.push(`${attacker.species} consumed its Power Herb!`);
+		attacker.item = undefined; // Consume the item
+		activateUnburden(attackerSlot, messageLog); // Activate Unburden
+		return false; // Skip the charging turn and execute the move
+	}
+	
 	if (move.flags.charge && !attackerSlot.chargingMove) {
 		attackerSlot.chargingMove = move.id;
 		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
