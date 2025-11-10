@@ -524,6 +524,7 @@ export function handleGenericVolatileMove(
 	const target = targetSlot.pokemon;
 	let hadEffect = false;
 
+	// Substitute blocks non-damaging moves that target the opponent
 	if (move.target !== 'self' && targetSlot.substitute) {
 		messageLog.push(`But it failed! (${target.species}'s Substitute blocked the move!)`);
 		return true;
@@ -603,6 +604,11 @@ export function handleGenericVolatileMove(
 		}
 		break;
 	case 'magnetrise':
+		if (battle.gravityTurns > 0) {
+			messageLog.push(`But it failed! (Gravity)`);
+			hadEffect = false;
+			break;
+		}
 		if (targetSlot.magnetRiseTurns === 0) {
 			targetSlot.magnetRiseTurns = 5;
 			messageLog.push(`${target.species} levitated with electromagnetism!`);
@@ -610,6 +616,11 @@ export function handleGenericVolatileMove(
 		}
 		break;
 	case 'telekinesis':
+		if (battle.gravityTurns > 0) {
+			messageLog.push(`But it failed! (Gravity)`);
+			hadEffect = false;
+			break;
+		}
 		if (targetSlot.telekinesisCounter === 0) {
 			targetSlot.telekinesisCounter = 3;
 			messageLog.push(`${target.species} was hurled into the air!`);
