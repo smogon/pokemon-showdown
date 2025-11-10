@@ -848,9 +848,6 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	const messageLog: string[] = [...initialMessages];
 	battle.turn++;
 
-	// Add turn header to cumulative battle log
-	battle.battleLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
-
 	battle.playerQuickGuard = false;
 	battle.opponentQuickGuard = false;
 	battle.playerWideGuard = false;
@@ -878,6 +875,8 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 
 		const battleEndedMidTurn = checkBattleEndCondition(context, battle, room, user, messageLog);
 		if (battleEndedMidTurn) {
+			// Add turn header at end so it appears before actions when reversed
+			messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 			// Append current turn logs to battle log
 			battle.battleLog.push(...messageLog);
 			return;
@@ -885,6 +884,8 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	}
 
 	if (battle.forceEnd) {
+		// Add turn header at end so it appears before actions when reversed
+		messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 		// Append current turn logs to battle log
 		battle.battleLog.push(...messageLog);
 		return;
@@ -894,6 +895,9 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	processEndOfTurn(battle, messageLog);
 
 	const battleEnded = checkBattleEndCondition(context, battle, room, user, messageLog);
+
+	// Add turn header at end so it appears before actions when reversed
+	messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
 
 	// Append current turn logs to cumulative battle log
 	battle.battleLog.push(...messageLog);
