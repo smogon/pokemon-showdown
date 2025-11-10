@@ -730,7 +730,7 @@ export function generateDoubleBattleHTML(
 			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
 
 			const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
-			
+
 			// Check if locked into a rampage move or Uproar with no PP
 			const isRampagingWithNoPP = (activeSlot.lockedMoveCounter > 0 || activeSlot.uproarTurns > 0) &&
 				activeSlot.lockedMove &&

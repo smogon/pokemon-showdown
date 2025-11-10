@@ -631,7 +631,7 @@ export function executeMove(
 
 		if (battle.terrain?.type === 'psychic' && truePriority > 0) {
 			const isDefenderGrounded = RPGAbilities.isGrounded(defenderSlot.pokemon, battle);
-			
+
 			// Check if attacker and defender are on different teams
 			const isAttackerPlayer = battle.playerSlots.includes(attackerSlot);
 			const isDefenderPlayerCheck = battle.playerSlots.includes(defenderSlot);
@@ -641,7 +641,7 @@ export function executeMove(
 				continue; // Skip this target
 			}
 		}
-		
+
 		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
 
 		if (isSpread) {
@@ -671,7 +671,7 @@ export function executeMove(
 			let moveAccuracy = move.accuracy;
 
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon, move);
-			
+
 			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
 
@@ -1083,7 +1083,7 @@ export function executeAction(
 				attackerSlot.terastallized = attackerSlot.pokemon.teraType;
 				battle.playerTerastallizeUsed = true;
 				messageLog.push(`<span style="color: #FF1493; font-weight: bold;">✨ ${attackerSlot.pokemon.species} Terastallized into ${attackerSlot.pokemon.teraType} type! ✨</span>`);
-				
+
 				// --- NEW: Add Slow Start check after Terastallization ---
 				if (toID(attackerSlot.pokemon.ability || '') === 'slowstart' && attackerSlot.slowStartTurns && attackerSlot.slowStartTurns > 0) {
 					attackerSlot.slowStartTurns = 0;
@@ -1168,12 +1168,12 @@ export function executeAction(
 					messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
 					return; // Stop the switch
 				}
-		
+
 				if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
 					messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
 					return; // Stop the switch
 				}
-		
+
 				if (attackerSlot.isIngrained) {
 					messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
 					return; // Stop the switch
@@ -1192,7 +1192,7 @@ export function executeAction(
 					// The move failed due to immunity, so the pivot also fails.
 					// The "But it failed!" message will be added by executeMove.
 					// We just need to stop the pivot from happening.
-					return; 
+					return;
 				}
 			}
 
@@ -1244,7 +1244,7 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 		}
 	}
 	// Check if Encored into a specific move
-	else if (aiSlot.encoreMove && aiSlot.encoreMove.moveId) {
+	else if (aiSlot.encoreMove?.moveId) {
 		const encoredMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.encoreMove!.moveId);
 		if (encoredMoveObj && encoredMoveObj.pp > 0) {
 			chosenMoveId = aiSlot.encoreMove.moveId;
@@ -1266,7 +1266,7 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 			}
 		}
 	}
-	
+
 	// Normal move selection if not locked
 	if (chosenMoveId === 'struggle' && !aiSlot.lockedMoveCounter && !aiSlot.uproarTurns && !aiSlot.encoreMove) {
 		// First try to find damaging moves
