@@ -367,6 +367,15 @@ export function checkBattleEndCondition(
 export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: BattleState, messageLog: string[], move?: Move): boolean {
 	const attacker = attackerSlot.pokemon;
 
+	if (toID(attacker.ability || '') === 'truant') {
+		if (attackerSlot.isLoafing) {
+			messageLog.push(`${attacker.species} is loafing around!`);
+			attackerSlot.isLoafing = false; // Will move next turn
+			return false;
+		}
+		// This flag will be set to true in executeMove after a successful move
+	}
+
 	if (attackerSlot.mustRecharge) {
 		messageLog.push(`${attacker.species} must recharge!`);
 		attackerSlot.mustRecharge = false;
@@ -719,6 +728,10 @@ export function executeMove(
 		if (defenderSlot && defenderSlot.pokemon.hp > 0) {
 			RPGAbilities.checkFormChangeAbilities(defenderSlot, battle, messageLog);
 		}
+	}
+
+	if (attackerSlot && attackerSlot.pokemon.hp > 0 && toID(attackerSlot.pokemon.ability || '') === 'truant') {
+		attackerSlot.isLoafing = true; // Will loaf next turn
 	}
 }
 
