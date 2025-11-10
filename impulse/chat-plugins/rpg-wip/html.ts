@@ -149,7 +149,7 @@ export function generatePokemonInfoHTML(
 
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
-	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
+	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
 	let expBarHTML = '';
 	if (isPlayerSide) {
@@ -158,11 +158,14 @@ export function generatePokemonInfoHTML(
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
-		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 8px; border-radius: 8px;"></div></div>`;
+		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">EXP: ${expProgress}/${expNeededForLevel}</div></div>`;
+	} else {
+		// Add placeholder div with same height for opponent to maintain consistent container size
+		expBarHTML = `<div style="height: 24px; margin: 5px 0;"></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
-	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
+	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'tox': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? `<span style="background-color: ${statusColors[displayStatus]}; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">${displayStatus}</span>` : '';
 	const confusedTag = slot.isConfused ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>` : '';
 	const cursedTag = slot.isCursed ? `<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>` : '';
@@ -233,9 +236,10 @@ export function generatePokemonInfoHTML(
 
 	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${partiallyTrappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
 
+	// Add EXP bar or placeholder for both sides
+	html += expBarHTML;
+
 	if (isPlayerSide) {
-		html += `${expBarHTML}`;
-		html += `EXP: ${pokemon.experience}/${pokemon.expToNextLevel}<br>`;
 		html += `Nature: ${pokemon.nature}<br>`;
 		html += `Ability: ${pokemon.ability || 'Unknown'}<br>`;
 		if (pokemon.item) {
@@ -263,10 +267,10 @@ export function generateSharedBattlePokemonInfo(
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
-	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'orange' : 'red';
+	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
 	const displayStatus = slot.status || pokemon.status;
-	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
+	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'tox': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
 	const statusTag = displayStatus ? '<span style="background-color: ' + statusColors[displayStatus] + '; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">' + displayStatus + '</span>' : '';
 
 	const volatileTags = [

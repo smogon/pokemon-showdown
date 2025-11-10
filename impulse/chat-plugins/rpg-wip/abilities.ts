@@ -1509,7 +1509,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		if (canBeAfflicted) {
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 2;
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
 		}
@@ -1534,7 +1534,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 2;
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
 		}

@@ -102,8 +102,9 @@ export function calculateStats(
 
 	const natureEffect = NATURES[nature];
 	if (natureEffect) {
-		stats[natureEffect.plus] = Math.floor(stats[natureEffect.plus] * 1.1);
-		stats[natureEffect.minus] = Math.floor(stats[natureEffect.minus] * 0.9);
+		// Use 110/100 and 90/100 instead of 1.1 and 0.9 to match Pokemon Showdown's formula
+		stats[natureEffect.plus] = Math.floor(stats[natureEffect.plus] * 110 / 100);
+		stats[natureEffect.minus] = Math.floor(stats[natureEffect.minus] * 90 / 100);
 	}
 	return stats;
 }

@@ -109,6 +109,7 @@ export interface ActivePokemonSlot {
 	lastMoveThatHitMe?: Move;
 	terastallized?: string;
 	perishSongCounter?: number;
+	wishTurns?: number; // For Wish move - heals after 2 turns
 }
 
 export interface PlayerData {

@@ -92,9 +92,23 @@ export function getDamageBasePower(
 		const attackerSpe = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
 		const defenderSpe = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
 		if (defenderSpe > 0) {
-			basePower = Math.min(150, Math.floor(25 * (defenderSpe / attackerSpe)) + 1);
+			basePower = Math.min(150, Math.floor(25 * (defenderSpe / attackerSpe))); // Removed incorrect +1
 		} else {
 			basePower = 1;
+		}
+		break;
+	case 'electroball':
+		const attackerSpeEB = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
+		const defenderSpeEB = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
+		if (attackerSpeEB > 0) {
+			const speedRatio = defenderSpeEB / attackerSpeEB;
+			if (speedRatio >= 1) basePower = 40;
+			else if (speedRatio >= 0.5) basePower = 60;
+			else if (speedRatio >= 0.33) basePower = 80;
+			else if (speedRatio >= 0.25) basePower = 120;
+			else basePower = 150;
+		} else {
+			basePower = 40;
 		}
 		break;
 	case 'storedpower':
@@ -139,7 +153,7 @@ export function getDamageBasePower(
 		break;
 	}
 
-	if (move.id === 'facade' && attackerSlot.status && ['psn', 'brn', 'par'].includes(attackerSlot.status)) {
+	if (move.id === 'facade' && attackerSlot.status && ['psn', 'tox', 'brn', 'par'].includes(attackerSlot.status)) {
 		basePower *= 2;
 	}
 	if (move.id === 'brine' && defender.hp <= defender.maxHp / 2) {
@@ -492,7 +506,7 @@ export function handleGenericStatusInflictMove(
 			defenderSlot.toxicCounter = 1;
 		}
 		if (newStatus === 'slp') {
-			defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+			defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 		}
 		messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
 
@@ -534,7 +548,7 @@ export function handleGenericVolatileMove(
 	case 'confusion':
 		if (!targetSlot.isConfused) {
 			targetSlot.isConfused = true;
-			targetSlot.confusionCounter = Math.floor(Math.random() * 3) + 2;
+			targetSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
 			messageLog.push(`${target.species} became confused!`);
 			hadEffect = true;
 		}
@@ -1465,6 +1479,12 @@ export function handleSpecificStatusMove(
 			attackerSlot.sleepCounter = 2;
 			messageLog.push(`${attacker.species} went to sleep and restored ${attacker.hp - oldHp} HP!`);
 		}
+		return true;
+
+	case 'wish':
+		// Wish heals 50% HP at the end of the next turn
+		attackerSlot.wishTurns = 2;
+		messageLog.push(`${attacker.species} made a wish!`);
 		return true;
 
 	case 'roost':

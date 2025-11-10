@@ -318,6 +318,7 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 		lastMoveThatHitMe: undefined,
 		terastallized: undefined,
+		toxicCounter: pokemon.status === 'tox' ? 1 : undefined, // Initialize toxic counter for pre-existing badly poisoned status
 	};
 }
 

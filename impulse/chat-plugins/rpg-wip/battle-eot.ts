@@ -36,6 +36,15 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
 		}
+	} else if (status === 'tox') {
+		// Badly poisoned (Toxic) - damage escalates each turn
+		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
+			if (!slot.toxicCounter) slot.toxicCounter = 1;
+			const damage = Math.max(1, Math.floor(pokemon.maxHp * slot.toxicCounter / 16));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+			slot.toxicCounter++;
+		}
 	}
 }
 
@@ -50,7 +59,8 @@ export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState
 			slot.status = 'brn';
 			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was burned by its Flame Orb!</span>`);
 		} else if (pokemon.item === 'toxicorb' && !speciesData.types.includes('Poison') && !speciesData.types.includes('Steel')) {
-			slot.status = 'psn';
+			slot.status = 'tox'; // Badly poisoned, not regular poison
+			slot.toxicCounter = 1; // Initialize toxic counter
 			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was badly poisoned by its Toxic Orb!</span>`);
 		}
 	}
@@ -139,6 +149,17 @@ export function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleSt
 		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
 	}
+
+	// Wish healing - heals 50% HP after 2 turns
+	if (slot.wishTurns && slot.wishTurns > 0) {
+		slot.wishTurns--;
+		if (slot.wishTurns === 0 && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.floor(pokemon.maxHp / 2);
+			const oldHp = pokemon.hp;
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s wish came true! It restored ${pokemon.hp - oldHp} HP!`);
+		}
+	}
 }
 
 export function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
@@ -177,7 +198,7 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 
 				if (!isTerrainImmune && !isAbilityImmune) {
 					slot.status = 'slp';
-					slot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+					slot.sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
 				} else {
 					messageLog.push(`${pokemon.species} stayed awake!`);
@@ -265,7 +286,7 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 				slot.lockedMove = undefined;
 				if (!slot.isConfused) {
 					slot.isConfused = true;
-					slot.confusionCounter = Math.floor(Math.random() * 4) + 2;
+					slot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
 					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
 				}
 			}
