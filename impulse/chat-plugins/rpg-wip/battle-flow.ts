@@ -752,6 +752,9 @@ export function buildActionQueue(battle: BattleState, messageLog: string[]): Non
 	const actionQueue: NonNullable<BattleState['pendingActions'][number]>[] = [];
 	const allActiveSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
+	// Reset analyticBoost for all Pokemon at the start of the turn
+	allActiveSlots.forEach(s => { s.analyticBoost = false; });
+
 	for (const slotIndex in battle.pendingActions) {
 		const action = battle.pendingActions[slotIndex];
 		if (action && allActiveSlots.some(s => s.pokemon.id === action.pokemonId)) {
