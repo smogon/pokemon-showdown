@@ -1029,9 +1029,9 @@ export function handleSpecificStatusMove(
 			if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); }
 			if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); }
 		}
-		if (defenderSlot && defenderSlot.statStages.evasion > -6) {
-			defenderSlot.statStages.evasion--;
-			messageLog.push(`${defender!.species}'s evasion fell!`);
+		if (defenderSlot) {
+			// Use applyStatChange to correctly trigger abilities like Defiant, Contrary, etc.
+			applyStatChange(defenderSlot, 'evasion', -1, battle, messageLog, attackerSlot);
 		}
 		return true;
 
