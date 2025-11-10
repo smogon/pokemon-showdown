@@ -29,6 +29,11 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 					// Basic Poke Balls
 					'pokeball',
 					'premierball',
+					'expcandyl',
+					'expcandyxl',
+					'rarecandy',
+					'terashard',
+					'eggmovetutor',
 					// Basic Healing Items
 					'potion',
 					'antidote',
