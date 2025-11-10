@@ -231,12 +231,19 @@ export function gainExperience(
 	const X = 2 * opponentLevel + 10;
 	const Z = Math.floor((baseExp * opponentLevel) / 5);
 
+	// Get IDs of active participants (for EV distribution)
+	const activeParticipantIds = new Set<string>();
 	for (const slot of participantSlots) {
-		if (!slot?.pokemon) continue;
-		const pokemon = slot.pokemon;
-		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
+		if (slot?.pokemon && slot.pokemon.hp > 0) {
+			activeParticipantIds.add(slot.pokemon.id);
+		}
+	}
 
-		// Calculate level-scaled experience for this participant
+	// Gen 6-9: Exp Share is always on - ALL Pokemon in party gain experience
+	for (const pokemon of player.party) {
+		if (pokemon.level >= 100) continue;
+
+		// Calculate level-scaled experience for this Pokemon
 		const participantLevel = pokemon.level;
 		const Y = opponentLevel + participantLevel + 10;
 
@@ -245,7 +252,12 @@ export function gainExperience(
 		const expGained = Math.floor(scalingFactor * Z) + 1;
 
 		participantExpGains.set(pokemon.species, expGained);
-		gainEffortValues(pokemon, defeatedPokemon);
+
+		// Only active participants gain EVs
+		if (activeParticipantIds.has(pokemon.id)) {
+			gainEffortValues(pokemon, defeatedPokemon);
+		}
+
 		pokemon.experience += expGained;
 	}
 
@@ -256,7 +268,7 @@ export function gainExperience(
 		const [species, exp] = Array.from(participantExpGains.entries())[0];
 		messages.push(`<b>${species} gained ${exp} Experience Points!</b>`);
 	} else {
-		// Check if all participants gained the same exp
+		// Check if all Pokemon gained the same exp
 		const expValues = Array.from(participantExpGains.values());
 		const allSame = expValues.every(v => v === expValues[0]);
 
@@ -272,10 +284,9 @@ export function gainExperience(
 		}
 	}
 
-	for (const slot of participantSlots) {
-		if (!slot?.pokemon) continue;
-		const pokemon = slot.pokemon;
-		if (pokemon.hp <= 0 || pokemon.level >= 100) continue;
+	// Check for level ups, evolutions, and move learning for ALL Pokemon in party
+	for (const pokemon of player.party) {
+		if (pokemon.level >= 100) continue;
 
 		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
 			messages.push(...levelUp(pokemon));
