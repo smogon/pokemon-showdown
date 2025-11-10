@@ -873,23 +873,34 @@ export function handleSwitchAction(
 	const isPlayerSwitch = attackerSlotIndex <= 1;
 	const pokemonToSwitchInId = action.switchToPokemonId!;
 
-	const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
-	if (trappingPokemon) {
-		messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
-		return;
-	}
+	// Check for Shed Shell first
+	if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'shedshell') {
+		// Shed Shell bypasses all trapping except Ingrain
+		if (attackerSlot.isIngrained) {
+			messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
+			return;
+		}
+		// Continue with the switch, skipping other trap checks
+	} else {
+		// No Shed Shell, perform normal trap checks
+		const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
+		if (trappingPokemon) {
+			messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
+			return;
+		}
 
-	if (attackerSlot.isIngrained) {
-		messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
-		return;
-	}
-	if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
-		messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
-		return;
-	}
-	if (battle.fairyLockTurns > 0) {
-		messageLog.push(`${attackerSlot.pokemon.species} can't switch out due to Fairy Lock!`);
-		return;
+		if (attackerSlot.isIngrained) {
+			messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
+			return;
+		}
+		if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
+			messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
+			return;
+		}
+		if (battle.fairyLockTurns > 0) {
+			messageLog.push(`${attackerSlot.pokemon.species} can't switch out due to Fairy Lock!`);
+			return;
+		}
 	}
 
 	const outgoingPokemon = attackerSlot.pokemon;
@@ -1090,20 +1101,31 @@ export function executeAction(
 		}
 
 		if (move.selfSwitch && attackerSlot.pokemon.hp > 0) {
-			const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
-			if (trappingPokemon) {
-				messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
-				return; // Stop the switch
-			}
-	
-			if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
-				messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
-				return; // Stop the switch
-			}
-	
-			if (attackerSlot.isIngrained) {
-				messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
-				return; // Stop the switch
+			// Check for Shed Shell first
+			if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'shedshell') {
+				// Shed Shell bypasses all trapping except Ingrain
+				if (attackerSlot.isIngrained) {
+					messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
+					return; // Stop the switch
+				}
+				// Continue to the pivot logic
+			} else {
+				// No Shed Shell, perform normal trap checks
+				const trappingPokemon = checkTrappingAbility(attackerSlot, battle);
+				if (trappingPokemon) {
+					messageLog.push(`${attackerSlot.pokemon.species} can't escape due to ${trappingPokemon.pokemon.species}'s ${trappingPokemon.pokemon.ability}!`);
+					return; // Stop the switch
+				}
+		
+				if (attackerSlot.isTrapped || attackerSlot.partiallyTrapped) {
+					messageLog.push(`${attackerSlot.pokemon.species} is trapped and can't switch out!`);
+					return; // Stop the switch
+				}
+		
+				if (attackerSlot.isIngrained) {
+					messageLog.push(`${attackerSlot.pokemon.species} is rooted in place and can't switch out!`);
+					return; // Stop the switch
+				}
 			}
 
 			const isPlayer = attackerSlotIndex <= 1;
