@@ -72,7 +72,7 @@ export function getInitialMoves(speciesId: string, level: number): { id: string,
 				const learnedMoves: { move: string, level: number }[] = [];
 				for (const moveId in learnset) {
 					for (const learnMethod of learnset[moveId]) {
-						if (learnMethod.startsWith('8L')) {
+						if (learnMethod.startsWith('9L')) { // Changed from '8L' to '9L' for Gen 9
 							const learnLevel = parseInt(learnMethod.substring(2));
 							if (learnLevel > 0 && learnLevel <= level) {
 								learnedMoves.push({ move: moveId, level: learnLevel });

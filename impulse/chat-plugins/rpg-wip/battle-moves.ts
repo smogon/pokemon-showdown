@@ -92,7 +92,7 @@ export function getDamageBasePower(
 		const attackerSpe = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
 		const defenderSpe = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
 		if (defenderSpe > 0) {
-			basePower = Math.min(150, Math.floor(25 * (defenderSpe / attackerSpe)) + 1);
+			basePower = Math.min(150, Math.floor(25 * (defenderSpe / attackerSpe))); // Removed incorrect +1
 		} else {
 			basePower = 1;
 		}
@@ -139,7 +139,7 @@ export function getDamageBasePower(
 		break;
 	}
 
-	if (move.id === 'facade' && attackerSlot.status && ['psn', 'brn', 'par'].includes(attackerSlot.status)) {
+	if (move.id === 'facade' && attackerSlot.status && ['psn', 'tox', 'brn', 'par'].includes(attackerSlot.status)) {
 		basePower *= 2;
 	}
 	if (move.id === 'brine' && defender.hp <= defender.maxHp / 2) {
