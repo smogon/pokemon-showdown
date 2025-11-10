@@ -446,6 +446,11 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 		}
 	}
 
+	if (move && attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === move.id) {
+		messageLog.push(`${attacker.species}'s ${move.name} is disabled!`);
+		return false;
+	}
+
 	return true;
 }
 
