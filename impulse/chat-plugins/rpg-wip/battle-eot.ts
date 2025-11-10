@@ -149,6 +149,17 @@ export function applyEOTHealingEffects(slot: ActivePokemonSlot, battle: BattleSt
 		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 		messageLog.push(`${pokemon.species} absorbed nutrients with its roots!`);
 	}
+
+	// Wish healing - heals 50% HP after 2 turns
+	if (slot.wishTurns && slot.wishTurns > 0) {
+		slot.wishTurns--;
+		if (slot.wishTurns === 0 && pokemon.hp < pokemon.maxHp) {
+			const healAmount = Math.floor(pokemon.maxHp / 2);
+			const oldHp = pokemon.hp;
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s wish came true! It restored ${pokemon.hp - oldHp} HP!`);
+		}
+	}
 }
 
 export function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {

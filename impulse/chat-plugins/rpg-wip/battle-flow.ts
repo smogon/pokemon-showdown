@@ -544,9 +544,15 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 				const targetStatus = slot.status;
 
 				if (!isImmune && !targetStatus) {
-					const newStatus = 'psn';
+					// 1 layer = regular poison, 2+ layers = badly poisoned
+					const newStatus = toxicSpikeLayers >= 2 ? 'tox' : 'psn';
 					slot.status = newStatus;
-					messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
+					if (newStatus === 'tox') {
+						slot.toxicCounter = 1;
+						messageLog.push(`${pokemon.species} was badly poisoned by the Toxic Spikes!`);
+					} else {
+						messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
+					}
 				}
 			}
 		}
