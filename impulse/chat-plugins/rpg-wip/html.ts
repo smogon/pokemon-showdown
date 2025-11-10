@@ -415,8 +415,9 @@ export function generateSingleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Combine cumulative battle log with any temporary messages
-	const allLogs = [...battle.battleLog, ...messageLog];
+	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
+	const reversedBattleLog = [...battle.battleLog].reverse();
+	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
 	// Check if battle has ended first - slots may be null after fainting
@@ -563,8 +564,9 @@ export function generateDoubleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Combine cumulative battle log with any temporary messages
-	const allLogs = [...battle.battleLog, ...messageLog];
+	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
+	const reversedBattleLog = [...battle.battleLog].reverse();
+	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
 	// Check if battle has ended first - slots may be null after fainting
