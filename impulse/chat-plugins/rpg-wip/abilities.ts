@@ -556,6 +556,16 @@ export const CONTACT_ABILITIES = {
 		onContactDamage: 1 / 8,
 	},
 
+	'gooey': {
+		onContactStat: 'spe',
+		value: -1,
+	},
+	
+	'tanglinghair': {
+		onContactStat: 'spe',
+		value: -1,
+	},
+
 	// Phase 2: Poison Touch - 30% chance to poison on contact
 	'poisontouch': {
 		onContactChance: 0.3,
