@@ -148,7 +148,7 @@ export function getDamageBasePower(
 	if (move.id === 'venoshock' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
 		basePower *= 2;
 	}
-	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
+	if (move.id === 'weatherball' && (RPGAbilities.isWeatherActive(battle) || (battle.terrain && RPGAbilities.isGrounded(attacker, battle)))) {
 		basePower *= 2;
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
