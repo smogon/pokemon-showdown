@@ -220,6 +220,9 @@ export interface BattleState {
 		attackerSlotIndex: number,
 		attackerStats: { atk: number, spa: number },
 	}[];
+
+	// Cumulative battle log for all turns
+	battleLog: string[];
 }
 
 export interface TrainerSpec {

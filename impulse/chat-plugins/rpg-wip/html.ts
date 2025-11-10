@@ -415,6 +415,10 @@ export function generateSingleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
+	// Combine cumulative battle log with any temporary messages
+	const allLogs = [...battle.battleLog, ...messageLog];
+	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
+
 	// Check if battle has ended first - slots may be null after fainting
 	if (battle.battleEnded) {
 		// For ended battles, we only need to show the message log and Continue button
@@ -426,7 +430,7 @@ export function generateSingleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 250px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -549,7 +553,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 350px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -559,6 +563,10 @@ export function generateDoubleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
+	// Combine cumulative battle log with any temporary messages
+	const allLogs = [...battle.battleLog, ...messageLog];
+	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
+
 	// Check if battle has ended first - slots may be null after fainting
 	if (battle.battleEnded) {
 		// For ended battles, we only need to show the message log and Continue button
@@ -570,7 +578,7 @@ export function generateDoubleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 250px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -637,7 +645,7 @@ export function generateDoubleBattleHTML(
 	html += '</tr>';
 	html += '</table>';
 
-	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 350px; overflow-y: auto; border-radius: 5px;">' + messageLog.join('<br>') + '</div>';
+	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 200px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
 
 	// Battle is ongoing - show action buttons
 	if (targetSelection) {
