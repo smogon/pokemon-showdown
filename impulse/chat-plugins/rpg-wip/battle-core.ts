@@ -382,12 +382,23 @@ export function getMoveType(
 ): string {
 	let moveType = move.type;
 
-	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
-		switch (battle.weather!.type) {
-		case 'sun': moveType = 'Fire'; break;
-		case 'rain': moveType = 'Water'; break;
-		case 'sand': moveType = 'Rock'; break;
-		case 'hail': moveType = 'Ice'; break;
+	if (move.id === 'weatherball') {
+		if (RPGAbilities.isWeatherActive(battle)) {
+			// Weather takes priority
+			switch (battle.weather!.type) {
+			case 'sun': moveType = 'Fire'; break;
+			case 'rain': moveType = 'Water'; break;
+			case 'sand': moveType = 'Rock'; break;
+			case 'hail': moveType = 'Ice'; break;
+			}
+		} else if (battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
+			// Terrain is checked if no weather is active
+			switch (battle.terrain.type) {
+			case 'electric': moveType = 'Electric'; break;
+			case 'grassy': moveType = 'Grass'; break;
+			case 'psychic': moveType = 'Psychic'; break;
+			case 'misty': moveType = 'Fairy'; break;
+			}
 		}
 	}
 	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
