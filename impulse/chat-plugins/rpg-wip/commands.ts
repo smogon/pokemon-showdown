@@ -2875,7 +2875,44 @@ export const commands: ChatCommands = {
 		},
 
 		help() {
-			return this.parse('/help rpg');
+			if (!this.runBroadcast()) return;
+			const helpList = [
+				{ cmd: "/rpg start", desc: "Start your RPG adventure or continue from where you left off." },
+				{ cmd: "/rpg storymode", desc: "Begin story mode and choose your starter Pokémon." },
+				{ cmd: "/rpg explore", desc: "Explore your current location and see available actions." },
+				{ cmd: "/rpg travel [location]", desc: "Travel to a connected location." },
+				{ cmd: "/rpg profile", desc: "View your trainer profile, badges, and progress." },
+				{ cmd: "/rpg party", desc: "View your party Pokémon." },
+				{ cmd: "/rpg summary [pokemonId]", desc: "View detailed information about a specific Pokémon." },
+				{ cmd: "/rpg swapslot [slot1] [slot2]", desc: "Swap two Pokémon positions in your party." },
+				{ cmd: "/rpg items [category]", desc: "View your inventory. Categories: pokeball, medicine, berry, held, misc." },
+				{ cmd: "/rpg useitem [itemId] [pokemonId]", desc: "Use an item from your inventory on a Pokémon." },
+				{ cmd: "/rpg pc", desc: "Access the PC storage system." },
+				{ cmd: "/rpg depositpc [pokemonId]", desc: "Deposit a Pokémon into the PC." },
+				{ cmd: "/rpg withdrawpc [pokemonId]", desc: "Withdraw a Pokémon from the PC." },
+				{ cmd: "/rpg shop [category]", desc: "Visit the shop and buy items." },
+				{ cmd: "/rpg buy [itemId] [quantity]", desc: "Purchase items from the shop." },
+				{ cmd: "/rpg sell [itemId] [quantity]", desc: "Sell items from your inventory." },
+				{ cmd: "/rpg wildpokemon [zoneId]", desc: "Battle wild Pokémon in a specific zone." },
+				{ cmd: "/rpg challenge [trainerId]", desc: "Challenge a trainer to a battle." },
+				{ cmd: "/rpg giveitem [pokemonId] [itemId]", desc: "Give a held item to a Pokémon." },
+				{ cmd: "/rpg takeitem [pokemonId]", desc: "Take a held item from a Pokémon." },
+				{ cmd: "/rpg nickname [pokemonId], [nickname]", desc: "Give a nickname to your Pokémon." },
+				{ cmd: "/rpg npc [npcId]", desc: "Talk to an NPC in your location." },
+				{ cmd: "/rpg npcaction [npcId]", desc: "Perform an action with an NPC." },
+				{ cmd: "/rpg building [buildingId]", desc: "Enter a building in your location." },
+				{ cmd: "/rpg learnmove [moveId|skip]", desc: "Choose which move to learn when your Pokémon levels up." },
+				{ cmd: "/rpg save", desc: "Save your game progress to a text string." },
+				{ cmd: "/rpg load [saveData]", desc: "Load a saved game from save data." },
+				{ cmd: "/rpg reset", desc: "Reset all your RPG progress (cannot be undone)." },
+				{ cmd: "/rpg unstuck", desc: "Exit a battle if you're stuck." },
+			];
+			const html = `<center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('') +
+				`</ul>`;
+			this.sendReplyBox(`<div style="max-height: 380px; overflow-y: auto;">${html}</div>`);
 		},
 		'': 'help',
 
