@@ -577,11 +577,20 @@ export function calculateDamage(
 	const defenderAbility = toID(defender.ability || '');
 	const attackerAbility = toID(attacker.ability || '');
 
-	if (defenderAbility === 'unaware') {
-		attackStage = 0;
+	// Attacker's Unaware: Ignores defender's positive defensive stat stages
+	// (But Mold Breaker bypasses this)
+	if (attackerAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, attackerAbility)) {
+		if (defenseStage > 0) {
+			defenseStage = 0;
+		}
 	}
-	if (attackerAbility === 'unaware') {
-		defenseStage = 0;
+
+	// Defender's Unaware: Ignores attacker's positive offensive stat stages
+	// (But Mold Breaker bypasses this)
+	if (defenderAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
+		if (attackStage > 0) {
+			attackStage = 0;
+		}
 	}
 
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
