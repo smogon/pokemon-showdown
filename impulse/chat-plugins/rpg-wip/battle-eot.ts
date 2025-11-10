@@ -112,14 +112,6 @@ export function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: Ba
 	}
 	if (pokemon.hp <= 0) return;
 
-	if (slot.isTrapped) {
-		if (RPGAbilities.takesIndirectDamage(pokemon)) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`${pokemon.species} is hurt by the trap!`);
-		}
-	}
-
 	if (slot.partiallyTrapped) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / slot.partiallyTrapped.damage));
