@@ -1026,11 +1026,16 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 	return 0;
 }
 
-export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon): number {
+
+export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
 
 	if (handler?.accuracyMultiplier) {
+		// Special case for Hustle
+		if (ability === 'hustle' && move.category !== 'Physical') {
+			return moveAccuracy; // Do not apply penalty to Special or Status moves
+		}
 		return Math.floor(moveAccuracy * handler.accuracyMultiplier);
 	}
 
