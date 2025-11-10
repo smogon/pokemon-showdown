@@ -2875,7 +2875,18 @@ export const commands: ChatCommands = {
 		},
 
 		help() {
-			return this.parse('/help rpg');
+			if (!this.runBroadcast()) return;
+			const helpList = [
+				{ cmd: "/rpg start", desc: "Start your RPG adventure or continue from where you left off." },
+				{ cmd: "/rpg reset", desc: "Reset all your RPG progress (cannot be undone)." },
+				{ cmd: "/rpg unstuck", desc: "Exit a battle if you're stuck." },
+			];
+			const html = `<center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('') +
+				`</ul>`;
+			this.sendReplyBox(`<div style="max-height: 380px; overflow-y: auto;">${html}</div>`);
 		},
 		'': 'help',
 
