@@ -780,8 +780,8 @@ exports.grouplist = [
 	},
 	{
 		symbol: '㆜',
-		id: "impulsetester",
-		name: "Impulse Tester",
+		id: "contributor",
+		name: "Contributor",
 		inherit: ' ',
 
 		altsself: true,
