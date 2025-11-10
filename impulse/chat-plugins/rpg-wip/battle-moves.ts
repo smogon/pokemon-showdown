@@ -145,7 +145,7 @@ export function getDamageBasePower(
 	if (move.id === 'brine' && defender.hp <= defender.maxHp / 2) {
 		basePower *= 2;
 	}
-	if (move.id === 'venoshock' && defenderSlot.status === 'psn') {
+	if (move.id === 'venoshock' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
 		basePower *= 2;
 	}
 	if (move.id === 'weatherball' && RPGAbilities.isWeatherActive(battle)) {
