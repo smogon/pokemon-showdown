@@ -215,7 +215,12 @@ export function deserializePlayerData(data: any): PlayerData {
 		defeatedTrainers: new Set(data.defeatedTrainers || []),
 		obtainedBadges: data.obtainedBadges || [],
 		visitedLocations: new Set(data.visitedLocations || [data.location]),
-		pendingMoveLearnQueue: data.pendingMoveLearnQueue,
+		// Migrate old single-object format to new array format
+		pendingMoveLearnQueue: data.pendingMoveLearnQueue
+			? (Array.isArray(data.pendingMoveLearnQueue)
+				? data.pendingMoveLearnQueue
+				: [data.pendingMoveLearnQueue])
+			: undefined,
 		lastPokemonCenter: data.lastPokemonCenter || 'startertown',
 		completedNPCActions: new Set(data.completedNPCActions || []),
 	};

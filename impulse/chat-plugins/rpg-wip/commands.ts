@@ -239,13 +239,18 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this during a battle.");
 			}
 			const player = getPlayerData(user.id);
-			const queue = player.pendingMoveLearnQueue;
+			const queueArray = player.pendingMoveLearnQueue;
+			if (!queueArray || queueArray.length === 0) {
+				return this.errorReply("Your Pokemon is not trying to learn a new move.");
+			}
+			const queue = queueArray[0]; // Process first Pokemon in queue
 			if (!queue || queue.moveIds.length === 0) {
+				player.pendingMoveLearnQueue?.shift();
 				return this.errorReply("Your Pokemon is not trying to learn a new move.");
 			}
 			const pokemon = player.party.find(p => p.id === queue.pokemonId);
 			if (!pokemon) {
-				delete player.pendingMoveLearnQueue;
+				player.pendingMoveLearnQueue?.shift();
 				return this.errorReply("Error: Pokemon not found.");
 			}
 			const newMoveId = queue.moveIds[0];
@@ -269,10 +274,16 @@ export const commands: ChatCommands = {
 			if (queue.moveIds.length > 0) {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
-				delete player.pendingMoveLearnQueue;
-				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				// Remove this Pokemon's entry from queue
+				queueArray.shift();
+				// Check if there are more Pokemon waiting to learn moves
+				if (queueArray.length > 0) {
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+				} else {
+					const tempSlot = createActivePokemonSlot(pokemon);
+					const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				}
 			}
 		},
 
@@ -315,7 +326,10 @@ export const commands: ChatCommands = {
 				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
-				player.pendingMoveLearnQueue = { pokemonId: pokemon.id, moveIds: [newMoveId] };
+				if (!player.pendingMoveLearnQueue) {
+					player.pendingMoveLearnQueue = [];
+				}
+				player.pendingMoveLearnQueue.push({ pokemonId: pokemon.id, moveIds: [newMoveId] });
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			}
 		},
@@ -700,7 +714,7 @@ export const commands: ChatCommands = {
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
-					if (player.pendingMoveLearnQueue?.moveIds.length) {
+					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 					}
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
@@ -714,7 +728,7 @@ export const commands: ChatCommands = {
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
-					if (player.pendingMoveLearnQueue?.moveIds.length) {
+					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 					}
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
@@ -751,7 +765,7 @@ export const commands: ChatCommands = {
 						let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
 
 						// Check if new moves were queued
-						if (player.pendingMoveLearnQueue?.moveIds.length) {
+						if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 							resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
 						} else {
 							resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
