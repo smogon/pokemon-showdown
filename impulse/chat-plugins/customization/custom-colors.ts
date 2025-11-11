@@ -4,12 +4,34 @@
 */
 
 import https from 'https';
-import { FS } from '../../../lib';
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib/fs';
 import { validateHexColor, clearColorCache, loadCustomColorsFromDB, nameColor } from '../../colors';
 import { generateThemedTable } from '../../utils';
 
 const STAFF_ROOM_ID = 'staff';
+const CUSTOM_COLORS_FILE = 'config/custom-colors.json';
+
+interface CustomColorDocument {
+	userid: string;
+	color: string;
+	updatedBy: string;
+	updatedAt: string;
+}
+
+interface CustomColorsData {
+	[userId: string]: CustomColorDocument;
+}
+
+let customColors: CustomColorsData = {};
+
+const loadCustomColors = async (): Promise<void> => {
+	const data = await FS(CUSTOM_COLORS_FILE).readIfExists();
+	customColors = data ? JSON.parse(data) : {};
+};
+
+const saveCustomColors = async (): Promise<void> => {
+	await FS(CUSTOM_COLORS_FILE).safeWrite(JSON.stringify(customColors, null, 2));
+};
 
 Impulse.reloadCSS = () => {
 	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
@@ -25,10 +47,9 @@ const generateCSS = (name: string, color: string): string => {
 
 const updateColor = async () => {
 	try {
-		const colorDocs = await ImpulseDB('customcolors').find({});
 		let css = '/* COLORS START */\n';
 
-		colorDocs.forEach(doc => {
+		Object.values(customColors).forEach(doc => {
 			css += generateCSS(doc.userid, doc.color);
 		});
 
@@ -69,10 +90,13 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			await ImpulseDB('customcolors').upsert(
-				{ userid: targetId },
-				{ $set: { userid: targetId, color, updatedBy: user.id, updatedAt: new Date() } }
-			);
+			customColors[targetId] = {
+				userid: targetId,
+				color,
+				updatedBy: user.id,
+				updatedAt: new Date().toISOString(),
+			};
+			await saveCustomColors();
 
 			await updateColor();
 
@@ -89,11 +113,14 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/customcolorhelp');
 
 			const targetId = toID(target);
-			const colorDoc = await ImpulseDB('customcolors').findOne({ userid: targetId });
 
-			if (!colorDoc) return this.errorReply(`${target} does not have a custom color.`);
+			if (!customColors[targetId]) {
+				return this.errorReply(`${target} does not have a custom color.`);
+			}
 
-			await ImpulseDB('customcolors').deleteOne({ userid: targetId });
+			delete customColors[targetId];
+			await saveCustomColors();
+
 			await updateColor();
 
 			this.sendReply(`You removed ${target}'s custom color.`);
@@ -130,27 +157,23 @@ export const commands: Chat.ChatCommands = {
 		async list(target, room, user) {
 			this.checkCan('roomowner');
 
-			try {
-				const colorDocs = await ImpulseDB('customcolors').find({}, { sort: { userid: 1 } });
+			const allColors = Object.values(customColors).sort((a, b) => a.userid.localeCompare(b.userid));
 
-				if (colorDocs.length === 0) return this.sendReply('No custom colors are currently set.');
+			if (allColors.length === 0) return this.sendReply('No custom colors are currently set.');
 
-				const rows: string[][] = colorDocs.map(doc => [
-					Chat.escapeHTML(doc.userid),
-					`<code>${Chat.escapeHTML(doc.color)}</code>`,
-					`<b><font color="${doc.color}">${Chat.escapeHTML(doc.userid)}</font></b>`,
-				]);
+			const rows: string[][] = allColors.map(doc => [
+				Chat.escapeHTML(doc.userid),
+				`<code>${Chat.escapeHTML(doc.color)}</code>`,
+				`<b><font color="${doc.color}">${Chat.escapeHTML(doc.userid)}</font></b>`,
+			]);
 
-				const output = generateThemedTable(
-					`Custom Colors (${colorDocs.length} users)`,
-					['User', 'Color', 'Preview'],
-					rows,
-				);
+			const output = generateThemedTable(
+				`Custom Colors (${allColors.length} users)`,
+				['User', 'Color', 'Preview'],
+				rows,
+			);
 
-				this.sendReply(`|raw|${output}`);
-			} catch {
-				return this.errorReply('Failed to list custom colors.');
-			}
+			this.sendReply(`|raw|${output}`);
 		},
 
 		help() {
@@ -174,3 +197,5 @@ export const commands: Chat.ChatCommands = {
 	customcolorhelp: 'customcolor.help',
 	cchelp: 'customcolor.help',
 };
+
+void loadCustomColors();
