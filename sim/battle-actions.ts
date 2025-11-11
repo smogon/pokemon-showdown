@@ -2013,7 +2013,12 @@ export class BattleActions {
 		// Recalculate stats
 		this.recalculateStats(pokemon);
 
-		// TODO: Check for moves to learn (Phase 5)
+		// Check for moves to learn
+		const movesToLearn = this.getMovesToLearnAtLevel(pokemon, oldLevel, newLevel);
+		if (movesToLearn.length > 0) {
+			this.handleMoveLearning(pokemon, movesToLearn);
+		}
+
 		// TODO: Check for evolution (Phase 6)
 	}
 
@@ -2085,6 +2090,87 @@ export class BattleActions {
 		}
 
 		return stats;
+	}
+
+	/**
+	 * Get all moves a Pokemon should learn between two levels
+	 * @param pokemon The Pokemon
+	 * @param oldLevel The previous level
+	 * @param newLevel The new level
+	 * @returns Array of move IDs to learn
+	 */
+	getMovesToLearnAtLevel(pokemon: Pokemon, oldLevel: number, newLevel: number): string[] {
+		const learnset = this.battle.dex.species.getLearnsetData(pokemon.species.id);
+		if (!learnset.learnset) return [];
+
+		const movesToLearn: string[] = [];
+		const currentGen = this.battle.gen;
+
+		for (const [moveid, sources] of Object.entries(learnset.learnset)) {
+			for (const source of sources) {
+				// Match pattern like "9L16" (Gen 9, Level 16)
+				const match = source.match(/^(\d)L(\d+)$/);
+				if (!match) continue;
+
+				const gen = parseInt(match[1]);
+				const learnLevel = parseInt(match[2]);
+
+				// Check if it's current gen and within level range
+				if (gen === currentGen && learnLevel > oldLevel && learnLevel <= newLevel) {
+					if (!movesToLearn.includes(moveid)) {
+						movesToLearn.push(moveid);
+					}
+				}
+			}
+		}
+
+		return movesToLearn;
+	}
+
+	/**
+	 * Handle move learning process
+	 * @param pokemon The Pokemon learning moves
+	 * @param movesToLearn Array of move IDs to learn
+	 */
+	handleMoveLearning(pokemon: Pokemon, movesToLearn: string[]) {
+		for (const moveid of movesToLearn) {
+			const move = this.battle.dex.moves.get(moveid);
+
+			this.battle.add('-message', `${pokemon.name} wants to learn ${move.name}!`);
+
+			// If Pokemon has less than 4 moves, auto-learn
+			if (pokemon.moveSlots.length < 4) {
+				this.learnMove(pokemon, move);
+				this.battle.add('-message', `${pokemon.name} learned ${move.name}!`);
+			} else {
+				// TODO: Request move replacement choice (for now, skip)
+				// In a real implementation, this would prompt the player
+				this.battle.add('-message', `${pokemon.name} did not learn ${move.name}.`);
+			}
+		}
+	}
+
+	/**
+	 * Learn a new move
+	 * @param pokemon The Pokemon learning the move
+	 * @param move The move to learn
+	 */
+	learnMove(pokemon: Pokemon, move: Move) {
+		const basepp = move.noPPBoosts ? move.pp : move.pp * 8 / 5;
+
+		const newMoveSlot = {
+			move: move.name,
+			id: move.id,
+			pp: basepp,
+			maxpp: basepp,
+			target: move.target,
+			disabled: false,
+			disabledSource: '',
+			used: false,
+		};
+
+		pokemon.moveSlots.push(newMoveSlot);
+		pokemon.baseMoveSlots.push({ ...newMoveSlot });
 	}
 
 	// #endregion
