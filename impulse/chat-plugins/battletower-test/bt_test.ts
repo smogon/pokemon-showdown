@@ -11,7 +11,7 @@ const PACK_TEAMS = [
 	// The misc section contains: hpType,pokeball,gigantamax,dynamaxLevel,teraType,hpPercentage,status
 	// - Position 6 in misc: hpPercentage (50 for Weavile = starts at 50% HP)
 	// - Position 7 in misc: status (frz for Azumarill = starts frozen)
-	"Testmon1|Weavile|ChoiceBand|Pickpocket|IceShard,KnockOff,IcicleCrash,LowKick|Jolly|,252,,,4,252|M||||,,,,,,0,]Testmon2|Azumarill|ChoiceBand|HugePower|AquaJet,PlayRough,Waterfall,Superpower|Adamant|252,252,,,4,|M||||,,,,,,,frz",
+	"Testmon1|Weavile|ChoiceBand|Pickpocket|IceShard,KnockOff,IcicleCrash,LowKick|Jolly|,252,,,4,252|M||||,,,,,,50,]Testmon2|Azumarill|ChoiceBand|HugePower|AquaJet,PlayRough,Waterfall,Superpower|Adamant|252,252,,,4,|M||||,,,,,,,frz",
 ];
 
 export const commands: Chat.ChatCommands = {
