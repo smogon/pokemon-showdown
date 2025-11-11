@@ -2019,7 +2019,8 @@ export class BattleActions {
 			this.handleMoveLearning(pokemon, movesToLearn);
 		}
 
-		// TODO: Check for evolution (Phase 6)
+		// Check for evolution
+		this.checkEvolution(pokemon);
 	}
 
 	/**
@@ -2171,6 +2172,139 @@ export class BattleActions {
 
 		pokemon.moveSlots.push(newMoveSlot);
 		pokemon.baseMoveSlots.push({ ...newMoveSlot });
+	}
+
+	/**
+	 * Check if Pokemon should evolve after leveling up
+	 * @param pokemon The Pokemon to check for evolution
+	 */
+	checkEvolution(pokemon: Pokemon) {
+		const species = pokemon.baseSpecies;
+
+		// Can't evolve if no evolution exists
+		if (!species.evos || species.evos.length === 0) return;
+
+		// Check each possible evolution
+		for (const evoName of species.evos) {
+			const evoSpecies = this.battle.dex.species.get(evoName);
+
+			// Check evolution conditions
+			if (this.canEvolve(pokemon, evoSpecies)) {
+				this.evolveOnLevelUp(pokemon, evoSpecies);
+				return; // Only one evolution at a time
+			}
+		}
+	}
+
+	/**
+	 * Check if evolution conditions are met
+	 * @param pokemon The Pokemon
+	 * @param evoSpecies The evolution species
+	 * @returns true if can evolve
+	 */
+	canEvolve(pokemon: Pokemon, evoSpecies: Species): boolean {
+		const currentLevel = pokemon.level;
+
+		// Level-based evolution
+		if (evoSpecies.evoLevel) {
+			if (currentLevel < evoSpecies.evoLevel) return false;
+
+			// Check specific evolution types
+			switch (evoSpecies.evoType) {
+				case 'levelMove':
+					// Must know specific move
+					if (!evoSpecies.evoMove) return false;
+					const hasMove = pokemon.moveSlots.some(slot =>
+						this.battle.toID(slot.move) === this.battle.toID(evoSpecies.evoMove!)
+					);
+					return hasMove;
+
+				case 'levelFriendship':
+					// Must have high friendship
+					return pokemon.happiness >= 220;
+
+				case 'levelHold':
+					// Must be holding specific item
+					if (!evoSpecies.evoItem) return false;
+					return pokemon.item === this.battle.toID(evoSpecies.evoItem);
+
+				case 'levelExtra':
+					// Check additional conditions
+					if (evoSpecies.evoCondition) {
+						return this.checkEvolutionCondition(pokemon, evoSpecies.evoCondition);
+					}
+					return true;
+
+				default:
+					// Simple level-up evolution
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check special evolution conditions
+	 * @param pokemon The Pokemon
+	 * @param condition The condition string
+	 * @returns true if condition is met
+	 */
+	checkEvolutionCondition(pokemon: Pokemon, condition: string): boolean {
+		// Handle special conditions like Tyrogue evolution based on stats
+		if (condition.includes('attack > defense')) {
+			return pokemon.baseStoredStats.atk > pokemon.baseStoredStats.def;
+		}
+
+		if (condition.includes('attack < defense')) {
+			return pokemon.baseStoredStats.atk < pokemon.baseStoredStats.def;
+		}
+
+		if (condition.includes('attack = defense') || condition.includes('attack == defense')) {
+			return pokemon.baseStoredStats.atk === pokemon.baseStoredStats.def;
+		}
+
+		// Add more conditions as needed
+		return true;
+	}
+
+	/**
+	 * Perform the evolution
+	 * @param pokemon The Pokemon evolving
+	 * @param newSpecies The evolution species
+	 */
+	evolveOnLevelUp(pokemon: Pokemon, newSpecies: Species) {
+		const oldName = pokemon.name;
+		const oldSpecies = pokemon.species.name;
+
+		this.battle.add('-message', `What? ${oldName} is evolving!`);
+
+		// Update species
+		pokemon.species = newSpecies;
+		pokemon.baseSpecies = newSpecies;
+
+		// Recalculate stats with new base stats
+		this.recalculateStats(pokemon);
+
+		// Update appearance details
+		pokemon.details = pokemon.getUpdatedDetails();
+
+		// Broadcast evolution
+		this.battle.add('-transform', pokemon, newSpecies, '[evolution]');
+		this.battle.add('-message', `Congratulations! Your ${oldSpecies} evolved into ${newSpecies.name}!`);
+
+		// Check for ability change
+		const newAbility = newSpecies.abilities['0'];
+		if (newAbility && this.battle.toID(newAbility) !== pokemon.ability) {
+			pokemon.setAbility(newAbility, null, true);
+			this.battle.add('-ability', pokemon, newAbility, '[evolution]');
+		}
+
+		// Check if evolved Pokemon learns moves at this level
+		const movesToLearn = this.getMovesToLearnAtLevel(pokemon, 0, pokemon.level);
+		if (movesToLearn.length > 0) {
+			this.handleMoveLearning(pokemon, movesToLearn);
+		}
 	}
 
 	// #endregion
