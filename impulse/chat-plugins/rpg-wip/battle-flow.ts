@@ -93,6 +93,18 @@ export function handleOpponentFaint(
 				RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
 			}
 
+			// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
+			const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+			for (const activeSlot of allActiveSlots) {
+				if (activeSlot.pokemon.hp > 0) {
+					const ability = toID(activeSlot.pokemon.ability || '');
+					if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
+						activeSlot.statStages.spa++;
+						messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+					}
+				}
+			}
+
 			if (playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
 				messageLog.push(...expResult.messages);
@@ -141,6 +153,18 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 						const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 						attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
 						messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+					}
+				}
+
+				// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
+				const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+				for (const activeSlot of allActiveSlots) {
+					if (activeSlot.pokemon.hp > 0) {
+						const ability = toID(activeSlot.pokemon.ability || '');
+						if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
+							activeSlot.statStages.spa++;
+							messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+						}
 					}
 				}
 			}
