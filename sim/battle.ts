@@ -2506,6 +2506,8 @@ export class Battle {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
+		// Save faint data for experience awarding
+		const faintedPokemon = [...this.faintQueue];
 		let faintQueueLeft, faintData;
 		while (this.faintQueue.length) {
 			faintQueueLeft = this.faintQueue.length;
@@ -2539,6 +2541,26 @@ export class Battle {
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
+		}
+
+		// Award experience for defeated Pokemon
+		const expAwards = new Map<Pokemon, Pokemon[]>();
+
+		for (const faintData of faintedPokemon) {
+			if (faintData.source && !faintData.source.fainted) {
+				if (!expAwards.has(faintData.target)) {
+					expAwards.set(faintData.target, []);
+				}
+				const participants = expAwards.get(faintData.target)!;
+				if (!participants.includes(faintData.source)) {
+					participants.push(faintData.source);
+				}
+			}
+		}
+
+		// Award experience to all participants
+		for (const [defeated, participants] of expAwards) {
+			this.actions.awardExperience(defeated, participants);
 		}
 
 		if (this.gen <= 1) {

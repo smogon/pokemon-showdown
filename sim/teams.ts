@@ -128,6 +128,16 @@ export interface PokemonSet {
 	 * or for creating custom battle scenarios.
 	 */
 	status?: string;
+	/**
+	 * Current experience points. If not specified, calculated from level.
+	 * Used to track progress toward next level.
+	 */
+	experience?: number;
+	/**
+	 * Current experience within the current level (0 to exp needed for next level).
+	 * Calculated automatically from total experience and level.
+	 */
+	currentLevelExp?: number;
 }
 
 export const Teams = new class Teams {
@@ -215,11 +225,11 @@ export const Teams = new class Teams {
 
 			// Extended properties section (misc array in team packing format)
 			// This section stores optional properties that aren't commonly used.
-			// We add hpPercentage and status to this section to maintain backward compatibility
+			// We add hpPercentage, status, and experience to this section to maintain backward compatibility
 			// with existing team formats while allowing new battle scenarios.
 			if (set.pokeball || set.hpType || set.gigantamax ||
 				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType ||
-				set.hpPercentage !== undefined || set.status) {
+				set.hpPercentage !== undefined || set.status || set.experience !== undefined) {
 				buf += `,${set.hpType || ''}`;
 				buf += `,${this.packName(set.pokeball || '')}`;
 				buf += `,${set.gigantamax ? 'G' : ''}`;
@@ -229,6 +239,8 @@ export const Teams = new class Teams {
 				buf += `,${set.hpPercentage !== undefined ? set.hpPercentage : ''}`;
 				// Position 7 in misc array: initial status condition (brn, psn, par, slp, frz, tox)
 				buf += `,${this.packName(set.status || '')}`;
+				// Position 8 in misc array: experience points
+				buf += `,${set.experience !== undefined ? set.experience : ''}`;
 			}
 		}
 
@@ -362,7 +374,7 @@ export const Teams = new class Teams {
 						happinessEnd = commaIndex;
 						// Extract misc array starting from the comma (format: ,val1,val2,...)
 						// When split by comma, first element is empty, so actual values start at index 1
-						misc = buf.substring(commaIndex).split(',', 8);
+						misc = buf.substring(commaIndex).split(',', 9);
 					} else {
 						happinessEnd = buf.length;
 					}
@@ -374,7 +386,7 @@ export const Teams = new class Teams {
 					happinessEnd = commaIndex;
 					// Extract misc array starting from the comma (format: ,val1,val2,...)
 					// When split by comma, first element is empty, so actual values start at index 1
-					misc = buf.substring(commaIndex, j).split(',', 8);
+					misc = buf.substring(commaIndex, j).split(',', 9);
 				} else {
 					happinessEnd = j;
 				}
@@ -390,7 +402,7 @@ export const Teams = new class Teams {
 			// Unpack extended properties from the misc array
 			// These properties are optional and stored after the standard team format fields
 			// The misc array is split from ",val1,val2,..." so misc[0] is empty, values start at misc[1]
-			// Format: ['', hpType, pokeball, gigantamax, dynamaxLevel, teraType, hpPercentage, status]
+			// Format: ['', hpType, pokeball, gigantamax, dynamaxLevel, teraType, hpPercentage, status, experience]
 			if (misc) {
 				set.hpType = misc[1] || '';
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
@@ -403,6 +415,9 @@ export const Teams = new class Teams {
 				// Position 7: Extract custom status condition for battle start
 				// Uses Dex.conditions to validate and normalize the status name
 				set.status = this.unpackName(misc[7] || '', Dex.conditions);
+				// Position 8: Extract experience points
+				// Only set if present to maintain backward compatibility with old team formats
+				if (misc[8]) set.experience = Number(misc[8]);
 			}
 			if (j < 0) break;
 			i = j + 1;
@@ -462,6 +477,9 @@ export const Teams = new class Teams {
 		// details
 		if (set.level && set.level !== 100) {
 			out += `Level: ${set.level}  \n`;
+		}
+		if (set.experience !== undefined) {
+			out += `Experience: ${set.experience}  \n`;
 		}
 		if (set.shiny) {
 			out += `Shiny: Yes  \n`;
@@ -556,6 +574,9 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('Level: ')) {
 			line = line.slice(7);
 			set.level = +line;
+		} else if (line.startsWith('Experience: ')) {
+			line = line.slice(12);
+			set.experience = +line;
 		} else if (line.startsWith('Happiness: ')) {
 			line = line.slice(11);
 			set.happiness = +line;
