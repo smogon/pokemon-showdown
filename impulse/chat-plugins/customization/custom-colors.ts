@@ -9,7 +9,7 @@ import { validateHexColor, clearColorCache, loadCustomColorsFromDB, nameColor } 
 import { generateThemedTable } from '../../utils';
 
 const STAFF_ROOM_ID = 'staff';
-const CUSTOM_COLORS_FILE = 'config/custom-colors.json';
+const CUSTOM_COLORS_FILE = 'impulse/db/custom-colors.json';
 
 interface CustomColorDocument {
 	userid: string;
