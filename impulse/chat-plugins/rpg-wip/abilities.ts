@@ -227,7 +227,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		// Check if attacker is an ally (same side in double battles)
 		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
 		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
-		
+
 		if (attackerIsPlayer === defenderIsPlayer) {
 			// Same team - Telepathy blocks the move
 			return {
@@ -576,7 +576,7 @@ export const CONTACT_ABILITIES = {
 		onContactStat: 'spe',
 		value: -1,
 	},
-	
+
 	'tanglinghair': {
 		onContactStat: 'spe',
 		value: -1,
@@ -586,6 +586,11 @@ export const CONTACT_ABILITIES = {
 	'poisontouch': {
 		onContactChance: 0.3,
 		effect: 'psn',
+	},
+
+	// Phase 1: Pickpocket - Steals item from attacker on contact
+	'pickpocket': {
+		stealItem: true,
 	},
 };
 
@@ -628,6 +633,11 @@ export const ACCURACY_EVASION_ABILITIES = {
 
 	'snowcloak': {
 		weatherEvasion: 'hail',
+	},
+
+	// Phase 1: No Guard - Makes all moves always hit (bypasses accuracy/evasion)
+	'noguard': {
+		alwaysHit: true,
 	},
 };
 
@@ -813,22 +823,22 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 	// Phase 2: Moody - Raises one random stat by 2 stages, lowers another by 1 stage
 	'moody': {
 		handler: (slot, battle, messageLog) => {
-			const stats: Array<keyof typeof slot.statStages> = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
-			
+			const stats: (keyof typeof slot.statStages)[] = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+
 			// Find stats that can be raised (not at +6)
 			const raisableStats = stats.filter(stat => slot.statStages[stat] < 6);
 			// Find stats that can be lowered (not at -6)
 			const lowerableStats = stats.filter(stat => slot.statStages[stat] > -6);
-			
+
 			if (raisableStats.length > 0) {
 				const statToRaise = raisableStats[Math.floor(Math.random() * raisableStats.length)];
 				slot.statStages[statToRaise] = Math.min(6, slot.statStages[statToRaise] + 2);
-				const statNames: Record<string, string> = { 
+				const statNames: Record<string, string> = {
 					atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed',
-					accuracy: 'accuracy', evasion: 'evasion'
+					accuracy: 'accuracy', evasion: 'evasion',
 				};
 				messageLog.push(`${slot.pokemon.species}'s Moody sharply raised its ${statNames[statToRaise]}!`);
-				
+
 				// Lower a different stat
 				const lowerableDifferentStats = lowerableStats.filter(stat => stat !== statToRaise);
 				if (lowerableDifferentStats.length > 0) {
@@ -891,6 +901,36 @@ export const STATUS_INTERACTION_ABILITIES: Record<string, {
 				messageLog.push(`${slot.pokemon.species}'s Hydration cured its status condition!`);
 			}
 		},
+	},
+};
+
+// Phase 1: RPG-specific abilities (implemented in RPG core, not battle system)
+export const RPG_SPECIFIC_ABILITIES = {
+	'noability': {
+		// Placeholder ability with no effect
+		description: 'No ability - does nothing',
+	},
+	'runaway': {
+		// Guarantees escape from wild battles
+		description: 'Guarantees escape from wild battles (implemented in encounter system)',
+		escapeGuaranteed: true,
+	},
+	'illuminate': {
+		// Increases wild encounter rate
+		description: 'Increases wild encounter rate by 2x (implemented in encounter system)',
+		encounterRateMultiplier: 2,
+	},
+	'honeygather': {
+		// May gather Honey after battle
+		description: 'May gather Honey after battle (implemented in post-battle rewards)',
+		postBattleItem: 'honey',
+		chance: 0.05, // 5% chance per battle level
+	},
+	'pickup': {
+		// May pick up items after battle
+		description: 'May pick up items after battle based on level (implemented in post-battle rewards)',
+		postBattlePickup: true,
+		chanceByLevel: true, // Increases with level
 	},
 };
 
@@ -1082,17 +1122,22 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 		return true;
 	}
 
+	// Phase 1: Leaf Guard - Prevents status in harsh sunlight
+	if (ability === 'leafguard' && battle && isWeatherActive(battle) && battle.weather?.type === 'sun') {
+		return true;
+	}
+
 	// Check for team protection abilities
 	if (battle) {
 		// Find which side this Pokemon is on
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-		
+
 		// Pastel Veil protects team from poison
 		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
 			return true;
 		}
-		
+
 		// Sweet Veil protects team from sleep
 		if (status === 'slp' && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'sweetveil')) {
 			return true;
@@ -1119,7 +1164,6 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 
 	return 0;
 }
-
 
 export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
@@ -1374,7 +1418,7 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 			if (rand < 35) return 2; // 35% chance
 			if (rand < 70) return 3; // 35% chance
 			if (rand < 85) return 4; // 15% chance
-			return 5;                // 15% chance
+			return 5; // 15% chance
 		}
 
 		// This handles other multi-hit moves, like Triple Kick or simple ranges
@@ -1652,6 +1696,17 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
 		}
 	}
+
+	// Phase 1: Pickpocket - Steals item from attacker on contact
+	if (handler.stealItem && attacker.hp > 0 && !ctx.defender.item && attacker.item) {
+		const attackerAbility = toID(attacker.ability || '');
+		// Sticky Hold prevents item removal
+		if (attackerAbility !== 'stickyhold') {
+			ctx.defender.item = attacker.item;
+			attacker.item = undefined;
+			ctx.messageLog.push(`${ctx.defender.species} stole ${attacker.species}'s ${ctx.defender.item}!`);
+		}
+	}
 }
 
 export const RPGAbilities = {
@@ -1693,7 +1748,7 @@ export const RPGAbilities = {
 	applyStatChangeModifier,
 	handlePoisonHeal,
 	handleHydration,
-	
+
 	isAbilityIgnored,
 
 	IMMUNITY_ABILITIES,

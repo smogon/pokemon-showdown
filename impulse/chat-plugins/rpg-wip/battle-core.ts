@@ -219,7 +219,7 @@ export function gainExperience(
 
 	let leveledUp = false;
 	const messages: string[] = [];
-	const participantExpGains: Map<string, number> = new Map();
+	const participantExpGains = new Map<string, number>();
 
 	// Gen 5-9 Scaled Experience Formula
 	// Formula: ExpGained = floor((X^1.5 * Z) / (Y^1.5)) + 1
@@ -608,11 +608,11 @@ export function calculateDamage(
 	} else {
 		attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
 	}
-	
+
 	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
-	
+
 	// Handle Psyshock / Psystrike / Secret Sword
 	if (['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
 		defenseStage = battle.wonderRoomTurns > 0 ? defenderSlot.statStages.spd : defenderSlot.statStages.def;
@@ -647,7 +647,7 @@ export function calculateDamage(
 	if (['explosion', 'selfdestruct'].includes(move.id)) {
 		defenseStat = Math.floor(defenseStat * 0.5);
 	}
-	
+
 	// Safety check: Ensure defenseStat is always at least 1 to prevent division issues
 	defenseStat = Math.max(1, defenseStat);
 	finalAttackStat = Math.max(1, finalAttackStat);
@@ -657,7 +657,7 @@ export function calculateDamage(
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	const defenderTypes = getPokemonTypes(defender, defenderSlot);
-	
+
 	let effectiveness: number;
 	if (moveId === 'struggle') {
 		// Struggle is typeless and always hits neutrally
@@ -688,7 +688,7 @@ export function calculateDamage(
 
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
 	damage = Math.floor(damage * spreadMultiplier);
-	
+
 	// Safety check: Handle any invalid damage values (Infinity, NaN, or negative)
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
@@ -807,7 +807,7 @@ export function applyPostDamageContactEffects(
 	// Long Reach prevents contact effects
 	const attackerAbility = toID(attacker.ability || '');
 	const isContact = move.flags.contact && attackerAbility !== 'longreach';
-	
+
 	if (isContact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
 			if (defender.item === 'rockyhelmet' && RPGAbilities.takesIndirectDamage(attacker)) {
@@ -1131,6 +1131,14 @@ export function applySecondaryEffects(
 			}
 		}
 	}
+
+	// Phase 1: Stench - 10% chance to flinch when dealing damage
+	const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+	if (attackerAbility === 'stench' && move.category !== 'Status' && defenderSlot.pokemon.hp > 0) {
+		if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
+			defenderSlot.willFlinch = true;
+		}
+	}
 }
 
 export function handleDamagingMove(
@@ -1257,7 +1265,7 @@ export function handleDamagingMove(
 				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
 				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
 				defender.item = undefined;
-				
+
 				// Activate Unburden if the defender had it
 				activateUnburden(defenderSlot, messageLog);
 			}
@@ -1277,9 +1285,8 @@ export function handleDamagingMove(
 				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
 			}
 			// Raise Speed
-			if (applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot)) {
-				// applyStatChange already adds its own message
-			}
+			// applyStatChange already adds its own message
+			applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
 		}
 
 		// Handle Clear Smog stat reset effect
@@ -1328,7 +1335,7 @@ export function handleDamagingMove(
 					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
 					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
 					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
-					
+
 					const availableReplacements = party.filter(p =>
 						p.hp > 0 &&
 						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
