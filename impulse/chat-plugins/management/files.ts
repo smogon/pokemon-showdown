@@ -282,31 +282,31 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		try {
-			const dir = FS(${DIR_TO_BACKUP});
+			const dir = FS(DIR_TO_BACKUP);
 
 			if (!await dir.exists()) {
-				throw new Chat.ErrorMessage(`Directory not found: ${dirPath}`);
+				throw new Chat.ErrorMessage(`Directory not found: ${DIR_TO_BACKUP}`);
 			}
 
 			if (!await dir.isDirectory()) {
-				throw new Chat.ErrorMessage(`Path is not a directory: ${dirPath}`);
+				throw new Chat.ErrorMessage(`Path is not a directory: ${DIR_TO_BACKUP}`);
 			}
 
 			const files = await dir.readdir();
 			const jsonFiles = files.filter(file => file.endsWith('.json'));
 
 			if (jsonFiles.length === 0) {
-				throw new Chat.ErrorMessage(`No .json files found in ${dirPath}`);
+				throw new Chat.ErrorMessage(`No .json files found in ${DIR_TO_BACKUP}`);
 			}
 
-			this.sendReply(`Starting backup of ${jsonFiles.length} JSON file(s) from ${dirPath}...`);
+			this.sendReply(`Starting backup of ${jsonFiles.length} JSON file(s) from ${DIR_TO_BACKUP}...`);
 
 			const results = [];
 			const errors = [];
 
 			for (const fileName of jsonFiles) {
 				try {
-					const filePath = `${dirPath}/${fileName}`;
+					const filePath = `${DIR_TO_BACKUP}/${fileName}`;
 					const file = FS(filePath);
 					const content = await file.read();
 
