@@ -187,9 +187,20 @@ export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, me
 }
 
 export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
-	if (battle.magicRoomTurns > 0) return;
-
 	const pokemon = slot.pokemon;
+
+	// Phase 2: Emergency Exit and Wimp Out - check for auto-switch at low HP
+	if (pokemon.hp > 0 && pokemon.hp <= pokemon.maxHp / 2) {
+		const ability = toID(pokemon.ability || '');
+		if (ability === 'emergencyexit' || ability === 'wimpout') {
+			// Mark for switching (this would need to be handled by the battle flow)
+			// For now, just add a message
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} wants to switch out!`);
+			// Note: Actual switching would require battle flow changes
+		}
+	}
+
+	if (battle.magicRoomTurns > 0) return;
 
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 

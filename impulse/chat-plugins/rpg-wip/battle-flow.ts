@@ -391,6 +391,14 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
 		attackerSlot.willFlinch = false;
+		
+		// Phase 2: Steadfast - Boosts Speed when flinched
+		const ability = toID(attacker.ability || '');
+		if (ability === 'steadfast' && attackerSlot.statStages.spe < 6) {
+			attackerSlot.statStages.spe++;
+			messageLog.push(`${attacker.species}'s Steadfast raised its Speed!`);
+		}
+		
 		return false;
 	}
 

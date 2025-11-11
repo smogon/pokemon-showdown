@@ -876,6 +876,81 @@ export function applyPostDamageContactEffects(
 	}
 }
 
+// Phase 2: Handle abilities that trigger when a Pokemon is hit
+export function handleOnHitAbilityResponses(
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
+	move: Move,
+	battle: BattleState,
+	messageLog: string[],
+	damageDealt: number,
+	isCritical: boolean
+) {
+	const defender = defenderSlot.pokemon;
+	const defenderAbility = toID(defender.ability || '');
+	const attacker = attackerSlot.pokemon;
+
+	// Justified - Boosts Attack when hit by Dark move
+	if (defenderAbility === 'justified' && move.type === 'Dark' && damageDealt > 0) {
+		if (defenderSlot.statStages.atk < 6) {
+			defenderSlot.statStages.atk++;
+			messageLog.push(`${defender.species}'s Justified raised its Attack!`);
+		}
+	}
+
+	// Rattled - Boosts Speed when hit by Bug/Dark/Ghost move
+	if (defenderAbility === 'rattled' && ['Bug', 'Dark', 'Ghost'].includes(move.type) && damageDealt > 0) {
+		if (defenderSlot.statStages.spe < 6) {
+			defenderSlot.statStages.spe++;
+			messageLog.push(`${defender.species}'s Rattled raised its Speed!`);
+		}
+	}
+
+	// Stamina - Boosts Defense when hit
+	if (defenderAbility === 'stamina' && damageDealt > 0) {
+		if (defenderSlot.statStages.def < 6) {
+			defenderSlot.statStages.def++;
+			messageLog.push(`${defender.species}'s Stamina raised its Defense!`);
+		}
+	}
+
+	// Weak Armor - Defense down, Speed up when hit by physical move
+	if (defenderAbility === 'weakarmor' && move.category === 'Physical' && damageDealt > 0) {
+		let changed = false;
+		if (defenderSlot.statStages.def > -6) {
+			defenderSlot.statStages.def--;
+			messageLog.push(`${defender.species}'s Weak Armor lowered its Defense!`);
+			changed = true;
+		}
+		if (defenderSlot.statStages.spe < 6) {
+			defenderSlot.statStages.spe = Math.min(6, defenderSlot.statStages.spe + 2);
+			messageLog.push(`${defender.species}'s Weak Armor sharply raised its Speed!`);
+			changed = true;
+		}
+	}
+
+	// Anger Point - Maxes Attack on critical hit received
+	if (defenderAbility === 'angerpoint' && isCritical && damageDealt > 0) {
+		if (defenderSlot.statStages.atk < 6) {
+			defenderSlot.statStages.atk = 6;
+			messageLog.push(`${defender.species}'s Anger Point maxed its Attack!`);
+		}
+	}
+
+	// Berserk - Boosts Sp. Atk when HP drops below 50%
+	if (defenderAbility === 'berserk' && damageDealt > 0) {
+		const hpBefore = defender.hp + damageDealt;
+		const halfHP = defender.maxHp / 2;
+		// Trigger if HP dropped below 50% from this hit
+		if (hpBefore >= halfHP && defender.hp < halfHP) {
+			if (defenderSlot.statStages.spa < 6) {
+				defenderSlot.statStages.spa++;
+				messageLog.push(`${defender.species}'s Berserk raised its Sp. Atk!`);
+			}
+		}
+	}
+}
+
 export function applyRecoilAndSelfEffects(
 	attackerSlot: ActivePokemonSlot,
 	move: Move,
@@ -1157,6 +1232,9 @@ export function handleDamagingMove(
 			}
 
 			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
+
+			// Phase 2: Handle on-hit ability responses
+			handleOnHitAbilityResponses(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.isCritical);
 
 			handleHPDropEffects(defenderSlot, battle, messageLog);
 		}

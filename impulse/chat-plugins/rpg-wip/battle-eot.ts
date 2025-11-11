@@ -27,9 +27,13 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 	const status = slot.status;
 
 	if (status === 'brn') {
-		const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.max(0, pokemon.hp - damage);
-		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
+		// Phase 2: Heatproof prevents burn damage
+		const ability = toID(pokemon.ability || '');
+		if (ability !== 'heatproof') {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
+		}
 	} else if (status === 'psn') {
 		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
