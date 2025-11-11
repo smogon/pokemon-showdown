@@ -45,9 +45,8 @@ async function testExpLeveling() {
 		},
 	});
 
-	// Start battle
-	console.log('Starting battle...\n');
-	battle.start();
+	// Battle auto-starts in constructor
+	console.log('Battle started!\n');
 
 	const charmander = battle.sides[0].pokemon[0];
 	const pidgey = battle.sides[1].pokemon[0];
