@@ -221,6 +221,22 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		}
 		return null;
 	},
+
+	'telepathy': ctx => {
+		// Telepathy makes the Pokemon immune to allies' moves
+		// Check if attacker is an ally (same side in double battles)
+		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
+		
+		if (attackerIsPlayer === defenderIsPlayer) {
+			// Same team - Telepathy blocks the move
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Telepathy protects it from its ally's move!`,
+			};
+		}
+		return null;
+	},
 };
 
 export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandler> = {
@@ -746,6 +762,24 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
+	// Phase 2: Grim Neigh - Boosts Sp. Atk on KO
+	'grimneigh': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.spa < 6) {
+				slot.statStages.spa++;
+				messageLog.push(`${slot.pokemon.species}'s Grim Neigh raised its Sp. Atk!`);
+			}
+		},
+	},
+	// Phase 2: Soul-Heart - Boosts Sp. Atk when any Pokemon faints
+	'soulheart': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.spa < 6) {
+				slot.statStages.spa++;
+				messageLog.push(`${slot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+			}
+		},
+	},
 };
 
 // End of Turn Abilities - abilities that trigger at the end of each turn
@@ -773,6 +807,35 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 				}[slot.status] || 'status condition';
 				slot.status = null;
 				messageLog.push(`${slot.pokemon.species} shed its skin and cured its ${statusName}!`);
+			}
+		},
+	},
+	// Phase 2: Moody - Raises one random stat by 2 stages, lowers another by 1 stage
+	'moody': {
+		handler: (slot, battle, messageLog) => {
+			const stats: Array<keyof typeof slot.statStages> = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+			
+			// Find stats that can be raised (not at +6)
+			const raisableStats = stats.filter(stat => slot.statStages[stat] < 6);
+			// Find stats that can be lowered (not at -6)
+			const lowerableStats = stats.filter(stat => slot.statStages[stat] > -6);
+			
+			if (raisableStats.length > 0) {
+				const statToRaise = raisableStats[Math.floor(Math.random() * raisableStats.length)];
+				slot.statStages[statToRaise] = Math.min(6, slot.statStages[statToRaise] + 2);
+				const statNames: Record<string, string> = { 
+					atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed',
+					accuracy: 'accuracy', evasion: 'evasion'
+				};
+				messageLog.push(`${slot.pokemon.species}'s Moody sharply raised its ${statNames[statToRaise]}!`);
+				
+				// Lower a different stat
+				const lowerableDifferentStats = lowerableStats.filter(stat => stat !== statToRaise);
+				if (lowerableDifferentStats.length > 0) {
+					const statToLower = lowerableDifferentStats[Math.floor(Math.random() * lowerableDifferentStats.length)];
+					slot.statStages[statToLower] = Math.max(-6, slot.statStages[statToLower] - 1);
+					messageLog.push(`${slot.pokemon.species}'s Moody lowered its ${statNames[statToLower]}!`);
+				}
 			}
 		},
 	},
@@ -992,7 +1055,7 @@ export function preventsFlinch(pokemon: RPGPokemon): boolean {
 	return ability === 'innerfocus';
 }
 
-export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
+export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState): boolean {
 	const ability = toID(pokemon.ability || '');
 
 	if (ability === 'purifyingsalt') {
@@ -1017,6 +1080,23 @@ export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 
 	if (ability === 'magmaarmor' && status === 'frz') {
 		return true;
+	}
+
+	// Check for team protection abilities
+	if (battle) {
+		// Find which side this Pokemon is on
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		
+		// Pastel Veil protects team from poison
+		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
+			return true;
+		}
+		
+		// Sweet Veil protects team from sleep
+		if (status === 'slp' && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'sweetveil')) {
+			return true;
+		}
 	}
 
 	return false;
@@ -1168,6 +1248,39 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
+	// Phase 2: Heatproof - halves Fire damage
+	if (defenderAbility === 'heatproof' && ctx.move.type === 'Fire') {
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
+	}
+
+	// Phase 2: Fluffy - halves contact damage, doubles Fire damage
+	if (defenderAbility === 'fluffy') {
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			if (ctx.move.flags.contact) {
+				damage = Math.floor(damage * 0.5);
+			}
+			if (ctx.move.type === 'Fire') {
+				damage = Math.floor(damage * 2);
+			}
+		}
+	}
+
+	// Phase 2: Ice Scales - halves special damage
+	if (defenderAbility === 'icescales' && ctx.move.category === 'Special') {
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.5);
+		}
+	}
+
+	// Phase 2: Prism Armor - reduces super effective damage (same as Filter/Solid Rock)
+	if (defenderAbility === 'prismarmor' && effectiveness > 1) {
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			damage = Math.floor(damage * 0.75);
+		}
+	}
+
 	if (attackerAbility === 'punkrock' && ctx.move.flags.sound) {
 		damage = Math.floor(damage * 1.3);
 	}
@@ -1298,7 +1411,7 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 		return null;
 	}
 
-	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty') &&
+	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty' || defenderAbility === 'armortail') &&
 		ctx.move.priority && ctx.move.priority > 0) {
 		return {
 			prevented: true,
@@ -1428,7 +1541,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
 				const oppAbility = toID(opponentSlot.pokemon.ability || '');
-				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody'];
+				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody', 'oblivious'];
 
 				if (opponentSlot.substitute) {
 					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);

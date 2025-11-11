@@ -27,9 +27,13 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 	const status = slot.status;
 
 	if (status === 'brn') {
-		const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
-		pokemon.hp = Math.max(0, pokemon.hp - damage);
-		messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
+		// Phase 2: Heatproof prevents burn damage
+		const ability = toID(pokemon.ability || '');
+		if (ability !== 'heatproof') {
+			const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
+			pokemon.hp = Math.max(0, pokemon.hp - damage);
+			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
+		}
 	} else if (status === 'psn') {
 		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
@@ -195,8 +199,9 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			if (!slot.status) {
 				const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(pokemon, battle);
 				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
+				const hasTeamProtection = RPGAbilities.preventsStatus(pokemon, 'slp', battle);
 
-				if (!isTerrainImmune && !isAbilityImmune) {
+				if (!isTerrainImmune && !isAbilityImmune && !hasTeamProtection) {
 					slot.status = 'slp';
 					slot.sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
@@ -285,9 +290,13 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			if (slot.lockedMoveCounter === 0) {
 				slot.lockedMove = undefined;
 				if (!slot.isConfused) {
-					slot.isConfused = true;
-					slot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
-					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+					const ability = toID(pokemon.ability || '');
+					// Own Tempo prevents confusion
+					if (ability !== 'owntempo') {
+						slot.isConfused = true;
+						slot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
+						messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+					}
 				}
 			}
 		}

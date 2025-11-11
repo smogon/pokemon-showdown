@@ -93,6 +93,18 @@ export function handleOpponentFaint(
 				RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
 			}
 
+			// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
+			const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+			for (const activeSlot of allActiveSlots) {
+				if (activeSlot.pokemon.hp > 0) {
+					const ability = toID(activeSlot.pokemon.ability || '');
+					if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
+						activeSlot.statStages.spa++;
+						messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+					}
+				}
+			}
+
 			if (playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
 				messageLog.push(...expResult.messages);
@@ -141,6 +153,18 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 						const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 						attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
 						messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+					}
+				}
+
+				// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
+				const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+				for (const activeSlot of allActiveSlots) {
+					if (activeSlot.pokemon.hp > 0) {
+						const ability = toID(activeSlot.pokemon.ability || '');
+						if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
+							activeSlot.statStages.spa++;
+							messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+						}
 					}
 				}
 			}
@@ -391,6 +415,14 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
 		attackerSlot.willFlinch = false;
+		
+		// Phase 2: Steadfast - Boosts Speed when flinched
+		const ability = toID(attacker.ability || '');
+		if (ability === 'steadfast' && attackerSlot.statStages.spe < 6) {
+			attackerSlot.statStages.spe++;
+			messageLog.push(`${attacker.species}'s Steadfast raised its Speed!`);
+		}
+		
 		return false;
 	}
 
@@ -1032,8 +1064,13 @@ export function resolveMoveTarget(
 	const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
 	let finalTargetIndex = chosenTargetSlotIndex;
 
+	// Propeller Tail and Stalwart prevent redirection
+	const attackerSlot = attackerSlotIndex <= 1 ? battle.playerSlots[attackerSlotIndex] : battle.opponentSlots[attackerSlotIndex - 2];
+	const attackerAbility = toID(attackerSlot?.pokemon.ability || '');
+	const ignoresRedirection = attackerAbility === 'propellertail' || attackerAbility === 'stalwart';
+
 	let abilityRedirector: ActivePokemonSlot | undefined = undefined;
-	if (move.target === 'normal') {
+	if (move.target === 'normal' && !ignoresRedirection) {
 		const moveType = move.type;
 
 		if (moveType === 'Water') {
@@ -1049,7 +1086,7 @@ export function resolveMoveTarget(
 		}
 	}
 
-	if (!abilityRedirector) {
+	if (!abilityRedirector && !ignoresRedirection) {
 		const redirector = opponentSlots.find(s => s.isRedirecting);
 		if (redirector && move.target === 'normal') {
 			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);
