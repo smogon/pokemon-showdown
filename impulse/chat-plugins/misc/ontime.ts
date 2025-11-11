@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * Ontime Commands
 */
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib/fs';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
@@ -11,13 +11,33 @@ interface OntimeDocument {
 	ontime: number;
 }
 
-interface OntimeBlockDocument {
-	_id: string;
+interface OntimeData {
+	users: { [userId: string]: OntimeDocument };
+	blocked: { [userId: string]: boolean };
 }
 
-const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
-const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>('ontimeblocks');
+const ONTIME_FILE = 'impulse/db/ontime.json';
 const ONTIME_LEADERBOARD_SIZE = 100;
+
+let ontimeData: OntimeData = {
+	users: {},
+	blocked: {},
+};
+
+const loadOntime = async (): Promise<void> => {
+	const data = await FS(ONTIME_FILE).readIfExists();
+	if (data) {
+		ontimeData = JSON.parse(data);
+	}
+};
+
+const saveOntime = (): void => {
+	// Use writeUpdate with throttling since there will be many concurrent writes
+	FS(ONTIME_FILE).writeUpdate(
+		() => JSON.stringify(ontimeData, null, 2),
+		{ throttle: 10000 } // Save at most once every 10 seconds
+	);
+};
 
 const convertTime = (time: number): { h: number, m: number, s: number } => {
 	const s = Math.floor((time / 1000) % 60);
@@ -34,26 +54,31 @@ const displayTime = (t: { h: number, m: number, s: number }): string => {
 	return parts.length ? parts.join(', ') : '0 seconds';
 };
 
-async function isBlockedOntime(userid: string): Promise<boolean> {
-	return !!(await OntimeBlockDB.findOne({ _id: userid }));
+function isBlockedOntime(userid: string): boolean {
+	return !!ontimeData.blocked[userid];
 }
 
-async function getBlockedOntimeUsers(): Promise<string[]> {
-	const docs = await OntimeBlockDB.find({});
-	return docs.map(d => d._id);
+function getBlockedOntimeUsers(): string[] {
+	return Object.keys(ontimeData.blocked);
 }
 
 export const handlers: Chat.Handlers = {
 	onDisconnect(user: User): void {
 		const isLastConnection = user.connections.length === 0;
 		if (user.named && isLastConnection && !user.isPublicBot) {
-			void (async () => {
-				if (await isBlockedOntime(user.id)) return;
-				const sessionTime = user.lastDisconnected - user.lastConnected;
-				if (sessionTime > 0) {
-					void OntimeDB.updateOne({ _id: user.id }, { $inc: { ontime: sessionTime } }, { upsert: true });
+			if (isBlockedOntime(user.id)) return;
+			
+			const sessionTime = user.lastDisconnected - user.lastConnected;
+			if (sessionTime > 0) {
+				// Update in-memory data
+				if (!ontimeData.users[user.id]) {
+					ontimeData.users[user.id] = { _id: user.id, ontime: 0 };
 				}
-			})();
+				ontimeData.users[user.id].ontime += sessionTime;
+				
+				// Queue write with throttling to handle many concurrent disconnects
+				saveOntime();
+			}
 		}
 	},
 };
@@ -61,7 +86,7 @@ export const handlers: Chat.Handlers = {
 export const commands: Chat.ChatCommands = {
 	ontime: {
 		'': 'check',
-		async check(target, room, user): Promise<void> {
+		check(target, room, user): void {
 			if (!this.runBroadcast()) return;
 
 			const targetId = toID(target) || user.id;
@@ -71,11 +96,11 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(`${nameColor(targetId, true)} is a bot and does not track ontime.`);
 			}
 
-			if (await isBlockedOntime(targetId)) {
+			if (isBlockedOntime(targetId)) {
 				return this.sendReplyBox(`${nameColor(targetId, true)} is blocked from gaining ontime.`);
 			}
 
-			const ontimeDoc = await OntimeDB.findOne({ _id: targetId });
+			const ontimeDoc = ontimeData.users[targetId];
 			const totalOntime = ontimeDoc?.ontime || 0;
 
 			if (!totalOntime && !targetUser?.connected) {
@@ -88,23 +113,29 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		async ladder(target, room, user): Promise<void> {
+		ladder(target, room, user): void {
 			if (!this.runBroadcast()) return;
 
-			const blockedUsers = await getBlockedOntimeUsers();
-			const blockedSet = new Set(blockedUsers);
+			const blockedSet = new Set(getBlockedOntimeUsers());
+			const ontimeMap = new Map<string, number>();
 
-			const ontimeData = await OntimeDB.find({}, { sort: { ontime: -1 }, limit: ONTIME_LEADERBOARD_SIZE * 2 });
-			const ontimeMap = new Map(ontimeData.map(d => [d._id, d.ontime]));
+			// Add stored ontime data
+			for (const [userId, doc] of Object.entries(ontimeData.users)) {
+				if (!blockedSet.has(userId)) {
+					ontimeMap.set(userId, doc.ontime);
+				}
+			}
 
+			// Add currently connected users
 			for (const u of Users.users.values()) {
-				if (u.connected && u.named && !ontimeMap.has(u.id) && !u.isPublicBot && !blockedSet.has(u.id)) {
-					ontimeMap.set(u.id, 0);
+				if (u.connected && u.named && !u.isPublicBot && !blockedSet.has(u.id)) {
+					if (!ontimeMap.has(u.id)) {
+						ontimeMap.set(u.id, 0);
+					}
 				}
 			}
 
 			const ladderData = [...ontimeMap.entries()]
-				.filter(([userid]) => !blockedSet.has(userid))
 				.map(([userid, ontime]) => {
 					const u = Users.get(userid);
 					const currentOntime = u?.connected && u.lastConnected ? Date.now() - u.lastConnected : 0;
@@ -146,10 +177,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to block.");
-			if (await isBlockedOntime(targetId)) {
+			if (isBlockedOntime(targetId)) {
 				return this.errorReply(`${nameColor(targetId, true)} is already blocked from gaining ontime.`);
 			}
-			await OntimeBlockDB.updateOne({ _id: targetId }, { $set: { _id: targetId } }, { upsert: true });
+			
+			ontimeData.blocked[targetId] = true;
+			await FS(ONTIME_FILE).safeWrite(JSON.stringify(ontimeData, null, 2));
+			
 			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
 		},
 
@@ -157,16 +191,19 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
 			if (!targetId) return this.errorReply("Please specify a user to unblock.");
-			if (!(await isBlockedOntime(targetId))) {
+			if (!isBlockedOntime(targetId)) {
 				return this.errorReply(`${nameColor(targetId, true)} is not blocked from gaining ontime.`);
 			}
-			await OntimeBlockDB.deleteOne({ _id: targetId });
+			
+			delete ontimeData.blocked[targetId];
+			await FS(ONTIME_FILE).safeWrite(JSON.stringify(ontimeData, null, 2));
+			
 			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
 		},
 
-		async blocked(target, room, user): Promise<void> {
+		blocked(target, room, user): void {
 			this.checkCan('roomowner');
-			const blockedUsers = await getBlockedOntimeUsers();
+			const blockedUsers = getBlockedOntimeUsers();
 			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
 			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
 			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
@@ -176,3 +213,5 @@ export const commands: Chat.ChatCommands = {
 
 	ontimehelp(): void { this.parse('/ontime help'); },
 };
+
+void loadOntime();
