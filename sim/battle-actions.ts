@@ -2137,6 +2137,13 @@ export class BattleActions {
 		for (const moveid of movesToLearn) {
 			const move = this.battle.dex.moves.get(moveid);
 
+			// Check if Pokemon already knows this move
+			const alreadyKnows = pokemon.moveSlots.some(slot => slot.id === move.id);
+			if (alreadyKnows) {
+				// Skip moves the Pokemon already knows
+				continue;
+			}
+
 			this.battle.add('-message', `${pokemon.name} wants to learn ${move.name}!`);
 
 			// If Pokemon has less than 4 moves, auto-learn
