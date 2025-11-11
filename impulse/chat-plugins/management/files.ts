@@ -7,6 +7,8 @@
 
 import { FS, Utils } from '../../../lib';
 
+const DIR_TO_BACKUP = 'impulse/db';
+
 export const commands: Chat.ChatCommands = {
 	async fileread(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
@@ -272,6 +274,104 @@ export const commands: Chat.ChatCommands = {
 	},
 	filesavehelp: [`/filesave [path], [GitHub/Gist raw URL] - Downloads and saves a file from URL. Requires: ~ and whitelist`],
 
+	async filebackup(target, room, user): Promise<void> {
+		if (!this.runBroadcast()) return;
+		this.checkCan('bypassall');
+		if (!Config.fileWhitelist?.includes(user.id)) {
+			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
+		}
+
+		try {
+			const dir = FS(DIR_TO_BACKUP);
+
+			if (!await dir.exists()) {
+				throw new Chat.ErrorMessage(`Directory not found: ${dirPath}`);
+			}
+
+			if (!await dir.isDirectory()) {
+				throw new Chat.ErrorMessage(`Path is not a directory: ${dirPath}`);
+			}
+
+			const files = await dir.readdir();
+			const jsonFiles = files.filter(file => file.endsWith('.json'));
+
+			if (jsonFiles.length === 0) {
+				throw new Chat.ErrorMessage(`No .json files found in ${dirPath}`);
+			}
+
+			this.sendReply(`Starting backup of ${jsonFiles.length} JSON file(s) from ${dirPath}...`);
+
+			const results = [];
+			const errors = [];
+
+			for (const fileName of jsonFiles) {
+				try {
+					const filePath = `${dirPath}/${fileName}`;
+					const file = FS(filePath);
+					const content = await file.read();
+
+					const gistData = {
+						description: `Backup from Pokemon Showdown: ${filePath}`,
+						public: false,
+						files: {
+							[fileName]: {
+								content,
+							},
+						},
+					};
+
+					const response = await fetch('https://api.github.com/gists', {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/vnd.github+json',
+							'Authorization': `Bearer ${Config.githubToken}`,
+							'X-GitHub-Api-Version': '2022-11-28',
+							'User-Agent': 'Pokemon-Showdown',
+						},
+						body: JSON.stringify(gistData),
+					});
+
+					if (!response.ok) {
+						const errorData = await response.json();
+						errors.push(`${fileName}: ${errorData.message || response.statusText}`);
+						continue;
+					}
+
+					const result = await response.json();
+					results.push({ fileName, url: result.html_url });
+				} catch (err: unknown) {
+					const message = err instanceof Error ? err.message : String(err);
+					errors.push(`${fileName}: ${message}`);
+				}
+			}
+
+			let html = `<strong>Backup Complete!</strong><br />`;
+			html += `<strong>Successfully uploaded ${results.length} of ${jsonFiles.length} file(s)</strong><br /><br />`;
+
+			if (results.length > 0) {
+				html += `<details><summary>Successful Uploads (${results.length})</summary><ul>`;
+				for (const { fileName, url } of results) {
+					html += `<li>${Utils.escapeHTML(fileName)}: <a href="${url}" target="_blank">${url}</a></li>`;
+				}
+				html += `</ul></details>`;
+			}
+
+			if (errors.length > 0) {
+				html += `<details><summary>Failed Uploads (${errors.length})</summary><ul>`;
+				for (const error of errors) {
+					html += `<li>${Utils.escapeHTML(error)}</li>`;
+				}
+				html += `</ul></details>`;
+			}
+
+			return this.sendReplyBox(html);
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new Chat.ErrorMessage(`Failed to backup files: ${message}`);
+		}
+	},
+	filebackuphelp: [`/filebackup - Uploads all .json files from impulse/db directory to GitHub Gist. Requires: ~ and whitelist`],
+
 	filehelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
@@ -285,6 +385,7 @@ export const commands: Chat.ChatCommands = {
 				cmd: "/filesave [path], [GitHub/Gist raw URL]",
 				desc: "Downloads and saves a file from URL. Requires: Whitelisted User.",
 			},
+			{ cmd: "/filebackup", desc: "Uploads all .json files from impulse/db directory to GitHub Gist. Requires: Whitelisted User." },
 		];
 		const html = `<center><strong>File Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
