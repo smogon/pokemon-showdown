@@ -128,6 +128,16 @@ export interface PokemonSet {
 	 * or for creating custom battle scenarios.
 	 */
 	status?: string;
+	/**
+	 * Current experience points. If not specified, calculated from level.
+	 * Used to track progress toward next level.
+	 */
+	experience?: number;
+	/**
+	 * Current experience within the current level (0 to exp needed for next level).
+	 * Calculated automatically from total experience and level.
+	 */
+	currentLevelExp?: number;
 }
 
 export const Teams = new class Teams {
