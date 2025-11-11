@@ -533,7 +533,7 @@ export const commands: Chat.ChatCommands = {
 					`Prize: ${Economy.formatMoney(prize)} ${CURRENCY.name}<br />` +
 					`Winners: ${maxWinners}<br />` +
 					`Duration: ${duration} seconds<br />` +
-					`Use <code>/eco giveaway join</code> to enter!</div>`).update();
+					`<button class="button" name="send" value="/eco giveaway join" style="margin-top: 5px;">Join Giveaway 🎉</button></div>`).update();
 
 				this.modlog('GIVEAWAY', null, `started a giveaway with prize ${Economy.formatMoney(prize)} for ${maxWinners} winners`);
 			},
@@ -669,6 +669,15 @@ export const commands: Chat.ChatCommands = {
 
 				const timeLeft = Math.max(0, Math.ceil((giveaway.startTime + giveaway.duration - Date.now()) / 1000));
 				const hostNameColor = nameColor(giveaway.hostName, true, false);
+				const hasJoined = giveaway.participants.has(user.id);
+				const isHost = giveaway.hostId === user.id;
+
+				let joinButton = '';
+				if (!hasJoined && !isHost) {
+					joinButton = `<br /><button class="button" name="send" value="/eco giveaway join" style="margin-top: 5px;">Join Giveaway 🎉</button>`;
+				} else if (hasJoined) {
+					joinButton = `<br /><span style="color: green;">✓ You have joined this giveaway</span>`;
+				}
 
 				this.sendReplyBox(
 					`<strong>Active Giveaway</strong><br />` +
@@ -676,7 +685,8 @@ export const commands: Chat.ChatCommands = {
 					`Prize: ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}<br />` +
 					`Winners: ${giveaway.maxWinners}<br />` +
 					`Participants: ${giveaway.participants.size}<br />` +
-					`Time Left: ${timeLeft} seconds`
+					`Time Left: ${timeLeft} seconds` +
+					joinButton
 				);
 			},
 
@@ -690,12 +700,12 @@ export const commands: Chat.ChatCommands = {
 				this.sendReplyBox(
 					`<strong>Giveaway Commands:</strong><br />` +
 					`<code>/eco giveaway start [prize], [winners], [duration]</code> - Starts a giveaway with the specified prize amount, number of winners, and duration in seconds (10-600). Requires: % @ # &<br />` +
-					`<code>/eco giveaway join</code> - Join the active giveaway in the current room.<br />` +
+					`<code>/eco giveaway join</code> - Join the active giveaway in the current room. You can also click the "Join Giveaway" button when a giveaway is announced.<br />` +
 					`<code>/eco giveaway end</code> - Manually end the giveaway and pick winners. Requires: % @ # &<br />` +
 					`<code>/eco giveaway cancel</code> - Cancel the active giveaway. Requires: % @ # &<br />` +
-					`<code>/eco giveaway list</code> - View details of the active giveaway in the current room.<br />` +
+					`<code>/eco giveaway list</code> - View details of the active giveaway in the current room (includes a join button if you haven't joined).<br />` +
 					`<br />` +
-					`<strong>Note:</strong> This giveaway system uses ${CURRENCY.name} from the economy system. Winners are selected randomly from participants.`
+					`<strong>Note:</strong> This giveaway system uses ${CURRENCY.name} from the economy system. Winners are selected randomly from participants. Click the interactive "Join Giveaway" button to participate instantly!`
 				);
 			},
 		},
