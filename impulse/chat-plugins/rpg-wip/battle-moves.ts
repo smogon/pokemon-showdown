@@ -82,7 +82,8 @@ export function getDamageBasePower(
 		break;
 	case 'grassknot':
 	case 'lowkick':
-		const defenderWeight = defenderSpecies.weightkg;
+		// Phase 2: Use modified weight for Heavy Metal / Light Metal
+		const defenderWeight = RPGAbilities.getModifiedWeight(defender);
 		if (defenderWeight < 10) basePower = 20;
 		else if (defenderWeight < 25) basePower = 40;
 		else if (defenderWeight < 50) basePower = 60;
@@ -92,8 +93,9 @@ export function getDamageBasePower(
 		break;
 	case 'heavyslam':
 	case 'heatcrash':
-		const attackerWeight = attackerSpecies.weightkg;
-		const defenderWeightSlam = defenderSpecies.weightkg;
+		// Phase 2: Use modified weight for Heavy Metal / Light Metal
+		const attackerWeight = RPGAbilities.getModifiedWeight(attacker);
+		const defenderWeightSlam = RPGAbilities.getModifiedWeight(defender);
 		const weightRatio = attackerWeight / defenderWeightSlam;
 		if (weightRatio >= 5) basePower = 120;
 		else if (weightRatio >= 4) basePower = 100;

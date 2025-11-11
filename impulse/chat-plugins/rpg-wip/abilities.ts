@@ -354,6 +354,52 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		}
 		return basePower;
 	},
+
+	// Phase 2: Transistor - 1.5x power for Electric-type moves
+	'transistor': (ctx, basePower) => {
+		if (ctx.move.type === 'Electric') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Dragon's Maw - 1.5x power for Dragon-type moves
+	'dragonsmaw': (ctx, basePower) => {
+		if (ctx.move.type === 'Dragon') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Rocky Payload - 1.5x power for Rock-type moves
+	'rockypayload': (ctx, basePower) => {
+		if (ctx.move.type === 'Rock') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Sharpness - 1.5x power for slicing moves
+	'sharpness': (ctx, basePower) => {
+		const slicingMoves = [
+			'aerialace', 'aircutter', 'airslash', 'aquacutter', 'behemothblade', 'bitterblade',
+			'ceaselessedge', 'crosspoison', 'cut', 'furycutter', 'kowtowcleave', 'leafblade',
+			'nightslash', 'populationbomb', 'psychocut', 'razorleaf', 'razorshell', 'sacredsword',
+			'slash', 'solarblade', 'stoneaxe', 'xscissor',
+		];
+		if (slicingMoves.includes(ctx.move.id)) {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Steely Spirit - 1.5x power for Steel moves (user and allies)
+	'steelyspirit': (ctx, basePower) => {
+		if (ctx.move.type === 'Steel') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
 };
 
 export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler> = {
@@ -474,6 +520,24 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	// Phase 2: Gorilla Tactics - 1.5x Attack (like Choice Band effect)
 	'gorillatactics': (pokemon, stat, value) => {
 		if (stat === 'atk') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 2: Toxic Boost - 1.5x Attack when poisoned
+	'toxicboost': (pokemon, stat, value, slot) => {
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'atk' && (status === 'psn' || status === 'tox')) {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 2: Flare Boost - 1.5x Sp. Atk when burned
+	'flareboost': (pokemon, stat, value, slot) => {
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'spa' && status === 'brn') {
 			return Math.floor(value * 1.5);
 		}
 		return value;
@@ -934,6 +998,22 @@ export const RPG_SPECIFIC_ABILITIES = {
 	},
 };
 
+// Phase 2: Get modified weight for weight-based moves
+export function getModifiedWeight(pokemon: RPGPokemon): number {
+	const ability = toID(pokemon.ability || '');
+	const species = Dex.species.get(pokemon.species);
+	const baseWeight = species.weightkg;
+
+	if (ability === 'heavymetal') {
+		return baseWeight * 2;
+	}
+	if (ability === 'lightmetal') {
+		return baseWeight / 2;
+	}
+
+	return baseWeight;
+}
+
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
 
@@ -1323,6 +1403,11 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.75);
 		}
+	}
+
+	// Phase 2: Neuroforce - 1.25x damage on super effective hits
+	if (attackerAbility === 'neuroforce' && effectiveness > 1) {
+		damage = Math.floor(damage * 1.25);
 	}
 
 	if (attackerAbility === 'punkrock' && ctx.move.flags.sound) {
@@ -1748,6 +1833,7 @@ export const RPGAbilities = {
 	applyStatChangeModifier,
 	handlePoisonHeal,
 	handleHydration,
+	getModifiedWeight,
 
 	isAbilityIgnored,
 

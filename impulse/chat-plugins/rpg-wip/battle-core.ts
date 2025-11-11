@@ -159,6 +159,12 @@ export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSl
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
+	// Phase 2: Merciless - always crit against poisoned targets
+	const abilityId = toID(attacker.ability || '');
+	if (abilityId === 'merciless' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
+		return 1;
+	}
+
 	if (attackerSlot.focusEnergy) {
 		critStage += 2;
 	}
@@ -1223,7 +1229,15 @@ export function handleDamagingMove(
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
 			if (move.drain && attacker.hp < attacker.maxHp) {
-				if (attackerSlot.healBlockTurns > 0) {
+				// Phase 2: Liquid Ooze - damages attacker instead of healing them
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					if (RPGAbilities.takesIndirectDamage(attacker)) {
+						attacker.hp = Math.max(0, attacker.hp - drainAmount);
+						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
+					}
+				} else if (attackerSlot.healBlockTurns > 0) {
 					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
 				} else {
 					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
