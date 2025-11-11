@@ -5,7 +5,7 @@
 */
 
 import Autolinker from 'autolinker';
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib/fs';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
@@ -13,33 +13,61 @@ interface EmoticonEntry {
 	_id: string;
 	url: string;
 	addedBy: string;
-	addedAt: Date;
+	addedAt: string;
 }
 
-interface EmoticonConfigDocument {
-	_id: string;
+interface EmoticonConfig {
 	emoteSize: number;
-	lastUpdated: Date;
+	lastUpdated: string;
 }
 
-interface IgnoreEmotesDocument {
-	_id: string;
-	ignored: boolean;
-	lastUpdated: Date;
+interface EmoticonsData {
+	emoticons: { [key: string]: EmoticonEntry };
+	config: EmoticonConfig;
+	ignoreEmotes: { [userId: string]: boolean };
 }
 
-interface IgnoreEmotesData {
-	[userId: string]: boolean;
-}
+const EMOTICONS_FILE = 'impulse/db/emoticons.json';
 
-const EmoticonDB = ImpulseDB<EmoticonEntry>('emoticons');
-const EmoticonConfigDB = ImpulseDB<EmoticonConfigDocument>('emoticonconfig');
-const IgnoreEmotesDB = ImpulseDB<IgnoreEmotesDocument>('ignoreemotes');
+let emoticonsData: EmoticonsData = {
+	emoticons: {},
+	config: { emoteSize: 32, lastUpdated: new Date().toISOString() },
+	ignoreEmotes: {},
+};
 
 let emoticons: { [key: string]: string } = {};
 let emoteRegex = /^$/g;
 let emoteSize = 32;
-Impulse.ignoreEmotes = {} as IgnoreEmotesData;
+Impulse.ignoreEmotes = {} as { [userId: string]: boolean };
+
+const loadEmoticons = async (): Promise<void> => {
+	try {
+		const data = await FS(EMOTICONS_FILE).readIfExists();
+		if (data) {
+			emoticonsData = JSON.parse(data);
+		}
+
+		// Build emoticons lookup
+		emoticons = {};
+		for (const [key, entry] of Object.entries(emoticonsData.emoticons)) {
+			emoticons[key] = entry.url;
+		}
+
+		// Load config
+		emoteSize = emoticonsData.config.emoteSize || 32;
+
+		// Load ignore list
+		Impulse.ignoreEmotes = emoticonsData.ignoreEmotes || {};
+
+		buildEmoteRegex();
+	} catch {
+		// Silently fail
+	}
+};
+
+const saveEmoticons = async (): Promise<void> => {
+	await FS(EMOTICONS_FILE).safeWrite(JSON.stringify(emoticonsData, null, 2));
+};
 
 const getEmoteSize = (): string => emoteSize.toString();
 
@@ -70,49 +98,29 @@ const buildEmoteRegex = (): void => {
 	emoteRegex = emoteArray.length > 0 ? new RegExp(`(${emoteArray.join('|')})`, 'g') : /^$/g;
 };
 
-const loadEmoticons = async (): Promise<void> => {
-	try {
-		const emoticonDocs = await EmoticonDB.find({}, { projection: { _id: 1, url: 1 } });
-		if (emoticonDocs.length > 0) {
-			emoticons = {};
-			emoticonDocs.forEach(doc => {
-				emoticons[doc._id] = doc.url;
-			});
-		}
-
-		const config = await EmoticonConfigDB.findOne({ _id: 'config' });
-		if (config) emoteSize = config.emoteSize;
-
-		const ignoreEmotesDocs = await IgnoreEmotesDB.find({ ignored: true }, { projection: { _id: 1 } });
-		Impulse.ignoreEmotes = {};
-		ignoreEmotesDocs.forEach(doc => {
-			Impulse.ignoreEmotes[doc._id] = true;
-		});
-
-		buildEmoteRegex();
-	} catch {
-		// Silently fail
-	}
-};
-
 const saveEmoteSize = async (size: number): Promise<void> => {
-	try {
-		await EmoticonConfigDB.upsert({ _id: 'config' }, { $set: { emoteSize: size, lastUpdated: new Date() } });
-		emoteSize = size;
-	} catch {
-		// Silently fail
-	}
+	emoticonsData.config.emoteSize = size;
+	emoticonsData.config.lastUpdated = new Date().toISOString();
+	emoteSize = size;
+	await saveEmoticons();
 };
 
 const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
-	await EmoticonDB.insertOne({ _id: name, url, addedBy: user.name, addedAt: new Date() });
+	emoticonsData.emoticons[name] = {
+		_id: name,
+		url,
+		addedBy: user.name,
+		addedAt: new Date().toISOString(),
+	};
 	emoticons[name] = url;
+	await saveEmoticons();
 	buildEmoteRegex();
 };
 
 const deleteEmoticon = async (name: string): Promise<void> => {
-	await EmoticonDB.deleteOne({ _id: name });
+	delete emoticonsData.emoticons[name];
 	delete emoticons[name];
+	await saveEmoticons();
 	buildEmoteRegex();
 };
 
@@ -153,7 +161,7 @@ export const commands: Chat.ChatCommands = {
 			const [name, url] = target.split(",").map(s => s.trim());
 			if (!url) return this.parse("/emoticon help");
 			if (name.length > 10) return this.errorReply("Emoticons may not be longer than 10 characters.");
-			if (await EmoticonDB.exists({ _id: name })) return this.errorReply(`${name} is already an emoticon.`);
+			if (emoticonsData.emoticons[name]) return this.errorReply(`${name} is already an emoticon.`);
 
 			await addEmoticon(name, url, user);
 
@@ -165,8 +173,9 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
 
-			const emote = await EmoticonDB.findOne({ _id: target });
-			if (!emote) return this.errorReply("That emoticon does not exist.");
+			if (!emoticonsData.emoticons[target]) {
+				return this.errorReply("That emoticon does not exist.");
+			}
 
 			await deleteEmoticon(target);
 
@@ -202,15 +211,21 @@ export const commands: Chat.ChatCommands = {
 
 		async ignore(target, room, user): Promise<void> {
 			if (Impulse.ignoreEmotes[user.id]) return this.errorReply('Already ignoring emoticons.');
-			await IgnoreEmotesDB.upsert({ _id: user.id }, { $set: { ignored: true, lastUpdated: new Date() } });
+			
+			emoticonsData.ignoreEmotes[user.id] = true;
 			Impulse.ignoreEmotes[user.id] = true;
+			await saveEmoticons();
+
 			this.sendReply('Ignoring emoticons. Note: Chat history may still show emoticons when rejoining.');
 		},
 
 		async unignore(target, room, user): Promise<void> {
 			if (!Impulse.ignoreEmotes[user.id]) return this.errorReply('Not ignoring emoticons.');
-			await IgnoreEmotesDB.deleteOne({ _id: user.id });
+			
+			delete emoticonsData.ignoreEmotes[user.id];
 			delete Impulse.ignoreEmotes[user.id];
+			await saveEmoticons();
+
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
@@ -230,14 +245,14 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /emoticon info <name>');
 
-			const emote = await EmoticonDB.findOne({ _id: target });
+			const emote = emoticonsData.emoticons[target];
 			if (!emote) return this.errorReply(`Emoticon "${target}" not found.`);
 
 			const rows = [
 				[`<img src="${emote.url}" height="40" width="40">`],
 				[`<b>URL:</b> ${Chat.escapeHTML(emote.url)}`],
 				[`<b>Added by:</b> ${nameColor(emote.addedBy, true, true)}`],
-				[`<b>Added:</b> ${emote.addedAt.toUTCString()}`],
+				[`<b>Added:</b> ${new Date(emote.addedAt).toUTCString()}`],
 			];
 
 			const tableHTML = generateThemedTable(`Emoticon: ${Chat.escapeHTML(target)}`, [], rows);
