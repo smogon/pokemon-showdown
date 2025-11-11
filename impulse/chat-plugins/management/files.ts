@@ -282,7 +282,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		try {
-			const dir = FS(DIR_TO_BACKUP);
+			const dir = FS(${DIR_TO_BACKUP});
 
 			if (!await dir.exists()) {
 				throw new Chat.ErrorMessage(`Directory not found: ${dirPath}`);
