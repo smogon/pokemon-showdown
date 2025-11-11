@@ -379,6 +379,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		evos: ["Pidgeotto"],
 		eggGroups: ["Flying"],
+		baseExp: 50,
+		growthRate: "mediumslow",
 	},
 	pidgeotto: {
 		num: 17,

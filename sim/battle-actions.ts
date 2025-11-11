@@ -1961,5 +1961,131 @@ export class BattleActions {
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 
+	/**
+	 * Award experience to Pokemon that participated in defeating opponent
+	 * @param defeated The Pokemon that was defeated
+	 * @param participants Array of Pokemon that should receive EXP
+	 */
+	awardExperience(defeated: Pokemon, participants: Pokemon[]) {
+		if (!defeated || !participants || participants.length === 0) return;
+
+		for (const pokemon of participants) {
+			if (pokemon.fainted) continue;
+
+			const expGained = this.battle.dex.calculateExpGain(
+				defeated,
+				pokemon,
+				participants.length,
+				false, // trainer battle - can be expanded
+				false, // exp share - can be expanded
+				pokemon.item === 'luckyegg' as ID // lucky egg
+			);
+
+			this.battle.add('-message', `${pokemon.name} gained ${expGained} EXP!`);
+
+			const leveledUp = pokemon.gainExperience(expGained);
+
+			if (leveledUp) {
+				this.handleLevelUp(pokemon);
+			}
+		}
+	}
+
+	/**
+	 * Handle Pokemon leveling up
+	 * @param pokemon The Pokemon that is leveling up
+	 */
+	handleLevelUp(pokemon: Pokemon) {
+		const oldLevel = pokemon.level;
+		let newLevel = oldLevel;
+
+		// Calculate how many levels gained
+		while (pokemon.expToNextLevel <= 0 && newLevel < 100) {
+			newLevel++;
+			(pokemon as any).level = newLevel;
+			pokemon.calculateExpProgress();
+		}
+
+		if (newLevel === oldLevel) return;
+
+		this.battle.add('-message', `${pokemon.name} grew to level ${newLevel}!`);
+
+		// Recalculate stats
+		this.recalculateStats(pokemon);
+
+		// TODO: Check for moves to learn (Phase 5)
+		// TODO: Check for evolution (Phase 6)
+	}
+
+	/**
+	 * Recalculate Pokemon stats after level up
+	 * @param pokemon The Pokemon whose stats to recalculate
+	 */
+	recalculateStats(pokemon: Pokemon) {
+		const species = pokemon.baseSpecies;
+		const set = pokemon.set;
+		const level = pokemon.level;
+
+		// Calculate new stats
+		const newStats = this.calculateStats(species, level, set);
+
+		// HP calculation and scaling
+		const oldMaxHP = pokemon.maxhp;
+		const newMaxHP = newStats.hp;
+
+		// Scale current HP proportionally
+		const hpRatio = pokemon.hp / oldMaxHP;
+		pokemon.maxhp = newMaxHP;
+		pokemon.baseMaxhp = newMaxHP;
+		pokemon.hp = Math.floor(newMaxHP * hpRatio);
+
+		// Update base stored stats
+		pokemon.baseStoredStats = newStats;
+
+		// Update stored stats (non-HP)
+		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as StatIDExceptHP[]) {
+			pokemon.storedStats[stat] = pokemon.baseStoredStats[stat];
+		}
+
+		this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+	}
+
+	/**
+	 * Calculate base stats at a given level
+	 * @param species The species
+	 * @param level The level
+	 * @param set The Pokemon set with IVs/EVs
+	 * @returns Calculated stats
+	 */
+	calculateStats(species: Species, level: number, set: PokemonSet): StatsTable {
+		const stats: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+
+		// HP calculation
+		const baseHP = species.baseStats.hp;
+		stats.hp = Math.floor(
+			Math.floor(2 * baseHP + set.ivs.hp + Math.floor(set.evs.hp / 4)) * level / 100 + level + 10
+		);
+
+		// Other stats
+		const nature = this.battle.dex.natures.get(set.nature);
+		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as StatIDExceptHP[]) {
+			const baseStat = species.baseStats[stat];
+			let calculated = Math.floor(
+				Math.floor(2 * baseStat + set.ivs[stat] + Math.floor(set.evs[stat] / 4)) * level / 100 + 5
+			);
+
+			// Apply nature
+			if (nature.plus === stat) {
+				calculated = Math.floor(calculated * 1.1);
+			} else if (nature.minus === stat) {
+				calculated = Math.floor(calculated * 0.9);
+			}
+
+			stats[stat] = calculated;
+		}
+
+		return stats;
+	}
+
 	// #endregion
 }
