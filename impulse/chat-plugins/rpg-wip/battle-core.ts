@@ -804,7 +804,11 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
-	if (move.flags.contact && attacker.hp > 0) {
+	// Long Reach prevents contact effects
+	const attackerAbility = toID(attacker.ability || '');
+	const isContact = move.flags.contact && attackerAbility !== 'longreach';
+	
+	if (isContact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
 			if (defender.item === 'rockyhelmet' && RPGAbilities.takesIndirectDamage(attacker)) {
 				attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 6));
@@ -945,6 +949,11 @@ export function applySecondaryEffects(
 	if (defenderSlot.substitute) {
 		return;
 	}
+	// Shield Dust blocks secondary effects
+	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+	if (defenderAbility === 'shielddust' && !RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
+		return;
+	}
 	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
 
 	let chance = move.secondary.chance || 100;
@@ -961,7 +970,7 @@ export function applySecondaryEffects(
 				(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
 				canInflict = false;
 			}
-			if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status)) {
+			if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle)) {
 				canInflict = false;
 				messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
 			}

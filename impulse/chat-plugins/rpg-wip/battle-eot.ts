@@ -195,8 +195,9 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			if (!slot.status) {
 				const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(pokemon, battle);
 				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
+				const hasTeamProtection = RPGAbilities.preventsStatus(pokemon, 'slp', battle);
 
-				if (!isTerrainImmune && !isAbilityImmune) {
+				if (!isTerrainImmune && !isAbilityImmune && !hasTeamProtection) {
 					slot.status = 'slp';
 					slot.sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
 					messageLog.push(`<strong>${pokemon.species}</strong> fell asleep!`);
@@ -285,9 +286,13 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			if (slot.lockedMoveCounter === 0) {
 				slot.lockedMove = undefined;
 				if (!slot.isConfused) {
-					slot.isConfused = true;
-					slot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
-					messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+					const ability = toID(pokemon.ability || '');
+					// Own Tempo prevents confusion
+					if (ability !== 'owntempo') {
+						slot.isConfused = true;
+						slot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
+						messageLog.push(`${pokemon.species} became confused due to fatigue!`);
+					}
 				}
 			}
 		}

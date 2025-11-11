@@ -1032,8 +1032,13 @@ export function resolveMoveTarget(
 	const opponentSlots = getActiveSlots(isPlayerAttacker ? battle.opponentSlots : battle.playerSlots);
 	let finalTargetIndex = chosenTargetSlotIndex;
 
+	// Propeller Tail and Stalwart prevent redirection
+	const attackerSlot = attackerSlotIndex <= 1 ? battle.playerSlots[attackerSlotIndex] : battle.opponentSlots[attackerSlotIndex - 2];
+	const attackerAbility = toID(attackerSlot?.pokemon.ability || '');
+	const ignoresRedirection = attackerAbility === 'propellertail' || attackerAbility === 'stalwart';
+
 	let abilityRedirector: ActivePokemonSlot | undefined = undefined;
-	if (move.target === 'normal') {
+	if (move.target === 'normal' && !ignoresRedirection) {
 		const moveType = move.type;
 
 		if (moveType === 'Water') {
@@ -1049,7 +1054,7 @@ export function resolveMoveTarget(
 		}
 	}
 
-	if (!abilityRedirector) {
+	if (!abilityRedirector && !ignoresRedirection) {
 		const redirector = opponentSlots.find(s => s.isRedirecting);
 		if (redirector && move.target === 'normal') {
 			const redirectorIndex = [...battle.playerSlots, ...battle.opponentSlots].indexOf(redirector);

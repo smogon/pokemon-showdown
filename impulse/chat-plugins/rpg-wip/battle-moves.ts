@@ -20,6 +20,19 @@ import {
 } from './battle-shared';
 import { getStatMultiplier } from './battle-core';
 
+// Helper function to check if a Pokemon is protected by Aroma Veil
+function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState): boolean {
+	// Check if any ally has Aroma Veil
+	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
+	const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
+	
+	return allies.some(slot => {
+		if (!slot || slot.pokemon.hp <= 0) return false;
+		const ability = toID(slot.pokemon.ability || '');
+		return ability === 'aromaveil';
+	});
+}
+
 export function getDamageBasePower(
 	move: Move,
 	attacker: RPGPokemon,
@@ -481,7 +494,7 @@ export function handleGenericStatusInflictMove(
 		canBeAfflicted = false;
 		messageLog.push('But the uproar kept it awake!');
 	}
-	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status)) {
+	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status, battle)) {
 		canBeAfflicted = false;
 		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
 	}
@@ -547,18 +560,30 @@ export function handleGenericVolatileMove(
 	switch (move.volatileStatus) {
 	case 'confusion':
 		if (!targetSlot.isConfused) {
-			targetSlot.isConfused = true;
-			targetSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
-			messageLog.push(`${target.species} became confused!`);
-			hadEffect = true;
+			const targetAbility = toID(target.ability || '');
+			// Own Tempo prevents confusion
+			if (targetAbility === 'owntempo') {
+				messageLog.push(`${target.species}'s Own Tempo prevents confusion!`);
+				hadEffect = false;
+			} else {
+				targetSlot.isConfused = true;
+				targetSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // Gen 7+: 1-4 turns
+				messageLog.push(`${target.species} became confused!`);
+				hadEffect = true;
+			}
 		}
 		break;
 	case 'taunt':
 		if (targetSlot.tauntTurns <= 0) {
-			targetSlot.tauntTurns = 3;
-			messageLog.push(`${target.species} fell for the taunt!`);
-			hadEffect = true;
-			checkMentalHerb(targetSlot, battle, messageLog);
+			if (hasAromaVeilProtection(targetSlot, battle)) {
+				messageLog.push(`${target.species} is protected by Aroma Veil!`);
+				hadEffect = false;
+			} else {
+				targetSlot.tauntTurns = 3;
+				messageLog.push(`${target.species} fell for the taunt!`);
+				hadEffect = true;
+				checkMentalHerb(targetSlot, battle, messageLog);
+			}
 		}
 		break;
 	case 'trap':
@@ -582,18 +607,28 @@ export function handleGenericVolatileMove(
 		break;
 	case 'disable':
 		if (targetSlot.lastMoveUsed && !targetSlot.disabledMove) {
-			targetSlot.disabledMove = { moveId: targetSlot.lastMoveUsed, turns: 4 };
-			messageLog.push(`${target.species}'s ${targetSlot.lastMoveUsed} was disabled!`);
-			hadEffect = true;
-			checkMentalHerb(targetSlot, battle, messageLog);
+			if (hasAromaVeilProtection(targetSlot, battle)) {
+				messageLog.push(`${target.species} is protected by Aroma Veil!`);
+				hadEffect = false;
+			} else {
+				targetSlot.disabledMove = { moveId: targetSlot.lastMoveUsed, turns: 4 };
+				messageLog.push(`${target.species}'s ${targetSlot.lastMoveUsed} was disabled!`);
+				hadEffect = true;
+				checkMentalHerb(targetSlot, battle, messageLog);
+			}
 		}
 		break;
 	case 'encore':
 		if (targetSlot.lastMoveUsed && !targetSlot.encoreMove) {
-			targetSlot.encoreMove = { moveId: targetSlot.lastMoveUsed, turns: 3 };
-			messageLog.push(`${target.species} received an encore!`);
-			hadEffect = true;
-			checkMentalHerb(targetSlot, battle, messageLog);
+			if (hasAromaVeilProtection(targetSlot, battle)) {
+				messageLog.push(`${target.species} is protected by Aroma Veil!`);
+				hadEffect = false;
+			} else {
+				targetSlot.encoreMove = { moveId: targetSlot.lastMoveUsed, turns: 3 };
+				messageLog.push(`${target.species} received an encore!`);
+				hadEffect = true;
+				checkMentalHerb(targetSlot, battle, messageLog);
+			}
 		}
 		break;
 	case 'ingrain':
@@ -650,10 +685,15 @@ export function handleGenericVolatileMove(
 		break;
 	case 'torment':
 		if (!targetSlot.tormentActive) {
-			targetSlot.tormentActive = true;
-			messageLog.push(`${target.species} was subjected to torment!`);
-			hadEffect = true;
-			checkMentalHerb(targetSlot, battle, messageLog);
+			if (hasAromaVeilProtection(targetSlot, battle)) {
+				messageLog.push(`${target.species} is protected by Aroma Veil!`);
+				hadEffect = false;
+			} else {
+				targetSlot.tormentActive = true;
+				messageLog.push(`${target.species} was subjected to torment!`);
+				hadEffect = true;
+				checkMentalHerb(targetSlot, battle, messageLog);
+			}
 		}
 		break;
 	case 'embargo':

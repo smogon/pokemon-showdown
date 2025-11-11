@@ -53,8 +53,36 @@ export function applyStatChange(
 			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
 			return false;
 		}
-		if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(ability)) {
+		if (stat === 'atk' && ability === 'hypercutter') {
 			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Attack from being lowered!`);
+			return false;
+		}
+		// Flower Veil protects Grass-types from stat drops
+		if (ability === 'flowerveil') {
+			const species = Dex.species.get(pokemon.species);
+			if (species.types.includes('Grass')) {
+				messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
+				return false;
+			}
+		}
+		// Check if any ally has Flower Veil that would protect this Grass-type
+		const species = Dex.species.get(pokemon.species);
+		if (species.types.includes('Grass')) {
+			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
+				messageLog.push(`Flower Veil protects ${pokemon.species} from stat drops!`);
+				return false;
+			}
+		}
+		// Big Pecks prevents Defense from being lowered
+		if (stat === 'def' && ability === 'bigpecks') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Defense from being lowered!`);
+			return false;
+		}
+		// Keen Eye prevents accuracy from being lowered
+		if (stat === 'accuracy' && ability === 'keeneye') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its accuracy from being lowered!`);
 			return false;
 		}
 
@@ -116,7 +144,7 @@ export function applySynchronize(
 					canBeAfflicted = false;
 				}
 
-				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict)) {
+				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle)) {
 					canBeAfflicted = false;
 				}
 
@@ -222,9 +250,13 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
 				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
 					if (!slot.isConfused) {
-						slot.isConfused = true;
-						slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
-						messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
+						const ability = toID(pokemon.ability || '');
+						// Own Tempo prevents confusion
+						if (ability !== 'owntempo') {
+							slot.isConfused = true;
+							slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
+							messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
+						}
 					}
 				}
 			}

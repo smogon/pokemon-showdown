@@ -221,6 +221,22 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		}
 		return null;
 	},
+
+	'telepathy': ctx => {
+		// Telepathy makes the Pokemon immune to allies' moves
+		// Check if attacker is an ally (same side in double battles)
+		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
+		
+		if (attackerIsPlayer === defenderIsPlayer) {
+			// Same team - Telepathy blocks the move
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Telepathy protects it from its ally's move!`,
+			};
+		}
+		return null;
+	},
 };
 
 export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandler> = {
@@ -992,7 +1008,7 @@ export function preventsFlinch(pokemon: RPGPokemon): boolean {
 	return ability === 'innerfocus';
 }
 
-export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
+export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState): boolean {
 	const ability = toID(pokemon.ability || '');
 
 	if (ability === 'purifyingsalt') {
@@ -1017,6 +1033,23 @@ export function preventsStatus(pokemon: RPGPokemon, status: string): boolean {
 
 	if (ability === 'magmaarmor' && status === 'frz') {
 		return true;
+	}
+
+	// Check for team protection abilities
+	if (battle) {
+		// Find which side this Pokemon is on
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		
+		// Pastel Veil protects team from poison
+		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
+			return true;
+		}
+		
+		// Sweet Veil protects team from sleep
+		if (status === 'slp' && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'sweetveil')) {
+			return true;
+		}
 	}
 
 	return false;
@@ -1298,7 +1331,7 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 		return null;
 	}
 
-	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty') &&
+	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty' || defenderAbility === 'armortail') &&
 		ctx.move.priority && ctx.move.priority > 0) {
 		return {
 			prevented: true,
@@ -1428,7 +1461,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
 				const oppAbility = toID(opponentSlot.pokemon.ability || '');
-				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody'];
+				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody', 'oblivious'];
 
 				if (opponentSlot.substitute) {
 					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
