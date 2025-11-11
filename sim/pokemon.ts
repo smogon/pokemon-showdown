@@ -55,12 +55,6 @@ export class Pokemon {
 	readonly level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
-
-	// NEW: Experience tracking
-	experience: number;
-	currentLevelExp: number;
-	expToNextLevel: number;
-
 	readonly pokeball: ID;
 	readonly dynamaxLevel: number;
 	readonly gigantamax: boolean;
@@ -338,21 +332,6 @@ export class Pokemon {
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-
-		// Initialize experience
-		if (set.experience !== undefined) {
-			this.experience = set.experience;
-		} else {
-			// Calculate experience based on current level using species growth rate
-			this.experience = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
-		}
-
-		// Calculate current level progress
-		const currentLevelExp = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
-		const nextLevelExp = this.battle.dex.getExpForLevel(this.level + 1, this.baseSpecies.growthRate);
-		this.currentLevelExp = this.experience - currentLevelExp;
-		this.expToNextLevel = nextLevelExp - this.experience;
-
 		const genders: { [key: string]: GenderName | null } = { __proto__: null, M: 'M', F: 'F', N: 'N' };
 		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
 		if (this.gender === 'N') this.gender = '';
@@ -599,33 +578,6 @@ export class Pokemon {
 
 	updateSpeed() {
 		this.speed = this.getActionSpeed();
-	}
-
-	/**
-	 * Calculate exp progress within current level
-	 */
-	calculateExpProgress() {
-		const currentLevelExp = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
-		const nextLevelExp = this.battle.dex.getExpForLevel(this.level + 1, this.baseSpecies.growthRate);
-
-		this.currentLevelExp = this.experience - currentLevelExp;
-		this.expToNextLevel = nextLevelExp - this.experience;
-	}
-
-	/**
-	 * Gain experience points
-	 * @param amount Amount of experience to gain
-	 * @returns true if leveled up, false otherwise
-	 */
-	gainExperience(amount: number): boolean {
-		this.experience += amount;
-		this.calculateExpProgress();
-
-		// Check for level up
-		if (this.expToNextLevel <= 0) {
-			return true; // Leveled up
-		}
-		return false;
 	}
 
 	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon) {

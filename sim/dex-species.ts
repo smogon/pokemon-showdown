@@ -21,10 +21,6 @@ export interface SpeciesData extends Partial<Species> {
 	baseStats: StatsTable;
 	eggGroups: string[];
 	weightkg: number;
-	/** Base experience yield when defeated */
-	baseExp?: number;
-	/** Experience growth rate curve */
-	growthRate?: GrowthRate;
 }
 export interface CosmeticFormeData {
 	isCosmeticForme: boolean;
@@ -209,10 +205,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly maxHP?: number;
 	/** A Pokemon's Base Stat Total */
 	readonly bst: number;
-	/** Base experience yield when defeated */
-	readonly baseExp: number;
-	/** Experience growth rate curve */
-	readonly growthRate: GrowthRate;
 	/** Weight (in kg). Not valid for OMs; use weighthg / 10 instead. */
 	readonly weightkg: number;
 	/** Weight (in integer multiples of 0.1kg). */
@@ -347,8 +339,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
 		this.pokemonGoData = data.pokemonGoData || undefined;
-		this.baseExp = data.baseExp || 100;
-		this.growthRate = data.growthRate || 'mediumfast';
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 906 || this.forme.includes('Paldea')) {
