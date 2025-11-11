@@ -216,11 +216,11 @@ export function deserializePlayerData(data: any): PlayerData {
 		obtainedBadges: data.obtainedBadges || [],
 		visitedLocations: new Set(data.visitedLocations || [data.location]),
 		// Migrate old single-object format to new array format
-		pendingMoveLearnQueue: data.pendingMoveLearnQueue
-			? (Array.isArray(data.pendingMoveLearnQueue)
-				? data.pendingMoveLearnQueue
-				: [data.pendingMoveLearnQueue])
-			: undefined,
+		pendingMoveLearnQueue: data.pendingMoveLearnQueue ?
+			(Array.isArray(data.pendingMoveLearnQueue) ?
+				data.pendingMoveLearnQueue :
+				[data.pendingMoveLearnQueue]) :
+			undefined,
 		lastPokemonCenter: data.lastPokemonCenter || 'startertown',
 		completedNPCActions: new Set(data.completedNPCActions || []),
 	};

@@ -25,7 +25,7 @@ function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleSta
 	// Check if any ally has Aroma Veil
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
 	const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
-	
+
 	return allies.some(slot => {
 		if (!slot || slot.pokemon.hp <= 0) return false;
 		const ability = toID(slot.pokemon.ability || '');
@@ -1045,7 +1045,7 @@ export function handleSpecificStatusMove(
 		const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
 		const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
 		const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
-		
+
 		const availableReplacements = party.filter(p =>
 			p.hp > 0 &&
 			!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
@@ -1667,7 +1667,6 @@ export function handleChargingMove(
 	messageLog: string[],
 	ppDeduction: number
 ): boolean {
-	
 	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
 		const attacker = attackerSlot.pokemon;
 		messageLog.push(`${attacker.species} consumed its Power Herb!`);
@@ -1675,7 +1674,7 @@ export function handleChargingMove(
 		activateUnburden(attackerSlot, messageLog); // Activate Unburden
 		return false; // Skip the charging turn and execute the move
 	}
-	
+
 	if (move.flags.charge && !attackerSlot.chargingMove) {
 		attackerSlot.chargingMove = move.id;
 		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;

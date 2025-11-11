@@ -123,10 +123,10 @@ export interface PlayerData {
 	money: number;
 	inventory: Map<string, InventoryItem>;
 	pc: Map<string, RPGPokemon>;
-	pendingMoveLearnQueue?: Array<{
+	pendingMoveLearnQueue?: {
 		pokemonId: string,
 		moveIds: string[],
-	}>;
+	}[];
 	// Story progression tracking
 	storyFlags: Set<string>;
 	defeatedTrainers: Set<string>;
