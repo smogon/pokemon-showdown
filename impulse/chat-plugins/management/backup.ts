@@ -9,7 +9,7 @@ import { google } from 'googleapis';
 import { Readable } from 'stream';
 
 const BACKUP_CONFIG_FILE = 'impulse/db/backup-config.json';
-const DB_DIR = 'impulse/db';
+const DB_DIR = 'impulse/db/';
 
 interface BackupConfig {
 	enabled: boolean;
