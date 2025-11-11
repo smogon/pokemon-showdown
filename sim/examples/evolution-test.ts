@@ -10,7 +10,8 @@ import { Battle } from '../battle';
 async function testEvolution() {
 	console.log('=== Testing Evolution System ===\n');
 
-	// Create battle with a level 15 Charmander (close to evolution) vs level 10 Pidgey
+	// Create battle with a level 15 Charmander (close to evolution) vs level 12 Pidgey
+	// Charmander needs to reach level 16 to evolve (needs 2535 total EXP)
 	const battle = new Battle({
 		formatid: 'gen9customgame' as ID,
 		p1: {
@@ -19,6 +20,7 @@ async function testEvolution() {
 				name: 'Charmander',
 				species: 'Charmander',
 				level: 15,
+				experience: 2450, // Start very close to level 16 (2535 needed, only 85 EXP away)
 				moves: ['scratch', 'ember', 'smokescreen'],
 				ability: 'Blaze',
 				evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
@@ -33,7 +35,7 @@ async function testEvolution() {
 			team: [{
 				name: 'Pidgey',
 				species: 'Pidgey',
-				level: 10,
+				level: 12,
 				moves: ['tackle', 'sandattack', 'gust'],
 				ability: 'Keen Eye',
 				evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
@@ -45,9 +47,8 @@ async function testEvolution() {
 		},
 	});
 
-	// Start battle
-	console.log('Starting battle...\n');
-	battle.start();
+	// Battle auto-starts in constructor
+	console.log('Battle started!\n');
 
 	const charmander = battle.sides[0].pokemon[0];
 	const pidgey = battle.sides[1].pokemon[0];
