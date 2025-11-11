@@ -343,14 +343,13 @@ export class Pokemon {
 		if (set.experience !== undefined) {
 			this.experience = set.experience;
 		} else {
-			// Calculate experience based on current level
-			// We'll use a temporary calculation here - this will be replaced by dex method in Phase 3
-			this.experience = Math.pow(this.level, 3); // Default to mediumfast formula
+			// Calculate experience based on current level using species growth rate
+			this.experience = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
 		}
 
 		// Calculate current level progress
-		const currentLevelExp = Math.pow(this.level, 3);
-		const nextLevelExp = Math.pow(this.level + 1, 3);
+		const currentLevelExp = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
+		const nextLevelExp = this.battle.dex.getExpForLevel(this.level + 1, this.baseSpecies.growthRate);
 		this.currentLevelExp = this.experience - currentLevelExp;
 		this.expToNextLevel = nextLevelExp - this.experience;
 
@@ -606,9 +605,8 @@ export class Pokemon {
 	 * Calculate exp progress within current level
 	 */
 	calculateExpProgress() {
-		// Using temporary simple formula - will be replaced with dex method in Phase 3
-		const currentLevelExp = Math.pow(this.level, 3);
-		const nextLevelExp = Math.pow(this.level + 1, 3);
+		const currentLevelExp = this.battle.dex.getExpForLevel(this.level, this.baseSpecies.growthRate);
+		const nextLevelExp = this.battle.dex.getExpForLevel(this.level + 1, this.baseSpecies.growthRate);
 
 		this.currentLevelExp = this.experience - currentLevelExp;
 		this.expToNextLevel = nextLevelExp - this.experience;
