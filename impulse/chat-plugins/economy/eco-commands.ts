@@ -476,7 +476,7 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`The /eco giveaway command is not available in the ${room.roomid} room. Please use the room-specific giveaway commands instead.`);
 				}
 
-				this.checkCan('minigame', null, room);
+				this.checkCan('gamemanagement', null, room);
 
 				// Check if there's already an active giveaway in this room
 				for (const [, giveaway] of activeGiveaways) {
@@ -564,10 +564,6 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply('You have already joined this giveaway.');
 				}
 
-				if (giveaway.hostId === user.id) {
-					return this.errorReply('You cannot join your own giveaway.');
-				}
-
 				giveaway.participants.add(user.id);
 				void saveGiveaways();
 
@@ -584,7 +580,7 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`The /eco giveaway command is not available in the ${room.roomid} room.`);
 				}
 
-				this.checkCan('minigame', null, room);
+				this.checkCan('gamemanagement', null, room);
 
 				// Find active giveaway in this room
 				let giveaway: GiveawayEntry | undefined;
@@ -614,7 +610,7 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`The /eco giveaway command is not available in the ${room.roomid} room.`);
 				}
 
-				this.checkCan('minigame', null, room);
+				this.checkCan('gamemanagement', null, room);
 
 				// Find active giveaway in this room
 				let giveaway: GiveawayEntry | undefined;
@@ -670,12 +666,11 @@ export const commands: Chat.ChatCommands = {
 				const timeLeft = Math.max(0, Math.ceil((giveaway.startTime + giveaway.duration - Date.now()) / 1000));
 				const hostNameColor = nameColor(giveaway.hostName, true, false);
 				const hasJoined = giveaway.participants.has(user.id);
-				const isHost = giveaway.hostId === user.id;
 
 				let joinButton = '';
-				if (!hasJoined && !isHost) {
+				if (!hasJoined) {
 					joinButton = `<br /><button class="button" name="send" value="/eco giveaway join" style="margin-top: 5px;">Join Giveaway 🎉</button>`;
-				} else if (hasJoined) {
+				} else {
 					joinButton = `<br /><span style="color: green;">✓ You have joined this giveaway</span>`;
 				}
 
@@ -699,10 +694,10 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReplyBox(
 					`<strong>Giveaway Commands:</strong><br />` +
-					`<code>/eco giveaway start [prize], [winners], [duration]</code> - Starts a giveaway with the specified prize amount, number of winners, and duration in seconds (10-600). Requires: % @ # &<br />` +
-					`<code>/eco giveaway join</code> - Join the active giveaway in the current room. You can also click the "Join Giveaway" button when a giveaway is announced.<br />` +
-					`<code>/eco giveaway end</code> - Manually end the giveaway and pick winners. Requires: % @ # &<br />` +
-					`<code>/eco giveaway cancel</code> - Cancel the active giveaway. Requires: % @ # &<br />` +
+					`<code>/eco giveaway start [prize], [winners], [duration]</code> - Starts a giveaway with the specified prize amount, number of winners, and duration in seconds (10-600). Requires: & ~<br />` +
+					`<code>/eco giveaway join</code> - Join the active giveaway in the current room. You can also click the "Join Giveaway" button when a giveaway is announced. Hosts can join their own giveaway.<br />` +
+					`<code>/eco giveaway end</code> - Manually end the giveaway and pick winners. Requires: & ~<br />` +
+					`<code>/eco giveaway cancel</code> - Cancel the active giveaway. Requires: & ~<br />` +
 					`<code>/eco giveaway list</code> - View details of the active giveaway in the current room (includes a join button if you haven't joined).<br />` +
 					`<br />` +
 					`<strong>Note:</strong> This giveaway system uses ${CURRENCY.name} from the economy system. Winners are selected randomly from participants. Click the interactive "Join Giveaway" button to participate instantly!`
