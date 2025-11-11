@@ -9,7 +9,7 @@ import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const SYMBOLS_FILE = 'config/custom-symbols.json';
+const SYMBOLS_FILE = 'impulse/db/custom-symbols.json';
 
 interface CustomSymbolDocument {
 	_id: string;
