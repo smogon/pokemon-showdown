@@ -4255,6 +4255,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Slow Start', '[silent]');
+		}
 		flags: {},
 		name: "Slow Start",
 		rating: -1,
