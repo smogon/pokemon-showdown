@@ -11,8 +11,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Ivysaur"],
 		eggGroups: ["Monster", "Grass"],
-		baseExp: 64,
-		growthRate: "mediumslow",
 	},
 	ivysaur: {
 		num: 2,
@@ -28,8 +26,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 16,
 		evos: ["Venusaur"],
 		eggGroups: ["Monster", "Grass"],
-		baseExp: 142,
-		growthRate: "mediumslow",
 	},
 	venusaur: {
 		num: 3,
@@ -44,8 +40,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Ivysaur",
 		evoLevel: 32,
 		eggGroups: ["Monster", "Grass"],
-		baseExp: 236,
-		growthRate: "mediumslow",
 		otherFormes: ["Venusaur-Mega"],
 		formeOrder: ["Venusaur", "Venusaur-Mega"],
 		canGigantamax: "G-Max Vine Lash",
@@ -92,8 +86,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		evos: ["Charmeleon"],
 		eggGroups: ["Monster", "Dragon"],
-		baseExp: 62,
-		growthRate: "mediumslow",
 	},
 	charmeleon: {
 		num: 5,
@@ -109,8 +101,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 16,
 		evos: ["Charizard"],
 		eggGroups: ["Monster", "Dragon"],
-		baseExp: 142,
-		growthRate: "mediumslow",
 	},
 	charizard: {
 		num: 6,
@@ -125,8 +115,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Charmeleon",
 		evoLevel: 36,
 		eggGroups: ["Monster", "Dragon"],
-		baseExp: 240,
-		growthRate: "mediumslow",
 		otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y"],
 		formeOrder: ["Charizard", "Charizard-Mega-X", "Charizard-Mega-Y"],
 		canGigantamax: "G-Max Wildfire",
@@ -188,8 +176,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		evos: ["Wartortle"],
 		eggGroups: ["Monster", "Water 1"],
-		baseExp: 63,
-		growthRate: "mediumslow",
 	},
 	wartortle: {
 		num: 8,
@@ -205,8 +191,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 16,
 		evos: ["Blastoise"],
 		eggGroups: ["Monster", "Water 1"],
-		baseExp: 142,
-		growthRate: "mediumslow",
 	},
 	blastoise: {
 		num: 9,
@@ -221,8 +205,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Wartortle",
 		evoLevel: 36,
 		eggGroups: ["Monster", "Water 1"],
-		baseExp: 239,
-		growthRate: "mediumslow",
 		otherFormes: ["Blastoise-Mega"],
 		formeOrder: ["Blastoise", "Blastoise-Mega"],
 		canGigantamax: "G-Max Cannonade",
@@ -268,8 +250,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Metapod"],
 		eggGroups: ["Bug"],
-		baseExp: 39,
-		growthRate: "mediumfast",
 	},
 	metapod: {
 		num: 11,
@@ -379,8 +359,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		evos: ["Pidgeotto"],
 		eggGroups: ["Flying"],
-		baseExp: 50,
-		growthRate: "mediumslow",
 	},
 	pidgeotto: {
 		num: 17,
