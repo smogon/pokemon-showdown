@@ -4,11 +4,11 @@
 * @author PrinceSky-Git
 */
 
-import { FS } from '../../../lib/fs';
+import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
 interface NewsEntry {
-	id: string;
+	_id?: unknown;
 	title: string;
 	postedBy: string;
 	desc: string;
@@ -16,44 +16,28 @@ interface NewsEntry {
 	timestamp: number;
 }
 
-interface NewsData {
-	[id: string]: NewsEntry;
-}
-
-let serverNews: NewsData = {};
-
-const NEWS_FILE = 'impulse/db/server-news.json';
 const serverName = Config.serverName || 'Impulse';
+
+const NewsDB = ImpulseDB<NewsEntry>('news');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const loadNews = async (): Promise<void> => {
-	const data = await FS(NEWS_FILE).readIfExists();
-	serverNews = data ? JSON.parse(data) : {};
-};
-
-const saveNews = async (): Promise<void> => {
-	await FS(NEWS_FILE).safeWrite(JSON.stringify(serverNews, null, 2));
-};
-
-const formatDate = (date: Date = new Date()): string => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
-
-const generateNewsId = (title: string): string => {
-	return `${toID(title)}_${Date.now()}`;
-};
+const formatDate = (date: Date = new Date()): string =>
+	`${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
 class NewsManager {
 	static async generateNewsDisplay(): Promise<string[]> {
-		const newsArray = Object.values(serverNews)
-			.sort((a, b) => b.timestamp - a.timestamp)
-			.slice(0, 3);
-
-		return newsArray.map(entry =>
-			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br><small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
+		const news = await NewsDB.find(
+			{},
+			{ sort: { timestamp: -1 }, limit: 3, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } }
+		);
+		return news.map(entry =>
+			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
+			`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
 		);
 	}
 
 	static async onUserConnect(user: User): Promise<void> {
-		if (Object.keys(serverNews).length === 0) return;
+		if (!await NewsDB.exists({})) return;
 		const news = await this.generateNewsDisplay();
 		if (news.length) {
 			user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
@@ -61,58 +45,31 @@ class NewsManager {
 	}
 
 	static async addNews(title: string, desc: string, user: User): Promise<string> {
-		const newsId = generateNewsId(title);
 		const newsEntry: NewsEntry = {
-			id: newsId,
 			title,
 			postedBy: user.name,
 			desc,
 			postTime: formatDate(),
 			timestamp: Date.now(),
 		};
-		serverNews[newsId] = newsEntry;
-		await saveNews();
+		await NewsDB.insertOne(newsEntry);
 		return `Added: ${title}`;
 	}
 
 	static async deleteNews(title: string): Promise<string | null> {
-		const entry = Object.values(serverNews).find(n => n.title === title);
-		if (!entry) return `News "${title}" not found.`;
-
-		delete serverNews[entry.id];
-		await saveNews();
-		return `Deleted: ${title}`;
+		const result = await NewsDB.deleteOne({ title });
+		return result.deletedCount === 0 ? `News "${title}" not found.` : `Deleted: ${title}`;
 	}
 
 	static async updateNews(title: string, newDesc: string): Promise<string | null> {
-		const entry = Object.values(serverNews).find(n => n.title === title);
-		if (!entry) return `News "${title}" not found.`;
-
-		serverNews[entry.id].desc = newDesc;
-		await saveNews();
-		return `Updated: ${title}`;
+		const result = await NewsDB.updateOne({ title }, { $set: { desc: newDesc } });
+		return result.matchedCount === 0 ? `News "${title}" not found.` : `Updated: ${title}`;
 	}
 
 	static async deleteOldNews(daysOld = 90): Promise<number> {
 		const cutoff = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
-		let deletedCount = 0;
-
-		for (const [id, entry] of Object.entries(serverNews)) {
-			if (entry.timestamp < cutoff) {
-				delete serverNews[id];
-				deletedCount++;
-			}
-		}
-
-		if (deletedCount > 0) {
-			await saveNews();
-		}
-
-		return deletedCount;
-	}
-
-	static async newsExists(title: string): Promise<boolean> {
-		return Object.values(serverNews).some(n => n.title === title);
+		const result = await NewsDB.deleteMany({ timestamp: { $lt: cutoff } });
+		return result.deletedCount || 0;
 	}
 }
 
@@ -139,11 +96,11 @@ export const commands: Chat.ChatCommands = {
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) return this.errorReply("Usage: /servernews add [title], [desc]");
 
-			if (await NewsManager.newsExists(title)) {
+			if (await NewsDB.exists({ title })) {
 				return this.errorReply(`"${title}" exists. Use /servernews update.`);
 			}
 
-			await NewsManager.addNews(title, descParts.join(','), user);
+			await NewsManager.addNews(title, descParts, user);
 
 			this.sendReply(`Added: "${title}"`);
 		},
@@ -201,5 +158,3 @@ export const commands: Chat.ChatCommands = {
 	},
 	svnhelp: 'servernewshelp',
 };
-
-void loadNews();

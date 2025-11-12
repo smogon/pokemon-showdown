@@ -6,7 +6,7 @@
 if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
 */
 
-import { FS } from '../../../lib/fs';
+import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
@@ -18,38 +18,6 @@ const MULTIPLIER = 1.2;
 let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
 const EXP_COOLDOWN = 30000;
-
-const EXP_FILE = 'impulse/db/exp-data.json';
-
-interface ExpDocument {
-	_id: string;
-	exp: number;
-	level: number;
-	lastUpdated: string;
-}
-
-interface ExpData {
-	users: { [userId: string]: ExpDocument };
-}
-
-let expData: ExpData = {
-	users: {},
-};
-
-const loadExpData = async (): Promise<void> => {
-	const data = await FS(EXP_FILE).readIfExists();
-	if (data) {
-		expData = JSON.parse(data);
-	}
-};
-
-const saveExpData = (): void => {
-	// Use writeUpdate with throttling since there will be many concurrent writes
-	FS(EXP_FILE).writeUpdate(
-		() => JSON.stringify(expData, null, 2),
-		{ throttle: 10000 } // Save at most once every 10 seconds
-	);
-};
 
 const formatTime = (date: Date): string => {
 	return date.toISOString().replace('T', ' ').slice(0, 19);
@@ -68,6 +36,15 @@ interface CooldownData {
 	[userid: string]: number;
 }
 
+interface ExpDocument {
+	_id: string;
+	exp: number;
+	level: number;
+	lastUpdated: Date;
+}
+
+const ExpDB = ImpulseDB<ExpDocument>('expdata');
+
 export class ExpSystem {
 	private static cooldowns: CooldownData = {};
 
@@ -80,42 +57,43 @@ export class ExpSystem {
 		const id = toID(userid);
 		const level = this.getLevel(amount);
 
-		expData.users[id] = {
-			_id: id,
-			exp: amount,
-			level,
-			lastUpdated: new Date().toISOString(),
-		};
-
-		await FS(EXP_FILE).safeWrite(JSON.stringify(expData, null, 2));
+		await ExpDB.upsert(
+			{ _id: id },
+			{
+				_id: id,
+				exp: amount,
+				level,
+				lastUpdated: new Date(),
+			}
+		);
 	}
 
-	static readExp(userid: string): number {
+	static async readExp(userid: string): Promise<number> {
 		const id = toID(userid);
-		const doc = expData.users[id];
+		const doc = await ExpDB.findOne({ _id: id });
 		return doc ? doc.exp : DEFAULT_EXP;
 	}
 
-	static hasExp(userid: string, amount: number): boolean {
+	static async hasExp(userid: string, amount: number): Promise<boolean> {
 		const id = toID(userid);
-		const doc = expData.users[id];
-		return doc ? doc.exp >= amount : false;
+		const doc = await ExpDB.findOne({ _id: id, exp: { $gte: amount } });
+		return doc !== null;
 	}
 
-	static hasLevel(userid: string, level: number): boolean {
+	static async hasLevel(userid: string, level: number): Promise<boolean> {
 		const id = toID(userid);
-		const doc = expData.users[id];
-		return doc ? doc.level >= level : false;
+		const doc = await ExpDB.findOne({ _id: id, level: { $gte: level } });
+		return doc !== null;
 	}
 
-	static addExp(userid: string, amount: number, reason?: string, by?: string): number {
+	static async addExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
 		const id = toID(userid);
 
 		if (!by && this.isOnCooldown(id)) {
-			return this.readExp(id);
+			return await this.readExp(id);
 		}
 
-		const currentDoc = expData.users[id];
+		const currentDoc = await ExpDB.findOne({ _id: id });
 		const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
 		const currentLevel = this.getLevel(currentExp);
 
@@ -123,16 +101,15 @@ export class ExpSystem {
 		const newExp = currentExp + gainedAmount;
 		const newLevel = this.getLevel(newExp);
 
-		// Update in-memory data
-		expData.users[id] = {
-			_id: id,
-			exp: newExp,
-			level: newLevel,
-			lastUpdated: new Date().toISOString(),
-		};
-
-		// Queue write with throttling to handle many concurrent exp gains
-		saveExpData();
+		await ExpDB.findOneAndUpdate(
+			{ _id: id },
+			{
+				$inc: { exp: gainedAmount },
+				$set: { level: newLevel, lastUpdated: new Date() },
+				$setOnInsert: { _id: id },
+			},
+			{ upsert: true, returnDocument: 'after' }
+		);
 
 		if (!by) {
 			this.cooldowns[id] = Date.now();
@@ -145,10 +122,10 @@ export class ExpSystem {
 		return newExp;
 	}
 
-	static addExpRewards(userid: string, amount: number, reason?: string, by?: string): number {
+	static async addExpRewards(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
 		const id = toID(userid);
 
-		const currentDoc = expData.users[id];
+		const currentDoc = await ExpDB.findOne({ _id: id });
 		const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
 		const currentLevel = this.getLevel(currentExp);
 
@@ -156,16 +133,15 @@ export class ExpSystem {
 		const newExp = currentExp + gainedAmount;
 		const newLevel = this.getLevel(newExp);
 
-		// Update in-memory data
-		expData.users[id] = {
-			_id: id,
-			exp: newExp,
-			level: newLevel,
-			lastUpdated: new Date().toISOString(),
-		};
-
-		// Queue write with throttling
-		saveExpData();
+		await ExpDB.findOneAndUpdate(
+			{ _id: id },
+			{
+				$inc: { exp: gainedAmount },
+				$set: { level: newLevel, lastUpdated: new Date() },
+				$setOnInsert: { _id: id },
+			},
+			{ upsert: true, returnDocument: 'after' }
+		);
 
 		if (newLevel > currentLevel) {
 			this.notifyLevelUp(id, newLevel, currentLevel);
@@ -234,40 +210,40 @@ export class ExpSystem {
 		});
 	}
 
-	static takeExp(userid: string, amount: number, reason?: string, by?: string): number {
+	static async takeExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
 		const id = toID(userid);
-		const currentDoc = expData.users[id];
 
-		if (!currentDoc || currentDoc.exp < amount) {
-			return currentDoc ? currentDoc.exp : DEFAULT_EXP;
+		const result = await ExpDB.findOneAndUpdate(
+			{ _id: id, exp: { $gte: amount } },
+			{
+				$inc: { exp: -amount },
+				$set: { lastUpdated: new Date() },
+			},
+			{ returnDocument: 'after' }
+		);
+
+		if (result) {
+			const newLevel = this.getLevel(result.exp);
+			if (result.level !== newLevel) {
+				await ExpDB.updateOne(
+					{ _id: id },
+					{ $set: { level: newLevel } }
+				);
+			}
+			return result.exp;
 		}
 
-		const newExp = currentDoc.exp - amount;
-		const newLevel = this.getLevel(newExp);
-
-		expData.users[id] = {
-			_id: id,
-			exp: newExp,
-			level: newLevel,
-			lastUpdated: new Date().toISOString(),
-		};
-
-		// Queue write with throttling
-		saveExpData();
-
-		return newExp;
+		const doc = await ExpDB.findOne({ _id: id });
+		return doc ? doc.exp : DEFAULT_EXP;
 	}
 
 	static async resetAllExp(): Promise<void> {
-		expData.users = {};
-		await FS(EXP_FILE).safeWrite(JSON.stringify(expData, null, 2));
+		await ExpDB.deleteMany({});
 	}
 
-	static getRichestUsers(limit = 100): [string, number][] {
-		const users = Object.values(expData.users)
-			.sort((a, b) => b.exp - a.exp)
-			.slice(0, limit);
-		return users.map(doc => [doc._id, doc.exp]);
+	static async getRichestUsers(limit = 100): Promise<[string, number][]> {
+		const docs = await ExpDB.find({}, { sort: { exp: -1 }, limit });
+		return docs.map(doc => [doc._id, doc.exp]);
 	}
 
 	static getLevel(exp: number): number {
@@ -293,8 +269,8 @@ export class ExpSystem {
 }
 
 export const pages: Chat.PageTable = {
-	expladder(args, user): string {
-		const richest = ExpSystem.getRichestUsers(100);
+	async expladder(args, user): Promise<string> {
+		const richest = await ExpSystem.getRichestUsers(100);
 		if (!richest.length) {
 			return `<div class="pad"><h2>No users have any ${EXP_UNIT} yet.</h2></div>`;
 		}
@@ -320,11 +296,11 @@ export const pages: Chat.PageTable = {
 export const commands: Chat.ChatCommands = {
 	exp: {
 		'': 'level',
-		level(target, room, user): void {
+		async level(target, room, user): Promise<void> {
 			if (!target) target = user.name;
 			if (!this.runBroadcast()) return;
 			const userid = toID(target);
-			const currentExp = ExpSystem.readExp(userid);
+			const currentExp = await ExpSystem.readExp(userid);
 			const currentLevel = ExpSystem.getLevel(currentExp);
 			const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
 			const expNeeded = nextLevelExp - currentExp;
@@ -336,7 +312,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 
-		give(target, room, user): void {
+		async give(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.sendReply(`Usage: /exp give [user], [amount], [reason]`);
 			const parts = target.split(',').map(p => p.trim());
@@ -353,8 +329,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Please specify a valid positive amount.`);
 			}
 
-			ExpSystem.addExp(targetUser.id, amount, reason, user.id);
-			const newExp = ExpSystem.readExp(targetUser.id);
+			await ExpSystem.addExp(targetUser.id, amount, reason, user.id);
+			const newExp = await ExpSystem.readExp(targetUser.id);
 			const newLevel = ExpSystem.getLevel(newExp);
 			const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
 
@@ -373,7 +349,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		take(target, room, user): void {
+		async take(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			if (!target) return this.sendReply(`Usage: /exp take [user], [amount], [reason]`);
 			const parts = target.split(',').map(p => p.trim());
@@ -390,8 +366,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Please specify a valid positive amount.`);
 			}
 
-			ExpSystem.takeExp(targetUser.id, amount, reason, user.id);
-			const newExp = ExpSystem.readExp(targetUser.id);
+			await ExpSystem.takeExp(targetUser.id, amount, reason, user.id);
+			const newExp = await ExpSystem.readExp(targetUser.id);
 			const newLevel = ExpSystem.getLevel(newExp);
 			const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
 
@@ -497,13 +473,34 @@ export const commands: Chat.ChatCommands = {
 		help(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/exp level [user]", desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)" },
-				{ cmd: "/exp give [user], [amount], [reason]", desc: `Give a specified amount of ${EXP_UNIT} to a user. Requires: &.` },
-				{ cmd: "/exp take [user], [amount], [reason]", desc: `Take a specified amount of ${EXP_UNIT} from a user. Requires: &.` },
-				{ cmd: "/exp reset [user], [reason]", desc: `Reset a user's ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: &.` },
-				{ cmd: "/exp resetall [reason]", desc: `Reset all users' ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: ~.` },
-				{ cmd: "/exp ladder", desc: `View the top 100 users with the most ${EXP_UNIT} and their levels.` },
-				{ cmd: "/exp toggledouble [duration|off]", desc: "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &." },
+				{
+					cmd: "/exp level [user]",
+					desc: "Check a user's EXP, level, and EXP needed for the next level. (Default: yourself)",
+				},
+				{
+					cmd: "/exp give [user], [amount], [reason]",
+					desc: `Give a specified amount of ${EXP_UNIT} to a user. Requires: &.`,
+				},
+				{
+					cmd: "/exp take [user], [amount], [reason]",
+					desc: `Take a specified amount of ${EXP_UNIT} from a user. Requires: &.`,
+				},
+				{
+					cmd: "/exp reset [user], [reason]",
+					desc: `Reset a user's ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: &.`,
+				},
+				{
+					cmd: "/exp resetall [reason]",
+					desc: `Reset all users' ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: ~.`,
+				},
+				{
+					cmd: "/exp ladder",
+					desc: `View the top 100 users with the most ${EXP_UNIT} and their levels.`,
+				},
+				{
+					cmd: "/exp toggledouble [duration|off]",
+					desc: "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &.",
+				},
 			];
 			const html = `<center><strong>EXP System Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
@@ -514,5 +511,3 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 };
-
-void loadExpData();
