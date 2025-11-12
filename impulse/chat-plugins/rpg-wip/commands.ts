@@ -2894,6 +2894,7 @@ export const commands: ChatCommands = {
 				{ cmd: "/rpg start", desc: "Start your RPG adventure or continue from where you left off." },
 				{ cmd: "/rpg reset", desc: "Reset all your RPG progress (cannot be undone)." },
 				{ cmd: "/rpg unstuck", desc: "Exit a battle if you're stuck." },
+				{ cmd: "/rpg battleaction back", desc: "Return to battle if ui disappears while you're in battle." },
 			];
 			const html = `<center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
