@@ -955,6 +955,39 @@ export function handleOnHitAbilityResponses(
 			}
 		}
 	}
+
+	// Phase 3: Anger Shell - When HP drops below 50%, lowers Def and Sp. Def, raises Atk, Sp. Atk, and Speed
+	if (defenderAbility === 'angershell' && damageDealt > 0) {
+		const hpBefore = defender.hp + damageDealt;
+		const halfHP = defender.maxHp / 2;
+		// Trigger if HP dropped below 50% from this hit
+		if (hpBefore >= halfHP && defender.hp < halfHP) {
+			const messages: string[] = [];
+			if (defenderSlot.statStages.def > -6) {
+				defenderSlot.statStages.def--;
+				messages.push('Defense fell');
+			}
+			if (defenderSlot.statStages.spd > -6) {
+				defenderSlot.statStages.spd--;
+				messages.push('Sp. Def fell');
+			}
+			if (defenderSlot.statStages.atk < 6) {
+				defenderSlot.statStages.atk++;
+				messages.push('Attack rose');
+			}
+			if (defenderSlot.statStages.spa < 6) {
+				defenderSlot.statStages.spa++;
+				messages.push('Sp. Atk rose');
+			}
+			if (defenderSlot.statStages.spe < 6) {
+				defenderSlot.statStages.spe++;
+				messages.push('Speed rose');
+			}
+			if (messages.length > 0) {
+				messageLog.push(`${defender.species}'s Anger Shell: ${messages.join(', ')}!`);
+			}
+		}
+	}
 }
 
 export function applyRecoilAndSelfEffects(

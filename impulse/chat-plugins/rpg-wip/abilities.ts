@@ -542,6 +542,38 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Phase 3: Defeatist - Halves Attack and Sp. Atk when HP < 50%
+	'defeatist': (pokemon, stat, value) => {
+		if ((stat === 'atk' || stat === 'spa') && pokemon.hp <= pokemon.maxHp / 2) {
+			return Math.floor(value * 0.5);
+		}
+		return value;
+	},
+
+	// Phase 3: Grass Pelt - 1.5x Defense in Grassy Terrain
+	'grasspelt': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'def' && battle?.terrain?.type === 'grassy') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 3: Plus - 1.5x Sp. Atk if ally has Minus or Plus
+	'plus': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spa' && battle) {
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayer ? battle.playerSlots : battle.opponentSlots;
+			const hasMinusOrPlus = allies.some(s =>
+				s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0 &&
+				(toID(s.pokemon.ability || '') === 'minus' || toID(s.pokemon.ability || '') === 'plus')
+			);
+			if (hasMinusOrPlus) {
+				return Math.floor(value * 1.5);
+			}
+		}
+		return value;
+	},
 };
 
 export const WEATHER_ABILITIES = {
@@ -702,6 +734,11 @@ export const ACCURACY_EVASION_ABILITIES = {
 	// Phase 1: No Guard - Makes all moves always hit (bypasses accuracy/evasion)
 	'noguard': {
 		alwaysHit: true,
+	},
+
+	// Phase 3: Victory Star - Raises accuracy of user and allies by 10%
+	'victorystar': {
+		accuracyMultiplier: 1.1,
 	},
 };
 
@@ -1117,6 +1154,24 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = Math.floor(basePower * 1.2);
 	}
 
+	// Phase 3: Battery - Boosts allies' special moves by 1.3x
+	// Phase 3: Power Spot - Boosts allies' moves by 1.3x
+	const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+	const attackerAllies = isPlayerAttacker ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const hasBattery = attackerAllies.some(s =>
+		s && s.pokemon.id !== ctx.attacker.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'battery'
+	);
+	const hasPowerSpot = attackerAllies.some(s =>
+		s && s.pokemon.id !== ctx.attacker.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'powerspot'
+	);
+
+	if (hasBattery && ctx.move.category === 'Special') {
+		basePower = Math.floor(basePower * 1.3);
+	}
+	if (hasPowerSpot) {
+		basePower = Math.floor(basePower * 1.3);
+	}
+
 	return basePower;
 }
 
@@ -1419,6 +1474,17 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
+	// Phase 3: Friend Guard - Reduces damage to allies by 25%
+	// Check if there are any allies with Friend Guard
+	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
+	const defenderAllies = isPlayerDefender ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const hasFriendGuard = defenderAllies.some(s =>
+		s && s.pokemon.id !== ctx.defender.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'friendguard'
+	);
+	if (hasFriendGuard) {
+		damage = Math.floor(damage * 0.75);
+	}
+
 	return damage;
 }
 
@@ -1676,6 +1742,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
 				} else if (blockAbilities.includes(oppAbility)) {
 					messageLog.push(`${opponentSlot.pokemon.species}'s ${opponentSlot.pokemon.ability} prevents its stats from being lowered!`);
+				} else if (oppAbility === 'guarddog') {
+					// Phase 3: Guard Dog raises Attack when intimidated
+					if (opponentSlot.statStages.atk < 6) {
+						opponentSlot.statStages.atk++;
+						messageLog.push(`${opponentSlot.pokemon.species}'s Guard Dog raised its Attack!`);
+					}
 				} else if (opponentSlot.statStages.atk > -6) {
 					opponentSlot.statStages.atk--;
 					messageLog.push(`${pokemon.species}'s Intimidate lowered ${opponentSlot.pokemon.species}'s Attack!`);
@@ -1687,6 +1759,18 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	if (ability === 'slowstart') {
 		slot.slowStartTurns = 5;
 		messageLog.push(`${pokemon.species} is off to a slow start!`);
+	}
+
+	// Phase 3: Dauntless Shield - Raises Defense by 1 stage on switch-in
+	if (ability === 'dauntlessshield' && slot.statStages.def < 6) {
+		slot.statStages.def++;
+		messageLog.push(`${pokemon.species}'s Dauntless Shield raised its Defense!`);
+	}
+
+	// Phase 3: Intrepid Sword - Raises Attack by 1 stage on switch-in
+	if (ability === 'intrepidsword' && slot.statStages.atk < 6) {
+		slot.statStages.atk++;
+		messageLog.push(`${pokemon.species}'s Intrepid Sword raised its Attack!`);
 	}
 }
 
