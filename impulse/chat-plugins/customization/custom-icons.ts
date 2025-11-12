@@ -58,25 +58,20 @@ const updateIcons = async () => {
 			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
 		}
 		Impulse.reloadCSS();
-	} catch {
-		// Ignore errors during initialization
-	}
+	} catch {}
 };
 
 const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) =>
 	`<img src="${url}${cacheBuster()}" width="32" height="32">`;
 
-const notifyUser = (userId: string, staffName: string, message: string, icon?: string) => {
-	const user = Users.get(userId);
-	if (user?.connected) {
-		user.popup(`|html|${nameColor(staffName, true, true)} ${message}${icon ? `: ${icon}` : ''}<br /><center>Refresh if you don't see it.</center>`);
-	}
-};
-
-const notifyStaff = (staffName: string, targetName: string, action: string, icon?: string) => {
-	const room = Rooms.get(STAFF_ROOM_ID);
-	if (room) {
-		room.add(`|html|<div class="infobox">${nameColor(staffName, true, true)} ${action} ${nameColor(targetName, true, false)}${icon ? `: ${icon}` : ''}</div>`).update();
+const notify = (userId: string, staffName: string, msg: string, icon?: string, isUser = true) => {
+	const content = `${nameColor(staffName, true, true)} ${msg}${icon ? `: ${icon}` : ''}`;
+	if (isUser) {
+		const user = Users.get(userId);
+		if (user?.connected) user.popup(`|html|${content}<br /><center>Refresh if you don't see it.</center>`);
+	} else {
+		const room = Rooms.get(STAFF_ROOM_ID);
+		if (room) room.add(`|html|<div class="infobox">${content}</div>`).update();
 	}
 };
 
@@ -95,7 +90,6 @@ export const commands: Chat.ChatCommands = {
 
 			const userId = toID(name);
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
-
 			if (await IconsDB.exists({ _id: userId })) {
 				return this.errorReply('User already has icon. Remove with /icon delete [user].');
 			}
@@ -119,8 +113,8 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|You have given ${nameColor(name, true, false)} an icon${sizeDisplay}.`);
 
 			const icon = displayIcon(imageUrl, sizeCheck.size);
-			notifyUser(userId, user.name, `has set your userlist icon${sizeDisplay}`, icon);
-			notifyStaff(user.name, name, `set icon for`, icon);
+			notify(userId, user.name, `has set your userlist icon${sizeDisplay}`, icon);
+			notify('', user.name, `set icon for ${nameColor(name, true, false)}`, icon, false);
 		},
 
 		async update(target, room, user) {
@@ -134,10 +128,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const updateFields: any = { updatedAt: new Date() };
-
-			if (imageUrl) {
-				updateFields.url = imageUrl;
-			}
+			if (imageUrl) updateFields.url = imageUrl;
 			if (sizeStr) {
 				const sizeCheck = validateSize(sizeStr);
 				if (!sizeCheck.valid) return this.errorReply(sizeCheck.error);
@@ -155,14 +146,13 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|You have updated ${nameColor(name, true, false)}'s icon${sizeDisplay}.`);
 
 			const icon = url ? displayIcon(url, size) : '';
-			notifyUser(userId, user.name, `has updated your userlist icon${sizeDisplay}`, icon);
-			notifyStaff(user.name, name, `updated icon for`, icon);
+			notify(userId, user.name, `has updated your userlist icon${sizeDisplay}`, icon);
+			notify('', user.name, `updated icon for ${nameColor(name, true, false)}`, icon, false);
 		},
 
 		async delete(target, room, user) {
 			this.checkCan('roomowner');
 			const userId = toID(target);
-
 			if (!await IconsDB.exists({ _id: userId })) {
 				return this.errorReply(`${target} does not have an icon.`);
 			}
@@ -171,16 +161,15 @@ export const commands: Chat.ChatCommands = {
 			await updateIcons();
 
 			this.sendReply(`You removed ${target}'s icon.`);
-			notifyUser(userId, user.name, 'has removed your userlist icon.');
-			notifyStaff(user.name, target, 'removed icon for');
+			notify(userId, user.name, 'has removed your userlist icon.');
+			notify('', user.name, `removed icon for ${nameColor(target, true, false)}`, undefined, false);
 		},
 
 		async list(target, room, user) {
 			this.checkCan('roomowner');
 
 			const result = await IconsDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
-
-			if (result.total === 0) return this.sendReply('No custom icons have been set.');
+			if (!result.total) return this.sendReply('No custom icons have been set.');
 
 			const rows: string[][] = result.docs.map(icon => [
 				icon._id,
@@ -197,12 +186,8 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) {
-					output += `<button class="button" name="send" value="/icon list ${result.page - 1}">Previous</button> `;
-				}
-				if (result.hasNext) {
-					output += `<button class="button" name="send" value="/icon list ${result.page + 1}">Next</button>`;
-				}
+				if (result.hasPrev) output += `<button class="button" name="send" value="/icon list ${result.page - 1}">Previous</button> `;
+				if (result.hasNext) output += `<button class="button" name="send" value="/icon list ${result.page + 1}">Next</button>`;
 				output += `</center></div>`;
 			}
 
@@ -211,18 +196,17 @@ export const commands: Chat.ChatCommands = {
 
 		help() {
 			if (!this.runBroadcast()) return;
-			const helpList = [
-				{ cmd: "/icon set [user], [url], [size]", desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.` },
-				{ cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &." },
-				{ cmd: "/icon delete [user]", desc: "Remove icon. Requires: &." },
-				{ cmd: "/icon list [page]", desc: "List icons. Requires: &." },
+			const cmds = [
+				["/icon set [user], [url], [size]", `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.`],
+				["/icon update [user], [url], [size]", "Update icon. Requires: &."],
+				["/icon delete [user]", "Remove icon. Requires: &."],
+				["/icon list [page]", "List icons. Requires: &."],
 			];
-			const html = `<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
+			this.sendReplyBox(
+				`<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				cmds.map(([c, d], i) => `<li><b>${c}</b> - ${d}</li>${i < cmds.length - 1 ? '<hr>' : ''}`).join('') +
+				`</ul>`
+			);
 		},
 	},
 
