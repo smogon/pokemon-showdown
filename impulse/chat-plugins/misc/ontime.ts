@@ -3,8 +3,7 @@
 * Ontime Commands
 */
 import { FS } from '../../../lib/fs';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { generateThemedTable, nameColor } from '../../utils';
 
 interface OntimeDocument {
 	_id: string;
@@ -24,6 +23,9 @@ let ontimeData: OntimeData = {
 	blocked: {},
 };
 
+let pendingWrites = new Set<string>();
+let writeTimeout: NodeJS.Timeout | null = null;
+
 const loadOntime = async (): Promise<void> => {
 	const data = await FS(ONTIME_FILE).readIfExists();
 	if (data) {
@@ -31,12 +33,30 @@ const loadOntime = async (): Promise<void> => {
 	}
 };
 
-const saveOntime = (): void => {
-	// Use writeUpdate with throttling since there will be many concurrent writes
-	FS(ONTIME_FILE).writeUpdate(
-		() => JSON.stringify(ontimeData, null, 2),
-		{ throttle: 10000 } // Save at most once every 10 seconds
-	);
+const flushOntime = async (): Promise<void> => {
+	if (writeTimeout) {
+		clearTimeout(writeTimeout);
+		writeTimeout = null;
+	}
+	pendingWrites.clear();
+	await FS(ONTIME_FILE).safeWrite(JSON.stringify(ontimeData, null, 2));
+};
+
+const queueOntimeWrite = (userId: string): void => {
+	pendingWrites.add(userId);
+	
+	if (writeTimeout) {
+		clearTimeout(writeTimeout);
+	}
+	
+	// Write after 1 second of no new disconnects, or immediately if 10+ users pending
+	if (pendingWrites.size >= 10) {
+		void flushOntime();
+	} else {
+		writeTimeout = setTimeout(() => {
+			void flushOntime();
+		}, 1000);
+	}
 };
 
 const convertTime = (time: number): { h: number, m: number, s: number } => {
@@ -76,8 +96,8 @@ export const handlers: Chat.Handlers = {
 				}
 				ontimeData.users[user.id].ontime += sessionTime;
 				
-				// Queue write with throttling to handle many concurrent disconnects
-				saveOntime();
+				// Queue a batched write
+				queueOntimeWrite(user.id);
 			}
 		}
 	},
