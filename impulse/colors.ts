@@ -5,41 +5,14 @@
 import * as crypto from 'crypto';
 import { FS } from '../lib/fs';
 
-/**
- * Represents an RGB color structure.
- */
-interface RGB {
-	R: number;
-	G: number;
-	B: number;
-}
-
-/**
- * Maps user IDs to their custom hex color strings.
- */
-interface CustomColors {
-	[userid: string]: string;
-}
-
-/**
- * Document format for storing custom colors in the database file.
- */
-interface ColorDocument {
-	userid: string;
-	color: string;
-}
+interface RGB { R: number; G: number; B: number; }
+interface CustomColors { [userid: string]: string; }
+interface ColorDocument { userid: string; color: string; }
 
 let customColors: CustomColors = {};
 const colorCache: Record<string, string> = {};
-
-/**
- * The file path for storing custom color data.
- */
 const CUSTOM_COLORS_FILE = 'impulse/db/customcolors.json';
 
-/**
- * Loads custom colors from the database file into memory.
- */
 export const loadCustomColorsFromDB = async (): Promise<void> => {
 	try {
 		const data = await FS(CUSTOM_COLORS_FILE).readIfExists();
@@ -48,9 +21,7 @@ export const loadCustomColorsFromDB = async (): Promise<void> => {
 		customColors = {};
 		if (Array.isArray(parsed)) {
 			parsed.forEach(doc => {
-				if (doc.userid && doc.color) {
-					customColors[doc.userid] = doc.color;
-				}
+				if (doc.userid && doc.color) customColors[doc.userid] = doc.color;
 			});
 		} else {
 			Object.assign(customColors, parsed);
@@ -61,9 +32,6 @@ export const loadCustomColorsFromDB = async (): Promise<void> => {
 	}
 };
 
-/**
- * Saves the current custom colors map to the database file.
- */
 export const saveCustomColorsToDB = async (): Promise<void> => {
 	try {
 		await FS(CUSTOM_COLORS_FILE).safeWrite(JSON.stringify(customColors, null, 2));
@@ -74,36 +42,18 @@ export const saveCustomColorsToDB = async (): Promise<void> => {
 
 loadCustomColorsFromDB().catch(err => console.error('Failed to init colors:', err));
 
-/**
- * Retrieves the in-memory map of custom colors.
- * @returns The CustomColors map.
- */
 export const getCustomColors = (): CustomColors => customColors;
 
-/**
- * Sets the in-memory map of custom colors and saves them to the database.
- * @param colors The new map of custom colors.
- */
 export const setCustomColors = (colors: CustomColors): void => {
 	customColors = colors;
 	void saveCustomColorsToDB();
 };
 
-/**
- * Reloads custom colors from the database and clears the color cache.
- */
 export const reloadCustomColors = async (): Promise<void> => {
 	await loadCustomColorsFromDB();
 	clearColorCache();
 };
 
-/**
- * Converts HSL color values to RGB color values.
- * @param H Hue (0-360).
- * @param S Saturation (0-100).
- * @param L Lightness (0-100).
- * @returns The RGB color object with R, G, B components normalized to 0-1.
- */
 const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	const C = (100 - Math.abs(2 * L - 100)) * S / 100 / 100;
 	const X = C * (1 - Math.abs((H / 60) % 2 - 1));
@@ -116,15 +66,8 @@ const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	return { R: R1 + m, G: G1 + m, B: B1 + m };
 };
 
-/**
- * Calculates a unique, accessible color for a given name using an MD5 hash.
- * Prioritizes custom colors and cache lookup.
- * @param name The name to generate a color for.
- * @returns The hex color string (e.g., '#AABBCC').
- */
 const hashColor = (name: string): string => {
 	const id = toID(name);
-
 	if (customColors[id]) return customColors[id];
 	if (colorCache[id]) return colorCache[id];
 
@@ -157,29 +100,13 @@ const hashColor = (name: string): string => {
 	return color;
 };
 
-/**
- * Checks if a string is a valid CSS hex color code (3 or 6 digits, prefixed with #).
- * @param color The hex color string to validate.
- * @returns True if the color is a valid hex code, false otherwise.
- */
 export const validateHexColor = (color: string): boolean =>
 	/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
-/**
- * Clears the in-memory color cache.
- */
 export const clearColorCache = (): void => {
 	Object.keys(colorCache).forEach(key => delete colorCache[key]);
 };
 
-/**
- * Formats a name with its unique color wrapped in HTML for display.
- * @param name The user's name or a plain string.
- * @param bold If true, wrap the name in bold tags. Defaults to true.
- * @param userGroup If true, prepends the user's global authority group symbol. Defaults to false.
- * @param room The room context (optional, currently unused in implementation).
- * @returns The HTML string for the colored name.
- */
 export const nameColor = (
 	name: string,
 	bold = true,
