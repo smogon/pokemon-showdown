@@ -10,7 +10,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
-import { type ENCOUNTER_ZONES } from './locations';
+import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
@@ -875,17 +875,41 @@ export function generateRPGModeSelectionHTML(): string {
 }
 
 export function generateStoryModeStartHTML(): string {
+	const startingLocation = getStartingLocation();
+	const location = LOCATIONS[startingLocation.id];
+	
+	let buildingsHTML = '';
+	let labBuildingId = '';
+	
+	// Find the lab building and list all buildings
+	if (location?.buildings) {
+		buildingsHTML += `<p>The town is peaceful, with a few buildings around you. You can see:</p><ul>`;
+		for (const building of location.buildings) {
+			let icon = '🏠';
+			if (building.type === 'pokecenter') icon = '🏥';
+			else if (building.type === 'pokemart') icon = '🏪';
+			else if (building.type === 'lab') {
+				icon = '🔬';
+				labBuildingId = building.id;
+			}
+			buildingsHTML += `<li>${icon} <strong>${building.name}</strong> - ${building.description}</li>`;
+		}
+		buildingsHTML += `</ul>`;
+	}
+	
+	let labButtonHTML = '';
+	if (labBuildingId) {
+		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button></p>`;
+	}
+	
 	return `<div class="infobox">` +
-		`<h2>Professor Oak's Laboratory</h2>` +
-		`<p><strong>Professor Oak:</strong> "Ah, welcome! I've been expecting you. I'm Professor Oak, and I've dedicated my life to the study of Pokémon."</p>` +
-		`<p>"The world of Pokémon is a vast and wonderful place, filled with creatures of all shapes and sizes. Some people train them, others befriend them, but all share a special bond."</p>` +
-		`<p>"Before you begin your journey, you'll need a Pokémon partner. I have three Pokémon here that are perfect for beginning trainers."</p>` +
-		`<p><strong>Choose your starter type:</strong></p>` +
-		`<p>` +
-		`<button name="send" value="/rpg choosestarter fire" class="button">🔥 Fire Type</button>` +
-		`<button name="send" value="/rpg choosestarter water" class="button">💧 Water Type</button>` +
-		`<button name="send" value="/rpg choosestarter grass" class="button">🌱 Grass Type</button>` +
-		`</p>` +
+		`<h2>Welcome to the World of Pokémon!</h2>` +
+		`<p>You find yourself in <strong>${startingLocation.name}</strong>, ready to begin your journey as a Pokémon Trainer!</p>` +
+		buildingsHTML +
+		`<p><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
+		`<hr />` +
+		labButtonHTML +
+		`<p><button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button></p>` +
 		`</div>`;
 }
 

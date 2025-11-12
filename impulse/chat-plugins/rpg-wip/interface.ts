@@ -278,7 +278,7 @@ export interface NPCAction {
 		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer' |
 		'fishing' | 'bikeshop' | 'coinexchange' | 'tutorcombo' | 'apricorncrafter' | 'pokeathlon' | 'musicalprops' |
 		'berryblender' | 'pokeblockmixer' | 'poffincooking' | 'rivalbattle' | 'gymrematch' | 'shardtrader' |
-		'wingcollector' | 'scalecollector' | 'opower' | 'heal';
+		'wingcollector' | 'scalecollector' | 'opower' | 'heal' | 'choosestarter';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
@@ -391,6 +391,8 @@ export interface NPCAction {
 	opowerType?: string; // Type of O-Power (attack, defense, capture, etc.)
 	opowerDuration?: number; // Duration in minutes
 	opowerCooldown?: number; // Cooldown in minutes
+	// Choose starter
+	starterLevel?: number; // Level of starter Pokemon (default 5)
 }
 
 export interface NPCData {
