@@ -3,44 +3,32 @@
 * Symbol Colors Commands
 */
 
-import { FS } from '../../../lib/fs';
+import { FS } from '../../../lib';
+import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const SYMBOL_COLORS_FILE = 'impulse/db/symbol-colors.json';
 const HEX_REGEX = /^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/;
 
 interface SymbolColorDocument {
 	_id: string;
 	color: string;
 	setBy: string;
-	createdAt: string;
-	updatedAt: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
-interface SymbolColorsData {
-	[userId: string]: SymbolColorDocument;
-}
-
-let symbolColors: SymbolColorsData = {};
-
-const loadSymbolColors = async (): Promise<void> => {
-	const data = await FS(SYMBOL_COLORS_FILE).readIfExists();
-	symbolColors = data ? JSON.parse(data) : {};
-};
-
-const saveSymbolColors = async (): Promise<void> => {
-	await FS(SYMBOL_COLORS_FILE).safeWrite(JSON.stringify(symbolColors, null, 2));
-};
+const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
 
 const isValidColor = (color: string): boolean => HEX_REGEX.test(color);
 
 const updateSymbolColors = async (): Promise<void> => {
 	try {
+		const symbolColorDocs = await SymbolColorsDB.find({});
 		let css = '/* SYMBOLCOLORS START */\n';
 
-		Object.values(symbolColors).forEach(doc => {
+		symbolColorDocs.forEach(doc => {
 			const selector = `[id$="-userlist-user-${doc._id}"] button > em.group`;
 			const chatSelector = `[class$="chatmessage-${doc._id}"] strong small, .groupsymbol`;
 			css += `${selector} { color: ${doc.color}; }\n${chatSelector} { color: ${doc.color}; }\n`;
@@ -82,7 +70,7 @@ const notifyStaff = (staffName: string, targetName: string, color: string, actio
 
 export const commands: Chat.ChatCommands = {
 	symbolcolor: {
-		async set(target: string, room: Room, user: User): Promise<void> {
+		async set(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
 			if (!name || !color) return this.parse('/help symbolcolor');
@@ -94,13 +82,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid color. Use hex format: #FF5733 or #F73');
 			}
 
-			if (symbolColors[userId]) {
+			if (await SymbolColorsDB.exists({ _id: userId })) {
 				return this.errorReply('User already has symbol color. Remove with /symbolcolor delete.');
 			}
 
-			const now = new Date().toISOString();
-			symbolColors[userId] = { _id: userId, color, setBy: user.id, createdAt: now, updatedAt: now };
-			await saveSymbolColors();
+			const now = new Date();
+			await SymbolColorsDB.insertOne({ _id: userId, color, setBy: user.id, createdAt: now, updatedAt: now });
 
 			await updateSymbolColors();
 
@@ -109,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, color, 'set');
 		},
 
-		async update(target: string, room: Room, user: User): Promise<void> {
+		async update(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
 			if (!name || !color) return this.parse('/help symbolcolor');
@@ -120,14 +107,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid color. Use hex format: #FF5733 or #F73');
 			}
 
-			if (!symbolColors[userId]) {
+			const oldColor = await SymbolColorsDB.findOne({ _id: userId }, { projection: { color: 1 } });
+			if (!oldColor) {
 				return this.errorReply('User does not have symbol color. Use /symbolcolor set.');
 			}
 
-			symbolColors[userId].color = color;
-			symbolColors[userId].updatedAt = new Date().toISOString();
-			await saveSymbolColors();
-
+			await SymbolColorsDB.updateOne({ _id: userId }, { $set: { color, updatedAt: new Date() } });
 			await updateSymbolColors();
 
 			this.sendReply(`|raw|You have updated ${nameColor(name, true, false)}'s symbol color to: <span style="color: ${color}">■</span>`);
@@ -135,17 +120,16 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff(user.name, name, color, 'updated');
 		},
 
-		async delete(target: string, room: Room, user: User): Promise<void> {
+		async delete(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
-			if (!symbolColors[userId]) {
+			const symbolColor = await SymbolColorsDB.findOne({ _id: userId }, { projection: { color: 1 } });
+			if (!symbolColor) {
 				return this.errorReply(`${target} does not have a symbol color.`);
 			}
 
-			delete symbolColors[userId];
-			await saveSymbolColors();
-
+			await SymbolColorsDB.deleteOne({ _id: userId });
 			await updateSymbolColors();
 
 			this.sendReply(`You removed ${target}'s symbol color.`);
@@ -161,22 +145,13 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async list(target: string, room: Room, user: User): Promise<void> {
+		async list(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
+			const result = await SymbolColorsDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
-			const allColors = Object.values(symbolColors).sort((a, b) => a._id.localeCompare(b._id));
-			const total = allColors.length;
+			if (result.total === 0) return this.sendReply('No custom symbol colors have been set.');
 
-			if (total === 0) return this.sendReply('No custom symbol colors have been set.');
-
-			const page = parseInt(target) || 1;
-			const limit = 20;
-			const totalPages = Math.ceil(total / limit);
-			const startIdx = (page - 1) * limit;
-			const endIdx = startIdx + limit;
-			const pageColors = allColors.slice(startIdx, endIdx);
-
-			const rows: string[][] = pageColors.map(sc => [
+			const rows: string[][] = result.docs.map(sc => [
 				sc._id,
 				sc.color,
 				colorPreview(sc.color),
@@ -184,18 +159,18 @@ export const commands: Chat.ChatCommands = {
 			]);
 
 			let output = generateThemedTable(
-				`Custom Symbol Colors (Page ${page}/${totalPages})`,
+				`Custom Symbol Colors (Page ${result.page}/${result.totalPages})`,
 				['User', 'Color', 'Preview', 'Set By'],
 				rows,
 			);
 
-			if (totalPages > 1) {
+			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (page > 1) {
-					output += `<button class="button" name="send" value="/symbolcolor list ${page - 1}">Previous</button> `;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/symbolcolor list ${result.page - 1}">Previous</button> `;
 				}
-				if (page < totalPages) {
-					output += `<button class="button" name="send" value="/symbolcolor list ${page + 1}">Next</button>`;
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/symbolcolor list ${result.page + 1}">Next</button>`;
 				}
 				output += `</center></div>`;
 			}
@@ -227,5 +202,3 @@ export const commands: Chat.ChatCommands = {
 	symbolcolorhelp: 'symbolcolor.help',
 	schelp: 'symbolcolor.help',
 };
-
-void loadSymbolColors();

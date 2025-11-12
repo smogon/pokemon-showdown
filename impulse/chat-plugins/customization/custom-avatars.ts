@@ -3,12 +3,12 @@
 * Custom Avatars Commands
 */
 
-import { FS } from '../../../lib/fs';
+import { FS } from '../../../lib';
+import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const AVATAR_PATH = 'config/avatars/';
-const AVATARS_FILE = 'impulse/db/custom-avatars.json';
 const STAFF_ROOM_ID = 'staff';
 const VALID_EXTENSIONS = ['.jpg', '.png', '.gif'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -21,29 +21,6 @@ const IMAGE_SIGS: { [key: string]: number[] } = {
 	'.png': PNG_SIG,
 	'.jpg': JPG_SIG,
 	'.gif': GIF_SIG,
-};
-
-interface CustomAvatarDocument {
-	userid: string;
-	filename: string;
-	setBy: string;
-	sourceUrl: string;
-	updatedAt: string;
-}
-
-interface CustomAvatarsData {
-	[userId: string]: CustomAvatarDocument;
-}
-
-let customAvatars: CustomAvatarsData = {};
-
-const loadAvatars = async (): Promise<void> => {
-	const data = await FS(AVATARS_FILE).readIfExists();
-	customAvatars = data ? JSON.parse(data) : {};
-};
-
-const saveAvatars = async (): Promise<void> => {
-	await FS(AVATARS_FILE).safeWrite(JSON.stringify(customAvatars, null, 2));
 };
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
@@ -128,19 +105,13 @@ const downloadImage = async (
 };
 
 const saveAvatarMetadata = async (userId: string, filename: string, setBy: string, sourceUrl: string) => {
-	customAvatars[userId] = {
-		userid: userId,
-		filename,
-		setBy,
-		sourceUrl,
-		updatedAt: new Date().toISOString(),
-	};
-	await saveAvatars();
+	await ImpulseDB('customavatars').upsert({ userid: userId }, {
+		$set: { userid: userId, filename, setBy, sourceUrl, updatedAt: new Date() },
+	});
 };
 
 const removeAvatarMetadata = async (userId: string) => {
-	delete customAvatars[userId];
-	await saveAvatars();
+	await ImpulseDB('customavatars').deleteOne({ userid: userId });
 };
 
 const displayAvatar = (filename: string) => {
@@ -241,25 +212,16 @@ export const commands: Chat.ChatCommands = {
 		async list(target, room, user) {
 			this.checkCan('roomowner');
 
-			const allAvatars = Object.values(customAvatars).sort((a, b) => a.userid.localeCompare(b.userid));
-			const total = allAvatars.length;
-
-			if (total === 0) return this.sendReply('No custom avatars have been set.');
-
 			const page = parseInt(target) || 1;
-			const limit = 20;
-			const totalPages = Math.ceil(total / limit);
+			const result = await ImpulseDB('customavatars').findPaginated({}, { page, limit: 20, sort: { userid: 1 } });
 
-			if (page < 1 || page > totalPages) {
-				return this.errorReply(`Invalid page number. Please use a page between 1 and ${totalPages}.`);
+			if (result.total === 0) return this.sendReply('No custom avatars have been set.');
+			if (page < 1 || page > result.totalPages) {
+				return this.errorReply(`Invalid page number. Please use a page between 1 and ${result.totalPages}.`);
 			}
 
-			const startIdx = (page - 1) * limit;
-			const endIdx = startIdx + limit;
-			const pageAvatars = allAvatars.slice(startIdx, endIdx);
-
 			const baseUrl = getAvatarBaseUrl();
-			const rows: string[][] = pageAvatars.map(doc => [
+			const rows: string[][] = result.docs.map(doc => [
 				nameColor(doc.userid, true, true),
 				`<img src="${baseUrl}${doc.filename}" width="80" height="80">`,
 				Chat.escapeHTML(doc.filename),
@@ -267,17 +229,17 @@ export const commands: Chat.ChatCommands = {
 			]);
 
 			let output = generateThemedTable(
-				`Custom Avatars (Page ${page}/${totalPages})`,
+				`Custom Avatars (Page ${page}/${result.totalPages})`,
 				['User', 'Avatar', 'Filename', 'Set By'],
 				rows,
 			);
 
-			if (totalPages > 1) {
+			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (page > 1) {
+				if (result.hasPrev) {
 					output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
 				}
-				if (page < totalPages) {
+				if (result.hasNext) {
 					output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
 				}
 				output += `</center></div>`;
@@ -305,5 +267,3 @@ export const commands: Chat.ChatCommands = {
 	customavatarhelp: 'customavatar.help',
 	cahelp: 'customavatar.help',
 };
-
-void loadAvatars();

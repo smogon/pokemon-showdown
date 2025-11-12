@@ -4,41 +4,27 @@
 * @author PrinceSky-Git
 */
 
-import { FS } from '../../../lib/fs';
+import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const SYMBOLS_FILE = 'impulse/db/custom-symbols.json';
 
 interface CustomSymbolDocument {
 	_id: string;
 	symbol: string;
 	setBy: string;
-	createdAt: string;
-	updatedAt: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
-interface CustomSymbolsData {
-	[userId: string]: CustomSymbolDocument;
-}
+const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
 
-let customSymbols: CustomSymbolsData = {};
-
-const loadSymbols = async (): Promise<void> => {
-	const data = await FS(SYMBOLS_FILE).readIfExists();
-	customSymbols = data ? JSON.parse(data) : {};
-};
-
-const saveSymbols = async (): Promise<void> => {
-	await FS(SYMBOLS_FILE).safeWrite(JSON.stringify(customSymbols, null, 2));
-};
-
-const applyCustomSymbol = (userid: string): void => {
+const applyCustomSymbol = async (userid: string): Promise<void> => {
 	const user = Users.get(userid);
 	if (!user) return;
 
-	const symbolDoc = customSymbols[userid];
+	const symbolDoc = await CustomSymbolDB.findOne({ _id: userid }, { projection: { symbol: 1 } });
 	if (symbolDoc) {
 		if (!(user as any).originalGroup) (user as any).originalGroup = user.tempGroup;
 		(user as any).customSymbol = symbolDoc.symbol;
@@ -86,15 +72,14 @@ export const commands: Chat.ChatCommands = {
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
 			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
 
-			if (customSymbols[userId]) {
+			if (await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User already has symbol. Use /symbol update or /symbol delete.');
 			}
 
-			const now = new Date().toISOString();
-			customSymbols[userId] = { _id: userId, symbol, setBy: user.id, createdAt: now, updatedAt: now };
-			await saveSymbols();
+			const now = new Date();
+			await CustomSymbolDB.insertOne({ _id: userId, symbol, setBy: user.id, createdAt: now, updatedAt: now });
 
-			applyCustomSymbol(userId);
+			await applyCustomSymbol(userId);
 
 			this.sendReply(`|raw|You have given ${nameColor(name, true, false)} the custom symbol: ${symbol}`);
 			notifyUser(userId, user.name, symbol, 'has set');
@@ -108,17 +93,14 @@ export const commands: Chat.ChatCommands = {
 
 			const userId = toID(name);
 
-			if (!customSymbols[userId]) {
+			if (!await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User does not have symbol. Use /symbol set.');
 			}
 
 			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
 
-			customSymbols[userId].symbol = symbol;
-			customSymbols[userId].updatedAt = new Date().toISOString();
-			await saveSymbols();
-
-			applyCustomSymbol(userId);
+			await CustomSymbolDB.updateOne({ _id: userId }, { $set: { symbol, updatedAt: new Date() } });
+			await applyCustomSymbol(userId);
 
 			this.sendReply(`|raw|You have updated ${nameColor(name, true, false)}'s custom symbol to: ${symbol}`);
 			notifyUser(userId, user.name, symbol, 'has updated');
@@ -129,13 +111,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
-			if (!customSymbols[userId]) {
+			if (!await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply(`${target} does not have a custom symbol.`);
 			}
 
-			delete customSymbols[userId];
-			await saveSymbols();
-
+			await CustomSymbolDB.deleteOne({ _id: userId });
 			removeCustomSymbol(userId);
 
 			this.sendReply(`You removed ${target}'s custom symbol.`);
@@ -151,40 +131,32 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		list(target, room, user): void {
+		async list(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
-			const allSymbols = Object.values(customSymbols).sort((a, b) => a._id.localeCompare(b._id));
-			const total = allSymbols.length;
+			const result = await CustomSymbolDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
-			if (total === 0) return this.sendReply('No custom symbols have been set.');
+			if (result.total === 0) return this.sendReply('No custom symbols have been set.');
 
-			const page = parseInt(target) || 1;
-			const limit = 20;
-			const totalPages = Math.ceil(total / limit);
-			const startIdx = (page - 1) * limit;
-			const endIdx = startIdx + limit;
-			const pageSymbols = allSymbols.slice(startIdx, endIdx);
-
-			const rows: string[][] = pageSymbols.map(doc => [
+			const rows: string[][] = result.docs.map(doc => [
 				doc._id,
 				`<strong style="font-size: 16px;">${doc.symbol}</strong>`,
 				Chat.escapeHTML(doc.setBy || 'Unknown'),
 			]);
 
 			let output = generateThemedTable(
-				`Custom Symbols (Page ${page}/${totalPages})`,
+				`Custom Symbols (Page ${result.page}/${result.totalPages})`,
 				['User', 'Symbol', 'Set By'],
 				rows,
 			);
 
-			if (totalPages > 1) {
+			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (page > 1) {
-					output += `<button class="button" name="send" value="/symbol list ${page - 1}">Previous</button> `;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page - 1}">Previous</button> `;
 				}
-				if (page < totalPages) {
-					output += `<button class="button" name="send" value="/symbol list ${page + 1}">Next</button>`;
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page + 1}">Next</button>`;
 				}
 				output += `</center></div>`;
 			}
@@ -213,7 +185,7 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const loginfilter: Chat.LoginFilter = user => {
-	applyCustomSymbol(user.id);
+	void applyCustomSymbol(user.id);
 };
 
 const originalGetIdentity = Users.User.prototype.getIdentity;
@@ -244,5 +216,3 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 
 	return customSymbol + this.name;
 };
-
-void loadSymbols();
