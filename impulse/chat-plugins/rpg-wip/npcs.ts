@@ -12,7 +12,12 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		id: 'professor',
 		name: 'Professor Oak',
 		location: 'startertown_lab',
-		dialogue: "Welcome! I research Pokémon as a profession. Let me give you some advice: defeat all 8 gym leaders to challenge the Elite Four!",
+		dialogue: "Welcome! I research Pokémon as a profession. Are you here to get your first Pokémon partner?",
+		action: {
+			type: 'choosestarter',
+			starterLevel: 5,
+			onceOnly: true,
+		},
 	},
 	'nursejoystartertown': {
 		id: 'nursejoystartertown',

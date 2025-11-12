@@ -172,6 +172,9 @@ export const commands: ChatCommands = {
 			if (player.party.length > 0) {
 				return this.errorReply("You have already started your adventure!");
 			}
+			// Set player location to starting location
+			const startingLocation = getStartingLocation();
+			player.location = startingLocation.name;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStoryModeStartHTML()}`);
 		},
 
@@ -2636,6 +2639,16 @@ export const commands: ChatCommands = {
 						dialogueHTML += `<p><strong>Service:</strong> Heal all Pokémon</p>`;
 						dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">💊 Heal Party</button> `;
 						break;
+
+					case 'choosestarter':
+						// Check if player already has a starter
+						if (player.party.length > 0) {
+							dialogueHTML += `<p style="color: gray;"><em>You already have your Pokémon partner!</em></p>`;
+						} else {
+							dialogueHTML += `<p><strong>Choose your starter Pokémon:</strong></p>`;
+							dialogueHTML += `<button name="send" value="/rpg starterchoice ${npcId}" class="button">👀 View Available Starters</button> `;
+						}
+						break;
 					}
 				} else {
 					dialogueHTML += `<hr /><p style="color: gray;"><em>You've already completed this NPC's request.</em></p>`;
@@ -2836,6 +2849,97 @@ export const commands: ChatCommands = {
 				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+		},
+
+		starterchoice(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot choose a starter during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const parts = target.split(' ');
+			const npcId = toID(parts[0]);
+			const selectedPokemon = parts[1]; // pokemon id if selecting, undefined if viewing
+
+			const npc = NPC_DATABASE[npcId];
+			if (!npc?.action || npc.action.type !== 'choosestarter') {
+				return this.errorReply("Invalid NPC or no starter selection available.");
+			}
+
+			const action = npc.action;
+
+			if (!selectedPokemon) {
+				// Show all available starters (like Pokemon games)
+				// Get all starters from STARTER_POKEMON
+				const allStarters = Object.values(STARTER_POKEMON).flat();
+
+				let html = `<div class="infobox">` +
+					`<h2>${npc.name}</h2>` +
+					`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
+					`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
+					`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+
+				for (const starterId of allStarters) {
+					const species = Dex.species.get(starterId);
+					if (species.exists) {
+						html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
+							`<strong>${species.name}</strong><br>` +
+							`<small>Type: ${species.types.join('/')}</small><br>` +
+							`<button name="send" value="/rpg starterchoice ${npcId} ${starterId}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
+							`</div>`;
+					}
+				}
+
+				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			} else {
+				// Player selected a specific Pokemon
+				// Validate the selection is in STARTER_POKEMON
+				const allStarters = Object.values(STARTER_POKEMON).flat();
+				if (!allStarters.includes(selectedPokemon)) {
+					return this.errorReply("Invalid starter Pokémon selection.");
+				}
+
+				const result = NPCActions.handleChooseStarter(player, action, selectedPokemon);
+
+				if (!result.success) {
+					return this.errorReply(result.message);
+				}
+
+				// Mark as completed
+				if (action.onceOnly) {
+					player.completedNPCActions.add(npcId);
+				}
+
+				// Set starting location if not already set
+				if (!player.location) {
+					const startingLocation = getStartingLocation();
+					player.location = startingLocation.name;
+				}
+
+				const starter = result.pokemon!;
+				const species = Dex.species.get(starter.species);
+				const tempSlot = createActivePokemonSlot(starter);
+
+				const confirmHTML = `<div class="infobox">` +
+					`<h2>Congratulations!</h2>` +
+					`<p><strong>${npc.name}:</strong> "${result.message}"</p>` +
+					`${generatePokemonInfoHTML(tempSlot, true)}` +
+					`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${species.name}!"</p>` +
+					`<p>"Now, head out and begin your journey. Good luck!"</p>` +
+					`<hr />` +
+					`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+
+				if (room?.roomid !== 'lobby') {
+					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
+				}
+			}
 		},
 
 		save(target, room, user) {

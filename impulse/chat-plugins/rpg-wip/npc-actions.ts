@@ -1231,3 +1231,35 @@ export function handleHeal(
 		message: "We've restored your Pokémon to full health. We hope to see you again!",
 	};
 }
+
+/**
+ * Choose Starter Action
+ * Handle starter Pokemon selection (simplified single-step like Pokemon games)
+ */
+export function handleChooseStarter(
+	player: PlayerData,
+	action: NPCAction,
+	selectedPokemon: string
+): { success: boolean, message: string, pokemon?: RPGPokemon } {
+	// Check if player already has a starter
+	if (player.party.length > 0) {
+		return {
+			success: false,
+			message: 'You already have a starter Pokémon!',
+		};
+	}
+
+	const starterLevel = action.starterLevel || 5;
+
+	// Create the starter Pokemon
+	const starter = createPokemon(selectedPokemon, starterLevel);
+	player.party.push(starter);
+
+	const species = Dex.species.get(selectedPokemon);
+
+	return {
+		success: true,
+		message: `Excellent choice! ${species.name} will be a great partner for you.`,
+		pokemon: starter,
+	};
+}
