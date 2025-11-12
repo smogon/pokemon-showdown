@@ -49,7 +49,8 @@ export function generateMenuHTML(player: PlayerData): string {
 export function generateProfileHTML(player: PlayerData): string {
 	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p>` +
 		`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
-		`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button></p>` +
+		`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button> ` +
+		`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
 		generateBottomNavigation() + `</div>`;
 }
 

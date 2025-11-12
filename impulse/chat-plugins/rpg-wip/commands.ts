@@ -35,6 +35,7 @@ import {
 	savePlayerToDB,
 	loadPlayerFromDB,
 	hasSaveInDB,
+	deletePlayerFromDB,
 } from './core';
 import {
 	createActivePokemonSlot,
@@ -3053,6 +3054,54 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
+			}
+		},
+
+		async dbdelete(target, room, user) {
+			try {
+				const hasSave = await hasSaveInDB(user.id);
+
+				if (!hasSave) {
+					const noSaveHTML = `<div class="infobox">` +
+						`<h2>No Save Found</h2>` +
+						`<p>You don't have a saved game in the database to delete.</p>` +
+						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+						generateBottomNavigation() +
+						`</div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
+				}
+
+				// Require confirmation
+				if (!target || target !== 'confirm') {
+					const confirmHTML = `<div class="infobox">` +
+						`<h2>⚠️ Delete Save Confirmation</h2>` +
+						`<p><strong>Warning:</strong> This will permanently delete your saved game from the database!</p>` +
+						`<p>Your current in-memory progress will NOT be affected, but you won't be able to load this save anymore.</p>` +
+						`<p>Are you sure you want to delete your database save?</p>` +
+						`<p><button name="send" value="/rpg dbdelete confirm" class="button" style="background-color: #d32f2f; color: white;">⚠️ Yes, Delete Save</button> ` +
+						`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
+						generateBottomNavigation() +
+						`</div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+				}
+
+				// Perform deletion
+				const deleted = await deletePlayerFromDB(user.id);
+
+				if (!deleted) {
+					return this.errorReply("Error deleting save from database.");
+				}
+
+				const successHTML = `<div class="infobox">` +
+					`<h2>Save Deleted</h2>` +
+					`<p>Your saved game has been permanently deleted from the database.</p>` +
+					`<p><small>Your current game progress is still in memory. Use "Save to Database" if you want to save your current progress.</small></p>` +
+					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
+			} catch (error) {
+				return this.errorReply("Error deleting save from database: " + String(error));
 			}
 		},
 
