@@ -1097,8 +1097,8 @@ export const commands: ChatCommands = {
 			}
 
 			const exploreHTML = `<div class="infobox">` +
-				`<h2>${currentLocation.name}</h2>` +
-				`<p><em>${currentLocation.description}</em></p>` +
+				`<h2><center><b>${currentLocation.name}</b></center></h2>` +
+				`<center><p><em>${currentLocation.description}</em></p></center><hr>` +
 				`${exploreButtons}` +
 				`<hr />` +
 				generateBottomNavigation() +
