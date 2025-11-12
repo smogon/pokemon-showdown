@@ -32,6 +32,9 @@ import {
 	getInitialMoves,
 	savePlayerToString,
 	loadPlayer,
+	savePlayerToDB,
+	loadPlayerFromDB,
+	hasSaveInDB,
 } from './core';
 import {
 	createActivePokemonSlot,
@@ -2989,6 +2992,67 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 			} catch (error) {
 				return this.errorReply("Error loading game. Make sure you pasted the complete save data.");
+			}
+		},
+
+		async dbsave(target, room, user) {
+			const player = getPlayerData(user.id);
+
+			try {
+				await savePlayerToDB(player);
+
+				const saveHTML = `<div class="infobox">` +
+					`<h2>Game Saved to Database!</h2>` +
+					`<p>Your game has been successfully saved to the database.</p>` +
+					`<p><strong>Trainer:</strong> ${player.name}</p>` +
+					`<p><strong>Location:</strong> ${player.location}</p>` +
+					`<p><strong>Badges:</strong> ${player.badges}/8</p>` +
+					`<p><strong>Party:</strong> ${player.party.length} Pokémon</p>` +
+					`<p><strong>Money:</strong> ₽${player.money}</p>` +
+					`<p><small>You can load your save anytime using the Load from Database button.</small></p>` +
+					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
+			} catch (error) {
+				return this.errorReply("Error saving game to database: " + String(error));
+			}
+		},
+
+		async dbload(target, room, user) {
+			try {
+				const hasSave = await hasSaveInDB(user.id);
+
+				if (!hasSave) {
+					const noSaveHTML = `<div class="infobox">` +
+						`<h2>No Save Found</h2>` +
+						`<p>You don't have a saved game in the database yet.</p>` +
+						`<p>Use the "Save to Database" button to save your progress first.</p>` +
+						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+						generateBottomNavigation() +
+						`</div>`;
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
+				}
+
+				const loadedPlayer = await loadPlayerFromDB(user.id);
+
+				if (!loadedPlayer) {
+					return this.errorReply("Error loading game from database.");
+				}
+
+				const confirmHTML = `<div class="infobox">` +
+					`<h2>Game Loaded from Database!</h2>` +
+					`<p>Your saved game has been loaded successfully!</p>` +
+					`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
+					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
+					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
+					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
+					`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
+					generateBottomNavigation() +
+					`</div>`;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			} catch (error) {
+				return this.errorReply("Error loading game from database: " + String(error));
 			}
 		},
 

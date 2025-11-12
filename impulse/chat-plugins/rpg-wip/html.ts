@@ -48,6 +48,8 @@ export function generateMenuHTML(player: PlayerData): string {
 
 export function generateProfileHTML(player: PlayerData): string {
 	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p>` +
+		`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
+		`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button></p>` +
 		generateBottomNavigation() + `</div>`;
 }
 
@@ -877,10 +879,10 @@ export function generateRPGModeSelectionHTML(): string {
 export function generateStoryModeStartHTML(): string {
 	const startingLocation = getStartingLocation();
 	const location = LOCATIONS[startingLocation.id];
-	
+
 	let buildingsHTML = '';
 	let labBuildingId = '';
-	
+
 	// Find the lab building and list all buildings
 	if (location?.buildings) {
 		buildingsHTML += `<p>The town is peaceful, with a few buildings around you. You can see:</p><ul>`;
@@ -896,12 +898,12 @@ export function generateStoryModeStartHTML(): string {
 		}
 		buildingsHTML += `</ul>`;
 	}
-	
+
 	let labButtonHTML = '';
 	if (labBuildingId) {
 		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button></p>`;
 	}
-	
+
 	return `<div class="infobox">` +
 		`<h2>Welcome to the World of Pokémon!</h2>` +
 		`<p>You find yourself in <strong>${startingLocation.name}</strong>, ready to begin your journey as a Pokémon Trainer!</p>` +
@@ -1373,14 +1375,14 @@ export function generateFieldEffectHTML(battle: BattleState): string {
 
 	// --- Global Field Effects ---
 	if (battle.weather) {
-		const weatherIcons = { 
-			sun: '☀️', 
-			rain: '🌧️', 
-			sand: '🏜️', 
+		const weatherIcons = {
+			sun: '☀️',
+			rain: '🌧️',
+			sand: '🏜️',
 			hail: '🌨️',
 			'harsh-sun': '🔥',
 			'heavy-rain': '💧',
-			'strong-winds': '💨'
+			'strong-winds': '💨',
 		};
 		const icon = weatherIcons[battle.weather.type] || '🌤️';
 		const weatherName = battle.weather.type.toUpperCase().replace(/-/g, ' ');
