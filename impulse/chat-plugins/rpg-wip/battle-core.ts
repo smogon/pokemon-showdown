@@ -48,9 +48,20 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	let effectiveness = 1;
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
+
+	// Phase 4: Delta Stream - Strong winds negate Flying-type weaknesses
+	const hasStrongWinds = battle.weather?.type === 'strong-winds';
+	const isFlyingType = defenderTypes.includes('Flying');
+
 	for (const defenderType of defenderTypes) {
 		if (chartEntry.superEffective.includes(defenderType)) {
-			effectiveness *= 2;
+			// Delta Stream negates super effective hits on Flying types from Rock, Electric, Ice
+			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
+				['Rock', 'Electric', 'Ice'].includes(moveType)) {
+				effectiveness *= 1; // Neutral instead of super effective
+			} else {
+				effectiveness *= 2;
+			}
 		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
 			effectiveness *= 0.5;
 		} else if (chartEntry.noEffect.includes(defenderType)) {
@@ -987,6 +998,18 @@ export function handleOnHitAbilityResponses(
 				messageLog.push(`${defender.species}'s Anger Shell: ${messages.join(', ')}!`);
 			}
 		}
+	}
+
+	// Phase 4: Seed Sower - Creates Grassy Terrain when hit
+	if (defenderAbility === 'seedsower' && damageDealt > 0 && battle.terrain?.type !== 'grassy') {
+		battle.terrain = { type: 'grassy', turns: 5 };
+		messageLog.push(`${defender.species}'s Seed Sower created Grassy Terrain!`);
+	}
+
+	// Phase 4: Sand Spit - Creates sandstorm when hit
+	if (defenderAbility === 'sandspit' && damageDealt > 0 && battle.weather?.type !== 'sand') {
+		battle.weather = { type: 'sand', turns: 5 };
+		messageLog.push(`${defender.species}'s Sand Spit created a sandstorm!`);
 	}
 }
 

@@ -574,6 +574,22 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Phase 4: Hadron Engine - 1.3x Sp. Atk in Electric Terrain
+	'hadronengine': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spa' && battle?.terrain?.type === 'electric') {
+			return Math.floor(value * 1.33);
+		}
+		return value;
+	},
+
+	// Phase 4: Orichalcum Pulse - 1.3x Attack in harsh sunlight
+	'orichalcumpulse': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'atk' && battle?.weather?.type === 'sun') {
+			return Math.floor(value * 1.33);
+		}
+		return value;
+	},
 };
 
 export const WEATHER_ABILITIES = {
@@ -631,6 +647,46 @@ export const WEATHER_ABILITIES = {
 
 	'icebody': {
 		weatherHeal: 'hail',
+	},
+
+	// Phase 4: Delta Stream - Creates strong winds (negates Flying weaknesses)
+	'deltastream': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'strong-winds') {
+				battle.weather = { type: 'strong-winds', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Delta Stream created strong winds!`);
+			}
+		},
+	},
+
+	// Phase 4: Desolate Land - Harsh sunlight (prevents Water moves)
+	'desolateland': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'harsh-sun') {
+				battle.weather = { type: 'harsh-sun', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Desolate Land created harsh sunlight!`);
+			}
+		},
+	},
+
+	// Phase 4: Primordial Sea - Heavy rain (prevents Fire moves)
+	'primordialsea': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'heavy-rain') {
+				battle.weather = { type: 'heavy-rain', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Primordial Sea created heavy rain!`);
+			}
+		},
+	},
+
+	// Phase 4: Orichalcum Pulse - Sets harsh sunlight on entry
+	'orichalcumpulse': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'sun') {
+				battle.weather = { type: 'sun', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Orichalcum Pulse created harsh sunlight!`);
+			}
+		},
 	},
 };
 
@@ -764,6 +820,16 @@ export const FORM_CHANGE_ABILITIES = {
 	'shieldsdown': {
 		hpFormChange: true,
 	},
+
+	// Phase 4: Ice Face - Blocks first physical hit in hail/snow
+	'iceface': {
+		blockPhysical: true,
+	},
+
+	// Phase 4: Mimicry - Changes type based on terrain
+	'mimicry': {
+		terrainType: true,
+	},
 };
 
 export const MULTI_HIT_ABILITIES = {
@@ -825,6 +891,16 @@ export const TERRAIN_ABILITIES = {
 
 	'surgesurfer': {
 		terrainSpeedBoost: 'electric',
+	},
+
+	// Phase 4: Hadron Engine - Sets Electric Terrain on entry
+	'hadronengine': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.terrain?.type !== 'electric') {
+				battle.terrain = { type: 'electric', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Hadron Engine electrified the field!`);
+			}
+		},
 	},
 };
 
@@ -1601,6 +1677,21 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
+	// Phase 4: Check primal weather preventing moves
+	if (ctx.battle.weather?.type === 'harsh-sun' && ctx.move.type === 'Water') {
+		return {
+			prevented: true,
+			message: `The harsh sunlight evaporated the Water-type move!`,
+		};
+	}
+
+	if (ctx.battle.weather?.type === 'heavy-rain' && ctx.move.type === 'Fire') {
+		return {
+			prevented: true,
+			message: `The heavy rain extinguished the Fire-type move!`,
+		};
+	}
+
 	// Check for Mold Breaker
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 		return null;
@@ -1771,6 +1862,35 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	if (ability === 'intrepidsword' && slot.statStages.atk < 6) {
 		slot.statStages.atk++;
 		messageLog.push(`${pokemon.species}'s Intrepid Sword raised its Attack!`);
+	}
+
+	// Phase 4: Screen Cleaner - Removes screens on switch-in
+	if (ability === 'screencleaner') {
+		const sides = [
+			{ name: 'player', slots: battle.playerSlots },
+			{ name: 'opponent', slots: battle.opponentSlots },
+		];
+		let removedScreens = false;
+
+		for (const side of sides) {
+			const sidePrefix = side.name === 'player' ? 'player' : 'opponent';
+			if ((battle as any)[`${sidePrefix}ReflectTurns`] > 0) {
+				(battle as any)[`${sidePrefix}ReflectTurns`] = 0;
+				removedScreens = true;
+			}
+			if ((battle as any)[`${sidePrefix}LightScreenTurns`] > 0) {
+				(battle as any)[`${sidePrefix}LightScreenTurns`] = 0;
+				removedScreens = true;
+			}
+			if ((battle as any)[`${sidePrefix}AuroraVeilTurns`] > 0) {
+				(battle as any)[`${sidePrefix}AuroraVeilTurns`] = 0;
+				removedScreens = true;
+			}
+		}
+
+		if (removedScreens) {
+			messageLog.push(`${pokemon.species}'s Screen Cleaner removed all screens!`);
+		}
 	}
 }
 
