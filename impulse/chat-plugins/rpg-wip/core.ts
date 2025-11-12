@@ -14,6 +14,7 @@ import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from 
 import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
 import { addItemToInventory } from './items';
 import { getStartingLocation } from './locations';
+import { ImpulseDB } from '../../impulse-db';
 
 export const playerData = new Map<string, PlayerData>();
 export const activeBattles = new Map<string, BattleState>();
@@ -253,6 +254,67 @@ export function loadPlayer(userid: string, savedData: string): PlayerData {
 	player.id = userid; // Ensure ID matches current user
 	playerData.set(userid, player);
 	return player;
+}
+
+/**
+ * Save player data to ImpulseDB (MongoDB)
+ * @param player - Player data to save
+ * @returns Promise that resolves when save is complete
+ */
+export async function savePlayerToDB(player: PlayerData): Promise<void> {
+	const collection = ImpulseDB('rpg_saves');
+	const serialized = serializePlayerData(player);
+
+	// Add timestamp for tracking
+	const saveDocument = {
+		...serialized,
+		lastSaved: new Date(),
+	};
+
+	// Upsert: update if exists, insert if doesn't
+	await collection.upsert(
+		{ id: player.id },
+		saveDocument
+	);
+}
+
+/**
+ * Load player data from ImpulseDB (MongoDB)
+ * @param userid - User ID to load data for
+ * @returns Promise that resolves to PlayerData or null if not found
+ */
+export async function loadPlayerFromDB(userid: string): Promise<PlayerData | null> {
+	const collection = ImpulseDB('rpg_saves');
+	const savedData = await collection.findOne({ id: userid });
+
+	if (!savedData) {
+		return null;
+	}
+
+	const player = deserializePlayerData(savedData);
+	playerData.set(userid, player);
+	return player;
+}
+
+/**
+ * Delete player data from ImpulseDB (MongoDB)
+ * @param userid - User ID to delete data for
+ * @returns Promise that resolves when deletion is complete
+ */
+export async function deletePlayerFromDB(userid: string): Promise<boolean> {
+	const collection = ImpulseDB('rpg_saves');
+	const result = await collection.deleteOne({ id: userid });
+	return result.deletedCount > 0;
+}
+
+/**
+ * Check if a save exists in ImpulseDB for a user
+ * @param userid - User ID to check
+ * @returns Promise that resolves to true if save exists
+ */
+export async function hasSaveInDB(userid: string): Promise<boolean> {
+	const collection = ImpulseDB('rpg_saves');
+	return await collection.exists({ id: userid });
 }
 
 // Export the commands from the new commands.ts file
