@@ -852,7 +852,7 @@ export function generateBattleHTML(
 
 export function generateWelcomeHTML(): string {
 	return `<div class="infobox">` +
-		`<center><b><font size="1.1em">Welcome, Tester!</font></b></center><hr>` +
+		`<center><b><font size="16px">Welcome, Tester!</font></b></center><hr>` +
 		`<p>We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
 		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
 		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
