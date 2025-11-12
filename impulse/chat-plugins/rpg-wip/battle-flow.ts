@@ -725,9 +725,9 @@ export function executeMove(
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
 
 			if (RPGAbilities.isWeatherActive(battle)) {
-				if (battle.weather!.type === 'rain') {
+				if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
-				} else if (battle.weather!.type === 'sun') {
+				} else if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
 				}
 				if (battle.weather!.type === 'hail' && move.id === 'blizzard') {

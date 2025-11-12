@@ -1548,8 +1548,8 @@ export function handleSpecificStatusMove(
 		} else {
 			let healRatio = 0.5;
 			if (RPGAbilities.isWeatherActive(battle)) {
-				if (battle.weather?.type === 'sun') healRatio = 0.667;
-				else if (['rain', 'sand', 'hail'].includes(battle.weather!.type)) healRatio = 0.25;
+				if (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun') healRatio = 0.667;
+				else if (['rain', 'sand', 'hail', 'heavy-rain'].includes(battle.weather!.type)) healRatio = 0.25;
 			}
 			const healAmount = Math.floor(attacker.maxHp * healRatio);
 			const oldHp = attacker.hp;
@@ -1699,7 +1699,7 @@ export function handleChargingMove(
 			chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
 		} else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
 		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
-			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+			if (RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
 				attackerSlot.chargingMove = undefined;
 				chargeMessage = '';
 			} else {

@@ -381,7 +381,7 @@ export function getDamageOffense(
 		}
 	}
 
-	if (isSpecial && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+	if (isSpecial && RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
 		if (toID(attacker.ability || '') === 'solarpower') {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
 		}
@@ -510,10 +510,10 @@ export function applyFinalDamageModifiers(
 	}
 
 	if (RPGAbilities.isWeatherActive(battle)) {
-		if (battle.weather!.type === 'sun') {
+		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
 			if (moveType === 'Water') damage = Math.floor(damage * 0.5);
-		} else if (battle.weather!.type === 'rain') {
+		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
 			if (moveType === 'Water') damage = Math.floor(damage * 1.5);
 			if (moveType === 'Fire') damage = Math.floor(damage * 0.5);
 		}

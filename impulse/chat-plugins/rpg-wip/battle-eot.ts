@@ -352,8 +352,13 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		'rain': 'Rain continues to fall.',
 		'sand': 'The sandstorm rages.',
 		'hail': 'The hail crashes down.',
+		'harsh-sun': 'The sunlight is extremely harsh!',
+		'heavy-rain': 'The downpour continues!',
+		'strong-winds': 'Strong winds continue to blow!',
 	};
-	messageLog.push(weatherMessages[battle.weather!.type]);
+	if (weatherMessages[battle.weather!.type]) {
+		messageLog.push(weatherMessages[battle.weather!.type]);
+	}
 
 	for (const slot of allSlots) {
 		const pokemon = slot.pokemon;
@@ -361,7 +366,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		const species = Dex.species.get(pokemon.species);
 		const ability = toID(pokemon.ability || '');
 
-		if (battle.weather!.type === 'rain' && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
+		if ((battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') && ability === 'raindish' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Rain Dish restored its HP!`);
@@ -369,7 +374,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Ice Body restored its HP!`);
-		} else if (battle.weather!.type === 'rain' && ability === 'dryskin' && pokemon.hp < pokemon.maxHp) {
+		} else if ((battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') && ability === 'dryskin' && pokemon.hp < pokemon.maxHp) {
 			const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			messageLog.push(`${pokemon.species}'s Dry Skin restored its HP!`);
@@ -384,7 +389,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			takeDamage = true;
 		} else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
 			takeDamage = true;
-		} else if (battle.weather!.type === 'sun') {
+		} else if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 			if (ability === 'dryskin') {
 				takeDamage = true;
 				damageAmount = Math.floor(pokemon.maxHp / 8);
@@ -396,7 +401,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 
 		if (takeDamage && RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, damageAmount));
-			if (ability === 'dryskin' && battle.weather!.type === 'sun') {
+			if (ability === 'dryskin' && (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun')) {
 				messageLog.push(`${pokemon.species} was hurt by its Dry Skin!`);
 			} else if (ability === 'solarpower') {
 				messageLog.push(`${pokemon.species} was hurt by Solar Power!`);
@@ -412,8 +417,13 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			'rain': 'The rain stopped.',
 			'sand': 'The sandstorm subsided.',
 			'hail': 'The hail stopped.',
+			'harsh-sun': 'The extremely harsh sunlight faded.',
+			'heavy-rain': 'The heavy rain stopped.',
+			'strong-winds': 'The strong winds subsided.',
 		};
-		messageLog.push(weatherEndMessages[battle.weather!.type]);
+		if (weatherEndMessages[battle.weather!.type]) {
+			messageLog.push(weatherEndMessages[battle.weather!.type]);
+		}
 
 		// Restore location weather if it exists
 		if (battle.locationWeather) {
@@ -426,8 +436,13 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 				'rain': 'The rain resumed!',
 				'sand': 'The sandstorm picked up again!',
 				'hail': 'It started hailing again!',
+				'harsh-sun': 'The extremely harsh sunlight returned!',
+				'heavy-rain': 'The heavy rain resumed!',
+				'strong-winds': 'The strong winds picked up again!',
 			};
-			messageLog.push(weatherRestoreMessages[battle.locationWeather.type]);
+			if (weatherRestoreMessages[battle.locationWeather.type]) {
+				messageLog.push(weatherRestoreMessages[battle.locationWeather.type]);
+			}
 		} else {
 			battle.weather = undefined;
 		}
