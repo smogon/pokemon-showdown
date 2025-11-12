@@ -204,32 +204,43 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
+	// Phase 1: Unnerve - Prevents opponents from eating berries
+	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'unnerve');
+	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
+		return; // Cannot consume berries when opponent has Unnerve
+	}
+
 	let itemConsumed = false;
 	let consumedItemName = '';
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 
 	const halfHP = pokemon.maxHp / 2;
 	const quarterHP = pokemon.maxHp / 4;
 
 	if (pokemon.hp <= halfHP && !itemConsumed) {
+		// Phase 3: Ripen - Doubles the effect of berries
+		const hasRipen = toID(pokemon.ability || '') === 'ripen';
+		const ripenMultiplier = hasRipen ? 2 : 1;
+
 		let healAmount = 0;
 		if (pokemon.item === 'berryjuice') {
-			healAmount = 20;
+			healAmount = 20 * ripenMultiplier;
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'oranberry') {
-			healAmount = 10;
+			healAmount = 10 * ripenMultiplier;
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'goldberry') {
-			healAmount = 30;
+			healAmount = 30 * ripenMultiplier;
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
 		} else if (pokemon.item === 'sitrusberry') {
-			healAmount = Math.floor(pokemon.maxHp / 4);
+			healAmount = Math.floor(pokemon.maxHp / 4) * ripenMultiplier;
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
 			itemConsumed = true;
@@ -249,8 +260,12 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 		};
 
 		if (pinchBerryHP.includes(pokemon.item)) {
+			// Phase 3: Ripen - Doubles the effect of berries
+			const hasRipen = toID(pokemon.ability || '') === 'ripen';
+			const ripenMultiplier = hasRipen ? 2 : 1;
+
 			const oldHp = pokemon.hp;
-			const healAmount = Math.floor(pokemon.maxHp / 2);
+			const healAmount = Math.floor(pokemon.maxHp / 2) * ripenMultiplier;
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
 			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
 			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);

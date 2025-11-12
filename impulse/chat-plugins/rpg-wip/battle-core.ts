@@ -48,9 +48,20 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	let effectiveness = 1;
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
+
+	// Phase 4: Delta Stream - Strong winds negate Flying-type weaknesses
+	const hasStrongWinds = battle.weather?.type === 'strong-winds';
+	const isFlyingType = defenderTypes.includes('Flying');
+
 	for (const defenderType of defenderTypes) {
 		if (chartEntry.superEffective.includes(defenderType)) {
-			effectiveness *= 2;
+			// Delta Stream negates super effective hits on Flying types from Rock, Electric, Ice
+			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
+				['Rock', 'Electric', 'Ice'].includes(moveType)) {
+				effectiveness *= 1; // Neutral instead of super effective
+			} else {
+				effectiveness *= 2;
+			}
 		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
 			effectiveness *= 0.5;
 		} else if (chartEntry.noEffect.includes(defenderType)) {
@@ -159,6 +170,12 @@ export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSl
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
+	// Phase 2: Merciless - always crit against poisoned targets
+	const abilityId = toID(attacker.ability || '');
+	if (abilityId === 'merciless' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
+		return 1;
+	}
+
 	if (attackerSlot.focusEnergy) {
 		critStage += 2;
 	}
@@ -219,7 +236,7 @@ export function gainExperience(
 
 	let leveledUp = false;
 	const messages: string[] = [];
-	const participantExpGains: Map<string, number> = new Map();
+	const participantExpGains = new Map<string, number>();
 
 	// Gen 5-9 Scaled Experience Formula
 	// Formula: ExpGained = floor((X^1.5 * Z) / (Y^1.5)) + 1
@@ -364,7 +381,7 @@ export function getDamageOffense(
 		}
 	}
 
-	if (isSpecial && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+	if (isSpecial && RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
 		if (toID(attacker.ability || '') === 'solarpower') {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
 		}
@@ -493,10 +510,10 @@ export function applyFinalDamageModifiers(
 	}
 
 	if (RPGAbilities.isWeatherActive(battle)) {
-		if (battle.weather!.type === 'sun') {
+		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
 			if (moveType === 'Water') damage = Math.floor(damage * 0.5);
-		} else if (battle.weather!.type === 'rain') {
+		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
 			if (moveType === 'Water') damage = Math.floor(damage * 1.5);
 			if (moveType === 'Fire') damage = Math.floor(damage * 0.5);
 		}
@@ -608,11 +625,11 @@ export function calculateDamage(
 	} else {
 		attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
 	}
-	
+
 	let defenseStage = battle.wonderRoomTurns > 0 ?
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
-	
+
 	// Handle Psyshock / Psystrike / Secret Sword
 	if (['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
 		defenseStage = battle.wonderRoomTurns > 0 ? defenderSlot.statStages.spd : defenderSlot.statStages.def;
@@ -647,7 +664,7 @@ export function calculateDamage(
 	if (['explosion', 'selfdestruct'].includes(move.id)) {
 		defenseStat = Math.floor(defenseStat * 0.5);
 	}
-	
+
 	// Safety check: Ensure defenseStat is always at least 1 to prevent division issues
 	defenseStat = Math.max(1, defenseStat);
 	finalAttackStat = Math.max(1, finalAttackStat);
@@ -657,7 +674,7 @@ export function calculateDamage(
 	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
 	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 	const defenderTypes = getPokemonTypes(defender, defenderSlot);
-	
+
 	let effectiveness: number;
 	if (moveId === 'struggle') {
 		// Struggle is typeless and always hits neutrally
@@ -688,7 +705,7 @@ export function calculateDamage(
 
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
 	damage = Math.floor(damage * spreadMultiplier);
-	
+
 	// Safety check: Handle any invalid damage values (Infinity, NaN, or negative)
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
@@ -807,7 +824,7 @@ export function applyPostDamageContactEffects(
 	// Long Reach prevents contact effects
 	const attackerAbility = toID(attacker.ability || '');
 	const isContact = move.flags.contact && attackerAbility !== 'longreach';
-	
+
 	if (isContact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
 			if (defender.item === 'rockyhelmet' && RPGAbilities.takesIndirectDamage(attacker)) {
@@ -948,6 +965,51 @@ export function handleOnHitAbilityResponses(
 				messageLog.push(`${defender.species}'s Berserk raised its Sp. Atk!`);
 			}
 		}
+	}
+
+	// Phase 3: Anger Shell - When HP drops below 50%, lowers Def and Sp. Def, raises Atk, Sp. Atk, and Speed
+	if (defenderAbility === 'angershell' && damageDealt > 0) {
+		const hpBefore = defender.hp + damageDealt;
+		const halfHP = defender.maxHp / 2;
+		// Trigger if HP dropped below 50% from this hit
+		if (hpBefore >= halfHP && defender.hp < halfHP) {
+			const messages: string[] = [];
+			if (defenderSlot.statStages.def > -6) {
+				defenderSlot.statStages.def--;
+				messages.push('Defense fell');
+			}
+			if (defenderSlot.statStages.spd > -6) {
+				defenderSlot.statStages.spd--;
+				messages.push('Sp. Def fell');
+			}
+			if (defenderSlot.statStages.atk < 6) {
+				defenderSlot.statStages.atk++;
+				messages.push('Attack rose');
+			}
+			if (defenderSlot.statStages.spa < 6) {
+				defenderSlot.statStages.spa++;
+				messages.push('Sp. Atk rose');
+			}
+			if (defenderSlot.statStages.spe < 6) {
+				defenderSlot.statStages.spe++;
+				messages.push('Speed rose');
+			}
+			if (messages.length > 0) {
+				messageLog.push(`${defender.species}'s Anger Shell: ${messages.join(', ')}!`);
+			}
+		}
+	}
+
+	// Phase 4: Seed Sower - Creates Grassy Terrain when hit
+	if (defenderAbility === 'seedsower' && damageDealt > 0 && battle.terrain?.type !== 'grassy') {
+		battle.terrain = { type: 'grassy', turns: 5 };
+		messageLog.push(`${defender.species}'s Seed Sower created Grassy Terrain!`);
+	}
+
+	// Phase 4: Sand Spit - Creates sandstorm when hit
+	if (defenderAbility === 'sandspit' && damageDealt > 0 && battle.weather?.type !== 'sand') {
+		battle.weather = { type: 'sand', turns: 5 };
+		messageLog.push(`${defender.species}'s Sand Spit created a sandstorm!`);
 	}
 }
 
@@ -1131,6 +1193,14 @@ export function applySecondaryEffects(
 			}
 		}
 	}
+
+	// Phase 1: Stench - 10% chance to flinch when dealing damage
+	const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+	if (attackerAbility === 'stench' && move.category !== 'Status' && defenderSlot.pokemon.hp > 0) {
+		if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
+			defenderSlot.willFlinch = true;
+		}
+	}
 }
 
 export function handleDamagingMove(
@@ -1215,7 +1285,15 @@ export function handleDamagingMove(
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
 			if (move.drain && attacker.hp < attacker.maxHp) {
-				if (attackerSlot.healBlockTurns > 0) {
+				// Phase 2: Liquid Ooze - damages attacker instead of healing them
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					if (RPGAbilities.takesIndirectDamage(attacker)) {
+						attacker.hp = Math.max(0, attacker.hp - drainAmount);
+						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
+					}
+				} else if (attackerSlot.healBlockTurns > 0) {
 					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
 				} else {
 					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
@@ -1257,7 +1335,7 @@ export function handleDamagingMove(
 				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
 				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
 				defender.item = undefined;
-				
+
 				// Activate Unburden if the defender had it
 				activateUnburden(defenderSlot, messageLog);
 			}
@@ -1277,9 +1355,8 @@ export function handleDamagingMove(
 				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
 			}
 			// Raise Speed
-			if (applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot)) {
-				// applyStatChange already adds its own message
-			}
+			// applyStatChange already adds its own message
+			applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
 		}
 
 		// Handle Clear Smog stat reset effect
@@ -1328,7 +1405,7 @@ export function handleDamagingMove(
 					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
 					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
 					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
-					
+
 					const availableReplacements = party.filter(p =>
 						p.hp > 0 &&
 						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&

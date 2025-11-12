@@ -123,10 +123,10 @@ export interface PlayerData {
 	money: number;
 	inventory: Map<string, InventoryItem>;
 	pc: Map<string, RPGPokemon>;
-	pendingMoveLearnQueue?: Array<{
+	pendingMoveLearnQueue?: {
 		pokemonId: string,
 		moveIds: string[],
-	}>;
+	}[];
 	// Story progression tracking
 	storyFlags: Set<string>;
 	defeatedTrainers: Set<string>;
@@ -144,11 +144,11 @@ export interface BattleState {
 	opponentHazards: string[];
 
 	weather?: {
-		type: 'sun' | 'rain' | 'sand' | 'hail',
+		type: 'sun' | 'rain' | 'sand' | 'hail' | 'harsh-sun' | 'heavy-rain' | 'strong-winds',
 		turns: number,
 	};
 	locationWeather?: {
-		type: 'sun' | 'rain' | 'sand' | 'hail',
+		type: 'sun' | 'rain' | 'sand' | 'hail' | 'harsh-sun' | 'heavy-rain' | 'strong-winds',
 	}; // Original location weather for restoration after temporary weather expires
 	trickRoomTurns: number;
 	magicRoomTurns: number;

@@ -415,14 +415,14 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 	if (attackerSlot.willFlinch) {
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
 		attackerSlot.willFlinch = false;
-		
+
 		// Phase 2: Steadfast - Boosts Speed when flinched
 		const ability = toID(attacker.ability || '');
 		if (ability === 'steadfast' && attackerSlot.statStages.spe < 6) {
 			attackerSlot.statStages.spe++;
 			messageLog.push(`${attacker.species}'s Steadfast raised its Speed!`);
 		}
-		
+
 		return false;
 	}
 
@@ -707,8 +707,13 @@ export function executeMove(
 		}
 
 		let moveHit = true;
-		if (['aerialace', 'struggle'].includes(move.id)) {
-			// Moves like Aerial Ace always hit
+		// Phase 1: No Guard - Moves always hit if attacker or defender has No Guard
+		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+		const hasNoGuard = attackerAbility === 'noguard' || defenderAbility === 'noguard';
+
+		if (['aerialace', 'struggle'].includes(move.id) || hasNoGuard) {
+			// Moves like Aerial Ace always hit, or No Guard is active
 		} else if (move.accuracy !== true) {
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
@@ -720,9 +725,9 @@ export function executeMove(
 			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
 
 			if (RPGAbilities.isWeatherActive(battle)) {
-				if (battle.weather!.type === 'rain') {
+				if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
-				} else if (battle.weather!.type === 'sun') {
+				} else if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
 				}
 				if (battle.weather!.type === 'hail' && move.id === 'blizzard') {

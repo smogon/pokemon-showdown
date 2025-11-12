@@ -227,7 +227,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		// Check if attacker is an ally (same side in double battles)
 		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
 		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
-		
+
 		if (attackerIsPlayer === defenderIsPlayer) {
 			// Same team - Telepathy blocks the move
 			return {
@@ -349,6 +349,52 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 
 	// Phase 2: Steelworker - 1.5x power for Steel-type moves
 	'steelworker': (ctx, basePower) => {
+		if (ctx.move.type === 'Steel') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Transistor - 1.5x power for Electric-type moves
+	'transistor': (ctx, basePower) => {
+		if (ctx.move.type === 'Electric') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Dragon's Maw - 1.5x power for Dragon-type moves
+	'dragonsmaw': (ctx, basePower) => {
+		if (ctx.move.type === 'Dragon') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Rocky Payload - 1.5x power for Rock-type moves
+	'rockypayload': (ctx, basePower) => {
+		if (ctx.move.type === 'Rock') {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Sharpness - 1.5x power for slicing moves
+	'sharpness': (ctx, basePower) => {
+		const slicingMoves = [
+			'aerialace', 'aircutter', 'airslash', 'aquacutter', 'behemothblade', 'bitterblade',
+			'ceaselessedge', 'crosspoison', 'cut', 'furycutter', 'kowtowcleave', 'leafblade',
+			'nightslash', 'populationbomb', 'psychocut', 'razorleaf', 'razorshell', 'sacredsword',
+			'slash', 'solarblade', 'stoneaxe', 'xscissor',
+		];
+		if (slicingMoves.includes(ctx.move.id)) {
+			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 2: Steely Spirit - 1.5x power for Steel moves (user and allies)
+	'steelyspirit': (ctx, basePower) => {
 		if (ctx.move.type === 'Steel') {
 			return Math.floor(basePower * 1.5);
 		}
@@ -478,6 +524,72 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Phase 2: Toxic Boost - 1.5x Attack when poisoned
+	'toxicboost': (pokemon, stat, value, slot) => {
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'atk' && (status === 'psn' || status === 'tox')) {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 2: Flare Boost - 1.5x Sp. Atk when burned
+	'flareboost': (pokemon, stat, value, slot) => {
+		const status = slot ? slot.status : pokemon.status;
+		if (stat === 'spa' && status === 'brn') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 3: Defeatist - Halves Attack and Sp. Atk when HP < 50%
+	'defeatist': (pokemon, stat, value) => {
+		if ((stat === 'atk' || stat === 'spa') && pokemon.hp <= pokemon.maxHp / 2) {
+			return Math.floor(value * 0.5);
+		}
+		return value;
+	},
+
+	// Phase 3: Grass Pelt - 1.5x Defense in Grassy Terrain
+	'grasspelt': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'def' && battle?.terrain?.type === 'grassy') {
+			return Math.floor(value * 1.5);
+		}
+		return value;
+	},
+
+	// Phase 3: Plus - 1.5x Sp. Atk if ally has Minus or Plus
+	'plus': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spa' && battle) {
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayer ? battle.playerSlots : battle.opponentSlots;
+			const hasMinusOrPlus = allies.some(s =>
+				s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0 &&
+				(toID(s.pokemon.ability || '') === 'minus' || toID(s.pokemon.ability || '') === 'plus')
+			);
+			if (hasMinusOrPlus) {
+				return Math.floor(value * 1.5);
+			}
+		}
+		return value;
+	},
+
+	// Phase 4: Hadron Engine - 1.3x Sp. Atk in Electric Terrain
+	'hadronengine': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spa' && battle?.terrain?.type === 'electric') {
+			return Math.floor(value * 1.33);
+		}
+		return value;
+	},
+
+	// Phase 4: Orichalcum Pulse - 1.3x Attack in harsh sunlight
+	'orichalcumpulse': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'atk' && battle?.weather?.type === 'sun') {
+			return Math.floor(value * 1.33);
+		}
+		return value;
+	},
 };
 
 export const WEATHER_ABILITIES = {
@@ -536,6 +648,46 @@ export const WEATHER_ABILITIES = {
 	'icebody': {
 		weatherHeal: 'hail',
 	},
+
+	// Phase 4: Delta Stream - Creates strong winds (negates Flying weaknesses)
+	'deltastream': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'strong-winds') {
+				battle.weather = { type: 'strong-winds', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Delta Stream created strong winds!`);
+			}
+		},
+	},
+
+	// Phase 4: Desolate Land - Harsh sunlight (prevents Water moves)
+	'desolateland': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'harsh-sun') {
+				battle.weather = { type: 'harsh-sun', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Desolate Land created harsh sunlight!`);
+			}
+		},
+	},
+
+	// Phase 4: Primordial Sea - Heavy rain (prevents Fire moves)
+	'primordialsea': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'heavy-rain') {
+				battle.weather = { type: 'heavy-rain', turns: 9999 };
+				messageLog.push(`${slot.pokemon.species}'s Primordial Sea created heavy rain!`);
+			}
+		},
+	},
+
+	// Phase 4: Orichalcum Pulse - Sets harsh sunlight on entry
+	'orichalcumpulse': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.weather?.type !== 'sun') {
+				battle.weather = { type: 'sun', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Orichalcum Pulse created harsh sunlight!`);
+			}
+		},
+	},
 };
 
 export const CONTACT_ABILITIES = {
@@ -576,7 +728,7 @@ export const CONTACT_ABILITIES = {
 		onContactStat: 'spe',
 		value: -1,
 	},
-	
+
 	'tanglinghair': {
 		onContactStat: 'spe',
 		value: -1,
@@ -586,6 +738,11 @@ export const CONTACT_ABILITIES = {
 	'poisontouch': {
 		onContactChance: 0.3,
 		effect: 'psn',
+	},
+
+	// Phase 1: Pickpocket - Steals item from attacker on contact
+	'pickpocket': {
+		stealItem: true,
 	},
 };
 
@@ -629,6 +786,16 @@ export const ACCURACY_EVASION_ABILITIES = {
 	'snowcloak': {
 		weatherEvasion: 'hail',
 	},
+
+	// Phase 1: No Guard - Makes all moves always hit (bypasses accuracy/evasion)
+	'noguard': {
+		alwaysHit: true,
+	},
+
+	// Phase 3: Victory Star - Raises accuracy of user and allies by 10%
+	'victorystar': {
+		accuracyMultiplier: 1.1,
+	},
 };
 
 export const RECOIL_DRAIN_ABILITIES = {
@@ -652,6 +819,16 @@ export const FORM_CHANGE_ABILITIES = {
 
 	'shieldsdown': {
 		hpFormChange: true,
+	},
+
+	// Phase 4: Ice Face - Blocks first physical hit in hail/snow
+	'iceface': {
+		blockPhysical: true,
+	},
+
+	// Phase 4: Mimicry - Changes type based on terrain
+	'mimicry': {
+		terrainType: true,
 	},
 };
 
@@ -714,6 +891,16 @@ export const TERRAIN_ABILITIES = {
 
 	'surgesurfer': {
 		terrainSpeedBoost: 'electric',
+	},
+
+	// Phase 4: Hadron Engine - Sets Electric Terrain on entry
+	'hadronengine': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			if (battle.terrain?.type !== 'electric') {
+				battle.terrain = { type: 'electric', turns: 5 };
+				messageLog.push(`${slot.pokemon.species}'s Hadron Engine electrified the field!`);
+			}
+		},
 	},
 };
 
@@ -813,22 +1000,22 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 	// Phase 2: Moody - Raises one random stat by 2 stages, lowers another by 1 stage
 	'moody': {
 		handler: (slot, battle, messageLog) => {
-			const stats: Array<keyof typeof slot.statStages> = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
-			
+			const stats: (keyof typeof slot.statStages)[] = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+
 			// Find stats that can be raised (not at +6)
 			const raisableStats = stats.filter(stat => slot.statStages[stat] < 6);
 			// Find stats that can be lowered (not at -6)
 			const lowerableStats = stats.filter(stat => slot.statStages[stat] > -6);
-			
+
 			if (raisableStats.length > 0) {
 				const statToRaise = raisableStats[Math.floor(Math.random() * raisableStats.length)];
 				slot.statStages[statToRaise] = Math.min(6, slot.statStages[statToRaise] + 2);
-				const statNames: Record<string, string> = { 
+				const statNames: Record<string, string> = {
 					atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed',
-					accuracy: 'accuracy', evasion: 'evasion'
+					accuracy: 'accuracy', evasion: 'evasion',
 				};
 				messageLog.push(`${slot.pokemon.species}'s Moody sharply raised its ${statNames[statToRaise]}!`);
-				
+
 				// Lower a different stat
 				const lowerableDifferentStats = lowerableStats.filter(stat => stat !== statToRaise);
 				if (lowerableDifferentStats.length > 0) {
@@ -893,6 +1080,52 @@ export const STATUS_INTERACTION_ABILITIES: Record<string, {
 		},
 	},
 };
+
+// Phase 1: RPG-specific abilities (implemented in RPG core, not battle system)
+export const RPG_SPECIFIC_ABILITIES = {
+	'noability': {
+		// Placeholder ability with no effect
+		description: 'No ability - does nothing',
+	},
+	'runaway': {
+		// Guarantees escape from wild battles
+		description: 'Guarantees escape from wild battles (implemented in encounter system)',
+		escapeGuaranteed: true,
+	},
+	'illuminate': {
+		// Increases wild encounter rate
+		description: 'Increases wild encounter rate by 2x (implemented in encounter system)',
+		encounterRateMultiplier: 2,
+	},
+	'honeygather': {
+		// May gather Honey after battle
+		description: 'May gather Honey after battle (implemented in post-battle rewards)',
+		postBattleItem: 'honey',
+		chance: 0.05, // 5% chance per battle level
+	},
+	'pickup': {
+		// May pick up items after battle
+		description: 'May pick up items after battle based on level (implemented in post-battle rewards)',
+		postBattlePickup: true,
+		chanceByLevel: true, // Increases with level
+	},
+};
+
+// Phase 2: Get modified weight for weight-based moves
+export function getModifiedWeight(pokemon: RPGPokemon): number {
+	const ability = toID(pokemon.ability || '');
+	const species = Dex.species.get(pokemon.species);
+	const baseWeight = species.weightkg;
+
+	if (ability === 'heavymetal') {
+		return baseWeight * 2;
+	}
+	if (ability === 'lightmetal') {
+		return baseWeight / 2;
+	}
+
+	return baseWeight;
+}
 
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
@@ -997,6 +1230,24 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = Math.floor(basePower * 1.2);
 	}
 
+	// Phase 3: Battery - Boosts allies' special moves by 1.3x
+	// Phase 3: Power Spot - Boosts allies' moves by 1.3x
+	const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+	const attackerAllies = isPlayerAttacker ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const hasBattery = attackerAllies.some(s =>
+		s && s.pokemon.id !== ctx.attacker.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'battery'
+	);
+	const hasPowerSpot = attackerAllies.some(s =>
+		s && s.pokemon.id !== ctx.attacker.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'powerspot'
+	);
+
+	if (hasBattery && ctx.move.category === 'Special') {
+		basePower = Math.floor(basePower * 1.3);
+	}
+	if (hasPowerSpot) {
+		basePower = Math.floor(basePower * 1.3);
+	}
+
 	return basePower;
 }
 
@@ -1082,17 +1333,22 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 		return true;
 	}
 
+	// Phase 1: Leaf Guard - Prevents status in harsh sunlight
+	if (ability === 'leafguard' && battle && isWeatherActive(battle) && battle.weather?.type === 'sun') {
+		return true;
+	}
+
 	// Check for team protection abilities
 	if (battle) {
 		// Find which side this Pokemon is on
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-		
+
 		// Pastel Veil protects team from poison
 		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
 			return true;
 		}
-		
+
 		// Sweet Veil protects team from sleep
 		if (status === 'slp' && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'sweetveil')) {
 			return true;
@@ -1119,7 +1375,6 @@ export function applyPriorityModifier(move: Move, pokemon: RPGPokemon): number {
 
 	return 0;
 }
-
 
 export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
@@ -1281,6 +1536,11 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
+	// Phase 2: Neuroforce - 1.25x damage on super effective hits
+	if (attackerAbility === 'neuroforce' && effectiveness > 1) {
+		damage = Math.floor(damage * 1.25);
+	}
+
 	if (attackerAbility === 'punkrock' && ctx.move.flags.sound) {
 		damage = Math.floor(damage * 1.3);
 	}
@@ -1288,6 +1548,17 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.5);
 		}
+	}
+
+	// Phase 3: Friend Guard - Reduces damage to allies by 25%
+	// Check if there are any allies with Friend Guard
+	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
+	const defenderAllies = isPlayerDefender ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const hasFriendGuard = defenderAllies.some(s =>
+		s && s.pokemon.id !== ctx.defender.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'friendguard'
+	);
+	if (hasFriendGuard) {
+		damage = Math.floor(damage * 0.75);
 	}
 
 	return damage;
@@ -1374,7 +1645,7 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 			if (rand < 35) return 2; // 35% chance
 			if (rand < 70) return 3; // 35% chance
 			if (rand < 85) return 4; // 15% chance
-			return 5;                // 15% chance
+			return 5; // 15% chance
 		}
 
 		// This handles other multi-hit moves, like Triple Kick or simple ranges
@@ -1405,6 +1676,21 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
+
+	// Phase 4: Check primal weather preventing moves
+	if (ctx.battle.weather?.type === 'harsh-sun' && ctx.move.type === 'Water') {
+		return {
+			prevented: true,
+			message: `The harsh sunlight evaporated the Water-type move!`,
+		};
+	}
+
+	if (ctx.battle.weather?.type === 'heavy-rain' && ctx.move.type === 'Fire') {
+		return {
+			prevented: true,
+			message: `The heavy rain extinguished the Fire-type move!`,
+		};
+	}
 
 	// Check for Mold Breaker
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
@@ -1547,6 +1833,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
 				} else if (blockAbilities.includes(oppAbility)) {
 					messageLog.push(`${opponentSlot.pokemon.species}'s ${opponentSlot.pokemon.ability} prevents its stats from being lowered!`);
+				} else if (oppAbility === 'guarddog') {
+					// Phase 3: Guard Dog raises Attack when intimidated
+					if (opponentSlot.statStages.atk < 6) {
+						opponentSlot.statStages.atk++;
+						messageLog.push(`${opponentSlot.pokemon.species}'s Guard Dog raised its Attack!`);
+					}
 				} else if (opponentSlot.statStages.atk > -6) {
 					opponentSlot.statStages.atk--;
 					messageLog.push(`${pokemon.species}'s Intimidate lowered ${opponentSlot.pokemon.species}'s Attack!`);
@@ -1558,6 +1850,47 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	if (ability === 'slowstart') {
 		slot.slowStartTurns = 5;
 		messageLog.push(`${pokemon.species} is off to a slow start!`);
+	}
+
+	// Phase 3: Dauntless Shield - Raises Defense by 1 stage on switch-in
+	if (ability === 'dauntlessshield' && slot.statStages.def < 6) {
+		slot.statStages.def++;
+		messageLog.push(`${pokemon.species}'s Dauntless Shield raised its Defense!`);
+	}
+
+	// Phase 3: Intrepid Sword - Raises Attack by 1 stage on switch-in
+	if (ability === 'intrepidsword' && slot.statStages.atk < 6) {
+		slot.statStages.atk++;
+		messageLog.push(`${pokemon.species}'s Intrepid Sword raised its Attack!`);
+	}
+
+	// Phase 4: Screen Cleaner - Removes screens on switch-in
+	if (ability === 'screencleaner') {
+		const sides = [
+			{ name: 'player', slots: battle.playerSlots },
+			{ name: 'opponent', slots: battle.opponentSlots },
+		];
+		let removedScreens = false;
+
+		for (const side of sides) {
+			const sidePrefix = side.name === 'player' ? 'player' : 'opponent';
+			if ((battle as any)[`${sidePrefix}ReflectTurns`] > 0) {
+				(battle as any)[`${sidePrefix}ReflectTurns`] = 0;
+				removedScreens = true;
+			}
+			if ((battle as any)[`${sidePrefix}LightScreenTurns`] > 0) {
+				(battle as any)[`${sidePrefix}LightScreenTurns`] = 0;
+				removedScreens = true;
+			}
+			if ((battle as any)[`${sidePrefix}AuroraVeilTurns`] > 0) {
+				(battle as any)[`${sidePrefix}AuroraVeilTurns`] = 0;
+				removedScreens = true;
+			}
+		}
+
+		if (removedScreens) {
+			messageLog.push(`${pokemon.species}'s Screen Cleaner removed all screens!`);
+		}
 	}
 }
 
@@ -1652,6 +1985,17 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
 		}
 	}
+
+	// Phase 1: Pickpocket - Steals item from attacker on contact
+	if (handler.stealItem && attacker.hp > 0 && !ctx.defender.item && attacker.item) {
+		const attackerAbility = toID(attacker.ability || '');
+		// Sticky Hold prevents item removal
+		if (attackerAbility !== 'stickyhold') {
+			ctx.defender.item = attacker.item;
+			attacker.item = undefined;
+			ctx.messageLog.push(`${ctx.defender.species} stole ${attacker.species}'s ${ctx.defender.item}!`);
+		}
+	}
 }
 
 export const RPGAbilities = {
@@ -1693,7 +2037,8 @@ export const RPGAbilities = {
 	applyStatChangeModifier,
 	handlePoisonHeal,
 	handleHydration,
-	
+	getModifiedWeight,
+
 	isAbilityIgnored,
 
 	IMMUNITY_ABILITIES,

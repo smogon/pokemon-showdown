@@ -1349,8 +1349,18 @@ export function generateFieldEffectHTML(battle: BattleState): string {
 
 	// --- Global Field Effects ---
 	if (battle.weather) {
-		const weatherIcons = { sun: '☀️', rain: '🌧️', sand: '🏜️', hail: '🌨️' };
-		fieldEffects.push(`${weatherIcons[battle.weather.type]} <strong>${battle.weather.type.toUpperCase()}</strong> (${battle.weather.turns} turns)`);
+		const weatherIcons = { 
+			sun: '☀️', 
+			rain: '🌧️', 
+			sand: '🏜️', 
+			hail: '🌨️',
+			'harsh-sun': '🔥',
+			'heavy-rain': '💧',
+			'strong-winds': '💨'
+		};
+		const icon = weatherIcons[battle.weather.type] || '🌤️';
+		const weatherName = battle.weather.type.toUpperCase().replace(/-/g, ' ');
+		fieldEffects.push(`${icon} <strong>${weatherName}</strong> (${battle.weather.turns} turns)`);
 	}
 	if (battle.terrain) {
 		const terrainIcons = { electric: '⚡', grassy: '🌱', misty: '🌫️', psychic: '👁️' };

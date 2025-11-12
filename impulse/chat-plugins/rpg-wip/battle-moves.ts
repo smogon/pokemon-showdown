@@ -25,7 +25,7 @@ function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleSta
 	// Check if any ally has Aroma Veil
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
 	const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
-	
+
 	return allies.some(slot => {
 		if (!slot || slot.pokemon.hp <= 0) return false;
 		const ability = toID(slot.pokemon.ability || '');
@@ -82,7 +82,8 @@ export function getDamageBasePower(
 		break;
 	case 'grassknot':
 	case 'lowkick':
-		const defenderWeight = defenderSpecies.weightkg;
+		// Phase 2: Use modified weight for Heavy Metal / Light Metal
+		const defenderWeight = RPGAbilities.getModifiedWeight(defender);
 		if (defenderWeight < 10) basePower = 20;
 		else if (defenderWeight < 25) basePower = 40;
 		else if (defenderWeight < 50) basePower = 60;
@@ -92,8 +93,9 @@ export function getDamageBasePower(
 		break;
 	case 'heavyslam':
 	case 'heatcrash':
-		const attackerWeight = attackerSpecies.weightkg;
-		const defenderWeightSlam = defenderSpecies.weightkg;
+		// Phase 2: Use modified weight for Heavy Metal / Light Metal
+		const attackerWeight = RPGAbilities.getModifiedWeight(attacker);
+		const defenderWeightSlam = RPGAbilities.getModifiedWeight(defender);
 		const weightRatio = attackerWeight / defenderWeightSlam;
 		if (weightRatio >= 5) basePower = 120;
 		else if (weightRatio >= 4) basePower = 100;
@@ -1045,7 +1047,7 @@ export function handleSpecificStatusMove(
 		const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
 		const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
 		const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
-		
+
 		const availableReplacements = party.filter(p =>
 			p.hp > 0 &&
 			!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
@@ -1546,8 +1548,8 @@ export function handleSpecificStatusMove(
 		} else {
 			let healRatio = 0.5;
 			if (RPGAbilities.isWeatherActive(battle)) {
-				if (battle.weather?.type === 'sun') healRatio = 0.667;
-				else if (['rain', 'sand', 'hail'].includes(battle.weather!.type)) healRatio = 0.25;
+				if (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun') healRatio = 0.667;
+				else if (['rain', 'sand', 'hail', 'heavy-rain'].includes(battle.weather!.type)) healRatio = 0.25;
 			}
 			const healAmount = Math.floor(attacker.maxHp * healRatio);
 			const oldHp = attacker.hp;
@@ -1667,7 +1669,6 @@ export function handleChargingMove(
 	messageLog: string[],
 	ppDeduction: number
 ): boolean {
-	
 	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
 		const attacker = attackerSlot.pokemon;
 		messageLog.push(`${attacker.species} consumed its Power Herb!`);
@@ -1675,7 +1676,7 @@ export function handleChargingMove(
 		activateUnburden(attackerSlot, messageLog); // Activate Unburden
 		return false; // Skip the charging turn and execute the move
 	}
-	
+
 	if (move.flags.charge && !attackerSlot.chargingMove) {
 		attackerSlot.chargingMove = move.id;
 		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
@@ -1698,7 +1699,7 @@ export function handleChargingMove(
 			chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
 		} else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
 		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
-			if (RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'sun') {
+			if (RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
 				attackerSlot.chargingMove = undefined;
 				chargeMessage = '';
 			} else {
