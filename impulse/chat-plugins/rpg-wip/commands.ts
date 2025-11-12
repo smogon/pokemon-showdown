@@ -1098,7 +1098,7 @@ export const commands: ChatCommands = {
 
 			const exploreHTML = `<div class="infobox">` +
 				`<h2><center><b>${currentLocation.name}</b></center></h2>` +
-				`<center><p><em>${currentLocation.description}</em></p></center><hr>` +
+				`<center><p><em>${currentLocation.description}</em></p></center>` +
 				`${exploreButtons}` +
 				`<hr />` +
 				generateBottomNavigation() +
@@ -1323,9 +1323,9 @@ export const commands: ChatCommands = {
 			}
 
 			const arrivalHTML = `<div class="infobox">` +
-				`<h2>Arrived at ${targetLocation.name}</h2>` +
-				`<p>${targetLocation.description}</p>` +
-				`<p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p>` +
+				`<h2><center><b>Arrived at ${targetLocation.name}</b></center></h2>` +
+				`<em><center><p>${targetLocation.description}</p></center></em>` +
+				`<center><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></center>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
 		},
@@ -1363,7 +1363,7 @@ export const commands: ChatCommands = {
 			}
 
 			// Handle different building types
-			let buildingHTML = `<div class="infobox"><h2>${building.name}</h2><p><em>${building.description}</em></p>`;
+			let buildingHTML = `<div class="infobox"><center><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></center>`;
 
 			// NPCs in this building
 			if (building.npcs && building.npcs.length > 0) {
