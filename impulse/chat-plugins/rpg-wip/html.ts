@@ -852,7 +852,7 @@ export function generateBattleHTML(
 
 export function generateWelcomeHTML(): string {
 	return `<div class="infobox">` +
-		`<center><b><h2>Welcome, Tester!</h2></b></center><hr>` +
+		`<h2><center><b>Welcome, Tester!</b></center></h2>` +
 		`<p>We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
 		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
 		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
@@ -863,7 +863,8 @@ export function generateWelcomeHTML(): string {
 		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
 		`</ul>` +
 		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
-		`<p>Ready to begin your adventure or load your save?</p>` +
+		`<p><strong>Starting a New Game:</strong> Press 'Continue' to begin. Your first task is to head to the Professor's Lab to choose your starter Pokémon.</p>` +
+		`<p><strong>Returning Testers:</strong> Press 'Load Save' to resume your progress.</p>` +
 		`<p>` +
 		`<button name="send" value="/rpg storymode" class="button">Continue</button> ` +
 		`<button name="send" value="/rpg dbload" class="button">Load Save</button>` +
