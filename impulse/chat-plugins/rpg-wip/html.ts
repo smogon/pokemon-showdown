@@ -11,7 +11,7 @@ import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
-import { getPlayerData } from './core'; // We will export this from core.ts
+import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
 /**
@@ -265,7 +265,7 @@ export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	isDoubleBattle: boolean,
-	ownerName?: string // <-- NEW PARAMETER
+	ownerName?: string
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
@@ -363,7 +363,7 @@ export function generateSharedBattlePokemonInfo(
 		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		return html;
 	} else {
-		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
+		const spriteDir = pokemon.shiny ? 'gen5ani-shiny' : 'gen5ani';
 		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' + // Centering container
 			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
