@@ -201,6 +201,194 @@ export function serializePlayerData(player: PlayerData): any {
  * Converts arrays back to Maps and Sets
  */
 export function deserializePlayerData(data: any): PlayerData {
+	// Validate required fields exist
+	if (!data || typeof data !== 'object') {
+		throw new Error('Invalid save data format');
+	}
+	if (!data.id || typeof data.id !== 'string') {
+		throw new Error('Invalid save data: missing or invalid user ID');
+	}
+	if (!data.name || typeof data.name !== 'string') {
+		throw new Error('Invalid save data: missing or invalid name');
+	}
+	if (typeof data.level !== 'number' || data.level < 1 || data.level > 100) {
+		throw new Error('Invalid save data: level must be between 1 and 100');
+	}
+	if (typeof data.badges !== 'number' || data.badges < 0 || data.badges > 8) {
+		throw new Error('Invalid save data: badges must be between 0 and 8');
+	}
+	if (!Array.isArray(data.party)) {
+		throw new Error('Invalid save data: party must be an array');
+	}
+	if (data.party.length > 6) {
+		throw new Error('Invalid save data: party cannot have more than 6 Pokemon');
+	}
+	if (typeof data.money !== 'number' || data.money < 0 || data.money > 999999999) {
+		throw new Error('Invalid save data: money must be between 0 and 999999999');
+	}
+	
+	// Validate inventory
+	if (!Array.isArray(data.inventory)) {
+		throw new Error('Invalid save data: inventory must be an array');
+	}
+	for (const [itemId, itemData] of data.inventory) {
+		if (typeof itemId !== 'string') {
+			throw new Error('Invalid save data: item ID must be a string');
+		}
+		if (!itemData || typeof itemData !== 'object') {
+			throw new Error('Invalid save data: invalid item data');
+		}
+		if (typeof itemData.quantity !== 'number' || itemData.quantity < 0 || itemData.quantity > 999) {
+			throw new Error('Invalid save data: item quantity must be between 0 and 999');
+		}
+	}
+	
+	// Validate PC storage
+	if (!Array.isArray(data.pc)) {
+		throw new Error('Invalid save data: PC must be an array');
+	}
+	if (data.pc.length > 100) {
+		throw new Error('Invalid save data: PC cannot have more than 100 Pokemon');
+	}
+	
+	// Validate obtainedBadges
+	if (!Array.isArray(data.obtainedBadges)) {
+		throw new Error('Invalid save data: obtainedBadges must be an array');
+	}
+	if (data.obtainedBadges.length !== data.badges) {
+		throw new Error('Invalid save data: obtainedBadges length must match badges count');
+	}
+	if (data.obtainedBadges.length > 8) {
+		throw new Error('Invalid save data: cannot have more than 8 badges');
+	}
+
+	// Validate Pokemon in party
+	for (const pokemon of data.party) {
+		if (!pokemon || typeof pokemon !== 'object') {
+			throw new Error('Invalid save data: invalid Pokemon in party');
+		}
+		if (!pokemon.species || typeof pokemon.species !== 'string') {
+			throw new Error('Invalid save data: Pokemon missing species');
+		}
+		// Check if species exists in the Dex
+		const species = Dex.species.get(pokemon.species);
+		if (!species.exists) {
+			throw new Error(`Invalid save data: Pokemon species "${pokemon.species}" does not exist`);
+		}
+		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > 100) {
+			throw new Error('Invalid save data: Pokemon level must be between 1 and 100');
+		}
+		if (typeof pokemon.hp !== 'number' || pokemon.hp < 0) {
+			throw new Error('Invalid save data: Pokemon HP cannot be negative');
+		}
+		if (typeof pokemon.maxHp !== 'number' || pokemon.maxHp < 1 || pokemon.maxHp > 9999) {
+			throw new Error('Invalid save data: Pokemon maxHp must be between 1 and 9999');
+		}
+		if (pokemon.hp > pokemon.maxHp) {
+			throw new Error('Invalid save data: Pokemon HP cannot exceed maxHp');
+		}
+		// Validate stats are within reasonable bounds
+		if (pokemon.stats) {
+			const statKeys = ['atk', 'def', 'spa', 'spd', 'spe'];
+			for (const stat of statKeys) {
+				if (pokemon.stats[stat] !== undefined) {
+					if (typeof pokemon.stats[stat] !== 'number' || pokemon.stats[stat] < 1 || pokemon.stats[stat] > 9999) {
+						throw new Error(`Invalid save data: Pokemon ${stat} stat must be between 1 and 9999`);
+					}
+				}
+			}
+		}
+		// Validate IVs
+		if (pokemon.ivs) {
+			const ivKeys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			for (const iv of ivKeys) {
+				if (pokemon.ivs[iv] !== undefined) {
+					if (typeof pokemon.ivs[iv] !== 'number' || pokemon.ivs[iv] < 0 || pokemon.ivs[iv] > 31) {
+						throw new Error(`Invalid save data: Pokemon ${iv} IV must be between 0 and 31`);
+					}
+				}
+			}
+		}
+		// Validate EVs
+		if (pokemon.evs) {
+			const evKeys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			let totalEVs = 0;
+			for (const ev of evKeys) {
+				if (pokemon.evs[ev] !== undefined) {
+					if (typeof pokemon.evs[ev] !== 'number' || pokemon.evs[ev] < 0 || pokemon.evs[ev] > 252) {
+						throw new Error(`Invalid save data: Pokemon ${ev} EV must be between 0 and 252`);
+					}
+					totalEVs += pokemon.evs[ev];
+				}
+			}
+			if (totalEVs > 510) {
+				throw new Error('Invalid save data: Pokemon total EVs cannot exceed 510');
+			}
+		}
+		// Validate moves
+		if (!Array.isArray(pokemon.moves)) {
+			throw new Error('Invalid save data: Pokemon moves must be an array');
+		}
+		if (pokemon.moves.length > 4) {
+			throw new Error('Invalid save data: Pokemon cannot have more than 4 moves');
+		}
+		for (const move of pokemon.moves) {
+			if (!move || typeof move !== 'object') {
+				throw new Error('Invalid save data: invalid move data');
+			}
+			if (!move.id || typeof move.id !== 'string') {
+				throw new Error('Invalid save data: move missing ID');
+			}
+			// Check if move exists
+			const moveData = getMove(move.id);
+			if (!moveData.exists) {
+				throw new Error(`Invalid save data: Move "${move.id}" does not exist`);
+			}
+			if (typeof move.pp !== 'number' || move.pp < 0 || move.pp > 64) {
+				throw new Error('Invalid save data: move PP must be between 0 and 64');
+			}
+		}
+		// Validate held item if present
+		if (pokemon.item) {
+			if (typeof pokemon.item !== 'string') {
+				throw new Error('Invalid save data: Pokemon held item must be a string');
+			}
+		}
+		// Validate ability if present
+		if (pokemon.ability) {
+			if (typeof pokemon.ability !== 'string') {
+				throw new Error('Invalid save data: Pokemon ability must be a string');
+			}
+		}
+		// Validate nature if present
+		if (pokemon.nature) {
+			if (typeof pokemon.nature !== 'string') {
+				throw new Error('Invalid save data: Pokemon nature must be a string');
+			}
+		}
+	}
+	
+	// Validate Pokemon in PC
+	for (const [pcId, pokemon] of data.pc) {
+		if (!pokemon || typeof pokemon !== 'object') {
+			throw new Error('Invalid save data: invalid Pokemon in PC');
+		}
+		// Apply same validations as party Pokemon
+		if (!pokemon.species || typeof pokemon.species !== 'string') {
+			throw new Error('Invalid save data: PC Pokemon missing species');
+		}
+		const species = Dex.species.get(pokemon.species);
+		if (!species.exists) {
+			throw new Error(`Invalid save data: PC Pokemon species "${pokemon.species}" does not exist`);
+		}
+		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > 100) {
+			throw new Error('Invalid save data: PC Pokemon level must be between 1 and 100');
+		}
+		if (typeof pokemon.maxHp !== 'number' || pokemon.maxHp < 1 || pokemon.maxHp > 9999) {
+			throw new Error('Invalid save data: PC Pokemon maxHp must be between 1 and 9999');
+		}
+	}
+
 	return {
 		id: data.id,
 		name: data.name,

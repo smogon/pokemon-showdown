@@ -408,6 +408,9 @@ export const commands: ChatCommands = {
 				`<p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>` +
 				`<p><strong>Money:</strong> ₽${player.money}</p>` +
 				`<p><strong>Trainers Defeated:</strong> ${player.defeatedTrainers.size}</p>` +
+				`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
+				`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button> ` +
+				`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
 				generateBottomNavigation() +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
@@ -2947,6 +2950,9 @@ export const commands: ChatCommands = {
 		},
 
 		save(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot save during a battle.");
+			}
 			const player = getPlayerData(user.id);
 
 			try {
@@ -2967,6 +2973,9 @@ export const commands: ChatCommands = {
 		},
 
 		load(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot load during a battle.");
+			}
 			if (!target) {
 				const loadHTML = `<div class="infobox">` +
 					`<h2>Load Game</h2>` +
@@ -2997,6 +3006,9 @@ export const commands: ChatCommands = {
 		},
 
 		async dbsave(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot save during a battle.");
+			}
 			const player = getPlayerData(user.id);
 
 			try {
@@ -3021,6 +3033,9 @@ export const commands: ChatCommands = {
 		},
 
 		async dbload(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot load during a battle.");
+			}
 			try {
 				const hasSave = await hasSaveInDB(user.id);
 
@@ -3058,6 +3073,9 @@ export const commands: ChatCommands = {
 		},
 
 		async dbdelete(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot delete saves during a battle.");
+			}
 			try {
 				const hasSave = await hasSaveInDB(user.id);
 
