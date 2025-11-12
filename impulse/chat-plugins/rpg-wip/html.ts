@@ -852,19 +852,22 @@ export function generateBattleHTML(
 
 export function generateWelcomeHTML(): string {
 	return `<div class="infobox">` +
-		`<h2>Developer Note</h2>` +
-		`<p>Welcome to the World of Impulse RPG System!</p>` +
-		`<p>This is an immersive Pokémon-style adventure where you'll battle trainers, catch Pokémon, explore locations, and become the Champion!</p>` +
-		`<p><strong>Features:</strong></p>` +
+		`<center><b><font size="1.1em">Welcome, Tester!</font></b></center><hr>` +
+		`<p>We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
+		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
+		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
+		`<p>This means you get a sneak peek, but it also means the game is still a work-in-progress. As you explore, you might encounter:</p>` +
 		`<ul>` +
-		`<li>🎮 Story Mode with 8 Gym Leaders and Elite Four</li>` +
-		`<li>⚔️ Wild Pokémon battles and trainer challenges</li>` +
-		`<li>📦 Item management and PC storage system</li>` +
-		`<li>🌍 Multiple locations to explore</li>` +
-		`<li>✨ Evolution, moves, and abilities system</li>` +
+		`<li>Bugs, typos, or unexpected command responses.</li>` +
+		`<li>Unfinished story sections, features, or placeholder text.</li>` +
+		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
 		`</ul>` +
-		`<p>Ready to begin your adventure?</p>` +
-		`<p><button name="send" value="/rpg storymode" class="button">Continue</button></p>` +
+		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
+		`<p>Ready to begin your adventure or load your save?</p>` +
+		`<p>` +
+		`<button name="send" value="/rpg storymode" class="button">Continue</button> ` +
+		`<button name="send" value="/rpg dbload" class="button">Load Save</button>` +
+		`</p>` +
 		`</div>`;
 }
 
