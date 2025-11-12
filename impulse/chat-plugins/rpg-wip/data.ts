@@ -9,7 +9,7 @@
 import type { Stats } from './interface';
 
 export const STARTER_POKEMON = {
-	fire: ['charmander'],
+	fire: ['torchic'],
 	water: ['mudkip'],
 	grass: ['grookey'],
 };
