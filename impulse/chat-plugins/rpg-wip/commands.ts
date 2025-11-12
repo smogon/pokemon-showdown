@@ -30,8 +30,6 @@ import {
 	withdrawPokemonFromPC,
 	playerData,
 	getInitialMoves,
-	savePlayerToString,
-	loadPlayer,
 	savePlayerToDB,
 	loadPlayerFromDB,
 	hasSaveInDB,
@@ -49,8 +47,6 @@ import {
 	handleMirrorHerb,
 } from './battle-engine';
 import {
-	generateMenuHTML,
-	generateProfileHTML,
 	generateBuyHTML,
 	generateSellMenuHTML,
 	generateSellConfirmHTML,
@@ -2949,61 +2945,10 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		save(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot save during a battle.");
-			}
-			const player = getPlayerData(user.id);
-
-			try {
-				const saveData = savePlayerToString(player);
-
-				const saveHTML = `<div class="infobox">` +
-					`<h2>Save Game</h2>` +
-					`<p>Your game has been saved! Copy the text below to save your progress:</p>` +
-					`<textarea readonly style="width: 100%; height: 150px; font-family: monospace; font-size: 10px;">${saveData}</textarea>` +
-					`<p><small>Save this text somewhere safe. Use /rpg load [save data] to restore your progress.</small></p>` +
-					`<p><strong>Warning:</strong> This save contains your entire game state. Keep it private!</p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
-			} catch (error) {
-				return this.errorReply("Error saving game: " + String(error));
-			}
-		},
-
-		load(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot load during a battle.");
-			}
-			if (!target) {
-				const loadHTML = `<div class="infobox">` +
-					`<h2>Load Game</h2>` +
-					`<p>To load a saved game, use: <code>/rpg load [save data]</code></p>` +
-					`<p><strong>Warning:</strong> Loading will replace your current progress!</p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${loadHTML}`);
-			}
-
-			try {
-				const loadedPlayer = loadPlayer(user.id, target);
-
-				const confirmHTML = `<div class="infobox">` +
-					`<h2>Game Loaded!</h2>` +
-					`<p>Your saved game has been loaded successfully!</p>` +
-					`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
-					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
-					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
-					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
-					`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
-			} catch (error) {
-				return this.errorReply("Error loading game. Make sure you pasted the complete save data.");
-			}
-		},
+		// Manual JSON save/load commands removed - use database save/load instead
+		// These were insecure as users could manually edit the JSON data
+		save: 'dbsave',
+		load: 'dbload',
 
 		async dbsave(target, room, user) {
 			if (activeBattles.has(user.id)) {
