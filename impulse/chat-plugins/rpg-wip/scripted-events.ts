@@ -3,6 +3,104 @@
 * RPG Scripted Events Handler
 *
 * This file implements logic for all scripted event types.
+*
+* All handlers are exported and can be imported individually or as a namespace:
+*   import * as ScriptedEvents from './scripted-events';
+*   import { handleCutscene, handlePokemonSwarm } from './scripted-events';
+*
+* Available Scripted Event Handlers (60+ handlers):
+*  - handleCutscene: Display cinematic cutscenes
+*  - handleChoice: Player makes a choice that affects story
+*  - handleQuiz: Answer quiz questions
+*  - handlePuzzle: Solve puzzles
+*  - handleRiddle: Answer riddles
+*  - handleMinigame: Play minigames
+*  - handleWeatherChange: Change weather in location
+*  - handleEarthquake: Earthquake event
+*  - handleExplosion: Explosion event
+*  - handleFlood: Flood event
+*  - handleMeteor: Meteor fall event
+*  - handleEclipse: Eclipse event
+*  - handleTimeWarp: Time manipulation
+*  - handleDimensionRift: Dimension rift opening
+*  - handlePokemonSwarm: Pokemon swarms appear
+*  - checkActiveSwarm: Check if swarm is active
+*  - handleBossBattle: Multi-phase boss battles
+*  - handleTournament: Tournament against AI trainers
+*  - advanceTournamentRound: Progress tournament
+*  - handleContest: Pokemon contests
+*  - handleRace: Racing events
+*  - handleScavengerHunt: Find hidden items
+*  - markScavengerItemFound: Mark item as found
+*  - handleInvestigation: Investigate mysteries
+*  - markClueFound: Mark clue as found
+*  - handleStealth: Stealth missions
+*  - handleEscape: Escape sequences
+*  - handleRescue: Rescue missions
+*  - handleDefense: Defend location
+*  - handleAmbush: Player ambushed
+*  - handleBetrayal: Betrayal occurs
+*  - handleAlliance: Form alliances
+*  - handleNegotiation: Negotiate with NPCs
+*  - handleDiscovery: Discover something new
+*  - handleRevelation: Story revelations
+*  - handleTransformation: Pokemon transformations
+*  - handleEvolutionCeremony: Special evolution
+*  - handleLegendaryAwakening: Legendary Pokemon awakens
+*  - handleAncientSeal: Ancient seal activated
+*  - handlePortalOpening: Portal opens
+*  - handleDimensionMerge: Dimensions merge
+*  - handleTimeLoop: Time loop event
+*  - handleProphecy: Prophecy revealed
+*  - handleFishingEvent: Fishing encounter
+*  - handleSurfingEvent: Surfing encounter
+*  - handleDivingEvent: Diving encounter
+*  - handleItemBall: Find items in pokeballs
+*  - handleHiddenItemEvent: Hidden item pickup
+*  - handleRoamingEvent: Roaming Pokemon
+*  - handleMultiBattle: Tag team battles
+*  - handleFestivalEvent: Festival/celebration
+*  - handleSecretArea: Unlock secret areas
+*  - handleWarpEvent: Teleportation/warp
+*  - handleGymChallengeEvent: Gym challenge start
+*  - handleEliteFourChallengeEvent: Elite Four gauntlet
+*  - handleHallOfFameEvent: Hall of Fame induction
+*  - handleSafariZoneEvent: Safari Zone special
+*  - handleBugCatchingContestEvent: Bug Catching Contest
+*  - handleBattleFrontierEvent: Battle Frontier
+*  - handleFlashback: Show flashback scenes
+*  - handleDreamSequence: Dream sequences and nightmares
+*  - handleReputationChange: Change faction reputation
+*  - handleCompanionJoin: NPC joins as companion
+*  - handleCompanionLeave: Companion leaves party
+*  - handleMoralChoice: Moral choices affecting karma
+*  - handleLoreDiscovery: Discover world lore/history
+*  - handleBranchingPath: Story branches based on choices
+*  - handleChapterTransition: Transition between chapters
+*  - handleEpilogue: Show epilogue after main story
+*  - handleCollectibleItem: Find special collectibles
+*  - handleVoiceFromAbove: Mysterious voice guidance
+*  - handleMemoryRestoration: Regain lost memories
+*  - handleHordeBattle: Battle multiple Pokemon at once
+*  - handleInverseBattle: Type effectiveness reversed
+*  - handleRotationBattle: Rotation battle format
+*  - handleBattleRoyale: Four-way free-for-all
+*  - handleTripleBattle: 3v3 simultaneous battle
+*  - handleSkyBattle: Flying-type only battle
+*  - handleUnderwaterBattle: Water-type only battle
+*  - handleRaidBattle: Single-player boss battles
+*  - handleGauntletBattle: Series of consecutive battles
+*  - advanceGauntletEvent: Progress gauntlet event
+*  - handleChampionDefense: Defend champion title
+*  - recordChampionDefense: Record title defense
+*  - handleBattleTest: Trial battles with conditions
+*  - handleWarBattle: Large-scale multi-wave battles
+*  - advanceWarWave: Progress to next war wave
+*
+* Usage in locations.ts:
+*   Define scriptedEvents in location objects with types that match
+*   these handlers. The handler will be automatically called by
+*   commands.ts when the event is triggered.
 */
 
 import type { PlayerData, RPGPokemon, ScriptedEvent } from './interface';
@@ -943,21 +1041,7 @@ export function handleMultiBattle(
 	};
 }
 
-/**
- * Photo Op Event
- * Photo opportunity event
- */
-export function handlePhotoOpEvent(
-	player: PlayerData,
-	event: ScriptedEvent
-): { success: boolean, message: string, subject?: string, reward?: any } {
-	return {
-		success: true,
-		message: `Take a photo of ${event.photoSubject || 'this moment'}!`,
-		subject: event.photoSubject,
-		reward: event.photoReward,
-	};
-}
+
 
 /**
  * Festival Event
@@ -1104,4 +1188,711 @@ export function handleBattleFrontierEvent(
 		facility: event.frontierFacility,
 		rules: event.frontierRules,
 	};
+}
+
+/**
+ * Flashback Event
+ * Show a flashback scene revealing backstory
+ */
+export function handleFlashback(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, flashbackText?: string, characters?: string[] } {
+	if (!event.flashbackText) {
+		return { success: false, message: 'No flashback configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A memory from the past...',
+		flashbackText: event.flashbackText,
+		characters: event.flashbackCharacters,
+	};
+}
+
+/**
+ * Dream Sequence Event
+ * Dream sequence for foreshadowing or story
+ */
+export function handleDreamSequence(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, dreamText?: string, isNightmare?: boolean } {
+	if (!event.dreamText) {
+		return { success: false, message: 'No dream configured.' };
+	}
+
+	return {
+		success: true,
+		message: event.isNightmare ? 'A terrifying nightmare...' : 'You drift into a dream...',
+		dreamText: event.dreamText,
+		isNightmare: event.isNightmare,
+	};
+}
+
+/**
+ * Reputation Change Event
+ * Change reputation with factions based on actions
+ */
+export function handleReputationChange(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, factionId?: string, change?: number } {
+	if (!event.factionId || event.reputationChange === undefined) {
+		return { success: false, message: 'No reputation change configured.' };
+	}
+
+	const repFlag = `reputation_${event.factionId}_points`;
+	const repStr = Array.from(player.storyFlags).find(f => f.startsWith(repFlag));
+
+	let currentPoints = 0;
+	if (repStr) {
+		currentPoints = parseInt(repStr.split('_').pop() || '0');
+		player.storyFlags.delete(repStr);
+	}
+
+	currentPoints += event.reputationChange;
+	player.storyFlags.add(`${repFlag}_${currentPoints}`);
+
+	const changeText = event.reputationChange > 0 ? 'increased' : 'decreased';
+
+	return {
+		success: true,
+		message: `Your reputation with ${event.factionId} has ${changeText}!`,
+		factionId: event.factionId,
+		change: event.reputationChange,
+	};
+}
+
+/**
+ * Companion Join Event
+ * NPC joins player as companion
+ */
+export function handleCompanionJoin(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, companionId?: string } {
+	if (!event.companionId) {
+		return { success: false, message: 'No companion configured.' };
+	}
+
+	const companionFlag = `companion_${event.companionId}_joined`;
+	if (player.storyFlags.has(companionFlag)) {
+		return { success: false, message: 'This companion has already joined you!' };
+	}
+
+	player.storyFlags.add(companionFlag);
+
+	return {
+		success: true,
+		message: `${event.companionId} has joined your party as a companion!`,
+		companionId: event.companionId,
+	};
+}
+
+/**
+ * Companion Leave Event
+ * Companion leaves the party
+ */
+export function handleCompanionLeave(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, companionId?: string } {
+	if (!event.companionId) {
+		return { success: false, message: 'No companion configured.' };
+	}
+
+	const companionFlag = `companion_${event.companionId}_joined`;
+	if (!player.storyFlags.has(companionFlag)) {
+		return { success: false, message: 'This companion is not with you!' };
+	}
+
+	player.storyFlags.delete(companionFlag);
+
+	return {
+		success: true,
+		message: `${event.companionId} has left your party.`,
+		companionId: event.companionId,
+	};
+}
+
+/**
+ * Moral Choice Event
+ * Player makes a moral choice affecting karma/alignment
+ */
+export function handleMoralChoice(
+	player: PlayerData,
+	event: ScriptedEvent,
+	choiceIndex: number
+): { success: boolean, message: string, karmaChange?: number, alignment?: string } {
+	if (!event.moralChoices || choiceIndex >= event.moralChoices.length) {
+		return { success: false, message: 'Invalid moral choice.' };
+	}
+
+	const choice = event.moralChoices[choiceIndex];
+
+	// Update karma
+	const karmaFlag = 'player_karma_points';
+	const karmaStr = Array.from(player.storyFlags).find(f => f.startsWith(karmaFlag));
+
+	let currentKarma = 0;
+	if (karmaStr) {
+		currentKarma = parseInt(karmaStr.split('_').pop() || '0');
+		player.storyFlags.delete(karmaStr);
+	}
+
+	currentKarma += choice.karmaChange || 0;
+	player.storyFlags.add(`${karmaFlag}_${currentKarma}`);
+
+	// Determine alignment
+	let alignment = 'Neutral';
+	if (currentKarma >= 50) alignment = 'Hero';
+	else if (currentKarma >= 20) alignment = 'Good';
+	else if (currentKarma <= -50) alignment = 'Villain';
+	else if (currentKarma <= -20) alignment = 'Evil';
+
+	// Set result flag if specified
+	if (choice.resultFlag) {
+		player.storyFlags.add(choice.resultFlag);
+	}
+
+	return {
+		success: true,
+		message: choice.resultText || 'Choice made.',
+		karmaChange: choice.karmaChange,
+		alignment,
+	};
+}
+
+/**
+ * Lore Discovery Event
+ * Discover lore/history about the world
+ */
+export function handleLoreDiscovery(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, loreTitle?: string, loreText?: string } {
+	if (!event.loreTitle || !event.loreText) {
+		return { success: false, message: 'No lore configured.' };
+	}
+
+	const loreFlag = `lore_${eventId}_discovered`;
+	if (player.storyFlags.has(loreFlag)) {
+		return {
+			success: true,
+			message: 'You review the lore you discovered earlier.',
+			loreTitle: event.loreTitle,
+			loreText: event.loreText,
+		};
+	}
+
+	player.storyFlags.add(loreFlag);
+
+	return {
+		success: true,
+		message: 'You discovered ancient lore!',
+		loreTitle: event.loreTitle,
+		loreText: event.loreText,
+	};
+}
+
+/**
+ * Branching Path Event
+ * Story branches based on player choices
+ */
+export function handleBranchingPath(
+	player: PlayerData,
+	event: ScriptedEvent,
+	pathChoice: number
+): { success: boolean, message: string, selectedPath?: string, pathFlag?: string } {
+	if (!event.pathOptions || pathChoice >= event.pathOptions.length) {
+		return { success: false, message: 'Invalid path choice.' };
+	}
+
+	const path = event.pathOptions[pathChoice];
+
+	// Set the path flag
+	if (path.pathFlag) {
+		player.storyFlags.add(path.pathFlag);
+	}
+
+	// Clear other path flags if exclusive
+	if (event.exclusivePaths) {
+		for (const otherPath of event.pathOptions) {
+			if (otherPath.pathFlag && otherPath.pathFlag !== path.pathFlag) {
+				player.storyFlags.delete(otherPath.pathFlag);
+			}
+		}
+	}
+
+	return {
+		success: true,
+		message: path.description || 'Path chosen.',
+		selectedPath: path.name,
+		pathFlag: path.pathFlag,
+	};
+}
+
+/**
+ * Chapter Transition Event
+ * Transition between story chapters
+ */
+export function handleChapterTransition(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, chapterNumber?: number, chapterTitle?: string } {
+	if (!event.chapterNumber || !event.chapterTitle) {
+		return { success: false, message: 'No chapter configured.' };
+	}
+
+	const chapterFlag = `chapter_${event.chapterNumber}_completed`;
+	player.storyFlags.add(chapterFlag);
+
+	return {
+		success: true,
+		message: `Chapter ${event.chapterNumber}: ${event.chapterTitle}`,
+		chapterNumber: event.chapterNumber,
+		chapterTitle: event.chapterTitle,
+	};
+}
+
+/**
+ * Epilogue Event
+ * Show epilogue after main story
+ */
+export function handleEpilogue(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, epilogueText?: string, characters?: string[] } {
+	if (!event.epilogueText) {
+		return { success: false, message: 'No epilogue configured.' };
+	}
+
+	player.storyFlags.add('epilogue_viewed');
+
+	return {
+		success: true,
+		message: 'The story concludes...',
+		epilogueText: event.epilogueText,
+		characters: event.epilogueCharacters,
+	};
+}
+
+/**
+ * Collectible Item Event
+ * Find special collectible items (badges, medals, etc.)
+ */
+export function handleCollectibleItem(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, collectibleId?: string, category?: string } {
+	if (!event.collectibleId || !event.collectibleCategory) {
+		return { success: false, message: 'No collectible configured.' };
+	}
+
+	const collectibleFlag = `collectible_${event.collectibleCategory}_${event.collectibleId}`;
+	if (player.storyFlags.has(collectibleFlag)) {
+		return { success: false, message: 'You already have this collectible!' };
+	}
+
+	player.storyFlags.add(collectibleFlag);
+
+	return {
+		success: true,
+		message: `You found a ${event.collectibleCategory}: ${event.collectibleId}!`,
+		collectibleId: event.collectibleId,
+		category: event.collectibleCategory,
+	};
+}
+
+/**
+ * Voice From Above Event
+ * Mysterious voice gives guidance
+ */
+export function handleVoiceFromAbove(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, voiceText?: string } {
+	if (!event.voiceText) {
+		return { success: false, message: 'No voice configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A mysterious voice speaks...',
+		voiceText: event.voiceText,
+	};
+}
+
+/**
+ * Memory Restoration Event
+ * Player regains lost memories
+ */
+export function handleMemoryRestoration(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, memoryText?: string } {
+	if (!event.memoryText) {
+		return { success: false, message: 'No memory configured.' };
+	}
+
+	const memoryFlag = `memory_${eventId}_restored`;
+	if (player.storyFlags.has(memoryFlag)) {
+		return { success: false, message: 'You have already regained this memory!' };
+	}
+
+	player.storyFlags.add(memoryFlag);
+
+	return {
+		success: true,
+		message: 'A forgotten memory returns to you...',
+		memoryText: event.memoryText,
+	};
+}
+
+/**
+ * Horde Battle Event
+ * Battle against multiple Pokemon at once
+ */
+export function handleHordeBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, hordeSpecies?: string[], hordeSize?: number } {
+	if (!event.hordeSpecies || event.hordeSpecies.length === 0) {
+		return { success: false, message: 'No horde configured.' };
+	}
+
+	const hordeSize = event.hordeSize || event.hordeSpecies.length;
+
+	return {
+		success: true,
+		message: `A horde of ${hordeSize} Pokemon appears!`,
+		hordeSpecies: event.hordeSpecies,
+		hordeSize,
+	};
+}
+
+/**
+ * Inverse Battle Event
+ * Type effectiveness is reversed
+ */
+export function handleInverseBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No inverse battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'The battlefield distorts! Type effectiveness is reversed!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Rotation Battle Event
+ * Special battle format with rotation mechanic
+ */
+export function handleRotationBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string, rotationSlots?: number } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No rotation battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A rotation battle begins!',
+		trainerId: event.trainerId,
+		rotationSlots: event.rotationSlots || 3,
+	};
+}
+
+/**
+ * Battle Royale Event
+ * Four-way free-for-all battle
+ */
+export function handleBattleRoyale(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, opponentIds?: string[] } {
+	if (!event.opponentIds || event.opponentIds.length < 2) {
+		return { success: false, message: 'Not enough opponents for battle royale.' };
+	}
+
+	return {
+		success: true,
+		message: 'A battle royale begins! Last one standing wins!',
+		opponentIds: event.opponentIds,
+	};
+}
+
+/**
+ * Triple Battle Event
+ * 3v3 simultaneous battle
+ */
+export function handleTripleBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No triple battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A triple battle begins! Three Pokemon battle at once!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Sky Battle Event
+ * Only Flying-type or Levitate Pokemon can participate
+ */
+export function handleSkyBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No sky battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A sky battle! Only Flying-type Pokemon or those with Levitate can participate!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Underwater Battle Event
+ * Only Water-type Pokemon can participate
+ */
+export function handleUnderwaterBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No underwater battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'An underwater battle! Only Water-type Pokemon can participate!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Boss Encounter Event
+ * Single-player battle against powerful boss Pokemon
+ */
+export function handleRaidBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, raidBoss?: any, raidLevel?: number } {
+	if (!event.raidBoss) {
+		return { success: false, message: 'No boss Pokemon configured.' };
+	}
+
+	return {
+		success: true,
+		message: `A powerful ${event.raidLevel || 5}-star boss appears!`,
+		raidBoss: event.raidBoss,
+		raidLevel: event.raidLevel,
+	};
+}
+
+/**
+ * Gauntlet Battle Event
+ * Series of consecutive battles
+ */
+export function handleGauntletBattle(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, currentBattle?: number, totalBattles?: number, opponents?: string[] } {
+	if (!event.gauntletOpponents || event.gauntletOpponents.length === 0) {
+		return { success: false, message: 'No gauntlet configured.' };
+	}
+
+	const gauntletFlag = `gauntlet_event_${eventId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		currentBattle = parseInt(battleStr.split('_').pop() || '0');
+	}
+
+	if (currentBattle >= event.gauntletOpponents.length) {
+		return {
+			success: false,
+			message: 'Gauntlet complete!',
+			currentBattle,
+			totalBattles: event.gauntletOpponents.length,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Gauntlet Battle ${currentBattle + 1} of ${event.gauntletOpponents.length}`,
+		currentBattle,
+		totalBattles: event.gauntletOpponents.length,
+		opponents: event.gauntletOpponents,
+	};
+}
+
+/**
+ * Advance gauntlet event
+ */
+export function advanceGauntletEvent(player: PlayerData, eventId: string): void {
+	const gauntletFlag = `gauntlet_event_${eventId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		currentBattle = parseInt(battleStr.split('_').pop() || '0');
+		player.storyFlags.delete(battleStr);
+	}
+
+	player.storyFlags.add(`${gauntletFlag}_${currentBattle + 1}`);
+}
+
+/**
+ * Champion Defense Event
+ * Defend champion title against challengers
+ */
+export function handleChampionDefense(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, challenger?: string, defensesSuccessful?: number } {
+	if (!event.challengers || event.challengers.length === 0) {
+		return { success: false, message: 'No challengers configured.' };
+	}
+
+	const defensesFlag = `champion_defenses_${eventId}`;
+	const defensesStr = Array.from(player.storyFlags).find(f => f.startsWith(defensesFlag));
+
+	let defenses = 0;
+	if (defensesStr) {
+		defenses = parseInt(defensesStr.split('_').pop() || '0');
+	}
+
+	// Select challenger based on defenses
+	const challengerIndex = Math.min(defenses, event.challengers.length - 1);
+	const challenger = event.challengers[challengerIndex];
+
+	return {
+		success: true,
+		message: `Title Defense #${defenses + 1}`,
+		challenger,
+		defensesSuccessful: defenses,
+	};
+}
+
+/**
+ * Record championship defense
+ */
+export function recordChampionDefense(player: PlayerData, eventId: string): void {
+	const defensesFlag = `champion_defenses_${eventId}`;
+	const defensesStr = Array.from(player.storyFlags).find(f => f.startsWith(defensesFlag));
+
+	let defenses = 0;
+	if (defensesStr) {
+		defenses = parseInt(defensesStr.split('_').pop() || '0');
+		player.storyFlags.delete(defensesStr);
+	}
+
+	player.storyFlags.add(`${defensesFlag}_${defenses + 1}`);
+}
+
+/**
+ * Battle Test Event
+ * Trial battle to test player's skills
+ */
+export function handleBattleTest(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, testType?: string, requirements?: string[] } {
+	if (!event.testType) {
+		return { success: false, message: 'No battle test configured.' };
+	}
+
+	const testDescriptions: Record<string, string> = {
+		'survival': 'Survive for 10 turns',
+		'damage': 'Deal 500+ damage in one turn',
+		'speed': 'Win in under 5 turns',
+		'type_advantage': 'Win using type advantage only',
+		'no_damage': 'Win without taking damage',
+		'status_only': 'Win using status moves only',
+	};
+
+	return {
+		success: true,
+		message: `Battle Test: ${testDescriptions[event.testType] || event.testType}`,
+		testType: event.testType,
+		requirements: event.testRequirements,
+	};
+}
+
+/**
+ * War Battle Event
+ * Large-scale battle with multiple waves
+ */
+export function handleWarBattle(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, currentWave?: number, totalWaves?: number } {
+	if (!event.warWaves || event.warWaves.length === 0) {
+		return { success: false, message: 'No war battle configured.' };
+	}
+
+	const waveFlag = `war_${eventId}_wave`;
+	const waveStr = Array.from(player.storyFlags).find(f => f.startsWith(waveFlag));
+
+	let currentWave = 0;
+	if (waveStr) {
+		currentWave = parseInt(waveStr.split('_').pop() || '0');
+	}
+
+	if (currentWave >= event.warWaves.length) {
+		return {
+			success: false,
+			message: 'War battle complete! Victory achieved!',
+			currentWave,
+			totalWaves: event.warWaves.length,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Wave ${currentWave + 1} of ${event.warWaves.length}`,
+		currentWave,
+		totalWaves: event.warWaves.length,
+	};
+}
+
+/**
+ * Advance war battle wave
+ */
+export function advanceWarWave(player: PlayerData, eventId: string): void {
+	const waveFlag = `war_${eventId}_wave`;
+	const waveStr = Array.from(player.storyFlags).find(f => f.startsWith(waveFlag));
+
+	let currentWave = 0;
+	if (waveStr) {
+		currentWave = parseInt(waveStr.split('_').pop() || '0');
+		player.storyFlags.delete(waveStr);
+	}
+
+	player.storyFlags.add(`${waveFlag}_${currentWave + 1}`);
 }

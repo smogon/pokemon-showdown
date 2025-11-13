@@ -3,6 +3,42 @@
 * RPG Story Events Data
 *
 * This file contains story event definitions triggered at specific points in the game.
+*
+* Story events are triggered based on player actions like entering locations,
+* defeating trainers, or obtaining badges. They're separate from location-based
+* scriptedEvents and are managed by the story system.
+*
+* Story Event Triggers:
+*   - location_enter: When player enters a specific location
+*   - trainer_defeat: When player defeats a specific trainer
+*   - badge_obtain: When player obtains a specific badge
+*   - manual: Manually triggered by code
+*
+* Story Event Configuration:
+*   - id: Unique event identifier
+*   - name: Display name of the event
+*   - description: Brief description
+*   - trigger: Trigger type (see above)
+*   - location: Location ID (for location_enter)
+*   - trainerId: Trainer ID (for trainer_defeat)
+*   - badgeName: Badge name (for badge_obtain)
+*   - flagsRequired: Flags that must be set
+*   - flagsSet: Flags to set when event triggers
+*   - dialogue: Message to display
+*
+* All scripted event handlers from scripted-events.ts can be used
+* with story events as well.
+*
+* Example:
+*   {
+*     id: 'first_badge',
+*     name: 'First Badge Earned',
+*     description: 'You earned your first gym badge',
+*     trigger: 'badge_obtain',
+*     badgeName: 'Boulder Badge',
+*     flagsSet: ['first_badge_earned'],
+*     dialogue: 'Congratulations on earning your first badge!',
+*   }
 */
 
 export interface StoryEvent {
