@@ -408,7 +408,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	///////////////////////////////////////////////////////////////
 	//////////////////////// Server Special /////////////////////////////
 	///////////////////////////////////////////////////////////////
-	/*{
+	{
 		section: "Server Special",
 		column: 1,
 	},
@@ -514,7 +514,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 	},
-	{
+	/*{
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
 		threads: [
