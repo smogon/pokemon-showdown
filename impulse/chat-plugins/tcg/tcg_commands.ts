@@ -11,6 +11,7 @@ import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
 import { tradeCommands } from './tcg_trade_cmds';
+import { tcgGiveawayCommands } from './tcg_giveaway';
 import { tcgCardsCollection, userProfilesCollection,
 	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
@@ -478,6 +479,7 @@ export const commands: ChatCommands = {
 				{ cmd: "/tcg adminhelp", desc: "Shows all admin commands." },
 				{ cmd: "/tcg economyhelp", desc: "Shows all economy and shop commands." },
 				{ cmd: "/tcg tradehelp", desc: "Shows trading commands." },
+				{ cmd: "/tcg giveaway", desc: "Shows TCG card giveaway commands. Use /tcg giveaway help for details." },
 				{ cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information." },
 				{ cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set." },
 				{ cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>" },
@@ -505,6 +507,7 @@ export const commands: ChatCommands = {
 		...collectionCommands,
 		...economyCommands,
 		...tradeCommands,
+		...tcgGiveawayCommands,
 	},
 };
 
