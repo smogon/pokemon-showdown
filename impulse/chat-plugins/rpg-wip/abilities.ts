@@ -74,6 +74,64 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
+	// Phase 1: Earth Eater - Immunity to Ground-type moves with healing
+	'eartheater': ctx => {
+		if (ctx.move.type === 'Ground') {
+			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
+			ctx.defender.hp = Math.min(ctx.defender.maxHp, ctx.defender.hp + healAmount);
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Earth Eater restored its HP!`,
+			};
+		}
+		return null;
+	},
+
+	// Phase 1: Well-Baked Body - Immunity to Fire-type moves with Defense boost
+	'wellbakedbody': ctx => {
+		if (ctx.move.type === 'Fire') {
+			let message = `${ctx.defender.species}'s Well-Baked Body blocked the Fire move!`;
+			if (ctx.defenderSlot.statStages.def < 6) {
+				ctx.defenderSlot.statStages.def += 2;
+				message = `${ctx.defender.species}'s Well-Baked Body sharply raised its Defense!`;
+			}
+			return {
+				immune: true,
+				message,
+			};
+		}
+		return null;
+	},
+
+	// Phase 1: Wind Power / Wind Rider - Immunity to wind moves with boost
+	'windpower': ctx => {
+		const windMoves = ['twister', 'gust', 'whirlwind', 'hurricane', 'tailwind', 'icy wind', 'heat wave', 'sandstorm', 'blizzard'];
+		if (windMoves.includes(ctx.move.id)) {
+			// Handled in battle flow - gains Charge status
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Wind Power charged it up!`,
+			};
+		}
+		return null;
+	},
+
+	'windrider': ctx => {
+		const windMoves = ['twister', 'gust', 'whirlwind', 'hurricane', 'tailwind', 'icy wind', 'heat wave', 'sandstorm', 'blizzard'];
+		if (windMoves.includes(ctx.move.id)) {
+			let message = `${ctx.defender.species}'s Wind Rider blocked the wind move!`;
+			if (ctx.defenderSlot.statStages.atk < 6) {
+				ctx.defenderSlot.statStages.atk++;
+				message = `${ctx.defender.species}'s Wind Rider raised its Attack!`;
+			}
+			return {
+				immune: true,
+				message,
+			};
+		}
+		return null;
+	},
+
 	'voltabsorb': ctx => {
 		if (ctx.move.type === 'Electric') {
 			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
@@ -419,6 +477,21 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		}
 		return basePower;
 	},
+
+	// Phase 1: Supreme Overlord - Boosts based on fallen allies (10% per fainted)
+	'supremeoverlord': (ctx, basePower) => {
+		const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const party = isPlayerAttacker ? 
+			ctx.battle.playerSlots.map(s => s?.pokemon).filter(p => p) :
+			ctx.battle.opponentSlots.map(s => s?.pokemon).filter(p => p);
+		
+		const faintedCount = party.filter(p => p && p.hp === 0).length;
+		if (faintedCount > 0) {
+			const multiplier = 1 + (faintedCount * 0.1);
+			return Math.floor(basePower * multiplier);
+		}
+		return basePower;
+	},
 };
 
 export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler> = {
@@ -458,6 +531,14 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
 			(ctx.move as any).typeConversionBoost = true;
 			return 'Electric';
+		}
+		return moveType;
+	},
+
+	// Phase 1: Liquid Voice - All sound moves become Water-type
+	'liquidvoice': (ctx, moveType) => {
+		if (ctx.move.flags.sound) {
+			return 'Water';
 		}
 		return moveType;
 	},
@@ -764,6 +845,13 @@ export const CONTACT_ABILITIES = {
 		stealItem: true,
 	},
 
+	// Phase 1: Water Compaction - Raises Defense by 2 when hit by Water move
+	'watercompaction': {
+		onContactStat: 'def',
+		value: 2,
+		triggerType: 'Water',
+	},
+
 	// Phase 2: Toxic Chain - 30% chance to badly poison on contact
 	'toxicchain': {
 		onContactChance: 0.3,
@@ -808,6 +896,34 @@ export const PRIORITY_ABILITIES = {
 			}
 			return 0;
 		},
+	},
+
+	// Phase 1: Quick Draw - 30% chance to move first with attacking moves
+	'quickdraw': {
+		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
+			if (move.category !== 'Status' && Math.random() < 0.3) {
+				return 1;
+			}
+			return 0;
+		},
+	},
+
+	// Phase 1: Stall - Always moves last (negative priority)
+	'stall': {
+		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
+			return -9999; // Extremely low priority
+		},
+	},
+
+	// Phase 1: Mycelium Might - Status moves go last but ignore abilities
+	'myceliummight': {
+		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
+			if (move.category === 'Status') {
+				return -999; // Status moves go last
+			}
+			return 0;
+		},
+		ignoresAbilities: true, // For status moves only
 	},
 };
 
@@ -880,6 +996,18 @@ export const FORM_CHANGE_ABILITIES = {
 	// Phase 4: Mimicry - Changes type based on terrain
 	'mimicry': {
 		terrainType: true,
+	},
+
+	// Phase 1: Hunger Switch - Form change between Full Belly and Hangry Mode every turn
+	'hungerswitch': {
+		formChange: true,
+		everyTurn: true,
+	},
+
+	// Phase 1: Zen Mode - Form change when HP drops below 50%
+	'zenmode': {
+		hpFormChange: true,
+		threshold: 0.5,
 	},
 };
 
@@ -1018,6 +1146,19 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
+	// Phase 1: Aftermath - Damages attacker when KO'd (1/4 max HP if contact move)
+	'aftermath': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled in the battle flow when a Pokemon faints from a contact move
+		},
+	},
+
+	// Phase 1: Innards Out - Damages attacker equal to HP lost when KO'd
+	'innardsout': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled in the battle flow when a Pokemon faints
+		},
+	},
 };
 
 // End of Turn Abilities - abilities that trigger at the end of each turn
@@ -1046,6 +1187,12 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 				slot.status = null;
 				messageLog.push(`${slot.pokemon.species} shed its skin and cured its ${statusName}!`);
 			}
+		},
+	},
+	// Phase 1: Color Change - Changes type to match last move hit by
+	'colorchange': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled when Pokemon is hit by a move (see battle flow)
 		},
 	},
 	// Phase 2: Moody - Raises one random stat by 2 stages, lowers another by 1 stage
@@ -1158,6 +1305,27 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			}
 		},
 	},
+
+	// Phase 1: Wind Power - Gains Charge when hit by wind move
+	'windpower': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled when hit by wind moves (see battle flow)
+		},
+	},
+
+	// Phase 1: Wind Rider - Boosts Attack when hit by wind move
+	'windrider': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled when hit by wind moves (see battle flow)
+		},
+	},
+
+	// Phase 1: Electromorphosis - Gains Charge when hit
+	'electromorphosis': {
+		handler: (slot, battle, messageLog) => {
+			// This is handled when Pokemon takes damage (see battle flow)
+		},
+	},
 };
 
 // Stat Drop Response Abilities - abilities that trigger when stats are lowered
@@ -1186,6 +1354,13 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 			}
 		},
 	},
+	// Phase 1: Mirror Armor - Reflects stat drops back to the attacker
+	'mirrorarmor': {
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// This is handled during stat drop attempts (see battle-shared.ts)
+			// When a stat drop is attempted, it's reflected back to sourceSlot
+		},
+	},
 };
 
 // Status Interaction Abilities - abilities that interact with status conditions
@@ -1210,6 +1385,125 @@ export const STATUS_INTERACTION_ABILITIES: Record<string, {
 				messageLog.push(`${slot.pokemon.species}'s Hydration cured its status condition!`);
 			}
 		},
+	},
+};
+
+// Trapping Abilities - abilities that prevent opponents from switching
+export const TRAPPING_ABILITIES = {
+	'shadowtag': {
+		preventsSwitch: true,
+		description: 'Prevents non-Shadow Tag opponents from switching',
+	},
+	'arenatrap': {
+		preventsSwitch: true,
+		groundedOnly: true,
+		description: 'Prevents grounded opponents from switching',
+	},
+	'magnetpull': {
+		preventsSwitch: true,
+		steelOnly: true,
+		description: 'Prevents Steel-type opponents from switching',
+	},
+};
+
+// Aura Abilities - abilities that boost move types for all Pokemon
+export const AURA_ABILITIES = {
+	'darkaura': {
+		boostedType: 'Dark',
+		multiplier: 1.33,
+		description: 'Boosts Dark-type moves for all Pokemon by 33%',
+	},
+	'fairyaura': {
+		boostedType: 'Fairy',
+		multiplier: 1.33,
+		description: 'Boosts Fairy-type moves for all Pokemon by 33%',
+	},
+	'aurabreak': {
+		reversesAuras: true,
+		description: 'Reverses the effects of Dark Aura and Fairy Aura',
+	},
+};
+
+// Ruin Abilities - abilities that lower stats of all opponents
+export const RUIN_ABILITIES = {
+	'swordofruin': {
+		stat: 'def',
+		description: 'Lowers Defense of all other Pokemon',
+	},
+	'tabletsof ruin': {
+		stat: 'atk',
+		description: 'Lowers Attack of all other Pokemon',
+	},
+	'vesselofruin': {
+		stat: 'spa',
+		description: 'Lowers Sp. Atk of all other Pokemon',
+	},
+	'beadsofruin': {
+		stat: 'spd',
+		description: 'Lowers Sp. Def of all other Pokemon',
+	},
+};
+
+// Special Mechanic Abilities - abilities with unique mechanics
+export const SPECIAL_MECHANIC_ABILITIES = {
+	// Phase 1: Protean / Libero - Changes type to match move used
+	'protean': {
+		changeTypeOnMove: true,
+		description: 'Changes the Pokemon\'s type to the type of the move it\'s about to use',
+	},
+	'libero': {
+		changeTypeOnMove: true,
+		description: 'Changes the Pokemon\'s type to the type of the move it\'s about to use',
+	},
+	// Phase 1: Magician - Steals target's item after attacking
+	'magician': {
+		stealsItemOnHit: true,
+		description: 'Steals the target\'s item when attacking',
+	},
+	// Phase 1: Dancer - Copies dance moves
+	'dancer': {
+		copiesDanceMoves: true,
+		description: 'Automatically uses dance moves after another Pokemon uses one',
+	},
+	// Phase 1: Symbiosis - Passes item to ally when they use theirs
+	'symbiosis': {
+		passesItem: true,
+		description: 'Passes item to ally when they use their item',
+	},
+	// Phase 1: Opportunist - Copies foe's stat boosts
+	'opportunist': {
+		copiesStatBoosts: true,
+		description: 'Copies any stat increases made by opponents',
+	},
+	// Phase 1: Receiver / Power of Alchemy - Copies fallen ally's ability
+	'receiver': {
+		copiesAllyAbility: true,
+		description: 'Copies the ability of a defeated ally',
+	},
+	'powerofalchemy': {
+		copiesAllyAbility: true,
+		description: 'Copies the ability of a defeated ally',
+	},
+	// Phase 1: Magic Bounce / Rebound - Reflects status moves
+	'magicbounce': {
+		reflectsStatusMoves: true,
+		description: 'Reflects non-damaging moves back at the user',
+	},
+	'rebound': {
+		reflectsStatusMoves: true,
+		description: 'Reflects non-damaging moves back at the user',
+	},
+	// Phase 1: Wonder Skin - Lowers accuracy of status moves to 50%
+	'wonderskin': {
+		lowersStatusAccuracy: true,
+		description: 'Lowers the accuracy of status moves targeting this Pokemon to 50%',
+	},
+	// Phase 1: Water Bubble - Fire resistance, Attack boost, burn immunity
+	'waterbubble': {
+		fireResistance: 0.5,
+		attackBoost: 2.0,
+		burnImmune: true,
+		description: 'Halves Fire damage, doubles Attack, prevents burn',
 	},
 };
 
@@ -1240,6 +1534,21 @@ export const RPG_SPECIFIC_ABILITIES = {
 		description: 'May pick up items after battle based on level (implemented in post-battle rewards)',
 		postBattlePickup: true,
 		chanceByLevel: true, // Increases with level
+	},
+	// Phase 1: Ball Fetch - Fetches failed Poké Ball after battle
+	'ballfetch': {
+		description: 'Fetches failed Poké Ball after battle (implemented in catch system)',
+		retrievesBall: true,
+	},
+	// Phase 1: Anticipation - Warns about super-effective/OHKO/Explosion moves
+	'anticipation': {
+		description: 'Warns about dangerous moves (implemented in battle start)',
+		warnsDangerousMoves: true,
+	},
+	// Phase 1: Forewarn - Reveals opponent\'s strongest move
+	'forewarn': {
+		description: 'Reveals opponent\'s strongest move (implemented in battle start)',
+		revealsStrongestMove: true,
 	},
 };
 
@@ -2015,6 +2324,68 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		messageLog.push(`${pokemon.species}'s Intrepid Sword raised its Attack!`);
 	}
 
+	// Phase 1: Costar - Copies ally's stat changes on switch-in
+	if (ability === 'costar') {
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
+		
+		if (ally) {
+			// Copy all stat stages from ally
+			slot.statStages = { ...ally.statStages };
+			messageLog.push(`${pokemon.species} copied ${ally.pokemon.species}'s stat changes!`);
+		}
+	}
+
+	// Phase 1: Curious Medicine - Resets ally's stats on switch-in
+	if (ability === 'curiousmedicine') {
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		
+		for (const ally of allies) {
+			if (ally && ally.pokemon.id !== pokemon.id && ally.pokemon.hp > 0) {
+				// Reset all negative stat stages
+				const hadNegative = Object.values(ally.statStages).some(stage => stage < 0);
+				if (hadNegative) {
+					ally.statStages = {
+						atk: Math.max(0, ally.statStages.atk),
+						def: Math.max(0, ally.statStages.def),
+						spa: Math.max(0, ally.statStages.spa),
+						spd: Math.max(0, ally.statStages.spd),
+						spe: Math.max(0, ally.statStages.spe),
+						accuracy: Math.max(0, ally.statStages.accuracy),
+						evasion: Math.max(0, ally.statStages.evasion),
+					};
+					messageLog.push(`${pokemon.species}'s Curious Medicine restored ${ally.pokemon.species}'s stats!`);
+				}
+			}
+		}
+	}
+
+	// Phase 1: Hospitality - Heals ally by 25% on switch-in
+	if (ability === 'hospitality') {
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
+		
+		if (ally && ally.pokemon.hp < ally.pokemon.maxHp) {
+			const healAmount = Math.floor(ally.pokemon.maxHp * 0.25);
+			ally.pokemon.hp = Math.min(ally.pokemon.maxHp, ally.pokemon.hp + healAmount);
+			messageLog.push(`${pokemon.species}'s Hospitality restored ${ally.pokemon.species}'s HP!`);
+		}
+	}
+
+	// Phase 1: Supersweet Syrup - Lowers evasion of all foes by 1 stage on switch-in
+	if (ability === 'supersweetsynip') {
+		const opponents = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		for (const opponent of opponents) {
+			if (opponent && opponent.pokemon.hp > 0 && opponent.statStages.evasion > -6) {
+				opponent.statStages.evasion--;
+				messageLog.push(`${pokemon.species}'s Supersweet Syrup lowered ${opponent.pokemon.species}'s evasion!`);
+			}
+		}
+	}
+
 	// Phase 4: Screen Cleaner - Removes screens on switch-in
 	if (ability === 'screencleaner') {
 		const sides = [
@@ -2253,6 +2624,11 @@ export const RPGAbilities = {
 	END_OF_TURN_ABILITIES,
 	STAT_DROP_RESPONSE_ABILITIES,
 	STATUS_INTERACTION_ABILITIES,
+	TRAPPING_ABILITIES,
+	AURA_ABILITIES,
+	RUIN_ABILITIES,
+	SPECIAL_MECHANIC_ABILITIES,
+	RPG_SPECIFIC_ABILITIES,
 };
 
 export default RPGAbilities;
