@@ -52,7 +52,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		canMegaEvo(pokemon: Pokemon) {
 			if (pokemon.side.megaEvoUsed) return false;
-	
+
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();
