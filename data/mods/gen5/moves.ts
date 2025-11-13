@@ -749,6 +749,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	relicsong: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, sound: 1 },
+		onAfterSubDamage(damage, target, pokemon, move) {
+			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
+				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
+				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]');
+			}
+		},
 	},
 	roar: {
 		inherit: true,

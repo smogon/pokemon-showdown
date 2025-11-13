@@ -52,7 +52,7 @@ describe('Relic Song [Gen 5]', () => {
 	});
 
 	it('should transform Meloetta into its Pirouette forme even if it hits a substitute', () => {
-		battle = common.createBattle([
+		battle = common.gen(5).createBattle([
 			[{ species: "Meloetta", ability: 'serenegrace', moves: ['relicsong'] }],
 			[{ species: "Registeel", ability: 'prankster', moves: ['substitute'] }],
 		]);
