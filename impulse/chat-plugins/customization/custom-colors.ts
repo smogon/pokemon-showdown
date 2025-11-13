@@ -10,6 +10,7 @@ import { validateHexColor, clearColorCache, nameColor } from '../../colors';
 const STAFF_ROOM_ID = 'staff';
 const CUSTOM_COLORS_FILE_PATH = 'config/custom-colors.json';
 
+// Helper function to notify staff
 const logToStaffRoom = (message: string) => {
 	const staffRoom = Rooms.get(STAFF_ROOM_ID);
 	if (staffRoom) {
@@ -17,19 +18,30 @@ const logToStaffRoom = (message: string) => {
 	}
 };
 
+// --- File System Operations ---
+
+const saveColorsToFile = async (colors: {[key: string]: string}) => {
+	await FS(CUSTOM_COLORS_FILE_PATH).writeUpdate(JSON.stringify(colors, null, 2));
+};
+
 const getColorsFromFile = async (): Promise<{[key: string]: string}> => {
 	try {
-		const fileContent = await FS(CUSTOM_COLORS_FILE_PATH).readIfExists();
-		if (!fileContent) return {};
+		const fileExists = await FS(CUSTOM_COLORS_FILE_PATH).exists();
+		if (!fileExists) {
+			// Create an empty file if it doesn't exist
+			await saveColorsToFile({});
+			return {};
+		}
+
+		const fileContent = await FS(CUSTOM_COLORS_FILE_PATH).read();
+		// We check fileContent because read() can return empty string
+		if (!fileContent) return {}; // File exists but is empty
+
 		return JSON.parse(fileContent);
 	} catch (e) {
 		// File might be corrupted, treat as empty
 		return {};
 	}
-};
-
-const saveColorsToFile = async (colors: {[key: string]: string}) => {
-	await FS(CUSTOM_COLORS_FILE_PATH).writeUpdate(JSON.stringify(colors, null, 2));
 };
 
 const loadCustomColorsFromFile = async () => {
@@ -38,6 +50,8 @@ const loadCustomColorsFromFile = async () => {
 		Chat.customColors.set(userid, colors[userid]);
 	}
 };
+
+// --- CSS Generation ---
 
 Impulse.reloadCSS = () => {
 	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
@@ -49,7 +63,7 @@ Impulse.reloadCSS = () => {
 const generateCSS = (name: string, color: string): string => {
 	const id = toID(name);
 	return (
-		`\n[class$="chatmessage-${id}"] strong, ` +
+		`[class$="chatmessage-${id}"] strong, ` +
 		`[class$="chatmessage-${id} mine"] strong, ` +
 		`[class$="chatmessage-${id} highlighted"] strong, ` +
 		`[id$="-userlist-user-${id}"] strong em, ` +
@@ -157,7 +171,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			return this.sendReplyBox(
-				`<b><font size="3" color="${color}">${Chat.escapeHTML(name)}</font></b>`
+				`<b><font size="3" color="${color}">${Chat.escapeHTML(name)}</final></b>`
 			);
 		},
 
