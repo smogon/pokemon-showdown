@@ -2574,6 +2574,21 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 			messageLog.push(`${pokemon.species}'s Screen Cleaner removed all screens!`);
 		}
 	}
+
+	// Phase 6: Booster Energy - Activate Protosynthesis/Quark Drive abilities
+	if ((ability === 'protosynthesis' || ability === 'quarkdrive') && pokemon.item === 'boosterenergy') {
+		// Check if not already active from weather/terrain
+		const hasWeatherBuff = ability === 'protosynthesis' && battle.weather && 
+			(battle.weather.type === 'sun' || battle.weather.type === 'harsh-sun');
+		const hasTerrainBuff = ability === 'quarkdrive' && battle.terrain?.type === 'electric';
+		
+		if (!hasWeatherBuff && !hasTerrainBuff && !(slot as any).boosterEnergyActive) {
+			// Consume Booster Energy
+			pokemon.item = undefined;
+			(slot as any).boosterEnergyActive = true;
+			messageLog.push(`${pokemon.species} consumed its Booster Energy to activate ${pokemon.ability}!`);
+		}
+	}
 }
 
 export function applyContactAbilityEffects(ctx: AbilityContext): void {

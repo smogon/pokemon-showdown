@@ -113,6 +113,13 @@ export interface ActivePokemonSlot {
 	consumedBerry?: string; // Track the last berry consumed for Harvest
 	harvestUsedThisTurn?: boolean; // Prevent multiple Harvest triggers per turn
 	cudChewBerry?: string; // Track berry for Cud Chew to consume again
+	
+	// Phase 6: New ability-related properties
+	boosterEnergyActive?: boolean; // Track if Booster Energy has been consumed for Protosynthesis/Quark Drive
+	gulpMissileForm?: 'gulping' | 'gorging' | null; // Track Cramorant's Gulp Missile form
+	commanderActive?: boolean; // Track if Tatsugiri is inside Dondozo
+	commanderBoost?: boolean; // Track if Dondozo has Commander boost
+	hasSwitchedOut?: boolean; // Track if Pokemon has switched out (for Zero to Hero)
 }
 
 export interface PlayerData {

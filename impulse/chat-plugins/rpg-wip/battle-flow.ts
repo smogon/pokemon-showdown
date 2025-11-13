@@ -1049,6 +1049,12 @@ export function handleSwitchAction(
 		messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
 	}
 
+	// Phase 6: Mark Pokemon with Zero to Hero as having switched out
+	if (outgoingAbility === 'zerotohero' && outgoingPokemon.species.includes('Palafin')) {
+		// Mark on the pokemon object so it persists when creating new slot
+		(outgoingPokemon as any).hasSwitchedOut = true;
+	}
+
 	saveBattleStatus(battle);
 
 	if (isPlayerSwitch) {
@@ -1059,6 +1065,10 @@ export function handleSwitchAction(
 		}
 
 		const newSlot = createActivePokemonSlot(incomingPokemon);
+		// Phase 6: Transfer hasSwitchedOut flag for Zero to Hero
+		if ((incomingPokemon as any).hasSwitchedOut) {
+			(newSlot as any).hasSwitchedOut = true;
+		}
 		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
 		messageLog.push(`<b>${player.name} withdrew ${outgoingPokemon.species} and sent out ${incomingPokemon.species}!</b>`);
 
@@ -1074,6 +1084,10 @@ export function handleSwitchAction(
 
 		if (replacement) {
 			const newSlot = createActivePokemonSlot(replacement);
+			// Phase 6: Transfer hasSwitchedOut flag for Zero to Hero
+			if ((replacement as any).hasSwitchedOut) {
+				(newSlot as any).hasSwitchedOut = true;
+			}
 			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot;
 			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
 
