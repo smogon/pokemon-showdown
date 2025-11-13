@@ -50,7 +50,7 @@ export class TimedCounter extends Map<string, [number, number]> {
 // 3 = warning
 // (4 is currently unused)
 // 5 = supposedly completely silent, but for now a lot of PS output doesn't respect loglevel
-if (('Config' in global) &&
+if (("Config" in global) &&
 	(typeof Config.loglevel !== 'number' || Config.loglevel < 0 || Config.loglevel > 5)) {
 	Config.loglevel = 2;
 }
@@ -335,7 +335,8 @@ export const Monitor = new class {
 				bytes += 8;
 				break;
 			case 'object':
-				if (!objectCache.has(value)) objectCache.add(value);
+				if (objectCache.has(value)) break;
+				objectCache.add(value);
 				if (Array.isArray(value)) {
 					for (const el of value) stack.push(el);
 				} else {
