@@ -10,6 +10,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return true;
 		},
 		itemUser: ["Cirno-Tanned"],
+		isNonstandard: null,
 	},
 	jeweledpagoda: {
 		name: "Jeweled Pagoda",
@@ -25,6 +26,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			}
 		},
 		itemUser: ["Nazrin", "Shou Toramaru"],
+		isNonstandard: null,
 	},
 	
 	

@@ -8793,4 +8793,34 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		isNonstandard: "Future",
 	},
+	// Touhou
+	summerbackdoor: {
+		name: "Summer Backdoor",
+		spritenum: 751,
+		shortDesc: "If held by a Cirno, this item changes its forme to Tanned.",
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 5) || pokemon.baseSpecies.num === 5) {
+				return false;
+			}
+			return true;
+		},
+		itemUser: ["Cirno-Tanned"],
+		isNonstandard: "Future",
+	},
+	jeweledpagoda: {
+		name: "Jeweled Pagoda",
+		spritenum: 92,
+		shortDesc: "Nazrin, Shou Toramaru: Fairy moves have 1.5x power.",
+		onBasePowerPriority: 15,
+		onBasePower(basePower, source, target, move) {
+			// if (!(source && (source.baseSpecies.num === 57 || source.baseSpecies.num === 62) || !(source.baseSpecies.num === 57 || source.baseSpecies.num === 62))) return;
+			if (source.baseSpecies.baseSpecies === 'Nazrin' || source.baseSpecies.baseSpecies === 'Shou Toramaru') {
+				if (move && move.type === 'Fairy') {
+					return this.chainModify(1.5);
+				}
+			}
+		},
+		itemUser: ["Nazrin", "Shou Toramaru"],
+		isNonstandard: "Future",
+	},
 };
