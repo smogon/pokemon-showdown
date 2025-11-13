@@ -1168,16 +1168,6 @@ export const warCommands: Chat.ChatCommands = {
 			`</ul>`;
 		this.sendReplyBox(`<div style="max-height: 380px; overflow-y: auto;">${h}</div>`);
 	},
-}; ${user.name} has concluded the war. Final Score: ${s1} - ${s2}`;
-		const eh = generateWarCard(w, c1, c2, 'ended', { endMessage: em });
-		const r1 = Rooms.get(c1.chatRoom);
-		const r2 = Rooms.get(c2.chatRoom);
-		const lr = Rooms.get(LOBBY);
-		if (r1) r1.add(`|uhtmlchange|${uid}|${eh}`).update();
-		if (r2) r2.add(`|uhtmlchange|${uid}|${eh}`).update();
-		if (lr) lr.add(`|uhtmlchange|${uid}|${eh}`).update();
-		this.sendReply(`Force ended the war between ${c1.name} and ${c2.name}.`);
-	},
 
 	async forcetie(target, room, user) {
 		this.checkChat();
@@ -1197,4 +1187,14 @@ export const warCommands: Chat.ChatCommands = {
 		const s1 = w.scores[c1._id] || 0;
 		const s2 = w.scores[c2._id] || 0;
 		const uid = `clan-war-card-${w._id}`;
-		const em = `[ADMIN]
+		const em = `[ADMIN] ${user.name} has declared the war a tie. Final Score: ${s1} - ${s2}`;
+		const eh = generateWarCard(w, c1, c2, 'ended', { endMessage: em });
+		const r1 = Rooms.get(c1.chatRoom);
+		const r2 = Rooms.get(c2.chatRoom);
+		const lr = Rooms.get(LOBBY);
+		if (r1) r1.add(`|uhtmlchange|${uid}|${eh}`).update();
+		if (r2) r2.add(`|uhtmlchange|${uid}|${eh}`).update();
+		if (lr) lr.add(`|uhtmlchange|${uid}|${eh}`).update();
+		this.sendReply(`Force tied the war between ${c1.name} and ${c2.name}.`);
+	},
+};
