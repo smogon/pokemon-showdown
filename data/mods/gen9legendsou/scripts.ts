@@ -50,36 +50,33 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	actions: {
-		canMegaEvo(pokemon) {
+		canMegaEvo(pokemon: Pokemon) {
+			if (pokemon.side.megaEvoUsed) return false;
+	
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();
 			// Mega Rayquaza
 			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
-				this.battle.ruleTable.has('+pokemontag:future')) &&
+				this.battle.ruleTable.has('+pokemontag:future')) && !this.battle.ruleTable.has('megarayquazaclause') &&
 				altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
-			if (item.megaEvolves === species.name) {
+			if (item.megaStone && item.megaEvolves === species.name) {
 				return item.megaStone;
 			}
-			return null;
+			return false;
 		},
 		runMegaEvo(pokemon) {
-			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+			const speciesid = this.canMegaEvo(pokemon) || this.canUltraBurst(pokemon);
 			if (!speciesid) return false;
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
-
-			// Limit one mega evolution
-			const wasMega = pokemon.canMegaEvo;
-			for (const ally of pokemon.side.pokemon) {
-				if (wasMega) {
-					ally.canMegaEvo = false;
-				} else {
-					ally.canUltraBurst = null;
-				}
+			if (speciesid === 'Necrozma-Ultra') {
+				pokemon.side.ultraBurstUsed = true;
+			} else {
+				pokemon.side.megaEvoUsed = true;
 			}
 
 			// will finish coding this later, not important since zygarde is banned
