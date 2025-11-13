@@ -13,6 +13,7 @@ import type { ActivePokemonSlot, BattleState } from './interface';
 import {
 	activateUnburden,
 	applyStatChange,
+	consumeBerry,
 } from './battle-shared';
 
 // Import functions from battle-core
@@ -72,8 +73,7 @@ export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState
 	if (slot.status && pokemon.item === 'lumberry') {
 		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
-		pokemon.item = undefined;
-		activateUnburden(slot, messageLog);
+		consumeBerry(slot, 'lumberry', messageLog);
 		return true;
 	}
 
@@ -308,6 +308,11 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			slot.lockedMove = undefined;
 			messageLog.push(`${pokemon.species} calmed down.`);
 		}
+	}
+
+	// Phase 1: Reset Harvest tracking for next turn
+	if (slot.harvestUsedThisTurn) {
+		slot.harvestUsedThisTurn = false;
 	}
 
 	RPGAbilities.applyEndOfTurnAbilities(slot, battle, messageLog);

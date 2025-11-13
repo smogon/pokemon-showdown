@@ -31,6 +31,7 @@ import {
 	activateUnburden,
 	applySynchronize,
 	handleHPDropEffects,
+	consumeBerry,
 } from './battle-shared';
 
 /**
@@ -809,14 +810,12 @@ export function applyPostDamageContactEffects(
 		if (move.category === 'Physical' && defender.item === 'keberry') {
 			if (applyStatChange(defenderSlot, 'def', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Kee Berry)!`;
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'keberry', messageLog);
 			}
 		} else if (move.category === 'Special' && defender.item === 'marangaberry') {
 			if (applyStatChange(defenderSlot, 'spd', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Maranga Berry)!`;
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'marangaberry', messageLog);
 			}
 		}
 	}
@@ -834,8 +833,7 @@ export function applyPostDamageContactEffects(
 			if (defender.item === 'jabocaberry' && RPGAbilities.takesIndirectDamage(attacker)) {
 				attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 				messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'jabocaberry', messageLog);
 			}
 		}
 		if (attacker.hp > 0) {
@@ -847,8 +845,7 @@ export function applyPostDamageContactEffects(
 		if (RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 			messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Rowap Berry!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			consumeBerry(defenderSlot, 'rowapberry', messageLog);
 		}
 	}
 
@@ -1010,6 +1007,16 @@ export function handleOnHitAbilityResponses(
 	if (defenderAbility === 'sandspit' && damageDealt > 0 && battle.weather?.type !== 'sand') {
 		battle.weather = { type: 'sand', turns: 5 };
 		messageLog.push(`${defender.species}'s Sand Spit created a sandstorm!`);
+	}
+
+	// Phase 1: Steam Engine - Raises Speed by 6 stages when hit by Fire or Water move
+	if (defenderAbility === 'steamengine' && ['Fire', 'Water'].includes(move.type) && damageDealt > 0) {
+		const stages = Math.min(6, 6 - defenderSlot.statStages.spe);
+		if (stages > 0) {
+			defenderSlot.statStages.spe = Math.min(6, defenderSlot.statStages.spe + stages);
+			const message = stages >= 2 ? 'sharply raised' : 'raised';
+			messageLog.push(`${defender.species}'s Steam Engine ${message} its Speed!`);
+		}
 	}
 }
 
@@ -1252,8 +1259,7 @@ export function handleDamagingMove(
 			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
 				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
 			}
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			consumeBerry(defenderSlot, attackResult.berryConsumed, messageLog);
 		}
 
 		// We need the ability context here for Infiltrator

@@ -119,6 +119,28 @@ export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]):
 	}
 }
 
+// Phase 1: Handle berry consumption with Cheek Pouch and Harvest tracking
+export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+	
+	// Track for Harvest
+	slot.consumedBerry = berryId;
+	slot.harvestUsedThisTurn = false; // Reset for next turn
+	
+	// Remove the berry
+	slot.pokemon.item = undefined;
+	
+	// Activate Unburden
+	activateUnburden(slot, messageLog);
+	
+	// Phase 1: Cheek Pouch - Restores 1/3 HP when consuming a Berry
+	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
+		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
+		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
+		messageLog.push(`${slot.pokemon.species}'s Cheek Pouch restored its HP!`);
+	}
+}
+
 export function applySynchronize(
 	statusToInflict: Status,
 	sourceSlot: ActivePokemonSlot,
@@ -216,7 +238,9 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	let consumedItemName = '';
 
 	const halfHP = pokemon.maxHp / 2;
-	const quarterHP = pokemon.maxHp / 4;
+	// Phase 1: Gluttony - Activates pinch berries at 50% HP instead of 25%
+	const hasGluttony = toID(pokemon.ability || '') === 'gluttony';
+	const quarterHP = hasGluttony ? halfHP : pokemon.maxHp / 4;
 
 	if (pokemon.hp <= halfHP && !itemConsumed) {
 		// Phase 3: Ripen - Doubles the effect of berries
@@ -312,9 +336,8 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 		}
 	}
 
-	if (itemConsumed) {
-		pokemon.item = undefined;
-		activateUnburden(slot, messageLog);
+	if (itemConsumed && pokemon.item) {
+		consumeBerry(slot, pokemon.item, messageLog);
 	}
 }
 

@@ -41,6 +41,17 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
+	// Phase 1: Mountaineer - Immunity to Rock-type moves
+	'mountaineer': ctx => {
+		if (ctx.move.type === 'Rock') {
+			return {
+				immune: true,
+				message: `${ctx.defender.species}'s Mountaineer makes it immune to Rock moves!`,
+			};
+		}
+		return null;
+	},
+
 	'levitate': ctx => {
 		if (ctx.move.type === 'Ground' && ctx.battle.gravityTurns === 0) {
 			return {
@@ -397,6 +408,14 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	'steelyspirit': (ctx, basePower) => {
 		if (ctx.move.type === 'Steel') {
 			return Math.floor(basePower * 1.5);
+		}
+		return basePower;
+	},
+
+	// Phase 1: Stakeout - Doubles damage to target that switched in this turn
+	'stakeout': (ctx, basePower) => {
+		if (ctx.defenderSlot.activeTurns === 1) {
+			return Math.floor(basePower * 2);
 		}
 		return basePower;
 	},
@@ -1023,6 +1042,53 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 					slot.statStages[statToLower] = Math.max(-6, slot.statStages[statToLower] - 1);
 					messageLog.push(`${slot.pokemon.species}'s Moody lowered its ${statNames[statToLower]}!`);
 				}
+			}
+		},
+	},
+
+	// Phase 1: Healer - 30% chance to heal ally's status at end of turn
+	'healer': {
+		handler: (slot, battle, messageLog) => {
+			if (Math.random() >= 0.3) return;
+
+			// Find which side this Pokemon is on
+			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
+			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+
+			// Find allies with status conditions
+			for (const allySlot of allies) {
+				if (allySlot && allySlot.pokemon.id !== slot.pokemon.id && allySlot.pokemon.hp > 0 && allySlot.status) {
+					const statusName = {
+						psn: 'poison',
+						tox: 'toxic poison',
+						brn: 'burn',
+						par: 'paralysis',
+						slp: 'sleep',
+						frz: 'freeze',
+					}[allySlot.status] || 'status condition';
+					allySlot.status = null;
+					messageLog.push(`${slot.pokemon.species}'s Healer cured ${allySlot.pokemon.species}'s ${statusName}!`);
+					return; // Only heal one ally per turn
+				}
+			}
+		},
+	},
+
+	// Phase 1: Harvest - 50% chance to restore eaten Berry at end of turn (100% in sun)
+	'harvest': {
+		handler: (slot, battle, messageLog) => {
+			// Only restore if we have a consumed berry and no current item
+			if (!slot.consumedBerry || slot.pokemon.item || slot.harvestUsedThisTurn) return;
+
+			// Check if in sunlight (50% chance normally, 100% in sun)
+			const inSunlight = isWeatherActive(battle) &&
+				(battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun');
+			const chance = inSunlight ? 1.0 : 0.5;
+
+			if (Math.random() < chance) {
+				slot.pokemon.item = slot.consumedBerry;
+				messageLog.push(`${slot.pokemon.species}'s Harvest restored its ${slot.consumedBerry}!`);
+				slot.harvestUsedThisTurn = true; // Prevent multiple restores in one turn
 			}
 		},
 	},
