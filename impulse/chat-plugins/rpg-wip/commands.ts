@@ -492,15 +492,15 @@ export const commands: ChatCommands = {
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox rpg-container"><p class="rpg-text" style="color: #dc3545; font-weight: bold;">${result.message}</p><div class="rpg-center"><button name="send" value="/rpg items" class="button rpg-button">Back to Items</button></div></div>`;
 						return this.popupReply(`|html|${errorHTML}`);
 					}
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const resultHTML = `<div class="infobox rpg-container"><h2 class="rpg-title">Item Used!</h2><p class="rpg-text">${result.message}</p><div class="rpg-flex rpg-center"><button name="send" value="/rpg party" class="button rpg-button">View Party</button><button name="send" value="/rpg items" class="button rpg-button">Back to Items</button></div></div>`;
 					return this.popupReply(`|html|${resultHTML}`);
 				}
 
 				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
+					let html = `<div class="infobox rpg-container"><h2 class="rpg-title">Use ${item.name}</h2><p class="rpg-text">Select a Pokemon to use this item on:</p>`;
 
 					// Determine what kind of Pokemon to show (fainted, status, etc.)
 					const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
@@ -511,12 +511,12 @@ export const commands: ChatCommands = {
 
 					for (const pokemon of player.party) {
 						let show = false;
-						let details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp}</small>`;
-						if (pokemon.status) details += ` <small style="color: red;">(${pokemon.status.toUpperCase()})</small>`;
+						let details = `<small class="rpg-text-small">HP: ${pokemon.hp}/${pokemon.maxHp}</small>`;
+						if (pokemon.status) details += ` <small class="rpg-text-small" style="color: #dc3545;">(${pokemon.status.toUpperCase()})</small>`;
 
 						if (isRevival && pokemon.hp <= 0) {
 							show = true;
-							details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small>`;
+							details = `<small class="rpg-text-small">HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small>`;
 						}
 						if (isHealing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
 							show = true;
@@ -536,10 +536,10 @@ export const commands: ChatCommands = {
 						}
 
 						if (show) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+							html += `<div class="rpg-item-card rpg-flex-between"><div><strong class="rpg-text-bold">${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button rpg-button rpg-button-small">Use</button></div>`;
 						}
 					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					html += `<div class="rpg-center"><button name="send" value="/rpg items" class="button rpg-button">Back to Items</button></div></div>`;
 					return this.popupReply(`|html|${html}`);
 				}
 

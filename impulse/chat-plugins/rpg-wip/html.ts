@@ -1129,14 +1129,17 @@ export function generateStoryModeStartHTML(): string {
 		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button></p>`;
 	}
 
-	return `<div class="infobox">` +
-		`<h2>Welcome to the World of Pokémon!</h2>` +
-		`<p>You find yourself in <strong>${startingLocation.name}</strong>, ready to begin your journey as a Pokémon Trainer!</p>` +
+	return `<div class="infobox rpg-container">` +
+		`<h2 class="rpg-title">Welcome to the World of Pokémon!</h2>` +
+		`<div class="rpg-card">` +
+		`<p class="rpg-text">You find yourself in <strong>${startingLocation.name}</strong>, ready to begin your journey as a Pokémon Trainer!</p>` +
 		buildingsHTML +
-		`<p><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
-		`<hr />` +
+		`<p class="rpg-text"><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
+		`</div>` +
+		`<div class="rpg-center">` +
 		labButtonHTML +
-		`<p><button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button></p>` +
+		`<button name="send" value="/rpg explore" class="button rpg-button">🗺️ Explore ${startingLocation.name}</button>` +
+		`</div>` +
 		`</div>`;
 }
 
@@ -1364,17 +1367,26 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 }
 
 export function generatePCHTML(player: PlayerData): string {
-	let html = `<div class="infobox"><h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
+	let html = `<div class="infobox rpg-container">` +
+		`<h2 class="rpg-title">Pokemon PC System</h2>` +
+		`<p class="rpg-text">Welcome to Bill's PC!</p>` +
+		`<p class="rpg-text-bold">Pokemon in PC: ${player.pc.size}</p>`;
 	if (player.pc.size === 0) {
-		html += `<p>No Pokemon stored in PC.</p>`;
+		html += `<p class="rpg-text">No Pokemon stored in PC.</p>`;
 	} else {
-		html += `<div style="max-height: 400px; overflow-y: auto;">`;
+		html += `<div class="rpg-item-grid">`;
 		for (const [pokemonId, pokemon] of player.pc) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Level ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button></div>`;
+			html += `<div class="rpg-item-card rpg-flex-between">` +
+				`<div>` +
+				`<strong class="rpg-text-bold">${pokemon.species}</strong> (Level ${pokemon.level})<br>` +
+				`<small class="rpg-text-small">HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
+				`</div>` +
+				`<button name="send" value="/rpg withdrawpc ${pokemonId}" class="button rpg-button rpg-button-small">Withdraw</button>` +
+				`</div>`;
 		}
 		html += `</div>`;
 	}
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button></p>`;
+	html += `<div class="rpg-center"><button name="send" value="/rpg party" class="button rpg-button">View Party</button></div>`;
 	html += generateBottomNavigation();
 	html += `</div>`;
 	return html;
