@@ -273,6 +273,8 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('GIVEAWAY', null, 'manually ended the giveaway');
 		},
 
+		draw: 'end',
+
 		cancel(target, room, user) {
 			this.checkCan('roomowner');
 
@@ -396,6 +398,7 @@ export const commands: Chat.ChatCommands = {
 				],
 				['<code>/giveaway join</code>', 'Join an active giveaway', 'None'],
 				['<code>/giveaway end</code>', 'Manually end the giveaway and pick a random winner', '# or higher'],
+				['<code>/giveaway draw</code>', 'Immediately draw a winner (alias for end)', '# or higher'],
 				['<code>/giveaway cancel</code>', 'Cancel the active giveaway without picking a winner', '# or higher'],
 				['<code>/giveaway participants</code>', 'View all participants in the current giveaway', 'None'],
 				['<code>/giveaway history</code>', 'View recent giveaway history (broadcastable)', 'None'],
