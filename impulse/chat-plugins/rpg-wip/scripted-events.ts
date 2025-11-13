@@ -81,6 +81,21 @@
 *  - handleCollectibleItem: Find special collectibles
 *  - handleVoiceFromAbove: Mysterious voice guidance
 *  - handleMemoryRestoration: Regain lost memories
+*  - handleHordeBattle: Battle multiple Pokemon at once
+*  - handleInverseBattle: Type effectiveness reversed
+*  - handleRotationBattle: Rotation battle format
+*  - handleBattleRoyale: Four-way free-for-all
+*  - handleTripleBattle: 3v3 simultaneous battle
+*  - handleSkyBattle: Flying-type only battle
+*  - handleUnderwaterBattle: Water-type only battle
+*  - handleRaidBattle: Cooperative raid battles
+*  - handleGauntletBattle: Series of consecutive battles
+*  - advanceGauntletEvent: Progress gauntlet event
+*  - handleChampionDefense: Defend champion title
+*  - recordChampionDefense: Record title defense
+*  - handleBattleTest: Trial battles with conditions
+*  - handleWarBattle: Large-scale multi-wave battles
+*  - advanceWarWave: Progress to next war wave
 *
 * Usage in locations.ts:
 *   Define scriptedEvents in location objects with types that match
@@ -1536,4 +1551,349 @@ export function handleMemoryRestoration(
 		message: 'A forgotten memory returns to you...',
 		memoryText: event.memoryText,
 	};
+}
+
+/**
+ * Horde Battle Event
+ * Battle against multiple Pokemon at once
+ */
+export function handleHordeBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, hordeSpecies?: string[], hordeSize?: number } {
+	if (!event.hordeSpecies || event.hordeSpecies.length === 0) {
+		return { success: false, message: 'No horde configured.' };
+	}
+
+	const hordeSize = event.hordeSize || event.hordeSpecies.length;
+
+	return {
+		success: true,
+		message: `A horde of ${hordeSize} Pokemon appears!`,
+		hordeSpecies: event.hordeSpecies,
+		hordeSize,
+	};
+}
+
+/**
+ * Inverse Battle Event
+ * Type effectiveness is reversed
+ */
+export function handleInverseBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No inverse battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'The battlefield distorts! Type effectiveness is reversed!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Rotation Battle Event
+ * Special battle format with rotation mechanic
+ */
+export function handleRotationBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string, rotationSlots?: number } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No rotation battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A rotation battle begins!',
+		trainerId: event.trainerId,
+		rotationSlots: event.rotationSlots || 3,
+	};
+}
+
+/**
+ * Battle Royale Event
+ * Four-way free-for-all battle
+ */
+export function handleBattleRoyale(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, opponentIds?: string[] } {
+	if (!event.opponentIds || event.opponentIds.length < 2) {
+		return { success: false, message: 'Not enough opponents for battle royale.' };
+	}
+
+	return {
+		success: true,
+		message: 'A battle royale begins! Last one standing wins!',
+		opponentIds: event.opponentIds,
+	};
+}
+
+/**
+ * Triple Battle Event
+ * 3v3 simultaneous battle
+ */
+export function handleTripleBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No triple battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A triple battle begins! Three Pokemon battle at once!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Sky Battle Event
+ * Only Flying-type or Levitate Pokemon can participate
+ */
+export function handleSkyBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No sky battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A sky battle! Only Flying-type Pokemon or those with Levitate can participate!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Underwater Battle Event
+ * Only Water-type Pokemon can participate
+ */
+export function handleUnderwaterBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, trainerId?: string } {
+	if (!event.trainerId) {
+		return { success: false, message: 'No underwater battle configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'An underwater battle! Only Water-type Pokemon can participate!',
+		trainerId: event.trainerId,
+	};
+}
+
+/**
+ * Raid Battle Event
+ * Cooperative battle against powerful Pokemon
+ */
+export function handleRaidBattle(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, raidBoss?: any, raidLevel?: number, maxPlayers?: number } {
+	if (!event.raidBoss) {
+		return { success: false, message: 'No raid boss configured.' };
+	}
+
+	return {
+		success: true,
+		message: `A ${event.raidLevel || 5}-star raid appears!`,
+		raidBoss: event.raidBoss,
+		raidLevel: event.raidLevel,
+		maxPlayers: event.maxPlayers || 4,
+	};
+}
+
+/**
+ * Gauntlet Battle Event
+ * Series of consecutive battles
+ */
+export function handleGauntletBattle(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, currentBattle?: number, totalBattles?: number, opponents?: string[] } {
+	if (!event.gauntletOpponents || event.gauntletOpponents.length === 0) {
+		return { success: false, message: 'No gauntlet configured.' };
+	}
+
+	const gauntletFlag = `gauntlet_event_${eventId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		currentBattle = parseInt(battleStr.split('_').pop() || '0');
+	}
+
+	if (currentBattle >= event.gauntletOpponents.length) {
+		return {
+			success: false,
+			message: 'Gauntlet complete!',
+			currentBattle,
+			totalBattles: event.gauntletOpponents.length,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Gauntlet Battle ${currentBattle + 1} of ${event.gauntletOpponents.length}`,
+		currentBattle,
+		totalBattles: event.gauntletOpponents.length,
+		opponents: event.gauntletOpponents,
+	};
+}
+
+/**
+ * Advance gauntlet event
+ */
+export function advanceGauntletEvent(player: PlayerData, eventId: string): void {
+	const gauntletFlag = `gauntlet_event_${eventId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		currentBattle = parseInt(battleStr.split('_').pop() || '0');
+		player.storyFlags.delete(battleStr);
+	}
+
+	player.storyFlags.add(`${gauntletFlag}_${currentBattle + 1}`);
+}
+
+/**
+ * Champion Defense Event
+ * Defend champion title against challengers
+ */
+export function handleChampionDefense(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, challenger?: string, defensesSuccessful?: number } {
+	if (!event.challengers || event.challengers.length === 0) {
+		return { success: false, message: 'No challengers configured.' };
+	}
+
+	const defensesFlag = `champion_defenses_${eventId}`;
+	const defensesStr = Array.from(player.storyFlags).find(f => f.startsWith(defensesFlag));
+
+	let defenses = 0;
+	if (defensesStr) {
+		defenses = parseInt(defensesStr.split('_').pop() || '0');
+	}
+
+	// Select challenger based on defenses
+	const challengerIndex = Math.min(defenses, event.challengers.length - 1);
+	const challenger = event.challengers[challengerIndex];
+
+	return {
+		success: true,
+		message: `Title Defense #${defenses + 1}`,
+		challenger,
+		defensesSuccessful: defenses,
+	};
+}
+
+/**
+ * Record championship defense
+ */
+export function recordChampionDefense(player: PlayerData, eventId: string): void {
+	const defensesFlag = `champion_defenses_${eventId}`;
+	const defensesStr = Array.from(player.storyFlags).find(f => f.startsWith(defensesFlag));
+
+	let defenses = 0;
+	if (defensesStr) {
+		defenses = parseInt(defensesStr.split('_').pop() || '0');
+		player.storyFlags.delete(defensesStr);
+	}
+
+	player.storyFlags.add(`${defensesFlag}_${defenses + 1}`);
+}
+
+/**
+ * Battle Test Event
+ * Trial battle to test player's skills
+ */
+export function handleBattleTest(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, testType?: string, requirements?: string[] } {
+	if (!event.testType) {
+		return { success: false, message: 'No battle test configured.' };
+	}
+
+	const testDescriptions: Record<string, string> = {
+		'survival': 'Survive for 10 turns',
+		'damage': 'Deal 500+ damage in one turn',
+		'speed': 'Win in under 5 turns',
+		'type_advantage': 'Win using type advantage only',
+		'no_damage': 'Win without taking damage',
+		'status_only': 'Win using status moves only',
+	};
+
+	return {
+		success: true,
+		message: `Battle Test: ${testDescriptions[event.testType] || event.testType}`,
+		testType: event.testType,
+		requirements: event.testRequirements,
+	};
+}
+
+/**
+ * War Battle Event
+ * Large-scale battle with multiple waves
+ */
+export function handleWarBattle(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, currentWave?: number, totalWaves?: number } {
+	if (!event.warWaves || event.warWaves.length === 0) {
+		return { success: false, message: 'No war battle configured.' };
+	}
+
+	const waveFlag = `war_${eventId}_wave`;
+	const waveStr = Array.from(player.storyFlags).find(f => f.startsWith(waveFlag));
+
+	let currentWave = 0;
+	if (waveStr) {
+		currentWave = parseInt(waveStr.split('_').pop() || '0');
+	}
+
+	if (currentWave >= event.warWaves.length) {
+		return {
+			success: false,
+			message: 'War battle complete! Victory achieved!',
+			currentWave,
+			totalWaves: event.warWaves.length,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Wave ${currentWave + 1} of ${event.warWaves.length}`,
+		currentWave,
+		totalWaves: event.warWaves.length,
+	};
+}
+
+/**
+ * Advance war battle wave
+ */
+export function advanceWarWave(player: PlayerData, eventId: string): void {
+	const waveFlag = `war_${eventId}_wave`;
+	const waveStr = Array.from(player.storyFlags).find(f => f.startsWith(waveFlag));
+
+	let currentWave = 0;
+	if (waveStr) {
+		currentWave = parseInt(waveStr.split('_').pop() || '0');
+		player.storyFlags.delete(waveStr);
+	}
+
+	player.storyFlags.add(`${waveFlag}_${currentWave + 1}`);
 }

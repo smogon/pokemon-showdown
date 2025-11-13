@@ -55,6 +55,17 @@
 *  - handleConditionalDialogue: Dynamic dialogue based on progress
 *  - handleEscortQuest: Escort NPCs to locations
 *  - handleAchievement: Track and reward achievements
+*  - handleBattleGauntlet: Consecutive battle challenges
+*  - advanceBattleGauntlet: Progress to next gauntlet battle
+*  - handleBattleArena: Repeatable arena battles with rankings
+*  - recordArenaWin: Record arena victory
+*  - handleTrainingBattle: Practice battles for story
+*  - recordTrainingAttempt: Track training attempts
+*  - handleBattleChallenge: Special condition battles
+*  - handleSurvivalBattle: Win streak battle system
+*  - recordSurvivalResult: Record survival win/loss
+*  - handleRematchTracker: Manage trainer rematches
+*  - recordRematch: Record rematch completion
 *
 * Usage in npcs.ts:
 *   Define NPCs with action types that match these handlers.
@@ -1631,4 +1642,343 @@ export function handleAchievement(
 		unlocked: true,
 		reward: achievement.reward,
 	};
+}
+
+/**
+ * Battle Gauntlet Action
+ * Challenge player to consecutive battles
+ */
+export function handleBattleGauntlet(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, currentBattle?: number, totalBattles?: number, trainerIds?: string[] } {
+	if (!action.gauntletTrainers || action.gauntletTrainers.length === 0) {
+		return { success: false, message: 'No battle gauntlet configured.' };
+	}
+
+	const gauntletFlag = `gauntlet_${npcId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		const parts = battleStr.split('_');
+		currentBattle = parseInt(parts[parts.length - 1]) || 0;
+	}
+
+	if (currentBattle >= action.gauntletTrainers.length) {
+		return {
+			success: false,
+			message: 'You have completed the battle gauntlet!',
+			currentBattle,
+			totalBattles: action.gauntletTrainers.length,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Battle ${currentBattle + 1} of ${action.gauntletTrainers.length}`,
+		currentBattle,
+		totalBattles: action.gauntletTrainers.length,
+		trainerIds: action.gauntletTrainers,
+	};
+}
+
+/**
+ * Advance gauntlet to next battle
+ */
+export function advanceBattleGauntlet(player: PlayerData, npcId: string): void {
+	const gauntletFlag = `gauntlet_${npcId}_battle`;
+	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
+
+	let currentBattle = 0;
+	if (battleStr) {
+		currentBattle = parseInt(battleStr.split('_').pop() || '0');
+		player.storyFlags.delete(battleStr);
+	}
+
+	player.storyFlags.add(`${gauntletFlag}_${currentBattle + 1}`);
+}
+
+/**
+ * Battle Arena Action
+ * Repeatable arena battles with rankings
+ */
+export function handleBattleArena(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, wins?: number, rank?: string, nextOpponent?: string } {
+	if (!action.arenaOpponents || action.arenaOpponents.length === 0) {
+		return { success: false, message: 'No arena opponents configured.' };
+	}
+
+	const winsFlag = `arena_${npcId}_wins`;
+	const winsStr = Array.from(player.storyFlags).find(f => f.startsWith(winsFlag));
+
+	let wins = 0;
+	if (winsStr) {
+		wins = parseInt(winsStr.split('_').pop() || '0');
+	}
+
+	// Determine rank based on wins
+	let rank = 'Novice';
+	if (wins >= 50) rank = 'Champion';
+	else if (wins >= 30) rank = 'Master';
+	else if (wins >= 20) rank = 'Expert';
+	else if (wins >= 10) rank = 'Veteran';
+	else if (wins >= 5) rank = 'Skilled';
+
+	// Select opponent based on wins
+	const opponentIndex = Math.min(Math.floor(wins / 5), action.arenaOpponents.length - 1);
+	const nextOpponent = action.arenaOpponents[opponentIndex];
+
+	return {
+		success: true,
+		message: `Arena Rank: ${rank} (${wins} wins)`,
+		wins,
+		rank,
+		nextOpponent,
+	};
+}
+
+/**
+ * Record arena win
+ */
+export function recordArenaWin(player: PlayerData, npcId: string): void {
+	const winsFlag = `arena_${npcId}_wins`;
+	const winsStr = Array.from(player.storyFlags).find(f => f.startsWith(winsFlag));
+
+	let wins = 0;
+	if (winsStr) {
+		wins = parseInt(winsStr.split('_').pop() || '0');
+		player.storyFlags.delete(winsStr);
+	}
+
+	player.storyFlags.add(`${winsFlag}_${wins + 1}`);
+}
+
+/**
+ * Training Battle Action
+ * Practice battles for story progression
+ */
+export function handleTrainingBattle(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, trainerId?: string, canBattle: boolean, attempts?: number } {
+	if (!action.trainerId) {
+		return { success: false, message: 'No training battle configured.', canBattle: false };
+	}
+
+	const attemptsFlag = `training_${npcId}_attempts`;
+	const attemptsStr = Array.from(player.storyFlags).find(f => f.startsWith(attemptsFlag));
+
+	let attempts = 0;
+	if (attemptsStr) {
+		attempts = parseInt(attemptsStr.split('_').pop() || '0');
+	}
+
+	const maxAttempts = action.maxAttempts || 999; // Default unlimited
+	if (attempts >= maxAttempts) {
+		return {
+			success: false,
+			message: 'You have reached the maximum training attempts.',
+			canBattle: false,
+			attempts,
+		};
+	}
+
+	return {
+		success: true,
+		message: `Training battle available (Attempt ${attempts + 1})`,
+		trainerId: action.trainerId,
+		canBattle: true,
+		attempts,
+	};
+}
+
+/**
+ * Record training attempt
+ */
+export function recordTrainingAttempt(player: PlayerData, npcId: string): void {
+	const attemptsFlag = `training_${npcId}_attempts`;
+	const attemptsStr = Array.from(player.storyFlags).find(f => f.startsWith(attemptsFlag));
+
+	let attempts = 0;
+	if (attemptsStr) {
+		attempts = parseInt(attemptsStr.split('_').pop() || '0');
+		player.storyFlags.delete(attemptsStr);
+	}
+
+	player.storyFlags.add(`${attemptsFlag}_${attempts + 1}`);
+}
+
+/**
+ * Battle Challenge Action
+ * Special condition battles (no items, level cap, etc.)
+ */
+export function handleBattleChallenge(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, rules?: string[], trainerId?: string } {
+	if (!action.trainerId || !action.challengeRules) {
+		return { success: false, message: 'No battle challenge configured.' };
+	}
+
+	const rulesText = action.challengeRules.map(rule => {
+		const ruleDescriptions: Record<string, string> = {
+			'no_items': 'No items allowed',
+			'level_cap': `Level ${action.levelCap || 50} cap`,
+			'type_restriction': `Only ${action.allowedTypes?.join('/')} types`,
+			'monotype': 'All Pokemon must share a type',
+			'single_pokemon': 'Single Pokemon only',
+			'no_legends': 'No legendary Pokemon',
+			'inverse': 'Type effectiveness reversed',
+		};
+		return ruleDescriptions[rule] || rule;
+	});
+
+	return {
+		success: true,
+		message: 'Special battle challenge!',
+		rules: rulesText,
+		trainerId: action.trainerId,
+	};
+}
+
+/**
+ * Survival Battle Action
+ * Win streak battle system
+ */
+export function handleSurvivalBattle(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, currentStreak?: number, bestStreak?: number, nextOpponent?: string } {
+	if (!action.survivalOpponents || action.survivalOpponents.length === 0) {
+		return { success: false, message: 'No survival battle configured.' };
+	}
+
+	const streakFlag = `survival_${npcId}_streak`;
+	const bestFlag = `survival_${npcId}_best`;
+	
+	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
+	const bestStr = Array.from(player.storyFlags).find(f => f.startsWith(bestFlag));
+
+	let currentStreak = 0;
+	let bestStreak = 0;
+
+	if (streakStr) {
+		currentStreak = parseInt(streakStr.split('_').pop() || '0');
+	}
+	if (bestStr) {
+		bestStreak = parseInt(bestStr.split('_').pop() || '0');
+	}
+
+	// Select opponent based on streak
+	const opponentIndex = Math.min(currentStreak, action.survivalOpponents.length - 1);
+	const nextOpponent = action.survivalOpponents[opponentIndex];
+
+	return {
+		success: true,
+		message: `Current Streak: ${currentStreak} | Best: ${bestStreak}`,
+		currentStreak,
+		bestStreak,
+		nextOpponent,
+	};
+}
+
+/**
+ * Record survival win/loss
+ */
+export function recordSurvivalResult(player: PlayerData, npcId: string, won: boolean): void {
+	const streakFlag = `survival_${npcId}_streak`;
+	const bestFlag = `survival_${npcId}_best`;
+	
+	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
+	const bestStr = Array.from(player.storyFlags).find(f => f.startsWith(bestFlag));
+
+	let currentStreak = 0;
+	let bestStreak = 0;
+
+	if (streakStr) {
+		currentStreak = parseInt(streakStr.split('_').pop() || '0');
+		player.storyFlags.delete(streakStr);
+	}
+	if (bestStr) {
+		bestStreak = parseInt(bestStr.split('_').pop() || '0');
+		player.storyFlags.delete(bestStr);
+	}
+
+	if (won) {
+		currentStreak += 1;
+		if (currentStreak > bestStreak) {
+			bestStreak = currentStreak;
+		}
+	} else {
+		currentStreak = 0;
+	}
+
+	player.storyFlags.add(`${streakFlag}_${currentStreak}`);
+	player.storyFlags.add(`${bestFlag}_${bestStreak}`);
+}
+
+/**
+ * Rematch Tracker Action
+ * Track and manage trainer rematches
+ */
+export function handleRematchTracker(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, canRematch: boolean, timesDefeated?: number, rematchLevel?: number } {
+	if (!action.trainerId) {
+		return { success: false, message: 'No rematch trainer configured.', canRematch: false };
+	}
+
+	const defeatedFlag = `rematch_${npcId}_defeated`;
+	const defeatedStr = Array.from(player.storyFlags).find(f => f.startsWith(defeatedFlag));
+
+	let timesDefeated = 0;
+	if (defeatedStr) {
+		timesDefeated = parseInt(defeatedStr.split('_').pop() || '0');
+	}
+
+	const maxRematches = action.maxRematches || 999;
+	if (timesDefeated >= maxRematches) {
+		return {
+			success: false,
+			message: 'No more rematches available.',
+			canRematch: false,
+			timesDefeated,
+		};
+	}
+
+	// Scale difficulty based on rematches
+	const rematchLevel = (action.baseLevel || 50) + (timesDefeated * (action.levelIncrease || 5));
+
+	return {
+		success: true,
+		message: `Rematch #${timesDefeated + 1} available`,
+		canRematch: true,
+		timesDefeated,
+		rematchLevel,
+	};
+}
+
+/**
+ * Record rematch completion
+ */
+export function recordRematch(player: PlayerData, npcId: string): void {
+	const defeatedFlag = `rematch_${npcId}_defeated`;
+	const defeatedStr = Array.from(player.storyFlags).find(f => f.startsWith(defeatedFlag));
+
+	let timesDefeated = 0;
+	if (defeatedStr) {
+		timesDefeated = parseInt(defeatedStr.split('_').pop() || '0');
+		player.storyFlags.delete(defeatedStr);
+	}
+
+	player.storyFlags.add(`${defeatedFlag}_${timesDefeated + 1}`);
 }

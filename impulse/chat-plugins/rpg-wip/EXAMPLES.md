@@ -525,6 +525,301 @@ Combine multiple handlers for rich storytelling:
 - `voicefromabove` - Mysterious guidance
 - `memoryrestoration` - Plot reveals
 
+### Battle Types
+- `battlegauntlet` - Consecutive battle series
+- `battlearena` - Repeatable ranked battles
+- `trainingbattle` - Practice battles
+- `battlechallenge` - Special condition battles
+- `survivalbattle` - Win streak system
+- `rematchtracker` - Trainer rematches
+- `hordebattle` - Multiple Pokemon at once
+- `inversebattle` - Reversed type effectiveness
+- `raidbattle` - Cooperative battles
+- `championdefense` - Title defense battles
+- `warbattle` - Multi-wave large battles
+
+---
+
+## Battle Handler Examples
+
+### Battle Gauntlet
+
+Create a series of consecutive battles:
+
+```typescript
+// In npcs.ts
+{
+  id: 'gauntlet_master',
+  name: 'Gauntlet Master',
+  location: 'pokemonleague_hall',
+  dialogue: "Face five trainers in a row without healing!",
+  action: {
+    type: 'battlegauntlet',
+    gauntletTrainers: ['trainer1', 'trainer2', 'trainer3', 'trainer4', 'trainer5'],
+  },
+}
+```
+
+### Battle Arena
+
+Repeatable battles with ranking system:
+
+```typescript
+{
+  id: 'arena_champion',
+  name: 'Arena Champion',
+  location: 'battlearena',
+  dialogue: "Welcome to the Battle Arena!",
+  action: {
+    type: 'battlearena',
+    arenaOpponents: [
+      'novice_trainer',
+      'skilled_trainer',
+      'veteran_trainer',
+      'expert_trainer',
+      'master_trainer',
+      'champion_trainer',
+    ],
+  },
+}
+```
+
+### Survival Battle
+
+Win streak challenge:
+
+```typescript
+{
+  id: 'survival_host',
+  name: 'Survival Challenge Host',
+  location: 'battlefrontier',
+  dialogue: "How long can you survive?",
+  action: {
+    type: 'survivalbattle',
+    survivalOpponents: [
+      'weak_trainer',
+      'medium_trainer',
+      'strong_trainer',
+      'very_strong_trainer',
+      'ultimate_trainer',
+    ],
+  },
+}
+```
+
+### Training Battle
+
+Practice battles for story:
+
+```typescript
+{
+  id: 'training_coach',
+  name: 'Battle Coach',
+  location: 'startertown_gym',
+  dialogue: "Let's practice! You can battle me up to 10 times.",
+  action: {
+    type: 'trainingbattle',
+    trainerId: 'coach_team',
+    maxAttempts: 10,
+  },
+}
+```
+
+### Battle Challenge
+
+Special condition battles:
+
+```typescript
+{
+  id: 'challenge_master',
+  name: 'Challenge Master',
+  location: 'celadoncity_dojo',
+  dialogue: "Can you win under these special rules?",
+  action: {
+    type: 'battlechallenge',
+    trainerId: 'challenge_opponent',
+    challengeRules: ['no_items', 'level_cap', 'monotype'],
+    levelCap: 50,
+  },
+}
+```
+
+### Rematch Tracker
+
+Scaling difficulty rematches:
+
+```typescript
+{
+  id: 'rival_rematch',
+  name: 'Rival',
+  location: 'pokemonleague',
+  dialogue: "Want to battle again? I've gotten stronger!",
+  action: {
+    type: 'rematchtracker',
+    trainerId: 'rival_advanced',
+    baseLevel: 50,
+    levelIncrease: 5,
+    maxRematches: 10,
+  },
+}
+```
+
+### Horde Battle Event
+
+Face multiple Pokemon at once:
+
+```typescript
+// In locations.ts
+{
+  id: 'route_horde',
+  name: 'Pokemon Horde',
+  triggerOnce: false,
+  type: 'hordebattle',
+  hordeSpecies: ['zubat', 'zubat', 'zubat', 'zubat', 'zubat'],
+  hordeSize: 5,
+  dialogue: 'A horde of Zubat swarms you!',
+}
+```
+
+### Raid Battle Event
+
+Cooperative boss battle:
+
+```typescript
+{
+  id: 'legendary_raid',
+  name: 'Legendary Raid',
+  triggerOnce: true,
+  requiredBadgeCount: 8,
+  type: 'raidbattle',
+  raidBoss: {
+    species: 'mewtwo',
+    level: 70,
+    moves: ['psychic', 'aurasphere', 'recover', 'calmmind'],
+  },
+  raidLevel: 5,
+  maxPlayers: 4,
+  dialogue: 'A legendary raid has appeared!',
+}
+```
+
+### Inverse Battle
+
+Type effectiveness reversed:
+
+```typescript
+{
+  id: 'inverse_battle_event',
+  name: 'Distorted Battle',
+  triggerOnce: true,
+  type: 'inversebattle',
+  trainerId: 'inverse_specialist',
+  dialogue: 'The battlefield warps! Everything is backwards!',
+}
+```
+
+### War Battle
+
+Multi-wave epic battle:
+
+```typescript
+{
+  id: 'team_rocket_invasion',
+  name: 'Team Rocket Invasion',
+  triggerOnce: true,
+  type: 'warbattle',
+  warWaves: [
+    { trainers: ['grunt1', 'grunt2'] },
+    { trainers: ['grunt3', 'grunt4', 'grunt5'] },
+    { trainers: ['admin1', 'admin2'] },
+    { trainers: ['boss'] },
+  ],
+  dialogue: 'Team Rocket is invading! Defend the city!',
+  setFlag: 'defended_city',
+}
+```
+
+### Champion Defense
+
+Defend your title:
+
+```typescript
+{
+  id: 'champion_challengers',
+  name: 'Title Defense',
+  type: 'championdefense',
+  requiredFlag: 'became_champion',
+  challengers: [
+    'challenger1',
+    'challenger2',
+    'challenger3',
+    'elite_challenger',
+    'legendary_challenger',
+  ],
+  dialogue: 'A challenger approaches to take your title!',
+}
+```
+
+### Battle Test
+
+Trial with special conditions:
+
+```typescript
+{
+  id: 'skill_test',
+  name: 'Battle Mastery Test',
+  triggerOnce: true,
+  type: 'battletest',
+  testType: 'speed',
+  testRequirements: ['Win in 5 turns or less'],
+  dialogue: 'Prove your battle mastery!',
+  setFlag: 'passed_battle_test',
+}
+```
+
+### Sky Battle
+
+Flying-type only:
+
+```typescript
+{
+  id: 'sky_trainer_battle',
+  name: 'Sky Battle',
+  triggerOnce: false,
+  type: 'skybattle',
+  trainerId: 'sky_trainer',
+  dialogue: 'Take to the skies! Flying-types only!',
+}
+```
+
+### Triple Battle
+
+3v3 simultaneous:
+
+```typescript
+{
+  id: 'triple_challenge',
+  name: 'Triple Battle',
+  type: 'triplebattle',
+  trainerId: 'triple_trainer',
+  dialogue: 'A triple battle! Three Pokemon at once!',
+}
+```
+
+### Battle Royale
+
+Four-way free-for-all:
+
+```typescript
+{
+  id: 'royale_event',
+  name: 'Battle Royale',
+  type: 'battleroyale',
+  opponentIds: ['trainer1', 'trainer2', 'trainer3'],
+  dialogue: 'Four trainers enter, one leaves victorious!',
+}
+```
+
 ---
 
 For more information, see:
