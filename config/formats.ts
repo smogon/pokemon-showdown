@@ -405,6 +405,158 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Sneasel-Hisui', 'Ursaring', 'Vigoroth', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 	},
+	///////////////////////////////////////////////////////////////
+	//////////////////////// Server Special /////////////////////////////
+	///////////////////////////////////////////////////////////////
+	{
+		section: "Server Special",
+		column: 1,
+	},
+	{
+		name: "[Gen 9] A Golden Experience",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'Uber', 'AG', 'Moody', 'Power Construct', 'King\'s Rock',
+			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+		teambuilderFormat: 'National Dex',
+	},
+	{
+		name: "[Gen 9] A Golden Experience UU",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'Uber', 'AG', 'OU', 'UUBL', 'Moody', 'Power Construct', 'King\'s Rock',
+			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
+			'Drizzle', 'Drought', 'Light Clay', 
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+		teambuilderFormat: 'National Dex UU',
+	},
+	{
+		name: "[Gen 9] A Golden Experience RU",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'Moody', 'Power Construct', 'King\'s Rock',
+			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
+			'Drizzle', 'Drought', 'Light Clay', 
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+		teambuilderFormat: 'National Dex RU',
+	},
+	{
+		name: "[Gen 9] A Golden Experience NU",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'Moody', 'Power Construct', 'King\'s Rock',
+			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
+			'Drizzle', 'Drought', 'Light Clay', 
+			'Dante\'s Inferno', 'Happy Dance', 'Sticky Web', 
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+		teambuilderFormat: 'National Dex RU',
+	},
+	{
+		name: "[Gen 9] A Golden Experience PU",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'Moody', 'Power Construct', 'King\'s Rock',
+			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
+			'Drizzle', 'Drought', 'Light Clay', 
+			'Dante\'s Inferno', 'Happy Dance', 'Sticky Web', 
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+		teambuilderFormat: 'National Dex RU',
+	},
+	{
+		name: "[Gen 9] A Golden Experience Doubles",
+		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'agoldenexperience',
+		gameType: 'doubles',
+		teambuilderFormat: 'National Dex Doubles',
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Dynamax Clause', 'Data Mod', 'Mega Data Mod'],
+		banlist: [
+			'DUber', 'Commander', 'Power Construct', 'Coaching', 'Dark Void', 'Swagger',
+			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
+		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
+	},
+	{
+		name: "[Gen 9] Touhoumons",
+		desc: `2hu`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'toho',
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Sleep Clause Mod', 'Data Mod', 'Mega Data Mod', 'Z-Move Clause'],
+		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
+		unbanlist: ['Light of Ruin'],
+		teambuilderFormat: 'National Dex',
+		onValidateTeam(team, format) {
+			/**@type {{[k: string]: true}} */
+			for (const set of team) {
+				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
+					 return ["Cirno-Tanned can only have Drought as its ability."]
+				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
+					 return ["Only Cirno-Tanned can have Drought as its ability."]
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Touhoumons Doubles",
+		desc: `2hu`,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">Spreadsheet for the mod</a>`,
+		],
+		mod: 'toho',
+		gameType: 'doubles',
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Sleep Clause Mod', 'Data Mod', 'Mega Data Mod'],
+		banlist: [],
+		unbanlist: [],
+		teambuilderFormat: 'National Dex',
+		onValidateTeam(team, format) {
+			/**@type {{[k: string]: true}} */
+			for (const set of team) {
+				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
+					 return ["Cirno-Tanned can only have Drought as its ability."]
+				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
+					 return ["Only Cirno-Tanned can have Drought as its ability."]
+			}
+		},
+	},
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
