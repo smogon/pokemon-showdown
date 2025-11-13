@@ -10,9 +10,17 @@ import { nameColor } from '../../colors';
 
 const AVATAR_PATH = 'config/avatars/';
 const STAFF_ROOM_ID = 'staff';
+const DB_TABLE_NAME = 'customavatars';
+const LIST_PAGE_LIMIT = 20;
+const AVATAR_DIMENSIONS = {
+	width: 80,
+	height: 80,
+};
+
 const VALID_EXTENSIONS = ['.jpg', '.png', '.gif'];
-const MAX_FILE_SIZE = 5242880;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const FETCH_TIMEOUT = 10000;
+
 const IMAGE_SIGS: { [key: string]: number[] } = {
 	'.png': [0x89, 0x50, 0x4E, 0x47],
 	'.jpg': [0xFF, 0xD8, 0xFF],
@@ -37,7 +45,11 @@ const getExtension = (filename: string): string => {
 
 const deleteAllUserAvatarFiles = async (userId: string) => {
 	for (const ext of VALID_EXTENSIONS) {
-		try { await FS(AVATAR_PATH + userId + ext).unlinkIfExists(); } catch {}
+		try {
+			await FS(AVATAR_PATH + userId + ext).unlinkIfExists();
+		} catch {
+			// Ignore errors when unlinking
+		}
 	}
 };
 
@@ -75,12 +87,12 @@ const downloadImage = async (
 
 		const contentLength = response.headers.get('content-length');
 		if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
-			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1048576}MB)` };
+			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
 		}
 
 		const buffer = await response.arrayBuffer();
 		if (buffer.byteLength > MAX_FILE_SIZE) {
-			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1048576}MB)` };
+			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
 		}
 
 		const uint8 = new Uint8Array(buffer);
@@ -97,18 +109,18 @@ const downloadImage = async (
 };
 
 const saveAvatarMetadata = async (userId: string, filename: string, setBy: string, sourceUrl: string) => {
-	await ImpulseDB('customavatars').upsert({ userid: userId }, {
+	await ImpulseDB(DB_TABLE_NAME).upsert({ userid: userId }, {
 		$set: { userid: userId, filename, setBy, sourceUrl, updatedAt: new Date() },
 	});
 };
 
 const removeAvatarMetadata = async (userId: string) => {
-	await ImpulseDB('customavatars').deleteOne({ userid: userId });
+	await ImpulseDB(DB_TABLE_NAME).deleteOne({ userid: userId });
 };
 
 const displayAvatar = (filename: string) => {
 	const url = `${getAvatarBaseUrl()}${filename}?v=${Date.now()}`;
-	return `<img src='${url}' width='80' height='80'>`;
+	return `<img src='${url}' width='${AVATAR_DIMENSIONS.width}' height='${AVATAR_DIMENSIONS.height}'>`;
 };
 
 export const commands: Chat.ChatCommands = {
@@ -134,7 +146,9 @@ export const commands: Chat.ChatCommands = {
 			const avatarFilename = userId + ext;
 			const result = await downloadImage(processedUrl, userId, ext);
 
-			if (!result.success) return this.errorReply(`Failed to download avatar: ${result.error}`);
+			if (!result.success) {
+				return this.errorReply(`Failed to download avatar: ${result.error}`);
+			}
 
 			if (!Users.Avatars.addPersonal(userId, avatarFilename)) {
 				await FS(AVATAR_PATH + avatarFilename).unlinkIfExists();
@@ -203,9 +217,12 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 
 			const page = parseInt(target) || 1;
-			const result = await ImpulseDB('customavatars').findPaginated({}, { page, limit: 20, sort: { userid: 1 } });
+			const result = await ImpulseDB(DB_TABLE_NAME).findPaginated(
+				{},
+				{ page, limit: LIST_PAGE_LIMIT, sort: { userid: 1 } }
+			);
 
-			if (!result.total) return this.sendReply('No custom avatars have been set.');
+			if (result.total === 0) return this.sendReply('No custom avatars have been set.');
 			if (page < 1 || page > result.totalPages) {
 				return this.errorReply(`Invalid page number. Please use a page between 1 and ${result.totalPages}.`);
 			}
@@ -213,7 +230,7 @@ export const commands: Chat.ChatCommands = {
 			const baseUrl = getAvatarBaseUrl();
 			const rows: string[][] = result.docs.map(doc => [
 				nameColor(doc.userid, true, true),
-				`<img src="${baseUrl}${doc.filename}" width="80" height="80">`,
+				`<img src="${baseUrl}${doc.filename}" width="${AVATAR_DIMENSIONS.width}" height="${AVATAR_DIMENSIONS.height}">`,
 				Chat.escapeHTML(doc.filename),
 				Chat.escapeHTML(doc.setBy || 'Unknown'),
 			]);
@@ -226,8 +243,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -236,16 +257,17 @@ export const commands: Chat.ChatCommands = {
 
 		help() {
 			if (!this.runBroadcast()) return;
-			const cmds = [
-				["/customavatar set [user], [url]", "Set avatar for a user. Requires: &."],
-				["/customavatar delete [user]", "Remove avatar from a user. Requires: &."],
-				["/customavatar list [page]", "List all avatars. Requires: &."],
+			const helpList = [
+				{ cmd: "/customavatar set [user], [url]", desc: "Set avatar for a user. Requires: &." },
+				{ cmd: "/customavatar delete [user]", desc: "Remove avatar from a user. Requires: &." },
+				{ cmd: "/customavatar list [page]", desc: "List all avatars. Requires: &." },
 			];
-			this.sendReplyBox(
-				`<center><strong>Custom Avatar Commands:</strong><br>Alias: /cc</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				cmds.map(([c, d], i) => `<li><b>${c}</b> - ${d}</li>${i < cmds.length - 1 ? '<hr>' : ''}`).join('') +
-				`</ul><small>Max 5MB. Formats: JPG, PNG, GIF</small>`
-			);
+			const html = `<center><strong>Custom Avatar Commands:</strong><br>Alias: /ca</center><hr><ul style="list-style-type:none;padding-left:0;">${
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('')
+			}</ul><small>Max 5MB. Formats: JPG, PNG, GIF</small>`;
+			this.sendReplyBox(html);
 		},
 	},
 	ca: 'customavatar',
