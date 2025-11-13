@@ -763,6 +763,32 @@ export const CONTACT_ABILITIES = {
 	'pickpocket': {
 		stealItem: true,
 	},
+
+	// Phase 2: Toxic Chain - 30% chance to badly poison on contact
+	'toxicchain': {
+		onContactChance: 0.3,
+		effect: 'tox',
+	},
+
+	// Phase 2: Mummy - Changes attacker's ability to Mummy on contact
+	'mummy': {
+		changeAbility: 'mummy',
+	},
+
+	// Phase 2: Lingering Aroma - Changes attacker's ability to Lingering Aroma on contact
+	'lingeringaroma': {
+		changeAbility: 'lingeringaroma',
+	},
+
+	// Phase 2: Wandering Spirit - Swaps abilities with attacker on contact
+	'wanderingspirit': {
+		swapAbility: true,
+	},
+
+	// Phase 2: Perish Body - Both faint in 3 turns after contact
+	'perishbody': {
+		perishBody: true,
+	},
 };
 
 export const PRIORITY_ABILITIES = {
@@ -814,6 +840,12 @@ export const ACCURACY_EVASION_ABILITIES = {
 	// Phase 3: Victory Star - Raises accuracy of user and allies by 10%
 	'victorystar': {
 		accuracyMultiplier: 1.1,
+	},
+
+	// Phase 2: Mind's Eye - Ignores evasion, hits Ghost with Normal/Fighting
+	'mindseye': {
+		ignoresEvasion: true,
+		hitsGhosts: true,
 	},
 };
 
@@ -1089,6 +1121,40 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 				slot.pokemon.item = slot.consumedBerry;
 				messageLog.push(`${slot.pokemon.species}'s Harvest restored its ${slot.consumedBerry}!`);
 				slot.harvestUsedThisTurn = true; // Prevent multiple restores in one turn
+			}
+		},
+	},
+
+	// Phase 2: Bad Dreams - Damages sleeping opponents by 1/8 max HP each turn
+	'baddreams': {
+		handler: (slot, battle, messageLog) => {
+			// Find which side this Pokemon is on
+			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
+			const opponents = isPlayerPokemon ? battle.opponentSlots : battle.playerSlots;
+
+			// Damage each sleeping opponent
+			for (const opponentSlot of opponents) {
+				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.status === 'slp') {
+					const damage = Math.floor(opponentSlot.pokemon.maxHp / 8);
+					opponentSlot.pokemon.hp = Math.max(0, opponentSlot.pokemon.hp - damage);
+					messageLog.push(`${opponentSlot.pokemon.species} is tormented by ${slot.pokemon.species}'s Bad Dreams!`);
+				}
+			}
+		},
+	},
+
+	// Phase 2: Cud Chew - Eats berry again at end of turn
+	'cudchew': {
+		handler: (slot, battle, messageLog) => {
+			// If we have a berry to chew and no current item
+			if (slot.cudChewBerry && !slot.pokemon.item) {
+				// Temporarily restore the berry to trigger its effect
+				slot.pokemon.item = slot.cudChewBerry;
+				messageLog.push(`${slot.pokemon.species} is chewing its ${slot.cudChewBerry} again!`);
+
+				// The berry will be consumed through normal HP drop effects
+				// Clear the cud chew tracker after use
+				slot.cudChewBerry = undefined;
 			}
 		},
 	},
@@ -1372,8 +1438,17 @@ export function preventsFlinch(pokemon: RPGPokemon): boolean {
 	return ability === 'innerfocus';
 }
 
-export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState): boolean {
+export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState, attacker?: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
+
+	// Phase 2: Corrosion - Attacker with Corrosion can poison Steel/Poison types
+	if (attacker && toID(attacker.ability || '') === 'corrosion' && (status === 'psn' || status === 'tox')) {
+		// Corrosion bypasses type immunity but not ability immunity
+		if (ability === 'immunity' || ability === 'purifyingsalt') {
+			return true;
+		}
+		return false;
+	}
 
 	if (ability === 'purifyingsalt') {
 		return true;
@@ -1743,6 +1818,16 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
+	// Phase 2: Damp - Prevents self-destruct moves (explosion, selfdestruct, etc.)
+	const allSlots = [...ctx.battle.playerSlots, ...ctx.battle.opponentSlots];
+	const hasDamp = allSlots.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'damp');
+	if (hasDamp && ['explosion', 'selfdestruct', 'mindblown', 'mistyexplosion'].includes(ctx.move.id)) {
+		return {
+			prevented: true,
+			message: `${ctx.attacker.species} cannot use ${ctx.move.name} due to Damp!`,
+		};
+	}
+
 	// Phase 4: Check primal weather preventing moves
 	if (ctx.battle.weather?.type === 'harsh-sun' && ctx.move.type === 'Water') {
 		return {
@@ -2060,6 +2145,48 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			ctx.defender.item = attacker.item;
 			attacker.item = undefined;
 			ctx.messageLog.push(`${ctx.defender.species} stole ${attacker.species}'s ${ctx.defender.item}!`);
+		}
+	}
+
+	// Phase 2: Mummy - Changes attacker's ability to Mummy on contact
+	if (handler.changeAbility && attacker.hp > 0) {
+		const attackerAbility = toID(attacker.ability || '');
+		// Some abilities cannot be changed (Multitype, Stance Change, etc.)
+		const unchangeableAbilities = ['multitype', 'stancechange', 'schooling', 'shieldsdown', 'battlebond',
+			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode'];
+
+		if (!unchangeableAbilities.includes(attackerAbility)) {
+			const oldAbility = attacker.ability;
+			attacker.ability = handler.changeAbility;
+			ctx.messageLog.push(`${attacker.species}'s ability changed to ${handler.changeAbility} from ${ctx.defender.species}'s ${defenderAbility}!`);
+		}
+	}
+
+	// Phase 2: Wandering Spirit - Swaps abilities with attacker on contact
+	if (handler.swapAbility && attacker.hp > 0) {
+		const attackerAbility = toID(attacker.ability || '');
+		const defenderAbilityName = ctx.defender.ability;
+		// Some abilities cannot be swapped
+		const unswappableAbilities = ['multitype', 'stancechange', 'schooling', 'shieldsdown', 'battlebond',
+			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode', 'wonderguard', 'illusion'];
+
+		if (!unswappableAbilities.includes(attackerAbility) && !unswappableAbilities.includes(defenderAbility)) {
+			const temp = attacker.ability;
+			attacker.ability = defenderAbilityName;
+			ctx.defender.ability = temp;
+			ctx.messageLog.push(`${ctx.defender.species} swapped abilities with ${attacker.species}!`);
+		}
+	}
+
+	// Phase 2: Perish Body - Both faint in 3 turns after contact
+	if (handler.perishBody && attacker.hp > 0) {
+		if (!attackerSlot.perishSongCounter) {
+			attackerSlot.perishSongCounter = 3;
+			ctx.messageLog.push(`${attacker.species} will perish in 3 turns!`);
+		}
+		if (!ctx.defenderSlot.perishSongCounter) {
+			ctx.defenderSlot.perishSongCounter = 3;
+			ctx.messageLog.push(`${ctx.defender.species} will perish in 3 turns!`);
 		}
 	}
 }

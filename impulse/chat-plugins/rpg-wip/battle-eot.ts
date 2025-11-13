@@ -199,7 +199,7 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			if (!slot.status) {
 				const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(pokemon, battle);
 				const isAbilityImmune = ['Insomnia', 'Vital Spirit', 'Comatose', 'Sweet Veil'].includes(pokemon.ability || '');
-				const hasTeamProtection = RPGAbilities.preventsStatus(pokemon, 'slp', battle);
+				const hasTeamProtection = RPGAbilities.preventsStatus(pokemon, 'slp', battle, undefined);
 
 				if (!isTerrainImmune && !isAbilityImmune && !hasTeamProtection) {
 					slot.status = 'slp';

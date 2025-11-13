@@ -496,7 +496,7 @@ export function handleGenericStatusInflictMove(
 		canBeAfflicted = false;
 		messageLog.push('But the uproar kept it awake!');
 	}
-	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status, battle)) {
+	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status, battle, attackerSlot.pokemon)) {
 		canBeAfflicted = false;
 		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
 	}

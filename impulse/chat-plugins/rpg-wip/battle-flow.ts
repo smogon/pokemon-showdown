@@ -443,7 +443,11 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 			return true;
 		}
 
-		attackerSlot.sleepCounter--;
+		// Phase 2: Early Bird - Wake up twice as fast (decrement counter by 2 instead of 1)
+		const ability = toID(attacker.ability || '');
+		const decrementAmount = ability === 'earlybird' ? 2 : 1;
+		attackerSlot.sleepCounter -= decrementAmount;
+
 		if (attackerSlot.sleepCounter > 0) {
 			messageLog.push(`${attacker.species} is fast asleep.`);
 			return false;
@@ -700,7 +704,11 @@ export function executeMove(
 		}
 
 		if (move.id !== 'struggle') {
-			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect) {
+			// Phase 2: Unseen Fist - Contact moves ignore Protect/Detect
+			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+			const bypassesProtect = attackerAbility === 'unseenfist' && move.flags.contact;
+
+			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect && !bypassesProtect) {
 				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
 				continue;
 			}
@@ -716,7 +724,9 @@ export function executeMove(
 			// Moves like Aerial Ace always hit, or No Guard is active
 		} else if (move.accuracy !== true) {
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
-			const evasionMultiplier = getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
+			// Phase 2: Mind's Eye - Ignores evasion
+			const ignoresEvasion = attackerAbility === 'mindseye';
+			const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
 
 			moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracy, attackerSlot.pokemon, move);
@@ -1286,9 +1296,8 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 			// Locked move has no PP, use Struggle
 			chosenMoveId = 'struggle';
 		}
-	}
-	// Check if locked into Uproar
-	else if (aiSlot.uproarTurns && aiSlot.uproarTurns > 0 && aiSlot.lockedMove) {
+	} else if (aiSlot.uproarTurns && aiSlot.uproarTurns > 0 && aiSlot.lockedMove) {
+		// Check if locked into Uproar
 		const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);
 		if (lockedMoveObj && lockedMoveObj.pp > 0) {
 			chosenMoveId = aiSlot.lockedMove;
@@ -1296,9 +1305,8 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 			// Uproar has no PP, use Struggle
 			chosenMoveId = 'struggle';
 		}
-	}
-	// Check if Encored into a specific move
-	else if (aiSlot.encoreMove?.moveId) {
+	} else if (aiSlot.encoreMove?.moveId) {
+		// Check if Encored into a specific move
 		const encoredMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.encoreMove!.moveId);
 		if (encoredMoveObj && encoredMoveObj.pp > 0) {
 			chosenMoveId = aiSlot.encoreMove.moveId;
@@ -1306,9 +1314,8 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 			// Encored move has no PP, use Struggle
 			chosenMoveId = 'struggle';
 		}
-	}
-	// Check if locked by Choice item
-	else if (aiSlot.lockedMove && battle.magicRoomTurns === 0) {
+	} else if (aiSlot.lockedMove && battle.magicRoomTurns === 0) {
+		// Check if locked by Choice item
 		const choiceItems = ['choiceband', 'choicescarf', 'choicespecs'];
 		if (choiceItems.includes(aiSlot.pokemon.item || '')) {
 			const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);

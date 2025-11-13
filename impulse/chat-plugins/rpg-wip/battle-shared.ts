@@ -122,17 +122,22 @@ export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]):
 // Phase 1: Handle berry consumption with Cheek Pouch and Harvest tracking
 export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
-	
-	// Track for Harvest
+
+	// Track for Harvest and Cud Chew
 	slot.consumedBerry = berryId;
 	slot.harvestUsedThisTurn = false; // Reset for next turn
-	
+
+	// Phase 2: Cud Chew - Track berry for eating again at end of turn
+	if (ability === 'cudchew') {
+		slot.cudChewBerry = berryId;
+	}
+
 	// Remove the berry
 	slot.pokemon.item = undefined;
-	
+
 	// Activate Unburden
 	activateUnburden(slot, messageLog);
-	
+
 	// Phase 1: Cheek Pouch - Restores 1/3 HP when consuming a Berry
 	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
 		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
@@ -166,7 +171,7 @@ export function applySynchronize(
 					canBeAfflicted = false;
 				}
 
-				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle)) {
+				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle, targetPokemon)) {
 					canBeAfflicted = false;
 				}
 
