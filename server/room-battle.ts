@@ -386,12 +386,13 @@ export class RoomBattleTimer {
 					room.add(`|inactive|${player.name} has ${dcSecondsLeft} seconds to reconnect!`);
 				}
 			} else {
-				// highlight turn timer when it's extremely low, with a safeguard for Blitz modes
-				if (secondsLeft <= 10 && secondsPassed >= 20) {
-					room.add(`|raw|<div class="broadcast-red"><strong>${player.name} has ${secondsLeft} seconds left.</strong></div>`);
-				} else if (secondsLeft % 30 === 0 || secondsLeft <= 20) {
-					// regular turn timer shown
+				// regular turn timer shown
+				if (secondsLeft % 30 === 0 || secondsLeft <= 20) {
 					room.add(`|inactive|${player.name} has ${secondsLeft} seconds left.`);
+				}
+				// sends clear warning when timeout is near, with safeguard for blitz modes
+				if (secondsLeft === 10 && secondsPassed >= 20) {
+					room.send(`|raw|<div class="broadcast-red"><strong>${player.name}: low timer warning</strong></div>`);
 				}
 			}
 			if (this.debug) {
