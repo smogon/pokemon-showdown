@@ -417,6 +417,103 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	return effects.join(' ');
 }
 
+/**
+ * Generates HTML tags for weather effects
+ */
+function generateWeatherTags(battle: BattleState): string {
+	if (!battle.weather) return '';
+	
+	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	const weatherColors: Record<string, string> = {
+		'sun': '#F8D030',
+		'rain': '#6890F0',
+		'sand': '#E0C068',
+		'hail': '#98D8D8',
+		'harsh-sun': '#FF8C00',
+		'heavy-rain': '#0066CC',
+		'strong-winds': '#A0D0F0',
+	};
+	
+	const weatherNames: Record<string, string> = {
+		'sun': 'Sunny',
+		'rain': 'Rain',
+		'sand': 'Sandstorm',
+		'hail': 'Hail',
+		'harsh-sun': 'Harsh Sun',
+		'heavy-rain': 'Heavy Rain',
+		'strong-winds': 'Strong Winds',
+	};
+	
+	const color = weatherColors[battle.weather.type] || '#999';
+	const name = weatherNames[battle.weather.type] || battle.weather.type;
+	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
+	
+	return `<span style="background-color: ${color}; ${tagStyle}">☀️ ${name}${turnsText}</span>`;
+}
+
+/**
+ * Generates HTML tags for terrain effects
+ */
+function generateTerrainTags(battle: BattleState): string {
+	if (!battle.terrain) return '';
+	
+	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	const terrainColors: Record<string, string> = {
+		'electric': '#F8D030',
+		'grassy': '#78C850',
+		'misty': '#EE99AC',
+		'psychic': '#F85888',
+	};
+	
+	const terrainNames: Record<string, string> = {
+		'electric': 'Electric Terrain',
+		'grassy': 'Grassy Terrain',
+		'misty': 'Misty Terrain',
+		'psychic': 'Psychic Terrain',
+	};
+	
+	const color = terrainColors[battle.terrain.type] || '#999';
+	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
+	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
+	
+	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
+}
+
+/**
+ * Generates HTML tags for global field effects (rooms, gravity, etc.)
+ */
+function generateFieldEffectTags(battle: BattleState): string {
+	const effects: string[] = [];
+	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	
+	if (battle.trickRoomTurns > 0) {
+		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
+	}
+	if (battle.magicRoomTurns > 0) {
+		effects.push(`<span style="background-color: #F85888; ${tagStyle}">Magic Room (${battle.magicRoomTurns})</span>`);
+	}
+	if (battle.wonderRoomTurns > 0) {
+		effects.push(`<span style="background-color: #A890F0; ${tagStyle}">Wonder Room (${battle.wonderRoomTurns})</span>`);
+	}
+	if (battle.gravityTurns > 0) {
+		effects.push(`<span style="background-color: #705848; ${tagStyle}">Gravity (${battle.gravityTurns})</span>`);
+	}
+	if (battle.mudSportTurns > 0) {
+		effects.push(`<span style="background-color: #E0C068; ${tagStyle}">Mud Sport (${battle.mudSportTurns})</span>`);
+	}
+	if (battle.waterSportTurns > 0) {
+		effects.push(`<span style="background-color: #6890F0; ${tagStyle}">Water Sport (${battle.waterSportTurns})</span>`);
+	}
+	if (battle.fairyLockTurns > 0) {
+		effects.push(`<span style="background-color: #EE99AC; ${tagStyle}">Fairy Lock (${battle.fairyLockTurns})</span>`);
+	}
+	if (battle.ionDelugeTurns > 0) {
+		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
+	}
+	
+	return effects.join(' ');
+}
+
 export function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
@@ -580,6 +677,22 @@ export function generateSingleBattleHTML(
 		opponentOwnerName = 'Wild';
 	}
 
+	// Generate weather, terrain, and field effect tags
+	const weatherTags = generateWeatherTags(battle);
+	const terrainTags = generateTerrainTags(battle);
+	const fieldEffectTags = generateFieldEffectTags(battle);
+	const playerSideEffects = generateSideEffectTags(battle, 'player');
+	const opponentSideEffects = generateSideEffectTags(battle, 'opponent');
+	
+	let battleConditionsHTML = '';
+	const allConditions = [weatherTags, terrainTags, fieldEffectTags, playerSideEffects, opponentSideEffects].filter(Boolean);
+	if (allConditions.length > 0) {
+		battleConditionsHTML = '<div style="padding: 5px; margin: 5px 0; text-align: center; background-color: #f0f0f0; border-radius: 5px;">' +
+			'<strong style="font-size: 0.9em;">Battle Conditions:</strong> ' +
+			allConditions.join(' ') +
+			'</div>';
+	}
+
 	return '<div class="infobox">' +
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
@@ -591,6 +704,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
+		battleConditionsHTML +
 		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
@@ -683,6 +797,21 @@ export function generateDoubleBattleHTML(
 	html += '</td>';
 	html += '</tr>';
 	html += '</table>';
+
+	// Generate weather, terrain, and field effect tags
+	const weatherTags = generateWeatherTags(battle);
+	const terrainTags = generateTerrainTags(battle);
+	const fieldEffectTags = generateFieldEffectTags(battle);
+	const playerSideEffects = generateSideEffectTags(battle, 'player');
+	const opponentSideEffects = generateSideEffectTags(battle, 'opponent');
+	
+	const allConditions = [weatherTags, terrainTags, fieldEffectTags, playerSideEffects, opponentSideEffects].filter(Boolean);
+	if (allConditions.length > 0) {
+		html += '<div style="padding: 5px; margin: 5px 0; text-align: center; background-color: #f0f0f0; border-radius: 5px;">' +
+			'<strong style="font-size: 0.9em;">Battle Conditions:</strong> ' +
+			allConditions.join(' ') +
+			'</div>';
+	}
 
 	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
 
