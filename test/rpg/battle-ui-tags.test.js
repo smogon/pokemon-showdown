@@ -108,9 +108,9 @@ describe('RPG Battle UI Tags', function () {
 
 			const battleHTML = html.generateBattleHTML(battle);
 			
-			// Check that the HTML contains weather tag
+			// Check that the HTML contains weather tag integrated with Pokemon status
 			assert(battleHTML.includes('Sunny'), 'Battle HTML should contain "Sunny" weather tag');
-			assert(battleHTML.includes('Battle Conditions'), 'Battle HTML should have Battle Conditions section');
+			assert(!battleHTML.includes('Battle Conditions'), 'Battle HTML should NOT have separate Battle Conditions section');
 		});
 
 		it('should generate terrain tags for Electric Terrain', () => {
