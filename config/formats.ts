@@ -408,7 +408,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	///////////////////////////////////////////////////////////////
 	//////////////////////// Server Special /////////////////////////////
 	///////////////////////////////////////////////////////////////
-	{
+	/*{
 		section: "Server Special",
 		column: 1,
 	},
@@ -526,7 +526,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Light of Ruin'],
 		teambuilderFormat: 'National Dex',
 		onValidateTeam(team, format) {
-			/**@type {{[k: string]: true}} */
 			for (const set of team) {
 				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
 					 return ["Cirno-Tanned can only have Drought as its ability."]
@@ -548,7 +547,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: [],
 		teambuilderFormat: 'National Dex',
 		onValidateTeam(team, format) {
-			/**@type {{[k: string]: true}} */
 			for (const set of team) {
 				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
 					 return ["Cirno-Tanned can only have Drought as its ability."]
@@ -556,7 +554,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
 		},
-	},
+	},*/
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
