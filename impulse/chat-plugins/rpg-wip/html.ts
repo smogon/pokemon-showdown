@@ -432,7 +432,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
  */
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
-	
+
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const weatherColors: Record<string, string> = {
 		'sun': '#F8D030',
@@ -443,7 +443,7 @@ function generateWeatherTags(battle: BattleState): string {
 		'heavy-rain': '#0066CC',
 		'strong-winds': '#A0D0F0',
 	};
-	
+
 	const weatherNames: Record<string, string> = {
 		'sun': 'Sunny',
 		'rain': 'Rain',
@@ -453,11 +453,11 @@ function generateWeatherTags(battle: BattleState): string {
 		'heavy-rain': 'Heavy Rain',
 		'strong-winds': 'Strong Winds',
 	};
-	
+
 	const color = weatherColors[battle.weather.type] || '#999';
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
-	
+
 	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
 }
 
@@ -466,7 +466,7 @@ function generateWeatherTags(battle: BattleState): string {
  */
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
-	
+
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const terrainColors: Record<string, string> = {
 		'electric': '#F8D030',
@@ -474,18 +474,18 @@ function generateTerrainTags(battle: BattleState): string {
 		'misty': '#EE99AC',
 		'psychic': '#F85888',
 	};
-	
+
 	const terrainNames: Record<string, string> = {
 		'electric': 'Electric Terrain',
 		'grassy': 'Grassy Terrain',
 		'misty': 'Misty Terrain',
 		'psychic': 'Psychic Terrain',
 	};
-	
+
 	const color = terrainColors[battle.terrain.type] || '#999';
 	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
 	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
-	
+
 	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
 }
 
@@ -495,7 +495,7 @@ function generateTerrainTags(battle: BattleState): string {
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
-	
+
 	if (battle.trickRoomTurns > 0) {
 		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
 	}
@@ -520,7 +520,7 @@ function generateFieldEffectTags(battle: BattleState): string {
 	if (battle.ionDelugeTurns > 0) {
 		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
 	}
-	
+
 	return effects.join('');
 }
 

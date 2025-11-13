@@ -260,7 +260,7 @@ export function checkForWinLoss(
 		messageLog.push(`<center><b>${opponentMessage}</b></center>`);
 		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
 		activeBattles.delete(user.id);
 		return true;
 	}
@@ -326,9 +326,9 @@ export function checkForWinLoss(
 			messageLog.push(`<center><b>You received ₽${moneyGained} for winning!</b></center>`);
 
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
+				context.popupReply(`|html|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+				context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
@@ -341,9 +341,9 @@ export function checkForWinLoss(
 			messageLog.push(`<center><b>You gained ₽${moneyGained}!</b></center>`);
 
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
+				context.popupReply(`|html|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+				context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
 			}
 		}
 		activeBattles.delete(user.id);
@@ -370,7 +370,7 @@ export function checkBattleEndCondition(
 	if (battleEnded) return true;
 
 	if (battle.pendingPivot) {
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		context.popupReply(`|html|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
 		return true;
 	}
 	handleAiPivot(battle, messageLog);
@@ -387,7 +387,7 @@ export function checkBattleEndCondition(
 				delete battle.pendingActions[i];
 			}
 		}
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		context.popupReply(`|html|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		return true;
 	}
 
@@ -804,13 +804,13 @@ export function executeMove(
 
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
-		
+
 		// Phase 6: Gulp Missile - Cramorant catches prey when using Surf or Dive
 		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 		if (attackerAbility === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
 			const attacker = attackerSlot.pokemon;
 			const hpPercent = attacker.hp / attacker.maxHp;
-			
+
 			// Gulping Form (Arrokuda) if HP > 50%, Gorging Form (Pikachu) if HP <= 50%
 			if (hpPercent > 0.5) {
 				if (!attacker.species.includes('Gulping')) {
@@ -991,7 +991,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 				slot.activeTurns++;
 			}
 		});
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
+		context.popupReply(`|html|${generateBattleHTML(battle)}`);
 	}
 }
 
