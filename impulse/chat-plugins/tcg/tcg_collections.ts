@@ -1,6 +1,12 @@
-// Pokemon Showdown TCG Collections - @author PrinceSky-Git
+/*
+* Pokemon Showdown
+* TCG Collections
+* @author PrinceSky-Git
+*/
 import { ImpulseDB } from '../../impulse-db';
-import { type TcgCard, type TcgDailyCooldown, type TcgUser, type TcgUserProfile, type TcgUserPack } from './interface';
+import { type TcgCard, type TcgDailyCooldown, type TcgUser,
+	type TcgUserProfile, type TcgUserPack } from './interface';
+
 export const tcgCardsCollection = ImpulseDB<TcgCard>('tcg_cards');
 export const userCollectionsCollection = ImpulseDB<TcgUser>('tcg_collections');
 export const userProfilesCollection = ImpulseDB<TcgUserProfile>('tcg_profiles');

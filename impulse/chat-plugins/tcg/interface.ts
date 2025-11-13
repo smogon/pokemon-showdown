@@ -1,9 +1,14 @@
-// Pokemon Showdown TCG Interface - @author PrinceSky-Git
+/*
+* Pokemon Showdown
+* TCG Interface
+* @author PrinceSky-Git
+*/
 export interface TcgAbility {
 	name: string;
 	text: string;
 	type: string;
 }
+
 export interface TcgAttack {
 	name: string;
 	cost: string[];
@@ -11,24 +16,29 @@ export interface TcgAttack {
 	damage: string;
 	text: string;
 }
+
 export interface TcgResistanceWeakness {
 	type: string;
 	value: string;
 }
+
 export interface TcgSetImages {
 	symbol: string;
 	logo: string;
 }
+
 export interface TcgAncientTrait {
 	name: string;
 	text: string;
 }
+
 export interface TcgLegalities {
 	standard?: string;
 	expanded?: string;
 	unlimited?: string;
 	[key: string]: string | undefined;
 }
+
 export interface TcgCard {
 	cardId: string;
 	name: string;
@@ -71,6 +81,7 @@ export interface TcgCard {
 	importedAt: string;
 	dataVersion: string;
 }
+
 export interface TcgUser {
 	userId: string;
 	cardId: string;
@@ -89,10 +100,12 @@ export interface TcgUser {
 	setSeries?: string;
 	regulationMark?: string;
 }
+
 export interface TcgDailyCooldown {
 	userId: string;
 	lastClaimedAt: string;
 }
+
 export interface TcgUserProfile {
 	userId: string;
 	userName: string;
@@ -106,6 +119,7 @@ export interface TcgUserProfile {
 	tradesEnabled?: boolean;
 	lastUpdatedAt: string;
 }
+
 export interface TcgUserPack {
 	userId: string;
 	setId: string;

@@ -1,4 +1,8 @@
-// Pokemon Showdown TCG Core Commands - @author PrinceSky-Git
+/*
+* Pokemon Showdown
+* TCG Core Commands
+* @author PrinceSky-Git
+*/
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats,
 	renderCardGridHtml, addCardsToCollection, initializeCache } from './tcg_utils';
@@ -9,99 +13,104 @@ import { collectionCommands } from './tcg_collections_cmds';
 import { tradeCommands } from './tcg_trade_cmds';
 import { tcgCardsCollection, userProfilesCollection,
 	userPacksCollection, cooldownsCollection } from './tcg_collections';
+
 const SEARCH_PAGE_LIMIT = 40;
 
 function parseSearchQuery(target: string): { filter: any, queryDescription: string, page: number, commandString: string } {
 	const parts = target.split(',');
-	let page = 1, query = target.trim(), cmdStr = query;
+	let page = 1, query = target.trim(), commandString = query;
+
 	if (parts.length > 1) {
 		const lastPart = parts[parts.length - 1].trim();
 		const potentialPage = parseInt(lastPart);
 		if (!isNaN(potentialPage)) {
 			page = Math.max(1, potentialPage);
 			query = parts.slice(0, -1).join(',').trim();
-			cmdStr = query;
+			commandString = query;
 		}
 	}
-	const filter: any = { $and: [] };
-	const descs: string[] = [];
-	const fRegex = /(\w+)\s*:\s*([<=>]{1,2})?"([^"]+)"|([\w-]+)/g;
-	let nQuery = query, match;
 
-	while ((match = fRegex.exec(query)) !== null) {
+	const filter: any = { $and: [] };
+	const descriptions: string[] = [];
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?"([^"]+)"|([\w-]+)/g;
+	let nameQuery = query, match;
+
+	while ((match = filterRegex.exec(query)) !== null) {
 		const key = match[1].toLowerCase();
 		const operator = match[2];
 		const value = match[3].replace(/"/g, '');
-		nQuery = nQuery.replace(match[0], '');
-		const vNum = parseInt(value);
-		const escVal = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		const vRegex = new RegExp(escVal, 'i');
+		nameQuery = nameQuery.replace(match[0], '');
+
+		const valueNum = parseInt(value);
+		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const valueRegex = new RegExp(escapedValue, 'i');
 
 		switch (key) {
 		case 'rarity':
-			filter.$and.push({ rarity: vRegex });
-			descs.push(`Rarity: ${value}`);
+			filter.$and.push({ rarity: valueRegex });
+			descriptions.push(`Rarity: ${value}`);
 			break;
 		case 'supertype':
 		case 'st':
-			filter.$and.push({ supertype: vRegex });
-			descs.push(`Supertype: ${value}`);
+			filter.$and.push({ supertype: valueRegex });
+			descriptions.push(`Supertype: ${value}`);
 			break;
 		case 'subtype':
-			filter.$and.push({ subtypes: vRegex });
-			descs.push(`Subtype: ${value}`);
+			filter.$and.push({ subtypes: valueRegex });
+			descriptions.push(`Subtype: ${value}`);
 			break;
 		case 'type':
-			filter.$and.push({ types: vRegex });
-			descs.push(`Type: ${value}`);
+			filter.$and.push({ types: valueRegex });
+			descriptions.push(`Type: ${value}`);
 			break;
 		case 'artist':
-			filter.$and.push({ artist: vRegex });
-			descs.push(`Artist: ${value}`);
+			filter.$and.push({ artist: valueRegex });
+			descriptions.push(`Artist: ${value}`);
 			break;
 		case 'hp':
-			if (!isNaN(vNum)) {
+			if (!isNaN(valueNum)) {
 				let hpFilter: any = {};
-				if (operator === '>') hpFilter = { $gt: vNum };
-				else if (operator === '>=') hpFilter = { $gte: vNum };
-				else if (operator === '<') hpFilter = { $lt: vNum };
-				else if (operator === '<=') hpFilter = { $lte: vNum };
-				else hpFilter = vNum;
+				if (operator === '>') hpFilter = { $gt: valueNum };
+				else if (operator === '>=') hpFilter = { $gte: valueNum };
+				else if (operator === '<') hpFilter = { $lt: valueNum };
+				else if (operator === '<=') hpFilter = { $lte: valueNum };
+				else hpFilter = valueNum;
 				filter.$and.push({ hp: hpFilter });
-				descs.push(`HP: ${operator || ''}${value}`);
+				descriptions.push(`HP: ${operator || ''}${value}`);
 			}
 			break;
 		case 'legal':
 			const legalKey = `legalities.${value.toLowerCase()}`;
 			filter.$and.push({ [legalKey]: 'Legal' });
-			descs.push(`Legal: ${value}`);
+			descriptions.push(`Legal: ${value}`);
 			break;
 		case 'series':
-			filter.$and.push({ setSeries: vRegex });
-			descs.push(`Series: ${value}`);
+			filter.$and.push({ setSeries: valueRegex });
+			descriptions.push(`Series: ${value}`);
 			break;
 		case 'reg':
-			filter.$and.push({ regulationMark: vRegex });
-			descs.push(`Reg Mark: ${value}`);
+			filter.$and.push({ regulationMark: valueRegex });
+			descriptions.push(`Reg Mark: ${value}`);
 			break;
 		case 'set':
-			const partialRegex = new RegExp(escVal, 'i');
-			const exactRegex = new RegExp("^" + escVal + "$", 'i');
+			const partialRegex = new RegExp(escapedValue, 'i');
+			const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
 			filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
-			descs.push(`Set: ${value}`);
+			descriptions.push(`Set: ${value}`);
 			break;
 		}
 	}
 
-	const nQueryClean = nQuery.trim();
-	if (nQueryClean) {
-		const nameRegex = new RegExp(nQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+	const nameQueryClean = nameQuery.trim();
+	if (nameQueryClean) {
+		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 		filter.$and.push({ name: nameRegex });
-		descs.unshift(`'${nQueryClean}'`);
+		descriptions.unshift(`'${nameQueryClean}'`);
 	}
+
 	if (filter.$and.length === 0) delete filter.$and;
-	const queryDescription = descs.length > 0 ? descs.join(', ') : 'All Cards';
-	return { filter, queryDescription, page, commandString: cmdStr };
+	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
+	return { filter, queryDescription, page, commandString };
 }
 
 export const commands: ChatCommands = {
@@ -110,31 +119,34 @@ export const commands: ChatCommands = {
 		async card(target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /tcg card [cardid]');
+
 			const cardId = target.trim();
 			let card: TcgCard | null = null;
-			const cacheInit = getCacheStats().isInitialized;
+			const cacheInitialized = getCacheStats().isInitialized;
+
 			try {
-				if (cacheInit) card = getCard(cardId) || null;
+				if (cacheInitialized) card = getCard(cardId) || null;
 				if (!card) {
 					const collection = tcgCardsCollection;
 					card = await collection.findOne({ cardId });
 				}
-				if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInit ? 'On' : 'Off'})`);
+				if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 			} catch {
 				return this.errorReply('An error occurred while fetching card information.');
 			}
-			const origW = 246, origH = 342, scale = 0.65;
-			const imgW = Math.round(origW * scale);
-			const imgH = Math.round(origH * scale);
-			const imgUrl = card.imageUrl || `https://via.placeholder.com/${imgW}x${imgH}?text=No+Image`;
+
+			const originalWidth = 246, originalHeight = 342, scaleFactor = 0.65;
+			const imageWidth = Math.round(originalWidth * scaleFactor);
+			const imageHeight = Math.round(originalHeight * scaleFactor);
+			const imageUrl = card.imageUrl || `https://via.placeholder.com/${imageWidth}x${imageHeight}?text=No+Image`;
 			const subtypes = card.subtypes?.length > 0 ? card.subtypes.join(' | ') : 'N/A';
-			const imgAlt = `${card.name} (${card.cardId})`;
+			const imageAlt = `${card.name} (${card.cardId})`;
 
 			let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
 			html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc;">`;
-			html += `<img src="${imgUrl}" width="${imgW}" height="${imgH}" alt="${imgAlt}" title="${imgAlt}" style="border-radius: 8px; display: block;" />`;
+			html += `<img src="${imageUrl}" width="${imageWidth}" height="${imageHeight}" alt="${imageAlt}" title="${imageAlt}" style="border-radius: 8px; display: block;" />`;
 			html += `</div>`;
-			html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; max-height: ${imgH}px; overflow-y: auto;">`;
+			html += `<div style="flex: 1; line-height: 1.6; margin-left: 20px; max-height: ${imageHeight}px; overflow-y: auto;">`;
 			html += `<strong style="font-size: 22px;">${card.name}</strong> <span style="font-size: 0.9em; margin-left: 5px;">(${card.cardId})</span><br />`;
 			html += `<div style="margin-top: 12px; font-size: 0.95em;">`;
 			html += `<strong style="font-size: 1.1em;">Set:</strong> ${card.set} <span style="font-size: 0.9em;">(${card.setId})</span><br />`;
@@ -153,19 +165,22 @@ export const commands: ChatCommands = {
 		async set(target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.errorReply('Usage: /tcg set [setid]');
-			const setId = target.trim().toLowerCase();
+
+			const setId = target.trim().toLowerCase(); // Normalize input
 			let card: TcgCard | null = null;
-			const cacheInit = getCacheStats().isInitialized;
+			const cacheInitialized = getCacheStats().isInitialized;
+
 			try {
-				if (cacheInit) card = getSet(setId) || null;
+				if (cacheInitialized) card = getSet(setId) || null;
 				if (!card) {
 					const collection = tcgCardsCollection;
 					card = await collection.findOne({ setId });
 				}
-				if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInit ? 'On' : 'Off'})`);
+				if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
 			} catch {
 				return this.errorReply('An error occurred while fetching set information.');
 			}
+
 			const setName = card.set;
 			const series = card.setSeries || 'N/A';
 			const releaseDate = card.setReleaseDate || 'N/A';
@@ -174,6 +189,7 @@ export const commands: ChatCommands = {
 			const logoUrl = card.setImages?.logo || '';
 			const symbolUrl = card.setImages?.symbol || '';
 			const logoHeight = 40;
+
 			let html = `<div class="infobox" style="display: flex; align-items: center; padding: 15px;">`;
 			if (logoUrl) {
 				html += `<div style="flex-shrink: 0; padding-right: 20px; border-right: 1px solid #ccc; text-align: center;">`;
@@ -198,23 +214,28 @@ export const commands: ChatCommands = {
 			if (!target) {
 				return this.errorReply('Usage: /tcg search [card/pokemonname|set:setid|rarity:"Rarity Name"|artist:"Artist Name"]');
 			}
+
 			try {
 				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
 				const collection = tcgCardsCollection;
 				const totalMatches = await collection.countDocuments(filter);
 				if (totalMatches === 0) return this.errorReply(`No cards found matching: ${queryDescription}.`);
+
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
+
 				const results = await collection.find(filter, {
 					limit: SEARCH_PAGE_LIMIT, skip,
 					projection: { name: 1, cardId: 1, rarity: 1, imageUrl: 1 },
 					sort: { rarityPoints: -1, name: 1 },
 				});
+
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches} matching cards.</div>`;
+
 				if (results.length === 0) html += `No results found for this page.`;
 				for (let i = 0; i < results.length; i++) {
 					const c = results[i];
@@ -260,6 +281,7 @@ export const commands: ChatCommands = {
 			const cooldowns = cooldownsCollection;
 			const now = Date.now();
 			const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
 			try {
 				const cooldown = await cooldowns.findOne({ userId });
 				if (cooldown) {
@@ -272,6 +294,7 @@ export const commands: ChatCommands = {
 						return this.errorReply(`You must wait ${hours}h ${minutes}m ${seconds}s before claiming your next daily pack.`);
 					}
 				}
+
 				let randomSetId = 'sv1';
 				const setCollection = tcgCardsCollection;
 				const randomSetArr = await setCollection.aggregate<{ setId: string }>([{
@@ -282,13 +305,16 @@ export const commands: ChatCommands = {
 					$project: { _id: 0, setId: "$_id" },
 				}]);
 				if (randomSetArr.length > 0) randomSetId = randomSetArr[0].setId;
+
 				const pack = await generatePack(randomSetId);
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
+
 				await cooldowns.updateOne(
 					{ userId },
 					{ $set: { lastClaimedAt: new Date(now).toISOString() } },
 					{ upsert: true }
 				);
+
 				const title = `${user.name} opened their daily pack! (${randomSetId})`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
@@ -300,15 +326,18 @@ export const commands: ChatCommands = {
 
 		async opensavedpack(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const setId = target.trim().toLowerCase();
+			const setId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
 			if (!setId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
+
 			const packCollection = userPacksCollection;
 			let updateResult;
+
 			try {
 				updateResult = await packCollection.updateOne(
 					{ userId: user.id, setId, quantity: { $gt: 0 } },
 					{ $inc: { quantity: -1 } }
 				);
+
 				if (updateResult.modifiedCount === 0) {
 					return this.errorReply(`You do not have any saved "${setId}" packs to open.`);
 				}
@@ -316,12 +345,15 @@ export const commands: ChatCommands = {
 				console.error(`DB error decrementing pack for ${user.id}, setId ${setId}:`, dbError);
 				return this.errorReply(`A database error occurred while trying to use your pack. Please try again.`);
 			}
+
 			try {
 				const pack = await generatePack(setId);
 				const { creditsAwarded } = await addCardsToCollection(user, pack);
+
 				let setName = setId;
 				const setInfo = getSet(setId) ?? await tcgCardsCollection.findOne({ setId });
 				if (setInfo) setName = setInfo.set;
+
 				const title = `${user.name} opened a ${setName} pack!`;
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
@@ -341,16 +373,18 @@ export const commands: ChatCommands = {
 
 		async openallpacks(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const rawSetId = target.trim().toLowerCase();
+			const rawSetId = target.trim().toLowerCase(); // <-- FIX: Normalize setId to lowercase
 			if (!rawSetId) return this.errorReply(`Specify a pack ID to open. Use /tcg packs to see your packs.`);
 			const packCollection = userPacksCollection;
 			const queryFilter = { userId: user.id, setId: rawSetId, quantity: { $gt: 0 } };
 			let findResult: TcgUserPack | null = null;
+
 			try {
 				findResult = await packCollection.findOneAndUpdate(queryFilter, { $set: { quantity: 0 } });
 			} catch (dbError) {
 				return this.errorReply(`A database error occurred while trying to find your packs. Please try again later.`);
 			}
+
 			if (!findResult || typeof findResult.quantity !== 'number' || findResult.quantity === 0) {
 				try {
 					const zeroCheck = await packCollection.findOne({ userId: user.id, setId: rawSetId });
@@ -360,19 +394,24 @@ export const commands: ChatCommands = {
 				} catch (checkError) { }
 				return this.errorReply(`You do not have any saved "${rawSetId}" packs to open, or there was an issue accessing them.`);
 			}
+
 			const packQuantity = findResult.quantity;
 			const setName = findResult.setName || rawSetId;
+
 			try {
 				const allPacks: TcgCard[] = [];
 				const quantityToOpen = Math.min(packQuantity, 100);
+
 				if (packQuantity > 100) {
 					this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
 					await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $inc: { quantity: packQuantity - 100 } });
 				}
+
 				for (let i = 0; i < quantityToOpen; i++) {
 					const pack = await generatePack(rawSetId);
 					allPacks.push(...pack);
 				}
+
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
 				let html = `<div class="infobox" style="padding: 15px; text-align: center;">`;
 				html += `<strong style="font-size: 20px;">${user.name} opened ${quantityToOpen} ${setName} packs!</strong><br /><br />`;
@@ -396,6 +435,7 @@ export const commands: ChatCommands = {
 			let sortKey: keyof TcgUserProfile = 'collectionPoints';
 			let title = 'Collection Points';
 			let valueField: keyof TcgUserProfile = 'collectionPoints';
+
 			switch (targetStat) {
 			case 'points':
 				sortKey = 'collectionPoints'; title = 'Collection Points'; valueField = 'collectionPoints'; break;
@@ -410,15 +450,18 @@ export const commands: ChatCommands = {
 			default:
 				return this.errorReply("Invalid leaderboard type. Try 'points', 'count', 'unique', 'credits', or 'sets'.");
 			}
+
 			try {
 				const collection = userProfilesCollection;
 				const results = await collection.find({}, { sort: { [sortKey]: -1 }, limit: 10 });
 				if (results.length === 0) return this.errorReply("No users found in the leaderboard yet.");
+
 				const headerRow = ['Rank', 'User', title];
 				const dataRows = results.map((profile, i) => {
 					const value = profile[valueField]! || 0;
 					return [`<strong>${i + 1}</strong>`, profile.userName, value.toLocaleString()];
 				});
+
 				let html = `<div style="padding: 10px;">`;
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
 				html += `</div>`;
@@ -432,24 +475,24 @@ export const commands: ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/tcg adminhelp", desc: "Show admin commands." },
-				{ cmd: "/tcg economyhelp", desc: "Show economy/shop commands." },
-				{ cmd: "/tcg tradehelp", desc: "Show trading commands." },
-				{ cmd: "/tcg card [cardId]", desc: "Display TCG card info." },
-				{ cmd: "/tcg set [setId]", desc: "Display TCG set info." },
-				{ cmd: "/tcg search [query], [page]", desc: "Search cards. Filters: <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>" },
-				{ cmd: "/tcg profile [user]", desc: "View TCG profile and collection stats." },
-				{ cmd: "/tcg daily", desc: "Claim free daily pack (24h cooldown)." },
-				{ cmd: "/tcg collection [user:], [filters:], [page]", desc: "View card collection.<br><b>Example:</b> <code>/tcg collection user:princeskygit, rarity:Secret</code>" },
-				{ cmd: "/tcg setprogress [setId]", desc: "Track collection progress for a set." },
-				{ cmd: "/tcg missing [setId], [user?], [page?]", desc: "Show missing cards from a set." },
-				{ cmd: "/tcg packs", desc: "View unopened packs." },
-				{ cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from inventory." },
-				{ cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a set from inventory." },
-				{ cmd: "/tcg favorite [cardId]", desc: "Add card to profile (max 10)." },
-				{ cmd: "/tcg unfavorite [cardId]", desc: "Remove card from profile favorites." },
-				{ cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View top collectors." },
-				{ cmd: "/tcg recalculatestats [user]", desc: "Recalculate stats. Admins can specify user." },
+				{ cmd: "/tcg adminhelp", desc: "Shows all admin commands." },
+				{ cmd: "/tcg economyhelp", desc: "Shows all economy and shop commands." },
+				{ cmd: "/tcg tradehelp", desc: "Shows trading commands." },
+				{ cmd: "/tcg card [cardId]", desc: "Display Pokemon TCG card information." },
+				{ cmd: "/tcg set [setId]", desc: "Display information about a specific TCG set." },
+				{ cmd: "/tcg search [query], [page]", desc: "Search for cards. Use filters like <code>type:Fire</code>, <code>hp:&gt;100</code>, <code>rarity:Secret</code>, <code>artist:\"Arita\"</code>, <code>set:sv1</code>, <code>legal:standard</code>, <code>reg:G</code>.<br><b>Example:</b> <code>/tcg search Charizard type:Fire hp:&gt;200, 1</code>" },
+				{ cmd: "/tcg profile [user]", desc: "View a user's TCG profile and collection stats." },
+				{ cmd: "/tcg daily", desc: "Claim your free daily booster pack (once per 24h)." },
+				{ cmd: "/tcg collection [user:], [filters:], [page]", desc: "View your (or another user's) card collection.<br><b>Example:</b> <code>/tcg collection user:princeskygit, rarity:Secret</code>" },
+				{ cmd: "/tcg setprogress [setId]", desc: "Track your collection progress for a specific set." },
+				{ cmd: "/tcg missing [setId], [user?], [page?]", desc: "Shows cards you are missing from a set." },
+				{ cmd: "/tcg packs", desc: "View your unopened booster packs." },
+				{ cmd: "/tcg opensavedpack [setId]", desc: "Open one pack from your inventory." },
+				{ cmd: "/tcg openallpacks [setId]", desc: "Open all packs of a specific set from your inventory." },
+				{ cmd: "/tcg favorite [cardId]", desc: "Add a card from your collection to your profile (max 10)." },
+				{ cmd: "/tcg unfavorite [cardId]", desc: "Remove a card from your profile favorites." },
+				{ cmd: "/tcg leaderboard [points | count | unique | credits | sets]", desc: "View the top collectors." },
+				{ cmd: "/tcg recalculatestats [user]", desc: "Recalculate your stats. Admins can specify a user." },
 			];
 			const html = `<center><strong>TCG Commands:</strong><br>Alias: /pokemontcg</center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
@@ -466,10 +509,11 @@ export const commands: ChatCommands = {
 };
 
 export function start() {
-	console.log('TCG plugin start() - initializing cache...');
+	// Initialize TCG cache when plugin is loaded/reloaded
+	console.log('TCG plugin start() called - initializing cache...');
 	void initializeCache().then(result => {
-		console.log(`TCG cache loaded: ${result.cardCount} cards, ${result.setCount} sets`);
+		console.log(`TCG cache loaded on plugin start: ${result.cardCount} cards, ${result.setCount} sets`);
 	}).catch(err => {
-		console.error('Failed to init TCG cache. Check DB. Use /tcg loadcache to retry.', err);
+		console.error('Failed to initialize TCG cache on plugin start. Check database connectivity. Use /tcg loadcache to retry.', err);
 	});
 }
