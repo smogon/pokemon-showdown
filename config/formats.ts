@@ -414,7 +414,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] A Golden Experience",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'Moody', 'Power Construct', 'King\'s Rock',
@@ -426,7 +426,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	/*{
 		name: "[Gen 9] A Golden Experience UU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'Moody', 'Power Construct', 'King\'s Rock',
@@ -439,7 +439,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] A Golden Experience RU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'Moody', 'Power Construct', 'King\'s Rock',
@@ -452,7 +452,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] A Golden Experience NU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'Moody', 'Power Construct', 'King\'s Rock',
@@ -466,7 +466,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] A Golden Experience PU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'Moody', 'Power Construct', 'King\'s Rock',
@@ -480,7 +480,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] A Golden Experience Doubles",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
-		mod: 'agoldenexperience',
+		mod: 'gen9agoldenexperience',
 		gameType: 'doubles',
 		teambuilderFormat: 'National Dex Doubles',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
