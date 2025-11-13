@@ -408,7 +408,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const craftyShield = (side === 'player') ? battle.playerCraftyShield : battle.opponentCraftyShield;
 
 	// Style to match other status condition tags
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	if (reflectTurns > 0) effects.push('<span style="background-color: #A890F0; ' + tagStyle + '">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span style="background-color: #F8D030; ' + tagStyle + '">Light Screen</span>');
@@ -433,7 +433,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
 	
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const weatherColors: Record<string, string> = {
 		'sun': '#F8D030',
 		'rain': '#6890F0',
@@ -467,7 +467,7 @@ function generateWeatherTags(battle: BattleState): string {
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 	
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const terrainColors: Record<string, string> = {
 		'electric': '#F8D030',
 		'grassy': '#78C850',
@@ -494,7 +494,7 @@ function generateTerrainTags(battle: BattleState): string {
  */
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	
 	if (battle.trickRoomTurns > 0) {
 		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
@@ -537,7 +537,7 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 
 	if (allTags) {
 		// This is the new container the user requested
-		return `<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; border-radius: 5px; text-align: center;">` +
+		return `<div style="padding: 8px; margin: 5px 0; max-height: 100px; border: 1px solid #666; border-radius: 5px; text-align: center;">` +
 			allTags +
 			`</div>`;
 	}
