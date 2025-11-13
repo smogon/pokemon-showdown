@@ -6,7 +6,6 @@
 import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
-import { generateThemedTable } from '../../utils';
 
 interface GiveawayParticipant {
 	userid: string;
@@ -217,37 +216,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("You have already joined this giveaway!");
 			}
 
-			// Add the user to participants (host can join too, no restrictions)
+			// Add the user to participants
 			giveaway.participants.push({
 				userid: user.id,
 				username: user.name,
 				joinedAt: new Date(),
 			});
-
-			// Update the giveaway display
-			const timeRemaining = giveaway.duration ? giveaway.duration : 0;
-			const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
-				`<center>` +
-				`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY ACTIVE! 🎉</h2>` +
-				`<p style="font-size: 16px; margin: 10px 0;">` +
-				`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
-				`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}<br />` +
-				`<strong>Duration:</strong> ${timeRemaining} minute${timeRemaining !== 1 ? 's' : ''}` +
-				`</p>` +
-				`<p style="font-size: 14px; margin: 15px 0;">` +
-				`Click the button below to join!` +
-				`</p>` +
-				`<button class="button" name="send" value="/giveaway join" ` +
-				`style="background-color: #4CAF50; color: white; font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
-				`Join Giveaway` +
-				`</button>` +
-				`<p style="font-size: 12px; margin-top: 15px; color: #666;">` +
-				`Participants: <strong>${giveaway.participants.length}</strong>` +
-				`</p>` +
-				`</center>` +
-				`</div>`;
-
-			room.add(`|html|${html}`).update();
 
 			// Notify the user privately
 			this.sendReply("You have successfully joined the giveaway!");
@@ -388,30 +362,29 @@ export const commands: Chat.ChatCommands = {
 	giveawayhelp: {
 		''() {
 			if (!this.runBroadcast()) return;
-
-			const headerRow = ['Command', 'Description', 'Required Rank'];
-			const dataRows = [
+			const cmds = [
 				[
-					'<code>/giveaway start [amount], [duration]</code>',
-					'Start a giveaway with the specified prize amount and optional duration in minutes (or "manual" for no auto-end)',
-					'# or higher',
+					"/giveaway start [amount], [duration]",
+					"Start a giveaway with the specified prize amount and optional duration in minutes " +
+					"(or 'manual' for no auto-end). Requires: #.",
 				],
-				['<code>/giveaway join</code>', 'Join an active giveaway', 'None'],
-				['<code>/giveaway end</code>', 'Manually end the giveaway and pick a random winner', '# or higher'],
-				['<code>/giveaway draw</code>', 'Immediately draw a winner (alias for end)', '# or higher'],
-				['<code>/giveaway cancel</code>', 'Cancel the active giveaway without picking a winner', '# or higher'],
-				['<code>/giveaway participants</code>', 'View all participants in the current giveaway', 'None'],
-				['<code>/giveaway history</code>', 'View recent giveaway history (broadcastable)', 'None'],
+				["/giveaway join", "Join an active giveaway."],
+				["/giveaway end", "Manually end the giveaway and pick a random winner. Requires: #."],
+				["/giveaway draw", "Immediately draw a winner (alias for end). Requires: #."],
+				["/giveaway cancel", "Cancel the active giveaway without picking a winner. Requires: #."],
+				["/giveaway participants", "View all participants in the current giveaway."],
+				["/giveaway history", "View recent giveaway history (broadcastable)."],
 				[
-					'<code>/giveaway setduration [minutes]</code>',
-					'Set the default auto-end duration for giveaways in this room (1-60 minutes)',
-					'# or higher',
+					"/giveaway setduration [minutes]",
+					"Set the default auto-end duration for giveaways in this room (1-60 minutes). Requires: #.",
 				],
-				['<code>/giveaway getduration</code>', 'View the current default auto-end duration for this room', 'None'],
+				["/giveaway getduration", "View the current default auto-end duration for this room."],
 			];
-
-			const tableHtml = generateThemedTable('Giveaway Commands', headerRow, dataRows);
-			this.sendReplyBox(tableHtml);
+			this.sendReplyBox(
+				`<center><strong>Giveaway Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				cmds.map(([c, d], i) => `<li><b>${c}</b> - ${d}</li>${i < cmds.length - 1 ? '<hr>' : ''}`).join('') +
+				`</ul>`
+			);
 		},
 	},
 };
