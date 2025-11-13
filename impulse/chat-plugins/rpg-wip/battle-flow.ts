@@ -709,7 +709,7 @@ export function executeMove(
 			const bypassesProtect = attackerAbility === 'unseenfist' && move.flags.contact;
 
 			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect && !bypassesProtect) {
-				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
+				messageLog.push(`<span class="rpg-message-info">${defenderSlot.pokemon.species} protected itself!</span>`);
 				continue;
 			}
 		}
@@ -751,13 +751,13 @@ export function executeMove(
 
 			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
 			if ((Math.random() * 100) > finalAccuracy) {
-				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
+				messageLog.push(`<span class="rpg-message-error">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
 
 				if (['highjumpkick', 'jumpkick'].includes(move.id)) {
 					const crashDamage = Math.floor(attackerSlot.pokemon.maxHp / 2);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - crashDamage);
-					messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species} kept going and crashed!</span>`);
+					messageLog.push(`<span class="rpg-message-error">${attackerSlot.pokemon.species} kept going and crashed!</span>`);
 				}
 			}
 		}

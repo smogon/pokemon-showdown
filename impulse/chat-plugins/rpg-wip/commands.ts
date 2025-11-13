@@ -346,7 +346,7 @@ export const commands: ChatCommands = {
 					html += '<p>You have no Pokémon.</p>';
 				} else {
 					player.party.forEach(p => {
-						html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
+						html += `<button name="send" value="/rpg summary ${p.id}" class="button rpg-m-1">${p.species}</button> `;
 					});
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
@@ -492,7 +492,7 @@ export const commands: ChatCommands = {
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p class="rpg-message-error">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.popupReply(`|html|${errorHTML}`);
 					}
 					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -536,7 +536,7 @@ export const commands: ChatCommands = {
 						}
 
 						if (show) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+							html += `<div class="rpg-item-card rpg-flex-between"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -669,7 +669,7 @@ export const commands: ChatCommands = {
 				}
 
 				if (!result.success) {
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+					const errorHTML = `<div class="infobox"><p class="rpg-message-error">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 					return this.popupReply(`|html|${errorHTML}`);
 				}
 
@@ -700,7 +700,7 @@ export const commands: ChatCommands = {
 						}
 
 						if (canUse) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+							html += `<div class="rpg-item-card rpg-flex-between"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -714,7 +714,7 @@ export const commands: ChatCommands = {
 				if (itemId === 'rarecandy') {
 					const result = useRareCandyItem(player, targetPokemon, room, user);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p class="rpg-message-error">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.popupReply(`|html|${errorHTML}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
@@ -728,7 +728,7 @@ export const commands: ChatCommands = {
 				} else if (itemId.startsWith('expcandy')) {
 					const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p class="rpg-message-error">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.popupReply(`|html|${errorHTML}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
@@ -769,7 +769,7 @@ export const commands: ChatCommands = {
 
 						// Check if new moves were queued
 						if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-							resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
+							resultHTML += `<hr/><p class="rpg-message-error">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
 						} else {
 							resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
 						}
@@ -777,7 +777,7 @@ export const commands: ChatCommands = {
 						this.popupReply(`|html|${resultHTML}`);
 					} else {
 						// Evolution failed
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">It had no effect... (${targetPokemon.species} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+						const errorHTML = `<div class="infobox"><p class="rpg-message-error">It had no effect... (${targetPokemon.species} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 						return this.popupReply(`|html|${errorHTML}`);
 					}
 				} else {
@@ -940,18 +940,18 @@ export const commands: ChatCommands = {
 			if (!itemId) {
 				// If no item specified, show sell menu
 				let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
-				html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
+				html += `<div class="rpg-grid-2col">`;
 				let sellableItems = 0;
 				for (const [id, item] of player.inventory) {
 					const sellPrice = ITEM_PRICES[id]; // Using ITEM_PRICES as sell price for now
 					if (sellPrice && item.category === 'misc') { // Only allow selling 'misc' items
 						sellableItems++;
-						html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
+						html += `<div class="rpg-item-card">`;
 						html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;
 						html += `<small>Sell for: ₽${sellPrice} each</small><br>`;
-						html += `<button name="send" value="/rpg sell ${id} 1" class="button" style="font-size: 12px; margin-top: 5px;">Sell 1</button>`;
+						html += `<button name="send" value="/rpg sell ${id} 1" class="button rpg-btn-small">Sell 1</button>`;
 						if (item.quantity >= 5) {
-							html += `<button name="send" value="/rpg sell ${id} 5" class="button" style="font-size: 12px; margin-top: 5px;">Sell 5</button>`;
+							html += `<button name="send" value="/rpg sell ${id} 5" class="button rpg-btn-small">Sell 5</button>`;
 						}
 						html += `</div>`;
 					}
@@ -959,7 +959,7 @@ export const commands: ChatCommands = {
 				if (sellableItems === 0) {
 					html += `<p>You have no valuable items to sell.</p>`;
 				}
-				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
+				html += `</div><p class="rpg-mt-2"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 				return this.popupReply(`|html|${html}`);
 			}
 
@@ -1087,7 +1087,7 @@ export const commands: ChatCommands = {
 					if (canAccess) {
 						exploreButtons += `<button name="send" value="/rpg travel ${connection.id}" class="button">🗺️ ${connection.name}</button> `;
 					} else {
-						exploreButtons += `<button class="button" disabled style="opacity: 0.5;">🗺️ ${connection.name}${lockReason}</button> `;
+						exploreButtons += `<button class="button rpg-btn-disabled" disabled>🗺️ ${connection.name}${lockReason}</button> `;
 					}
 				}
 				exploreButtons += '<hr />';
@@ -1145,7 +1145,7 @@ export const commands: ChatCommands = {
 						if (canAccess) {
 							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 						} else {
-							travelHTML += `<button class="button" disabled style="opacity: 0.5;">${connection.name}${lockReason}</button> `;
+							travelHTML += `<button class="button rpg-btn-disabled" disabled>${connection.name}${lockReason}</button> `;
 						}
 					}
 				}
@@ -1309,7 +1309,7 @@ export const commands: ChatCommands = {
 					// See scripted-events.ts for all 42 handler functions
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
-					eventHTML += `<p style="color: orange;">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
+					eventHTML += `<p class="rpg-message-warning">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
 					eventHTML += `<p><em>Handler exists in scripted-events.ts but needs to be wired up here.</em></p>`;
 					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 				}
@@ -2322,7 +2322,7 @@ export const commands: ChatCommands = {
 			if (!pokemonId) {
 				let html = `<div class="infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
 				for (const pokemon of player.party) {
-					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
+					html += `<div class="rpg-p-1 rpg-m-1" style="border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 				return this.popupReply(`|html|${html}`);
@@ -2336,7 +2336,7 @@ export const commands: ChatCommands = {
 				let holdableItemsFound = false;
 				for (const [id, item] of player.inventory) {
 					if (item.category === 'held' || item.category === 'berry') {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id} ${id}" class="button">${item.name}</button> x${item.quantity}</div>`;
+						html += `<div class="rpg-p-1 rpg-m-1" style="border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id} ${id}" class="button">${item.name}</button> x${item.quantity}</div>`;
 						holdableItemsFound = true;
 					}
 				}
@@ -2378,7 +2378,7 @@ export const commands: ChatCommands = {
 				let html = `<div class="infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
 				for (const pokemon of player.party) {
 					if (pokemon.item) {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
+						html += `<div class="rpg-p-1 rpg-m-1" style="border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
 					}
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
@@ -2584,17 +2584,17 @@ export const commands: ChatCommands = {
 						if (action.pokemon) {
 							const species = Dex.species.get(action.pokemon.species);
 							if (!species.exists) {
-								dialogueHTML += `<p style="color: red;">❌ Invalid Pokemon species.</p>`;
+								dialogueHTML += `<p class="rpg-message-error">❌ Invalid Pokemon species.</p>`;
 								break;
 							}
 							dialogueHTML += `<p><strong>Offer:</strong> ${species.name} (Lvl ${action.pokemon.level})</p>`;
 
 							// Check if player has space
 							if (player.party.length >= 6 && player.pc.size >= 100) {
-								dialogueHTML += `<p style="color: red;">❌ Your party and PC are both full! Free up space first.</p>`;
+								dialogueHTML += `<p class="rpg-message-error">❌ Your party and PC are both full! Free up space first.</p>`;
 							} else {
 								if (player.party.length >= 6) {
-									dialogueHTML += `<p style="color: orange;">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
+									dialogueHTML += `<p class="rpg-message-warning">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
 								}
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Pokémon</button> `;
 							}
@@ -2610,10 +2610,10 @@ export const commands: ChatCommands = {
 							dialogueHTML += `<p><strong>Trade:</strong> ${requiredItem?.name || action.requiredItem} x${action.requiredQuantity} → ${rewardItem?.name || action.itemId} x${action.quantity}</p>`;
 
 							if (hasRequired >= action.requiredQuantity) {
-								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<p class="rpg-message-success">✅ You have the required items!</p>`;
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🔄 Make Trade</button> `;
 							} else {
-								dialogueHTML += `<p style="color: red;">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
+								dialogueHTML += `<p class="rpg-message-error">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
 							}
 						}
 						break;
@@ -2626,10 +2626,10 @@ export const commands: ChatCommands = {
 							dialogueHTML += `<p><strong>Request:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
 
 							if (hasItem >= action.quantity) {
-								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<p class="rpg-message-success">✅ You have the required items!</p>`;
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🎁 Give Items</button> `;
 							} else {
-								dialogueHTML += `<p style="color: red;">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
+								dialogueHTML += `<p class="rpg-message-error">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
 							}
 						}
 						break;
@@ -2642,7 +2642,7 @@ export const commands: ChatCommands = {
 					case 'choosestarter':
 						// Check if player already has a starter
 						if (player.party.length > 0) {
-							dialogueHTML += `<p style="color: gray;"><em>You already have your Pokémon partner!</em></p>`;
+							dialogueHTML += `<p class="rpg-message-info"><em>You already have your Pokémon partner!</em></p>`;
 						} else {
 							dialogueHTML += `<p><strong>Choose your starter Pokémon:</strong></p>`;
 							dialogueHTML += `<button name="send" value="/rpg starterchoice ${npcId}" class="button">👀 View Available Starters</button> `;
@@ -2650,7 +2650,7 @@ export const commands: ChatCommands = {
 						break;
 					}
 				} else {
-					dialogueHTML += `<hr /><p style="color: gray;"><em>You've already completed this NPC's request.</em></p>`;
+					dialogueHTML += `<hr /><p class="rpg-message-info"><em>You've already completed this NPC's request.</em></p>`;
 				}
 			}
 
@@ -2709,7 +2709,7 @@ export const commands: ChatCommands = {
 					addItemToInventory(player, action.itemId, action.quantity);
 					const item = ITEMS_DATABASE[action.itemId];
 					resultHTML += `<p>"Here you go!"</p>`;
-					resultHTML += `<p style="color: green;">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					resultHTML += `<p class="rpg-message-success">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
 				break;
@@ -2743,11 +2743,11 @@ export const commands: ChatCommands = {
 					if (player.party.length < 6) {
 						player.party.push(pokemon);
 						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> joined your party!</p>`;
+						resultHTML += `<p class="rpg-message-success">✅ <strong>${species.name}</strong> joined your party!</p>`;
 					} else {
 						storePokemonInPC(player, pokemon);
 						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
+						resultHTML += `<p class="rpg-message-success">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
 					}
 
 					// Show Pokemon info
@@ -2773,7 +2773,7 @@ export const commands: ChatCommands = {
 					const rewardItem = ITEMS_DATABASE[action.itemId];
 
 					resultHTML += `<p>"Here's your trade!"</p>`;
-					resultHTML += `<p style="color: green;">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					resultHTML += `<p class="rpg-message-success">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2791,12 +2791,12 @@ export const commands: ChatCommands = {
 					const item = ITEMS_DATABASE[action.itemId];
 
 					resultHTML += `<p>"Thank you so much!"</p>`;
-					resultHTML += `<p style="color: green;">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
+					resultHTML += `<p class="rpg-message-success">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
 
 					// Give a reward (example: money)
 					const reward = action.quantity * 1000; // 1000 per item
 					player.money += reward;
-					resultHTML += `<p style="color: gold;">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
+					resultHTML += `<p class="rpg-message-warning">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2816,9 +2816,9 @@ export const commands: ChatCommands = {
 					}
 
 					resultHTML += `<p>"${result.message}"</p>`;
-					resultHTML += `<p style="color: green;">✅ Your Pokémon have been restored to full health!</p>`;
+					resultHTML += `<p class="rpg-message-success">✅ Your Pokémon have been restored to full health!</p>`;
 				} else {
-					resultHTML += `<p style="color: red;">❌ ${result.message}</p>`;
+					resultHTML += `<p class="rpg-message-error">❌ ${result.message}</p>`;
 				}
 				break;
 			}
@@ -2837,7 +2837,7 @@ export const commands: ChatCommands = {
 			// }
 			// See npc-actions.ts for all 34+ handler functions
 			default:
-				resultHTML += `<p style="color: orange;">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
+				resultHTML += `<p class="rpg-message-warning">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
 				resultHTML += `<p><em>The handler exists in npc-actions.ts but needs to be wired up here.</em></p>`;
 				break;
 			}
@@ -2876,20 +2876,20 @@ export const commands: ChatCommands = {
 					`<h2>${npc.name}</h2>` +
 					`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
 					`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
-					`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+					`<div class="rpg-grid-3col">`;
 
 				for (const starterId of allStarters) {
 					const species = Dex.species.get(starterId);
 					if (species.exists) {
-						html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
+						html += `<div class="rpg-item-card rpg-text-center">` +
 							`<strong>${species.name}</strong><br>` +
 							`<small>Type: ${species.types.join('/')}</small><br>` +
-							`<button name="send" value="/rpg starterchoice ${npcId} ${starterId}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
+							`<button name="send" value="/rpg starterchoice ${npcId} ${starterId}" class="button rpg-mt-1">Choose ${species.name}</button>` +
 							`</div>`;
 					}
 				}
 
-				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
+				html += `</div><p class="rpg-mt-2"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
 					generateBottomNavigation() +
 					`</div>`;
 				this.popupReply(`|html|${html}`);
@@ -3067,7 +3067,7 @@ export const commands: ChatCommands = {
 				{ cmd: "/rpg unstuck", desc: "Exit a battle if you're stuck." },
 				{ cmd: "/rpg battleaction back", desc: "Return to battle if ui disappears while you're in battle." },
 			];
-			const html = `<div class="infobox" style="max-height: 380px; overflow-y: auto;"><center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<div class="infobox rpg-scroll-400"><center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +

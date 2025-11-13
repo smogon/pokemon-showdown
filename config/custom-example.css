@@ -7,3 +7,581 @@
  * other words, you can use this facility to introduce a custom theme for
  * your server.
  */
+
+/* ============================================
+   RPG UI STYLES
+   ============================================ */
+
+/* Base Container */
+.rpg-container {
+	font-family: inherit;
+	line-height: 1.5;
+}
+
+/* Buttons */
+.rpg-btn {
+	padding: 8px 12px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background: #fff;
+	cursor: pointer;
+	font-size: 1em;
+	transition: background 0.2s ease;
+}
+
+.rpg-btn:hover {
+	background: #f5f5f5;
+}
+
+.rpg-btn-small {
+	font-size: 12px;
+	padding: 4px 8px;
+	margin-top: 5px;
+}
+
+.rpg-btn-move {
+	width: 155px;
+	height: 40px;
+	padding: 4px;
+	border-radius: 8px;
+	box-sizing: border-box;
+	text-align: left;
+	background: #fff;
+	border: 1px solid #ccc;
+}
+
+.rpg-btn-action {
+	width: 155px;
+	height: 20px;
+	padding: 2px;
+	border-radius: 8px;
+	box-sizing: border-box;
+	text-align: center;
+	font-weight: bold;
+	margin: 4px 2px;
+	font-size: 0.8em;
+	vertical-align: middle;
+}
+
+.rpg-btn-continue {
+	width: 200px;
+	height: 40px;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 8px;
+	border-radius: 8px;
+}
+
+.rpg-btn-tera {
+	width: 155px;
+	height: 20px;
+	padding: 2px;
+	border-radius: 8px;
+	box-sizing: border-box;
+	text-align: center;
+	color: #FF1493;
+	font-weight: bold;
+	margin-top: 4px;
+	font-size: 0.8em;
+	border: 2px solid #FF1493;
+	background: #fff;
+}
+
+.rpg-btn-disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.rpg-btn-sell {
+	background: #28a745;
+	color: white;
+	border: 1px solid #1e7e34;
+}
+
+.rpg-btn-sell:hover {
+	background: #218838;
+}
+
+/* Status Tags */
+.rpg-status-tag {
+	background-color: #999;
+	color: white;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 10px;
+	text-transform: uppercase;
+	vertical-align: middle;
+	margin-left: 5px;
+	display: inline-block;
+}
+
+.rpg-status-brn { background-color: #F08030; }
+.rpg-status-par { background-color: #F8D030; }
+.rpg-status-psn { background-color: #A040A0; }
+.rpg-status-tox { background-color: #A040A0; }
+.rpg-status-slp { background-color: #9898E8; }
+.rpg-status-frz { background-color: #98D8D8; }
+
+/* Volatile Status Colors */
+.rpg-status-confused { background-color: #A890F0; }
+.rpg-status-cursed { background-color: #705898; }
+.rpg-status-seeded { background-color: #78C850; }
+.rpg-status-nightmare { background-color: #503870; }
+.rpg-status-trapped { background-color: #A8A878; }
+.rpg-status-taunted { background-color: #C03028; }
+.rpg-status-charging { background-color: #6890F0; }
+.rpg-status-substitute { background-color: #A8A878; }
+.rpg-status-drowsy { background-color: #9898E8; }
+.rpg-status-disabled { background-color: #A040A0; }
+.rpg-status-encored { background-color: #F85888; }
+.rpg-status-tormented { background-color: #705848; }
+.rpg-status-focused { background-color: #F08030; }
+.rpg-status-ingrained { background-color: #78C850; }
+.rpg-status-aquaring { background-color: #6890F0; }
+.rpg-status-levitating { background-color: #F8D030; }
+.rpg-status-telekinesis { background-color: #A040A0; }
+.rpg-status-grounded { background-color: #B8A038; }
+.rpg-status-embargo { background-color: #705848; }
+.rpg-status-healblock { background-color: #C03028; }
+.rpg-status-charged { background-color: #F8D030; }
+.rpg-status-stockpile { background-color: #A890F0; }
+.rpg-status-rampage { background-color: #C03028; }
+.rpg-status-recharge { background-color: #F8D030; }
+.rpg-status-protected { background-color: #4A90E2; }
+.rpg-status-redirecting { background-color: #D0021B; }
+.rpg-status-helped { background-color: #417505; }
+
+/* Weather/Terrain Tags */
+.rpg-weather-sun { background-color: #F8D030; }
+.rpg-weather-rain { background-color: #6890F0; }
+.rpg-weather-sand { background-color: #E0C068; }
+.rpg-weather-hail { background-color: #98D8D8; }
+.rpg-weather-harshsun { background-color: #FF8C00; }
+.rpg-weather-heavyrain { background-color: #0066CC; }
+.rpg-weather-strongwinds { background-color: #A0D0F0; }
+
+.rpg-terrain-electric { background-color: #F8D030; }
+.rpg-terrain-grassy { background-color: #78C850; }
+.rpg-terrain-misty { background-color: #EE99AC; }
+.rpg-terrain-psychic { background-color: #F85888; }
+
+/* Side Effects (Screens & Hazards) */
+.rpg-side-reflect { background-color: #A890F0; }
+.rpg-side-lightscreen { background-color: #F8D030; }
+.rpg-side-auroraveil { background-color: #98D8D8; }
+.rpg-side-quickguard { background-color: #F08030; }
+.rpg-side-wideguard { background-color: #6890F0; }
+.rpg-side-craftyshield { background-color: #F85888; }
+.rpg-side-stealthrock { background-color: #B8A038; }
+.rpg-side-spikes { background-color: #A8A878; }
+.rpg-side-toxicspikes { background-color: #A040A0; }
+.rpg-side-stickyweb { background-color: #705898; }
+
+/* Field Effects */
+.rpg-field-trickroom { background-color: #A040A0; }
+.rpg-field-magicroom { background-color: #F85888; }
+.rpg-field-wonderroom { background-color: #A890F0; }
+.rpg-field-gravity { background-color: #705848; }
+.rpg-field-mudsport { background-color: #E0C068; }
+.rpg-field-watersport { background-color: #6890F0; }
+.rpg-field-fairylock { background-color: #EE99AC; }
+.rpg-field-iondeluge { background-color: #F8D030; }
+
+/* HP/EXP Bars */
+.rpg-bar-container {
+	border-radius: 10px;
+	padding: 2px;
+	margin: 5px 0;
+	position: relative;
+}
+
+.rpg-bar {
+	height: 10px;
+	border-radius: 8px;
+	transition: width 0.3s ease;
+}
+
+.rpg-bar-text {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 10px;
+	line-height: 10px;
+	color: #000;
+	font-weight: 500;
+}
+
+.rpg-hp-high { background: green; }
+.rpg-hp-medium { background: yellow; }
+.rpg-hp-low { background: red; }
+.rpg-exp-bar { background: #6c9be8; }
+
+/* Battle HP Bar (Compact) */
+.rpg-battle-hp-container {
+	max-width: 120px;
+	height: 12px;
+	background: #f0f0f0;
+	border: 1px solid #aaa;
+	border-radius: 8px;
+	position: relative;
+	margin: 4px auto 0;
+}
+
+.rpg-battle-hp-bar {
+	height: 100%;
+	border-radius: 7px;
+	transition: width 0.3s ease;
+}
+
+.rpg-battle-hp-percent {
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: #b0b0b0;
+	color: #fff;
+	font-size: 9px;
+	font-weight: bold;
+	padding: 0 5px;
+	line-height: 12px;
+	height: 100%;
+	border-radius: 0 7px 7px 0;
+}
+
+/* Pokemon Cards */
+.rpg-card {
+	border: 1px solid #666;
+	padding: 10px;
+	margin: 8px 0;
+	border-radius: 8px;
+	background: #fff;
+	transition: box-shadow 0.2s ease;
+}
+
+.rpg-card:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.rpg-card-compact {
+	padding: 8px;
+	margin: 5px 0;
+}
+
+.rpg-card-battle {
+	padding: 10px;
+	margin: 5px;
+	border-radius: 5px;
+}
+
+.rpg-card-active {
+	border: 3px solid #28a745;
+}
+
+.rpg-card-target {
+	border: 3px dashed #007bff;
+}
+
+.rpg-card-empty {
+	border: 1px dashed #ccc;
+	opacity: 0.6;
+}
+
+.rpg-card-fainted {
+	opacity: 0.5;
+}
+
+/* Item Cards */
+.rpg-item-card {
+	border: 1px solid #ccc;
+	padding: 10px;
+	border-radius: 8px;
+	background: #fff;
+	transition: box-shadow 0.2s ease;
+}
+
+.rpg-item-card:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Battle Log */
+.rpg-battle-log {
+	padding: 10px;
+	margin: 8px 0;
+	border: 1px solid #666;
+	min-height: 50px;
+	max-height: 150px;
+	overflow-y: auto;
+	border-radius: 8px;
+	background: #fafafa;
+	line-height: 1.6;
+}
+
+.rpg-turn-separator {
+	text-align: center;
+	font-weight: bold;
+	margin: 8px 0;
+	padding: 4px 0;
+}
+
+/* Grid Layouts */
+.rpg-grid-2col {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	max-height: 300px;
+	overflow-y: auto;
+	padding: 4px;
+}
+
+.rpg-grid-3col {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+	padding: 4px;
+}
+
+/* Move Grid */
+.rpg-move-grid {
+	width: auto;
+	border-collapse: separate;
+	border-spacing: 8px;
+	margin: 15px auto;
+}
+
+.rpg-move-cell {
+	padding: 0;
+	vertical-align: top;
+}
+
+/* Field Conditions Container */
+.rpg-field-conditions {
+	padding: 10px;
+	margin: 8px 0;
+	max-height: 100px;
+	border: 1px solid #666;
+	border-radius: 8px;
+	text-align: center;
+	background: #fafafa;
+}
+
+/* Sprites */
+.rpg-sprite-container {
+	text-align: center;
+	margin: 8px 0;
+}
+
+/* Gender/Shiny Symbols */
+.rpg-shiny { color: #d4af37; }
+.rpg-male { color: #007bff; }
+.rpg-female { color: #f06292; }
+.rpg-tera { color: #FF1493; }
+
+/* Typography */
+.rpg-title {
+	font-size: 1.4em;
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.rpg-subtitle {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin: 8px 0;
+}
+
+.rpg-small-text {
+	font-size: 0.9em;
+	color: #666;
+}
+
+.rpg-tiny-text {
+	font-size: 0.75em;
+}
+
+/* Messages */
+.rpg-message-success {
+	color: #28a745;
+	font-weight: 500;
+}
+
+.rpg-message-error {
+	color: #dc3545;
+	font-weight: 500;
+}
+
+.rpg-message-warning {
+	color: #ff8c00;
+	font-weight: 500;
+}
+
+.rpg-message-info {
+	color: #6c757d;
+}
+
+/* Flexbox Utilities */
+.rpg-flex-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+}
+
+.rpg-flex-start {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.rpg-flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Scrollable Containers */
+.rpg-scroll-300 {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.rpg-scroll-400 {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+/* Borders */
+.rpg-border-light { border: 1px solid #ccc; }
+.rpg-border-medium { border: 1px solid #666; }
+.rpg-border-dashed { border: 1px dashed #ccc; }
+
+/* Spacing */
+.rpg-p-1 { padding: 4px; }
+.rpg-p-2 { padding: 8px; }
+.rpg-p-3 { padding: 12px; }
+.rpg-m-1 { margin: 4px; }
+.rpg-m-2 { margin: 8px; }
+.rpg-m-3 { margin: 12px; }
+.rpg-mt-1 { margin-top: 4px; }
+.rpg-mt-2 { margin-top: 8px; }
+.rpg-mb-1 { margin-bottom: 4px; }
+.rpg-mb-2 { margin-bottom: 8px; }
+
+/* Text Alignment */
+.rpg-text-center { text-align: center; }
+.rpg-text-left { text-align: left; }
+.rpg-text-right { text-align: right; }
+
+/* Float */
+.rpg-float-right { float: right; }
+
+/* Opacity */
+.rpg-opacity-50 { opacity: 0.5; }
+.rpg-opacity-60 { opacity: 0.6; }
+.rpg-opacity-90 { opacity: 0.9; }
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+.dark .rpg-btn {
+	background: #2a2a2a;
+	border-color: #444;
+	color: #e0e0e0;
+}
+
+.dark .rpg-btn:hover {
+	background: #353535;
+}
+
+.dark .rpg-btn-move {
+	background: #2a2a2a;
+	border-color: #444;
+	color: #e0e0e0;
+}
+
+.dark .rpg-btn-tera {
+	background: #2a2a2a;
+	border-color: #FF1493;
+}
+
+.dark .rpg-btn-sell {
+	background: #1e7e34;
+	border-color: #145523;
+}
+
+.dark .rpg-btn-sell:hover {
+	background: #28a745;
+}
+
+.dark .rpg-bar-text {
+	color: #fff;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.dark .rpg-battle-hp-container {
+	background: #2a2a2a;
+	border-color: #555;
+}
+
+.dark .rpg-battle-hp-percent {
+	background: #444;
+}
+
+.dark .rpg-card {
+	background: #1e1e1e;
+	border-color: #444;
+	color: #e0e0e0;
+}
+
+.dark .rpg-card:hover {
+	box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.dark .rpg-card-empty {
+	border-color: #444;
+}
+
+.dark .rpg-item-card {
+	background: #1e1e1e;
+	border-color: #444;
+	color: #e0e0e0;
+}
+
+.dark .rpg-item-card:hover {
+	box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.dark .rpg-battle-log {
+	background: #1e1e1e;
+	border-color: #444;
+	color: #e0e0e0;
+}
+
+.dark .rpg-field-conditions {
+	background: #1e1e1e;
+	border-color: #444;
+}
+
+.dark .rpg-small-text {
+	color: #999;
+}
+
+.dark .rpg-message-success {
+	color: #4ade80;
+}
+
+.dark .rpg-message-error {
+	color: #f87171;
+}
+
+.dark .rpg-message-warning {
+	color: #fbbf24;
+}
+
+.dark .rpg-message-info {
+	color: #94a3b8;
+}

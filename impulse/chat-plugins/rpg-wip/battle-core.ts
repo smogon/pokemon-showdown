@@ -593,11 +593,11 @@ export function calculateDamage(
 	};
 
 	if (move.flags.powder && defenderSpecies.types.includes('Grass')) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false };
+		return { damage: 0, message: ` <i class="rpg-message-info">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false };
 	}
 	const immunityCheck = RPGAbilities.checkImmunity(abilityContext);
 	if (immunityCheck?.immune) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false };
+		return { damage: 0, message: ` <i class="rpg-message-info">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false };
 	}
 
 	if (!move.basePower) {
@@ -612,14 +612,14 @@ export function calculateDamage(
 		if (moveId === 'superfang') {
 			return { damage: Math.floor(defender.hp / 2), message: '', effectiveness: 1, isCritical: false };
 		}
-		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false };
+		return { damage: 0, message: ` <i class="rpg-message-info">But it had no effect!</i>`, effectiveness: 1, isCritical: false };
 	}
 
 	let basePower = RPGMoves.getDamageBasePower(move, attacker, defender, attackerSlot, defenderSlot, battle);
 	if (basePower === -1) {
 		const healAmount = Math.floor(defender.maxHp * 0.25);
 		defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
-		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false };
+		return { damage: 0, message: ` <i class="rpg-message-info">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false };
 	}
 
 	const moveType = getMoveType(move, attacker, battle, abilityContext);
@@ -724,10 +724,10 @@ export function calculateDamage(
 	damage = Math.max(1, damage);
 
 	let message = "";
-	if (isCritical) message += ` <i style="color: #28a745;">A critical hit!</i>`;
-	if (effectiveness > 1) message += ` <i style="color: #28a745;">It's super effective!</i>`;
-	if (effectiveness < 1 && effectiveness > 0) message += ` <i style="color: #d9534f;">It's not very effective...</i>`;
-	if (effectiveness === 0) message = ` <i style="color: #6c757d;">It had no effect on ${defender.species}!</i>`;
+	if (isCritical) message += ` <i class="rpg-message-success">A critical hit!</i>`;
+	if (effectiveness > 1) message += ` <i class="rpg-message-success">It's super effective!</i>`;
+	if (effectiveness < 1 && effectiveness > 0) message += ` <i class="rpg-message-error">It's not very effective...</i>`;
+	if (effectiveness === 0) message = ` <i class="rpg-message-info">It had no effect on ${defender.species}!</i>`;
 
 	return { damage, message, effectiveness, berryConsumed, isCritical };
 }
@@ -1305,8 +1305,8 @@ export function handleDamagingMove(
 
 	if (totalHits > 1) {
 		const hitMessage = hasParentalBond ?
-			` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
-			` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
+			` <i class="rpg-message-info">(Parental Bond hit twice!)</i>` :
+			` <i class="rpg-message-info">(It hit ${totalHits} times!)</i>`;
 		if (messageLog.length > 0) {
 			messageLog[messageLog.length - 1] += hitMessage;
 		} else {

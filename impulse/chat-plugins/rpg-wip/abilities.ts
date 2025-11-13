@@ -1467,7 +1467,7 @@ export const STATUS_INTERACTION_ABILITIES: Record<string, {
 			if (pokemon.hp < pokemon.maxHp) {
 				const healAmount = Math.max(1, Math.floor(pokemon.maxHp / 8));
 				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
+				messageLog.push(`<span class="rpg-message-success"><strong>${pokemon.species}</strong> was healed by its Poison Heal!</span>`);
 			}
 		},
 	},
