@@ -6845,4 +6845,498 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+	// Touhou
+
+	reimuhakurei: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	marisakirisame: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rumia: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	daiyousei: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cirno: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cirnotanned: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hongmeiling: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	koakuma: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	patchouliknowledge: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sakuyaizayoi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	remiliascarlet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	flandrescarlet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lettywhiterock: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chen: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	alicemargatroid: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lilywhite: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lunasaprismriver: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	merlinprismriver: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lyricaprismriver: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	youmukonpaku: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yuyukosaigyouji: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ranyakumo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yukariyakumo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	suikaibuki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wrigglenightbug: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mystialorelei: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	keine: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tewiinaba: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	reiseninaba: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eirinyagokoro: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kaguyahouraisan: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	fujiwaranomokou: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ayashameimaru: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	medicinemelancholy: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yuukakazami: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	komachionozuka: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eikishiki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	shizuhaaki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	minorikoaki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hinakagiyama: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nitorikawashiro: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	momijiinubashiri: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sanaekochiya: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kanakoyasaka: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	suwakomoriya: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ikunagae: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tenshihinanawi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kisume: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yamamekurodani: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	parseemizuhashi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yuugihoshiguma: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	satorikomeiji: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rinkaenbyou: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	utsuhoreiuji: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	koishikomeiji: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nazrin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kogasatatara: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ichirinkumoi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ichirinunzan: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	minamitsumurasa: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	shoutoramaru: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	byakurenhijiri: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nuehoujuu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hatatehimekaidou: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sunnymilk: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lunachild: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	starsapphire: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kyoukokasodani: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yoshikamiyako: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	seigakaku: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	soganotojiko: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mononobenofuto: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toyosatomiminomiko: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mamizoufutatsuiwa: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kasenibaraki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hatanokokoro: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wakasagihime: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sekibanki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kagerouimaizumi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	benbentsukumo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yatsuhashitsukumo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	seijakijin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	shinmyoumarusukuna: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	raikohorikawa: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sumirekousami: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	seiran: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ringo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	doremysweet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sagumekishin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	clownpiece: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	junko: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hecatiaotherworld: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	joonyorigami: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	shionyorigami: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eternitylarva: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nemunosakata: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	aunnkomano: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	narumiyatadera: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	maiteireida: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	satononishida: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	okinamatara: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eikaebisu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	urumiushizaki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kutakaniwatari: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yachiekicchou: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mayumijoutouguu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	keikihaniyasushin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sakikurokuma: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yuumatoutetsu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mikegotoukuji: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	takaneyamashiro: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sannyokomakusa: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	misumarutamatsukuri: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tsukasakudamaki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	megumuiizunamaru: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chimatatenkyuu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	momoyohimemushi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sonbiten: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	enokomitsugashira: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chiyaritenkajin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hisamiyomotsu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zanmunippaku: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	vivit: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 };
