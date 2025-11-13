@@ -2938,7 +2938,7 @@ export const commands: ChatCommands = {
 
 				this.popupReply(`|html|${confirmHTML}`);
 
-				if (room?.roomid !== 'lobby') {
+				if (room && room.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
 				}
 			}
