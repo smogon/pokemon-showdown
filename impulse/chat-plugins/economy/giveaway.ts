@@ -25,12 +25,87 @@ interface Giveaway {
 	winnerId?: string;
 	winnerName?: string;
 	endedAt?: Date;
+	duration?: number; // Duration in minutes
+	timer?: NodeJS.Timeout; // Timer for auto-end
+}
+
+interface GiveawayConfig {
+	_id?: unknown;
+	roomid: string;
+	defaultDuration: number; // Default duration in minutes
 }
 
 const GiveawayDB = ImpulseDB<Giveaway>('giveaways');
+const GiveawayConfigDB = ImpulseDB<GiveawayConfig>('giveaway_config');
 
 // Store active giveaways by room
 const activeGiveaways = new Map<string, Giveaway>();
+
+// Helper function to get room's default duration
+async function getRoomDefaultDuration(roomid: string): Promise<number> {
+	const config = await GiveawayConfigDB.findOne({ roomid });
+	return config?.defaultDuration || 5; // Default 5 minutes if not configured
+}
+
+// Helper function to end a giveaway
+async function endGiveaway(roomid: string, room: Room): Promise<void> {
+	const giveaway = activeGiveaways.get(roomid);
+	if (!giveaway) return;
+
+	if (giveaway.participants.length === 0) {
+		activeGiveaways.delete(roomid);
+		room.add(`|html|<div class="infobox" style="border: 2px solid #f44336; padding: 15px;"><center><strong>Giveaway ended with no participants!</strong></center></div>`).update();
+		return;
+	}
+
+	// Pick a random winner
+	const randomIndex = Math.floor(Math.random() * giveaway.participants.length);
+	const winner = giveaway.participants[randomIndex];
+
+	// Award the prize
+	await Economy.updateBalance(winner.userid, giveaway.prize);
+
+	// Update giveaway data
+	giveaway.active = false;
+	giveaway.winnerId = winner.userid;
+	giveaway.winnerName = winner.username;
+	giveaway.endedAt = new Date();
+
+	// Clear timer if exists
+	if (giveaway.timer) {
+		clearTimeout(giveaway.timer);
+	}
+
+	// Save to database
+	await GiveawayDB.insertOne(giveaway);
+
+	// Remove from active giveaways
+	activeGiveaways.delete(roomid);
+
+	// Announce the winner
+	const html = `<div class="infobox" style="border: 2px solid #FFD700; padding: 15px; margin: 10px 0;">` +
+		`<center>` +
+		`<h2 style="color: #FFD700; margin: 10px 0;">🏆 GIVEAWAY WINNER! 🏆</h2>` +
+		`<p style="font-size: 18px; margin: 15px 0;">` +
+		`<strong>Winner:</strong> ${nameColor(winner.username, true, true)}` +
+		`</p>` +
+		`<p style="font-size: 16px; margin: 10px 0;">` +
+		`<strong>Prize Won:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}` +
+		`</p>` +
+		`<p style="font-size: 14px; color: #666; margin-top: 15px;">` +
+		`Total Participants: ${giveaway.participants.length}` +
+		`</p>` +
+		`</center>` +
+		`</div>`;
+
+	room.add(`|html|${html}`).update();
+
+	// Notify the winner
+	const winnerUser = Users.get(winner.userid);
+	if (winnerUser) {
+		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #FFD700; padding: 20px;"><center><h2 style="color: #FFD700;">🎉 Congratulations! 🎉</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}</strong></p></center></div>`);
+	}
+}
 
 export const commands: Chat.ChatCommands = {
 	giveaway: {
@@ -38,8 +113,8 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/help giveaway');
 		},
 
-		start(target, room, user) {
-			this.checkCan('roommod');
+		async start(target, room, user) {
+			this.checkCan('roomowner');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("Giveaways can only be started in chat rooms.");
@@ -52,11 +127,17 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("There is already an active giveaway in this room. End it first with /giveaway end.");
 			}
 
-			const prizeStr = target.trim();
+			const [prizeStr, durationStr] = target.split(',').map(s => s.trim());
 			const prize = parseInt(prizeStr);
+			const defaultDuration = await getRoomDefaultDuration(roomid);
+			const duration = durationStr ? parseInt(durationStr) : defaultDuration;
 
 			if (!prizeStr || isNaN(prize) || prize <= 0) {
-				return this.errorReply("Specify a valid prize amount. Usage: /giveaway start [amount]");
+				return this.errorReply("Specify a valid prize amount. Usage: /giveaway start [amount], [duration in minutes]");
+			}
+
+			if (isNaN(duration) || duration < 1 || duration > 60) {
+				return this.errorReply("Duration must be between 1 and 60 minutes.");
 			}
 
 			// Create the giveaway
@@ -68,7 +149,13 @@ export const commands: Chat.ChatCommands = {
 				participants: [],
 				startedAt: new Date(),
 				active: true,
+				duration,
 			};
+
+			// Set up auto-end timer
+			giveaway.timer = setTimeout(async () => {
+				await endGiveaway(roomid, room);
+			}, duration * 60 * 1000); // Convert minutes to milliseconds
 
 			activeGiveaways.set(roomid, giveaway);
 
@@ -78,7 +165,8 @@ export const commands: Chat.ChatCommands = {
 				`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY STARTED! 🎉</h2>` +
 				`<p style="font-size: 16px; margin: 10px 0;">` +
 				`<strong>Host:</strong> ${nameColor(user.name, true, true)}<br />` +
-				`<strong>Prize:</strong> ${Economy.formatMoney(prize)} ${CURRENCY.name}` +
+				`<strong>Prize:</strong> ${Economy.formatMoney(prize)} ${CURRENCY.name}<br />` +
+				`<strong>Duration:</strong> ${duration} minute${duration !== 1 ? 's' : ''}` +
 				`</p>` +
 				`<p style="font-size: 14px; margin: 15px 0;">` +
 				`Click the button below to join!` +
@@ -94,7 +182,7 @@ export const commands: Chat.ChatCommands = {
 				`</div>`;
 
 			room.add(`|html|${html}`).update();
-			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)}`);
+			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)} (${duration} min)`);
 		},
 
 		join(target, room, user) {
@@ -123,12 +211,14 @@ export const commands: Chat.ChatCommands = {
 			});
 
 			// Update the giveaway display
+			const timeRemaining = giveaway.duration ? giveaway.duration : 0;
 			const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 				`<center>` +
 				`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY ACTIVE! 🎉</h2>` +
 				`<p style="font-size: 16px; margin: 10px 0;">` +
 				`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
-				`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}` +
+				`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}<br />` +
+				`<strong>Duration:</strong> ${timeRemaining} minute${timeRemaining !== 1 ? 's' : ''}` +
 				`</p>` +
 				`<p style="font-size: 14px; margin: 15px 0;">` +
 				`Click the button below to join!` +
@@ -150,7 +240,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async end(target, room, user): Promise<void> {
-			this.checkCan('roommod');
+			this.checkCan('roomowner');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("Giveaways can only be ended in chat rooms.");
@@ -163,60 +253,14 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("There is no active giveaway in this room.");
 			}
 
-			if (giveaway.participants.length === 0) {
-				activeGiveaways.delete(roomid);
-				room.add(`|html|<div class="infobox" style="border: 2px solid #f44336; padding: 15px;"><center><strong>Giveaway ended with no participants!</strong></center></div>`).update();
-				return;
-			}
+			// Use the helper function to end the giveaway
+			await endGiveaway(roomid, room);
 
-			// Pick a random winner
-			const randomIndex = Math.floor(Math.random() * giveaway.participants.length);
-			const winner = giveaway.participants[randomIndex];
-
-			// Award the prize
-			await Economy.updateBalance(winner.userid, giveaway.prize);
-
-			// Update giveaway data
-			giveaway.active = false;
-			giveaway.winnerId = winner.userid;
-			giveaway.winnerName = winner.username;
-			giveaway.endedAt = new Date();
-
-			// Save to database
-			await GiveawayDB.insertOne(giveaway);
-
-			// Remove from active giveaways
-			activeGiveaways.delete(roomid);
-
-			// Announce the winner
-			const html = `<div class="infobox" style="border: 2px solid #FFD700; padding: 15px; margin: 10px 0;">
-				<center>
-					<h2 style="color: #FFD700; margin: 10px 0;">🏆 GIVEAWAY WINNER! 🏆</h2>
-					<p style="font-size: 18px; margin: 15px 0;">
-						<strong>Winner:</strong> ${nameColor(winner.username, true, true)}
-					</p>
-					<p style="font-size: 16px; margin: 10px 0;">
-						<strong>Prize Won:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}
-					</p>
-					<p style="font-size: 14px; color: #666; margin-top: 15px;">
-						Total Participants: ${giveaway.participants.length}
-					</p>
-				</center>
-			</div>`;
-
-			room.add(`|html|${html}`).update();
-
-			// Notify the winner
-			const winnerUser = Users.get(winner.userid);
-			if (winnerUser) {
-				winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #FFD700; padding: 20px;"><center><h2 style="color: #FFD700;">🎉 Congratulations! 🎉</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}</strong></p></center></div>`);
-			}
-
-			this.modlog('GIVEAWAY', winner.userid, `won the giveaway of ${Economy.formatMoney(giveaway.prize)}`);
+			this.modlog('GIVEAWAY', null, 'manually ended the giveaway');
 		},
 
 		cancel(target, room, user) {
-			this.checkCan('roommod');
+			this.checkCan('roomowner');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("There is no giveaway to cancel in this context.");
@@ -227,6 +271,11 @@ export const commands: Chat.ChatCommands = {
 
 			if (!giveaway) {
 				return this.errorReply("There is no active giveaway in this room.");
+			}
+
+			// Clear timer if exists
+			if (giveaway.timer) {
+				clearTimeout(giveaway.timer);
 			}
 
 			// Remove the giveaway
@@ -282,18 +331,56 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReplyBox(`<strong>Recent Giveaway History (Last ${limit}):</strong><br /><br />${historyList}`);
 		},
+
+		async setduration(target, room, user): Promise<void> {
+			this.checkCan('roomowner');
+
+			if (!room || room.roomid === 'global') {
+				return this.errorReply("You must be in a chat room to configure giveaway settings.");
+			}
+
+			const duration = parseInt(target.trim());
+
+			if (!target || isNaN(duration) || duration < 1 || duration > 60) {
+				return this.errorReply("Specify a valid duration between 1 and 60 minutes. Usage: /giveaway setduration [minutes]");
+			}
+
+			const roomid = room.roomid;
+
+			// Update or insert the configuration
+			await GiveawayConfigDB.upsert(
+				{ roomid },
+				{ $set: { roomid, defaultDuration: duration } }
+			);
+
+			this.sendReplyBox(`Default giveaway duration for this room has been set to ${duration} minute${duration !== 1 ? 's' : ''}.`);
+			this.modlog('GIVEAWAY CONFIG', null, `set default duration to ${duration} minutes`);
+		},
+
+		async getduration(target, room, user): Promise<void> {
+			if (!room || room.roomid === 'global') {
+				return this.errorReply("You must be in a chat room to view giveaway settings.");
+			}
+
+			const roomid = room.roomid;
+			const defaultDuration = await getRoomDefaultDuration(roomid);
+
+			this.sendReplyBox(`Default giveaway duration for this room is ${defaultDuration} minute${defaultDuration !== 1 ? 's' : ''}.`);
+		},
 	},
 
 	giveawayhelp: {
 		''() {
 			this.sendReplyBox(
 				`<strong>Giveaway Commands:</strong><br />` +
-				`<code>/giveaway start [amount]</code> - Start a giveaway with the specified prize amount (Requires: & or higher)<br />` +
+				`<code>/giveaway start [amount], [duration]</code> - Start a giveaway with the specified prize amount and optional duration in minutes (Requires: # or higher)<br />` +
 				`<code>/giveaway join</code> - Join an active giveaway<br />` +
-				`<code>/giveaway end</code> - End the giveaway and pick a random winner (Requires: & or higher)<br />` +
-				`<code>/giveaway cancel</code> - Cancel the active giveaway (Requires: & or higher)<br />` +
+				`<code>/giveaway end</code> - Manually end the giveaway and pick a random winner (Requires: # or higher)<br />` +
+				`<code>/giveaway cancel</code> - Cancel the active giveaway (Requires: # or higher)<br />` +
 				`<code>/giveaway participants</code> - View all participants in the current giveaway<br />` +
-				`<code>/giveaway history</code> - View recent giveaway history<br />`
+				`<code>/giveaway history</code> - View recent giveaway history<br />` +
+				`<code>/giveaway setduration [minutes]</code> - Set the default auto-end duration for giveaways in this room (1-60 minutes, Requires: # or higher)<br />` +
+				`<code>/giveaway getduration</code> - View the current default auto-end duration for this room<br />`
 			);
 		},
 	},
