@@ -162,9 +162,6 @@ export function generatePokemonInfoHTML(
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
 		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">EXP: ${expProgress}/${expNeededForLevel}</div></div>`;
-	} else {
-		// Add placeholder div with same height for opponent to maintain consistent container size
-		expBarHTML = `<div style="height: 24px; margin: 5px 0;"></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
