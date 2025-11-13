@@ -265,7 +265,8 @@ export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	isDoubleBattle: boolean,
-	ownerName?: string // <-- NEW PARAMETER
+	ownerName?: string,
+	battle?: BattleState // <-- NEW PARAMETER for battle conditions
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
@@ -349,7 +350,17 @@ export function generateSharedBattlePokemonInfo(
 		'</span>' +
 		'</div>';
 
-	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
+	// Add weather, terrain, and field effect tags if battle is provided
+	let battleConditionTags = '';
+	if (battle) {
+		const weatherTags = generateWeatherTags(battle);
+		const terrainTags = generateTerrainTags(battle);
+		const fieldEffectTags = generateFieldEffectTags(battle);
+		const sideEffectTags = generateSideEffectTags(battle, isPlayerSide ? 'player' : 'opponent');
+		battleConditionTags = [weatherTags, terrainTags, fieldEffectTags, sideEffectTags].filter(Boolean).join('');
+	}
+
+	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags + battleConditionTags;
 	const statusDisplay = allStatusTags || '&nbsp;'; // Non-breaking space for height
 
 	if (isDoubleBattle) {
@@ -397,8 +408,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
 	const craftyShield = (side === 'player') ? battle.playerCraftyShield : battle.opponentCraftyShield;
 
-	// Style to roughly match the <h3> text size
-	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	// Style to match other status condition tags
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
 
 	if (reflectTurns > 0) effects.push('<span style="background-color: #A890F0; ' + tagStyle + '">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span style="background-color: #F8D030; ' + tagStyle + '">Light Screen</span>');
@@ -414,7 +425,104 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	if (toxicSpikes > 0) effects.push('<span style="background-color: #A040A0; ' + tagStyle + '">TSP ' + String(toxicSpikes) + '</span>');
 	if (hazards.includes('stickyweb')) effects.push('<span style="background-color: #705898; ' + tagStyle + '">Web</span>');
 
-	return effects.join(' ');
+	return effects.join('');
+}
+
+/**
+ * Generates HTML tags for weather effects
+ */
+function generateWeatherTags(battle: BattleState): string {
+	if (!battle.weather) return '';
+	
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const weatherColors: Record<string, string> = {
+		'sun': '#F8D030',
+		'rain': '#6890F0',
+		'sand': '#E0C068',
+		'hail': '#98D8D8',
+		'harsh-sun': '#FF8C00',
+		'heavy-rain': '#0066CC',
+		'strong-winds': '#A0D0F0',
+	};
+	
+	const weatherNames: Record<string, string> = {
+		'sun': 'Sunny',
+		'rain': 'Rain',
+		'sand': 'Sandstorm',
+		'hail': 'Hail',
+		'harsh-sun': 'Harsh Sun',
+		'heavy-rain': 'Heavy Rain',
+		'strong-winds': 'Strong Winds',
+	};
+	
+	const color = weatherColors[battle.weather.type] || '#999';
+	const name = weatherNames[battle.weather.type] || battle.weather.type;
+	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
+	
+	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
+}
+
+/**
+ * Generates HTML tags for terrain effects
+ */
+function generateTerrainTags(battle: BattleState): string {
+	if (!battle.terrain) return '';
+	
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	const terrainColors: Record<string, string> = {
+		'electric': '#F8D030',
+		'grassy': '#78C850',
+		'misty': '#EE99AC',
+		'psychic': '#F85888',
+	};
+	
+	const terrainNames: Record<string, string> = {
+		'electric': 'Electric Terrain',
+		'grassy': 'Grassy Terrain',
+		'misty': 'Misty Terrain',
+		'psychic': 'Psychic Terrain',
+	};
+	
+	const color = terrainColors[battle.terrain.type] || '#999';
+	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
+	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
+	
+	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
+}
+
+/**
+ * Generates HTML tags for global field effects (rooms, gravity, etc.)
+ */
+function generateFieldEffectTags(battle: BattleState): string {
+	const effects: string[] = [];
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
+	
+	if (battle.trickRoomTurns > 0) {
+		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
+	}
+	if (battle.magicRoomTurns > 0) {
+		effects.push(`<span style="background-color: #F85888; ${tagStyle}">Magic Room (${battle.magicRoomTurns})</span>`);
+	}
+	if (battle.wonderRoomTurns > 0) {
+		effects.push(`<span style="background-color: #A890F0; ${tagStyle}">Wonder Room (${battle.wonderRoomTurns})</span>`);
+	}
+	if (battle.gravityTurns > 0) {
+		effects.push(`<span style="background-color: #705848; ${tagStyle}">Gravity (${battle.gravityTurns})</span>`);
+	}
+	if (battle.mudSportTurns > 0) {
+		effects.push(`<span style="background-color: #E0C068; ${tagStyle}">Mud Sport (${battle.mudSportTurns})</span>`);
+	}
+	if (battle.waterSportTurns > 0) {
+		effects.push(`<span style="background-color: #6890F0; ${tagStyle}">Water Sport (${battle.waterSportTurns})</span>`);
+	}
+	if (battle.fairyLockTurns > 0) {
+		effects.push(`<span style="background-color: #EE99AC; ${tagStyle}">Fairy Lock (${battle.fairyLockTurns})</span>`);
+	}
+	if (battle.ionDelugeTurns > 0) {
+		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
+	}
+	
+	return effects.join('');
 }
 
 export function generateSingleBattleHTML(
@@ -584,10 +692,10 @@ export function generateSingleBattleHTML(
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName) +
+		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
 		'</td>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) +
+		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
 		'</td>' +
 		'</tr>' +
 		'</table>' +
@@ -647,7 +755,7 @@ export function generateDoubleBattleHTML(
 		}
 
 		if (slot.pokemon.hp <= 0) {
-			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>';
+			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
 		}
 
 		let borderStyle = "1px solid #ccc";
@@ -658,7 +766,7 @@ export function generateDoubleBattleHTML(
 			borderStyle = "3px solid #28a745";
 		}
 
-		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>';
+		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
 	};
 
 	let html = '<div class="infobox">';
