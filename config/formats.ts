@@ -415,7 +415,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] A Golden Experience",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'Moody', 'Power Construct', 'King\'s Rock',
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
@@ -423,11 +423,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 		teambuilderFormat: 'National Dex',
 	},
-	{
+	/*{
 		name: "[Gen 9] A Golden Experience UU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'Moody', 'Power Construct', 'King\'s Rock',
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
@@ -440,7 +440,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] A Golden Experience RU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'Moody', 'Power Construct', 'King\'s Rock',
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
@@ -453,7 +453,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] A Golden Experience NU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'Moody', 'Power Construct', 'King\'s Rock',
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
@@ -467,7 +467,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] A Golden Experience PU",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'Uber', 'AG', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'Moody', 'Power Construct', 'King\'s Rock',
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
@@ -483,7 +483,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'agoldenexperience',
 		gameType: 'doubles',
 		teambuilderFormat: 'National Dex Doubles',
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Dynamax Clause', /*'Data Mod', 'Mega Data Mod'*/, 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: [
 			'DUber', 'Commander', 'Power Construct', 'Coaching', 'Dark Void', 'Swagger',
 		],
@@ -493,7 +493,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
 		mod: 'toho',
-		ruleset: ['Standard NatDex', 'Terastal Clause', /*'Data Mod', 'Mega Data Mod',*/ 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
 		unbanlist: ['Light of Ruin'],
 		teambuilderFormat: 'National Dex',
@@ -511,7 +511,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `2hu`,
 		mod: 'toho',
 		gameType: 'doubles',
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'/*'Data Mod', 'Mega Data Mod'*/],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
 		banlist: [],
 		unbanlist: [],
 		teambuilderFormat: 'National Dex',
@@ -523,7 +523,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
 		},
-	},
+	},*/
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
