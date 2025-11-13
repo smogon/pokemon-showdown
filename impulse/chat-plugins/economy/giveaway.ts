@@ -43,13 +43,13 @@ const activeGiveaways = new Map<string, Giveaway>();
 
 // Helper function to generate giveaway display HTML
 function generateGiveawayHTML(giveaway: Giveaway): string {
-	const durationText = giveaway.duration ? 
-		`${giveaway.duration} minute${giveaway.duration !== 1 ? 's' : ''}` : 
+	const durationText = giveaway.duration ?
+		`${giveaway.duration} minute${giveaway.duration !== 1 ? 's' : ''}` :
 		'Manual (no auto-end)';
-	
+
 	return `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY ACTIVE! 🎉</h2>` +
+		`<h2 style="margin: 10px 0;">GIVEAWAY ACTIVE!</h2>` +
 		`<p style="font-size: 16px; margin: 10px 0;">` +
 		`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
 		`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}<br />` +
@@ -59,10 +59,10 @@ function generateGiveawayHTML(giveaway: Giveaway): string {
 		`Click the button below to join!` +
 		`</p>` +
 		`<button class="button" name="send" value="/giveaway join" ` +
-		`style="background-color: #4CAF50; color: white; font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
+		`style="font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
 		`Join Giveaway` +
 		`</button>` +
-		`<p style="font-size: 12px; margin-top: 15px; color: #666;">` +
+		`<p style="font-size: 12px; margin-top: 15px;">` +
 		`Participants: <strong>${giveaway.participants.length}</strong>` +
 		`</p>` +
 		`</center>` +
@@ -113,14 +113,14 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	// Announce the winner
 	const html = `<div class="infobox" style="border: 2px solid #FFD700; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #FFD700; margin: 10px 0;">🏆 GIVEAWAY WINNER! 🏆</h2>` +
+		`<h2 style="margin: 10px 0;">GIVEAWAY WINNER!</h2>` +
 		`<p style="font-size: 18px; margin: 15px 0;">` +
 		`<strong>Winner:</strong> ${nameColor(winner.username, true, true)}` +
 		`</p>` +
 		`<p style="font-size: 16px; margin: 10px 0;">` +
 		`<strong>Prize Won:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}` +
 		`</p>` +
-		`<p style="font-size: 14px; color: #666; margin-top: 15px;">` +
+		`<p style="font-size: 14px; margin-top: 15px;">` +
 		`Total Participants: ${giveaway.participants.length}` +
 		`</p>` +
 		`</center>` +
@@ -131,7 +131,7 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	// Notify the winner
 	const winnerUser = Users.get(winner.userid);
 	if (winnerUser) {
-		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #FFD700; padding: 20px;"><center><h2 style="color: #FFD700;">🎉 Congratulations! 🎉</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}</strong></p></center></div>`);
+		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #FFD700; padding: 20px;"><center><h2>Congratulations!</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}</strong></p></center></div>`);
 	}
 }
 
