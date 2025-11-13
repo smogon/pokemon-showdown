@@ -6,6 +6,7 @@
 import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
+import { generateThemedTable } from '../../utils';
 
 interface GiveawayParticipant {
 	userid: string;
@@ -130,14 +131,24 @@ export const commands: Chat.ChatCommands = {
 			const [prizeStr, durationStr] = target.split(',').map(s => s.trim());
 			const prize = parseInt(prizeStr);
 			const defaultDuration = await getRoomDefaultDuration(roomid);
-			const duration = durationStr ? parseInt(durationStr) : defaultDuration;
 
-			if (!prizeStr || isNaN(prize) || prize <= 0) {
-				return this.errorReply("Specify a valid prize amount. Usage: /giveaway start [amount], [duration in minutes]");
+			// Check if manual mode is requested (duration = 0 or "manual")
+			let duration: number | undefined;
+			let isManual = false;
+
+			if (durationStr && (durationStr.toLowerCase() === 'manual' || durationStr === '0')) {
+				isManual = true;
+				duration = undefined;
+			} else {
+				duration = durationStr ? parseInt(durationStr) : defaultDuration;
 			}
 
-			if (isNaN(duration) || duration < 1 || duration > 60) {
-				return this.errorReply("Duration must be between 1 and 60 minutes.");
+			if (!prizeStr || isNaN(prize) || prize <= 0) {
+				return this.errorReply("Specify a valid prize amount. Usage: /giveaway start [amount], [duration in minutes or 'manual']");
+			}
+
+			if (!isManual && (isNaN(duration!) || duration! < 1 || duration! > 60)) {
+				return this.errorReply("Duration must be between 1 and 60 minutes, or 'manual' for manual-only ending.");
 			}
 
 			// Create the giveaway
@@ -152,21 +163,24 @@ export const commands: Chat.ChatCommands = {
 				duration,
 			};
 
-			// Set up auto-end timer
-			giveaway.timer = setTimeout(async () => {
-				await endGiveaway(roomid, room);
-			}, duration * 60 * 1000); // Convert minutes to milliseconds
+			// Set up auto-end timer only if not manual
+			if (!isManual && duration) {
+				giveaway.timer = setTimeout(() => {
+					void endGiveaway(roomid, room);
+				}, duration * 60 * 1000); // Convert minutes to milliseconds
+			}
 
 			activeGiveaways.set(roomid, giveaway);
 
 			// Display the giveaway announcement with Join button
+			const durationText = isManual ? 'Manual (no auto-end)' : `${duration} minute${duration !== 1 ? 's' : ''}`;
 			const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 				`<center>` +
 				`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY STARTED! 🎉</h2>` +
 				`<p style="font-size: 16px; margin: 10px 0;">` +
 				`<strong>Host:</strong> ${nameColor(user.name, true, true)}<br />` +
 				`<strong>Prize:</strong> ${Economy.formatMoney(prize)} ${CURRENCY.name}<br />` +
-				`<strong>Duration:</strong> ${duration} minute${duration !== 1 ? 's' : ''}` +
+				`<strong>Duration:</strong> ${durationText}` +
 				`</p>` +
 				`<p style="font-size: 14px; margin: 15px 0;">` +
 				`Click the button below to join!` +
@@ -182,7 +196,7 @@ export const commands: Chat.ChatCommands = {
 				`</div>`;
 
 			room.add(`|html|${html}`).update();
-			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)} (${duration} min)`);
+			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)} (${isManual ? 'manual' : `${duration} min`})`);
 		},
 
 		join(target, room, user) {
@@ -371,17 +385,30 @@ export const commands: Chat.ChatCommands = {
 
 	giveawayhelp: {
 		''() {
-			this.sendReplyBox(
-				`<strong>Giveaway Commands:</strong><br />` +
-				`<code>/giveaway start [amount], [duration]</code> - Start a giveaway with the specified prize amount and optional duration in minutes (Requires: # or higher)<br />` +
-				`<code>/giveaway join</code> - Join an active giveaway<br />` +
-				`<code>/giveaway end</code> - Manually end the giveaway and pick a random winner (Requires: # or higher)<br />` +
-				`<code>/giveaway cancel</code> - Cancel the active giveaway (Requires: # or higher)<br />` +
-				`<code>/giveaway participants</code> - View all participants in the current giveaway<br />` +
-				`<code>/giveaway history</code> - View recent giveaway history<br />` +
-				`<code>/giveaway setduration [minutes]</code> - Set the default auto-end duration for giveaways in this room (1-60 minutes, Requires: # or higher)<br />` +
-				`<code>/giveaway getduration</code> - View the current default auto-end duration for this room<br />`
-			);
+			if (!this.runBroadcast()) return;
+
+			const headerRow = ['Command', 'Description', 'Required Rank'];
+			const dataRows = [
+				[
+					'<code>/giveaway start [amount], [duration]</code>',
+					'Start a giveaway with the specified prize amount and optional duration in minutes (or "manual" for no auto-end)',
+					'# or higher',
+				],
+				['<code>/giveaway join</code>', 'Join an active giveaway', 'None'],
+				['<code>/giveaway end</code>', 'Manually end the giveaway and pick a random winner', '# or higher'],
+				['<code>/giveaway cancel</code>', 'Cancel the active giveaway without picking a winner', '# or higher'],
+				['<code>/giveaway participants</code>', 'View all participants in the current giveaway', 'None'],
+				['<code>/giveaway history</code>', 'View recent giveaway history (broadcastable)', 'None'],
+				[
+					'<code>/giveaway setduration [minutes]</code>',
+					'Set the default auto-end duration for giveaways in this room (1-60 minutes)',
+					'# or higher',
+				],
+				['<code>/giveaway getduration</code>', 'View the current default auto-end duration for this room', 'None'],
+			];
+
+			const tableHtml = generateThemedTable('Giveaway Commands', headerRow, dataRows);
+			this.sendReplyBox(tableHtml);
 		},
 	},
 };
