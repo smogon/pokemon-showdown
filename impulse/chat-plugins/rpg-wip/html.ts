@@ -15,6 +15,58 @@ import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
 /**
+ * Reverses battle logs by turn while keeping logs within each turn in chronological order
+ * Turn headers remain with their respective turn logs
+ * @param battleLog - Array of battle log strings
+ * @returns Processed log with turns reversed but messages within turns in order
+ */
+function reverseBattleLogByTurns(battleLog: string[]): string[] {
+	if (battleLog.length === 0) return [];
+	
+	// Split logs into turns based on turn headers
+	const turns: string[][] = [];
+	let currentTurn: string[] = [];
+	
+	// Battle logs are stored with turn header at the END of each turn's messages
+	// We need to group them properly
+	for (let i = 0; i < battleLog.length; i++) {
+		const log = battleLog[i];
+		
+		// Check if this is a turn header
+		if (log.includes('<strong>Turn ') && log.includes('</strong>')) {
+			// This is a turn header - it belongs at the START of the previous messages
+			if (currentTurn.length > 0) {
+				// Add the turn header at the beginning of current turn
+				currentTurn.unshift(log);
+				turns.push(currentTurn);
+				currentTurn = [];
+			} else {
+				// First item is a turn header
+				currentTurn.push(log);
+			}
+		} else {
+			currentTurn.push(log);
+		}
+	}
+	
+	// Add any remaining logs
+	if (currentTurn.length > 0) {
+		turns.push(currentTurn);
+	}
+	
+	// Reverse the turns array so newest turns appear first
+	turns.reverse();
+	
+	// Flatten back to a single array
+	const result: string[] = [];
+	for (const turn of turns) {
+		result.push(...turn);
+	}
+	
+	return result;
+}
+
+/**
  * Generate bottom navigation buttons for story UI
  * These appear below all story UI screens separated by an HR
  */
@@ -547,8 +599,8 @@ export function generateSingleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
-	const reversedBattleLog = [...battle.battleLog].reverse();
+	// Reverse battle log by turns (newest turns first, but messages within turns in chronological order)
+	const reversedBattleLog = reverseBattleLogByTurns(battle.battleLog);
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
@@ -733,8 +785,8 @@ export function generateDoubleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
-	const reversedBattleLog = [...battle.battleLog].reverse();
+	// Reverse battle log by turns (newest turns first, but messages within turns in chronological order)
+	const reversedBattleLog = reverseBattleLogByTurns(battle.battleLog);
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
