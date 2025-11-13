@@ -6,12 +6,15 @@ import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
+const ONTIME_DB_NAME = 'ontime';
+const ONTIME_BLOCK_DB_NAME = 'ontimeblocks';
+const ONTIME_LEADERBOARD_SIZE = 100;
+
 interface OntimeDocument { _id: string; ontime: number; }
 interface OntimeBlockDocument { _id: string; }
 
-const OntimeDB = ImpulseDB<OntimeDocument>('ontime');
-const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>('ontimeblocks');
-const ONTIME_LEADERBOARD_SIZE = 100;
+const OntimeDB = ImpulseDB<OntimeDocument>(ONTIME_DB_NAME);
+const OntimeBlockDB = ImpulseDB<OntimeBlockDocument>(ONTIME_BLOCK_DB_NAME);
 
 const convertTime = (time: number): { h: number, m: number, s: number } => ({
 	h: Math.floor(time / 3600000),
@@ -106,7 +109,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const cmds = [
 				["/ontime [user]", "Check user's online time."],
-				["/ontime ladder", "Top 100 by ontime."],
+				[`/ontime ladder", "Top ${ONTIME_LEADERBOARD_SIZE} by ontime.`],
 				["/ontime block [user]", "Block user from gaining ontime. Requires: &."],
 				["/ontime unblock [user]", "Unblock user from gaining ontime. Requires: &."],
 				["/ontime blocked", "List blocked users. Requires: &."],
@@ -127,6 +130,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await OntimeBlockDB.updateOne({ _id: targetId }, { $set: { _id: targetId } }, { upsert: true });
 			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
+			this.modlog('ONTIME BLOCK', targetId);
 		},
 
 		async unblock(target, room, user): Promise<void> {
@@ -138,6 +142,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			await OntimeBlockDB.deleteOne({ _id: targetId });
 			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
+			this.modlog('ONTIME UNBLOCK', targetId);
 		},
 
 		async blocked(target, room, user): Promise<void> {
@@ -149,5 +154,5 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 
-	ontimehelp(): void { this.parse('/ontime help'); },
+	ontimehelp: 'ontime.help',
 };
