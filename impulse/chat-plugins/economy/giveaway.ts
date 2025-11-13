@@ -39,7 +39,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		start(target, room, user) {
-			this.checkCan('roomowner');
+			this.checkCan('roommod');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("Giveaways can only be started in chat rooms.");
@@ -150,7 +150,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async end(target, room, user): Promise<void> {
-			this.checkCan('roomowner');
+			this.checkCan('roommod');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("Giveaways can only be ended in chat rooms.");
@@ -216,7 +216,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		cancel(target, room, user) {
-			this.checkCan('roomowner');
+			this.checkCan('roommod');
 
 			if (!room || room.roomid === 'global') {
 				return this.errorReply("There is no giveaway to cancel in this context.");
