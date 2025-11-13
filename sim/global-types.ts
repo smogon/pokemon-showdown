@@ -155,7 +155,8 @@ interface ModdedBattleActions {
 	inherit?: true;
 	afterMoveSecondaryEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
 	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move, pokemon: Pokemon) => number;
-	canDynamax?: (this: BattleActions, side: Side) => boolean;
+	canDynamax?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	canDynamaxSide?: (this: BattleActions, side: Side) => boolean;
 	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | false;
 	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | false;
 	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | false;

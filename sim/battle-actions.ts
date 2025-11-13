@@ -1915,7 +1915,7 @@ export class BattleActions {
 	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 
-	canDynamax(side: Side): boolean {
+	canDynamaxSide(side: Side) {
 		if (side.dynamaxUsed) return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
@@ -1926,8 +1926,22 @@ export class BattleActions {
 		return true;
 	}
 
+	canDynamax(pokemon: Pokemon): boolean {
+		if (!this.canDynamaxSide(pokemon.side)) return false;
+
+		// Some pokemon species are unable to dynamax
+		if (pokemon.species.cannotDynamax || pokemon.illusion?.species.cannotDynamax) return false;
+		if (
+			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
+			pokemon.getItem().zMove || this.battle.actions.canMegaEvo(pokemon)
+		) {
+			return false;
+		}
+		return true;
+	}
+
 	runDynamax(pokemon: Pokemon) {
-		if (!this.canDynamax(pokemon.side)) return false;
+		if (!this.canDynamax(pokemon)) return false;
 		pokemon.addVolatile('dynamax');
 		pokemon.side.dynamaxUsed = true;
 		if (pokemon.side.allySide) pokemon.side.allySide.dynamaxUsed = true;

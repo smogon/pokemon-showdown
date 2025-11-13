@@ -1013,17 +1013,7 @@ export class Pokemon {
 
 	getDynamaxRequest(skipChecks?: boolean) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
-		if (!skipChecks) {
-			if (!this.battle.actions.canDynamax(this.side)) return;
-			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.battle.actions.canMegaEvo(this)
-			) {
-				return;
-			}
-			// Some pokemon species are unable to dynamax
-			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
-		}
+		if (!skipChecks && !this.battle.actions.canDynamax(this)) return;
 		const result: DynamaxOptions = { maxMoves: [] };
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {

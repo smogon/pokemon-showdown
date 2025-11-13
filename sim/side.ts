@@ -173,8 +173,9 @@ export class Side {
 	/**
 	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
 	 *
-	 * Use BattleActions.canDynamax() to check if a side can dynamax instead of this property because only one
-	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
+	 * Use BattleActions.canDynamax(p: Pokemon) or BattleActions.canDynamaxSide(s: Side) to check if a pokemon/side
+	 * can dynamax instead of this property because only one player per team can dynamax on any given turn of a
+	 * gen 8 Multi Battle.
 	 */
 	dynamaxUsed: boolean;
 	terastallizationUsed: boolean;
@@ -743,9 +744,9 @@ export class Side {
 			} else {
 				if (this.battle.gen !== 8) {
 					return this.emitChoiceError(`Can't move: Dynamaxing doesn't outside of Gen 8.`);
-				} else if (this.battle.actions.canDynamax(pokemon.side)) {
+				} else if (this.battle.actions.canDynamax(pokemon)) {
 					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
-				} else if (pokemon.side.allySide && this.battle.actions.canDynamax(pokemon.side.allySide)) {
+				} else if (pokemon.side.allySide && this.battle.actions.canDynamaxSide(pokemon.side.allySide)) {
 					return this.emitChoiceError(`Can't move: It's your partner's turn to Dynamax.`);
 				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);

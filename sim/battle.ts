@@ -1739,7 +1739,7 @@ export class Battle {
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
-				if (this.actions.canDynamax(side)) {
+				if (this.actions.canDynamaxSide(side)) {
 					if (this.turn === 1) {
 						this.addSplit(side.id, ['-candynamax', side.id]);
 					} else {

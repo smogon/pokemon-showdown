@@ -914,7 +914,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		canTerastallize(pokemon) {
 			if (
 				pokemon.terastallized || pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
-				pokemon.getItem().zMove || this.battle.actions.canMegaEvo(pokemon) || this.battle.actions.canDynamax(pokemon.side)
+				pokemon.getItem().zMove || this.battle.actions.canMegaEvo(pokemon) || this.battle.actions.canDynamax(pokemon)
 			) {
 				return false;
 			}
