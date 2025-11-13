@@ -41,6 +41,34 @@ const GiveawayConfigDB = ImpulseDB<GiveawayConfig>('giveaway_config');
 // Store active giveaways by room
 const activeGiveaways = new Map<string, Giveaway>();
 
+// Helper function to generate giveaway display HTML
+function generateGiveawayHTML(giveaway: Giveaway): string {
+	const durationText = giveaway.duration ? 
+		`${giveaway.duration} minute${giveaway.duration !== 1 ? 's' : ''}` : 
+		'Manual (no auto-end)';
+	
+	return `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
+		`<center>` +
+		`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY ACTIVE! 🎉</h2>` +
+		`<p style="font-size: 16px; margin: 10px 0;">` +
+		`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
+		`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCY.name}<br />` +
+		`<strong>Duration:</strong> ${durationText}` +
+		`</p>` +
+		`<p style="font-size: 14px; margin: 15px 0;">` +
+		`Click the button below to join!` +
+		`</p>` +
+		`<button class="button" name="send" value="/giveaway join" ` +
+		`style="background-color: #4CAF50; color: white; font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
+		`Join Giveaway` +
+		`</button>` +
+		`<p style="font-size: 12px; margin-top: 15px; color: #666;">` +
+		`Participants: <strong>${giveaway.participants.length}</strong>` +
+		`</p>` +
+		`</center>` +
+		`</div>`;
+}
+
 // Helper function to get room's default duration
 async function getRoomDefaultDuration(roomid: string): Promise<number> {
 	const config = await GiveawayConfigDB.findOne({ roomid });
@@ -171,30 +199,11 @@ export const commands: Chat.ChatCommands = {
 
 			activeGiveaways.set(roomid, giveaway);
 
-			// Display the giveaway announcement with Join button
-			const durationText = isManual ? 'Manual (no auto-end)' : `${duration} minute${duration !== 1 ? 's' : ''}`;
-			const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
-				`<center>` +
-				`<h2 style="color: #4CAF50; margin: 10px 0;">🎉 GIVEAWAY STARTED! 🎉</h2>` +
-				`<p style="font-size: 16px; margin: 10px 0;">` +
-				`<strong>Host:</strong> ${nameColor(user.name, true, true)}<br />` +
-				`<strong>Prize:</strong> ${Economy.formatMoney(prize)} ${CURRENCY.name}<br />` +
-				`<strong>Duration:</strong> ${durationText}` +
-				`</p>` +
-				`<p style="font-size: 14px; margin: 15px 0;">` +
-				`Click the button below to join!` +
-				`</p>` +
-				`<button class="button" name="send" value="/giveaway join" ` +
-				`style="background-color: #4CAF50; color: white; font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
-				`Join Giveaway` +
-				`</button>` +
-				`<p style="font-size: 12px; margin-top: 15px; color: #666;">` +
-				`Participants: <strong>0</strong>` +
-				`</p>` +
-				`</center>` +
-				`</div>`;
+			// Display the giveaway announcement with Join button using uhtml
+			const uhtmlid = `giveaway-${roomid}`;
+			const html = generateGiveawayHTML(giveaway);
 
-			room.add(`|html|${html}`).update();
+			room.add(`|uhtml|${uhtmlid}|${html}`).update();
 			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)} (${isManual ? 'manual' : `${duration} min`})`);
 		},
 
@@ -222,6 +231,11 @@ export const commands: Chat.ChatCommands = {
 				username: user.name,
 				joinedAt: new Date(),
 			});
+
+			// Update the giveaway display using uhtmlchange
+			const uhtmlid = `giveaway-${roomid}`;
+			const html = generateGiveawayHTML(giveaway);
+			room.add(`|uhtmlchange|${uhtmlid}|${html}`).update();
 
 			// Notify the user privately
 			this.sendReply("You have successfully joined the giveaway!");
