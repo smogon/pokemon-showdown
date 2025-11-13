@@ -3,6 +3,46 @@
 * RPG Locations Data
 *
 * This file contains location definitions and their encounter zones.
+* 
+* Locations can include scriptedEvents that trigger when players enter or meet conditions.
+* All scripted event handlers are available in scripted-events.ts
+*
+* Supported Event Types (see scripted-events.ts for full list of 60+ handlers):
+*   - dialogue: Simple dialogue message
+*   - item: Give items to player
+*   - pokemon: Give Pokemon to player
+*   - wildbattle: Scripted wild Pokemon encounter
+*   - trainer: Scripted trainer battle
+*   - cutscene: Cinematic cutscene
+*   - choice: Player makes a choice
+*   - quiz: Quiz question
+*   - puzzle: Puzzle to solve
+*   - pokemonswarm: Pokemon swarm appears
+*   - bossbattle: Multi-phase boss battle
+*   - tournament: Tournament event
+*   - weatherchange: Change weather
+*   - legendaryawakening: Legendary Pokemon awakens
+*   - And 40+ more event types...
+*
+* Event Configuration Options:
+*   - triggerOnce: Event only triggers once (default: false)
+*   - requiredFlag: Player must have this flag
+*   - requiredBadgeCount: Minimum badges required
+*   - maxBadgeCount: Maximum badges allowed (for early-game events)
+*   - preventIfFlag: Skip if player has this flag
+*   - setFlag: Set this flag when event triggers
+*
+* Example:
+*   scriptedEvents: [
+*     {
+*       id: 'unique_event_id',
+*       name: 'Event Name',
+*       triggerOnce: true,
+*       type: 'wildbattle',
+*       pokemon: { species: 'pikachu', level: 25, shiny: true },
+*       dialogue: 'A wild shiny Pikachu appears!',
+*     }
+*   ]
 */
 
 import type { Location } from './interface';

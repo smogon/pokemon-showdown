@@ -3,6 +3,63 @@
 * RPG NPC Actions Handler
 *
 * This file implements logic for all NPC action types.
+* 
+* All handlers are exported and can be imported individually or as a namespace:
+*   import * as NPCActions from './npc-actions';
+*   import { handleHeal, handleChooseStarter } from './npc-actions';
+*
+* Available NPC Action Handlers (40+ handlers):
+*  - handleFossilRevival: Revive fossils into Pokemon
+*  - handleDailyReward: Daily login rewards system
+*  - handleBattleRequest: NPC battle challenges with cooldowns
+*  - completeBattleRequest: Mark battle as completed
+*  - handleQuestChain: Multi-stage quest system
+*  - advanceQuestStage: Progress quest to next stage
+*  - handleItemCraft: Combine items to create new ones
+*  - handleBerryPlant: Plant berries that grow over time
+*  - checkBerryHarvest: Check and harvest berries
+*  - handlePokemonGrooming: Groom Pokemon for friendship
+*  - handleFortuneTeller: Fortune telling for temporary boosts
+*  - checkActiveFortune: Check if fortune is active
+*  - handlePokemonBreeder: Breed Pokemon to produce eggs
+*  - handleMoveRelearner: Relearn moves from learnset
+*  - handleAbilityCapsule: Change Pokemon ability
+*  - handleEVTrainer: Train specific EVs
+*  - handleIVChecker: Check Pokemon IVs
+*  - handleMysteryGift: Distribute special mystery gifts
+*  - handleLottery: Lottery system with prizes
+*  - handleMasseuse: Massages for friendship
+*  - handleHairCutter: Haircuts for friendship
+*  - handleFishing: Give or use fishing rods
+*  - handleBikeShop: Purchase bikes
+*  - handleCoinExchange: Exchange money for coins
+*  - handleTutorCombo: Teach multiple moves
+*  - handleApricornCrafter: Craft Pokeballs from Apricorns
+*  - handlePokeathlon: Pokeathlon events
+*  - handleBerryBlender: Blend berries together
+*  - handlePokeblockMixer: Mix berries into Pokeblocks
+*  - handlePoffinCooking: Cook berries into Poffins
+*  - handleRivalBattle: Trigger rival battles
+*  - handleGymRematch: Rematch gym leaders
+*  - handleShardTrader: Trade shards for moves/items
+*  - handleWingCollector: Collect wings for stat boosts
+*  - handleScaleCollector: Collect scales for rewards
+*  - handleOPower: Distribute O-Powers
+*  - handleHeal: Heal all Pokemon to full health
+*  - handleChooseStarter: Handle starter Pokemon selection
+*  - handleCollectionQuest: Quest to collect specific items
+*  - handleReputation: Manage faction/town reputation
+*  - addReputationPoints: Add reputation points
+*  - handleDeliveryQuest: Deliver items to other NPCs
+*  - handleTimeBasedAction: Actions available at certain times
+*  - handleConditionalDialogue: Dynamic dialogue based on progress
+*  - handleEscortQuest: Escort NPCs to locations
+*  - handleAchievement: Track and reward achievements
+*
+* Usage in npcs.ts:
+*   Define NPCs with action types that match these handlers.
+*   The handler will be automatically called by commands.ts when
+*   the player interacts with the NPC.
 */
 
 import type { PlayerData, RPGPokemon, NPCAction } from './interface';
@@ -799,36 +856,7 @@ export function handleHairCutter(
 	};
 }
 
-/**
- * Photographer Action
- * Take photos of Pokemon for rewards
- */
-export function handlePhotographer(
-	player: PlayerData,
-	action: NPCAction,
-	pokemon: RPGPokemon,
-	npcId: string
-): { success: boolean, message: string, reward?: { itemId: string, quantity: number } } {
-	const cost = action.photographyCost || 500;
-	if (player.money < cost) {
-		return { success: false, message: `A photo session costs ₽${cost}.` };
-	}
 
-	// Check if this Pokemon has already been photographed by this NPC
-	const photoFlag = `photo_${npcId}_${pokemon.id}`;
-	if (player.storyFlags.has(photoFlag)) {
-		return { success: false, message: 'You have already photographed this Pokemon!' };
-	}
-
-	player.money -= cost;
-	player.storyFlags.add(photoFlag);
-
-	return {
-		success: true,
-		message: `Beautiful photo of ${pokemon.nickname}!`,
-		reward: action.photoReward,
-	};
-}
 
 /**
  * Fishing Action
@@ -994,31 +1022,7 @@ export function handlePokeathlon(
 	};
 }
 
-/**
- * Musical Props Action
- * Get props for Pokemon Musical
- */
-export function handleMusicalProps(
-	player: PlayerData,
-	action: NPCAction,
-	propName: string
-): { success: boolean, message: string } {
-	if (!action.musicalPropsList?.includes(propName)) {
-		return { success: false, message: 'That prop is not available.' };
-	}
 
-	const cost = action.musicalPropCost || 0;
-	if (cost > 0 && player.money < cost) {
-		return { success: false, message: `This prop costs ₽${cost}.` };
-	}
-
-	if (cost > 0) player.money -= cost;
-
-	return {
-		success: true,
-		message: `You got the ${propName} prop!`,
-	};
-}
 
 /**
  * Berry Blender Action
@@ -1261,5 +1265,370 @@ export function handleChooseStarter(
 		success: true,
 		message: `Excellent choice! ${species.name} will be a great partner for you.`,
 		pokemon: starter,
+	};
+}
+
+/**
+ * Collection Quest Action
+ * Quest to collect specific items for rewards
+ */
+export function handleCollectionQuest(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, progress?: number, total?: number, reward?: any } {
+	if (!action.requiredItems || action.requiredItems.length === 0) {
+		return { success: false, message: 'No collection quest configured.' };
+	}
+
+	// Check if quest is already completed
+	const questFlag = `collection_${npcId}_completed`;
+	if (action.onceOnly && player.storyFlags.has(questFlag)) {
+		return { success: false, message: 'You have already completed this collection quest!' };
+	}
+
+	// Check if player has all required items
+	let hasAllItems = true;
+	let collectedCount = 0;
+
+	for (const reqItem of action.requiredItems) {
+		const item = player.inventory.get(reqItem.itemId);
+		const hasQuantity = item?.quantity || 0;
+		
+		if (hasQuantity >= reqItem.quantity) {
+			collectedCount++;
+		} else {
+			hasAllItems = false;
+		}
+	}
+
+	if (!hasAllItems) {
+		return {
+			success: false,
+			message: `You haven't collected all the required items yet.`,
+			progress: collectedCount,
+			total: action.requiredItems.length,
+		};
+	}
+
+	// Remove items from inventory
+	for (const reqItem of action.requiredItems) {
+		const item = player.inventory.get(reqItem.itemId)!;
+		item.quantity -= reqItem.quantity;
+		if (item.quantity === 0) {
+			player.inventory.delete(reqItem.itemId);
+		}
+	}
+
+	// Mark as completed
+	if (action.onceOnly) {
+		player.storyFlags.add(questFlag);
+	}
+
+	return {
+		success: true,
+		message: 'Collection quest completed! Thank you!',
+		progress: collectedCount,
+		total: action.requiredItems.length,
+		reward: action.questReward,
+	};
+}
+
+/**
+ * Reputation Action
+ * Manage reputation with factions/towns
+ */
+export function handleReputation(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string
+): { success: boolean, message: string, reputationLevel?: string, currentPoints?: number } {
+	if (!action.factionId) {
+		return { success: false, message: 'No faction configured.' };
+	}
+
+	const repFlag = `reputation_${action.factionId}_points`;
+	const repStr = Array.from(player.storyFlags).find(f => f.startsWith(repFlag));
+
+	let currentPoints = 0;
+	if (repStr) {
+		currentPoints = parseInt(repStr.split('_').pop() || '0');
+	}
+
+	// Determine reputation level
+	let level = 'Neutral';
+	if (currentPoints >= 1000) level = 'Exalted';
+	else if (currentPoints >= 750) level = 'Revered';
+	else if (currentPoints >= 500) level = 'Honored';
+	else if (currentPoints >= 250) level = 'Friendly';
+
+	return {
+		success: true,
+		message: `Your reputation with ${action.factionId}: ${level}`,
+		reputationLevel: level,
+		currentPoints,
+	};
+}
+
+/**
+ * Add reputation points
+ */
+export function addReputationPoints(
+	player: PlayerData,
+	factionId: string,
+	points: number
+): void {
+	const repFlag = `reputation_${factionId}_points`;
+	const repStr = Array.from(player.storyFlags).find(f => f.startsWith(repFlag));
+
+	let currentPoints = 0;
+	if (repStr) {
+		currentPoints = parseInt(repStr.split('_').pop() || '0');
+		player.storyFlags.delete(repStr);
+	}
+
+	currentPoints += points;
+	player.storyFlags.add(`${repFlag}_${currentPoints}`);
+}
+
+/**
+ * Delivery Quest Action
+ * Deliver items to another NPC
+ */
+export function handleDeliveryQuest(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string,
+	isPickup: boolean
+): { success: boolean, message: string, deliveryItem?: { itemId: string, quantity: number }, targetNpcId?: string } {
+	if (!action.deliveryItem || !action.targetNpcId) {
+		return { success: false, message: 'Delivery quest not configured.' };
+	}
+
+	const deliveryFlag = `delivery_${npcId}_${action.targetNpcId}_active`;
+	const completedFlag = `delivery_${npcId}_${action.targetNpcId}_completed`;
+
+	if (action.onceOnly && player.storyFlags.has(completedFlag)) {
+		return { success: false, message: 'You have already completed this delivery!' };
+	}
+
+	if (isPickup) {
+		// Picking up the item to deliver
+		if (player.storyFlags.has(deliveryFlag)) {
+			return { success: false, message: 'You already have an active delivery!' };
+		}
+
+		player.storyFlags.add(deliveryFlag);
+		return {
+			success: true,
+			message: `Please deliver this to ${action.targetNpcId}!`,
+			deliveryItem: action.deliveryItem,
+			targetNpcId: action.targetNpcId,
+		};
+	} else {
+		// Completing the delivery
+		if (!player.storyFlags.has(deliveryFlag)) {
+			return { success: false, message: 'You don\'t have a delivery for me!' };
+		}
+
+		player.storyFlags.delete(deliveryFlag);
+		if (action.onceOnly) {
+			player.storyFlags.add(completedFlag);
+		}
+
+		return {
+			success: true,
+			message: 'Thank you for the delivery!',
+		};
+	}
+}
+
+/**
+ * Time-based Action
+ * Actions available only at certain times
+ */
+export function handleTimeBasedAction(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, isAvailable: boolean, nextAvailableIn?: number } {
+	if (!action.availableHours || action.availableHours.length === 0) {
+		return { success: true, message: 'Always available', isAvailable: true };
+	}
+
+	const currentHour = new Date().getHours();
+	const isAvailable = action.availableHours.includes(currentHour);
+
+	if (!isAvailable) {
+		const nextHour = action.availableHours.find(h => h > currentHour) || action.availableHours[0];
+		let hoursUntil = nextHour - currentHour;
+		if (hoursUntil < 0) hoursUntil += 24;
+
+		return {
+			success: false,
+			message: `This is not available right now. Come back in ${hoursUntil} hour(s).`,
+			isAvailable: false,
+			nextAvailableIn: hoursUntil,
+		};
+	}
+
+	return {
+		success: true,
+		message: 'Available now!',
+		isAvailable: true,
+	};
+}
+
+/**
+ * Conditional Dialogue Action
+ * NPCs with different dialogues based on player progress
+ */
+export function handleConditionalDialogue(
+	player: PlayerData,
+	action: NPCAction
+): { success: boolean, message: string, dialogue: string } {
+	if (!action.dialogueConditions || action.dialogueConditions.length === 0) {
+		return {
+			success: true,
+			message: action.defaultDialogue || 'Hello!',
+			dialogue: action.defaultDialogue || 'Hello!',
+		};
+	}
+
+	// Check conditions in order and return first matching dialogue
+	for (const condition of action.dialogueConditions) {
+		// Check badge count
+		if (condition.minBadges && player.obtainedBadges.length < condition.minBadges) {
+			continue;
+		}
+		if (condition.maxBadges && player.obtainedBadges.length > condition.maxBadges) {
+			continue;
+		}
+
+		// Check required flags
+		if (condition.requiredFlag && !player.storyFlags.has(condition.requiredFlag)) {
+			continue;
+		}
+
+		// Check prevented flags
+		if (condition.preventIfFlag && player.storyFlags.has(condition.preventIfFlag)) {
+			continue;
+		}
+
+		// Condition matched!
+		return {
+			success: true,
+			message: condition.dialogue,
+			dialogue: condition.dialogue,
+		};
+	}
+
+	// No conditions matched, use default
+	return {
+		success: true,
+		message: action.defaultDialogue || 'Hello!',
+		dialogue: action.defaultDialogue || 'Hello!',
+	};
+}
+
+/**
+ * Escort Quest Action
+ * Escort NPC to a location
+ */
+export function handleEscortQuest(
+	player: PlayerData,
+	action: NPCAction,
+	npcId: string,
+	currentLocation: string
+): { success: boolean, message: string, escorting?: boolean, destination?: string, arrived?: boolean } {
+	if (!action.escortDestination) {
+		return { success: false, message: 'No escort destination configured.' };
+	}
+
+	const escortFlag = `escort_${npcId}_active`;
+	const completedFlag = `escort_${npcId}_completed`;
+
+	if (action.onceOnly && player.storyFlags.has(completedFlag)) {
+		return { success: false, message: 'You have already completed this escort!' };
+	}
+
+	const isEscorting = player.storyFlags.has(escortFlag);
+
+	if (!isEscorting) {
+		// Start escort
+		player.storyFlags.add(escortFlag);
+		return {
+			success: true,
+			message: `Please escort me to ${action.escortDestination}!`,
+			escorting: true,
+			destination: action.escortDestination,
+			arrived: false,
+		};
+	} else {
+		// Check if at destination
+		if (currentLocation === action.escortDestination) {
+			player.storyFlags.delete(escortFlag);
+			if (action.onceOnly) {
+				player.storyFlags.add(completedFlag);
+			}
+
+			return {
+				success: true,
+				message: 'Thank you for escorting me safely!',
+				escorting: false,
+				arrived: true,
+			};
+		} else {
+			return {
+				success: false,
+				message: `We need to get to ${action.escortDestination}. Keep going!`,
+				escorting: true,
+				destination: action.escortDestination,
+				arrived: false,
+			};
+		}
+	}
+}
+
+/**
+ * Achievement Tracker Action
+ * Track and reward achievements
+ */
+export function handleAchievement(
+	player: PlayerData,
+	action: NPCAction,
+	achievementId: string
+): { success: boolean, message: string, unlocked: boolean, reward?: any } {
+	if (!action.achievements || !action.achievements[achievementId]) {
+		return { success: false, message: 'Achievement not found.' };
+	}
+
+	const achievement = action.achievements[achievementId];
+	const achievementFlag = `achievement_${achievementId}_unlocked`;
+
+	if (player.storyFlags.has(achievementFlag)) {
+		return {
+			success: false,
+			message: 'You have already unlocked this achievement!',
+			unlocked: true,
+		};
+	}
+
+	// Check achievement requirements
+	if (achievement.requiredFlag && !player.storyFlags.has(achievement.requiredFlag)) {
+		return {
+			success: false,
+			message: 'Achievement requirements not met.',
+			unlocked: false,
+		};
+	}
+
+	// Unlock achievement
+	player.storyFlags.add(achievementFlag);
+
+	return {
+		success: true,
+		message: `Achievement unlocked: ${achievement.name}!`,
+		unlocked: true,
+		reward: achievement.reward,
 	};
 }

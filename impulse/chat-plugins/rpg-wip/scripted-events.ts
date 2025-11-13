@@ -3,6 +3,89 @@
 * RPG Scripted Events Handler
 *
 * This file implements logic for all scripted event types.
+*
+* All handlers are exported and can be imported individually or as a namespace:
+*   import * as ScriptedEvents from './scripted-events';
+*   import { handleCutscene, handlePokemonSwarm } from './scripted-events';
+*
+* Available Scripted Event Handlers (60+ handlers):
+*  - handleCutscene: Display cinematic cutscenes
+*  - handleChoice: Player makes a choice that affects story
+*  - handleQuiz: Answer quiz questions
+*  - handlePuzzle: Solve puzzles
+*  - handleRiddle: Answer riddles
+*  - handleMinigame: Play minigames
+*  - handleWeatherChange: Change weather in location
+*  - handleEarthquake: Earthquake event
+*  - handleExplosion: Explosion event
+*  - handleFlood: Flood event
+*  - handleMeteor: Meteor fall event
+*  - handleEclipse: Eclipse event
+*  - handleTimeWarp: Time manipulation
+*  - handleDimensionRift: Dimension rift opening
+*  - handlePokemonSwarm: Pokemon swarms appear
+*  - checkActiveSwarm: Check if swarm is active
+*  - handleBossBattle: Multi-phase boss battles
+*  - handleTournament: Tournament against AI trainers
+*  - advanceTournamentRound: Progress tournament
+*  - handleContest: Pokemon contests
+*  - handleRace: Racing events
+*  - handleScavengerHunt: Find hidden items
+*  - markScavengerItemFound: Mark item as found
+*  - handleInvestigation: Investigate mysteries
+*  - markClueFound: Mark clue as found
+*  - handleStealth: Stealth missions
+*  - handleEscape: Escape sequences
+*  - handleRescue: Rescue missions
+*  - handleDefense: Defend location
+*  - handleAmbush: Player ambushed
+*  - handleBetrayal: Betrayal occurs
+*  - handleAlliance: Form alliances
+*  - handleNegotiation: Negotiate with NPCs
+*  - handleDiscovery: Discover something new
+*  - handleRevelation: Story revelations
+*  - handleTransformation: Pokemon transformations
+*  - handleEvolutionCeremony: Special evolution
+*  - handleLegendaryAwakening: Legendary Pokemon awakens
+*  - handleAncientSeal: Ancient seal activated
+*  - handlePortalOpening: Portal opens
+*  - handleDimensionMerge: Dimensions merge
+*  - handleTimeLoop: Time loop event
+*  - handleProphecy: Prophecy revealed
+*  - handleFishingEvent: Fishing encounter
+*  - handleSurfingEvent: Surfing encounter
+*  - handleDivingEvent: Diving encounter
+*  - handleItemBall: Find items in pokeballs
+*  - handleHiddenItemEvent: Hidden item pickup
+*  - handleRoamingEvent: Roaming Pokemon
+*  - handleMultiBattle: Tag team battles
+*  - handleFestivalEvent: Festival/celebration
+*  - handleSecretArea: Unlock secret areas
+*  - handleWarpEvent: Teleportation/warp
+*  - handleGymChallengeEvent: Gym challenge start
+*  - handleEliteFourChallengeEvent: Elite Four gauntlet
+*  - handleHallOfFameEvent: Hall of Fame induction
+*  - handleSafariZoneEvent: Safari Zone special
+*  - handleBugCatchingContestEvent: Bug Catching Contest
+*  - handleBattleFrontierEvent: Battle Frontier
+*  - handleFlashback: Show flashback scenes
+*  - handleDreamSequence: Dream sequences and nightmares
+*  - handleReputationChange: Change faction reputation
+*  - handleCompanionJoin: NPC joins as companion
+*  - handleCompanionLeave: Companion leaves party
+*  - handleMoralChoice: Moral choices affecting karma
+*  - handleLoreDiscovery: Discover world lore/history
+*  - handleBranchingPath: Story branches based on choices
+*  - handleChapterTransition: Transition between chapters
+*  - handleEpilogue: Show epilogue after main story
+*  - handleCollectibleItem: Find special collectibles
+*  - handleVoiceFromAbove: Mysterious voice guidance
+*  - handleMemoryRestoration: Regain lost memories
+*
+* Usage in locations.ts:
+*   Define scriptedEvents in location objects with types that match
+*   these handlers. The handler will be automatically called by
+*   commands.ts when the event is triggered.
 */
 
 import type { PlayerData, RPGPokemon, ScriptedEvent } from './interface';
@@ -943,21 +1026,7 @@ export function handleMultiBattle(
 	};
 }
 
-/**
- * Photo Op Event
- * Photo opportunity event
- */
-export function handlePhotoOpEvent(
-	player: PlayerData,
-	event: ScriptedEvent
-): { success: boolean, message: string, subject?: string, reward?: any } {
-	return {
-		success: true,
-		message: `Take a photo of ${event.photoSubject || 'this moment'}!`,
-		subject: event.photoSubject,
-		reward: event.photoReward,
-	};
-}
+
 
 /**
  * Festival Event
@@ -1103,5 +1172,368 @@ export function handleBattleFrontierEvent(
 		message: `Welcome to the Battle ${event.frontierFacility || 'Tower'}!`,
 		facility: event.frontierFacility,
 		rules: event.frontierRules,
+	};
+}
+
+/**
+ * Flashback Event
+ * Show a flashback scene revealing backstory
+ */
+export function handleFlashback(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, flashbackText?: string, characters?: string[] } {
+	if (!event.flashbackText) {
+		return { success: false, message: 'No flashback configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A memory from the past...',
+		flashbackText: event.flashbackText,
+		characters: event.flashbackCharacters,
+	};
+}
+
+/**
+ * Dream Sequence Event
+ * Dream sequence for foreshadowing or story
+ */
+export function handleDreamSequence(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, dreamText?: string, isNightmare?: boolean } {
+	if (!event.dreamText) {
+		return { success: false, message: 'No dream configured.' };
+	}
+
+	return {
+		success: true,
+		message: event.isNightmare ? 'A terrifying nightmare...' : 'You drift into a dream...',
+		dreamText: event.dreamText,
+		isNightmare: event.isNightmare,
+	};
+}
+
+/**
+ * Reputation Change Event
+ * Change reputation with factions based on actions
+ */
+export function handleReputationChange(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, factionId?: string, change?: number } {
+	if (!event.factionId || event.reputationChange === undefined) {
+		return { success: false, message: 'No reputation change configured.' };
+	}
+
+	const repFlag = `reputation_${event.factionId}_points`;
+	const repStr = Array.from(player.storyFlags).find(f => f.startsWith(repFlag));
+
+	let currentPoints = 0;
+	if (repStr) {
+		currentPoints = parseInt(repStr.split('_').pop() || '0');
+		player.storyFlags.delete(repStr);
+	}
+
+	currentPoints += event.reputationChange;
+	player.storyFlags.add(`${repFlag}_${currentPoints}`);
+
+	const changeText = event.reputationChange > 0 ? 'increased' : 'decreased';
+
+	return {
+		success: true,
+		message: `Your reputation with ${event.factionId} has ${changeText}!`,
+		factionId: event.factionId,
+		change: event.reputationChange,
+	};
+}
+
+/**
+ * Companion Join Event
+ * NPC joins player as companion
+ */
+export function handleCompanionJoin(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, companionId?: string } {
+	if (!event.companionId) {
+		return { success: false, message: 'No companion configured.' };
+	}
+
+	const companionFlag = `companion_${event.companionId}_joined`;
+	if (player.storyFlags.has(companionFlag)) {
+		return { success: false, message: 'This companion has already joined you!' };
+	}
+
+	player.storyFlags.add(companionFlag);
+
+	return {
+		success: true,
+		message: `${event.companionId} has joined your party as a companion!`,
+		companionId: event.companionId,
+	};
+}
+
+/**
+ * Companion Leave Event
+ * Companion leaves the party
+ */
+export function handleCompanionLeave(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, companionId?: string } {
+	if (!event.companionId) {
+		return { success: false, message: 'No companion configured.' };
+	}
+
+	const companionFlag = `companion_${event.companionId}_joined`;
+	if (!player.storyFlags.has(companionFlag)) {
+		return { success: false, message: 'This companion is not with you!' };
+	}
+
+	player.storyFlags.delete(companionFlag);
+
+	return {
+		success: true,
+		message: `${event.companionId} has left your party.`,
+		companionId: event.companionId,
+	};
+}
+
+/**
+ * Moral Choice Event
+ * Player makes a moral choice affecting karma/alignment
+ */
+export function handleMoralChoice(
+	player: PlayerData,
+	event: ScriptedEvent,
+	choiceIndex: number
+): { success: boolean, message: string, karmaChange?: number, alignment?: string } {
+	if (!event.moralChoices || choiceIndex >= event.moralChoices.length) {
+		return { success: false, message: 'Invalid moral choice.' };
+	}
+
+	const choice = event.moralChoices[choiceIndex];
+
+	// Update karma
+	const karmaFlag = 'player_karma_points';
+	const karmaStr = Array.from(player.storyFlags).find(f => f.startsWith(karmaFlag));
+
+	let currentKarma = 0;
+	if (karmaStr) {
+		currentKarma = parseInt(karmaStr.split('_').pop() || '0');
+		player.storyFlags.delete(karmaStr);
+	}
+
+	currentKarma += choice.karmaChange || 0;
+	player.storyFlags.add(`${karmaFlag}_${currentKarma}`);
+
+	// Determine alignment
+	let alignment = 'Neutral';
+	if (currentKarma >= 50) alignment = 'Hero';
+	else if (currentKarma >= 20) alignment = 'Good';
+	else if (currentKarma <= -50) alignment = 'Villain';
+	else if (currentKarma <= -20) alignment = 'Evil';
+
+	// Set result flag if specified
+	if (choice.resultFlag) {
+		player.storyFlags.add(choice.resultFlag);
+	}
+
+	return {
+		success: true,
+		message: choice.resultText || 'Choice made.',
+		karmaChange: choice.karmaChange,
+		alignment,
+	};
+}
+
+/**
+ * Lore Discovery Event
+ * Discover lore/history about the world
+ */
+export function handleLoreDiscovery(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, loreTitle?: string, loreText?: string } {
+	if (!event.loreTitle || !event.loreText) {
+		return { success: false, message: 'No lore configured.' };
+	}
+
+	const loreFlag = `lore_${eventId}_discovered`;
+	if (player.storyFlags.has(loreFlag)) {
+		return {
+			success: true,
+			message: 'You review the lore you discovered earlier.',
+			loreTitle: event.loreTitle,
+			loreText: event.loreText,
+		};
+	}
+
+	player.storyFlags.add(loreFlag);
+
+	return {
+		success: true,
+		message: 'You discovered ancient lore!',
+		loreTitle: event.loreTitle,
+		loreText: event.loreText,
+	};
+}
+
+/**
+ * Branching Path Event
+ * Story branches based on player choices
+ */
+export function handleBranchingPath(
+	player: PlayerData,
+	event: ScriptedEvent,
+	pathChoice: number
+): { success: boolean, message: string, selectedPath?: string, pathFlag?: string } {
+	if (!event.pathOptions || pathChoice >= event.pathOptions.length) {
+		return { success: false, message: 'Invalid path choice.' };
+	}
+
+	const path = event.pathOptions[pathChoice];
+
+	// Set the path flag
+	if (path.pathFlag) {
+		player.storyFlags.add(path.pathFlag);
+	}
+
+	// Clear other path flags if exclusive
+	if (event.exclusivePaths) {
+		for (const otherPath of event.pathOptions) {
+			if (otherPath.pathFlag && otherPath.pathFlag !== path.pathFlag) {
+				player.storyFlags.delete(otherPath.pathFlag);
+			}
+		}
+	}
+
+	return {
+		success: true,
+		message: path.description || 'Path chosen.',
+		selectedPath: path.name,
+		pathFlag: path.pathFlag,
+	};
+}
+
+/**
+ * Chapter Transition Event
+ * Transition between story chapters
+ */
+export function handleChapterTransition(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, chapterNumber?: number, chapterTitle?: string } {
+	if (!event.chapterNumber || !event.chapterTitle) {
+		return { success: false, message: 'No chapter configured.' };
+	}
+
+	const chapterFlag = `chapter_${event.chapterNumber}_completed`;
+	player.storyFlags.add(chapterFlag);
+
+	return {
+		success: true,
+		message: `Chapter ${event.chapterNumber}: ${event.chapterTitle}`,
+		chapterNumber: event.chapterNumber,
+		chapterTitle: event.chapterTitle,
+	};
+}
+
+/**
+ * Epilogue Event
+ * Show epilogue after main story
+ */
+export function handleEpilogue(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, epilogueText?: string, characters?: string[] } {
+	if (!event.epilogueText) {
+		return { success: false, message: 'No epilogue configured.' };
+	}
+
+	player.storyFlags.add('epilogue_viewed');
+
+	return {
+		success: true,
+		message: 'The story concludes...',
+		epilogueText: event.epilogueText,
+		characters: event.epilogueCharacters,
+	};
+}
+
+/**
+ * Collectible Item Event
+ * Find special collectible items (badges, medals, etc.)
+ */
+export function handleCollectibleItem(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, collectibleId?: string, category?: string } {
+	if (!event.collectibleId || !event.collectibleCategory) {
+		return { success: false, message: 'No collectible configured.' };
+	}
+
+	const collectibleFlag = `collectible_${event.collectibleCategory}_${event.collectibleId}`;
+	if (player.storyFlags.has(collectibleFlag)) {
+		return { success: false, message: 'You already have this collectible!' };
+	}
+
+	player.storyFlags.add(collectibleFlag);
+
+	return {
+		success: true,
+		message: `You found a ${event.collectibleCategory}: ${event.collectibleId}!`,
+		collectibleId: event.collectibleId,
+		category: event.collectibleCategory,
+	};
+}
+
+/**
+ * Voice From Above Event
+ * Mysterious voice gives guidance
+ */
+export function handleVoiceFromAbove(
+	player: PlayerData,
+	event: ScriptedEvent
+): { success: boolean, message: string, voiceText?: string } {
+	if (!event.voiceText) {
+		return { success: false, message: 'No voice configured.' };
+	}
+
+	return {
+		success: true,
+		message: 'A mysterious voice speaks...',
+		voiceText: event.voiceText,
+	};
+}
+
+/**
+ * Memory Restoration Event
+ * Player regains lost memories
+ */
+export function handleMemoryRestoration(
+	player: PlayerData,
+	event: ScriptedEvent,
+	eventId: string
+): { success: boolean, message: string, memoryText?: string } {
+	if (!event.memoryText) {
+		return { success: false, message: 'No memory configured.' };
+	}
+
+	const memoryFlag = `memory_${eventId}_restored`;
+	if (player.storyFlags.has(memoryFlag)) {
+		return { success: false, message: 'You have already regained this memory!' };
+	}
+
+	player.storyFlags.add(memoryFlag);
+
+	return {
+		success: true,
+		message: 'A forgotten memory returns to you...',
+		memoryText: event.memoryText,
 	};
 }

@@ -3,6 +3,53 @@
 * RPG NPCs Data
 *
 * This file contains NPC definitions and their dialogues/actions.
+*
+* NPCs can have actions that trigger when players interact with them.
+* All NPC action handlers are available in npc-actions.ts
+*
+* Supported Action Types (see npc-actions.ts for full list of 40+ handlers):
+*   - heal: Heal all Pokemon (Pokemon Centers)
+*   - choosestarter: Let player choose starter Pokemon
+*   - giveitem: Give items to player
+*   - givepokemon: Give Pokemon to player
+*   - exchangeitems: Trade items with player
+*   - takeitem: Take items from player
+*   - tradepokemon: Trade Pokemon
+*   - movetutor: Teach moves
+*   - fossilrevival: Revive fossils
+*   - dailyreward: Daily login rewards
+*   - battlerequest: Challenge player to battle with cooldown
+*   - questchain: Multi-stage quests
+*   - itemcraft: Craft items from recipes
+*   - berryplant: Plant and grow berries
+*   - pokemongrooming: Groom Pokemon for friendship
+*   - fortuneteller: Fortune telling for boosts
+*   - pokemonbreeder: Breed Pokemon
+*   - moverelearner: Relearn moves
+*   - abilitycapsule: Change ability
+*   - evtrainer: Train specific EVs
+*   - ivchecker: Check IVs
+*   - mysterygift: Distribute mystery gifts
+*   - lottery: Lottery system
+*   - And 20+ more action types...
+*
+* Action Configuration Options:
+*   - onceOnly: Action can only be completed once (default: false)
+*   - Various type-specific options (cost, items, etc.)
+*
+* Example:
+*   {
+*     id: 'npc_id',
+*     name: 'NPC Name',
+*     location: 'location_building_id',
+*     dialogue: 'Hello, trainer!',
+*     action: {
+*       type: 'giveitem',
+*       itemId: 'potion',
+*       quantity: 5,
+*       onceOnly: true,
+*     }
+*   }
 */
 
 import type { NPCData } from './interface';
