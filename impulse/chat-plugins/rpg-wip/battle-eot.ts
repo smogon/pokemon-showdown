@@ -72,28 +72,28 @@ export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState
 
 	if (slot.status && pokemon.item === 'lumberry') {
 		slot.status = null;
-		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
+		messageLog.push(`<span class="rpg-message-success"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		consumeBerry(slot, 'lumberry', messageLog);
 		return true;
 	}
 
 	if (pokemon.item === 'leftovers' && pokemon.hp < pokemon.maxHp) {
 		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
-		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
+		messageLog.push(`<span class="rpg-message-success"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
 	} else if (pokemon.item === 'blacksludge') {
 		if (speciesData.types.includes('Poison')) {
 			if (pokemon.hp < pokemon.maxHp) {
 				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
-				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
+				messageLog.push(`<span class="rpg-message-success"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
 			}
 		} else if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
-			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
+			messageLog.push(`<span class="rpg-message-error"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
 		}
 	} else if (pokemon.item === 'stickybarb') {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.floor(pokemon.maxHp / 8));
-			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
+			messageLog.push(`<span class="rpg-message-error"><strong>${pokemon.species}</strong> was hurt by its <strong>Sticky Barb</strong>!</span>`);
 		}
 	}
 

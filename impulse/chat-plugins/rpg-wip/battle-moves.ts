@@ -364,7 +364,7 @@ export function handleDamagingMovePreamble(
 		const accuracy = 30 + attacker.level - defender.level;
 		if (Math.random() * 100 < accuracy) {
 			defender.hp = 0;
-			messageLog.push(`<i style="color: #dc3545;">It's a one-hit KO!</i>`);
+			messageLog.push(`<i class="rpg-message-error">It's a one-hit KO!</i>`);
 		} else {
 			messageLog.push(`${attacker.species}'s attack missed!`);
 		}
