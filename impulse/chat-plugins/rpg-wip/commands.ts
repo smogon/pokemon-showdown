@@ -224,9 +224,6 @@ export const commands: ChatCommands = {
 					`</div>`;
 
 				this.popupReply(`|html|${confirmHTML}`);
-				if (room?.roomid !== 'lobby') {
-					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
-				}
 			} catch (error) {
 				this.errorReply(`Error creating starter Pokémon: ${error}`);
 			}
@@ -2937,10 +2934,6 @@ export const commands: ChatCommands = {
 					`</div>`;
 
 				this.popupReply(`|html|${confirmHTML}`);
-
-				if (room?.roomid !== 'lobby') {
-					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
-				}
 			}
 		},
 
