@@ -55,7 +55,7 @@ function generateGiveawayHTML(giveaway: Giveaway): string {
 
 	return `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #4CAF50; margin: 10px 0;">脂 GIVEAWAY ACTIVE! 脂</h2>` +
+		`<h2 style="color: #4CAF50; margin: 10px 0;">GIVEAWAY ACTIVE!</h2>` +
 		`<p style="font-size: 16px; margin: 10px 0;">` +
 		`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
 		`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}<br />` +
@@ -107,9 +107,9 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	await GiveawayDB.insertOne(giveaway);
 	activeGiveaways.delete(roomid);
 
-	const html = `<div class="infobox" style="border: 2px solid #FFD700; padding: 15px; margin: 10px 0;">` +
+	const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #FFD700; margin: 10px 0;">醇 GIVEAWAY WINNER! 醇</h2>` +
+		`<h2 style="color: #4CAF50; margin: 10px 0;">GIVEAWAY WINNER!</h2>` +
 		`<p style="font-size: 18px; margin: 15px 0;">` +
 		`<strong>Winner:</strong> ${nameColor(winner.username, true, true)}` +
 		`</p>` +
