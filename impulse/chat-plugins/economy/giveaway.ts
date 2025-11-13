@@ -13,12 +13,21 @@ interface GiveawayParticipant {
 	joinedAt: Date;
 }
 
+type GiveawayType = 'currency' | 'tcgcard';
+
 interface Giveaway {
 	_id?: unknown;
 	roomid: string;
 	hostId: string;
 	hostName: string;
-	prize: number;
+	type: GiveawayType;
+	// For currency giveaways
+	prize?: number;
+	// For TCG card giveaways
+	cardId?: string;
+	cardName?: string;
+	cardRarity?: string;
+	cardImageUrl?: string;
 	participants: GiveawayParticipant[];
 	startedAt: Date;
 	active: boolean;
@@ -53,12 +62,26 @@ function generateGiveawayHTML(giveaway: Giveaway): string {
 		`${giveaway.duration} minute${giveaway.duration !== 1 ? 's' : ''}` :
 		'Manual (no auto-end)';
 
+	let prizeHTML = '';
+	let imageHTML = '';
+	let title = 'GIVEAWAY ACTIVE!';
+
+	if (giveaway.type === 'currency') {
+		prizeHTML = `<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize!)} ${CURRENCYNAME}<br />`;
+	} else if (giveaway.type === 'tcgcard') {
+		title = 'TCG CARD GIVEAWAY ACTIVE!';
+		const imageUrl = giveaway.cardImageUrl || 'https://via.placeholder.com/160x223?text=No+Image';
+		imageHTML = `<img src="${imageUrl}" width="160" height="223" alt="${giveaway.cardName}" title="${giveaway.cardName}" style="border-radius: 8px; display: block; margin: 10px auto;" />`;
+		prizeHTML = `<strong>Card:</strong> ${giveaway.cardName}<br /><strong>Rarity:</strong> ${giveaway.cardRarity}<br />`;
+	}
+
 	return `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #4CAF50; margin: 10px 0;">GIVEAWAY ACTIVE!</h2>` +
+		`<h2 style="color: #4CAF50; margin: 10px 0;">${title}</h2>` +
+		imageHTML +
 		`<p style="font-size: 16px; margin: 10px 0;">` +
 		`<strong>Host:</strong> ${nameColor(giveaway.hostName, true, true)}<br />` +
-		`<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}<br />` +
+		prizeHTML +
 		`<strong>Duration:</strong> ${durationText}` +
 		`</p>` +
 		`<p style="font-size: 14px; margin: 15px 0;">` +
@@ -97,7 +120,32 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	const randomIndex = Math.floor(Math.random() * giveaway.participants.length);
 	const winner = giveaway.participants[randomIndex];
 
-	await Economy.updateBalance(winner.userid, giveaway.prize);
+	// Award the prize based on giveaway type
+	if (giveaway.type === 'currency') {
+		await Economy.updateBalance(winner.userid, giveaway.prize!);
+	} else if (giveaway.type === 'tcgcard') {
+		// Import TCG collections dynamically
+		try {
+			const { userCollectionsCollection } = require('../tcg/tcg_collections');
+			await userCollectionsCollection.updateOne(
+				{ userId: winner.userid, cardId: giveaway.cardId },
+				{
+					$inc: { quantity: 1 },
+					$setOnInsert: {
+						userId: winner.userid,
+						cardId: giveaway.cardId,
+						firstAcquiredAt: new Date().toISOString(),
+					},
+					$set: {
+						lastAcquiredAt: new Date().toISOString(),
+					},
+				},
+				{ upsert: true }
+			);
+		} catch (e) {
+			console.error('Error adding TCG card to winner collection:', e);
+		}
+	}
 
 	giveaway.active = false;
 	giveaway.winnerId = winner.userid;
@@ -107,14 +155,28 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	await GiveawayDB.insertOne(giveaway);
 	activeGiveaways.delete(roomid);
 
+	let prizeText = '';
+	let imageHTML = '';
+	let title = 'GIVEAWAY WINNER!';
+
+	if (giveaway.type === 'currency') {
+		prizeText = `${Economy.formatMoney(giveaway.prize!)} ${CURRENCYNAME}`;
+	} else if (giveaway.type === 'tcgcard') {
+		title = 'TCG CARD GIVEAWAY WINNER!';
+		const imageUrl = giveaway.cardImageUrl || 'https://via.placeholder.com/160x223?text=No+Image';
+		imageHTML = `<img src="${imageUrl}" width="160" height="223" alt="${giveaway.cardName}" title="${giveaway.cardName}" style="border-radius: 8px; display: block; margin: 10px auto;" />`;
+		prizeText = giveaway.cardName!;
+	}
+
 	const html = `<div class="infobox" style="border: 2px solid #4CAF50; padding: 15px; margin: 10px 0;">` +
 		`<center>` +
-		`<h2 style="color: #4CAF50; margin: 10px 0;">GIVEAWAY WINNER!</h2>` +
+		`<h2 style="color: #4CAF50; margin: 10px 0;">${title}</h2>` +
+		imageHTML +
 		`<p style="font-size: 18px; margin: 15px 0;">` +
 		`<strong>Winner:</strong> ${nameColor(winner.username, true, true)}` +
 		`</p>` +
 		`<p style="font-size: 16px; margin: 10px 0;">` +
-		`<strong>Prize Won:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}` +
+		`<strong>Prize Won:</strong> ${prizeText}` +
 		`</p>` +
 		`<p style="font-size: 14px; margin-top: 15px;">` +
 		`Total Participants: ${giveaway.participants.length}` +
@@ -126,7 +188,7 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 
 	const winnerUser = Users.get(winner.userid);
 	if (winnerUser) {
-		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #4CAF50; padding: 20px;"><center><h2 style="color: #4CAF50;">Congratulations!</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}</strong></p></center></div>`);
+		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #4CAF50; padding: 20px;"><center><h2 style="color: #4CAF50;">Congratulations!</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${prizeText}</strong></p></center></div>`);
 	}
 }
 
@@ -148,8 +210,15 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("There is already an active giveaway in this room. End it first with /giveaway end.");
 			}
 
-			const [prizeStr, durationStr] = target.split(',').map(s => s.trim());
-			const prize = parseInt(prizeStr);
+			const parts = target.split(',').map(s => s.trim());
+			const giveawayType = parts[0].toLowerCase() as GiveawayType;
+
+			if (!['currency', 'tcgcard'].includes(giveawayType)) {
+				return this.errorReply("Usage: /giveaway start [currency|tcgcard], [amount or cardId], [duration in minutes or 'manual']");
+			}
+
+			const prizeStr = parts[1];
+			const durationStr = parts[2];
 			const defaultDuration = await getRoomDefaultDuration(roomid);
 
 			let duration: number | undefined;
@@ -162,10 +231,6 @@ export const commands: Chat.ChatCommands = {
 				duration = durationStr ? parseInt(durationStr) : defaultDuration;
 			}
 
-			if (!prizeStr || isNaN(prize) || prize <= 0) {
-				return this.errorReply("Specify a valid prize amount. Usage: /giveaway start [amount], [duration in minutes or 'manual']");
-			}
-
 			if (!isManual && (isNaN(duration!) || duration! < MIN_DURATION || duration! > MAX_DURATION)) {
 				return this.errorReply(`Duration must be between ${MIN_DURATION} and ${MAX_DURATION} minutes, or 'manual' for manual-only ending.`);
 			}
@@ -174,12 +239,43 @@ export const commands: Chat.ChatCommands = {
 				roomid,
 				hostId: user.id,
 				hostName: user.name,
-				prize,
+				type: giveawayType,
 				participants: [],
 				startedAt: new Date(),
 				active: true,
 				duration,
 			};
+
+			if (giveawayType === 'currency') {
+				const prize = parseInt(prizeStr);
+				if (!prizeStr || isNaN(prize) || prize <= 0) {
+					return this.errorReply("Specify a valid prize amount. Usage: /giveaway start currency, [amount], [duration in minutes or 'manual']");
+				}
+				giveaway.prize = prize;
+			} else if (giveawayType === 'tcgcard') {
+				if (!prizeStr) {
+					return this.errorReply("Specify a card ID. Usage: /giveaway start tcgcard, [cardId], [duration in minutes or 'manual']");
+				}
+
+				// Fetch card details
+				try {
+					const { getCard } = require('../tcg/tcg_utils');
+					const { tcgCardsCollection } = require('../tcg/tcg_collections');
+					let card = getCard(prizeStr) || null;
+					if (!card) {
+						card = await tcgCardsCollection.findOne({ cardId: prizeStr });
+					}
+					if (!card) {
+						return this.errorReply(`Card with ID "${prizeStr}" not found.`);
+					}
+					giveaway.cardId = card.cardId;
+					giveaway.cardName = card.name;
+					giveaway.cardRarity = card.rarity;
+					giveaway.cardImageUrl = card.imageUrl;
+				} catch {
+					return this.errorReply("An error occurred while fetching card information.");
+				}
+			}
 
 			if (!isManual && duration) {
 				giveaway.timer = setTimeout(() => {
@@ -193,7 +289,14 @@ export const commands: Chat.ChatCommands = {
 			const html = generateGiveawayHTML(giveaway);
 
 			room.add(`|uhtml|${uhtmlid}|${html}`).update();
-			this.modlog('GIVEAWAY', null, `started a giveaway for ${Economy.formatMoney(prize)} (${isManual ? 'manual' : `${duration} min`})`);
+
+			let prizeDescription = '';
+			if (giveawayType === 'currency') {
+				prizeDescription = Economy.formatMoney(giveaway.prize!);
+			} else {
+				prizeDescription = giveaway.cardName!;
+			}
+			this.modlog('GIVEAWAY', null, `started a ${giveawayType} giveaway for ${prizeDescription} (${isManual ? 'manual' : `${duration} min`})`);
 		},
 
 		join(target, room, user) {
@@ -309,7 +412,13 @@ export const commands: Chat.ChatCommands = {
 
 			const historyList = giveaways.map((g, i) => {
 				const date = g.endedAt ? new Date(g.endedAt).toLocaleString() : 'N/A';
-				return `${i + 1}. <strong>${nameColor(g.hostName, true, false)}</strong> gave away ${Economy.formatMoney(g.prize)} to ${nameColor(g.winnerName || 'Unknown', true, false)} - ${date}`;
+				let prizeText = '';
+				if (g.type === 'currency') {
+					prizeText = Economy.formatMoney(g.prize!);
+				} else if (g.type === 'tcgcard') {
+					prizeText = g.cardName!;
+				}
+				return `${i + 1}. <strong>${nameColor(g.hostName, true, false)}</strong> gave away ${prizeText} to ${nameColor(g.winnerName || 'Unknown', true, false)} - ${date}`;
 			}).join('<br />');
 
 			this.sendReplyBox(`<strong>Recent Giveaway History (Last ${HISTORY_LIMIT}):</strong><br /><br />${historyList}`);
@@ -356,8 +465,13 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const cmds = [
 				[
-					"/giveaway start [amount], [duration]",
-					"Start a giveaway with the specified prize amount and optional duration in minutes " +
+					"/giveaway start currency, [amount], [duration]",
+					"Start a currency giveaway with the specified prize amount and optional duration in minutes " +
+					"(or 'manual' for no auto-end). Requires: #.",
+				],
+				[
+					"/giveaway start tcgcard, [cardId], [duration]",
+					"Start a TCG card giveaway with the specified card ID and optional duration in minutes " +
 					"(or 'manual' for no auto-end). Requires: #.",
 				],
 				["/giveaway join", "Join an active giveaway."],
