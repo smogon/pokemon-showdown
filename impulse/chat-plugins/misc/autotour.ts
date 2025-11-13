@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Auto Tournaments Commands
+* Autotour Commands
 * @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
@@ -8,6 +8,10 @@ import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const AUTOTOUR_COLLECTION = 'autotour_configs';
+const ALL_TOUR_TYPES = [
+	'elimination',
+	'roundrobin',
+];
 
 interface PerRoomAutotourConfig {
 	roomid: RoomID;
@@ -23,11 +27,6 @@ interface PerRoomAutotourConfig {
 	lastTourTime?: number;
 	_id?: unknown;
 }
-
-const ALL_TOUR_TYPES = [
-	'elimination',
-	'roundrobin',
-];
 
 const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 	formats: [
@@ -70,7 +69,6 @@ async function loadConfig(): Promise<void> {
 		autotourConfig[config.roomid] = config;
 	}
 }
-void loadConfig();
 
 function pickRandom<T>(arr: T[]): T {
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -164,7 +162,6 @@ function runAutotour(roomid: RoomID): void {
 			void saveConfig(roomid);
 		}
 	} catch {
-		// Silently fail
 	}
 }
 
@@ -181,6 +178,7 @@ function checkRoomOwner(context: Chat.CommandContext, room: Room | null): boolea
 
 export const commands: Chat.ChatCommands = {
 	autotour: {
+		'': 'help',
 		async enable(target, room, user) {
 			this.checkChat();
 			if (!checkRoomOwner(this, room)) return;
