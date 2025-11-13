@@ -22,16 +22,14 @@ import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, 
  */
 function reverseBattleLogByTurns(battleLog: string[]): string[] {
 	if (battleLog.length === 0) return [];
-	
+
 	// Split logs into turns based on turn headers
 	const turns: string[][] = [];
 	let currentTurn: string[] = [];
-	
+
 	// Battle logs are stored with turn header at the END of each turn's messages
 	// We need to group them properly
-	for (let i = 0; i < battleLog.length; i++) {
-		const log = battleLog[i];
-		
+	for (const log of battleLog) {
 		// Check if this is a turn header
 		if (log.includes('<strong>Turn ') && log.includes('</strong>')) {
 			// This is a turn header - it belongs at the START of the previous messages
@@ -48,21 +46,21 @@ function reverseBattleLogByTurns(battleLog: string[]): string[] {
 			currentTurn.push(log);
 		}
 	}
-	
+
 	// Add any remaining logs
 	if (currentTurn.length > 0) {
 		turns.push(currentTurn);
 	}
-	
+
 	// Reverse the turns array so newest turns appear first
 	turns.reverse();
-	
+
 	// Flatten back to a single array
 	const result: string[] = [];
 	for (const turn of turns) {
 		result.push(...turn);
 	}
-	
+
 	return result;
 }
 
@@ -206,7 +204,7 @@ export function generatePokemonInfoHTML(
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
-	let expBarHTML = '';
+	const expBarHTML = '';
 	if (isPlayerSide) {
 		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 		const expForNextLevel = pokemon.expToNextLevel;
@@ -1456,9 +1454,8 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	// Check slot 0 (always used in both single and double battles)
 	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	}
-	// In double battles, also check slot 1 if slot 0 is already filled
-	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+	} else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+		// In double battles, also check slot 1 if slot 0 is already filled
 		slotToFill = 1;
 	}
 	// --- END FIX ---
