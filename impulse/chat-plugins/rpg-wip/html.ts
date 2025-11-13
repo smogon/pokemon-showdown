@@ -265,7 +265,8 @@ export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	isDoubleBattle: boolean,
-	ownerName?: string // <-- NEW PARAMETER
+	ownerName?: string,
+	battle?: BattleState // <-- NEW PARAMETER for battle conditions
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
@@ -349,7 +350,17 @@ export function generateSharedBattlePokemonInfo(
 		'</span>' +
 		'</div>';
 
-	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags;
+	// Add weather, terrain, and field effect tags if battle is provided
+	let battleConditionTags = '';
+	if (battle) {
+		const weatherTags = generateWeatherTags(battle);
+		const terrainTags = generateTerrainTags(battle);
+		const fieldEffectTags = generateFieldEffectTags(battle);
+		const sideEffectTags = generateSideEffectTags(battle, isPlayerSide ? 'player' : 'opponent');
+		battleConditionTags = [weatherTags, terrainTags, fieldEffectTags, sideEffectTags].filter(Boolean).join('');
+	}
+
+	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags + battleConditionTags;
 	const statusDisplay = allStatusTags || '&nbsp;'; // Non-breaking space for height
 
 	if (isDoubleBattle) {
@@ -397,8 +408,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
 	const craftyShield = (side === 'player') ? battle.playerCraftyShield : battle.opponentCraftyShield;
 
-	// Style to roughly match the <h3> text size
-	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	// Style to match other status condition tags
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
 
 	if (reflectTurns > 0) effects.push('<span style="background-color: #A890F0; ' + tagStyle + '">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span style="background-color: #F8D030; ' + tagStyle + '">Light Screen</span>');
@@ -414,7 +425,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	if (toxicSpikes > 0) effects.push('<span style="background-color: #A040A0; ' + tagStyle + '">TSP ' + String(toxicSpikes) + '</span>');
 	if (hazards.includes('stickyweb')) effects.push('<span style="background-color: #705898; ' + tagStyle + '">Web</span>');
 
-	return effects.join(' ');
+	return effects.join('');
 }
 
 /**
@@ -423,7 +434,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
 	
-	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
 	const weatherColors: Record<string, string> = {
 		'sun': '#F8D030',
 		'rain': '#6890F0',
@@ -448,7 +459,7 @@ function generateWeatherTags(battle: BattleState): string {
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 	
-	return `<span style="background-color: ${color}; ${tagStyle}">☀️ ${name}${turnsText}</span>`;
+	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
 }
 
 /**
@@ -457,7 +468,7 @@ function generateWeatherTags(battle: BattleState): string {
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 	
-	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
 	const terrainColors: Record<string, string> = {
 		'electric': '#F8D030',
 		'grassy': '#78C850',
@@ -484,7 +495,7 @@ function generateTerrainTags(battle: BattleState): string {
  */
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
-	const tagStyle = 'font-size: 0.8em; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 4px; vertical-align: middle; text-shadow: 1px 1px 1px #333;';
+	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; color: white; margin-left: 5px; vertical-align: middle;';
 	
 	if (battle.trickRoomTurns > 0) {
 		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
@@ -511,7 +522,7 @@ function generateFieldEffectTags(battle: BattleState): string {
 		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
 	}
 	
-	return effects.join(' ');
+	return effects.join('');
 }
 
 export function generateSingleBattleHTML(
@@ -677,34 +688,17 @@ export function generateSingleBattleHTML(
 		opponentOwnerName = 'Wild';
 	}
 
-	// Generate weather, terrain, and field effect tags
-	const weatherTags = generateWeatherTags(battle);
-	const terrainTags = generateTerrainTags(battle);
-	const fieldEffectTags = generateFieldEffectTags(battle);
-	const playerSideEffects = generateSideEffectTags(battle, 'player');
-	const opponentSideEffects = generateSideEffectTags(battle, 'opponent');
-	
-	let battleConditionsHTML = '';
-	const allConditions = [weatherTags, terrainTags, fieldEffectTags, playerSideEffects, opponentSideEffects].filter(Boolean);
-	if (allConditions.length > 0) {
-		battleConditionsHTML = '<div style="padding: 5px; margin: 5px 0; text-align: center; background-color: #f0f0f0; border-radius: 5px;">' +
-			'<strong style="font-size: 0.9em;">Battle Conditions:</strong> ' +
-			allConditions.join(' ') +
-			'</div>';
-	}
-
 	return '<div class="infobox">' +
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName) +
+		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
 		'</td>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName) +
+		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		battleConditionsHTML +
 		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
@@ -761,7 +755,7 @@ export function generateDoubleBattleHTML(
 		}
 
 		if (slot.pokemon.hp <= 0) {
-			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>';
+			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
 		}
 
 		let borderStyle = "1px solid #ccc";
@@ -772,7 +766,7 @@ export function generateDoubleBattleHTML(
 			borderStyle = "3px solid #28a745";
 		}
 
-		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName) + '</div>';
+		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
 	};
 
 	let html = '<div class="infobox">';
@@ -797,21 +791,6 @@ export function generateDoubleBattleHTML(
 	html += '</td>';
 	html += '</tr>';
 	html += '</table>';
-
-	// Generate weather, terrain, and field effect tags
-	const weatherTags = generateWeatherTags(battle);
-	const terrainTags = generateTerrainTags(battle);
-	const fieldEffectTags = generateFieldEffectTags(battle);
-	const playerSideEffects = generateSideEffectTags(battle, 'player');
-	const opponentSideEffects = generateSideEffectTags(battle, 'opponent');
-	
-	const allConditions = [weatherTags, terrainTags, fieldEffectTags, playerSideEffects, opponentSideEffects].filter(Boolean);
-	if (allConditions.length > 0) {
-		html += '<div style="padding: 5px; margin: 5px 0; text-align: center; background-color: #f0f0f0; border-radius: 5px;">' +
-			'<strong style="font-size: 0.9em;">Battle Conditions:</strong> ' +
-			allConditions.join(' ') +
-			'</div>';
-	}
 
 	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
 
