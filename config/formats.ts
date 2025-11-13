@@ -408,7 +408,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	///////////////////////////////////////////////////////////////
 	//////////////////////// Server Special /////////////////////////////
 	///////////////////////////////////////////////////////////////
-	{
+	/*{
 		section: "Server Special",
 		column: 1,
 	},
@@ -556,7 +556,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
 		},
-	},
+	},*/
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
