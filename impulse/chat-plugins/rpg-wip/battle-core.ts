@@ -1045,18 +1045,18 @@ export function handleOnHitAbilityResponses(
 	// Phase 6: Gulp Missile - Cramorant spits out catch when hit
 	if (defenderAbility === 'gulpmissile' && damageDealt > 0 && attacker.hp > 0) {
 		const gulpForm = (defenderSlot as any).gulpMissileForm;
-		
+
 		if (gulpForm === 'gulping') {
 			// Arrokuda form - deals 1/4 max HP damage and lowers Defense
 			const damageAmount = Math.floor(attacker.maxHp / 4);
 			attacker.hp = Math.max(0, attacker.hp - damageAmount);
 			messageLog.push(`${defender.species} spit out its catch at ${attacker.species}!`);
-			
+
 			if (attacker.hp > 0 && attackerSlot.statStages.def > -6) {
 				attackerSlot.statStages.def--;
 				messageLog.push(`${attacker.species}'s Defense fell!`);
 			}
-			
+
 			// Revert form
 			if (defender.species.includes('Gulping')) {
 				defender.species = 'Cramorant';
@@ -1067,7 +1067,7 @@ export function handleOnHitAbilityResponses(
 			const damageAmount = Math.floor(attacker.maxHp / 4);
 			attacker.hp = Math.max(0, attacker.hp - damageAmount);
 			messageLog.push(`${defender.species} spit out its catch at ${attacker.species}!`);
-			
+
 			if (attacker.hp > 0 && !attackerSlot.status) {
 				const attackerSpecies = Dex.species.get(attacker.species);
 				if (!attackerSpecies.types.includes('Electric')) {
@@ -1075,7 +1075,7 @@ export function handleOnHitAbilityResponses(
 					messageLog.push(`${attacker.species} was paralyzed!`);
 				}
 			}
-			
+
 			// Revert form
 			if (defender.species.includes('Gorging')) {
 				defender.species = 'Cramorant';
