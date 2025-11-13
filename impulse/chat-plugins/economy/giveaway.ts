@@ -65,10 +65,10 @@ function generateGiveawayHTML(giveaway: Giveaway): string {
 		`Click the button below to join!` +
 		`</p>` +
 		`<button class="button" name="send" value="/giveaway join" ` +
-		`style="background-color: #4CAF50; color: white; font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
+		`style="font-size: 16px; padding: 10px 20px; border-radius: 5px;">` +
 		`Join Giveaway` +
 		`</button>` +
-		`<p style="font-size: 12px; margin-top: 15px; color: #666;">` +
+		`<p style="font-size: 12px; margin-top: 15px;">` +
 		`Participants: <strong>${giveaway.participants.length}</strong>` +
 		`</p>` +
 		`</center>` +
@@ -116,7 +116,7 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 		`<p style="font-size: 16px; margin: 10px 0;">` +
 		`<strong>Prize Won:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}` +
 		`</p>` +
-		`<p style="font-size: 14px; color: #666; margin-top: 15px;">` +
+		`<p style="font-size: 14px; margin-top: 15px;">` +
 		`Total Participants: ${giveaway.participants.length}` +
 		`</p>` +
 		`</center>` +
