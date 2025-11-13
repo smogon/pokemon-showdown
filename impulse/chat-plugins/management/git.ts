@@ -1,60 +1,89 @@
 /*
 * Pokemon Showdown
 * Git Commands
-* Allows pulling git changes directly from chatrooms.
-* Note: Remove sudo if you're using windows or android.
 * @author PrinceSky-Git
 */
-
 import { FS, Utils } from '../../../lib';
 import { execSync } from 'child_process';
 
+const GIT_COMMAND_TIMEOUT = 30000; // 30 seconds
+const SUDO_PREFIX = 'sudo '; // Remove 'sudo ' if not needed
+
 async function findGitRoot(startPath: string): Promise<string | null> {
-	let cur = FS(startPath);
+	let currentPath = FS(startPath);
+
 	while (true) {
-		if (await FS(`${cur.path}/.git`).exists()) return cur.path;
-		const parent = cur.parentDir();
-		if (parent.path === cur.path) return null;
-		cur = parent;
+		const gitPath = FS(`${currentPath.path}/.git`);
+		if (await gitPath.exists()) {
+			return currentPath.path;
+		}
+
+		const parentPath = currentPath.parentDir();
+		if (parentPath.path === currentPath.path) {
+			return null;
+		}
+		currentPath = parentPath;
 	}
 }
 
-async function runGitCmd(ctx: any, cmd: string, label: string): Promise<void> {
+async function runGitCommand(command: string): Promise<string> {
 	const gitRoot = await findGitRoot(FS.ROOT_PATH);
-	if (!gitRoot) throw new Chat.ErrorMessage('Could not find git root directory.');
+	if (!gitRoot) {
+		throw new Chat.ErrorMessage('Could not find .git root directory.');
+	}
+
 	try {
-		const output = execSync(`sudo git ${cmd}`, { cwd: gitRoot, encoding: 'utf8', timeout: 30000 });
-		return ctx.sendReplyBox(`<details><summary>${label}</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
+		return execSync(`${SUDO_PREFIX}git ${command}`, {
+			cwd: gitRoot,
+			encoding: 'utf8',
+			timeout: GIT_COMMAND_TIMEOUT,
+		});
 	} catch (err: unknown) {
-		throw new Chat.ErrorMessage(`Git ${cmd} failed: ${err instanceof Error ? err.message : String(err)}`);
+		const message = err instanceof Error ? err.message : String(err);
+		throw new Chat.ErrorMessage(`Git command 'git ${command}' failed: ${message}`);
 	}
 }
 
 export const commands: Chat.ChatCommands = {
-	async gitpull(target, room, user): Promise<void> {
-		if (!this.runBroadcast()) return;
-		this.checkCan('bypassall');
-		await runGitCmd(this, 'pull', 'Git pull completed');
-	},
-	gitpullhelp: [`/gitpull - Pulls the latest changes from git repository. Requires: ~`],
+	git: {
+		'': 'help',
 
-	async gitstatus(target, room, user): Promise<void> {
-		if (!this.runBroadcast()) return;
-		this.checkCan('bypassall');
-		await runGitCmd(this, 'status', 'Git status');
-	},
-	gitstatushelp: [`/gitstatus - Shows the current git status. Requires: ~`],
+		async pull(target, room, user): Promise<void> {
+			if (!this.runBroadcast()) return;
+			this.checkCan('bypassall');
 
-	githelp(): void {
-		if (!this.runBroadcast()) return;
-		const cmds = [
-			["/gitpull", "Pulls the latest changes from git repository. Requires: ~."],
-			["/gitstatus", "Shows the current git status. Requires: ~."],
-		];
-		this.sendReplyBox(
-			`<center><strong>Git Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-			cmds.map(([c, d], i) => `<li><b>${c}</b> - ${d}</li>${i < cmds.length - 1 ? '<hr>' : ''}`).join('') +
-			`</ul>`
-		);
+			const output = await runGitCommand('pull');
+			return this.sendReplyBox(`<details><summary>Git pull completed</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
+		},
+		pullhelp: [`/git pull - Pulls the latest changes from git repository. Requires: ~`],
+
+		async status(target, room, user): Promise<void> {
+			if (!this.runBroadcast()) return;
+			this.checkCan('bypassall');
+
+			const output = await runGitCommand('status');
+			return this.sendReplyBox(`<details><summary>Git status</summary><pre>${Utils.escapeHTML(output)}</pre></details>`);
+		},
+		statushelp: [`/git status - Shows the current git status. Requires: ~`],
+
+		help(): void {
+			if (!this.runBroadcast()) return;
+			const helpList = [
+				{ cmd: "/git pull", desc: "Pulls the latest changes from git repository. Requires: ~." },
+				{ cmd: "/git status", desc: "Shows the current git status. Requires: ~." },
+			];
+			const html = `<center><strong>Git Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('') +
+				`</ul>`;
+			this.sendReplyBox(html);
+		},
 	},
+
+	gitpull: 'git.pull',
+	gitpullhelp: 'git.pullhelp',
+	gitstatus: 'git.status',
+	gitstatushelp: 'git.statushelp',
+	githelp: 'git.help',
 };
