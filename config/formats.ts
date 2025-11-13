@@ -412,7 +412,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Server Special",
 		column: 1,
 	},
-	{
+	/*{
 		name: "[Gen 9] A Golden Experience",
 		desc: `A fun metagame where we try to make everything viable, or at least usable. We also have new Fakemons!`,
 		mod: 'agoldenexperience',
@@ -495,8 +495,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z', 'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Pikanium Z', 'Aloraichium Z', 'Eevium Z', 'Snorlium Z', 'Mewnium Z', 'Ultranecrozium Z', 'Pikashunium Z', 'Decidium Z', 'Incinium Z', 'Primarium Z', 'Lycanium Z', 'Mimikium Z', 'Kommonium Z', 'Tapunium Z', 'Solganium Z', 'Lunalium Z', 'Marshadium Z',
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-	},
-	/*{
+	},*/
+	{
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
 		mod: 'toho',
@@ -530,7 +530,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
 		},
-	},*/
+	},
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
