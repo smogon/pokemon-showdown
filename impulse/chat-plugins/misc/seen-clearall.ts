@@ -2,14 +2,20 @@
 * Pokemon Showdown
 * Seen & Clearall Commands
 */
-
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 interface SeenDocument { _id: string; lastSeen: Date; }
 
-const SeenDB = ImpulseDB<SeenDocument>('seen');
+const DB_TABLE_NAME = 'seen';
+const SeenDB = ImpulseDB<SeenDocument>(DB_TABLE_NAME);
+const MS_IN_DAY = 86400000;
+const DEFAULT_CLEANUP_DAYS = 365;
+const MIN_CLEANUP_DAYS = 30;
+const REJOIN_DELAY = 1000; // 1 second
+const DEFAULT_RECENT_LIMIT = 25;
+const MAX_RECENT_LIMIT = 100;
 
 export const trackSeen = (userid: string): void => {
 	void SeenDB.upsert({ _id: userid }, { $set: { lastSeen: new Date() } }).catch(err => {});
@@ -26,11 +32,12 @@ export const getLastSeen = async (userid: string): Promise<Date | null> => {
 	return doc?.lastSeen || null;
 };
 
-export const getRecentUsers = async (limit = 50): Promise<SeenDocument[]> =>
+export const getRecentUsers = async (limit = DEFAULT_RECENT_LIMIT): Promise<SeenDocument[]> =>
 	SeenDB.find({}, { sort: { lastSeen: -1 }, limit, projection: { _id: 1, lastSeen: 1 } });
 
-export const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
-	const result = await SeenDB.deleteMany({ lastSeen: { $lt: new Date(Date.now() - daysOld * 86400000) } });
+export const cleanupOldSeen = async (daysOld = DEFAULT_CLEANUP_DAYS): Promise<number> => {
+	const cutoff = Date.now() - (daysOld * MS_IN_DAY);
+	const result = await SeenDB.deleteMany({ lastSeen: { $lt: new Date(cutoff) } });
 	return result.deletedCount || 0;
 };
 
@@ -56,7 +63,7 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 				const u = Users.get(userId);
 				u?.connections?.forEach(conn => u.joinRoom(room, conn));
 			});
-		}, 1000);
+		}, REJOIN_DELAY);
 	}
 	return { cleared, failed };
 };
@@ -89,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
-			const limit = Math.min(parseInt(target) || 25, 100);
+			const limit = Math.min(parseInt(target) || DEFAULT_RECENT_LIMIT, MAX_RECENT_LIMIT);
 
 			try {
 				const recent = await getRecentUsers(limit);
@@ -111,8 +118,8 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
-			const days = parseInt(target) || 365;
-			if (days < 30) return this.errorReply('Minimum: 30 days.');
+			const days = parseInt(target) || DEFAULT_CLEANUP_DAYS;
+			if (days < MIN_CLEANUP_DAYS) return this.errorReply(`Minimum: ${MIN_CLEANUP_DAYS} days.`);
 
 			try {
 				const deleted = await cleanupOldSeen(days);
@@ -126,8 +133,8 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const cmds = [
 				["/seen [user]", "Shows the last connection time for a user."],
-				["/seen recent [limit]", "Shows recently seen users (staff only). Default limit: 25, max: 100."],
-				["/seen cleanup [days]", "Deletes records older than X days (staff only, min: 30)."],
+				[`/seen recent [limit]", "Shows recently seen users (staff only). Default: ${DEFAULT_RECENT_LIMIT}, max: ${MAX_RECENT_LIMIT}.`],
+				[`/seen cleanup [days]", "Deletes records older than X days (staff only, min: ${MIN_CLEANUP_DAYS}). Default: ${DEFAULT_CLEANUP_DAYS}.`],
 			];
 			this.sendReplyBox(
 				`<center><strong>Seen Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
@@ -153,7 +160,10 @@ export const commands: Chat.ChatCommands = {
 		global(target, room, user): void {
 			this.checkCan('roomowner');
 			const rooms = Rooms.global.chatRooms.filter((r): r is Room => !!r && !r.battle);
-			const { failed } = clearRooms(rooms, user);
+			const { cleared, failed } = clearRooms(rooms, user);
+
+			this.privateModAction(`(${user.name} has cleared all chatrooms: ${cleared.join(', ') || 'none'
+				})`);
 			if (failed.length) {
 				this.errorReply(`Cannot clear the following rooms because a tournament is running: ${failed.join(', ')}`);
 			}
@@ -179,17 +189,19 @@ export const commands: Chat.ChatCommands = {
 			if (!roomid) return this.errorReply("Specify a room.");
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) return this.errorReply(`Room "${roomid}" not found.`);
-			if (!user.can('roomowner', null, targetRoom) && !user.can('declare', null, targetRoom)) {
-				return this.errorReply("Requires: Room Owner or Global Admin.");
-			}
+
+			this.checkCan('declare', null, targetRoom);
+
 			if (targetRoom.game?.gameid === 'tournament') {
 				try {
 					if (typeof targetRoom.game.end === 'function') targetRoom.game.end();
 					targetRoom.game = null;
 					this.sendReply(`Cleaned up stuck tournament in "${roomid}". Autotour will resume on next interval.`);
+					this.modlog('CLEANTOUR', null, `in room ${roomid}`);
 				} catch {
 					targetRoom.game = null;
 					this.errorReply(`Tournament forcibly removed from "${roomid}".`);
+					this.modlog('CLEANTOUR', null, `in room ${roomid} (forced)`);
 				}
 			} else {
 				return this.errorReply(`No tournament is running in "${roomid}".`);
@@ -201,8 +213,8 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 
-	globalclearall(): void { this.parse('/clearall global'); },
-	clearallhelp(): void { this.parse('/clearall help'); },
-	recentseen(): void { this.parse('/seen recent'); },
-	cleanupseen(): void { this.parse('/seen cleanup'); },
+	globalclearall: 'clearall.global',
+	clearallhelp: 'clearall.help',
+	recentseen: 'seen.recent',
+	cleanupseen: 'seen.cleanup',
 };

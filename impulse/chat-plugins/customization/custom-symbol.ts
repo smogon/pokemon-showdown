@@ -3,12 +3,15 @@
 * Custom Symbol Commands
 * @author PrinceSky-Git
 */
-
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
+const DB_TABLE_NAME = 'customsymbols';
+const MAX_USERNAME_LENGTH = 19;
+const SYMBOL_LENGTH = 1;
+const LIST_PAGE_LIMIT = 20;
 
 interface CustomSymbolDocument {
 	_id: string;
@@ -18,7 +21,7 @@ interface CustomSymbolDocument {
 	updatedAt: Date;
 }
 
-const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
+const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>(DB_TABLE_NAME);
 
 const applyCustomSymbol = async (userid: string): Promise<void> => {
 	const user = Users.get(userid);
@@ -35,22 +38,23 @@ const applyCustomSymbol = async (userid: string): Promise<void> => {
 const removeCustomSymbol = (userid: string): void => {
 	const user = Users.get(userid);
 	if (!user) return;
+
 	delete (user as any).customSymbol;
 	if ((user as any).originalGroup) delete (user as any).originalGroup;
 	user.updateIdentity();
 };
 
-const notify = (userId: string, staffName: string, symbol: string, action: string, isUser = true, targetName = ''): void => {
-	if (isUser) {
-		const user = Users.get(userId);
-		if (user?.connected) {
-			user.popup(`|html|${nameColor(staffName, true, true)} ${action} your custom symbol to: <strong>${symbol}</strong><br /><center>Refresh to see changes.</center>`);
-		}
-	} else {
-		const room = Rooms.get(STAFF_ROOM_ID);
-		if (room) {
-			room.add(`|html|<div class="infobox">${nameColor(staffName, true, true)} ${action} custom symbol for ${nameColor(targetName, true, false)}: <strong>${symbol}</strong></div>`).update();
-		}
+const notifyUser = (userId: string, staffName: string, symbol: string, action: string): void => {
+	const user = Users.get(userId);
+	if (user?.connected) {
+		user.popup(`|html|${nameColor(staffName, true, true)} ${action} your custom symbol to: <strong>${symbol}</strong><br /><center>Refresh to see changes.</center>`);
+	}
+};
+
+const notifyStaff = (staffName: string, targetName: string, symbol: string, action: string): void => {
+	const room = Rooms.get(STAFF_ROOM_ID);
+	if (room) {
+		room.add(`|html|<div class="infobox">${nameColor(staffName, true, true)} ${action} custom symbol for ${nameColor(targetName, true, false)}: <strong>${symbol}</strong></div>`).update();
 	}
 };
 
@@ -68,19 +72,21 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !symbol) return this.parse('/help symbol');
 
 			const userId = toID(name);
-			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
-			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
+			if (userId.length > MAX_USERNAME_LENGTH) return this.errorReply('Usernames are not this long...');
+			if (symbol.length !== SYMBOL_LENGTH) return this.errorReply('Symbol must be a single character.');
+
 			if (await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User already has symbol. Use /symbol update or /symbol delete.');
 			}
 
 			const now = new Date();
 			await CustomSymbolDB.insertOne({ _id: userId, symbol, setBy: user.id, createdAt: now, updatedAt: now });
+
 			await applyCustomSymbol(userId);
 
 			this.sendReply(`|raw|You have given ${nameColor(name, true, false)} the custom symbol: ${symbol}`);
-			notify(userId, user.name, symbol, 'has set');
-			notify('', user.name, symbol, 'set', false, name);
+			notifyUser(userId, user.name, symbol, 'has set');
+			notifyStaff(user.name, name, symbol, 'set');
 		},
 
 		async update(target, room, user): Promise<void> {
@@ -89,22 +95,25 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !symbol) return this.parse('/help symbol');
 
 			const userId = toID(name);
+
 			if (!await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User does not have symbol. Use /symbol set.');
 			}
-			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
+
+			if (symbol.length !== SYMBOL_LENGTH) return this.errorReply('Symbol must be a single character.');
 
 			await CustomSymbolDB.updateOne({ _id: userId }, { $set: { symbol, updatedAt: new Date() } });
 			await applyCustomSymbol(userId);
 
 			this.sendReply(`|raw|You have updated ${nameColor(name, true, false)}'s custom symbol to: ${symbol}`);
-			notify(userId, user.name, symbol, 'has updated');
-			notify('', user.name, symbol, 'updated', false, name);
+			notifyUser(userId, user.name, symbol, 'has updated');
+			notifyStaff(user.name, name, symbol, 'updated');
 		},
 
 		async delete(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 			const userId = toID(target);
+
 			if (!await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply(`${target} does not have a custom symbol.`);
 			}
@@ -127,8 +136,13 @@ export const commands: Chat.ChatCommands = {
 
 		async list(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
-			const result = await CustomSymbolDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
-			if (!result.total) return this.sendReply('No custom symbols have been set.');
+
+			const result = await CustomSymbolDB.findPaginated(
+				{},
+				{ page: parseInt(target) || 1, limit: LIST_PAGE_LIMIT, sort: { _id: 1 } }
+			);
+
+			if (result.total === 0) return this.sendReply('No custom symbols have been set.');
 
 			const rows: string[][] = result.docs.map(doc => [
 				doc._id,
@@ -144,8 +158,12 @@ export const commands: Chat.ChatCommands = {
 
 			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.hasPrev) output += `<button class="button" name="send" value="/symbol list ${result.page - 1}">Previous</button> `;
-				if (result.hasNext) output += `<button class="button" name="send" value="/symbol list ${result.page + 1}">Next</button>`;
+				if (result.hasPrev) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page - 1}">Previous</button> `;
+				}
+				if (result.hasNext) {
+					output += `<button class="button" name="send" value="/symbol list ${result.page + 1}">Next</button>`;
+				}
 				output += `</center></div>`;
 			}
 
@@ -154,17 +172,18 @@ export const commands: Chat.ChatCommands = {
 
 		help(): void {
 			if (!this.runBroadcast()) return;
-			const cmds = [
-				["/symbol set [user], [symbol]", "Set custom symbol. Requires: &."],
-				["/symbol update [user], [symbol]", "Update symbol. Requires: &."],
-				["/symbol delete [user]", "Remove custom symbol. Requires: &."],
-				["/symbol list [page]", "List custom symbols. Requires: &."],
+			const helpList = [
+				{ cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &." },
+				{ cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &." },
+				{ cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &." },
+				{ cmd: "/symbol list [page]", desc: "List custom symbols. Requires: &." },
 			];
-			this.sendReplyBox(
-				`<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				cmds.map(([c, d], i) => `<li><b>${c}</b> - ${d}</li>${i < cmds.length - 1 ? '<hr>' : ''}`).join('') +
-				`</ul>`
-			);
+			const html = `<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('') +
+				`</ul>`;
+			this.sendReplyBox(html);
 		},
 	},
 
@@ -178,18 +197,28 @@ export const loginfilter: Chat.LoginFilter = user => {
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
+
 	if (!customSymbol) return originalGetIdentity.call(this, room);
 
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
-	if (this.locked || this.namelocked) return (punishgroups.locked?.symbol || '\u203d') + this.name;
+	if (this.locked || this.namelocked) {
+		return (punishgroups.locked?.symbol || '\u203d') + this.name;
+	}
 
 	if (room) {
-		if (room.isMuted(this)) return (punishgroups.muted?.symbol || '!') + this.name;
+		if (room.isMuted(this)) {
+			return (punishgroups.muted?.symbol || '!') + this.name;
+		}
 		const roomGroup = room.auth.get(this);
-		if (roomGroup === this.tempGroup || roomGroup === ' ') return customSymbol + this.name;
+		if (roomGroup === this.tempGroup || roomGroup === ' ') {
+			return customSymbol + this.name;
+		}
 		return roomGroup + this.name;
 	}
 
-	if (this.semilocked) return (punishgroups.muted?.symbol || '!') + this.name;
+	if (this.semilocked) {
+		return (punishgroups.muted?.symbol || '!') + this.name;
+	}
+
 	return customSymbol + this.name;
 };
