@@ -352,45 +352,44 @@ export function generateSharedBattlePokemonInfo(
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
 	const displayStatus = slot.status || pokemon.status;
-	const statusColors: Record<Status, string> = { 'brn': '#F08030', 'par': '#F8D030', 'psn': '#A040A0', 'tox': '#A040A0', 'slp': '#9898E8', 'frz': '#98D8D8' };
-	const statusTag = displayStatus ? '<span style="background-color: ' + statusColors[displayStatus] + '; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; text-transform: uppercase; vertical-align: middle; margin-left: 5px;">' + displayStatus + '</span>' : '';
+	const statusTag = displayStatus ? '<span class="rpg-status rpg-status-' + displayStatus + '">' + displayStatus + '</span>' : '';
 
 	const volatileTags = [
-		slot.isConfused ? '<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Confused</span>' : '',
-		slot.isCursed ? '<span style="background-color: #705898; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Cursed</span>' : '',
-		slot.isSeeded ? '<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Seeded</span>' : '',
-		slot.hasNightmare ? '<span style="background-color: #503870; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Nightmare</span>' : '',
-		slot.isTrapped ? '<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Trapped</span>' : '',
-		slot.tauntTurns > 0 ? '<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Taunted</span>' : '',
-		slot.substitute ? '<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Substitute' + (isDoubleBattle ? '' : ' (' + String(slot.substitute.hp) + ' HP)') + '</span>' : '',
-		slot.yawnCounter ? '<span style="background-color: #9898E8; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Drowsy (' + String(slot.yawnCounter) + ')</span>' : '',
-		slot.disabledMove ? '<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Disabled: ' + slot.disabledMove.moveId + '</span>' : '',
-		slot.encoreMove ? '<span style="background-color: #F85888; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Encored: ' + slot.encoreMove.moveId + '</span>' : '',
-		slot.tormentActive ? '<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Tormented</span>' : '',
-		slot.focusEnergy ? '<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Focused</span>' : '',
-		slot.isIngrained ? '<span style="background-color: #78C850; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Ingrained</span>' : '',
-		slot.hasAquaRing ? '<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Aqua Ring</span>' : '',
-		slot.magnetRiseTurns && slot.magnetRiseTurns > 0 ? '<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Levitating (' + String(slot.magnetRiseTurns) + ')</span>' : '',
-		slot.telekinesisCounter && slot.telekinesisCounter > 0 ? '<span style="background-color: #A040A0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Telekinesis (' + String(slot.telekinesisCounter) + ')</span>' : '',
-		slot.isSmackedDown ? '<span style="background-color: #B8A038; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Grounded</span>' : '',
-		slot.embargoTurns && slot.embargoTurns > 0 ? '<span style="background-color: #705848; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Embargo (' + String(slot.embargoTurns) + ')</span>' : '',
-		slot.healBlockTurns && slot.healBlockTurns > 0 ? '<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Heal Block (' + String(slot.healBlockTurns) + ')</span>' : '',
-		slot.isCharged ? '<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>' : '',
-		slot.stockpileCount && slot.stockpileCount > 0 ? '<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×' + String(slot.stockpileCount) + '</span>' : '',
-		slot.lockedMoveCounter && slot.lockedMoveCounter > 0 ? '<span style="background-color: #C03028; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Rampage' + (isDoubleBattle ? '' : ': ' + (slot.lockedMove || '') + ' (' + String(slot.lockedMoveCounter) + ')') + '</span>' : '',
-		slot.uproarTurns && slot.uproarTurns > 0 ? '<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Uproar (' + String(slot.uproarTurns) + ')</span>' : '',
-		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? '<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked' + (isDoubleBattle ? '' : ': ' + slot.lockedMove) + '</span>' : '',
-		slot.mustRecharge ? '<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Must Recharge</span>' : '',
-		slot.isProtected ? '<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>' : '',
-		slot.isRedirecting ? '<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>' : '',
-		slot.isHelped ? '<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>' : '',
+		slot.isConfused ? '<span class="rpg-status rpg-status-confused">Confused</span>' : '',
+		slot.isCursed ? '<span class="rpg-status rpg-status-cursed">Cursed</span>' : '',
+		slot.isSeeded ? '<span class="rpg-status rpg-status-seeded">Seeded</span>' : '',
+		slot.hasNightmare ? '<span class="rpg-status" style="background-color: #503870; color: white;">Nightmare</span>' : '',
+		slot.isTrapped ? '<span class="rpg-status rpg-status-trapped">Trapped</span>' : '',
+		slot.tauntTurns > 0 ? '<span class="rpg-status" style="background-color: #C03028; color: white;">Taunted</span>' : '',
+		slot.substitute ? '<span class="rpg-status rpg-status-trapped">Substitute' + (isDoubleBattle ? '' : ' (' + String(slot.substitute.hp) + ' HP)') + '</span>' : '',
+		slot.yawnCounter ? '<span class="rpg-status rpg-status-slp">Drowsy (' + String(slot.yawnCounter) + ')</span>' : '',
+		slot.disabledMove ? '<span class="rpg-status rpg-status-psn">Disabled: ' + slot.disabledMove.moveId + '</span>' : '',
+		slot.encoreMove ? '<span class="rpg-status" style="background-color: #F85888; color: white;">Encored: ' + slot.encoreMove.moveId + '</span>' : '',
+		slot.tormentActive ? '<span class="rpg-status" style="background-color: #705848; color: white;">Tormented</span>' : '',
+		slot.focusEnergy ? '<span class="rpg-status rpg-status-brn">Focused</span>' : '',
+		slot.isIngrained ? '<span class="rpg-status rpg-status-seeded">Ingrained</span>' : '',
+		slot.hasAquaRing ? '<span class="rpg-status" style="background-color: #6890F0; color: white;">Aqua Ring</span>' : '',
+		slot.magnetRiseTurns && slot.magnetRiseTurns > 0 ? '<span class="rpg-status rpg-status-par">Levitating (' + String(slot.magnetRiseTurns) + ')</span>' : '',
+		slot.telekinesisCounter && slot.telekinesisCounter > 0 ? '<span class="rpg-status rpg-status-psn">Telekinesis (' + String(slot.telekinesisCounter) + ')</span>' : '',
+		slot.isSmackedDown ? '<span class="rpg-status" style="background-color: #B8A038; color: white;">Grounded</span>' : '',
+		slot.embargoTurns && slot.embargoTurns > 0 ? '<span class="rpg-status" style="background-color: #705848; color: white;">Embargo (' + String(slot.embargoTurns) + ')</span>' : '',
+		slot.healBlockTurns && slot.healBlockTurns > 0 ? '<span class="rpg-status" style="background-color: #C03028; color: white;">Heal Block (' + String(slot.healBlockTurns) + ')</span>' : '',
+		slot.isCharged ? '<span class="rpg-status rpg-status-par">Charged</span>' : '',
+		slot.stockpileCount && slot.stockpileCount > 0 ? '<span class="rpg-status rpg-status-confused">Stockpile ×' + String(slot.stockpileCount) + '</span>' : '',
+		slot.lockedMoveCounter && slot.lockedMoveCounter > 0 ? '<span class="rpg-status" style="background-color: #C03028; color: white;">Rampage' + (isDoubleBattle ? '' : ': ' + (slot.lockedMove || '') + ' (' + String(slot.lockedMoveCounter) + ')') + '</span>' : '',
+		slot.uproarTurns && slot.uproarTurns > 0 ? '<span class="rpg-status rpg-status-confused">Uproar (' + String(slot.uproarTurns) + ')</span>' : '',
+		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? '<span class="rpg-status rpg-status-trapped">Locked' + (isDoubleBattle ? '' : ': ' + slot.lockedMove) + '</span>' : '',
+		slot.mustRecharge ? '<span class="rpg-status rpg-status-par">Must Recharge</span>' : '',
+		slot.isProtected ? '<span class="rpg-status" style="background-color: #4A90E2; color: white;">Protected</span>' : '',
+		slot.isRedirecting ? '<span class="rpg-status" style="background-color: #D0021B; color: white;">Center of Attention</span>' : '',
+		slot.isHelped ? '<span class="rpg-status" style="background-color: #417505; color: white;">Helped</span>' : '',
 	].filter(Boolean).join('');
 
 	const abilityTags = [
-		slot.flashFireBoost ? '<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Fire Boost</span>' : '',
-		slot.analyticBoost ? '<span style="background-color: #6c757d; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Analytic</span>' : '',
-		slot.slowStartTurns !== undefined && slot.slowStartTurns > 0 ? '<span style="background-color: #F08030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Slow Start (' + String(slot.slowStartTurns) + ')</span>' : '',
-		slot.unburdenActive ? '<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Unburden</span>' : '',
+		slot.flashFireBoost ? '<span class="rpg-status rpg-status-brn">Fire Boost</span>' : '',
+		slot.analyticBoost ? '<span class="rpg-status" style="background-color: #6c757d; color: white;">Analytic</span>' : '',
+		slot.slowStartTurns !== undefined && slot.slowStartTurns > 0 ? '<span class="rpg-status rpg-status-brn">Slow Start (' + String(slot.slowStartTurns) + ')</span>' : '',
+		slot.unburdenActive ? '<span class="rpg-status rpg-status-confused">Unburden</span>' : '',
 	].filter(Boolean).join('');
 
 	let chargingTag = '';
@@ -400,7 +399,7 @@ export function generateSharedBattlePokemonInfo(
 		if (slot.chargingMove === 'fly') chargeText = 'Flew up high!';
 		if (slot.chargingMove === 'dig') chargeText = 'Dug underground!';
 		if (slot.chargingMove === 'dive') chargeText = 'Hid underwater!';
-		chargingTag = '<span style="background-color: #6890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">' + chargeText + '</span>';
+		chargingTag = '<span class="rpg-status" style="background-color: #6890F0; color: white;">' + chargeText + '</span>';
 	}
 
 	let statStageTags = '';
@@ -420,9 +419,14 @@ export function generateSharedBattlePokemonInfo(
 
 	const namePrefix = ownerName ? ownerName + "'s " : '';
 
+	// Determine HP bar class based on percentage
+	let hpBarClass = 'rpg-bar-hp-high';
+	if (hpPercentage <= 25) hpBarClass = 'rpg-bar-hp-low';
+	else if (hpPercentage <= 50) hpBarClass = 'rpg-bar-hp-medium';
+
 	const hpBarHTML =
-		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-		'<div style="background: ' + hpBarColor + '; width: ' + String(hpPercentage) + '%; height: 100%; border-radius: 7px;"></div>' +
+		'<div style="max-width: 120px; height: 12px; background: #e0e0e0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
+		'<div class="rpg-bar ' + hpBarClass + '" style="width: ' + String(hpPercentage) + '%; height: 100%; border-radius: 7px;"></div>' +
 		'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
 		String(hpPercentage) + '%' +
 		'</span>' +
@@ -443,7 +447,7 @@ export function generateSharedBattlePokemonInfo(
 	if (isDoubleBattle) {
 		let html = ''; // Start with an empty string
 		// Add psicon next to name
-		html += '<div style="font-weight: bold; font-size: 1.1em;">';
+		html += '<div class="rpg-pokemon-name">';
 		html += '<psicon pokemon="' + species.id + '" style="vertical-align: -5px;"></psicon> ';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
@@ -453,12 +457,12 @@ export function generateSharedBattlePokemonInfo(
 	} else {
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
-			'<div style="text-align: center; margin-top: 4px;">' + // Centering container
+			'<div class="rpg-pokemon-sprite">' +
 			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
 			'</div>';
 
-		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
-		html += '<div style="font-weight: bold; font-size: 1.1em;">';
+		let html = '<div class="rpg-battle-pokemon">';
+		html += '<div class="rpg-pokemon-name">';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
 		html += hpBarHTML;
@@ -615,7 +619,7 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 
 	if (allTags) {
 		// This is the new container the user requested
-		return `<div style="padding: 8px; margin: 5px 0; max-height: 100px; border: 1px solid #666; border-radius: 5px; text-align: center;">` +
+		return `<div class="rpg-battle-conditions">` +
 			allTags +
 			`</div>`;
 	}
@@ -639,12 +643,12 @@ export function generateSingleBattleHTML(
 		const continueCommand = battle.battleResult === 'victory' ?
 			(battle.battleType === 'wild' ? '/rpg explore' : '/rpg explore') :
 			'/rpg explore';
-		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
-			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
-			'</p>';
+		const actionHTML = '<div class="rpg-center">' +
+			'<button name="send" value="' + continueCommand + '" class="button rpg-button rpg-button-large">Continue</button>' +
+			'</div>';
 
-		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+		return '<div class="infobox rpg-container">' +
+			'<div class="rpg-battle-log">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -654,7 +658,7 @@ export function generateSingleBattleHTML(
 	const opponentSlot = battle.opponentSlots[0];
 
 	if (!playerSlot || !opponentSlot) {
-		return '<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p>' +
+		return '<div class="infobox rpg-container"><h2 class="rpg-title">Battle Error!</h2><p class="rpg-text">Active Pokémon slots are missing.</p>' +
 			generateBottomNavigation() + '</div>';
 	}
 
@@ -668,16 +672,15 @@ export function generateSingleBattleHTML(
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
-		const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
-			'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+		const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
+			'<div class="rpg-move-info">' +
 			'<span>Normal</span>' +
 			'<span style="float: right;">-- / --</span>' +
-			'</div> ';
+			'</div>';
 
 		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button rpg-move-button">' + buttonContent + '</button></td>';
 		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
@@ -697,16 +700,15 @@ export function generateSingleBattleHTML(
 
 		// If locked into a move with no PP, show only Struggle button
 		if (isRampagingWithNoPP || isEncoredWithNoPP) {
-			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
-				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+			const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
+				'<div class="rpg-move-info">' +
 				'<span>Normal</span>' +
 				'<span style="float: right;">-- / --</span>' +
-				'</div> ';
+				'</div>';
 
 			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 			moveButtonsHTML += '<tr>';
-			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button" style="' + buttonStyle + '">' + buttonContent + '</button></td>';
+			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"><button name="send" value="/rpg battleaction move 0 struggle 2" class="button rpg-move-button">' + buttonContent + '</button></td>';
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
 			moveButtonsHTML += '</tr>';
 			moveButtonsHTML += '<tr>';
@@ -732,19 +734,18 @@ export function generateSingleBattleHTML(
 					(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 					move.pp === 0;
 
-				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
-					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+				const buttonContent = '<div class="rpg-move-name">' + moveData.name + '</div>' +
+					'<div class="rpg-move-info">' +
 					'<span>' + moveData.type + '</span>' +
 					'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
-					'</div> ';
+					'</div>';
 
-				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
-					' ' + buttonContent + '</button>';
+				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button rpg-move-button" ' + (isDisabled ? 'disabled' : '') + '>' +
+					buttonContent + '</button>';
 
 				// Add Tera option if can terastallize
 				if (canTerastallize && !isDisabled) {
-					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
+					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button rpg-tera-button">⭐ Tera + ' + moveData.name + '</button></div>';
 				}
 				return normalButton;
 			});
