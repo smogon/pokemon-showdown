@@ -1250,7 +1250,7 @@ export function executeAction(
 				const defenderTypes = getPokemonTypes(primaryTargetSlot.pokemon, primaryTargetSlot);
 				// We must get the move type *after* abilities like Pixilate
 				const moveType = getMoveType(move, attackerSlot.pokemon, battle, { attacker: attackerSlot.pokemon, defender: primaryTargetSlot.pokemon, attackerSlot, defenderSlot: primaryTargetSlot, move, battle, messageLog });
-				const effectiveness = getCustomEffectiveness(moveType, defenderTypes, primaryTargetSlot.pokemon, battle);
+				const effectiveness = getCustomEffectiveness(moveType, defenderTypes, primaryTargetSlot.pokemon, battle, attackerSlot.pokemon);
 
 				if (effectiveness === 0) {
 					// The move failed due to immunity, so the pivot also fails.
