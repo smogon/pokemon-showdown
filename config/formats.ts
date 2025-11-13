@@ -421,7 +421,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass', 'Last Respects', 'Quick Claw', 'Razor Fang', 'Shed Tail',
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-		teambuilderFormat: 'National Dex',
 	},
 	/*{
 		name: "[Gen 9] A Golden Experience UU",
