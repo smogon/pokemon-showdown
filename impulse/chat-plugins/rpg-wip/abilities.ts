@@ -690,6 +690,75 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Phase 6: Protosynthesis - Boosts highest stat in harsh sunlight or with Booster Energy
+	'protosynthesis': (pokemon, stat, value, slot, battle) => {
+		// Check if active (in sun or has Booster Energy consumed)
+		const inSun = battle && RPGAbilities.isWeatherActive(battle) && 
+			(battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun');
+		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
+		
+		if (!inSun && !hasBoosterActive) return value;
+
+		// Determine highest stat
+		const stats = {
+			atk: pokemon.atk,
+			def: pokemon.def,
+			spa: pokemon.spa,
+			spd: pokemon.spd,
+			spe: pokemon.spe,
+		};
+		
+		let highestStat: keyof typeof stats = 'atk';
+		let highestValue = stats.atk;
+		
+		for (const [statName, statValue] of Object.entries(stats) as [keyof typeof stats, number][]) {
+			if (statValue > highestValue) {
+				highestValue = statValue;
+				highestStat = statName;
+			}
+		}
+		
+		// Boost the highest stat by 1.3x (rounded down in Gen 9)
+		if (stat === highestStat) {
+			return Math.floor(value * 1.3);
+		}
+		return value;
+	},
+
+	// Phase 6: Quark Drive - Boosts highest stat in Electric Terrain or with Booster Energy
+	'quarkdrive': (pokemon, stat, value, slot, battle) => {
+		// Check if active (in Electric Terrain or has Booster Energy consumed)
+		const inElectricTerrain = battle?.terrain?.type === 'electric';
+		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
+		
+		if (!inElectricTerrain && !hasBoosterActive) return value;
+
+		// Determine highest stat
+		const stats = {
+			atk: pokemon.atk,
+			def: pokemon.def,
+			spa: pokemon.spa,
+			spd: pokemon.spd,
+			spe: pokemon.spe,
+		};
+		
+		let highestStat: keyof typeof stats = 'atk';
+		let highestValue = stats.atk;
+		
+		for (const [statName, statValue] of Object.entries(stats) as [keyof typeof stats, number][]) {
+			if (statValue > highestValue) {
+				highestValue = statValue;
+				highestStat = statName;
+			}
+		}
+		
+		// Boost the highest stat by 1.3x (rounded down in Gen 9)
+		if (stat === highestStat) {
+			return Math.floor(value * 1.3);
+		}
+		return value;
+	},
 };
 
 export const WEATHER_ABILITIES = {
@@ -785,6 +854,24 @@ export const WEATHER_ABILITIES = {
 			if (battle.weather?.type !== 'sun') {
 				battle.weather = { type: 'sun', turns: 5 };
 				messageLog.push(`${slot.pokemon.species}'s Orichalcum Pulse created harsh sunlight!`);
+			}
+		},
+	},
+
+	// Phase 6: Teraform Zero - Removes weather and terrain on switch-in and prevents them from activating
+	'teraformzero': {
+		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
+			const hadWeather = battle.weather !== null;
+			const hadTerrain = battle.terrain !== null;
+			
+			battle.weather = null;
+			battle.terrain = null;
+			
+			// Set flag to prevent weather/terrain activation (cleared at end of turn)
+			(battle as any).teraformZeroActive = true;
+			
+			if (hadWeather || hadTerrain) {
+				messageLog.push(`${slot.pokemon.species}'s Teraform Zero eliminated all effects on the field!`);
 			}
 		},
 	},
@@ -1008,6 +1095,12 @@ export const FORM_CHANGE_ABILITIES = {
 	'zenmode': {
 		hpFormChange: true,
 		threshold: 0.5,
+	},
+
+	// Phase 6: Gulp Missile - Cramorant catches prey with Surf/Dive, spits it when hit
+	'gulpmissile': {
+		formChange: true,
+		onSurfDive: true,
 	},
 };
 
@@ -2011,6 +2104,14 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		damage = Math.floor(damage * 0.75);
 	}
 
+	// Phase 6: Tera Shell - When at full HP, all damaging moves are not very effective
+	if (defenderAbility === 'terashell' && ctx.defender.hp === ctx.defender.maxHp && ctx.move.category !== 'Status') {
+		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
+			// Make the attack not very effective (0.5x damage)
+			damage = Math.floor(damage * 0.5);
+		}
+	}
+
 	return damage;
 }
 
@@ -2075,6 +2176,35 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 			messageLog.push(`${pokemon.nickname || pokemon.species}'s shell broke off!`);
 		}
 	}
+
+	// Phase 6: Tera Shift - Terapagos changes form at the start of battle
+	if (ability === 'terashift') {
+		if (pokemon.species === 'Terapagos' && slot.activeTurns === 1) {
+			pokemon.species = 'Terapagos-Terastal';
+			messageLog.push(`${pokemon.nickname || pokemon.species} transformed into its Terastal Form!`);
+		}
+	}
+
+	// Phase 6: Gulp Missile - Cramorant catches prey with Surf/Dive
+	if (ability === 'gulpmissile') {
+		// When hit, Cramorant spits out the catch
+		if ((slot as any).gulpMissileForm && slot.lastDamageTaken) {
+			const form = (slot as any).gulpMissileForm;
+			
+			// Revert to normal form
+			if (pokemon.species.includes('Gulping') || pokemon.species.includes('Gorging')) {
+				pokemon.species = 'Cramorant';
+				(slot as any).gulpMissileForm = null;
+				
+				// The attacker takes damage and gets affected
+				// This is handled in the battle-core.ts when Cramorant takes damage
+			}
+		}
+	}
+
+	// Phase 6: Zero to Hero - Palafin changes form when switching out and back in
+	// This is handled differently - the form changes during the switch, not during battle
+	// Palafin-Hero form is set when it switches in after being out
 }
 
 export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
@@ -2384,6 +2514,36 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 				messageLog.push(`${pokemon.species}'s Supersweet Syrup lowered ${opponent.pokemon.species}'s evasion!`);
 			}
 		}
+	}
+
+	// Phase 6: Commander - Tatsugiri enters the mouth of Dondozo ally
+	if (ability === 'commander' && pokemon.species.includes('Tatsugiri')) {
+		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const dondozo = allies.find(s => s && s.pokemon.species === 'Dondozo' && s.pokemon.hp > 0);
+		
+		if (dondozo) {
+			// Mark Tatsugiri as inside Dondozo (remove from active slot)
+			(slot as any).commanderActive = true;
+			(dondozo as any).commanderBoost = true;
+			
+			// Boost Dondozo's stats
+			const statBoosts = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+			for (const stat of statBoosts) {
+				if (dondozo.statStages[stat] < 6) {
+					dondozo.statStages[stat] = Math.min(6, dondozo.statStages[stat] + 2);
+				}
+			}
+			
+			messageLog.push(`${pokemon.species} commanded from inside ${dondozo.pokemon.species}'s mouth!`);
+		}
+	}
+
+	// Phase 6: Zero to Hero - Palafin switches to Hero form after switching out and back in
+	if (ability === 'zerotohero' && pokemon.species === 'Palafin' && (slot as any).hasSwitchedOut) {
+		pokemon.species = 'Palafin-Hero';
+		(slot as any).hasSwitchedOut = false;
+		messageLog.push(`${pokemon.nickname || 'Palafin'} transformed into its Hero form!`);
 	}
 
 	// Phase 4: Screen Cleaner - Removes screens on switch-in

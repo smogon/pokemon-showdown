@@ -804,6 +804,28 @@ export function executeMove(
 
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
+		
+		// Phase 6: Gulp Missile - Cramorant catches prey when using Surf or Dive
+		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+		if (attackerAbility === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
+			const attacker = attackerSlot.pokemon;
+			const hpPercent = attacker.hp / attacker.maxHp;
+			
+			// Gulping Form (Arrokuda) if HP > 50%, Gorging Form (Pikachu) if HP <= 50%
+			if (hpPercent > 0.5) {
+				if (!attacker.species.includes('Gulping')) {
+					attacker.species = 'Cramorant-Gulping';
+					(attackerSlot as any).gulpMissileForm = 'gulping';
+					messageLog.push(`${attacker.nickname || 'Cramorant'} caught an Arrokuda!`);
+				}
+			} else {
+				if (!attacker.species.includes('Gorging')) {
+					attacker.species = 'Cramorant-Gorging';
+					(attackerSlot as any).gulpMissileForm = 'gorging';
+					messageLog.push(`${attacker.nickname || 'Cramorant'} caught a Pikachu!`);
+				}
+			}
+		}
 	}
 	for (const defenderSlot of targetSlots) {
 		if (defenderSlot && defenderSlot.pokemon.hp > 0) {
