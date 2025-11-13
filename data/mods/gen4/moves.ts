@@ -905,10 +905,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	knockoff: {
 		inherit: true,
 		onAfterHit(target, source, move) {
-			if (!target.item || target.itemKnockedOff) return;
+			if (!target.item) return;
 			if (target.ability === 'multitype') return;
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
+				target.item = '';
 				target.itemKnockedOff = true;
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
 				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
@@ -1699,6 +1700,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	switcheroo: {
 		inherit: true,
 		onTryHit(target, source, move) {
+			if (target.itemKnockedOff || source.itemKnockedOff) return false;
 			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},
@@ -1815,7 +1817,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
+				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel') || pokemon.hasAbility('magicguard')) {
 					// do nothing
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1832,6 +1834,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	trick: {
 		inherit: true,
 		onTryHit(target, source, move) {
+			if (target.itemKnockedOff || source.itemKnockedOff) return false;
 			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},

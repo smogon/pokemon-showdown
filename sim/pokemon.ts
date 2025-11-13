@@ -851,7 +851,6 @@ export class Pokemon {
 
 	ignoringItem(isFling = false) {
 		if (this.getItem().isPrimalOrb) return false;
-		if (this.itemKnockedOff) return true; // Gen 3-4
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
@@ -1707,7 +1706,7 @@ export class Pokemon {
 	}
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
-		if (!this.item || this.itemKnockedOff) return false;
+		if (!this.item) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -1751,7 +1750,7 @@ export class Pokemon {
 
 	useItem(source?: Pokemon, sourceEffect?: Effect) {
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
-		if (!this.item || this.itemKnockedOff) return false;
+		if (!this.item) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -1790,9 +1789,10 @@ export class Pokemon {
 	}
 
 	takeItem(source?: Pokemon) {
-		if (!this.item || this.itemKnockedOff) return false;
+		if (!this.item) return false;
 		if (!source) source = this;
-		if (this.battle.gen === 4) {
+		if (this.battle.gen <= 4) {
+			if (source.itemKnockedOff) return false;
 			if (toID(this.ability) === 'multitype') return false;
 			if (toID(source.ability) === 'multitype') return false;
 		}
@@ -1811,7 +1811,6 @@ export class Pokemon {
 
 	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
-		if (this.itemKnockedOff) return false;
 		if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
