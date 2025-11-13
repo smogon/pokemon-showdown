@@ -212,9 +212,4 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(`<b>/cleantour [room]</b>: Forcibly destroys a stuck tournament in the room. Requires: # or ~`);
 		},
 	},
-
-	globalclearall: 'clearall.global',
-	clearallhelp: 'clearall.help',
-	recentseen: 'seen.recent',
-	cleanupseen: 'seen.cleanup',
 };
