@@ -410,7 +410,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	///////////////////////////////////////////////////////////////
 	{
 		section: "Server Special",
-		column: 1,
 	},
 	{
 		name: "[Gen 9] A Golden Experience",
