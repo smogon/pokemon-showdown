@@ -260,7 +260,7 @@ export function checkForWinLoss(
 		messageLog.push(`<center><b>${opponentMessage}</b></center>`);
 		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
-		context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
+		context.popupReply(`|wide||html|${generateBattleHTML(battle, messageLog)}`);
 		activeBattles.delete(user.id);
 		return true;
 	}
@@ -326,9 +326,9 @@ export function checkForWinLoss(
 			messageLog.push(`<center><b>You received ₽${moneyGained} for winning!</b></center>`);
 
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				context.popupReply(`|html|${generateMoveLearnHTML(player, messageLog)}`);
+				context.popupReply(`|wide||html|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
+				context.popupReply(`|wide||html|${generateBattleHTML(battle, messageLog)}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
@@ -341,9 +341,9 @@ export function checkForWinLoss(
 			messageLog.push(`<center><b>You gained ₽${moneyGained}!</b></center>`);
 
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				context.popupReply(`|html|${generateMoveLearnHTML(player, messageLog)}`);
+				context.popupReply(`|wide||html|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.popupReply(`|html|${generateBattleHTML(battle, messageLog)}`);
+				context.popupReply(`|wide||html|${generateBattleHTML(battle, messageLog)}`);
 			}
 		}
 		activeBattles.delete(user.id);
@@ -370,7 +370,7 @@ export function checkBattleEndCondition(
 	if (battleEnded) return true;
 
 	if (battle.pendingPivot) {
-		context.popupReply(`|html|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		context.popupReply(`|wide||html|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
 		return true;
 	}
 	handleAiPivot(battle, messageLog);
@@ -387,7 +387,7 @@ export function checkBattleEndCondition(
 				delete battle.pendingActions[i];
 			}
 		}
-		context.popupReply(`|html|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		context.popupReply(`|wide||html|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		return true;
 	}
 
@@ -991,7 +991,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 				slot.activeTurns++;
 			}
 		});
-		context.popupReply(`|html|${generateBattleHTML(battle)}`);
+		context.popupReply(`|wide||html|${generateBattleHTML(battle)}`);
 	}
 }
 
