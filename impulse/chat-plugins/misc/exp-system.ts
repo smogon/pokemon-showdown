@@ -1,20 +1,23 @@
 /*
 * Pokemon Showdown
 * Exp System Commands
+* @author PrinceSky-Git
 * Instructions: Add this line in chat.ts output message.
 * Note: You need to import ExpSystem in chat.ts
 if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
 */
-
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
+const DB_TABLE_NAME = 'expdata';
 const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
 const MIN_LEVEL_EXP = 10;
 const MULTIPLIER = 1.2;
 const EXP_COOLDOWN = 30000;
+const CHAT_INTERVAL = 300000;
+const LADDER_LIMIT = 100;
 
 let DOUBLE_EXP = false;
 let DOUBLE_EXP_END_TIME: number | null = null;
@@ -29,7 +32,7 @@ const getDurationMs = (value: number, unit: string): number => {
 interface CooldownData { [userid: string]: number; }
 interface ExpDocument { _id: string; exp: number; level: number; lastUpdated: Date; }
 
-const ExpDB = ImpulseDB<ExpDocument>('expdata');
+const ExpDB = ImpulseDB<ExpDocument>(DB_TABLE_NAME);
 
 export class ExpSystem {
 	private static cooldowns: CooldownData = {};
@@ -130,7 +133,7 @@ export class ExpSystem {
 
 	static grantExp(): void {
 		Users.users.forEach(user => {
-			if (!user?.named || !user.connected || !user.lastPublicMessage || Date.now() - user.lastPublicMessage > 300000) return;
+			if (!user?.named || !user.connected || !user.lastPublicMessage || Date.now() - user.lastPublicMessage > CHAT_INTERVAL) return;
 			void this.addExp(user.id, 1);
 		});
 	}
@@ -157,7 +160,7 @@ export class ExpSystem {
 		await ExpDB.deleteMany({});
 	}
 
-	static async getRichestUsers(limit = 100): Promise<[string, number][]> {
+	static async getRichestUsers(limit = LADDER_LIMIT): Promise<[string, number][]> {
 		const docs = await ExpDB.find({}, { sort: { exp: -1 }, limit });
 		return docs.map(doc => [doc._id, doc.exp]);
 	}
@@ -182,7 +185,7 @@ export class ExpSystem {
 
 export const pages: Chat.PageTable = {
 	async expladder(args, user): Promise<string> {
-		const richest = await ExpSystem.getRichestUsers(100);
+		const richest = await ExpSystem.getRichestUsers(LADDER_LIMIT);
 		if (!richest.length) return `<div class="pad"><h2>No users have any ${EXP_UNIT} yet.</h2></div>`;
 
 		const data = richest.map(([userid, exp], index) => [
@@ -321,6 +324,7 @@ export const commands: Chat.ChatCommands = {
 				DOUBLE_EXP = !DOUBLE_EXP;
 				DOUBLE_EXP_END_TIME = null;
 				ExpSystem.checkDoubleExpStatus(room, user);
+				this.modlog('TOGGLEDOUBLEEXP', null, `to ${DOUBLE_EXP ? 'ON' : 'OFF'}`);
 				return;
 			}
 
@@ -328,6 +332,7 @@ export const commands: Chat.ChatCommands = {
 				DOUBLE_EXP = false;
 				DOUBLE_EXP_END_TIME = null;
 				ExpSystem.checkDoubleExpStatus(room, user);
+				this.modlog('TOGGLEDOUBLEEXP', null, 'to OFF');
 				return;
 			}
 
@@ -340,7 +345,8 @@ export const commands: Chat.ChatCommands = {
 			DOUBLE_EXP_END_TIME = Date.now() + duration;
 
 			ExpSystem.checkDoubleExpStatus(room, user);
-			setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
+			this.modlog('TOGGLEDOUBLEEXP', null, `to ON for ${target}`);
+			setTimeout(() => ExpSystem.checkDoubleExpStatus(Rooms.global.get('staff')), duration);
 		},
 
 		ladder(target, room, user): void {
@@ -356,7 +362,7 @@ export const commands: Chat.ChatCommands = {
 				["/exp take [user], [amount], [reason]", `Take a specified amount of ${EXP_UNIT} from a user. Requires: &.`],
 				["/exp reset [user], [reason]", `Reset a user's ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: &.`],
 				["/exp resetall [reason]", `Reset all users' ${EXP_UNIT} to ${DEFAULT_EXP}. Requires: ~.`],
-				["/exp ladder", `View the top 100 users with the most ${EXP_UNIT} and their levels.`],
+				[`/exp ladder", "View the top ${LADDER_LIMIT} users with the most ${EXP_UNIT} and their levels.`],
 				["/exp toggledouble [duration|off]", "Toggle double EXP with optional duration (e.g. 2 hours, 1 day, 30 minutes). Use off to disable. Requires: &."],
 			];
 			this.sendReplyBox(
