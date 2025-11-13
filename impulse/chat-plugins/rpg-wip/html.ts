@@ -350,14 +350,13 @@ export function generateSharedBattlePokemonInfo(
 		'</span>' +
 		'</div>';
 
-	// Add weather, terrain, and field effect tags if battle is provided
+	// Add side effect tags if battle is provided
 	let battleConditionTags = '';
 	if (battle) {
-		const weatherTags = generateWeatherTags(battle);
-		const terrainTags = generateTerrainTags(battle);
-		const fieldEffectTags = generateFieldEffectTags(battle);
+		// --- MODIFICATION: Removed weather, terrain, and global field effects ---
 		const sideEffectTags = generateSideEffectTags(battle, isPlayerSide ? 'player' : 'opponent');
-		battleConditionTags = [weatherTags, terrainTags, fieldEffectTags, sideEffectTags].filter(Boolean).join('');
+		battleConditionTags = [sideEffectTags].filter(Boolean).join('');
+		// --- END MODIFICATION ---
 	}
 
 	const allStatusTags = '' + statusTag + volatileTags + abilityTags + chargingTag + statStageTags + battleConditionTags;
@@ -525,6 +524,27 @@ function generateFieldEffectTags(battle: BattleState): string {
 	return effects.join('');
 }
 
+/**
+ * [NEW HELPER]
+ * Generates a single div for all active global battle conditions (weather, terrain, rooms).
+ */
+function generateGlobalBattleConditionsHTML(battle: BattleState): string {
+	const weatherTags = generateWeatherTags(battle);
+	const terrainTags = generateTerrainTags(battle);
+	const fieldEffectTags = generateFieldEffectTags(battle);
+
+	const allTags = [weatherTags, terrainTags, fieldEffectTags].filter(Boolean).join('');
+
+	if (allTags) {
+		// This is the new container the user requested
+		return `<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; border-radius: 5px; text-align: center;">` +
+			allTags +
+			`</div>`;
+	}
+
+	return ''; // Return empty string if no conditions are active
+}
+
 export function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
@@ -688,7 +708,14 @@ export function generateSingleBattleHTML(
 		opponentOwnerName = 'Wild';
 	}
 
+	// --- NEW: Add global conditions div ---
+	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
+	// --- END NEW ---
+
 	return '<div class="infobox">' +
+		// --- NEW: Insert the HTML here ---
+		globalConditionsHTML +
+		// --- END NEW ---
 		'<table style="width: 100%; margin-bottom: 5px;">' +
 		'<tr>' +
 		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
@@ -770,6 +797,11 @@ export function generateDoubleBattleHTML(
 	};
 
 	let html = '<div class="infobox">';
+
+	// --- NEW: Add global conditions div ---
+	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
+	html += globalConditionsHTML;
+	// --- END NEW ---
 
 	html += '<table style="width: 100%; margin-bottom: 5px;">';
 	// Opponent Side (Top Row)
@@ -1509,6 +1541,6 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 		html += `<p>All of ${pokemon.species}'s moves are already at full PP!</p>`;
 	}
 
-	html += `<hr /><p><button name="send" value="/rpg useitem ${itemId}" class="button">Back to Pokémon</button></p></div>`;
+	html += `<hr /><p><button name"send" value="/rpg useitem ${itemId}" class="button">Back to Pokémon</button></p></div>`;
 	return html;
 }
