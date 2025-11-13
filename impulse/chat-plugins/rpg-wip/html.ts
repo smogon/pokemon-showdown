@@ -305,7 +305,7 @@ export function generatePokemonInfoHTML(
 
 	// Add the rest of the Pokemon info
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-	
+
 	// Determine HP bar class based on percentage
 	let hpBarClass = 'rpg-bar-hp-high';
 	if (hpPercentage <= 25) hpBarClass = 'rpg-bar-hp-low';
@@ -349,7 +349,6 @@ export function generateSharedBattlePokemonInfo(
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
-	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
 	const displayStatus = slot.status || pokemon.status;
 	const statusTag = displayStatus ? '<span class="rpg-status rpg-status-' + displayStatus + '">' + displayStatus + '</span>' : '';
@@ -1513,9 +1512,10 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	// Check slot 0 (always used in both single and double battles)
 	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	}
-	// In double battles, also check slot 1 if slot 0 is already filled
-	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+	} else if (
+		// In double battles, also check slot 1 if slot 0 is already filled
+		isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))
+	) {
 		slotToFill = 1;
 	}
 	// --- END FIX ---
