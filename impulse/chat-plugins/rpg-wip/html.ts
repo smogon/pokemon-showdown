@@ -382,7 +382,7 @@ export function generateSharedBattlePokemonInfo(
 		html += '</div>';
 		html += hpBarHTML;
 		html += spriteHTML; // --- ADDED SPRITE (for singles) ---
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
+		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 40px;">' + statusDisplay + '</div>';
 		html += '</div>';
 		return html;
 	}
