@@ -88,7 +88,7 @@
 *  - handleTripleBattle: 3v3 simultaneous battle
 *  - handleSkyBattle: Flying-type only battle
 *  - handleUnderwaterBattle: Water-type only battle
-*  - handleRaidBattle: Cooperative raid battles
+*  - handleRaidBattle: Single-player boss battles
 *  - handleGauntletBattle: Series of consecutive battles
 *  - advanceGauntletEvent: Progress gauntlet event
 *  - handleChampionDefense: Defend champion title
@@ -1691,23 +1691,22 @@ export function handleUnderwaterBattle(
 }
 
 /**
- * Raid Battle Event
- * Cooperative battle against powerful Pokemon
+ * Boss Encounter Event
+ * Single-player battle against powerful boss Pokemon
  */
 export function handleRaidBattle(
 	player: PlayerData,
 	event: ScriptedEvent
-): { success: boolean, message: string, raidBoss?: any, raidLevel?: number, maxPlayers?: number } {
+): { success: boolean, message: string, raidBoss?: any, raidLevel?: number } {
 	if (!event.raidBoss) {
-		return { success: false, message: 'No raid boss configured.' };
+		return { success: false, message: 'No boss Pokemon configured.' };
 	}
 
 	return {
 		success: true,
-		message: `A ${event.raidLevel || 5}-star raid appears!`,
+		message: `A powerful ${event.raidLevel || 5}-star boss appears!`,
 		raidBoss: event.raidBoss,
 		raidLevel: event.raidLevel,
-		maxPlayers: event.maxPlayers || 4,
 	};
 }
 

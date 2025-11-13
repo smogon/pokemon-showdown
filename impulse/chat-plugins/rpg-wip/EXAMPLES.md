@@ -534,7 +534,7 @@ Combine multiple handlers for rich storytelling:
 - `rematchtracker` - Trainer rematches
 - `hordebattle` - Multiple Pokemon at once
 - `inversebattle` - Reversed type effectiveness
-- `raidbattle` - Cooperative battles
+- `raidbattle` - Single-player boss battles
 - `championdefense` - Title defense battles
 - `warbattle` - Multi-wave large battles
 
@@ -681,14 +681,14 @@ Face multiple Pokemon at once:
 }
 ```
 
-### Raid Battle Event
+### Boss Battle Event
 
-Cooperative boss battle:
+Single-player boss encounter:
 
 ```typescript
 {
-  id: 'legendary_raid',
-  name: 'Legendary Raid',
+  id: 'legendary_boss',
+  name: 'Legendary Boss Battle',
   triggerOnce: true,
   requiredBadgeCount: 8,
   type: 'raidbattle',
@@ -698,8 +698,7 @@ Cooperative boss battle:
     moves: ['psychic', 'aurasphere', 'recover', 'calmmind'],
   },
   raidLevel: 5,
-  maxPlayers: 4,
-  dialogue: 'A legendary raid has appeared!',
+  dialogue: 'A legendary Pokemon appears as a powerful boss!',
 }
 ```
 

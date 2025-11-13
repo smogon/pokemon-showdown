@@ -285,10 +285,12 @@ export interface NPCAction {
 	type: 'giveitem' | 'givepokemon' | 'exchangeitems' | 'takeitem' | 'movetutor' | 'movedeleter' | 'namerater' | 'tradepokemon' |
 		'fossilrevival' | 'dailyreward' | 'battlerequest' | 'questchain' | 'itemcraft' | 'berryplant' | 'pokemongrooming' |
 		'fortuneteller' | 'pokemonbreeder' | 'moverelearner' | 'abilitycapsule' | 'evtrainer' | 'ivchecker' |
-		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' | 'photographer' |
-		'fishing' | 'bikeshop' | 'coinexchange' | 'tutorcombo' | 'apricorncrafter' | 'pokeathlon' | 'musicalprops' |
+		'mysterygift' | 'lottery' | 'masseuse' | 'haircutter' |
+		'fishing' | 'bikeshop' | 'coinexchange' | 'tutorcombo' | 'apricorncrafter' | 'pokeathlon' |
 		'berryblender' | 'pokeblockmixer' | 'poffincooking' | 'rivalbattle' | 'gymrematch' | 'shardtrader' |
-		'wingcollector' | 'scalecollector' | 'opower' | 'heal' | 'choosestarter';
+		'wingcollector' | 'scalecollector' | 'opower' | 'heal' | 'choosestarter' |
+		'collectionquest' | 'deliveryquest' | 'escortquest' | 'reputation' | 'timebasedaction' | 'conditionaldialogue' | 'achievement' |
+		'battlegauntlet' | 'battlearena' | 'trainingbattle' | 'battlechallenge' | 'survivalbattle' | 'rematchtracker';
 	itemId?: string;
 	quantity?: number;
 	pokemon?: { species: string, level: number, moves?: string[] };
@@ -403,6 +405,49 @@ export interface NPCAction {
 	opowerCooldown?: number; // Cooldown in minutes
 	// Choose starter
 	starterLevel?: number; // Level of starter Pokemon (default 5)
+	// Collection quest
+	requiredItems?: { itemId: string, quantity: number }[]; // Items needed for quest
+	questReward?: { money?: number, items?: { itemId: string, quantity: number }[] }; // Quest rewards
+	// Delivery quest
+	deliveryItem?: { itemId: string, quantity: number }; // Item to deliver
+	targetNpcId?: string; // Target NPC for delivery
+	// Escort quest
+	escortDestination?: string; // Destination location ID
+	// Reputation
+	factionId?: string; // Faction/town identifier
+	// Time-based action
+	availableHours?: number[]; // Hours when action is available (0-23)
+	// Conditional dialogue
+	dialogueConditions?: {
+		minBadges?: number;
+		maxBadges?: number;
+		requiredFlag?: string;
+		preventIfFlag?: string;
+		dialogue: string;
+	}[];
+	defaultDialogue?: string; // Default dialogue if no conditions match
+	// Achievement
+	achievements?: Record<string, {
+		name: string;
+		requiredFlag?: string;
+		reward?: any;
+	}>;
+	// Battle gauntlet
+	gauntletTrainers?: string[]; // List of trainer IDs for gauntlet
+	// Battle arena
+	arenaOpponents?: string[]; // List of opponent trainer IDs
+	// Training battle
+	maxAttempts?: number; // Maximum training attempts
+	// Battle challenge
+	challengeRules?: string[]; // Special battle rules
+	levelCap?: number; // Level cap for challenge
+	allowedTypes?: string[]; // Allowed Pokemon types
+	// Survival battle
+	survivalOpponents?: string[]; // List of opponents for survival mode
+	// Rematch tracker
+	baseLevel?: number; // Base level for rematch
+	levelIncrease?: number; // Level increase per rematch
+	maxRematches?: number; // Maximum number of rematches
 }
 
 export interface NPCData {
@@ -480,8 +525,14 @@ export interface ScriptedEvent {
 		'discovery' | 'revelation' | 'transformation' | 'evolution_ceremony' | 'legendary_awakening' |
 		'ancient_seal' | 'portal_opening' | 'dimension_merge' | 'timeloop' | 'prophecy' |
 		'fishing' | 'surfing' | 'diving' | 'itemball' | 'hiddenitem' | 'roaming' | 'multibattle' |
-		'photoop' | 'festival' | 'secretarea' | 'warp' | 'gymchallenge' | 'elitefourchallenge' |
-		'halloffame' | 'safarizone' | 'bugcatchingcontest' | 'battlefrontier';
+		'festival' | 'secretarea' | 'warp' | 'gymchallenge' | 'elitefourchallenge' |
+		'halloffame' | 'safarizone' | 'bugcatchingcontest' | 'battlefrontier' |
+		'flashback' | 'dreamsequence' | 'reputationchange' | 'companionjoin' | 'companionleave' |
+		'moralchoice' | 'lorediscovery' | 'branchingpath' | 'chaptertransition' | 'epilogue' |
+		'collectibleitem' | 'voicefromabove' | 'memoryrestoration' |
+		'hordebattle' | 'inversebattle' | 'rotationbattle' | 'battleroyale' | 'triplebattle' |
+		'skybattle' | 'underwaterbattle' | 'raidbattle' | 'gauntletbattle' | 'championdefense' |
+		'battletest' | 'warbattle';
 	trainerId?: string; // For trainer battles
 	dialogue?: string; // Text to display
 	itemId?: string; // Item to give
@@ -569,4 +620,54 @@ export interface ScriptedEvent {
 	frontierFacility?: string; // Facility name (Tower, Factory, etc.)
 	frontierRules?: string[]; // Special rules for facility
 	frontierRewards?: { itemId: string, winStreak: number }[]; // Rewards by win streak
+	// Flashback
+	flashbackText?: string; // Flashback narrative
+	flashbackCharacters?: string[]; // Characters in flashback
+	// Dream sequence
+	dreamText?: string; // Dream narrative
+	isNightmare?: boolean; // Whether it's a nightmare
+	// Reputation change
+	reputationChange?: number; // Points to add/subtract
+	// Companion
+	companionId?: string; // Companion NPC ID
+	// Moral choice
+	moralChoices?: { text: string, karmaChange?: number, resultFlag?: string, resultText?: string }[];
+	// Lore discovery
+	loreTitle?: string; // Title of lore entry
+	loreText?: string; // Lore content
+	// Branching path
+	pathOptions?: { name: string, description?: string, pathFlag?: string }[];
+	exclusivePaths?: boolean; // Whether paths are mutually exclusive
+	// Chapter transition
+	chapterNumber?: number; // Chapter number
+	chapterTitle?: string; // Chapter title
+	// Epilogue
+	epilogueText?: string; // Epilogue narrative
+	epilogueCharacters?: string[]; // Characters in epilogue
+	// Collectible item
+	collectibleId?: string; // Collectible identifier
+	collectibleCategory?: string; // Category (badges, medals, etc.)
+	// Voice from above
+	voiceText?: string; // Voice message
+	// Memory restoration
+	memoryText?: string; // Memory content
+	// Horde battle
+	hordeSpecies?: string[]; // Species in horde
+	hordeSize?: number; // Number of Pokemon in horde
+	// Rotation battle
+	rotationSlots?: number; // Number of rotation slots
+	// Battle royale
+	opponentIds?: string[]; // Opponent trainer IDs
+	// Raid battle (single-player boss)
+	raidBoss?: { species: string, level: number, moves?: string[] }; // Boss Pokemon
+	raidLevel?: number; // Boss difficulty level (1-5 stars)
+	// Gauntlet battle
+	gauntletOpponents?: string[]; // Opponent trainer IDs for gauntlet
+	// Champion defense
+	challengers?: string[]; // Challenger trainer IDs
+	// Battle test
+	testType?: string; // Type of test (survival, damage, speed, etc.)
+	testRequirements?: string[]; // Test requirements
+	// War battle
+	warWaves?: { trainers: string[] }[]; // Wave configuration
 }
