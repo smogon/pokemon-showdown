@@ -1,7 +1,13 @@
-// Clans Battle Hook - @author PrinceSky-Git
+/*
+* Pokemon Showdown
+* Clans Battle Hook
+* @author PrinceSky-Git
+*/
 import { Clans, UserClans, ClanBattleLogs, ClanWars } from './database';
-import type { ClanBattleLogEntry } from './interface';
-import { calculateElo, generateWarCard } from './utils';
+import type { ClanBattleLogEntry, Clan, ClanWar } from './interface';
+import { Utils } from '../../../lib';
+import { K_FACTOR, getExpectedScore, calculateElo, generateWarCard } from './utils';
+
 const LOBBY_ROOM_ID = 'clanwarlogs' as RoomID;
 
 async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]) {
@@ -9,65 +15,74 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 	const [p1, p2] = players;
 	const loser = (winner === p1) ? p2 : p1;
 	if (!winner || !loser) return;
-	const [wci, lci] = await Promise.all([
+
+	const [winnerClanInfo, loserClanInfo] = await Promise.all([
 		UserClans.findOne({ _id: winner }),
 		UserClans.findOne({ _id: loser }),
 	]);
-	const wClan = wci?.memberOf;
-	const lClan = lci?.memberOf;
-	if (!wClan || !lClan || wClan === lClan) return;
+	const winnerClanId = winnerClanInfo?.memberOf;
+	const loserClanId = loserClanInfo?.memberOf;
+	if (!winnerClanId || !loserClanId || winnerClanId === loserClanId) {
+		return;
+	}
 
 	const war = await ClanWars.findOne({
-		clans: { $all: [wClan, lClan] },
+		clans: { $all: [winnerClanId, loserClanId] },
 		status: 'active',
 	});
-	if (!war || !war.bestOf || war.paused) return;
-	const uhtmlId = `clan-war-card-${war._id}`;
-	const needed = Math.ceil(war.bestOf / 2);
-	const wScore = (war.scores[wClan] || 0) + 1;
-	const lScore = war.scores[lClan] || 0;
-	const wName = Users.get(winner)?.name || winner;
-	const lName = Users.get(loser)?.name || loser;
+	if (!war || !war.bestOf || war.paused) {
+		return;
+	}
 
-	if (wScore === needed) {
-		const [wc, lc] = await Promise.all([
-			Clans.findOne({ _id: wClan }),
-			Clans.findOne({ _id: lClan }),
+	const uhtmlId = `clan-war-card-${war._id}`;
+	const winsNeeded = Math.ceil(war.bestOf / 2);
+	const newWinnerScore = (war.scores[winnerClanId] || 0) + 1;
+	const newLoserScore = war.scores[loserClanId] || 0;
+
+	const winnerName = Users.get(winner)?.name || winner;
+	const loserName = Users.get(loser)?.name || loser;
+
+	if (newWinnerScore === winsNeeded) {
+		const [winnerClan, loserClan] = await Promise.all([
+			Clans.findOne({ _id: winnerClanId }),
+			Clans.findOne({ _id: loserClanId }),
 		]);
-		if (!wc || !lc) {
-			Monitor.crashlog(new Error("War battle ended but a clan was missing."), "Clan War Battle End");
+		if (!winnerClan || !loserClan) {
+			Monitor.crashlog(new Error("War battle ended but a clan was missing."), "Clan War Battle End Handler");
 			return;
 		}
-		const wElo = wc.stats.elo || 1000;
-		const lElo = lc.stats.elo || 1000;
-		const [newWElo, newLElo, elo] = calculateElo(wElo, lElo);
-		const logEntry: Omit<ClanBattleLogEntry, '_id'> = {
+
+		const winnerOldElo = winnerClan.stats.elo || 1000;
+		const loserOldElo = loserClan.stats.elo || 1000;
+		const [newWinnerElo, newLoserElo, eloChange] = calculateElo(winnerOldElo, loserOldElo);
+
+		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
-			winningClan: wClan,
-			losingClan: lClan,
+			winningClan: winnerClanId,
+			losingClan: loserClanId,
 			winner,
 			loser,
 			format: battle.format,
 			battleID: battle.roomid,
 			warId: war._id,
-			eloChangeWinner: elo,
-			eloChangeLoser: -elo,
+			eloChangeWinner: eloChange,
+			eloChangeLoser: -eloChange,
 			isWarWinningBattle: true,
 		};
 
 		try {
 			await Promise.all([
 				Clans.updateOne(
-					{ _id: wClan },
+					{ _id: winnerClanId },
 					{
-						$set: { 'stats.elo': newWElo },
+						$set: { 'stats.elo': newWinnerElo },
 						$inc: { 'stats.clanBattleWins': 1 },
 					}
 				),
 				Clans.updateOne(
-					{ _id: lClan },
+					{ _id: loserClanId },
 					{
-						$set: { 'stats.elo': newLElo },
+						$set: { 'stats.elo': newLoserElo },
 						$inc: { 'stats.clanBattleLosses': 1 },
 					}
 				),
@@ -75,10 +90,10 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 					{ _id: war._id },
 					{
 						$set: { status: 'completed', endDate: Date.now() },
-						$inc: { [`scores.${wClan}`]: 1 },
+						$inc: { [`scores.${winnerClanId}`]: 1 },
 					}
 				),
-				ClanBattleLogs.insertOne(logEntry),
+				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
 			const [clan1, clan2] = await Promise.all([
@@ -86,29 +101,39 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 				Clans.findOne({ _id: war.clans[1] }),
 			]);
 			if (!clan1 || !clan2) return;
-			const score = `(Final: ${wScore} - ${lScore})`;
-			const endMsg = `${wc.name} emerges victorious over ${lc.name}! ${score}`;
+
+			const warScore = `(Final Score: ${newWinnerScore} - ${newLoserScore})`;
+			const endMessage = `${winnerClan.name} emerges victorious over ${loserClan.name}! ${warScore}`;
+
 			war.status = 'completed';
-			war.scores[wClan] = wScore;
-			war.scores[lClan] = lScore;
-			const eHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage: endMsg });
-			const wRoom = Rooms.get(wc.chatRoom);
-			const lRoom = Rooms.get(lc.chatRoom);
-			const lobby = Rooms.get(LOBBY_ROOM_ID);
-			if (wRoom) wRoom.add(`|uhtmlchange|${uhtmlId}|${eHtml}`).update();
-			if (lRoom) lRoom.add(`|uhtmlchange|${uhtmlId}|${eHtml}`).update();
-			if (lobby) lobby.add(`|uhtmlchange|${uhtmlId}|${eHtml}`).update();
+			war.scores[winnerClanId] = newWinnerScore;
+			war.scores[loserClanId] = newLoserScore;
+
+			const endedHtml = generateWarCard(war, clan1, clan2, 'ended', { endMessage });
+
+			const winnerRoom = Rooms.get(winnerClan.chatRoom);
+			const loserRoom = Rooms.get(loserClan.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+			if (winnerRoom) {
+				winnerRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			}
+			if (loserRoom) {
+				loserRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			}
+			if (lobbyRoom) {
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${endedHtml}`).update();
+			}
 		} catch (e) {
-			Monitor.crashlog(e as Error, "Clan War Battle End (War End)", {
+			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War End)", {
 				battleID: battle.roomid,
 				warId: war._id,
 			});
 		}
 	} else {
-		const logEntry: Omit<ClanBattleLogEntry, '_id'> = {
+		const battleLogEntry: Omit<ClanBattleLogEntry, '_id'> = {
 			timestamp: Date.now(),
-			winningClan: wClan,
-			losingClan: lClan,
+			winningClan: winnerClanId,
+			losingClan: loserClanId,
 			winner,
 			loser,
 			format: battle.format,
@@ -123,34 +148,45 @@ async function handleClanBattleEnd(battle: RoomBattle, winner: ID, players: ID[]
 			await Promise.all([
 				ClanWars.updateOne(
 					{ _id: war._id },
-					{ $inc: { [`scores.${wClan}`]: 1 } }
+					{ $inc: { [`scores.${winnerClanId}`]: 1 } }
 				),
-				ClanBattleLogs.insertOne(logEntry),
+				ClanBattleLogs.insertOne(battleLogEntry),
 			]);
 
-			const [wc, lc, uWar] = await Promise.all([
-				Clans.findOne({ _id: wClan }),
-				Clans.findOne({ _id: lClan }),
+			const [winnerClan, loserClan, updatedWar] = await Promise.all([
+				Clans.findOne({ _id: winnerClanId }),
+				Clans.findOne({ _id: loserClanId }),
 				ClanWars.findOne({ _id: war._id }),
 			]);
-			if (!wc || !lc || !uWar) return;
-			const last = { winnerName: wName, loserName: lName, winningClanName: wc.name };
+			if (!winnerClan || !loserClan || !updatedWar) return;
+
+			const lastBattle = { winnerName, loserName, winningClanName: winnerClan.name };
+
 			const [clan1, clan2] = await Promise.all([
-				Clans.findOne({ _id: uWar.clans[0] }),
-				Clans.findOne({ _id: uWar.clans[1] }),
+				Clans.findOne({ _id: updatedWar.clans[0] }),
+				Clans.findOne({ _id: updatedWar.clans[1] }),
 			]);
 			if (!clan1 || !clan2) return;
-			const cHtml = generateWarCard(uWar, clan1, clan2, 'challenger', { lastBattle: last });
-			const tHtml = generateWarCard(uWar, clan1, clan2, 'target', { lastBattle: last });
-			const pHtml = generateWarCard(uWar, clan1, clan2, 'public', { lastBattle: last });
-			const cRoom = Rooms.get(clan1.chatRoom);
-			const tRoom = Rooms.get(clan2.chatRoom);
-			const lobby = Rooms.get(LOBBY_ROOM_ID);
-			if (cRoom) cRoom.add(`|uhtmlchange|${uhtmlId}|${cHtml}`).update();
-			if (tRoom) tRoom.add(`|uhtmlchange|${uhtmlId}|${tHtml}`).update();
-			if (lobby) lobby.add(`|uhtmlchange|${uhtmlId}|${pHtml}`).update();
+
+			const challengerHtml = generateWarCard(updatedWar, clan1, clan2, 'challenger', { lastBattle });
+			const targetHtml = generateWarCard(updatedWar, clan1, clan2, 'target', { lastBattle });
+			const publicHtml = generateWarCard(updatedWar, clan1, clan2, 'public', { lastBattle });
+
+			const challengerRoom = Rooms.get(clan1.chatRoom);
+			const targetRoom = Rooms.get(clan2.chatRoom);
+			const lobbyRoom = Rooms.get(LOBBY_ROOM_ID);
+
+			if (challengerRoom) {
+				challengerRoom.add(`|uhtmlchange|${uhtmlId}|${challengerHtml}`).update();
+			}
+			if (targetRoom) {
+				targetRoom.add(`|uhtmlchange|${uhtmlId}|${targetHtml}`).update();
+			}
+			if (lobbyRoom) {
+				lobbyRoom.add(`|uhtmlchange|${uhtmlId}|${publicHtml}`).update();
+			}
 		} catch (e) {
-			Monitor.crashlog(e as Error, "Clan War Battle End (Continue)", {
+			Monitor.crashlog(e as Error, "Clan War ELO Battle End Handler (War Continue)", {
 				battleID: battle.roomid,
 				warId: war._id,
 			});
