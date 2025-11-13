@@ -31,6 +31,7 @@ import {
 	activateUnburden,
 	applySynchronize,
 	handleHPDropEffects,
+	consumeBerry,
 } from './battle-shared';
 
 /**
@@ -44,7 +45,7 @@ export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): 
 	return species.types;
 }
 
-export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState): number {
+export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState, attacker?: RPGPokemon): number {
 	let effectiveness = 1;
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
@@ -52,6 +53,10 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	// Phase 4: Delta Stream - Strong winds negate Flying-type weaknesses
 	const hasStrongWinds = battle.weather?.type === 'strong-winds';
 	const isFlyingType = defenderTypes.includes('Flying');
+
+	// Phase 2: Mind's Eye - Hits Ghost types with Normal/Fighting moves
+	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
+	const hasMindEye = attackerAbility === 'mindseye';
 
 	for (const defenderType of defenderTypes) {
 		if (chartEntry.superEffective.includes(defenderType)) {
@@ -65,7 +70,13 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
 			effectiveness *= 0.5;
 		} else if (chartEntry.noEffect.includes(defenderType)) {
-			effectiveness *= 0;
+			// Mind's Eye bypasses Ghost immunity to Normal/Fighting
+			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				// Don't multiply by 0, treat as neutral
+				effectiveness *= 1;
+			} else {
+				effectiveness *= 0;
+			}
 		}
 	}
 	return effectiveness;
@@ -681,7 +692,7 @@ export function calculateDamage(
 		effectiveness = 1;
 	} else {
 		// All other moves calculate effectiveness normally
-		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle);
+		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker);
 	}
 
 	abilityContext.effectiveness = effectiveness;
@@ -809,14 +820,12 @@ export function applyPostDamageContactEffects(
 		if (move.category === 'Physical' && defender.item === 'keberry') {
 			if (applyStatChange(defenderSlot, 'def', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Kee Berry)!`;
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'keberry', messageLog);
 			}
 		} else if (move.category === 'Special' && defender.item === 'marangaberry') {
 			if (applyStatChange(defenderSlot, 'spd', 1, battle, messageLog, defenderSlot)) {
 				messageLog[messageLog.length - 1] += ` (from Maranga Berry)!`;
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'marangaberry', messageLog);
 			}
 		}
 	}
@@ -834,8 +843,7 @@ export function applyPostDamageContactEffects(
 			if (defender.item === 'jabocaberry' && RPGAbilities.takesIndirectDamage(attacker)) {
 				attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 				messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Jaboca Berry!`);
-				defender.item = undefined;
-				activateUnburden(defenderSlot, messageLog);
+				consumeBerry(defenderSlot, 'jabocaberry', messageLog);
 			}
 		}
 		if (attacker.hp > 0) {
@@ -847,8 +855,7 @@ export function applyPostDamageContactEffects(
 		if (RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 8));
 			messageLog.push(`${attacker.species} was hurt by the ${defender.species}'s Rowap Berry!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			consumeBerry(defenderSlot, 'rowapberry', messageLog);
 		}
 	}
 
@@ -1011,6 +1018,29 @@ export function handleOnHitAbilityResponses(
 		battle.weather = { type: 'sand', turns: 5 };
 		messageLog.push(`${defender.species}'s Sand Spit created a sandstorm!`);
 	}
+
+	// Phase 1: Steam Engine - Raises Speed by 6 stages when hit by Fire or Water move
+	if (defenderAbility === 'steamengine' && ['Fire', 'Water'].includes(move.type) && damageDealt > 0) {
+		const stages = Math.min(6, 6 - defenderSlot.statStages.spe);
+		if (stages > 0) {
+			defenderSlot.statStages.spe = Math.min(6, defenderSlot.statStages.spe + stages);
+			const message = stages >= 2 ? 'sharply raised' : 'raised';
+			messageLog.push(`${defender.species}'s Steam Engine ${message} its Speed!`);
+		}
+	}
+
+	// Phase 2: Toxic Debris - Scatters Toxic Spikes when hit by physical move
+	if (defenderAbility === 'toxicdebris' && move.category === 'Physical' && damageDealt > 0) {
+		const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
+		const opponentHazards = isDefenderPlayer ? battle.opponentHazards : battle.playerHazards;
+
+		// Can only set up to 2 layers of Toxic Spikes
+		const toxicSpikesCount = opponentHazards.filter(h => h === 'toxicspikes').length;
+		if (toxicSpikesCount < 2) {
+			opponentHazards.push('toxicspikes');
+			messageLog.push(`${defender.species}'s Toxic Debris scattered Toxic Spikes!`);
+		}
+	}
 }
 
 export function applyRecoilAndSelfEffects(
@@ -1107,7 +1137,7 @@ export function applySecondaryEffects(
 				(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
 				canInflict = false;
 			}
-			if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle)) {
+			if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle, attackerSlot.pokemon)) {
 				canInflict = false;
 				messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
 			}
@@ -1126,6 +1156,16 @@ export function applySecondaryEffects(
 					defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 				}
 				messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
+
+				// Phase 2: Poison Puppeteer - Poisoned foes also become confused
+				const attackerAbilityId = toID(attackerSlot.pokemon.ability || '');
+				if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
+					if (!defenderSlot.isConfused) {
+						defenderSlot.isConfused = true;
+						defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // 1-4 turns
+						messageLog.push(`${defender.species} became confused from Poison Puppeteer!`);
+					}
+				}
 
 				const defenderAbility = toID(defender.ability || '');
 				if (defenderAbility === 'synchronize') {
@@ -1252,8 +1292,7 @@ export function handleDamagingMove(
 			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
 				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
 			}
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			consumeBerry(defenderSlot, attackResult.berryConsumed, messageLog);
 		}
 
 		// We need the ability context here for Infiltrator
@@ -1451,7 +1490,7 @@ export function handleStatusMove(
 	}
 
 	if (defender && defenderSpecies && move.target !== 'self' && !move.flags.heal) {
-		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle);
+		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle, attackerSlot.pokemon);
 		if (effectiveness === 0) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
 			return;

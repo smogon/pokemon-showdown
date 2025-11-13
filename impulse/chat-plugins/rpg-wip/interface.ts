@@ -110,6 +110,9 @@ export interface ActivePokemonSlot {
 	terastallized?: string;
 	perishSongCounter?: number;
 	wishTurns?: number; // For Wish move - heals after 2 turns
+	consumedBerry?: string; // Track the last berry consumed for Harvest
+	harvestUsedThisTurn?: boolean; // Prevent multiple Harvest triggers per turn
+	cudChewBerry?: string; // Track berry for Cud Chew to consume again
 }
 
 export interface PlayerData {
