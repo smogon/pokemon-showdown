@@ -126,7 +126,7 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 
 	const winnerUser = Users.get(winner.userid);
 	if (winnerUser) {
-		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #FFD700; padding: 20px;"><center><h2 style="color: #FFD700;">脂 Congratulations! 脂</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}</strong></p></center></div>`);
+		winnerUser.popup(`|html|<div class="infobox" style="border: 2px solid #4CAF50; padding: 20px;"><center><h2 style="color: #4CAF50;">脂 Congratulations! 脂</h2><p>You won the giveaway!</p><p style="font-size: 18px;"><strong>${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}</strong></p></center></div>`);
 	}
 }
 
