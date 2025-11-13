@@ -7,3 +7,611 @@
  * other words, you can use this facility to introduce a custom theme for
  * your server.
  */
+
+/* ============================================
+   RPG UI Styling - Light Theme
+   ============================================ */
+
+/* Container Classes */
+.rpg-container {
+	background: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 15px;
+	margin: 10px 0;
+}
+
+.rpg-card {
+	background: #f9f9f9;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	padding: 10px;
+	margin: 8px 0;
+}
+
+.rpg-panel {
+	background: #ffffff;
+	border: 1px solid #666;
+	border-radius: 5px;
+	padding: 8px;
+	margin: 5px 0;
+}
+
+.rpg-battle-log {
+	background: #f5f5f5;
+	border: 1px solid #666;
+	border-radius: 5px;
+	padding: 8px;
+	margin: 5px 0;
+	min-height: 50px;
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+/* Button Classes */
+.rpg-button {
+	background: #4a90e2;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.rpg-button:hover {
+	background: #357abd;
+}
+
+.rpg-button-primary {
+	background: #28a745;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.rpg-button-primary:hover {
+	background: #218838;
+}
+
+.rpg-button-secondary {
+	background: #6c757d;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.rpg-button-secondary:hover {
+	background: #5a6268;
+}
+
+.rpg-button-danger {
+	background: #dc3545;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.rpg-button-danger:hover {
+	background: #c82333;
+}
+
+.rpg-button-disabled {
+	background: #d3d3d3;
+	color: #888;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-weight: 500;
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.rpg-button-small {
+	font-size: 12px;
+	padding: 4px 8px;
+}
+
+.rpg-button-large {
+	font-size: 16px;
+	padding: 12px 24px;
+}
+
+/* Text Classes */
+.rpg-title {
+	font-size: 24px;
+	font-weight: bold;
+	color: #333;
+	margin: 10px 0;
+}
+
+.rpg-subtitle {
+	font-size: 18px;
+	font-weight: 600;
+	color: #555;
+	margin: 8px 0;
+}
+
+.rpg-text {
+	font-size: 14px;
+	color: #666;
+	line-height: 1.5;
+}
+
+.rpg-text-small {
+	font-size: 12px;
+	color: #777;
+}
+
+.rpg-text-bold {
+	font-weight: bold;
+	color: #333;
+}
+
+/* Layout Classes */
+.rpg-grid {
+	display: grid;
+	gap: 10px;
+}
+
+.rpg-grid-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.rpg-grid-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.rpg-flex {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.rpg-flex-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.rpg-center {
+	text-align: center;
+}
+
+/* Status Tag Classes */
+.rpg-status {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: 600;
+	text-transform: uppercase;
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+.rpg-status-psn,
+.rpg-status-tox {
+	background-color: #A040A0;
+	color: white;
+}
+
+.rpg-status-brn {
+	background-color: #F08030;
+	color: white;
+}
+
+.rpg-status-par {
+	background-color: #F8D030;
+	color: #333;
+}
+
+.rpg-status-slp {
+	background-color: #9898E8;
+	color: white;
+}
+
+.rpg-status-frz {
+	background-color: #98D8D8;
+	color: #333;
+}
+
+.rpg-status-confused {
+	background-color: #A890F0;
+	color: white;
+}
+
+.rpg-status-cursed {
+	background-color: #705898;
+	color: white;
+}
+
+.rpg-status-seeded {
+	background-color: #78C850;
+	color: white;
+}
+
+.rpg-status-trapped {
+	background-color: #A8A878;
+	color: white;
+}
+
+/* HP and EXP Bar Classes */
+.rpg-bar-container {
+	background: #e0e0e0;
+	border: 1px solid #aaa;
+	border-radius: 10px;
+	padding: 2px;
+	margin: 5px 0;
+	position: relative;
+	height: 14px;
+}
+
+.rpg-bar {
+	height: 100%;
+	border-radius: 8px;
+	transition: width 0.3s ease;
+}
+
+.rpg-bar-hp-high {
+	background: linear-gradient(to bottom, #7bc67b, #5aa85a);
+}
+
+.rpg-bar-hp-medium {
+	background: linear-gradient(to bottom, #f9d857, #f0c840);
+}
+
+.rpg-bar-hp-low {
+	background: linear-gradient(to bottom, #f56565, #d94545);
+}
+
+.rpg-bar-exp {
+	background: linear-gradient(to bottom, #8ab4f8, #6c9be8);
+}
+
+.rpg-bar-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 10px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: 0 0 2px #fff;
+}
+
+/* Pokemon Card Classes */
+.rpg-pokemon-card {
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 12px;
+	margin: 8px 0;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rpg-pokemon-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rpg-pokemon-sprite {
+	text-align: center;
+	margin: 8px 0;
+}
+
+.rpg-pokemon-name {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+}
+
+.rpg-pokemon-info {
+	font-size: 12px;
+	color: #666;
+	margin: 4px 0;
+}
+
+/* Navigation Classes */
+.rpg-nav {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin: 15px 0;
+	padding: 10px 0;
+	border-top: 1px solid #ddd;
+}
+
+.rpg-nav-button {
+	background: #6c757d;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.rpg-nav-button:hover {
+	background: #5a6268;
+}
+
+/* Item Grid Classes */
+.rpg-item-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.rpg-item-card {
+	background: white;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 10px;
+	transition: box-shadow 0.2s ease;
+}
+
+.rpg-item-card:hover {
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Battle-specific Classes */
+.rpg-battle-pokemon {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 12px;
+	margin: 8px;
+	background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+}
+
+.rpg-battle-pokemon-active {
+	border: 3px solid #28a745;
+	box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+
+.rpg-battle-pokemon-selecting {
+	border: 3px dashed #4a90e2;
+}
+
+.rpg-battle-conditions {
+	background: #f0f8ff;
+	border: 1px solid #b0d4f1;
+	border-radius: 5px;
+	padding: 8px;
+	margin: 5px 0;
+	text-align: center;
+}
+
+/* Move Button Classes */
+.rpg-move-button {
+	background: white;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	padding: 8px;
+	width: 155px;
+	height: 60px;
+	text-align: left;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.rpg-move-button:hover {
+	border-color: #4a90e2;
+	box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+	transform: translateY(-2px);
+}
+
+.rpg-move-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	background: #f5f5f5;
+}
+
+.rpg-move-name {
+	font-weight: bold;
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 4px;
+}
+
+.rpg-move-info {
+	font-size: 11px;
+	color: #666;
+}
+
+/* Tera Button */
+.rpg-tera-button {
+	background: linear-gradient(135deg, #ff1493, #ff69b4);
+	color: white;
+	border: 2px solid #ff1493;
+	border-radius: 8px;
+	padding: 4px 8px;
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+	margin-top: 4px;
+	width: 155px;
+	transition: all 0.2s ease;
+}
+
+.rpg-tera-button:hover {
+	background: linear-gradient(135deg, #ff69b4, #ff1493);
+	box-shadow: 0 2px 8px rgba(255, 20, 147, 0.4);
+}
+
+/* ============================================
+   Dark Theme Support
+   ============================================ */
+
+.dark .rpg-container {
+	background: #2a2a2a;
+	border-color: #444;
+}
+
+.dark .rpg-card {
+	background: #333;
+	border-color: #555;
+}
+
+.dark .rpg-panel {
+	background: #2a2a2a;
+	border-color: #555;
+}
+
+.dark .rpg-battle-log {
+	background: #1a1a1a;
+	border-color: #555;
+	color: #ddd;
+}
+
+.dark .rpg-button {
+	background: #5a9fd4;
+}
+
+.dark .rpg-button:hover {
+	background: #4a8fc4;
+}
+
+.dark .rpg-button-primary {
+	background: #3d9e5d;
+}
+
+.dark .rpg-button-primary:hover {
+	background: #2d8e4d;
+}
+
+.dark .rpg-button-secondary {
+	background: #5a6268;
+}
+
+.dark .rpg-button-secondary:hover {
+	background: #4a5258;
+}
+
+.dark .rpg-button-danger {
+	background: #cc3545;
+}
+
+.dark .rpg-button-danger:hover {
+	background: #bc2333;
+}
+
+.dark .rpg-button-disabled {
+	background: #555;
+	color: #888;
+}
+
+.dark .rpg-title {
+	color: #eee;
+}
+
+.dark .rpg-subtitle {
+	color: #ccc;
+}
+
+.dark .rpg-text {
+	color: #aaa;
+}
+
+.dark .rpg-text-small {
+	color: #999;
+}
+
+.dark .rpg-text-bold {
+	color: #eee;
+}
+
+.dark .rpg-bar-container {
+	background: #444;
+	border-color: #666;
+}
+
+.dark .rpg-bar-text {
+	color: #eee;
+	text-shadow: 0 0 2px #000;
+}
+
+.dark .rpg-pokemon-card {
+	background: #333;
+	border-color: #555;
+}
+
+.dark .rpg-pokemon-name {
+	color: #eee;
+}
+
+.dark .rpg-pokemon-info {
+	color: #aaa;
+}
+
+.dark .rpg-nav {
+	border-top-color: #444;
+}
+
+.dark .rpg-nav-button {
+	background: #5a6268;
+}
+
+.dark .rpg-nav-button:hover {
+	background: #6a7278;
+}
+
+.dark .rpg-item-card {
+	background: #333;
+	border-color: #555;
+}
+
+.dark .rpg-battle-pokemon {
+	background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+	border-color: #555;
+}
+
+.dark .rpg-battle-pokemon-active {
+	border-color: #3d9e5d;
+	box-shadow: 0 0 10px rgba(61, 158, 93, 0.4);
+}
+
+.dark .rpg-battle-conditions {
+	background: #1a2a3a;
+	border-color: #3a5a7a;
+}
+
+.dark .rpg-move-button {
+	background: #2a2a2a;
+	border-color: #555;
+}
+
+.dark .rpg-move-button:hover {
+	border-color: #5a9fd4;
+	box-shadow: 0 2px 6px rgba(90, 159, 212, 0.4);
+}
+
+.dark .rpg-move-button:disabled {
+	background: #1a1a1a;
+}
+
+.dark .rpg-move-name {
+	color: #eee;
+}
+
+.dark .rpg-move-info {
+	color: #aaa;
+}
