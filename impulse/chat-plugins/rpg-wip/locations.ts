@@ -574,7 +574,7 @@ export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], 
 	},
 	'startertown_pond': {
 		name: 'Pond',
-		pokemon: ['magikarp', 'feebas'],
+		pokemon: ['magikarp', 'feebas', 'palafin'],
 		levelRange: [5, 10],
 		battleType: 'single',
 	},
