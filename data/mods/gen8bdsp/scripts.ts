@@ -3,7 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen8',
 	actions: {
 		inherit: true,
-		canDynamaxSide(side) {
+		canDynamaxSide() {
 			// Dynamaxing is not in BDSP
 			return false;
 		},
