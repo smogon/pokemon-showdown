@@ -11,7 +11,7 @@ import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
-import { getPlayerData } from './core';
+import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
 /**
@@ -265,7 +265,7 @@ export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	isDoubleBattle: boolean,
-	ownerName?: string
+	ownerName?: string // <-- NEW PARAMETER
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
@@ -363,10 +363,10 @@ export function generateSharedBattlePokemonInfo(
 		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		return html;
 	} else {
-		const spriteDir = pokemon.shiny ? 'gen5ani-shiny' : 'gen5ani';
+		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' + // Centering container
-			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.gif" width="64" height="64" />' +
+			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
 			'</div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
@@ -1369,75 +1369,6 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 		}
 	}
 	html += `</div>`;
-	return html;
-}
-
-export function generateFieldEffectHTML(battle: BattleState): string {
-	let html = '<div style="border: 1px solid #dee2e6; border-radius: 5px; padding: 8px; margin-bottom: 10px; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">';
-	const fieldEffects: string[] = [];
-	const playerSide: string[] = [];
-	const opponentSide: string[] = [];
-
-	// --- Global Field Effects ---
-	if (battle.weather) {
-		const weatherIcons = {
-			sun: '☀️',
-			rain: '🌧️',
-			sand: '🏜️',
-			hail: '🌨️',
-			'harsh-sun': '🔥',
-			'heavy-rain': '💧',
-			'strong-winds': '💨',
-		};
-		const icon = weatherIcons[battle.weather.type] || '🌤️';
-		const weatherName = battle.weather.type.toUpperCase().replace(/-/g, ' ');
-		fieldEffects.push(`${icon} <strong>${weatherName}</strong> (${battle.weather.turns} turns)`);
-	}
-	if (battle.terrain) {
-		const terrainIcons = { electric: '⚡', grassy: '🌱', misty: '🌫️', psychic: '👁️' };
-		fieldEffects.push(`${terrainIcons[battle.terrain.type]} <strong>${battle.terrain.type.toUpperCase()} Terrain</strong> (${battle.terrain.turns} turns)`);
-	}
-	if (battle.trickRoomTurns > 0) fieldEffects.push(`🕒 <strong>Trick Room</strong> (${battle.trickRoomTurns} turns)`);
-	if (battle.magicRoomTurns > 0) fieldEffects.push(`✨ <strong>Magic Room</strong> (${battle.magicRoomTurns} turns)`);
-	if (battle.wonderRoomTurns > 0) fieldEffects.push(`❓ <strong>Wonder Room</strong> (${battle.wonderRoomTurns} turns)`);
-	if (battle.gravityTurns > 0) fieldEffects.push(`🌍 <strong>Gravity</strong> (${battle.gravityTurns} turns)`);
-	if (battle.mudSportTurns > 0) fieldEffects.push(`💩 <strong>Mud Sport</strong> (${battle.mudSportTurns} turns)`);
-	if (battle.waterSportTurns > 0) fieldEffects.push(`💧 <strong>Water Sport</strong> (${battle.waterSportTurns} turns)`);
-
-	// --- Player Side Effects ---
-	if (battle.playerReflectTurns > 0) playerSide.push(`🛡️ Reflect (${battle.playerReflectTurns})`);
-	if (battle.playerLightScreenTurns > 0) playerSide.push(`💡 Light Screen (${battle.playerLightScreenTurns})`);
-	if (battle.playerAuroraVeilTurns > 0) playerSide.push(`🌈 Aurora Veil (${battle.playerAuroraVeilTurns})`);
-	if (battle.playerQuickGuard) playerSide.push(`💨 Quick Guard`);
-	if (battle.playerWideGuard) playerSide.push(`🛡️ Wide Guard`);
-	if (battle.playerCraftyShield) playerSide.push(`✨ Crafty Shield`);
-	if (battle.playerHazards.includes('stealthrock')) playerSide.push(`💎 Stealth Rock`);
-	const spikes = battle.playerHazards.filter(h => h === 'spikes').length;
-	if (spikes > 0) playerSide.push(`📌 Spikes (x${spikes})`);
-	const toxicSpikes = battle.playerHazards.filter(h => h === 'toxicspikes').length;
-	if (toxicSpikes > 0) playerSide.push(`☠️ Toxic Spikes (x${toxicSpikes})`);
-	if (battle.playerHazards.includes('stickyweb')) playerSide.push(`🕸️ Sticky Web`);
-
-	// --- Opponent Side Effects ---
-	if (battle.opponentReflectTurns > 0) opponentSide.push(`🛡️ Reflect (${battle.opponentReflectTurns})`);
-	if (battle.opponentLightScreenTurns > 0) opponentSide.push(`💡 Light Screen (${battle.opponentLightScreenTurns})`);
-	if (battle.opponentAuroraVeilTurns > 0) opponentSide.push(`🌈 Aurora Veil (${battle.opponentAuroraVeilTurns})`);
-	if (battle.opponentQuickGuard) opponentSide.push(`💨 Quick Guard`);
-	if (battle.opponentWideGuard) opponentSide.push(`🛡️ Wide Guard`);
-	if (battle.opponentCraftyShield) opponentSide.push(`✨ Crafty Shield`);
-	if (battle.opponentHazards.includes('stealthrock')) opponentSide.push(`💎 Stealth Rock`);
-	const oppSpikes = battle.opponentHazards.filter(h => h === 'spikes').length;
-	if (oppSpikes > 0) opponentSide.push(`📌 Spikes (x${oppSpikes})`); // Corrected variable name
-	const oppToxicSpikes = battle.opponentHazards.filter(h => h === 'toxicspikes').length;
-	if (oppToxicSpikes > 0) opponentSide.push(`☠️ Toxic Spikes (x${oppToxicSpikes})`);
-	if (battle.opponentHazards.includes('stickyweb')) opponentSide.push(`🕸️ Sticky Web`);
-
-	// --- Assemble HTML ---
-	html += `<div><strong>Your Side:</strong><br>${playerSide.length > 0 ? playerSide.join('<br>') : '<em>Clear</em>'}</div>`;
-	html += `<div><strong>Field:</strong><br>${fieldEffects.length > 0 ? fieldEffects.join('<br>') : '<em>Clear</em>'}</div>`;
-	html += `<div><strong>Opponent's Side:</strong><br>${opponentSide.length > 0 ? opponentSide.join('<br>') : '<em>Clear</em>'}</div>`;
-
-	html += '</div>';
 	return html;
 }
 
