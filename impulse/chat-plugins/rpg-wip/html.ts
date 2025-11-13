@@ -763,22 +763,19 @@ export function generateSingleBattleHTML(
 		}
 	}
 
-	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
-	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
-
-	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button rpg-button rpg-button-small">🔄 Switch</button>';
 
 	const catchButton = (battle.battleType === 'wild') ?
-		'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
-		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
+		'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-button rpg-button-small">⚽ Catch</button>' :
+		'<button class="button rpg-button-disabled rpg-button-small" disabled>⚽ Catch</button>';
 
 	const runButton = (battle.battleType === 'wild' && !playerSlot.isTrapped) ?
-		'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
-		'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+		'<button name="send" value="/rpg battleaction run" class="button rpg-button rpg-button-small">🏃 Run</button>' :
+		'<button class="button rpg-button-disabled rpg-button-small" disabled>🏃 Run</button>';
 
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
+	actionHTML = '<p class="rpg-text-bold" style="margin-top: 5px;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
 		moveButtonsHTML +
-		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+		'<div class="rpg-center" style="margin-top: 5px;">' + switchButton + catchButton + runButton + '</div>';
 
 	const playerName = player ? player.name : "Your";
 
@@ -791,7 +788,7 @@ export function generateSingleBattleHTML(
 	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
 	// --- END NEW ---
 
-	return '<div class="infobox">' +
+	return '<div class="infobox rpg-container">' +
 		// --- NEW: Insert the HTML here ---
 		globalConditionsHTML +
 		// --- END NEW ---
@@ -805,7 +802,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+		'<div class="rpg-battle-log">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -1070,33 +1067,37 @@ export function generateBattleHTML(
 }
 
 export function generateWelcomeHTML(): string {
-	return `<div class="infobox">` +
-		`<h2><center><b>Welcome, Tester!</b></center></h2>` +
-		`<p>We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
-		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
-		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
-		`<p>This means you get a sneak peek, but it also means the game is still a work-in-progress. As you explore, you might encounter:</p>` +
+	return `<div class="infobox rpg-container">` +
+		`<h2 class="rpg-title rpg-center">Welcome, Tester!</h2>` +
+		`<div class="rpg-card">` +
+		`<p class="rpg-text">We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
+		`<p class="rpg-text">This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
+		`<p class="rpg-text-bold">You are joining us during an active testing phase.</p>` +
+		`<p class="rpg-text">This means you get a sneak peek, but it also means the game is still a work-in-progress. As you explore, you might encounter:</p>` +
 		`<ul>` +
 		`<li>Bugs, typos, or unexpected command responses.</li>` +
 		`<li>Unfinished story sections, features, or placeholder text.</li>` +
 		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
 		`</ul>` +
-		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
-		`<p><strong>Starting a New Game:</strong> Press 'Continue' to begin. Your first task is to head to the Professor's Lab to choose your starter Pokémon.</p>` +
-		`<p><strong>Returning Testers:</strong> Press 'Load Save' to resume your progress.</p>` +
-		`<p>` +
-		`<button name="send" value="/rpg storymode" class="button">Continue</button> ` +
-		`<button name="send" value="/rpg dbload" class="button">Load Save</button>` +
-		`</p>` +
+		`<p class="rpg-text">Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
+		`<p class="rpg-text"><strong>Starting a New Game:</strong> Press 'Continue' to begin. Your first task is to head to the Professor's Lab to choose your starter Pokémon.</p>` +
+		`<p class="rpg-text"><strong>Returning Testers:</strong> Press 'Load Save' to resume your progress.</p>` +
+		`</div>` +
+		`<div class="rpg-center">` +
+		`<button name="send" value="/rpg storymode" class="button rpg-button-primary rpg-button-large">Continue</button> ` +
+		`<button name="send" value="/rpg dbload" class="button rpg-button rpg-button-large">Load Save</button>` +
+		`</div>` +
 		`</div>`;
 }
 
 export function generateRPGModeSelectionHTML(): string {
-	return `<div class="infobox">` +
-		`<h2>RPG Menu</h2>` +
-		`<p>Select a game mode to begin:</p>` +
-		`<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>` +
-		`<p><em>More modes will be added in future updates!</em></p>` +
+	return `<div class="infobox rpg-container">` +
+		`<h2 class="rpg-title">RPG Menu</h2>` +
+		`<p class="rpg-text">Select a game mode to begin:</p>` +
+		`<div class="rpg-center">` +
+		`<button name="send" value="/rpg storymode" class="button rpg-button-primary rpg-button-large">📖 Story Mode</button>` +
+		`</div>` +
+		`<p class="rpg-text-small"><em>More modes will be added in future updates!</em></p>` +
 		`</div>`;
 }
 
@@ -1264,29 +1265,38 @@ export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: stri
 }
 
 export function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="infobox">`;
-	html += `<h2>Inventory</h2>`;
-	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
+	let html = `<div class="infobox rpg-container">`;
+	html += `<h2 class="rpg-title">Inventory</h2>`;
+	html += `<p class="rpg-text-bold">Money: ₽${player.money}</p>`;
 
 	// Category Buttons
-	html += `<div style="margin: 10px 0;"><button name="send" value="/rpg items" class="button">All</button> <button name="send" value="/rpg items pokeball" class="button">Poké Balls</button> <button name="send" value="/rpg items medicine" class="button">Medicines</button> <button name="send" value="/rpg items held" class="button">Held Items</button> <button name="send" value="/rpg items berry" class="button">Berries</button> <button name="send" value="/rpg items tm" class="button">TMs</button> <button name="send" value="/rpg items key" class="button">Key Items</button> <button name="send" value="/rpg items misc" class="button">Misc.</button></div>`;
+	html += `<div class="rpg-flex" style="margin: 10px 0; flex-wrap: wrap;">` +
+		`<button name="send" value="/rpg items" class="button rpg-button rpg-button-small">All</button>` +
+		`<button name="send" value="/rpg items pokeball" class="button rpg-button rpg-button-small">Poké Balls</button>` +
+		`<button name="send" value="/rpg items medicine" class="button rpg-button rpg-button-small">Medicines</button>` +
+		`<button name="send" value="/rpg items held" class="button rpg-button rpg-button-small">Held Items</button>` +
+		`<button name="send" value="/rpg items berry" class="button rpg-button rpg-button-small">Berries</button>` +
+		`<button name="send" value="/rpg items tm" class="button rpg-button rpg-button-small">TMs</button>` +
+		`<button name="send" value="/rpg items key" class="button rpg-button rpg-button-small">Key Items</button>` +
+		`<button name="send" value="/rpg items misc" class="button rpg-button rpg-button-small">Misc.</button>` +
+		`</div>`;
 
-	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
+	html += `<div class="rpg-item-grid">`;
 
 	let itemsFound = false;
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category) {
 			itemsFound = true;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
-			html += `<strong>${item.name}</strong> x${item.quantity}<br>`;
-			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg useitem ${itemId}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button>`;
+			html += `<div class="rpg-item-card">`;
+			html += `<strong class="rpg-text-bold">${item.name}</strong> x${item.quantity}<br>`;
+			html += `<small class="rpg-text-small">${item.description}</small><br>`;
+			html += `<button name="send" value="/rpg useitem ${itemId}" class="button rpg-button rpg-button-small" style="margin-top: 5px;">Use</button>`;
 			html += `</div>`;
 		}
 	}
 
 	if (!itemsFound) {
-		html += `<p>You have no items in this category.</p>`;
+		html += `<p class="rpg-text">You have no items in this category.</p>`;
 	}
 
 	html += `</div>`;
@@ -1300,30 +1310,31 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
 
-	let html = `<div class="infobox">`;
-	html += `<h2>Poké Mart - ${player.location}</h2>`;
-	html += `<p>Welcome! What would you like to do?</p>`;
-	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/8</p>`;
+	let html = `<div class="infobox rpg-container">`;
+	html += `<h2 class="rpg-title">Poké Mart - ${player.location}</h2>`;
+	html += `<p class="rpg-text">Welcome! What would you like to do?</p>`;
+	html += `<p class="rpg-text"><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/8</p>`;
 
 	// Show next tier info if available
 	if (nextTier) {
-		html += `<p style="color: #666; font-size: 12px;">🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</p>`;
+		html += `<p class="rpg-text-small">🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</p>`;
 	}
 
 	// --- NEW: Added Sell Button ---
-	html += `<p><button name="send" value="/rpg sell" class="button" style="background-color: #28a745; color: white;">Sell Items</button></p>`;
+	html += `<div class="rpg-center"><button name="send" value="/rpg sell" class="button rpg-button-primary">Sell Items</button></div>`;
 
 	// Category Buttons
-	html += `<h3>Buy Items</h3><div style="margin: 10px 0;">`;
-	html += `<button name="send" value="/rpg shop" class="button">All</button> `;
-	html += `<button name="send" value="/rpg shop pokeball" class="button">Poké Balls</button> `;
-	html += `<button name="send" value="/rpg shop medicine" class="button">Medicines</button> `;
-	html += `<button name="send" value="/rpg shop held" class="button">Held Items</button> `;
-	html += `<button name="send" value="/rpg shop berry" class="button">Berries</button> `;
-	html += `<button name="send" value="/rpg shop misc" class="button">Misc.</button>`;
+	html += `<h3 class="rpg-subtitle">Buy Items</h3>`;
+	html += `<div class="rpg-flex" style="margin: 10px 0; flex-wrap: wrap;">`;
+	html += `<button name="send" value="/rpg shop" class="button rpg-button rpg-button-small">All</button>`;
+	html += `<button name="send" value="/rpg shop pokeball" class="button rpg-button rpg-button-small">Poké Balls</button>`;
+	html += `<button name="send" value="/rpg shop medicine" class="button rpg-button rpg-button-small">Medicines</button>`;
+	html += `<button name="send" value="/rpg shop held" class="button rpg-button rpg-button-small">Held Items</button>`;
+	html += `<button name="send" value="/rpg shop berry" class="button rpg-button rpg-button-small">Berries</button>`;
+	html += `<button name="send" value="/rpg shop misc" class="button rpg-button rpg-button-small">Misc.</button>`;
 	html += `</div>`;
 
-	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
+	html += `<div class="rpg-item-grid">`;
 
 	let itemsFound = false;
 	for (const itemId of shopInventory) {
@@ -1333,21 +1344,21 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 		if (!category || item.category === category) {
 			itemsFound = true;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
-			html += `<strong>${item.name}</strong> - ₽${price}<br>`;
-			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button" style="font-size: 12px; margin-top: 5px;">Buy 1</button>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 5" class="button" style="font-size: 12px; margin-top: 5px;">Buy 5</button>`;
+			html += `<div class="rpg-item-card">`;
+			html += `<strong class="rpg-text-bold">${item.name}</strong> - ₽${price}<br>`;
+			html += `<small class="rpg-text-small">${item.description}</small><br>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button rpg-button rpg-button-small" style="margin-top: 5px;">Buy 1</button>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 5" class="button rpg-button rpg-button-small" style="margin-top: 5px;">Buy 5</button>`;
 			html += `</div>`;
 		}
 	}
 
 	if (!itemsFound) {
-		html += `<p>No items found in this category.</p>`;
+		html += `<p class="rpg-text">No items found in this category.</p>`;
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `<div class="rpg-center"><button name="send" value="/rpg explore" class="button rpg-button">Back to Explore</button></div>`;
 	html += `</div>`;
 	return html;
 }
