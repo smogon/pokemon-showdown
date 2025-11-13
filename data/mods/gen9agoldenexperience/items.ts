@@ -121,6 +121,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		shortDesc: "Tries to para the holder.",
 		num: -1,
 		gen: 4,
+		isNonstandard: null,
 	},
 	frozenorb: {
 		name: "Frozen Orb",
@@ -138,6 +139,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		shortDesc: "Tries to freeze the holder.",
 		num: -2,
 		gen: 4,
+		isNonstandard: null,
 	},
 	nullifyorb: {
 		name: "Nullify Orb",
@@ -151,6 +153,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -3,
 		gen: 9,
+		isNonstandard: null,
 	},
 
 	//mega stones
@@ -167,6 +170,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -4,
 		gen: 9,
 		desc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	blastoisinitex: {
 		name: "Blastoisinite X",
@@ -181,6 +185,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -5,
 		gen: 9,
 		desc: "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	butterfrite: {
 		name: "Butterfrite",
@@ -195,6 +200,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -6,
 		gen: 9,
 		desc: "If held by a Butterfree, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	wigglytite: {
 		name: "Wigglytite",
@@ -209,6 +215,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -7,
 		gen: 9,
 		desc: "If held by a Wigglytuff, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	machampite: {
 		name: "Machampite",
@@ -223,6 +230,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -8,
 		gen: 9,
 		desc: "If held by a Machamp, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	typhlosionite: {
 		name: "Typhlosionite",
@@ -237,6 +245,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -9,
 		gen: 9,
 		desc: "If held by a Typhlosion or a Typhlosion-Hisui, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	noctowlite: {
 		name: "Noctowlite",
@@ -251,6 +260,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -10,
 		gen: 9,
 		desc: "If held by a Noctowl, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	crobatite: {
 		name: "Crobatite",
@@ -265,6 +275,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -11,
 		gen: 9,
 		desc: "If held by a Crobat, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	flygonite: {
 		name: "Flygonite",
@@ -279,6 +290,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -12,
 		gen: 9,
 		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	cacturnite: {
 		name: "Cacturnite",
@@ -293,6 +305,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -13,
 		gen: 9,
 		desc: "If held by a Cacturne, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	whiscashite: {
 		name: "Whiscashite",
@@ -307,6 +320,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -14,
 		gen: 9,
 		desc: "If held by a Whiscash, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	castformite: {
 		name: "Castformite",
@@ -321,6 +335,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -15,
 		gen: 9,
 		desc: "If held by a Castform, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	yanmeganite: {
 		name: "Yanmeganite",
@@ -335,6 +350,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -16,
 		gen: 9,
 		desc: "If held by a Yanmega, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	krookodite: {
 		name: "Krookodite",
@@ -349,6 +365,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -17,
 		gen: 9,
 		desc: "If held by a Krookodile, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	crustlite: {
 		name: "Crustlite",
@@ -363,6 +380,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -18,
 		gen: 9,
 		desc: "If held by a Crustle, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	zoroarkite: {
 		name: "Zoroarkite",
@@ -377,6 +395,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -19,
 		gen: 9,
 		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	ribombinite: {
 		name: "Ribombinite",
@@ -391,6 +410,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -20,
 		gen: 9,
 		desc: "If held by a Ribombee, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	salazzlite: {
 		name: "Salazzlite",
@@ -405,6 +425,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -21,
 		gen: 9,
 		desc: "If held by a Salazzle, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	golisopodite: {
 		name: "Golisopodite",
@@ -419,6 +440,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -22,
 		gen: 9,
 		desc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	dhelmite: {
 		name: "Dhelmite",
@@ -433,6 +455,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -23,
 		gen: 9,
 		desc: "If held by a Dhelmise, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	cramorantite: {
 		name: "Cramorantite",
@@ -446,6 +469,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -24,
 		gen: 9,
 		desc: "If held by a Cramorant, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	toxtricitite: {
 		name: "Toxtricitite",
@@ -460,6 +484,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -25,
 		gen: 9,
 		desc: "If held by a Toxtricity, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	centiskorchitex: {
 		name: "Centiskorchite X",
@@ -474,6 +499,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -26,
 		gen: 9,
 		desc: "If held by a Centiskorch, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	centiskorchitey: {
 		name: "Centiskorchite Y",
@@ -488,6 +514,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -27,
 		gen: 9,
 		desc: "If held by a Centiskorch, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	kleavorite: { 
 		name: "Kleavorite",
@@ -502,6 +529,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -28,
 		gen: 9,
 		desc: "If held by a Kleavor, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	meowscaradite: {
 		name: "Meowscaradite",
@@ -515,6 +543,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -29,
 		gen: 9,
 		desc: "If held by a Meowscarada, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	skeledite: { 
 		name: "Skeledite",
@@ -529,6 +558,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -30,
 		gen: 9,
 		desc: "If held by a Skeledirge, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	quaquavite: {
 		name: "Quaquavite",
@@ -542,6 +572,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -31,
 		gen: 9,
 		desc: "If held by a Quaquaval, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	rabscanite: { 
 		name: "Rabscanite",
@@ -556,6 +587,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -32,
 		gen: 9,
 		desc: "If held by a Rabsca, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	brambleghite: {
 		name: "Brambleghite",
@@ -570,6 +602,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -33,
 		gen: 9,
 		desc: "If held by a Brambleghast, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	baskironite: {
 		name: "Baskironite",
@@ -584,6 +617,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -34,
 		gen: 9,
 		desc: "If held by a Baskiron, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	terreptilite: {
 		name: "Terreptilite",
@@ -598,6 +632,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -35,
 		gen: 9,
 		desc: "If held by a Terreptile, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	rocksterite: {
 		name: "Rocksterite",
@@ -612,6 +647,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -36,
 		gen: 9,
 		desc: "If held by a Rockster, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	infarmatemite: {
 		name: "Infarmatemite",
@@ -626,6 +662,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -37,
 		gen: 9,
 		desc: "If held by a Infarmatem, this item allows it to Mega Evolve in battle.",
+		isNonstandard: null,
 	},
 	slowbronite: {
 		inherit: true,
@@ -660,6 +697,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -38,
 		gen: 9,
+		isNonstandard: null,
 	},
 	honey: {
 		name: "Honey",
@@ -681,6 +719,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			pokemon.cureStatus();
 			pokemon.removeVolatile('confusion');
 		},
+		isNonstandard: null,
 	},
 	indecisiveorb: {
 		name: "Indecisive Orb",
@@ -696,6 +735,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		desc: "Holder's move have 1.3x BP, but it can't use the same move twice in a row.",
 		num: -40,
 		gen: 9,
+		isNonstandard: null,
 	},
 	deepseascale: {
 		inherit: true,
@@ -740,6 +780,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Meowstic", "Meowstic-F"],
 		num: -41,
 		gen: 9,
+		isNonstandard: null,
 	},
 	identitycard: { 
 		name: "Identity Card",
@@ -747,6 +788,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		// Edited in scripts.ts
 		num: -42,
 		gen: 9,
+		isNonstandard: null,
 	},
 	bananapeel: {
 		name: "Banana Peel",
@@ -767,6 +809,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Tropius", "Sautropius"],
 		num: -43,
 		gen: 9,
+		isNonstandard: null,
 	},
 	relicsheet: {
 		name: "Relic Sheet",
@@ -783,6 +826,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		num: -44,
 		gen: 9,
 		desc: "If held by Meloetta: Pirouette form on entry.",
+		isNonstandard: null,
 	},
 	lightball: {
 		inherit: true,
@@ -868,6 +912,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			if (item.itemUser == source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
+		isNonstandard: null,
 	},
 	helixfossil: {
 		inherit: true,
