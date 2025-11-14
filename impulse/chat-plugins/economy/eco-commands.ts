@@ -1,6 +1,7 @@
 /*
 * Pokemon Showdown
 * Economy Commands
+* @author PrinceSky-Git
 */
 
 import { Economy, CURRENCY } from '../../economy';
@@ -8,6 +9,13 @@ import { nameColor } from '../../colors';
 import { generateThemedTable } from '../../utils';
 
 const CURRENCYNAME = CURRENCY.name;
+
+const notifyUser = (userId: string, message: string): void => {
+	const targetSocket = Users.get(userId);
+	if (targetSocket) {
+		targetSocket.popup(`|html|${message}`);
+	}
+};
 
 export const commands: Chat.ChatCommands = {
 	bal: 'balance',
@@ -49,7 +57,9 @@ export const commands: Chat.ChatCommands = {
 
 			const fromUser = await Economy.getUser(user.id);
 			if (fromUser.balance < amount) {
-				return this.errorReply(`You do not have enough money to transfer ${Economy.formatMoney(amount)}. You have ${Economy.formatMoney(fromUser.balance)}.`);
+				const msg = `You do not have enough money to transfer ` +
+					`${Economy.formatMoney(amount)}. You have ${Economy.formatMoney(fromUser.balance)}.`;
+				return this.errorReply(msg);
 			}
 
 			const result = await Economy.transferMoney(user.id, targetUserid, amount);
@@ -58,14 +68,16 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Transfer failed: ${result.error}`);
 			}
 
-			this.sendReplyBox(`You successfully transferred ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ${targetUserid}. Your new balance is ${Economy.formatMoney(result.fromBalance)} ${CURRENCYNAME}.`);
+			const successMsg = `You successfully transferred ${Economy.formatMoney(amount)} ` +
+				`${CURRENCYNAME} to ${targetUserid}. Your new balance is ` +
+				`${Economy.formatMoney(result.fromBalance)} ${CURRENCYNAME}.`;
+			this.sendReplyBox(successMsg);
 
-			const targetSocket = Users.get(targetUserid);
-			if (targetSocket) {
-				const fromNameColor = nameColor(user.name, false, true);
-				const toBalanceDisplay = Economy.formatMoney(result.toBalance);
-				targetSocket.popup(`|html|You received a transfer of ${Economy.formatMoney(amount)} from ${fromNameColor}. Your new balance is ${toBalanceDisplay} ${CURRENCYNAME}.`);
-			}
+			const fromNameColor = nameColor(user.name, false, true);
+			const toBalanceDisplay = Economy.formatMoney(result.toBalance);
+			const notifyMsg = `You received a transfer of ${Economy.formatMoney(amount)} from ` +
+				`${fromNameColor}. Your new balance is ${toBalanceDisplay} ${CURRENCYNAME}.`;
+			notifyUser(targetUserid, notifyMsg);
 		},
 
 		async give(target, room, user): Promise<void> {
@@ -87,14 +99,16 @@ export const commands: Chat.ChatCommands = {
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ${targetNameColor}.`);
+			const msg = `You have given ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ` +
+				`${targetNameColor}.`;
+			this.sendReplyBox(msg);
 
-			const targetSocket = Users.get(targetUserid);
-			if (targetSocket) {
-				const giverNameColor = nameColor(user.name, false, true);
-				const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
-				targetSocket.popup(`|html|You have been given ${Economy.formatMoney(amount)} by ${giverNameColor} ${CURRENCYNAME}. Your new balance is ${newBalanceDisplay} ${CURRENCYNAME}.`);
-			}
+			const giverNameColor = nameColor(user.name, false, true);
+			const newBalanceDisplay = Economy.formatMoney(updatedUser.balance);
+			const notifyMsg = `You have been given ${Economy.formatMoney(amount)} by ` +
+				`${giverNameColor} ${CURRENCYNAME}. Your new balance is ` +
+				`${newBalanceDisplay} ${CURRENCYNAME}.`;
+			notifyUser(targetUserid, notifyMsg);
 		},
 
 		async take(target, room, user): Promise<void> {
@@ -114,100 +128,25 @@ export const commands: Chat.ChatCommands = {
 
 			const targetUser = await Economy.getUser(targetUserid);
 			if (targetUser.balance < amount) {
-				return this.errorReply(`${targetUserid} only has ${Economy.formatMoney(targetUser.balance)} and cannot have ${Economy.formatMoney(amount)} taken.`);
+				const msg = `${targetUserid} only has ${Economy.formatMoney(targetUser.balance)} ` +
+					`and cannot have ${Economy.formatMoney(amount)} taken.`;
+				return this.errorReply(msg);
 			}
 
 			await Economy.updateBalance(targetUserid, -amount);
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`You have taken ${Economy.formatMoney(amount)} ${CURRENCYNAME} from ${targetNameColor}.`);
+			const msg = `You have taken ${Economy.formatMoney(amount)} ${CURRENCYNAME} from ` +
+				`${targetNameColor}.`;
+			this.sendReplyBox(msg);
 
-			const targetSocket = Users.get(targetUserid);
-			if (targetSocket) {
-				const takerNameColor = nameColor(user.name, false, true);
-				targetSocket.popup(`|html|${takerNameColor} has taken ${Economy.formatMoney(amount)} ${CURRENCYNAME} from you.`);
-			}
+			const takerNameColor = nameColor(user.name, false, true);
+			const notifyMsg = `${takerNameColor} has taken ${Economy.formatMoney(amount)} ` +
+				`${CURRENCYNAME} from you.`;
+			notifyUser(targetUserid, notifyMsg);
 		},
-
-		async history(target, room, user): Promise<void> {
-			if (!this.runBroadcast()) return;
-
-			let targetUserid = toID(target);
-			const staffCheck = user.can('roomowner');
-
-			if (targetUserid && !staffCheck) {
-				return this.errorReply("You can only view your own transaction history. Use `/eco history`.");
-			}
-
-			targetUserid = targetUserid || user.id;
-
-			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
-			const targetNameColor = nameColor(targetDisplayName);
-
-			const history = await Economy.getTransactionHistory(targetUserid);
-			if (!history.length) {
-				return this.sendReplyBox(`<h3><center>Transaction History for ${targetNameColor}</center></h3><hr />No transactions found for ${targetUserid}.`);
-			}
-
-			const headerRow = ["Type", "Amount", "Details", "Date"];
-			const dataRows = history.map(t => {
-				const date = new Date(t.timestamp).toLocaleString();
-				let typeColor = '';
-				let details = '';
-				let amountDisplay = Economy.formatMoney(t.amount);
-
-				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
-				const toDisplayName = Users.getExact(t.to)?.name || t.to;
-
-				const fromColor = nameColor(fromDisplayName);
-				const toColor = nameColor(toDisplayName);
-
-				switch (t.type) {
-				case 'transfer':
-					typeColor = t.from === targetUserid ? 'red' : 'green';
-					details = t.from === targetUserid ? `Sent to ${toColor}` : `Received from ${fromColor}`;
-					amountDisplay = t.from === targetUserid ? `- ${amountDisplay}` : `+ ${amountDisplay}`;
-					break;
-				case 'give':
-					typeColor = 'green';
-					amountDisplay = `+ ${amountDisplay}`;
-					break;
-				case 'take':
-					typeColor = 'red';
-					amountDisplay = `- ${amountDisplay}`;
-					break;
-				case 'shop':
-					typeColor = 'red';
-					details = `Spent on shop item`;
-					amountDisplay = `- ${amountDisplay}`;
-					break;
-				case 'reward':
-					typeColor = 'green';
-					details = `Reward`;
-					amountDisplay = `+ ${amountDisplay}`;
-					break;
-				}
-
-				const reason = t.reason ? ` (${t.reason})` : '';
-
-				return [
-					t.type.toUpperCase(),
-					`<span style="color: ${typeColor};">${amountDisplay}</span>`,
-					`${details}${reason}`,
-					date,
-				];
-			});
-
-			const tableHtml = generateThemedTable(
-				`Transaction History for ${targetNameColor}`,
-				headerRow,
-				dataRows
-			);
-
-			this.sendReply(`|html|${tableHtml}`);
-		},
-
+		
 		async stats(): Promise<void> {
 			if (!this.runBroadcast()) return;
 
@@ -273,21 +212,25 @@ export const commands: Chat.ChatCommands = {
 
 			const targetUser = await Economy.getUser(targetUserid);
 			if (targetUser.balance === Economy.CONFIG.startingBalance) {
-				return this.errorReply(`${targetUserid} already has the starting balance, so there is nothing to reset.`);
+				const msg = `${targetUserid} already has the starting balance, ` +
+					`so there is nothing to reset.`;
+				return this.errorReply(msg);
 			}
 
 			await Economy.resetUser(targetUserid);
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			this.sendReplyBox(`Economy data for ${targetNameColor} has been reset. They now have a starting balance of ${Economy.formatMoney(Economy.CONFIG.startingBalance)} ${CURRENCYNAME}.`);
+			const startingBalance = Economy.formatMoney(Economy.CONFIG.startingBalance);
+			const msg = `Economy data for ${targetNameColor} has been reset. They now have a ` +
+				`starting balance of ${startingBalance} ${CURRENCYNAME}.`;
+			this.sendReplyBox(msg);
 
-			const targetSocket = Users.get(targetUserid);
-			if (targetSocket) {
-				const resetterNameColor = nameColor(user.name, false, true);
-				const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
-				targetSocket.popup(`|html|Your economy data has been reset by ${resetterNameColor}. Your new balance is ${startingBalanceDisplay} ${CURRENCYNAME}.`);
-			}
+			const resetterNameColor = nameColor(user.name, false, true);
+			const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
+			const notifyMsg = `Your economy data has been reset by ${resetterNameColor}. ` +
+				`Your new balance is ${startingBalanceDisplay} ${CURRENCYNAME}.`;
+			notifyUser(targetUserid, notifyMsg);
 		},
 
 		help(): void {
@@ -295,11 +238,8 @@ export const commands: Chat.ChatCommands = {
 			const helpList = [
 				{
 					cmd: "/balance [user]",
-					desc: `Shows a user's ${CURRENCYNAME} balance. Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>`,
-				},
-				{
-					cmd: "/eco history [user]",
-					desc: "Shows the last 50 transactions for a user. Staff & can view other users' history. (Default: yourself)",
+					desc: `Shows a user's ${CURRENCYNAME} balance. ` +
+						`Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>`,
 				},
 				{
 					cmd: "/eco stats",
@@ -326,7 +266,8 @@ export const commands: Chat.ChatCommands = {
 					desc: `Resets a user's economy data (${CURRENCYNAME} and transactions). Requires: &.`,
 				},
 			];
-			const html = `<center><strong>Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<center><strong>Economy Commands:</strong></center>` +
+				`<hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
