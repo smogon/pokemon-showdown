@@ -80,7 +80,7 @@ export const commands: Chat.ChatCommands = {
 		async set(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
-			if (!name || !color) return this.parse('/help symbolcolor');
+			if (!name || !color) return this.parse('/sc help');
 
 			const userId = toID(name);
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
@@ -116,7 +116,7 @@ export const commands: Chat.ChatCommands = {
 		async update(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
-			if (!name || !color) return this.parse('/help symbolcolor');
+			if (!name || !color) return this.parse('/sc help');
 
 			const userId = toID(name);
 
