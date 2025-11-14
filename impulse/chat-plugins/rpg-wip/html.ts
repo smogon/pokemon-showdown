@@ -15,56 +15,6 @@ import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
 /**
- * Reverses battle logs by turn while keeping logs within each turn in chronological order
- * Turn headers remain with their respective turn logs
- * @param battleLog - Array of battle log strings
- * @returns Processed log with turns reversed but messages within turns in order
- */
-function reverseBattleLogByTurns(battleLog: string[]): string[] {
-	if (battleLog.length === 0) return [];
-
-	// Split logs into turns based on turn headers
-	const turns: string[][] = [];
-	let currentTurn: string[] = [];
-
-	// Battle logs are stored with turn header at the END of each turn's messages
-	// We need to group them properly
-	for (const log of battleLog) {
-		// Check if this is a turn header
-		if (log.includes('<strong>Turn ') && log.includes('</strong>')) {
-			// This is a turn header - it belongs at the START of the previous messages
-			if (currentTurn.length > 0) {
-				// Add the turn header at the beginning of current turn
-				currentTurn.unshift(log);
-				turns.push(currentTurn);
-				currentTurn = [];
-			} else {
-				// First item is a turn header
-				currentTurn.push(log);
-			}
-		} else {
-			currentTurn.push(log);
-		}
-	}
-
-	// Add any remaining logs
-	if (currentTurn.length > 0) {
-		turns.push(currentTurn);
-	}
-
-	// Reverse the turns array so newest turns appear first
-	turns.reverse();
-
-	// Flatten back to a single array
-	const result: string[] = [];
-	for (const turn of turns) {
-		result.push(...turn);
-	}
-
-	return result;
-}
-
-/**
  * Generate bottom navigation buttons for story UI
  * These appear below all story UI screens separated by an HR
  */
@@ -204,13 +154,17 @@ export function generatePokemonInfoHTML(
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
-	const expBarHTML = '';
+	let expBarHTML = '';
 	if (isPlayerSide) {
 		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
 		const expForNextLevel = pokemon.expToNextLevel;
 		const expProgress = pokemon.experience - expForLastLevel;
 		const expNeededForLevel = expForNextLevel - expForLastLevel;
 		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
+		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">EXP: ${expProgress}/${expNeededForLevel}</div></div>`;
+	} else {
+		// Add placeholder div with same height for opponent to maintain consistent container size
+		expBarHTML = `<div style="height: 24px; margin: 5px 0;"></div>`;
 	}
 
 	const displayStatus = slot.status || pokemon.status;
@@ -391,6 +345,9 @@ export function generateSharedBattlePokemonInfo(
 	const hpBarHTML =
 		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
 		'<div style="background: ' + hpBarColor + '; width: ' + String(hpPercentage) + '%; height: 100%; border-radius: 7px;"></div>' +
+		'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
+		String(hpPercentage) + '%' +
+		'</span>' +
 		'</div>';
 
 	// Add side effect tags if battle is provided
@@ -428,7 +385,7 @@ export function generateSharedBattlePokemonInfo(
 		html += '</div>';
 		html += hpBarHTML;
 		html += spriteHTML; // --- ADDED SPRITE (for singles) ---
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 40px;">' + statusDisplay + '</div>';
+		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		html += '</div>';
 		return html;
 	}
@@ -475,7 +432,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
  */
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
-
+	
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const weatherColors: Record<string, string> = {
 		'sun': '#F8D030',
@@ -486,7 +443,7 @@ function generateWeatherTags(battle: BattleState): string {
 		'heavy-rain': '#0066CC',
 		'strong-winds': '#A0D0F0',
 	};
-
+	
 	const weatherNames: Record<string, string> = {
 		'sun': 'Sunny',
 		'rain': 'Rain',
@@ -496,11 +453,11 @@ function generateWeatherTags(battle: BattleState): string {
 		'heavy-rain': 'Heavy Rain',
 		'strong-winds': 'Strong Winds',
 	};
-
+	
 	const color = weatherColors[battle.weather.type] || '#999';
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
-
+	
 	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
 }
 
@@ -509,7 +466,7 @@ function generateWeatherTags(battle: BattleState): string {
  */
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
-
+	
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const terrainColors: Record<string, string> = {
 		'electric': '#F8D030',
@@ -517,18 +474,18 @@ function generateTerrainTags(battle: BattleState): string {
 		'misty': '#EE99AC',
 		'psychic': '#F85888',
 	};
-
+	
 	const terrainNames: Record<string, string> = {
 		'electric': 'Electric Terrain',
 		'grassy': 'Grassy Terrain',
 		'misty': 'Misty Terrain',
 		'psychic': 'Psychic Terrain',
 	};
-
+	
 	const color = terrainColors[battle.terrain.type] || '#999';
 	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
 	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
-
+	
 	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
 }
 
@@ -538,7 +495,7 @@ function generateTerrainTags(battle: BattleState): string {
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
-
+	
 	if (battle.trickRoomTurns > 0) {
 		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
 	}
@@ -563,7 +520,7 @@ function generateFieldEffectTags(battle: BattleState): string {
 	if (battle.ionDelugeTurns > 0) {
 		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
 	}
-
+	
 	return effects.join('');
 }
 
@@ -593,8 +550,8 @@ export function generateSingleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Reverse battle log by turns (newest turns first, but messages within turns in chronological order)
-	const reversedBattleLog = reverseBattleLogByTurns(battle.battleLog);
+	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
+	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
@@ -769,7 +726,7 @@ export function generateSingleBattleHTML(
 		'</td>' +
 		'</tr>' +
 		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 100px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
 }
@@ -779,8 +736,8 @@ export function generateDoubleBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
-	// Reverse battle log by turns (newest turns first, but messages within turns in chronological order)
-	const reversedBattleLog = reverseBattleLogByTurns(battle.battleLog);
+	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
+	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
@@ -795,7 +752,7 @@ export function generateDoubleBattleHTML(
 			'</p>';
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 100px; max-height: 100px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			actionHTML +
 			'</div>';
 	}
@@ -1454,8 +1411,9 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	// Check slot 0 (always used in both single and double battles)
 	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	} else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
-		// In double battles, also check slot 1 if slot 0 is already filled
+	}
+	// In double battles, also check slot 1 if slot 0 is already filled
+	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
 		slotToFill = 1;
 	}
 	// --- END FIX ---

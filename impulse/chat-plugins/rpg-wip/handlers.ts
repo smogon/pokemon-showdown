@@ -15,7 +15,7 @@
 // Re-export all NPC action handlers
 export * as NPC from './npc-actions';
 
-// Re-export all scripted event handlers
+// Re-export all scripted event handlers  
 export * as Events from './scripted-events';
 
 // Re-export for convenience - individual imports

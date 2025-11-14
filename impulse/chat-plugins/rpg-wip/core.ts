@@ -226,7 +226,7 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (typeof data.money !== 'number' || data.money < 0 || data.money > 999999999) {
 		throw new Error('Invalid save data: money must be between 0 and 999999999');
 	}
-
+	
 	// Validate inventory
 	if (!Array.isArray(data.inventory)) {
 		throw new Error('Invalid save data: inventory must be an array');
@@ -242,7 +242,7 @@ export function deserializePlayerData(data: any): PlayerData {
 			throw new Error('Invalid save data: item quantity must be between 0 and 999');
 		}
 	}
-
+	
 	// Validate PC storage
 	if (!Array.isArray(data.pc)) {
 		throw new Error('Invalid save data: PC must be an array');
@@ -250,7 +250,7 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (data.pc.length > 100) {
 		throw new Error('Invalid save data: PC cannot have more than 100 Pokemon');
 	}
-
+	
 	// Validate obtainedBadges
 	if (!Array.isArray(data.obtainedBadges)) {
 		throw new Error('Invalid save data: obtainedBadges must be an array');
@@ -367,7 +367,7 @@ export function deserializePlayerData(data: any): PlayerData {
 			}
 		}
 	}
-
+	
 	// Validate Pokemon in PC
 	for (const [pcId, pokemon] of data.pc) {
 		if (!pokemon || typeof pokemon !== 'object') {

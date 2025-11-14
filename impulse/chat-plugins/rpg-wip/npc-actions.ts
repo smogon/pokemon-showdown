@@ -3,7 +3,7 @@
 * RPG NPC Actions Handler
 *
 * This file implements logic for all NPC action types.
-*
+* 
 * All handlers are exported and can be imported individually or as a namespace:
 *   import * as NPCActions from './npc-actions';
 *   import { handleHeal, handleChooseStarter } from './npc-actions';
@@ -867,6 +867,8 @@ export function handleHairCutter(
 	};
 }
 
+
+
 /**
  * Fishing Action
  * Give or use fishing rods
@@ -1030,6 +1032,8 @@ export function handlePokeathlon(
 		reward,
 	};
 }
+
+
 
 /**
  * Berry Blender Action
@@ -1301,7 +1305,7 @@ export function handleCollectionQuest(
 	for (const reqItem of action.requiredItems) {
 		const item = player.inventory.get(reqItem.itemId);
 		const hasQuantity = item?.quantity || 0;
-
+		
 		if (hasQuantity >= reqItem.quantity) {
 			collectedCount++;
 		} else {
@@ -1605,7 +1609,7 @@ export function handleAchievement(
 	action: NPCAction,
 	achievementId: string
 ): { success: boolean, message: string, unlocked: boolean, reward?: any } {
-	if (!action.achievements?.[achievementId]) {
+	if (!action.achievements || !action.achievements[achievementId]) {
 		return { success: false, message: 'Achievement not found.' };
 	}
 
@@ -1858,7 +1862,7 @@ export function handleSurvivalBattle(
 
 	const streakFlag = `survival_${npcId}_streak`;
 	const bestFlag = `survival_${npcId}_best`;
-
+	
 	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
 	const bestStr = Array.from(player.storyFlags).find(f => f.startsWith(bestFlag));
 
@@ -1891,7 +1895,7 @@ export function handleSurvivalBattle(
 export function recordSurvivalResult(player: PlayerData, npcId: string, won: boolean): void {
 	const streakFlag = `survival_${npcId}_streak`;
 	const bestFlag = `survival_${npcId}_best`;
-
+	
 	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
 	const bestStr = Array.from(player.storyFlags).find(f => f.startsWith(bestFlag));
 
