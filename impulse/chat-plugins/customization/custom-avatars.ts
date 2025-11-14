@@ -145,7 +145,7 @@ export const commands: Chat.ChatCommands = {
 		async set(target, room, user) {
 			this.checkCan('roomowner');
 			const [name, avatarUrl] = target.split(',').map(s => s.trim());
-			if (!name || !avatarUrl) return this.parse('/help customavatar');
+			if (!name || !avatarUrl) return this.parse('/ca help');
 
 			const userId = toID(name);
 			if (!userId) return this.errorReply('Invalid username.');
