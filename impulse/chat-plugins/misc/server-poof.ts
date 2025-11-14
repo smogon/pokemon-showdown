@@ -1,7 +1,6 @@
 /*
 * Pokemon Showdown
 * Poof Commands
-* Refactored from server-poof.js
 */
 
 interface PoofConfig {
@@ -55,75 +54,73 @@ const messages: string[] = [
 	`ran out of Repels in Victory Road.`,
 ];
 
-class PoofManager {
-	static generateRandomColor(): string {
-		return "#" + Array(3).fill(0).map(() => {
-			const part = Math.floor(Math.random() * 0xaa);
-			return (part < 0x10 ? "0" : "") + part.toString(16);
-		}).join("");
-	}
+const generateRandomColor = (): string => {
+	return "#" + Array(3).fill(0).map(() => {
+		const part = Math.floor(Math.random() * 0xaa);
+		return (part < 0x10 ? "0" : "") + part.toString(16);
+	}).join("");
+};
 
-	static getRandomMessage(): string {
-		return messages[Math.floor(Math.random() * messages.length)];
-	}
+const getRandomMessage = (): string => {
+	return messages[Math.floor(Math.random() * messages.length)];
+};
 
-	static formatMessage(message: string, userName: string): string {
-		let formattedMessage = message;
-		if (!formattedMessage.includes('{{user}}')) {
-			formattedMessage = `{{user}} ${formattedMessage}`;
-		}
-		return formattedMessage.replace(/{{user}}/g, userName);
+const formatMessage = (message: string, userName: string): string => {
+	let formattedMessage = message;
+	if (!formattedMessage.includes('{{user}}')) {
+		formattedMessage = `{{user}} ${formattedMessage}`;
 	}
+	return formattedMessage.replace(/{{user}}/g, userName);
+};
 
-	static isPoofDisabled(): boolean {
-		return !!(Config as PoofConfig).poofOff;
-	}
+const isPoofDisabled = (): boolean => {
+	return !!(Config as PoofConfig).poofOff;
+};
 
-	static enablePoof(): void {
-		(Config as PoofConfig).poofOff = false;
-	}
+const enablePoof = (): void => {
+	(Config as PoofConfig).poofOff = false;
+};
 
-	static disablePoof(): void {
-		(Config as PoofConfig).poofOff = true;
-	}
-}
+const disablePoof = (): void => {
+	(Config as PoofConfig).poofOff = true;
+};
 
 export const commands: Chat.ChatCommands = {
 	poof: {
 		''(target: string, room: Room, user: User): void {
-			if (PoofManager.isPoofDisabled()) {
+			if (isPoofDisabled()) {
 				return this.errorReply("Poof is currently disabled.");
 			}
-			const message = target || PoofManager.getRandomMessage();
-			const formattedMessage = PoofManager.formatMessage(message, user.name);
+			const message = target || getRandomMessage();
+			const formattedMessage = formatMessage(message, user.name);
 
 			if (!this.canTalk(formattedMessage)) return;
 
-			const colour = PoofManager.generateRandomColor();
-			room.addRaw(`<center><strong><font color="${colour}">~~ ${formattedMessage || target} ~~</font></strong></center>`);
+			const colour = generateRandomColor();
+			const msg = `<center><strong><font color="${colour}">~~ ${formattedMessage || target} ` +
+				`~~</font></strong></center>`;
+			room.addRaw(msg);
 			user.disconnectAll();
 		},
 
 		on(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
-			PoofManager.enablePoof();
+			enablePoof();
 			this.sendReply("Poof is now enabled.");
 		},
 		onhelp: ["/poof on - Enable the use /poof command. Requires: &"],
 
 		off(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
-			PoofManager.disablePoof();
+			disablePoof();
 			this.sendReply("Poof is now disabled.");
 		},
 		offhelp: ["/poof off - Disable the use of the /poof command. Requires: &"],
 	},
 
-	// Aliases
 	d: 'poof',
 	cpoof: 'poof',
 
-	// Legacy commands for backward compatibility
 	poofon: 'poof on',
 	poofoff: 'poof off',
 	nopoof: 'poof off',
@@ -131,11 +128,21 @@ export const commands: Chat.ChatCommands = {
 	poofhelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{ cmd: "/poof [message]", desc: "Disconnects the user and leaves a message in the lobby." },
-			{ cmd: "/poof on", desc: "Enable the use of /poof command. Requires: &." },
-			{ cmd: "/poof off", desc: "Disable the use of the /poof command. Requires: &." },
+			{
+				cmd: "/poof [message]",
+				desc: "Disconnects the user and leaves a message in the lobby.",
+			},
+			{
+				cmd: "/poof on",
+				desc: "Enable the use of /poof command. Requires: &.",
+			},
+			{
+				cmd: "/poof off",
+				desc: "Disable the use of the /poof command. Requires: &.",
+			},
 		];
-		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+		const html = `<center><strong>Poof Commands:<br>Aliases: /d, /cpoof</strong></center>` +
+			`<hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
