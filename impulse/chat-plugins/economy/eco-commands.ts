@@ -1,16 +1,13 @@
 /*
 * Pokemon Showdown
 * Economy Commands
-* @author PrinceSky-Git
 */
+
 import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
 import { generateThemedTable } from '../../utils';
 
 const CURRENCYNAME = CURRENCY.name;
-const LADDER_DEFAULT_PAGE = 1;
-const LADDER_DEFAULT_LIMIT = 50;
-const LADDER_MAX_LIMIT = 50;
 
 export const commands: Chat.ChatCommands = {
 	bal: 'balance',
@@ -20,17 +17,17 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		const targetUserid = toID(target) || user.id;
+
 		const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 		const targetNameColor = nameColor(targetDisplayName, true, false);
-		const targetUser = await Economy.getUser(targetUserid);
-		const moneyDisplay = Economy.formatMoney(targetUser.balance);
 
+		const targetUser = await Economy.getUser(targetUserid);
+
+		const moneyDisplay = Economy.formatMoney(targetUser.balance);
 		this.sendReplyBox(`${targetNameColor} has ${moneyDisplay} ${CURRENCYNAME}.`);
 	},
 
 	eco: {
-		'': 'help',
-
 		async transfer(target, room, user): Promise<void> {
 			if (!target) return this.parse('/help eco');
 
@@ -41,9 +38,11 @@ export const commands: Chat.ChatCommands = {
 			if (!targetUserid || !amountStr) {
 				return this.parse('/help eco');
 			}
+
 			if (targetUserid === user.id) {
 				return this.errorReply("You cannot transfer money to yourself.");
 			}
+
 			if (amount <= 0 || isNaN(amount)) {
 				return this.errorReply(`Amount must be a positive number.`);
 			}
@@ -79,11 +78,13 @@ export const commands: Chat.ChatCommands = {
 			if (!targetUserid || !amountStr) {
 				return this.parse('/help eco');
 			}
+
 			if (amount <= 0 || isNaN(amount)) {
 				return this.errorReply(`Amount must be a positive number.`);
 			}
 
 			const updatedUser = await Economy.updateBalance(targetUserid, amount);
+
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
 			this.sendReplyBox(`You have given ${Economy.formatMoney(amount)} ${CURRENCYNAME} to ${targetNameColor}.`);
@@ -106,6 +107,7 @@ export const commands: Chat.ChatCommands = {
 			if (!targetUserid || !amountStr) {
 				return this.parse('/help eco');
 			}
+
 			if (amount <= 0 || isNaN(amount)) {
 				return this.errorReply(`Amount must be a positive number.`);
 			}
@@ -137,12 +139,13 @@ export const commands: Chat.ChatCommands = {
 			if (targetUserid && !staffCheck) {
 				return this.errorReply("You can only view your own transaction history. Use `/eco history`.");
 			}
+
 			targetUserid = targetUserid || user.id;
 
 			const targetDisplayName = Users.getExact(targetUserid)?.name || targetUserid;
 			const targetNameColor = nameColor(targetDisplayName);
-			const history = await Economy.getTransactionHistory(targetUserid);
 
+			const history = await Economy.getTransactionHistory(targetUserid);
 			if (!history.length) {
 				return this.sendReplyBox(`<h3><center>Transaction History for ${targetNameColor}</center></h3><hr />No transactions found for ${targetUserid}.`);
 			}
@@ -156,6 +159,7 @@ export const commands: Chat.ChatCommands = {
 
 				const fromDisplayName = Users.getExact(t.from)?.name || t.from;
 				const toDisplayName = Users.getExact(t.to)?.name || t.to;
+
 				const fromColor = nameColor(fromDisplayName);
 				const toColor = nameColor(toDisplayName);
 
@@ -209,6 +213,7 @@ export const commands: Chat.ChatCommands = {
 
 			const stats = await Economy.getStats();
 			const { totalMoney, totalUsers } = stats;
+
 			const headerRow = ["Total Users", "Total Money in Circulation"];
 			const dataRows = [[
 				totalUsers.toString(),
@@ -230,10 +235,10 @@ export const commands: Chat.ChatCommands = {
 			const [pageStr, limitStr] = target.split(',').map(s => s.trim());
 
 			let page = parseInt(pageStr);
-			if (isNaN(page) || page < 1) page = LADDER_DEFAULT_PAGE;
+			if (isNaN(page) || page < 1) page = 1;
 
 			let limit = parseInt(limitStr);
-			if (isNaN(limit) || limit < 1 || limit > LADDER_MAX_LIMIT) limit = LADDER_DEFAULT_LIMIT;
+			if (isNaN(limit) || limit < 1 || limit > 50) limit = 50;
 
 			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
@@ -302,7 +307,7 @@ export const commands: Chat.ChatCommands = {
 				},
 				{
 					cmd: "/eco ladder [page], [limit]",
-					desc: `Shows the economy leaderboard. Max limit is ${LADDER_MAX_LIMIT}.`,
+					desc: "Shows the economy leaderboard. Max limit is 50.",
 				},
 				{
 					cmd: "/eco transfer [user], [amount]",
