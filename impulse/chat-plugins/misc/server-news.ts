@@ -8,7 +8,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
 interface NewsEntry {
-	_id?: unknown;
+	_id: string;
 	title: string;
 	postedBy: string;
 	desc: string;
@@ -16,19 +16,42 @@ interface NewsEntry {
 	timestamp: number;
 }
 
+interface NewsBlockEntry {
+	_id: string;
+}
+
 const serverName = Config.serverName || 'Impulse';
 
 const NewsDB = ImpulseDB<NewsEntry>('news');
+const NewsBlockDB = ImpulseDB<NewsBlockEntry>('newsblock');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const formatDate = (date: Date = new Date()): string =>
 	`${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
+const parseTargetArgs = (target: string): [string, string] => {
+	const [title, ...descParts] = target.split(',');
+	return [title, descParts.join(',')];
+};
+
+const validateNewsArgs = (target: string, context: Chat.CommandContext, usage: string): [string, string] | null => {
+	if (!target) {
+		context.parse('/help servernewshelp');
+		return null;
+	}
+	const [title, desc] = parseTargetArgs(target);
+	if (!desc) {
+		context.errorReply(usage);
+		return null;
+	}
+	return [title, desc];
+};
+
 class NewsManager {
 	static async generateNewsDisplay(): Promise<string[]> {
 		const news = await NewsDB.find(
 			{},
-			{ sort: { timestamp: -1 }, limit: 3, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } }
+			{ sort: { timestamp: -1 }, limit: 2, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } }
 		);
 		return news.map(entry =>
 			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
@@ -38,14 +61,16 @@ class NewsManager {
 
 	static async onUserConnect(user: User): Promise<void> {
 		if (!await NewsDB.exists({})) return;
+		if (await NewsBlockDB.exists({ _id: toID(user.name) })) return;
 		const news = await this.generateNewsDisplay();
 		if (news.length) {
 			user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
 		}
 	}
 
-	static async addNews(title: string, desc: string, user: User): Promise<string> {
+	static async addNews(id: string, title: string, desc: string, user: User): Promise<string> {
 		const newsEntry: NewsEntry = {
+			_id: id,
 			title,
 			postedBy: user.name,
 			desc,
@@ -56,20 +81,18 @@ class NewsManager {
 		return `Added: ${title}`;
 	}
 
-	static async deleteNews(title: string): Promise<string | null> {
-		const result = await NewsDB.deleteOne({ title });
+	static async deleteNews(id: string, title: string): Promise<string | null> {
+		const result = await NewsDB.deleteOne({ _id: id });
 		return result.deletedCount === 0 ? `News "${title}" not found.` : `Deleted: ${title}`;
 	}
 
-	static async updateNews(title: string, newDesc: string): Promise<string | null> {
-		const result = await NewsDB.updateOne({ title }, { $set: { desc: newDesc } });
-		return result.matchedCount === 0 ? `News "${title}" not found.` : `Updated: ${title}`;
+	static async blockNews(userid: string): Promise<void> {
+		await NewsBlockDB.insertOne({ _id: userid });
 	}
 
-	static async deleteOldNews(daysOld = 90): Promise<number> {
-		const cutoff = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
-		const result = await NewsDB.deleteMany({ timestamp: { $lt: cutoff } });
-		return result.deletedCount || 0;
+	static async unblockNews(userid: string): Promise<boolean> {
+		const result = await NewsBlockDB.deleteOne({ _id: userid });
+		return result.deletedCount > 0;
 	}
 }
 
@@ -92,29 +115,17 @@ export const commands: Chat.ChatCommands = {
 
 		async add(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
-			if (!target) return this.parse('/help servernewshelp');
-			const [title, ...descParts] = target.split(',');
-			if (!descParts.length) return this.errorReply("Usage: /servernews add [title], [desc]");
+			const args = validateNewsArgs(target, this, "Usage: /servernews add [title], [desc]");
+			if (!args) return;
+			const [title, desc] = args;
+			const id = toID(title);
 
-			if (await NewsDB.exists({ title })) {
-				return this.errorReply(`"${title}" exists. Use /servernews update.`);
+			if (await NewsDB.exists({ _id: id })) {
+				return this.errorReply(`"${title}" exists.`);
 			}
 
-			await NewsManager.addNews(title, descParts, user);
-
+			await NewsManager.addNews(id, title, desc, user);
 			this.sendReply(`Added: "${title}"`);
-		},
-
-		async update(target, room, user): Promise<void> {
-			this.checkCan('roomowner');
-			if (!target) return this.parse('/help servernewshelp');
-			const [title, ...descParts] = target.split(',');
-			if (!descParts.length) return this.errorReply("Usage: /servernews update [title], [new desc]");
-
-			const result = await NewsManager.updateNews(title, descParts.join(','));
-			if (result?.includes('not found')) return this.errorReply(result);
-
-			this.sendReply(`Updated: "${title}"`);
 		},
 
 		remove: 'delete',
@@ -122,20 +133,33 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
-			const result = await NewsManager.deleteNews(target);
+			const id = toID(target);
+			const result = await NewsManager.deleteNews(id, target);
 
 			if (result?.includes('not found')) return this.errorReply(result);
 
 			this.sendReply(`Deleted: "${target}"`);
 		},
 
-		async cleanup(target, room, user): Promise<void> {
-			this.checkCan('bypassall');
-			const days = Math.max(parseInt(target) || 90, 1);
+		async block(target, room, user): Promise<void> {
+			const userid = toID(user.name);
+			if (await NewsBlockDB.exists({ _id: userid })) {
+				return this.errorReply("You have already blocked server news.");
+			}
 
-			const deleted = await NewsManager.deleteOldNews(days);
+			await NewsManager.blockNews(userid);
+			this.sendReply("You have blocked server news. You will no longer receive news on login.");
+		},
 
-			this.sendReply(`Deleted ${deleted} news item(s) older than ${days} days.`);
+		async unblock(target, room, user): Promise<void> {
+			const userid = toID(user.name);
+			const unblocked = await NewsManager.unblockNews(userid);
+
+			if (!unblocked) {
+				return this.errorReply("You have not blocked server news.");
+			}
+
+			this.sendReply("You have unblocked server news. You will now receive news on login.");
 		},
 	},
 	svn: 'servernews',
@@ -143,11 +167,11 @@ export const commands: Chat.ChatCommands = {
 	servernewshelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{ cmd: "/servernews view", desc: "View the latest 3 server news." },
+			{ cmd: "/servernews view", desc: "View the latest 2 server news." },
 			{ cmd: "/servernews add [title], [desc]", desc: "Add a news. Requires: &." },
-			{ cmd: "/servernews update [title], [desc]", desc: "Update a news. Requires: &." },
 			{ cmd: "/servernews delete [title]", desc: "Delete a news. Requires: &." },
-			{ cmd: "/servernews cleanup [days]", desc: "Delete news older than [days] days. Requires: ~." },
+			{ cmd: "/servernews block", desc: "Block server news on login." },
+			{ cmd: "/servernews unblock", desc: "Unblock server news on login." },
 		];
 		const html = `<center><strong>Server News Commands:<br>Alias: /svn</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
