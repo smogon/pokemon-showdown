@@ -6,9 +6,10 @@
 
 import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
+import { toID } from '../../utils';
 
 interface NewsEntry {
-	_id?: unknown;
+	_id: string;
 	title: string;
 	postedBy: string;
 	desc: string;
@@ -51,7 +52,9 @@ const onUserConnect = async (user: User): Promise<void> => {
 };
 
 const addNews = async (title: string, desc: string, user: User): Promise<string> => {
+	const _id = toID(title);
 	const newsEntry: NewsEntry = {
+		_id,
 		title,
 		postedBy: user.name,
 		desc,
@@ -63,12 +66,14 @@ const addNews = async (title: string, desc: string, user: User): Promise<string>
 };
 
 const deleteNews = async (title: string): Promise<string | null> => {
-	const result = await NewsDB.deleteOne({ title });
+	const _id = toID(title);
+	const result = await NewsDB.deleteOne({ _id });
 	return result.deletedCount === 0 ? `News "${title}" not found.` : `Deleted: ${title}`;
 };
 
 const updateNews = async (title: string, newDesc: string): Promise<string | null> => {
-	const result = await NewsDB.updateOne({ title }, { $set: { desc: newDesc } });
+	const _id = toID(title);
+	const result = await NewsDB.updateOne({ _id }, { $set: { desc: newDesc } });
 	return result.matchedCount === 0 ? `News "${title}" not found.` : `Updated: ${title}`;
 };
 
@@ -113,7 +118,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Usage: /servernews add [title], [desc]");
 			}
 
-			if (await NewsDB.exists({ title })) {
+			const _id = toID(title);
+			if (await NewsDB.exists({ _id })) {
 				return this.errorReply(`"${title}" exists. Use /servernews update.`);
 			}
 
