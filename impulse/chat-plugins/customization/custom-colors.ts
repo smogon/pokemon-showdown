@@ -70,7 +70,7 @@ export const commands: Chat.ChatCommands = {
 		async set(target: string, room: ChatRoom, user: User) {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(t => t.trim());
-			if (!name || !color) return this.parse('/customcolorhelp');
+			if (!name || !color) return this.parse('/cc help');
 
 			const targetId = toID(name);
 			if (targetId.length > 19) return this.errorReply('Usernames are not this long...');
@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 
 		async delete(target, room, user) {
 			this.checkCan('roomowner');
-			if (!target) return this.parse('/customcolorhelp');
+			if (!target) return this.parse('/cc help');
 
 			const targetId = toID(target);
 			const colorDoc = await ImpulseDB('customcolors').findOne({ userid: targetId });
@@ -123,7 +123,7 @@ export const commands: Chat.ChatCommands = {
 		preview(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const [name, color] = target.split(',').map(t => t.trim());
-			if (!name || !color) return this.parse('/customcolorhelp');
+			if (!name || !color) return this.parse('/cc help');
 
 			if (!validateHexColor(color)) {
 				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
