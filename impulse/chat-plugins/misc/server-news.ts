@@ -161,8 +161,8 @@ export const commands: Chat.ChatCommands = {
 
 	servernewshelp(): void {
 		if (!this.runBroadcast()) return;
-		const html = `<center><strong>Server News Commands:<br>Alias: /svn</strong></center><hr>`,
-			`<ul style="list-style-type:none;padding-left:0;">`,
+		const html = `<center><strong>Server News Commands:<br>Alias: /svn</strong></center><hr>` +
+			`<ul style="list-style-type:none;padding-left:0;">` +
 			`${SERVER_NEWS_HELP.map(item => `<li><b>${item.cmd}</b> - ${item.desc}</li>`).join('<hr>')}</ul>`;
 		this.sendReplyBox(html.trim());
 	},
