@@ -97,7 +97,7 @@ export const commands: Chat.ChatCommands = {
 
 		async add(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
-			if (!target) return this.parse('/help servernewshelp');
+			if (!target) return this.parse('/servernewshelp');
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) {
 				return this.errorReply("Usage: /servernews add [title], [desc]");
@@ -114,7 +114,7 @@ export const commands: Chat.ChatCommands = {
 
 		async update(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
-			if (!target) return this.parse('/help servernewshelp');
+			if (!target) return this.parse('/servernewshelp');
 			const [title, ...descParts] = target.split(',');
 			if (!descParts.length) {
 				return this.errorReply("Usage: /servernews update [title], [new desc]");
@@ -129,7 +129,7 @@ export const commands: Chat.ChatCommands = {
 		remove: 'delete',
 		async delete(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
-			if (!target) return this.parse('/help servernewshelp');
+			if (!target) return this.parse('/servernewshelp');
 
 			const result = await deleteNews(target);
 
