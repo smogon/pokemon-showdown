@@ -156,7 +156,7 @@ export const commands: ChatCommands = {
 			}
 
 			// New players: show welcome screen
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`, -1000);
 		},
 
 		continue(target, room, user) {
