@@ -156,7 +156,7 @@ export const commands: ChatCommands = {
 			}
 
 			// New players: show welcome screen
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`, -1000);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
 		continue(target, room, user) {
@@ -175,7 +175,7 @@ export const commands: ChatCommands = {
 			// Set player location to starting location
 			const startingLocation = getStartingLocation();
 			player.location = startingLocation.name;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStoryModeStartHTML()}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStoryModeStartHTML()}`);
 		},
 
 		choosestarter(target, room, user) {
@@ -187,7 +187,7 @@ export const commands: ChatCommands = {
 			if (!starters) {
 				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
 
 		selectstarter(target, room, user) {
@@ -223,7 +223,7 @@ export const commands: ChatCommands = {
 					generateBottomNavigation() +
 					`</div>`;
 
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
 				}
@@ -275,17 +275,17 @@ export const commands: ChatCommands = {
 			}
 			queue.moveIds.shift();
 			if (queue.moveIds.length > 0) {
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} else {
 				// Remove this Pokemon's entry from queue
 				queueArray.shift();
 				// Check if there are more Pokemon waiting to learn moves
 				if (queueArray.length > 0) {
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
 					const tempSlot = createActivePokemonSlot(pokemon);
 					const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 			}
 		},
@@ -327,13 +327,13 @@ export const commands: ChatCommands = {
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				const tempSlot = createActivePokemonSlot(pokemon);
 				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				if (!player.pendingMoveLearnQueue) {
 					player.pendingMoveLearnQueue = [];
 				}
 				player.pendingMoveLearnQueue.push({ pokemonId: pokemon.id, moveIds: [newMoveId] });
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			}
 		},
 
@@ -353,13 +353,13 @@ export const commands: ChatCommands = {
 					});
 				}
 				html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`, -1000);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 			const pokemon = player.party.find(p => p.id === targetId);
 			if (!pokemon) {
 				return this.errorReply("Pokemon not found in your party.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
 		},
 
 		profile(target, room, user) {
@@ -409,7 +409,7 @@ export const commands: ChatCommands = {
 				`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
 				generateBottomNavigation() +
 				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
 		},
 
 		party(target, room, user) {
@@ -433,7 +433,7 @@ export const commands: ChatCommands = {
 				}
 			}
 			partyHTML += `${generateBottomNavigation()}`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
 		},
 
 		swapslot(target, room, user) {
@@ -475,7 +475,7 @@ export const commands: ChatCommands = {
 			const category = toID(target);
 			const validCategories = ['pokeball', 'medicine', 'berry', 'tm', 'key', 'held', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
 
 		useitem(target, room, user) {
@@ -496,10 +496,10 @@ export const commands: ChatCommands = {
 					const result = useSacredAsh(player);
 					if (!result.success) {
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
 					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 
 				if (!pokemonId) {
@@ -543,7 +543,7 @@ export const commands: ChatCommands = {
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -668,12 +668,12 @@ export const commands: ChatCommands = {
 
 				if (requiresMoveSelection) {
 					// Show the move selection UI
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveSelectionHTML(player, pokemonId, itemId)}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveSelectionHTML(player, pokemonId, itemId)}`);
 				}
 
 				if (!result.success) {
 					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 				}
 
 				// If successful, remove item and show result
@@ -686,7 +686,7 @@ export const commands: ChatCommands = {
 				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`, -1000);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (item.category === 'misc') {
 				if (!pokemonId) {
 					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
@@ -707,7 +707,7 @@ export const commands: ChatCommands = {
 						}
 					}
 					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 				}
 
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -718,30 +718,30 @@ export const commands: ChatCommands = {
 					const result = useRareCandyItem(player, targetPokemon, room, user);
 					if (!result.success) {
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 					}
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
 					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 					const tempSlot = createActivePokemonSlot(updatedPokemon);
 					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				} else if (itemId.startsWith('expcandy')) {
 					const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
 					if (!result.success) {
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 					}
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
 					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 					const tempSlot = createActivePokemonSlot(updatedPokemon);
 					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				} else if (itemId === 'terashard') {
 					const allTypes = Object.keys(TYPE_CHART);
 					if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
@@ -751,15 +751,15 @@ export const commands: ChatCommands = {
 					removeItemFromInventory(player, 'terashard', 1);
 					const tempSlot = createActivePokemonSlot(targetPokemon);
 					const resultHTML = `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${targetPokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				} else if (itemId === 'eggmovetutor') {
 					const speciesId = toID(targetPokemon.species);
 					const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
 					const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
 					if (learnableEggMoves.length === 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 					}
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 				} else if (item.id.endsWith('stone')) {
 					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
 
@@ -777,11 +777,11 @@ export const commands: ChatCommands = {
 							resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
 						}
 						resultHTML += `</div>`;
-						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 					} else {
 						// Evolution failed
 						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">It had no effect... (${targetPokemon.species} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`, -1000);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
 					}
 				} else {
 					return this.errorReply("This item cannot be used right now.");
@@ -841,14 +841,14 @@ export const commands: ChatCommands = {
 
 			const tempSlot = createActivePokemonSlot(pokemon);
 			const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>You used an <strong>${item.name}</strong> on <strong>${pokemon.species}</strong>!</p><p><strong>${moveData.name}</strong>'s PP was restored by ${restored}.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
 		pc(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`);
 		},
 
 		depositpc(target, room, user) {
@@ -866,7 +866,7 @@ export const commands: ChatCommands = {
 			}
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -884,7 +884,7 @@ export const commands: ChatCommands = {
 			}
 			player.party.push(pokemon);
 			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
 		},
 
 		shop(target, room, user) {
@@ -896,7 +896,7 @@ export const commands: ChatCommands = {
 			// This line has been corrected to include 'medicine' instead of 'potion'
 			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
 
 		buy(target, room, user) {
@@ -929,7 +929,7 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
 			const purchaseHTML = `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>${generateBottomNavigation()}</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${purchaseHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${purchaseHTML}`);
 		},
 
 		sell(target, room, user) {
@@ -963,7 +963,7 @@ export const commands: ChatCommands = {
 					html += `<p>You have no valuable items to sell.</p>`;
 				}
 				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`, -1000);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
 			const itemInBag = player.inventory.get(itemId);
@@ -986,7 +986,7 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`);
 		},
 
 		pokedex(target, room, user) {
@@ -1102,7 +1102,7 @@ export const commands: ChatCommands = {
 				`${exploreButtons}` +
 				generateBottomNavigation() +
 				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
 		},
 
 		travel(target, room, user) {
@@ -1155,7 +1155,7 @@ export const commands: ChatCommands = {
 
 				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 				travelHTML += generateBottomNavigation() + `</div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`, -1000);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
 			// Travel to target location
@@ -1318,7 +1318,7 @@ export const commands: ChatCommands = {
 				}
 
 				eventHTML += `</div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`, -1000);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
 			const arrivalHTML = `<div class="infobox">` +
@@ -1326,7 +1326,7 @@ export const commands: ChatCommands = {
 				`<em><center><p>${targetLocation.description}</p></center></em>` +
 				`<center><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></center>` +
 				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
 		},
 
 		building(target, room, user) {
@@ -1401,7 +1401,7 @@ export const commands: ChatCommands = {
 			}
 
 			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
@@ -1534,7 +1534,7 @@ export const commands: ChatCommands = {
 				battle.battleLog.push(...battleMessages);
 
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`, -1000);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1645,7 +1645,7 @@ export const commands: ChatCommands = {
 				battle.battleLog.push(...battleMessages);
 
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
@@ -1793,7 +1793,7 @@ export const commands: ChatCommands = {
 			battle.battleLog.push(...challengeMessages);
 
 			// Generate HTML using the modified battle object
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`, -1000);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 		},
 
 		battle(target, room, user) {
@@ -2308,7 +2308,7 @@ export const commands: ChatCommands = {
 							delete battle.pendingActions[i];
 						}
 					}
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`, -1000);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
 				}
 			},
 
@@ -2436,7 +2436,7 @@ export const commands: ChatCommands = {
 
 			const tempSlot = createActivePokemonSlot(pokemon);
 			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		},
 
 		reset(target, room, user) {
@@ -2461,7 +2461,7 @@ export const commands: ChatCommands = {
 
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
 		unstuck(target, room, user) {
@@ -2480,7 +2480,7 @@ export const commands: ChatCommands = {
 			// Send confirmation
 			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
 				generateBottomNavigation() + `</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`, -1000);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 		},
 
 		npc(target, room, user) {
@@ -2970,7 +2970,7 @@ export const commands: ChatCommands = {
 					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 					generateBottomNavigation() +
 					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
 			}
@@ -2991,7 +2991,7 @@ export const commands: ChatCommands = {
 						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 						generateBottomNavigation() +
 						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
 				}
 
 				const loadedPlayer = await loadPlayerFromDB(user.id);
@@ -3010,7 +3010,7 @@ export const commands: ChatCommands = {
 					`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
 					generateBottomNavigation() +
 					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
 			}
@@ -3030,7 +3030,7 @@ export const commands: ChatCommands = {
 						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 						generateBottomNavigation() +
 						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
 				}
 
 				// Require confirmation
@@ -3044,7 +3044,7 @@ export const commands: ChatCommands = {
 						`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
 						generateBottomNavigation() +
 						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`, -1000);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
 				}
 
 				// Perform deletion
@@ -3061,7 +3061,7 @@ export const commands: ChatCommands = {
 					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 					generateBottomNavigation() +
 					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`, -1000);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
 			}
