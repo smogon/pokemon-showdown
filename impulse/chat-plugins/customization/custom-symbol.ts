@@ -3,15 +3,12 @@
 * Custom Symbol Commands
 * @author PrinceSky-Git
 */
+
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const DB_TABLE_NAME = 'customsymbols';
-const MAX_USERNAME_LENGTH = 19;
-const SYMBOL_LENGTH = 1;
-const LIST_PAGE_LIMIT = 20;
 
 interface CustomSymbolDocument {
 	_id: string;
@@ -21,7 +18,7 @@ interface CustomSymbolDocument {
 	updatedAt: Date;
 }
 
-const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>(DB_TABLE_NAME);
+const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
 
 const applyCustomSymbol = async (userid: string): Promise<void> => {
 	const user = Users.get(userid);
@@ -72,8 +69,8 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !symbol) return this.parse('/help symbol');
 
 			const userId = toID(name);
-			if (userId.length > MAX_USERNAME_LENGTH) return this.errorReply('Usernames are not this long...');
-			if (symbol.length !== SYMBOL_LENGTH) return this.errorReply('Symbol must be a single character.');
+			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
+			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
 
 			if (await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User already has symbol. Use /symbol update or /symbol delete.');
@@ -100,7 +97,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('User does not have symbol. Use /symbol set.');
 			}
 
-			if (symbol.length !== SYMBOL_LENGTH) return this.errorReply('Symbol must be a single character.');
+			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
 
 			await CustomSymbolDB.updateOne({ _id: userId }, { $set: { symbol, updatedAt: new Date() } });
 			await applyCustomSymbol(userId);
@@ -137,10 +134,7 @@ export const commands: Chat.ChatCommands = {
 		async list(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
 
-			const result = await CustomSymbolDB.findPaginated(
-				{},
-				{ page: parseInt(target) || 1, limit: LIST_PAGE_LIMIT, sort: { _id: 1 } }
-			);
+			const result = await CustomSymbolDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
 			if (result.total === 0) return this.sendReply('No custom symbols have been set.');
 

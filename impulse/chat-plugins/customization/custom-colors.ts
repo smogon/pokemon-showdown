@@ -1,7 +1,8 @@
 /*
 * Pokemon Showdown
-* Custom Color Commands
+* Custom Colors Commands
 */
+
 import https from 'https';
 import { FS } from '../../../lib';
 import { ImpulseDB } from '../../impulse-db';
@@ -9,10 +10,6 @@ import { validateHexColor, clearColorCache, loadCustomColorsFromDB, nameColor } 
 import { generateThemedTable } from '../../utils';
 
 const STAFF_ROOM_ID = 'staff';
-const DB_TABLE_NAME = 'customcolors';
-const CUSTOM_CSS_PATH = 'config/custom.css';
-const CSS_START_COMMENT = '/* COLORS START */';
-const CSS_END_COMMENT = '/* COLORS END */';
 
 Impulse.reloadCSS = () => {
 	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
@@ -28,28 +25,29 @@ const generateCSS = (name: string, color: string): string => {
 
 const updateColor = async () => {
 	try {
-		const colorDocs = await ImpulseDB(DB_TABLE_NAME).find({});
-		let css = `${CSS_START_COMMENT}\n`;
+		const colorDocs = await ImpulseDB('customcolors').find({});
+		let css = '/* COLORS START */\n';
 
 		colorDocs.forEach(doc => {
 			css += generateCSS(doc.userid, doc.color);
 		});
 
-		css += `${CSS_END_COMMENT}\n`;
+		css += '/* COLORS END */\n';
 
-		const fileContent = await FS(CUSTOM_CSS_PATH).readIfExists();
+		const fileContent = await FS('config/custom.css').readIfExists();
 		const file = fileContent ? fileContent.split('\n') : [];
 
-		const start = file.indexOf(CSS_START_COMMENT);
-		const end = file.indexOf(CSS_END_COMMENT);
+		const start = file.indexOf('/* COLORS START */');
+		const end = file.indexOf('/* COLORS END */');
 		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
 
-		FS(CUSTOM_CSS_PATH).writeUpdate(() => file.join('\n') + css);
+		FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
 
 		clearColorCache();
 		await loadCustomColorsFromDB();
 		Impulse.reloadCSS();
 	} catch {
+		// Ignore errors during initialization
 	}
 };
 
@@ -71,7 +69,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			await ImpulseDB(DB_TABLE_NAME).upsert(
+			await ImpulseDB('customcolors').upsert(
 				{ userid: targetId },
 				{ $set: { userid: targetId, color, updatedBy: user.id, updatedAt: new Date() } }
 			);
@@ -91,11 +89,11 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/customcolorhelp');
 
 			const targetId = toID(target);
-			const colorDoc = await ImpulseDB(DB_TABLE_NAME).findOne({ userid: targetId });
+			const colorDoc = await ImpulseDB('customcolors').findOne({ userid: targetId });
 
 			if (!colorDoc) return this.errorReply(`${target} does not have a custom color.`);
 
-			await ImpulseDB(DB_TABLE_NAME).deleteOne({ userid: targetId });
+			await ImpulseDB('customcolors').deleteOne({ userid: targetId });
 			await updateColor();
 
 			this.sendReply(`You removed ${target}'s custom color.`);
@@ -120,7 +118,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			return this.sendReplyBox(`<b><font size="3" color="${color}">${Chat.escapeHTML(name)}</Dfont></b>`);
+			return this.sendReplyBox(`<b><font size="3" color="${color}">${Chat.escapeHTML(name)}</font></b>`);
 		},
 
 		async reload(target: string, room: ChatRoom, user: User) {
@@ -133,7 +131,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 
 			try {
-				const colorDocs = await ImpulseDB(DB_TABLE_NAME).find({}, { sort: { userid: 1 } });
+				const colorDocs = await ImpulseDB('customcolors').find({}, { sort: { userid: 1 } });
 
 				if (colorDocs.length === 0) return this.sendReply('No custom colors are currently set.');
 

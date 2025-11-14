@@ -2,24 +2,16 @@
 * Pokemon Showdown
 * Custom Icons Commands
 */
+
 import { FS } from '../../../lib';
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const DB_TABLE_NAME = 'usericons';
-const CUSTOM_CSS_PATH = 'config/custom.css';
-
 const DEFAULT_ICON_SIZE = 24;
 const MIN_SIZE = 1;
 const MAX_SIZE = 100;
-const DISPLAY_ICON_SIZE = 32;
-const MAX_USERNAME_LENGTH = 19;
-const LIST_PAGE_LIMIT = 20;
-
-const CSS_START_COMMENT = '/* ICONS START */';
-const CSS_END_COMMENT = '/* ICONS END */';
 
 interface IconDocument {
 	_id: string;
@@ -30,7 +22,7 @@ interface IconDocument {
 	updatedAt: Date;
 }
 
-const IconsDB = ImpulseDB<IconDocument>(DB_TABLE_NAME);
+const IconsDB = ImpulseDB<IconDocument>('usericons');
 const cacheBuster = () => `?v=${Date.now()}`;
 
 const validateSize = (sizeStr: string | undefined): { valid: boolean, size: number, error?: string } => {
@@ -45,7 +37,7 @@ const validateSize = (sizeStr: string | undefined): { valid: boolean, size: numb
 const updateIcons = async () => {
 	try {
 		const iconDocs = await IconsDB.find({}, { projection: { _id: 1, url: 1, size: 1 } });
-		let css = `${CSS_START_COMMENT}\n`;
+		let css = '/* ICONS START */\n';
 		const bust = cacheBuster();
 
 		iconDocs.forEach(doc => {
@@ -53,25 +45,26 @@ const updateIcons = async () => {
 			css += `[id$="-userlist-user-${doc._id}"] { background: url("${doc.url}${bust}") right no-repeat !important; background-size: ${size}px!important;}\n`;
 		});
 
-		css += `${CSS_END_COMMENT}\n`;
+		css += '/* ICONS END */\n';
 
-		const file = FS(CUSTOM_CSS_PATH).readIfExistsSync().split('\n');
-		const start = file.indexOf(CSS_START_COMMENT);
-		const end = file.indexOf(CSS_END_COMMENT);
+		const file = FS('config/custom.css').readIfExistsSync().split('\n');
+		const start = file.indexOf('/* ICONS START */');
+		const end = file.indexOf('/* ICONS END */');
 
 		if (start !== -1 && end !== -1 && start < end) {
 			file.splice(start, (end - start + 1), ...css.split('\n'));
-			FS(CUSTOM_CSS_PATH).writeUpdate(() => file.join('\n'));
+			FS('config/custom.css').writeUpdate(() => file.join('\n'));
 		} else {
-			FS(CUSTOM_CSS_PATH).writeUpdate(() => file.join('\n') + '\n' + css);
+			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
 		}
 		Impulse.reloadCSS();
 	} catch {
+		// Ignore errors during initialization
 	}
 };
 
 const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) =>
-	`<img src="${url}${cacheBuster()}" width="${DISPLAY_ICON_SIZE}" height="${DISPLAY_ICON_SIZE}">`;
+	`<img src="${url}${cacheBuster()}" width="32" height="32">`;
 
 const notifyUser = (userId: string, staffName: string, message: string, icon?: string) => {
 	const user = Users.get(userId);
@@ -101,7 +94,7 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !imageUrl) return this.parse('/help icon');
 
 			const userId = toID(name);
-			if (userId.length > MAX_USERNAME_LENGTH) return this.errorReply('Usernames are not this long...');
+			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
 
 			if (await IconsDB.exists({ _id: userId })) {
 				return this.errorReply('User already has icon. Remove with /icon delete [user].');
@@ -185,16 +178,13 @@ export const commands: Chat.ChatCommands = {
 		async list(target, room, user) {
 			this.checkCan('roomowner');
 
-			const result = await IconsDB.findPaginated(
-				{},
-				{ page: parseInt(target) || 1, limit: LIST_PAGE_LIMIT, sort: { _id: 1 } }
-			);
+			const result = await IconsDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
 			if (result.total === 0) return this.sendReply('No custom icons have been set.');
 
 			const rows: string[][] = result.docs.map(icon => [
 				icon._id,
-				`<img src="${icon.url}" width="${DISPLAY_ICON_SIZE}" height="${DISPLAY_ICON_SIZE}">`,
+				`<img src="${icon.url}" width="32" height="32">`,
 				`${icon.size || DEFAULT_ICON_SIZE}px`,
 				Chat.escapeHTML(icon.setBy || 'Unknown'),
 			]);
@@ -222,7 +212,7 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/icon set [user], [url], [size]", desc: `Set icon (${MIN_SIZE}-${MAX_SIZE}px). Requires: &.` },
+				{ cmd: "/icon set [user], [url], [size]", desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.` },
 				{ cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &." },
 				{ cmd: "/icon delete [user]", desc: "Remove icon. Requires: &." },
 				{ cmd: "/icon list [page]", desc: "List icons. Requires: &." },

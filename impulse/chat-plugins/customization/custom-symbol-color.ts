@@ -2,19 +2,14 @@
 * Pokemon Showdown
 * Symbol Colors Commands
 */
+
 import { FS } from '../../../lib';
 import { ImpulseDB } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
-const DB_TABLE_NAME = 'symbolcolors';
-const CUSTOM_CSS_PATH = 'config/custom.css';
-const CSS_START_COMMENT = '/* SYMBOLCOLORS START */';
-const CSS_END_COMMENT = '/* SYMBOLCOLORS END */';
 const HEX_REGEX = /^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/;
-const MAX_USERNAME_LENGTH = 19;
-const LIST_PAGE_LIMIT = 20;
 
 interface SymbolColorDocument {
 	_id: string;
@@ -24,14 +19,14 @@ interface SymbolColorDocument {
 	updatedAt: Date;
 }
 
-const SymbolColorsDB = ImpulseDB<SymbolColorDocument>(DB_TABLE_NAME);
+const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
 
 const isValidColor = (color: string): boolean => HEX_REGEX.test(color);
 
 const updateSymbolColors = async (): Promise<void> => {
 	try {
 		const symbolColorDocs = await SymbolColorsDB.find({});
-		let css = `${CSS_START_COMMENT}\n`;
+		let css = '/* SYMBOLCOLORS START */\n';
 
 		symbolColorDocs.forEach(doc => {
 			const selector = `[id$="-userlist-user-${doc._id}"] button > em.group`;
@@ -39,20 +34,21 @@ const updateSymbolColors = async (): Promise<void> => {
 			css += `${selector} { color: ${doc.color}; }\n${chatSelector} { color: ${doc.color}; }\n`;
 		});
 
-		css += `${CSS_END_COMMENT}\n`;
+		css += '/* SYMBOLCOLORS END */\n';
 
-		const file = FS(CUSTOM_CSS_PATH).readIfExistsSync().split('\n');
-		const start = file.indexOf(CSS_START_COMMENT);
-		const end = file.indexOf(CSS_END_COMMENT);
+		const file = FS('config/custom.css').readIfExistsSync().split('\n');
+		const start = file.indexOf('/* SYMBOLCOLORS START */');
+		const end = file.indexOf('/* SYMBOLCOLORS END */');
 
 		if (start !== -1 && end !== -1 && start < end) {
 			file.splice(start, (end - start + 1), ...css.split('\n'));
-			FS(CUSTOM_CSS_PATH).writeUpdate(() => file.join('\n'));
+			FS('config/custom.css').writeUpdate(() => file.join('\n'));
 		} else {
-			FS(CUSTOM_CSS_PATH).writeUpdate(() => file.join('\n') + '\n' + css);
+			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
 		}
 		Impulse.reloadCSS();
 	} catch {
+		// Ignore errors during initialization
 	}
 };
 
@@ -74,17 +70,13 @@ const notifyStaff = (staffName: string, targetName: string, color: string, actio
 
 export const commands: Chat.ChatCommands = {
 	symbolcolor: {
-		''(target, room, user): void {
-			this.parse('/symbolcolor help');
-		},
-
 		async set(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
 			const [name, color] = target.split(',').map(s => s.trim());
 			if (!name || !color) return this.parse('/help symbolcolor');
 
 			const userId = toID(name);
-			if (userId.length > MAX_USERNAME_LENGTH) return this.errorReply('Usernames are not this long...');
+			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
 
 			if (!isValidColor(color)) {
 				return this.errorReply('Invalid color. Use hex format: #FF5733 or #F73');
@@ -155,10 +147,7 @@ export const commands: Chat.ChatCommands = {
 
 		async list(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
 			this.checkCan('roomowner');
-			const result = await SymbolColorsDB.findPaginated(
-				{},
-				{ page: parseInt(target) || 1, limit: LIST_PAGE_LIMIT, sort: { _id: 1 } }
-			);
+			const result = await SymbolColorsDB.findPaginated({}, { page: parseInt(target) || 1, limit: 20, sort: { _id: 1 } });
 
 			if (result.total === 0) return this.sendReply('No custom symbol colors have been set.');
 
@@ -203,6 +192,10 @@ export const commands: Chat.ChatCommands = {
 				).join('') +
 				`</ul><small>Format: #FF5733 or #F73</small>`;
 			this.sendReplyBox(html);
+		},
+
+		''(target, room, user): void {
+			this.parse('/symbolcolor help');
 		},
 	},
 	sc: 'symbolcolor',
