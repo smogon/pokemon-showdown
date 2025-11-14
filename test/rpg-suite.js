@@ -11,14 +11,15 @@ const path = require('path');
 describe('RPG System - Comprehensive Test Suite', function () {
 	this.timeout(15000); // RPG tests may need more time
 
-	let utils, core, items, html, battleEngine, Dex;
+	let utils, playerLib, pokemonLib, items, html, battleEngine, Dex;
 	let testPlayer, testPokemon;
 
 	before(function () {
 		try {
 			// Load required modules from dist
 			utils = require('../dist/impulse/chat-plugins/rpg-wip/utils');
-			core = require('../dist/impulse/chat-plugins/rpg-wip/core');
+			playerLib = require('../dist/impulse/chat-plugins/rpg-wip/lib/player');
+			pokemonLib = require('../dist/impulse/chat-plugins/rpg-wip/lib/pokemon');
 			items = require('../dist/impulse/chat-plugins/rpg-wip/items');
 			html = require('../dist/impulse/chat-plugins/rpg-wip/html');
 			battleEngine = require('../dist/impulse/chat-plugins/rpg-wip/battle-engine');
@@ -31,7 +32,7 @@ describe('RPG System - Comprehensive Test Suite', function () {
 
 	beforeEach(() => {
 		// Create a test player before each test
-		if (!core) return;
+		if (!playerLib) return;
 
 		testPlayer = {
 			id: 'testplayer',
@@ -536,9 +537,9 @@ describe('RPG System - Comprehensive Test Suite', function () {
 	// ============================================
 	describe('Pokemon Creation', () => {
 		it('should create a valid Pokemon', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const pokemon = core.createPokemon('pikachu', 5);
+			const pokemon = pokemonLib.createPokemon('pikachu', 5);
 
 			assert.equal(pokemon.species, 'Pikachu');
 			assert.equal(pokemon.level, 5);
@@ -548,9 +549,9 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should create Pokemon with valid IVs', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const pokemon = core.createPokemon('bulbasaur', 5);
+			const pokemon = pokemonLib.createPokemon('bulbasaur', 5);
 
 			assert(pokemon.ivs.hp >= 0 && pokemon.ivs.hp <= 31);
 			assert(pokemon.ivs.atk >= 0 && pokemon.ivs.atk <= 31);
@@ -590,7 +591,7 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should initialize battle with location weather', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
 			// This test verifies the concept - actual implementation is in commands.ts
 			// In a real battle, weather would be set based on player.location
@@ -746,18 +747,18 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should track completed NPC actions', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser123');
+			const player = playerLib.getPlayerData('testuser123');
 
 			assert(player.completedNPCActions);
 			assert(player.completedNPCActions instanceof Set);
 		});
 
 		it('should add items to inventory from NPC giveitem action', function () {
-			if (!items || !core) this.skip();
+			if (!items || !playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser456');
+			const player = playerLib.getPlayerData('testuser456');
 			player.inventory.clear();
 
 			// Simulate NPC giving item
@@ -769,9 +770,9 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should handle item exchanges correctly', function () {
-			if (!items || !core) this.skip();
+			if (!items || !playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser789');
+			const player = playerLib.getPlayerData('testuser789');
 			player.inventory.clear();
 
 			// Give player required items
@@ -793,13 +794,13 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should create Pokemon from NPC givepokemon action', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser101');
+			const player = playerLib.getPlayerData('testuser101');
 			player.party = [];
 
 			// Simulate NPC giving Pokemon
-			const pokemon = core.createPokemon('eevee', 25);
+			const pokemon = pokemonLib.createPokemon('eevee', 25);
 			player.party.push(pokemon);
 
 			assert.equal(player.party.length, 1);
@@ -808,21 +809,21 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should send Pokemon to PC when party is full', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser102');
+			const player = playerLib.getPlayerData('testuser102');
 			player.party = [];
 			player.pc.clear();
 
 			// Fill party with 6 Pokemon
 			for (let i = 0; i < 6; i++) {
-				player.party.push(core.createPokemon('pikachu', 5));
+				player.party.push(pokemonLib.createPokemon('pikachu', 5));
 			}
 
 			// Try to add 7th Pokemon - should go to PC
-			const newPokemon = core.createPokemon('eevee', 25);
+			const newPokemon = pokemonLib.createPokemon('eevee', 25);
 			if (player.party.length >= 6) {
-				core.storePokemonInPC(player, newPokemon);
+				pokemonLib.storePokemonInPC(player, newPokemon);
 			}
 
 			assert.equal(player.party.length, 6);
@@ -834,19 +835,19 @@ describe('RPG System - Comprehensive Test Suite', function () {
 		});
 
 		it('should serialize and deserialize completedNPCActions', function () {
-			if (!core) this.skip();
+			if (!playerLib) this.skip();
 
-			const player = core.getPlayerData('testuser103');
+			const player = playerLib.getPlayerData('testuser103');
 			player.completedNPCActions.add('aideroute1');
 			player.completedNPCActions.add('hikerroute2');
 
 			// Serialize
-			const serialized = core.serializePlayerData(player);
+			const serialized = playerLib.serializePlayerData(player);
 			assert(Array.isArray(serialized.completedNPCActions));
 			assert.equal(serialized.completedNPCActions.length, 2);
 
 			// Deserialize
-			const deserialized = core.deserializePlayerData(serialized);
+			const deserialized = playerLib.deserializePlayerData(serialized);
 			assert(deserialized.completedNPCActions instanceof Set);
 			assert.equal(deserialized.completedNPCActions.size, 2);
 			assert(deserialized.completedNPCActions.has('aideroute1'));

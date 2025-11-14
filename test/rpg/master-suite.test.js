@@ -10,14 +10,15 @@ const assert = require('assert').strict;
 describe('RPG System - Master Integration Suite', function () {
 	this.timeout(15000);
 
-	let core, utils, items, npcActions, scriptedEvents, Dex;
+	let playerLib, pokemonLib, utils, items, npcActions, scriptedEvents, Dex;
 	let testPlayer;
 
 	let battleShared;
 
 	before(function () {
 		try {
-			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
+			playerLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
+			pokemonLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/pokemon');
 			utils = require('../../dist/impulse/chat-plugins/rpg-wip/utils');
 			items = require('../../dist/impulse/chat-plugins/rpg-wip/items');
 			npcActions = require('../../dist/impulse/chat-plugins/rpg-wip/npc-actions');
@@ -31,7 +32,7 @@ describe('RPG System - Master Integration Suite', function () {
 	});
 
 	beforeEach(() => {
-		testPlayer = core.getPlayerData('mastertest001');
+		testPlayer = playerLib.getPlayerData('mastertest001');
 		testPlayer.party = [];
 		testPlayer.inventory.clear();
 		testPlayer.pc.clear();
@@ -44,7 +45,7 @@ describe('RPG System - Master Integration Suite', function () {
 	describe('Complete Game Flow Integration', () => {
 		it('should handle new player creation through badge collection', () => {
 			// Create new player
-			const player = core.getPlayerData('flowtest001');
+			const player = playerLib.getPlayerData('flowtest001');
 			player.party = [];
 			player.inventory.clear();
 			player.badges = 0;
@@ -53,7 +54,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert.equal(player.party.length, 0);
 
 			// Get starter Pokemon
-			const starter = core.createPokemon('bulbasaur', 5);
+			const starter = pokemonLib.createPokemon('bulbasaur', 5);
 			player.party.push(starter);
 
 			assert.equal(player.party.length, 1);
@@ -83,14 +84,14 @@ describe('RPG System - Master Integration Suite', function () {
 		it('should handle catching Pokemon and PC storage', () => {
 			// Fill party
 			for (let i = 0; i < 6; i++) {
-				testPlayer.party.push(core.createPokemon('pikachu', 10));
+				testPlayer.party.push(pokemonLib.createPokemon('pikachu', 10));
 			}
 
 			assert.equal(testPlayer.party.length, 6);
 
 			// Catch 7th Pokemon (should go to PC)
-			const newPokemon = core.createPokemon('eevee', 15);
-			core.storePokemonInPC(testPlayer, newPokemon);
+			const newPokemon = pokemonLib.createPokemon('eevee', 15);
+			pokemonLib.storePokemonInPC(testPlayer, newPokemon);
 
 			assert.equal(testPlayer.party.length, 6);
 			assert.equal(testPlayer.pc.size, 1);
@@ -137,8 +138,8 @@ describe('RPG System - Master Integration Suite', function () {
 		let pokemon1, pokemon2;
 
 		beforeEach(() => {
-			pokemon1 = core.createPokemon('pikachu', 50);
-			pokemon2 = core.createPokemon('charizard', 50);
+			pokemon1 = pokemonLib.createPokemon('pikachu', 50);
+			pokemon2 = pokemonLib.createPokemon('charizard', 50);
 		});
 
 		it('should create valid battle-ready Pokemon', function () {
@@ -345,8 +346,8 @@ describe('RPG System - Master Integration Suite', function () {
 	describe('Serialization Integration', () => {
 		it('should serialize and deserialize complete player data', () => {
 			// Setup player with full data
-			testPlayer.party.push(core.createPokemon('pikachu', 25));
-			testPlayer.party.push(core.createPokemon('charizard', 40));
+			testPlayer.party.push(pokemonLib.createPokemon('pikachu', 25));
+			testPlayer.party.push(pokemonLib.createPokemon('charizard', 40));
 			items.addItemToInventory(testPlayer, 'potion', 10);
 			items.addItemToInventory(testPlayer, 'pokeball', 5);
 			testPlayer.storyFlags.add('flag1');
@@ -356,7 +357,7 @@ describe('RPG System - Master Integration Suite', function () {
 			testPlayer.money = 7500;
 
 			// Serialize
-			const serialized = core.serializePlayerData(testPlayer);
+			const serialized = playerLib.serializePlayerData(testPlayer);
 
 			// Verify serialization
 			assert.equal(serialized.badges, 3);
@@ -366,7 +367,7 @@ describe('RPG System - Master Integration Suite', function () {
 			assert(serialized.storyFlags.includes('flag1'));
 
 			// Deserialize
-			const deserialized = core.deserializePlayerData(serialized);
+			const deserialized = playerLib.deserializePlayerData(serialized);
 
 			// Verify deserialization
 			assert.equal(deserialized.badges, 3);
@@ -395,7 +396,7 @@ describe('RPG System - Master Integration Suite', function () {
 
 			// Large PC
 			for (let i = 0; i < 50; i++) {
-				core.storePokemonInPC(testPlayer, core.createPokemon('pikachu', 10));
+				pokemonLib.storePokemonInPC(testPlayer, pokemonLib.createPokemon('pikachu', 10));
 			}
 			assert.equal(testPlayer.pc.size, 50);
 
@@ -411,7 +412,7 @@ describe('RPG System - Master Integration Suite', function () {
 			const initialName = testPlayer.name;
 
 			// Perform various operations
-			testPlayer.party.push(core.createPokemon('pikachu', 10));
+			testPlayer.party.push(pokemonLib.createPokemon('pikachu', 10));
 			items.addItemToInventory(testPlayer, 'potion', 5);
 			testPlayer.badges++;
 
@@ -448,8 +449,8 @@ describe('RPG System - Master Integration Suite', function () {
 
 			// Add many Pokemon to PC
 			for (let i = 0; i < 100; i++) {
-				const pokemon = core.createPokemon('pikachu', 10);
-				core.storePokemonInPC(testPlayer, pokemon);
+				const pokemon = pokemonLib.createPokemon('pikachu', 10);
+				pokemonLib.storePokemonInPC(testPlayer, pokemon);
 			}
 
 			const endTime = Date.now();

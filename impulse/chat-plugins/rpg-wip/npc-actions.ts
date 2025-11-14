@@ -75,7 +75,7 @@
 
 import type { PlayerData, RPGPokemon, NPCAction } from './interface';
 import { ITEMS_DATABASE } from './items';
-import { createPokemon } from './core';
+import { createPokemon } from './lib/pokemon';
 import { Dex } from '../../../sim/dex';
 
 /**
