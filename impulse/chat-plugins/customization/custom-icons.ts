@@ -104,7 +104,7 @@ export const commands: Chat.ChatCommands = {
 		async set(target, room, user) {
 			this.checkCan('roomowner');
 			const [name, imageUrl, sizeStr] = target.split(',').map(s => s.trim());
-			if (!name || !imageUrl) return this.parse('/help icon');
+			if (!name || !imageUrl) return this.parse('/icon help');
 
 			const userId = toID(name);
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
@@ -142,7 +142,7 @@ export const commands: Chat.ChatCommands = {
 		async update(target, room, user) {
 			this.checkCan('roomowner');
 			const [name, imageUrl, sizeStr] = target.split(',').map(s => s.trim());
-			if (!name) return this.parse('/help icon');
+			if (!name) return this.parse('/icon help');
 
 			const userId = toID(name);
 			if (!await IconsDB.exists({ _id: userId })) {
