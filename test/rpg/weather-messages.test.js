@@ -10,12 +10,11 @@ const assert = require('assert').strict;
 describe('RPG Weather Messages', function () {
 	this.timeout(10000);
 
-	let playerLib, pokemonLib, locations;
+	let core, locations;
 
 	before(function () {
 		try {
-			playerLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
-			pokemonLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/pokemon');
+			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
 			locations = require('../../dist/impulse/chat-plugins/rpg-wip/locations');
 		} catch (e) {
 			console.log('Required modules not found, skipping weather message tests:', e.message);
@@ -90,7 +89,7 @@ describe('RPG Weather Messages', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('weathertestuser');
+			player = core.getPlayerData('weathertestuser');
 			// Reset player state
 			player.party = [];
 			player.inventory.clear();
@@ -117,9 +116,9 @@ describe('RPG Weather Messages', function () {
 
 	describe('Weather Functionality in Battle System', () => {
 		it('should properly initialize battle with location weather', () => {
-			const player = playerLib.getPlayerData('weatherbattletest');
+			const player = core.getPlayerData('weatherbattletest');
 			player.location = 'startertown';
-			player.party = [pokemonLib.createPokemon('pikachu', 10)];
+			player.party = [core.createPokemon('pikachu', 10)];
 
 			// Verify player has valid party and location
 			assert(player.party.length > 0, 'Player should have Pokemon in party');
