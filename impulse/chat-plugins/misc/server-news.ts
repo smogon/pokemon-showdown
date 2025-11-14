@@ -6,7 +6,6 @@
 
 import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
-import { toID } from '../../utils';
 
 interface NewsEntry {
 	_id: string;
