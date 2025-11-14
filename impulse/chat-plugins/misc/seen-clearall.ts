@@ -14,36 +14,28 @@ interface SeenDocument {
 
 const SeenDB = ImpulseDB<SeenDocument>('seen');
 
-export const trackSeen = (userid: string): void => {
+const trackSeen = (userid: string): void => {
 	void SeenDB.upsert({ _id: userid }, { $set: { lastSeen: new Date() } }).catch(err => {});
 };
 
-export const handlers: Chat.Handlers = {
-	onDisconnect(user: User): void {
-		if (user.named && user.connections.length === 0) trackSeen(user.id);
-	},
-};
-
-export const getLastSeen = async (userid: string): Promise<Date | null> => {
+const getLastSeen = async (userid: string): Promise<Date | null> => {
 	const doc = await SeenDB.findOne({ _id: userid }, { projection: { lastSeen: 1 } });
 	return doc?.lastSeen || null;
 };
 
-export const getRecentUsers = async (limit = 50): Promise<SeenDocument[]> => {
-	return SeenDB.find({}, { sort: { lastSeen: -1 }, limit, projection: { _id: 1, lastSeen: 1 } });
+const getRecentUsers = async (limit = 50): Promise<SeenDocument[]> => {
+	return SeenDB.find(
+		{},
+		{ sort: { lastSeen: -1 }, limit, projection: { _id: 1, lastSeen: 1 } }
+	);
 };
 
-export const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
+const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
 	const cutoff = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);
 	const result = await SeenDB.deleteMany({ lastSeen: { $lt: cutoff } });
 	return result.deletedCount || 0;
 };
 
-/**
- * Returns an object with two arrays:
- * - cleared: rooms successfully cleared
- * - failed: rooms not cleared due to tournament
- */
 const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: string[] } => {
 	const cleared: string[] = [];
 	const failed: string[] = [];
@@ -72,6 +64,18 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 	return { cleared, failed };
 };
 
+const getErrorMessage = (err: unknown): string => {
+	return err instanceof Error ? err.message : String(err);
+};
+
+export { trackSeen };
+
+export const handlers: Chat.Handlers = {
+	onDisconnect(user: User): void {
+		if (user.named && user.connections.length === 0) trackSeen(user.id);
+	},
+};
+
 export const commands: Chat.ChatCommands = {
 	seen: {
 		async ''(target, room, user): Promise<void> {
@@ -80,19 +84,29 @@ export const commands: Chat.ChatCommands = {
 
 			const targetUser = Users.get(target);
 			if (targetUser?.connected) {
-				return this.sendReplyBox(`${nameColor(targetUser.name, true, true)} is <b><font color='limegreen'>Online</font></b>.`);
+				const userNameColor = nameColor(targetUser.name, true, true);
+				return this.sendReplyBox(
+					`${userNameColor} is <b><font color='limegreen'>Online</font></b>.`
+				);
 			}
 
 			try {
 				const lastSeen = await getLastSeen(toID(target));
 				if (!lastSeen) {
-					return this.sendReplyBox(`${nameColor(target, true, true)} has <b><font color='red'>never been online</font></b>.`);
+					const targetNameColor = nameColor(target, true, true);
+					return this.sendReplyBox(
+						`${targetNameColor} has <b><font color='red'>never been online</font></b>.`
+					);
 				}
 
-				const duration = Chat.toDurationString(Date.now() - lastSeen.getTime(), { precision: true });
-				this.sendReplyBox(`${nameColor(target, true, true)} was last seen <b>${duration}</b> ago.`);
+				const duration = Chat.toDurationString(
+					Date.now() - lastSeen.getTime(),
+					{ precision: true }
+				);
+				const targetNameColor = nameColor(target, true, true);
+				this.sendReplyBox(`${targetNameColor} was last seen <b>${duration}</b> ago.`);
 			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : String(err);
+				const message = getErrorMessage(err);
 				this.errorReply('Error retrieving seen data: ' + message);
 			}
 		},
@@ -121,7 +135,7 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReply(`|raw|${tableHTML}`);
 			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : String(err);
+				const message = getErrorMessage(err);
 				this.errorReply('Error: ' + message);
 			}
 		},
@@ -137,7 +151,7 @@ export const commands: Chat.ChatCommands = {
 				const deleted = await cleanupOldSeen(days);
 				this.sendReply(`Deleted ${deleted} records older than ${days} days.`);
 			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : String(err);
+				const message = getErrorMessage(err);
 				this.errorReply('Error: ' + message);
 			}
 		},
@@ -145,11 +159,21 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/seen [user]", desc: "Shows the last connection time for a user." },
-				{ cmd: "/seen recent [limit]", desc: "Shows recently seen users (staff only). Default limit: 25, max: 100." },
-				{ cmd: "/seen cleanup [days]", desc: "Deletes records older than X days (staff only, min: 30)." },
+				{
+					cmd: "/seen [user]",
+					desc: "Shows the last connection time for a user.",
+				},
+				{
+					cmd: "/seen recent [limit]",
+					desc: "Shows recently seen users (staff only). Default limit: 25, max: 100.",
+				},
+				{
+					cmd: "/seen cleanup [days]",
+					desc: "Deletes records older than X days (staff only, min: 30).",
+				},
 			];
-			const html = `<center><strong>Seen Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<center><strong>Seen Commands:</strong></center>` +
+				`<hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
@@ -181,7 +205,8 @@ export const commands: Chat.ChatCommands = {
 			const { failed } = clearRooms(rooms, user);
 			if (failed.length) {
 				this.errorReply(
-					`Cannot clear the following rooms because a tournament is running: ${failed.join(', ')}`
+					`Cannot clear the following rooms because a tournament is running: ` +
+					`${failed.join(', ')}`
 				);
 			}
 		},
@@ -189,10 +214,17 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/clearall", desc: "Clear the current room chat. Requires: #." },
-				{ cmd: "/clearall global", desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>" },
+				{
+					cmd: "/clearall",
+					desc: "Clear the current room chat. Requires: #.",
+				},
+				{
+					cmd: "/clearall global",
+					desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>",
+				},
 			];
-			const html = `<center><strong>Clearall Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<center><strong>Clearall Commands:</strong></center>` +
+				`<hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
@@ -207,7 +239,8 @@ export const commands: Chat.ChatCommands = {
 			if (!roomid) return this.errorReply("Specify a room.");
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) return this.errorReply(`Room "${roomid}" not found.`);
-			if (!user.can('roomowner', null, targetRoom) && !user.can('declare', null, targetRoom)) {
+			if (!user.can('roomowner', null, targetRoom) &&
+				!user.can('declare', null, targetRoom)) {
 				return this.errorReply("Requires: Room Owner or Global Admin.");
 			}
 			if (targetRoom.game && targetRoom.game.gameid === 'tournament') {
@@ -216,7 +249,10 @@ export const commands: Chat.ChatCommands = {
 						targetRoom.game.end();
 					}
 					targetRoom.game = null;
-					this.sendReply(`Cleaned up stuck tournament in "${roomid}". Autotour will resume on next interval.`);
+					this.sendReply(
+						`Cleaned up stuck tournament in "${roomid}". ` +
+						`Autotour will resume on next interval.`
+					);
 				} catch {
 					targetRoom.game = null;
 					this.errorReply(`Tournament forcibly removed from "${roomid}".`);
@@ -228,7 +264,8 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<b>/cleantour [room]</b>: Forcibly destroys a stuck tournament in the room. Requires: # or ~`
+				`<b>/cleantour [room]</b>: Forcibly destroys a stuck tournament in the room. ` +
+				`Requires: # or ~`
 			);
 		},
 	},
