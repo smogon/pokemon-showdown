@@ -7,13 +7,21 @@
 
 import { FS, Utils } from '../../../lib';
 
+const checkWhitelist = (user: User): void => {
+	if (!Config.fileWhitelist?.includes(user.id)) {
+		throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
+	}
+};
+
+const getErrorMessage = (err: unknown): string => {
+	return err instanceof Error ? err.message : String(err);
+};
+
 export const commands: Chat.ChatCommands = {
 	async fileread(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		if (!target) {
 			throw new Chat.ErrorMessage('Please specify a file path.');
@@ -37,22 +45,23 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReplyBox(
 				`<details>` +
 				`<summary>File: ${Utils.escapeHTML(filePath)}</summary>` +
-				`<pre style="max-height: 400px; overflow-y: auto;">${Utils.escapeHTML(content)}</pre>` +
+				`<pre style="max-height: 400px; overflow-y: auto;">` +
+				`${Utils.escapeHTML(content)}</pre>` +
 				`</details>`
 			);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to read file: ${message}`);
 		}
 	},
-	filereadhelp: [`/fileread [path] - Reads and displays the contents of a file. Requires: ~ and whitelist`],
+	filereadhelp: [
+		`/fileread [path] - Reads and displays the contents of a file. Requires: ~ and whitelist`,
+	],
 
 	async filedelete(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		if (!target) {
 			throw new Chat.ErrorMessage('Please specify a file path.');
@@ -71,18 +80,18 @@ export const commands: Chat.ChatCommands = {
 
 			return this.sendReply(`File deleted: ${filePath}`);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to delete file: ${message}`);
 		}
 	},
-	filedeletehelp: [`/filedelete [path] - Deletes a file. Requires: ~ and whitelist`],
+	filedeletehelp: [
+		`/filedelete [path] - Deletes a file. Requires: ~ and whitelist`,
+	],
 
 	async filemove(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		const [source, destination] = target.split(',').map(s => s.trim());
 
@@ -101,18 +110,18 @@ export const commands: Chat.ChatCommands = {
 
 			return this.sendReply(`File moved from ${source} to ${destination}`);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to move file: ${message}`);
 		}
 	},
-	filemovehelp: [`/filemove [source], [destination] - Moves a file. Requires: ~ and whitelist`],
+	filemovehelp: [
+		`/filemove [source], [destination] - Moves a file. Requires: ~ and whitelist`,
+	],
 
 	async filecopy(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		const [source, destination] = target.split(',').map(s => s.trim());
 
@@ -132,18 +141,18 @@ export const commands: Chat.ChatCommands = {
 
 			return this.sendReply(`File copied from ${source} to ${destination}`);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to copy file: ${message}`);
 		}
 	},
-	filecopyhelp: [`/filecopy [source], [destination] - Copies a file. Requires: ~ and whitelist`],
+	filecopyhelp: [
+		`/filecopy [source], [destination] - Copies a file. Requires: ~ and whitelist`,
+	],
 
 	async filerename(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		const [source, destination] = target.split(',').map(s => s.trim());
 
@@ -162,18 +171,18 @@ export const commands: Chat.ChatCommands = {
 
 			return this.sendReply(`File renamed from ${source} to ${destination}`);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to rename file: ${message}`);
 		}
 	},
-	filerenamehelp: [`/filerename [source], [destination] - Renames a file. Requires: ~ and whitelist`],
+	filerenamehelp: [
+		`/filerename [source], [destination] - Renames a file. Requires: ~ and whitelist`,
+	],
 
 	async fileupload(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		if (!target) {
 			throw new Chat.ErrorMessage('Please specify a file path.');
@@ -218,7 +227,8 @@ export const commands: Chat.ChatCommands = {
 
 			if (!response.ok) {
 				const errorData = await response.json();
-				throw new Chat.ErrorMessage(`Failed to upload to Gist: ${errorData.message || response.statusText}`);
+				const errorMsg = errorData.message || response.statusText;
+				throw new Chat.ErrorMessage(`Failed to upload to Gist: ${errorMsg}`);
 			}
 
 			const result = await response.json();
@@ -229,18 +239,18 @@ export const commands: Chat.ChatCommands = {
 				`Gist URL: <a href="${result.html_url}" target="_blank">${result.html_url}</a>`
 			);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to upload file: ${message}`);
 		}
 	},
-	fileuploadhelp: [`/fileupload [path] - Uploads a file to GitHub Gist. Requires: ~ and whitelist`],
+	fileuploadhelp: [
+		`/fileupload [path] - Uploads a file to GitHub Gist. Requires: ~ and whitelist`,
+	],
 
 	async filesave(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
-		if (!Config.fileWhitelist?.includes(user.id)) {
-			throw new Chat.ErrorMessage('You are not whitelisted to use this command.');
-		}
+		checkWhitelist(user);
 
 		const [filePath, url] = target.split(',').map(s => s.trim());
 
@@ -256,7 +266,9 @@ export const commands: Chat.ChatCommands = {
 			});
 
 			if (!response.ok) {
-				throw new Chat.ErrorMessage(`Failed to fetch content from URL: ${response.statusText}`);
+				throw new Chat.ErrorMessage(
+					`Failed to fetch content from URL: ${response.statusText}`
+				);
 			}
 
 			const content = await response.text();
@@ -264,29 +276,53 @@ export const commands: Chat.ChatCommands = {
 			const file = FS(filePath);
 			await file.write(content);
 
-			return this.sendReply(`File saved successfully: ${filePath} (${content.length} bytes)`);
+			return this.sendReply(
+				`File saved successfully: ${filePath} (${content.length} bytes)`
+			);
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
+			const message = getErrorMessage(err);
 			throw new Chat.ErrorMessage(`Failed to save file: ${message}`);
 		}
 	},
-	filesavehelp: [`/filesave [path], [GitHub/Gist raw URL] - Downloads and saves a file from URL. Requires: ~ and whitelist`],
+	filesavehelp: [
+		`/filesave [path], [GitHub/Gist raw URL] - Downloads and saves a file from URL. ` +
+		`Requires: ~ and whitelist`,
+	],
 
 	filehelp(): void {
 		if (!this.runBroadcast()) return;
 		const helpList = [
-			{ cmd: "/fileread [path]", desc: "Reads and displays the contents of a file. Requires: Whitelisted User." },
-			{ cmd: "/filedelete [path]", desc: "Deletes a file. Requires: Whitelisted User." },
-			{ cmd: "/filemove [source], [destination]", desc: "Moves a file. Requires: Whitelisted User." },
-			{ cmd: "/filecopy [source], [destination]", desc: "Copies a file. Requires: Whitelisted User." },
-			{ cmd: "/filerename [source], [destination]", desc: "Renames a file. Requires: Whitelisted User." },
-			{ cmd: "/fileupload [path]", desc: "Uploads a file to GitHub Gist. Requires: Whitelisted User." },
+			{
+				cmd: "/fileread [path]",
+				desc: "Reads and displays the contents of a file. Requires: Whitelisted User.",
+			},
+			{
+				cmd: "/filedelete [path]",
+				desc: "Deletes a file. Requires: Whitelisted User.",
+			},
+			{
+				cmd: "/filemove [source], [destination]",
+				desc: "Moves a file. Requires: Whitelisted User.",
+			},
+			{
+				cmd: "/filecopy [source], [destination]",
+				desc: "Copies a file. Requires: Whitelisted User.",
+			},
+			{
+				cmd: "/filerename [source], [destination]",
+				desc: "Renames a file. Requires: Whitelisted User.",
+			},
+			{
+				cmd: "/fileupload [path]",
+				desc: "Uploads a file to GitHub Gist. Requires: Whitelisted User.",
+			},
 			{
 				cmd: "/filesave [path], [GitHub/Gist raw URL]",
 				desc: "Downloads and saves a file from URL. Requires: Whitelisted User.",
 			},
 		];
-		const html = `<center><strong>File Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+		const html = `<center><strong>File Commands:</strong></center>` +
+			`<hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 			).join('') +
