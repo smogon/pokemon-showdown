@@ -223,14 +223,13 @@ export const commands: Chat.ChatCommands = {
 			const baseUrl = getAvatarBaseUrl();
 			const rows: string[][] = result.docs.map(doc => [
 				nameColor(doc.userid, true, true),
-				`<img src="${baseUrl}${doc.filename}" width="80" height="80">`,
-				Chat.escapeHTML(doc.filename),
+				`<img src="${baseUrl}${doc.filename}" width="40" height="40">`,
 				Chat.escapeHTML(doc.setBy || 'Unknown'),
 			]);
 
 			let output = generateThemedTable(
 				`Custom Avatars (Page ${page}/${result.totalPages})`,
-				['User', 'Avatar', 'Filename', 'Set By'],
+				['User', 'Avatar', 'Set By'],
 				rows,
 			);
 
