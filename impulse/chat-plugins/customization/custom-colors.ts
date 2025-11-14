@@ -64,7 +64,7 @@ const notifyStaffRoom = (message: string) => {
 export const commands: Chat.ChatCommands = {
 	customcolor: {
 		''(target, room, user) {
-			this.parse('/customcolorhelp');
+			this.parse('/cc help');
 		},
 
 		async set(target: string, room: ChatRoom, user: User) {
