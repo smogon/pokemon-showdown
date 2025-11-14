@@ -7,6 +7,7 @@ import { FS } from '../../../lib';
 import { nameColor } from '../../colors';
 
 const AVATAR_PATH = 'config/avatars/';
+const AVATAR_VERSIONS_FILE = AVATAR_PATH + 'avatar-versions.json';
 const STAFF_ROOM_ID = 'staff';
 const AVATAR_DIMENSIONS = {
 	width: 80,
@@ -35,6 +36,37 @@ const deleteAllUserAvatarFiles = async (userId: string) => {
 			// Ignore errors when unlinking
 		}
 	}
+};
+
+const readAvatarVersions = async (): Promise<Record<string, number>> => {
+	try {
+		await FS(AVATAR_PATH).mkdirp();
+		const file = FS(AVATAR_VERSIONS_FILE);
+		const text = await file.readIfExists();
+		if (!text) return {};
+		return JSON.parse(text);
+	} catch {
+		return {};
+	}
+};
+
+const writeAvatarVersions = async (data: Record<string, number>) => {
+	await FS(AVATAR_PATH).mkdirp();
+	await FS(AVATAR_VERSIONS_FILE).write(JSON.stringify(data));
+};
+
+const bumpAvatarVersion = async (userId: string) => {
+	const data = await readAvatarVersions();
+	data[userId] = Date.now();
+	await writeAvatarVersions(data);
+	return data[userId];
+};
+
+const getAvatarVersionForFilename = async (filename: string) => {
+	// Derive userId from filename by removing extension
+	const userId = filename.replace(/\.[^.]+$/, '');
+	const data = await readAvatarVersions();
+	return data[userId] || Date.now();
 };
 
 const downloadImage = async (
@@ -69,6 +101,7 @@ const downloadImage = async (
 
 		if (!response.ok) return { success: false, error: `HTTP error ${response.status}` };
 
+		// Read as array buffer and check size
 		const buffer = await response.arrayBuffer();
 		if (buffer.byteLength > MAX_FILE_SIZE) {
 			return {
@@ -77,7 +110,8 @@ const downloadImage = async (
 			};
 		}
 
-		await FS(AVATAR_PATH).parentDir().mkdirp();
+		// Ensure directory exists (fixed: create avatars directory itself)
+		await FS(AVATAR_PATH).mkdirp();
 		await FS(AVATAR_PATH + name + ext).write(Buffer.from(buffer));
 		return { success: true };
 	} catch {
@@ -85,8 +119,9 @@ const downloadImage = async (
 	}
 };
 
-const displayAvatar = (filename: string) => {
-	const url = `${getAvatarBaseUrl()}${filename}?v=${Date.now()}`;
+const displayAvatar = async (filename: string) => {
+	const version = await getAvatarVersionForFilename(filename);
+	const url = `${getAvatarBaseUrl()}${filename}?v=${version}`;
 	return `<img src='${url}' width='${AVATAR_DIMENSIONS.width}' height='${AVATAR_DIMENSIONS.height}'>`;
 };
 
@@ -95,7 +130,8 @@ export const commands: Chat.ChatCommands = {
 		async set(target, room, user) {
 			this.checkCan('roomowner');
 
-			const [name, avatarUrl] = target.split(',').map(s => s.trim());
+			// limit split to 2 parts so URLs with commas are preserved
+			const [name, avatarUrl] = target.split(',', 2).map(s => s.trim());
 			if (!name || !avatarUrl) return this.parse('/help customavatar');
 
 			const userId = toID(name);
@@ -121,7 +157,10 @@ export const commands: Chat.ChatCommands = {
 
 			Users.Avatars.save(true);
 
-			const avatar = displayAvatar(avatarFilename);
+			// bump version so cached copies are busted
+			await bumpAvatarVersion(userId);
+
+			const avatar = await displayAvatar(avatarFilename);
 			const replyHtml = `<div class="infobox"><center><strong>${Chat.escapeHTML(name)}'s avatar ` +
 				`was successfully set.</strong><br>${avatar}</center></div>`;
 			this.sendReply(`|raw|${replyHtml}`);
@@ -131,6 +170,7 @@ export const commands: Chat.ChatCommands = {
 				const popupHtml = `${nameColor(user.name, true, true)} set your custom avatar.` +
 					`<p>${avatar}</p><p>Use <code>/avatars</code> to see your custom avatars!</p>`;
 				targetUser.popup(`|html|${popupHtml}`);
+				// set the avatar filename on the user; client-side should request the avatar URL including version when shown
 				targetUser.avatar = avatarFilename;
 			}
 
@@ -161,6 +201,9 @@ export const commands: Chat.ChatCommands = {
 				Users.Avatars.removeAllowed(userId, personalAvatar);
 				Users.Avatars.save(true);
 				await deleteAllUserAvatarFiles(userId);
+
+				// bump version so cached copies are busted after deletion
+				await bumpAvatarVersion(userId);
 
 				const targetUser = Users.get(userId);
 				if (targetUser) {
@@ -208,7 +251,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${arg} does not have a personal custom avatar to preview.`);
 			}
 
-			const avatarHtml = displayAvatar(personalAvatar);
+			const avatarHtml = await displayAvatar(personalAvatar);
 			this.sendReply(`|raw|<center><strong>${Chat.escapeHTML(arg)}'s avatar preview:</strong><br>${avatarHtml}</center>`);
 		},
 
