@@ -10,13 +10,12 @@ const assert = require('assert').strict;
 describe('RPG NPC Actions Module', function () {
 	this.timeout(10000);
 
-	let npcActions, playerLib, pokemonLib;
+	let npcActions, core;
 
 	before(function () {
 		try {
 			npcActions = require('../../dist/impulse/chat-plugins/rpg-wip/npc-actions');
-			playerLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
-			pokemonLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/pokemon');
+			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
 		} catch (e) {
 			console.log('NPC Actions module not found, skipping tests:', e.message);
 			this.skip();
@@ -27,7 +26,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser001');
+			player = core.getPlayerData('testnpcuser001');
 			player.inventory.clear();
 			player.money = 5000;
 		});
@@ -100,7 +99,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser002');
+			player = core.getPlayerData('testnpcuser002');
 			player.storyFlags.clear();
 		});
 
@@ -154,7 +153,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser003');
+			player = core.getPlayerData('testnpcuser003');
 			player.storyFlags.clear();
 		});
 
@@ -206,7 +205,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser004');
+			player = core.getPlayerData('testnpcuser004');
 			player.storyFlags.clear();
 		});
 
@@ -261,7 +260,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser005');
+			player = core.getPlayerData('testnpcuser005');
 			player.inventory.clear();
 		});
 
@@ -317,7 +316,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser006');
+			player = core.getPlayerData('testnpcuser006');
 			player.storyFlags.clear();
 		});
 
@@ -368,8 +367,8 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser007');
-			player.party = [pokemonLib.createPokemon('pikachu', 10)];
+			player = core.getPlayerData('testnpcuser007');
+			player.party = [core.createPokemon('pikachu', 10)];
 		});
 
 		it('should handle EV trainer', function () {
@@ -432,7 +431,7 @@ describe('RPG NPC Actions Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testnpcuser008');
+			player = core.getPlayerData('testnpcuser008');
 		});
 
 		it('should handle null action gracefully', function () {

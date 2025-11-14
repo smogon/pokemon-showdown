@@ -10,13 +10,13 @@ const assert = require('assert').strict;
 describe('RPG Save/Load Validation', function () {
 	this.timeout(10000);
 
-	let player;
+	let core;
 
 	before(function () {
 		try {
-			player = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
+			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
 		} catch (e) {
-			console.log('Player lib module not found, skipping tests:', e.message);
+			console.log('Core module not found, skipping tests:', e.message);
 			this.skip();
 		}
 	});
@@ -24,17 +24,17 @@ describe('RPG Save/Load Validation', function () {
 	describe('Data Validation - Basic Fields', () => {
 		it('should reject invalid data format', () => {
 			assert.throws(() => {
-				player.deserializePlayerData(null);
+				core.deserializePlayerData(null);
 			}, /Invalid save data format/);
 
 			assert.throws(() => {
-				player.deserializePlayerData("string");
+				core.deserializePlayerData("string");
 			}, /Invalid save data format/);
 		});
 
 		it('should reject missing user ID', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					name: 'Test',
 					level: 1,
 					badges: 0,
@@ -49,7 +49,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject invalid level', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 0, // Invalid: too low
@@ -63,7 +63,7 @@ describe('RPG Save/Load Validation', function () {
 			}, /level must be between 1 and 100/);
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 101, // Invalid: too high
@@ -79,7 +79,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject invalid badges count', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -93,7 +93,7 @@ describe('RPG Save/Load Validation', function () {
 			}, /badges must be between 0 and 8/);
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -109,7 +109,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject invalid money amount', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -123,7 +123,7 @@ describe('RPG Save/Load Validation', function () {
 			}, /money must be between 0 and 999999999/);
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -139,7 +139,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject inconsistent badge data', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -168,7 +168,7 @@ describe('RPG Save/Load Validation', function () {
 			}
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -184,7 +184,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid species', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -206,7 +206,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid level', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -226,7 +226,7 @@ describe('RPG Save/Load Validation', function () {
 			}, /Pokemon level must be between 1 and 100/);
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -248,7 +248,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with HP exceeding maxHp', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -270,7 +270,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid maxHp', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -292,7 +292,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with more than 4 moves', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -320,7 +320,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid move', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -344,7 +344,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid IVs', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -367,7 +367,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with invalid EVs', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -390,7 +390,7 @@ describe('RPG Save/Load Validation', function () {
 
 		it('should reject Pokemon with total EVs exceeding 510', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -419,7 +419,7 @@ describe('RPG Save/Load Validation', function () {
 	describe('Data Validation - Inventory', () => {
 		it('should reject invalid item quantity', () => {
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -435,7 +435,7 @@ describe('RPG Save/Load Validation', function () {
 			}, /item quantity must be between 0 and 999/);
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -466,7 +466,7 @@ describe('RPG Save/Load Validation', function () {
 			}
 
 			assert.throws(() => {
-				player.deserializePlayerData({
+				core.deserializePlayerData({
 					id: 'testuser',
 					name: 'Test',
 					level: 1,
@@ -514,7 +514,7 @@ describe('RPG Save/Load Validation', function () {
 				visitedLocations: ['Pallet Town', 'Viridian City'],
 			};
 
-			const player = player.deserializePlayerData(validData);
+			const player = core.deserializePlayerData(validData);
 			assert.equal(player.id, 'testuser');
 			assert.equal(player.level, 5);
 			assert.equal(player.badges, 2);

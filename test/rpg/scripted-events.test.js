@@ -10,12 +10,12 @@ const assert = require('assert').strict;
 describe('RPG Scripted Events Module', function () {
 	this.timeout(10000);
 
-	let scriptedEvents, playerLib;
+	let scriptedEvents, core;
 
 	before(function () {
 		try {
 			scriptedEvents = require('../../dist/impulse/chat-plugins/rpg-wip/scripted-events');
-			playerLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
+			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
 		} catch (e) {
 			console.log('Scripted Events module not found, skipping tests:', e.message);
 			this.skip();
@@ -26,7 +26,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser001');
+			player = core.getPlayerData('testevuser001');
 			player.storyFlags.clear();
 		});
 
@@ -82,7 +82,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser002');
+			player = core.getPlayerData('testevuser002');
 			player.storyFlags.clear();
 		});
 
@@ -161,7 +161,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser003');
+			player = core.getPlayerData('testevuser003');
 		});
 
 		it('should handle quiz event', function () {
@@ -213,7 +213,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser004');
+			player = core.getPlayerData('testevuser004');
 			player.storyFlags.clear();
 		});
 
@@ -265,7 +265,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser005');
+			player = core.getPlayerData('testevuser005');
 			player.storyFlags.clear();
 		});
 
@@ -316,7 +316,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser006');
+			player = core.getPlayerData('testevuser006');
 		});
 
 		it('should handle weather change event', function () {
@@ -365,7 +365,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser007');
+			player = core.getPlayerData('testevuser007');
 			player.storyFlags.clear();
 		});
 
@@ -478,7 +478,7 @@ describe('RPG Scripted Events Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testevuser008');
+			player = core.getPlayerData('testevuser008');
 		});
 
 		it('should handle null event gracefully', function () {

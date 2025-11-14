@@ -10,13 +10,12 @@ const assert = require('assert').strict;
 describe('RPG Items Module', function () {
 	this.timeout(10000);
 
-	let items, playerLib, pokemonLib;
+	let items, core;
 
 	before(function () {
 		try {
 			items = require('../../dist/impulse/chat-plugins/rpg-wip/items');
-			playerLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/player');
-			pokemonLib = require('../../dist/impulse/chat-plugins/rpg-wip/lib/pokemon');
+			core = require('../../dist/impulse/chat-plugins/rpg-wip/core');
 		} catch (e) {
 			console.log('Items module not found, skipping tests:', e.message);
 			this.skip();
@@ -27,7 +26,7 @@ describe('RPG Items Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testitemuser001');
+			player = core.getPlayerData('testitemuser001');
 			player.inventory.clear();
 		});
 
@@ -166,11 +165,11 @@ describe('RPG Items Module', function () {
 		let player, pokemon;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testitemuser002');
+			player = core.getPlayerData('testitemuser002');
 			player.inventory.clear();
 			player.party = [];
 
-			pokemon = pokemonLib.createPokemon('pikachu', 10);
+			pokemon = core.createPokemon('pikachu', 10);
 			pokemon.hp = 10; // Damaged Pokemon
 			pokemon.maxHp = 35;
 			player.party.push(pokemon);
@@ -259,7 +258,7 @@ describe('RPG Items Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testitemuser003');
+			player = core.getPlayerData('testitemuser003');
 			player.inventory.clear();
 			player.money = 5000;
 		});
@@ -357,7 +356,7 @@ describe('RPG Items Module', function () {
 		let player;
 
 		beforeEach(() => {
-			player = playerLib.getPlayerData('testitemuser004');
+			player = core.getPlayerData('testitemuser004');
 			player.inventory.clear();
 		});
 
