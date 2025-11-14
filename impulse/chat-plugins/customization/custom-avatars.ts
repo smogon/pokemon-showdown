@@ -1,39 +1,22 @@
 /*
-* Pokemon Showdown
-* Custom Avatars Commands
-*/
+ * Pokemon Showdown
+ * Custom Avatars Commands
+ */
 
 import { FS } from '../../../lib';
-import { ImpulseDB } from '../../impulse-db';
-import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
 const AVATAR_PATH = 'config/avatars/';
 const STAFF_ROOM_ID = 'staff';
-const DB_TABLE_NAME = 'customavatars';
-const LIST_PAGE_LIMIT = 20;
 const AVATAR_DIMENSIONS = {
 	width: 80,
 	height: 80,
 };
 
-const VALID_EXTENSIONS = ['.jpg', '.png', '.gif'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const FETCH_TIMEOUT = 10000;
 
-const IMAGE_SIGS: { [key: string]: number[] } = {
-	'.png': [0x89, 0x50, 0x4E, 0x47],
-	'.jpg': [0xFF, 0xD8, 0xFF],
-	'.gif': [0x47, 0x49, 0x46],
-};
-
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
-
-const isValidImage = (bytes: Uint8Array, ext: string): boolean => {
-	const sig = IMAGE_SIGS[ext];
-	if (!sig || bytes.length < sig.length) return false;
-	return sig.every((byte, i) => bytes[i] === byte);
-};
 
 const getExtension = (filename: string): string => {
 	const lastDot = filename.lastIndexOf('.');
@@ -44,7 +27,8 @@ const getExtension = (filename: string): string => {
 };
 
 const deleteAllUserAvatarFiles = async (userId: string) => {
-	for (const ext of VALID_EXTENSIONS) {
+	const possibleExts = ['.jpg', '.png', '.gif'];
+	for (const ext of possibleExts) {
 		try {
 			await FS(AVATAR_PATH + userId + ext).unlinkIfExists();
 		} catch {
@@ -55,7 +39,7 @@ const deleteAllUserAvatarFiles = async (userId: string) => {
 
 const downloadImage = async (
 	imageUrl: string, name: string, ext: string
-): Promise<{ success: boolean, error?: string }> => {
+): Promise<{ success: boolean; error?: string }> => {
 	try {
 		let url: URL;
 		try {
@@ -76,28 +60,21 @@ const downloadImage = async (
 			response = await fetch(imageUrl, { signal: controller.signal });
 		} catch (err: any) {
 			clearTimeout(timeout);
-			return { success: false, error: err.name === 'AbortError' ? 'Request timed out' : 'Failed to fetch image' };
+			return {
+				success: false,
+				error: err?.name === 'AbortError' ? 'Request timed out' : 'Failed to fetch image',
+			};
 		}
 		clearTimeout(timeout);
 
 		if (!response.ok) return { success: false, error: `HTTP error ${response.status}` };
 
-		const contentType = response.headers.get('content-type');
-		if (!contentType?.startsWith('image/')) return { success: false, error: 'URL does not point to an image' };
-
-		const contentLength = response.headers.get('content-length');
-		if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
-			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
-		}
-
 		const buffer = await response.arrayBuffer();
 		if (buffer.byteLength > MAX_FILE_SIZE) {
-			return { success: false, error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` };
-		}
-
-		const uint8 = new Uint8Array(buffer);
-		if (!isValidImage(uint8, ext)) {
-			return { success: false, error: 'File content does not match extension or is corrupted' };
+			return {
+				success: false,
+				error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`,
+			};
 		}
 
 		await FS(AVATAR_PATH).parentDir().mkdirp();
@@ -106,16 +83,6 @@ const downloadImage = async (
 	} catch {
 		return { success: false, error: 'An unexpected error occurred' };
 	}
-};
-
-const saveAvatarMetadata = async (userId: string, filename: string, setBy: string, sourceUrl: string) => {
-	await ImpulseDB(DB_TABLE_NAME).upsert({ userid: userId }, {
-		$set: { userid: userId, filename, setBy, sourceUrl, updatedAt: new Date() },
-	});
-};
-
-const removeAvatarMetadata = async (userId: string) => {
-	await ImpulseDB(DB_TABLE_NAME).deleteOne({ userid: userId });
 };
 
 const displayAvatar = (filename: string) => {
@@ -127,6 +94,7 @@ export const commands: Chat.ChatCommands = {
 	customavatar: {
 		async set(target, room, user) {
 			this.checkCan('roomowner');
+
 			const [name, avatarUrl] = target.split(',').map(s => s.trim());
 			if (!name || !avatarUrl) return this.parse('/help customavatar');
 
@@ -135,10 +103,6 @@ export const commands: Chat.ChatCommands = {
 
 			const processedUrl = /^https?:\/\//i.test(avatarUrl) ? avatarUrl : `https://${avatarUrl}`;
 			const ext = getExtension(processedUrl);
-
-			if (!VALID_EXTENSIONS.includes(ext)) {
-				return this.errorReply('Image URL must end with .jpg, .png, or .gif extension.');
-			}
 
 			await deleteAllUserAvatarFiles(userId);
 			this.sendReply('Downloading avatar...');
@@ -156,20 +120,27 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			Users.Avatars.save(true);
-			await saveAvatarMetadata(userId, avatarFilename, user.id, processedUrl);
 
 			const avatar = displayAvatar(avatarFilename);
-			this.sendReply(`|raw|${name}'s avatar was successfully set. Avatar:<p>${avatar}</p>`);
+			const replyHtml = `<div class="infobox"><center><strong>${Chat.escapeHTML(name)}'s avatar ` +
+				`was successfully set.</strong><br>${avatar}</center></div>`;
+			this.sendReply(`|raw|${replyHtml}`);
 
 			const targetUser = Users.get(userId);
 			if (targetUser) {
-				targetUser.popup(`|html|${nameColor(user.name, true, true)} set your custom avatar.<p>${avatar}</p><p>Use <code>/avatars</code> to see your custom avatars!</p>`);
+				const popupHtml = `${nameColor(user.name, true, true)} set your custom avatar.` +
+					`<p>${avatar}</p><p>Use <code>/avatars</code> to see your custom avatars!</p>`;
+				targetUser.popup(`|html|${popupHtml}`);
 				targetUser.avatar = avatarFilename;
 			}
 
 			const staffRoom = Rooms.get(STAFF_ROOM_ID);
 			if (staffRoom) {
-				staffRoom.add(`|html|<div class="infobox"><center><strong>${nameColor(user.name, true, true)} set custom avatar for ${nameColor(userId, true, true)}:</strong><br>${avatar}</center></div>`).update();
+				staffRoom.add(
+					`|html|<div class="infobox"><center><strong>${nameColor(user.name, true, true)} ` +
+					`set custom avatar for ${nameColor(userId, true, true)}:</strong><br>${avatar}` +
+					`</center></div>`
+				).update();
 			}
 		},
 
@@ -190,7 +161,6 @@ export const commands: Chat.ChatCommands = {
 				Users.Avatars.removeAllowed(userId, personalAvatar);
 				Users.Avatars.save(true);
 				await deleteAllUserAvatarFiles(userId);
-				await removeAvatarMetadata(userId);
 
 				const targetUser = Users.get(userId);
 				if (targetUser) {
@@ -213,60 +183,48 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		async list(target, room, user) {
+		async preview(target, room, user) {
+			if (!this.runBroadcast()) return;
 			this.checkCan('roomowner');
+			const arg = target.trim();
+			if (!arg) return this.parse('/help customavatar');
 
-			const page = parseInt(target) || 1;
-			const result = await ImpulseDB(DB_TABLE_NAME).findPaginated(
-				{},
-				{ page, limit: LIST_PAGE_LIMIT, sort: { userid: 1 } }
-			);
-
-			if (result.total === 0) return this.sendReply('No custom avatars have been set.');
-			if (page < 1 || page > result.totalPages) {
-				return this.errorReply(`Invalid page number. Please use a page between 1 and ${result.totalPages}.`);
+			// If it's a URL, show a preview of that URL.
+			if (/^https?:\/\//i.test(arg) || arg.includes('/')) {
+				const processedUrl = /^https?:\/\//i.test(arg) ? arg : `https://${arg}`;
+				const html = `<center><strong>Avatar preview:</strong><br>` +
+					`<img src="${Chat.escapeHTML(processedUrl)}" width="${AVATAR_DIMENSIONS.width}" ` +
+					`height="${AVATAR_DIMENSIONS.height}"></center>`;
+				return this.sendReply(`|raw|${html}`);
 			}
 
-			const baseUrl = getAvatarBaseUrl();
-			const rows: string[][] = result.docs.map(doc => [
-				nameColor(doc.userid, true, true),
-				`<img src="${baseUrl}${doc.filename}" width="${AVATAR_DIMENSIONS.width}" height="${AVATAR_DIMENSIONS.height}">`,
-				Chat.escapeHTML(doc.filename),
-				Chat.escapeHTML(doc.setBy || 'Unknown'),
-			]);
+			// Otherwise treat as username and preview their current custom avatar.
+			const userId = toID(arg);
+			if (!userId) return this.errorReply('Invalid username.');
 
-			let output = generateThemedTable(
-				`Custom Avatars (Page ${page}/${result.totalPages})`,
-				['User', 'Avatar', 'Filename', 'Set By'],
-				rows,
-			);
-
-			if (result.totalPages > 1) {
-				output += `<div class="pad"><center>`;
-				if (result.hasPrev) {
-					output += `<button class="button" name="send" value="/customavatar list ${page - 1}">Previous</button> `;
-				}
-				if (result.hasNext) {
-					output += `<button class="button" name="send" value="/customavatar list ${page + 1}">Next</button>`;
-				}
-				output += `</center></div>`;
+			const userAvatars = Users.Avatars.avatars[userId];
+			const personalAvatar = userAvatars?.allowed?.[0];
+			if (!personalAvatar || personalAvatar.startsWith('#')) {
+				return this.errorReply(`${arg} does not have a personal custom avatar to preview.`);
 			}
 
-			this.sendReply(`|raw|${output}`);
+			const avatarHtml = displayAvatar(personalAvatar);
+			this.sendReply(`|raw|<center><strong>${Chat.escapeHTML(arg)}'s avatar preview:</strong><br>${avatarHtml}</center>`);
 		},
 
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{ cmd: "/customavatar set [user], [url]", desc: "Set avatar for a user. Requires: &." },
-				{ cmd: "/customavatar delete [user]", desc: "Remove avatar from a user. Requires: &." },
-				{ cmd: "/customavatar list [page]", desc: "List all avatars. Requires: &." },
+				{ cmd: '/customavatar set [user], [url]', desc: 'Set avatar for a user. Requires: &.' },
+				{ cmd: '/customavatar delete [user]', desc: 'Remove avatar from a user. Requires: &.' },
+				{ cmd: '/customavatar preview [user|url]', desc: 'Preview a user avatar or an image URL. Requires: &.' },
 			];
-			const html = `<center><strong>Custom Avatar Commands:</strong><br>Alias: /ca</center><hr><ul style="list-style-type:none;padding-left:0;">${
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('')
-			}</ul><small>Max 5MB. Formats: JPG, PNG, GIF</small>`;
+			const html = `<center><strong>Custom Avatar Commands:</strong><br>Alias: /ca</center><hr>` +
+				`<ul style="list-style-type:none;padding-left:0;">${
+					helpList.map(({ cmd, desc }, i) =>
+						`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+					).join('')
+				}</ul><small>Max 5MB. Formats: JPG, PNG, GIF</small>`;
 			this.sendReplyBox(html);
 		},
 	},
