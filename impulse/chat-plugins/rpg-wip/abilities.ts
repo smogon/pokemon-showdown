@@ -844,7 +844,7 @@ export const WEATHER_ABILITIES = {
 	'drought': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sun') {
-				battle.weather = { type: 'sun', turns: 9999 };
+				battle.weather = { type: 'sun', turns: 5 };
 				messageLog.push(`${slot.pokemon.species}'s Drought intensified the sun!`);
 			}
 		},
@@ -853,7 +853,7 @@ export const WEATHER_ABILITIES = {
 	'drizzle': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'rain') {
-				battle.weather = { type: 'rain', turns: 9999 };
+				battle.weather = { type: 'rain', turns: 5 };
 				messageLog.push(`${slot.pokemon.species}'s Drizzle caused a downpour!`);
 			}
 		},
@@ -862,7 +862,7 @@ export const WEATHER_ABILITIES = {
 	'sandstream': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sand') {
-				battle.weather = { type: 'sand', turns: 9999 };
+				battle.weather = { type: 'sand', turns: 5 };
 				messageLog.push(`${slot.pokemon.species}'s Sand Stream whipped up a sandstorm!`);
 			}
 		},
@@ -871,7 +871,7 @@ export const WEATHER_ABILITIES = {
 	'snowwarning': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'hail') {
-				battle.weather = { type: 'hail', turns: 9999 };
+				battle.weather = { type: 'hail', turns: 5 };
 				messageLog.push(`${slot.pokemon.species}'s Snow Warning created a hailstorm!`);
 			}
 		},
