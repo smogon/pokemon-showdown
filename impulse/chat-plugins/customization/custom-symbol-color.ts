@@ -53,25 +53,42 @@ const updateSymbolColors = async (): Promise<void> => {
 	}
 };
 
-const notifyUser = (userId: string, staffName: string, color: string, action: string): void => {
-	const user = Users.get(userId);
-	if (user?.connected) {
-		const userNameColor = nameColor(staffName, true, true);
-		const colorSpan = `<span style="color: ${color}; font-weight: bold;">${color}</span>`;
-		const msg = `${userNameColor} ${action} your symbol color to ${colorSpan}` +
-			`<br /><center>Refresh if you don't see it.</center>`;
-		user.popup(`|html|${msg}`);
-	}
-};
+const sendSymbolColorNotifications = (
+	staffUser: User,
+	targetName: string,
+	color: string,
+	action: 'set' | 'updated' | 'removed'
+): void => {
+	const userId = toID(targetName);
+	const staffNameColor = nameColor(staffUser.name, true, true);
+	const targetNameColor = nameColor(targetName, true, false);
 
-const notifyStaff = (staffName: string, targetName: string, color: string, action: string): void => {
-	const room = Rooms.get(STAFF_ROOM_ID);
-	if (room) {
-		const staffNameColor = nameColor(staffName, true, true);
-		const targetNameColor = nameColor(targetName, true, false);
-		const colorSpan = `<span style="color: ${color}">■ ${color}</span>`;
-		const msg = `${staffNameColor} ${action} symbol color for ${targetNameColor}: ${colorSpan}`;
-		room.add(`|html|<div class="infobox">${msg}</div>`).update();
+	if (action !== 'removed') {
+		const user = Users.get(userId);
+		if (user?.connected) {
+			const colorSpan = `<span style="color: ${color}; font-weight: bold;">${color}</span>`;
+			const msg = `${staffNameColor} has ${action} your symbol color to ${colorSpan}` +
+				`<br /><center>Refresh if you don't see it.</center>`;
+			user.popup(`|html|${msg}`);
+		}
+
+		const room = Rooms.get(STAFF_ROOM_ID);
+		if (room) {
+			const colorSpan = `<span style="color: ${color}">■ ${color}</span>`;
+			const msg = `${staffNameColor} ${action} symbol color for ${targetNameColor}: ${colorSpan}`;
+			room.add(`|html|<div class="infobox">${msg}</div>`).update();
+		}
+	} else {
+		const user = Users.get(userId);
+		if (user?.connected) {
+			user.popup(`|html|${staffNameColor} has removed your symbol color.`);
+		}
+
+		const room = Rooms.get(STAFF_ROOM_ID);
+		if (room) {
+			const msg = `${staffNameColor} removed symbol color for ${targetNameColor}.`;
+			room.add(`|html|<div class="infobox">${msg}</div>`).update();
+		}
 	}
 };
 
@@ -109,8 +126,8 @@ export const commands: Chat.ChatCommands = {
 			const targetNameColor = nameColor(name, true, false);
 			const colorSpan = `<span style="color: ${color}">■</span>`;
 			this.sendReply(`|raw|You have given ${targetNameColor} a symbol color: ${colorSpan}`);
-			notifyUser(userId, user.name, color, 'has set');
-			notifyStaff(user.name, name, color, 'set');
+			
+			sendSymbolColorNotifications(user, name, color, 'set');
 		},
 
 		async update(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
@@ -141,8 +158,8 @@ export const commands: Chat.ChatCommands = {
 			const targetNameColor = nameColor(name, true, false);
 			const colorSpan = `<span style="color: ${color}">■</span>`;
 			this.sendReply(`|raw|You have updated ${targetNameColor}'s symbol color to: ${colorSpan}`);
-			notifyUser(userId, user.name, color, 'has updated');
-			notifyStaff(user.name, name, color, 'updated');
+			
+			sendSymbolColorNotifications(user, name, color, 'updated');
 		},
 
 		async delete(this: CommandContext, target: string, room: Room, user: User): Promise<void> {
@@ -162,19 +179,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`You removed ${target}'s symbol color.`);
 
-			const targetUser = Users.get(userId);
-			if (targetUser?.connected) {
-				const userNameColor = nameColor(user.name, true, true);
-				targetUser.popup(`|html|${userNameColor} has removed your symbol color.`);
-			}
-
-			const staffRoom = Rooms.get(STAFF_ROOM_ID);
-			if (staffRoom) {
-				const staffNameColor = nameColor(user.name, true, true);
-				const targetNameColor = nameColor(target, true, false);
-				const msg = `${staffNameColor} removed symbol color for ${targetNameColor}.`;
-				staffRoom.add(`|html|<div class="infobox">${msg}</div>`).update();
-			}
+			sendSymbolColorNotifications(user, target, '', 'removed');
 		},
 
 		help(): void {
