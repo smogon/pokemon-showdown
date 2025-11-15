@@ -1359,40 +1359,57 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSlots;
 
-	const slotToSwitchOut = parseInt(target || '');
+	// Determine which slot to switch from
+	let slotToSwitchOut: number;
 
-	if (isNaN(slotToSwitchOut)) {
-		// --- Step 1: Choose which Pokemon to switch out ---
-		html += `<p>Select a Pokémon to switch out. This will use its turn.</p>`;
-		if (pSlot0 && pSlot0.pokemon.hp > 0) {
-			html += `<button name="send" value="/rpg battleaction switchmenu 0" class="button"><strong>${pSlot0.pokemon.species}</strong> (Slot 1)</button> `;
-		}
-		if (pSlot1 && pSlot1.pokemon.hp > 0) {
-			html += `<button name="send" value="/rpg battleaction switchmenu 1" class="button"><strong>${pSlot1.pokemon.species}</strong> (Slot 2)</button> `;
-		}
+	if (target !== undefined && target !== '') {
+		// If target is provided, use it
+		slotToSwitchOut = parseInt(target);
 	} else {
-		// --- Step 2: Choose which Pokemon to switch in ---
-		const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
-		if (!outgoingPokemon) {
-			return `<h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p>`;
-		}
+		// Auto-determine the slot to switch from
+		// In single battles, always slot 0
+		// In double battles, find the first slot without a pending action
+		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
-		html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
-
-		const availableParty = player.party.filter(p =>
-			p.hp > 0 &&
-			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
-		);
-
-		if (availableParty.length === 0) {
-			html += `<p>You have no other Pokémon to switch to!</p>`;
+		if (!isDoubleBattle) {
+			// Single battle: always switch from slot 0
+			slotToSwitchOut = 0;
 		} else {
-			for (const pokemon of availableParty) {
-				html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
-					`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
-					`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
-					`</div>`;
+			// Double battle: find the first slot that needs an action
+			if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
+				slotToSwitchOut = 0;
+			} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
+				slotToSwitchOut = 1;
+			} else {
+				// No valid slot found (shouldn't happen, but fallback)
+				html += `<p>Error: No available slot to switch from.</p>`;
+				html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+				return html;
 			}
+		}
+	}
+
+	// Show Pokemon selection for the determined slot
+	const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
+	if (!outgoingPokemon) {
+		return `<div class="infobox"><h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p></div>`;
+	}
+
+	html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
+
+	const availableParty = player.party.filter(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+
+	if (availableParty.length === 0) {
+		html += `<p>You have no other Pokémon to switch to!</p>`;
+	} else {
+		for (const pokemon of availableParty) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
+				`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
+				`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
+				`</div>`;
 		}
 	}
 
