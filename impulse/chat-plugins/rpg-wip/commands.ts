@@ -45,6 +45,8 @@ import {
 	getSlotFromIndex,
 	applyHazardEffectsOnSwitchIn,
 	handleMirrorHerb,
+	getLocationWeatherData,
+	getWeatherStartMessage,
 } from './battle-engine';
 import {
 	generateSellMenuHTML,
