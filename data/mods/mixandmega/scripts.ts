@@ -42,10 +42,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
-		for (const side of this.sides) {
-			this.add('teamsize', side.id, side.pokemon.length);
-		}
-
 		this.add('gen', this.gen);
 
 		this.add('tier', format.name);
@@ -54,11 +50,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) format.onBegin.call(this);
+		format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onBegin) subFormat.onBegin.call(this);
+			subFormat.onBegin?.call(this);
 		}
 		for (const pokemon of this.getAllPokemon()) {
 			const item = pokemon.getItem();
@@ -87,13 +83,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
-		if (format.onTeamPreview) format.onTeamPreview.call(this);
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
-		}
-
+		this.runPickTeam();
 		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
@@ -106,6 +96,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
@@ -147,11 +138,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {
@@ -419,7 +410,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			// }
 
-			pokemon.canMegaEvo = null;
+			pokemon.canMegaEvo = false;
 			return true;
 		},
 		terastallize(pokemon) {

@@ -6,7 +6,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	start() {
 		// Choose a random format
 		this.gen = this.random(1, 10);
-		const format = Dex.formats.get(`gen${this.gen}randombattle@@@${(this.format.customRules || []).join(',')}`);
+		const format = Dex.formats.get(
+			`gen${this.gen}randombattle@@@${[...this.format.ruleset, ...(this.format.customRules || [])].join(',')}`
+		);
 		this.dex = Dex.forFormat(format);
 		this.ruleTable = this.dex.formats.getRuleTable(format);
 		this.teamGenerator = Teams.getGenerator(format);
@@ -80,10 +82,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
-		for (const side of this.sides) {
-			this.add('teamsize', side.id, side.pokemon.length);
-		}
-
 		this.add('gen', this.gen);
 
 		this.add('tier', format.name);
@@ -92,11 +90,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) format.onBegin.call(this);
+		format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onBegin) subFormat.onBegin.call(this);
+			subFormat.onBegin?.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -113,13 +111,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
-		if (format.onTeamPreview) format.onTeamPreview.call(this);
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
-		}
-
+		this.runPickTeam();
 		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
