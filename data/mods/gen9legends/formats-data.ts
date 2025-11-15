@@ -1917,7 +1917,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	delphoxmega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	froakie: {
 		isNonstandard: null,
@@ -2186,10 +2186,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	diancie: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	dianciemega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	hoopa: {
 		isNonstandard: "Unobtainable",
