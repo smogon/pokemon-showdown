@@ -2026,7 +2026,7 @@ export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 export function generateBattleTowerLossHTML(floor: number): string {
 	let html = `<div class="infobox"><h2>🗼 Battle Lost on Floor ${floor}</h2>`;
 	html += `<p>You were defeated. Your Battle Tower streak has ended.</p>`;
-	html += `<p><strong>Final Floor: ${floor}</strong></sP><hr />`;
+	html += `<p><strong>Final Floor: ${floor}</strong></p><hr />`;
 	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">Try Again (from Floor 1)</button></p>`;
 	html += `<p><button name="send" value="/rpg modes" class="button" style="width: 200px;">Exit Battle Tower</button></p>`;
 	html += `</div>`;
