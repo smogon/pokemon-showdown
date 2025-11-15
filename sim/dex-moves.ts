@@ -210,7 +210,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
 	/**
-	 * Boosted by Sheer Force without suppressing secondary effects
+	 * Boosted by Sheer Force without suppressing secondary effects.
 	 */
 	hasSheerForceBoost?: boolean;
 
@@ -385,7 +385,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 */
 	readonly secondaries: SecondaryEffect[] | null;
 	/**
-	 * Moves manually boosted by Sheer Force that don't have secondary effects.
+	 * Moves manually boosted by Sheer Force.
 	 * e.g. Electro Shot and Order Up.
 	 */
 	readonly hasSheerForceBoost: boolean;
