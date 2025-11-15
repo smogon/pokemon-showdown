@@ -1300,17 +1300,22 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	}
 
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	const activeOpponents = getActiveSlots(battle.opponentSlots);
 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
 		html += `<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 		for (const ball of pokeBalls) {
-			// --- FIX: Change command based on battle type ---
+			// Determine command based on battle type and number of opponents
 			let command = '';
-			if (isDoubleBattle) {
-				// Doubles: Go to target selection
+			if (isDoubleBattle && activeOpponents.length > 1) {
+				// Doubles with multiple opponents: Go to target selection
 				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
+			} else if (isDoubleBattle && activeOpponents.length === 1) {
+				// Doubles with one opponent: Auto-select that opponent
+				const targetSlot = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
+				command = `/rpg battleaction catch ${ball.id} ${targetSlot}`;
 			} else {
 				// Singles: Hardcode target to slot 2 (the only opponent)
 				command = `/rpg battleaction catch ${ball.id} 2`;
