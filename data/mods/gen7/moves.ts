@@ -386,7 +386,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
@@ -613,7 +612,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
@@ -1154,39 +1152,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	toxicthread: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	trick: {
-		inherit: true,
-		onHit(target, source, move) {
-			const yourItem = target.takeItem(source);
-			const myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
-				if (yourItem) target.item = yourItem.id;
-				if (myItem) source.item = myItem.id;
-				return false;
-			}
-			if (
-				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
-				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
-			) {
-				if (yourItem) target.item = yourItem.id;
-				if (myItem) source.item = myItem.id;
-				return false;
-			}
-			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
-			if (myItem) {
-				target.setItem(myItem);
-				this.add('-item', target, myItem, '[from] move: Trick');
-			} else {
-				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Trick');
-			}
-			if (yourItem) {
-				source.setItem(yourItem);
-				this.add('-item', source, yourItem, '[from] move: Trick');
-			} else {
-				this.add('-enditem', source, myItem, '[silent]', '[from] move: Trick');
-			}
-		},
 	},
 	trumpcard: {
 		inherit: true,

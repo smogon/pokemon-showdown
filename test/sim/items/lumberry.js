@@ -38,4 +38,14 @@ describe('Lum Berry', () => {
 		assert.equal(attacker.status, '');
 		assert(attacker.volatiles['confusion']);
 	});
+
+	it('should cure Poison and confusion after Poison Puppeteer activation', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: 'Charizard', item: 'lumberry', moves: ['sleeptalk'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Pecharunt', ability: 'poisonpuppeteer', moves: ['toxic'] }] });
+		const charizard = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(charizard.status, '');
+		assert(!charizard.volatiles['confusion']);
+	});
 });

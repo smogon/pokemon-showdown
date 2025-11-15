@@ -146,6 +146,78 @@ function writeFile(path: string, data: AnyObject) {
 	));
 }
 
+function mafiaSearch(
+	entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][],
+	searchTarget: string, searchType: keyof MafiaData
+) {
+	if (typeof (entries) === 'undefined' || searchType === `aliases` || searchTarget.length === 0) return entries;
+
+	// Handle negation
+	const negation = searchTarget.startsWith('!');
+	if (negation) searchTarget = searchTarget.substring(1).trim();
+
+	const entriesCopy = entries.slice();
+
+	// Check if the search term is an alias of something
+	const alias = toID((toID(searchTarget) in MafiaData[`aliases`]) ?
+		MafiaData[`aliases`][toID(searchTarget)] : searchTarget);
+
+	if (searchType === `themes` && searchTarget.includes(`players`) && searchTarget.includes(`pl`)) {
+		// Search themes by playercount
+		const inequalities = ['<=', '>=', '=', '<', '>'];
+		const inequality = inequalities.find(x => searchTarget.includes(x));
+		if (!inequality) return entries;
+
+		const players = Number(searchTarget.split(inequality)[1].trim());
+		if (!!players && !isNaN(players)) {
+			if (inequality === '=') {
+				// Filter based on themes with the exact player count
+				entries = entries.filter(([key]) => players in MafiaData[`themes`][key]);
+			} else if (inequality === '<' || inequality === '<=') {
+				// Filter based on themes less than / at most a certain amount of players
+				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
+				entries = entries.filter(([key]) => ([...Array(players + (inequality === '<=' ? 1 : 0)).keys()])
+					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
+			} else if (inequality === '>' || inequality === '>=') {
+				// Filter based on themes greater than / at least a certain amount of players
+				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
+				entries = entries.filter(([key]) => ([...Array(50 - Number(players)).keys()]
+					.map(num => num + players + (inequality === '>=' ? 0 : 1)))
+					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
+			}
+		} else {
+			return entries;
+		}
+	} else if (searchType === `themes` && alias in MafiaData[`roles`]) {
+		// Search themes that contain a role
+		// Creates a list of all potential playercounts, then verifies if any of them contains the role that we seek
+		entries = entries.filter(([key, data]) => ([...Array(50).keys()])
+			.some(playerCount => playerCount in (MafiaData[`themes`][key]) &&
+				(MafiaData[`themes`][key])[playerCount].toString().toLowerCase().includes(alias)));
+	} else if (searchType === `IDEAs` && alias in MafiaData[`roles`]) {
+		// Search IDEAs that contain a role
+		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][key].roles.map(role =>
+			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(alias));
+	} else if (searchType === `roles` && alias in MafiaData[`themes`]) {
+		// Search roles that appear in a theme
+		// Filters entries based on whether the list of roles in the given theme contains it (or an alias of it)
+		entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][alias])
+			.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
+	} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
+		// Search roles that appear in an IDEA
+		// Filters entries based on whether the list of roles in the given IDEA contains it (or an alias of it)
+		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][alias].roles.map(role =>
+			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(toID(key)));
+	} else {
+		// Any other search type matches just on whether it is included in the text
+		// Filters entries based on whether it contains the given string anywhere
+		entries = entries.filter(([key]) => Object.entries(MafiaData[searchType][key])
+			.some(([newKey, value]) => value.toString().toLowerCase().includes(searchTarget)));
+	}
+	// Inverses the found results for negation
+	return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
+}
+
 // data assumptions -
 // the alignments "town" and "solo" always exist (defaults)
 // <role>.alignment is always a valid key in data.alignments
@@ -156,12 +228,16 @@ function writeFile(path: string, data: AnyObject) {
 MafiaData = readFile(DATA_FILE) || { alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {} };
 if (!MafiaData.alignments.town) {
 	MafiaData.alignments.town = {
-		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`],
+		name: 'Town',
+		plural: 'Town',
+		memo: [`This alignment is required for the script to function properly.`],
 	};
 }
 if (!MafiaData.alignments.solo) {
 	MafiaData.alignments.solo = {
-		name: 'solo', plural: 'solo', memo: [`This alignment is required for the script to function properly.`],
+		name: 'Solo',
+		plural: 'Solo',
+		memo: [`This alignment is required for the script to function properly.`],
 	};
 }
 
@@ -328,6 +404,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	dlAt: number;
 
 	IDEA: MafiaIDEAModule;
+
 	constructor(room: ChatRoom, host: User) {
 		super(room);
 
@@ -340,6 +417,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.hostid = host.id;
 		this.host = Utils.escapeHTML(host.name);
+
 		this.cohostids = [];
 		this.cohosts = [];
 
@@ -445,7 +523,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return Punishments.hasRoomPunishType(room, toID(user), 'MAFIAGAMEBAN');
 	}
 
-	static gameBan(room: Room, user: User, reason: string, duration: number) {
+	static gameBan(room: Room, user: User | ID, reason: string, duration: number) {
 		Punishments.roomPunish(room, user, {
 			type: 'MAFIAGAMEBAN',
 			id: toID(user),
@@ -459,10 +537,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	static isHostBanned(room: Room, user: User) {
-		return Mafia.isGameBanned(room, user) || Punishments.hasRoomPunishType(room, toID(user), 'MAFIAGAMEBAN');
+		return Mafia.isGameBanned(room, user) || Punishments.hasRoomPunishType(room, toID(user), 'MAFIAHOSTBAN');
 	}
 
-	static hostBan(room: Room, user: User, reason: string, duration: number) {
+	static hostBan(room: Room, user: User | ID, reason: string, duration: number) {
 		Punishments.roomPunish(room, user, {
 			type: 'MAFIAHOSTBAN',
 			id: toID(user),
@@ -598,12 +676,20 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	resetGame() {
+		if (this.playerCount > this.originalRoles.length) {
+			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.");
+		}
 		this.clearVotes();
 		this.dayNum = 0;
 		this.phase = 'night';
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
-			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			if (host?.connected) {
+				if (this.playerCount < this.originalRoles.length) {
+					this.sendUser(host, `More roles exist than players. Not all roles in the rolelist were distributed.`);
+				}
+				host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			}
 		}
 		for (const player of this.players) {
 			const user = Users.get(player.id);
@@ -615,8 +701,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (this.timer) this.setDeadline(0);
-		this.sendDeclare(`The game has been reset.`);
 		this.distributeRoles();
+		this.sendDeclare(`The game has been reset.`);
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
 		} else {
@@ -740,10 +826,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	distributeRoles() {
-		const roles = Utils.shuffle(this.roles.slice());
-		if (roles.length < this.players.length) {
-			throw new Chat.ErrorMessage(`Not enough roles for all players. Have ${roles.length} roles but ${this.players.length} players.`);
-		}
+		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
 				const role = roles.shift();
@@ -1676,13 +1759,14 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
 			if (this.cohostids.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
-
-		for (const alt of user.getAltUsers(true)) {
-			if (!force && (this.getPlayer(alt.id) || this.played.includes(alt.id))) {
-				throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
-			}
-			if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
-				throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+		if (!force) {
+			for (const alt of user.getAltUsers(true)) {
+				if (this.getPlayer(alt.id) || this.played.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
+				}
+				if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+				}
 			}
 		}
 	}
@@ -2201,7 +2285,6 @@ export const commands: Chat.ChatCommands = {
 			}
 			return this.parse('/help mafia');
 		},
-
 		forcehost: 'host',
 		nexthost: 'host',
 		host(target, room, user, connection, cmd) {
@@ -3451,6 +3534,10 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage(`${targetUser.name} cannot become a host because they are playing.`);
 			}
 
+			if (Mafia.isHostBanned(room, targetUser)) {
+				throw new Chat.ErrorMessage(`${targetUser.name} is banned from hosting mafia games.`);
+			}
+
 			if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 			if (cmd.includes('cohost')) {
 				game.cohostids.push(targetUser.id);
@@ -3765,14 +3852,17 @@ export const commands: Chat.ChatCommands = {
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
 				throw new Chat.ErrorMessage(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
-				user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned.`);
-				this.parse(`/mafia unhostban ${targetUser.name}`);
+				user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned too.`);
 			}
 
 			if (cmd === 'hostban') {
 				Mafia.hostBan(room, targetUser, reason, duration);
 			} else {
 				Mafia.gameBan(room, targetUser, reason, duration);
+			}
+
+			if (targetUser.id in room.users) {
+				targetUser.popup(`|modal|${user.name} has ${cmd}ned you in ${room.roomid} for ${Chat.toDurationString(duration * 60 * 60 * 24 * 1000)}. ${reason}`);
 			}
 
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, reason);
@@ -3786,6 +3876,61 @@ export const commands: Chat.ChatCommands = {
 		ban: 'gamebanhelp',
 		banhelp: 'gamebanhelp',
 		gamebanhelp() {
+			this.parse('/mafia hostbanhelp');
+		},
+
+		gamebanname: 'namehostban',
+		namegameban: 'namehostban',
+		hostbanname: 'namehostban',
+		namehostban(target, room, user, connection, cmd) {
+			if (!target) return this.parse('/help mafia namehostban');
+			room = this.requireRoom();
+			this.checkCan('warn', null, room);
+
+			const [targetUser, rest] = this.splitOne(target);
+			const [string1, string2] = this.splitOne(rest);
+			let duration, reason;
+			if (parseInt(string1)) {
+				duration = parseInt(string1);
+				reason = string2;
+			} else {
+				duration = parseInt(string2);
+				reason = string1;
+			}
+
+			if (!duration) duration = 2;
+			if (!reason) reason = '';
+			if (reason.length > 300) {
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
+			}
+
+			const userid = toID(targetUser);
+			const commandType = cmd.includes('hostban') ? 'hostban' : 'gameban';
+			if (Punishments.hasRoomPunishType(room, userid, `MAFIA${commandType.toUpperCase()}`)) {
+				throw new Chat.ErrorMessage(`User '${targetUser}' is already ${commandType}ned in this room.`);
+			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
+				throw new Chat.ErrorMessage(`User '${targetUser}' is already gamebanned in this room, which also means they can't host.`);
+			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
+				user.sendTo(room, `User '${targetUser}' is already hostbanned in this room, but they will now be gamebanned too.`);
+			}
+
+			if (cmd.includes('hostban')) {
+				Mafia.hostBan(room, userid, reason, duration);
+			} else {
+				Mafia.gameBan(room, userid, reason, duration);
+			}
+
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, reason);
+			this.privateModAction(`${targetUser} was (name)banned from ${cmd.includes('hostban') ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
+		},
+		namehostbanhelp: [
+			`/mafia hostbanname [user], [reason], [duration] - Ban a username from hosting games for [duration] days. Requires % @ # ~`,
+			`/mafia gamebanname [user], [reason], [duration] - Ban a username from playing games for [duration] days. Requires % @ # ~`,
+		],
+
+		nameban: 'namegamebanhelp',
+		namebanhelp: 'namegamebanhelp',
+		namegamebanhelp() {
 			this.parse('/mafia hostbanhelp');
 		},
 
@@ -4069,23 +4214,156 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # ~`],
-		listdata(target, room, user) {
-			if (!(target in MafiaData)) {
-				throw new Chat.ErrorMessage(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
+
+		randtheme: 'listdata',
+		randrole: 'listdata',
+		randalignment: 'listdata',
+		randidea: 'listdata',
+		randterm: 'listdata',
+		randroles: 'listdata',
+		randalignments: 'listdata',
+		randideas: 'listdata',
+		randterms: 'listdata',
+		randdata: 'listdata',
+		randomtheme: 'listdata',
+		randomrole: 'listdata',
+		randomalignment: 'listdata',
+		randomidea: 'listdata',
+		randomterm: 'listdata',
+		randomdata: 'listdata',
+		randomthemes: 'listdata',
+		randomroles: 'listdata',
+		randomalignments: 'listdata',
+		randomideas: 'listdata',
+		randomterms: 'listdata',
+		randthemes: 'listdata',
+		listthemes: 'listdata',
+		listroles: 'listdata',
+		listalignments: 'listdata',
+		listideas: 'listdata',
+		listterms: 'listdata',
+		themes: 'listdata',
+		roles: 'listdata',
+		alignments: 'listdata',
+		ideas: 'listdata',
+		terms: 'listdata',
+		ds: 'listdata',
+		search: 'listdata',
+		random: 'listdata',
+		list: 'listdata',
+		listdata(target, room, user, connection, cmd, message) {
+			if (!this.runBroadcast()) return false;
+
+			// Determine non-search targets first, afterward searching is done with the remainder
+			const targets = target.split(',').map(x => x.trim().toLowerCase());
+
+			// Determine search type
+			let searchType: keyof MafiaData = 'aliases';
+			let foundSearchType = false;
+			const searchTypes: (keyof MafiaData)[] = ['themes', 'roles', 'alignments', 'IDEAs', 'terms', 'aliases'];
+			for (const type of searchTypes) {
+				const typeID = toID(type.substring(0, type.length - 1));
+				if (cmd.includes(typeID) || targets.includes(typeID)) {
+					searchType = type;
+					foundSearchType = true;
+					if (targets.includes(type)) targets.splice(targets.indexOf(type), 1);
+				}
 			}
-			const dataSource = MafiaData[target as keyof MafiaData];
-			if (dataSource === MafiaData.aliases) {
-				const aliases = Object.entries(MafiaData.aliases)
-					.map(([from, to]) => `${from}: ${to}`)
-					.join('<br/>');
-				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
-			} else {
-				const entries = Object.entries(dataSource)
-					.map(([key, data]) => `<button class="button" name="send" value="/mafia dt ${key}">${data.name}</button>`)
-					.join('');
-				return this.sendReplyBox(`Mafia ${target}:<br/>${entries}`);
+			if (cmd === 'random' || cmd === 'randomdata' || cmd === 'randdata') {
+				searchType =
+					([`themes`, `roles`, `alignments`, `IDEAs`, `terms`] as (keyof MafiaData)[])[Math.floor(Math.random() * 5)];
+				foundSearchType = true;
+			}
+
+			if (!foundSearchType) {
+				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).filter(key => key !== `aliases`).join(', ')}.`);
+			}
+
+			const dataSource = MafiaData[searchType];
+
+			// determine whether the command should return a random subset of results
+			const random = (cmd.includes('rand') || targets.includes(`random`));
+			if (targets.includes(`random`)) targets.splice(targets.indexOf(`random`), 1);
+
+			// TODO: hide certain roles from appearing (unless the command includes the 'hidden' parameter)
+
+			// Number of results
+			let number = random ? 1 : 0;
+			for (let i = 0; i < targets.length; i++) {
+				if ((!!targets[i] &&
+					!isNaN(Number(targets[i].toString())))) {
+					number = Number(targets[i]);
+					targets.splice(i, 1);
+					break;
+				}
+
+				// Convert to rows
+				const themeRow = function (theme: MafiaDataTheme, players = 0) {
+					return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia theme ${theme.name}" > ${theme.name} </button> </td><td style="text-align:left;width:70%">${players > 0 ? theme[players] : theme.desc} </td></tr >`;
+				};
+				const ideaRow = function (idea: MafiaDataIDEA) {
+					return `<tr><td style="text-align:left;width:100%" ><button class="button" name = "send" value = "/mafia dt ${idea.name}" > ${idea.name} </button> </td></tr >`;
+				};
+				const row = function (role: MafiaDataRole | MafiaDataTerm | MafiaDataAlignment) {
+					return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
+				};
+
+				if (searchType === `aliases`) {
+					// Handle aliases separately for differing functionality
+					room = this.requireRoom();
+					this.checkCan('mute', null, room);
+					const aliases = Object.entries(MafiaData.aliases)
+						.map(([from, to]) => `${from}: ${to}`)
+						.join('<br/>');
+					return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
+				} else {
+					// Create a table for a pleasant viewing experience
+					let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
+					let entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][] =
+						Object.entries(dataSource).sort();
+
+					for (const targetString of targets) {
+						entries = targetString.split('|').map(x => x.trim())
+							.map(searchTerm => mafiaSearch(entries.slice(), searchTerm, searchType))
+							.reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
+					}
+
+					if (typeof (entries) === 'undefined') return;
+
+					if (random) entries = Utils.shuffle(entries);
+					if (number > 0) entries = entries.slice(0, number);
+
+					if (entries.length === 0) {
+						return this.errorReply(`No ${searchType} found.`);
+					}
+
+					if (entries.length === 1) {
+						this.target = entries[0][0];
+						return this.run((Chat.commands.mafia as Chat.ChatCommands).data as Chat.AnnotatedChatHandler);
+					}
+
+					table += entries
+						.map(([key, data]) => searchType === `themes` ?
+							themeRow(MafiaData[searchType][key]) : searchType === `IDEAs` ?
+								ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType][key]))
+						.join('');
+					table += `</table></div>`;
+					return this.sendReplyBox(table);
+				}
 			}
 		},
+		listdatahelp: [
+			`/mafia roles [parameter, paramater, ...] - Views all Mafia roles. Parameters: theme that must include role, text included in role data.`,
+			`/mafia themes [parameter, paramater, ...] - Views all Mafia themes. Parameters: roles in theme, players(< | <= | = | => | >)[x] for playercounts, text included in theme data.`,
+			`/mafia alignments [parameter, paramater, ...] - Views all Mafia alignments. Parameters: text included in alignment data.`,
+			`/mafia ideas [parameter, paramater, ...] - Views all Mafia IDEAs. Parameters: roles in IDEA, text included in IDEA data.`,
+			`/mafia terms [parameter, paramater, ...] - Views all Mafia terms. Parameters: text included in term data.`,
+			`/mafia randomrole [parameter, paramater, ...] - View a random Mafia role. Parameters: number of roles to be randomly generated, theme that must include role, text included in role data.`,
+			`/mafia randomtheme [parameter, paramater, ...] - View a random Mafia theme. Parameters: number of themes to be randomly generated, roles in theme, players(< | <= | = | => | >)[x] for playercounts, text included in theme data.`,
+			`/mafia randomalignment [parameter, paramater, ...] - View a random Mafia alignment. Parameters: number of alignments to be randomly generated, text included in alignment data.`,
+			`/mafia randomidea [parameter, paramater, ...] - View a random Mafia IDEA. Parameters: number of IDEAs to be randomly generated, roles in IDEA, text included in IDEA data.`,
+			`/mafia randomterm [parameter, paramater, ...] - View a random Mafia term. Parameters: number of terms to be randomly generated, text included in term data.`,
+		],
 
 		disable(target, room, user) {
 			room = this.requireRoom();
@@ -4218,6 +4496,22 @@ export const commands: Chat.ChatCommands = {
 			`/mafia (un)gameban [user], [duration] - Ban a user from playing games for [duration] days. Requires % @ # ~`,
 		].join('<br/>');
 		buf += `</details>`;
+		buf += `</details><details><summary class="button">Mafia Dexsearch Commands</summary>`;
+		buf += [
+			`<br/><strong>Commands to search Mafia data</strong>:<br/>`,
+			`/mafia dt [data] - Views Mafia data.`,
+			`/mafia roles [parameter, paramater, ...] - Views all Mafia roles. Parameters: theme that must include role, text included in role data.`,
+			`/mafia themes [parameter, paramater, ...] - Views all Mafia themes. Parameters: roles in theme, players(< | <= | = | => | >)[x] for playercounts, text included in theme data.`,
+			`/mafia alignments [parameter, paramater, ...] - Views all Mafia alignments. Parameters: text included in alignment data.`,
+			`/mafia ideas [parameter, paramater, ...] - Views all Mafia IDEAs. Parameters: roles in IDEA, text included in IDEA data.`,
+			`/mafia terms [parameter, paramater, ...] - Views all Mafia terms. Parameters: text included in term data.`,
+			`/mafia randomrole [parameter, paramater, ...] - View a random Mafia role. Parameters: number of roles to be randomly generated, theme that must include role, text included in role data.`,
+			`/mafia randomtheme [parameter, paramater, ...] - View a random Mafia theme. Parameters: number of themes to be randomly generated, roles in theme, players(< | <= | = | => | >)[x] for playercounts, text included in theme data.`,
+			`/mafia randomalignment [parameter, paramater, ...] - View a random Mafia alignment. Parameters: number of alignments to be randomly generated, text included in alignment data.`,
+			`/mafia randomidea [parameter, paramater, ...] - View a random Mafia IDEA. Parameters: number of IDEAs to be randomly generated, roles in IDEA, text included in IDEA data.`,
+			`/mafia randomterm [parameter, paramater, ...] - View a random Mafia term. Parameters: number of terms to be randomly generated, text included in term data.`,
+		].join('<br/>');
+		buf += `</details>`;
 
 		return this.sendReplyBox(buf);
 	},
@@ -4232,6 +4526,6 @@ export const roomSettings: Chat.SettingsHandler = room => ({
 	],
 });
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/mafia (custom|add|overwrite)idea');
-});
+}
