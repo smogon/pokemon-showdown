@@ -6848,494 +6848,617 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	// Touhou
 
 	reimuhakurei: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	marisakirisame: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	rumia: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	daiyousei: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	cirno: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	cirnotanned: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hongmeiling: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	koakuma: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	patchouliknowledge: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sakuyaizayoi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	remiliascarlet: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	flandrescarlet: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	lettywhiterock: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	chen: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	alicemargatroid: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	lilywhite: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	lunasaprismriver: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	merlinprismriver: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	lyricaprismriver: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	youmukonpaku: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yuyukosaigyouji: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ranyakumo: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yukariyakumo: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	suikaibuki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	wrigglenightbug: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	mystialorelei: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	keine: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	tewiinaba: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	reiseninaba: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	eirinyagokoro: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kaguyahouraisan: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	fujiwaranomokou: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ayashameimaru: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	medicinemelancholy: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yuukakazami: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	komachionozuka: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	eikishiki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	shizuhaaki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	minorikoaki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hinakagiyama: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	nitorikawashiro: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	momijiinubashiri: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sanaekochiya: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kanakoyasaka: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	suwakomoriya: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ikunagae: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	tenshihinanawi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kisume: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yamamekurodani: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	parseemizuhashi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yuugihoshiguma: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	satorikomeiji: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	rinkaenbyou: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	utsuhoreiuji: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	koishikomeiji: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	nazrin: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kogasatatara: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ichirinkumoi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ichirinunzan: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	minamitsumurasa: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	shoutoramaru: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	byakurenhijiri: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	nuehoujuu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hatatehimekaidou: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sunnymilk: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	lunachild: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	starsapphire: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kyoukokasodani: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yoshikamiyako: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	seigakaku: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	soganotojiko: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	mononobenofuto: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	toyosatomiminomiko: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	mamizoufutatsuiwa: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kasenibaraki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hatanokokoro: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	wakasagihime: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sekibanki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kagerouimaizumi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	benbentsukumo: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yatsuhashitsukumo: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	seijakijin: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	shinmyoumarusukuna: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	raikohorikawa: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sumirekousami: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	seiran: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	ringo: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	doremysweet: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sagumekishin: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	clownpiece: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	junko: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hecatiaotherworld: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	joonyorigami: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	shionyorigami: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	eternitylarva: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	nemunosakata: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	aunnkomano: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	narumiyatadera: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	maiteireida: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	satononishida: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	okinamatara: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	eikaebisu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	urumiushizaki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	kutakaniwatari: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yachiekicchou: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	mayumijoutouguu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	keikihaniyasushin: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sakikurokuma: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	yuumatoutetsu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	mikegotoukuji: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	takaneyamashiro: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sannyokomakusa: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	misumarutamatsukuri: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	tsukasakudamaki: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	megumuiizunamaru: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	chimatatenkyuu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	momoyohimemushi: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	sonbiten: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	enokomitsugashira: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	chiyaritenkajin: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	hisamiyomotsu: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	zanmunippaku: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
 	vivit: {
+		isNonstandard: "Future",
 		tier: "Toho",
 		doublesTier: "DToho",
 	},
