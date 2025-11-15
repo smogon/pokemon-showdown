@@ -5,8 +5,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
-import { Utils, FS, ProcessManager, Repl } from '../lib';
-import { Config } from './config-loader';
+import { Utils, FS, ProcessManager } from '../lib';
+import * as ConfigLoader from './config-loader';
 import * as path from 'path';
 
 /** Max friends per user */
@@ -390,9 +390,9 @@ const setup = () => {
 };
 
 /** Process manager for main process use. */
-export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
+export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>('friends', module, query => {
 	const { type, statement, data } = query;
-	const start = Date.now();
+	const startTime = Date.now();
 	const result: DatabaseResult = {};
 	try {
 		switch (type) {
@@ -418,7 +418,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 		}
 		return result;
 	}
-	const delta = Date.now() - start;
+	const delta = Date.now() - startTime;
 	if (delta > 1000) {
 		Monitor.slow(`[Slow friends list query] ${JSON.stringify(query)}`);
 	}
@@ -429,30 +429,33 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 	}
 });
 
-if (require.main === module) {
-	global.Config = (require as any)('./config-loader').Config;
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
 	}
-	// since we require this in child processes
-	if (process.mainModule === module) {
-		global.Monitor = {
-			crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
-				const repr = JSON.stringify([error.name, error.message, source, details]);
-				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-			},
-			slow(message: string) {
-				process.send!(`CALLBACK\nSLOW\n${message}`);
-			},
-		} as any;
-		process.on('uncaughtException', err => {
-			if (Config.crashguard) {
-				Monitor.crashlog(err, 'A friends child process');
-			}
-		});
-		// eslint-disable-next-line no-eval
-		Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
-	}
-} else if (!process.send) {
-	PM.spawn(global.Config?.subprocessescache?.friends ?? 1);
+	global.Monitor = {
+		crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(message: string) {
+			process.send!(`CALLBACK\nSLOW\n${message}`);
+		},
+	} as any;
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A friends child process');
+		}
+	});
+	// eslint-disable-next-line no-eval
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['friends'] ?? 1);
+}
+
+export function destroy() {
+	void PM.destroy();
 }
