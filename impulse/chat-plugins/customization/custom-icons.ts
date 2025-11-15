@@ -71,24 +71,34 @@ const updateIcons = async () => {
 const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) =>
 	`<img src="${url}${cacheBuster()}" width="32" height="32">`;
 
-const notifyUser = (userId: string, staffName: string, message: string, icon?: string) => {
+const getSizeDisplay = (size: number) => size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
+
+const sendIconNotifications = (
+	staffUser: User,
+	targetName: string,
+	action: string,
+	url?: string,
+	size: number = DEFAULT_ICON_SIZE
+) => {
+	const userId = toID(targetName);
+	const sizeDisplay = getSizeDisplay(size);
+	const icon = url ? displayIcon(url, size) : '';
+	
 	const user = Users.get(userId);
 	if (user?.connected) {
-		const staffNameColor = nameColor(staffName, true, true);
+		const staffNameColor = nameColor(staffUser.name, true, true);
 		const iconDisplay = icon ? `: ${icon}` : '';
-		const msg = `${staffNameColor} ${message}${iconDisplay}` +
+		const msg = `${staffNameColor} ${action}${sizeDisplay}${iconDisplay}` +
 			`<br /><center>Refresh if you don't see it.</center>`;
 		user.popup(`|html|${msg}`);
 	}
-};
 
-const notifyStaff = (staffName: string, targetName: string, action: string, icon?: string) => {
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
-		const staffNameColor = nameColor(staffName, true, true);
+		const staffNameColor = nameColor(staffUser.name, true, true);
 		const targetNameColor = nameColor(targetName, true, false);
 		const iconDisplay = icon ? `: ${icon}` : '';
-		const msg = `${staffNameColor} ${action} ${targetNameColor}${iconDisplay}`;
+		const msg = `${staffNameColor} ${action.replace('has ', '').replace('your userlist icon', `icon for ${targetNameColor}`)}${iconDisplay}`;
 		room.add(`|html|<div class="infobox">${msg}</div>`).update();
 	}
 };
@@ -128,15 +138,11 @@ export const commands: Chat.ChatCommands = {
 
 			await updateIcons();
 
-			const sizeDisplay = sizeCheck.size !== DEFAULT_ICON_SIZE ?
-				` (${sizeCheck.size}px)` :
-				'';
+			const sizeDisplay = getSizeDisplay(sizeCheck.size);
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetNameColor} an icon${sizeDisplay}.`);
 
-			const icon = displayIcon(imageUrl, sizeCheck.size);
-			notifyUser(userId, user.name, `has set your userlist icon${sizeDisplay}`, icon);
-			notifyStaff(user.name, name, `set icon for`, icon);
+			sendIconNotifications(user, name, 'has set your userlist icon', imageUrl, sizeCheck.size);
 		},
 
 		async update(target, room, user) {
@@ -169,14 +175,12 @@ export const commands: Chat.ChatCommands = {
 			);
 			const size = updatedIcon?.size || DEFAULT_ICON_SIZE;
 			const url = updatedIcon?.url || imageUrl;
-			const sizeDisplay = size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
+			const sizeDisplay = getSizeDisplay(size);
 
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetNameColor}'s icon${sizeDisplay}.`);
 
-			const icon = url ? displayIcon(url, size) : '';
-			notifyUser(userId, user.name, `has updated your userlist icon${sizeDisplay}`, icon);
-			notifyStaff(user.name, name, `updated icon for`, icon);
+			sendIconNotifications(user, name, 'has updated your userlist icon', url, size);
 		},
 
 		async delete(target, room, user) {
@@ -191,8 +195,7 @@ export const commands: Chat.ChatCommands = {
 			await updateIcons();
 
 			this.sendReply(`You removed ${target}'s icon.`);
-			notifyUser(userId, user.name, 'has removed your userlist icon.');
-			notifyStaff(user.name, target, 'removed icon for');
+			sendIconNotifications(user, target, 'has removed your userlist icon');
 		},
 
 		help() {
