@@ -300,6 +300,15 @@ export function handleDamagingMovePreamble(
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 
+	// Steel Roller: Fails if there is no terrain active
+	if (move.id === 'steelroller') {
+		if (!battle.terrain) {
+			messageLog.push(`But it failed! (No terrain active)`);
+			return true;
+		}
+		// Terrain will be removed after damage is dealt (handled separately)
+	}
+
 	const defenderChargingMoveId = defenderSlot.chargingMove;
 	if (defenderChargingMoveId) {
 		let isImmune = true;

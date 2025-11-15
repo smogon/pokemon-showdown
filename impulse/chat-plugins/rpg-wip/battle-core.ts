@@ -1489,6 +1489,13 @@ export function handleDamagingMove(
 			messageLog.push(`${defenderSlot.pokemon.species}'s stat changes were reset!`);
 		}
 
+		// Handle Steel Roller terrain removal
+		if (move.id === 'steelroller' && moveWasSuccessful && battle.terrain) {
+			const terrainName = battle.terrain.type.charAt(0).toUpperCase() + battle.terrain.type.slice(1);
+			battle.terrain = undefined;
+			messageLog.push(`The ${terrainName} Terrain was removed!`);
+		}
+
 		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 
 		// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
