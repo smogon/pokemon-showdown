@@ -258,6 +258,123 @@ export function checkEvolution(
 	return evoMessage;
 }
 
+/**
+ * Helper function to shuffle an array in place (Fisher-Yates)
+ */
+function shuffleArray(array: any[]) {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+}
+
+/**
+ * Assigns a random, viable moveset to a Pokémon for Battle Tower mode.
+ * This function directly uses MANUAL_LEARNSETS as requested, ignoring Dex.learnset.
+ */
+export function assignRandomMoveset(pokemon: RPGPokemon): void {
+	const speciesId = toID(pokemon.species);
+	const learnsetData = MANUAL_LEARNSETS[speciesId];
+
+	if (!learnsetData) {
+		// If species has no manual learnset, keep its default moves.
+		// If it has no moves, give it Tackle as a fallback.
+		if (pokemon.moves.length === 0) {
+			const tackle = getMove('tackle');
+			pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
+		}
+		return;
+	}
+
+	const allMoveIds: string[] = [];
+
+	// 1. Collect all moves from MANUAL_LEARNSETS
+	// From levelup:
+	if (learnsetData.levelup) {
+		for (const entry of learnsetData.levelup) {
+			allMoveIds.push(toID(entry.move));
+		}
+	}
+	// From tm:
+	if (learnsetData.tm) {
+		allMoveIds.push(...learnsetData.tm.map(toID));
+	}
+	// From tutor:
+	if (learnsetData.tutor) {
+		allMoveIds.push(...learnsetData.tutor.map(toID));
+	}
+	// From egg:
+	if (learnsetData.egg) {
+		allMoveIds.push(...learnsetData.egg.map(toID));
+	}
+
+	// 2. Filter for unique, valid moves
+	const uniqueMoveIds = [...new Set(allMoveIds)];
+	const validMoves: Move[] = [];
+	for (const moveId of uniqueMoveIds) {
+		const moveData = getMove(moveId) as Move; // Cast to Move from interface
+		if (moveData && moveData.exists) {
+			// Filter out "do-nothing" moves
+			if (moveData.category === 'Status' && moveData.basePower === 0 && !moveData.status && !moveData.boosts && !moveData.volatileStatus && !moveData.sideCondition && !moveData.pseudoWeather && !moveData.weather && !moveData.terrain && !moveData.flags?.heal) {
+				continue;
+			}
+			validMoves.push(moveData);
+		}
+	}
+
+	if (validMoves.length === 0) {
+		// Fallback if no valid moves found
+		const tackle = getMove('tackle');
+		pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
+		return;
+	}
+
+	// 3. Separate into damaging and status moves
+	const damagingMoves = validMoves.filter(m => m.category === 'Physical' || m.category === 'Special');
+	const statusMoves = validMoves.filter(m => m.category === 'Status');
+
+	// 4. Shuffle arrays for randomness
+	shuffleArray(damagingMoves);
+	shuffleArray(statusMoves);
+
+	const newMoveset: Move[] = [];
+
+	// 5. Select 3-4 damaging moves, 0-1 status moves
+	// Prioritize 1 status move if available, otherwise go for 4 damaging
+	const statusMoveCount = statusMoves.length > 0 ? 1 : 0;
+	const damagingMoveCount = 4 - statusMoveCount;
+
+	// Add damaging moves
+	newMoveset.push(...damagingMoves.slice(0, damagingMoveCount));
+	// Add status move
+	newMoveset.push(...statusMoves.slice(0, statusMoveCount));
+
+	// 6. If not enough damaging moves, fill with more status moves
+	if (newMoveset.length < 4 && statusMoves.length > statusMoveCount) {
+		const needed = 4 - newMoveset.length;
+		newMoveset.push(...statusMoves.slice(statusMoveCount, statusMoveCount + needed));
+	}
+	// 7. If still not enough moves, fill with remaining damaging moves
+	if (newMoveset.length < 4 && damagingMoves.length > damagingMoveCount) {
+		const needed = 4 - newMoveset.length;
+		newMoveset.push(...damagingMoves.slice(damagingMoveCount, damagingMoveCount + needed));
+	}
+
+	// 8. If still not 4 moves (e.g., learnset has < 4 total), just use what we have.
+	// If we somehow have 0, add Tackle.
+	if (newMoveset.length === 0) {
+		const tackle = getMove('tackle');
+		pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
+		return;
+	}
+
+	// 9. Format for RPGPokemon and assign max PP
+	pokemon.moves = newMoveset.map(move => ({
+		id: move.id,
+		pp: move.pp || 5 // Use the move's max PP
+	}));
+}
+
 export const RPGUtils = {
 	getActiveSlots,
 	calculateTotalExpForLevel,
@@ -268,6 +385,7 @@ export const RPGUtils = {
 	checkEvolution,
 	NATURES,
 	NATURE_LIST,
+	assignRandomMoveset,
 };
 
 export default RPGUtils;
