@@ -844,7 +844,8 @@ export const WEATHER_ABILITIES = {
 	'drought': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sun') {
-				battle.weather = { type: 'sun', turns: 5 };
+				const hasHeatRock = battle.magicRoomTurns === 0 && slot.pokemon.item === 'heatrock';
+				battle.weather = { type: 'sun', turns: hasHeatRock ? 8 : 5 };
 				messageLog.push(`${slot.pokemon.species}'s Drought intensified the sun!`);
 			}
 		},
@@ -853,7 +854,8 @@ export const WEATHER_ABILITIES = {
 	'drizzle': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'rain') {
-				battle.weather = { type: 'rain', turns: 5 };
+				const hasDampRock = battle.magicRoomTurns === 0 && slot.pokemon.item === 'damprock';
+				battle.weather = { type: 'rain', turns: hasDampRock ? 8 : 5 };
 				messageLog.push(`${slot.pokemon.species}'s Drizzle caused a downpour!`);
 			}
 		},
@@ -862,7 +864,8 @@ export const WEATHER_ABILITIES = {
 	'sandstream': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sand') {
-				battle.weather = { type: 'sand', turns: 5 };
+				const hasSmoothRock = battle.magicRoomTurns === 0 && slot.pokemon.item === 'smoothrock';
+				battle.weather = { type: 'sand', turns: hasSmoothRock ? 8 : 5 };
 				messageLog.push(`${slot.pokemon.species}'s Sand Stream whipped up a sandstorm!`);
 			}
 		},
@@ -871,7 +874,8 @@ export const WEATHER_ABILITIES = {
 	'snowwarning': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'hail') {
-				battle.weather = { type: 'hail', turns: 5 };
+				const hasIcyRock = battle.magicRoomTurns === 0 && slot.pokemon.item === 'icyrock';
+				battle.weather = { type: 'hail', turns: hasIcyRock ? 8 : 5 };
 				messageLog.push(`${slot.pokemon.species}'s Snow Warning created a hailstorm!`);
 			}
 		},
@@ -931,7 +935,8 @@ export const WEATHER_ABILITIES = {
 	'orichalcumpulse': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sun') {
-				battle.weather = { type: 'sun', turns: 5 };
+				const hasHeatRock = battle.magicRoomTurns === 0 && slot.pokemon.item === 'heatrock';
+				battle.weather = { type: 'sun', turns: hasHeatRock ? 8 : 5 };
 				messageLog.push(`${slot.pokemon.species}'s Orichalcum Pulse created harsh sunlight!`);
 			}
 		},
