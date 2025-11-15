@@ -47,9 +47,7 @@ import {
 	handleMirrorHerb,
 } from './battle-engine';
 import {
-	generateBuyHTML,
 	generateSellMenuHTML,
-	generateSellConfirmHTML,
 	generateExploreHTML,
 	generateRunHTML,
 	generateResetHTML,

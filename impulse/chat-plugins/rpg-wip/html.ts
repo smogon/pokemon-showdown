@@ -42,22 +42,6 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 
 // These were previously inline in the commands and are now dedicated functions.
 
-export function generateMenuHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p><p><button name="send" value="/rpg dbsave" class="button">💾 Save Game</button><button name="send" value="/rpg dbload" class="button">📁 Load Game</button></p></div>`;
-}
-
-export function generateProfileHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p>` +
-		`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
-		`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button> ` +
-		`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
-		generateBottomNavigation() + `</div>`;
-}
-
-export function generateBuyHTML(player: PlayerData, item: Omit<InventoryItem, 'quantity'>, quantity: number, totalCost: number): string {
-	return `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`;
-}
-
 export function generateSellMenuHTML(player: PlayerData): string {
 	let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
@@ -81,10 +65,6 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	}
 	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 	return html;
-}
-
-export function generateSellConfirmHTML(player: PlayerData, item: InventoryItem, quantity: number, totalGain: number): string {
-	return `<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${item.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`;
 }
 
 export function generateExploreHTML(player: PlayerData, availableZones: string[], zoneData: typeof ENCOUNTER_ZONES): string {
@@ -126,10 +106,6 @@ export function generateRunHTML(zoneId: string): string {
 		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
 		`</p>` +
 		`</div>`;
-}
-
-export function generateHealHTML(): string {
-	return `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg explore" class="button">Explore</button></p></div>`;
 }
 
 export function generateResetHTML(): string {
