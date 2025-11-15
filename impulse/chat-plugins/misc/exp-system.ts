@@ -86,13 +86,12 @@ export class ExpSystem {
 		return doc !== null;
 	}
 
-	static async addExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
+	private static async updateExpInDB(
+		userid: string,
+		amount: number,
+		skipCooldown: boolean
+	): Promise<{ currentExp: number; currentLevel: number; newExp: number; newLevel: number }> {
 		const id = toID(userid);
-
-		if (!by && this.isOnCooldown(id)) {
-			return await this.readExp(id);
-		}
-
 		const currentDoc = await ExpDB.findOne({ _id: id });
 		const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
 		const currentLevel = this.getLevel(currentExp);
@@ -111,7 +110,7 @@ export class ExpSystem {
 			{ upsert: true, returnDocument: 'after' }
 		);
 
-		if (!by) {
+		if (!skipCooldown) {
 			this.cooldowns[id] = Date.now();
 		}
 
@@ -119,35 +118,24 @@ export class ExpSystem {
 			this.notifyLevelUp(id, newLevel, currentLevel);
 		}
 
-		return newExp;
+		return { currentExp, currentLevel, newExp, newLevel };
+	}
+
+	static async addExp(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
+		const id = toID(userid);
+
+		if (!by && this.isOnCooldown(id)) {
+			return await this.readExp(id);
+		}
+
+		const result = await this.updateExpInDB(id, amount, !!by);
+		return result.newExp;
 	}
 
 	static async addExpRewards(userid: string, amount: number, reason?: string, by?: string): Promise<number> {
 		const id = toID(userid);
-
-		const currentDoc = await ExpDB.findOne({ _id: id });
-		const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
-		const currentLevel = this.getLevel(currentExp);
-
-		const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
-		const newExp = currentExp + gainedAmount;
-		const newLevel = this.getLevel(newExp);
-
-		await ExpDB.findOneAndUpdate(
-			{ _id: id },
-			{
-				$inc: { exp: gainedAmount },
-				$set: { level: newLevel, lastUpdated: new Date() },
-				$setOnInsert: { _id: id },
-			},
-			{ upsert: true, returnDocument: 'after' }
-		);
-
-		if (newLevel > currentLevel) {
-			this.notifyLevelUp(id, newLevel, currentLevel);
-		}
-
-		return newExp;
+		const result = await this.updateExpInDB(id, amount, true);
+		return result.newExp;
 	}
 
 	static notifyLevelUp(userid: string, newLevel: number, oldLevel: number): void {
