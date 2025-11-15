@@ -61,6 +61,30 @@ const notifyStaffRoom = (message: string) => {
 	}
 };
 
+const sendColorSetNotifications = (
+	setterUser: User,
+	targetName: string,
+	color: string
+) => {
+	const userNameColor = nameColor(setterUser.name, true, true);
+	const targetNameColor = nameColor(targetName, true, false);
+	notifyStaffRoom(`${userNameColor} set custom color for ${targetNameColor} to ${color}.`);
+};
+
+const sendColorDeleteNotifications = (
+	deleterUser: User,
+	targetName: string
+) => {
+	const targetUser = Users.get(targetName);
+	if (targetUser?.connected) {
+		targetUser.popup(`${deleterUser.name} removed your custom color.`);
+	}
+
+	const userNameColor = nameColor(deleterUser.name, true, true);
+	const targetNameColor = nameColor(targetName, true, false);
+	notifyStaffRoom(`${userNameColor} removed custom color for ${targetNameColor}.`);
+};
+
 export const commands: Chat.ChatCommands = {
 	customcolor: {
 		''(target, room, user) {
@@ -91,9 +115,7 @@ export const commands: Chat.ChatCommands = {
 				`|raw|You have given <b><font color="${color}">${escapedName}</font></b> a custom color.`
 			);
 
-			const userNameColor = nameColor(user.name, true, true);
-			const targetNameColor = nameColor(name, true, false);
-			notifyStaffRoom(`${userNameColor} set custom color for ${targetNameColor} to ${color}.`);
+			sendColorSetNotifications(user, name, color);
 		},
 
 		async delete(target, room, user) {
@@ -110,14 +132,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`You removed ${target}'s custom color.`);
 
-			const targetUser = Users.get(target);
-			if (targetUser?.connected) {
-				targetUser.popup(`${user.name} removed your custom color.`);
-			}
-
-			const userNameColor = nameColor(user.name, true, true);
-			const targetNameColor = nameColor(target, true, false);
-			notifyStaffRoom(`${userNameColor} removed custom color for ${targetNameColor}.`);
+			sendColorDeleteNotifications(user, target);
 		},
 
 		preview(target, room, user) {
