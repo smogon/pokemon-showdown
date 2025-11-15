@@ -382,6 +382,10 @@ export function getDamageOffense(
 		const defender = abilityContext.defender; // We need to get the defender context
 		attackStatRaw = defender.atk;
 		statName = 'atk'; // Ensure it uses 'atk' stat stages
+	} else if (move.id === 'bodypress') {
+		// Body Press uses the attacker's Defense stat as Attack
+		attackStatRaw = attacker.def;
+		statName = 'def'; // Use Defense stat modifiers
 	} else {
 		// Standard moves use the attacker's stats
 		attackStatRaw = attacker[statName];
@@ -639,6 +643,8 @@ export function calculateDamage(
 	let attackStage: number;
 	if (move.id === 'foulplay') {
 		attackStage = defenderSlot.statStages.atk;
+	} else if (move.id === 'bodypress') {
+		attackStage = attackerSlot.statStages.def;
 	} else {
 		attackStage = move.category === 'Special' ? attackerSlot.statStages.spa : attackerSlot.statStages.atk;
 	}
