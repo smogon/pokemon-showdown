@@ -10,7 +10,7 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
+import { generateRandomTeam, getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
@@ -59,6 +59,8 @@ import {
 	handleEndOfTurnWeather,
 	handleEndOfTurnFieldEffects,
 } from './battle-eot';
+
+import { getLocationWeatherData, getWeatherStartMessage } from './commands';
 
 export function handleOpponentFaint(
 	battle: BattleState,
