@@ -180,6 +180,7 @@ export function generatePokemonInfoHTML(
 	const chargeTag = slot.isCharged ? `<span style="background-color: #F8D030; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Charged</span>` : '';
 	const stockpileTag = slot.stockpileCount > 0 ? `<span style="background-color: #A890F0; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Stockpile ×${slot.stockpileCount}</span>` : '';
 	const lockedMoveTag = slot.lockedMove ? `<span style="background-color: #A8A878; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Locked</span>` : '';
+	const teraTag = slot.terastallized ? `<span style="background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;">⭐ Tera: ${slot.terastallized}</span>` : '';
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
@@ -214,7 +215,7 @@ export function generatePokemonInfoHTML(
 	// Add the rest of the Pokemon info
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
 
-	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${partiallyTrappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
+	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})${statusTag}${confusedTag}${cursedTag}${seededTag}${nightmareTag}${trappedTag}${partiallyTrappedTag}${tauntTag}${chargingTag}${yawnTag}${substituteTag}${disableTag}${encoreTag}${tormentTag}${focusEnergyTag}${ingrainTag}${aquaRingTag}${magnetRiseTag}${telekinesisTag}${smackdownTag}${embargoTag}${healBlockTag}${chargeTag}${stockpileTag}${lockedMoveTag}${teraTag}${statStageTags}<br><small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
 
 	// Add EXP bar or placeholder for both sides
 	html += expBarHTML;
@@ -283,6 +284,7 @@ export function generateSharedBattlePokemonInfo(
 		slot.isProtected ? '<span style="background-color: #4A90E2; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Protected</span>' : '',
 		slot.isRedirecting ? '<span style="background-color: #D0021B; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Center of Attention</span>' : '',
 		slot.isHelped ? '<span style="background-color: #417505; color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px;">Helped</span>' : '',
+		slot.terastallized ? '<span style="background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white; padding: 1px 4px; border-radius: 3px; font-size: 10px; vertical-align: middle; margin-left: 5px; font-weight: bold;">⭐ Tera: ' + slot.terastallized + '</span>' : '',
 	].filter(Boolean).join('');
 
 	const abilityTags = [
@@ -594,8 +596,19 @@ export function generateSingleBattleHTML(
 		const isEncoredWithNoPP = playerSlot.encoreMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
+		// Check if charging a move with no PP
+		const isChargingWithNoPP = playerSlot.chargingMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.chargingMove)?.pp === 0;
+
+		// Check if locked by Choice item with no PP
+		const isChoiceLockedWithNoPP = playerSlot.lockedMove &&
+			playerSlot.lockedMoveCounter === 0 &&
+			playerSlot.uproarTurns === 0 &&
+			battle.magicRoomTurns === 0 &&
+			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
+
 		// If locked into a move with no PP, show only Struggle button
-		if (isRampagingWithNoPP || isEncoredWithNoPP) {
+		if (isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -864,9 +877,20 @@ export function generateDoubleBattleHTML(
 			const isEncoredWithNoPP = activeSlot.encoreMove &&
 				pokemon.moves.find(m => m.id === activeSlot.encoreMove!.moveId)?.pp === 0;
 
+			// Check if charging a move with no PP
+			const isChargingWithNoPP = activeSlot.chargingMove &&
+				pokemon.moves.find(m => m.id === activeSlot.chargingMove)?.pp === 0;
+
+			// Check if locked by Choice item with no PP
+			const isChoiceLockedWithNoPP = activeSlot.lockedMove &&
+				activeSlot.lockedMoveCounter === 0 &&
+				activeSlot.uproarTurns === 0 &&
+				battle.magicRoomTurns === 0 &&
+				pokemon.moves.find(m => m.id === activeSlot.lockedMove)?.pp === 0;
+
 			let moveButtonsHTML = '';
 
-			if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP) {
+			if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -959,7 +983,7 @@ export function generateBattleTowerHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const currentFloor = battle.floor || 1;
-	
+
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
@@ -967,7 +991,7 @@ export function generateBattleTowerHTML(
 
 	// Battle Tower header
 	const headerHTML = '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; margin-bottom: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">' +
-		'<h2 style="margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🗼 Battle Tower - Floor ' + currentFloor + '</h2>' +
+		'<h2 style="margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🗼 Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
 	// Check if battle has ended first - slots may be null after fainting
@@ -1029,8 +1053,19 @@ export function generateBattleTowerHTML(
 		const isEncoredWithNoPP = playerSlot.encoreMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
+		// Check if charging a move with no PP
+		const isChargingWithNoPP = playerSlot.chargingMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.chargingMove)?.pp === 0;
+
+		// Check if locked by Choice item with no PP
+		const isChoiceLockedWithNoPP = playerSlot.lockedMove &&
+			playerSlot.lockedMoveCounter === 0 &&
+			playerSlot.uproarTurns === 0 &&
+			battle.magicRoomTurns === 0 &&
+			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
+
 		// If locked into a move with no PP, show only Struggle button
-		if (isRampagingWithNoPP || isEncoredWithNoPP) {
+		if (isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
