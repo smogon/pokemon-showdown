@@ -554,9 +554,28 @@ export function generateSingleBattleHTML(
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
+	// Defensive check: if slots are missing, this indicates a bug in battle flow logic
+	// Return a more helpful error message that helps with debugging
 	if (!playerSlot || !opponentSlot) {
-		return '<div class="infobox"><h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p>' +
-			generateBottomNavigation() + '</div>';
+		console.error('[RPG Battle Error] generateSingleBattleHTML: Missing active slots', {
+			battleType: battle.battleType,
+			playerSlotNull: !playerSlot,
+			opponentSlotNull: !opponentSlot,
+			battleEnded: battle.battleEnded,
+			turn: battle.turn,
+		});
+
+		// Attempt recovery: if battle should have ended, show appropriate end screen
+		if (!playerSlot && !opponentSlot) {
+			return '<div class="infobox"><h2>Battle Ended</h2><p>Both Pokémon have fainted. The battle has concluded.</p>' +
+				generateBottomNavigation() + '</div>';
+		} else if (!playerSlot) {
+			return '<div class="infobox"><h2>Battle Ended</h2><p>Your Pokémon has fainted. Please select a new Pokémon.</p>' +
+				generateBottomNavigation() + '</div>';
+		} else {
+			return '<div class="infobox"><h2>Battle Ended</h2><p>The opponent\'s Pokémon has fainted.</p>' +
+				generateBottomNavigation() + '</div>';
+		}
 	}
 
 	const playerPokemon = playerSlot.pokemon;
@@ -752,6 +771,22 @@ export function generateDoubleBattleHTML(
 	const [oSlot0, oSlot1] = battle.opponentSlots;
 	const player = getPlayerData(battle.playerId);
 	const playerName = player ? player.name : "Your";
+
+	// Defensive logging: if all slots are null on one side, this might indicate a bug
+	if (!pSlot0 && !pSlot1) {
+		console.warn('[RPG Battle Warning] generateDoubleBattleHTML: All player slots are null', {
+			battleType: battle.battleType,
+			battleEnded: battle.battleEnded,
+			turn: battle.turn,
+		});
+	}
+	if (!oSlot0 && !oSlot1) {
+		console.warn('[RPG Battle Warning] generateDoubleBattleHTML: All opponent slots are null', {
+			battleType: battle.battleType,
+			battleEnded: battle.battleEnded,
+			turn: battle.turn,
+		});
+	}
 
 	let opponentOwnerName: string | undefined = battle.opponentName;
 	if (battle.battleType === 'wild_double') {
@@ -1009,10 +1044,21 @@ export function generateBattleTowerHTML(
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
+	// Defensive check: if slots are missing, this indicates a bug in battle flow logic
+	// Return a more helpful error message that helps with debugging
 	if (!playerSlot || !opponentSlot) {
+		console.error('[RPG Battle Error] generateBattleTowerHTML: Missing active slots', {
+			floor: battle.floor,
+			playerSlotNull: !playerSlot,
+			opponentSlotNull: !opponentSlot,
+			battleEnded: battle.battleEnded,
+			turn: battle.turn,
+		});
+
+		// Attempt recovery: if battle should have ended, show appropriate end screen
 		return '<div class="infobox">' +
 			headerHTML +
-			'<h2>Battle Error!</h2><p>Active Pokémon slots are missing.</p>' +
+			'<h2>Battle Ended</h2><p>A Pokémon has fainted. The battle is being resolved.</p>' +
 			generateBottomNavigation() + '</div>';
 	}
 

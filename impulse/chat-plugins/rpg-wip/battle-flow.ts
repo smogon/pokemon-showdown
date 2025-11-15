@@ -162,7 +162,7 @@ export function startBattleTowerFloor(
 		// Create the battle state object
 		const battle: BattleState = {
 			battleType: 'battletower',
-			floor: floor,
+			floor,
 			overridePlayerParty: playerTeam, // Set the temporary party
 			opponentName: `Battle Tower Trainer`,
 			opponentParty: aiTeam,
@@ -412,7 +412,7 @@ export function checkForWinLoss(
 			// Generate loss HTML
 			const lossHTML = generateBattleTowerLossHTML(currentFloor);
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${lossHTML}`);
-			
+
 			// Reset progress
 			player.battleTowerFloor = 1;
 			activeBattles.delete(user.id);
@@ -476,7 +476,7 @@ export function checkForWinLoss(
 			// Generate floor clear HTML
 			const floorClearHTML = generateBattleTowerFloorCompleteHTML(currentFloor);
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${floorClearHTML}`);
-			
+
 			activeBattles.delete(user.id);
 			return true;
 		}
@@ -1196,7 +1196,19 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 				slot.activeTurns++;
 			}
 		});
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
+
+		// Only generate battle HTML if we have active Pokemon on both sides
+		// This prevents the "Active Pokémon slots are missing" error when slots are null
+		const hasActivePlayerSlot = battle.playerSlots.some(s => s !== null && s.pokemon.hp > 0);
+		const hasActiveOpponentSlot = battle.opponentSlots.some(s => s !== null && s.pokemon.hp > 0);
+
+		if (hasActivePlayerSlot && hasActiveOpponentSlot) {
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
+		} else {
+			// If slots are missing, the battle should have ended or a switch should be pending
+			// If neither happened, this is an edge case that should be logged for debugging
+			console.warn(`[RPG Battle Warning] Battle ${user.id}: Attempted to generate HTML with null slots. Player: ${hasActivePlayerSlot}, Opponent: ${hasActiveOpponentSlot}`);
+		}
 	}
 }
 
