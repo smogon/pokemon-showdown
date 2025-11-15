@@ -378,18 +378,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	beadsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Beads of Ruin');
+			this.field.addSourcedPseudoWeather('beadsofruin', pokemon, this.effect);
 		},
-		onAnyModifySpD(spd, target, source, move) {
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Beads of Ruin')) return;
-			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
-			if (move.ruinedSpD !== abilityHolder) return;
-			this.debug('Beads of Ruin SpD drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('beadsofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifySpD(spd, target, source, move) {
+				if (this.field.pseudoWeather['beadsofruin'].activeSources.includes(target)) return;
+				this.debug('Beads of Ruin SpD drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Beads of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -4724,18 +4726,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	swordofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Sword of Ruin');
+			this.field.addSourcedPseudoWeather('swordofruin', pokemon, this.effect);
 		},
-		onAnyModifyDef(def, target, source, move) {
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Sword of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
-			this.debug('Sword of Ruin Def drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('swordofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifyDef(def, target, source, move) {
+				if (this.field.pseudoWeather['swordofruin'].activeSources.includes(target)) return;
+				this.debug('Sword of Ruin Def drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Sword of Ruin",
 		rating: 4.5,
 		num: 285,
@@ -4777,18 +4781,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	tabletsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Tablets of Ruin');
+			this.field.addSourcedPseudoWeather('tabletsofruin', pokemon, this.effect);
 		},
-		onAnyModifyAtk(atk, source, target, move) {
-			const abilityHolder = this.effectState.target;
-			if (source.hasAbility('Tablets of Ruin')) return;
-			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
-			if (move.ruinedAtk !== abilityHolder) return;
-			this.debug('Tablets of Ruin Atk drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('tabletsofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifyAtk(atk, target, source, move) {
+				if (this.field.pseudoWeather['tabletsofruin'].activeSources.includes(target)) return;
+				this.debug('Tablets of Ruin Atk drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Tablets of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -5197,18 +5203,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	vesselofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Vessel of Ruin');
+			this.field.addSourcedPseudoWeather('vesselofruin', pokemon, this.effect);
 		},
-		onAnyModifySpA(spa, source, target, move) {
-			const abilityHolder = this.effectState.target;
-			if (source.hasAbility('Vessel of Ruin')) return;
-			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
-			if (move.ruinedSpA !== abilityHolder) return;
-			this.debug('Vessel of Ruin SpA drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('vesselofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifySpA(spa, target, source, move) {
+				if (this.field.pseudoWeather['vesselofruin'].activeSources.includes(target)) return;
+				this.debug('Vessel of Ruin SpA drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Vessel of Ruin",
 		rating: 4.5,
 		num: 284,
