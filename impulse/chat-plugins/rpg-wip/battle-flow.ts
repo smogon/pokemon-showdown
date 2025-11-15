@@ -804,13 +804,13 @@ export function executeMove(
 
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
-		
+
 		// Phase 6: Gulp Missile - Cramorant catches prey when using Surf or Dive
 		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 		if (attackerAbility === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
 			const attacker = attackerSlot.pokemon;
 			const hpPercent = attacker.hp / attacker.maxHp;
-			
+
 			// Gulping Form (Arrokuda) if HP > 50%, Gorging Form (Pikachu) if HP <= 50%
 			if (hpPercent > 0.5) {
 				if (!attacker.species.includes('Gulping')) {
@@ -1323,8 +1323,17 @@ export function executeAction(
 export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number, battle: BattleState): BattleState['pendingActions'][number] {
 	let chosenMoveId = 'struggle';
 
-	// Check if locked into a rampage move (Outrage, Thrash, Petal Dance, Raging Fury)
-	if (aiSlot.lockedMoveCounter && aiSlot.lockedMoveCounter > 0 && aiSlot.lockedMove) {
+	// Check if currently charging a move (Solar Beam, Dig, Fly, etc.)
+	if (aiSlot.chargingMove) {
+		const chargingMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.chargingMove);
+		if (chargingMoveObj && chargingMoveObj.pp > 0) {
+			chosenMoveId = aiSlot.chargingMove;
+		} else {
+			// Charging move has no PP, use Struggle
+			chosenMoveId = 'struggle';
+		}
+	} else if (aiSlot.lockedMoveCounter && aiSlot.lockedMoveCounter > 0 && aiSlot.lockedMove) {
+		// Check if locked into a rampage move (Outrage, Thrash, Petal Dance, Raging Fury)
 		const lockedMoveObj = aiSlot.pokemon.moves.find(m => m.id === aiSlot.lockedMove);
 		if (lockedMoveObj && lockedMoveObj.pp > 0) {
 			chosenMoveId = aiSlot.lockedMove;
@@ -1365,7 +1374,7 @@ export function generateAiAction(aiSlot: ActivePokemonSlot, aiSlotIndex: number,
 	}
 
 	// Normal move selection if not locked
-	if (chosenMoveId === 'struggle' && !aiSlot.lockedMoveCounter && !aiSlot.uproarTurns && !aiSlot.encoreMove) {
+	if (chosenMoveId === 'struggle' && !aiSlot.chargingMove && !aiSlot.lockedMoveCounter && !aiSlot.uproarTurns && !aiSlot.encoreMove) {
 		// First try to find damaging moves
 		let usableMoves = aiSlot.pokemon.moves.filter(m => {
 			const moveData = getMove(m.id);
@@ -1453,6 +1462,20 @@ export function validateMoveAction(
 
 	if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
 		return `${pokemon.species} can't use the same move twice due to Torment!`;
+	}
+
+	// Check if currently charging a move (Solar Beam, Dig, Fly, etc.)
+	if (attackerSlot.chargingMove) {
+		if (attackerSlot.chargingMove !== moveData.id) {
+			// Check if the charging move has PP left
+			const chargingMoveObj = pokemon.moves.find(m => m.id === attackerSlot.chargingMove);
+			if (chargingMoveObj && chargingMoveObj.pp > 0) {
+				const chargingMoveName = getMove(attackerSlot.chargingMove).name;
+				return `${pokemon.species} must continue using ${chargingMoveName}!`;
+			}
+			// If charging move has no PP, allow Struggle (but no other moves)
+			return `${pokemon.species} has no PP left for its charging move!`;
+		}
 	}
 
 	if (attackerSlot.lockedMoveCounter > 0) {

@@ -323,13 +323,13 @@ async function toggleAutotour(
 	const config = ensureRoomConfig(roomid);
 	config.enabled = enable;
 	await saveConfig(roomid);
-	
+
 	if (enable) {
 		startRoomAutotourScheduler(roomid);
 	} else {
 		stopRoomAutotourScheduler(roomid);
 	}
-	
+
 	context.sendReply(`Autotour ${enable ? 'enabled' : 'disabled'} for room ${roomid}.`);
 	room!.add(
 		`|html|<div class="infobox"><center>${user.name} ${enable ? 'enabled' : 'disabled'} auto tournaments in this room.</center></div>`

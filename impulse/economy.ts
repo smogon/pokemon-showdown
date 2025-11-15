@@ -4,7 +4,7 @@
 */
 import { ImpulseDB } from './impulse-db';
 
-export interface EconomyUser { _id: string; balance: number; updatedAt: Date; }
+export interface EconomyUser { _id: string; balance: number; updatedAt: Date }
 export interface Transaction {
 	_id?: unknown;
 	from: string;
@@ -14,8 +14,8 @@ export interface Transaction {
 	reason?: string;
 	timestamp: Date;
 }
-export interface TransferResult { success: boolean; error?: string; fromBalance?: number; toBalance?: number; }
-export interface EconomyStats { totalUsers: number; totalMoney: { totalBalance: number }; }
+export interface TransferResult { success: boolean; error?: string; fromBalance?: number; toBalance?: number }
+export interface EconomyStats { totalUsers: number; totalMoney: { totalBalance: number } }
 
 const EconomyDB = ImpulseDB<EconomyUser>('economy');
 const TransactionsDB = ImpulseDB<Transaction>('transactions');

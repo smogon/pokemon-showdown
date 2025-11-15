@@ -87,7 +87,7 @@ const formatSeenStatus = (targetName: string, status: 'online' | 'never' | 'ago'
 	return `${userNameColor} was last seen <b>${duration}</b> ago.`;
 };
 
-const generateHelpHTML = (title: string, helpList: Array<{ cmd: string, desc: string }>): string => {
+const generateHelpHTML = (title: string, helpList: { cmd: string, desc: string }[]): string => {
 	return `<center><strong>${title}:</strong></center>` +
 		`<hr><ul style="list-style-type:none;padding-left:0;">` +
 		helpList.map(({ cmd, desc }, i) =>

@@ -12,8 +12,8 @@
 
 import { MongoClient, type Db, type Collection, type Document, type Filter, type UpdateFilter, type OptionalId, type FindOptions, type UpdateOptions, type DeleteOptions, type InsertOneOptions, type BulkWriteOptions, type AggregateOptions, type CountDocumentsOptions, type CreateIndexesOptions, type IndexSpecification, type MongoClientOptions, type ClientSession, type TransactionOptions, type CollectionInfo, type ListCollectionsOptions, type RenameOptions } from 'mongodb';
 
-interface ImpulseDBConfig { uri: string; dbName: string; options?: MongoClientOptions; }
-interface GlobalState { client: MongoClient | null; db: Db | null; config: ImpulseDBConfig | null; isConnecting: boolean; connectionPromise: Promise<void> | null; }
+interface ImpulseDBConfig { uri: string; dbName: string; options?: MongoClientOptions }
+interface GlobalState { client: MongoClient | null; db: Db | null; config: ImpulseDBConfig | null; isConnecting: boolean; connectionPromise: Promise<void> | null }
 
 declare const global: { __impulseDBState?: GlobalState, Config?: unknown };
 
@@ -65,9 +65,9 @@ export const getClient = async (): Promise<MongoClient> => {
 	return state.client;
 };
 
-interface PaginatedResult<T> { docs: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrev: boolean; }
-interface BatchUpdateResult { processed: number; updated: number; }
-interface CloneResult { copied: number; }
+interface PaginatedResult<T> { docs: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrev: boolean }
+interface BatchUpdateResult { processed: number; updated: number }
+interface CloneResult { copied: number }
 
 export class ImpulseCollection<T extends Document = Document> {
 	collectionName: string;

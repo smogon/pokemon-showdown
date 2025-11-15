@@ -487,10 +487,10 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	// Phase 1: Supreme Overlord - Boosts based on fallen allies (10% per fainted)
 	'supremeoverlord': (ctx, basePower) => {
 		const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
-		const party = isPlayerAttacker ? 
+		const party = isPlayerAttacker ?
 			ctx.battle.playerSlots.map(s => s?.pokemon).filter(p => p) :
 			ctx.battle.opponentSlots.map(s => s?.pokemon).filter(p => p);
-		
+
 		const faintedCount = party.filter(p => p && p.hp === 0).length;
 		if (faintedCount > 0) {
 			const multiplier = 1 + (faintedCount * 0.1);
@@ -700,10 +700,10 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	// Phase 6: Protosynthesis - Boosts highest stat in harsh sunlight or with Booster Energy
 	'protosynthesis': (pokemon, stat, value, slot, battle) => {
 		// Check if active (in sun or has Booster Energy consumed)
-		const inSun = battle && RPGAbilities.isWeatherActive(battle) && 
+		const inSun = battle && RPGAbilities.isWeatherActive(battle) &&
 			(battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun');
 		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
-		
+
 		if (!inSun && !hasBoosterActive) return value;
 
 		// Determine highest stat
@@ -714,17 +714,17 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			spd: pokemon.spd,
 			spe: pokemon.spe,
 		};
-		
+
 		let highestStat: keyof typeof stats = 'atk';
 		let highestValue = stats.atk;
-		
+
 		for (const [statName, statValue] of Object.entries(stats) as [keyof typeof stats, number][]) {
 			if (statValue > highestValue) {
 				highestValue = statValue;
 				highestStat = statName;
 			}
 		}
-		
+
 		// Boost the highest stat by 1.3x (rounded down in Gen 9)
 		if (stat === highestStat) {
 			return Math.floor(value * 1.3);
@@ -737,7 +737,7 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		// Check if active (in Electric Terrain or has Booster Energy consumed)
 		const inElectricTerrain = battle?.terrain?.type === 'electric';
 		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
-		
+
 		if (!inElectricTerrain && !hasBoosterActive) return value;
 
 		// Determine highest stat
@@ -748,17 +748,17 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			spd: pokemon.spd,
 			spe: pokemon.spe,
 		};
-		
+
 		let highestStat: keyof typeof stats = 'atk';
 		let highestValue = stats.atk;
-		
+
 		for (const [statName, statValue] of Object.entries(stats) as [keyof typeof stats, number][]) {
 			if (statValue > highestValue) {
 				highestValue = statValue;
 				highestStat = statName;
 			}
 		}
-		
+
 		// Boost the highest stat by 1.3x (rounded down in Gen 9)
 		if (stat === highestStat) {
 			return Math.floor(value * 1.3);
@@ -772,12 +772,12 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			// Check if any opponent has Sword of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-			const hasSwordOfRuin = opponents.some(s => 
-				s && s.pokemon.hp > 0 && 
+			const hasSwordOfRuin = opponents.some(s =>
+				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'swordofruin' &&
 				s.pokemon.id !== pokemon.id
 			);
-			
+
 			if (hasSwordOfRuin) {
 				return Math.floor(value * 0.75);
 			}
@@ -790,12 +790,12 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			// Check if any opponent has Tablets of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-			const hasTabletsOfRuin = opponents.some(s => 
-				s && s.pokemon.hp > 0 && 
+			const hasTabletsOfRuin = opponents.some(s =>
+				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'tabletsofruin' &&
 				s.pokemon.id !== pokemon.id
 			);
-			
+
 			if (hasTabletsOfRuin) {
 				return Math.floor(value * 0.75);
 			}
@@ -808,12 +808,12 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			// Check if any opponent has Vessel of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-			const hasVesselOfRuin = opponents.some(s => 
-				s && s.pokemon.hp > 0 && 
+			const hasVesselOfRuin = opponents.some(s =>
+				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'vesselofruin' &&
 				s.pokemon.id !== pokemon.id
 			);
-			
+
 			if (hasVesselOfRuin) {
 				return Math.floor(value * 0.75);
 			}
@@ -826,12 +826,12 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			// Check if any opponent has Beads of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-			const hasBeadsOfRuin = opponents.some(s => 
-				s && s.pokemon.hp > 0 && 
+			const hasBeadsOfRuin = opponents.some(s =>
+				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'beadsofruin' &&
 				s.pokemon.id !== pokemon.id
 			);
-			
+
 			if (hasBeadsOfRuin) {
 				return Math.floor(value * 0.75);
 			}
@@ -942,13 +942,13 @@ export const WEATHER_ABILITIES = {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			const hadWeather = battle.weather !== null;
 			const hadTerrain = battle.terrain !== null;
-			
+
 			battle.weather = null;
 			battle.terrain = null;
-			
+
 			// Set flag to prevent weather/terrain activation (cleared at end of turn)
 			(battle as any).teraformZeroActive = true;
-			
+
 			if (hadWeather || hadTerrain) {
 				messageLog.push(`${slot.pokemon.species}'s Teraform Zero eliminated all effects on the field!`);
 			}
@@ -2287,12 +2287,12 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 		// When hit, Cramorant spits out the catch
 		if ((slot as any).gulpMissileForm && slot.lastDamageTaken) {
 			const form = (slot as any).gulpMissileForm;
-			
+
 			// Revert to normal form
 			if (pokemon.species.includes('Gulping') || pokemon.species.includes('Gorging')) {
 				pokemon.species = 'Cramorant';
 				(slot as any).gulpMissileForm = null;
-				
+
 				// The attacker takes damage and gets affected
 				// This is handled in the battle-core.ts when Cramorant takes damage
 			}
@@ -2556,7 +2556,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
 		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
-		
+
 		if (ally) {
 			// Copy all stat stages from ally
 			slot.statStages = { ...ally.statStages };
@@ -2568,7 +2568,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	if (ability === 'curiousmedicine') {
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-		
+
 		for (const ally of allies) {
 			if (ally && ally.pokemon.id !== pokemon.id && ally.pokemon.hp > 0) {
 				// Reset all negative stat stages
@@ -2594,7 +2594,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
 		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
-		
+
 		if (ally && ally.pokemon.hp < ally.pokemon.maxHp) {
 			const healAmount = Math.floor(ally.pokemon.maxHp * 0.25);
 			ally.pokemon.hp = Math.min(ally.pokemon.maxHp, ally.pokemon.hp + healAmount);
@@ -2617,12 +2617,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
 		const dondozo = allies.find(s => s && s.pokemon.species === 'Dondozo' && s.pokemon.hp > 0);
-		
+
 		if (dondozo) {
 			// Mark Tatsugiri as inside Dondozo (remove from active slot)
 			(slot as any).commanderActive = true;
 			(dondozo as any).commanderBoost = true;
-			
+
 			// Boost Dondozo's stats
 			const statBoosts = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 			for (const stat of statBoosts) {
@@ -2630,7 +2630,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 					dondozo.statStages[stat] = Math.min(6, dondozo.statStages[stat] + 2);
 				}
 			}
-			
+
 			messageLog.push(`${pokemon.species} commanded from inside ${dondozo.pokemon.species}'s mouth!`);
 		}
 	}
@@ -2694,10 +2694,10 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	// Phase 6: Booster Energy - Activate Protosynthesis/Quark Drive abilities
 	if ((ability === 'protosynthesis' || ability === 'quarkdrive') && pokemon.item === 'boosterenergy') {
 		// Check if not already active from weather/terrain
-		const hasWeatherBuff = ability === 'protosynthesis' && battle.weather && 
+		const hasWeatherBuff = ability === 'protosynthesis' && battle.weather &&
 			(battle.weather.type === 'sun' || battle.weather.type === 'harsh-sun');
 		const hasTerrainBuff = ability === 'quarkdrive' && battle.terrain?.type === 'electric';
-		
+
 		if (!hasWeatherBuff && !hasTerrainBuff && !(slot as any).boosterEnergyActive) {
 			// Consume Booster Energy
 			pokemon.item = undefined;

@@ -67,7 +67,7 @@ function generateGiveawayHTML(giveaway: Giveaway): string {
 	let title = 'GIVEAWAY ACTIVE!';
 
 	if (giveaway.type === 'currency') {
-		prizeHTML = `<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize!)} ${CURRENCYNAME}<br />`;
+		prizeHTML = `<strong>Prize:</strong> ${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}<br />`;
 	} else if (giveaway.type === 'tcgcard') {
 		title = 'TCG CARD GIVEAWAY ACTIVE!';
 		const imageUrl = giveaway.cardImageUrl || 'https://via.placeholder.com/160x223?text=No+Image';
@@ -160,7 +160,7 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	let title = 'GIVEAWAY WINNER!';
 
 	if (giveaway.type === 'currency') {
-		prizeText = `${Economy.formatMoney(giveaway.prize!)} ${CURRENCYNAME}`;
+		prizeText = `${Economy.formatMoney(giveaway.prize)} ${CURRENCYNAME}`;
 	} else if (giveaway.type === 'tcgcard') {
 		title = 'TCG CARD GIVEAWAY WINNER!';
 		const imageUrl = giveaway.cardImageUrl || 'https://via.placeholder.com/160x223?text=No+Image';
@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 
 			let prizeDescription = '';
 			if (giveawayType === 'currency') {
-				prizeDescription = Economy.formatMoney(giveaway.prize!);
+				prizeDescription = Economy.formatMoney(giveaway.prize);
 			} else {
 				prizeDescription = giveaway.cardName!;
 			}
@@ -414,7 +414,7 @@ export const commands: Chat.ChatCommands = {
 				const date = g.endedAt ? new Date(g.endedAt).toLocaleString() : 'N/A';
 				let prizeText = '';
 				if (g.type === 'currency') {
-					prizeText = Economy.formatMoney(g.prize!);
+					prizeText = Economy.formatMoney(g.prize);
 				} else if (g.type === 'tcgcard') {
 					prizeText = g.cardName!;
 				}

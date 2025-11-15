@@ -126,7 +126,7 @@ export const commands: Chat.ChatCommands = {
 			const targetNameColor = nameColor(name, true, false);
 			const colorSpan = `<span style="color: ${color}">■</span>`;
 			this.sendReply(`|raw|You have given ${targetNameColor} a symbol color: ${colorSpan}`);
-			
+
 			sendSymbolColorNotifications(user, name, color, 'set');
 		},
 
@@ -158,7 +158,7 @@ export const commands: Chat.ChatCommands = {
 			const targetNameColor = nameColor(name, true, false);
 			const colorSpan = `<span style="color: ${color}">■</span>`;
 			this.sendReply(`|raw|You have updated ${targetNameColor}'s symbol color to: ${colorSpan}`);
-			
+
 			sendSymbolColorNotifications(user, name, color, 'updated');
 		},
 

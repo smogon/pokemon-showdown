@@ -113,7 +113,7 @@ export interface ActivePokemonSlot {
 	consumedBerry?: string; // Track the last berry consumed for Harvest
 	harvestUsedThisTurn?: boolean; // Prevent multiple Harvest triggers per turn
 	cudChewBerry?: string; // Track berry for Cud Chew to consume again
-	
+
 	// Phase 6: New ability-related properties
 	boosterEnergyActive?: boolean; // Track if Booster Energy has been consumed for Protosynthesis/Quark Drive
 	gulpMissileForm?: 'gulping' | 'gorging' | null; // Track Cramorant's Gulp Missile form
@@ -419,18 +419,18 @@ export interface NPCAction {
 	availableHours?: number[]; // Hours when action is available (0-23)
 	// Conditional dialogue
 	dialogueConditions?: {
-		minBadges?: number;
-		maxBadges?: number;
-		requiredFlag?: string;
-		preventIfFlag?: string;
-		dialogue: string;
+		minBadges?: number,
+		maxBadges?: number,
+		requiredFlag?: string,
+		preventIfFlag?: string,
+		dialogue: string,
 	}[];
 	defaultDialogue?: string; // Default dialogue if no conditions match
 	// Achievement
 	achievements?: Record<string, {
-		name: string;
-		requiredFlag?: string;
-		reward?: any;
+		name: string,
+		requiredFlag?: string,
+		reward?: any,
 	}>;
 	// Battle gauntlet
 	gauntletTrainers?: string[]; // List of trainer IDs for gauntlet

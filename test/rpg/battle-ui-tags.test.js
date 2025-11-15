@@ -37,8 +37,8 @@ describe('RPG Battle UI Tags', function () {
 			battle = {
 				playerId: player.id,
 				turn: 1,
-				playerSlots: [{ 
-					pokemon: player.party[0], 
+				playerSlots: [{
+					pokemon: player.party[0],
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
 					sleepCounter: 0,
@@ -55,7 +55,7 @@ describe('RPG Battle UI Tags', function () {
 					isCursed: false,
 					activeTurns: 0,
 				}],
-				opponentSlots: [{ 
+				opponentSlots: [{
 					pokemon: core.createPokemon('rattata', 5),
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
@@ -107,7 +107,7 @@ describe('RPG Battle UI Tags', function () {
 			};
 
 			const battleHTML = html.generateBattleHTML(battle);
-			
+
 			// Check that the HTML contains weather tag integrated with Pokemon status
 			assert(battleHTML.includes('Sunny'), 'Battle HTML should contain "Sunny" weather tag');
 			assert(!battleHTML.includes('Battle Conditions'), 'Battle HTML should NOT have separate Battle Conditions section');
@@ -118,8 +118,8 @@ describe('RPG Battle UI Tags', function () {
 			battle = {
 				playerId: player.id,
 				turn: 1,
-				playerSlots: [{ 
-					pokemon: player.party[0], 
+				playerSlots: [{
+					pokemon: player.party[0],
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
 					sleepCounter: 0,
@@ -136,7 +136,7 @@ describe('RPG Battle UI Tags', function () {
 					isCursed: false,
 					activeTurns: 0,
 				}],
-				opponentSlots: [{ 
+				opponentSlots: [{
 					pokemon: core.createPokemon('rattata', 5),
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
@@ -188,7 +188,7 @@ describe('RPG Battle UI Tags', function () {
 			};
 
 			const battleHTML = html.generateBattleHTML(battle);
-			
+
 			// Check that the HTML contains terrain tag
 			assert(battleHTML.includes('Electric Terrain'), 'Battle HTML should contain "Electric Terrain" tag');
 		});
@@ -198,8 +198,8 @@ describe('RPG Battle UI Tags', function () {
 			battle = {
 				playerId: player.id,
 				turn: 1,
-				playerSlots: [{ 
-					pokemon: player.party[0], 
+				playerSlots: [{
+					pokemon: player.party[0],
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
 					sleepCounter: 0,
@@ -216,7 +216,7 @@ describe('RPG Battle UI Tags', function () {
 					isCursed: false,
 					activeTurns: 0,
 				}],
-				opponentSlots: [{ 
+				opponentSlots: [{
 					pokemon: core.createPokemon('rattata', 5),
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
@@ -267,7 +267,7 @@ describe('RPG Battle UI Tags', function () {
 			};
 
 			const battleHTML = html.generateBattleHTML(battle);
-			
+
 			// Check that the HTML contains field effect tag
 			assert(battleHTML.includes('Trick Room'), 'Battle HTML should contain "Trick Room" tag');
 		});
@@ -277,8 +277,8 @@ describe('RPG Battle UI Tags', function () {
 			battle = {
 				playerId: player.id,
 				turn: 1,
-				playerSlots: [{ 
-					pokemon: player.party[0], 
+				playerSlots: [{
+					pokemon: player.party[0],
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
 					sleepCounter: 0,
@@ -295,7 +295,7 @@ describe('RPG Battle UI Tags', function () {
 					isCursed: false,
 					activeTurns: 0,
 				}],
-				opponentSlots: [{ 
+				opponentSlots: [{
 					pokemon: core.createPokemon('rattata', 5),
 					statStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 },
 					status: null,
@@ -346,7 +346,7 @@ describe('RPG Battle UI Tags', function () {
 			};
 
 			const battleHTML = html.generateBattleHTML(battle);
-			
+
 			// Check that the HTML contains side effect tags
 			assert(battleHTML.includes('Reflect'), 'Battle HTML should contain "Reflect" tag');
 			assert(battleHTML.includes('SR'), 'Battle HTML should contain "SR" (Stealth Rock) tag');

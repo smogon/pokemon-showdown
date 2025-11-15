@@ -146,7 +146,7 @@ export const commands: Chat.ChatCommands = {
 				`${CURRENCYNAME} from you.`;
 			notifyUser(targetUserid, notifyMsg);
 		},
-		
+
 		async stats(): Promise<void> {
 			if (!this.runBroadcast()) return;
 
