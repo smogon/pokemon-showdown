@@ -2195,15 +2195,7 @@ export const commands: ChatCommands = {
 				saveBattleStatus(battle);
 				activeBattles.delete(user.id);
 
-				const runHTML = `<div class="infobox">` +
-					`<h2>Got away safely!</h2>` +
-					`<p>You ran away from the wild Pokemon.</p>` +
-					`<p>` +
-					`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-					`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-					`</p>` +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRunHTML(zoneId)}`);
 			},
 
 			back(target, room, user) {
@@ -2345,8 +2337,7 @@ export const commands: ChatCommands = {
 			playerData.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateResetHTML()}`);
 		},
 
 		unstuck(target, room, user) {
@@ -2363,9 +2354,7 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
-				generateBottomNavigation() + `</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateUnstuckHTML()}`);
 		},
 
 		npc(target, room, user) {
