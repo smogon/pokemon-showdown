@@ -261,6 +261,16 @@ export function getDamageBasePower(
 		basePower *= 2;
 	}
 
+	// Barb Barrage: Power doubles if target is poisoned
+	if (move.id === 'barbbarrage' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
+		basePower *= 2;
+	}
+
+	// Infernal Parade: Power doubles if target has a status condition
+	if (move.id === 'infernalparade' && defenderSlot.status) {
+		basePower *= 2;
+	}
+
 	// Terrain-based power increases
 	if (battle.terrain) {
 		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
