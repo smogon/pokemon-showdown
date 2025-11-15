@@ -62,6 +62,63 @@ import {
 
 import { getLocationWeatherData, getWeatherStartMessage } from './commands';
 
+/**
+ * Get the initial weather for a battle based on the player's location
+ * Converts location weather format to battle weather format
+ * Returns both the active weather and the location weather type for restoration
+ */
+export function getLocationWeatherData(player: PlayerData): {
+	weather: BattleState['weather'],
+	locationWeather: BattleState['locationWeather'],
+} {
+	const locationId = toID(player.location);
+	const location = LOCATIONS[locationId];
+
+	if (!location?.weather) {
+		return { weather: undefined, locationWeather: undefined };
+	}
+
+	// Convert location weather to battle weather format
+	// Exclude 'fog' as per requirements
+	const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
+		'sun': 'sun',
+		'rain': 'rain',
+		'sandstorm': 'sand',
+		'hail': 'hail',
+	};
+
+	const battleWeatherType = weatherMap[location.weather];
+	if (!battleWeatherType) {
+		return { weather: undefined, locationWeather: undefined };
+	}
+
+	// Return weather with very high turn count (9999) for permanent location weather
+	// This effectively makes it permanent since battles rarely last that long
+	// Also return locationWeather for restoration after temporary weather expires
+	return {
+		weather: {
+			type: battleWeatherType,
+			turns: 9999, // Very high number for permanent location-based weather
+		},
+		locationWeather: {
+			type: battleWeatherType,
+		},
+	};
+}
+
+/**
+ * Get the weather message for the start of a battle based on weather type
+ */
+export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'hail'): string {
+	const weatherStartMessages: Record<string, string> = {
+		'sun': 'The sunlight is strong.',
+		'rain': 'It started to rain!',
+		'sand': 'A sandstorm is raging!',
+		'hail': 'It started to hail!',
+	};
+	return weatherStartMessages[weatherType];
+}
+
 export function handleOpponentFaint(
 	battle: BattleState,
 	player: PlayerData,
