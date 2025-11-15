@@ -5,9 +5,9 @@
 import * as crypto from 'crypto';
 import { FS } from '../lib/fs';
 
-interface RGB { R: number; G: number; B: number; }
-interface CustomColors { [userid: string]: string; }
-interface ColorDocument { userid: string; color: string; }
+interface RGB { R: number; G: number; B: number }
+interface CustomColors { [userid: string]: string }
+interface ColorDocument { userid: string; color: string }
 
 let customColors: CustomColors = {};
 const colorCache: Record<string, string> = {};

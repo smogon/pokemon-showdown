@@ -5,7 +5,7 @@
 */
 import { Clans, UserClans, ClanLogs, ClanBans,
 	ClanPointsLogs, ClanWars, ClanBattleLogs,
-		  type ClanDoc } from './database';
+	type ClanDoc } from './database';
 import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interface';
 import { generateThemedTable } from '../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,

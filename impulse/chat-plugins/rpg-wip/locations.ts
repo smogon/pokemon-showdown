@@ -3,7 +3,7 @@
 * RPG Locations Data
 *
 * This file contains location definitions and their encounter zones.
-* 
+*
 * Locations can include scriptedEvents that trigger when players enter or meet conditions.
 * All scripted event handlers are available in scripted-events.ts
 *

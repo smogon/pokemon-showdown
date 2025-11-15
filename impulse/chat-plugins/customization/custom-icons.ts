@@ -28,7 +28,7 @@ const cacheBuster = () => `?v=${Date.now()}`;
 const validateSize = (sizeStr: string | undefined): {
 	valid: boolean,
 	size: number,
-	error?: string
+	error?: string,
 } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
 	const size = parseInt(sizeStr);
@@ -83,7 +83,7 @@ const sendIconNotifications = (
 	const userId = toID(targetName);
 	const sizeDisplay = getSizeDisplay(size);
 	const icon = url ? displayIcon(url, size) : '';
-	
+
 	const user = Users.get(userId);
 	if (user?.connected) {
 		const staffNameColor = nameColor(staffUser.name, true, true);

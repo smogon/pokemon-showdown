@@ -90,7 +90,7 @@ export class ExpSystem {
 		userid: string,
 		amount: number,
 		skipCooldown: boolean
-	): Promise<{ currentExp: number; currentLevel: number; newExp: number; newLevel: number }> {
+	): Promise<{ currentExp: number, currentLevel: number, newExp: number, newLevel: number }> {
 		const id = toID(userid);
 		const currentDoc = await ExpDB.findOne({ _id: id });
 		const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;

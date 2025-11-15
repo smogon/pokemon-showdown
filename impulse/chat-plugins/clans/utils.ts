@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Clans Utility Functions 
+* Clans Utility Functions
 * @author PrinceSky-Git
 */
 import { ClanLogs } from './database';

@@ -1,6 +1,6 @@
 /**
  * Test Script: Check Move-Ability Interactions
- * 
+ *
  * This script verifies that all moves correctly interact with all abilities.
  * It checks for:
  * 1. Ability immunity checks
@@ -49,7 +49,7 @@ function createMockPokemon(species: string, ability: string): RPGPokemon {
 		spa: 100,
 		spd: 100,
 		spe: 100,
-		ability: ability,
+		ability,
 		nature: 'Hardy',
 		item: undefined,
 		status: null,
@@ -163,33 +163,33 @@ function createMockBattle(): BattleState {
 // Test 1: Check Immunity Abilities
 function testImmunityAbilities(): void {
 	console.log('\n=== Testing Immunity Abilities ===');
-	
+
 	const immunityAbilities = Object.keys(RPGAbilities.IMMUNITY_ABILITIES);
 	console.log(`Found ${immunityAbilities.length} immunity abilities to test`);
-	
+
 	// Get all moves from Dex
 	const allDexMoves = Array.from(Dex.moves.all());
 	const allCustomMoves = Object.values(CUSTOM_MOVES);
-	
+
 	console.log(`Testing ${allDexMoves.length} Dex moves and ${allCustomMoves.length} custom moves`);
-	
+
 	for (const abilityId of immunityAbilities) {
 		const ability = Dex.abilities.get(abilityId);
 		if (!ability.exists) continue;
-		
+
 		let testedMoves = 0;
 		let immuneCount = 0;
-		
+
 		// Test with Dex moves
 		for (const dexMove of allDexMoves) {
 			if (!dexMove.exists || dexMove.category === 'Status') continue;
-			
+
 			const attacker = createMockPokemon('Pikachu', 'Static');
 			const defender = createMockPokemon('Gyarados', ability.name);
 			const attackerSlot = createMockSlot(attacker);
 			const defenderSlot = createMockSlot(defender);
 			const battle = createMockBattle();
-			
+
 			const ctx: AbilityContext = {
 				attacker,
 				defender,
@@ -199,14 +199,14 @@ function testImmunityAbilities(): void {
 				battle,
 				messageLog: [],
 			};
-			
+
 			const immunityCheck = RPGAbilities.checkImmunity(ctx);
 			if (immunityCheck?.immune) {
 				immuneCount++;
 			}
 			testedMoves++;
 		}
-		
+
 		if (testedMoves > 0) {
 			console.log(`  ${ability.name}: Tested ${testedMoves} moves, ${immuneCount} immune`);
 			result.passed++;
@@ -217,26 +217,26 @@ function testImmunityAbilities(): void {
 // Test 2: Check Power Modifier Abilities
 function testPowerModifierAbilities(): void {
 	console.log('\n=== Testing Power Modifier Abilities ===');
-	
+
 	const powerModAbilities = Object.keys(RPGAbilities.POWER_MODIFIER_ABILITIES);
 	console.log(`Found ${powerModAbilities.length} power modifier abilities to test`);
-	
+
 	const allDexMoves = Array.from(Dex.moves.all()).filter(m => m.exists && m.basePower > 0);
-	
+
 	for (const abilityId of powerModAbilities) {
 		const ability = Dex.abilities.get(abilityId);
 		if (!ability.exists) continue;
-		
+
 		let modifiedCount = 0;
 		let testedCount = 0;
-		
+
 		for (const dexMove of allDexMoves) {
 			const attacker = createMockPokemon('Pikachu', ability.name);
 			const defender = createMockPokemon('Gyarados', 'Intimidate');
 			const attackerSlot = createMockSlot(attacker);
 			const defenderSlot = createMockSlot(defender);
 			const battle = createMockBattle();
-			
+
 			const ctx: AbilityContext = {
 				attacker,
 				defender,
@@ -246,19 +246,19 @@ function testPowerModifierAbilities(): void {
 				battle,
 				messageLog: [],
 			};
-			
+
 			const basePower = 100;
 			const modifiedPower = RPGAbilities.applyPowerModifier(ctx, basePower);
-			
+
 			if (modifiedPower !== basePower) {
 				modifiedCount++;
 			}
 			testedCount++;
-			
+
 			// Only test a sample to avoid taking too long
 			if (testedCount >= 20) break;
 		}
-		
+
 		console.log(`  ${ability.name}: Tested ${testedCount} moves, ${modifiedCount} modified`);
 		result.passed++;
 	}
@@ -267,14 +267,14 @@ function testPowerModifierAbilities(): void {
 // Test 3: Check Type Modifier Abilities
 function testTypeModifierAbilities(): void {
 	console.log('\n=== Testing Type Modifier Abilities ===');
-	
+
 	const typeModAbilities = Object.keys(RPGAbilities.TYPE_MODIFIER_ABILITIES);
 	console.log(`Found ${typeModAbilities.length} type modifier abilities to test`);
-	
+
 	for (const abilityId of typeModAbilities) {
 		const ability = Dex.abilities.get(abilityId);
 		if (!ability.exists) continue;
-		
+
 		// Test with a Normal-type move
 		const normalMove = Dex.moves.get('tackle');
 		const attacker = createMockPokemon('Pikachu', ability.name);
@@ -282,7 +282,7 @@ function testTypeModifierAbilities(): void {
 		const attackerSlot = createMockSlot(attacker);
 		const defenderSlot = createMockSlot(defender);
 		const battle = createMockBattle();
-		
+
 		const ctx: AbilityContext = {
 			attacker,
 			defender,
@@ -292,10 +292,10 @@ function testTypeModifierAbilities(): void {
 			battle,
 			messageLog: [],
 		};
-		
+
 		const originalType = normalMove.type;
 		const modifiedType = RPGAbilities.applyTypeModifier(ctx, originalType);
-		
+
 		if (modifiedType !== originalType) {
 			console.log(`  ${ability.name}: Changed ${originalType} to ${modifiedType}`);
 		} else {
@@ -308,13 +308,13 @@ function testTypeModifierAbilities(): void {
 // Test 4: Check for Missing Move Flags
 function testMoveFlagsCompleteness(): void {
 	console.log('\n=== Testing Move Flags Completeness ===');
-	
+
 	const importantFlags = ['contact', 'sound', 'powder', 'punch', 'bite', 'pulse', 'bullet'];
 	const allDexMoves = Array.from(Dex.moves.all()).filter(m => m.exists && m.basePower > 0);
-	
+
 	let missingFlagsCount = 0;
 	const movesWithMissingFlags: string[] = [];
-	
+
 	for (const move of allDexMoves) {
 		let hasAnyFlag = false;
 		for (const flag of importantFlags) {
@@ -323,13 +323,13 @@ function testMoveFlagsCompleteness(): void {
 				break;
 			}
 		}
-		
+
 		if (!hasAnyFlag && move.category !== 'Status') {
 			movesWithMissingFlags.push(move.name);
 			missingFlagsCount++;
 		}
 	}
-	
+
 	if (missingFlagsCount > 0) {
 		result.warnings++;
 		result.warnings_list.push(
@@ -345,10 +345,10 @@ function testMoveFlagsCompleteness(): void {
 // Test 5: Check Custom Moves Integration
 function testCustomMovesIntegration(): void {
 	console.log('\n=== Testing Custom Moves Integration ===');
-	
+
 	const customMoves = Object.values(CUSTOM_MOVES);
 	console.log(`Found ${customMoves.length} custom moves to test`);
-	
+
 	for (const customMove of customMoves) {
 		// Test if custom move works with immunity abilities
 		const attacker = createMockPokemon('Pikachu', 'Static');
@@ -356,7 +356,7 @@ function testCustomMovesIntegration(): void {
 		const attackerSlot = createMockSlot(attacker);
 		const defenderSlot = createMockSlot(defender);
 		const battle = createMockBattle();
-		
+
 		const ctx: AbilityContext = {
 			attacker,
 			defender,
@@ -366,37 +366,37 @@ function testCustomMovesIntegration(): void {
 			battle,
 			messageLog: [],
 		};
-		
+
 		// Test immunity check
 		const immunityCheck = RPGAbilities.checkImmunity(ctx);
-		
+
 		// Test power modifier
 		if (customMove.basePower > 0) {
 			const modifiedPower = RPGAbilities.applyPowerModifier(ctx, customMove.basePower);
 		}
-		
+
 		result.passed++;
 	}
-	
+
 	console.log(`  All ${customMoves.length} custom moves passed integration tests`);
 }
 
 // Test 6: Check Ability-Move Edge Cases
 function testEdgeCases(): void {
 	console.log('\n=== Testing Edge Cases ===');
-	
+
 	// Test 6.1: Sound moves with Soundproof
 	const soundMoves = ['hypervoice', 'boomburst', 'round'];
 	for (const moveId of soundMoves) {
 		const move = Dex.moves.get(moveId);
 		if (!move.exists) continue;
-		
+
 		const attacker = createMockPokemon('Pikachu', 'Static');
 		const defender = createMockPokemon('Voltorb', 'Soundproof');
 		const attackerSlot = createMockSlot(attacker);
 		const defenderSlot = createMockSlot(defender);
 		const battle = createMockBattle();
-		
+
 		const ctx: AbilityContext = {
 			attacker,
 			defender,
@@ -406,9 +406,9 @@ function testEdgeCases(): void {
 			battle,
 			messageLog: [],
 		};
-		
+
 		const immunityCheck = RPGAbilities.checkImmunity(ctx);
-		
+
 		if (move.flags.sound && !immunityCheck?.immune) {
 			result.failed++;
 			result.issues.push(`Sound move ${move.name} should be blocked by Soundproof but isn't`);
@@ -416,19 +416,19 @@ function testEdgeCases(): void {
 			result.passed++;
 		}
 	}
-	
+
 	// Test 6.2: Ground moves with Levitate
 	const groundMoves = ['earthquake', 'dig', 'earthpower'];
 	for (const moveId of groundMoves) {
 		const move = Dex.moves.get(moveId);
 		if (!move.exists) continue;
-		
+
 		const attacker = createMockPokemon('Pikachu', 'Static');
 		const defender = createMockPokemon('Bronzong', 'Levitate');
 		const attackerSlot = createMockSlot(attacker);
 		const defenderSlot = createMockSlot(defender);
 		const battle = createMockBattle();
-		
+
 		const ctx: AbilityContext = {
 			attacker,
 			defender,
@@ -438,9 +438,9 @@ function testEdgeCases(): void {
 			battle,
 			messageLog: [],
 		};
-		
+
 		const immunityCheck = RPGAbilities.checkImmunity(ctx);
-		
+
 		if (move.type === 'Ground' && !immunityCheck?.immune) {
 			result.failed++;
 			result.issues.push(`Ground move ${move.name} should be blocked by Levitate but isn't`);
@@ -448,14 +448,14 @@ function testEdgeCases(): void {
 			result.passed++;
 		}
 	}
-	
+
 	// Test 6.3: Mold Breaker bypassing abilities
 	const moldBreakerAttacker = createMockPokemon('Excadrill', 'Mold Breaker');
 	const levitateDefender = createMockPokemon('Bronzong', 'Levitate');
 	const attackerSlot = createMockSlot(moldBreakerAttacker);
 	const defenderSlot = createMockSlot(levitateDefender);
 	const battle = createMockBattle();
-	
+
 	const earthPower = Dex.moves.get('earthpower');
 	const ctx: AbilityContext = {
 		attacker: moldBreakerAttacker,
@@ -466,9 +466,9 @@ function testEdgeCases(): void {
 		battle,
 		messageLog: [],
 	};
-	
+
 	const immunityCheck = RPGAbilities.checkImmunity(ctx);
-	
+
 	if (immunityCheck?.immune) {
 		result.failed++;
 		result.issues.push(`Mold Breaker should bypass Levitate but doesn't`);
@@ -483,41 +483,41 @@ function runAllTests(): void {
 	console.log('========================================');
 	console.log('  Move-Ability Interaction Test Suite');
 	console.log('========================================');
-	
+
 	testImmunityAbilities();
 	testPowerModifierAbilities();
 	testTypeModifierAbilities();
 	testMoveFlagsCompleteness();
 	testCustomMovesIntegration();
 	testEdgeCases();
-	
+
 	console.log('\n========================================');
 	console.log('           Test Results');
 	console.log('========================================');
 	console.log(`Passed: ${result.passed}`);
 	console.log(`Failed: ${result.failed}`);
 	console.log(`Warnings: ${result.warnings}`);
-	
+
 	if (result.issues.length > 0) {
 		console.log('\n=== Issues Found ===');
 		for (const issue of result.issues) {
 			console.log(`  ❌ ${issue}`);
 		}
 	}
-	
+
 	if (result.warnings_list.length > 0) {
 		console.log('\n=== Warnings ===');
 		for (const warning of result.warnings_list) {
 			console.log(`  ⚠️  ${warning}`);
 		}
 	}
-	
+
 	if (result.failed === 0 && result.issues.length === 0) {
 		console.log('\n✅ All tests passed! All moves correctly interact with all abilities.');
 	} else {
 		console.log('\n❌ Some tests failed. Please review the issues above.');
 	}
-	
+
 	console.log('========================================\n');
 }
 

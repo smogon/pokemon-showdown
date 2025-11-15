@@ -119,7 +119,7 @@ export const commands: Chat.ChatCommands = {
 
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetNameColor} the custom symbol: ${symbol}`);
-			
+
 			sendSymbolNotifications(user, name, symbol, 'set');
 		},
 
@@ -144,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetNameColor}'s custom symbol to: ${symbol}`);
-			
+
 			sendSymbolNotifications(user, name, symbol, 'updated');
 		},
 
