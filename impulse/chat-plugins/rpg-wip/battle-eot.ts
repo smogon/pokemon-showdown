@@ -28,7 +28,6 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 	const status = slot.status;
 
 	if (status === 'brn') {
-		// Phase 2: Heatproof prevents burn damage
 		const ability = toID(pokemon.ability || '');
 		if (ability !== 'heatproof') {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
@@ -310,7 +309,6 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 		}
 	}
 
-	// Phase 1: Reset Harvest tracking for next turn
 	if (slot.harvestUsedThisTurn) {
 		slot.harvestUsedThisTurn = false;
 	}

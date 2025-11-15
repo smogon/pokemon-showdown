@@ -50,11 +50,9 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
 
-	// Phase 4: Delta Stream - Strong winds negate Flying-type weaknesses
 	const hasStrongWinds = battle.weather?.type === 'strong-winds';
 	const isFlyingType = defenderTypes.includes('Flying');
 
-	// Phase 2: Mind's Eye - Hits Ghost types with Normal/Fighting moves
 	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
 	const hasMindEye = attackerAbility === 'mindseye';
 	// Scrappy - Allows Normal/Fighting moves to hit Ghost types
@@ -174,7 +172,6 @@ export function getStatMultiplier(stage: number): number {
 export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
 	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 	if (RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
-		// Continue if ability is ignored
 	} else if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
 		return 0;
 	}
@@ -186,7 +183,6 @@ export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSl
 	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
 
-	// Phase 2: Merciless - always crit against poisoned targets
 	const abilityId = toID(attacker.ability || '');
 	if (abilityId === 'merciless' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
 		return 1;
@@ -387,7 +383,6 @@ export function getDamageOffense(
 		attackStatRaw = attacker.def;
 		statName = 'def'; // Use Defense stat modifiers
 	} else {
-		// Standard moves use the attacker's stats
 		attackStatRaw = attacker[statName];
 	}
 
@@ -924,7 +919,6 @@ export function applyPostDamageContactEffects(
 	}
 }
 
-// Phase 2: Handle abilities that trigger when a Pokemon is hit
 export function handleOnHitAbilityResponses(
 	attackerSlot: ActivePokemonSlot,
 	defenderSlot: ActivePokemonSlot,
@@ -1028,7 +1022,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Phase 3: Anger Shell - When HP drops below 50%, lowers Def and Sp. Def, raises Atk, Sp. Atk, and Speed
 	if (defenderAbility === 'angershell' && damageDealt > 0) {
 		const hpBefore = defender.hp + damageDealt;
 		const halfHP = defender.maxHp / 2;
@@ -1061,19 +1054,16 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Phase 4: Seed Sower - Creates Grassy Terrain when hit
 	if (defenderAbility === 'seedsower' && damageDealt > 0 && battle.terrain?.type !== 'grassy') {
 		battle.terrain = { type: 'grassy', turns: 5 };
 		messageLog.push(`${defender.species}'s Seed Sower created Grassy Terrain!`);
 	}
 
-	// Phase 4: Sand Spit - Creates sandstorm when hit
 	if (defenderAbility === 'sandspit' && damageDealt > 0 && battle.weather?.type !== 'sand') {
 		battle.weather = { type: 'sand', turns: 5 };
 		messageLog.push(`${defender.species}'s Sand Spit created a sandstorm!`);
 	}
 
-	// Phase 1: Steam Engine - Raises Speed by 6 stages when hit by Fire or Water move
 	if (defenderAbility === 'steamengine' && ['Fire', 'Water'].includes(move.type) && damageDealt > 0) {
 		const stages = Math.min(6, 6 - defenderSlot.statStages.spe);
 		if (stages > 0) {
@@ -1083,7 +1073,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Phase 2: Toxic Debris - Scatters Toxic Spikes when hit by physical move
 	if (defenderAbility === 'toxicdebris' && move.category === 'Physical' && damageDealt > 0) {
 		const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
 		const opponentHazards = isDefenderPlayer ? battle.opponentHazards : battle.playerHazards;
@@ -1096,7 +1085,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Phase 6: Gulp Missile - Cramorant spits out catch when hit
 	if (defenderAbility === 'gulpmissile' && damageDealt > 0 && attacker.hp > 0) {
 		const gulpForm = (defenderSlot as any).gulpMissileForm;
 
@@ -1253,7 +1241,6 @@ export function applySecondaryEffects(
 				}
 				messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
 
-				// Phase 2: Poison Puppeteer - Poisoned foes also become confused
 				const attackerAbilityId = toID(attackerSlot.pokemon.ability || '');
 				if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
 					if (!defenderSlot.isConfused) {
@@ -1330,7 +1317,6 @@ export function applySecondaryEffects(
 		}
 	}
 
-	// Phase 1: Stench - 10% chance to flinch when dealing damage
 	const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 	if (attackerAbility === 'stench' && move.category !== 'Status' && defenderSlot.pokemon.hp > 0) {
 		if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
@@ -1420,7 +1406,6 @@ export function handleDamagingMove(
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
 			if (move.drain && attacker.hp < attacker.maxHp) {
-				// Phase 2: Liquid Ooze - damages attacker instead of healing them
 				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
 					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
@@ -1446,7 +1431,6 @@ export function handleDamagingMove(
 
 			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
 
-			// Phase 2: Handle on-hit ability responses
 			handleOnHitAbilityResponses(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.isCritical);
 
 			handleHPDropEffects(defenderSlot, battle, messageLog);

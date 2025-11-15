@@ -114,7 +114,6 @@ export interface ActivePokemonSlot {
 	harvestUsedThisTurn?: boolean; // Prevent multiple Harvest triggers per turn
 	cudChewBerry?: string; // Track berry for Cud Chew to consume again
 
-	// Phase 6: New ability-related properties
 	boosterEnergyActive?: boolean; // Track if Booster Energy has been consumed for Protosynthesis/Quark Drive
 	gulpMissileForm?: 'gulping' | 'gorging' | null; // Track Cramorant's Gulp Missile form
 	commanderActive?: boolean; // Track if Tatsugiri is inside Dondozo

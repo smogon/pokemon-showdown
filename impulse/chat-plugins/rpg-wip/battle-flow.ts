@@ -265,7 +265,6 @@ export function handleOpponentFaint(
 					RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
 				}
 
-				// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
 				const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
 				for (const activeSlot of allActiveSlots) {
 					if (activeSlot.pokemon.hp > 0) {
@@ -331,7 +330,6 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 					}
 				}
 
-				// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
 				const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
 				for (const activeSlot of allActiveSlots) {
 					if (activeSlot.pokemon.hp > 0) {
@@ -629,7 +627,6 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 		messageLog.push(`${attacker.species} flinched and couldn't move!`);
 		attackerSlot.willFlinch = false;
 
-		// Phase 2: Steadfast - Boosts Speed when flinched
 		const ability = toID(attacker.ability || '');
 		if (ability === 'steadfast' && attackerSlot.statStages.spe < 6) {
 			attackerSlot.statStages.spe++;
@@ -656,7 +653,6 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 			return true;
 		}
 
-		// Phase 2: Early Bird - Wake up twice as fast (decrement counter by 2 instead of 1)
 		const ability = toID(attacker.ability || '');
 		const decrementAmount = ability === 'earlybird' ? 2 : 1;
 		attackerSlot.sleepCounter -= decrementAmount;
@@ -917,7 +913,6 @@ export function executeMove(
 		}
 
 		if (move.id !== 'struggle') {
-			// Phase 2: Unseen Fist - Contact moves ignore Protect/Detect
 			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 			const bypassesProtect = attackerAbility === 'unseenfist' && move.flags.contact;
 
@@ -928,7 +923,6 @@ export function executeMove(
 		}
 
 		let moveHit = true;
-		// Phase 1: No Guard - Moves always hit if attacker or defender has No Guard
 		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 		const hasNoGuard = attackerAbility === 'noguard' || defenderAbility === 'noguard';
@@ -937,7 +931,6 @@ export function executeMove(
 			// Moves like Aerial Ace always hit, or No Guard is active
 		} else if (move.accuracy !== true) {
 			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
-			// Phase 2: Mind's Eye - Ignores evasion
 			const ignoresEvasion = attackerAbility === 'mindseye';
 			const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = move.accuracy;
@@ -1018,7 +1011,6 @@ export function executeMove(
 	if (attackerSlot && attackerSlot.pokemon.hp > 0) {
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
 
-		// Phase 6: Gulp Missile - Cramorant catches prey when using Surf or Dive
 		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 		if (attackerAbility === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
 			const attacker = attackerSlot.pokemon;
@@ -1262,7 +1254,6 @@ export function handleSwitchAction(
 		messageLog.push(`${outgoingPokemon.species}'s Natural Cure healed its status!`);
 	}
 
-	// Phase 6: Mark Pokemon with Zero to Hero as having switched out
 	if (outgoingAbility === 'zerotohero' && outgoingPokemon.species.includes('Palafin')) {
 		// Mark on the pokemon object so it persists when creating new slot
 		(outgoingPokemon as any).hasSwitchedOut = true;
@@ -1279,7 +1270,6 @@ export function handleSwitchAction(
 		}
 
 		const newSlot = createActivePokemonSlot(incomingPokemon);
-		// Phase 6: Transfer hasSwitchedOut flag for Zero to Hero
 		if ((incomingPokemon as any).hasSwitchedOut) {
 			(newSlot as any).hasSwitchedOut = true;
 		}
@@ -1298,7 +1288,6 @@ export function handleSwitchAction(
 
 		if (replacement) {
 			const newSlot = createActivePokemonSlot(replacement);
-			// Phase 6: Transfer hasSwitchedOut flag for Zero to Hero
 			if ((replacement as any).hasSwitchedOut) {
 				(newSlot as any).hasSwitchedOut = true;
 			}

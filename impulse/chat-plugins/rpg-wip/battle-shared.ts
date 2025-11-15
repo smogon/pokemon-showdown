@@ -119,7 +119,6 @@ export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]):
 	}
 }
 
-// Phase 1: Handle berry consumption with Cheek Pouch and Harvest tracking
 export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
 
@@ -127,7 +126,6 @@ export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLo
 	slot.consumedBerry = berryId;
 	slot.harvestUsedThisTurn = false; // Reset for next turn
 
-	// Phase 2: Cud Chew - Track berry for eating again at end of turn
 	if (ability === 'cudchew') {
 		slot.cudChewBerry = berryId;
 	}
@@ -138,7 +136,6 @@ export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLo
 	// Activate Unburden
 	activateUnburden(slot, messageLog);
 
-	// Phase 1: Cheek Pouch - Restores 1/3 HP when consuming a Berry
 	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
 		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
 		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
@@ -216,7 +213,6 @@ export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, me
 export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	const pokemon = slot.pokemon;
 
-	// Phase 2: Emergency Exit and Wimp Out - check for auto-switch at low HP
 	if (pokemon.hp > 0 && pokemon.hp <= pokemon.maxHp / 2) {
 		const ability = toID(pokemon.ability || '');
 		if (ability === 'emergencyexit' || ability === 'wimpout') {
@@ -231,7 +227,6 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
-	// Phase 1: Unnerve - Prevents opponents from eating berries
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
@@ -244,12 +239,10 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	let consumedItemName = '';
 
 	const halfHP = pokemon.maxHp / 2;
-	// Phase 1: Gluttony - Activates pinch berries at 50% HP instead of 25%
 	const hasGluttony = toID(pokemon.ability || '') === 'gluttony';
 	const quarterHP = hasGluttony ? halfHP : pokemon.maxHp / 4;
 
 	if (pokemon.hp <= halfHP && !itemConsumed) {
-		// Phase 3: Ripen - Doubles the effect of berries
 		const hasRipen = toID(pokemon.ability || '') === 'ripen';
 		const ripenMultiplier = hasRipen ? 2 : 1;
 
@@ -290,7 +283,6 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 		};
 
 		if (pinchBerryHP.includes(pokemon.item)) {
-			// Phase 3: Ripen - Doubles the effect of berries
 			const hasRipen = toID(pokemon.ability || '') === 'ripen';
 			const ripenMultiplier = hasRipen ? 2 : 1;
 

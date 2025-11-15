@@ -82,7 +82,6 @@ export function getDamageBasePower(
 		break;
 	case 'grassknot':
 	case 'lowkick':
-		// Phase 2: Use modified weight for Heavy Metal / Light Metal
 		const defenderWeight = RPGAbilities.getModifiedWeight(defender);
 		if (defenderWeight < 10) basePower = 20;
 		else if (defenderWeight < 25) basePower = 40;
@@ -93,7 +92,6 @@ export function getDamageBasePower(
 		break;
 	case 'heavyslam':
 	case 'heatcrash':
-		// Phase 2: Use modified weight for Heavy Metal / Light Metal
 		const attackerWeight = RPGAbilities.getModifiedWeight(attacker);
 		const defenderWeightSlam = RPGAbilities.getModifiedWeight(defender);
 		const weightRatio = attackerWeight / defenderWeightSlam;
@@ -1545,8 +1543,6 @@ export function handleSpecificStatusMove(
 				// Berry items have category 'berry' or their ID ends with 'berry'
 				if (itemData?.category === 'berry' || slot.pokemon.item?.endsWith('berry')) {
 					messageLog.push(`${slot.pokemon.species} consumed its ${itemData?.name || slot.pokemon.item}!`);
-					// TODO: Implement actual berry effects (healing, stat boosts, status cure, etc.)
-					// For now, berries are just consumed without applying their effects
 					slot.pokemon.item = undefined;
 					activateUnburden(slot, messageLog);
 					teatimeAffected++;

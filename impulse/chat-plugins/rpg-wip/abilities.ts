@@ -20,7 +20,6 @@ export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, def
 	return false;
 }
 
-// Persistent - Prevents ability changes
 export function isPersistent(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ability === 'persistent';
@@ -47,7 +46,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Phase 1: Mountaineer - Immunity to Rock-type moves
 	'mountaineer': ctx => {
 		if (ctx.move.type === 'Rock') {
 			return {
@@ -80,7 +78,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Phase 1: Earth Eater - Immunity to Ground-type moves with healing
 	'eartheater': ctx => {
 		if (ctx.move.type === 'Ground') {
 			const healAmount = Math.floor(ctx.defender.maxHp * 0.25);
@@ -93,7 +90,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Phase 1: Well-Baked Body - Immunity to Fire-type moves with Defense boost
 	'wellbakedbody': ctx => {
 		if (ctx.move.type === 'Fire') {
 			let message = `${ctx.defender.species}'s Well-Baked Body blocked the Fire move!`;
@@ -109,7 +105,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		return null;
 	},
 
-	// Phase 1: Wind Power / Wind Rider - Immunity to wind moves with boost
 	'windpower': ctx => {
 		const windMoves = ['twister', 'gust', 'whirlwind', 'hurricane', 'tailwind', 'icy wind', 'heat wave', 'sandstorm', 'blizzard'];
 		if (windMoves.includes(ctx.move.id)) {
@@ -422,7 +417,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Steelworker - 1.5x power for Steel-type moves
 	'steelworker': (ctx, basePower) => {
 		if (ctx.move.type === 'Steel') {
 			return Math.floor(basePower * 1.5);
@@ -430,7 +424,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Transistor - 1.5x power for Electric-type moves
 	'transistor': (ctx, basePower) => {
 		if (ctx.move.type === 'Electric') {
 			return Math.floor(basePower * 1.5);
@@ -438,7 +431,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Dragon's Maw - 1.5x power for Dragon-type moves
 	'dragonsmaw': (ctx, basePower) => {
 		if (ctx.move.type === 'Dragon') {
 			return Math.floor(basePower * 1.5);
@@ -446,7 +438,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Rocky Payload - 1.5x power for Rock-type moves
 	'rockypayload': (ctx, basePower) => {
 		if (ctx.move.type === 'Rock') {
 			return Math.floor(basePower * 1.5);
@@ -454,7 +445,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Sharpness - 1.5x power for slicing moves
 	'sharpness': (ctx, basePower) => {
 		const slicingMoves = [
 			'aerialace', 'aircutter', 'airslash', 'aquacutter', 'behemothblade', 'bitterblade',
@@ -468,7 +458,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 2: Steely Spirit - 1.5x power for Steel moves (user and allies)
 	'steelyspirit': (ctx, basePower) => {
 		if (ctx.move.type === 'Steel') {
 			return Math.floor(basePower * 1.5);
@@ -476,7 +465,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 1: Stakeout - Doubles damage to target that switched in this turn
 	'stakeout': (ctx, basePower) => {
 		if (ctx.defenderSlot.activeTurns === 1) {
 			return Math.floor(basePower * 2);
@@ -484,7 +472,6 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		return basePower;
 	},
 
-	// Phase 1: Supreme Overlord - Boosts based on fallen allies (10% per fainted)
 	'supremeoverlord': (ctx, basePower) => {
 		const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
 		const party = isPlayerAttacker ?
@@ -541,7 +528,6 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 		return moveType;
 	},
 
-	// Phase 1: Liquid Voice - All sound moves become Water-type
 	'liquidvoice': (ctx, moveType) => {
 		if (ctx.move.flags.sound) {
 			return 'Water';
@@ -623,7 +609,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 2: Gorilla Tactics - 1.5x Attack (like Choice Band effect)
 	'gorillatactics': (pokemon, stat, value) => {
 		if (stat === 'atk') {
 			return Math.floor(value * 1.5);
@@ -631,7 +616,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 2: Toxic Boost - 1.5x Attack when poisoned
 	'toxicboost': (pokemon, stat, value, slot) => {
 		const status = slot ? slot.status : pokemon.status;
 		if (stat === 'atk' && (status === 'psn' || status === 'tox')) {
@@ -640,7 +624,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 2: Flare Boost - 1.5x Sp. Atk when burned
 	'flareboost': (pokemon, stat, value, slot) => {
 		const status = slot ? slot.status : pokemon.status;
 		if (stat === 'spa' && status === 'brn') {
@@ -649,7 +632,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 3: Defeatist - Halves Attack and Sp. Atk when HP < 50%
 	'defeatist': (pokemon, stat, value) => {
 		if ((stat === 'atk' || stat === 'spa') && pokemon.hp <= pokemon.maxHp / 2) {
 			return Math.floor(value * 0.5);
@@ -657,7 +639,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 3: Grass Pelt - 1.5x Defense in Grassy Terrain
 	'grasspelt': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'def' && battle?.terrain?.type === 'grassy') {
 			return Math.floor(value * 1.5);
@@ -665,7 +646,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 3: Plus - 1.5x Sp. Atk if ally has Minus or Plus
 	'plus': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spa' && battle) {
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
@@ -681,7 +661,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 4: Hadron Engine - 1.3x Sp. Atk in Electric Terrain
 	'hadronengine': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spa' && battle?.terrain?.type === 'electric') {
 			return Math.floor(value * 1.33);
@@ -689,7 +668,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 4: Orichalcum Pulse - 1.3x Attack in harsh sunlight
 	'orichalcumpulse': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'atk' && battle?.weather?.type === 'sun') {
 			return Math.floor(value * 1.33);
@@ -697,7 +675,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 6: Protosynthesis - Boosts highest stat in harsh sunlight or with Booster Energy
 	'protosynthesis': (pokemon, stat, value, slot, battle) => {
 		// Check if active (in sun or has Booster Energy consumed)
 		const inSun = battle && RPGAbilities.isWeatherActive(battle) &&
@@ -732,7 +709,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		return value;
 	},
 
-	// Phase 6: Quark Drive - Boosts highest stat in Electric Terrain or with Booster Energy
 	'quarkdrive': (pokemon, stat, value, slot, battle) => {
 		// Check if active (in Electric Terrain or has Booster Energy consumed)
 		const inElectricTerrain = battle?.terrain?.type === 'electric';
@@ -901,7 +877,6 @@ export const WEATHER_ABILITIES = {
 		weatherHeal: 'hail',
 	},
 
-	// Phase 4: Delta Stream - Creates strong winds (negates Flying weaknesses)
 	'deltastream': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'strong-winds') {
@@ -911,7 +886,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Phase 4: Desolate Land - Harsh sunlight (prevents Water moves)
 	'desolateland': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'harsh-sun') {
@@ -921,7 +895,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Phase 4: Primordial Sea - Heavy rain (prevents Fire moves)
 	'primordialsea': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'heavy-rain') {
@@ -931,7 +904,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Phase 4: Orichalcum Pulse - Sets harsh sunlight on entry
 	'orichalcumpulse': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.weather?.type !== 'sun') {
@@ -942,7 +914,6 @@ export const WEATHER_ABILITIES = {
 		},
 	},
 
-	// Phase 6: Teraform Zero - Removes weather and terrain on switch-in and prevents them from activating
 	'teraformzero': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			const hadWeather = battle.weather !== null;
@@ -1005,46 +976,38 @@ export const CONTACT_ABILITIES = {
 		value: -1,
 	},
 
-	// Phase 2: Poison Touch - 30% chance to poison on contact
 	'poisontouch': {
 		onContactChance: 0.3,
 		effect: 'psn',
 	},
 
-	// Phase 1: Pickpocket - Steals item from attacker on contact
 	'pickpocket': {
 		stealItem: true,
 	},
 
-	// Phase 1: Water Compaction - Raises Defense by 2 when hit by Water move
 	'watercompaction': {
 		onContactStat: 'def',
 		value: 2,
 		triggerType: 'Water',
 	},
 
-	// Phase 2: Toxic Chain - 30% chance to badly poison on contact
 	'toxicchain': {
 		onContactChance: 0.3,
 		effect: 'tox',
 	},
 
-	// Phase 2: Mummy - Changes attacker's ability to Mummy on contact
 	'mummy': {
 		changeAbility: 'mummy',
 	},
 
-	// Phase 2: Lingering Aroma - Changes attacker's ability to Lingering Aroma on contact
 	'lingeringaroma': {
 		changeAbility: 'lingeringaroma',
 	},
 
-	// Phase 2: Wandering Spirit - Swaps abilities with attacker on contact
 	'wanderingspirit': {
 		swapAbility: true,
 	},
 
-	// Phase 2: Perish Body - Both faint in 3 turns after contact
 	'perishbody': {
 		perishBody: true,
 	},
@@ -1069,7 +1032,6 @@ export const PRIORITY_ABILITIES = {
 		},
 	},
 
-	// Phase 1: Quick Draw - 30% chance to move first with attacking moves
 	'quickdraw': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
 			if (move.category !== 'Status' && Math.random() < 0.3) {
@@ -1079,14 +1041,12 @@ export const PRIORITY_ABILITIES = {
 		},
 	},
 
-	// Phase 1: Stall - Always moves last (negative priority)
 	'stall': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
 			return -9999; // Extremely low priority
 		},
 	},
 
-	// Phase 1: Mycelium Might - Status moves go last but ignore abilities
 	'myceliummight': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
 			if (move.category === 'Status') {
@@ -1119,17 +1079,14 @@ export const ACCURACY_EVASION_ABILITIES = {
 		weatherEvasion: 'hail',
 	},
 
-	// Phase 1: No Guard - Makes all moves always hit (bypasses accuracy/evasion)
 	'noguard': {
 		alwaysHit: true,
 	},
 
-	// Phase 3: Victory Star - Raises accuracy of user and allies by 10%
 	'victorystar': {
 		accuracyMultiplier: 1.1,
 	},
 
-	// Phase 2: Mind's Eye - Ignores evasion, hits Ghost with Normal/Fighting
 	'mindseye': {
 		ignoresEvasion: true,
 		hitsGhosts: true,
@@ -1159,29 +1116,24 @@ export const FORM_CHANGE_ABILITIES = {
 		hpFormChange: true,
 	},
 
-	// Phase 4: Ice Face - Blocks first physical hit in hail/snow
 	'iceface': {
 		blockPhysical: true,
 	},
 
-	// Phase 4: Mimicry - Changes type based on terrain
 	'mimicry': {
 		terrainType: true,
 	},
 
-	// Phase 1: Hunger Switch - Form change between Full Belly and Hangry Mode every turn
 	'hungerswitch': {
 		formChange: true,
 		everyTurn: true,
 	},
 
-	// Phase 1: Zen Mode - Form change when HP drops below 50%
 	'zenmode': {
 		hpFormChange: true,
 		threshold: 0.5,
 	},
 
-	// Phase 6: Gulp Missile - Cramorant catches prey with Surf/Dive, spits it when hit
 	'gulpmissile': {
 		formChange: true,
 		onSurfDive: true,
@@ -1249,7 +1201,6 @@ export const TERRAIN_ABILITIES = {
 		terrainSpeedBoost: 'electric',
 	},
 
-	// Phase 4: Hadron Engine - Sets Electric Terrain on entry
 	'hadronengine': {
 		onSwitchIn: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => {
 			if (battle.terrain?.type !== 'electric') {
@@ -1305,7 +1256,6 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
-	// Phase 2: Grim Neigh - Boosts Sp. Atk on KO
 	'grimneigh': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.statStages.spa < 6) {
@@ -1332,7 +1282,6 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
-	// Phase 2: Soul-Heart - Boosts Sp. Atk when any Pokemon faints
 	'soulheart': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.statStages.spa < 6) {
@@ -1341,14 +1290,12 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
-	// Phase 1: Aftermath - Damages attacker when KO'd (1/4 max HP if contact move)
 	'aftermath': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled in the battle flow when a Pokemon faints from a contact move
 		},
 	},
 
-	// Phase 1: Innards Out - Damages attacker equal to HP lost when KO'd
 	'innardsout': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled in the battle flow when a Pokemon faints
@@ -1367,7 +1314,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 2: Shed Skin - 30% chance to cure status at end of turn
 	'shedskin': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.status && Math.random() < 0.3) {
@@ -1384,13 +1330,11 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			}
 		},
 	},
-	// Phase 1: Color Change - Changes type to match last move hit by
 	'colorchange': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled when Pokemon is hit by a move (see battle flow)
 		},
 	},
-	// Phase 2: Moody - Raises one random stat by 2 stages, lowers another by 1 stage
 	'moody': {
 		handler: (slot, battle, messageLog) => {
 			const stats: (keyof typeof slot.statStages)[] = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -1420,7 +1364,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 1: Healer - 30% chance to heal ally's status at end of turn
 	'healer': {
 		handler: (slot, battle, messageLog) => {
 			if (Math.random() >= 0.3) return;
@@ -1448,7 +1391,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 1: Harvest - 50% chance to restore eaten Berry at end of turn (100% in sun)
 	'harvest': {
 		handler: (slot, battle, messageLog) => {
 			// Only restore if we have a consumed berry and no current item
@@ -1467,7 +1409,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 2: Bad Dreams - Damages sleeping opponents by 1/8 max HP each turn
 	'baddreams': {
 		handler: (slot, battle, messageLog) => {
 			// Find which side this Pokemon is on
@@ -1485,7 +1426,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 2: Cud Chew - Eats berry again at end of turn
 	'cudchew': {
 		handler: (slot, battle, messageLog) => {
 			// If we have a berry to chew and no current item
@@ -1501,21 +1441,18 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		},
 	},
 
-	// Phase 1: Wind Power - Gains Charge when hit by wind move
 	'windpower': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled when hit by wind moves (see battle flow)
 		},
 	},
 
-	// Phase 1: Wind Rider - Boosts Attack when hit by wind move
 	'windrider': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled when hit by wind moves (see battle flow)
 		},
 	},
 
-	// Phase 1: Electromorphosis - Gains Charge when hit
 	'electromorphosis': {
 		handler: (slot, battle, messageLog) => {
 			// This is handled when Pokemon takes damage (see battle flow)
@@ -1549,7 +1486,6 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 			}
 		},
 	},
-	// Phase 1: Mirror Armor - Reflects stat drops back to the attacker
 	'mirrorarmor': {
 		handler: (slot, battle, messageLog, sourceSlot) => {
 			// This is handled during stat drop attempts (see battle-shared.ts)
@@ -1641,7 +1577,6 @@ export const RUIN_ABILITIES = {
 
 // Special Mechanic Abilities - abilities with unique mechanics
 export const SPECIAL_MECHANIC_ABILITIES = {
-	// Phase 1: Protean / Libero - Changes type to match move used
 	'protean': {
 		changeTypeOnMove: true,
 		description: 'Changes the Pokemon\'s type to the type of the move it\'s about to use',
@@ -1650,27 +1585,22 @@ export const SPECIAL_MECHANIC_ABILITIES = {
 		changeTypeOnMove: true,
 		description: 'Changes the Pokemon\'s type to the type of the move it\'s about to use',
 	},
-	// Phase 1: Magician - Steals target's item after attacking
 	'magician': {
 		stealsItemOnHit: true,
 		description: 'Steals the target\'s item when attacking',
 	},
-	// Phase 1: Dancer - Copies dance moves
 	'dancer': {
 		copiesDanceMoves: true,
 		description: 'Automatically uses dance moves after another Pokemon uses one',
 	},
-	// Phase 1: Symbiosis - Passes item to ally when they use theirs
 	'symbiosis': {
 		passesItem: true,
 		description: 'Passes item to ally when they use their item',
 	},
-	// Phase 1: Opportunist - Copies foe's stat boosts
 	'opportunist': {
 		copiesStatBoosts: true,
 		description: 'Copies any stat increases made by opponents',
 	},
-	// Phase 1: Receiver / Power of Alchemy - Copies fallen ally's ability
 	'receiver': {
 		copiesAllyAbility: true,
 		description: 'Copies the ability of a defeated ally',
@@ -1679,7 +1609,6 @@ export const SPECIAL_MECHANIC_ABILITIES = {
 		copiesAllyAbility: true,
 		description: 'Copies the ability of a defeated ally',
 	},
-	// Phase 1: Magic Bounce / Rebound - Reflects status moves
 	'magicbounce': {
 		reflectsStatusMoves: true,
 		description: 'Reflects non-damaging moves back at the user',
@@ -1688,12 +1617,10 @@ export const SPECIAL_MECHANIC_ABILITIES = {
 		reflectsStatusMoves: true,
 		description: 'Reflects non-damaging moves back at the user',
 	},
-	// Phase 1: Wonder Skin - Lowers accuracy of status moves to 50%
 	'wonderskin': {
 		lowersStatusAccuracy: true,
 		description: 'Lowers the accuracy of status moves targeting this Pokemon to 50%',
 	},
-	// Phase 1: Water Bubble - Fire resistance, Attack boost, burn immunity
 	'waterbubble': {
 		fireResistance: 0.5,
 		attackBoost: 2.0,
@@ -1702,7 +1629,6 @@ export const SPECIAL_MECHANIC_ABILITIES = {
 	},
 };
 
-// Phase 1: RPG-specific abilities (implemented in RPG core, not battle system)
 export const RPG_SPECIFIC_ABILITIES = {
 	'noability': {
 		// Placeholder ability with no effect
@@ -1730,24 +1656,20 @@ export const RPG_SPECIFIC_ABILITIES = {
 		postBattlePickup: true,
 		chanceByLevel: true, // Increases with level
 	},
-	// Phase 1: Ball Fetch - Fetches failed Poké Ball after battle
 	'ballfetch': {
 		description: 'Fetches failed Poké Ball after battle (implemented in catch system)',
 		retrievesBall: true,
 	},
-	// Phase 1: Anticipation - Warns about super-effective/OHKO/Explosion moves
 	'anticipation': {
 		description: 'Warns about dangerous moves (implemented in battle start)',
 		warnsDangerousMoves: true,
 	},
-	// Phase 1: Forewarn - Reveals opponent\'s strongest move
 	'forewarn': {
 		description: 'Reveals opponent\'s strongest move (implemented in battle start)',
 		revealsStrongestMove: true,
 	},
 };
 
-// Phase 2: Get modified weight for weight-based moves
 export function getModifiedWeight(pokemon: RPGPokemon): number {
 	const ability = toID(pokemon.ability || '');
 	const species = Dex.species.get(pokemon.species);
@@ -1866,8 +1788,6 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = Math.floor(basePower * 1.2);
 	}
 
-	// Phase 3: Battery - Boosts allies' special moves by 1.3x
-	// Phase 3: Power Spot - Boosts allies' moves by 1.3x
 	const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
 	const attackerAllies = isPlayerAttacker ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
 	const hasBattery = attackerAllies.some(s =>
@@ -1938,14 +1858,12 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: 
 
 export function preventsFlinch(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
-	// Phase 2: Inner Focus prevents flinching
 	return ability === 'innerfocus';
 }
 
 export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState, attacker?: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 
-	// Phase 2: Corrosion - Attacker with Corrosion can poison Steel/Poison types
 	if (attacker && toID(attacker.ability || '') === 'corrosion' && (status === 'psn' || status === 'tox')) {
 		// Corrosion bypasses type immunity but not ability immunity
 		if (ability === 'immunity' || ability === 'purifyingsalt') {
@@ -1978,7 +1896,6 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 		return true;
 	}
 
-	// Phase 1: Leaf Guard - Prevents status in harsh sunlight
 	if (ability === 'leafguard' && battle && isWeatherActive(battle) && battle.weather?.type === 'sun') {
 		return true;
 	}
@@ -2141,21 +2058,18 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
-	// Phase 2: Thick Fat - halves Fire and Ice damage
 	if (defenderAbility === 'thickfat' && (ctx.move.type === 'Fire' || ctx.move.type === 'Ice')) {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.5);
 		}
 	}
 
-	// Phase 2: Heatproof - halves Fire damage
 	if (defenderAbility === 'heatproof' && ctx.move.type === 'Fire') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.5);
 		}
 	}
 
-	// Phase 2: Fluffy - halves contact damage, doubles Fire damage
 	if (defenderAbility === 'fluffy') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			if (ctx.move.flags.contact) {
@@ -2167,21 +2081,18 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
-	// Phase 2: Ice Scales - halves special damage
 	if (defenderAbility === 'icescales' && ctx.move.category === 'Special') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.5);
 		}
 	}
 
-	// Phase 2: Prism Armor - reduces super effective damage (same as Filter/Solid Rock)
 	if (defenderAbility === 'prismarmor' && effectiveness > 1) {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			damage = Math.floor(damage * 0.75);
 		}
 	}
 
-	// Phase 2: Neuroforce - 1.25x damage on super effective hits
 	if (attackerAbility === 'neuroforce' && effectiveness > 1) {
 		damage = Math.floor(damage * 1.25);
 	}
@@ -2195,7 +2106,6 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
-	// Phase 3: Friend Guard - Reduces damage to allies by 25%
 	// Check if there are any allies with Friend Guard
 	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
 	const defenderAllies = isPlayerDefender ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
@@ -2206,7 +2116,6 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		damage = Math.floor(damage * 0.75);
 	}
 
-	// Phase 6: Tera Shell - When at full HP, all damaging moves are not very effective
 	if (defenderAbility === 'terashell' && ctx.defender.hp === ctx.defender.maxHp && ctx.move.category !== 'Status') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 			// Make the attack not very effective (0.5x damage)
@@ -2279,7 +2188,6 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 		}
 	}
 
-	// Phase 6: Tera Shift - Terapagos changes form at the start of battle
 	if (ability === 'terashift') {
 		if (pokemon.species === 'Terapagos' && slot.activeTurns === 1) {
 			pokemon.species = 'Terapagos-Terastal';
@@ -2287,7 +2195,6 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 		}
 	}
 
-	// Phase 6: Gulp Missile - Cramorant catches prey with Surf/Dive
 	if (ability === 'gulpmissile') {
 		// When hit, Cramorant spits out the catch
 		if ((slot as any).gulpMissileForm && slot.lastDamageTaken) {
@@ -2304,7 +2211,6 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 		}
 	}
 
-	// Phase 6: Zero to Hero - Palafin changes form when switching out and back in
 	// This is handled differently - the form changes during the switch, not during battle
 	// Palafin-Hero form is set when it switches in after being out
 }
@@ -2359,7 +2265,6 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
-	// Phase 2: Damp - Prevents self-destruct moves (explosion, selfdestruct, etc.)
 	const allSlots = [...ctx.battle.playerSlots, ...ctx.battle.opponentSlots];
 	const hasDamp = allSlots.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'damp');
 	if (hasDamp && ['explosion', 'selfdestruct', 'mindblown', 'mistyexplosion'].includes(ctx.move.id)) {
@@ -2369,7 +2274,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 		};
 	}
 
-	// Phase 4: Check primal weather preventing moves
 	if (ctx.battle.weather?.type === 'harsh-sun' && ctx.move.type === 'Water') {
 		return {
 			prevented: true,
@@ -2526,7 +2430,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 				} else if (blockAbilities.includes(oppAbility)) {
 					messageLog.push(`${opponentSlot.pokemon.species}'s ${opponentSlot.pokemon.ability} prevents its stats from being lowered!`);
 				} else if (oppAbility === 'guarddog') {
-					// Phase 3: Guard Dog raises Attack when intimidated
 					if (opponentSlot.statStages.atk < 6) {
 						opponentSlot.statStages.atk++;
 						messageLog.push(`${opponentSlot.pokemon.species}'s Guard Dog raised its Attack!`);
@@ -2544,19 +2447,16 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		messageLog.push(`${pokemon.species} is off to a slow start!`);
 	}
 
-	// Phase 3: Dauntless Shield - Raises Defense by 1 stage on switch-in
 	if (ability === 'dauntlessshield' && slot.statStages.def < 6) {
 		slot.statStages.def++;
 		messageLog.push(`${pokemon.species}'s Dauntless Shield raised its Defense!`);
 	}
 
-	// Phase 3: Intrepid Sword - Raises Attack by 1 stage on switch-in
 	if (ability === 'intrepidsword' && slot.statStages.atk < 6) {
 		slot.statStages.atk++;
 		messageLog.push(`${pokemon.species}'s Intrepid Sword raised its Attack!`);
 	}
 
-	// Phase 1: Costar - Copies ally's stat changes on switch-in
 	if (ability === 'costar') {
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
@@ -2569,7 +2469,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 1: Curious Medicine - Resets ally's stats on switch-in
 	if (ability === 'curiousmedicine') {
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
@@ -2594,7 +2493,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 1: Hospitality - Heals ally by 25% on switch-in
 	if (ability === 'hospitality') {
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
@@ -2617,7 +2515,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 6: Commander - Tatsugiri enters the mouth of Dondozo ally
 	if (ability === 'commander' && pokemon.species.includes('Tatsugiri')) {
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
@@ -2640,7 +2537,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 6: Zero to Hero - Palafin switches to Hero form after switching out and back in
 	if (ability === 'zerotohero' && pokemon.species === 'Palafin' && (slot as any).hasSwitchedOut) {
 		pokemon.species = 'Palafin-Hero';
 		(slot as any).hasSwitchedOut = false;
@@ -2667,7 +2563,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		applyStatChange(slot, 'def', 1, battle, messageLog, slot);
 	}
 
-	// Phase 4: Screen Cleaner - Removes screens on switch-in
 	if (ability === 'screencleaner') {
 		const sides = [
 			{ name: 'player', slots: battle.playerSlots },
@@ -2696,7 +2591,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 6: Booster Energy - Activate Protosynthesis/Quark Drive abilities
 	if ((ability === 'protosynthesis' || ability === 'quarkdrive') && pokemon.item === 'boosterenergy') {
 		// Check if not already active from weather/terrain
 		const hasWeatherBuff = ability === 'protosynthesis' && battle.weather &&
@@ -2804,7 +2698,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Phase 1: Pickpocket - Steals item from attacker on contact
 	if (handler.stealItem && attacker.hp > 0 && !ctx.defender.item && attacker.item) {
 		const attackerAbility = toID(attacker.ability || '');
 		// Sticky Hold prevents item removal
@@ -2815,7 +2708,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Phase 2: Mummy - Changes attacker's ability to Mummy on contact
 	if (handler.changeAbility && attacker.hp > 0) {
 		const attackerAbility = toID(attacker.ability || '');
 		// Some abilities cannot be changed (Multitype, Stance Change, etc.)
@@ -2829,7 +2721,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Phase 2: Wandering Spirit - Swaps abilities with attacker on contact
 	if (handler.swapAbility && attacker.hp > 0) {
 		const attackerAbility = toID(attacker.ability || '');
 		const defenderAbilityName = ctx.defender.ability;
@@ -2845,7 +2736,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// Phase 2: Perish Body - Both faint in 3 turns after contact
 	if (handler.perishBody && attacker.hp > 0) {
 		if (!attackerSlot.perishSongCounter) {
 			attackerSlot.perishSongCounter = 3;

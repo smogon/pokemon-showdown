@@ -133,7 +133,7 @@ export const ITEM_PRICES: Record<string, number> = {
 	'eviolite': 8500,
 	'airballoon': 4000,
 	'heatrock': 4000, 'damprock': 4000, 'smoothrock': 4000, 'icyrock': 4000,
-	'boosterenergy': 8000, // Phase 6: Activates Protosynthesis/Quark Drive abilities
+	'boosterenergy': 8000,
 	'masterball': 100000,
 	'freshwater': 250, 'sodapop': 350, 'lemonade': 450, 'moomoomilk': 600, 'tea': 750,
 	'energyroot': 1200, 'energypowder': 500, 'healpowder': 450,
