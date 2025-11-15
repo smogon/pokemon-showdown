@@ -243,6 +243,24 @@ export function getDamageBasePower(
 		}
 	}
 
+	// Hex: Power doubles if target has a status condition
+	if (move.id === 'hex') {
+		const defenderAbility = toID(defender.ability || '');
+		if (defenderSlot.status || defenderAbility === 'comatose') {
+			basePower *= 2;
+		}
+	}
+
+	// Wake-Up Slap: Power doubles if target is asleep, and wakes them up
+	if (move.id === 'wakeupslap' && defenderSlot.status === 'slp') {
+		basePower *= 2;
+	}
+
+	// Smelling Salts: Power doubles if target is paralyzed, and cures paralysis
+	if (move.id === 'smellingsalts' && defenderSlot.status === 'par') {
+		basePower *= 2;
+	}
+
 	return basePower;
 }
 
@@ -339,6 +357,15 @@ export function handleDamagingMovePreamble(
 		attacker.item = undefined;
 		activateUnburden(attackerSlot, messageLog);
 		return true;
+	}
+
+	// Dream Eater requires target to be asleep
+	if (move.id === 'dreameater') {
+		const defenderAbility = toID(defender.ability || '');
+		if (defenderSlot.status !== 'slp' && defenderAbility !== 'comatose') {
+			messageLog.push(`But it failed! (${defender.species} isn't asleep!)`);
+			return true;
+		}
 	}
 
 	if (move.ohko) {
