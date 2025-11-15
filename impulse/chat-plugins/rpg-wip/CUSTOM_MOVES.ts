@@ -52,6 +52,8 @@ export interface CustomMove {
 		powder?: 1,
 		punch?: 1,
 		bite?: 1,
+		pulse?: 1,
+		bullet?: 1,
 		heal?: 1,
 		metronome?: 1,
 	};
@@ -130,7 +132,7 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		pp: 10,
 		priority: 0,
 		target: 'normal',
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1, pulse: 1 }, // Added pulse flag for Mega Launcher compatibility
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -183,7 +185,7 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		pp: 10,
 		priority: 0,
 		target: 'normal',
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1, bullet: 1 }, // Added bullet flag for Bulletproof interaction
 		multihit: [2, 5], // Hits 2-5 times
 	},
 
