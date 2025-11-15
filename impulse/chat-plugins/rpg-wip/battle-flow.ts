@@ -60,8 +60,6 @@ import {
 	handleEndOfTurnFieldEffects,
 } from './battle-eot';
 
-import { getLocationWeatherData, getWeatherStartMessage } from './commands';
-
 /**
  * Get the initial weather for a battle based on the player's location
  * Converts location weather format to battle weather format
