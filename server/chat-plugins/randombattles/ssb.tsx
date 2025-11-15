@@ -52,7 +52,9 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 		};
 
 		if (sigMove.isNonstandard === "Past" && dex.gen >= 8) details["Past Gens Only"] = "x";
-		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForce) details["Boosted by Sheer Force"] = "";
+		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForceBoost) {
+			details["Boosted by Sheer Force"] = "";
+		}
 		if (sigMove.flags['contact'] && dex.gen >= 3) details["Contact"] = "";
 		if (sigMove.flags['sound'] && dex.gen >= 3) details["Sound"] = "";
 		if (sigMove.flags['bullet'] && dex.gen >= 6) details["Bullet"] = "";
