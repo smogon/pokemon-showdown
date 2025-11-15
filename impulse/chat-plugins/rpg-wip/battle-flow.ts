@@ -26,7 +26,8 @@ import {
 import { RPGMoves } from './battle-moves';
 
 // Import shared helpers
-import {
+import * from './battle-shared';
+/*import {
 	activateUnburden,
 	applyStatChange,
 	handleHPDropEffects,
@@ -36,10 +37,11 @@ import {
 	getMoveTargets,
 	getAccuracyEvasionMultiplier,
 	handleMirrorHerb,
-} from './battle-shared';
+} from './battle-shared';*/
 
 // Import core functions
-import {
+import * from './battle-core';
+/*import {
 	gainExperience,
 	getCustomEffectiveness,
 	getStatMultiplier,
@@ -47,10 +49,11 @@ import {
 	handleStatusMove,
 	saveBattleStatus,
 	getPokemonTypes,
-} from './battle-core';
+} from './battle-core';*/
 
 // Import EOT functions
-import {
+import * from './battle-eot';
+/*import {
 	processEndOfTurn,
 	applyEOTStatusDamage,
 	applyEOTItemEffects,
@@ -61,7 +64,7 @@ import {
 	handleEndOfTurnEffects,
 	handleEndOfTurnWeather,
 	handleEndOfTurnFieldEffects,
-} from './battle-eot';
+} from './battle-eot';*/
 
 /**
  * Get the initial weather for a battle based on the player's location
