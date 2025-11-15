@@ -239,6 +239,8 @@ export const economyCommands: ChatCommands = {
 
 		const collection = userCollectionsCollection;
 		const profiles = userProfilesCollection;
+		let senderCardDeducted = false;
+		let senderProfileUpdated = false;
 
 		try {
 			const senderCard = await collection.findOne({ userId: user.id, cardId });
@@ -251,17 +253,21 @@ export const economyCommands: ChatCommands = {
 			const pointsToDeduct = senderCard.totalPoints * quantityToGift;
 			const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
 
+			// Deduct from sender
 			if (newSenderQty === 0) {
 				await collection.deleteOne({ userId: user.id, cardId });
 			} else {
 				await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: -quantityToGift } });
 			}
+			senderCardDeducted = true;
 
 			await profiles.updateOne(
 				{ userId: user.id },
 				{ $inc: { totalQuantity: -quantityToGift, collectionPoints: -pointsToDeduct, totalUniqueCards: uniqueCardsChangeSender } }
 			);
+			senderProfileUpdated = true;
 
+			// Add to recipient
 			const now = new Date().toISOString();
 			const recipientCard = await collection.findOne({ userId: targetUserId, cardId });
 			const currentRecipientQty = recipientCard?.quantity || 0;
@@ -318,6 +324,46 @@ export const economyCommands: ChatCommands = {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
 			}
 		} catch (error) {
+			// Rollback sender's deduction if recipient update failed
+			if (senderCardDeducted || senderProfileUpdated) {
+				try {
+					const senderCard = await collection.findOne({ userId: user.id, cardId });
+					const currentQty = senderCard?.quantity || 0;
+					const pointsToRestore = (senderCard?.totalPoints || 0) * quantityToGift;
+					const uniqueCardsRestoreSender = (currentQty === 0) ? 1 : 0;
+
+					if (senderCardDeducted) {
+						if (currentQty === 0) {
+							// Card was deleted, need to re-fetch original card data
+							const originalCard = await tcgCardsCollection.findOne({ cardId });
+							if (originalCard) {
+								const now = new Date().toISOString();
+								const newDoc: TcgUser = {
+									userId: user.id, cardId, quantity: quantityToGift,
+									firstAcquiredAt: now, lastAcquiredAt: now, name: originalCard.name,
+									setId: originalCard.setId, rarity: originalCard.rarity, totalPoints: originalCard.totalPoints,
+									supertype: originalCard.supertype, types: originalCard.types || [], subtypes: originalCard.subtypes || [],
+								};
+								await collection.insertOne(newDoc);
+							}
+						} else {
+							await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: quantityToGift } });
+						}
+					}
+
+					if (senderProfileUpdated) {
+						await profiles.updateOne(
+							{ userId: user.id },
+							{ $inc: { totalQuantity: quantityToGift, collectionPoints: pointsToRestore, totalUniqueCards: uniqueCardsRestoreSender } }
+						);
+					}
+
+					return this.errorReply('An error occurred while gifting your card. Your cards have been returned.');
+				} catch (rollbackError) {
+					console.error('Failed to rollback gift card transaction:', rollbackError);
+					return this.errorReply('A critical error occurred during the gift. Please contact an administrator to verify your card inventory.');
+				}
+			}
 			return this.errorReply('An error occurred while gifting your card.');
 		}
 	},
@@ -338,6 +384,7 @@ export const economyCommands: ChatCommands = {
 		if (isNaN(quantityToGift) || quantityToGift <= 0) return this.errorReply("Invalid quantity. Quantity must be a positive number.");
 
 		const collection = userPacksCollection;
+		let senderPackDeducted = false;
 
 		try {
 			const senderPack = await collection.findOne({ userId: user.id, setId });
@@ -354,6 +401,7 @@ export const economyCommands: ChatCommands = {
 			if (updateSenderResult.modifiedCount === 0) {
 				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
 			}
+			senderPackDeducted = true;
 
 			const now = new Date().toISOString();
 			await collection.updateOne(
@@ -371,6 +419,19 @@ export const economyCommands: ChatCommands = {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
 			}
 		} catch (error) {
+			// Rollback sender's deduction if recipient update failed
+			if (senderPackDeducted) {
+				try {
+					await collection.updateOne(
+						{ userId: user.id, setId },
+						{ $inc: { quantity: quantityToGift } }
+					);
+					return this.errorReply('An error occurred while gifting your pack(s). Your packs have been returned.');
+				} catch (rollbackError) {
+					console.error('Failed to rollback gift pack transaction:', rollbackError);
+					return this.errorReply('A critical error occurred during the gift. Please contact an administrator to verify your pack inventory.');
+				}
+			}
 			return this.errorReply('An error occurred while gifting your pack(s).');
 		}
 	},
