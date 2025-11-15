@@ -77,12 +77,8 @@ const isPoofDisabled = (): boolean => {
 	return !!(Config as PoofConfig).poofOff;
 };
 
-const enablePoof = (): void => {
-	(Config as PoofConfig).poofOff = false;
-};
-
-const disablePoof = (): void => {
-	(Config as PoofConfig).poofOff = true;
+const setPoofState = (enabled: boolean): void => {
+	(Config as PoofConfig).poofOff = !enabled;
 };
 
 export const commands: Chat.ChatCommands = {
@@ -105,14 +101,14 @@ export const commands: Chat.ChatCommands = {
 
 		on(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
-			enablePoof();
+			setPoofState(true);
 			this.sendReply("Poof is now enabled.");
 		},
 		onhelp: ["/poof on - Enable the use /poof command. Requires: &"],
 
 		off(target: string, room: Room, user: User): void {
 			this.checkCan('roomowner');
-			disablePoof();
+			setPoofState(false);
 			this.sendReply("Poof is now disabled.");
 		},
 		offhelp: ["/poof off - Disable the use of the /poof command. Requires: &"],
