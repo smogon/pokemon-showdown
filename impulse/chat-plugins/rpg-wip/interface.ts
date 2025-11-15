@@ -144,6 +144,7 @@ export interface PlayerData {
 	visitedLocations: Set<string>;
 	lastPokemonCenter?: string; // Track the last Pokemon Center visited for respawn
 	completedNPCActions: Set<string>; // Track NPCs that have completed one-time actions
+	battleTowerFloor: number; // [NEW] Added for Battle Tower mode
 }
 
 export interface BattleState {
@@ -193,7 +194,7 @@ export interface BattleState {
 	playerTerastallizeUsed: boolean;
 	opponentTerastallizeUsed: boolean;
 
-	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double';
+	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double' | 'battletower'; // [MODIFIED] Added 'battletower'
 	opponentName: string;
 	opponentParty: RPGPokemon[];
 	opponentMoney: number;
@@ -234,6 +235,10 @@ export interface BattleState {
 
 	// Cumulative battle log for all turns
 	battleLog: string[];
+
+	// [NEW] Added for Battle Tower mode
+	floor: number;
+	overridePlayerParty: RPGPokemon[] | null;
 }
 
 export interface TrainerSpec {
