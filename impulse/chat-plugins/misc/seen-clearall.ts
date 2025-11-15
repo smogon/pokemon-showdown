@@ -36,6 +36,20 @@ const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
 	return result.deletedCount || 0;
 };
 
+const rejoinUsersToRoom = (room: Room, userIds: ID[]): void => {
+	userIds.forEach(userId => {
+		const u = Users.get(userId);
+		u?.connections?.forEach(conn => u.joinRoom(room, conn));
+	});
+};
+
+const leaveUsersFromRoom = (room: Room, userIds: ID[]): void => {
+	userIds.forEach(userId => {
+		const u = Users.get(userId);
+		u?.connections?.forEach(conn => u.leaveRoom(room, conn));
+	});
+};
+
 const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: string[] } => {
 	const cleared: string[] = [];
 	const failed: string[] = [];
@@ -48,17 +62,11 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 		if (room.log.log) room.log.log.length = 0;
 
 		const userIds = Object.keys(room.users) as ID[];
-		userIds.forEach(userId => {
-			const u = Users.get(userId);
-			u?.connections?.forEach(conn => u.leaveRoom(room, conn));
-		});
+		leaveUsersFromRoom(room, userIds);
 
 		cleared.push(room.id);
 		setTimeout(() => {
-			userIds.forEach(userId => {
-				const u = Users.get(userId);
-				u?.connections?.forEach(conn => u.joinRoom(room, conn));
-			});
+			rejoinUsersToRoom(room, userIds);
 		}, 1000);
 	}
 	return { cleared, failed };
@@ -66,6 +74,26 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 
 const getErrorMessage = (err: unknown): string => {
 	return err instanceof Error ? err.message : String(err);
+};
+
+const formatSeenStatus = (targetName: string, status: 'online' | 'never' | 'ago', duration?: string): string => {
+	const userNameColor = nameColor(targetName, true, true);
+	if (status === 'online') {
+		return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
+	}
+	if (status === 'never') {
+		return `${userNameColor} has <b><font color='red'>never been online</font></b>.`;
+	}
+	return `${userNameColor} was last seen <b>${duration}</b> ago.`;
+};
+
+const generateHelpHTML = (title: string, helpList: Array<{ cmd: string, desc: string }>): string => {
+	return `<center><strong>${title}:</strong></center>` +
+		`<hr><ul style="list-style-type:none;padding-left:0;">` +
+		helpList.map(({ cmd, desc }, i) =>
+			`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+		).join('') +
+		`</ul>`;
 };
 
 export { trackSeen };
@@ -84,27 +112,20 @@ export const commands: Chat.ChatCommands = {
 
 			const targetUser = Users.get(target);
 			if (targetUser?.connected) {
-				const userNameColor = nameColor(targetUser.name, true, true);
-				return this.sendReplyBox(
-					`${userNameColor} is <b><font color='limegreen'>Online</font></b>.`
-				);
+				return this.sendReplyBox(formatSeenStatus(targetUser.name, 'online'));
 			}
 
 			try {
 				const lastSeen = await getLastSeen(toID(target));
 				if (!lastSeen) {
-					const targetNameColor = nameColor(target, true, true);
-					return this.sendReplyBox(
-						`${targetNameColor} has <b><font color='red'>never been online</font></b>.`
-					);
+					return this.sendReplyBox(formatSeenStatus(target, 'never'));
 				}
 
 				const duration = Chat.toDurationString(
 					Date.now() - lastSeen.getTime(),
 					{ precision: true }
 				);
-				const targetNameColor = nameColor(target, true, true);
-				this.sendReplyBox(`${targetNameColor} was last seen <b>${duration}</b> ago.`);
+				this.sendReplyBox(formatSeenStatus(target, 'ago', duration));
 			} catch (err: unknown) {
 				const message = getErrorMessage(err);
 				this.errorReply('Error retrieving seen data: ' + message);
@@ -172,13 +193,7 @@ export const commands: Chat.ChatCommands = {
 					desc: "Deletes records older than X days (staff only, min: 30).",
 				},
 			];
-			const html = `<center><strong>Seen Commands:</strong></center>` +
-				`<hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
+			this.sendReplyBox(generateHelpHTML('Seen Commands', helpList));
 		},
 	},
 
@@ -223,50 +238,7 @@ export const commands: Chat.ChatCommands = {
 					desc: "Clear all public rooms. Requires: &. <b>Alias: /globalclearall</b>",
 				},
 			];
-			const html = `<center><strong>Clearall Commands:</strong></center>` +
-				`<hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
-		},
-	},
-
-	cleantour: {
-		''(target, room, user): void {
-			const roomid = toID(target) || room?.roomid;
-			if (!roomid) return this.errorReply("Specify a room.");
-			const targetRoom = Rooms.get(roomid);
-			if (!targetRoom) return this.errorReply(`Room "${roomid}" not found.`);
-			if (!user.can('roomowner', null, targetRoom) &&
-				!user.can('declare', null, targetRoom)) {
-				return this.errorReply("Requires: Room Owner or Global Admin.");
-			}
-			if (targetRoom.game && targetRoom.game.gameid === 'tournament') {
-				try {
-					if (typeof targetRoom.game.end === 'function') {
-						targetRoom.game.end();
-					}
-					targetRoom.game = null;
-					this.sendReply(
-						`Cleaned up stuck tournament in "${roomid}". ` +
-						`Autotour will resume on next interval.`
-					);
-				} catch {
-					targetRoom.game = null;
-					this.errorReply(`Tournament forcibly removed from "${roomid}".`);
-				}
-			} else {
-				return this.errorReply(`No tournament is running in "${roomid}".`);
-			}
-		},
-		help(): void {
-			if (!this.runBroadcast()) return;
-			this.sendReplyBox(
-				`<b>/cleantour [room]</b>: Forcibly destroys a stuck tournament in the room. ` +
-				`Requires: # or ~`
-			);
+			this.sendReplyBox(generateHelpHTML('Clearall Commands', helpList));
 		},
 	},
 
