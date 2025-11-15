@@ -147,7 +147,7 @@ export const adminCommands: ChatCommands = {
 
 			let setsCompleted: number | undefined = undefined;
 			if (actualQtyAdded > 0) {
-				const calculateSetsCompleted = (await import('./tcg_utils')).calculateSetsCompleted;
+				const calculateSetsCompleted = (await import('./tcg_utils.js')).calculateSetsCompleted;
 				setsCompleted = await calculateSetsCompleted(targetUserId);
 			}
 
