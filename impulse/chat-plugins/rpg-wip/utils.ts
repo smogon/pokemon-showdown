@@ -4,6 +4,7 @@
 * @author MusaddikTemkar
 */
 import { Dex, toID } from '../../../sim/dex';
+import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
