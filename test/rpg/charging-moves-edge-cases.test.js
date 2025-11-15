@@ -16,8 +16,8 @@ describe('Charging Move Edge Cases', function () {
 		}
 	});
 
-	describe('Charging Move with Disable', function () {
-		it('should prevent player from using charging move when disabled mid-charge', function () {
+	describe('Charging Move with Disable', () => {
+		it('should prevent player from using charging move when disabled mid-charge', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -40,7 +40,7 @@ describe('Charging Move Edge Cases', function () {
 			assert(error.includes('disabled'), 'Error should mention disabled');
 		});
 
-		it('should AI use Struggle when charging move gets disabled', function () {
+		it('should AI use Struggle when charging move gets disabled', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-1',
@@ -69,8 +69,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('Charging Move with Taunt', function () {
-		it('should allow player to continue physical charging move (Sky Attack) when taunted', function () {
+	describe('Charging Move with Taunt', () => {
+		it('should allow player to continue physical charging move (Sky Attack) when taunted', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Pidgeot',
@@ -93,8 +93,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('Multiple Charging Moves', function () {
-		it('should test all known charging moves are properly handled', function () {
+	describe('Multiple Charging Moves', () => {
+		it('should test all known charging moves are properly handled', () => {
 			const chargingMoves = [
 				'solarbeam', 'solarblade', 'dig', 'fly', 'dive', 'bounce',
 				'skyattack', 'razorwind', 'skullbash', 'shadowforce', 'phantomforce',
@@ -127,8 +127,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('Charging Move with Encore', function () {
-		it('should have charging move take priority over Encore', function () {
+	describe('Charging Move with Encore', () => {
+		it('should have charging move take priority over Encore', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -156,8 +156,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('Charging Move Priority', function () {
-		it('should check charging move before other locks in validation', function () {
+	describe('Charging Move Priority', () => {
+		it('should check charging move before other locks in validation', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -184,8 +184,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('Charging Move with Torment', function () {
-		it('should ignore Torment when locked into charging move', function () {
+	describe('Charging Move with Torment', () => {
+		it('should ignore Torment when locked into charging move', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -210,8 +210,8 @@ describe('Charging Move Edge Cases', function () {
 		});
 	});
 
-	describe('AI Charging Move Priority', function () {
-		it('should prioritize charging move over Encore for AI', function () {
+	describe('AI Charging Move Priority', () => {
+		it('should prioritize charging move over Encore for AI', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-1',
@@ -238,7 +238,7 @@ describe('Charging Move Edge Cases', function () {
 			assert.equal(action.moveId, 'solarbeam', 'AI should prioritize charging move over Encore');
 		});
 
-		it('should prioritize charging move over Choice item for AI', function () {
+		it('should prioritize charging move over Choice item for AI', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-1',
@@ -266,7 +266,7 @@ describe('Charging Move Edge Cases', function () {
 			assert.equal(action.moveId, 'solarbeam', 'AI should prioritize charging move over Choice lock');
 		});
 
-		it('should prioritize charging move over rampage lock for AI', function () {
+		it('should prioritize charging move over rampage lock for AI', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-1',

@@ -15,8 +15,8 @@ describe('Charging Move Locking', function () {
 			this.skip();
 		}
 	});
-	describe('AI Charging Move Selection', function () {
-		it('should force AI to continue using Solar Beam on second turn', function () {
+	describe('AI Charging Move Selection', () => {
+		it('should force AI to continue using Solar Beam on second turn', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-1',
@@ -42,7 +42,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(action.moveId, 'solarbeam', 'AI should be forced to use Solar Beam on second turn');
 		});
 
-		it('should force AI to continue using Dig on second turn', function () {
+		it('should force AI to continue using Dig on second turn', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-2',
@@ -68,7 +68,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(action.moveId, 'dig', 'AI should be forced to use Dig on second turn');
 		});
 
-		it('should force AI to continue using Fly on second turn', function () {
+		it('should force AI to continue using Fly on second turn', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-3',
@@ -94,7 +94,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(action.moveId, 'fly', 'AI should be forced to use Fly on second turn');
 		});
 
-		it('should use Struggle if charging move has no PP', function () {
+		it('should use Struggle if charging move has no PP', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-4',
@@ -119,7 +119,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(action.moveId, 'struggle', 'AI should use Struggle when charging move has no PP');
 		});
 
-		it('should not interfere with normal move selection when not charging', function () {
+		it('should not interfere with normal move selection when not charging', () => {
 			const aiSlot = {
 				pokemon: {
 					id: 'test-pokemon-5',
@@ -146,8 +146,8 @@ describe('Charging Move Locking', function () {
 		});
 	});
 
-	describe('Player Charging Move Validation', function () {
-		it('should prevent player from using different move while charging Solar Beam', function () {
+	describe('Player Charging Move Validation', () => {
+		it('should prevent player from using different move while charging Solar Beam', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -170,7 +170,7 @@ describe('Charging Move Locking', function () {
 			assert(error.includes('Solar Beam'), 'Error should mention Solar Beam');
 		});
 
-		it('should allow player to continue using Solar Beam on second turn', function () {
+		it('should allow player to continue using Solar Beam on second turn', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -190,7 +190,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(error, null, 'Should allow continuing the charging move');
 		});
 
-		it('should prevent player from using different move while charging Dig', function () {
+		it('should prevent player from using different move while charging Dig', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Dugtrio',
@@ -212,7 +212,7 @@ describe('Charging Move Locking', function () {
 			assert(error.includes('Dig'), 'Error should mention Dig');
 		});
 
-		it('should allow Struggle when charging move has no PP', function () {
+		it('should allow Struggle when charging move has no PP', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
@@ -232,7 +232,7 @@ describe('Charging Move Locking', function () {
 			assert.equal(error, null, 'Should allow Struggle when charging move has no PP');
 		});
 
-		it('should allow any move when not charging', function () {
+		it('should allow any move when not charging', () => {
 			const playerSlot = {
 				pokemon: {
 					species: 'Venusaur',
