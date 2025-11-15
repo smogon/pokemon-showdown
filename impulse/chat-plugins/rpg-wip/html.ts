@@ -1340,6 +1340,10 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSlots;
 
+	// --- MODIFIED: Use overridePlayerParty if it exists ---
+	const partyToUse = battle.overridePlayerParty || player.party;
+	// --- END MODIFICATION ---
+
 	// Determine which slot to switch from
 	let slotToSwitchOut: number;
 
@@ -1350,22 +1354,20 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 		// Auto-determine the slot to switch from
 		// In single battles, always slot 0
 		// In double battles, find the first slot without a pending action
-		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double' || battle.battleType === 'battletower'; // Added battletower
 
-		if (!isDoubleBattle) {
+		if (!isDoubleBattle && battle.battleType !== 'battletower') { // Modified check
 			// Single battle: always switch from slot 0
 			slotToSwitchOut = 0;
 		} else {
-			// Double battle: find the first slot that needs an action
+			// Double battle or Battle Tower (which is singles but we use this logic)
 			if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
 				slotToSwitchOut = 0;
 			} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
 				slotToSwitchOut = 1;
 			} else {
-				// No valid slot found (shouldn't happen, but fallback)
-				html += `<p>Error: No available slot to switch from.</p>`;
-				html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
-				return html;
+				// Fallback for single battles (like battletower)
+				slotToSwitchOut = 0;
 			}
 		}
 	}
@@ -1378,7 +1380,8 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 
 	html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
 
-	const availableParty = player.party.filter(p =>
+	// Use partyToUse
+	const availableParty = partyToUse.filter(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
@@ -1402,6 +1405,10 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	let html = `<div class="infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 
+	// --- MODIFIED: Use overridePlayerParty if it exists ---
+	const partyToUse = battle.overridePlayerParty || player.party;
+	// --- END MODIFICATION ---
+
 	// --- FIX: Correctly find the empty slot based on battle type ---
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
@@ -1422,8 +1429,8 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	} else {
 		html += `<p>Choose a Pokémon to send to <strong>Slot ${slotToFill + 1}</strong>:</p>`;
 
-		// Find available party members
-		const availableParty = player.party.filter(p =>
+		// Find available party members from the correct party
+		const availableParty = partyToUse.filter(p =>
 			p.hp > 0 &&
 			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 		);
