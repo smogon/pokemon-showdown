@@ -261,6 +261,32 @@ export function getDamageBasePower(
 		basePower *= 2;
 	}
 
+	// Terrain-based power increases
+	if (battle.terrain) {
+		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
+		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
+
+		// Rising Voltage: Power doubles if target is grounded on Electric Terrain
+		if (move.id === 'risingvoltage' && battle.terrain.type === 'electric' && defenderIsGrounded) {
+			basePower *= 2;
+		}
+
+		// Expanding Force: Power multiplied by 1.5 if user is grounded on Psychic Terrain
+		if (move.id === 'expandingforce' && battle.terrain.type === 'psychic' && attackerIsGrounded) {
+			basePower = Math.floor(basePower * 1.5);
+		}
+
+		// Psyblade: Power multiplied by 1.5 during Electric Terrain
+		if (move.id === 'psyblade' && battle.terrain.type === 'electric') {
+			basePower = Math.floor(basePower * 1.5);
+		}
+
+		// Misty Explosion: Power multiplied by 1.5 if user is grounded on Misty Terrain
+		if (move.id === 'mistyexplosion' && battle.terrain.type === 'misty' && attackerIsGrounded) {
+			basePower = Math.floor(basePower * 1.5);
+		}
+	}
+
 	return basePower;
 }
 
