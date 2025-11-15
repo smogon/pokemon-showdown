@@ -572,8 +572,9 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.opponentSlots[fm.slotIndex];
+			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+			
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
-				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
 				const move = getMove(fm.moveId);
@@ -593,6 +594,8 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			} else {
+				messageLog.push(`<strong>${moveName}</strong> failed to find its target!`);
 			}
 			return false;
 		}
@@ -603,8 +606,9 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.playerSlots[fm.slotIndex];
+			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
+			
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
-				const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
 				const move = getMove(fm.moveId);
@@ -624,6 +628,8 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
+			} else {
+				messageLog.push(`<strong>${moveName}</strong> failed to find its target!`);
 			}
 			return false;
 		}

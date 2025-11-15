@@ -1510,6 +1510,19 @@ export function handleDamagingMove(
 				}
 			}
 
+			// Wake-Up Slap wakes up the target after dealing damage
+			if (move.id === 'wakeupslap' && defenderSlot.status === 'slp' && defenderSlot?.pokemon.hp > 0) {
+				defenderSlot.status = null;
+				defenderSlot.sleepCounter = 0;
+				messageLog.push(`${defenderSlot.pokemon.species} woke up!`);
+			}
+
+			// Smelling Salts cures paralysis after dealing damage
+			if (move.id === 'smellingsalts' && defenderSlot.status === 'par' && defenderSlot?.pokemon.hp > 0) {
+				defenderSlot.status = null;
+				messageLog.push(`${defenderSlot.pokemon.species} was cured of paralysis!`);
+			}
+
 			// Force switch moves (Dragon Tail, Circle Throw)
 			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
 				const defenderAbility = toID(defenderSlot.pokemon.ability || '');

@@ -200,7 +200,8 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			if (player.party.length > 0) {
-				return this.errorReply("You have already started your adventure!");
+				// Player has already started their adventure, take them to explore
+				return this.parse('/rpg explore');
 			}
 			// Set player location to starting location
 			const startingLocation = getStartingLocation();
