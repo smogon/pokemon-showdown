@@ -46,6 +46,7 @@ import {
 	handleDamagingMove,
 	handleStatusMove,
 	saveBattleStatus,
+	getPokemonTypes,
 } from './battle-core';
 
 // Import EOT functions
