@@ -43,23 +43,22 @@ Impulse.ignoreEmotes = {} as IgnoreEmotesData;
 
 const getEmoteSize = (): string => emoteSize.toString();
 
-function parseMessage(message: string): string {
-	if (message.substr(0, 5) === "/html") {
-		message = message.substr(5);
-		message = message.replace(/__([^< ](?:[^<]*?[^< ])?)__(?![^<]*?<\/a)/g, '<i>$1</i>');
-		message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
-		message = message.replace(/~~([^< ](?:[^<]*?[^< ])?)~~/g, '<strike>$1</strike>');
-		message = message.replace(/&lt;&lt;([a-z0-9-]+)&gt;&gt;/g, '&laquo;<a href="/$1" target="_blank">$1</a>&raquo;');
-		message = Autolinker.link(message.replace(/&#x2f;/g, '/'), { stripPrefix: false, phone: false, twitter: false });
-		return message;
-	}
-	message = Chat.escapeHTML(message).replace(/&#x2f;/g, '/');
+const applyTextFormatting = (message: string): string => {
 	message = message.replace(/__([^< ](?:[^<]*?[^< ])?)__(?![^<]*?<\/a)/g, '<i>$1</i>');
 	message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
 	message = message.replace(/~~([^< ](?:[^<]*?[^< ])?)~~/g, '<strike>$1</strike>');
 	message = message.replace(/&lt;&lt;([a-z0-9-]+)&gt;&gt;/g, '&laquo;<a href="/$1" target="_blank">$1</a>&raquo;');
-	message = Autolinker.link(message, { stripPrefix: false, phone: false, twitter: false });
-	return message;
+	return Autolinker.link(message, { stripPrefix: false, phone: false, twitter: false });
+};
+
+function parseMessage(message: string): string {
+	if (message.substr(0, 5) === "/html") {
+		message = message.substr(5);
+		message = message.replace(/&#x2f;/g, '/');
+		return applyTextFormatting(message);
+	}
+	message = Chat.escapeHTML(message).replace(/&#x2f;/g, '/');
+	return applyTextFormatting(message);
 }
 Impulse.parseMessage = parseMessage;
 
