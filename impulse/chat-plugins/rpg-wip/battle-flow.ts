@@ -242,44 +242,49 @@ export function handleOpponentFaint(
 
 	for (const i of opponentSlotsToCheck) {
 		const slot = battle.opponentSlots[i];
-		if (slot && slot.pokemon.hp <= 0) {
-			faintedThisCheck = true;
-			messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
+		// Handle both fainted Pokemon AND forced switches (null slots from Dragon Tail/Circle Throw)
+		if (slot === null || slot.pokemon.hp <= 0) {
+			// Only process faint effects if the Pokemon actually fainted (not a forced switch)
+			if (slot && slot.pokemon.hp <= 0) {
+				faintedThisCheck = true;
+				messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
 
-			const faintedAbility = toID(slot.pokemon.ability || '');
-			const lastMove = slot.lastMoveThatHitMe;
-			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
-				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
-					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
-					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
-					messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
-				}
-			}
-
-			for (const participantSlot of playerParticipants) {
-				if (participantSlot.pokemon.hp <= 0) continue;
-				RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
-			}
-
-			// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
-			const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
-			for (const activeSlot of allActiveSlots) {
-				if (activeSlot.pokemon.hp > 0) {
-					const ability = toID(activeSlot.pokemon.ability || '');
-					if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
-						activeSlot.statStages.spa++;
-						messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+				const faintedAbility = toID(slot.pokemon.ability || '');
+				const lastMove = slot.lastMoveThatHitMe;
+				if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+					const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+					if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
+						const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
+						attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+						messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
 					}
 				}
+
+				for (const participantSlot of playerParticipants) {
+					if (participantSlot.pokemon.hp <= 0) continue;
+					RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
+				}
+
+				// Phase 2: Soul-Heart triggers for ALL Pokemon when ANY Pokemon faints
+				const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+				for (const activeSlot of allActiveSlots) {
+					if (activeSlot.pokemon.hp > 0) {
+						const ability = toID(activeSlot.pokemon.ability || '');
+						if (ability === 'soulheart' && activeSlot.statStages.spa < 6) {
+							activeSlot.statStages.spa++;
+							messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+						}
+					}
+				}
+
+				// [MODIFIED] Skip EXP/EVs in Battle Tower
+				if (battle.battleType !== 'battletower' && playerParticipants.length > 0) {
+					const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
+					messageLog.push(...expResult.messages);
+				}
 			}
 
-			// [MODIFIED] Skip EXP/EVs in Battle Tower
-			if (battle.battleType !== 'battletower' && playerParticipants.length > 0) {
-				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
-				messageLog.push(...expResult.messages);
-			}
-
+			// Find replacement Pokemon (for both faints and forced switches)
 			const nextOpponent = battle.opponentParty.find(p =>
 				p.hp > 0 &&
 				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
