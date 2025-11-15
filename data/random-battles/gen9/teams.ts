@@ -53,10 +53,12 @@ interface BSSFactorySet {
 }
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
+	basePowerMoves: Set<Move>;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
+		this.basePowerMoves = new Set();
 	}
 }
 
@@ -413,6 +415,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
+				counter.basePowerMoves.add(move);
 				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
@@ -1096,19 +1099,6 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		// ffa abilities that differ from doubles
-		if (this.format.gameType === 'freeforall') {
-			if (species.id === 'bellossom') return 'Chlorophyll';
-			if (species.id === 'sinistcha') return 'Heatproof';
-			if (abilities.length === 1 && abilities[0] === 'Telepathy') {
-				return species.id === 'oranguru' ? 'Inner Focus' : 'Pressure';
-			}
-			if (species.id === 'duraludon') return 'Light Metal';
-			if (species.id === 'clefairy') return 'Magic Guard';
-			if (species.id === 'blissey') return 'Natural Cure';
-			if (species.id === 'barraskewda') return 'Swift Swim';
-		}
-
 		if (abilities.length <= 1) return abilities[0];
 
 		// Hard-code abilities here
@@ -1221,7 +1211,7 @@ export class RandomTeams {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
-		if (ability === 'Anger Shell') return this.sample(['Rindo Berry', 'Passho Berry', 'Scope Lens', 'Sitrus Berry']);
+		if (ability === 'Anger Shell') return this.sample(['Expert Belt', 'Lum Berry', 'Scope Lens', 'Sitrus Berry']);
 		if (moves.has('dragondance') && isDoubles) return 'Clear Amulet';
 		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
 		if (ability === 'Unburden') {
@@ -1882,7 +1872,8 @@ export class RandomTeams {
 					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			}
+			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
@@ -1999,13 +1990,7 @@ export class RandomTeams {
 				shiny,
 			};
 			if (this.gen === 9) {
-				// Tera type
-				if (species.requiredTeraType) set.teraType = species.requiredTeraType;
-				if (this.forceTeraType) {
-					set.teraType = this.forceTeraType;
-				} else {
-					set.teraType = this.sample(this.dex.types.names());
-				}
+				set.teraType = species.requiredTeraType || this.forceTeraType || this.sample(this.dex.types.names());
 			}
 			team.push(set);
 		}

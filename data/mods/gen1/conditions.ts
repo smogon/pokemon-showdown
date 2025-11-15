@@ -191,13 +191,16 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 2,
 		// defender still takes PSN damage, etc
 		// TODO: research exact mechanics
-		onBeforeMovePriority: 0,
+		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
 		onRestart() {
 			this.effectState.duration = 2;
+		},
+		onAccuracy(accuracy, target, source, move) {
+			if (source === this.effectState.source) return true;
 		},
 		onLockMove() {
 			// exact move doesn't matter, no move is ever actually used
@@ -240,6 +243,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['partialtrappinglock'];
+				return;
+			}
 			if (this.effectState.duration === 1) {
 				if (this.effectState.totalDuration !== 5) {
 					pokemon.addVolatile('fakepartiallytrapped');
@@ -250,9 +257,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			} else {
 				target.addVolatile('partiallytrapped', pokemon, move);
 			}
-		},
-		onAccuracy(accuracy, target, source, move) {
-			if (target === this.effectState.locked) return true;
 		},
 		onLockMove() {
 			return this.effectState.move;
@@ -266,6 +270,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 0,
 		onBeforeMovePriority: 7,
 		onStart() {},
+		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['mustrecharge'];
+				return;
+			}
+			this.add('-mustrecharge', pokemon);
+		},
 	},
 	lockedmove: {
 		// Thrash and Petal Dance.
