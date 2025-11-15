@@ -1665,19 +1665,20 @@ export function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId:
 export function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlotIndex: number): string {
 	let html = `<div class="infobox"><h2>A Pokémon is switching out!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
-	const pivotingPokemon = battle.pendingPivot?.slot.pokemon; // Get pokemon from the pivot request
+	const pivotingPokemon = battle.pendingPivot?.slot.pokemon;
 
 	html += `<p>Choose a Pokémon to replace <strong>${pivotingPokemon?.species || 'your Pokémon'}</strong> in <strong>Slot ${pivotSlotIndex + 1}</strong>:</p>`;
 
-	const availableParty = player.party.filter(p =>
+	// --- MODIFIED: Use overridePlayerParty if it exists for Battle Tower ---
+	const partyToUse = battle.overridePlayerParty || player.party;
+	const availableParty = partyToUse.filter(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
+	// --- END MODIFICATION ---
 
 	if (availableParty.length === 0) {
 		html += `<p>You have no other Pokémon to switch to!</p>`;
-		// This is a problem. The battle needs to continue.
-		// We'll add a button to just continue the battle.
 		html += `<p><button name="send" value="/rpg battleaction forceswitch ${pivotSlotIndex} cancel" class="button">Continue</button></p>`;
 	} else {
 		for (const pokemon of availableParty) {
