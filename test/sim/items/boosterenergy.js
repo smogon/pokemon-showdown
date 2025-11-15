@@ -21,7 +21,7 @@ describe('Booster Energy', () => {
 		battle.makeChoices();
 		battle.makeChoices('switch 2');
 		const bundle = battle.p1.active[0];
-		assert.equal(bundle.volatiles['quarkdrive'].bestStat, 'spa',
+		assert.equal(bundle.abilityState.bestStat, 'spa',
 			`Iron Bundle's Speed should have been lowered before Booster Energy activated, boosting its SpA instead.`);
 	});
 });
