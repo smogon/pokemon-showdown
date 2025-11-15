@@ -135,9 +135,49 @@ const notifyStaffRoom = (message: string) => {
 
 const notifyTargetUser = (userId: string, message: string) => {
 	const targetUser = Users.get(userId);
-	if (targetUser) {
+	if (targetUser?.connected) {
 		targetUser.popup(`|html|${message}`);
 	}
+};
+
+const sendAvatarSetNotifications = (
+	setterUser: Chat.User,
+	targetUserId: string,
+	avatarFilename: string
+) => {
+	const avatar = displayAvatar(avatarFilename);
+	const setterNameColor = nameColor(setterUser.name, true, true);
+	const targetNameColor = nameColor(targetUserId, true, true);
+
+	const targetUser = Users.get(targetUserId);
+	if (targetUser) {
+		const userMsg = `${setterNameColor} set your custom avatar.<p>${avatar}</p>` +
+			`<p>Use <code>/avatars</code> to see your custom avatars!</p>`;
+		notifyTargetUser(targetUserId, userMsg);
+		targetUser.avatar = avatarFilename;
+	}
+
+	const staffMsg = `<center><strong>${setterNameColor} set custom avatar for ` +
+		`${targetNameColor}:</strong><br>${avatar}</center>`;
+	notifyStaffRoom(staffMsg);
+};
+
+const sendAvatarDeleteNotifications = (
+	deleterUser: Chat.User,
+	targetUserId: string
+) => {
+	const deleterNameColor = nameColor(deleterUser.name, true, true);
+	const targetNameColor = nameColor(targetUserId, true, true);
+
+	const targetUser = Users.get(targetUserId);
+	if (targetUser) {
+		notifyTargetUser(targetUserId, `${deleterNameColor} has deleted your custom avatar.`);
+		targetUser.avatar = 1;
+	}
+
+	const staffMsg = `<strong>${deleterNameColor} deleted custom avatar for ` +
+		`${targetNameColor}.</strong>`;
+	notifyStaffRoom(staffMsg);
 };
 
 export const commands: Chat.ChatCommands = {
@@ -182,20 +222,7 @@ export const commands: Chat.ChatCommands = {
 			const avatar = displayAvatar(avatarFilename);
 			this.sendReply(`|raw|${name}'s avatar was successfully set. Avatar:<p>${avatar}</p>`);
 
-			const targetUser = Users.get(userId);
-			if (targetUser) {
-				const userNameColor = nameColor(user.name, true, true);
-				const msg = `${userNameColor} set your custom avatar.<p>${avatar}</p>` +
-					`<p>Use <code>/avatars</code> to see your custom avatars!</p>`;
-				notifyTargetUser(userId, msg);
-				targetUser.avatar = avatarFilename;
-			}
-
-			const userNameColor = nameColor(user.name, true, true);
-			const targetNameColor = nameColor(userId, true, true);
-			const staffMsg = `<center><strong>${userNameColor} set custom avatar for ` +
-				`${targetNameColor}:</strong><br>${avatar}</center>`;
-			notifyStaffRoom(staffMsg);
+			sendAvatarSetNotifications(user, userId, avatarFilename);
 		},
 
 		async delete(target, room, user) {
@@ -219,20 +246,9 @@ export const commands: Chat.ChatCommands = {
 				await deleteAllUserAvatarFiles(userId);
 				await removeAvatarMetadata(userId);
 
-				const targetUser = Users.get(userId);
-				if (targetUser) {
-					const userNameColor = nameColor(user.name, true, true);
-					notifyTargetUser(userId, `${userNameColor} has deleted your custom avatar.`);
-					targetUser.avatar = 1;
-				}
-
 				this.sendReply(`${target}'s avatar has been removed.`);
 
-				const userNameColor = nameColor(user.name, true, true);
-				const targetNameColor = nameColor(userId, true, true);
-				const staffMsg = `<strong>${userNameColor} deleted custom avatar for ` +
-					`${targetNameColor}.</strong>`;
-				notifyStaffRoom(staffMsg);
+				sendAvatarDeleteNotifications(user, userId);
 			} catch {
 				return this.errorReply('An error occurred while deleting the avatar.');
 			}
