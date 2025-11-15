@@ -1975,3 +1975,60 @@ export function generateDBDeleteSuccessHTML(): string {
 		generateBottomNavigation() +
 		`</div>`;
 }
+
+/**
+ * Generates the main mode selection screen.
+ */
+export function generateModeSelectionHTML(): string {
+	let html = `<div class="infobox"><h2>Select a Mode</h2>`;
+	html += `<p><button name="send" value="/rpg start" class="button" style="width: 200px;">📖 Story Mode</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">🗼 Battle Tower</button></p>`;
+	html += `</div>`;
+	return html;
+}
+
+/**
+ * Generates the Battle Tower welcome/start screen.
+ */
+export function generateBattleTowerWelcomeHTML(floor: number): string {
+	let html = `<div class="infobox"><h2>🗼 Welcome to the Battle Tower</h2>`;
+	html += `<p>You will be assigned a random team of 3 Pokémon, all at Level 100.</p>`;
+	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
+	html += `<p>Good luck!</p><hr />`;
+	if (floor > 1) {
+		html += `<p>Your current streak is <strong>Floor ${floor}</strong>.</p>`;
+		html += `<p><button name="send" value="/rpg battletower beginfloor" class="button">Begin Floor ${floor}</button></p>`;
+	} else {
+		html += `<p>You are starting on <strong>Floor 1</strong>.</p>`;
+		html += `<p><button name="send" value="/rpg battletower beginfloor" class="button">Begin!</button></p>`;
+	}
+	html += `<p><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>`;
+	html += `</div>`;
+	return html;
+}
+
+/**
+ * Generates the screen shown after winning a Battle Tower floor.
+ */
+export function generateBattleTowerFloorCompleteHTML(floor: number): string {
+	let html = `<div class="infobox"><h2>🗼 Floor ${floor} Cleared!</h2>`;
+	html += `<p>You defeated the trainer! Your team has been healed.</p>`;
+	html += `<p>Your new random team is being prepared for the next floor.</p><hr />`;
+	html += `<p><button name="send" value="/rpg battletower nextfloor" class="button" style="width: 200px;">Continue to Floor ${floor + 1}</button></p>`;
+	html += `<p><button name="send" value="/rpg modes" class="button" style="width: 200px;">Exit Battle Tower</button></p>`;
+	html += `</div>`;
+	return html;
+}
+
+/**
+ * Generates the screen shown after losing in the Battle Tower.
+ */
+export function generateBattleTowerLossHTML(floor: number): string {
+	let html = `<div class="infobox"><h2>🗼 Battle Lost on Floor ${floor}</h2>`;
+	html += `<p>You were defeated. Your Battle Tower streak has ended.</p>`;
+	html += `<p><strong>Final Floor: ${floor}</strong></sP><hr />`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">Try Again (from Floor 1)</button></p>`;
+	html += `<p><button name="send" value="/rpg modes" class="button" style="width: 200px;">Exit Battle Tower</button></p>`;
+	html += `</div>`;
+	return html;
+}
