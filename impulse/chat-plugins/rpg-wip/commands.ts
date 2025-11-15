@@ -2269,6 +2269,11 @@ export const commands: ChatCommands = {
 			const pokemonId = toID(target);
 
 			if (!pokemonId) {
+				// Check if only one Pokemon has an item - auto-select it
+				const pokemonWithItems = player.party.filter(p => p.item);
+				if (pokemonWithItems.length === 1) {
+					return this.parse(`/rpg takeitem ${pokemonWithItems[0].id}`);
+				}
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTakeItemSelectionHTML(player)}`);
 			}
 
@@ -2402,6 +2407,11 @@ export const commands: ChatCommands = {
 
 				if (availableNPCs.length === 0) {
 					return this.errorReply("There are no NPCs to talk to here.");
+				}
+
+				// Auto-select if only one NPC available
+				if (availableNPCs.length === 1) {
+					return this.parse(`/rpg npc ${availableNPCs[0][0]}`);
 				}
 
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCSelectionHTML(availableNPCs)}`);
