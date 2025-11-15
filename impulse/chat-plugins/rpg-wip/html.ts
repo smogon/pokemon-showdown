@@ -42,22 +42,6 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 
 // These were previously inline in the commands and are now dedicated functions.
 
-export function generateMenuHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>RPG Menu - ${player.name}</h2><p><strong>Location:</strong> ${player.location} | <strong>Money:</strong> ₽${player.money}</p><p>What would you like to do?</p><p><button name="send" value="/rpg profile" class="button">👤 Profile</button><button name="send" value="/rpg party" class="button">⚡ Party</button><button name="send" value="/rpg battle" class="button">⚔️ Battle</button><button name="send" value="/rpg explore" class="button">🗺️ Explore</button></p><p><button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button><button name="send" value="/rpg items" class="button">🎒 Items</button><button name="send" value="/rpg pc" class="button">💻 Pokemon PC</button></p><p><button name="send" value="/rpg dbsave" class="button">💾 Save Game</button><button name="send" value="/rpg dbload" class="button">📁 Load Game</button></p></div>`;
-}
-
-export function generateProfileHTML(player: PlayerData): string {
-	return `<div class="infobox"><h2>Player Profile</h2><p><strong>Trainer:</strong> ${player.name}</p><p><strong>Level:</strong> ${player.level}</p><p><strong>Badges:</strong> ${player.badges}</p><p><strong>Pokemon in Party:</strong> ${player.party.length}</p><p><strong>Money:</strong> ₽${player.money}</p>` +
-		`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
-		`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button> ` +
-		`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
-		generateBottomNavigation() + `</div>`;
-}
-
-export function generateBuyHTML(player: PlayerData, item: Omit<InventoryItem, 'quantity'>, quantity: number, totalCost: number): string {
-	return `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button><button name="send" value="/rpg items" class="button">View Inventory</button></p></div>`;
-}
-
 export function generateSellMenuHTML(player: PlayerData): string {
 	let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
@@ -81,10 +65,6 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	}
 	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 	return html;
-}
-
-export function generateSellConfirmHTML(player: PlayerData, item: InventoryItem, quantity: number, totalGain: number): string {
-	return `<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${item.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`;
 }
 
 export function generateExploreHTML(player: PlayerData, availableZones: string[], zoneData: typeof ENCOUNTER_ZONES): string {
@@ -126,10 +106,6 @@ export function generateRunHTML(zoneId: string): string {
 		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
 		`</p>` +
 		`</div>`;
-}
-
-export function generateHealHTML(): string {
-	return `<div class="infobox"><h2>Pokemon Healed!</h2><p>Welcome to the Pokémon Center. We've restored your Pokémon to full health.</p><p>We hope to see you again!</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg explore" class="button">Explore</button></p></div>`;
 }
 
 export function generateResetHTML(): string {
@@ -1300,17 +1276,22 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	}
 
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	const activeOpponents = getActiveSlots(battle.opponentSlots);
 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
 		html += `<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
 		for (const ball of pokeBalls) {
-			// --- FIX: Change command based on battle type ---
+			// Determine command based on battle type and number of opponents
 			let command = '';
-			if (isDoubleBattle) {
-				// Doubles: Go to target selection
+			if (isDoubleBattle && activeOpponents.length > 1) {
+				// Doubles with multiple opponents: Go to target selection
 				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
+			} else if (isDoubleBattle && activeOpponents.length === 1) {
+				// Doubles with one opponent: Auto-select that opponent
+				const targetSlot = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
+				command = `/rpg battleaction catch ${ball.id} ${targetSlot}`;
 			} else {
 				// Singles: Hardcode target to slot 2 (the only opponent)
 				command = `/rpg battleaction catch ${ball.id} 2`;
@@ -1359,40 +1340,57 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSlots;
 
-	const slotToSwitchOut = parseInt(target || '');
+	// Determine which slot to switch from
+	let slotToSwitchOut: number;
 
-	if (isNaN(slotToSwitchOut)) {
-		// --- Step 1: Choose which Pokemon to switch out ---
-		html += `<p>Select a Pokémon to switch out. This will use its turn.</p>`;
-		if (pSlot0 && pSlot0.pokemon.hp > 0) {
-			html += `<button name="send" value="/rpg battleaction switchmenu 0" class="button"><strong>${pSlot0.pokemon.species}</strong> (Slot 1)</button> `;
-		}
-		if (pSlot1 && pSlot1.pokemon.hp > 0) {
-			html += `<button name="send" value="/rpg battleaction switchmenu 1" class="button"><strong>${pSlot1.pokemon.species}</strong> (Slot 2)</button> `;
-		}
+	if (target !== undefined && target !== '') {
+		// If target is provided, use it
+		slotToSwitchOut = parseInt(target);
 	} else {
-		// --- Step 2: Choose which Pokemon to switch in ---
-		const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
-		if (!outgoingPokemon) {
-			return `<h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p>`;
-		}
+		// Auto-determine the slot to switch from
+		// In single battles, always slot 0
+		// In double battles, find the first slot without a pending action
+		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
-		html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
-
-		const availableParty = player.party.filter(p =>
-			p.hp > 0 &&
-			!battle.playerSlots.some(s => s?.pokemon.id === p.id)
-		);
-
-		if (availableParty.length === 0) {
-			html += `<p>You have no other Pokémon to switch to!</p>`;
+		if (!isDoubleBattle) {
+			// Single battle: always switch from slot 0
+			slotToSwitchOut = 0;
 		} else {
-			for (const pokemon of availableParty) {
-				html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
-					`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
-					`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
-					`</div>`;
+			// Double battle: find the first slot that needs an action
+			if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
+				slotToSwitchOut = 0;
+			} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
+				slotToSwitchOut = 1;
+			} else {
+				// No valid slot found (shouldn't happen, but fallback)
+				html += `<p>Error: No available slot to switch from.</p>`;
+				html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+				return html;
 			}
+		}
+	}
+
+	// Show Pokemon selection for the determined slot
+	const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
+	if (!outgoingPokemon) {
+		return `<div class="infobox"><h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p></div>`;
+	}
+
+	html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
+
+	const availableParty = player.party.filter(p =>
+		p.hp > 0 &&
+		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+	);
+
+	if (availableParty.length === 0) {
+		html += `<p>You have no other Pokémon to switch to!</p>`;
+	} else {
+		for (const pokemon of availableParty) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
+				`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
+				`<button name="send" value="/rpg battleaction playerswitch ${slotToSwitchOut} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
+				`</div>`;
 		}
 	}
 
@@ -1411,9 +1409,9 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	// Check slot 0 (always used in both single and double battles)
 	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	}
-	// In double battles, also check slot 1 if slot 0 is already filled
-	else if (isDoubleBattle && (battle.playerSlots[1] === null || (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+	} else if (isDoubleBattle && (battle.playerSlots[1] === null ||
+		(battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+		// In double battles, also check slot 1 if slot 0 is already filled
 		slotToFill = 1;
 	}
 	// --- END FIX ---
@@ -1543,4 +1541,430 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 
 	html += `<hr /><p><button name"send" value="/rpg useitem ${itemId}" class="button">Back to Pokémon</button></p></div>`;
 	return html;
+}
+
+/**
+ * Generate HTML for starter Pokemon selection confirmation
+ */
+export function generateStarterConfirmHTML(
+	tempSlot: ActivePokemonSlot,
+	speciesName: string,
+	startingLocationName: string
+): string {
+	return `<div class="infobox">` +
+		`<h2>Congratulations!</h2>` +
+		`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
+		`<p>"Now, head out into ${startingLocationName} and begin your journey. Good luck!"</p>` +
+		`<hr />` +
+		`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for Pokemon selection when viewing summaries
+ */
+export function generateSummarySelectionHTML(player: PlayerData): string {
+	let html = `<div class="infobox"><h2>Select a Pokémon</h2><p>Choose a Pokémon to view its summary:</p>`;
+	if (player.party.length === 0) {
+		html += '<p>You have no Pokémon.</p>';
+	} else {
+		player.party.forEach(p => {
+			html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
+		});
+	}
+	html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for Sacred Ash item use result
+ */
+export function generateSacredAshResultHTML(message: string): string {
+	return `<div class="infobox"><h2>Item Used!</h2><p>${message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for Pokemon selection when using medicine items
+ */
+export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
+	let html = `<div class="infobox"><h2>Use ${itemName}</h2><p>Select a Pokemon to use this item on:</p>`;
+
+	// Determine what kind of Pokemon to show (fainted, status, etc.)
+	const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
+	const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
+	const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
+	const isPPRestore = ['ether', 'maxether', 'elixir', 'maxelixir'].includes(itemId);
+	const isVitamin = ['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId);
+
+	for (const pokemon of player.party) {
+		let show = false;
+		let details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp}</small>`;
+		if (pokemon.status) details += ` <small style="color: red;">(${pokemon.status.toUpperCase()})</small>`;
+
+		if (isRevival && pokemon.hp <= 0) {
+			show = true;
+			details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small>`;
+		}
+		if (isHealing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+			show = true;
+		}
+		if (isStatusHeal && pokemon.hp > 0 && pokemon.status) {
+			show = true;
+		}
+		if (isPPRestore && pokemon.hp > 0) {
+			show = true;
+		}
+		if (isVitamin && pokemon.hp > 0) {
+			const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+			if (totalEVs < 510) {
+				show = true;
+				details += `<br/><small>EVs: ${totalEVs}/510</small>`;
+			}
+		}
+
+		if (show) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+		}
+	}
+	html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for item use error
+ */
+export function generateItemUseErrorHTML(message: string, itemId: string): string {
+	return `<div class="infobox"><p style="color: red; font-weight: bold;">${message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for general item use result with Pokemon info
+ */
+export function generateItemUseResultHTML(message: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Item Used!</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for Pokemon selection when using misc items (like rare candy)
+ */
+export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
+	let html = `<div class="infobox"><h2>Use ${itemName}</h2><p>Select a Pokémon to use this item on:</p>`;
+	for (const pokemon of player.party) {
+		let canUse = true;
+		let details = `(Lvl ${pokemon.level})`;
+
+		if (itemId === 'rarecandy' || itemId.startsWith('expcandy')) {
+			if (pokemon.level >= 100) canUse = false;
+			details = `(Lvl ${pokemon.level}, ${pokemon.experience}/${pokemon.expToNextLevel} EXP)`;
+		}
+		if (itemId === 'terashard') {
+			details = `(Tera Type: ${pokemon.teraType})`;
+		}
+
+		if (canUse) {
+			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+		}
+	}
+	html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for Tera Shard use result
+ */
+export function generateTeraShardResultHTML(pokemon: RPGPokemon, oldTeraType: string, newTeraType: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${pokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for evolution stone incompatibility error
+ */
+export function generateEvolutionStoneErrorHTML(pokemonSpecies: string, itemId: string): string {
+	return `<div class="infobox"><p style="color: red; font-weight: bold;">It had no effect... (${pokemonSpecies} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for PP restoration result
+ */
+export function generatePPRestoreResultHTML(itemName: string, pokemonSpecies: string, moveName: string, restored: number, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Item Used!</h2><p>You used an <strong>${itemName}</strong> on <strong>${pokemonSpecies}</strong>!</p><p><strong>${moveName}</strong>'s PP was restored by ${restored}.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+}
+
+/**
+ * Generate HTML for Pokemon deposit confirmation
+ */
+export function generateDepositPCHTML(pokemonSpecies: string): string {
+	return `<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemonSpecies}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+}
+
+/**
+ * Generate HTML for Pokemon withdraw confirmation
+ */
+export function generateWithdrawPCHTML(pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemonSpecies}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+}
+
+/**
+ * Generate HTML for shop purchase confirmation
+ */
+export function generatePurchaseCompleteHTML(itemName: string, quantity: number, totalCost: number, remainingMoney: number): string {
+	return `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${itemName}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${remainingMoney}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>${generateBottomNavigation()}</div>`;
+}
+
+/**
+ * Generate HTML for item sell result
+ */
+export function generateSellCompleteHTML(itemName: string, quantity: number, totalGain: number, remainingMoney: number): string {
+	return `<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemName}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${remainingMoney}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
+}
+
+/**
+ * Generate HTML for catch error when multiple opponents present
+ */
+export function generateMultipleOpponentsCatchErrorHTML(): string {
+	return `<div class="infobox"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+}
+
+/**
+ * Generate HTML for successful catch
+ */
+export function generateCatchSuccessHTML(
+	caughtPokemon: RPGPokemon,
+	tempSlot: ActivePokemonSlot,
+	location: string,
+	zoneId: string,
+	wasHealed: boolean
+): string {
+	let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
+	if (wasHealed) successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
+
+	return `<div class="infobox">` + `${successMessage}` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
+		`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
+		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for give item - Pokemon selection
+ */
+export function generateGiveItemSelectionHTML(player: PlayerData): string {
+	let html = `<div class="infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
+	for (const pokemon of player.party) {
+		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
+	}
+	html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for give item - Item selection for a specific Pokemon
+ */
+export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemon: RPGPokemon): string {
+	let html = `<div class="infobox"><h2>Give ${pokemon.species} an Item</h2><p>Select an item from your bag:</p>`;
+	let holdableItemsFound = false;
+	for (const [id, item] of player.inventory) {
+		if (item.category === 'held' || item.category === 'berry') {
+			html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id} ${id}" class="button">${item.name}</button> x${item.quantity}</div>`;
+			holdableItemsFound = true;
+		}
+	}
+	if (!holdableItemsFound) {
+		html += `<p>You have no holdable items in your bag.</p>`;
+	}
+	html += `<hr /><p><button name="send" value="/rpg giveitem" class="button">Back to Pokémon</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for item given result
+ */
+export function generateItemGivenHTML(pokemonSpecies: string, itemName: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemonSpecies}</strong> is now holding the <strong>${itemName}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+}
+
+/**
+ * Generate HTML for take item - Pokemon selection
+ */
+export function generateTakeItemSelectionHTML(player: PlayerData): string {
+	let html = `<div class="infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
+	for (const pokemon of player.party) {
+		if (pokemon.item) {
+			html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
+		}
+	}
+	html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for item taken result
+ */
+export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${itemName}</strong> from <strong>${pokemonSpecies}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+}
+
+/**
+ * Generate HTML for nickname change result
+ */
+export function generateNicknameChangedHTML(
+	oldNickname: string,
+	pokemon: RPGPokemon,
+	tempSlot: ActivePokemonSlot
+): string {
+	const infoHTML = generatePokemonInfoHTML(tempSlot, true, true);
+	return `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${infoHTML}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+}
+
+/**
+ * Generate HTML for NPC selection
+ */
+export function generateNPCSelectionHTML(availableNPCs: [string, { name: string }][]): string {
+	let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
+	for (const [id, npc] of availableNPCs) {
+		html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
+	}
+	html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += generateBottomNavigation() + `</div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for NPC starter choice viewing
+ */
+export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, allStarters: string[]): string {
+	let html = `<div class="infobox">` +
+		`<h2>${npcName}</h2>` +
+		`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
+		`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
+		`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+
+	for (const starterId of allStarters) {
+		const species = Dex.species.get(starterId);
+		if (species.exists) {
+			html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
+				`<strong>${species.name}</strong><br>` +
+				`<small>Type: ${species.types.join('/')}</small><br>` +
+				`<button name="send" value="/rpg starterchoice ${npcId} ${starterId}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
+				`</div>`;
+		}
+	}
+
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+	return html;
+}
+
+/**
+ * Generate HTML for NPC starter choice confirmation
+ */
+export function generateNPCStarterConfirmHTML(
+	npcName: string,
+	message: string,
+	tempSlot: ActivePokemonSlot,
+	speciesName: string
+): string {
+	return `<div class="infobox">` +
+		`<h2>Congratulations!</h2>` +
+		`<p><strong>${npcName}:</strong> "${message}"</p>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
+		`<p>"Now, head out and begin your journey. Good luck!"</p>` +
+		`<hr />` +
+		`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database save confirmation
+ */
+export function generateDBSaveHTML(player: PlayerData): string {
+	return `<div class="infobox">` +
+		`<h2>Game Saved to Database!</h2>` +
+		`<p>Your game has been successfully saved to the database.</p>` +
+		`<p><strong>Trainer:</strong> ${player.name}</p>` +
+		`<p><strong>Location:</strong> ${player.location}</p>` +
+		`<p><strong>Badges:</strong> ${player.badges}/8</p>` +
+		`<p><strong>Party:</strong> ${player.party.length} Pokémon</p>` +
+		`<p><strong>Money:</strong> ₽${player.money}</p>` +
+		`<p><small>You can load your save anytime using the Load from Database button.</small></p>` +
+		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database load - no save found
+ */
+export function generateDBLoadNoSaveHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>No Save Found</h2>` +
+		`<p>You don't have a saved game in the database yet.</p>` +
+		`<p>Use the "Save to Database" button to save your progress first.</p>` +
+		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database load confirmation
+ */
+export function generateDBLoadConfirmHTML(loadedPlayer: PlayerData): string {
+	return `<div class="infobox">` +
+		`<h2>Game Loaded from Database!</h2>` +
+		`<p>Your saved game has been loaded successfully!</p>` +
+		`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
+		`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
+		`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
+		`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
+		`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database delete - no save found
+ */
+export function generateDBDeleteNoSaveHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>No Save Found</h2>` +
+		`<p>You don't have a saved game in the database to delete.</p>` +
+		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database delete confirmation prompt
+ */
+export function generateDBDeleteConfirmHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>⚠️ Delete Save Confirmation</h2>` +
+		`<p><strong>Warning:</strong> This will permanently delete your saved game from the database!</p>` +
+		`<p>Your current in-memory progress will NOT be affected, but you won't be able to load this save anymore.</p>` +
+		`<p>Are you sure you want to delete your database save?</p>` +
+		`<p><button name="send" value="/rpg dbdelete confirm" class="button" style="background-color: #d32f2f; color: white;">⚠️ Yes, Delete Save</button> ` +
+		`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+/**
+ * Generate HTML for database delete success
+ */
+export function generateDBDeleteSuccessHTML(): string {
+	return `<div class="infobox">` +
+		`<h2>Save Deleted</h2>` +
+		`<p>Your saved game has been permanently deleted from the database.</p>` +
+		`<p><small>Your current game progress is still in memory. Use "Save to Database" if you want to save your current progress.</small></p>` +
+		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
 }

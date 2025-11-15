@@ -47,9 +47,7 @@ import {
 	handleMirrorHerb,
 } from './battle-engine';
 import {
-	generateBuyHTML,
 	generateSellMenuHTML,
-	generateSellConfirmHTML,
 	generateExploreHTML,
 	generateRunHTML,
 	generateResetHTML,
@@ -72,6 +70,37 @@ import {
 	generateGiveItemPokemonSelectionHTML,
 	generateFaintSwitchHTML,
 	generateBottomNavigation,
+	generateStarterConfirmHTML,
+	generateSummarySelectionHTML,
+	generateSacredAshResultHTML,
+	generateMedicinePokemonSelectionHTML,
+	generateItemUseErrorHTML,
+	generateItemUseResultHTML,
+	generateMiscItemPokemonSelectionHTML,
+	generateTeraShardResultHTML,
+	generateEvolutionStoneErrorHTML,
+	generatePPRestoreResultHTML,
+	generateDepositPCHTML,
+	generateWithdrawPCHTML,
+	generatePurchaseCompleteHTML,
+	generateSellCompleteHTML,
+	generateMultipleOpponentsCatchErrorHTML,
+	generateCatchSuccessHTML,
+	generateGiveItemSelectionHTML,
+	generateGiveItemToSpecificPokemonHTML,
+	generateItemGivenHTML,
+	generateTakeItemSelectionHTML,
+	generateItemTakenHTML,
+	generateNicknameChangedHTML,
+	generateNPCSelectionHTML,
+	generateNPCStarterChoiceHTML,
+	generateNPCStarterConfirmHTML,
+	generateDBSaveHTML,
+	generateDBLoadNoSaveHTML,
+	generateDBLoadConfirmHTML,
+	generateDBDeleteNoSaveHTML,
+	generateDBDeleteConfirmHTML,
+	generateDBDeleteSuccessHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -212,18 +241,7 @@ export const commands: ChatCommands = {
 
 				const tempSlot = createActivePokemonSlot(starterPokemon);
 
-				const confirmHTML = `<div class="infobox">` +
-					`<h2>Congratulations!</h2>` +
-					`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${species.name}</strong> will be a great partner for you."</p>` +
-					`${generatePokemonInfoHTML(tempSlot, true)}` +
-					`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${species.name}!"</p>` +
-					`<p>"Now, head out into ${startingLocation.name} and begin your journey. Good luck!"</p>` +
-					`<hr />` +
-					`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterConfirmHTML(tempSlot, species.name, startingLocation.name)}`);
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
 				}
@@ -344,16 +362,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const targetId = target.trim();
 			if (!targetId) {
-				let html = `<div class="infobox"><h2>Select a Pokémon</h2><p>Choose a Pokémon to view its summary:</p>`;
-				if (player.party.length === 0) {
-					html += '<p>You have no Pokémon.</p>';
-				} else {
-					player.party.forEach(p => {
-						html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
-					});
-				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSummarySelectionHTML(player)}`);
 			}
 			const pokemon = player.party.find(p => p.id === targetId);
 			if (!pokemon) {
@@ -495,55 +504,13 @@ export const commands: ChatCommands = {
 				if (itemId === 'sacredash') {
 					const result = useSacredAsh(player);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'sacredash')}`);
 					}
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSacredAshResultHTML(result.message)}`);
 				}
 
 				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokemon to use this item on:</p>`;
-
-					// Determine what kind of Pokemon to show (fainted, status, etc.)
-					const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
-					const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
-					const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
-					const isPPRestore = ['ether', 'maxether', 'elixir', 'maxelixir'].includes(itemId);
-					const isVitamin = ['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId);
-
-					for (const pokemon of player.party) {
-						let show = false;
-						let details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp}</small>`;
-						if (pokemon.status) details += ` <small style="color: red;">(${pokemon.status.toUpperCase()})</small>`;
-
-						if (isRevival && pokemon.hp <= 0) {
-							show = true;
-							details = `<small>HP: ${pokemon.hp}/${pokemon.maxHp} (Fainted)</small>`;
-						}
-						if (isHealing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
-							show = true;
-						}
-						if (isStatusHeal && pokemon.hp > 0 && pokemon.status) {
-							show = true;
-						}
-						if (isPPRestore && pokemon.hp > 0) {
-							show = true;
-						}
-						if (isVitamin && pokemon.hp > 0) {
-							const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
-							if (totalEVs < 510) {
-								show = true;
-								details += `<br/><small>EVs: ${totalEVs}/510</small>`;
-							}
-						}
-
-						if (show) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
-						}
-					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
 				}
 
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -672,8 +639,7 @@ export const commands: ChatCommands = {
 				}
 
 				if (!result.success) {
-					const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
 				}
 
 				// If successful, remove item and show result
@@ -683,31 +649,12 @@ export const commands: ChatCommands = {
 				}
 
 				const tempSlot = createActivePokemonSlot(targetPokemon);
-				const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
 			} else if (item.category === 'held' || item.category === 'berry') {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 			} else if (item.category === 'misc') {
 				if (!pokemonId) {
-					let html = `<div class="infobox"><h2>Use ${item.name}</h2><p>Select a Pokémon to use this item on:</p>`;
-					for (const pokemon of player.party) {
-						let canUse = true;
-						let details = `(Lvl ${pokemon.level})`;
-
-						if (itemId === 'rarecandy' || itemId.startsWith('expcandy')) {
-							if (pokemon.level >= 100) canUse = false;
-							details = `(Lvl ${pokemon.level}, ${pokemon.experience}/${pokemon.expToNextLevel} EXP)`;
-						}
-						if (itemId === 'terashard') {
-							details = `(Tera Type: ${pokemon.teraType})`;
-						}
-
-						if (canUse) {
-							html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
-						}
-					}
-					html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
 				}
 
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
@@ -717,8 +664,7 @@ export const commands: ChatCommands = {
 				if (itemId === 'rarecandy') {
 					const result = useRareCandyItem(player, targetPokemon, room, user);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem rarecandy" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'rarecandy')}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
@@ -726,13 +672,11 @@ export const commands: ChatCommands = {
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
 					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 					const tempSlot = createActivePokemonSlot(updatedPokemon);
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
 				} else if (itemId.startsWith('expcandy')) {
 					const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
 					if (!result.success) {
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">${result.message}</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
 					}
 					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
@@ -740,8 +684,7 @@ export const commands: ChatCommands = {
 					const updatedPokemon = player.party.find(p => p.id === pokemonId);
 					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
 					const tempSlot = createActivePokemonSlot(updatedPokemon);
-					const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${result.message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
 				} else if (itemId === 'terashard') {
 					const allTypes = Object.keys(TYPE_CHART);
 					if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
@@ -750,8 +693,7 @@ export const commands: ChatCommands = {
 					targetPokemon.teraType = newTeraType;
 					removeItemFromInventory(player, 'terashard', 1);
 					const tempSlot = createActivePokemonSlot(targetPokemon);
-					const resultHTML = `<div class="infobox"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${targetPokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTeraShardResultHTML(targetPokemon, oldTeraType, newTeraType, tempSlot)}`);
 				} else if (itemId === 'eggmovetutor') {
 					const speciesId = toID(targetPokemon.species);
 					const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
@@ -780,8 +722,7 @@ export const commands: ChatCommands = {
 						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 					} else {
 						// Evolution failed
-						const errorHTML = `<div class="infobox"><p style="color: red; font-weight: bold;">It had no effect... (${targetPokemon.species} is not compatible with this item).</p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
 					}
 				} else {
 					return this.errorReply("This item cannot be used right now.");
@@ -840,8 +781,7 @@ export const commands: ChatCommands = {
 			const item = ITEMS_DATABASE[itemId];
 
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>You used an <strong>${item.name}</strong> on <strong>${pokemon.species}</strong>!</p><p><strong>${moveData.name}</strong>'s PP was restored by ${restored}.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePPRestoreResultHTML(item.name, pokemon.species, moveData.name, restored, tempSlot)}`);
 		},
 
 		pc(target, room, user) {
@@ -866,7 +806,7 @@ export const commands: ChatCommands = {
 			}
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Deposited</h2><p><strong>${pokemon.species}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDepositPCHTML(pokemon.species)}`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -884,7 +824,7 @@ export const commands: ChatCommands = {
 			}
 			player.party.push(pokemon);
 			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Pokemon Withdrawn</h2><p><strong>${pokemon.species}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateWithdrawPCHTML(pokemon.species, tempSlot)}`);
 		},
 
 		shop(target, room, user) {
@@ -928,8 +868,7 @@ export const commands: ChatCommands = {
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
-			const purchaseHTML = `<div class="infobox"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>${generateBottomNavigation()}</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${purchaseHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePurchaseCompleteHTML(item.name, quantity, totalCost, player.money)}`);
 		},
 
 		sell(target, room, user) {
@@ -942,28 +881,7 @@ export const commands: ChatCommands = {
 
 			if (!itemId) {
 				// If no item specified, show sell menu
-				let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
-				html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
-				let sellableItems = 0;
-				for (const [id, item] of player.inventory) {
-					const sellPrice = ITEM_PRICES[id]; // Using ITEM_PRICES as sell price for now
-					if (sellPrice && item.category === 'misc') { // Only allow selling 'misc' items
-						sellableItems++;
-						html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
-						html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;
-						html += `<small>Sell for: ₽${sellPrice} each</small><br>`;
-						html += `<button name="send" value="/rpg sell ${id} 1" class="button" style="font-size: 12px; margin-top: 5px;">Sell 1</button>`;
-						if (item.quantity >= 5) {
-							html += `<button name="send" value="/rpg sell ${id} 5" class="button" style="font-size: 12px; margin-top: 5px;">Sell 5</button>`;
-						}
-						html += `</div>`;
-					}
-				}
-				if (sellableItems === 0) {
-					html += `<p>You have no valuable items to sell.</p>`;
-				}
-				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player)}`);
 			}
 
 			const itemInBag = player.inventory.get(itemId);
@@ -986,7 +904,7 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${player.money}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</Gbutton></p></div>`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellCompleteHTML(itemInBag.name, quantity, totalGain, player.money)}`);
 		},
 
 		pokedex(target, room, user) {
@@ -2121,8 +2039,7 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'wild_double') {
 					const activeOpponents = getActiveSlots(battle.opponentSlots);
 					if (activeOpponents.length > 1) {
-						const errorHTML = `<div class="infobox"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${errorHTML}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMultipleOpponentsCatchErrorHTML()}`);
 					}
 				}
 
@@ -2232,19 +2149,9 @@ export const commands: ChatCommands = {
 					const location = player.party.length < 6 ? "your party" : "PC";
 					if (player.party.length < 6) { player.party.push(caughtPokemon); } else { storePokemonInPC(player, caughtPokemon); }
 
-					let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
-					if (ballId === 'healball') successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
-
-					// --- FIX: Use createActivePokemonSlot ---
+					const wasHealed = ballId === 'healball';
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
-					const successHTML = `<div class="infobox">` + `${successMessage}` +
-						`${generatePokemonInfoHTML(tempSlot, true)}` +
-						`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
-						`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
-						`<button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
-						generateBottomNavigation() +
-						`</div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, wasHealed)}`);
 				} else {
 					// --- FAILED CATCH PATH (FIXED) ---
 					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
@@ -2288,15 +2195,7 @@ export const commands: ChatCommands = {
 				saveBattleStatus(battle);
 				activeBattles.delete(user.id);
 
-				const runHTML = `<div class="infobox">` +
-					`<h2>Got away safely!</h2>` +
-					`<p>You ran away from the wild Pokemon.</p>` +
-					`<p>` +
-					`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-					`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-					`</p>` +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${runHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRunHTML(zoneId)}`);
 			},
 
 			back(target, room, user) {
@@ -2323,31 +2222,14 @@ export const commands: ChatCommands = {
 			const [pokemonId, itemId] = target.split(' ').map(toID);
 
 			if (!pokemonId) {
-				let html = `<div class="infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
-				for (const pokemon of player.party) {
-					html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id}" class="button">${pokemon.species}</button> (Currently holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</div>`;
-				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemSelectionHTML(player)}`);
 			}
 
 			const pokemon = player.party.find(p => p.id === pokemonId);
 			if (!pokemon) return this.errorReply("Pokémon not found in your party.");
 
 			if (!itemId) {
-				let html = `<div class="infobox"><h2>Give ${pokemon.species} an Item</h2><p>Select an item from your bag:</p>`;
-				let holdableItemsFound = false;
-				for (const [id, item] of player.inventory) {
-					if (item.category === 'held' || item.category === 'berry') {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg giveitem ${pokemon.id} ${id}" class="button">${item.name}</button> x${item.quantity}</div>`;
-						holdableItemsFound = true;
-					}
-				}
-				if (!holdableItemsFound) {
-					html += `<p>You have no holdable items in your bag.</p>`;
-				}
-				html += `<hr /><p><button name="send" value="/rpg giveitem" class="button">Back to Pokémon</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemToSpecificPokemonHTML(player, pokemon)}`);
 			}
 
 			const item = player.inventory.get(itemId);
@@ -2368,8 +2250,7 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, 1);
 
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Given</h2><p><strong>${pokemon.species}</strong> is now holding the <strong>${item.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemGivenHTML(pokemon.species, item.name, tempSlot)}`);
 		},
 
 		takeitem(target, room, user) {
@@ -2378,14 +2259,12 @@ export const commands: ChatCommands = {
 			const pokemonId = toID(target);
 
 			if (!pokemonId) {
-				let html = `<div class="infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
-				for (const pokemon of player.party) {
-					if (pokemon.item) {
-						html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;"><button name="send" value="/rpg takeitem ${pokemon.id}" class="button">${pokemon.species}</button> (Holding: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item})</div>`;
-					}
+				// Check if only one Pokemon has an item - auto-select it
+				const pokemonWithItems = player.party.filter(p => p.item);
+				if (pokemonWithItems.length === 1) {
+					return this.parse(`/rpg takeitem ${pokemonWithItems[0].id}`);
 				}
-				html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTakeItemSelectionHTML(player)}`);
 			}
 
 			const pokemon = player.party.find(p => p.id === pokemonId);
@@ -2403,8 +2282,7 @@ export const commands: ChatCommands = {
 			pokemon.item = undefined;
 
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Item Taken</h2><p>You took the <strong>${item.name}</strong> from <strong>${pokemon.species}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemTakenHTML(item.name, pokemon.species, tempSlot)}`);
 		},
 
 		nickname(target, room, user) {
@@ -2435,8 +2313,7 @@ export const commands: ChatCommands = {
 			pokemon.nickname = newNickname;
 
 			const tempSlot = createActivePokemonSlot(pokemon);
-			const resultHTML = `<div class="infobox"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNicknameChangedHTML(oldNickname, pokemon, tempSlot)}`);
 		},
 
 		reset(target, room, user) {
@@ -2460,8 +2337,7 @@ export const commands: ChatCommands = {
 			playerData.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateResetHTML()}`);
 		},
 
 		unstuck(target, room, user) {
@@ -2478,9 +2354,7 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 
 			// Send confirmation
-			const confirmHTML = `<div class="infobox"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
-				generateBottomNavigation() + `</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateUnstuckHTML()}`);
 		},
 
 		npc(target, room, user) {
@@ -2522,13 +2396,12 @@ export const commands: ChatCommands = {
 					return this.errorReply("There are no NPCs to talk to here.");
 				}
 
-				let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
-				for (const [id, npc] of availableNPCs) {
-					html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
+				// Auto-select if only one NPC available
+				if (availableNPCs.length === 1) {
+					return this.parse(`/rpg npc ${availableNPCs[0][0]}`);
 				}
-				html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
-				html += generateBottomNavigation() + `</div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCSelectionHTML(availableNPCs)}`);
 			}
 
 			const npc = NPC_DATABASE[npcId];
@@ -2874,28 +2747,7 @@ export const commands: ChatCommands = {
 				// Show all available starters (like Pokemon games)
 				// Get all starters from STARTER_POKEMON
 				const allStarters = Object.values(STARTER_POKEMON).flat();
-
-				let html = `<div class="infobox">` +
-					`<h2>${npc.name}</h2>` +
-					`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
-					`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
-					`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
-
-				for (const starterId of allStarters) {
-					const species = Dex.species.get(starterId);
-					if (species.exists) {
-						html += `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
-							`<strong>${species.name}</strong><br>` +
-							`<small>Type: ${species.types.join('/')}</small><br>` +
-							`<button name="send" value="/rpg starterchoice ${npcId} ${starterId}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
-							`</div>`;
-					}
-				}
-
-				html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterChoiceHTML(npcId, npc.name, allStarters)}`);
 			} else {
 				// Player selected a specific Pokemon
 				// Validate the selection is in STARTER_POKEMON
@@ -2925,18 +2777,7 @@ export const commands: ChatCommands = {
 				const species = Dex.species.get(starter.species);
 				const tempSlot = createActivePokemonSlot(starter);
 
-				const confirmHTML = `<div class="infobox">` +
-					`<h2>Congratulations!</h2>` +
-					`<p><strong>${npc.name}:</strong> "${result.message}"</p>` +
-					`${generatePokemonInfoHTML(tempSlot, true)}` +
-					`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${species.name}!"</p>` +
-					`<p>"Now, head out and begin your journey. Good luck!"</p>` +
-					`<hr />` +
-					`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterConfirmHTML(npc.name, result.message, tempSlot, species.name)}`);
 
 				if (room?.roomid !== 'lobby') {
 					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
@@ -2957,20 +2798,7 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-
-				const saveHTML = `<div class="infobox">` +
-					`<h2>Game Saved to Database!</h2>` +
-					`<p>Your game has been successfully saved to the database.</p>` +
-					`<p><strong>Trainer:</strong> ${player.name}</p>` +
-					`<p><strong>Location:</strong> ${player.location}</p>` +
-					`<p><strong>Badges:</strong> ${player.badges}/8</p>` +
-					`<p><strong>Party:</strong> ${player.party.length} Pokémon</p>` +
-					`<p><strong>Money:</strong> ₽${player.money}</p>` +
-					`<p><small>You can load your save anytime using the Load from Database button.</small></p>` +
-					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${saveHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBSaveHTML(player)}`);
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
 			}
@@ -2984,14 +2812,7 @@ export const commands: ChatCommands = {
 				const hasSave = await hasSaveInDB(user.id);
 
 				if (!hasSave) {
-					const noSaveHTML = `<div class="infobox">` +
-						`<h2>No Save Found</h2>` +
-						`<p>You don't have a saved game in the database yet.</p>` +
-						`<p>Use the "Save to Database" button to save your progress first.</p>` +
-						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
-						generateBottomNavigation() +
-						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBLoadNoSaveHTML()}`);
 				}
 
 				const loadedPlayer = await loadPlayerFromDB(user.id);
@@ -3000,17 +2821,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-				const confirmHTML = `<div class="infobox">` +
-					`<h2>Game Loaded from Database!</h2>` +
-					`<p>Your saved game has been loaded successfully!</p>` +
-					`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
-					`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
-					`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
-					`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
-					`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBLoadConfirmHTML(loadedPlayer)}`);
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
 			}
@@ -3024,27 +2835,12 @@ export const commands: ChatCommands = {
 				const hasSave = await hasSaveInDB(user.id);
 
 				if (!hasSave) {
-					const noSaveHTML = `<div class="infobox">` +
-						`<h2>No Save Found</h2>` +
-						`<p>You don't have a saved game in the database to delete.</p>` +
-						`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
-						generateBottomNavigation() +
-						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${noSaveHTML}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteNoSaveHTML()}`);
 				}
 
 				// Require confirmation
 				if (!target || target !== 'confirm') {
-					const confirmHTML = `<div class="infobox">` +
-						`<h2>⚠️ Delete Save Confirmation</h2>` +
-						`<p><strong>Warning:</strong> This will permanently delete your saved game from the database!</p>` +
-						`<p>Your current in-memory progress will NOT be affected, but you won't be able to load this save anymore.</p>` +
-						`<p>Are you sure you want to delete your database save?</p>` +
-						`<p><button name="send" value="/rpg dbdelete confirm" class="button" style="background-color: #d32f2f; color: white;">⚠️ Yes, Delete Save</button> ` +
-						`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
-						generateBottomNavigation() +
-						`</div>`;
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${confirmHTML}`);
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteConfirmHTML()}`);
 				}
 
 				// Perform deletion
@@ -3054,14 +2850,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error deleting save from database.");
 				}
 
-				const successHTML = `<div class="infobox">` +
-					`<h2>Save Deleted</h2>` +
-					`<p>Your saved game has been permanently deleted from the database.</p>` +
-					`<p><small>Your current game progress is still in memory. Use "Save to Database" if you want to save your current progress.</small></p>` +
-					`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
-					generateBottomNavigation() +
-					`</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${successHTML}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteSuccessHTML()}`);
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
 			}
