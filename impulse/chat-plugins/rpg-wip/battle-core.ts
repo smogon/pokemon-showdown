@@ -459,12 +459,15 @@ export function getDamageDefense(
 export function getMoveType(
 	move: Move,
 	attacker: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
 	battle: BattleState,
 	abilityContext: AbilityContext
 ): string {
 	let moveType = move.type;
 
-	if (move.id === 'weatherball') {
+	if (move.id === 'terablast' && attackerSlot.terastallized) {
+		moveType = attackerSlot.terastallized;
+	} else if (move.id === 'weatherball') {
 		if (RPGAbilities.isWeatherActive(battle)) {
 			// Weather takes priority
 			switch (battle.weather!.type) {
@@ -482,8 +485,7 @@ export function getMoveType(
 			case 'misty': moveType = 'Fairy'; break;
 			}
 		}
-	}
-	if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
+	} else if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
 		switch (battle.terrain.type) {
 		case 'electric': moveType = 'Electric'; break;
 		case 'grassy': moveType = 'Grass'; break;
@@ -625,6 +627,16 @@ export function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false };
 	}
 
+	if (move.id === 'terablast' && attackerSlot.terastallized) {
+		if (attacker.atk > attacker.spa) {
+			move.category = 'Physical';
+			abilityContext.move.category = 'Physical';
+		}
+		if (attackerSlot.terastallized === 'Stellar') {
+			move.basePower = 100;
+		}
+	}
+
 	let basePower = RPGMoves.getDamageBasePower(move, attacker, defender, attackerSlot, defenderSlot, battle);
 	if (basePower === -1) {
 		const healAmount = Math.floor(defender.maxHp * 0.25);
@@ -632,7 +644,7 @@ export function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false };
 	}
 
-	const moveType = getMoveType(move, attacker, battle, abilityContext);
+	const moveType = getMoveType(move, attacker, attackerSlot, battle, abilityContext);
 	abilityContext.move.type = moveType;
 
 	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
@@ -1497,6 +1509,17 @@ export function handleDamagingMove(
 		}
 
 		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+		if (move.id === 'terablast' && attackerSlot.terastallized === 'Stellar' && moveWasSuccessful) {
+			if (attackerSlot.statStages.atk > -6) {
+				attackerSlot.statStages.atk--;
+				messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell!`);
+			}
+			if (attackerSlot.statStages.spa > -6) {
+				attackerSlot.statStages.spa--;
+				messageLog.push(`${attackerSlot.pokemon.species}'s Special Attack fell!`);
+			}
+		}
 
 		// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
