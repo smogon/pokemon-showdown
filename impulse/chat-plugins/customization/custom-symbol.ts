@@ -43,26 +43,43 @@ const removeCustomSymbol = (userid: string): void => {
 	user.updateIdentity();
 };
 
-const notifyUser = (userId: string, staffName: string, symbol: string, action: string): void => {
-	const user = Users.get(userId);
-	if (user?.connected) {
-		const staffNameColor = nameColor(staffName, true, true);
-		const msg = `${staffNameColor} ${action} your custom symbol to: <strong>${symbol}</strong>` +
-			`<br /><center>Refresh to see changes.</center>`;
-		user.popup(`|html|${msg}`);
-	}
-};
-
-const notifyStaff = (
-	staffName: string, targetName: string, symbol: string, action: string
+const sendSymbolNotifications = (
+	staffUser: User,
+	targetName: string,
+	symbol: string,
+	action: 'set' | 'updated' | 'removed'
 ): void => {
-	const room = Rooms.get(STAFF_ROOM_ID);
-	if (room) {
-		const staffNameColor = nameColor(staffName, true, true);
-		const targetNameColor = nameColor(targetName, true, false);
-		const msg = `${staffNameColor} ${action} custom symbol for ${targetNameColor}: ` +
-			`<strong>${symbol}</strong>`;
-		room.add(`|html|<div class="infobox">${msg}</div>`).update();
+	const userId = toID(targetName);
+	const staffNameColor = nameColor(staffUser.name, true, true);
+	const targetNameColor = nameColor(targetName, true, false);
+
+	if (action !== 'removed') {
+		const user = Users.get(userId);
+		if (user?.connected) {
+			const msg = `${staffNameColor} has ${action} your custom symbol to: <strong>${symbol}</strong>` +
+				`<br /><center>Refresh to see changes.</center>`;
+			user.popup(`|html|${msg}`);
+		}
+
+		const room = Rooms.get(STAFF_ROOM_ID);
+		if (room) {
+			const msg = `${staffNameColor} ${action} custom symbol for ${targetNameColor}: ` +
+				`<strong>${symbol}</strong>`;
+			room.add(`|html|<div class="infobox">${msg}</div>`).update();
+		}
+	} else {
+		const user = Users.get(userId);
+		if (user?.connected) {
+			const msg = `${staffNameColor} has removed your custom symbol.` +
+				`<br /><center>Refresh to see changes.</center>`;
+			user.popup(`|html|${msg}`);
+		}
+
+		const room = Rooms.get(STAFF_ROOM_ID);
+		if (room) {
+			const msg = `${staffNameColor} removed custom symbol for ${targetNameColor}.`;
+			room.add(`|html|<div class="infobox">${msg}</div>`).update();
+		}
 	}
 };
 
@@ -102,8 +119,8 @@ export const commands: Chat.ChatCommands = {
 
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetNameColor} the custom symbol: ${symbol}`);
-			notifyUser(userId, user.name, symbol, 'has set');
-			notifyStaff(user.name, name, symbol, 'set');
+			
+			sendSymbolNotifications(user, name, symbol, 'set');
 		},
 
 		async update(target, room, user): Promise<void> {
@@ -127,8 +144,8 @@ export const commands: Chat.ChatCommands = {
 
 			const targetNameColor = nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetNameColor}'s custom symbol to: ${symbol}`);
-			notifyUser(userId, user.name, symbol, 'has updated');
-			notifyStaff(user.name, name, symbol, 'updated');
+			
+			sendSymbolNotifications(user, name, symbol, 'updated');
 		},
 
 		async delete(target, room, user): Promise<void> {
@@ -144,21 +161,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReply(`You removed ${target}'s custom symbol.`);
 
-			const targetUser = Users.get(userId);
-			if (targetUser?.connected) {
-				const staffNameColor = nameColor(user.name, true, true);
-				const msg = `${staffNameColor} has removed your custom symbol.` +
-					`<br /><center>Refresh to see changes.</center>`;
-				targetUser.popup(`|html|${msg}`);
-			}
-
-			const staffRoom = Rooms.get(STAFF_ROOM_ID);
-			if (staffRoom) {
-				const staffNameColor = nameColor(user.name, true, true);
-				const targetNameColor = nameColor(target, true, false);
-				const msg = `${staffNameColor} removed custom symbol for ${targetNameColor}.`;
-				staffRoom.add(`|html|<div class="infobox">${msg}</div>`).update();
-			}
+			sendSymbolNotifications(user, target, '', 'removed');
 		},
 
 		help(): void {
