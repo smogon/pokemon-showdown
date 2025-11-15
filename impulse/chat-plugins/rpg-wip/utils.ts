@@ -7,7 +7,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
-import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot } from './interface';
+import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move } from './interface';
 
 export function getActiveSlots(
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
@@ -465,6 +465,7 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 
 	if (viableSpecies.length === 0) {
 		// Fallback in case no Pokémon match criteria
+		// (e.g., if MANUAL_LEARNSETS is very small)
 		const fallback = createPokemon('pikachu', level);
 		assignRandomMoveset(fallback);
 		fallback.item = 'lightball';
@@ -483,7 +484,7 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 
 		// 5. Assign random, legal EV spread (252 / 252 / 4)
 		const stats: (keyof typeof pokemon.evs)[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-		shuffleArray(stats); // Re-use the shuffle helper from the previous step
+		shuffleArray(stats); // Re-use the shuffle helper
 		
 		pokemon.evs[stats[0]] = 252;
 		pokemon.evs[stats[1]] = 252;
@@ -514,6 +515,7 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 	return team;
 }
 
+
 export const RPGUtils = {
 	getActiveSlots,
 	calculateTotalExpForLevel,
@@ -524,8 +526,6 @@ export const RPGUtils = {
 	checkEvolution,
 	NATURES,
 	NATURE_LIST,
-	assignRandomMoveset,
-	generateRandomTeam,
 };
 
 export default RPGUtils;

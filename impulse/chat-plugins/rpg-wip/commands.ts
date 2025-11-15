@@ -46,8 +46,8 @@ import {
 	applyHazardEffectsOnSwitchIn,
 	handleMirrorHerb,
 	startBattleTowerFloor, // [NEW] Import Battle Tower starter
-	getLocationWeatherData, // [NEW] Keep this import
-	getWeatherStartMessage, // [NEW] Keep this import
+	getLocationWeatherData, // [MODIFIED] Import from battle-engine
+	getWeatherStartMessage, // [MODIFIED] Import from battle-engine
 } from './battle-engine';
 import {
 	generateSellMenuHTML,
@@ -122,8 +122,8 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
-// [MOVED] These functions were moved to battle-flow.ts (which is exported by battle-engine)
-// We just need to ensure they are exported from there and imported here, which they are.
+// [MOVED] Helper functions `getLocationWeatherData` and `getWeatherStartMessage`
+// are now imported from battle-engine (where battle-flow.ts lives).
 
 export const commands: ChatCommands = {
 	rpg: {
@@ -1570,7 +1570,7 @@ export const commands: ChatCommands = {
 				battle.battleLog.push(...battleMessages);
 
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
@@ -1777,9 +1777,18 @@ export const commands: ChatCommands = {
 				const moveData = getMove(moveId);
 				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
 
-				if (moveId !== 'struggle' && !attackerSlot.pokemon.moves.some(m => m.id === moveData.id)) {
-					return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
+				// [MODIFIED] Check the correct moves list (story party or tower party)
+				const partyToUse = battle.overridePlayerParty || getPlayerData(battle.playerId).party;
+				const currentPokemon = partyToUse.find(p => p.id === attackerSlot.pokemon.id);
+				
+				if (moveId !== 'struggle' && !currentPokemon?.moves.some(m => m.id === moveData.id)) {
+					// This check is tricky. The `attackerSlot.pokemon` is the *instance* of the Pokemon.
+					// We should check `attackerSlot.pokemon.moves` directly.
+					if (moveId !== 'struggle' && !attackerSlot.pokemon.moves.some(m => m.id === moveData.id)) {
+						return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
+					}
 				}
+				// [END MODIFICATION]
 
 				// --- Terastallization validation ---
 				if (shouldTerastallize) {
@@ -1881,10 +1890,10 @@ export const commands: ChatCommands = {
 				}
 
 				const player = getPlayerData(battle.playerId);
-				
-				// --- MODIFIED: Use overridePlayerParty if it exists ---
+
+				// --- [MODIFIED] Use overridePlayerParty if it exists ---
 				const partyToUse = battle.overridePlayerParty || player.party;
-				// --- END MODIFICATION ---
+				// --- [END MODIFICATION] ---
 
 				// Find the Pokemon in the correct party
 				const partyIndex = partyToUse.findIndex(p => p.id === pokemonId && p.hp > 0);
@@ -1910,16 +1919,18 @@ export const commands: ChatCommands = {
 				const infoColor = '#dc3545';
 				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
 
-				// **NEW:** Check if this is a pivot switch
+				// Check if this is a pivot switch
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
 					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
 
-					// Check if the pivoting Pokemon is already in the party to avoid duplicates
-					const pivotIndex = partyToUse.findIndex(p => p.id === pivotingPokemon.id);
-					if (pivotIndex === -1 && !battle.overridePlayerParty) { // Only add back to party in story mode
-						// Only push if not already in party (shouldn't normally happen)
-						player.party.push(pivotingPokemon);
+					// [MODIFIED] Only add back to party in Story Mode
+					if (!battle.overridePlayerParty) {
+						const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
+						if (pivotIndex === -1) {
+							player.party.push(pivotingPokemon);
+						}
 					}
+					// [END MODIFICATION]
 
 					// Handle Baton Pass
 					if (battle.pendingPivot.isBatonPass) {
@@ -1932,7 +1943,7 @@ export const commands: ChatCommands = {
 					}
 					battle.pendingPivot = undefined; // Clear the pivot flag
 				}
-				// (If not a pivot, it was a faint switch. The fainted mon is already in the party at 0 HP)
+				// (If not a pivot, it was a faint switch. The fainted mon is already in the party/overrideParty at 0 HP)
 
 				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
 
@@ -1945,11 +1956,10 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Check if more switches are needed ---
-				// In single battles, only check slot 0. In double battles, check both slots 0 and 1.
 				const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
 				
-				// Use partyToUse
+				// [MODIFIED] Use partyToUse
 				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
 					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 
@@ -1958,10 +1968,11 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 				} else {
 					// All slots are filled, the forced switch is complete
-					// A forced switch (due to fainting) ends the turn
-					// Clear any pending actions since the turn is over
-					battle.pendingActions = {};
-					// Show the battle screen for the next turn
+					// Clear any pending actions since the turn is over (if it was a faint)
+					if (!battle.pendingPivot) { // Don't clear if it was a mid-turn pivot
+						battle.pendingActions = {};
+					}
+					// Show the battle screen
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
 				}
 			},
@@ -2008,9 +2019,9 @@ export const commands: ChatCommands = {
 
 				const player = getPlayerData(battle.playerId);
 
-				// --- MODIFIED: Use overridePlayerParty if it exists ---
+				// --- [MODIFIED] Use overridePlayerParty if it exists ---
 				const partyToUse = battle.overridePlayerParty || player.party;
-				// --- END MODIFICATION ---
+				// --- [END MODIFICATION] ---
 
 				// Check if incoming Pokemon is valid
 				const incomingPokemon = partyToUse.find(p => p.id === pokemonIdIn && p.hp > 0);
@@ -2107,12 +2118,12 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [NEW] Add Battle Tower check
+				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
 				}
-				// [END NEW]
+				// [END MODIFICATION]
 
 				// --- NEW: Read target ---
 				const [ballId, slotIndexStr] = target.split(' ');
@@ -2208,12 +2219,12 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [NEW] Add Battle Tower check
+				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You can't run from a Battle Tower challenge!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't run from a Battle Tower challenge!"])}`);
 				}
-				// [END NEW]
+				// [END MODIFICATION]
 
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't run from a Trainer battle!");
