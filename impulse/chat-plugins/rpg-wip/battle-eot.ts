@@ -234,6 +234,17 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 			messageLog.push(`${pokemon.species}'s taunt wore off.`);
 		}
 	}
+	if (slot.chargingMove) {
+		// Check if the charging move has run out of PP
+		const chargingMoveObj = pokemon.moves.find(m => m.id === slot.chargingMove);
+		const hasNoPP = !chargingMoveObj || chargingMoveObj.pp === 0;
+
+		if (hasNoPP) {
+			// Clear the charging state if the move has no PP
+			messageLog.push(`${pokemon.species} stopped charging due to lack of PP!`);
+			slot.chargingMove = undefined;
+		}
+	}
 	if (slot.disabledMove) {
 		slot.disabledMove.turns--;
 		if (slot.disabledMove.turns <= 0) {
@@ -242,10 +253,20 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 		}
 	}
 	if (slot.encoreMove) {
-		slot.encoreMove.turns--;
-		if (slot.encoreMove.turns <= 0) {
-			messageLog.push(`${pokemon.species}'s encore ended!`);
+		// Check if the encored move has run out of PP
+		const encoredMoveObj = pokemon.moves.find(m => m.id === slot.encoreMove!.moveId);
+		const hasNoPP = !encoredMoveObj || encoredMoveObj.pp === 0;
+
+		if (hasNoPP) {
+			// End Encore if the move has no PP
+			messageLog.push(`${pokemon.species}'s encore ended due to lack of PP!`);
 			slot.encoreMove = undefined;
+		} else {
+			slot.encoreMove.turns--;
+			if (slot.encoreMove.turns <= 0) {
+				messageLog.push(`${pokemon.species}'s encore ended!`);
+				slot.encoreMove = undefined;
+			}
 		}
 	}
 	if (slot.magnetRiseTurns > 0) {
@@ -281,9 +302,17 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 	}
 
 	if (slot.lockedMoveCounter > 0) {
-		if (slot.status === 'slp') {
+		// Check if the locked move has run out of PP
+		const lockedMoveObj = pokemon.moves.find(m => m.id === slot.lockedMove);
+		const hasNoPP = !lockedMoveObj || lockedMoveObj.pp === 0;
+
+		if (slot.status === 'slp' || hasNoPP) {
+			// End the rampage if asleep or if the move has no PP
 			slot.lockedMove = undefined;
 			slot.lockedMoveCounter = 0;
+			if (hasNoPP) {
+				messageLog.push(`${pokemon.species}'s rampage ended due to lack of PP!`);
+			}
 		} else {
 			slot.lockedMoveCounter--;
 			if (slot.lockedMoveCounter === 0) {
@@ -302,10 +331,21 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 	}
 
 	if (slot.uproarTurns > 0) {
-		slot.uproarTurns--;
-		if (slot.uproarTurns === 0) {
+		// Check if Uproar has run out of PP
+		const uproarMoveObj = pokemon.moves.find(m => m.id === slot.lockedMove);
+		const hasNoPP = !uproarMoveObj || uproarMoveObj.pp === 0;
+
+		if (hasNoPP) {
+			// End Uproar if the move has no PP
 			slot.lockedMove = undefined;
-			messageLog.push(`${pokemon.species} calmed down.`);
+			slot.uproarTurns = 0;
+			messageLog.push(`${pokemon.species} calmed down due to lack of PP!`);
+		} else {
+			slot.uproarTurns--;
+			if (slot.uproarTurns === 0) {
+				slot.lockedMove = undefined;
+				messageLog.push(`${pokemon.species} calmed down.`);
+			}
 		}
 	}
 
@@ -571,7 +611,7 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.opponentSlots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
-			
+
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
@@ -605,7 +645,7 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.playerSlots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
-			
+
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
 
