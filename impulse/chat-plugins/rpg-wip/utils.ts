@@ -8,13 +8,26 @@ import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
-import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move } from './interface';
+import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState } from './interface';
 
 export function getActiveSlots(
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
 ): ActivePokemonSlot[] {
 	if (!slots) return [];
 	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
+}
+
+/**
+ * Helper function to get the active party for a battle.
+ * In Battle Tower mode, returns the temporary override party.
+ * In normal battles, returns the player's actual party.
+ * 
+ * @param battle - The current battle state
+ * @param player - The player data
+ * @returns The active party (either override or actual party)
+ */
+export function getActiveParty(battle: BattleState, player: PlayerData): RPGPokemon[] {
+	return battle.overridePlayerParty || player.party;
 }
 
 export function calculateTotalExpForLevel(growthRate: string, level: number): number {

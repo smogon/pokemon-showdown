@@ -10,7 +10,7 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { generateRandomTeam, getActiveSlots, getMove, type CheckEvolutionContext } from './utils';
+import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
@@ -389,7 +389,7 @@ export function checkForWinLoss(
 	user: User,
 	messageLog: string[]
 ): boolean {
-	const playerHasLivingPokemon = (battle.overridePlayerParty || player.party).some(p =>
+	const playerHasLivingPokemon = getActiveParty(battle, player).some(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
@@ -581,7 +581,7 @@ export function checkBattleEndCondition(
 	}
 	handleAiPivot(battle, messageLog);
 
-	const playerHasLivingPokemon = player.party.some(p =>
+	const playerHasLivingPokemon = getActiveParty(battle, player).some(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
@@ -1264,7 +1264,8 @@ export function handleSwitchAction(
 	saveBattleStatus(battle);
 
 	if (isPlayerSwitch) {
-		const incomingPokemon = player.party.find(p => p.id === pokemonToSwitchInId);
+		const playerParty = getActiveParty(battle, player);
+		const incomingPokemon = playerParty.find(p => p.id === pokemonToSwitchInId);
 		if (!incomingPokemon) {
 			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
 			return;
@@ -1504,7 +1505,8 @@ export function executeAction(
 
 			const isPlayer = attackerSlotIndex <= 1;
 			if (isPlayer) {
-				const hasReplacement = player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+				const playerParty = getActiveParty(battle, player);
+				const hasReplacement = playerParty.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 				if (hasReplacement) {
 					battle.pendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
 					battle.playerSlots[attackerSlotIndex as 0 | 1] = null;

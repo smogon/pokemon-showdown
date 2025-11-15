@@ -9,7 +9,7 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getActiveSlots, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, type CheckEvolutionContext } from './utils';
+import { getActiveSlots, getActiveParty, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, TYPE_CHART } from './data';
@@ -339,10 +339,11 @@ export function gainExperience(
 
 export function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
+	const playerParty = getActiveParty(battle, player);
 
 	for (const slot of battle.playerSlots) {
 		if (slot) {
-			const pokemonInParty = player.party.find(p => p.id === slot.pokemon.id);
+			const pokemonInParty = playerParty.find(p => p.id === slot.pokemon.id);
 			if (pokemonInParty) {
 				if (slot.status === 'slp' || slot.status === 'frz') {
 					pokemonInParty.status = null;
