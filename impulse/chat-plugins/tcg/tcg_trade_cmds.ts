@@ -344,10 +344,15 @@ export const tradeCommands: ChatCommands = {
 
 		if (trade.initiatorReady && trade.recipientReady) {
 			try {
+				// WARNING: Trade operations involve multiple sequential database updates
+				// without transaction support (MongoDB M0 free tier limitation).
+				// If any operation fails mid-trade, partial completion may occur.
+				// All validations are done upfront to minimize this risk.
 				const now = new Date().toISOString();
 				const collection = userCollectionsCollection;
 				const profiles = userProfilesCollection;
 
+				// Validate all cards exist and quantities are sufficient before starting trade
 				for (const [cardId, qty] of trade.initiatorOffer.cards.entries()) {
 					const card = await collection.findOne({ userId: trade.initiator, cardId });
 					if (!card || card.quantity < qty) {
@@ -368,6 +373,7 @@ export const tradeCommands: ChatCommands = {
 					}
 				}
 
+				// Validate credits are sufficient
 				const initiatorProfile = await profiles.findOne({ userId: trade.initiator });
 				const recipientProfile = await profiles.findOne({ userId: trade.recipient });
 
@@ -385,6 +391,8 @@ export const tradeCommands: ChatCommands = {
 					return;
 				}
 
+				// All validations passed - proceed with trade
+				// Note: Operations below are sequential and not atomic
 				for (const [cardId, qty] of trade.initiatorOffer.cards.entries()) {
 					const card = await collection.findOne({ userId: trade.initiator, cardId });
 					if (!card) continue;
@@ -531,11 +539,16 @@ export const tradeCommands: ChatCommands = {
 					otherUser.popup(`|html|Trade with ${user.name} completed successfully!`);
 				}
 			} catch (error) {
+				// Trade failed during execution - trade is cancelled but partial updates may have occurred
+				// This is a known limitation without transaction support (MongoDB M0 free tier)
+				// Both users are notified of the failure
 				activeTrades.delete(key);
 				this.errorReply(`An error occurred during the trade: ${error.message}`);
 				if (otherUser) {
 					otherUser.popup(`|html|Trade failed due to an error.`);
 				}
+				// Log the error for administrator review
+				console.error(`Trade error between ${trade.initiator} and ${trade.recipient}:`, error);
 			}
 		} else {
 			this.sendReply(`You are ready to trade. Waiting for ${otherUser?.name || otherUserId} to accept.`);
