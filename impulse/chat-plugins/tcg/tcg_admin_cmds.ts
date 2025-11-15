@@ -6,7 +6,7 @@
 import type { TcgUser, TcgUserProfile } from './interface';
 import { getSet, initializeCache, getCacheStats,
 	clearCache, clearShopCache, MAX_CARD_QUANTITY,
-	CREDITS_PER_DUPLICATE } from './tcg_utils';
+	CREDITS_PER_DUPLICATE, calculateSetsCompleted } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection,
 	userProfilesCollection, userPacksCollection,
 	cooldownsCollection } from './tcg_collections';
@@ -147,8 +147,7 @@ export const adminCommands: ChatCommands = {
 
 			let setsCompleted: number | undefined = undefined;
 			if (actualQtyAdded > 0) {
-				const calculateSetsCompleted = (await import('./tcg_utils.js')).calculateSetsCompleted;
-				setsCompleted = await calculateSetsCompleted(targetUserId);
+				setsCompleted = calculateSetsCompleted(targetUserId);
 			}
 
 			if (actualQtyAdded > 0 || creditsToAward > 0) {
