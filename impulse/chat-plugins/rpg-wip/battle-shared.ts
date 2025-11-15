@@ -234,7 +234,8 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	// Phase 1: Unnerve - Prevents opponents from eating berries
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'unnerve');
+	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 && 
+		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
 	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
 		return; // Cannot consume berries when opponent has Unnerve
 	}

@@ -20,6 +20,12 @@ export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, def
 	return false;
 }
 
+// Persistent - Prevents ability changes
+export function isPersistent(pokemon: RPGPokemon): boolean {
+	const ability = toID(pokemon.ability || '');
+	return ability === 'persistent';
+}
+
 export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	'soundproof': ctx => {
 		if (ctx.move.flags.sound) {
@@ -759,6 +765,79 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 		return value;
 	},
+
+	// Ruin Abilities - Lower stats of all opponents by 25%
+	'swordofruin': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'def' && battle) {
+			// Check if any opponent has Sword of Ruin
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const hasSwordOfRuin = opponents.some(s => 
+				s && s.pokemon.hp > 0 && 
+				toID(s.pokemon.ability || '') === 'swordofruin' &&
+				s.pokemon.id !== pokemon.id
+			);
+			
+			if (hasSwordOfRuin) {
+				return Math.floor(value * 0.75);
+			}
+		}
+		return value;
+	},
+
+	'tabletsofruin': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'atk' && battle) {
+			// Check if any opponent has Tablets of Ruin
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const hasTabletsOfRuin = opponents.some(s => 
+				s && s.pokemon.hp > 0 && 
+				toID(s.pokemon.ability || '') === 'tabletsofruin' &&
+				s.pokemon.id !== pokemon.id
+			);
+			
+			if (hasTabletsOfRuin) {
+				return Math.floor(value * 0.75);
+			}
+		}
+		return value;
+	},
+
+	'vesselofruin': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spa' && battle) {
+			// Check if any opponent has Vessel of Ruin
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const hasVesselOfRuin = opponents.some(s => 
+				s && s.pokemon.hp > 0 && 
+				toID(s.pokemon.ability || '') === 'vesselofruin' &&
+				s.pokemon.id !== pokemon.id
+			);
+			
+			if (hasVesselOfRuin) {
+				return Math.floor(value * 0.75);
+			}
+		}
+		return value;
+	},
+
+	'beadsofruin': (pokemon, stat, value, slot, battle) => {
+		if (stat === 'spd' && battle) {
+			// Check if any opponent has Beads of Ruin
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const hasBeadsOfRuin = opponents.some(s => 
+				s && s.pokemon.hp > 0 && 
+				toID(s.pokemon.ability || '') === 'beadsofruin' &&
+				s.pokemon.id !== pokemon.id
+			);
+			
+			if (hasBeadsOfRuin) {
+				return Math.floor(value * 0.75);
+			}
+		}
+		return value;
+	},
 };
 
 export const WEATHER_ABILITIES = {
@@ -1230,6 +1309,24 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
+	// As One (Glastrier) - Combines Unnerve and Chilling Neigh
+	'asoneglastrier': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.atk < 6) {
+				slot.statStages.atk++;
+				messageLog.push(`${slot.pokemon.species}'s As One raised its Attack!`);
+			}
+		},
+	},
+	// As One (Spectrier) - Combines Unnerve and Grim Neigh
+	'asonespectrier': {
+		handler: (slot, battle, messageLog) => {
+			if (slot.statStages.spa < 6) {
+				slot.statStages.spa++;
+				messageLog.push(`${slot.pokemon.species}'s As One raised its Sp. Atk!`);
+			}
+		},
+	},
 	// Phase 2: Soul-Heart - Boosts Sp. Atk when any Pokemon faints
 	'soulheart': {
 		handler: (slot, battle, messageLog) => {
@@ -1523,7 +1620,7 @@ export const RUIN_ABILITIES = {
 		stat: 'def',
 		description: 'Lowers Defense of all other Pokemon',
 	},
-	'tabletsof ruin': {
+	'tabletsofruin': {
 		stat: 'atk',
 		description: 'Lowers Attack of all other Pokemon',
 	},
@@ -2505,13 +2602,12 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Phase 1: Supersweet Syrup - Lowers evasion of all foes by 1 stage on switch-in
-	if (ability === 'supersweetsynip') {
+	// Supersweet Syrup - Lowers evasion of all foes by 1 stage on switch-in
+	if (ability === 'supersweetsynup' || ability === 'supersweetsynip') {
 		const opponents = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		for (const opponent of opponents) {
-			if (opponent && opponent.pokemon.hp > 0 && opponent.statStages.evasion > -6) {
-				opponent.statStages.evasion--;
-				messageLog.push(`${pokemon.species}'s Supersweet Syrup lowered ${opponent.pokemon.species}'s evasion!`);
+			if (opponent && opponent.pokemon.hp > 0) {
+				applyStatChange(opponent, 'evasion', -1, battle, messageLog, slot);
 			}
 		}
 	}
@@ -2544,6 +2640,26 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		pokemon.species = 'Palafin-Hero';
 		(slot as any).hasSwitchedOut = false;
 		messageLog.push(`${pokemon.nickname || 'Palafin'} transformed into its Hero form!`);
+	}
+
+	// Embody Aspect (Teal) - Boosts Speed on switch-in for Ogerpon-Teal
+	if (ability === 'embodyaspectteal' && pokemon.species.includes('Ogerpon')) {
+		applyStatChange(slot, 'spe', 1, battle, messageLog, slot);
+	}
+
+	// Embody Aspect (Wellspring) - Boosts Sp. Def on switch-in for Ogerpon-Wellspring
+	if (ability === 'embodyaspectwellspring' && pokemon.species.includes('Ogerpon')) {
+		applyStatChange(slot, 'spd', 1, battle, messageLog, slot);
+	}
+
+	// Embody Aspect (Hearthflame) - Boosts Attack on switch-in for Ogerpon-Hearthflame
+	if (ability === 'embodyaspecthearthflame' && pokemon.species.includes('Ogerpon')) {
+		applyStatChange(slot, 'atk', 1, battle, messageLog, slot);
+	}
+
+	// Embody Aspect (Cornerstone) - Boosts Defense on switch-in for Ogerpon-Cornerstone
+	if (ability === 'embodyaspectcornerstone' && pokemon.species.includes('Ogerpon')) {
+		applyStatChange(slot, 'def', 1, battle, messageLog, slot);
 	}
 
 	// Phase 4: Screen Cleaner - Removes screens on switch-in
@@ -2779,6 +2895,7 @@ export const RPGAbilities = {
 	getModifiedWeight,
 
 	isAbilityIgnored,
+	isPersistent,
 
 	IMMUNITY_ABILITIES,
 	POWER_MODIFIER_ABILITIES,

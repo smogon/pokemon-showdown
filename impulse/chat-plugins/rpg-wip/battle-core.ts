@@ -57,6 +57,8 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	// Phase 2: Mind's Eye - Hits Ghost types with Normal/Fighting moves
 	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
 	const hasMindEye = attackerAbility === 'mindseye';
+	// Scrappy - Allows Normal/Fighting moves to hit Ghost types
+	const hasScrappy = attackerAbility === 'scrappy';
 
 	for (const defenderType of defenderTypes) {
 		if (chartEntry.superEffective.includes(defenderType)) {
@@ -73,6 +75,9 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 			// Mind's Eye bypasses Ghost immunity to Normal/Fighting
 			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
 				// Don't multiply by 0, treat as neutral
+				effectiveness *= 1;
+			} else if (hasScrappy && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				// Scrappy bypasses Ghost immunity to Normal/Fighting
 				effectiveness *= 1;
 			} else {
 				effectiveness *= 0;
@@ -970,6 +975,36 @@ export function handleOnHitAbilityResponses(
 			if (defenderSlot.statStages.spa < 6) {
 				defenderSlot.statStages.spa++;
 				messageLog.push(`${defender.species}'s Berserk raised its Sp. Atk!`);
+			}
+		}
+	}
+
+	// Thermal Exchange - Boosts Attack when hit by Fire move
+	if (defenderAbility === 'thermalexchange' && move.type === 'Fire' && damageDealt > 0) {
+		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
+			if (defenderSlot.statStages.atk < 6) {
+				defenderSlot.statStages.atk++;
+				messageLog.push(`${defender.species}'s Thermal Exchange raised its Attack!`);
+			}
+		}
+	}
+
+	// Cotton Down - Lowers Speed of all opponents when hit by an attack
+	if (defenderAbility === 'cottondown' && damageDealt > 0 && move.category !== 'Status') {
+		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
+			const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
+			const opponentSlots = isDefenderPlayer ? battle.opponentSlots : battle.playerSlots;
+			
+			let affectedAny = false;
+			for (const oppSlot of opponentSlots) {
+				if (oppSlot && oppSlot.pokemon.hp > 0) {
+					if (applyStatChange(oppSlot, 'spe', -1, battle, messageLog, defenderSlot)) {
+						affectedAny = true;
+					}
+				}
+			}
+			if (affectedAny) {
+				messageLog.push(`${defender.species}'s Cotton Down lowered the Speed of opposing Pokémon!`);
 			}
 		}
 	}
