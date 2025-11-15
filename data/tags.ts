@@ -129,6 +129,17 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "G-Max Move",
 		moveFilter: move => typeof move.isMax === 'string',
 	},
+	// AGE flags
+	tail: {
+		name: "Tail",
+		desc: "Has +1 priority with Long Tail.",
+		moveFilter: move => 'tail' in move.flags,
+	},
+	kick: {
+		name: "Kick",
+		desc: "Boosted 1.2x by Striker.",
+		moveFilter: move => 'kick' in move.flags,
+	},
 
 	// Tiers
 	// -----
@@ -204,6 +215,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "AG",
 		speciesFilter: species => species.tier === 'AG',
 	},
+	touhoutier: {
+		name: "Touhou Tier",
+		speciesFilter: species => species.isNonstandard === 'Toho',
+	},
 
 	// Doubles tiers
 	// -------------
@@ -226,6 +241,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	dnu: {
 		name: "DNU",
 		speciesFilter: species => species.doublesTier === '(DUU)',
+	},
+	dtouhoutier: {
+		name: "DTouhou Tier",
+		speciesFilter: species => species.doublesTier === 'DToho',
 	},
 
 	// Nat Dex tiers
