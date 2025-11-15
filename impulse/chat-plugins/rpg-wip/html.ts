@@ -2151,7 +2151,7 @@ export function generateDBDeleteSuccessHTML(): string {
  */
 export function generateModeSelectionHTML(): string {
 	let html = `<div class="infobox"><h2>Select a Mode</h2>`;
-	html += `<p><button name="send" value="/rpg start" class="button" style="width: 200px;">📖 Story Mode</button></p>`;
+	html += `<p><button name="send" value="/rpg storymode" class="button" style="width: 200px;">📖 Story Mode</button></p>`;
 	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">🗼 Battle Tower</button></p>`;
 	html += `</div>`;
 	return html;
