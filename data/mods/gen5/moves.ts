@@ -553,6 +553,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.actions.useMove(newMove, this.effectState.target, { target: source });
+				move.hasBounced = true; // only bounce once in free-for-all battles
 				return null;
 			},
 		},
@@ -598,6 +599,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		type: "Normal",
 	},
+	muddywater: {
+		inherit: true,
+		basePower: 95,
+	},
 	mudsport: {
 		inherit: true,
 		pseudoWeather: undefined,
@@ -615,10 +620,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-	},
-	muddywater: {
-		inherit: true,
-		basePower: 95,
 	},
 	naturepower: {
 		inherit: true,
@@ -660,6 +661,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 70,
 	},
+	psychoshift: {
+		inherit: true,
+		accuracy: 90,
+	},
 	psychup: {
 		inherit: true,
 		onHit(target, source) {
@@ -669,10 +674,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
-	},
-	psychoshift: {
-		inherit: true,
-		accuracy: 90,
 	},
 	psywave: {
 		inherit: true,
