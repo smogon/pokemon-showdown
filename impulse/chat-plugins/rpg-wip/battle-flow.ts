@@ -1447,6 +1447,31 @@ export function validateMoveAction(
 		return `There is no PP left for ${moveData.name}!`;
 	}
 
+	// Check if currently charging a move (Solar Beam, Dig, Fly, etc.)
+	// This check must come before Encore, Torment, and other locks
+	// because charging moves take priority over all other move restrictions
+	if (attackerSlot.chargingMove) {
+		if (attackerSlot.chargingMove !== moveData.id) {
+			// Trying to use a different move while charging
+			// Check if the charging move has PP left
+			const chargingMoveObj = pokemon.moves.find(m => m.id === attackerSlot.chargingMove);
+			if (chargingMoveObj && chargingMoveObj.pp > 0) {
+				const chargingMoveName = getMove(attackerSlot.chargingMove).name;
+				return `${pokemon.species} must continue using ${chargingMoveName}!`;
+			}
+			// If charging move has no PP, allow Struggle (but no other moves)
+			return `${pokemon.species} has no PP left for its charging move!`;
+		}
+		// If we're using the charging move itself, check only Disable (not Encore/Torment)
+		// because charging takes priority
+		if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
+			return `${moveData.name} is disabled!`;
+		}
+		// Allow the charging move to continue - skip other checks
+		return null;
+	}
+
+	// Not charging, do normal validation
 	if (attackerSlot.disabledMove && attackerSlot.disabledMove.moveId === moveData.id) {
 		return `${moveData.name} is disabled!`;
 	}
@@ -1462,20 +1487,6 @@ export function validateMoveAction(
 
 	if (attackerSlot.tormentActive && attackerSlot.lastMoveUsed === moveData.id) {
 		return `${pokemon.species} can't use the same move twice due to Torment!`;
-	}
-
-	// Check if currently charging a move (Solar Beam, Dig, Fly, etc.)
-	if (attackerSlot.chargingMove) {
-		if (attackerSlot.chargingMove !== moveData.id) {
-			// Check if the charging move has PP left
-			const chargingMoveObj = pokemon.moves.find(m => m.id === attackerSlot.chargingMove);
-			if (chargingMoveObj && chargingMoveObj.pp > 0) {
-				const chargingMoveName = getMove(attackerSlot.chargingMove).name;
-				return `${pokemon.species} must continue using ${chargingMoveName}!`;
-			}
-			// If charging move has no PP, allow Struggle (but no other moves)
-			return `${pokemon.species} has no PP left for its charging move!`;
-		}
 	}
 
 	if (attackerSlot.lockedMoveCounter > 0) {
