@@ -26,7 +26,7 @@ import {
 import { RPGMoves } from './battle-moves';
 
 // Import shared helpers
-import * from './battle-shared';
+import * as './battle-shared';
 /*import {
 	activateUnburden,
 	applyStatChange,
@@ -40,7 +40,7 @@ import * from './battle-shared';
 } from './battle-shared';*/
 
 // Import core functions
-import * from './battle-core';
+import * as './battle-core';
 /*import {
 	gainExperience,
 	getCustomEffectiveness,
@@ -52,7 +52,7 @@ import * from './battle-core';
 } from './battle-core';*/
 
 // Import EOT functions
-import * from './battle-eot';
+import * as './battle-eot';
 /*import {
 	processEndOfTurn,
 	applyEOTStatusDamage,
