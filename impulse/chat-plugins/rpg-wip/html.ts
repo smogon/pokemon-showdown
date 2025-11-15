@@ -1151,8 +1151,8 @@ export function generateBattleHTML(
 
 export function generateWelcomeHTML(): string {
 	return `<div class="infobox">` +
-		`<h2><center><b>Welcome, Tester!</b></center></h2>` +
-		`<p>We're thrilled to have you here for an early look at the <strong>Impulse RPG System</strong>!</p>` +
+		`<h2><center><b>Developer's Note</b></center></h2>` +
+		`<p>Welcome to the <strong>Impulse RPG System</strong>!</p>` +
 		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
 		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
 		`<p>This means you get a sneak peek, but it also means the game is still a work-in-progress. As you explore, you might encounter:</p>` +
@@ -1162,11 +1162,8 @@ export function generateWelcomeHTML(): string {
 		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
 		`</ul>` +
 		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
-		`<p><strong>Starting a New Game:</strong> Press 'Continue' to begin. Your first task is to head to the Professor's Lab to choose your starter Pokémon.</p>` +
-		`<p><strong>Returning Testers:</strong> Press 'Load Save' to resume your progress.</p>` +
-		`<p>` +
-		`<button name="send" value="/rpg storymode" class="button">Continue</button> ` +
-		`<button name="send" value="/rpg dbload" class="button">Load Save</button>` +
+		`<p style="text-align: center; margin-top: 20px;">` +
+		`<button name="send" value="/rpg modes" class="button" style="width: 200px; height: 40px; font-size: 1.1em;">View Modes</button>` +
 		`</p>` +
 		`</div>`;
 }
@@ -1184,23 +1181,16 @@ export function generateStoryModeStartHTML(): string {
 	const startingLocation = getStartingLocation();
 	const location = LOCATIONS[startingLocation.id];
 
-	let buildingsHTML = '';
 	let labBuildingId = '';
 
-	// Find the lab building and list all buildings
+	// Find the lab building
 	if (location?.buildings) {
-		buildingsHTML += `<p>The town is peaceful, with a few buildings around you. You can see:</p><ul>`;
 		for (const building of location.buildings) {
-			let icon = '🏠';
-			if (building.type === 'pokecenter') icon = '🏥';
-			else if (building.type === 'pokemart') icon = '🏪';
-			else if (building.type === 'lab') {
-				icon = '🔬';
+			if (building.type === 'lab') {
 				labBuildingId = building.id;
+				break;
 			}
-			buildingsHTML += `<li>${icon} <strong>${building.name}</strong> - ${building.description}</li>`;
 		}
-		buildingsHTML += `</ul>`;
 	}
 
 	let labButtonHTML = '';
@@ -1209,9 +1199,6 @@ export function generateStoryModeStartHTML(): string {
 	}
 
 	return `<div class="infobox">` +
-		`<h2>Welcome to the World of Pokémon!</h2>` +
-		`<p>You find yourself in <strong>${startingLocation.name}</strong>, ready to begin your journey as a Pokémon Trainer!</p>` +
-		buildingsHTML +
 		`<p><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
 		`<hr />` +
 		labButtonHTML +
