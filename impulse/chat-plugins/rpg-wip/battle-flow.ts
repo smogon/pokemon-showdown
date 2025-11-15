@@ -1488,7 +1488,7 @@ export function executeAction(
 			if (primaryTargetSlot) {
 				const defenderTypes = getPokemonTypes(primaryTargetSlot.pokemon, primaryTargetSlot);
 				// We must get the move type *after* abilities like Pixilate
-				const moveType = getMoveType(move, attackerSlot.pokemon, battle, { attacker: attackerSlot.pokemon, defender: primaryTargetSlot.pokemon, attackerSlot, defenderSlot: primaryTargetSlot, move, battle, messageLog });
+				const moveType = getMoveType(move, attackerSlot.pokemon, attackerSlot, battle, { attacker: attackerSlot.pokemon, defender: primaryTargetSlot.pokemon, attackerSlot, defenderSlot: primaryTargetSlot, move, battle, messageLog });
 				const effectiveness = getCustomEffectiveness(moveType, defenderTypes, primaryTargetSlot.pokemon, battle, attackerSlot.pokemon);
 
 				if (effectiveness === 0) {
