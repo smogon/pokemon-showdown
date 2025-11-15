@@ -117,6 +117,114 @@ export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'h
 	return weatherStartMessages[weatherType];
 }
 
+/**
+ * Creates a new Battle Tower battle state.
+ * Generates random teams for both player and AI for the specified floor.
+ */
+export function startBattleTowerFloor(
+	player: PlayerData,
+	floor: number,
+	context: CommandContext,
+	room: ChatRoom,
+	user: User
+) {
+	const level = 100;
+	const teamSize = 3; // Set team size to 3
+
+	const battleMessages: string[] = [];
+	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+
+	try {
+		// --- Generate Teams ---
+		// generateRandomTeam is called with count = 3
+		const playerTeam = generateRandomTeam(teamSize, level);
+		const aiTeam = generateRandomTeam(teamSize, level);
+
+		// --- Player Pokemon ---
+		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
+
+		// --- Opponent Pokemon ---
+		opponentSlots[0] = createActivePokemonSlot(aiTeam[0]);
+
+		battleMessages.push(`<b>Battle Tower - Floor ${floor}</b>`);
+		battleMessages.push(`Your random team for this floor is: ${playerTeam.map(p => p.species).join(', ')}.`);
+
+		const locationWeatherData = getLocationWeatherData(player);
+		if (locationWeatherData.weather) {
+			battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
+		}
+
+		// Create the battle state object
+		const battle: BattleState = {
+			battleType: 'battletower',
+			floor: floor,
+			overridePlayerParty: playerTeam, // Set the temporary party
+			opponentName: `Battle Tower Trainer`,
+			opponentParty: aiTeam,
+			opponentMoney: 500 * floor, // Scale reward
+			playerSlots,
+			opponentSlots,
+			pendingActions: {},
+			playerId: user.id,
+			turn: 0,
+			zoneId: 'battletower',
+			playerHazards: [],
+			opponentHazards: [],
+			weather: locationWeatherData.weather,
+			locationWeather: locationWeatherData.locationWeather,
+			trickRoomTurns: 0,
+			magicRoomTurns: 0,
+			wonderRoomTurns: 0,
+			terrain: undefined,
+			playerShouldSwitch: undefined,
+			pendingPivot: undefined,
+			aiPendingPivot: undefined,
+			forceEnd: false,
+			playerTerastallizeUsed: false,
+			opponentTerastallizeUsed: false,
+			playerQuickGuard: false,
+			opponentQuickGuard: false,
+			playerWideGuard: false,
+			opponentWideGuard: false,
+			playerCraftyShield: false,
+			opponentCraftyShield: false,
+			playerReflectTurns: 0,
+			opponentReflectTurns: 0,
+			playerLightScreenTurns: 0,
+			opponentLightScreenTurns: 0,
+			playerAuroraVeilTurns: 0,
+			opponentAuroraVeilTurns: 0,
+			gravityTurns: 0,
+			mudSportTurns: 0,
+			waterSportTurns: 0,
+			fairyLockTurns: 0,
+			ionDelugeTurns: 0,
+			playerFutureMoves: [],
+			opponentFutureMoves: [],
+			battleLog: [],
+		};
+
+		// Apply switch-in abilities
+		if (playerSlots[0]) {
+			applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
+		}
+		if (opponentSlots[0]) {
+			applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
+		}
+
+		// Set the active battle
+		activeBattles.set(user.id, battle);
+		battle.battleLog.push(...battleMessages);
+
+		// Generate HTML
+		context.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
+	} catch (error) {
+		console.error(error);
+		context.errorReply(`Error starting Battle Tower floor: ${error}`);
+	}
+}
+
 export function handleOpponentFaint(
 	battle: BattleState,
 	player: PlayerData,
