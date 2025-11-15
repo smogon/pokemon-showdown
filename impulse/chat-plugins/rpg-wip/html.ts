@@ -594,8 +594,19 @@ export function generateSingleBattleHTML(
 		const isEncoredWithNoPP = playerSlot.encoreMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
+		// Check if charging a move with no PP
+		const isChargingWithNoPP = playerSlot.chargingMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.chargingMove)?.pp === 0;
+
+		// Check if locked by Choice item with no PP
+		const isChoiceLockedWithNoPP = playerSlot.lockedMove &&
+			playerSlot.lockedMoveCounter === 0 &&
+			playerSlot.uproarTurns === 0 &&
+			battle.magicRoomTurns === 0 &&
+			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
+
 		// If locked into a move with no PP, show only Struggle button
-		if (isRampagingWithNoPP || isEncoredWithNoPP) {
+		if (isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -864,9 +875,20 @@ export function generateDoubleBattleHTML(
 			const isEncoredWithNoPP = activeSlot.encoreMove &&
 				pokemon.moves.find(m => m.id === activeSlot.encoreMove!.moveId)?.pp === 0;
 
+			// Check if charging a move with no PP
+			const isChargingWithNoPP = activeSlot.chargingMove &&
+				pokemon.moves.find(m => m.id === activeSlot.chargingMove)?.pp === 0;
+
+			// Check if locked by Choice item with no PP
+			const isChoiceLockedWithNoPP = activeSlot.lockedMove &&
+				activeSlot.lockedMoveCounter === 0 &&
+				activeSlot.uproarTurns === 0 &&
+				battle.magicRoomTurns === 0 &&
+				pokemon.moves.find(m => m.id === activeSlot.lockedMove)?.pp === 0;
+
 			let moveButtonsHTML = '';
 
-			if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP) {
+			if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
@@ -959,7 +981,7 @@ export function generateBattleTowerHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const currentFloor = battle.floor || 1;
-	
+
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
@@ -967,7 +989,7 @@ export function generateBattleTowerHTML(
 
 	// Battle Tower header
 	const headerHTML = '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; margin-bottom: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">' +
-		'<h2 style="margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🗼 Battle Tower - Floor ' + currentFloor + '</h2>' +
+		'<h2 style="margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🗼 Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
 	// Check if battle has ended first - slots may be null after fainting
@@ -1029,8 +1051,19 @@ export function generateBattleTowerHTML(
 		const isEncoredWithNoPP = playerSlot.encoreMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
+		// Check if charging a move with no PP
+		const isChargingWithNoPP = playerSlot.chargingMove &&
+			playerPokemon.moves.find(m => m.id === playerSlot.chargingMove)?.pp === 0;
+
+		// Check if locked by Choice item with no PP
+		const isChoiceLockedWithNoPP = playerSlot.lockedMove &&
+			playerSlot.lockedMoveCounter === 0 &&
+			playerSlot.uproarTurns === 0 &&
+			battle.magicRoomTurns === 0 &&
+			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
+
 		// If locked into a move with no PP, show only Struggle button
-		if (isRampagingWithNoPP || isEncoredWithNoPP) {
+		if (isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
