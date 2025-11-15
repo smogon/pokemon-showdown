@@ -72,7 +72,7 @@ export const tradeCommands: ChatCommands = {
 			if (targetProfile?.tradesEnabled === false) {
 				return this.errorReply(`${targetUser.name} has disabled trades.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while checking trade settings.');
 		}
 
@@ -115,7 +115,7 @@ export const tradeCommands: ChatCommands = {
 			);
 
 			this.sendReply("You have disabled trades. Use /tcg tradesenable to re-enable them.");
-		} catch {
+		} catch (error) {
 			return this.errorReply("An error occurred while disabling trades.");
 		}
 	},
@@ -132,7 +132,7 @@ export const tradeCommands: ChatCommands = {
 			);
 
 			this.sendReply("You have enabled trades. Other users can now trade with you.");
-		} catch {
+		} catch (error) {
 			return this.errorReply("An error occurred while enabling trades.");
 		}
 	},
@@ -177,7 +177,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} added ${quantity}x "${userCard.name}" to their trade offer.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -225,7 +225,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} removed ${quantity}x "${cardName}" from their trade offer.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -260,7 +260,7 @@ export const tradeCommands: ChatCommands = {
 			if (otherUser) {
 				otherUser.popup(`|html|${user.name} added ${amount.toLocaleString()} credits to their trade offer.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -530,7 +530,7 @@ export const tradeCommands: ChatCommands = {
 				if (otherUser) {
 					otherUser.popup(`|html|Trade with ${user.name} completed successfully!`);
 				}
-			} catch {
+			} catch (error) {
 				activeTrades.delete(key);
 				this.errorReply(`An error occurred during the trade: ${error.message}`);
 				if (otherUser) {

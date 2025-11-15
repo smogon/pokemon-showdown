@@ -200,7 +200,7 @@ export const collectionCommands: ChatCommands = {
 			}
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while fetching your collection.');
 		}
 	},
@@ -256,7 +256,7 @@ export const collectionCommands: ChatCommands = {
 			html += `<div style="background: #4CAF50; width: ${progressWidth}px; height: 100%; border-radius: 4px;"></div>`;
 			html += `</div></div>`;
 			this.sendReply(`|html|${html}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while fetching your set progress.');
 		}
 	},
@@ -382,7 +382,7 @@ export const collectionCommands: ChatCommands = {
 			}
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while fetching missing cards.');
 		}
 	},
@@ -423,7 +423,7 @@ export const collectionCommands: ChatCommands = {
 			if (userPacks.length > 0) html += `</div>`;
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while fetching your packs.');
 		}
 	},
@@ -520,7 +520,7 @@ export const collectionCommands: ChatCommands = {
 			} else {
 				this.errorReply(`"${userCard.name}" is already in your favorites.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while adding your favorite card.');
 		}
 	},
@@ -553,7 +553,7 @@ export const collectionCommands: ChatCommands = {
 					this.errorReply(`Card "${cardId}" was not in your favorites list.`);
 				}
 			}
-		} catch {
+		} catch (error) {
 			const action = targetId === 'all' ? 'removing all your favorite cards' : 'removing your favorite card';
 			return this.errorReply(`An error occurred while ${action}.`);
 		}
@@ -623,7 +623,7 @@ export const collectionCommands: ChatCommands = {
 			this.sendReply(`- Sets Completed: ${setsCompleted} / ${totalSets}`);
 			this.sendReply(`- Total Points: ${stats.collectionPoints.toLocaleString()}`);
 			this.sendReply(`- Unique Cards: ${stats.totalUniqueCards.toLocaleString()}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred during recalculation: ${error.message}`);
 		}
 	},

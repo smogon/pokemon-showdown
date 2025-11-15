@@ -44,7 +44,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|You have been awarded ${amount.toLocaleString()} TCG credits by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -86,7 +86,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|You have been awarded ${quantity} "${setName}" pack(s) by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -192,7 +192,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|You have been awarded ${quantityToAward} "${card.name}" card(s) by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -248,7 +248,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${quantityToTake} "${userCard.name}" card(s) have been removed from your collection by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -283,7 +283,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${amount.toLocaleString()} TCG credits have been removed from your account by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -325,7 +325,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${quantity} "${userPack.setName}" pack(s) have been removed from your inventory by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -346,7 +346,7 @@ export const adminCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|Your TCG collection and profile have been reset by ${user.name}.`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -376,7 +376,7 @@ export const adminCommands: ChatCommands = {
 					targetUser.popup(`|html|Your TCG daily pack cooldown has been reset by ${user.name}.`);
 				}
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An error occurred: ${error.message}`);
 		}
 	},
@@ -515,7 +515,7 @@ export const adminCommands: ChatCommands = {
 		try {
 			const { cardCount, setCount } = await initializeCache();
 			this.sendReply(`TCG cache initialization complete. Loaded ${cardCount} cards and ${setCount} sets.`);
-		} catch {
+		} catch (error) {
 			this.errorReply('An error occurred while initializing the TCG cache.');
 		}
 	},
@@ -593,7 +593,7 @@ export const adminCommands: ChatCommands = {
 
 			const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 			this.sendReply(`Index creation finished in ${duration}s. Created: ${createdCount}, Failed: ${failedCount}.`);
-		} catch {
+		} catch (error) {
 			return this.errorReply(`An unexpected error occurred during index creation: ${error.message}`);
 		}
 	},

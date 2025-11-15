@@ -131,7 +131,7 @@ export const commands: ChatCommands = {
 					card = await collection.findOne({ cardId });
 				}
 				if (!card) return this.errorReply(`Card with ID "${cardId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			} catch {
+			} catch (error) {
 				return this.errorReply('An error occurred while fetching card information.');
 			}
 
@@ -177,7 +177,7 @@ export const commands: ChatCommands = {
 					card = await collection.findOne({ setId });
 				}
 				if (!card) return this.errorReply(`Set with ID "${setId}" not found. (Cache: ${cacheInitialized ? 'On' : 'Off'})`);
-			} catch {
+			} catch (error) {
 				return this.errorReply('An error occurred while fetching set information.');
 			}
 
@@ -270,7 +270,7 @@ export const commands: ChatCommands = {
 				}
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch {
+			} catch (error) {
 				return this.errorReply('An error occurred while searching for cards.');
 			}
 		},
@@ -319,7 +319,7 @@ export const commands: ChatCommands = {
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 				this.sendReply(`|html|${html}`);
-			} catch {
+			} catch (error) {
 				return this.errorReply(`An error occurred while generating your daily pack: ${error.message}`);
 			}
 		},
@@ -358,7 +358,7 @@ export const commands: ChatCommands = {
 				const subtitle = creditsAwarded > 0 ? `+${creditsAwarded} Credits from duplicates!<br>` : undefined;
 				const html = renderCardGridHtml(pack, title, subtitle);
 				this.sendReply(`|html|${html}`);
-			} catch {
+			} catch (error) {
 				try {
 					await packCollection.updateOne({ userId: user.id, setId }, { $inc: { quantity: 1 } });
 				} catch (refundError) {
@@ -423,7 +423,7 @@ export const commands: ChatCommands = {
 				html += `<button name="send" value="/tcg collection user:${user.id}, set:${rawSetId}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">View New Cards</button>`;
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch {
+			} catch (error) {
 				await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $set: { quantity: packQuantity } });
 				return this.errorReply(`An error occurred while opening your packs: ${error.message}. Your packs have been refunded.`);
 			}
@@ -466,7 +466,7 @@ export const commands: ChatCommands = {
 				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
-			} catch {
+			} catch (error) {
 				return this.errorReply('An error occurred while fetching the leaderboard.');
 			}
 		},

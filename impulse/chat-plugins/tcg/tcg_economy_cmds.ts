@@ -68,7 +68,7 @@ export const economyCommands: ChatCommands = {
 
 			html += generateThemedTable(title, headerRow, dataRows);
 			this.sendReply(`|html|${html}`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while fetching the shop. Please try again later.');
 		}
 	},
@@ -114,7 +114,7 @@ export const economyCommands: ChatCommands = {
 
 			this.sendReply(`You successfully purchased one "${setInShop.set}" pack for ${PACK_COST} credits!`);
 			this.sendReply(`Use /tcg packs to see your new pack and /tcg opensavedpack ${setInShop.setId} to open it.`);
-		} catch {
+		} catch (error) {
 			const profileCollection = userProfilesCollection;
 			await profileCollection.updateOne({ userId: user.id }, { $inc: { credits: PACK_COST } });
 			return this.errorReply(`An unknown error occurred during your purchase. Your credits have been refunded. Error: ${error.message}`);
@@ -165,7 +165,7 @@ export const economyCommands: ChatCommands = {
 			);
 
 			this.sendReply(`You successfully sold ${quantityToSell}x "${userCard.name}" for ${creditsToAward} credits.`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while selling your card.');
 		}
 	},
@@ -217,7 +217,7 @@ export const economyCommands: ChatCommands = {
 			);
 
 			this.sendReply(`You successfully sold ${totalCardsSold} ${description} for ${totalCreditsEarned} credits.`);
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while selling your duplicates.');
 		}
 	},
@@ -317,7 +317,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while gifting your card.');
 		}
 	},
@@ -370,7 +370,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
 			}
-		} catch {
+		} catch (error) {
 			return this.errorReply('An error occurred while gifting your pack(s).');
 		}
 	},
@@ -424,7 +424,7 @@ export const economyCommands: ChatCommands = {
 			if (targetUser) {
 				targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
 			}
-		} catch {
+		} catch (error) {
 			if (error.message.startsWith('You do not have enough credits')) {
 				return this.errorReply(error.message);
 			}
