@@ -45,8 +45,9 @@ import {
 	getSlotFromIndex,
 	applyHazardEffectsOnSwitchIn,
 	handleMirrorHerb,
-	getLocationWeatherData,
-	getWeatherStartMessage,
+	startBattleTowerFloor, // [NEW] Import Battle Tower starter
+	getLocationWeatherData, // [NEW] Keep this import
+	getWeatherStartMessage, // [NEW] Keep this import
 } from './battle-engine';
 import {
 	generateSellMenuHTML,
@@ -103,6 +104,11 @@ import {
 	generateDBDeleteNoSaveHTML,
 	generateDBDeleteConfirmHTML,
 	generateDBDeleteSuccessHTML,
+	// [NEW] Import new HTML functions
+	generateModeSelectionHTML,
+	generateBattleTowerWelcomeHTML,
+	generateBattleTowerFloorCompleteHTML,
+	generateBattleTowerLossHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -115,6 +121,9 @@ import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
+
+// [MOVED] These functions were moved to battle-flow.ts (which is exported by battle-engine)
+// We just need to ensure they are exported from there and imported here, which they are.
 
 export const commands: ChatCommands = {
 	rpg: {
@@ -131,6 +140,53 @@ export const commands: ChatCommands = {
 
 			// New players: show welcome screen
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
+		},
+
+		// [NEW] Main mode selection
+		modes(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot change modes during a battle.");
+			}
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModeSelectionHTML()}`);
+		},
+
+		// [NEW] Battle Tower commands
+		battletower: {
+			start(target, room, user) {
+				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				const player = getPlayerData(user.id);
+				// Don't reset floor here, let them continue if they exited
+				if (player.battleTowerFloor <= 1) player.battleTowerFloor = 1;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerWelcomeHTML(player.battleTowerFloor)}`);
+			},
+
+			beginfloor(target, room, user) {
+				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				const player = getPlayerData(user.id);
+				// Safety check: The player must have *started* story mode to have a PlayerData object
+				if (player.party.length === 0) return this.errorReply("You must start Story Mode and get a Pokémon before you can enter the Battle Tower.");
+
+				// Call the new function from battle-flow (via battle-engine)
+				startBattleTowerFloor(player, player.battleTowerFloor, this, room, user);
+			},
+
+			nextfloor(target, room, user) {
+				// This command is hit after winning a battle
+				const oldBattle = activeBattles.get(user.id);
+				if (oldBattle && oldBattle.battleType === 'battletower' && oldBattle.battleResult === 'victory') {
+					// Battle was won, clear it and start the next
+					activeBattles.delete(user.id);
+				} else if (activeBattles.has(user.id)) {
+					// This is a safety check
+					return this.errorReply("You are still in a battle.");
+				}
+
+				const player = getPlayerData(user.id);
+				// player.battleTowerFloor should have been incremented by checkBattleEndCondition
+				startBattleTowerFloor(player, player.battleTowerFloor, this, room, user);
+			},
+
+			'': 'start', // Default action
 		},
 
 		continue(target, room, user) {
@@ -1374,6 +1430,9 @@ export const commands: ChatCommands = {
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
 					battleLog: [],
+					// [NEW] Default Battle Tower fields
+					floor: 0,
+					overridePlayerParty: null,
 				};
 
 				// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1491,6 +1550,9 @@ export const commands: ChatCommands = {
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
 					battleLog: [],
+					// [NEW] Default Battle Tower fields
+					floor: 0,
+					overridePlayerParty: null,
 				};
 
 				// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1628,6 +1690,9 @@ export const commands: ChatCommands = {
 				playerFutureMoves: [],
 				opponentFutureMoves: [],
 				battleLog: [],
+				// [NEW] Default Battle Tower fields
+				floor: 0,
+				overridePlayerParty: null,
 			};
 
 			// Apply switch-in abilities (which modifies the 'battle' object)
@@ -1816,9 +1881,13 @@ export const commands: ChatCommands = {
 				}
 
 				const player = getPlayerData(battle.playerId);
+				
+				// --- MODIFIED: Use overridePlayerParty if it exists ---
+				const partyToUse = battle.overridePlayerParty || player.party;
+				// --- END MODIFICATION ---
 
-				// Find the Pokemon in the party
-				const partyIndex = player.party.findIndex(p => p.id === pokemonId && p.hp > 0);
+				// Find the Pokemon in the correct party
+				const partyIndex = partyToUse.findIndex(p => p.id === pokemonId && p.hp > 0);
 				if (partyIndex === -1) {
 					return this.errorReply("Invalid Pokemon or it has fainted.");
 				}
@@ -1834,7 +1903,7 @@ export const commands: ChatCommands = {
 				}
 
 				// --- Execute the Switch ---
-				const nextPokemon = player.party[partyIndex];
+				const nextPokemon = partyToUse[partyIndex]; // Get from correct party
 				const newSlot = createActivePokemonSlot(nextPokemon);
 
 				const playerColor = '#007bff';
@@ -1846,8 +1915,8 @@ export const commands: ChatCommands = {
 					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
 
 					// Check if the pivoting Pokemon is already in the party to avoid duplicates
-					const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
-					if (pivotIndex === -1) {
+					const pivotIndex = partyToUse.findIndex(p => p.id === pivotingPokemon.id);
+					if (pivotIndex === -1 && !battle.overridePlayerParty) { // Only add back to party in story mode
 						// Only push if not already in party (shouldn't normally happen)
 						player.party.push(pivotingPokemon);
 					}
@@ -1879,8 +1948,10 @@ export const commands: ChatCommands = {
 				// In single battles, only check slot 0. In double battles, check both slots 0 and 1.
 				const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
+				
+				// Use partyToUse
 				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
-					player.party.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 
 				if (needsAnotherSwitch) {
 					// Another slot is empty, show the switch screen again
@@ -1937,8 +2008,12 @@ export const commands: ChatCommands = {
 
 				const player = getPlayerData(battle.playerId);
 
+				// --- MODIFIED: Use overridePlayerParty if it exists ---
+				const partyToUse = battle.overridePlayerParty || player.party;
+				// --- END MODIFICATION ---
+
 				// Check if incoming Pokemon is valid
-				const incomingPokemon = player.party.find(p => p.id === pokemonIdIn && p.hp > 0);
+				const incomingPokemon = partyToUse.find(p => p.id === pokemonIdIn && p.hp > 0);
 				if (!incomingPokemon) {
 					return this.errorReply("Invalid Pokemon or it has fainted.");
 				}
@@ -1980,6 +2055,13 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
+				// [MODIFIED] Add Battle Tower check
+				if (battle.battleType === 'battletower') {
+					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
+				}
+				// [END MODIFICATION]
+
 				// In double battles, can only catch when one opponent remains
 				if (battle.battleType === 'wild_double') {
 					const activeOpponents = getActiveSlots(battle.opponentSlots);
@@ -1996,6 +2078,14 @@ export const commands: ChatCommands = {
 			selectcatchtarget(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// [MODIFIED] Add Battle Tower check
+				if (battle.battleType === 'battletower') {
+					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
+				}
+				// [END MODIFICATION]
+
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
 				}
@@ -2016,6 +2106,13 @@ export const commands: ChatCommands = {
 			catch(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// [NEW] Add Battle Tower check
+				if (battle.battleType === 'battletower') {
+					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
+				}
+				// [END NEW]
 
 				// --- NEW: Read target ---
 				const [ballId, slotIndexStr] = target.split(' ');
@@ -2110,6 +2207,13 @@ export const commands: ChatCommands = {
 			run(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// [NEW] Add Battle Tower check
+				if (battle.battleType === 'battletower') {
+					this.errorReply("You can't run from a Battle Tower challenge!");
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't run from a Battle Tower challenge!"])}`);
+				}
+				// [END NEW]
 
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't run from a Trainer battle!");
