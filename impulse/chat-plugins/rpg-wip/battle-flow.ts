@@ -20,6 +20,8 @@ import {
 	generateMoveLearnHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
+	generateBattleTowerFloorCompleteHTML,
+	generateBattleTowerLossHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
 
@@ -270,7 +272,8 @@ export function handleOpponentFaint(
 				}
 			}
 
-			if (playerParticipants.length > 0) {
+			// [MODIFIED] Skip EXP/EVs in Battle Tower
+			if (battle.battleType !== 'battletower' && playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
 				messageLog.push(...expResult.messages);
 			}
@@ -386,13 +389,33 @@ export function checkForWinLoss(
 	user: User,
 	messageLog: string[]
 ): boolean {
-	const playerHasLivingPokemon = player.party.some(p =>
+	const playerHasLivingPokemon = (battle.overridePlayerParty || player.party).some(p =>
 		p.hp > 0 &&
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
 	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
 
+	// [MODIFIED] Check for Defeat
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
+		// [NEW] Handle Battle Tower Loss
+		if (battle.battleType === 'battletower') {
+			saveBattleStatus(battle);
+			battle.battleEnded = true;
+			battle.battleResult = 'defeat';
+			const currentFloor = battle.floor || 1;
+
+			// Generate loss HTML
+			const lossHTML = generateBattleTowerLossHTML(currentFloor);
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${lossHTML}`);
+			
+			// Reset progress
+			player.battleTowerFloor = 1;
+			activeBattles.delete(user.id);
+			return true;
+		}
+		// [END NEW]
+
+		// Original Story Mode Defeat Logic
 		saveBattleStatus(battle);
 		battle.battleEnded = true;
 		battle.battleResult = 'defeat';
@@ -436,7 +459,25 @@ export function checkForWinLoss(
 	);
 	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
 
+	// [MODIFIED] Check for Victory
 	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
+		// [NEW] Handle Battle Tower Victory
+		if (battle.battleType === 'battletower') {
+			battle.battleEnded = true;
+			battle.battleResult = 'victory';
+			const currentFloor = battle.floor || 1;
+			player.battleTowerFloor = currentFloor + 1; // Increment floor for next battle
+
+			// Generate floor clear HTML
+			const floorClearHTML = generateBattleTowerFloorCompleteHTML(currentFloor);
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${floorClearHTML}`);
+			
+			activeBattles.delete(user.id);
+			return true;
+		}
+		// [END NEW]
+
+		// Original Story Mode Victory Logic
 		saveBattleStatus(battle);
 		battle.battleEnded = true;
 		battle.battleResult = 'victory';
