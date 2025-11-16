@@ -1604,8 +1604,10 @@ export function executeAction(
 			} else {
 				const hasReplacement = battle.opponentParty.some(p => p.hp > 0 && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
 				if (hasReplacement) {
-					battle.aiPendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
-					battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+					// Convert allSlots index (2-3) to opponentSlots index (0-1)
+					const opponentSlotIndex = attackerSlotIndex - 2;
+					battle.aiPendingPivot = { slotIndex: opponentSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
+					battle.opponentSlots[opponentSlotIndex as 0 | 1] = null;
 					messageLog.push(`${attackerSlot.pokemon.species} is waiting to switch out!`);
 				} else {
 					messageLog.push(`But there was no one to switch to!`);
