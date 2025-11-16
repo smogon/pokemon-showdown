@@ -514,7 +514,8 @@ export function checkForWinLoss(
 			const floorClearHTML = generateBattleTowerFloorCompleteHTML(currentFloor);
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${floorClearHTML}`);
 
-			activeBattles.delete(user.id);
+			// Don't delete the battle here - keep it so the format can be retrieved
+			// when the player continues to the next floor via the nextfloor command
 			return true;
 		}
 		// [END NEW]
