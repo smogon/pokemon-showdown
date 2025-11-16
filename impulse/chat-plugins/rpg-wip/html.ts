@@ -500,9 +500,9 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 
 	if (allTags) {
 		// This is the new container the user requested
-		return `<div style="text-align: center;">` +
+		return `<br><div style="text-align: center;">` +
 			allTags +
-			`</div><br>`;
+			`</div>`;
 	}
 
 	return ''; // Return empty string if no conditions are active
