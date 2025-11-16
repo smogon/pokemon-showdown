@@ -428,7 +428,7 @@ function generateWeatherTags(battle: BattleState): string {
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
-	return `<center><b><span style="${tagStyle}">${name}${turnsText}</span></b></center>`;
+	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
 }
 
 /**
@@ -437,13 +437,7 @@ function generateWeatherTags(battle: BattleState): string {
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
-	const terrainColors: Record<string, string> = {
-		'electric': '#F8D030',
-		'grassy': '#78C850',
-		'misty': '#EE99AC',
-		'psychic': '#F85888',
-	};
+	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	const terrainNames: Record<string, string> = {
 		'electric': 'Electric Terrain',
@@ -451,12 +445,11 @@ function generateTerrainTags(battle: BattleState): string {
 		'misty': 'Misty Terrain',
 		'psychic': 'Psychic Terrain',
 	};
-
-	const color = terrainColors[battle.terrain.type] || '#999';
+	
 	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
 	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
 
-	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
+	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
 }
 
 /**
