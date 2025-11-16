@@ -10,7 +10,7 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
+import { generateRandomTeam, generateRandomTeamFromBSS, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
@@ -141,9 +141,9 @@ export function startBattleTowerFloor(
 
 	try {
 		// --- Generate Teams ---
-		// generateRandomTeam is called with count = 3
-		const playerTeam = generateRandomTeam(teamSize, level);
-		const aiTeam = generateRandomTeam(teamSize, level);
+		// Use BSS Factory Sets for competitive, battle-tested teams
+		const playerTeam = generateRandomTeamFromBSS(teamSize, level);
+		const aiTeam = generateRandomTeamFromBSS(teamSize, level);
 
 		// --- Player Pokemon ---
 		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
