@@ -1567,15 +1567,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onAnyPrepareHitPriority: -1,
 			onAnyPrepareHit(source, target, move) {
-				const snatchUser = this.effectState.source;
+				const snatchUser = this.effectState.source as Pokemon;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				if (this.actions.useMove(move.id, snatchUser)) {
-					snatchUser.deductPP('snatch');
+				let extraPP = 0;
+				for (const source of snatchUser.foes()) {
+					const ppDrop = this.runEvent('DeductPP', source, snatchUser, move);
+					if (ppDrop !== true) {
+						extraPP += ppDrop || 0;
+					}
+				}
+				if (this.actions.useMove(move.id, snatchUser) && extraPP > 0) {
+					snatchUser.deductPP('snatch', extraPP);
 				}
 				return null;
 			},
