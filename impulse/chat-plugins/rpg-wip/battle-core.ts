@@ -584,7 +584,9 @@ export function calculateDamage(
 	battle: BattleState,
 	spreadMultiplier: number
 ): { damage: number, message: string, effectiveness: number, berryConsumed?: string, isCritical: boolean } {
-	const move = getMove(moveId);
+	const moveData = getMove(moveId);
+	// Create a mutable copy of the move object since we may need to modify it (e.g., Tera Blast)
+	const move = { ...moveData };
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 	const defenderSpecies = Dex.species.get(defender.species);
@@ -594,7 +596,7 @@ export function calculateDamage(
 		defender,
 		attackerSlot,
 		defenderSlot,
-		move: { ...move },
+		move,
 		battle,
 		messageLog: [],
 	};
@@ -625,7 +627,6 @@ export function calculateDamage(
 	if (move.id === 'terablast' && attackerSlot.terastallized) {
 		if (attacker.atk > attacker.spa) {
 			move.category = 'Physical';
-			abilityContext.move.category = 'Physical';
 		}
 		if (attackerSlot.terastallized === 'Stellar') {
 			move.basePower = 100;
