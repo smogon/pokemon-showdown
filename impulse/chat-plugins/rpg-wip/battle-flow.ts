@@ -16,6 +16,7 @@ import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
 import { BATTLE_TOWER_FORMATS, generateRandomTeamFromBSS, generateRandomTeamFromBaby } from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
+import { teraToggleState } from './commands'; // Import tera toggle state
 import {
 	generateBattleHTML,
 	generateMoveLearnHTML,
@@ -241,7 +242,7 @@ export function startBattleTowerFloor(
 		battle.battleLog.push(...battleMessages);
 
 		// Generate HTML
-		context.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
+		context.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 	} catch (error) {
 		console.error(error);
 		context.errorReply(`Error starting Battle Tower floor: ${error}`);
@@ -492,8 +493,9 @@ export function checkForWinLoss(
 		messageLog.push(`<center><b>${opponentMessage}</b></center>`);
 		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
 		activeBattles.delete(user.id);
+		teraToggleState.delete(user.id);
 		return true;
 	}
 
@@ -579,7 +581,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
@@ -594,7 +596,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
 			}
 		}
 		activeBattles.delete(user.id);
@@ -1258,7 +1260,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 		}
 
 		if (hasActivePlayerSlot && hasActiveOpponentSlot) {
-			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 		} else {
 			// If slots are missing, the battle should have ended or a switch should be pending
 			// If neither happened, this is an edge case that should be logged for debugging

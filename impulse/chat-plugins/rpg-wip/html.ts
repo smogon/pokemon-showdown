@@ -528,7 +528,8 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 export function generateSingleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
+	teraToggled?: boolean
 ): string {
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
@@ -648,6 +649,7 @@ export function generateSingleBattleHTML(
 			moveButtonsHTML += '</table>';
 		} else {
 			const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+			const teraActive = teraToggled || false;
 
 			const moveButtons = playerPokemon.moves.map(move => {
 				const moveData = getMove(move.id);
@@ -664,24 +666,30 @@ export function generateSingleBattleHTML(
 					(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 					move.pp === 0;
 
-				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;' + (teraActive ? ' border: 2px solid #FF1493;' : '');
+				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
 					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 					'<span>' + moveData.type + '</span>' +
 					'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
 					'</div> ';
 
-				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
+				const teraParam = teraActive ? ' terastallize' : '';
+				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2' + teraParam + '" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
 					' ' + buttonContent + '</button>';
 
-				// Add Tera option if can terastallize
-				if (canTerastallize && !isDisabled) {
-					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
-				}
 				return normalButton;
 			});
 
-			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+			// Add Terastallize toggle button if available
+			let teraToggleHTML = '';
+			if (canTerastallize) {
+				const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
+				const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+				const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
+				teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
+			}
+
+			moveButtonsHTML = teraToggleHTML + '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 			moveButtonsHTML += '<tr>';
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
@@ -744,7 +752,8 @@ export function generateSingleBattleHTML(
 export function generateDoubleBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
+	teraToggled?: boolean
 ): string {
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
@@ -938,6 +947,7 @@ export function generateDoubleBattleHTML(
 				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;"><tr><td style="padding: 0; vertical-align: top;">' + struggleButton + '</td><td style="padding: 0; vertical-align: top;"></td></tr><tr><td style="padding: 0; vertical-align: top;"></td><td style="padding: 0; vertical-align: top;"></td></tr></table>';
 			} else {
 				const canTerastallizeThisSlot = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
+				const teraActive = teraToggled || false;
 
 				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left; margin: 0;';
 				const moveButtons = pokemon.moves.map(move => {
@@ -954,22 +964,29 @@ export function generateDoubleBattleHTML(
 						(activeSlot.lockedMove && activeSlot.lockedMoveCounter === 0 && activeSlot.uproarTurns === 0 && activeSlot.lockedMove !== move.id) ||
 						move.pp === 0;
 
-					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+					const moveButtonStyle = buttonStyle + (teraActive ? ' border: 2px solid #FF1493;' : '');
+					const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
 						'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 						'<span>' + moveData.type + '</span>' +
 						'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
 						'</div>';
 
-					const normalButton = '<button name="send" value="/rpg battleaction selecttarget ' + String(activeSlotIndex) + ' ' + move.id + '" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' + buttonContent + '</button>';
+					const teraParam = teraActive ? ' terastallize' : '';
+					const normalButton = '<button name="send" value="/rpg battleaction selecttarget ' + String(activeSlotIndex) + ' ' + move.id + teraParam + '" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + moveButtonStyle + '">' + buttonContent + '</button>';
 
-					// Add Tera option if can terastallize
-					if (canTerastallizeThisSlot && !isDisabled) {
-						return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction selecttarget ' + String(activeSlotIndex) + ' ' + move.id + ' terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
-					}
 					return normalButton;
 				});
 
-				moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+				// Add Terastallize toggle button if available
+				let teraToggleHTML = '';
+				if (canTerastallizeThisSlot) {
+					const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
+					const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+					const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
+					teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
+				}
+
+				moveButtonsHTML = teraToggleHTML + '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 				moveButtonsHTML += '<tr>';
 				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
 				moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
@@ -1016,7 +1033,8 @@ export function generateDoubleBattleHTML(
 export function generateBattleTowerHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
+	teraToggled?: boolean
 ): string {
 	const currentFloor = battle.floor || 1;
 	// Get format name from configuration
@@ -1138,6 +1156,7 @@ export function generateBattleTowerHTML(
 			moveButtonsHTML += '</table>';
 		} else {
 			const canTerastallize = !battle.playerTerastallizeUsed && !playerSlot.terastallized;
+			const teraActive = teraToggled || false;
 
 			const moveButtons = playerPokemon.moves.map(move => {
 				const moveData = getMove(move.id);
@@ -1150,24 +1169,30 @@ export function generateBattleTowerHTML(
 					(playerSlot.lockedMove && playerSlot.lockedMoveCounter === 0 && playerSlot.uproarTurns === 0 && playerSlot.lockedMove !== move.id) ||
 					move.pp === 0;
 
-				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + moveData.name + '</div>' +
+				const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;' + (teraActive ? ' border: 2px solid #FF1493;' : '');
+				const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
 					'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 					'<span>' + moveData.type + '</span>' +
 					'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
 					'</div> ';
 
-				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
+				const teraParam = teraActive ? ' terastallize' : '';
+				const normalButton = '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2' + teraParam + '" class="button" ' + (isDisabled ? 'disabled' : '') + ' style="' + buttonStyle + '">' +
 					' ' + buttonContent + '</button>';
 
-				// Add Tera option if can terastallize
-				if (canTerastallize && !isDisabled) {
-					return '<div>' + normalButton + '<br>' + '<button name="send" value="/rpg battleaction move 0 ' + move.id + ' 2 terastallize" class="button" style="' + TERA_BUTTON_STYLE + '">⭐ Tera + ' + moveData.name + '</button></div>';
-				}
 				return normalButton;
 			});
 
-			moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+			// Add Terastallize toggle button if available
+			let teraToggleHTML = '';
+			if (canTerastallize) {
+				const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
+				const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+				const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
+				teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
+			}
+
+			moveButtonsHTML = teraToggleHTML + '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
 			moveButtonsHTML += '<tr>';
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
 			moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
@@ -1220,17 +1245,18 @@ export function generateBattleTowerHTML(
 export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
+	teraToggled?: boolean
 ): string {
 	// Battle Tower gets its own specialized UI
 	if (battle.battleType === 'battletower') {
-		return generateBattleTowerHTML(battle, messageLog, targetSelection);
+		return generateBattleTowerHTML(battle, messageLog, targetSelection, teraToggled);
 	} else if (battle.battleType === 'wild' || battle.battleType === 'trainer') {
 		// Use single battle UI
-		return generateSingleBattleHTML(battle, messageLog, targetSelection);
+		return generateSingleBattleHTML(battle, messageLog, targetSelection, teraToggled);
 	} else {
 		// Use double battle UI
-		return generateDoubleBattleHTML(battle, messageLog, targetSelection);
+		return generateDoubleBattleHTML(battle, messageLog, targetSelection, teraToggled);
 	}
 }
 
