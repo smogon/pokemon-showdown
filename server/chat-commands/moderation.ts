@@ -252,9 +252,16 @@ export const commands: Chat.ChatCommands = {
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
+				if (!(nextGroupName === "regular user") || oldSymbol === "!" || oldSymbol === "‽"){
 				this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
 				shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
+				}
+				else {
+				this.privateModAction(`${name} was demoted to Room ${nextGroupName} by ${user.name}.`);
+				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
+				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);				
+				}
 			}
 
 			if (targetUser) {
