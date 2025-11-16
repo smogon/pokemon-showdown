@@ -9,7 +9,8 @@ import { Dex, toID } from '../../../sim/dex';
 import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
-import { TYPE_CHART, BATTLE_TOWER_FORMATS } from './data';
+import { TYPE_CHART } from './data';
+import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';

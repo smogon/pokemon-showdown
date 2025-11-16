@@ -10,11 +10,11 @@
 
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { generateRandomTeam, generateRandomTeamFromBSS, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
+import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
-import { BATTLE_TOWER_FORMATS } from './data';
+import { BATTLE_TOWER_FORMATS, generateRandomTeamFromBSS, generateRandomTeamFromBaby } from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
@@ -153,6 +153,10 @@ export function startBattleTowerFloor(
 			// Use BSS Factory Sets for competitive, battle-tested teams
 			playerTeam = generateRandomTeamFromBSS(teamSize, level);
 			aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		} else if (formatConfig.teamGeneration === 'baby') {
+			// Use Gen9 Baby Sets for Little Cup format (uses levels from sets.json)
+			playerTeam = generateRandomTeamFromBaby(teamSize);
+			aiTeam = generateRandomTeamFromBaby(teamSize);
 		} else {
 			// Use random team generation
 			playerTeam = generateRandomTeam(teamSize, level);
