@@ -457,31 +457,31 @@ function generateTerrainTags(battle: BattleState): string {
  */
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	if (battle.trickRoomTurns > 0) {
-		effects.push(`<span style="background-color: #A040A0; ${tagStyle}">Trick Room (${battle.trickRoomTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Trick Room (${battle.trickRoomTurns})</span></b>`);
 	}
 	if (battle.magicRoomTurns > 0) {
-		effects.push(`<span style="background-color: #F85888; ${tagStyle}">Magic Room (${battle.magicRoomTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Magic Room (${battle.magicRoomTurns})</span></b>`);
 	}
 	if (battle.wonderRoomTurns > 0) {
-		effects.push(`<span style="background-color: #A890F0; ${tagStyle}">Wonder Room (${battle.wonderRoomTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Wonder Room (${battle.wonderRoomTurns})</span></b>`);
 	}
 	if (battle.gravityTurns > 0) {
-		effects.push(`<span style="background-color: #705848; ${tagStyle}">Gravity (${battle.gravityTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Gravity (${battle.gravityTurns})</span></b>`);
 	}
 	if (battle.mudSportTurns > 0) {
-		effects.push(`<span style="background-color: #E0C068; ${tagStyle}">Mud Sport (${battle.mudSportTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Mud Sport (${battle.mudSportTurns})</span></b>`);
 	}
 	if (battle.waterSportTurns > 0) {
-		effects.push(`<span style="background-color: #6890F0; ${tagStyle}">Water Sport (${battle.waterSportTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Water Sport (${battle.waterSportTurns})</span></b>`);
 	}
 	if (battle.fairyLockTurns > 0) {
-		effects.push(`<span style="background-color: #EE99AC; ${tagStyle}">Fairy Lock (${battle.fairyLockTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Fairy Lock (${battle.fairyLockTurns})</span></b>`);
 	}
 	if (battle.ionDelugeTurns > 0) {
-		effects.push(`<span style="background-color: #F8D030; ${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
+		effects.push(`<b><span style="${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span></b>`);
 	}
 
 	return effects.join('');
@@ -500,9 +500,9 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 
 	if (allTags) {
 		// This is the new container the user requested
-		return `<div style="padding: 8px; margin: 5px 0; max-height: 100px; border: 1px solid #666; border-radius: 5px; text-align: center;">` +
+		return `<div style="text-align: center;">` +
 			allTags +
-			`</div>`;
+			`</div><br>`;
 	}
 
 	return ''; // Return empty string if no conditions are active
@@ -666,8 +666,8 @@ export function generateSingleBattleHTML(
 			// Add Terastallize toggle button if available
 			let teraToggleHTML = '';
 			if (canTerastallize) {
-				const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
-				const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+				const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 8px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
+				const teraToggleText = teraActive ? 'Terastallize: ON' : 'Terastallize: OFF';
 				const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
 				teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
 			}
