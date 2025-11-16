@@ -438,19 +438,23 @@ function generateWeatherTags(battle: BattleState): string {
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 
-	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
-
 	const terrainNames: Record<string, string> = {
 		'electric': 'Electric Terrain',
 		'grassy': 'Grassy Terrain',
 		'misty': 'Misty Terrain',
 		'psychic': 'Psychic Terrain',
 	};
+
+	const terrainTypeKey = battle.terrain.type;
 	
-	const name = terrainNames[battle.terrain.type] || battle.terrain.type;
+	const terrainClass = terrainNames.hasOwnProperty(terrainTypeKey)
+		? `rpg-terrain-${terrainTypeKey}`
+		: 'rpg-terrain-default';
+	
+	const name = terrainNames[terrainTypeKey] || terrainTypeKey;
 	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
 
-	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
+	return `<span class="rpg-terrain-tag ${terrainClass}">${name}${turnsText}</span>`;
 }
 
 /**
