@@ -491,10 +491,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
-		mod: 'gen9toho'
-		isNonstandard: "Future",
-		tier: "Toho",
-		doublesTier: "DToho",,
+		mod: 'gen9toho',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
 		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
 		unbanlist: ['Light of Ruin'],
@@ -511,10 +508,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Touhoumons Doubles",
 		desc: `2hu`,
-		mod: 'gen9toho'
-		isNonstandard: "Future",
-		tier: "Toho",
-		doublesTier: "DToho",,
+		mod: 'gen9toho',
 		gameType: 'doubles',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
 		banlist: [],
