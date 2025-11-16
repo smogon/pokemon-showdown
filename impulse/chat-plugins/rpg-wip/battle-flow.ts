@@ -14,6 +14,7 @@ import { generateRandomTeam, generateRandomTeamFromBSS, getActiveSlots, getActiv
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
+import { BATTLE_TOWER_FORMATS } from './data';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
@@ -133,8 +134,10 @@ export function startBattleTowerFloor(
 	user: User,
 	format: string = 'battlefactory'
 ) {
-	const level = 100;
-	const teamSize = 3; // Set team size to 3
+	// Get format configuration
+	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
+	const level = formatConfig.level;
+	const teamSize = formatConfig.teamSize;
 
 	const battleMessages: string[] = [];
 	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
@@ -142,9 +145,19 @@ export function startBattleTowerFloor(
 
 	try {
 		// --- Generate Teams ---
-		// Use BSS Factory Sets for competitive, battle-tested teams
-		const playerTeam = generateRandomTeamFromBSS(teamSize, level);
-		const aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		// Use format-specific team generation
+		let playerTeam: RPGPokemon[];
+		let aiTeam: RPGPokemon[];
+
+		if (formatConfig.teamGeneration === 'bss') {
+			// Use BSS Factory Sets for competitive, battle-tested teams
+			playerTeam = generateRandomTeamFromBSS(teamSize, level);
+			aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		} else {
+			// Use random team generation
+			playerTeam = generateRandomTeam(teamSize, level);
+			aiTeam = generateRandomTeam(teamSize, level);
+		}
 
 		// --- Player Pokemon ---
 		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);

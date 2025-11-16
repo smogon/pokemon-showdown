@@ -9,7 +9,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
-import { TYPE_CHART } from './data';
+import { TYPE_CHART, BATTLE_TOWER_FORMATS } from './data';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
@@ -1018,7 +1018,9 @@ export function generateBattleTowerHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const currentFloor = battle.floor || 1;
-	const formatName = battle.battleTowerFormat === 'battlefactory' ? 'Battle Factory' : (battle.battleTowerFormat || 'Battle Factory');
+	// Get format name from configuration
+	const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
+	const formatName = formatConfig ? formatConfig.name : 'Battle Factory';
 
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
@@ -2245,12 +2247,14 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 	html += `<p>Challenge the Battle Tower with different random formats!</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<hr />`;
-	
-	// Random Formats section
+
+	// Random Formats section - dynamically generate from configuration
 	html += `<h3>Random Formats:</h3>`;
-	html += `<p><button name="send" value="/rpg battletower selectformat battlefactory" class="button" style="width: 200px;">🎲 Battle Factory</button></p>`;
-	html += `<p style="font-size: 0.9em; margin-top: 5px;"><em>Battle Factory: Random team of 3 Level 100 Pokémon with competitive sets</em></p>`;
-	
+	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
+		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button" style="width: 200px;">🎲 ${config.name}</button></p>`;
+		html += `<p style="font-size: 0.9em; margin-top: 5px;"><em>${config.description}</em></p>`;
+	}
+
 	html += `<p><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>`;
 	html += `</div>`;
 	return html;
@@ -2260,9 +2264,12 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
  * Generates the screen shown after selecting a format and before starting a floor.
  */
 export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
-	const formatName = format === 'battlefactory' ? 'Battle Factory' : format;
+	// Get format configuration
+	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
+	const formatName = formatConfig.name;
+
 	let html = `<div class="infobox"><h2>🗼 Battle Tower - ${formatName}</h2>`;
-	html += `<p>You will be assigned a random team of 3 Pokémon, all at Level 100.</p>`;
+	html += `<p>You will be assigned a random team of ${formatConfig.teamSize} Pokémon, all at Level ${formatConfig.level}.</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<p>Good luck!</p><hr />`;
 	if (floor > 1) {

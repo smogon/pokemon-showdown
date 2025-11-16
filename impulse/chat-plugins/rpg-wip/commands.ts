@@ -114,6 +114,7 @@ import {
 import {
 	STARTER_POKEMON,
 	TYPE_CHART,
+	BATTLE_TOWER_FORMATS,
 } from './data';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
@@ -166,9 +167,9 @@ export const commands: ChatCommands = {
 				const player = getPlayerData(user.id);
 				const format = toID(target) || 'battlefactory';
 
-				// Validate format (currently only battlefactory is supported)
-				if (format !== 'battlefactory') {
-					return this.errorReply("Invalid format. Currently only Battle Factory is available.");
+				// Validate format against configuration
+				if (!BATTLE_TOWER_FORMATS[format]) {
+					return this.errorReply(`Invalid format. Available formats: ${Object.keys(BATTLE_TOWER_FORMATS).join(', ')}`);
 				}
 
 				// Don't reset floor here, let them continue if they exited
