@@ -1178,13 +1178,9 @@ export function generateBattleTowerHTML(
 
 	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
 
-	// Battle Tower: Catch and Run are disabled
-	const catchButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
-	const runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
-
 	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
 		moveButtonsHTML +
-		'<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+		'<p style="margin-top: 5px; text-align: center;">' + switchButton + '</p>';
 
 	const playerName = player ? player.name : "Your";
 	const opponentOwnerName = battle.opponentName || 'Battle Tower Trainer';
