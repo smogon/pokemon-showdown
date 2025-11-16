@@ -1280,9 +1280,35 @@ export function applySecondaryEffects(
 							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
 							continue;
 						}
-						if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(targetAbility)) {
+						if (stat === 'atk' && targetAbility === 'hypercutter') {
 							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Attack from being lowered!`);
 							continue;
+						}
+						if (stat === 'def' && targetAbility === 'bigpecks') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Defense from being lowered!`);
+							continue;
+						}
+						if (stat === 'accuracy' && targetAbility === 'keeneye') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its accuracy from being lowered!`);
+							continue;
+						}
+						// Flower Veil protects Grass-types from stat drops
+						if (targetAbility === 'flowerveil') {
+							const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+							if (defenderSpecies.types.includes('Grass')) {
+								messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
+								continue;
+							}
+						}
+						// Check if any ally has Flower Veil that would protect this Grass-type
+						const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+						if (defenderSpecies.types.includes('Grass')) {
+							const isPlayerDefender = battle.playerSlots.some(s => s?.pokemon.id === defenderSlot.pokemon.id);
+							const allies = isPlayerDefender ? battle.playerSlots : battle.opponentSlots;
+							if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== defenderSlot.pokemon.id)) {
+								messageLog.push(`Flower Veil protects ${defenderSlot.pokemon.species} from stat drops!`);
+								continue;
+							}
 						}
 
 						if (currentStage > -6) {
