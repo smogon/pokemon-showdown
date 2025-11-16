@@ -720,6 +720,148 @@ export function generateRandomTeamFromBSS(count: number, level: number): RPGPoke
 	return team;
 }
 
+/**
+ * Type definitions for Gen9 Baby (Little Cup) Sets
+ */
+interface BabySet {
+	role: string;
+	movepool: string[];
+	abilities: string[];
+	teraTypes: string[];
+}
+
+interface BabySpecies {
+	level: number;
+	sets: BabySet[];
+}
+
+interface BabyData {
+	[speciesId: string]: BabySpecies;
+}
+
+// Cache for gen9baby sets to avoid reading the file multiple times
+let babySetsCache: BabyData | null = null;
+
+/**
+ * Loads the Gen9 Baby Sets from the JSON file.
+ * @returns The Gen9 Baby Sets data
+ */
+function loadBabySets(): BabyData | null {
+	if (babySetsCache) return babySetsCache;
+
+	try {
+		const json = FS('data/random-battles/gen9baby/sets.json').readIfExistsSync();
+		if (!json) {
+			console.error('[RPG Battle Tower] Gen9 Baby Sets file not found');
+			return null;
+		}
+		babySetsCache = JSON.parse(json);
+		return babySetsCache;
+	} catch (e: any) {
+		console.error('[RPG Battle Tower] Error loading Gen9 Baby Sets:', e);
+		return null;
+	}
+}
+
+/**
+ * Generates a random team using Gen9 Baby Sets for the Battle Tower Little Cup format.
+ * This provides Little Cup-viable Pokémon with appropriate movesets.
+ *
+ * @param count The number of Pokémon in the team.
+ * @param level The level for all Pokémon in the team (overrides set level).
+ * @returns An array of randomly generated RPGPokemon using Baby sets.
+ */
+export function generateRandomTeamFromBaby(count: number, level: number): RPGPokemon[] {
+	const babyData = loadBabySets();
+
+	// Fallback to old method if Baby data is unavailable
+	if (!babyData) {
+		console.log('[RPG Battle Tower] Gen9 Baby Sets not available, falling back to random generation');
+		return generateRandomTeam(count, level);
+	}
+
+	const team: RPGPokemon[] = [];
+	const speciesEntries = Object.entries(babyData);
+
+	if (speciesEntries.length === 0) {
+		console.error('[RPG Battle Tower] Gen9 Baby Sets is empty');
+		return generateRandomTeam(count, level);
+	}
+
+	// Track selected species to avoid duplicates
+	const usedSpecies = new Set<string>();
+
+	while (team.length < count) {
+		// Select a random species
+		const availableSpecies = speciesEntries.filter(([speciesId]) => !usedSpecies.has(speciesId));
+
+		if (availableSpecies.length === 0) {
+			// If we've used all species, allow duplicates for larger teams
+			usedSpecies.clear();
+		}
+
+		const [speciesId, speciesData] = availableSpecies[Math.floor(Math.random() * availableSpecies.length)];
+
+		// Select a random set from this species
+		const selectedSet = speciesData.sets[Math.floor(Math.random() * speciesData.sets.length)];
+
+		// Create the Pokémon (use provided level, not the set's level)
+		const pokemon = createPokemon(speciesId, level);
+
+		// Apply ability (randomly select from available abilities)
+		if (selectedSet.abilities.length > 0) {
+			pokemon.ability = selectedSet.abilities[Math.floor(Math.random() * selectedSet.abilities.length)];
+		}
+
+		// Apply moves (randomly select 4 moves from the movepool)
+		const moves: { id: string, pp: number }[] = [];
+		const movepool = [...selectedSet.movepool]; // Copy movepool
+
+		// Shuffle and select up to 4 moves
+		for (let i = 0; i < Math.min(4, movepool.length); i++) {
+			const randomIndex = Math.floor(Math.random() * movepool.length);
+			const selectedMove = movepool.splice(randomIndex, 1)[0];
+			const moveId = toID(selectedMove);
+			const moveData = getMove(moveId);
+			if (moveData?.exists) {
+				moves.push({ id: moveId, pp: moveData.pp || 10 });
+			}
+		}
+
+		// Ensure at least one move
+		if (moves.length === 0) {
+			const tackle = getMove('tackle');
+			moves.push({ id: 'tackle', pp: tackle.pp || 35 });
+		}
+
+		pokemon.moves = moves;
+
+		// Apply Tera Type (randomly select from available types)
+		if (selectedSet.teraTypes.length > 0) {
+			pokemon.teraType = selectedSet.teraTypes[Math.floor(Math.random() * selectedSet.teraTypes.length)];
+		}
+
+		// Little Cup typically uses basic stats, so we keep default EVs/IVs/nature
+		// Recalculate stats in case createPokemon modified anything
+		const dexSpecies = Dex.species.get(pokemon.species);
+		const newStats = calculateStats(dexSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+
+		pokemon.maxHp = newStats.maxHp;
+		pokemon.hp = newStats.maxHp;
+		pokemon.atk = newStats.atk;
+		pokemon.def = newStats.def;
+		pokemon.spa = newStats.spa;
+		pokemon.spd = newStats.spd;
+		pokemon.spe = newStats.spe;
+
+		// Add to team and mark species as used
+		team.push(pokemon);
+		usedSpecies.add(speciesId);
+	}
+
+	return team;
+}
+
 export const RPGUtils = {
 	getActiveSlots,
 	calculateTotalExpForLevel,

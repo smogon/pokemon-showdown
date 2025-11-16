@@ -65,7 +65,7 @@ export interface BattleTowerFormatConfig {
 	description: string;
 	level: number; // Pokemon level for this format
 	teamSize: number;
-	teamGeneration: 'bss' | 'random'; // Team generation method
+	teamGeneration: 'bss' | 'random' | 'baby'; // Team generation method
 }
 
 export const BATTLE_TOWER_FORMATS: Record<string, BattleTowerFormatConfig> = {
@@ -77,13 +77,12 @@ export const BATTLE_TOWER_FORMATS: Record<string, BattleTowerFormatConfig> = {
 		teamSize: 3,
 		teamGeneration: 'bss',
 	},
-	// Example for future formats:
-	// littlecup: {
-	// 	id: 'littlecup',
-	// 	name: 'Little Cup',
-	// 	description: 'Random team of LC-viable Pokémon at level 5',
-	// 	level: 5,
-	// 	teamSize: 3,
-	// 	teamGeneration: 'random',
-	// },
+	littlecup: {
+		id: 'littlecup',
+		name: 'Little Cup',
+		description: 'Random team of LC-viable Pokémon at level 5',
+		level: 5,
+		teamSize: 3,
+		teamGeneration: 'baby',
+	},
 };
