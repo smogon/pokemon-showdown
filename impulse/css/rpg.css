@@ -1,0 +1,122 @@
+/* RPG Weather Tags */
+/* weathers.css */
+
+.rpg-weather-tag {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.rpg-weather-default {
+    background-color: #999;
+    color: #000;
+}
+
+.rpg-weather-sun {
+    background-color: #F8D030;
+    color: #000;
+}
+
+.rpg-weather-rain {
+    background-color: #6890F0;
+    color: #000;
+}
+
+.rpg-weather-sand {
+    background-color: #E0C068;
+    color: #000;
+}
+
+.rpg-weather-hail {
+    background-color: #98D8D8;
+    color: #000;
+}
+
+.rpg-weather-strong-winds {
+    background-color: #A0D0F0;
+    color: #000;
+}
+
+.rpg-weather-harsh-sun {
+    background-color: #FF8C00;
+    color: #FFF;
+}
+
+.rpg-weather-heavy-rain {
+    background-color: #0066CC;
+    color: #FFF;
+}
+
+.dark .rpg-weather-tag {
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+}
+
+.dark .rpg-weather-default,
+.dark .rpg-weather-sun,
+.dark .rpg-weather-rain,
+.dark .rpg-weather-sand,
+.dark .rpg-weather-hail,
+.dark .rpg-weather-strong-winds {
+    color: #000; 
+}
+
+.dark .rpg-weather-harsh-sun,
+.dark .rpg-weather-heavy-rain {
+    color: #FFF;
+}
+
+/* RPG Terrains Tags */
+.rpg-terrain-tag {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.rpg-terrain-default {
+    background-color: #999;
+    color: #000;
+}
+
+.rpg-terrain-electric {
+    background-color: #F8D030;
+    color: #000;
+}
+
+.rpg-terrain-grassy {
+    background-color: #78C850;
+    color: #000;
+}
+
+.rpg-terrain-misty {
+    background-color: #EE99AC;
+    color: #000;
+}
+
+.rpg-terrain-psychic {
+    background-color: #F85888;
+    color: #FFF;
+}
+
+.dark .rpg-terrain-tag {
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+}
+
+.dark .rpg-terrain-default,
+.dark .rpg-terrain-electric,
+.dark .rpg-terrain-grassy,
+.dark .rpg-terrain-misty {
+    color: #000; 
+}
+
+.dark .rpg-terrain-psychic {
+    color: #FFF;
+}
+
