@@ -124,6 +124,160 @@
 }
 
 
+/* RPG TAGS */
+.rpg-tag {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+    display: inline-block;
+    color: #FFF;
+    text-transform: uppercase;
+}
+
+.rpg-tag-brn, .rpg-tag-focus-energy, .rpg-tag-slow-start, .rpg-tag-flash-fire {
+    background-color: #F08030;
+    color: #000;
+}
+
+.rpg-tag-par, .rpg-tag-magnet-rise, .rpg-tag-charged, .rpg-tag-must-recharge {
+    background-color: #F8D030;
+    color: #000;
+}
+
+.rpg-tag-psn, .rpg-tag-tox, .rpg-tag-telekinesis, .rpg-tag-disabled {
+    background-color: #A040A0;
+    color: #FFF;
+}
+
+.rpg-tag-slp, .rpg-tag-yawn, .rpg-tag-confused, .rpg-tag-uproar, .rpg-tag-stockpile {
+    background-color: #9898E8;
+    color: #000;
+}
+
+.rpg-tag-frz {
+    background-color: #98D8D8;
+    color: #000;
+}
+
+.rpg-tag-cursed, .rpg-tag-tormented, .rpg-tag-embargo {
+    background-color: #705898;
+    color: #FFF;
+}
+
+.rpg-tag-seeded, .rpg-tag-ingrained, .rpg-tag-helped {
+    background-color: #78C850;
+    color: #000;
+}
+
+.rpg-tag-nightmare {
+    background-color: #503870;
+    color: #FFF;
+}
+
+.rpg-tag-trapped, .rpg-tag-substitute, .rpg-tag-locked {
+    background-color: #A8A878;
+    color: #000;
+}
+
+.rpg-tag-taunted, .rpg-tag-rampage, .rpg-tag-heal-block {
+    background-color: #C03028;
+    color: #FFF;
+}
+
+.rpg-tag-encored {
+    background-color: #F85888;
+    color: #FFF;
+}
+
+.rpg-tag-aqua-ring, .rpg-tag-charging {
+    background-color: #6890F0;
+    color: #FFF;
+}
+
+.rpg-tag-grounded {
+    background-color: #B8A038;
+    color: #000;
+}
+
+.rpg-tag-protected {
+    background-color: #4A90E2;
+    color: #FFF;
+}
+
+.rpg-tag-attention {
+    background-color: #D0021B;
+    color: #FFF;
+}
+
+.rpg-tag-analytic {
+    background-color: #6c757d;
+    color: #FFF;
+}
+
+.rpg-tag-unburden {
+    background-color: #A890F0;
+    color: #FFF;
+}
+
+.rpg-tag-tera {
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+    color: #000;
+}
+
+.dark .rpg-tag {
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+}
+
+.dark .rpg-tag-brn,
+.dark .rpg-tag-focus-energy,
+.dark .rpg-tag-slow-start,
+.dark .rpg-tag-flash-fire,
+.dark .rpg-tag-par,
+.dark .rpg-tag-magnet-rise,
+.dark .rpg-tag-charged,
+.dark .rpg-tag-must-recharge,
+.dark .rpg-tag-frz,
+.dark .rpg-tag-seeded,
+.dark .rpg-tag-ingrained,
+.dark .rpg-tag-helped,
+.dark .rpg-tag-trapped,
+.dark .rpg-tag-substitute,
+.dark .rpg-tag-locked,
+.dark .rpg-tag-grounded,
+.dark .rpg-tag-slp,
+.dark .rpg-tag-yawn,
+.dark .rpg-tag-confused,
+.dark .rpg-tag-uproar,
+.dark .rpg-tag-stockpile,
+.dark .rpg-tag-tera {
+    color: #000; 
+}
+
+.dark .rpg-tag-psn,
+.dark .rpg-tag-tox,
+.dark .rpg-tag-telekinesis,
+.dark .rpg-tag-disabled,
+.dark .rpg-tag-cursed,
+.dark .rpg-tag-tormented,
+.dark .rpg-tag-embargo,
+.dark .rpg-tag-nightmare,
+.dark .rpg-tag-taunted,
+.dark .rpg-tag-rampage,
+.dark .rpg-tag-heal-block,
+.dark .rpg-tag-encored,
+.dark .rpg-tag-aqua-ring,
+.dark .rpg-tag-charging,
+.dark .rpg-tag-protected,
+.dark .rpg-tag-attention,
+.dark .rpg-tag-analytic,
+.dark .rpg-tag-unburden {
+    color: #FFF;
+}
+
+
 /*************************
 * RPG CUSTOM CSS ENDS
 **************************/
