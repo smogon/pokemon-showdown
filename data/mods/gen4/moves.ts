@@ -1573,7 +1573,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
-				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
 				let extraPP = 0;
 				for (const foe of snatchUser.foes()) {
 					const ppDrop = this.runEvent('DeductPP', foe, snatchUser, move);
@@ -1581,9 +1580,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						extraPP += ppDrop || 0;
 					}
 				}
-				if (this.actions.useMove(move.id, snatchUser) && extraPP > 0) {
+				if (extraPP > 0) {
 					snatchUser.deductPP('snatch', extraPP);
 				}
+				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
+				this.actions.useMove(move.id, snatchUser);
 				return null;
 			},
 		},
