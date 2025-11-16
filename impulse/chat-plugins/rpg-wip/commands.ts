@@ -128,7 +128,8 @@ import * as ScriptedEvents from './scripted-events';
 // are now imported from battle-engine (where battle-flow.ts lives).
 
 // Track Terastallize toggle state per user (temporary UI state)
-const teraToggleState = new Map<string, boolean>();
+// Exported so battle-flow.ts can access it when rendering battle UI
+export const teraToggleState = new Map<string, boolean>();
 
 export const commands: ChatCommands = {
 	rpg: {
@@ -201,6 +202,7 @@ export const commands: ChatCommands = {
 					const format = oldBattle.battleTowerFormat || 'battlefactory';
 					// Battle was won, clear it and start the next
 					activeBattles.delete(user.id);
+					teraToggleState.delete(user.id);
 
 					const player = getPlayerData(user.id);
 					// player.battleTowerFloor should have been incremented by checkBattleEndCondition
@@ -1603,6 +1605,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
+				teraToggleState.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
 			}
 		},
@@ -2235,6 +2238,7 @@ export const commands: ChatCommands = {
 					const zoneId = battle.zoneId;
 					saveBattleStatus(battle);
 					activeBattles.delete(user.id);
+					teraToggleState.delete(user.id);
 
 					const caughtPokemon = targetSlot.pokemon;
 					caughtPokemon.caughtIn = ballId; // Set the ball it was caught in!
@@ -2299,6 +2303,7 @@ export const commands: ChatCommands = {
 				const zoneId = battle.zoneId;
 				saveBattleStatus(battle);
 				activeBattles.delete(user.id);
+				teraToggleState.delete(user.id);
 
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRunHTML(zoneId)}`);
 			},
@@ -2312,7 +2317,7 @@ export const commands: ChatCommands = {
 							delete battle.pendingActions[i];
 						}
 					}
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."])}`);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
 				}
 			},
 
@@ -2436,6 +2441,7 @@ export const commands: ChatCommands = {
 					saveBattleStatus(battle);
 				}
 				activeBattles.delete(user.id);
+				teraToggleState.delete(user.id);
 			}
 
 			// Clear all player data
@@ -2457,6 +2463,7 @@ export const commands: ChatCommands = {
 				saveBattleStatus(battle);
 			}
 			activeBattles.delete(user.id);
+			teraToggleState.delete(user.id);
 
 			// Send confirmation
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateUnstuckHTML()}`);
