@@ -413,19 +413,10 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
 
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
-	const weatherColors: Record<string, string> = {
-		'sun': '#CC5500',
-		'rain': '#6890F0',
-		'sand': '#E0C068',
-		'hail': '#98D8D8',
-		'harsh-sun': '#CC5500',
-		'heavy-rain': '#0066CC',
-		'strong-winds': '#A0D0F0',
-	};
+	const tagStyle = 'font-size: 12px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	const weatherNames: Record<string, string> = {
-		'sun': 'Sunny',
+		'sun': 'Sun',
 		'rain': 'Rain',
 		'sand': 'Sandstorm',
 		'hail': 'Hail',
@@ -434,11 +425,10 @@ function generateWeatherTags(battle: BattleState): string {
 		'strong-winds': 'Strong Winds',
 	};
 
-	const color = weatherColors[battle.weather.type] || '#999';
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
-	return `<b><span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span></b>`;
+	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
 }
 
 /**
