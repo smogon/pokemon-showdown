@@ -1757,6 +1757,7 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 	const partyToUse = battle.overridePlayerParty || player.party;
 	const availableParty = partyToUse.filter(p =>
 		p.hp > 0 &&
+		p.id !== pivotingPokemon?.id && // Exclude the pivoting Pokemon
 		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
 	);
 	// --- END MODIFICATION ---
