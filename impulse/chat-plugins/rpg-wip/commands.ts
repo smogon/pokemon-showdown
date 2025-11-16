@@ -114,8 +114,8 @@ import {
 import {
 	STARTER_POKEMON,
 	TYPE_CHART,
-	BATTLE_TOWER_FORMATS,
 } from './data';
+import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { STORY_EVENTS } from './story-events';
