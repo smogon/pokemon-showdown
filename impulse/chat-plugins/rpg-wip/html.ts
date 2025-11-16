@@ -268,18 +268,12 @@ function getSpriteFilename(speciesId: string): string {
 	}
 	
 	const hyphenatedForms: Record<string, string> = {
-		'greattusk': 'great-tusk', 'screamtail': 'scream-tail', 'brutebonnet': 'brute-bonnet', 'fluttermane': 'flutter-mane',
-		'slitherwing': 'slither-wing', 'sandyshocks': 'sandy-shocks', 'ironhands': 'iron-hands', 'ironjugulis': 'iron-jugulis',
-		'ironmoth': 'iron-moth', 'ironthorns': 'iron-thorns', 'ironbundle': 'iron-bundle', 'ironvaliant': 'iron-valiant',
-		'walkingwake': 'walking-wake', 'gougingfire': 'gouging-fire', 'ragingbolt': 'raging-bolt', 'ironleaves': 'iron-leaves',
-		'ironboulder': 'iron-boulder', 'ironcrown': 'iron-crown',
-
 		'taurospaldeacombat': 'tauros-paldea-combat', 'taurospaldeablaze': 'tauros-paldea-blaze', 'taurospaldeaaqua': 'tauros-paldea-aqua',
 		'palafinhero': 'palafin-hero', 'gimmighoulroaming': 'gimmighoul-roaming', 'gholdengochest': 'gholdengo-chest',
 		'koraidonapex': 'koraidon-apex', 'koraidonlimited': 'koraidon-limited', 'miraidonapex': 'miraidon-apex',
-		'miraidonlimited': 'miraidon-limited', 'ogerponwellspringmask': 'ogerpon-wellspring',
-		'ogerponhearthflamemask': 'ogerpon-hearthflame', 'ogerponcornerstonemask': 'ogerpon-cornerstone',
-		'ursalunaheart': 'ursaluna-bloodmoon',
+		'miraidonlimited': 'miraidon-limited', 'ogerponwellspring': 'ogerpon-wellspring',
+		'ogerponhearthflame': 'ogerpon-hearthflame', 'ogerponcornerstone': 'ogerpon-cornerstone',
+		'ursalunabloodmoon': 'ursaluna-bloodmoon',
 
 		'cramorantgorging': 'cramorant-gorging', 'cramorantgulping': 'cramorant-gulping',
 		'zaciancrowned': 'zacian-crowned', 'zamazentacrowned': 'zamazenta-crowned',
