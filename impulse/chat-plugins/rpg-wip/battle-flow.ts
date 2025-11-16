@@ -283,12 +283,6 @@ export function handleOpponentFaint(
 				}
 			}
 
-			// Find replacement Pokemon (for both faints and forced switches)
-			const nextOpponent = battle.opponentParty.find(p =>
-				p.hp > 0 &&
-				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
-			);
-
 			// Keep trying to find a replacement until one survives entry or we run out
 			let foundReplacement = false;
 			while (!foundReplacement) {
