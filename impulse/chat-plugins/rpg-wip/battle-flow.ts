@@ -14,6 +14,7 @@ import { generateRandomTeam, generateRandomTeamFromBSS, getActiveSlots, getActiv
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
+import { BATTLE_TOWER_FORMATS } from './data';
 import { getPlayerData, activeBattles } from './core';
 import {
 	generateBattleHTML,
@@ -130,10 +131,13 @@ export function startBattleTowerFloor(
 	floor: number,
 	context: CommandContext,
 	room: ChatRoom,
-	user: User
+	user: User,
+	format = 'battlefactory'
 ) {
-	const level = 100;
-	const teamSize = 3; // Set team size to 3
+	// Get format configuration
+	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
+	const level = formatConfig.level;
+	const teamSize = formatConfig.teamSize;
 
 	const battleMessages: string[] = [];
 	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
@@ -141,9 +145,19 @@ export function startBattleTowerFloor(
 
 	try {
 		// --- Generate Teams ---
-		// Use BSS Factory Sets for competitive, battle-tested teams
-		const playerTeam = generateRandomTeamFromBSS(teamSize, level);
-		const aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		// Use format-specific team generation
+		let playerTeam: RPGPokemon[];
+		let aiTeam: RPGPokemon[];
+
+		if (formatConfig.teamGeneration === 'bss') {
+			// Use BSS Factory Sets for competitive, battle-tested teams
+			playerTeam = generateRandomTeamFromBSS(teamSize, level);
+			aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		} else {
+			// Use random team generation
+			playerTeam = generateRandomTeam(teamSize, level);
+			aiTeam = generateRandomTeam(teamSize, level);
+		}
 
 		// --- Player Pokemon ---
 		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
@@ -164,6 +178,7 @@ export function startBattleTowerFloor(
 			battleType: 'battletower',
 			floor,
 			overridePlayerParty: playerTeam, // Set the temporary party
+			battleTowerFormat: format, // Store the selected format
 			opponentName: `Battle Tower Trainer`,
 			opponentParty: aiTeam,
 			opponentMoney: 500 * floor, // Scale reward
@@ -1318,7 +1333,7 @@ export function handleSwitchAction(
 
 		if (replacement) {
 			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
-			
+
 			const newSlot = createActivePokemonSlot(replacement);
 			if ((replacement as any).hasSwitchedOut) {
 				(newSlot as any).hasSwitchedOut = true;

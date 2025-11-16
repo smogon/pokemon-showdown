@@ -107,12 +107,14 @@ import {
 	// [NEW] Import new HTML functions
 	generateModeSelectionHTML,
 	generateBattleTowerWelcomeHTML,
+	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
 	TYPE_CHART,
+	BATTLE_TOWER_FORMATS,
 } from './data';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
@@ -160,30 +162,54 @@ export const commands: ChatCommands = {
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerWelcomeHTML(player.battleTowerFloor)}`);
 			},
 
+			selectformat(target, room, user) {
+				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				const player = getPlayerData(user.id);
+				const format = toID(target) || 'battlefactory';
+
+				// Validate format against configuration
+				if (!BATTLE_TOWER_FORMATS[format]) {
+					return this.errorReply(`Invalid format. Available formats: ${Object.keys(BATTLE_TOWER_FORMATS).join(', ')}`);
+				}
+
+				// Don't reset floor here, let them continue if they exited
+				if (player.battleTowerFloor <= 1) player.battleTowerFloor = 1;
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerFormatSelectedHTML(player.battleTowerFloor, format)}`);
+			},
+
 			beginfloor(target, room, user) {
 				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
 				const player = getPlayerData(user.id);
 				// Safety check: The player must have *started* story mode to have a PlayerData object
 				if (player.party.length === 0) return this.errorReply("You must start Story Mode and get a Pokémon before you can enter the Battle Tower.");
 
+				// Parse format from target (defaults to battlefactory)
+				const format = toID(target) || 'battlefactory';
+
 				// Call the new function from battle-flow (via battle-engine)
-				startBattleTowerFloor(player, player.battleTowerFloor, this, room, user);
+				startBattleTowerFloor(player, player.battleTowerFloor, this, room, user, format);
 			},
 
 			nextfloor(target, room, user) {
 				// This command is hit after winning a battle
 				const oldBattle = activeBattles.get(user.id);
 				if (oldBattle && oldBattle.battleType === 'battletower' && oldBattle.battleResult === 'victory') {
+					// Store the format to continue with the same format
+					const format = oldBattle.battleTowerFormat || 'battlefactory';
 					// Battle was won, clear it and start the next
 					activeBattles.delete(user.id);
+
+					const player = getPlayerData(user.id);
+					// player.battleTowerFloor should have been incremented by checkBattleEndCondition
+					startBattleTowerFloor(player, player.battleTowerFloor, this, room, user, format);
 				} else if (activeBattles.has(user.id)) {
 					// This is a safety check
 					return this.errorReply("You are still in a battle.");
+				} else {
+					// No battle found, start fresh
+					const player = getPlayerData(user.id);
+					startBattleTowerFloor(player, player.battleTowerFloor, this, room, user, 'battlefactory');
 				}
-
-				const player = getPlayerData(user.id);
-				// player.battleTowerFloor should have been incremented by checkBattleEndCondition
-				startBattleTowerFloor(player, player.battleTowerFloor, this, room, user);
 			},
 
 			'': 'start', // Default action
@@ -1781,7 +1807,7 @@ export const commands: ChatCommands = {
 				// [MODIFIED] Check the correct moves list (story party or tower party)
 				const partyToUse = battle.overridePlayerParty || getPlayerData(battle.playerId).party;
 				const currentPokemon = partyToUse.find(p => p.id === attackerSlot.pokemon.id);
-				
+
 				if (moveId !== 'struggle' && !currentPokemon?.moves.some(m => m.id === moveData.id)) {
 					// This check is tricky. The `attackerSlot.pokemon` is the *instance* of the Pokemon.
 					// We should check `attackerSlot.pokemon.moves` directly.
@@ -1959,7 +1985,7 @@ export const commands: ChatCommands = {
 				// --- Check if more switches are needed ---
 				const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
-				
+
 				// [MODIFIED] Use partyToUse
 				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
 					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
