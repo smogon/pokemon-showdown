@@ -415,11 +415,11 @@ function generateWeatherTags(battle: BattleState): string {
 
 	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 	const weatherColors: Record<string, string> = {
-		'sun': '#F8D030',
+		'sun': '#CC5500',
 		'rain': '#6890F0',
 		'sand': '#E0C068',
 		'hail': '#98D8D8',
-		'harsh-sun': '#FF8C00',
+		'harsh-sun': '#CC5500',
 		'heavy-rain': '#0066CC',
 		'strong-winds': '#A0D0F0',
 	};
