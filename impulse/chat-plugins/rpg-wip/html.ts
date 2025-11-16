@@ -413,7 +413,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
 
-	const tagStyle = 'font-size: 12px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
+	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	const weatherNames: Record<string, string> = {
 		'sun': 'Sun',
@@ -428,7 +428,7 @@ function generateWeatherTags(battle: BattleState): string {
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
-	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
+	return `<center><b><span style="${tagStyle}">${name}${turnsText}</span></b></center>`;
 }
 
 /**
