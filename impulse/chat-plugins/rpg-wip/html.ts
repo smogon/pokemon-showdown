@@ -352,7 +352,7 @@ export function generateSharedBattlePokemonInfo(
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' +
-			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.id + '.png" width="64" height="64" />' +
+			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.name.toLowerCase() + '.png" width="64" height="64" />' +
 			'</div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
