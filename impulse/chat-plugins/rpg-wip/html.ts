@@ -458,31 +458,32 @@ function generateTerrainTags(battle: BattleState): string {
  */
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
-	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
+	
+	const tagClass = 'rpg-field-effect-tag';
 
 	if (battle.trickRoomTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Trick Room (${battle.trickRoomTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Trick Room (${battle.trickRoomTurns})</span>`);
 	}
 	if (battle.magicRoomTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Magic Room (${battle.magicRoomTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Magic Room (${battle.magicRoomTurns})</span>`);
 	}
 	if (battle.wonderRoomTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Wonder Room (${battle.wonderRoomTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Wonder Room (${battle.wonderRoomTurns})</span>`);
 	}
 	if (battle.gravityTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Gravity (${battle.gravityTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Gravity (${battle.gravityTurns})</span>`);
 	}
 	if (battle.mudSportTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Mud Sport (${battle.mudSportTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Mud Sport (${battle.mudSportTurns})</span>`);
 	}
 	if (battle.waterSportTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Water Sport (${battle.waterSportTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Water Sport (${battle.waterSportTurns})</span>`);
 	}
 	if (battle.fairyLockTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Fairy Lock (${battle.fairyLockTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Fairy Lock (${battle.fairyLockTurns})</span>`);
 	}
 	if (battle.ionDelugeTurns > 0) {
-		effects.push(`<b><span style="${tagStyle}">Ion Deluge (${battle.ionDelugeTurns})</span></b>`);
+		effects.push(`<span class="${tagClass}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
 	}
 
 	return effects.join('');
