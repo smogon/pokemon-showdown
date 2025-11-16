@@ -187,23 +187,35 @@ export function generateRandomTeamFromBSS(count: number, level: number): RPGPoke
 
 		// Apply item (randomly select from available items)
 		if (selectedSet.item.length > 0) {
-			pokemon.item = selectedSet.item[Math.floor(Math.random() * selectedSet.item.length)].toLowerCase().replace(/[^a-z0-9]/g, '');
+			const randomItem = selectedSet.item[Math.floor(Math.random() * selectedSet.item.length)];
+			pokemon.item = randomItem.toLowerCase().replace(/[^a-z0-9]/g, '');
 		}
 
 		// Apply moves (randomly select one move from each slot)
 		const moves: { id: string, pp: number }[] = [];
 		for (const moveSlot of selectedSet.moves) {
 			if (moveSlot.length > 0) {
-				const selectedMove = moveSlot[Math.floor(Math.random() * moveSlot.length)];
-				const moveId = toID(selectedMove);
-				const moveData = getMove(moveId);
-				if (moveData?.exists) {
-					moves.push({ id: moveId, pp: moveData.pp || 10 });
+				// Shuffle the moves in this slot to try them in random order
+				const shuffledMoves = [...moveSlot].sort(() => Math.random() - 0.5);
+				let addedMove = false;
+				for (const moveOption of shuffledMoves) {
+					const moveId = toID(moveOption);
+					const moveData = getMove(moveId);
+					if (moveData?.exists) {
+						moves.push({ id: moveId, pp: moveData.pp || 10 });
+						addedMove = true;
+						break; // Move to next slot
+					}
+				}
+				// If no move in this slot was valid, add Tackle as fallback
+				if (!addedMove) {
+					const tackle = getMove('tackle');
+					moves.push({ id: 'tackle', pp: tackle.pp || 35 });
 				}
 			}
 		}
 
-		// Ensure at least one move
+		// Ensure at least one move (in case all slots were empty)
 		if (moves.length === 0) {
 			const tackle = getMove('tackle');
 			moves.push({ id: 'tackle', pp: tackle.pp || 35 });
@@ -333,8 +345,8 @@ export function generateRandomTeamFromBaby(count: number): RPGPokemon[] {
 		const moves: { id: string, pp: number }[] = [];
 		const movepool = [...selectedSet.movepool]; // Copy movepool
 
-		// Shuffle and select up to 4 moves
-		for (let i = 0; i < Math.min(4, movepool.length); i++) {
+		// Keep trying to select moves until we have 4 or run out of moves in the pool
+		while (moves.length < 4 && movepool.length > 0) {
 			const randomIndex = Math.floor(Math.random() * movepool.length);
 			const selectedMove = movepool.splice(randomIndex, 1)[0];
 			const moveId = toID(selectedMove);
