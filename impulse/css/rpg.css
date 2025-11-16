@@ -125,11 +125,12 @@
 
 
 /* RPG TAGS */
+
 .rpg-tag {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 1px 4px;
+    border-radius: 3px;
     margin-left: 5px;
     vertical-align: middle;
     display: inline-block;
