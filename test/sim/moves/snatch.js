@@ -126,15 +126,21 @@ describe('Snatch [Gen 4]', () => {
 
 	it(`should only deduct additional PP from Snatch if the Snatch was successful`, () => {
 		battle = common.gen(4).createBattle([[
-			{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind'] },
+			{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind', 'lightscreen'] },
 		], [
 			{ species: 'Dialga', moves: ['snatch'] },
 		]]);
 		battle.makeChoices();
 		const move = battle.p2.active[0].getMoveData(Dex.moves.get('snatch'));
-		assert.equal(move.pp, move.maxpp - 1, `Snatch should only lose 1 PP because it was not successful.`);
+		assert.equal(move.pp, 15, `Snatch should only lose 1 PP because it was not successful.`);
 
 		battle.makeChoices('move calmmind', 'move snatch');
-		assert.equal(move.pp, move.maxpp - 3, `Snatch should be at 13 PP after losing 1 PP earlier and 2 PP this turn`);
+		assert.equal(move.pp, 13, `Snatch should be at 13 PP after losing 1 PP earlier and 2 PP this turn`);
+
+		battle.makeChoices('move lightscreen', 'move snatch');
+		assert.equal(move.pp, 11, `Snatch should be at 11 PP after losing 2 PP this turn`);
+
+		battle.makeChoices('move lightscreen', 'move snatch'); // Light Screen fails
+		assert.equal(move.pp, 9, `Snatch should be at 9 PP after losing 2 PP this turn`);
 	});
 });
