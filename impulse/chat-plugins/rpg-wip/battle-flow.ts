@@ -283,25 +283,32 @@ export function handleOpponentFaint(
 				}
 			}
 
-			// Find replacement Pokemon (for both faints and forced switches)
-			const nextOpponent = battle.opponentParty.find(p =>
-				p.hp > 0 &&
-				!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
-			);
+			// Keep trying to find a replacement until one survives entry or we run out
+			let foundReplacement = false;
+			while (!foundReplacement) {
+				const nextOpponent = battle.opponentParty.find(p =>
+					p.hp > 0 &&
+					!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+				);
 
-			if (nextOpponent) {
-				messageLog.push(`<b>${battle.opponentName} is about to send in ${nextOpponent.species}!</b>`);
-				const newSlot = createActivePokemonSlot(nextOpponent);
-				battle.opponentSlots[i as 0 | 1] = newSlot;
+				if (nextOpponent) {
+					messageLog.push(`<b>${battle.opponentName} is about to send in ${nextOpponent.species}!</b>`);
+					const newSlot = createActivePokemonSlot(nextOpponent);
+					battle.opponentSlots[i as 0 | 1] = newSlot;
 
-				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
-				if (faintedOnEntry) {
-					messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+					const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+					if (faintedOnEntry) {
+						messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+						// Continue loop to try next Pokemon
+					} else {
+						handleMirrorHerb(newSlot, battle, messageLog);
+						foundReplacement = true; // Successfully placed a Pokemon
+					}
 				} else {
-					handleMirrorHerb(newSlot, battle, messageLog);
+					// No more Pokemon available
+					battle.opponentSlots[i as 0 | 1] = null;
+					foundReplacement = true; // Exit loop (no more to try)
 				}
-			} else {
-				battle.opponentSlots[i as 0 | 1] = null;
 			}
 		}
 	}
@@ -351,38 +358,49 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 export function handleAiPivot(battle: BattleState, messageLog: string[]) {
 	if (!battle.aiPendingPivot) return;
 
-	const nextOpponent = battle.opponentParty.find(p =>
-		p.hp > 0 &&
-		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
-	);
 	const slotIndex = battle.aiPendingPivot.slotIndex;
 	const pivotSlot = battle.aiPendingPivot.slot;
+	const isBatonPass = battle.aiPendingPivot.isBatonPass;
 
-	if (nextOpponent) {
-		messageLog.push(`<b>${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!</b>`);
-		messageLog.push(`<b>${battle.opponentName} sent out ${nextOpponent.species}!</b>`);
+	messageLog.push(`<b>${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!</b>`);
 
-		const newSlot = createActivePokemonSlot(nextOpponent);
+	// Keep trying to find a replacement until one survives entry or we run out
+	let foundReplacement = false;
+	while (!foundReplacement) {
+		const nextOpponent = battle.opponentParty.find(p =>
+			p.hp > 0 &&
+			!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+		);
 
-		if (battle.aiPendingPivot.isBatonPass) {
-			newSlot.statStages = { ...pivotSlot.statStages };
-			newSlot.isConfused = pivotSlot.isConfused;
-			newSlot.confusionCounter = pivotSlot.confusionCounter;
-			newSlot.isSeeded = pivotSlot.isSeeded;
-			messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
-		}
+		if (nextOpponent) {
+			messageLog.push(`<b>${battle.opponentName} sent out ${nextOpponent.species}!</b>`);
 
-		battle.opponentSlots[slotIndex as 0 | 1] = newSlot;
+			const newSlot = createActivePokemonSlot(nextOpponent);
 
-		const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
-		if (faintedOnEntry) {
-			messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+			if (isBatonPass) {
+				newSlot.statStages = { ...pivotSlot.statStages };
+				newSlot.isConfused = pivotSlot.isConfused;
+				newSlot.confusionCounter = pivotSlot.confusionCounter;
+				newSlot.isSeeded = pivotSlot.isSeeded;
+				messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
+			}
+
+			battle.opponentSlots[slotIndex as 0 | 1] = newSlot;
+
+			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+			if (faintedOnEntry) {
+				messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+				// Continue loop to try next Pokemon
+			} else {
+				handleMirrorHerb(newSlot, battle, messageLog);
+				foundReplacement = true; // Successfully placed a Pokemon
+			}
 		} else {
-			handleMirrorHerb(newSlot, battle, messageLog);
+			// No more Pokemon available, put the original back
+			battle.opponentSlots[slotIndex as 0 | 1] = pivotSlot;
+			messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
+			foundReplacement = true; // Exit loop
 		}
-	} else {
-		battle.opponentSlots[slotIndex as 0 | 1] = pivotSlot;
-		messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
 	}
 	battle.aiPendingPivot = undefined;
 }
@@ -1299,16 +1317,18 @@ export function handleSwitchAction(
 		const replacement = battle.opponentParty.find(p => p.id === pokemonToSwitchInId);
 
 		if (replacement) {
+			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
+			
 			const newSlot = createActivePokemonSlot(replacement);
 			if ((replacement as any).hasSwitchedOut) {
 				(newSlot as any).hasSwitchedOut = true;
 			}
 			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot;
-			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
 
 			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
 			if (faintedOnEntry) {
 				messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+				// The fainted Pokemon is in the slot now - handleOpponentFaint will handle it in the next check
 			} else {
 				handleMirrorHerb(newSlot, battle, messageLog);
 				RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
