@@ -375,6 +375,112 @@ describe('RPG Self-Boost Moves', function () {
 		});
 	});
 
+	describe('Shield Dust and Substitute interactions', () => {
+		let battle, attackerSlot, defenderSlot;
+
+		beforeEach(() => {
+			battle = {
+				playerSlots: [],
+				opponentSlots: [],
+				weather: null,
+				terrain: null,
+				magicRoomTurns: 0,
+			};
+
+			attackerSlot = {
+				pokemon: {
+					id: 'attacker-5',
+					species: 'Machamp',
+					nickname: 'Machamp',
+					level: 50,
+					hp: 150,
+					maxHp: 150,
+					atk: 130,
+					def: 80,
+					spa: 65,
+					spd: 85,
+					spe: 55,
+					ability: null,
+					item: null,
+					status: null,
+				},
+				statStages: {
+					atk: 0,
+					def: 0,
+					spa: 0,
+					spd: 0,
+					spe: 0,
+					accuracy: 0,
+					evasion: 0,
+				},
+				substitute: null,
+			};
+
+			defenderSlot = {
+				pokemon: {
+					id: 'defender-5',
+					species: 'Dustox',
+					nickname: 'Dustox',
+					hp: 150,
+					maxHp: 150,
+					ability: 'Shield Dust',
+					item: null,
+					status: null,
+				},
+				statStages: {
+					atk: 0,
+					def: 0,
+					spa: 0,
+					spd: 0,
+					spe: 0,
+					accuracy: 0,
+					evasion: 0,
+				},
+				substitute: null,
+			};
+		});
+
+		it('should boost attacker even when defender has Shield Dust', () => {
+			const move = utils.getMove('poweruppunch');
+			const messageLog = [];
+			const abilityContext = {
+				attacker: attackerSlot.pokemon,
+				defender: defenderSlot.pokemon,
+				move,
+			};
+
+			assert.equal(attackerSlot.statStages.atk, 0, 'Initial Attack stage should be 0');
+
+			battleCore.applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+			// Shield Dust should NOT prevent the attacker's self-boost
+			assert.equal(attackerSlot.statStages.atk, 1, 'Attack stage should be 1 even with Shield Dust on defender');
+		});
+
+		it('should boost attacker even when defender has a substitute', () => {
+			// Give defender a substitute
+			defenderSlot.substitute = {
+				hp: 50,
+				maxHp: 50,
+			};
+
+			const move = utils.getMove('poweruppunch');
+			const messageLog = [];
+			const abilityContext = {
+				attacker: attackerSlot.pokemon,
+				defender: defenderSlot.pokemon,
+				move,
+			};
+
+			assert.equal(attackerSlot.statStages.atk, 0, 'Initial Attack stage should be 0');
+
+			battleCore.applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+			// Substitute should NOT prevent the attacker's self-boost
+			assert.equal(attackerSlot.statStages.atk, 1, 'Attack stage should be 1 even with Substitute on defender');
+		});
+	});
+
 	describe('Contrary ability interaction', () => {
 		let battle, attackerSlot, defenderSlot;
 
