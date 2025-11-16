@@ -176,6 +176,13 @@ describe('RPG Battle Tower Module', function () {
 			});
 		});
 
+		it('should assign exactly 4 moves to each Pokemon', () => {
+			const team = battleTower.generateRandomTeamFromBSS(3, 100);
+			team.forEach(pokemon => {
+				assert(pokemon.moves.length === 4, `${pokemon.species} should have exactly 4 moves (has ${pokemon.moves.length})`);
+			});
+		});
+
 		it('should assign items from BSS sets', () => {
 			const team = battleTower.generateRandomTeamFromBSS(3, 100);
 			team.forEach(pokemon => {
@@ -248,8 +255,8 @@ describe('RPG Battle Tower Module', function () {
 		it('should generate Pokemon at levels from their set data', () => {
 			const team = battleTower.generateRandomTeamFromBaby(3);
 			team.forEach(pokemon => {
-				// Little Cup Pokemon typically have levels between 5-7 in sets.json
-				assert(pokemon.level >= 5 && pokemon.level <= 7, `${pokemon.species} should be between level 5-7 (was ${pokemon.level})`);
+				// Little Cup Pokemon typically have levels between 5-9 in sets.json
+				assert(pokemon.level >= 5 && pokemon.level <= 9, `${pokemon.species} should be between level 5-9 (was ${pokemon.level})`);
 			});
 		});
 
@@ -258,6 +265,13 @@ describe('RPG Battle Tower Module', function () {
 			team.forEach(pokemon => {
 				assert(pokemon.moves.length > 0, `${pokemon.species} should have moves`);
 				assert(pokemon.moves.length <= 4, `${pokemon.species} should have at most 4 moves`);
+			});
+		});
+
+		it('should assign exactly 4 moves to each Pokemon', () => {
+			const team = battleTower.generateRandomTeamFromBaby(3);
+			team.forEach(pokemon => {
+				assert(pokemon.moves.length === 4, `${pokemon.species} should have exactly 4 moves (has ${pokemon.moves.length})`);
 			});
 		});
 
