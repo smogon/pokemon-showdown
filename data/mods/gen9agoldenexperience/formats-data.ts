@@ -2097,7 +2097,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	deoxysspeed: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	turtwig: {
@@ -2437,7 +2437,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	darkrai: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	shaymin: {
