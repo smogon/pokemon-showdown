@@ -611,6 +611,11 @@ export function checkBattleEndCondition(
 ): boolean {
 	const player = getPlayerData(user.id);
 
+	// Handle AI pivots FIRST, before checking for faints
+	// This ensures that if an AI Pokemon used a pivot move, it's replaced
+	// before any subsequent logic runs
+	handleAiPivot(battle, messageLog);
+
 	const playerParticipants = getActiveSlots(battle.playerSlots);
 	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
@@ -622,7 +627,6 @@ export function checkBattleEndCondition(
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
 		return true;
 	}
-	handleAiPivot(battle, messageLog);
 
 	const playerHasLivingPokemon = getActiveParty(battle, player).some(p =>
 		p.hp > 0 &&
@@ -1489,15 +1493,38 @@ export function executeAction(
 			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
 		}
 
-		messageLog.push(`<span style="color: #555;"><strong>${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`);
+		// Check if there are no valid targets
+		// This can happen if the target switched out (pivot move) or was forced out
 		if (resolvedTargets.length === 0) {
-			messageLog.push(`But there was no target!`);
+			// For moves that target opponents, silently skip if they switched out
+			// For self-targeting moves, this is an error and should be logged
+			const selfTargetingMove = move.target === 'self' ||
+				move.target === 'allySide' || move.target === 'all';
+			if (selfTargetingMove) {
+				const usedMsg = `<span style="color: #555;"><strong>` +
+					`${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`;
+				messageLog.push(usedMsg);
+				messageLog.push(`But there was no target!`);
+			}
+			// For opponent-targeting moves, skip silently (target switched out)
 			return;
 		}
 
+		const usedMsg = `<span style="color: #555;"><strong>` +
+			`${attackerSlot.pokemon.species}</strong> used <strong>${move.name}</strong>!</span>`;
+		messageLog.push(usedMsg);
+
 		const remainingTargets: ActivePokemonSlot[] = [];
 		for (const defenderSlot of resolvedTargets) {
-			const abilityContext = { attacker: attackerSlot.pokemon, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+			const abilityContext = {
+				attacker: attackerSlot.pokemon,
+				defender: defenderSlot.pokemon,
+				attackerSlot,
+				defenderSlot,
+				move,
+				battle,
+				messageLog,
+			};
 			const preventionCheck = RPGAbilities.preventMove(abilityContext);
 			if (preventionCheck?.prevented) {
 				messageLog.push(preventionCheck.message || `${defenderSlot.pokemon.species}'s ability prevented the move!`);
