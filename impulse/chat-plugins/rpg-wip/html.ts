@@ -277,7 +277,7 @@ function getSpriteFilename(speciesId: string): string {
 
 		'cramorantgorging': 'cramorant-gorging', 'cramorantgulping': 'cramorant-gulping',
 		'zaciancrowned': 'zacian-crowned', 'zamazentacrowned': 'zamazenta-crowned',
-		'urshifusinglestrike': 'urshifu-single-strike', 'urshifurapidstrike': 'urshifu-rapid-strike',
+		'urshifusinglestrike': 'urshifu-singlestrike', 'urshifurapidstrike': 'urshifu-rapidstrike',
 		'eternatuseternamax': 'eternatus-eternamax',
 
 		'lycanrocdusk': 'lycanroc-dusk', 'lycanrocmidnight': 'lycanroc-midnight',
