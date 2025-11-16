@@ -407,13 +407,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	return effects.join('');
 }
 
-/**
- * Generates HTML tags for weather effects
- */
 function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
-
-	const tagStyle = 'font-size: 12px; padding: 1px 4px; border: 1px solid #5F7C9B; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
 
 	const weatherNames: Record<string, string> = {
 		'sun': 'Sun',
@@ -425,10 +420,16 @@ function generateWeatherTags(battle: BattleState): string {
 		'strong-winds': 'Strong Winds',
 	};
 
-	const name = weatherNames[battle.weather.type] || battle.weather.type;
+	const weatherTypeKey = battle.weather.type;
+	
+	const weatherClass = weatherNames.hasOwnProperty(weatherTypeKey)
+		? `rpg-weather-${weatherTypeKey}`
+		: 'rpg-weather-default';
+	
+	const name = weatherNames[weatherTypeKey] || weatherTypeKey;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
-	return `<b><span style="${tagStyle}">${name}${turnsText}</span></b>`;
+	return `<span class="rpg-weather-tag ${weatherClass}">${name}${turnsText}</span>`;
 }
 
 /**
