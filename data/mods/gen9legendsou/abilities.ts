@@ -1,8 +1,8 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	ange: {
 		gen: 9,
-		desc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
-		shortDesc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
+		desc: "Gain 1/16 of max HP at the end of every turn. Opposing Megas have 1/12 max HP drained every turn.",
+		shortDesc: "Gain 1/16 max HP at end of every turn. Against Megas: drain 1/12 max HP every turn.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -13,11 +13,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (megaFoes.length) {
 				for (const target of megaFoes) {
-					this.damage(target.baseMaxhp / 10, target, pokemon);
-					this.heal(target.baseMaxhp / 10);
+					this.damage(target.baseMaxhp / 12, target, pokemon);
+					this.heal(target.baseMaxhp / 12);
 				}
 			} else {
-				this.heal(pokemon.baseMaxhp / 12);
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		name: "Ange",
