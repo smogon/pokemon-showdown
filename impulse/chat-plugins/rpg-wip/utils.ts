@@ -9,6 +9,7 @@ import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
 import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState } from './interface';
+import BSS_FACTORY_SETS from '../../../data/random-battles/gen9/bss-factory-sets.json';
 
 export function getActiveSlots(
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
@@ -107,7 +108,7 @@ export function calculateStats(
 	evs: Record<keyof Stats, number>
 ): Stats {
 	const stats: Stats = { maxHp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-	stats.maxHp = Math.floor(((2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4)) * level) / 100) + level + 10;
+	stats.maxHp = Math.floor(((2 * species.baseStats.hp + ivs.maxHp + Math.floor(evs.maxHp / 4)) * level) / 100) + level + 10;
 	stats.atk = Math.floor(((2 * species.baseStats.atk + ivs.atk + Math.floor(evs.atk / 4)) * level) / 100) + 5;
 	stats.def = Math.floor(((2 * species.baseStats.def + ivs.def + Math.floor(evs.def / 4)) * level) / 100) + 5;
 	stats.spa = Math.floor(((2 * species.baseStats.spa + ivs.spa + Math.floor(evs.spa / 4)) * level) / 100) + 5;
@@ -389,140 +390,75 @@ export function assignRandomMoveset(pokemon: RPGPokemon): void {
 	}));
 }
 
-/**
- * A list of viable, competitive held items for the Battle Tower.
- */
-const VIABLE_HELD_ITEMS: string[] = [
-	// Recovery
-	'leftovers', 
-	'sitrusberry', 
-	'blacksludge', 
-	'shellbell',
-
-	// Damage Boosting
-	'lifeorb', 
-	'choiceband', 
-	'choicespecs', 
-	'expertbelt',
-
-	// Speed Control
-	'choicescarf',
-	'quickclaw',
-
-	// Defensive / Utility
-	'focussash', 
-	'assaultvest', 
-	'heavydutyboots', 
-	'rockyhelmet', 
-	'airballoon',
-	'shedshell',
-	'clearamulet',
-
-	// One-time Use / Status Cure
-	'lumberry', 
-	'mentalherb', 
-	'whiteherb', 
-	'powerherb', 
-	'weaknesspolicy',
-
-	// Status Orbs
-	'flameorb', 
-	'toxicorb', 
-	'stickybarb',
-
-	// Stat-Boost Pinch Berries
-	'liechiberry', // Atk
-	'ganlonberry', // Def
-	'salacberry',  // Spe
-	'petayaberry', // SpA
-	'apicotberry', // SpD
-	'starfberry',  // Random
-
-	// Common Type-Resist Berries
-	'chopleberry', // Fighting
-	'yacheberry',  // Ice
-	'shucaberry',  // Ground
-	'occaberry',   // Fire
-	'passhoberry', // Water
-	'wacanberry',  // Electric
-	'rindoberry',  // Grass
-	'kasibberry',  // Ghost
-	'colburberry', // Dark
-	'babiriberry', // Steel
-];
-
-/**
- * Generates a random team of Pokémon for the Battle Tower.
- * "Hard but balanced" is achieved by filtering for fully-evolved Pokémon
- * from standard tiers (OU, UU, RU, NU, PU) that have manual learnsets.
- *
- * @param count The number of Pokémon in the team.
- * @param level The level for all Pokémon in the team.
- * @returns An array of randomly generated RPGPokemon.
- */
 export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
-	// 1. Get all species from the Dex
-	const allSpecies = Dex.species.all();
-
-	// 2. Filter for viable Pokémon
-	const viableTiers = ['OU', 'UU', 'UUBL', 'RU', 'RUBL', 'NU', 'NUBL', 'PU', 'PUBL'];
-	const viableSpecies = allSpecies.filter(species => {
-		// Must be fully evolved (not NFE and no evos)
-		const isFullyEvolved = !species.nfe && (!species.evos || species.evos.length === 0);
-		// Must be in a standard, viable tier (excludes Ubers, AG, etc.)
-		const isInViableTier = viableTiers.includes(species.tier);
-		// Must have a manual learnset defined
-		const hasManualLearnset = !!MANUAL_LEARNSETS[species.id];
-
-		return isFullyEvolved && isInViableTier && hasManualLearnset;
-	});
-
-	if (viableSpecies.length === 0) {
-		// Fallback in case no Pokémon match criteria
-		// (e.g., if MANUAL_LEARNSETS is very small)
-		const fallback = createPokemon('pikachu', level);
-		assignRandomMoveset(fallback);
-		fallback.item = 'lightball';
-		return [fallback];
-	}
-
 	const team: RPGPokemon[] = [];
+	const pokemonNames = Object.keys(BSS_FACTORY_SETS);
+	const usedPokemon = new Set<string>();
 
-	// 3. Loop until the team is full
 	while (team.length < count) {
-		// Pick a random species from the viable list
-		const randomSpecies = viableSpecies[Math.floor(Math.random() * viableSpecies.length)];
+		let randomPokemonName = pokemonNames[Math.floor(Math.random() * pokemonNames.length)];
+		while (usedPokemon.has(randomPokemonName)) {
+			randomPokemonName = pokemonNames[Math.floor(Math.random() * pokemonNames.length)];
+		}
+		usedPokemon.add(randomPokemonName);
 
-		// 4. Create the Pokémon. This already assigns random IVs.
-		const pokemon = createPokemon(randomSpecies.id, level);
+		const pokemonData = BSS_FACTORY_SETS[randomPokemonName as keyof typeof BSS_FACTORY_SETS];
 
-		// 5. Assign random, legal EV spread (252 / 252 / 4)
-		const stats: (keyof typeof pokemon.evs)[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-		shuffleArray(stats); // Re-use the shuffle helper
-		
-		pokemon.evs[stats[0]] = 252;
-		pokemon.evs[stats[1]] = 252;
-		pokemon.evs[stats[2]] = 4;
-		
-		// 6. Re-calculate stats with new EVs (IVs were already random)
+		// Select a random set based on weights
+		const totalWeight = pokemonData.sets.reduce((sum, set) => sum + set.weight, 0);
+		let randomWeight = Math.random() * totalWeight;
+		const chosenSet: any = pokemonData.sets.find(set => {
+			randomWeight -= set.weight;
+			return randomWeight <= 0;
+		}) || pokemonData.sets[0];
+
+		const pokemon = createPokemon(chosenSet.species, level);
+
+		// Assign moves from the set
+		pokemon.moves = chosenSet.moves.map((moveOptions: any) => {
+			const moveId = toID(moveOptions[Math.floor(Math.random() * moveOptions.length)]);
+			const moveData = getMove(moveId);
+			return { id: moveId, pp: moveData.pp || 5 };
+		});
+
+		// Assign item from the set
+		pokemon.item = toID(chosenSet.item[Math.floor(Math.random() * chosenSet.item.length)]);
+
+		// Assign nature from the set
+		pokemon.nature = chosenSet.nature;
+
+		// Assign EVs from the set, ensuring all stats are present
+		pokemon.evs = { maxHp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...chosenSet.evs };
+		if (chosenSet.evs.hp) {
+			pokemon.evs.maxHp = chosenSet.evs.hp;
+		}
+
+		// Assign IVs from the set, if specified
+		if (chosenSet.ivs) {
+			pokemon.ivs = { ...pokemon.ivs, ...chosenSet.ivs };
+			if (chosenSet.ivs.hp) {
+				pokemon.ivs.maxHp = chosenSet.ivs.hp;
+			}
+		}
+
+		// Assign ability from the set
+		pokemon.ability = chosenSet.ability[0];
+
+		// Assign teraType from the set
+		pokemon.teraType = chosenSet.teraType[Math.floor(Math.random() * chosenSet.teraType.length)];
+
+		// Recalculate stats with the new values
 		const speciesData = Dex.species.get(pokemon.species);
 		const newStats = calculateStats(speciesData, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
 		
 		pokemon.maxHp = newStats.maxHp;
-		pokemon.hp = newStats.maxHp; // Start at full HP
+		pokemon.hp = newStats.maxHp;
 		pokemon.atk = newStats.atk;
 		pokemon.def = newStats.def;
 		pokemon.spa = newStats.spa;
 		pokemon.spd = newStats.spd;
 		pokemon.spe = newStats.spe;
 
-		// 7. Assign random moveset
-		assignRandomMoveset(pokemon);
-
-		// 8. Assign a random viable item
-		pokemon.item = VIABLE_HELD_ITEMS[Math.floor(Math.random() * VIABLE_HELD_ITEMS.length)];
-
-		// 9. Add to team
 		team.push(pokemon);
 	}
 

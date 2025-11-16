@@ -2241,7 +2241,7 @@ export function generateModeSelectionHTML(): string {
  */
 export function generateBattleTowerWelcomeHTML(floor: number): string {
 	let html = `<div class="infobox"><h2>🗼 Welcome to the Battle Tower</h2>`;
-	html += `<p>You will be assigned a random team of 3 Pokémon, all at Level 100.</p>`;
+	html += `<p>You will be assigned a random team of 3 Pokémon, all at Level 50.</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<p>Good luck!</p><hr />`;
 	if (floor > 1) {

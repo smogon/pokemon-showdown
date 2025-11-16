@@ -132,7 +132,7 @@ export function startBattleTowerFloor(
 	room: ChatRoom,
 	user: User
 ) {
-	const level = 100;
+	const level = 50;
 	const teamSize = 3; // Set team size to 3
 
 	const battleMessages: string[] = [];
