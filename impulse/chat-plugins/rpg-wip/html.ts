@@ -1018,15 +1018,16 @@ export function generateBattleTowerHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
 ): string {
 	const currentFloor = battle.floor || 1;
+	const formatName = battle.battleTowerFormat === 'battlefactory' ? 'Battle Factory' : (battle.battleTowerFormat || 'Battle Factory');
 
 	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
-	// Battle Tower header
+	// Battle Tower header with format name
 	const headerHTML = '<div style="text-align: center;">' +
-		'<h2">🗼 Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
+		'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
 	// Check if battle has ended first - slots may be null after fainting
@@ -2241,17 +2242,37 @@ export function generateModeSelectionHTML(): string {
  */
 export function generateBattleTowerWelcomeHTML(floor: number): string {
 	let html = `<div class="infobox"><h2>🗼 Welcome to the Battle Tower</h2>`;
+	html += `<p>Challenge the Battle Tower with different random formats!</p>`;
+	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
+	html += `<hr />`;
+	
+	// Random Formats section
+	html += `<h3>Random Formats:</h3>`;
+	html += `<p><button name="send" value="/rpg battletower selectformat battlefactory" class="button" style="width: 200px;">🎲 Battle Factory</button></p>`;
+	html += `<p style="font-size: 0.9em; margin-top: 5px;"><em>Battle Factory: Random team of 3 Level 100 Pokémon with competitive sets</em></p>`;
+	
+	html += `<p><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>`;
+	html += `</div>`;
+	return html;
+}
+
+/**
+ * Generates the screen shown after selecting a format and before starting a floor.
+ */
+export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
+	const formatName = format === 'battlefactory' ? 'Battle Factory' : format;
+	let html = `<div class="infobox"><h2>🗼 Battle Tower - ${formatName}</h2>`;
 	html += `<p>You will be assigned a random team of 3 Pokémon, all at Level 100.</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<p>Good luck!</p><hr />`;
 	if (floor > 1) {
 		html += `<p>Your current streak is <strong>Floor ${floor}</strong>.</p>`;
-		html += `<p><button name="send" value="/rpg battletower beginfloor" class="button">Begin Floor ${floor}</button></p>`;
+		html += `<p><button name="send" value="/rpg battletower beginfloor ${format}" class="button">Begin Floor ${floor}</button></p>`;
 	} else {
 		html += `<p>You are starting on <strong>Floor 1</strong>.</p>`;
-		html += `<p><button name="send" value="/rpg battletower beginfloor" class="button">Begin!</button></p>`;
+		html += `<p><button name="send" value="/rpg battletower beginfloor ${format}" class="button">Begin!</button></p>`;
 	}
-	html += `<p><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button">Back to Format Selection</button></p>`;
 	html += `</div>`;
 	return html;
 }

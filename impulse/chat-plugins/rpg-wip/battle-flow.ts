@@ -130,7 +130,8 @@ export function startBattleTowerFloor(
 	floor: number,
 	context: CommandContext,
 	room: ChatRoom,
-	user: User
+	user: User,
+	format: string = 'battlefactory'
 ) {
 	const level = 100;
 	const teamSize = 3; // Set team size to 3
@@ -164,6 +165,7 @@ export function startBattleTowerFloor(
 			battleType: 'battletower',
 			floor,
 			overridePlayerParty: playerTeam, // Set the temporary party
+			battleTowerFormat: format, // Store the selected format
 			opponentName: `Battle Tower Trainer`,
 			opponentParty: aiTeam,
 			opponentMoney: 500 * floor, // Scale reward
