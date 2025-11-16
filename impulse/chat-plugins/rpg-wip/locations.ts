@@ -102,6 +102,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'route1',
 		name: 'Route 1',
 		type: 'route',
+		weather: 'rain',
 		description: 'A scenic route filled with tall grass. Wild Pokemon can be found here.',
 		connectedLocations: [
 			{ id: 'startertown', name: 'Starter Town' },
@@ -143,6 +144,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'pewtercity',
 		name: 'Pewter City',
 		type: 'city',
+		weather: 'sand',
 		description: 'A city known for its stone and rock Pokemon. The Pewter Gym awaits challengers.',
 		connectedLocations: [
 			{ id: 'route1', name: 'Route 1' },
@@ -184,6 +186,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'route2',
 		name: 'Route 2',
 		type: 'route',
+		weather: 'hail',
 		description: 'A longer route with stronger Pokemon. Only accessible after defeating the Pewter Gym.',
 		connectedLocations: [
 			{ id: 'pewtercity', name: 'Pewter City' },
@@ -225,6 +228,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'ceruleancity',
 		name: 'Cerulean City',
 		type: 'city',
+		weather: 'harsh-sun',
 		description: 'A city surrounded by water. The Cerulean Gym specializes in Water-type Pokemon.',
 		connectedLocations: [
 			{ id: 'route2', name: 'Route 2' },
@@ -276,6 +280,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'route3',
 		name: 'Route 3',
 		type: 'route',
+		weather: 'heavy-rain',
 		description: 'A mountainous route leading to Vermilion City. Electric Pokemon are common here.',
 		connectedLocations: [
 			{ id: 'ceruleancity', name: 'Cerulean City' },
@@ -287,6 +292,7 @@ export const LOCATIONS: Record<string, Location> = {
 		id: 'vermilioncity',
 		name: 'Vermilion City',
 		type: 'city',
+		weather: 'strong-winds',
 		description: 'A port city with an electric atmosphere. The Vermilion Gym tests trainers with Electric-types.',
 		connectedLocations: [
 			{ id: 'route3', name: 'Route 3' },
