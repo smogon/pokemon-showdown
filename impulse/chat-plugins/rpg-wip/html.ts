@@ -240,6 +240,95 @@ export function generatePokemonInfoHTML(
 	return html;
 }
 
+function getSpriteFilename(speciesId: string): string {
+	let filename = speciesId;
+
+	if (filename.endsWith('mega')) {
+		filename = filename.replace(/mega$/, '-mega');
+	} else if (filename.endsWith('megax')) {
+		filename = filename.replace(/megax$/, '-megax');
+	} else if (filename.endsWith('megay')) {
+		filename = filename.replace(/megay$/, '-megay');
+	}
+
+	const regionalFormSuffixes = [
+		'alola', 'galar', 'hisui', 'paldea', 
+		'alolan', 'galarian', 'hisuian', 'paldean'
+	];
+
+	for (const suffix of regionalFormSuffixes) {
+		if (filename.endsWith(suffix) && filename.length > suffix.length && !filename.includes('-' + suffix)) {
+			filename = filename.slice(0, -suffix.length) + '-' + suffix;
+			break;
+		}
+	}
+
+	const hyphenatedForms: Record<string, string> = {
+		'greattusk': 'great-tusk',
+		'screamtail': 'scream-tail',
+		'brutebonnet': 'brute-bonnet',
+		'fluttermane': 'flutter-mane',
+		'slitherwing': 'slither-wing',
+		'sandyshocks': 'sandy-shocks',
+		'ironhands': 'iron-hands',
+		'ironjugulis': 'iron-jugulis',
+		'ironmoth': 'iron-moth',
+		'ironthorns': 'iron-thorns',
+		'ironbundle': 'iron-bundle',
+		'ironvaliant': 'iron-valiant',
+		'walkingwake': 'walking-wake',
+		'gougingfire': 'gouging-fire',
+		'ragingbolt': 'raging-bolt',
+		'ironleaves': 'iron-leaves',
+		'ironboulder': 'iron-boulder',
+		'ironcrown': 'iron-crown',
+
+		'kyuremblack': 'kyurem-black',
+		'kyuremwhite': 'kyurem-white',
+		
+		'necrozmaduskmane': 'necrozma-dusk-mane',
+		'necrozmadawnwings': 'necrozma-dawn-wings',
+
+		'darmanitanzigzag': 'darmanitan-zen-galar', 
+		'darmanitanzen': 'darmanitan-zen',
+		'aegislashblade': 'aegislash-blade',
+		'meloettapirouette': 'meloetta-pirouette',
+		'basculinblu': 'basculin-blue-striped',
+		'basculinwhite': 'basculin-white-striped',
+		'castformsunny': 'castform-sunny',
+		'castformrainy': 'castform-rainy',
+		'castformsnowy': 'castform-snowy',
+		'rotomfan': 'rotom-fan',
+		'rotomfrost': 'rotom-frost',
+		'rotomheat': 'rotom-heat',
+		'rotommow': 'rotom-mow',
+		'rotomwash': 'rotom-wash',
+		'genesectdouse': 'genesect-douse',
+		'genesectshock': 'genesect-shock',
+		'genesectburn': 'genesect-burn',
+		'genesectchill': 'genesect-chill',
+		'shayminsky': 'shaymin-sky',
+		'zygardecomplete': 'zygarde-complete',
+		'zygarde10': 'zygarde-10',
+		'toxtricitylowkey': 'toxtricity-low-key',
+		'indeedeeunbound': 'indeedee-f',
+	};
+
+	if (hyphenatedForms[filename]) {
+		filename = hyphenatedForms[filename];
+	}
+
+	if (filename.endsWith('f') && filename.length > 1 && !filename.includes('-f')) {
+		filename = filename.slice(0, -1) + '-f';
+	}
+
+	filename = filename.replace(/\+/g, '-');
+
+	filename = filename.replace(/-{2,}/g, '-');
+	
+	return filename;
+}
+
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -349,10 +438,12 @@ export function generateSharedBattlePokemonInfo(
 		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		return html;
 	} else {
+		const spriteFilename = getSpriteFilename(species.id);
+		
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' +
-			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + species.name.toLowerCase() + '.png" width="64" height="64" />' +
+			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + spriteFilename + '.png" width="64" height="64" />' +
 			'</div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
