@@ -21,6 +21,7 @@ import {
 	generateMoveLearnHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
+	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
@@ -511,14 +512,12 @@ export function checkForWinLoss(
 			const currentFloor = battle.floor || 1;
 			player.battleTowerFloor = currentFloor + 1; // Increment floor for next battle
 
-			// Get the format for the next floor
-			const format = battle.battleTowerFormat || 'battlefactory';
+			// Generate floor clear HTML
+			const floorClearHTML = generateBattleTowerFloorCompleteHTML(currentFloor);
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${floorClearHTML}`);
 
-			// Delete the old battle
-			activeBattles.delete(user.id);
-
-			// Automatically start the next floor
-			startBattleTowerFloor(player, player.battleTowerFloor, context, room, user, format);
+			// Don't delete the battle here - keep it so the format can be retrieved
+			// when the player continues to the next floor via the nextfloor command
 			return true;
 		}
 		// [END NEW]
