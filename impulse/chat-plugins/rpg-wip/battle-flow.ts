@@ -132,7 +132,7 @@ export function startBattleTowerFloor(
 	context: CommandContext,
 	room: ChatRoom,
 	user: User,
-	format: string = 'battlefactory'
+	format = 'battlefactory'
 ) {
 	// Get format configuration
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
@@ -1333,7 +1333,7 @@ export function handleSwitchAction(
 
 		if (replacement) {
 			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
-			
+
 			const newSlot = createActivePokemonSlot(replacement);
 			if ((replacement as any).hasSwitchedOut) {
 				(newSlot as any).hasSwitchedOut = true;
