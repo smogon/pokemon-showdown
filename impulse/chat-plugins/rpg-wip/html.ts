@@ -438,7 +438,7 @@ function generateWeatherTags(battle: BattleState): string {
 	const name = weatherNames[battle.weather.type] || battle.weather.type;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
-	return `<span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span>`;
+	return `<b><span style="background-color: ${color}; ${tagStyle}">${name}${turnsText}</span></b>`;
 }
 
 /**
