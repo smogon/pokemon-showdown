@@ -1045,24 +1045,27 @@ export function generateBattleTowerHTML(
 	}
 
 	// Battle is ongoing - need slots to display Pokemon info
+	// Battle Tower is a single battle, so only slot[0] should be used
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
-	// Defensive check: if slots are missing, this indicates a bug in battle flow logic
-	// Return a more helpful error message that helps with debugging
+	// Defensive check: if slots are missing during an active battle,
+	// this may occur temporarily when a Pokemon faints and is being replaced
+	// Show a transitional state instead of erroring
 	if (!playerSlot || !opponentSlot) {
-		console.error('[RPG Battle Error] generateBattleTowerHTML: Missing active slots', {
+		console.warn('[RPG Battle Tower] Temporary null slot detected during battle resolution', {
 			floor: battle.floor,
 			playerSlotNull: !playerSlot,
 			opponentSlotNull: !opponentSlot,
-			battleEnded: battle.battleEnded,
 			turn: battle.turn,
 		});
 
-		// Attempt recovery: if battle should have ended, show appropriate end screen
+		// Show a transitional message with the battle log
+		// The next update should show the proper battle state
 		return '<div class="infobox">' +
 			headerHTML +
-			'<h2>Battle Ended</h2><p>A Pokémon has fainted. The battle is being resolved.</p>' +
+			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			'<div style="text-align: center; padding: 10px;"><strong>Resolving battle actions...</strong></div>' +
 			generateBottomNavigation() + '</div>';
 	}
 
