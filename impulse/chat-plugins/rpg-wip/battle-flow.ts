@@ -1236,9 +1236,20 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 		});
 
 		// Only generate battle HTML if we have active Pokemon on both sides
-		// This prevents the "Active Pokémon slots are missing" error when slots are null
-		const hasActivePlayerSlot = battle.playerSlots.some(s => s !== null && s.pokemon.hp > 0);
-		const hasActiveOpponentSlot = battle.opponentSlots.some(s => s !== null && s.pokemon.hp > 0);
+		// For single battles (wild, trainer, battletower), check slot[0] specifically
+		// For double battles, check if any slot has an active Pokemon
+		let hasActivePlayerSlot: boolean;
+		let hasActiveOpponentSlot: boolean;
+
+		if (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') {
+			// Double battle: check if any slot has an active Pokemon
+			hasActivePlayerSlot = battle.playerSlots.some(s => s !== null && s.pokemon.hp > 0);
+			hasActiveOpponentSlot = battle.opponentSlots.some(s => s !== null && s.pokemon.hp > 0);
+		} else {
+			// Single battle (including Battle Tower): only check slot[0]
+			hasActivePlayerSlot = battle.playerSlots[0] !== null && battle.playerSlots[0]?.pokemon.hp > 0;
+			hasActiveOpponentSlot = battle.opponentSlots[0] !== null && battle.opponentSlots[0]?.pokemon.hp > 0;
+		}
 
 		if (hasActivePlayerSlot && hasActiveOpponentSlot) {
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle)}`);
