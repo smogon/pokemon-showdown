@@ -1196,123 +1196,196 @@ export function applySecondaryEffects(
 	messageLog: string[],
 	abilityContext: AbilityContext
 ) {
-	if (defenderSlot.pokemon.hp <= 0) return;
-	if (defenderSlot.substitute) {
-		return;
-	}
-	// Shield Dust blocks secondary effects
-	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-	if (defenderAbility === 'shielddust' && !RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
-		return;
-	}
 	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
 
 	let chance = move.secondary.chance || 100;
 	chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
 	if (Math.random() * 100 < chance) {
-		if (move.secondary.status && !defenderSlot.status) {
-			const defender = defenderSlot.pokemon;
-			const defenderSpecies = Dex.species.get(defender.species);
-			let canInflict = true;
+		// Check if defender-targeted effects can be applied
+		const canApplyToDefender = defenderSlot.pokemon.hp > 0 && !defenderSlot.substitute;
+		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+		const shieldDustBlocks = defenderAbility === 'shielddust' &&
+			!RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility);
 
-			if ((move.secondary.status === 'par' && defenderSpecies.types.includes('Electric')) ||
-				(move.secondary.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
-				(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
-				canInflict = false;
-			}
-			if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle, attackerSlot.pokemon)) {
-				canInflict = false;
-				messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
-			}
-			if (canInflict && battle.terrain?.type === 'misty' && RPGAbilities.isGrounded(defender, battle)) {
-				canInflict = false;
-				messageLog.push('The Misty Terrain prevents status conditions!');
-			}
+		// Apply effects to defender (status, boosts, volatile status)
+		if (canApplyToDefender && !shieldDustBlocks) {
+			if (move.secondary.status && !defenderSlot.status) {
+				const defender = defenderSlot.pokemon;
+				const defenderSpecies = Dex.species.get(defender.species);
+				let canInflict = true;
 
-			if (canInflict) {
-				const newStatus = move.secondary.status as Status;
-				defenderSlot.status = newStatus;
-				if (newStatus === 'tox') {
-					defenderSlot.toxicCounter = 1;
+				if ((move.secondary.status === 'par' && defenderSpecies.types.includes('Electric')) ||
+					(move.secondary.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
+					(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
+					canInflict = false;
 				}
-				if (newStatus === 'slp') {
-					defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+				if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle, attackerSlot.pokemon)) {
+					canInflict = false;
+					messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
 				}
-				messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
+				if (canInflict && battle.terrain?.type === 'misty' && RPGAbilities.isGrounded(defender, battle)) {
+					canInflict = false;
+					messageLog.push('The Misty Terrain prevents status conditions!');
+				}
 
-				const attackerAbilityId = toID(attackerSlot.pokemon.ability || '');
-				if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
-					if (!defenderSlot.isConfused) {
-						defenderSlot.isConfused = true;
-						defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // 1-4 turns
-						messageLog.push(`${defender.species} became confused from Poison Puppeteer!`);
+				if (canInflict) {
+					const newStatus = move.secondary.status as Status;
+					defenderSlot.status = newStatus;
+					if (newStatus === 'tox') {
+						defenderSlot.toxicCounter = 1;
+					}
+					if (newStatus === 'slp') {
+						defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
+					}
+					messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
+
+					const attackerAbilityId = toID(attackerSlot.pokemon.ability || '');
+					if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
+						if (!defenderSlot.isConfused) {
+							defenderSlot.isConfused = true;
+							defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // 1-4 turns
+							messageLog.push(`${defender.species} became confused from Poison Puppeteer!`);
+						}
+					}
+
+					const defenderAbility = toID(defender.ability || '');
+					if (defenderAbility === 'synchronize') {
+						applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
+					}
+				}
+			}
+
+			if (move.secondary.boosts) {
+				let hadEffect = false;
+				let triggeredDefiant = false;
+
+				for (const stat in move.secondary.boosts) {
+					let boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
+
+					if (toID(defenderSlot.pokemon.ability || '') === 'contrary') {
+						boostValue *= -1;
+					}
+
+					const currentStage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
+
+					if (boostValue < 0) {
+						if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'clearamulet') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+							continue;
+						}
+						const targetAbility = toID(defenderSlot.pokemon.ability || '');
+						const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+						if (blockAbilities.includes(targetAbility)) {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
+							continue;
+						}
+						if (stat === 'atk' && targetAbility === 'hypercutter') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Attack from being lowered!`);
+							continue;
+						}
+						if (stat === 'def' && targetAbility === 'bigpecks') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Defense from being lowered!`);
+							continue;
+						}
+						if (stat === 'accuracy' && targetAbility === 'keeneye') {
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its accuracy from being lowered!`);
+							continue;
+						}
+						// Flower Veil protects Grass-types from stat drops
+						if (targetAbility === 'flowerveil') {
+							const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+							if (defenderSpecies.types.includes('Grass')) {
+								messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
+								continue;
+							}
+						}
+						// Check if any ally has Flower Veil that would protect this Grass-type
+						const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+						if (defenderSpecies.types.includes('Grass')) {
+							const isPlayerDefender = battle.playerSlots.some(s => s?.pokemon.id === defenderSlot.pokemon.id);
+							const allies = isPlayerDefender ? battle.playerSlots : battle.opponentSlots;
+							if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== defenderSlot.pokemon.id)) {
+								messageLog.push(`Flower Veil protects ${defenderSlot.pokemon.species} from stat drops!`);
+								continue;
+							}
+						}
+
+						if (currentStage > -6) {
+							const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+							defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+							hadEffect = true;
+							triggeredDefiant = true;
+						}
+					} else if (boostValue > 0) {
+						if (currentStage < 6) {
+							const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+							defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
+							messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+							hadEffect = true;
+						}
 					}
 				}
 
-				const defenderAbility = toID(defender.ability || '');
-				if (defenderAbility === 'synchronize') {
-					applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
+				if (triggeredDefiant) {
+					checkStatDropAbilities(defenderSlot, attackerSlot, battle, messageLog);
 				}
 			}
-		}
 
-		if (move.secondary.boosts) {
-			let hadEffect = false;
-			let triggeredDefiant = false;
+			if (move.secondary.volatileStatus === 'flinch') {
+				if (!RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
+					defenderSlot.willFlinch = true;
+				} else {
+					messageLog.push(`${defenderSlot.pokemon.species}'s Inner Focus prevents flinching!`);
+				}
+			}
+		} // End of defender-targeted effects block
 
-			for (const stat in move.secondary.boosts) {
-				let boostValue = move.secondary.boosts[stat as keyof typeof move.secondary.boosts]!;
+		// Handle self-boosts (effects that apply to the attacker)
+		// These should work even if the defender has Shield Dust or a Substitute
+		if (move.secondary.self?.boosts) {
+			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 
-				if (toID(defenderSlot.pokemon.ability || '') === 'contrary') {
+			for (const stat in move.secondary.self.boosts) {
+				let boostValue = move.secondary.self.boosts[stat as keyof typeof move.secondary.self.boosts]!;
+
+				// Contrary reverses stat changes on the user
+				if (attackerAbility === 'contrary') {
 					boostValue *= -1;
 				}
 
-				const currentStage = defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages];
+				const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
 
 				if (boostValue < 0) {
-					if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'clearamulet') {
-						messageLog.push(`${defenderSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+					// Self-lowering (e.g., Superpower, Close Combat - though these are primary effects)
+					if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'clearamulet') {
+						messageLog.push(`${attackerSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
 						continue;
 					}
-					const targetAbility = toID(defenderSlot.pokemon.ability || '');
 					const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
-					if (blockAbilities.includes(targetAbility)) {
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its stats from being lowered!`);
+					if (blockAbilities.includes(attackerAbility)) {
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${attackerSlot.pokemon.ability} prevents its stats from being lowered!`);
 						continue;
 					}
-					if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(targetAbility)) {
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its Attack from being lowered!`);
+					if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(attackerAbility)) {
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${attackerSlot.pokemon.ability} prevents its Attack from being lowered!`);
 						continue;
 					}
 
 					if (currentStage > -6) {
 						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
-						defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
-						hadEffect = true;
-						triggeredDefiant = true;
+						attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 					}
 				} else if (boostValue > 0) {
+					// Self-boosting (e.g., Power-Up Punch, Flame Charge)
 					if (currentStage < 6) {
 						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
-						defenderSlot.statStages[stat as keyof typeof defenderSlot.statStages] = newStage as any;
-						messageLog.push(`${defenderSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
-						hadEffect = true;
+						attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
 					}
 				}
-			}
-
-			if (triggeredDefiant) {
-				checkStatDropAbilities(defenderSlot, attackerSlot, battle, messageLog);
-			}
-		}
-
-		if (move.secondary.volatileStatus === 'flinch') {
-			if (!RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
-				defenderSlot.willFlinch = true;
-			} else {
-				messageLog.push(`${defenderSlot.pokemon.species}'s Inner Focus prevents flinching!`);
 			}
 		}
 	}
