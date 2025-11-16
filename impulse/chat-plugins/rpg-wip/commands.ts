@@ -7,7 +7,7 @@
 */
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, checkEvolution, handleLearningMoves, getActiveSlots } from './utils';
+import { getMove, checkEvolution, handleLearningMoves, getActiveSlots, generateRandomTeam } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData } from './interface';
 import {
 	addItemToInventory,
