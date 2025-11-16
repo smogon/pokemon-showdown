@@ -429,7 +429,8 @@ export function checkForWinLoss(
 	battle: BattleState,
 	player: PlayerData,
 	user: User,
-	messageLog: string[]
+	messageLog: string[],
+	room: ChatRoom
 ): boolean {
 	const playerHasLivingPokemon = getActiveParty(battle, player).some(p =>
 		p.hp > 0 &&
@@ -622,7 +623,7 @@ export function checkBattleEndCondition(
 	handleOpponentFaint(battle, player, playerParticipants, room, user, messageLog);
 	const playerSwitchNeeded = handlePlayerFaint(battle, messageLog);
 
-	const battleEnded = checkForWinLoss(context, battle, player, user, messageLog);
+	const battleEnded = checkForWinLoss(context, battle, player, user, messageLog, room);
 	if (battleEnded) return true;
 
 	if (battle.pendingPivot) {
