@@ -108,7 +108,6 @@ import {
 	generateModeSelectionHTML,
 	generateBattleTowerWelcomeHTML,
 	generateBattleTowerFormatSelectedHTML,
-	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
 } from './html';
 import {
