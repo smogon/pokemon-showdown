@@ -1308,6 +1308,52 @@ export function applySecondaryEffects(
 			}
 		}
 
+		// Handle self-boosts (effects that apply to the attacker)
+		if (move.secondary.self?.boosts) {
+			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+
+			for (const stat in move.secondary.self.boosts) {
+				let boostValue = move.secondary.self.boosts[stat as keyof typeof move.secondary.self.boosts]!;
+
+				// Contrary reverses stat changes on the user
+				if (attackerAbility === 'contrary') {
+					boostValue *= -1;
+				}
+
+				const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
+
+				if (boostValue < 0) {
+					// Self-lowering (e.g., Superpower, Close Combat - though these are primary effects)
+					if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'clearamulet') {
+						messageLog.push(`${attackerSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+						continue;
+					}
+					const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+					if (blockAbilities.includes(attackerAbility)) {
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${attackerSlot.pokemon.ability} prevents its stats from being lowered!`);
+						continue;
+					}
+					if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(attackerAbility)) {
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${attackerSlot.pokemon.ability} prevents its Attack from being lowered!`);
+						continue;
+					}
+
+					if (currentStage > -6) {
+						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+						attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
+					}
+				} else if (boostValue > 0) {
+					// Self-boosting (e.g., Power-Up Punch, Flame Charge)
+					if (currentStage < 6) {
+						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
+						attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
+					}
+				}
+			}
+		}
+
 		if (move.secondary.volatileStatus === 'flinch') {
 			if (!RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
 				defenderSlot.willFlinch = true;
