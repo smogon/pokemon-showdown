@@ -388,6 +388,7 @@ export function handleAiPivot(battle: BattleState, messageLog: string[]) {
 	while (!foundReplacement) {
 		const nextOpponent = battle.opponentParty.find(p =>
 			p.hp > 0 &&
+			p.id !== pivotSlot.pokemon.id && // Exclude the pivoting Pokemon
 			!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
 		);
 
