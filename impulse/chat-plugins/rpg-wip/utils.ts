@@ -4,6 +4,7 @@
 * @author MusaddikTemkar
 */
 import { Dex, toID } from '../../../sim/dex';
+import { FS } from '../../../lib';
 import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
@@ -21,7 +22,7 @@ export function getActiveSlots(
  * Helper function to get the active party for a battle.
  * In Battle Tower mode, returns the temporary override party.
  * In normal battles, returns the player's actual party.
- * 
+ *
  * @param battle - The current battle state
  * @param player - The player data
  * @returns The active party (either override or actual party)
@@ -327,7 +328,7 @@ export function assignRandomMoveset(pokemon: RPGPokemon): void {
 	const validMoves: Move[] = [];
 	for (const moveId of uniqueMoveIds) {
 		const moveData = getMove(moveId) as Move; // Cast to Move from interface
-		if (moveData && moveData.exists) {
+		if (moveData?.exists) {
 			// Filter out "do-nothing" moves
 			if (moveData.category === 'Status' && moveData.basePower === 0 && !moveData.status && !moveData.boosts && !moveData.volatileStatus && !moveData.sideCondition && !moveData.pseudoWeather && !moveData.weather && !moveData.terrain && !moveData.flags?.heal) {
 				continue;
@@ -385,7 +386,7 @@ export function assignRandomMoveset(pokemon: RPGPokemon): void {
 	// 9. Format for RPGPokemon and assign max PP
 	pokemon.moves = newMoveset.map(move => ({
 		id: move.id,
-		pp: move.pp || 5 // Use the move's max PP
+		pp: move.pp || 5, // Use the move's max PP
 	}));
 }
 
@@ -394,15 +395,15 @@ export function assignRandomMoveset(pokemon: RPGPokemon): void {
  */
 const VIABLE_HELD_ITEMS: string[] = [
 	// Recovery
-	'leftovers', 
-	'sitrusberry', 
-	'blacksludge', 
+	'leftovers',
+	'sitrusberry',
+	'blacksludge',
 	'shellbell',
 
 	// Damage Boosting
-	'lifeorb', 
-	'choiceband', 
-	'choicespecs', 
+	'lifeorb',
+	'choiceband',
+	'choicespecs',
 	'expertbelt',
 
 	// Speed Control
@@ -410,43 +411,43 @@ const VIABLE_HELD_ITEMS: string[] = [
 	'quickclaw',
 
 	// Defensive / Utility
-	'focussash', 
-	'assaultvest', 
-	'heavydutyboots', 
-	'rockyhelmet', 
+	'focussash',
+	'assaultvest',
+	'heavydutyboots',
+	'rockyhelmet',
 	'airballoon',
 	'shedshell',
 	'clearamulet',
 
 	// One-time Use / Status Cure
-	'lumberry', 
-	'mentalherb', 
-	'whiteherb', 
-	'powerherb', 
+	'lumberry',
+	'mentalherb',
+	'whiteherb',
+	'powerherb',
 	'weaknesspolicy',
 
 	// Status Orbs
-	'flameorb', 
-	'toxicorb', 
+	'flameorb',
+	'toxicorb',
 	'stickybarb',
 
 	// Stat-Boost Pinch Berries
 	'liechiberry', // Atk
 	'ganlonberry', // Def
-	'salacberry',  // Spe
+	'salacberry', // Spe
 	'petayaberry', // SpA
 	'apicotberry', // SpD
-	'starfberry',  // Random
+	'starfberry', // Random
 
 	// Common Type-Resist Berries
 	'chopleberry', // Fighting
-	'yacheberry',  // Ice
-	'shucaberry',  // Ground
-	'occaberry',   // Fire
+	'yacheberry', // Ice
+	'shucaberry', // Ground
+	'occaberry', // Fire
 	'passhoberry', // Water
-	'wacanberry',  // Electric
-	'rindoberry',  // Grass
-	'kasibberry',  // Ghost
+	'wacanberry', // Electric
+	'rindoberry', // Grass
+	'kasibberry', // Ghost
 	'colburberry', // Dark
 	'babiriberry', // Steel
 ];
@@ -499,15 +500,15 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 		// 5. Assign random, legal EV spread (252 / 252 / 4)
 		const stats: (keyof typeof pokemon.evs)[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 		shuffleArray(stats); // Re-use the shuffle helper
-		
+
 		pokemon.evs[stats[0]] = 252;
 		pokemon.evs[stats[1]] = 252;
 		pokemon.evs[stats[2]] = 4;
-		
+
 		// 6. Re-calculate stats with new EVs (IVs were already random)
 		const speciesData = Dex.species.get(pokemon.species);
 		const newStats = calculateStats(speciesData, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-		
+
 		pokemon.maxHp = newStats.maxHp;
 		pokemon.hp = newStats.maxHp; // Start at full HP
 		pokemon.atk = newStats.atk;
@@ -529,6 +530,195 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 	return team;
 }
 
+/**
+ * Type definitions for BSS Factory Sets
+ */
+interface BSSFactorySet {
+	species: string;
+	weight: number;
+	moves: string[][];
+	item: string[];
+	nature: string;
+	evs: {
+		hp?: number,
+		atk?: number,
+		def?: number,
+		spa?: number,
+		spd?: number,
+		spe?: number,
+	};
+	teraType: string[];
+	ability: string[];
+	wantsTera?: boolean;
+}
+
+interface BSSFactorySpecies {
+	weight: number;
+	sets: BSSFactorySet[];
+}
+
+interface BSSFactoryData {
+	[speciesId: string]: BSSFactorySpecies;
+}
+
+// Cache for BSS factory sets to avoid reading the file multiple times
+let bssFactorySetsCache: BSSFactoryData | null = null;
+
+/**
+ * Loads the BSS Factory Sets from the JSON file.
+ * @returns The BSS Factory Sets data
+ */
+function loadBSSFactorySets(): BSSFactoryData | null {
+	if (bssFactorySetsCache) return bssFactorySetsCache;
+
+	try {
+		const json = FS('data/random-battles/gen9/bss-factory-sets.json').readIfExistsSync();
+		if (!json) {
+			console.error('[RPG Battle Tower] BSS Factory Sets file not found');
+			return null;
+		}
+		bssFactorySetsCache = JSON.parse(json);
+		return bssFactorySetsCache;
+	} catch (e: any) {
+		console.error('[RPG Battle Tower] Error loading BSS Factory Sets:', e);
+		return null;
+	}
+}
+
+/**
+ * Weighted random selection helper
+ */
+function weightedRandom<T extends { weight: number }>(items: T[]): T {
+	const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+	let random = Math.random() * totalWeight;
+
+	for (const item of items) {
+		random -= item.weight;
+		if (random <= 0) return item;
+	}
+
+	return items[items.length - 1]; // Fallback
+}
+
+/**
+ * Generates a random team using BSS Factory Sets for the Battle Tower.
+ * This provides competitive, battle-tested movesets and spreads.
+ *
+ * @param count The number of Pokémon in the team.
+ * @param level The level for all Pokémon in the team.
+ * @returns An array of randomly generated RPGPokemon using BSS factory sets.
+ */
+export function generateRandomTeamFromBSS(count: number, level: number): RPGPokemon[] {
+	const bssData = loadBSSFactorySets();
+
+	// Fallback to old method if BSS data is unavailable
+	if (!bssData) {
+		console.log('[RPG Battle Tower] BSS Factory Sets not available, falling back to random generation');
+		return generateRandomTeam(count, level);
+	}
+
+	const team: RPGPokemon[] = [];
+	const speciesEntries = Object.entries(bssData);
+
+	if (speciesEntries.length === 0) {
+		console.error('[RPG Battle Tower] BSS Factory Sets is empty');
+		return generateRandomTeam(count, level);
+	}
+
+	// Track selected species to avoid duplicates
+	const usedSpecies = new Set<string>();
+
+	while (team.length < count) {
+		// Select a random species using weighted selection
+		const availableSpecies = speciesEntries.filter(([speciesId]) => !usedSpecies.has(speciesId));
+
+		if (availableSpecies.length === 0) {
+			// If we've used all species, allow duplicates for larger teams
+			usedSpecies.clear();
+		}
+
+		const speciesWeights = availableSpecies.map(([_, data]) => ({
+			entry: _,
+			weight: data.weight,
+		}));
+
+		const selectedSpecies = weightedRandom(speciesWeights);
+		const [speciesId, speciesData] = availableSpecies.find(([id]) => id === selectedSpecies.entry)!;
+
+		// Select a random set from this species using weighted selection
+		const selectedSet = weightedRandom(speciesData.sets);
+
+		// Create the Pokémon
+		const pokemon = createPokemon(speciesId, level);
+
+		// Apply EVs from the set
+		pokemon.evs = {
+			hp: selectedSet.evs.hp || 0,
+			atk: selectedSet.evs.atk || 0,
+			def: selectedSet.evs.def || 0,
+			spa: selectedSet.evs.spa || 0,
+			spd: selectedSet.evs.spd || 0,
+			spe: selectedSet.evs.spe || 0,
+		};
+
+		// Apply nature
+		pokemon.nature = selectedSet.nature;
+
+		// Apply ability (randomly select from available abilities)
+		if (selectedSet.ability.length > 0) {
+			pokemon.ability = selectedSet.ability[Math.floor(Math.random() * selectedSet.ability.length)];
+		}
+
+		// Apply item (randomly select from available items)
+		if (selectedSet.item.length > 0) {
+			pokemon.item = selectedSet.item[Math.floor(Math.random() * selectedSet.item.length)].toLowerCase().replace(/[^a-z0-9]/g, '');
+		}
+
+		// Apply moves (randomly select one move from each slot)
+		const moves: { id: string, pp: number }[] = [];
+		for (const moveSlot of selectedSet.moves) {
+			if (moveSlot.length > 0) {
+				const selectedMove = moveSlot[Math.floor(Math.random() * moveSlot.length)];
+				const moveId = toID(selectedMove);
+				const moveData = getMove(moveId);
+				if (moveData?.exists) {
+					moves.push({ id: moveId, pp: moveData.pp || 10 });
+				}
+			}
+		}
+
+		// Ensure at least one move
+		if (moves.length === 0) {
+			const tackle = getMove('tackle');
+			moves.push({ id: 'tackle', pp: tackle.pp || 35 });
+		}
+
+		pokemon.moves = moves;
+
+		// Apply Tera Type (randomly select from available types)
+		if (selectedSet.teraType.length > 0) {
+			pokemon.teraType = selectedSet.teraType[Math.floor(Math.random() * selectedSet.teraType.length)];
+		}
+
+		// Recalculate stats with new EVs and nature
+		const dexSpecies = Dex.species.get(pokemon.species);
+		const newStats = calculateStats(dexSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+
+		pokemon.maxHp = newStats.maxHp;
+		pokemon.hp = newStats.maxHp;
+		pokemon.atk = newStats.atk;
+		pokemon.def = newStats.def;
+		pokemon.spa = newStats.spa;
+		pokemon.spd = newStats.spd;
+		pokemon.spe = newStats.spe;
+
+		// Add to team and mark species as used
+		team.push(pokemon);
+		usedSpecies.add(speciesId);
+	}
+
+	return team;
+}
 
 export const RPGUtils = {
 	getActiveSlots,

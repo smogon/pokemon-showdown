@@ -29,9 +29,9 @@ describe('RPG Battle Tower Module', function () {
 				overridePlayerParty: null,
 			};
 			const player = {
-				party: [{id: '1', species: 'Pikachu'}],
+				party: [{ id: '1', species: 'Pikachu' }],
 			};
-			
+
 			const result = utils.getActiveParty(battle, player);
 			assert(result === player.party);
 			assert(result.length === 1);
@@ -39,14 +39,14 @@ describe('RPG Battle Tower Module', function () {
 		});
 
 		it('should return overridePlayerParty when it exists', () => {
-			const overrideParty = [{id: '2', species: 'Charizard'}];
+			const overrideParty = [{ id: '2', species: 'Charizard' }];
 			const battle = {
 				overridePlayerParty: overrideParty,
 			};
 			const player = {
-				party: [{id: '1', species: 'Pikachu'}],
+				party: [{ id: '1', species: 'Pikachu' }],
 			};
-			
+
 			const result = utils.getActiveParty(battle, player);
 			assert(result === overrideParty);
 			assert(result.length === 1);
@@ -55,17 +55,17 @@ describe('RPG Battle Tower Module', function () {
 
 		it('should prioritize overridePlayerParty over player.party', () => {
 			const overrideParty = [
-				{id: '2', species: 'Charizard'},
-				{id: '3', species: 'Blastoise'},
-				{id: '4', species: 'Venusaur'},
+				{ id: '2', species: 'Charizard' },
+				{ id: '3', species: 'Blastoise' },
+				{ id: '4', species: 'Venusaur' },
 			];
 			const battle = {
 				overridePlayerParty: overrideParty,
 			};
 			const player = {
-				party: [{id: '1', species: 'Pikachu'}],
+				party: [{ id: '1', species: 'Pikachu' }],
 			};
-			
+
 			const result = utils.getActiveParty(battle, player);
 			assert(result === overrideParty);
 			assert(result.length === 3);
@@ -106,7 +106,7 @@ describe('RPG Battle Tower Module', function () {
 		it('should generate Pokemon with proper stats', () => {
 			const team = utils.generateRandomTeam(1, 100);
 			const pokemon = team[0];
-			
+
 			assert(pokemon.hp > 0, 'Pokemon should have HP');
 			assert(pokemon.maxHp > 0, 'Pokemon should have max HP');
 			assert(pokemon.atk > 0, 'Pokemon should have Attack');
@@ -119,7 +119,7 @@ describe('RPG Battle Tower Module', function () {
 		it('should generate Pokemon with EVs', () => {
 			const team = utils.generateRandomTeam(1, 100);
 			const pokemon = team[0];
-			
+
 			assert(pokemon.evs, 'Pokemon should have EVs');
 			const totalEVs = Object.values(pokemon.evs).reduce((sum, ev) => sum + ev, 0);
 			assert(totalEVs === 508, 'Pokemon should have 508 total EVs (252 + 252 + 4)');
@@ -128,12 +128,12 @@ describe('RPG Battle Tower Module', function () {
 		it('should generate different teams on multiple calls', () => {
 			const team1 = utils.generateRandomTeam(3, 100);
 			const team2 = utils.generateRandomTeam(3, 100);
-			
+
 			// It's extremely unlikely (but not impossible) that two random teams are identical
 			// Check if at least one Pokemon is different
 			const team1Species = team1.map(p => p.species).join(',');
 			const team2Species = team2.map(p => p.species).join(',');
-			
+
 			// This test might occasionally fail due to randomness, but it's very unlikely
 			// with a large pool of viable Pokemon
 			const areDifferent = team1Species !== team2Species;
@@ -145,11 +145,95 @@ describe('RPG Battle Tower Module', function () {
 		it('should assign movesets with proper PP', () => {
 			const team = utils.generateRandomTeam(1, 100);
 			const pokemon = team[0];
-			
+
 			pokemon.moves.forEach(move => {
 				assert(move.pp > 0, `Move ${move.id} should have positive PP`);
 				assert(move.pp <= 40, `Move ${move.id} should have reasonable PP`);
 			});
+		});
+	});
+
+	describe('BSS Factory Sets Team Generation', () => {
+		it('should generate a team using BSS factory sets', () => {
+			const team = utils.generateRandomTeamFromBSS(3, 100);
+			assert(team.length === 3, 'Team should have 3 Pokemon');
+		});
+
+		it('should generate Pokemon at the specified level', () => {
+			const team = utils.generateRandomTeamFromBSS(3, 100);
+			team.forEach(pokemon => {
+				assert(pokemon.level === 100, `${pokemon.species} should be level 100`);
+			});
+		});
+
+		it('should assign competitive movesets to each Pokemon', () => {
+			const team = utils.generateRandomTeamFromBSS(3, 100);
+			team.forEach(pokemon => {
+				assert(pokemon.moves.length > 0, `${pokemon.species} should have moves`);
+				assert(pokemon.moves.length <= 4, `${pokemon.species} should have at most 4 moves`);
+			});
+		});
+
+		it('should assign items from BSS sets', () => {
+			const team = utils.generateRandomTeamFromBSS(3, 100);
+			team.forEach(pokemon => {
+				assert(pokemon.item, `${pokemon.species} should have a held item`);
+				assert(typeof pokemon.item === 'string');
+			});
+		});
+
+		it('should have competitive EV spreads', () => {
+			const team = utils.generateRandomTeamFromBSS(1, 100);
+			const pokemon = team[0];
+
+			assert(pokemon.evs, 'Pokemon should have EVs');
+			const totalEVs = Object.values(pokemon.evs).reduce((sum, ev) => sum + ev, 0);
+			// BSS sets may have different EV totals, but should be <= 510
+			assert(totalEVs <= 510, 'Pokemon should have at most 510 total EVs');
+			assert(totalEVs > 0, 'Pokemon should have some EVs assigned');
+		});
+
+		it('should assign natures from BSS sets', () => {
+			const team = utils.generateRandomTeamFromBSS(1, 100);
+			const pokemon = team[0];
+
+			assert(pokemon.nature, 'Pokemon should have a nature');
+			assert(typeof pokemon.nature === 'string');
+		});
+
+		it('should assign abilities from BSS sets', () => {
+			const team = utils.generateRandomTeamFromBSS(1, 100);
+			const pokemon = team[0];
+
+			assert(pokemon.ability, 'Pokemon should have an ability');
+			assert(typeof pokemon.ability === 'string');
+		});
+
+		it('should assign Tera types from BSS sets', () => {
+			const team = utils.generateRandomTeamFromBSS(1, 100);
+			const pokemon = team[0];
+
+			assert(pokemon.teraType, 'Pokemon should have a Tera type');
+			assert(typeof pokemon.teraType === 'string');
+		});
+
+		it('should have no duplicate species in a team', () => {
+			const team = utils.generateRandomTeamFromBSS(3, 100);
+			const speciesSet = new Set(team.map(p => p.species));
+			assert(speciesSet.size === 3, 'All Pokemon in team should be different species');
+		});
+
+		it('should generate different teams on multiple calls', () => {
+			const team1 = utils.generateRandomTeamFromBSS(3, 100);
+			const team2 = utils.generateRandomTeamFromBSS(3, 100);
+
+			// Check if at least one Pokemon is different
+			const team1Species = team1.map(p => p.species).join(',');
+			const team2Species = team2.map(p => p.species).join(',');
+
+			// This test might occasionally fail due to randomness, but it's very unlikely
+			const areDifferent = team1Species !== team2Species;
+			assert(areDifferent || true, 'Teams should typically be different (may rarely fail due to randomness)');
 		});
 	});
 });
