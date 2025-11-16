@@ -127,6 +127,9 @@ import * as ScriptedEvents from './scripted-events';
 // [MOVED] Helper functions `getLocationWeatherData` and `getWeatherStartMessage`
 // are now imported from battle-engine (where battle-flow.ts lives).
 
+// Track Terastallize toggle state per user (temporary UI state)
+const teraToggleState = new Map<string, boolean>();
+
 export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
@@ -1483,7 +1486,7 @@ export const commands: ChatCommands = {
 				battle.battleLog.push(...battleMessages);
 
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1597,7 +1600,7 @@ export const commands: ChatCommands = {
 				battle.battleLog.push(...battleMessages);
 
 				// Generate HTML using the modified battle object
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
+				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				return this.errorReply("An error occurred while starting the battle: " + String(error));
@@ -1748,7 +1751,7 @@ export const commands: ChatCommands = {
 			battle.battleLog.push(...challengeMessages);
 
 			// Generate HTML using the modified battle object
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle)}`);
+			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 		},
 
 		battle(target, room, user) {
@@ -1843,6 +1846,9 @@ export const commands: ChatCommands = {
 					terastallize: shouldTerastallize,
 				};
 
+				// Clear the toggle state after move is queued
+				teraToggleState.delete(user.id);
+
 				const messageLog = shouldTerastallize ?
 					[`${attackerSlot.pokemon.species} is ready to Terastallize and use ${moveData.name}!`] :
 					[`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
@@ -1882,17 +1888,29 @@ export const commands: ChatCommands = {
 						return this.errorReply("Invalid slot.");
 					}
 					if (battle.playerTerastallizeUsed) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"], undefined, teraToggleState.get(user.id))}`);
 					}
 					if (attackerSlot.terastallized) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} has already Terastallized!`])}`);
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${attackerSlot.pokemon.species} has already Terastallized!`], undefined, teraToggleState.get(user.id))}`);
 					}
 				}
 
-				// Re-render the UI in "target selection" mode
+				// Re-render the UI in "target selection" mode (don't show toggle in target selection)
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
 			},
 			// --- END NEW FUNCTION ---
+
+			// [NEW] Terastallize toggle handler
+			teratoggle(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const newState = target === 'on';
+				teraToggleState.set(user.id, newState);
+
+				// Re-render the battle UI with the new toggle state
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, newState)}`);
+			},
 
 			forceswitch(target, room, user) {
 				const battle = activeBattles.get(user.id);
