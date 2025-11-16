@@ -1025,8 +1025,8 @@ export function generateBattleTowerHTML(
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
 	// Battle Tower header
-	const headerHTML = '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; margin-bottom: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">' +
-		'<h2 style="margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🗼 Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
+	const headerHTML = '<div style="text-align: center;">' +
+		'<h2">🗼 Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
 	// Check if battle has ended first - slots may be null after fainting
