@@ -1,7 +1,7 @@
 /*
  * Pokemon Showdown
  * User Profile Command
- * @author MusaddikTemkar
+ * @author TurboRx
  */
 
 import { nameColor } from '../../colors';
