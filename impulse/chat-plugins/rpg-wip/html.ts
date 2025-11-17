@@ -558,397 +558,74 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 // B A T T L E   U I   -   M A I N
 // ###################################
 
+/**
+ * [MODIFIED] Generates the main battle HTML, now unified.
+ * This is the new implementation for Suggestion #4.
+ * It also includes Suggestion #3 (Hierarchy) by separating messageLog and battleLog.
+ */
 export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean
 ): string {
-	
-	if (battle.battleType === 'battletower') {
-		return generateBattleTowerHTML(battle, messageLog, targetSelection, teraToggled);
-	} else if (battle.battleType === 'wild' || battle.battleType === 'trainer') {
-		
-		return generateSingleBattleHTML(battle, messageLog, targetSelection, teraToggled);
-	} else {
-		
-		return generateDoubleBattleHTML(battle, messageLog, targetSelection, teraToggled);
-	}
-}
 
-export function generateSingleBattleHTML(
-	battle: BattleState,
-	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
-	teraToggled?: boolean
-): string {
+	// --- 1. Handle Battle End ---
+	// Get battle log *before* checking end condition
+	// [SUGGESTION #3] Separate new messages from old log
+	const newEventsHTML = messageLog.length > 0 ?
+		`<div style="padding: 8px; margin: 5px 0; border: 2px solid #007bff; border-radius: 5px;">${messageLog.join('<br>')}</div>` :
+		'';
 	
-	const displayLog = getDisplayLog(battle, messageLog);
+	const reversedBattleLog = [...battle.battleLog].reverse();
+	const historyLogHTML = `<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">` +
+		(reversedBattleLog.length > 0 ? reversedBattleLog.join('<br>') : 'Battle started...') +
+		`</div>`;
 
-	
 	if (battle.battleEnded) {
-		
-		const continueCommand = battle.battleResult === 'victory' ?
-			(battle.battleType === 'wild' ? '/rpg explore' : '/rpg explore') :
-			'/rpg explore';
-		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
-			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
-			'</p>';
+		let actionHTML = '';
+		// Battle Tower end screens are handled by dedicated functions (FloorComplete/Loss)
+		// So we do NOT show a "Continue" button for it.
+		if (battle.battleType !== 'battletower') {
+			const continueCommand = (battle.battleResult === 'victory') ? '/rpg explore' : '/rpg explore';
+			actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
+				'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+				'</p>';
+		}
 
 		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
+			generateBattleHeader(battle) + // Show header even on end screen
+			newEventsHTML + // Show final messages
+			historyLogHTML + // Show full log
 			actionHTML +
 			'</div>';
 	}
 
+	// --- 2. Render Active Battle ---
 	
-	const playerSlot = battle.playerSlots[0];
-	const opponentSlot = battle.opponentSlots[0];
-
-	
-	
-	
-	if (!playerSlot || !opponentSlot) {
-		console.error('[RPG Battle Error] generateSingleBattleHTML: Missing active slots', {
-			battleType: battle.battleType,
-			playerSlotNull: !playerSlot,
-			opponentSlotNull: !opponentSlot,
-			battleEnded: battle.battleEnded,
-			turn: battle.turn,
-		});
-
-		
-		if (!playerSlot && !opponentSlot) {
-			return '<div class="infobox"><h2>Battle Ended</h2><p>Both Pokémon have fainted. The battle has concluded.</p>' +
-				generateBottomNavigation() + '</div>';
-		} else if (!playerSlot) {
-			return '<div class="infobox"><h2>Battle Ended</h2><p>Your Pokémon has fainted. Please select a new Pokémon.</p>' +
-				generateBottomNavigation() + '</div>';
-		} else {
-			return '<div class="infobox"><h2>Battle Ended</h2><p>The opponent\'s Pokémon has fainted.</p>' +
-				generateBottomNavigation() + '</div>';
-		}
-	}
-
-	const playerPokemon = playerSlot.pokemon;
-	const player = getPlayerData(battle.playerId);
-
-	let actionHTML = '';
-	let moveButtonsHTML = '';
-
-	
-	moveButtonsHTML = generateBattleMoveSelectionHTML(battle, playerSlot, 0, false, teraToggled);
-	
-	
-	const actionButtonsHTML = generateBattleActionButtonsHTML(battle, playerSlot);
-
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
-		moveButtonsHTML +
-		actionButtonsHTML;
-
-	const playerName = player ? player.name : "Your";
-
-	let opponentOwnerName: string | undefined = battle.opponentName;
-	if (battle.battleType === 'wild') {
-		opponentOwnerName = 'Wild';
-	}
-
-	
+	// [NEW] Call the new helper components
+	const headerHTML = generateBattleHeader(battle);
 	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
-	
+	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
-	return '<div class="infobox">' +
-		
-		globalConditionsHTML +
-		
-		'<table style="width: 100%; margin-bottom: 5px;">' +
-		'<tr>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
-		'</td>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
-		'</td>' +
-		'</tr>' +
-		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
-		actionHTML +
-		'</div>';
-}
-
-export function generateDoubleBattleHTML(
-	battle: BattleState,
-	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
-	teraToggled?: boolean
-): string {
-	
-	const displayLog = getDisplayLog(battle, messageLog);
-
-	
-	if (battle.battleEnded) {
-		
-		const continueCommand = battle.battleResult === 'victory' ?
-			(battle.battleType === 'wild_double' ? '/rpg explore' : '/rpg explore') :
-			'/rpg explore';
-		const actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
-			'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
-			'</p>';
-
-		return '<div class="infobox">' +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
-			actionHTML +
-			'</div>';
-	}
-
-	
-	const [pSlot0, pSlot1] = battle.playerSlots;
-	const [oSlot0, oSlot1] = battle.opponentSlots;
-	const player = getPlayerData(battle.playerId);
-	const playerName = player ? player.name : "Your";
-
-	
-	if (!pSlot0 && !pSlot1) {
-		console.warn('[RPG Battle Warning] generateDoubleBattleHTML: All player slots are null', {
-			battleType: battle.battleType,
-			battleEnded: battle.battleEnded,
-			turn: battle.turn,
-		});
-	}
-	if (!oSlot0 && !oSlot1) {
-		console.warn('[RPG Battle Warning] generateDoubleBattleHTML: All opponent slots are null', {
-			battleType: battle.battleType,
-			battleEnded: battle.battleEnded,
-			turn: battle.turn,
-		});
-	}
-
-	let opponentOwnerName: string | undefined = battle.opponentName;
-	if (battle.battleType === 'wild_double') {
-		opponentOwnerName = 'Wild';
-	}
-
-	
-	const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
-		if (!slot) {
-			return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; text-align: center; color: #888;">(Empty)</div>';
-		}
-
-		let ownerName: string | undefined = undefined;
-		if (side === 'player') {
-			ownerName = playerName;
-		} else {
-			ownerName = opponentOwnerName; 
-		}
-
-		if (slot.pokemon.hp <= 0) {
-			return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
-		}
-
-		let borderStyle = "1px solid #ccc";
-		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			borderStyle = "3px dashed #007bff";
-		}
-		if (battle.pendingActions[slotIndex]) {
-			borderStyle = "3px solid #28a745";
-		}
-
-		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
-	};
-
-	let html = '<div class="infobox">';
-
-	
-	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
-	html += globalConditionsHTML;
-	
-
-	html += '<table style="width: 100%; margin-bottom: 5px;">';
-	
-	html += '<tr>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += generateSlotHTML(oSlot0, 2, 'opponent');
-	html += '</td>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += generateSlotHTML(oSlot1, 3, 'opponent');
-	html += '</td>';
-	html += '</tr>';
-	
-	html += '<tr>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += generateSlotHTML(pSlot0, 0, 'player');
-	html += '</td>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	html += generateSlotHTML(pSlot1, 1, 'player');
-	html += '</td>';
-	html += '</tr>';
-	html += '</table>';
-
-	html += '<div style="padding: 8px; margin: 10px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>';
-
-	
-	if (targetSelection) {
-		const move = getMove(targetSelection.moveId);
-		const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
-		html += '<p style="margin-top: 5px; font-weight: bold;">Select a target for <strong>' + move.name + '</strong>' + teraText + ':</p>';
-
-		const targets = [
-			{ slot: pSlot0, name: "Ally 1", index: 0 },
-			{ slot: pSlot1, name: "Ally 2", index: 1 },
-			{ slot: oSlot0, name: "Opponent 1", index: 2 },
-			{ slot: oSlot1, name: "Opponent 2", index: 3 },
-		];
-
-		const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0;';
-		const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
-		const targetButtons = targets
-			.filter(target => target.slot && target.slot.pokemon.hp > 0 && target.index !== targetSelection.attackerSlotIndex)
-			.map(target => {
-				return '<button name="send" value="/rpg battleaction move ' + String(targetSelection.attackerSlotIndex) + ' ' + targetSelection.moveId + ' ' + String(target.index) + teraParam + '" class="button" style="' + buttonStyle + '">' + target.name + '</button>';
-			});
-
-		let targetButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
-		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[0] || '') + '</td>';
-		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[1] || '') + '</td>';
-		targetButtonsHTML += '</tr>';
-		targetButtonsHTML += '<tr>';
-		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[2] || '') + '</td>';
-		targetButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (targetButtons[3] || '') + '</td>';
-		targetButtonsHTML += '</tr>';
-		targetButtonsHTML += '</table>';
-
-		html += targetButtonsHTML;
-		html += '<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button" style="' + buttonStyle + '">Cancel</button></p>';
+	// [NEW] Determine which action panel to show
+	let actionPanelHTML = '';
+	if (targetSelection && battle.battleType.includes('double')) {
+		// We are in target selection mode
+		actionPanelHTML = generateBattleTargetSelection(battle, targetSelection);
 	} else {
-		let activeSlot: ActivePokemonSlot | null = null;
-		let activeSlotIndex = -1;
-
-		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
-			activeSlot = pSlot0;
-			activeSlotIndex = 0;
-		} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
-			activeSlot = pSlot1;
-			activeSlotIndex = 1;
-		}
-
-		if (activeSlot) {
-			const pokemon = activeSlot.pokemon;
-			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
-
-			
-			const moveButtonsHTML = generateBattleMoveSelectionHTML(battle, activeSlot, activeSlotIndex, true, teraToggled);
-			
-			html += moveButtonsHTML;
-		} else {
-			html += '<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>';
-		}
-
-		
-		const activePlayerSlot = (pSlot0 && pSlot0.pokemon.hp > 0) ? pSlot0 : (pSlot1 && pSlot1.pokemon.hp > 0) ? pSlot1 : null;
-		const actionButtonsHTML = generateBattleActionButtonsHTML(battle, activePlayerSlot);
-		html += actionButtonsHTML;
+		// We are in move selection mode
+		actionPanelHTML = generateBattleActionPanel(battle, teraToggled);
 	}
 
-	html += '</div>';
-	return html;
-}
-
-export function generateBattleTowerHTML(
-	battle: BattleState,
-	messageLog: string[] = [],
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
-	teraToggled?: boolean
-): string {
-	const currentFloor = battle.floor || 1;
-	
-	const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
-	const formatName = formatConfig ? formatConfig.name : 'Battle Factory';
-
-	
-	const displayLog = getDisplayLog(battle, messageLog);
-
-	
-	const headerHTML = '<div style="text-align: center;">' +
-		'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
-		'</div>';
-
-	
-	if (battle.battleEnded) {
-		
-		
-		
-		return '<div class="infobox">' +
-			headerHTML +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
-			'</div>';
-	}
-
-	
-	
-	const playerSlot = battle.playerSlots[0];
-	const opponentSlot = battle.opponentSlots[0];
-
-	
-	
-	
-	
-	if (!playerSlot || !opponentSlot) {
-		console.warn('[RPG Battle Tower] Temporary null slot detected during battle resolution', {
-			floor: battle.floor,
-			playerSlotNull: !playerSlot,
-			opponentSlotNull: !opponentSlot,
-			turn: battle.turn,
-		});
-
-		
-		
-		return '<div class="infobox">' +
-			headerHTML +
-			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
-			'<div style="text-align: center; padding: 10px;"><strong>Resolving battle actions...</strong></div>' +
-			generateBottomNavigation() + '</div>';
-	}
-
-	const playerPokemon = playerSlot.pokemon;
-	const player = getPlayerData(battle.playerId);
-
-	let actionHTML = '';
-	let moveButtonsHTML = '';
-
-	
-	
-	
-	moveButtonsHTML = generateBattleMoveSelectionHTML(battle, playerSlot, 0, false, teraToggled);
-	
-	
-	const actionButtonsHTML = generateBattleActionButtonsHTML(battle, playerSlot);
-
-	actionHTML = '<p style="margin-top: 5px; font-weight: bold;">What will ' + (playerPokemon.nickname || playerPokemon.species) + ' do?</p>' +
-		moveButtonsHTML +
-		actionButtonsHTML;
-
-	const playerName = player ? player.name : "Your";
-	const opponentOwnerName = battle.opponentName || 'Battle Tower Trainer';
-
-	
-	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
-
+	// [NEW] Assemble the full UI
 	return '<div class="infobox">' +
 		headerHTML +
 		globalConditionsHTML +
-		'<table style="width: 100%; margin-bottom: 5px;">' +
-		'<tr>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
-		'</td>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
-		'</td>' +
-		'</tr>' +
-		'</table>' +
-		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
-		actionHTML +
+		battlefieldHTML +
+		newEventsHTML + // Show new messages
+		historyLogHTML + // Show old log
+		actionPanelHTML +
 		'</div>';
 }
 
@@ -1319,6 +996,10 @@ function generateAvailablePokemonListHTML(
 	return html;
 }
 
+/**
+ * [MODIFIED] Generates the HTML for a single Pokemon in battle.
+ * Now includes Suggestion #3 (Hierarchy): HP/Status is moved to the top.
+ */
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -1331,7 +1012,7 @@ export function generateSharedBattlePokemonInfo(
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
-	
+	// [SUGGESTION #3] Generate status tags first
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, isDoubleBattle, battle);
 	const statusDisplay = allStatusTags || '&nbsp;';
 
@@ -1350,12 +1031,14 @@ export function generateSharedBattlePokemonInfo(
 
 	if (isDoubleBattle) {
 		let html = '';
-		html += '<div style="font-weight: bold; font-size: 1.1em;">';
+        // [SUGGESTION #3] HP bar and status moved to the top
+		html += hpBarHTML;
+		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 1.4em;">' + statusDisplay + '</div>'; // Added min-height
+        // Name/Level below
+		html += '<div style="font-weight: bold; font-size: 1.1em; margin-top: 4px;">';
 		html += '<psicon pokemon="' + species.id + '" style="vertical-align: -5px;"></psicon> ';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
-		html += hpBarHTML;
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		return html;
 	} else {
 		const spriteFilename = getSpriteFilename(species.id);
@@ -1367,12 +1050,14 @@ export function generateSharedBattlePokemonInfo(
 			'</div>';
 
 		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
-		html += '<div style="font-weight: bold; font-size: 1.1em;">';
+        // [SUGGESTION #3] HP bar and status moved to the top
+		html += hpBarHTML;
+		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 1.4em;">' + statusDisplay + '</div>'; // Added min-height
+        // Name/Level below
+		html += '<div style="font-weight: bold; font-size: 1.1em; margin-top: 4px;">';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
-		html += hpBarHTML;
 		html += spriteHTML;
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4;">' + statusDisplay + '</div>';
 		html += '</div>';
 		return html;
 	}
@@ -1399,7 +1084,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const effects: string[] = [];
 	const reflectTurns = (side === 'player') ? battle.playerReflectTurns : battle.opponentReflectTurns;
 	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
-	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+	const auroraVeilTurns = (side ==='player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
 	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
@@ -2165,4 +1850,213 @@ export function generateDBDeleteSuccessHTML(): string {
 		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
+}
+
+// ###################################
+// B A T T L E   U I   -   N E W   H E L P E R S
+// ###################################
+
+/**
+ * [NEW HELPER] Generates the top header for a battle screen.
+ * This is a new component for Suggestion #4.
+ */
+function generateBattleHeader(battle: BattleState): string {
+	if (battle.battleType === 'battletower') {
+		const currentFloor = battle.floor || 1;
+		const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
+		const formatName = formatConfig ? formatConfig.name : 'Battle Factory';
+		return '<div style="text-align: center;">' +
+			'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
+			'</div>';
+	}
+	// Singles and Doubles battles do not have a special header
+	return '';
+}
+
+/**
+ * [NEW HELPER] Generates the battlefield (Pokémon info boxes).
+ * This is a new component for Suggestion #4.
+ */
+function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
+	const isDoubleBattle = battle.battleType.includes('double');
+	const player = getPlayerData(battle.playerId);
+	const playerName = player ? player.name : "Your";
+	let opponentOwnerName: string | undefined = battle.opponentName;
+	if (battle.battleType === 'wild' || battle.battleType === 'wild_double') {
+		opponentOwnerName = 'Wild';
+	}
+
+	if (isDoubleBattle) {
+		const [pSlot0, pSlot1] = battle.playerSlots;
+		const [oSlot0, oSlot1] = battle.opponentSlots;
+
+		// This inner helper generates the slot with correct borders for targeting/pending actions
+		const generateSlotHTML = (slot: ActivePokemonSlot | null, slotIndex: number, side: 'player' | 'opponent') => {
+			if (!slot) {
+				return '<div style="border: 1px dashed #ccc; padding: 10px; margin: 5px; border-radius: 5px; text-align: center; color: #888;">(Empty)</div>';
+			}
+
+			let ownerName: string | undefined = (side === 'player') ? playerName : opponentOwnerName;
+
+			if (slot.pokemon.hp <= 0) {
+				return '<div style="opacity: 0.5; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
+			}
+
+			let borderStyle = "1px solid #ccc";
+			// Check if this slot is a target (and not the attacker)
+			if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
+				// This logic isn't perfect, as it highlights all slots, but it's complex to get right without client-side JS.
+				// For now, we'll mimic the old logic which just checked attackerSlotIndex.
+				// A better server-side approach would be to check the move's target property.
+				borderStyle = "3px dashed #007bff";
+			}
+			if (battle.pendingActions[slotIndex]) {
+				borderStyle = "3px solid #28a745";
+			}
+
+			return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' + generateSharedBattlePokemonInfo(slot, side === 'player', true, ownerName, battle) + '</div>';
+		};
+
+		let html = '<table style="width: 100%; margin-bottom: 5px;">';
+		// Opponent Row
+		html += '<tr>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(oSlot0, 2, 'opponent');
+		html += '</td>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(oSlot1, 3, 'opponent');
+		html += '</td>';
+		html += '</tr>';
+		// Player Row
+		html += '<tr>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(pSlot0, 0, 'player');
+		html += '</td>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(pSlot1, 1, 'player');
+		html += '</td>';
+		html += '</tr>';
+		html += '</table>';
+		return html;
+
+	} else {
+		// Single Battle or Battle Tower logic
+		const playerSlot = battle.playerSlots[0];
+		const opponentSlot = battle.opponentSlots[0];
+
+		// Handle null slots, which can happen mid-turn or on faint
+		if (!playerSlot || !opponentSlot) {
+			console.error(`[RPG Battle Error] Unified generateBattlefield: Missing active slots`, {
+				battleType: battle.battleType,
+				playerSlotNull: !playerSlot,
+				opponentSlotNull: !opponentSlot,
+				battleEnded: battle.battleEnded,
+				turn: battle.turn,
+			});
+            
+            // Generate basic HTML to avoid crashing the UI
+            let recoveryHTML = '<div class="infobox"><h2>Resolving turn...</h2>';
+            if (!playerSlot) recoveryHTML += '<p>Waiting for player Pokémon...</p>';
+            if (!opponentSlot) recoveryHTML += '<p>Waiting for opponent Pokémon...</p>';
+            recoveryHTML += '</div>';
+            return recoveryHTML;
+		}
+
+		return '<table style="width: 100%; margin-bottom: 5px;">' +
+			'<tr>' +
+			'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
+			generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
+			'</td>' +
+			'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
+			generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
+			'</td>' +
+			'</tr>' +
+			'</table>';
+	}
+}
+
+/**
+ * [NEW HELPER] Generates the target selection panel for double battles.
+ * This is a new component for Suggestion #4.
+ */
+function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
+	const [pSlot0, pSlot1] = battle.playerSlots;
+	const [oSlot0, oSlot1] = battle.opponentSlots;
+	const move = getMove(targetSelection.moveId);
+	const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
+
+	let html = '<p style="margin-top: 5px; font-weight: bold;">Select a target for <strong>' + move.name + '</strong>' + teraText + ':</p>';
+
+	const targets = [
+		{ slot: pSlot0, name: "Ally 1", index: 0 },
+		{ slot: pSlot1, name: "Ally 2", index: 1 },
+		{ slot: oSlot0, name: "Opponent 1", index: 2 },
+		{ slot: oSlot1, name: "Opponent 2", index: 3 },
+	];
+
+	const buttonStyle = 'width: 100%; padding: 8px; border-radius: 8px; box-sizing: border-box; text-align: center; margin: 0;';
+	const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
+	
+    // Filter targets based on move properties (e.g., 'normal', 'any', 'self')
+    // This is a simplified version; a full implementation would check move.target
+    const validTargets = targets.filter(target => {
+        if (!target.slot || target.slot.pokemon.hp <= 0) return false;
+        // For now, allow all valid slots except the attacker
+        return target.index !== targetSelection.attackerSlotIndex;
+    });
+    
+	const targetButtons = validTargets.map(target => {
+			return '<button name="send" value="/rpg battleaction move ' + String(targetSelection.attackerSlotIndex) + ' ' + targetSelection.moveId + ' ' + String(target.index) + teraParam + '" class="button" style="' + buttonStyle + '">' + target.name + '</button>';
+	});
+
+	// A simple grid for buttons
+	let targetButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;"><tr>';
+    let count = 0;
+    for (const button of targetButtons) {
+        targetButtonsHTML += `<td style="padding: 0; vertical-align: top;">${button}</td>`;
+        count++;
+        if (count % 2 === 0 && count < targetButtons.length) {
+            targetButtonsHTML += '</tr><tr>'; // New row every 2 buttons
+        }
+    }
+	targetButtonsHTML += '</tr></table>';
+
+	html += targetButtonsHTML;
+	html += '<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button" style="' + buttonStyle + '">Cancel</button></p>';
+	return html;
+}
+
+/**
+ * [NEW HELPER] Generates the main action panel (moves + switch/run/catch).
+ * This is a new component for Suggestion #4.
+ */
+function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
+	const isDoubleBattle = battle.battleType.includes('double');
+	const [pSlot0, pSlot1] = battle.playerSlots;
+
+	let activeSlot: ActivePokemonSlot | null = null;
+	let activeSlotIndex = -1;
+
+	// Find the next slot that needs to move
+	if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
+		activeSlot = pSlot0;
+		activeSlotIndex = 0;
+	} else if (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
+		activeSlot = pSlot1;
+		activeSlotIndex = 1;
+	}
+
+	let html = '';
+	if (activeSlot) {
+		const pokemon = activeSlot.pokemon;
+		html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
+		html += generateBattleMoveSelectionHTML(battle, activeSlot, activeSlotIndex, isDoubleBattle, teraToggled);
+	} else if (!battle.battleEnded) {
+		html += '<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>';
+	}
+
+	// Find *any* active slot to pass to the action buttons (for run/catch validation)
+	const anyActivePlayerSlot = (pSlot0 && pSlot0.pokemon.hp > 0) ? pSlot0 : (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0) ? pSlot1 : null;
+	html += generateBattleActionButtonsHTML(battle, anyActivePlayerSlot);
+	return html;
 }
