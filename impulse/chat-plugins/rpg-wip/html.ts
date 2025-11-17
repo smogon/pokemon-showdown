@@ -10,7 +10,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { TYPE_CHART } from './data';
-import { BATTLE_TOWER_FORMATS }BATTLE_TOWER_FORMATS } from './battle-tower';
+import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
@@ -135,12 +135,12 @@ function getSpriteFilename(speciesId: string): string {
 
 
 export function generateBottomNavigation(): string {
-	return `<hr /><center><p><button name="send" value="/rpg modes" class="button">Modes</button> ` +
-		`<button name="send" value="/rpg explore" class="button">Explore</button> ` +
-		`<button name="send" value="/rpg profile" class="button">Profile</button> ` +
-		`<button name="send" value="/rpg pokedex" class="button">Pokédex</button> ` +
-		`<button name="send" value="/rpg party" class="button">Party</button> ` +
-		`<button name="send" value="/rpg items" class="button">Items</button></p></center>`;
+	return `<hr /><center><p><button name="send" value="/rpg modes" class="button">🎮 Modes</button> ` +
+		`<button name="send" value="/rpg explore" class="button">🗺️ Explore</button> ` +
+		`<button name="send" value="/rpg profile" class="button">👤 Profile</button> ` +
+		`<button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button> ` +
+		`<button name="send" value="/rpg party" class="button">⚡ Party</button> ` +
+		`<button name="send" value="/rpg items" class="button">🎒 Items</button></p></center>`;
 }
 
 // ###################################
@@ -218,7 +218,7 @@ function generatePokemonStatusTagsHTML(
 		slot.isProtected ? '<span class="rpg-tag rpg-tag-protected">Protected</span>' : '',
 		slot.isRedirecting ? '<span class="rpg-tag rpg-tag-attention">Center of Attention</span>' : '',
 		slot.isHelped ? '<span class="rpg-tag rpg-tag-helped">Helped</span>' : '',
-		slot.terastallized ? '<span class="rpg-tag rpg-tag-tera">Tera: ' + slot.terastallized + '</span>' : '',
+		slot.terastallized ? '<span class="rpg-tag rpg-tag-tera">⭐ Tera: ' + slot.terastallized + '</span>' : '',
 	].filter(Boolean).join('');
 
 	const abilityTags = [
@@ -243,9 +243,9 @@ function generatePokemonStatusTagsHTML(
 		for (const stat in slot.statStages) {
 			const stage = slot.statStages[stat as keyof typeof slot.statStages];
 			if (stage > 0) {
-				statStageTags += ' <span style="color: green; font-size: 11px;">' + stat.toUpperCase() + ' +' + stage + '</span>';
+				statStageTags += ' <span style="color: green; font-size: 11px;">🔼' + stat.toUpperCase() + '</span>';
 			} else if (stage < 0) {
-				statStageTags += ' <span style="color: red; font-size: 11px;">' + stat.toUpperCase() + ' ' + stage + '</span>';
+				statStageTags += ' <span style="color: red; font-size: 11px;">🔽' + stat.toUpperCase() + '</span>';
 			}
 		}
 	}
@@ -267,7 +267,7 @@ function generateBattleActionButtonsHTML(
 	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
 	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
 
-	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">Switch</button>';
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
 
 	
 	if (battle.battleType === 'battletower') {
@@ -276,32 +276,32 @@ function generateBattleActionButtonsHTML(
 
 	
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
-	let catchButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">Catch</button>';
-	let runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">Run</button>';
+	let catchButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
+	let runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
 	if (isWild) {
 		
 		const canRun = !playerSlot || !playerSlot.isTrapped;
 		runButton = canRun ?
-			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">Run</button>' :
-			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">Run</button>';
+			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
+			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 
 		
 		if (battle.battleType === 'wild') {
-			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">Catch</button>';
+			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>';
 		} else if (battle.battleType === 'wild_double') {
 			const activeOpponents = getActiveSlots(battle.opponentSlots);
 			const canCatch = activeOpponents.length === 1;
 			catchButton = canCatch ?
-				'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">Catch</button>' :
-				'<button class="button" disabled style="' + bottomButtonDisabledStyle + '" title="Can only catch when one opponent remains">Catch</button>';
+				'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
+				'<button class="button" disabled style="' + bottomButtonDisabledStyle + '" title="Can only catch when one opponent remains">⚽ Catch</button>';
 		}
 	} else if (battle.battleType === 'trainer') {
 		
-		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">Run</button>';
+		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 	} else if (battle.battleType === 'trainer_double') {
 		
-		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">Run</button>';
+		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
 	}
 
 
@@ -333,8 +333,8 @@ export function generateWelcomeHTML(): string {
 
 export function generateModeSelectionHTML(): string {
 	let html = `<div class="infobox"><h2>Select a Mode</h2>`;
-	html += `<p><button name="send" value="/rpg storymode" class="button" style="width: 200px;">Story Mode</button></p>`;
-	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">Battle Tower</button></p>`;
+	html += `<p><button name="send" value="/rpg storymode" class="button" style="width: 200px;">📖 Story Mode</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">🗼 Battle Tower</button></p>`;
 	html += `</div>`;
 	return html;
 }
@@ -343,7 +343,7 @@ export function generateRPGModeSelectionHTML(): string {
 	return `<div class="infobox">` +
 		`<h2>RPG Menu</h2>` +
 		`<p>Select a game mode to begin:</p>` +
-		`<p><button name="send" value="/rpg storymode" class="button">Story Mode</button></p>` +
+		`<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>` +
 		`<p><em>More modes will be added in future updates!</em></p>` +
 		`</div>`;
 }
@@ -366,14 +366,14 @@ export function generateStoryModeStartHTML(): string {
 
 	let labButtonHTML = '';
 	if (labBuildingId) {
-		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">Enter the Lab</button></p>`;
+		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button></p>`;
 	}
 
 	return `<div class="infobox">` +
 		`<p><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
 		`<hr />` +
 		labButtonHTML +
-		`<p><button name="send" value="/rpg explore" class="button">Explore ${startingLocation.name}</button></p>` +
+		`<p><button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button></p>` +
 		`</div>`;
 }
 
@@ -386,7 +386,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 	if (availableZones.length > 0) {
 		for (const zoneId of availableZones) {
 			const zone = zoneData[zoneId];
-			const icon = zone.battleType === 'double' ? '' : '';
+			const icon = zone.battleType === 'double' ? '👥' : '🛤️';
 			exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
 		}
 	} else {
@@ -395,7 +395,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 
 	
 	
-	exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">Challenge Brock</button>`;
+	exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
 	
 
 	const exploreHTML = `<div class="infobox">` +
@@ -404,7 +404,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 		`<p>${exploreButtons}</p>` +
 		`<hr />` +
 		`<p>` +
-		`<button name="send" value="/rpg shop" class="button">Poké Mart</button>` +
+		`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
 		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
@@ -476,7 +476,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 	
 	if (nextTier) {
-		html += `<p style="color: #666; font-size: 12px;">${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</p>`;
+		html += `<p style="color: #666; font-size: 12px;">🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</p>`;
 	}
 
 	
@@ -866,7 +866,7 @@ export function generateBattleTowerHTML(
 
 	
 	const headerHTML = '<div style="text-align: center;">' +
-		'<h2">' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
+		'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
 	
@@ -1245,7 +1245,7 @@ function generateBattleMoveSelectionHTML(
 				move.pp === 0;
 
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;' + (teraActive ? ' border: 2px solid #FF1493;' : '');
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? ' ' : '') + moveData.name + '</div>' +
+			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
 				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
 				'<span>' + moveData.type + '</span>' +
 				'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
@@ -1264,7 +1264,7 @@ function generateBattleMoveSelectionHTML(
 		let teraToggleHTML = '';
 		if (canTerastallize) {
 			const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
-			const teraToggleText = teraActive ? 'Terastallize: ON' : 'Terastallize: OFF';
+			const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
 			const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
 			teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
 		}
@@ -1331,8 +1331,8 @@ export function generateSharedBattlePokemonInfo(
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, isDoubleBattle, battle);
 	const statusDisplay = allStatusTags || '&nbsp;';
 
-	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">(Shiny)</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '(M)' : pokemon.gender === 'F' ? '(F)' : '';
+	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	const namePrefix = ownerName ? ownerName + "'s " : '';
 
@@ -1508,7 +1508,7 @@ function generateFieldEffectTags(battle: BattleState): string {
 // ###################################
 
 export function generateBattleTowerWelcomeHTML(floor: number): string {
-	let html = `<div class="infobox"><h2>Welcome to the Battle Tower</h2>`;
+	let html = `<div class="infobox"><h2>🗼 Welcome to the Battle Tower</h2>`;
 	html += `<p>Challenge the Battle Tower with different random formats!</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<hr />`;
@@ -1516,7 +1516,7 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 	
 	html += `<h3>Random Formats:</h3>`;
 	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button" style="width: 200px;">${config.name}</button></p>`;
+		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button" style="width: 200px;">🎲 ${config.name}</button></p>`;
 		html += `<p style="font-size: 0.9em; margin-top: 5px;"><em>${config.description}</em></p>`;
 	}
 
@@ -1530,7 +1530,7 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
 	const formatName = formatConfig.name;
 
-	let html = `<div class="infobox"><h2>Battle Tower - ${formatName}</h2>`;
+	let html = `<div class="infobox"><h2>🗼 Battle Tower - ${formatName}</h2>`;
 	html += `<p>You will be assigned a random team of ${formatConfig.teamSize} Pokémon, all at Level ${formatConfig.level}.</p>`;
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<p>Good luck!</p><hr />`;
@@ -1547,7 +1547,7 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 }
 
 export function generateBattleTowerFloorCompleteHTML(floor: number): string {
-	let html = `<center><div class="infobox"><h2>Floor ${floor} Cleared!</h2>`;
+	let html = `<center><div class="infobox"><h2>🗼 Floor ${floor} Cleared!</h2>`;
 	html += `<p>You defeated the trainer! Your team has been healed.</p>`;
 	html += `<p>Your new random team is being prepared for the next floor.</p><hr />`;
 	html += `<p><button name="send" value="/rpg battletower nextfloor" class="button" style="width: 200px;">Continue to Floor ${floor + 1}</button></p>`;
@@ -1556,7 +1556,7 @@ export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 }
 
 export function generateBattleTowerLossHTML(floor: number): string {
-	let html = `<center><div class="infobox"><h2>Battle Lost on Floor ${floor}</h2>`;
+	let html = `<center><div class="infobox"><h2>🗼 Battle Lost on Floor ${floor}</h2>`;
 	html += `<p>You were defeated. Your Battle Tower streak has ended.</p>`;
 	html += `<p><strong>Final Floor: ${floor}</strong></p><hr />`;
 	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">Try Again (from Floor 1)</button></p>`;
@@ -1596,8 +1596,8 @@ export function generatePokemonInfoHTML(
 	
 	const statusTagsHTML = generatePokemonStatusTagsHTML(slot, false);
 
-	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">(Shiny)</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '(M)' : pokemon.gender === 'F' ? '(F)' : '';
+	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	
 	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">`;
@@ -1606,10 +1606,10 @@ export function generatePokemonInfoHTML(
 	if (slotInfo) {
 		html += `<div style="margin-bottom: 5px;"><strong>Slot ${slotInfo.index + 1}:</strong>`;
 		if (slotInfo.index > 0) {
-			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index - 1}" class="button" style="font-size: 12px;">Up</button>`;
+			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index - 1}" class="button" style="font-size: 12px;">↑</button>`;
 		}
 		if (slotInfo.index < slotInfo.partyLength - 1) {
-			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index + 1}" class="button" style="font-size: 12px;">Down</button>`;
+			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index + 1}" class="button" style="font-size: 12px;">↓</button>`;
 		}
 		html += `</div>`;
 	}
@@ -1652,7 +1652,7 @@ export function generateSummarySelectionHTML(player: PlayerData): string {
 			html += `<button name="send" value="/rpg summary ${p.id}" class="button" style="margin: 3px;">${p.species}</button> `;
 		});
 	}
-	html += `<hr /><p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
+	html += `<hr /><p><button name="send" value="/rpg party" class="button">← Back to Party</button></p></div>`;
 	return html;
 }
 
@@ -1666,8 +1666,8 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 			'</div>';
 	}).join('');
 
-	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">(Shiny)</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '(M)' : pokemon.gender === 'F' ? '(F)' : '';
+	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	return '<div class="infobox">' +
 		'<h2>' + pokemon.nickname + '\'s Summary ' + shinySymbol + '</h2>' +
@@ -1677,7 +1677,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<p><strong>Level:</strong> ' + String(pokemon.level) + '</p>' +
 		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
 		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
-		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">' + pokemon.teraType + '</span></p>' +
+		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
 		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
 		'</div>' +
 		'<div style="flex-basis: 48%;">' +
@@ -1735,7 +1735,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'</div>' +
 		'</div>' +
 		'</div>' +
-		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">Back to Party</button></p>' +
+		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
 		'</div>';
 }
 
@@ -1992,7 +1992,7 @@ export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, 
 export function generateNPCSelectionHTML(availableNPCs: [string, { name: string }][]): string {
 	let html = `<div class="infobox"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
 	for (const [id, npc] of availableNPCs) {
-		html += `<button name="send" value="/rpg npc ${id}" class="button">${npc.name}</button> `;
+		html += `<button name="send" value="/rpg npc ${id}" class="button">💬 ${npc.name}</button> `;
 	}
 	html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 	html += generateBottomNavigation() + `</div>`;
@@ -2011,7 +2011,7 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
 
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">Back</button></p>` +
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 	return html;
@@ -2060,7 +2060,7 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 		const command = `/rpg selectstarter ${starterId}`;
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg storymode" class="button">Back to Type Selection</button></p></div>`;
+	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
 	return html;
 }
 
@@ -2143,11 +2143,11 @@ export function generateDBDeleteNoSaveHTML(): string {
 
 export function generateDBDeleteConfirmHTML(): string {
 	return `<div class="infobox">` +
-		`<h2>Delete Save Confirmation</h2>` +
+		`<h2>⚠️ Delete Save Confirmation</h2>` +
 		`<p><strong>Warning:</strong> This will permanently delete your saved game from the database!</p>` +
 		`<p>Your current in-memory progress will NOT be affected, but you won't be able to load this save anymore.</p>` +
 		`<p>Are you sure you want to delete your database save?</p>` +
-		`<p><button name="send" value="/rpg dbdelete confirm" class="button" style="background-color: #d32f2f; color: white;">Yes, Delete Save</button> ` +
+		`<p><button name="send" value="/rpg dbdelete confirm" class="button" style="background-color: #d32f2f; color: white;">⚠️ Yes, Delete Save</button> ` +
 		`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
