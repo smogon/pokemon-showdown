@@ -276,7 +276,6 @@ describe('Pressure [Gen 4]', () => {
 		battle.makeChoices();
 		assert.equal(move.pp, move.maxpp - 1);
 		battle.makeChoices('move magiccoat', 'move leer');
-		console.log(battle.log);
 		assert.equal(move.pp, move.maxpp - 3);
 	});
 });

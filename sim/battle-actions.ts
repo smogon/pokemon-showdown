@@ -416,7 +416,7 @@ export class BattleActions {
 		}
 		const baseTarget = move.target;
 		let targetRelayVar = { target };
-		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
+		this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
