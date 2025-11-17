@@ -922,6 +922,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Invalid item specified.");
 			}
 
+			// Validate quantity is positive
+			if (quantity <= 0) {
+				return this.errorReply("You must buy at least 1 item.");
+			}
+
 			// Check if item is available in current location's shop
 			const locationId = toID(player.location);
 			const shopInventory = getShopInventory(locationId, player.badges);
@@ -956,6 +961,11 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player)}`);
 			}
 
+			// Validate quantity is positive
+			if (quantity <= 0) {
+				return this.errorReply("You must sell at least 1 item.");
+			}
+
 			const itemInBag = player.inventory.get(itemId);
 			if (!itemInBag) {
 				return this.errorReply("You don't have that item.");
@@ -967,11 +977,13 @@ export const commands: ChatCommands = {
 				return this.errorReply("Key items cannot be sold.");
 			}
 
-			const sellPrice = ITEM_PRICES[itemId];
-			if (!sellPrice) {
+			const purchasePrice = ITEM_PRICES[itemId];
+			if (!purchasePrice) {
 				return this.errorReply("This item cannot be sold.");
 			}
 
+			// Sell price is 50% of the purchase price
+			const sellPrice = Math.floor(purchasePrice / 2);
 			const totalGain = sellPrice * quantity;
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
