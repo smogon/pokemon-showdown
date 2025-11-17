@@ -20,7 +20,7 @@ import { TOTAL_BADGES } from './badges';
 // C O N S T A N T S
 // ###################################
 
-export const TERA_BUTTON_STYLE = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; color: #FF1493; font-weight: bold; margin-top: 4px; font-size: 0.8em; border: 2px solid #FF1493;';
+// [REMOVED] TERA_BUTTON_STYLE constant is no longer needed.
 
 // ###################################
 // C O R E   U T I L I T I E S
@@ -163,7 +163,7 @@ function generateItemCategoryFilters(baseCommand: string): string {
 		{ id: 'misc', name: 'Misc.' },
 	];
 
-	let html = '<div style="margin: 10px 0;">';
+	let html = '<div style="margin: 10px 0;">'; // This margin is fine as it's specific layout
 	for (const category of categories) {
 		const command = category.id ? `${baseCommand} ${category.id}` : baseCommand;
 		html += `<button name="send" value="${command}" class="button">${category.name}</button> `;
@@ -176,10 +176,10 @@ function generateStarterChoiceBoxHTML(speciesId: string, command: string): strin
 	const species = Dex.species.get(speciesId);
 	if (!species.exists) return '';
 
-	return `<div style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">` +
+	return `<div class="rpg-card rpg-text-center">` +
 		`<strong>${species.name}</strong><br>` +
 		`<small>Type: ${species.types.join('/')}</small><br>` +
-		`<button name="send" value="${command}" class="button" style="margin-top: 5px;">Choose ${species.name}</button>` +
+		`<button name="send" value="${command}" class="button rpg-button-small" style="margin-top: 5px;">Choose ${species.name}</button>` +
 		`</div>`;
 }
 
@@ -247,9 +247,9 @@ function generatePokemonStatusTagsHTML(
 		for (const stat in slot.statStages) {
 			const stage = slot.statStages[stat as keyof typeof slot.statStages];
 			if (stage > 0) {
-				statStageTags += ' <span style="color: green; font-size: 11px;">🔼' + stat.toUpperCase() + '</span>';
+				statStageTags += ' <span class="rpg-stat-up">🔼' + stat.toUpperCase() + '</span>';
 			} else if (stage < 0) {
-				statStageTags += ' <span style="color: red; font-size: 11px;">🔽' + stat.toUpperCase() + '</span>';
+				statStageTags += ' <span class="rpg-stat-down">🔽' + stat.toUpperCase() + '</span>';
 			}
 		}
 	}
@@ -268,48 +268,48 @@ function generateBattleActionButtonsHTML(
 	battle: BattleState,
 	playerSlot: ActivePokemonSlot | null
 ): string {
-	const bottomButtonStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle;';
-	const bottomButtonDisabledStyle = 'width: 155px; height: 20px; padding: 2px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 4px 2px; font-size: 0.8em; vertical-align: middle; opacity: 0.6; cursor: not-allowed;';
+	// [REMOVED] const bottomButtonStyle = ...
+	// [REMOVED] const bottomButtonDisabledStyle = ...
 
-	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button" style="' + bottomButtonStyle + '">🔄 Switch</button>';
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button rpg-battle-action-button">🔄 Switch</button>';
 
 	
 	if (battle.battleType === 'battletower') {
-		return '<p style="margin-top: 5px; text-align: center;">' + switchButton + '</p>';
+		return '<p class="rpg-text-center" style="margin-top: 5px;">' + switchButton + '</p>';
 	}
 
 	
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
-	let catchButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">⚽ Catch</button>';
-	let runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+	let catchButton = '<button class="button rpg-battle-action-button" disabled>⚽ Catch</button>';
+	let runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 
 	if (isWild) {
 		
 		const canRun = !playerSlot || !playerSlot.isTrapped;
 		runButton = canRun ?
-			'<button name="send" value="/rpg battleaction run" class="button" style="' + bottomButtonStyle + '">🏃 Run</button>' :
-			'<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+			'<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 Run</button>' :
+			'<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 
 		
 		if (battle.battleType === 'wild') {
-			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>';
+			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ Catch</button>';
 		} else if (battle.battleType === 'wild_double') {
 			const activeOpponents = getActiveSlots(battle.opponentSlots);
 			const canCatch = activeOpponents.length === 1;
 			catchButton = canCatch ?
-				'<button name="send" value="/rpg battleaction catchmenu" class="button" style="' + bottomButtonStyle + '">⚽ Catch</button>' :
-				'<button class="button" disabled style="' + bottomButtonDisabledStyle + '" title="Can only catch when one opponent remains">⚽ Catch</button>';
+				'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ Catch</button>' :
+				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">⚽ Catch</button>';
 		}
 	} else if (battle.battleType === 'trainer') {
 		
-		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+		runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 	} else if (battle.battleType === 'trainer_double') {
 		
-		runButton = '<button class="button" disabled style="' + bottomButtonDisabledStyle + '">🏃 Run</button>';
+		runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 	}
 
 
-	return '<p style="margin-top: 5px; text-align: center;">' + switchButton + catchButton + runButton + '</p>';
+	return '<p class="rpg-text-center" style="margin-top: 5px;">' + switchButton + catchButton + runButton + '</p>';
 }
 
 // ###################################
@@ -329,16 +329,16 @@ export function generateWelcomeHTML(): string {
 		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
 		`</ul>` +
 		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
-		`<p style="text-align: center; margin-top: 20px;">` +
-		`<button name="send" value="/rpg modes" class="button" style="width: 200px; height: 40px; font-size: 1.1em;">View Modes</button>` +
+		`<p class="rpg-text-center rpg-margin-top">` +
+		`<button name="send" value="/rpg modes" class="button rpg-button-large">View Modes</button>` +
 		`</p>` +
 		`</div>`;
 }
 
 export function generateModeSelectionHTML(): string {
 	let html = `<div class="infobox"><h2>Select a Mode</h2>`;
-	html += `<p><button name="send" value="/rpg storymode" class="button" style="width: 200px;">📖 Story Mode</button></p>`;
-	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">🗼 Battle Tower</button></p>`;
+	html += `<p><button name="send" value="/rpg storymode" class="button rpg-button-medium">📖 Story Mode</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button rpg-button-medium">🗼 Battle Tower</button></p>`;
 	html += `</div>`;
 	return html;
 }
@@ -423,16 +423,16 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	
 	html += generateItemCategoryFilters('/rpg items');
 
-	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">`;
+	html += `<div class="rpg-grid-2col">`;
 
 	let itemsFound = false;
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
+			html += `<div class="rpg-card">`;
 			html += `<strong>${item.name}</strong> x${item.quantity}<br>`;
 			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg useitem ${itemId}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button>`;
+			html += `<button name="send" value="/rpg useitem ${itemId}" class="button rpg-button-small">Use</button>`;
 			html += `</div>`;
 		}
 	}
@@ -452,13 +452,13 @@ export function generatePCHTML(player: PlayerData): string {
 	if (player.pc.size === 0) {
 		html += `<p>No Pokemon stored in PC.</p>`;
 	} else {
-		html += `<div style="max-height: 400px; overflow-y: auto;">`;
+		html += `<div class="rpg-scroll-list-medium">`;
 		for (const [pokemonId, pokemon] of player.pc) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Level ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button></div>`;
+			html += `<div class="rpg-list-item"><div><strong>${pokemon.species}</strong> (Level ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button></div>`;
 		}
 		html += `</div>`;
 	}
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">View Party</button></p>`;
+	html += `<p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">View Party</button></p>`;
 	html += generateBottomNavigation();
 	html += `</div>`;
 	return html;
@@ -484,13 +484,13 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	}
 
 	
-	html += `<p><button name="send" value="/rpg sell" class="button" style="background-color: #28a745; color: white;">Sell Items</button></p>`;
+	html += `<p><button name="send" value="/rpg sell" class="button rpg-button-sell">Sell Items</button></p>`;
 
 	
 	html += `<h3>Buy Items</h3>`;
 	html += generateItemCategoryFilters('/rpg shop');
 
-	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
+	html += `<div class="rpg-scroll-grid-2col">`;
 
 	let itemsFound = false;
 	for (const itemId of shopInventory) {
@@ -500,11 +500,11 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
+			html += `<div class="rpg-card">`;
 			html += `<strong>${item.name}</strong> - ₽${price}<br>`;
 			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button" style="font-size: 12px; margin-top: 5px;">Buy 1</button>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 5" class="button" style="font-size: 12px; margin-top: 5px;">Buy 5</button>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button rpg-button-small">Buy 1</button>`;
+			html += `<button name="send" value="/rpg buy ${itemId} 5" class="button rpg-button-small">Buy 5</button>`;
 			html += `</div>`;
 		}
 	}
@@ -514,14 +514,14 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	}
 
 	html += `</div>`;
-	html += `<p style="margin-top: 15px;"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `<p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 	html += `</div>`;
 	return html;
 }
 
 export function generateSellMenuHTML(player: PlayerData): string {
 	let html = `<div class="infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
-	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
+	html += `<div class="rpg-scroll-grid-2col">`;
 	let sellableItems = 0;
 	for (const [id, item] of player.inventory) {
 		const purchasePrice = ITEM_PRICES[id];
@@ -529,12 +529,12 @@ export function generateSellMenuHTML(player: PlayerData): string {
 			
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
+			html += `<div class="rpg-card">`;
 			html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;
 			html += `<small>Sell for: ₽${sellPrice} each</small><br>`;
-			html += `<button name="send" value="/rpg sell ${id} 1" class="button" style="font-size: 12px; margin-top: 5px;">Sell 1</button>`;
+			html += `<button name="send" value="/rpg sell ${id} 1" class="button rpg-button-small">Sell 1</button>`;
 			if (item.quantity >= 5) {
-				html += `<button name="send" value="/rpg sell ${id} 5" class="button" style="font-size: 12px; margin-top: 5px;">Sell 5</button>`;
+				html += `<button name="send" value="/rpg sell ${id} 5" class="button rpg-button-small">Sell 5</button>`;
 			}
 			html += `</div>`;
 		}
@@ -542,7 +542,7 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	if (sellableItems === 0) {
 		html += `<p>You have no valuable items to sell.</p>`;
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
+	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 	return html;
 }
 
@@ -574,11 +574,11 @@ export function generateBattleHTML(
 	// Get battle log *before* checking end condition
 	// [SUGGESTION #3] Separate new messages from old log
 	const newEventsHTML = messageLog.length > 0 ?
-		`<div style="padding: 8px; margin: 5px 0; border: 2px solid #007bff; border-radius: 5px;">${messageLog.join('<br>')}</div>` :
+		`<div class="rpg-battle-new-events">${messageLog.join('<br>')}</div>` :
 		'';
 	
 	const reversedBattleLog = [...battle.battleLog].reverse();
-	const historyLogHTML = `<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">` +
+	const historyLogHTML = `<div class="rpg-battle-log">` +
 		(reversedBattleLog.length > 0 ? reversedBattleLog.join('<br>') : 'Battle started...') +
 		`</div>`;
 
@@ -588,8 +588,8 @@ export function generateBattleHTML(
 		// So we do NOT show a "Continue" button for it.
 		if (battle.battleType !== 'battletower') {
 			const continueCommand = (battle.battleResult === 'victory') ? '/rpg explore' : '/rpg explore';
-			actionHTML = '<p style="margin-top: 15px; text-align: center;">' +
-				'<button name="send" value="' + continueCommand + '" class="button" style="width: 200px; height: 40px; font-size: 1.2em; font-weight: bold;">Continue</button>' +
+			actionHTML = `<p class="rpg-margin-top rpg-text-center">` +
+				`<button name="send" value="${continueCommand}" class="button rpg-button-victory">Continue</button>` +
 				'</p>';
 		}
 
@@ -751,7 +751,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
-		html += `<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+		html += `<div class="rpg-grid-3col">`;
 		for (const ball of pokeBalls) {
 			
 			let command = '';
@@ -767,7 +767,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
-			html += `<div style="text-align: center; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="${command}" class="button" style="font-size: 12px; margin-top: 5px;">Use</button></div>`;
+			html += `<div class="rpg-card rpg-text-center"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="${command}" class="button rpg-button-small">Use</button></div>`;
 		}
 		html += `</div>`;
 	}
@@ -790,7 +790,7 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 		const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
 		const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
 
-		html += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">` +
+		html += `<div class="rpg-card">` +
 			`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
 			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
 			`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
@@ -887,11 +887,11 @@ function generateBattleMoveSelectionHTML(
 
 	
 	if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
-		const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
-		const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
-			'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+		// [REMOVED] const buttonStyle = ...
+		const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
+			'<div class="rpg-move-info">' +
 			'<span>Normal</span>' +
-			'<span style="float: right;">-- / --</span>' +
+			'<span class="rpg-move-pp">-- / --</span>' +
 			'</div> ';
 
 		
@@ -899,14 +899,14 @@ function generateBattleMoveSelectionHTML(
 			`/rpg battleaction selecttarget ${slotIndex} struggle` :
 			`/rpg battleaction move ${slotIndex} struggle 2`; 
 
-		moveButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+		moveButtonsHTML = '<table class="rpg-move-grid">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += `<td style="padding: 0; vertical-align: top;"><button name="send" value="${struggleCommand}" class="button" style="${buttonStyle}">${buttonContent}</button></td>`;
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += `<td class="rpg-move-grid-cell"><button name="send" value="${struggleCommand}" class="button rpg-move-button">${buttonContent}</button></td>`;
+		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;"></td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
@@ -925,11 +925,11 @@ function generateBattleMoveSelectionHTML(
 				(slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 && slot.lockedMove !== move.id) ||
 				move.pp === 0;
 
-			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;' + (teraActive ? ' border: 2px solid #FF1493;' : '');
-			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
-				'<div style="font-size: 0.8em; opacity: 0.9; overflow: hidden;">' +
+			const buttonClasses = 'button rpg-move-button' + (teraActive ? ' rpg-move-button-terastallized' : '');
+			const buttonContent = '<div class="rpg-move-name">' + (teraActive ? '⭐ ' : '') + moveData.name + '</div>' +
+				'<div class="rpg-move-info">' +
 				'<span>' + moveData.type + '</span>' +
-				'<span style="float: right;">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
+				'<span class="rpg-move-pp">' + String(move.pp) + ' / ' + String(moveData.pp) + '</span>' +
 				'</div> ';
 
 			const teraParam = teraActive ? ' terastallize' : '';
@@ -938,26 +938,26 @@ function generateBattleMoveSelectionHTML(
 				`/rpg battleaction selecttarget ${slotIndex} ${move.id}${teraParam}` :
 				`/rpg battleaction move ${slotIndex} ${move.id} 2${teraParam}`; 
 
-			return `<button name="send" value="${moveCommand}" class="button" ${isDisabled ? 'disabled' : ''} style="${buttonStyle}"> ${buttonContent}</button>`;
+			return `<button name="send" value="${moveCommand}" class="${buttonClasses}" ${isDisabled ? 'disabled' : ''}> ${buttonContent}</button>`;
 		});
 
 		
 		let teraToggleHTML = '';
 		if (canTerastallize) {
-			const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
+			const teraToggleClasses = 'button rpg-tera-toggle' + (teraActive ? ' rpg-tera-toggle-on' : '');
 			const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
 			const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
-			teraToggleHTML = '<div style="text-align: center; margin-bottom: 10px;"><button name="send" value="' + teraToggleCommand + '" class="button" style="' + teraToggleStyle + '">' + teraToggleText + '</button></div>';
+			teraToggleHTML = `<div class="rpg-text-center" style="margin-bottom: 10px;"><button name="send" value="${teraToggleCommand}" class="${teraToggleClasses}">${teraToggleText}</button></div>`;
 		}
 
-		moveButtonsHTML = teraToggleHTML + '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;">';
+		moveButtonsHTML = teraToggleHTML + '<table class="rpg-move-grid">';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[0] || '') + '</td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[1] || '') + '</td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[0] || '') + '</td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[1] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td style="padding: 0; vertical-align: top;">' + (moveButtons[3] || '') + '</td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[2] || '') + '</td>';
+		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[3] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	}
@@ -987,9 +987,9 @@ function generateAvailablePokemonListHTML(
 		html += `<p>You have no other Pokémon to switch to!</p>`;
 	} else {
 		for (const pokemon of availableParty) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; overflow: hidden;">` +
+			html += `<div class="rpg-switch-list-item">` +
 				`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
-				`<button name="send" value="${commandPrefix} ${pokemon.id}" class="button" style="float: right;">Switch In</button>` +
+				`<button name="send" value="${commandPrefix} ${pokemon.id}" class="button rpg-button-float-right">Switch In</button>` +
 				`</div>`;
 		}
 	}
@@ -1022,9 +1022,10 @@ export function generateSharedBattlePokemonInfo(
 	const namePrefix = ownerName ? ownerName + "'s " : '';
 
 	const hpBarHTML =
-		'<div style="max-width: 120px; height: 12px; background: #f0f0f0; border: 1px solid #aaa; border-radius: 8px; position: relative; margin-top: 4px; margin-left: auto; margin-right: auto;">' +
-		'<div style="background: ' + hpBarColor + '; width: ' + String(hpPercentage) + '%; height: 100%; border-radius: 7px;"></div>' +
-		'<span style="position: absolute; right: 0; top: 0; background: #b0b0b0; color: #fff; font-size: 9px; font-weight: bold; padding: 0 5px; line-height: 12px; height: 100%; border-radius: 0 7px 7px 0;">' +
+		'<div class="rpg-hp-bar">' +
+		// We still need inline style for width and color as they are dynamic
+		'<div class="rpg-hp-bar-inner" style="background: ' + hpBarColor + '; width: ' + String(hpPercentage) + '%;"></div>' +
+		'<span class="rpg-hp-bar-text">' +
 		String(hpPercentage) + '%' +
 		'</span>' +
 		'</div>';
@@ -1033,10 +1034,10 @@ export function generateSharedBattlePokemonInfo(
 		let html = '';
         // [SUGGESTION #3] HP bar and status moved to the top
 		html += hpBarHTML;
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 1.4em;">' + statusDisplay + '</div>'; // Added min-height
+		html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
         // Name/Level below
-		html += '<div style="font-weight: bold; font-size: 1.1em; margin-top: 4px;">';
-		html += '<psicon pokemon="' + species.id + '" style="vertical-align: -5px;"></psicon> ';
+		html += '<div class="rpg-battle-name-line">';
+		html += '<psicon pokemon="' + species.id + '" class="rpg-battle-psicon"></psicon> ';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
 		return html;
@@ -1045,16 +1046,16 @@ export function generateSharedBattlePokemonInfo(
 
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
-			'<div style="text-align: center; margin-top: 4px;">' +
+			`<div class="rpg-battle-sprite">` +
 			'<img src="https://play.pokemonshowdown.com/sprites/' + spriteDir + '/' + spriteFilename + '.png" width="64" height="64" />' +
 			'</div>';
 
-		let html = '<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">';
+		let html = '<div class="rpg-pokemon-card">';
         // [SUGGESTION #3] HP bar and status moved to the top
 		html += hpBarHTML;
-		html += '<div style="margin-top: 5px; font-size: 10px; line-height: 1.4; min-height: 1.4em;">' + statusDisplay + '</div>'; // Added min-height
+		html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
         // Name/Level below
-		html += '<div style="font-weight: bold; font-size: 1.1em; margin-top: 4px;">';
+		html += '<div class="rpg-battle-name-line">';
 		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
 		html += '</div>';
 		html += spriteHTML;
@@ -1072,7 +1073,7 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 
 	if (allTags) {
 		
-		return `<br><div style="text-align: center;">` +
+		return `<br><div class="rpg-text-center">` +
 			allTags +
 			`</div>`;
 	}
@@ -1091,21 +1092,21 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const craftyShield = (side === 'player') ? battle.playerCraftyShield : battle.opponentCraftyShield;
 
 	
-	const tagStyle = 'font-size: 10px; padding: 1px 4px; border-radius: 3px; margin-left: 5px; vertical-align: middle;';
+	// [REMOVED] const tagStyle = ...
 
-	if (reflectTurns > 0) effects.push('<span style="background-color: #A890F0; ' + tagStyle + '">Reflect</span>');
-	if (lightScreenTurns > 0) effects.push('<span style="background-color: #F8D030; ' + tagStyle + '">Light Screen</span>');
-	if (auroraVeilTurns > 0) effects.push('<span style="background-color: #98D8D8; ' + tagStyle + '">Aurora Veil</span>');
-	if (quickGuard) effects.push('<span style="background-color: #F08030; ' + tagStyle + '">Quick Guard</span>');
-	if (wideGuard) effects.push('<span style="background-color: #6890F0; ' + tagStyle + '">Wide Guard</span>');
-	if (craftyShield) effects.push('<span style="background-color: #F85888; ' + tagStyle + '">Crafty Shield</span>');
+	if (reflectTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-reflect">Reflect</span>');
+	if (lightScreenTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-lightscreen">Light Screen</span>');
+	if (auroraVeilTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-auroraveil">Aurora Veil</span>');
+	if (quickGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-quickguard">Quick Guard</span>');
+	if (wideGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-wideguard">Wide Guard</span>');
+	if (craftyShield) effects.push('<span class="rpg-side-effect-tag rpg-side-craftyshield">Crafty Shield</span>');
 
-	if (hazards.includes('stealthrock')) effects.push('<span style="background-color: #B8A038; ' + tagStyle + '">SR</span>');
+	if (hazards.includes('stealthrock')) effects.push('<span class="rpg-side-effect-tag rpg-side-stealthrock">SR</span>');
 	const spikes = hazards.filter(h => h === 'spikes').length;
-	if (spikes > 0) effects.push('<span style="background-color: #A8A878; ' + tagStyle + '">Spikes ' + String(spikes) + '</span>');
+	if (spikes > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-spikes">Spikes ' + String(spikes) + '</span>');
 	const toxicSpikes = hazards.filter(h => h === 'toxicspikes').length;
-	if (toxicSpikes > 0) effects.push('<span style="background-color: #A040A0; ' + tagStyle + '">TSP ' + String(toxicSpikes) + '</span>');
-	if (hazards.includes('stickyweb')) effects.push('<span style="background-color: #705898; ' + tagStyle + '">Web</span>');
+	if (toxicSpikes > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-toxicspikes">TSP ' + String(toxicSpikes) + '</span>');
+	if (hazards.includes('stickyweb')) effects.push('<span class="rpg-side-effect-tag rpg-side-stickyweb">Web</span>');
 
 	return effects.join('');
 }
@@ -1205,7 +1206,7 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 	
 	html += `<h3>Random Formats:</h3>`;
 	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button" style="width: 200px;">🎲 ${config.name}</button></p>`;
+		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button rpg-button-medium">🎲 ${config.name}</button></p>`;
 		html += `<p style="font-size: 0.9em; margin-top: 5px;"><em>${config.description}</em></p>`;
 	}
 
@@ -1239,7 +1240,7 @@ export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 	let html = `<center><div class="infobox"><h2>🗼 Floor ${floor} Cleared!</h2>`;
 	html += `<p>You defeated the trainer! Your team has been healed.</p>`;
 	html += `<p>Your new random team is being prepared for the next floor.</p><hr />`;
-	html += `<p><button name="send" value="/rpg battletower nextfloor" class="button" style="width: 200px;">Continue to Floor ${floor + 1}</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower nextfloor" class="button rpg-button-medium">Continue to Floor ${floor + 1}</button></p>`;
 	html += `</div></center>`;
 	return html;
 }
@@ -1248,16 +1249,147 @@ export function generateBattleTowerLossHTML(floor: number): string {
 	let html = `<center><div class="infobox"><h2>🗼 Battle Lost on Floor ${floor}</h2>`;
 	html += `<p>You were defeated. Your Battle Tower streak has ended.</p>`;
 	html += `<p><strong>Final Floor: ${floor}</strong></p><hr />`;
-	html += `<p><button name="send" value="/rpg battletower start" class="button" style="width: 200px;">Try Again (from Floor 1)</button></p>`;
-	html += `<p><button name="send" value="/rpg modes" class="button" style="width: 200px;">Exit Battle Tower</button></p>`;
+	html += `<p><button name="send" value="/rpg battletower start" class="button rpg-button-medium">Try Again (from Floor 1)</button></p>`;
+	html += `<p><button name="send" value="/rpg modes" class="button rpg-button-medium">Exit Battle Tower</button></p>`;
 	html += `</div></center>`;
 	return html;
+}
+
+// ###################################
+// [NEW] COMPONENT HELPERS
+// ###################################
+
+/**
+ * [NEW] Generates the HTML for a Pokemon's HP bar.
+ */
+function generateHPBar(pokemon: RPGPokemon): string {
+	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
+	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
+
+	return `<div class="rpg-hp-bar">` +
+		`<div class="rpg-hp-bar-inner" style="background: ${hpBarColor}; width: ${hpPercentage}%;"></div>` +
+		`<div class="rpg-hp-bar-text">HP: ${pokemon.hp}/${pokemon.maxHp}</div>` +
+		`</div>`;
+}
+
+/**
+ * [NEW] Generates the HTML for a Pokemon's EXP bar.
+ */
+function generateExpBar(pokemon: RPGPokemon): string {
+	const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+	const expForNextLevel = pokemon.expToNextLevel;
+	const expProgress = pokemon.experience - expForLastLevel;
+	const expNeededForLevel = expForNextLevel - expForLastLevel;
+	const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
+
+	return `<div class="rpg-exp-bar">` +
+		`<div class="rpg-exp-bar-inner" style="width: ${expPercentage}%;"></div>` +
+		`<div class="rpg-exp-bar-text">EXP: ${expProgress}/${expNeededForLevel}</div>` +
+		`</div>`;
+}
+
+/**
+ * [NEW] Generates the action buttons (Summary, Item, Deposit) for the party screen.
+ */
+function generatePartyActionButtons(pokemon: RPGPokemon): string {
+	const itemButton = pokemon.item ?
+		`<button name="send" value="/rpg takeitem ${pokemon.id}" class="button rpg-button-small">Take Item</button>` :
+		`<button name="send" value="/rpg giveitem ${pokemon.id}" class="button rpg-button-small">Give Item</button>`;
+	
+	return `<br><div style="margin-top: 8px;">` +
+		`<button name="send" value="/rpg summary ${pokemon.id}" class="button rpg-button-small">Summary</button> ` +
+		`${itemButton} ` +
+		`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button rpg-button-small">Deposit</button>` +
+		`</div>`;
+}
+
+/**
+ * [NEW] Generates the re-ordering buttons (up/down arrows) for the party screen.
+ */
+function generatePartySlotButtons(slotInfo: { index: number, partyLength: number }): string {
+	let html = `<div style="margin-bottom: 5px;"><strong>Slot ${slotInfo.index + 1}:</strong>`;
+	if (slotInfo.index > 0) {
+		html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index - 1}" class="button rpg-button-small" style="font-size: 12px;">↑</button>`;
+	}
+	if (slotInfo.index < slotInfo.partyLength - 1) {
+		html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index + 1}" class="button rpg-button-small" style="font-size: 12px;">↓</button>`;
+	}
+	html += `</div>`;
+	return html;
+}
+
+/**
+ * [NEW] Generates the main stats table for the summary screen.
+ */
+function generateSummaryStatsTable(pokemon: RPGPokemon): string {
+	return '<h4>Stats</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.maxHp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spe) + '</td></tr>' +
+		'</table>';
+}
+
+/**
+ * [NEW] Generates the IVs table for the summary screen.
+ */
+function generateSummaryIVsTable(pokemon: RPGPokemon): string {
+	return '<h4>IVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.hp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spe) + '</td></tr>' +
+		'</table>';
+}
+
+/**
+ * [NEW] Generates the EVs table for the summary screen.
+ */
+function generateSummaryEVsTable(pokemon: RPGPokemon): string {
+	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+	return '<h4>EVs</h4>' +
+		'<table style="width: 100%; border-collapse: collapse;">' +
+		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.hp) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.atk) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.def) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spa) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spd) + '</td></tr>' +
+		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spe) + '</td></tr>' +
+		'</table>' +
+		'<small>Total: ' + String(totalEVs) + ' / 510</small>';
+}
+
+/**
+ * [NEW] Generates the moves grid for the summary screen.
+ */
+function generateSummaryMovesGrid(pokemon: RPGPokemon): string {
+	const movesSummary = pokemon.moves.map(move => {
+		const moveData = getMove(move.id);
+		return '<div class="rpg-card rpg-text-center" style="padding: 5px;">' +
+			moveData.name +
+			'<br><small>PP: ' + String(move.pp) + '/' + String(moveData.pp) + '</small>' +
+			'</div>';
+	}).join('');
+
+	return '<h4>Moves</h4>' +
+		'<div class="rpg-grid-2col" style="gap: 5px;">' +
+		movesSummary +
+		'</div>';
 }
 
 // ###################################
 // P O K E M O N   M A N A G E M E N T
 // ###################################
 
+/**
+ * [REFACTORED] to use new component helpers.
+ */
 export function generatePokemonInfoHTML(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
@@ -1266,51 +1398,33 @@ export function generatePokemonInfoHTML(
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
-	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
-	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
 	let expBarHTML = '';
 	if (isPlayerSide) {
-		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
-		const expForNextLevel = pokemon.expToNextLevel;
-		const expProgress = pokemon.experience - expForLastLevel;
-		const expNeededForLevel = expForNextLevel - expForLastLevel;
-		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
-		expBarHTML = `<div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: #6c9be8; width: ${expPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">EXP: ${expProgress}/${expNeededForLevel}</div></div>`;
+		expBarHTML = generateExpBar(pokemon);
 	} else {
-		
+		// Maintain layout spacing
 		expBarHTML = `<div style="height: 24px; margin: 5px 0;"></div>`;
 	}
 
-	
 	const statusTagsHTML = generatePokemonStatusTagsHTML(slot, false);
 
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
-	
-	let html = `<div style="border: 1px solid #666; padding: 8px; margin: 5px 0; border-radius: 5px;">`;
+	let html = `<div class="rpg-pokemon-card">`;
 
-	
 	if (slotInfo) {
-		html += `<div style="margin-bottom: 5px;"><strong>Slot ${slotInfo.index + 1}:</strong>`;
-		if (slotInfo.index > 0) {
-			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index - 1}" class="button" style="font-size: 12px;">↑</button>`;
-		}
-		if (slotInfo.index < slotInfo.partyLength - 1) {
-			html += ` <button name="send" value="/rpg swapslot ${slotInfo.index} ${slotInfo.index + 1}" class="button" style="font-size: 12px;">↓</button>`;
-		}
-		html += `</div>`;
+		html += generatePartySlotButtons(slotInfo);
 	}
 
-	
 	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
 
 	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})<br>`;
-	html += `<div style="font-size: 10px; line-height: 1.4; margin-top: 4px;">${statusTagsHTML}</div>`;
-	html += `<small>Type: ${typeDisplay}</small><br><div style="border-radius: 10px; padding: 2px; margin: 5px 0; position: relative;"><div style="background: ${hpBarColor}; width: ${hpPercentage}%; height: 10px; border-radius: 8px;"></div><div style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; font-size: 10px; line-height: 10px; color: #000;">HP: ${pokemon.hp}/${pokemon.maxHp}</div></div>`;
-
+	html += `<div class="rpg-battle-status-line" style="margin-top: 4px;">${statusTagsHTML}</div>`;
+	html += `<small>Type: ${typeDisplay}</small><br>`;
 	
+	html += generateHPBar(pokemon);
 	html += expBarHTML;
 
 	if (isPlayerSide) {
@@ -1322,10 +1436,7 @@ export function generatePokemonInfoHTML(
 	}
 
 	if (showActions) {
-		const itemButton = pokemon.item ?
-			`<button name="send" value="/rpg takeitem ${pokemon.id}" class="button" style="font-size: 12px;">Take Item</button>` :
-			`<button name="send" value="/rpg giveitem ${pokemon.id}" class="button" style="font-size: 12px;">Give Item</button>`;
-		html += `<br><div style="margin-top: 8px;"><button name="send" value="/rpg summary ${pokemon.id}" class="button" style="font-size: 12px;">Summary</button> ${itemButton} <button name="send" value="/rpg depositpc ${pokemon.id}" class="button" style="font-size: 12px;">Deposit</button></div>`;
+		html += generatePartyActionButtons(pokemon);
 	}
 
 	html += '</div>';
@@ -1345,44 +1456,33 @@ export function generateSummarySelectionHTML(player: PlayerData): string {
 	return html;
 }
 
+/**
+ * [REFACTORED] to use new component helpers.
+ */
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
-	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
-	const movesSummary = pokemon.moves.map(move => {
-		const moveData = getMove(move.id);
-		return '<div style="text-align: center; padding: 5px; border-radius: 5px;">' +
-			moveData.name +
-			'<br><small>PP: ' + String(move.pp) + '/' + String(moveData.pp) + '</small>' +
-			'</div>';
-	}).join('');
-
 	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	return '<div class="infobox">' +
 		'<h2>' + pokemon.nickname + '\'s Summary ' + shinySymbol + '</h2>' +
 		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		// Column 1: Info
 		'<div style="flex-basis: 48%;">' +
 		'<p><strong>Species:</strong> ' + pokemon.species + ' ' + genderSymbol + '</p>' +
 		'<p><strong>Level:</strong> ' + String(pokemon.level) + '</p>' +
 		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
 		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
-		'<p><strong>Tera Type:</strong> <span style="background-color: #FF1493; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">⭐ ' + pokemon.teraType + '</span></p>' +
+		'<p><strong>Tera Type:</strong> <span class="rpg-tag rpg-tag-tera">⭐ ' + pokemon.teraType + '</span></p>' +
 		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
 		'</div>' +
+		// Column 2: Stats
 		'<div style="flex-basis: 48%;">' +
-		'<h4>Stats</h4>' +
-		'<table style="width: 100%; border-collapse: collapse;">' +
-		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.maxHp) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.atk) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.def) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spa) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spd) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.spe) + '</td></tr>' +
-		'</table>' +
+		generateSummaryStatsTable(pokemon) +
 		'</div>' +
 		'</div>' +
 		'<hr />' +
 		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		// Column 3: Memo
 		'<div style="flex-basis: 48%;">' +
 		'<h4>Trainer Memo</h4>' +
 		'<p><strong>ID:</strong> ' + pokemon.id + '</p>' +
@@ -1391,40 +1491,23 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 		'<p><strong>Weight:</strong> ' + String(pokemon.weightkg) + ' kg</p>' +
 		'<p><strong>Friendship:</strong> ' + String(pokemon.friendship) + '/255</p>' +
 		'</div>' +
+		// Column 4: IVs
 		'<div style="flex-basis: 48%;">' +
-		'<h4>IVs</h4>' +
-		'<table style="width: 100%; border-collapse: collapse;">' +
-		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.hp) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.atk) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.def) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spa) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spd) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.ivs.spe) + '</td></tr>' +
-		'</table>' +
+		generateSummaryIVsTable(pokemon) +
 		'</div>' +
 		'</div>' +
 		'<hr />' +
 		'<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+		// Column 5: EVs
 		'<div style="flex-basis: 48%;">' +
-		'<h4>EVs</h4>' +
-		'<table style="width: 100%; border-collapse: collapse;">' +
-		'<tr><td style="padding: 2px;">HP</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.hp) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Attack</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.atk) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Defense</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.def) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Atk</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spa) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Sp. Def</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spd) + '</td></tr>' +
-		'<tr><td style="padding: 2px;">Speed</td><td style="padding: 2px; text-align: right;">' + String(pokemon.evs.spe) + '</td></tr>' +
-		'</table>' +
-		'<small>Total: ' + String(totalEVs) + ' / 510</small>' +
+		generateSummaryEVsTable(pokemon) +
 		'</div>' +
+		// Column 6: Moves
 		'<div style="flex-basis: 48%;">' +
-		'<h4>Moves</h4>' +
-		'<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;">' +
-		movesSummary +
+		generateSummaryMovesGrid(pokemon) +
 		'</div>' +
 		'</div>' +
-		'</div>' +
-		'<p style="margin-top: 15px;"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
+		'<p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
 		'</div>';
 }
 
@@ -1446,7 +1529,7 @@ export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: s
 
 	
 	if (additionalMessages && additionalMessages.length > 0) {
-		html += `<div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;">${additionalMessages.join('<br>')}</div>`;
+		html += `<div class="rpg-battle-new-events" style="margin-bottom: 10px;">${additionalMessages.join('<br>')}</div>`;
 	}
 
 	html += `<h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
@@ -1515,7 +1598,7 @@ export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId:
 		}
 
 		if (show) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+			html += `<div class="rpg-list-item"><div><strong>${pokemon.species}</strong> (Lvl ${pokemon.level})<br>${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 		}
 	}
 	html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -1537,7 +1620,7 @@ export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId:
 		}
 
 		if (canUse) {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
+			html += `<div class="rpg-list-item"><div><strong>${pokemon.species}</strong> ${details}</div><button name="send" value="/rpg useitem ${itemId} ${pokemon.id}" class="button">Use</button></div>`;
 		}
 	}
 	html += `<p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -1575,9 +1658,9 @@ export function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId:
 
 	let html = `<div class="infobox"><h2>Give ${item.name}</h2><p>Select a Pokémon to give this item to:</p>`;
 	for (const pokemon of player.party) {
-		html += `<div style="padding: 5px; margin: 5px 0; border-bottom: 1px solid #eee;">` +
+		html += `<div class="rpg-switch-list-item" style="padding: 5px; margin: 5px 0;">` +
 			`<span>${pokemon.species} (Holding: ${pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None'})</span>` +
-			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button" style="float: right;">Give</button>` +
+			`<button name="send" value="/rpg giveitem ${pokemon.id} ${itemId}" class="button rpg-button-float-right">Give</button>` +
 			`</div>`;
 	}
 	html += `<hr /><p><button name="send" value="/rpg items" class="button">Back to Bag</button></p></div>`;
@@ -1608,12 +1691,12 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 		const maxPP = moveData.pp || 5;
 		if (move.pp < maxPP) {
 			canRestoreAny = true;
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">` +
+			html += `<div class="rpg-list-item">` +
 				`<div><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${maxPP}</small></div>` +
 				`<button name="send" value="/rpg restorepp ${pokemon.id} ${move.id} ${itemId}" class="button">Restore</button>` +
 				`</div>`;
 		} else {
-			html += `<div style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; border-radius: 5px; opacity: 0.6;">` +
+			html += `<div class="rpg-list-item" style="opacity: 0.6;">` +
 				`<div><strong>${moveData.name}</strong><br><small>PP: ${move.pp} / ${maxPP} (Full)</small></div>` +
 				`<button class="button" disabled>Restore</button>` +
 				`</div>`;
@@ -1693,14 +1776,14 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 		`<h2>${npcName}</h2>` +
 		`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
 		`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
-		`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+		`<div class="rpg-grid-3col">`;
 
 	for (const starterId of allStarters) {
 		const command = `/rpg starterchoice ${npcId} ${starterId}`;
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
 
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
+	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 	return html;
@@ -1743,13 +1826,13 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 		`<h2>Professor Oak's Laboratory</h2>` +
 		`<p><strong>Professor Oak:</strong> ${typeDescription}</p>` +
 		`<p>"Now, which ${typeTitle}-type Pokémon would you like to choose as your partner?"</p>` +
-		`<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
+		`<div class="rpg-grid-3col">`;
 
 	for (const starterId of starters) {
 		const command = `/rpg selectstarter ${starterId}`;
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
-	html += `</div><p style="margin-top: 15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
+	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
 	return html;
 }
 
@@ -1865,7 +1948,7 @@ function generateBattleHeader(battle: BattleState): string {
 		const currentFloor = battle.floor || 1;
 		const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
 		const formatName = formatConfig ? formatConfig.name : 'Battle Factory';
-		return '<div style="text-align: center;">' +
+		return '<div class="rpg-text-center">' +
 			'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 			'</div>';
 	}
@@ -2006,14 +2089,14 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
     });
     
 	const targetButtons = validTargets.map(target => {
-			return '<button name="send" value="/rpg battleaction move ' + String(targetSelection.attackerSlotIndex) + ' ' + targetSelection.moveId + ' ' + String(target.index) + teraParam + '" class="button" style="' + buttonStyle + '">' + target.name + '</button>';
+			return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button" style="${buttonStyle}">${target.name}</button>`;
 	});
 
 	// A simple grid for buttons
-	let targetButtonsHTML = '<table style="width: auto; border-collapse: separate; border-spacing: 8px; margin: 15px auto;"><tr>';
+	let targetButtonsHTML = '<table class="rpg-move-grid" style="margin: 15px auto;"><tr>';
     let count = 0;
     for (const button of targetButtons) {
-        targetButtonsHTML += `<td style="padding: 0; vertical-align: top;">${button}</td>`;
+        targetButtonsHTML += `<td class="rpg-move-grid-cell">${button}</td>`;
         count++;
         if (count % 2 === 0 && count < targetButtons.length) {
             targetButtonsHTML += '</tr><tr>'; // New row every 2 buttons
@@ -2022,7 +2105,7 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	targetButtonsHTML += '</tr></table>';
 
 	html += targetButtonsHTML;
-	html += '<p style="margin-top: 15px;"><button name="send" value="/rpg battleaction back" class="button" style="' + buttonStyle + '">Cancel</button></p>';
+	html += `<p class="rpg-margin-top"><button name="send" value="/rpg battleaction back" class="button" style="${buttonStyle}">Cancel</button></p>`;
 	return html;
 }
 
