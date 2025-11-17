@@ -1585,6 +1585,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += `<button name="send" value="/rpg shop medicine" class="button">Medicines</button> `;
 	html += `<button name="send" value="/rpg shop held" class="button">Held Items</button> `;
 	html += `<button name="send" value="/rpg shop berry" class="button">Berries</button> `;
+	html += `<button name="send" value="/rpg shop tm" class="button">TMs</button> `;
 	html += `<button name="send" value="/rpg shop misc" class="button">Misc.</button>`;
 	html += `</div>`;
 

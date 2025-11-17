@@ -901,7 +901,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const category = toID(target);
 			// This line has been corrected to include 'medicine' instead of 'potion'
-			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
+			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'tm', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
