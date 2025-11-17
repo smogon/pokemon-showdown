@@ -123,6 +123,7 @@ import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
+import { TOTAL_BADGES } from './badges';
 
 // [MOVED] Helper functions `getLocationWeatherData` and `getWeatherStartMessage`
 // are now imported from battle-engine (where battle-flow.ts lives).
@@ -429,9 +430,9 @@ export const commands: ChatCommands = {
 			} else if (player.storyFlags.has('all_badges')) {
 				progressHTML += 'Ready for Elite Four</p>';
 			} else if (player.badges >= 4) {
-				progressHTML += `${player.badges}/8 Badges - Halfway there!</p>`;
+				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - Halfway there!</p>`;
 			} else if (player.badges > 0) {
-				progressHTML += `${player.badges}/8 Badges - On your journey</p>`;
+				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - On your journey</p>`;
 			} else {
 				progressHTML += 'Just starting out</p>';
 			}

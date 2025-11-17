@@ -26,6 +26,7 @@ import {
 	generateBattleTowerLossHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
+import { getBadgeForGymLeader, TOTAL_BADGES } from './badges';
 
 // Import shared helpers
 import {
@@ -541,26 +542,16 @@ export function checkForWinLoss(
 				// Award badge if it's a gym leader
 				if (battle.trainerId.startsWith('gym')) {
 					const gymName = battle.trainerId.replace('gym', '');
-					const badgeNames: Record<string, string> = {
-						'brock': 'Boulder Badge',
-						'misty': 'Cascade Badge',
-						'ltsurge': 'Thunder Badge',
-						'erika': 'Rainbow Badge',
-						'koga': 'Soul Badge',
-						'sabrina': 'Marsh Badge',
-						'blaine': 'Volcano Badge',
-						'giovanni': 'Earth Badge',
-					};
-					const badgeName = badgeNames[gymName];
+					const badgeName = getBadgeForGymLeader(gymName);
 					if (badgeName && !player.obtainedBadges.includes(badgeName)) {
 						player.obtainedBadges.push(badgeName);
 						player.badges = player.obtainedBadges.length;
 						messageLog.push(`<hr><center><strong>You obtained the ${badgeName}!</strong></center>`);
 
-						// Check if player has all 8 badges
-						if (player.obtainedBadges.length === 8) {
+						// Check if player has all badges
+						if (player.obtainedBadges.length === TOTAL_BADGES) {
 							player.storyFlags.add('all_badges');
-							messageLog.push(`<hr><center><strong>You now have all 8 gym badges! Victory Road is now accessible!</strong></center>`);
+							messageLog.push(`<hr><center><strong>You now have all ${TOTAL_BADGES} gym badges! Victory Road is now accessible!</strong></center>`);
 						}
 					}
 				}

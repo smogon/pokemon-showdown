@@ -41,6 +41,8 @@
 *   }
 */
 
+import { FIRST_BADGE_NAME, LAST_BADGE_NAME } from './badges';
+
 export interface StoryEvent {
 	id: string;
 	name: string;
@@ -68,7 +70,7 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		name: 'First Badge Earned',
 		description: 'You earned your first gym badge',
 		trigger: 'badge_obtain',
-		badgeName: 'Boulder Badge',
+		badgeName: FIRST_BADGE_NAME,
 		flagsSet: ['first_badge_earned'],
 		dialogue: 'Congratulations on earning your first badge! The road ahead will be challenging, but I believe in you!',
 	},
@@ -86,7 +88,7 @@ export const STORY_EVENTS: Record<string, StoryEvent> = {
 		name: 'All Badges Obtained',
 		description: 'You have earned all eight gym badges',
 		trigger: 'badge_obtain',
-		badgeName: 'Earth Badge',
+		badgeName: LAST_BADGE_NAME,
 		flagsSet: ['all_badges'],
 		dialogue: 'You have all eight badges! Victory Road awaits. The Elite Four will test everything you have learned!',
 	},
