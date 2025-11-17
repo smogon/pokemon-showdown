@@ -860,7 +860,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	imprison: {
 		inherit: true,
-		flags: { bypasssub: 1, metronome: 1 },
+		flags: { bypasssub: 1, metronome: 1, mustpressure: 1 },
 		onTryHit(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
