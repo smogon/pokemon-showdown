@@ -995,8 +995,9 @@ function generateAvailablePokemonListHTML(
 }
 
 /**
- * [REFACTORED] to change the display order of elements.
- * The new order is: 1. Name, 2. HP Bar, 3. Tags, 4. Sprite.
+ * [REFACTORED] to restore sprite/psicon logic AND
+ * maintain the new display order:
+ * 1. Name, 2. HP Bar, 3. Tags, 4. Sprite (in singles)
  */
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
@@ -1009,8 +1010,6 @@ export function generateSharedBattlePokemonInfo(
 	const species = Dex.species.get(pokemon.species);
 
 	// --- 1. Generate all the component parts ---
-
-	// Tags
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, isDoubleBattle, battle);
 	const statusDisplay = allStatusTags || '&nbsp;';
 
@@ -1018,21 +1017,19 @@ export function generateSharedBattlePokemonInfo(
 	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
 
 	const namePrefix = ownerName ? ownerName + "'s " : '';
-
-	// HP Bar
-	const hpBarHTML = generateHPBar(pokemon); // Use the helper function we already made
-
-	// Name Line
-	const nameLineHTML = '<div class="rpg-battle-name-line">' +
-		(isDoubleBattle ? '<psicon pokemon="' + species.id + '" class="rpg-battle-psicon"></psicon> ' : '') + // Only show psicon in double battles
-		namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level) +
-		'</div>';
-
 	
-	// --- 2. Assemble the HTML in the new order ---
+	// Use the helper function we already made
+	const hpBarHTML = generateHPBar(pokemon); 
+
+	// --- 2. Assemble the HTML (with the if/else correctly restored) ---
 
 	if (isDoubleBattle) {
-		// Assemble for Double Battle (No Sprite)
+		// Assemble for Double Battle (No Sprite, with Psicon)
+		const nameLineHTML = '<div class="rpg-battle-name-line">' +
+			'<psicon pokemon="' + species.id + '" class="rpg-battle-psicon"></psicon> ' + // Show psicon
+			namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level) +
+			'</div>';
+		
 		let html = '';
 		// 1. Name
 		html += nameLineHTML;
@@ -1043,9 +1040,14 @@ export function generateSharedBattlePokemonInfo(
 		return html;
 
 	} else {
-		// Assemble for Single Battle (With Sprite)
+		// Assemble for Single Battle (With Sprite, no Psicon)
 		
-		// 4. Sprite
+		// Name Line (No psicon)
+		const nameLineHTML = '<div class="rpg-battle-name-line">' +
+			namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level) +
+			'</div>';
+
+		// Sprite
 		const spriteFilename = getSpriteFilename(species.id);
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
