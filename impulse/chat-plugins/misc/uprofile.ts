@@ -6,6 +6,7 @@
 
 import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
+import { Net } from '../../../lib';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
@@ -15,7 +16,14 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
+interface ProfileBackgroundDocument {
+	_id: string;
+	background: string;
+	updatedAt: Date;
+}
+
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
+const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackground');
 
 /**
  * Get the avatar display for a user, including custom avatars
@@ -51,6 +59,8 @@ async function getUserProfileData(userid: string) {
 		level?: number,
 		ontime?: number,
 		customStatus?: string,
+		background?: string,
+		registrationDate?: string,
 	} = {};
 
 	// Get EXP data if available
@@ -82,6 +92,28 @@ async function getUserProfileData(userid: string) {
 		}
 	} catch {
 		// Profile status not available
+	}
+
+	// Get custom profile background if available
+	try {
+		const backgroundDoc = await ProfileBackgroundDB.findOne({ _id: userid });
+		if (backgroundDoc) {
+			data.background = backgroundDoc.background;
+		}
+	} catch {
+		// Profile background not available
+	}
+
+	// Get registration date from login server
+	try {
+		const rawResult = await Net(`https://${Config.routes.root}/users/${userid}.json`).get();
+		const result = JSON.parse(rawResult);
+		if (result.registertime) {
+			const date = new Date(result.registertime * 1000);
+			data.registrationDate = date.toDateString();
+		}
+	} catch {
+		// Registration date not available
 	}
 
 	return data;
@@ -135,8 +167,10 @@ export const commands: Chat.ChatCommands = {
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
-			// Build the profile HTML
-			let buf = '<div class="infobox">';
+			// Build the profile HTML with optional background
+			const backgroundStyle = profileData.background ?
+				`background: ${profileData.background}; padding: 10px;` : '';
+			let buf = `<div class="infobox" style="${backgroundStyle}">`;
 
 			// Header with avatar and name
 			buf += '<div style="text-align:center;margin-bottom:10px;">';
@@ -160,10 +194,13 @@ export const commands: Chat.ChatCommands = {
 			// User ID
 			buf += `<strong>User ID:</strong> ${targetId}<br>`;
 
-			// Registration status
+			// Registration status and date
 			if (targetUser) {
 				if (targetUser.registered) {
 					buf += `<strong>Registered:</strong> Yes<br>`;
+					if (profileData.registrationDate) {
+						buf += `<strong>Registration Date:</strong> ${profileData.registrationDate}<br>`;
+					}
 				} else {
 					buf += `<strong>Registered:</strong> No<br>`;
 				}
@@ -217,18 +254,45 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Your profile status has been cleared.");
 		},
 
+		async setbackground(target, room, user): Promise<void> {
+			if (!target) {
+				return this.errorReply("Please provide a CSS background value (e.g., 'linear-gradient(to right, #ff7e5f, #feb47b)' or a color like '#2c3e50').");
+			}
+
+			// Basic validation for CSS background
+			if (target.length > 200) {
+				return this.errorReply("Background value is too long (max 200 characters).");
+			}
+
+			await ProfileBackgroundDB.updateOne(
+				{ _id: user.id },
+				{ $set: { _id: user.id, background: target, updatedAt: new Date() } },
+				{ upsert: true }
+			);
+
+			this.sendReply(`Your profile background has been set. Use /uprofile to see it!`);
+		},
+
+		async clearbackground(target, room, user): Promise<void> {
+			await ProfileBackgroundDB.deleteOne({ _id: user.id });
+			this.sendReply("Your profile background has been cleared.");
+		},
+
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
 				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
+				{ cmd: "/uprofile setbackground [css]", desc: "Set a custom background for your profile (CSS background value)." },
+				{ cmd: "/uprofile clearbackground", desc: "Clear your custom profile background." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
-				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>`;
+				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>` +
+				`<br><small>Background examples: 'linear-gradient(to right, #ff7e5f, #feb47b)' or '#2c3e50'</small>`;
 			this.sendReplyBox(html);
 		},
 	},
