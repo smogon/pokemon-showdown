@@ -958,8 +958,8 @@ export const commands: ChatCommands = {
 			if (itemInBag.quantity < quantity) {
 				return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
 			}
-			if (itemInBag.category !== 'misc') {
-				return this.errorReply("You can only sell items from the 'Misc.' category.");
+			if (itemInBag.category === 'key') {
+				return this.errorReply("Key items cannot be sold.");
 			}
 
 			const sellPrice = ITEM_PRICES[itemId];
