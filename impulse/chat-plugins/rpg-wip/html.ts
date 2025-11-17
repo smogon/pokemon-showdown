@@ -258,68 +258,52 @@ function generatePokemonStatusTagsHTML(
 	return [statusTag, volatileTags, abilityTags, chargingTag, statStageTags, battleConditionTags].filter(Boolean).join('');
 }
 
-/**
- * [REPLACED] Generates the main battle menu (FIGHT, BAG, POKEMON, RUN).
- * Replaces the old generateBattleActionButtonsHTML.
- */
-function generateBattleMainMenu(
+function generateBattleActionButtonsHTML(
 	battle: BattleState,
 	playerSlot: ActivePokemonSlot | null
 ): string {
-	const fightButton = `<button name="send" value="/rpg battleui showmoves" class="button rpg-battle-action-button">⚔️ FIGHT</button>`;
-	const switchButton = `<button name="send" value="/rpg battleaction switchmenu" class="button rpg-battle-action-button">🔄 POKÉMON</button>`;
+	// [REMOVED] const bottomButtonStyle = ...
+	// [REMOVED] const bottomButtonDisabledStyle = ...
+
+	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button rpg-battle-action-button">🔄 Switch</button>';
 
 	
 	if (battle.battleType === 'battletower') {
-		
-		return `<table class="rpg-move-grid" style="margin: 0 auto;"><tr>` +
-			`<td class="rpg-move-grid-cell">${fightButton}</td>` +
-			`<td class="rpg-move-grid-cell">${switchButton}</td>` +
-			`</tr></table>`;
+		return '<p class="rpg-text-center" style="margin-top: 5px;">' + switchButton + '</p>';
 	}
 
 	
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
-	let catchButton = `<button class="button rpg-battle-action-button" disabled>⚽ BAG</button>`;
-	let runButton = `<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>`;
+	let catchButton = '<button class="button rpg-battle-action-button" disabled>⚽ Catch</button>';
+	let runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 
 	if (isWild) {
 		
 		const canRun = !playerSlot || !playerSlot.isTrapped;
 		runButton = canRun ?
-			`<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 RUN</button>` :
-			`<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>`;
+			'<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 Run</button>' :
+			'<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 
 		
 		if (battle.battleType === 'wild') {
-			catchButton = `<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ BAG</button>`;
+			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ Catch</button>';
 		} else if (battle.battleType === 'wild_double') {
 			const activeOpponents = getActiveSlots(battle.opponentSlots);
 			const canCatch = activeOpponents.length === 1;
 			catchButton = canCatch ?
-				`<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ BAG</button>` :
-				
-				
-				`<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button" title="Can only catch when one opponent remains">⚽ BAG</button>`;
+				'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ Catch</button>' :
+				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">⚽ Catch</button>';
 		}
-	} else if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+	} else if (battle.battleType === 'trainer') {
 		
+		runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
+	} else if (battle.battleType === 'trainer_double') {
 		
-		catchButton = `<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚽ BAG</button>`;
-		runButton = `<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 RUN</button>`;
+		runButton = '<button class="button rpg-battle-action-button" disabled>🏃 Run</button>';
 	}
 
-	
-	return `<table class="rpg-move-grid" style="margin: 0 auto;">` +
-		`<tr>` +
-		`<td class="rpg-move-grid-cell">${fightButton}</td>` +
-		`<td class="rpg-move-grid-cell">${catchButton}</td>` +
-		`</tr>` +
-		`<tr>` +
-		`<td class="rpg-move-grid-cell">${switchButton}</td>` +
-		`<td class="rpg-move-grid-cell">${runButton}</td>` +
-		`</tr>` +
-		`</table>`;
+
+	return '<p class="rpg-text-center" style="margin-top: 5px;">' + switchButton + catchButton + runButton + '</p>';
 }
 
 // ###################################
@@ -571,12 +555,10 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 /**
  * [MODIFIED] Generates the main battle HTML.
  * This is a BATTLE UI, so it does NOT get 'rpg-menu-box'.
- * Now accepts a uiState to determine which action panel to show.
  */
 export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
-	uiState: 'main' | 'moves' = 'main', 
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean
 ): string {
@@ -613,31 +595,11 @@ export function generateBattleHTML(
 	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
 	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
-	// --- 2a. [NEW] Auto-skip logic for forced moves ---
-	let finalUiState = uiState;
-	if (uiState === 'main' && !targetSelection) {
-		const isDoubleBattle = battle.battleType.includes('double');
-		const [pSlot0, pSlot1] = battle.playerSlots;
-		let activeSlot: ActivePokemonSlot | null = null;
-
-		if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
-			activeSlot = pSlot0;
-		} else if (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
-			activeSlot = pSlot1;
-		}
-		
-		if (activeSlot && shouldShowMoveGridDirectly(activeSlot)) {
-			finalUiState = 'moves'; 
-		}
-	}
-	// --- End new logic ---
-
 	let actionPanelHTML = '';
 	if (targetSelection && battle.battleType.includes('double')) {
 		actionPanelHTML = generateBattleTargetSelection(battle, targetSelection);
 	} else {
-		
-		actionPanelHTML = generateBattleActionPanel(battle, finalUiState, teraToggled);
+		actionPanelHTML = generateBattleActionPanel(battle, teraToggled);
 	}
 
 	return '<div class="infobox">' + // NO 'rpg-menu-box'
@@ -889,10 +851,6 @@ function getDisplayLog(battle: BattleState, messageLog: string[] = []): string {
 	return allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 }
 
-/**
- * [MODIFIED] Generates the move selection grid.
- * Now includes a "Back" button to return to the main menu.
- */
 function generateBattleMoveSelectionHTML(
 	battle: BattleState,
 	slot: ActivePokemonSlot,
@@ -927,7 +885,7 @@ function generateBattleMoveSelectionHTML(
 
 	
 	if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
-		
+		// [REMOVED] const buttonStyle = ...
 		const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
 			'<div class="rpg-move-info">' +
 			'<span>Normal</span>' +
@@ -949,7 +907,6 @@ function generateBattleMoveSelectionHTML(
 		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
-		
 	} else {
 		
 		const canTerastallize = !battle.playerTerastallizeUsed && !slot.terastallized;
@@ -1001,13 +958,6 @@ function generateBattleMoveSelectionHTML(
 		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[3] || '') + '</td>';
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
-
-		
-		
-		const isForced = slot.chargingMove || (slot.lockedMoveCounter > 0) || (slot.uproarTurns > 0) || slot.encoreMove || slot.lockedMove;
-		if (!isForced) {
-			moveButtonsHTML += `<div class="rpg-text-center" style="margin-top: 10px;"><button name="send" value="/rpg battleui main" class="button">Back</button></div>`;
-		}
 	}
 
 	return moveButtonsHTML;
@@ -1854,7 +1804,7 @@ export function generateNPCStarterConfirmHTML(
 		`<h2>Congratulations!</h2>` +
 		`<p><strong>${npcName}:</strong> "${message}"</p>` +
 		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<p>"Your adventure begins now. The bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
+		`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
 		`<p>"Now, head out and begin your journey. Good luck!"</p>` +
 		`<hr />` +
 		`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
@@ -1993,44 +1943,6 @@ export function generateDBDeleteSuccessHTML(): string {
 // ###################################
 // B A T T L E   U I   -   N E W   H E L P E R S
 // ###################################
-
-/**
- * [NEW HELPER] Checks if the UI should skip the main menu and show moves.
- * This is for forced-move situations (Struggle, Encore, Rampage, etc.).
- */
-function shouldShowMoveGridDirectly(slot: ActivePokemonSlot): boolean {
-	const pokemon = slot.pokemon;
-
-	
-	if (slot.chargingMove) return true;
-
-	
-	if (slot.lockedMoveCounter > 0 || slot.uproarTurns > 0) {
-		const lockedMove = pokemon.moves.find(m => m.id === slot.lockedMove);
-		if (lockedMove && lockedMove.pp > 0) return true;
-		
-	}
-
-	
-	if (slot.encoreMove) {
-		const encoredMove = pokemon.moves.find(m => m.id === slot.encoreMove!.moveId);
-		if (encoredMove && encoredMove.pp > 0) return true;
-		
-	}
-
-	
-	if (slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0) {
-		const choiceMove = pokemon.moves.find(m => m.id === slot.lockedMove);
-		if (choiceMove && choiceMove.pp > 0) return true;
-		
-	}
-
-	
-	const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
-	if (allMovesOutOfPP) return true;
-
-	return false;
-}
 
 /**
  * [NEW HELPER] Generates the top header for a battle screen.
@@ -2199,14 +2111,10 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 }
 
 /**
- * [MODIFIED] Generates the main action panel (moves OR main menu).
+ * [NEW HELPER] Generates the main action panel (moves + switch/run/catch).
  * This is a new component for Suggestion #4.
  */
-function generateBattleActionPanel(
-	battle: BattleState,
-	uiState: 'main' | 'moves',
-	teraToggled?: boolean
-): string {
+function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
 	const isDoubleBattle = battle.battleType.includes('double');
 	const [pSlot0, pSlot1] = battle.playerSlots;
 
@@ -2225,21 +2133,14 @@ function generateBattleActionPanel(
 	let html = '';
 	if (activeSlot) {
 		const pokemon = activeSlot.pokemon;
-		
-		if (uiState === 'moves') {
-			
-			html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
-			html += generateBattleMoveSelectionHTML(battle, activeSlot, activeSlotIndex, isDoubleBattle, teraToggled);
-		} else {
-			
-			
-			html += generateBattleMainMenu(battle, activeSlot);
-		}
+		html += '<p style="margin-top: 5px; font-weight: bold;">What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
+		html += generateBattleMoveSelectionHTML(battle, activeSlot, activeSlotIndex, isDoubleBattle, teraToggled);
 	} else if (!battle.battleEnded) {
 		html += '<p style="margin-top: 10px; text-align: center; color: #666;">Waiting for opponent...</p>';
 	}
 
-	
-	
+	// Find *any* active slot to pass to the action buttons (for run/catch validation)
+	const anyActivePlayerSlot = (pSlot0 && pSlot0.pokemon.hp > 0) ? pSlot0 : (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0) ? pSlot1 : null;
+	html += generateBattleActionButtonsHTML(battle, anyActivePlayerSlot);
 	return html;
 }
