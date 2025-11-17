@@ -1,11 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Battle Shared Utilities
-*
-* This file contains shared helper functions used by battle-core,
-* battle-effects, and battle-moves to prevent circular dependencies.
-*/
-
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES } from './data';
@@ -14,339 +6,6 @@ import type { ActivePokemonSlot, BattleState, Stats, Status, Move, RPGPokemon } 
 import { getActiveSlots, NATURES } from './utils';
 
 export const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
-
-export function applyStatChange(
-	slot: ActivePokemonSlot,
-	stat: keyof ActivePokemonSlot['statStages'],
-	value: number,
-	battle: BattleState,
-	messageLog: string[],
-	source: ActivePokemonSlot | null = null
-): boolean {
-	const pokemon = slot.pokemon;
-	const ability = toID(pokemon.ability || '');
-	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
-
-	const currentStage = slot.statStages[stat];
-	const isSelf = !source || source.pokemon.id === pokemon.id;
-
-	if (actualValue > 0) {
-		if (currentStage >= 6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
-			return false;
-		}
-		const newStage = Math.min(6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
-		messageLog.push(msg);
-		return true;
-	} else if (actualValue < 0) {
-		// Clear Amulet only blocks drops from others
-		if (!isSelf && battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
-			messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
-			return false;
-		}
-
-		// Abilities like Clear Body block all drops, including self-inflicted ones
-		const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
-		if (blockAbilities.includes(ability)) {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
-			return false;
-		}
-		if (stat === 'atk' && ability === 'hypercutter') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Attack from being lowered!`);
-			return false;
-		}
-		// Flower Veil protects Grass-types from stat drops
-		if (ability === 'flowerveil') {
-			const species = Dex.species.get(pokemon.species);
-			if (species.types.includes('Grass')) {
-				messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
-				return false;
-			}
-		}
-		// Check if any ally has Flower Veil that would protect this Grass-type
-		const species = Dex.species.get(pokemon.species);
-		if (species.types.includes('Grass')) {
-			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
-				messageLog.push(`Flower Veil protects ${pokemon.species} from stat drops!`);
-				return false;
-			}
-		}
-		// Big Pecks prevents Defense from being lowered
-		if (stat === 'def' && ability === 'bigpecks') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Defense from being lowered!`);
-			return false;
-		}
-		// Keen Eye prevents accuracy from being lowered
-		if (stat === 'accuracy' && ability === 'keeneye') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its accuracy from being lowered!`);
-			return false;
-		}
-
-		if (currentStage <= -6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any lower!`);
-			return false;
-		}
-		const newStage = Math.max(-6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
-		messageLog.push(msg);
-
-		checkStatDropAbilities(slot, source, battle, messageLog);
-		return true;
-	}
-
-	return false;
-}
-
-export function checkStatDropAbilities(
-	targetSlot: ActivePokemonSlot,
-	sourceSlot: ActivePokemonSlot | null,
-	battle: BattleState,
-	messageLog: string[]
-) {
-	RPGAbilities.applyStatDropResponse(targetSlot, battle, messageLog, sourceSlot);
-}
-
-export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
-	const ability = toID(slot.pokemon.ability || '');
-	if (ability === 'unburden' && !slot.unburdenActive) {
-		slot.unburdenActive = true;
-		messageLog.push(`${slot.pokemon.species}'s Unburden activated!`);
-	}
-}
-
-export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
-	const ability = toID(slot.pokemon.ability || '');
-
-	// Track for Harvest and Cud Chew
-	slot.consumedBerry = berryId;
-	slot.harvestUsedThisTurn = false; // Reset for next turn
-
-	if (ability === 'cudchew') {
-		slot.cudChewBerry = berryId;
-	}
-
-	// Remove the berry
-	slot.pokemon.item = undefined;
-
-	// Activate Unburden
-	activateUnburden(slot, messageLog);
-
-	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
-		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
-		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
-		messageLog.push(`${slot.pokemon.species}'s Cheek Pouch restored its HP!`);
-	}
-}
-
-export function applySynchronize(
-	statusToInflict: Status,
-	sourceSlot: ActivePokemonSlot,
-	targetSlot: ActivePokemonSlot,
-	battle: BattleState,
-	messageLog: string[]
-) {
-	if (!targetSlot || targetSlot.pokemon.hp <= 0) return;
-
-	const targetPokemon = targetSlot.pokemon;
-	const targetAbility = toID(targetPokemon.ability || '');
-	if (targetAbility === 'synchronize') {
-		if (['psn', 'par', 'brn', 'tox'].includes(statusToInflict)) {
-			// Check if the source can be afflicted
-			if (!sourceSlot.status) {
-				const sourceSpecies = Dex.species.get(sourceSlot.pokemon.species);
-				let canBeAfflicted = true;
-
-				if ((statusToInflict === 'brn' && sourceSpecies.types.includes('Fire')) ||
-					(statusToInflict === 'par' && sourceSpecies.types.includes('Electric')) ||
-					((statusToInflict === 'psn' || statusToInflict === 'tox') &&
-						(sourceSpecies.types.includes('Poison') || sourceSpecies.types.includes('Steel')))) {
-					canBeAfflicted = false;
-				}
-
-				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle, targetPokemon)) {
-					canBeAfflicted = false;
-				}
-
-				if (canBeAfflicted) {
-					sourceSlot.status = statusToInflict;
-					if (statusToInflict === 'tox') {
-						sourceSlot.toxicCounter = 1;
-					}
-					messageLog.push(`${targetPokemon.species}'s Synchronize afflicted ${sourceSlot.pokemon.species} with ${statusToInflict}!`);
-				}
-			}
-		}
-	}
-}
-
-export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
-	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
-
-	const hasBindingEffect =
-		slot.tauntTurns > 0 ||
-		slot.encoreMove !== undefined ||
-		slot.disabledMove !== undefined ||
-		slot.tormentActive ||
-		(slot.healBlockTurns || 0) > 0;
-
-	if (hasBindingEffect) {
-		slot.tauntTurns = 0;
-		slot.encoreMove = undefined;
-		slot.disabledMove = undefined;
-		slot.tormentActive = false;
-		slot.healBlockTurns = 0;
-
-		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
-		slot.pokemon.item = undefined;
-		activateUnburden(slot, messageLog);
-		return true;
-	}
-
-	return false;
-}
-
-export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
-	const pokemon = slot.pokemon;
-
-	if (pokemon.hp > 0 && pokemon.hp <= pokemon.maxHp / 2) {
-		const ability = toID(pokemon.ability || '');
-		if (ability === 'emergencyexit' || ability === 'wimpout') {
-			// Mark for switching (this would need to be handled by the battle flow)
-			// For now, just add a message
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} wants to switch out!`);
-			// Note: Actual switching would require battle flow changes
-		}
-	}
-
-	if (battle.magicRoomTurns > 0) return;
-
-	if (pokemon.hp <= 0 || !pokemon.item) return;
-
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
-		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
-	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
-		return; // Cannot consume berries when opponent has Unnerve
-	}
-
-	let itemConsumed = false;
-	let consumedItemName = '';
-
-	const halfHP = pokemon.maxHp / 2;
-	const hasGluttony = toID(pokemon.ability || '') === 'gluttony';
-	const quarterHP = hasGluttony ? halfHP : pokemon.maxHp / 4;
-
-	if (pokemon.hp <= halfHP && !itemConsumed) {
-		const hasRipen = toID(pokemon.ability || '') === 'ripen';
-		const ripenMultiplier = hasRipen ? 2 : 1;
-
-		let healAmount = 0;
-		if (pokemon.item === 'berryjuice') {
-			healAmount = 20 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'oranberry') {
-			healAmount = 10 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'goldberry') {
-			healAmount = 30 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'sitrusberry') {
-			healAmount = Math.floor(pokemon.maxHp / 4) * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		}
-
-		if (healAmount > 0) {
-			const oldHp = pokemon.hp;
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		}
-	}
-
-	if (!itemConsumed && pokemon.hp <= quarterHP) {
-		const pinchBerryHP = ['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'];
-		const pinchBerryStat: Record<string, keyof Omit<Stats, 'maxHp'>> = {
-			'liechiberry': 'atk', 'ganlonberry': 'def', 'salacberry': 'spe',
-			'petayaberry': 'spa', 'apicotberry': 'spd',
-		};
-
-		if (pinchBerryHP.includes(pokemon.item)) {
-			const hasRipen = toID(pokemon.ability || '') === 'ripen';
-			const ripenMultiplier = hasRipen ? 2 : 1;
-
-			const oldHp = pokemon.hp;
-			const healAmount = Math.floor(pokemon.maxHp / 2) * ripenMultiplier;
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
-
-			const berryData = BERRY_FLAVORS[pokemon.item];
-			const natureData = NATURES[pokemon.nature];
-			if (natureData && berryData) {
-				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
-				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
-					if (!slot.isConfused) {
-						const ability = toID(pokemon.ability || '');
-						// Own Tempo prevents confusion
-						if (ability !== 'owntempo') {
-							slot.isConfused = true;
-							slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
-							messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
-						}
-					}
-				}
-			}
-			itemConsumed = true;
-		} else if (pokemon.item in pinchBerryStat) {
-			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
-
-			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
-				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
-				itemConsumed = true;
-			}
-		} else if (pokemon.item === 'starfberry') {
-			const targetStages = slot.statStages;
-			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-			const availableStats = stats.filter(stat => targetStages[stat] < 6);
-
-			if (availableStats.length > 0) {
-				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
-
-				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
-					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
-					itemConsumed = true;
-				}
-			}
-		}
-	}
-
-	if (itemConsumed && pokemon.item) {
-		consumeBerry(slot, pokemon.item, messageLog);
-	}
-}
-
-export function getAccuracyEvasionMultiplier(stage: number): number {
-	if (stage > 0) {
-		return (3 + stage) / 3;
-	} else if (stage < 0) {
-		return 3 / (3 - stage);
-	}
-	return 1;
-}
 
 export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
 	const ability = toID(pokemon.ability || '');
@@ -397,61 +56,107 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 		lastMoveThatHitMe: undefined,
 		terastallized: undefined,
-		toxicCounter: pokemon.status === 'tox' ? 1 : undefined, // Initialize toxic counter for pre-existing badly poisoned status
+		toxicCounter: pokemon.status === 'tox' ? 1 : undefined,
 	};
 }
 
-export function checkTrappingAbility(
-	slotToSwitch: ActivePokemonSlot,
-	battle: BattleState
-): ActivePokemonSlot | null {
-	const isPlayer = battle.playerSlots.includes(slotToSwitch);
-	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-	const userPokemon = slotToSwitch.pokemon;
-	const userAbility = toID(userPokemon.ability || '');
-	const userTypes = Dex.species.get(userPokemon.species).types;
+export function applyStatChange(
+	slot: ActivePokemonSlot,
+	stat: keyof ActivePokemonSlot['statStages'],
+	value: number,
+	battle: BattleState,
+	messageLog: string[],
+	source: ActivePokemonSlot | null = null
+): boolean {
+	const pokemon = slot.pokemon;
+	const ability = toID(pokemon.ability || '');
+	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
 
-	// User's own Shadow Tag allows switching
-	if (userAbility === 'shadowtag') return null;
+	const currentStage = slot.statStages[stat];
+	const isSelf = !source || source.pokemon.id === pokemon.id;
 
-	for (const oppSlot of opponentSlots) {
-		const oppAbility = toID(oppSlot.pokemon.ability || '');
-		if (!oppAbility) continue;
-
-		switch (oppAbility) {
-		case 'shadowtag':
-			return oppSlot;
-
-		case 'arenatrap':
-			// Ghost-types are immune to Arena Trap
-			if (RPGAbilities.isGrounded(userPokemon, battle) && !userTypes.includes('Ghost')) {
-				return oppSlot;
-			}
-			break;
-
-		case 'magnetpull':
-			// Ghost-types are immune to Magnet Pull
-			if (userTypes.includes('Steel') && !userTypes.includes('Ghost')) {
-				return oppSlot;
-			}
-			break;
+	if (actualValue > 0) {
+		if (currentStage >= 6) {
+			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
+			return false;
 		}
+		const newStage = Math.min(6, currentStage + actualValue);
+		slot.statStages[stat] = newStage as any;
+		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
+		messageLog.push(msg);
+		return true;
+	} else if (actualValue < 0) {
+		if (!isSelf && battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
+			messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
+			return false;
+		}
+
+		const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+		if (blockAbilities.includes(ability)) {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
+			return false;
+		}
+		if (stat === 'atk' && ability === 'hypercutter') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Attack from being lowered!`);
+			return false;
+		}
+		if (ability === 'flowerveil') {
+			const species = Dex.species.get(pokemon.species);
+			if (species.types.includes('Grass')) {
+				messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
+				return false;
+			}
+		}
+		const species = Dex.species.get(pokemon.species);
+		if (species.types.includes('Grass')) {
+			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
+				messageLog.push(`Flower Veil protects ${pokemon.species} from stat drops!`);
+				return false;
+			}
+		}
+		if (stat === 'def' && ability === 'bigpecks') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Defense from being lowered!`);
+			return false;
+		}
+		if (stat === 'accuracy' && ability === 'keeneye') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its accuracy from being lowered!`);
+			return false;
+		}
+
+		if (currentStage <= -6) {
+			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any lower!`);
+			return false;
+		}
+		const newStage = Math.max(-6, currentStage + actualValue);
+		slot.statStages[stat] = newStage as any;
+		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
+		messageLog.push(msg);
+
+		checkStatDropAbilities(slot, source, battle, messageLog);
+		return true;
 	}
 
-	return null;
+	return false;
 }
 
-export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
-	let slot: ActivePokemonSlot | null = null;
-	if (slotIndex === 0) slot = battle.playerSlots[0];
-	else if (slotIndex === 1) slot = battle.playerSlots[1];
-	else if (slotIndex === 2) slot = battle.opponentSlots[0];
-	else if (slotIndex === 3) slot = battle.opponentSlots[1];
+export function checkStatDropAbilities(
+	targetSlot: ActivePokemonSlot,
+	sourceSlot: ActivePokemonSlot | null,
+	battle: BattleState,
+	messageLog: string[]
+) {
+	RPGAbilities.applyStatDropResponse(targetSlot, battle, messageLog, sourceSlot);
+}
 
-	if (slot && slot.pokemon.hp > 0) {
-		return slot;
+export function getAccuracyEvasionMultiplier(stage: number): number {
+	if (stage > 0) {
+		return (3 + stage) / 3;
+	} else if (stage < 0) {
+		return 3 / (3 - stage);
 	}
-	return null;
+	return 1;
 }
 
 export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
@@ -531,6 +236,276 @@ export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: numbe
 	}
 
 	return [...new Set(targets)];
+}
+
+export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
+	let slot: ActivePokemonSlot | null = null;
+	if (slotIndex === 0) slot = battle.playerSlots[0];
+	else if (slotIndex === 1) slot = battle.playerSlots[1];
+	else if (slotIndex === 2) slot = battle.opponentSlots[0];
+	else if (slotIndex === 3) slot = battle.opponentSlots[1];
+
+	if (slot && slot.pokemon.hp > 0) {
+		return slot;
+	}
+	return null;
+}
+
+export function checkTrappingAbility(
+	slotToSwitch: ActivePokemonSlot,
+	battle: BattleState
+): ActivePokemonSlot | null {
+	const isPlayer = battle.playerSlots.includes(slotToSwitch);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+	const userPokemon = slotToSwitch.pokemon;
+	const userAbility = toID(userPokemon.ability || '');
+	const userTypes = Dex.species.get(userPokemon.species).types;
+
+	if (userAbility === 'shadowtag') return null;
+
+	for (const oppSlot of opponentSlots) {
+		const oppAbility = toID(oppSlot.pokemon.ability || '');
+		if (!oppAbility) continue;
+
+		switch (oppAbility) {
+		case 'shadowtag':
+			return oppSlot;
+
+		case 'arenatrap':
+			if (RPGAbilities.isGrounded(userPokemon, battle) && !userTypes.includes('Ghost')) {
+				return oppSlot;
+			}
+			break;
+
+		case 'magnetpull':
+			if (userTypes.includes('Steel') && !userTypes.includes('Ghost')) {
+				return oppSlot;
+			}
+			break;
+		}
+	}
+
+	return null;
+}
+
+export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	const pokemon = slot.pokemon;
+
+	if (pokemon.hp > 0 && pokemon.hp <= pokemon.maxHp / 2) {
+		const ability = toID(pokemon.ability || '');
+		if (ability === 'emergencyexit' || ability === 'wimpout') {
+			messageLog.push(`${pokemon.species}'s ${pokemon.ability} wants to switch out!`);
+		}
+	}
+
+	if (battle.magicRoomTurns > 0) return;
+
+	if (pokemon.hp <= 0 || !pokemon.item) return;
+
+	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
+		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
+	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
+		return;
+	}
+
+	let itemConsumed = false;
+	let consumedItemName = '';
+
+	const halfHP = pokemon.maxHp / 2;
+	const hasGluttony = toID(pokemon.ability || '') === 'gluttony';
+	const quarterHP = hasGluttony ? halfHP : pokemon.maxHp / 4;
+
+	if (pokemon.hp <= halfHP && !itemConsumed) {
+		const hasRipen = toID(pokemon.ability || '') === 'ripen';
+		const ripenMultiplier = hasRipen ? 2 : 1;
+
+		let healAmount = 0;
+		if (pokemon.item === 'berryjuice') {
+			healAmount = 20 * ripenMultiplier;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
+			itemConsumed = true;
+		} else if (pokemon.item === 'oranberry') {
+			healAmount = 10 * ripenMultiplier;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
+			itemConsumed = true;
+		} else if (pokemon.item === 'goldberry') {
+			healAmount = 30 * ripenMultiplier;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
+			itemConsumed = true;
+		} else if (pokemon.item === 'sitrusberry') {
+			healAmount = Math.floor(pokemon.maxHp / 4) * ripenMultiplier;
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
+			itemConsumed = true;
+		}
+
+		if (healAmount > 0) {
+			const oldHp = pokemon.hp;
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+		}
+	}
+
+	if (!itemConsumed && pokemon.hp <= quarterHP) {
+		const pinchBerryHP = ['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'];
+		const pinchBerryStat: Record<string, keyof Omit<Stats, 'maxHp'>> = {
+			'liechiberry': 'atk', 'ganlonberry': 'def', 'salacberry': 'spe',
+			'petayaberry': 'spa', 'apicotberry': 'spd',
+		};
+
+		if (pinchBerryHP.includes(pokemon.item)) {
+			const hasRipen = toID(pokemon.ability || '') === 'ripen';
+			const ripenMultiplier = hasRipen ? 2 : 1;
+
+			const oldHp = pokemon.hp;
+			const healAmount = Math.floor(pokemon.maxHp / 2) * ripenMultiplier;
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
+			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
+
+			const berryData = BERRY_FLAVORS[pokemon.item];
+			const natureData = NATURES[pokemon.nature];
+			if (natureData && berryData) {
+				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
+				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
+					if (!slot.isConfused) {
+						const ability = toID(pokemon.ability || '');
+						if (ability !== 'owntempo') {
+							slot.isConfused = true;
+							slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
+							messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
+						}
+					}
+				}
+			}
+			itemConsumed = true;
+		} else if (pokemon.item in pinchBerryStat) {
+			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
+
+			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
+				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
+				itemConsumed = true;
+			}
+		} else if (pokemon.item === 'starfberry') {
+			const targetStages = slot.statStages;
+			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+			const availableStats = stats.filter(stat => targetStages[stat] < 6);
+
+			if (availableStats.length > 0) {
+				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
+
+				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
+					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
+					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
+					itemConsumed = true;
+				}
+			}
+		}
+	}
+
+	if (itemConsumed && pokemon.item) {
+		consumeBerry(slot, pokemon.item, messageLog);
+	}
+}
+
+export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+	if (ability === 'unburden' && !slot.unburdenActive) {
+		slot.unburdenActive = true;
+		messageLog.push(`${slot.pokemon.species}'s Unburden activated!`);
+	}
+}
+
+export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
+	const ability = toID(slot.pokemon.ability || '');
+
+	slot.consumedBerry = berryId;
+	slot.harvestUsedThisTurn = false;
+
+	if (ability === 'cudchew') {
+		slot.cudChewBerry = berryId;
+	}
+
+	slot.pokemon.item = undefined;
+
+	activateUnburden(slot, messageLog);
+
+	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
+		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
+		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
+		messageLog.push(`${slot.pokemon.species}'s Cheek Pouch restored its HP!`);
+	}
+}
+
+export function applySynchronize(
+	statusToInflict: Status,
+	sourceSlot: ActivePokemonSlot,
+	targetSlot: ActivePokemonSlot,
+	battle: BattleState,
+	messageLog: string[]
+) {
+	if (!targetSlot || targetSlot.pokemon.hp <= 0) return;
+
+	const targetPokemon = targetSlot.pokemon;
+	const targetAbility = toID(targetPokemon.ability || '');
+	if (targetAbility === 'synchronize') {
+		if (['psn', 'par', 'brn', 'tox'].includes(statusToInflict)) {
+			if (!sourceSlot.status) {
+				const sourceSpecies = Dex.species.get(sourceSlot.pokemon.species);
+				let canBeAfflicted = true;
+
+				if ((statusToInflict === 'brn' && sourceSpecies.types.includes('Fire')) ||
+					(statusToInflict === 'par' && sourceSpecies.types.includes('Electric')) ||
+					((statusToInflict === 'psn' || statusToInflict === 'tox') &&
+						(sourceSpecies.types.includes('Poison') || sourceSpecies.types.includes('Steel')))) {
+					canBeAfflicted = false;
+				}
+
+				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle, targetPokemon)) {
+					canBeAfflicted = false;
+				}
+
+				if (canBeAfflicted) {
+					sourceSlot.status = statusToInflict;
+					if (statusToInflict === 'tox') {
+						sourceSlot.toxicCounter = 1;
+					}
+					messageLog.push(`${targetPokemon.species}'s Synchronize afflicted ${sourceSlot.pokemon.species} with ${statusToInflict}!`);
+				}
+			}
+		}
+	}
+}
+
+export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
+
+	const hasBindingEffect =
+		slot.tauntTurns > 0 ||
+		slot.encoreMove !== undefined ||
+		slot.disabledMove !== undefined ||
+		slot.tormentActive ||
+		(slot.healBlockTurns || 0) > 0;
+
+	if (hasBindingEffect) {
+		slot.tauntTurns = 0;
+		slot.encoreMove = undefined;
+		slot.disabledMove = undefined;
+		slot.tormentActive = false;
+		slot.healBlockTurns = 0;
+
+		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
+		slot.pokemon.item = undefined;
+		activateUnburden(slot, messageLog);
+		return true;
+	}
+
+	return false;
 }
 
 export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
