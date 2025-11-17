@@ -41,18 +41,7 @@ import {
 	getMoveType,
 } from './battle-core';
 
-import {
-	processEndOfTurn,
-	applyEOTStatusDamage,
-	applyEOTItemEffects,
-	applyEOTVolatileStatusDamage,
-	applyEOTHealingEffects,
-	applyEOTLeechSeedDamage,
-	decrementEOTVolatileCounters,
-	handleEndOfTurnEffects,
-	handleEndOfTurnWeather,
-	handleEndOfTurnFieldEffects,
-} from './battle-eot';
+import { processEndOfTurn } from './battle-eot';
 
 /**
  * Get the initial weather for a battle based on the player's location
