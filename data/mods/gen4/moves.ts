@@ -1042,7 +1042,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				newMove.hasBounced = true;
 				this.actions.useMove(newMove, target, {
 					target: source,
-					sourceEffect: this.effectState.sourceEffect, // deduct PP
+					sourceEffect: this.effectState.sourceEffect, // deduct PP against Pressure targets
 				});
 				return null;
 			},
