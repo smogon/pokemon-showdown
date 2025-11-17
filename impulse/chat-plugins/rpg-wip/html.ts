@@ -1118,9 +1118,9 @@ function generateWeatherTags(battle: BattleState): string {
 		'rain': 'Rain',
 		'sand': 'Sandstorm',
 		'hail': 'Hail',
-		'harshsun': 'Harsh Sun',
-		'heavyrain': 'Heavy Rain',
-		'strongwinds': 'Strong Winds',
+		'harsh-sun': 'Harsh Sun',
+		'heavy-rain': 'Heavy Rain',
+		'strong-winds': 'Strong Winds',
 	};
 
 	const weatherTypeKey = battle.weather.type;
