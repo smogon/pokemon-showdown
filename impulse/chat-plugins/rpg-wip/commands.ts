@@ -125,8 +125,276 @@ import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 import { TOTAL_BADGES } from './badges';
 
-// [MOVED] Helper functions `getLocationWeatherData` and `getWeatherStartMessage`
-// are now imported from battle-engine (where battle-flow.ts lives).
+/**
+ * Handles all logic for using items in the 'medicine' category.
+ */
+function handleUseMedicine(
+	this: CommandContext,
+	player: PlayerData,
+	item: { id: string, name: string },
+	targetPokemon: RPGPokemon,
+	room: ChatRoom,
+	user: User
+) {
+	let result: { success: boolean, message: string } = { success: false, message: "This item cannot be used." };
+	let requiresMoveSelection = false;
+
+	switch (item.id) {
+	// Revival
+	case 'revive':
+	case 'maxrevive':
+	case 'revivalherb':
+		result = useRevivalItem(player, targetPokemon, item.id);
+		break;
+	// Healing
+	case 'potion':
+	case 'superpotion':
+	case 'hyperpotion':
+	case 'maxpotion':
+	case 'fullrestore':
+	case 'berryjuice':
+	case 'freshwater':
+	case 'sodapop':
+	case 'lemonade':
+	case 'moomoomilk':
+	case 'tea':
+	case 'energyroot':
+	case 'energypowder':
+		result = useHealingItem(player, targetPokemon, item.id);
+		break;
+	// Specific Status
+	case 'antidote':
+		if (targetPokemon.status === 'psn') {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species} was cured of poison!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} is not poisoned.` };
+		}
+		break;
+	case 'paralyzeheal':
+		if (targetPokemon.status === 'par') {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species} was cured of paralysis!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} is not paralyzed.` };
+		}
+		break;
+	case 'awakening':
+		if (targetPokemon.status === 'slp') {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species} woke up!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} is not asleep.` };
+		}
+		break;
+	case 'burnheal':
+		if (targetPokemon.status === 'brn') {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species} was cured of its burn!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} is not burned.` };
+		}
+		break;
+	case 'iceheal':
+		if (targetPokemon.status === 'frz') {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species} was thawed out!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} is not frozen.` };
+		}
+		break;
+	// Full Status
+	case 'fullheal':
+	case 'healpowder':
+		if (targetPokemon.status) {
+			targetPokemon.status = null;
+			result = { success: true, message: `${targetPokemon.species}'s status was healed!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species} has no status condition.` };
+		}
+		break;
+	// PP Restore (Single Move)
+	case 'ether':
+	case 'maxether':
+		requiresMoveSelection = true;
+		break;
+	// PP Restore (All Moves)
+	case 'elixir':
+	case 'maxelixir':
+		let totalPPRestored = 0;
+		for (const move of targetPokemon.moves) {
+			const moveData = getMove(move.id);
+			const maxPP = moveData.pp || 5;
+			if (move.pp < maxPP) {
+				const restoreAmount = (item.id === 'elixir') ? 10 : maxPP;
+				const oldPP = move.pp;
+				move.pp = Math.min(maxPP, move.pp + restoreAmount);
+				totalPPRestored += (move.pp - oldPP);
+			}
+		}
+		if (totalPPRestored > 0) {
+			result = { success: true, message: `${targetPokemon.species}'s moves had their PP restored!` };
+		} else {
+			result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
+		}
+		break;
+	// Vitamins
+	case 'hpup':
+	case 'protein':
+	case 'iron':
+	case 'calcium':
+	case 'zinc':
+	case 'carbos':
+		result = useVitaminItem(player, targetPokemon, item.id);
+		break;
+	default:
+		return this.errorReply("This medicine item is not recognized.");
+	}
+
+	if (requiresMoveSelection) {
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveSelectionHTML(player, targetPokemon.id, item.id)}`);
+	}
+
+	if (!result.success) {
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, item.id)}`);
+	}
+
+	// If successful, remove item and show result
+	// (Vitamin function already removes item, so skip for them)
+	if (!['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(item.id)) {
+		removeItemFromInventory(player, item.id, 1);
+	}
+
+	const tempSlot = createActivePokemonSlot(targetPokemon);
+	return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+}
+
+/**
+ * Handles all logic for using items in the 'misc' category.
+ */
+function handleUseMiscItem(
+	this: CommandContext,
+	player: PlayerData,
+	item: { id: string, name: string },
+	targetPokemon: RPGPokemon,
+	room: ChatRoom,
+	user: User
+) {
+	const itemId = item.id;
+
+	// Handle specific misc items
+	if (itemId === 'rarecandy') {
+		const result = useRareCandyItem(player, targetPokemon, room, user);
+		if (!result.success) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'rarecandy')}`);
+		}
+		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+		}
+		const updatedPokemon = player.party.find(p => p.id === targetPokemon.id);
+		if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+		const tempSlot = createActivePokemonSlot(updatedPokemon);
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+	}
+	
+	if (itemId.startsWith('expcandy')) {
+		const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
+		if (!result.success) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
+		}
+		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+		}
+		const updatedPokemon = player.party.find(p => p.id === targetPokemon.id);
+		if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
+		const tempSlot = createActivePokemonSlot(updatedPokemon);
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+	}
+	
+	if (itemId === 'terashard') {
+		const allTypes = Object.keys(TYPE_CHART);
+		if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
+		const newTeraType = allTypes[Math.floor(Math.random() * allTypes.length)];
+		const oldTeraType = targetPokemon.teraType;
+		targetPokemon.teraType = newTeraType;
+		removeItemFromInventory(player, 'terashard', 1);
+		const tempSlot = createActivePokemonSlot(targetPokemon);
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTeraShardResultHTML(targetPokemon, oldTeraType, newTeraType, tempSlot)}`);
+	}
+	
+	if (itemId === 'eggmovetutor') {
+		const speciesId = toID(targetPokemon.species);
+		const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
+		const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
+		if (learnableEggMoves.length === 0) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+		}
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
+	}
+	
+	if (itemId.startsWith('tm-')) {
+		// TM Usage
+		if (targetPokemon.hp <= 0) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+		}
+
+		const moveId = itemId.substring(3); // Remove 'tm-' prefix to get move ID
+		const speciesId = toID(targetPokemon.species);
+		const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
+
+		if (!tmMoves.includes(moveId)) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Incompatible TM</h2><p><strong>${targetPokemon.species}</strong> cannot learn this move from a TM.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+		}
+
+		if (targetPokemon.moves.some(m => m.id === moveId)) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Move Already Known</h2><p><strong>${targetPokemon.species}</strong> already knows this move!</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+		}
+
+		// Teach the move
+		if (targetPokemon.moves.length < 4) {
+			const newMoveData = getMove(moveId);
+			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
+			removeItemFromInventory(player, itemId, 1);
+			const tempSlot = createActivePokemonSlot(targetPokemon);
+			const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+		} else {
+			// Queue move for replacement
+			if (!player.pendingMoveLearnQueue) {
+				player.pendingMoveLearnQueue = [];
+			}
+			player.pendingMoveLearnQueue.push({ pokemonId: targetPokemon.id, moveIds: [moveId] });
+			removeItemFromInventory(player, itemId, 1);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+		}
+	}
+	
+	if (item.id.endsWith('stone')) {
+		const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
+
+		if (evoMessage) {
+			// Evolution was successful
+			removeItemFromInventory(player, itemId, 1);
+			const updatedPokemon = player.party.find(p => p.id === targetPokemon.id); // Refetch in case of evolution
+			const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
+			let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+
+			// Check if new moves were queued
+			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
+				resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
+			} else {
+				resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
+			}
+			resultHTML += `</div>`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+		} else {
+			// Evolution failed
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
+		}
+	}
+	
+	return this.errorReply("This item cannot be used right now.");
+}
 
 // Track Terastallize toggle state per user (temporary UI state)
 // Exported so battle-flow.ts can access it when rendering battle UI
@@ -533,302 +801,65 @@ export const commands: ChatCommands = {
 
 			const item = player.inventory.get(itemId)!;
 
-			if (item.category === 'medicine') {
-				// Special handling for Sacred Ash (affects all Pokemon)
-				if (itemId === 'sacredash') {
-					const result = useSacredAsh(player);
-					if (!result.success) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'sacredash')}`);
-					}
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSacredAshResultHTML(result.message)}`);
+			// Handle Sacred Ash (affects all)
+			if (itemId === 'sacredash') {
+				const result = useSacredAsh(player);
+				if (!result.success) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'sacredash')}`);
 				}
-
-				if (!pokemonId) {
-					// [NEW] Context-Aware Logic (Suggestion #2)
-					// Check if there is only one obvious target for the item
-					
-					// Define item categories based on existing logic
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSacredAshResultHTML(result.message)}`);
+			}
+			
+			// --- Handle "NO POKEMON SELECTED" ---
+			if (!pokemonId) {
+				// We need to show a selection screen
+				if (item.category === 'medicine') {
+					// [Context-Aware Logic from Suggestion #2]
 					const revivalItems = ['revive', 'maxrevive', 'revivalherb'];
 					const healingItems = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'];
 
 					if (revivalItems.includes(itemId)) {
 						const faintedPokemon = player.party.filter(p => p.hp <= 0);
 						if (faintedPokemon.length === 1) {
-							// Only one fainted Pokémon, auto-select it.
 							return this.parse(`/rpg useitem ${itemId} ${faintedPokemon[0].id}`);
 						}
 					}
 
 					if (healingItems.includes(itemId)) {
-						// Auto-select if only one Pokémon is damaged (and not fainted)
 						const damagedPokemon = player.party.filter(p => p.hp > 0 && p.hp < p.maxHp);
 						if (damagedPokemon.length === 1) {
-							// Auto-select the only damaged Pokémon
 							return this.parse(`/rpg useitem ${itemId} ${damagedPokemon[0].id}`);
 						}
 					}
-					// [END NEW LOGIC]
-
-					// If no auto-selection was made, show the selection screen
+					// No auto-selection, show the list
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
 				}
-
-				// The rest of the function (for when pokemonId *is* provided) remains the same.
-				const targetPokemon = player.party.find(p => p.id === pokemonId);
-				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
-
-				let result: { success: boolean, message: string } = { success: false, message: "This item cannot be used." };
-				let requiresMoveSelection = false;
-
-				switch (itemId) {
-				// Revival
-				case 'revive':
-				case 'maxrevive':
-				case 'revivalherb':
-					result = useRevivalItem(player, targetPokemon, itemId);
-					break;
-				case 'potion':
-				case 'superpotion':
-				case 'hyperpotion':
-				case 'maxpotion':
-				case 'fullrestore':
-				case 'berryjuice':
-				case 'freshwater':
-				case 'sodapop':
-				case 'lemonade':
-				case 'moomoomilk':
-				case 'tea':
-				case 'energyroot':
-				case 'energypowder':
-					result = useHealingItem(player, targetPokemon, itemId);
-					break;
-
-					// Specific Status
-				case 'antidote':
-					if (targetPokemon.status === 'psn') {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species} was cured of poison!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} is not poisoned.` };
-					}
-					break;
-				case 'paralyzeheal':
-					if (targetPokemon.status === 'par') {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species} was cured of paralysis!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} is not paralyzed.` };
-					}
-					break;
-				case 'awakening':
-					if (targetPokemon.status === 'slp') {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species} woke up!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} is not asleep.` };
-					}
-					break;
-				case 'burnheal':
-					if (targetPokemon.status === 'brn') {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species} was cured of its burn!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} is not burned.` };
-					}
-					break;
-				case 'iceheal':
-					if (targetPokemon.status === 'frz') {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species} was thawed out!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} is not frozen.` };
-					}
-					break;
-
-					// Full Status
-				case 'fullheal':
-				case 'healpowder':
-					if (targetPokemon.status) {
-						targetPokemon.status = null;
-						result = { success: true, message: `${targetPokemon.species}'s status was healed!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species} has no status condition.` };
-					}
-					break;
-
-					// PP Restore (Single Move)
-				case 'ether':
-				case 'maxether':
-					requiresMoveSelection = true;
-					break;
-
-					// PP Restore (All Moves)
-				case 'elixir':
-				case 'maxelixir':
-					let totalPPRestored = 0;
-					for (const move of targetPokemon.moves) {
-						const moveData = getMove(move.id);
-						const maxPP = moveData.pp || 5;
-						if (move.pp < maxPP) {
-							const restoreAmount = (itemId === 'elixir') ? 10 : maxPP;
-							const oldPP = move.pp;
-							move.pp = Math.min(maxPP, move.pp + restoreAmount);
-							totalPPRestored += (move.pp - oldPP);
-						}
-					}
-					if (totalPPRestored > 0) {
-						result = { success: true, message: `${targetPokemon.species}'s moves had their PP restored!` };
-					} else {
-						result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
-					}
-					break;
-
-					// Vitamins
-				case 'hpup':
-				case 'protein':
-				case 'iron':
-				case 'calcium':
-				case 'zinc':
-				case 'carbos':
-					result = useVitaminItem(player, targetPokemon, itemId);
-					break;
-				}
-
-				if (requiresMoveSelection) {
-					// Show the move selection UI
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveSelectionHTML(player, pokemonId, itemId)}`);
-				}
-
-				if (!result.success) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
-				}
-
-				// If successful, remove item and show result
-				// (Vitamin function already removes item, so skip for them)
-				if (!['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId)) {
-					removeItemFromInventory(player, itemId, 1);
-				}
-
-				const tempSlot = createActivePokemonSlot(targetPokemon);
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
-			} else if (item.category === 'held' || item.category === 'berry') {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
-			} else if (item.category === 'misc') {
-				if (!pokemonId) {
+				
+				if (item.category === 'misc') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
 				}
-
-				const targetPokemon = player.party.find(p => p.id === pokemonId);
-				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
-
-				// Handle specific misc items
-				if (itemId === 'rarecandy') {
-					const result = useRareCandyItem(player, targetPokemon, room, user);
-					if (!result.success) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'rarecandy')}`);
-					}
-					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-					}
-					const updatedPokemon = player.party.find(p => p.id === pokemonId);
-					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-					const tempSlot = createActivePokemonSlot(updatedPokemon);
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
-				} else if (itemId.startsWith('expcandy')) {
-					const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
-					if (!result.success) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
-					}
-					if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-					}
-					const updatedPokemon = player.party.find(p => p.id === pokemonId);
-					if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-					const tempSlot = createActivePokemonSlot(updatedPokemon);
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
-				} else if (itemId === 'terashard') {
-					const allTypes = Object.keys(TYPE_CHART);
-					if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
-					const newTeraType = allTypes[Math.floor(Math.random() * allTypes.length)];
-					const oldTeraType = targetPokemon.teraType;
-					targetPokemon.teraType = newTeraType;
-					removeItemFromInventory(player, 'terashard', 1);
-					const tempSlot = createActivePokemonSlot(targetPokemon);
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTeraShardResultHTML(targetPokemon, oldTeraType, newTeraType, tempSlot)}`);
-				} else if (itemId === 'eggmovetutor') {
-					const speciesId = toID(targetPokemon.species);
-					const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
-					const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
-					if (learnableEggMoves.length === 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
-					}
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
-				} else if (itemId.startsWith('tm-')) {
-					// TM Usage
-					// Check if Pokemon has fainted
-					if (targetPokemon.hp <= 0) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
-					}
-
-					const moveId = itemId.substring(3); // Remove 'tm-' prefix to get move ID
-					const speciesId = toID(targetPokemon.species);
-					const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
-
-					// Check if Pokemon can learn this TM move
-					if (!tmMoves.includes(moveId)) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Incompatible TM</h2><p><strong>${targetPokemon.species}</strong> cannot learn this move from a TM.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
-					}
-
-					// Check if Pokemon already knows this move
-					if (targetPokemon.moves.some(m => m.id === moveId)) {
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Move Already Known</h2><p><strong>${targetPokemon.species}</strong> already knows this move!</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
-					}
-
-					// Teach the move (similar to Egg Move Tutor logic)
-					if (targetPokemon.moves.length < 4) {
-						const newMoveData = getMove(moveId);
-						targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
-						removeItemFromInventory(player, itemId, 1);
-						const tempSlot = createActivePokemonSlot(targetPokemon);
-						const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
-						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
-					} else {
-						// Queue move for replacement
-						if (!player.pendingMoveLearnQueue) {
-							player.pendingMoveLearnQueue = [];
-						}
-						player.pendingMoveLearnQueue.push({ pokemonId: targetPokemon.id, moveIds: [moveId] });
-						removeItemFromInventory(player, itemId, 1);
-						this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
-					}
-				} else if (item.id.endsWith('stone')) {
-					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
-
-					if (evoMessage) {
-						// Evolution was successful
-						removeItemFromInventory(player, itemId, 1);
-						const updatedPokemon = player.party.find(p => p.id === pokemonId); // Refetch in case of evolution
-						const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
-						let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
-
-						// Check if new moves were queued
-						if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-							resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
-						} else {
-							resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
-						}
-						resultHTML += `</div>`;
-						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
-					} else {
-						// Evolution failed
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
-					}
-				} else {
-					return this.errorReply("This item cannot be used right now.");
+				
+				if (item.category === 'held' || item.category === 'berry') {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 				}
-			} else {
+				
 				return this.errorReply("This item category cannot be used from the bag.");
 			}
+			
+			// --- Handle "POKEMON IS SELECTED" ---
+			const targetPokemon = player.party.find(p => p.id === pokemonId);
+			if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
+
+			// Route to the correct handler
+			if (item.category === 'medicine') {
+				return handleUseMedicine.call(this, player, item, targetPokemon, room, user);
+			} 
+			
+			if (item.category === 'misc') {
+				return handleUseMiscItem.call(this, player, item, targetPokemon, room, user);
+			}
+
+			return this.errorReply("This item cannot be used in this way.");
 		},
 
 		restorepp(target, room, user) {
