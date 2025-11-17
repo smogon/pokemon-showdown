@@ -695,6 +695,34 @@
     color: #FFF;
 }
 
+/*************************
+* RPG UI Kit (Additions)
+**************************/
+
+/* --- Main Menu Container --- */
+.rpg-menu-box {
+    text-align: center;
+}
+
+/* This ensures that lists inside the menu box are still left-aligned, which is standard. */
+.rpg-menu-box ul,
+.rpg-menu-box ol {
+    text-align: left;
+    display: inline-block; /* Helps with centering the list block itself */
+    margin: 0 auto;
+}
+
+/* Ensure cards and grids inside the menu box are not force-centered */
+.rpg-menu-box .rpg-card,
+.rpg-menu-box .rpg-grid-2col,
+.rpg-menu-box .rpg-grid-3col,
+.rpg-menu-box .rpg-list-item,
+.rpg-menu-box .rpg-switch-list-item,
+.rpg-menu-box .rpg-pokemon-card,
+.rpg-menu-box .rpg-scroll-grid-2col {
+    text-align: left;
+}
+
 
 /*************************
 * RPG CUSTOM CSS ENDS
