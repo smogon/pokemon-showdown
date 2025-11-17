@@ -77,6 +77,7 @@ describe('RPG Core Module', function () {
 				level: 10,
 				experience: 5000,
 				badges: 4,
+				obtainedBadges: ['Boulder Badge', 'Cascade Badge', 'Thunder Badge', 'Rainbow Badge'],
 				party: [],
 				location: 'Test City',
 				money: 12000,
@@ -103,6 +104,16 @@ describe('RPG Core Module', function () {
 		it('should handle edge case: empty storyFlags and completedNPCActions', () => {
 			const serialized = {
 				id: 'testuser005',
+				name: 'Test User 5',
+				level: 5,
+				experience: 0,
+				badges: 0,
+				obtainedBadges: [],
+				party: [],
+				location: 'pallet',
+				money: 3000,
+				inventory: [],
+				pc: [],
 				storyFlags: [],
 				completedNPCActions: [],
 			};

@@ -15,6 +15,7 @@ import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
 import { addItemToInventory } from './items';
 import { getStartingLocation } from './locations';
 import { ImpulseDB } from '../../impulse-db';
+import { TOTAL_BADGES } from './badges';
 
 export const playerData = new Map<string, PlayerData>();
 export const activeBattles = new Map<string, BattleState>();
@@ -214,8 +215,8 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (typeof data.level !== 'number' || data.level < 1 || data.level > 100) {
 		throw new Error('Invalid save data: level must be between 1 and 100');
 	}
-	if (typeof data.badges !== 'number' || data.badges < 0 || data.badges > 8) {
-		throw new Error('Invalid save data: badges must be between 0 and 8');
+	if (typeof data.badges !== 'number' || data.badges < 0 || data.badges > TOTAL_BADGES) {
+		throw new Error(`Invalid save data: badges must be between 0 and ${TOTAL_BADGES}`);
 	}
 	if (!Array.isArray(data.party)) {
 		throw new Error('Invalid save data: party must be an array');
@@ -258,8 +259,8 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (data.obtainedBadges.length !== data.badges) {
 		throw new Error('Invalid save data: obtainedBadges length must match badges count');
 	}
-	if (data.obtainedBadges.length > 8) {
-		throw new Error('Invalid save data: cannot have more than 8 badges');
+	if (data.obtainedBadges.length > TOTAL_BADGES) {
+		throw new Error(`Invalid save data: cannot have more than ${TOTAL_BADGES} badges`);
 	}
 
 	// Validate Pokemon in party

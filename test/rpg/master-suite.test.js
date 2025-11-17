@@ -353,6 +353,7 @@ describe('RPG System - Master Integration Suite', function () {
 			testPlayer.storyFlags.add('flag2');
 			testPlayer.completedNPCActions.add('npc1');
 			testPlayer.badges = 3;
+			testPlayer.obtainedBadges = ['Boulder Badge', 'Cascade Badge', 'Thunder Badge'];
 			testPlayer.money = 7500;
 
 			// Serialize
@@ -360,6 +361,8 @@ describe('RPG System - Master Integration Suite', function () {
 
 			// Verify serialization
 			assert.equal(serialized.badges, 3);
+			assert.equal(serialized.obtainedBadges.length, 3);
+			assert(serialized.obtainedBadges.includes('Boulder Badge'));
 			assert.equal(serialized.money, 7500);
 			assert.equal(serialized.party.length, 2);
 			assert(Array.isArray(serialized.storyFlags));
@@ -370,6 +373,8 @@ describe('RPG System - Master Integration Suite', function () {
 
 			// Verify deserialization
 			assert.equal(deserialized.badges, 3);
+			assert.equal(deserialized.obtainedBadges.length, 3);
+			assert(deserialized.obtainedBadges.includes('Boulder Badge'));
 			assert.equal(deserialized.money, 7500);
 			assert.equal(deserialized.party.length, 2);
 			assert(deserialized.storyFlags instanceof Set);
