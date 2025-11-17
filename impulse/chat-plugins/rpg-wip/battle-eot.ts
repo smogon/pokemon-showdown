@@ -1,3 +1,11 @@
+/*
+* Pokemon Showdown
+* RPG Battle End-of-Turn (EOT) Effects
+*
+* This file contains all logic that happens after
+* all actions for the turn have been completed.
+*/
+
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { getActiveSlots, getMove } from './utils';
@@ -13,9 +21,16 @@ import {
 	getStatMultiplier,
 } from './battle-core';
 
+/**
+ * Main EOT orchestrator.
+ * This function loops through effects in their correct priority order,
+ * applying each effect to all active Pokemon before moving to the next.
+ */
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+	// TODO: Sort allSlots by speed (descending, Trick Room aware) for perfect accuracy
 
+	// --- EOT Priority 1: Perish Song & Future Sight ---
 	allSlots.forEach(slot => {
 		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
 			slot.perishSongCounter--;
@@ -32,25 +47,19 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.opponentSlots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
-
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			} else {
@@ -66,25 +75,19 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		if (fm.turnsLeft === 0) {
 			const targetSlot = battle.playerSlots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
-
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
-
 				const move = getMove(fm.moveId);
 				const basePower = move.basePower || 120;
 				const moveType = move.type;
-
 				const defender = targetSlot.pokemon;
 				const defenderSpecies = Dex.species.get(defender.species);
 				const defenderDef = defender.spd * getStatMultiplier(targetSlot.statStages.spd);
-
 				const effectiveness = getCustomEffectiveness(moveType, defenderSpecies.types, defender, battle);
 				const baseDamage = Math.floor((2 * 50 / 5 + 2) * basePower * (fm.attackerStats.spa / defenderDef) / 50) + 2;
 				const damage = Math.floor(baseDamage * effectiveness);
-
 				targetSlot.pokemon.hp = Math.max(0, targetSlot.pokemon.hp - damage);
 				messageLog.push(`${defender.species} took ${damage} damage!`);
-
 				if (effectiveness > 1) messageLog.push(`It's super effective!`);
 				else if (effectiveness < 1 && effectiveness > 0) messageLog.push(`It's not very effective...`);
 			} else {
@@ -95,44 +98,68 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
+	// --- EOT Priority 2: Reset Flags ---
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 		slot.isProtected = false;
 	}
 
+	// --- EOT Priority 3: Weather (Damage/Healing) ---
+	handleEndOfTurnWeather(battle, messageLog, allSlots);
+
+	// --- EOT Priority 4: Item Healing (Leftovers, Black Sludge-Heal) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
-			handleEndOfTurnEffects(slot, battle, messageLog);
+			applyEOTHealingItemEffects(slot, battle, messageLog);
 		}
 	}
 
-	handleEndOfTurnWeather(battle, messageLog, allSlots);
-	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
-}
-
-export function handleEndOfTurnEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
-	if (slot.pokemon.hp <= 0) return;
-
-	const lumCuredStatus = applyEOTItemEffects(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
-
-	applyEOTHealingEffects(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
-
-	if (!lumCuredStatus) {
-		applyEOTStatusDamage(slot, battle, messageLog);
+	// --- EOT Priority 5: Ability Healing (Aqua Ring, Ingrained, Wish) ---
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			applyEOTHealingEffects(slot, battle, messageLog);
+		}
 	}
-	if (slot.pokemon.hp <= 0) return;
 
-	applyEOTLeechSeedDamage(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
+	// --- EOT Priority 6: Status Cure (Lum Berry) & Non-Healing Items ---
+	const lumCuredStatus = new Map<string, boolean>();
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			const cured = applyEOTNonHealingItemEffects(slot, battle, messageLog);
+			lumCuredStatus.set(slot.pokemon.id, cured);
+		}
+	}
 
-	applyEOTVolatileStatusDamage(slot, battle, messageLog);
-	if (slot.pokemon.hp <= 0) return;
+	// --- EOT Priority 7: Status Damage (Poison, Burn, Toxic) ---
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0 && !lumCuredStatus.get(slot.pokemon.id)) {
+			applyEOTStatusDamage(slot, battle, messageLog);
+		}
+	}
 
-	decrementEOTVolatileCounters(slot, battle, messageLog);
+	// --- EOT Priority 8: Leech Seed ---
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			applyEOTLeechSeedDamage(slot, battle, messageLog);
+		}
+	}
 
-	slot.isCharged = false;
+	// --- EOT Priority 9: Volatile Status Damage (Curse, Nightmare, Trap) ---
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			applyEOTVolatileStatusDamage(slot, battle, messageLog);
+		}
+	}
+
+	// --- EOT Priority 10: Timers & Counters (Yawn, Taunt, Field Effects) ---
+	for (const slot of allSlots) {
+		if (slot.pokemon.hp > 0) {
+			decrementEOTVolatileCounters(slot, battle, messageLog);
+			slot.isCharged = false; // Reset Charge
+		}
+	}
+
+	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 }
 
 export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[], allSlots: ActivePokemonSlot[]) {
@@ -373,7 +400,33 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 	}
 }
 
-export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
+/**
+ * Applies healing items (Leftovers, Black Sludge-Heal).
+ */
+export function applyEOTHealingItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return;
+
+	const pokemon = slot.pokemon;
+	const speciesData = Dex.species.get(pokemon.species);
+
+	if (pokemon.item === 'leftovers' && pokemon.hp < pokemon.maxHp) {
+		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
+		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
+	} else if (pokemon.item === 'blacksludge') {
+		if (speciesData.types.includes('Poison')) {
+			if (pokemon.hp < pokemon.maxHp) {
+				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
+				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
+			}
+		}
+	}
+}
+
+/**
+ * Applies status-inflicting items (Orbs), status-curing (Lum), and damage (Barb, Sludge-Damage).
+ * Returns true if a Lum Berry cured a status.
+ */
+export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return false;
 
 	const pokemon = slot.pokemon;
@@ -394,19 +447,11 @@ export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState
 		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		consumeBerry(slot, 'lumberry', messageLog);
-		return true;
+		return true; // Status was cured
 	}
 
-	if (pokemon.item === 'leftovers' && pokemon.hp < pokemon.maxHp) {
-		pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
-		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Leftovers</strong>!</span>`);
-	} else if (pokemon.item === 'blacksludge') {
-		if (speciesData.types.includes('Poison')) {
-			if (pokemon.hp < pokemon.maxHp) {
-				pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + Math.max(1, Math.floor(pokemon.maxHp / 16)));
-				messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> restored a little HP using its <strong>Black Sludge</strong>!</span>`);
-			}
-		} else if (RPGAbilities.takesIndirectDamage(pokemon)) {
+	if (pokemon.item === 'blacksludge') {
+		if (!speciesData.types.includes('Poison') && RPGAbilities.takesIndirectDamage(pokemon)) {
 			pokemon.hp = Math.max(0, pokemon.hp - Math.max(1, Math.floor(pokemon.maxHp / 8)));
 			messageLog.push(`<span style="color: #d9534f;"><strong>${pokemon.species}</strong> was hurt by its <strong>Black Sludge</strong>!</span>`);
 		}
@@ -417,7 +462,7 @@ export function applyEOTItemEffects(slot: ActivePokemonSlot, battle: BattleState
 		}
 	}
 
-	return false;
+	return false; // Status was not cured by Lum Berry
 }
 
 export function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
@@ -573,8 +618,6 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 	if (slot.encoreMove) {
 		const encoredMoveObj = pokemon.moves.find(m => m.id === slot.encoreMove!.moveId);
 		const hasNoPP = !encoredMoveObj || encoredMoveObj.pp === 0;
-
-
 
 		if (hasNoPP) {
 			messageLog.push(`${pokemon.species}'s encore ended due to lack of PP!`);
