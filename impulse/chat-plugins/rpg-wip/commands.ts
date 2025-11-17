@@ -738,6 +738,11 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 				} else if (itemId.startsWith('tm-')) {
 					// TM Usage
+					// Check if Pokemon has fainted
+					if (targetPokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					}
+
 					const moveId = itemId.substring(3); // Remove 'tm-' prefix to get move ID
 					const speciesId = toID(targetPokemon.species);
 					const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
