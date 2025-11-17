@@ -317,35 +317,36 @@
 }
 
 .rpg-exp-bar {
-    border-radius: 10px;
-    padding: 2px;
-    margin: 5px 0;
+    max-width: 120px;
+    height: 12px;
+    background: #f0f0f0;
+    border: 1px solid #aaa;
+    border-radius: 8px;
     position: relative;
-    background: #ddd;
+    margin-top: 4px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .dark .rpg-exp-bar {
-    background: #444;
+    background: #333;
+    border-color: #777;
 }
 
 .rpg-exp-bar-inner {
     background: #6c9be8;
-    height: 10px;
-    border-radius: 8px;
+    height: 100%;
+    border-radius: 7px;
 }
 
 .rpg-exp-bar-text {
     position: absolute;
-    top: 2px;
+    top: 0;
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 10px;
-    line-height: 10px;
-    color: #000;
-}
-
-.dark .rpg-exp-bar-text {
+    font-size: 9px;
+    line-height: 12px;
     color: #000;
 }
 
