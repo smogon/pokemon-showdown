@@ -176,8 +176,6 @@ export function handleDamagingMove(
 			messageLog.push(`The ${terrainName} Terrain was removed!`);
 		}
 
-		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
-
 		if (move.id === 'terablast' && attackerSlot.terastallized === 'Stellar' && moveWasSuccessful) {
 			if (attackerSlot.statStages.atk > -6) {
 				attackerSlot.statStages.atk--;
@@ -255,6 +253,14 @@ export function handleDamagingMove(
 		}
 
 		if (defenderSlot.pokemon.hp <= 0) break;
+	}
+
+	// [!!!] FIX IMPLEMENTED [!!!]
+	// applySecondaryEffects is now called *after* the multi-hit loop has finished.
+	// We only apply secondary effects if the move was successful and the defender is still active.
+	if (moveWasSuccessful && defenderSlot.pokemon.hp > 0) {
+		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 	}
 }
 
