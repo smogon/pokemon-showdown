@@ -736,6 +736,44 @@ export const commands: ChatCommands = {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 					}
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
+				} else if (itemId.startsWith('tm-')) {
+					// TM Usage
+					// Check if Pokemon has fainted
+					if (targetPokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					}
+
+					const moveId = itemId.substring(3); // Remove 'tm-' prefix to get move ID
+					const speciesId = toID(targetPokemon.species);
+					const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
+
+					// Check if Pokemon can learn this TM move
+					if (!tmMoves.includes(moveId)) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Incompatible TM</h2><p><strong>${targetPokemon.species}</strong> cannot learn this move from a TM.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					}
+
+					// Check if Pokemon already knows this move
+					if (targetPokemon.moves.some(m => m.id === moveId)) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Move Already Known</h2><p><strong>${targetPokemon.species}</strong> already knows this move!</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+					}
+
+					// Teach the move (similar to Egg Move Tutor logic)
+					if (targetPokemon.moves.length < 4) {
+						const newMoveData = getMove(moveId);
+						targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
+						removeItemFromInventory(player, itemId, 1);
+						const tempSlot = createActivePokemonSlot(targetPokemon);
+						const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
+						this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					} else {
+						// Queue move for replacement
+						if (!player.pendingMoveLearnQueue) {
+							player.pendingMoveLearnQueue = [];
+						}
+						player.pendingMoveLearnQueue.push({ pokemonId: targetPokemon.id, moveIds: [moveId] });
+						removeItemFromInventory(player, itemId, 1);
+						this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+					}
 				} else if (item.id.endsWith('stone')) {
 					const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
 
@@ -868,7 +906,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const category = toID(target);
 			// This line has been corrected to include 'medicine' instead of 'potion'
-			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'misc'];
+			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'tm', 'misc'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
@@ -925,8 +963,8 @@ export const commands: ChatCommands = {
 			if (itemInBag.quantity < quantity) {
 				return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
 			}
-			if (itemInBag.category !== 'misc') {
-				return this.errorReply("You can only sell items from the 'Misc.' category.");
+			if (itemInBag.category === 'key') {
+				return this.errorReply("Key items cannot be sold.");
 			}
 
 			const sellPrice = ITEM_PRICES[itemId];
