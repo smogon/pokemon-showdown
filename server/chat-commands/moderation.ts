@@ -259,8 +259,8 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					this.privateModAction(`${name} was demoted to Room ${nextGroupName} by ${user.name}.`);
 					this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
-					shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);				
-					}
+					shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);		
+				}
 			}
 
 			if (targetUser) {
