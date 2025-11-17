@@ -1118,6 +1118,7 @@ export function generateDoubleBattleHTML(
 /**
  * Generate Battle Tower battle UI.
  * This is a specialized version of the single battle UI with a header showing the current floor.
+ * Updated to use a layout inspired by Pokemon Emerald (Opponent Top-Right, Player Bottom-Left).
  */
 export function generateBattleTowerHTML(
 	battle: BattleState,
@@ -1126,39 +1127,27 @@ export function generateBattleTowerHTML(
 	teraToggled?: boolean
 ): string {
 	const currentFloor = battle.floor || 1;
-	// Get format name from configuration
 	const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
 	const formatName = formatConfig ? formatConfig.name : 'Battle Factory';
 
-	// Combine cumulative battle log with any temporary messages, reversing for newest-first display
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const allLogs = [...messageLog, ...reversedBattleLog];
 	const displayLog = allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
 
-	// Battle Tower header with format name
 	const headerHTML = '<div style="text-align: center;">' +
 		'<h2">🗼 ' + formatName + ' Battle Tower - Floor ' + String(currentFloor) + '</h2>' +
 		'</div>';
 
-	// Check if battle has ended first - slots may be null after fainting
 	if (battle.battleEnded) {
-		// Battle Tower battles don't use the normal continue button - they have their own flow
-		// The victory/loss screens are handled by generateBattleTowerFloorCompleteHTML and generateBattleTowerLossHTML
-		// This should not be reached normally, but provide a fallback
 		return '<div class="infobox">' +
 			headerHTML +
 			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 			'</div>';
 	}
 
-	// Battle is ongoing - need slots to display Pokemon info
-	// Battle Tower is a single battle, so only slot[0] should be used
 	const playerSlot = battle.playerSlots[0];
 	const opponentSlot = battle.opponentSlots[0];
 
-	// Defensive check: if slots are missing during an active battle,
-	// this may occur temporarily when a Pokemon faints and is being replaced
-	// Show a transitional state instead of erroring
 	if (!playerSlot || !opponentSlot) {
 		console.warn('[RPG Battle Tower] Temporary null slot detected during battle resolution', {
 			floor: battle.floor,
@@ -1167,8 +1156,6 @@ export function generateBattleTowerHTML(
 			turn: battle.turn,
 		});
 
-		// Show a transitional message with the battle log
-		// The next update should show the proper battle state
 		return '<div class="infobox">' +
 			headerHTML +
 			'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
@@ -1182,7 +1169,6 @@ export function generateBattleTowerHTML(
 	let actionHTML = '';
 	let moveButtonsHTML = '';
 
-	// Normal battle actions
 	const allMovesOutOfPP = playerPokemon.moves.every(m => m.pp === 0);
 
 	if (allMovesOutOfPP) {
@@ -1204,27 +1190,22 @@ export function generateBattleTowerHTML(
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
-		// Check if locked into a rampage move or Uproar with no PP
 		const isRampagingWithNoPP = (playerSlot.lockedMoveCounter > 0 || playerSlot.uproarTurns > 0) &&
 			playerSlot.lockedMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
 
-		// Check if encored into a move with no PP
 		const isEncoredWithNoPP = playerSlot.encoreMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.encoreMove!.moveId)?.pp === 0;
 
-		// Check if charging a move with no PP
 		const isChargingWithNoPP = playerSlot.chargingMove &&
 			playerPokemon.moves.find(m => m.id === playerSlot.chargingMove)?.pp === 0;
 
-		// Check if locked by Choice item with no PP
 		const isChoiceLockedWithNoPP = playerSlot.lockedMove &&
 			playerSlot.lockedMoveCounter === 0 &&
 			playerSlot.uproarTurns === 0 &&
 			battle.magicRoomTurns === 0 &&
 			playerPokemon.moves.find(m => m.id === playerSlot.lockedMove)?.pp === 0;
 
-		// If locked into a move with no PP, show only Struggle button
 		if (isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
 			const buttonStyle = 'width: 155px; height: 40px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: left;';
 			const buttonContent = '<div style="text-align: center; font-weight: bold; font-size: 1em; margin-bottom: 2px;">Struggle</div>' +
@@ -1272,7 +1253,6 @@ export function generateBattleTowerHTML(
 				return normalButton;
 			});
 
-			// Add Terastallize toggle button if available
 			let teraToggleHTML = '';
 			if (canTerastallize) {
 				const teraToggleStyle = 'width: 155px; height: 30px; padding: 4px; border-radius: 8px; box-sizing: border-box; text-align: center; font-weight: bold; margin: 0 auto 10px auto; font-size: 0.9em; ' + (teraActive ? 'background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%); color: white;' : 'border: 2px solid #FF1493; color: #FF1493; background: white;');
@@ -1306,22 +1286,34 @@ export function generateBattleTowerHTML(
 	const playerName = player ? player.name : "Your";
 	const opponentOwnerName = battle.opponentName || 'Battle Tower Trainer';
 
-	// --- Generate global conditions HTML ---
 	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
+
+	const opponentInfoHTML = generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle);
+	const playerInfoHTML = generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle);
+	
+	const emeraldStyleLayout =
+		'<div style="display: flex; flex-direction: column; height: 100%;">' +
+			'<div style="width: 100%; text-align: right; margin-bottom: 5px;">' +
+				'<div style="display: inline-block; text-align: left; max-width: 50%;">' +
+					opponentInfoHTML +
+				'</div>' +
+			'</div>' +
+			
+			'<div style="width: 100%; text-align: center;">' +
+				globalConditionsHTML +
+			'</div>' +
+			
+			'<div style="width: 100%; text-align: left; margin-top: 5px;">' +
+				'<div style="display: inline-block; text-align: left; max-width: 50%;">' +
+					playerInfoHTML +
+				'</div>' +
+			'</div>' +
+		'</div>';
+
 
 	return '<div class="infobox">' +
 		headerHTML +
-		globalConditionsHTML +
-		'<table style="width: 100%; margin-bottom: 5px;">' +
-		'<tr>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle) +
-		'</td>' +
-		'<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">' +
-		generateSharedBattlePokemonInfo(opponentSlot, false, false, opponentOwnerName, battle) +
-		'</td>' +
-		'</tr>' +
-		'</table>' +
+		emeraldStyleLayout +
 		'<div style="padding: 8px; margin: 5px 0; border: 1px solid #666; min-height: 50px; max-height: 150px; overflow-y: auto; border-radius: 5px;">' + displayLog + '</div>' +
 		actionHTML +
 		'</div>';
