@@ -1292,24 +1292,32 @@ export function generateBattleTowerHTML(
 	const playerInfoHTML = generateSharedBattlePokemonInfo(playerSlot, true, false, playerName, battle);
 	
 	const emeraldStyleLayout =
-		'<div style="display: flex; flex-direction: column; height: 100%;">' +
-			'<div style="width: 100%; text-align: right; margin-bottom: 5px;">' +
-				'<div style="display: inline-block; text-align: left; max-width: 50%;">' +
-					opponentInfoHTML +
-				'</div>' +
-			'</div>' +
-			
-			'<div style="width: 100%; text-align: center;">' +
-				globalConditionsHTML +
-			'</div>' +
-			
-			'<div style="width: 100%; text-align: left; margin-top: 5px;">' +
-				'<div style="display: inline-block; text-align: left; max-width: 50%;">' +
-					playerInfoHTML +
-				'</div>' +
-			'</div>' +
-		'</div>';
-
+		'<table style="width: 100%; border-collapse: collapse; margin-bottom: 5px;">' +
+			// First row: Opponent Info (Top-Right)
+			'<tr>' +
+				'<td style="width: 50%; padding: 0; vertical-align: top;"></td>' + // Empty cell for spacing
+				'<td style="width: 50%; padding: 0; vertical-align: top; text-align: right;">' + 
+					'<div style="display: inline-block; text-align: left;">' + // Ensures content alignment is correct inside the box
+						opponentInfoHTML + 
+					'</div>' +
+				'</td>' +
+			'</tr>' +
+			// Second row: Global Conditions (Center)
+			'<tr>' +
+				'<td colspan="2" style="padding: 0; vertical-align: middle; text-align: center;">' + 
+					globalConditionsHTML + 
+				'</td>' +
+			'</tr>' +
+			// Third row: Player Info (Bottom-Left)
+			'<tr>' +
+				'<td style="width: 50%; padding: 0; vertical-align: bottom; text-align: left;">' +
+					'<div style="display: inline-block; text-align: left;">' + 
+						playerInfoHTML + 
+					'</div>' +
+				'</td>' +
+				'<td style="width: 50%; padding: 0; vertical-align: bottom;"></td>' + // Empty cell for spacing
+			'</tr>' +
+		'</table>';
 
 	return '<div class="infobox">' +
 		headerHTML +
