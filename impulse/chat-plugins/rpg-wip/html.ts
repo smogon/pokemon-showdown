@@ -1964,6 +1964,7 @@ function generateBattleHeader(battle: BattleState): string {
 /**
  * [REFACTORED] to restore correct single-battle (side-by-side) 
  * and double-battle (grid) layouts.
+ * [FIXED] Swapped player and opponent in single battle to place player on the left.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -2041,14 +2042,14 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		// A single row with two cells
 		html += '<tr>';
 		
-		// Opponent Cell (Slot 0)
-		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-		html += generateSlotHTML(battle.opponentSlots[0], 2, 'opponent');
-		html += '</td>';
-		
-		// Player Cell (Slot 0)
+		// Player Cell (Slot 0) - [MOVED FIRST]
 		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
 		html += generateSlotHTML(battle.playerSlots[0], 0, 'player');
+		html += '</td>';
+
+		// Opponent Cell (Slot 0) - [MOVED SECOND]
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(battle.opponentSlots[0], 2, 'opponent');
 		html += '</td>';
 
 		html += '</tr>';
