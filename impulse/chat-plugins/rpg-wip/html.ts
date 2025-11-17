@@ -997,8 +997,8 @@ function generateAvailablePokemonListHTML(
 }
 
 /**
- * [MODIFIED] Generates the HTML for a single Pokemon in battle.
- * Now includes Suggestion #3 (Hierarchy): HP/Status is moved to the top.
+ * [REFACTORED] to change the display order of elements.
+ * The new order is: 1. Name, 2. HP Bar, 3. Tags, 4. Sprite.
  */
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
@@ -1009,10 +1009,10 @@ export function generateSharedBattlePokemonInfo(
 ): string {
 	const pokemon = slot.pokemon;
 	const species = Dex.species.get(pokemon.species);
-	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
-	const hpBarColor = hpPercentage > 50 ? 'green' : hpPercentage > 25 ? 'yellow' : 'red';
 
-	// [SUGGESTION #3] Generate status tags first
+	// --- 1. Generate all the component parts ---
+
+	// Tags
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, isDoubleBattle, battle);
 	const statusDisplay = allStatusTags || '&nbsp;';
 
@@ -1021,29 +1021,34 @@ export function generateSharedBattlePokemonInfo(
 
 	const namePrefix = ownerName ? ownerName + "'s " : '';
 
-	const hpBarHTML =
-		'<div class="rpg-hp-bar">' +
-		// We still need inline style for width and color as they are dynamic
-		'<div class="rpg-hp-bar-inner" style="background: ' + hpBarColor + '; width: ' + String(hpPercentage) + '%;"></div>' +
-		'<span class="rpg-hp-bar-text">' +
-		String(hpPercentage) + '%' +
-		'</span>' +
+	// HP Bar
+	const hpBarHTML = generateHPBar(pokemon); // Use the helper function we already made
+
+	// Name Line
+	const nameLineHTML = '<div class="rpg-battle-name-line">' +
+		(isDoubleBattle ? '<psicon pokemon="' + species.id + '" class="rpg-battle-psicon"></psicon> ' : '') + // Only show psicon in double battles
+		namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level) +
 		'</div>';
 
-	if (isDoubleBattle) {
-		let html = '';
-        // [SUGGESTION #3] HP bar and status moved to the top
-		html += hpBarHTML;
-		html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
-        // Name/Level below
-		html += '<div class="rpg-battle-name-line">';
-		html += '<psicon pokemon="' + species.id + '" class="rpg-battle-psicon"></psicon> ';
-		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
-		html += '</div>';
-		return html;
-	} else {
-		const spriteFilename = getSpriteFilename(species.id);
+	
+	// --- 2. Assemble the HTML in the new order ---
 
+	if (isDoubleBattle) {
+		// Assemble for Double Battle (No Sprite)
+		let html = '';
+		// 1. Name
+		html += nameLineHTML;
+		// 2. HP Bar
+		html += hpBarHTML;
+		// 3. Tags
+		html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
+		return html;
+
+	} else {
+		// Assemble for Single Battle (With Sprite)
+		
+		// 4. Sprite
+		const spriteFilename = getSpriteFilename(species.id);
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
 			`<div class="rpg-battle-sprite">` +
@@ -1051,13 +1056,13 @@ export function generateSharedBattlePokemonInfo(
 			'</div>';
 
 		let html = '<div class="rpg-pokemon-card">';
-        // [SUGGESTION #3] HP bar and status moved to the top
+		// 1. Name
+		html += nameLineHTML;
+		// 2. HP Bar
 		html += hpBarHTML;
+		// 3. Tags
 		html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
-        // Name/Level below
-		html += '<div class="rpg-battle-name-line">';
-		html += namePrefix + (pokemon.nickname || pokemon.species) + ' ' + genderSymbol + shinySymbol + ' L' + String(pokemon.level);
-		html += '</div>';
+		// 4. Sprite
 		html += spriteHTML;
 		html += '</div>';
 		return html;
