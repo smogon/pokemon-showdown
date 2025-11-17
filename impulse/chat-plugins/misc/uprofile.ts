@@ -9,6 +9,14 @@ import { ImpulseDB } from '../../impulse-db';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
+interface ProfileStatusDocument {
+	_id: string;
+	status: string;
+	updatedAt: Date;
+}
+
+const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
+
 /**
  * Get the avatar display for a user, including custom avatars
  */
@@ -42,6 +50,7 @@ async function getUserProfileData(userid: string) {
 		exp?: number,
 		level?: number,
 		ontime?: number,
+		customStatus?: string,
 	} = {};
 
 	// Get EXP data if available
@@ -65,6 +74,16 @@ async function getUserProfileData(userid: string) {
 		// Ontime system not available
 	}
 
+	// Get custom profile status if available
+	try {
+		const statusDoc = await ProfileStatusDB.findOne({ _id: userid });
+		if (statusDoc) {
+			data.customStatus = statusDoc.status;
+		}
+	} catch {
+		// Profile status not available
+	}
+
 	return data;
 }
 
@@ -81,6 +100,26 @@ function formatOntime(time: number): string {
 	if (m > 0) parts.push(`${m.toLocaleString()} ${m === 1 ? 'minute' : 'minutes'}`);
 	if (parts.length === 0 && s > 0) parts.push(`${s.toLocaleString()} ${s === 1 ? 'second' : 'seconds'}`);
 	return parts.length ? parts.join(', ') : '0 seconds';
+}
+
+/**
+ * Get status display with color and icon
+ */
+function getStatusDisplay(user: User | null): string {
+	if (!user) {
+		return `<span style="color:red;">○ Offline</span>`;
+	}
+
+	const statusType = user.statusType || 'online';
+	switch (statusType) {
+	case 'busy':
+		return `<span style="color:yellow;">● Busy</span>`;
+	case 'idle':
+		return `<span style="color:gray;">● Idle</span>`;
+	case 'online':
+	default:
+		return `<span style="color:green;">● Online</span>`;
+	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -111,14 +150,24 @@ export const commands: Chat.ChatCommands = {
 			buf += '<div style="text-align:left;padding:0 10px;">';
 
 			// Status
-			if (targetUser) {
-				buf += `<strong>Status:</strong> <span style="color:green;">● Online</span><br>`;
-			} else {
-				buf += `<strong>Status:</strong> <span style="color:gray;">○ Offline</span><br>`;
+			buf += `<strong>Status:</strong> ${getStatusDisplay(targetUser)}<br>`;
+
+			// Custom status message
+			if (profileData.customStatus) {
+				buf += `<strong>Custom Status:</strong> ${Chat.escapeHTML(profileData.customStatus)}<br>`;
 			}
 
 			// User ID
 			buf += `<strong>User ID:</strong> ${targetId}<br>`;
+
+			// Registration status
+			if (targetUser) {
+				if (targetUser.registered) {
+					buf += `<strong>Registered:</strong> Yes<br>`;
+				} else {
+					buf += `<strong>Registered:</strong> No<br>`;
+				}
+			}
 
 			// Level and EXP (if available)
 			if (profileData.level !== undefined) {
@@ -140,16 +189,7 @@ export const commands: Chat.ChatCommands = {
 
 			// Global rank (if available)
 			if (targetUser && Config.groups[targetUser.tempGroup]?.name) {
-				buf += `<strong>Global Rank:</strong> ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})<br>`;
-			}
-
-			// Registration status
-			if (targetUser) {
-				if (targetUser.registered) {
-					buf += `<strong>Registered:</strong> Yes<br>`;
-				} else {
-					buf += `<strong>Registered:</strong> No<br>`;
-				}
+				buf += `<strong>Staff Rank:</strong> ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})<br>`;
 			}
 
 			buf += '</div>';
@@ -158,10 +198,31 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
+		async setstatus(target, room, user): Promise<void> {
+			if (!target || target.length > 100) {
+				return this.errorReply("Please provide a status message (max 100 characters).");
+			}
+
+			await ProfileStatusDB.updateOne(
+				{ _id: user.id },
+				{ $set: { _id: user.id, status: target, updatedAt: new Date() } },
+				{ upsert: true }
+			);
+
+			this.sendReply(`Your profile status has been set to: "${target}"`);
+		},
+
+		async clearstatus(target, room, user): Promise<void> {
+			await ProfileStatusDB.deleteOne({ _id: user.id });
+			this.sendReply("Your profile status has been cleared.");
+		},
+
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
+				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
+				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
