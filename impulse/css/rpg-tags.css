@@ -350,6 +350,10 @@
     color: #000;
 }
 
+.dark .rpg-exp-bar-text {
+    color: #000;
+}
+
 .rpg-stat-up {
     color: green;
     font-size: 11px;
