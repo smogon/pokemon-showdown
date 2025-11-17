@@ -700,7 +700,7 @@ export const commands: ChatCommands = {
 			} else if (player.badges >= 4) {
 				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - Halfway there!</p>`;
 			} else if (player.badges > 0) {
-				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - On your journey</p>`;
+				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - On your journey</p>';
 			} else {
 				progressHTML += 'Just starting out</p>';
 			}
@@ -2021,7 +2021,7 @@ export const commands: ChatCommands = {
 				teraToggleState.set(user.id, newState);
 
 				// Re-render the battle UI with the new toggle state
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, newState)}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, newState, 'moves')}`);
 			},
 
 			forceswitch(target, room, user) {
@@ -2428,6 +2428,22 @@ export const commands: ChatCommands = {
 					}
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
 				}
+			},
+
+			// --- NEW COMMAND BLOCK ---
+			battleui: {
+				showmoves(target, room, user) {
+					const battle = activeBattles.get(user.id);
+					if (!battle) return this.errorReply("You are not in a battle.");
+					// Re-render the battle UI, forcing the 'moves' panel
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), 'moves')}`);
+				},
+				main(target, room, user) {
+					const battle = activeBattles.get(user.id);
+					if (!battle) return this.errorReply("You are not in a battle.");
+					// Re-render the battle UI, forcing the 'main' (4-button) panel
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), 'main')}`);
+				},
 			},
 
 			help() {
