@@ -14,7 +14,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
-import { TOTAL_BADGES }N'./badges';
+import { TOTAL_BADGES } from './badges';
 
 // ###################################
 // C O R E   U T I L I T I E S
