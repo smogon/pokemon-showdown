@@ -1,12 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Battle Engine
-*
-* This file contains all the core logic for running a battle,
-* including damage calculation, move execution, turn processing,
-* and end-of-turn effects.
-*/
-
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { getActiveSlots, getActiveParty, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, type CheckEvolutionContext } from './utils';
@@ -34,547 +25,297 @@ import {
 	consumeBerry,
 } from './battle-shared';
 
-/**
- * Get the current types of a Pokemon, accounting for terastallization.
- */
-export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
-	if (slot?.terastallized) {
-		return [slot.terastallized];
-	}
-	const species = Dex.species.get(pokemon.species);
-	return species.types;
-}
-
-export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState, attacker?: RPGPokemon): number {
-	let effectiveness = 1;
-	const chartEntry = TYPE_CHART[moveType];
-	if (!chartEntry) return 1;
-
-	const hasStrongWinds = battle.weather?.type === 'strong-winds';
-	const isFlyingType = defenderTypes.includes('Flying');
-
-	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
-	const hasMindEye = attackerAbility === 'mindseye';
-	// Scrappy - Allows Normal/Fighting moves to hit Ghost types
-	const hasScrappy = attackerAbility === 'scrappy';
-
-	for (const defenderType of defenderTypes) {
-		if (chartEntry.superEffective.includes(defenderType)) {
-			// Delta Stream negates super effective hits on Flying types from Rock, Electric, Ice
-			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
-				['Rock', 'Electric', 'Ice'].includes(moveType)) {
-				effectiveness *= 1; // Neutral instead of super effective
-			} else {
-				effectiveness *= 2;
-			}
-		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
-			effectiveness *= 0.5;
-		} else if (chartEntry.noEffect.includes(defenderType)) {
-			// Mind's Eye bypasses Ghost immunity to Normal/Fighting
-			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
-				// Don't multiply by 0, treat as neutral
-				effectiveness *= 1;
-			} else if (hasScrappy && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
-				// Scrappy bypasses Ghost immunity to Normal/Fighting
-				effectiveness *= 1;
-			} else {
-				effectiveness *= 0;
-			}
-		}
-	}
-	return effectiveness;
-}
-
-export function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
-	const opponentActivePokemon = targetSlot.pokemon;
-	const opponentStatus = targetSlot.status;
-	const playerSlot = getActiveSlots(battle.playerSlots)[0];
-	if (!playerSlot) return 1;
-	const activePokemon = playerSlot.pokemon;
-	const turn = battle.turn;
-
-	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
-
-	switch (ballId) {
-	case 'greatball': return 1.5;
-	case 'ultraball': return 2;
-	case 'masterball': return 255;
-	case 'fastball':
-		return opponentSpecies.baseStats.spe >= 100 ? 4 : 1;
-	case 'levelball':
-		if (activePokemon.level >= opponentActivePokemon.level * 4) return 8;
-		if (activePokemon.level >= opponentActivePokemon.level * 2) return 4;
-		if (activePokemon.level > opponentActivePokemon.level) return 2;
-		return 1;
-	case 'nestball':
-		return opponentActivePokemon.level <= 30 ? Math.max(1, (41 - opponentActivePokemon.level) / 10) : 1;
-	case 'netball':
-		return opponentSpecies.types.includes('Bug') || opponentSpecies.types.includes('Water') ? 3.5 : 1;
-	case 'quickball':
-		return turn === 0 ? 5 : 1;
-	case 'timerball':
-		return Math.min(4, 1 + turn * (1229 / 4096));
-	case 'dreamball':
-		return opponentStatus === 'slp' ? 4 : 1;
-	default:
-		return 1;
-	}
-}
-
-export function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
-	const opponentActivePokemon = targetSlot.pokemon;
-	const opponentStatus = targetSlot.status;
-
-	const speciesId = toID(opponentActivePokemon.species);
-	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
-
-	const ballBonus = getBallBonus(ballId, battle, targetSlot);
-	if (ballBonus === 255) return { success: true, shakes: 4 };
-
-	let statusBonus = 1;
-	if (opponentStatus === 'slp' || opponentStatus === 'frz') {
-		statusBonus = 2.5;
-	} else if (opponentStatus === 'par' || opponentStatus === 'psn' || opponentStatus === 'brn') {
-		statusBonus = 1.5;
+export function handleDamagingMove(
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
+	move: Move,
+	battle: BattleState,
+	messageLog: string[],
+	spreadMultiplier: number
+) {
+	if (RPGMoves.handleDamagingMovePreamble(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	const { maxHp, hp } = opponentActivePokemon;
-	const modifiedCatchRate = catchRate;
-
-	const a = Math.floor(
-		(((3 * maxHp - 2 * hp) * modifiedCatchRate * ballBonus) / (3 * maxHp)) * statusBonus
-	);
-
-	if (a >= 255) return { success: true, shakes: 4 };
-
-	const b = Math.floor(65536 / (255 / a) ** 0.1875);
-
-	let shakes = 0;
-	for (let i = 0; i < 4; i++) {
-		const rand = Math.floor(Math.random() * 65536);
-		if (rand >= b) {
-			return { success: false, shakes };
-		}
-		shakes++;
-	}
-
-	return { success: true, shakes: 4 };
-}
-
-export function getStatMultiplier(stage: number): number {
-	if (stage >= 0) {
-		return (2 + stage) / 2;
-	} else {
-		return 2 / (2 + Math.abs(stage));
-	}
-}
-
-export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
-	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-	if (RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
-	} else if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
-		return 0;
-	}
-
-	if (['frostbreath', 'stormthrow', 'zipzapzap', 'surginstrikes'].includes(move.id)) {
-		return 1;
-	}
-
-	let critStage = 0;
 	const attacker = attackerSlot.pokemon;
+	let moveWasSuccessful = false;
+	const hitCount = RPGAbilities.getMultiHitCount(attacker, move);
+	const hasParentalBond = RPGAbilities.hasParentalBond(attacker);
+	const totalHits = hasParentalBond && hitCount === 1 ? 2 : hitCount;
 
-	const abilityId = toID(attacker.ability || '');
-	if (abilityId === 'merciless' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
-		return 1;
+	if (totalHits > 1) {
+		const hitMessage = hasParentalBond ?
+			` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
+			` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
+		if (messageLog.length > 0) {
+			messageLog[messageLog.length - 1] += hitMessage;
+		} else {
+			messageLog.push(hitMessage);
+		}
 	}
 
-	if (attackerSlot.focusEnergy) {
-		critStage += 2;
-	}
+	for (let i = 0; i < totalHits; i++) {
+		let parentalBondSpreadMultiplier = spreadMultiplier;
+		if (hasParentalBond && i === 1) {
+			parentalBondSpreadMultiplier *= 0.25;
+		}
 
-	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
-		critStage += 1;
-	}
+		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
+		if (attackResult.effectiveness > 0) {
+			moveWasSuccessful = true;
+		}
+		if (move.id === 'spitup') {
+			moveWasSuccessful = true;
+		}
 
-	if (battle.magicRoomTurns === 0 && (attacker.item === 'scopelens' || attacker.item === 'razorclaw')) {
-		critStage += 1;
+		if (attackResult.berryConsumed) {
+			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
+			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
+				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
+			}
+			consumeBerry(defenderSlot, attackResult.berryConsumed, messageLog);
+		}
+
+		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
+		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog, abilityContext);
+
+		if (damageDealt > 0 && move.category !== 'Status') {
+			defenderSlot.lastDamageTaken = {
+				amount: damageDealt,
+				category: move.category,
+				from: attacker.id,
+			};
+		}
+
+		if (totalHits > 1) {
+			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
+		} else if (messageLog.length > 0) {
+			messageLog[messageLog.length - 1] += ` <i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message;
+		} else {
+			messageLog.push(`<i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message);
+		}
+
+		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
+			damageDealt > 0 && move.category !== 'Status') {
+			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
+			defenderSlot.pokemon.item = undefined;
+			activateUnburden(defenderSlot, messageLog);
+		}
+
+		if (attackResult.effectiveness > 0 && damageDealt > 0) {
+			if (move.drain && attacker.hp < attacker.maxHp) {
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					if (RPGAbilities.takesIndirectDamage(attacker)) {
+						attacker.hp = Math.max(0, attacker.hp - drainAmount);
+						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
+					}
+				} else if (attackerSlot.healBlockTurns > 0) {
+					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
+				} else {
+					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
+					messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
+				}
+			}
+			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
+				if (attackerSlot.healBlockTurns <= 0) {
+					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
+					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
+					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
+				}
+			}
+
+			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
+
+			handleOnHitAbilityResponses(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.isCritical);
+
+			handleHPDropEffects(defenderSlot, battle, messageLog);
+		}
+
+		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
+
+		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
+			const defender = defenderSlot.pokemon;
+			if (defenderSlot.substitute) {
+				messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
+			} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
+				messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
+			} else {
+				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
+				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
+				defender.item = undefined;
+
+				activateUnburden(defenderSlot, messageLog);
+			}
+		}
+
+		if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
+			const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+			const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
+			if (userHazards.length > 0) {
+				userHazards.length = 0;
+				messageLog.push(`${attacker.species} blew away the hazards!`);
+			}
+			if (attackerSlot.isSeeded) {
+				attackerSlot.isSeeded = false;
+				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
+			}
+			applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
+		}
+
+		if (move.id === 'clearsmog' && defenderSlot.pokemon.hp > 0 && moveWasSuccessful) {
+			defenderSlot.statStages = { ...INITIAL_STAT_STAGES };
+			messageLog.push(`${defenderSlot.pokemon.species}'s stat changes were reset!`);
+		}
+
+		if (move.id === 'steelroller' && moveWasSuccessful && battle.terrain) {
+			const terrainName = battle.terrain.type.charAt(0).toUpperCase() + battle.terrain.type.slice(1);
+			battle.terrain = undefined;
+			messageLog.push(`The ${terrainName} Terrain was removed!`);
+		}
+
+		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+
+		if (move.id === 'terablast' && attackerSlot.terastallized === 'Stellar' && moveWasSuccessful) {
+			if (attackerSlot.statStages.atk > -6) {
+				attackerSlot.statStages.atk--;
+				messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell!`);
+			}
+			if (attackerSlot.statStages.spa > -6) {
+				attackerSlot.statStages.spa--;
+				messageLog.push(`${attackerSlot.pokemon.species}'s Special Attack fell!`);
+			}
+		}
+
+		if (attackResult.effectiveness > 0 && damageDealt > 0) {
+			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
+			const isGhost = defenderSpecies.types.includes('Ghost');
+
+			if (['anchorshot', 'spiritshackle', 'thousandwaves'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
+				if (!defenderSlot.isTrapped && (move.id === 'spiritshackle' || !isGhost)) {
+					defenderSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
+				}
+			}
+			if (move.id === 'jawlock' && defenderSlot?.pokemon.hp > 0 && attackerSlot?.pokemon.hp > 0) {
+				if (!defenderSlot.isTrapped && !isGhost) {
+					defenderSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
+				}
+				if (!attackerSlot.isTrapped) {
+					attackerSlot.isTrapped = { turns: 5 };
+					messageLog.push(`${attackerSlot.pokemon.species} can no longer escape!`);
+				}
+			}
+
+			if (move.id === 'wakeupslap' && defenderSlot.status === 'slp' && defenderSlot?.pokemon.hp > 0) {
+				defenderSlot.status = null;
+				defenderSlot.sleepCounter = 0;
+				messageLog.push(`${defenderSlot.pokemon.species} woke up!`);
+			}
+
+			if (move.id === 'smellingsalts' && defenderSlot.status === 'par' && defenderSlot?.pokemon.hp > 0) {
+				defenderSlot.status = null;
+				messageLog.push(`${defenderSlot.pokemon.species} was cured of paralysis!`);
+			}
+
+			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
+				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				if (defenderAbility === 'suctioncups') {
+					messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
+				} else if (defenderSlot.isIngrained) {
+					messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
+				} else {
+					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
+					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+
+					const availableReplacements = party.filter(p =>
+						p.hp > 0 &&
+						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
+						!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+					);
+
+					if (availableReplacements.length === 0) {
+						messageLog.push(`But it failed! (No Pokémon to switch to!)`);
+					} else {
+						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
+						if (defenderSlotIndex !== -1) {
+							if (isDefenderPlayer) {
+								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
+							} else {
+								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (defenderSlot.pokemon.hp <= 0) break;
 	}
+}
+
+export function handleStatusMove(
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot | null,
+	move: Move,
+	battle: BattleState,
+	messageLog: string[]
+) {
+	const attacker = attackerSlot.pokemon;
+	const defender = defenderSlot?.pokemon;
+	const defenderSpecies = defender ? Dex.species.get(defender.species) : null;
 
 	const attackerAbility = toID(attacker.ability || '');
-	if (attackerAbility === 'superluck') {
-		critStage += 1;
+	if (attackerAbility === 'prankster' && defenderSpecies?.types.includes('Dark')) {
+		messageLog.push(`${defender!.species} is immune to Prankster-boosted moves!`);
+		return;
 	}
 
-	const critChances = [1 / 24, 1 / 8, 1 / 2, 1 / 1];
-	return critChances[Math.min(critStage, 3)];
-}
-
-export function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
-	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
-
-	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
-	for (const stat in evYield) {
-		if (totalEVs >= 510) break;
-		const statKey = stat as keyof Stats;
-		const evGained = evYield[statKey]!;
-		const currentEV = pokemon.evs[statKey];
-		if (currentEV >= 252) continue;
-		const canAdd = Math.min(evGained, 252 - currentEV, 510 - totalEVs);
-		pokemon.evs[statKey] += canAdd;
-		totalEVs += canAdd;
-	}
-	const species = Dex.species.get(pokemon.species);
-	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	const hpDiff = newStats.maxHp - pokemon.maxHp;
-	pokemon.hp = Math.max(1, pokemon.hp + hpDiff);
-	pokemon.maxHp = newStats.maxHp;
-	pokemon.atk = newStats.atk;
-	pokemon.def = newStats.def;
-	pokemon.spa = newStats.spa;
-	pokemon.spd = newStats.spd;
-	pokemon.spe = newStats.spe;
-}
-
-export function gainExperience(
-	player: PlayerData,
-	participantSlots: ActivePokemonSlot[],
-	defeatedPokemon: RPGPokemon,
-	room: ChatRoom,
-	user: User
-): { messages: string[], leveledUp: boolean } {
-	const defeatedSpeciesId = toID(defeatedPokemon.species);
-	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
-
-	let leveledUp = false;
-	const messages: string[] = [];
-	const participantExpGains = new Map<string, number>();
-
-	// Gen 5-9 Scaled Experience Formula
-	// Formula: ExpGained = floor((X^1.5 * Z) / (Y^1.5)) + 1
-	// Where: X = 2 * OpponentLevel + 10
-	//        Y = OpponentLevel + ParticipantLevel + 10
-	//        Z = floor((BaseExp * OpponentLevel) / 5)
-	//        X^1.5 = sqrt(X) * X * X (same for Y^1.5)
-	const opponentLevel = defeatedPokemon.level;
-	const X = 2 * opponentLevel + 10;
-	const Z = Math.floor((baseExp * opponentLevel) / 5);
-
-	// Get IDs of active participants (for EV distribution)
-	const activeParticipantIds = new Set<string>();
-	for (const slot of participantSlots) {
-		if (slot?.pokemon && slot.pokemon.hp > 0) {
-			activeParticipantIds.add(slot.pokemon.id);
+	if (defender && defenderSpecies && move.target !== 'self' && !move.flags.heal) {
+		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle, attackerSlot.pokemon);
+		if (effectiveness === 0) {
+			messageLog.push(`It doesn't affect ${defender.species}...`);
+			return;
 		}
 	}
 
-	// Gen 6-9: Exp Share is always on - ALL Pokemon in party gain experience
-	for (const pokemon of player.party) {
-		if (pokemon.level >= 100) continue;
-
-		// Calculate level-scaled experience for this Pokemon
-		const participantLevel = pokemon.level;
-		const Y = opponentLevel + participantLevel + 10;
-
-		// Calculate scaling factor: (X^1.5) / (Y^1.5)
-		const scalingFactor = (Math.sqrt(X) * X * X) / (Math.sqrt(Y) * Y * Y);
-		const expGained = Math.floor(scalingFactor * Z) + 1;
-
-		participantExpGains.set(pokemon.species, expGained);
-
-		// Only active participants gain EVs
-		if (activeParticipantIds.has(pokemon.id)) {
-			gainEffortValues(pokemon, defeatedPokemon);
-		}
-
-		pokemon.experience += expGained;
+	if (RPGMoves.handleSpecificStatusMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	if (participantExpGains.size === 0) return { messages: [], leveledUp: false };
-
-	// Create exp gain message
-	if (participantExpGains.size === 1) {
-		const [species, exp] = Array.from(participantExpGains.entries())[0];
-		messages.push(`<b>${species} gained ${exp} Experience Points!</b>`);
-	} else {
-		// Check if all Pokemon gained the same exp
-		const expValues = Array.from(participantExpGains.values());
-		const allSame = expValues.every(v => v === expValues[0]);
-
-		if (allSame) {
-			const participantNames = Array.from(participantExpGains.keys());
-			messages.push(`<b>${participantNames.join(' and ')} gained ${expValues[0]} Experience Points!</b>`);
-		} else {
-			// Different exp amounts - show individual gains
-			const expStrings = Array.from(participantExpGains.entries()).map(([name, exp]) =>
-				`${name} gained ${exp} Experience Points`
-			);
-			messages.push(`<b>${expStrings.join(' and ')}!</b>`);
-		}
+	if (RPGMoves.handleGenericBoostMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	// Check for level ups, evolutions, and move learning for ALL Pokemon in party
-	for (const pokemon of player.party) {
-		if (pokemon.level >= 100) continue;
-
-		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
-			messages.push(...levelUp(pokemon));
-			leveledUp = true;
-			const evolveMessage = checkEvolution(player, pokemon, { room, user });
-			if (evolveMessage) {
-				messages.push(evolveMessage);
-				break;
-			}
-			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
-			messages.push(...newMoveMessages);
-		}
+	if (RPGMoves.handleGenericStatusInflictMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	return { messages, leveledUp };
-}
-
-export function saveBattleStatus(battle: BattleState) {
-	const player = getPlayerData(battle.playerId);
-	const playerParty = getActiveParty(battle, player);
-
-	for (const slot of battle.playerSlots) {
-		if (slot) {
-			const pokemonInParty = playerParty.find(p => p.id === slot.pokemon.id);
-			if (pokemonInParty) {
-				if (slot.status === 'slp' || slot.status === 'frz') {
-					pokemonInParty.status = null;
-				} else {
-					pokemonInParty.status = slot.status;
-				}
-			}
-		}
+	if (RPGMoves.handleGenericVolatileMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-		for (const slot of battle.opponentSlots) {
-			if (slot) {
-				const opponentPokemonInParty = battle.opponentParty.find(p => p.id === slot.pokemon.id);
-				if (opponentPokemonInParty) {
-					opponentPokemonInParty.status = slot.status;
-				}
-			}
-		}
-	}
-}
-
-export function getDamageOffense(
-	move: Move,
-	attacker: RPGPokemon,
-	attackerSlot: ActivePokemonSlot,
-	battle: BattleState,
-	abilityContext: AbilityContext // Added for Foul Play
-): number {
-	const isSpecial = move.category === 'Special';
-	let statName = isSpecial ? 'spa' : 'atk';
-	let attackStatRaw: number;
-
-	if (move.id === 'foulplay') {
-		// Foul Play uses the defender's Attack stat
-		const defender = abilityContext.defender; // We need to get the defender context
-		attackStatRaw = defender.atk;
-		statName = 'atk'; // Ensure it uses 'atk' stat stages
-	} else if (move.id === 'bodypress') {
-		// Body Press uses the attacker's Defense stat as Attack
-		attackStatRaw = attacker.def;
-		statName = 'def'; // Use Defense stat modifiers
-	} else {
-		attackStatRaw = attacker[statName];
+	if (RPGMoves.handleGenericFieldMove(attackerSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, statName, attackStatRaw, attackerSlot, battle);
-
-	if (battle.magicRoomTurns === 0) {
-		if (attacker.item === 'choiceband' && !isSpecial) {
-			attackStatRaw = Math.floor(attackStatRaw * 1.5);
-		}
-		if (attacker.item === 'choicespecs' && isSpecial) {
-			attackStatRaw = Math.floor(attackStatRaw * 1.5);
-		}
+	if (RPGMoves.handleGenericSideMove(attackerSlot, move, battle, messageLog)) {
+		return;
 	}
 
-	if (isSpecial && RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
-		if (toID(attacker.ability || '') === 'solarpower') {
-			attackStatRaw = Math.floor(attackStatRaw * 1.5);
-		}
+	if (RPGMoves.handleGenericHealMove(attackerSlot, move, messageLog)) {
+		return;
 	}
 
-	return attackStatRaw;
-}
-
-export function getDamageDefense(
-	move: Move,
-	defender: RPGPokemon,
-	defenderSlot: ActivePokemonSlot,
-	battle: BattleState
-): number {
-	const isSpecial = move.category === 'Special';
-	let statName = isSpecial ? 'spd' : 'def';
-
-	// Handle Psyshock, Psystrike, Secret Sword (Special moves that target Defense)
-	if (isSpecial && ['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
-		statName = 'def';
+	if (move.selfSwitch) {
+		return;
 	}
 
-	if (battle.wonderRoomTurns > 0) {
-		statName = isSpecial ? 'def' : 'spd';
-	}
-
-	let defenseStatRaw = defender[statName];
-
-	defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, statName, defenseStatRaw, defenderSlot, battle);
-
-	if (battle.magicRoomTurns === 0) {
-		if (defender.item === 'assaultvest' && isSpecial && battle.wonderRoomTurns === 0) {
-			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
-		}
-
-		if (defender.item === 'eviolite') {
-			const species = Dex.species.get(defender.species);
-			if (species.evos && species.evos.length > 0) {
-				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
-				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
-
-				if (statName === 'def') {
-					defenseStatRaw = Math.floor(defWithAbility * 1.5);
-				} else {
-					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
-				}
-			}
-		}
-	}
-
-	return defenseStatRaw;
-}
-
-export function getMoveType(
-	move: Move,
-	attacker: RPGPokemon,
-	attackerSlot: ActivePokemonSlot,
-	battle: BattleState,
-	abilityContext: AbilityContext
-): string {
-	let moveType = move.type;
-
-	if (move.id === 'terablast' && attackerSlot.terastallized) {
-		moveType = attackerSlot.terastallized;
-	} else if (move.id === 'weatherball') {
-		if (RPGAbilities.isWeatherActive(battle)) {
-			// Weather takes priority
-			switch (battle.weather!.type) {
-			case 'sun': moveType = 'Fire'; break;
-			case 'rain': moveType = 'Water'; break;
-			case 'sand': moveType = 'Rock'; break;
-			case 'hail': moveType = 'Ice'; break;
-			}
-		} else if (battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
-			// Terrain is checked if no weather is active
-			switch (battle.terrain.type) {
-			case 'electric': moveType = 'Electric'; break;
-			case 'grassy': moveType = 'Grass'; break;
-			case 'psychic': moveType = 'Psychic'; break;
-			case 'misty': moveType = 'Fairy'; break;
-			}
-		}
-	} else if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
-		switch (battle.terrain.type) {
-		case 'electric': moveType = 'Electric'; break;
-		case 'grassy': moveType = 'Grass'; break;
-		case 'psychic': moveType = 'Psychic'; break;
-		case 'misty': moveType = 'Fairy'; break;
-		}
-	}
-
-	moveType = RPGAbilities.applyTypeModifier(abilityContext, moveType);
-	return moveType;
-}
-
-export function applyFinalDamageModifiers(
-	baseDamage: number,
-	move: Move,
-	moveType: string,
-	attacker: RPGPokemon,
-	defender: RPGPokemon,
-	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot,
-	battle: BattleState,
-	effectiveness: number,
-	isCritical: boolean,
-	abilityContext: AbilityContext
-): number {
-	let damage = baseDamage;
-
-	const attackerAbility = toID(attacker.ability || '');
-	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-
-	// Check for screens only if the attacker does not have Infiltrator
-	if (attackerAbility !== 'infiltrator' && !isCritical) {
-		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
-		if (defenderVeilTurns > 0) {
-			damage = Math.floor(damage * 0.5);
-		} else {
-			if (move.category === 'Physical') {
-				const defenderReflectTurns = isDefenderPlayer ? battle.playerReflectTurns : battle.opponentReflectTurns;
-				if (defenderReflectTurns > 0) damage = Math.floor(damage * 0.5);
-			} else if (move.category === 'Special') {
-				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
-				if (defenderLightScreenTurns > 0) damage = Math.floor(damage * 0.5);
-			}
-		}
-	}
-
-	if (RPGAbilities.isWeatherActive(battle)) {
-		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
-			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
-			if (moveType === 'Water') damage = Math.floor(damage * 0.5);
-		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
-			if (moveType === 'Water') damage = Math.floor(damage * 1.5);
-			if (moveType === 'Fire') damage = Math.floor(damage * 0.5);
-		}
-	}
-
-	if (battle.terrain) {
-		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
-		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
-
-		if (battle.terrain.type === 'electric' && moveType === 'Electric' && attackerIsGrounded) {
-			damage = Math.floor(damage * 1.3);
-		} else if (battle.terrain.type === 'grassy' && moveType === 'Grass' && attackerIsGrounded) {
-			damage = Math.floor(damage * 1.3);
-		} else if (battle.terrain.type === 'psychic' && moveType === 'Psychic' && attackerIsGrounded) {
-			damage = Math.floor(damage * 1.3);
-		}
-
-		if (battle.terrain.type === 'misty' && moveType === 'Dragon' && defenderIsGrounded) {
-			damage = Math.floor(damage * 0.5);
-		} else if (battle.terrain.type === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move.id) && defenderIsGrounded) {
-			damage = Math.floor(damage * 0.5);
-		}
-	}
-
-	if (battle.mudSportTurns > 0 && moveType === 'Electric') {
-		damage = Math.floor(damage * 0.33);
-	}
-	if (battle.waterSportTurns > 0 && moveType === 'Fire') {
-		damage = Math.floor(damage * 0.33);
-	}
-
-	damage = RPGAbilities.applyDamageModifier(abilityContext, damage);
-
-	if (battle.magicRoomTurns === 0) {
-		if (attacker.item === 'lifeorb') {
-			damage = Math.floor(damage * 1.3);
-		}
-		if (attacker.item === 'expertbelt' && effectiveness > 1) {
-			damage = Math.floor(damage * 1.2);
-		}
-	}
-
-	return damage;
+	messageLog.push(`But it failed!`);
 }
 
 export function calculateDamage(
@@ -585,7 +326,6 @@ export function calculateDamage(
 	spreadMultiplier: number
 ): { damage: number, message: string, effectiveness: number, berryConsumed?: string, isCritical: boolean } {
 	const moveData = getMove(moveId);
-	// Create a mutable copy of the move object since we may need to modify it (e.g., Tera Blast)
 	const move = { ...moveData };
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
@@ -661,7 +401,6 @@ export function calculateDamage(
 		(move.category === 'Special' ? defenderSlot.statStages.def : defenderSlot.statStages.spd) :
 		(move.category === 'Special' ? defenderSlot.statStages.spd : defenderSlot.statStages.def);
 
-	// Handle Psyshock / Psystrike / Secret Sword
 	if (['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
 		defenseStage = battle.wonderRoomTurns > 0 ? defenderSlot.statStages.spd : defenderSlot.statStages.def;
 	}
@@ -669,16 +408,12 @@ export function calculateDamage(
 	const defenderAbility = toID(defender.ability || '');
 	const attackerAbility = toID(attacker.ability || '');
 
-	// Attacker's Unaware: Ignores defender's positive defensive stat stages
-	// (But Mold Breaker bypasses this)
 	if (attackerAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, attackerAbility)) {
 		if (defenseStage > 0) {
 			defenseStage = 0;
 		}
 	}
 
-	// Defender's Unaware: Ignores attacker's positive offensive stat stages
-	// (But Mold Breaker bypasses this)
 	if (defenderAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 		if (attackStage > 0) {
 			attackStage = 0;
@@ -696,7 +431,6 @@ export function calculateDamage(
 		defenseStat = Math.floor(defenseStat * 0.5);
 	}
 
-	// Safety check: Ensure defenseStat is always at least 1 to prevent division issues
 	defenseStat = Math.max(1, defenseStat);
 	finalAttackStat = Math.max(1, finalAttackStat);
 
@@ -708,10 +442,8 @@ export function calculateDamage(
 
 	let effectiveness: number;
 	if (moveId === 'struggle') {
-		// Struggle is typeless and always hits neutrally
 		effectiveness = 1;
 	} else {
-		// All other moves calculate effectiveness normally
 		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker);
 	}
 
@@ -737,7 +469,6 @@ export function calculateDamage(
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
 	damage = Math.floor(damage * spreadMultiplier);
 
-	// Safety check: Handle any invalid damage values (Infinity, NaN, or negative)
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
 	}
@@ -752,17 +483,274 @@ export function calculateDamage(
 	return { damage, message, effectiveness, berryConsumed, isCritical };
 }
 
+export function getDamageOffense(
+	move: Move,
+	attacker: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	battle: BattleState,
+	abilityContext: AbilityContext
+): number {
+	const isSpecial = move.category === 'Special';
+	let statName = isSpecial ? 'spa' : 'atk';
+	let attackStatRaw: number;
+
+	if (move.id === 'foulplay') {
+		const defender = abilityContext.defender;
+		attackStatRaw = defender.atk;
+		statName = 'atk';
+	} else if (move.id === 'bodypress') {
+		attackStatRaw = attacker.def;
+		statName = 'def';
+	} else {
+		attackStatRaw = attacker[statName];
+	}
+
+	attackStatRaw = RPGAbilities.applyAbilityStatModifier(attacker, statName, attackStatRaw, attackerSlot, battle);
+
+	if (battle.magicRoomTurns === 0) {
+		if (attacker.item === 'choiceband' && !isSpecial) {
+			attackStatRaw = Math.floor(attackStatRaw * 1.5);
+		}
+		if (attacker.item === 'choicespecs' && isSpecial) {
+			attackStatRaw = Math.floor(attackStatRaw * 1.5);
+		}
+	}
+
+	if (isSpecial && RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
+		if (toID(attacker.ability || '') === 'solarpower') {
+			attackStatRaw = Math.floor(attackStatRaw * 1.5);
+		}
+	}
+
+	return attackStatRaw;
+}
+
+export function getDamageDefense(
+	move: Move,
+	defender: RPGPokemon,
+	defenderSlot: ActivePokemonSlot,
+	battle: BattleState
+): number {
+	const isSpecial = move.category === 'Special';
+	let statName = isSpecial ? 'spd' : 'def';
+
+	if (isSpecial && ['psyshock', 'psystrike', 'secretsword'].includes(move.id)) {
+		statName = 'def';
+	}
+
+	if (battle.wonderRoomTurns > 0) {
+		statName = isSpecial ? 'def' : 'spd';
+	}
+
+	let defenseStatRaw = defender[statName];
+
+	defenseStatRaw = RPGAbilities.applyAbilityStatModifier(defender, statName, defenseStatRaw, defenderSlot, battle);
+
+	if (battle.magicRoomTurns === 0) {
+		if (defender.item === 'assaultvest' && isSpecial && battle.wonderRoomTurns === 0) {
+			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
+		}
+
+		if (defender.item === 'eviolite') {
+			const species = Dex.species.get(defender.species);
+			if (species.evos && species.evos.length > 0) {
+				const defWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'def', defender.def, defenderSlot, battle);
+				const spdWithAbility = RPGAbilities.applyAbilityStatModifier(defender, 'spd', defender.spd, defenderSlot, battle);
+
+				if (statName === 'def') {
+					defenseStatRaw = Math.floor(defWithAbility * 1.5);
+				} else {
+					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
+				}
+			}
+		}
+	}
+
+	return defenseStatRaw;
+}
+
+export function getMoveType(
+	move: Move,
+	attacker: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	battle: BattleState,
+	abilityContext: AbilityContext
+): string {
+	let moveType = move.type;
+
+	if (move.id === 'terablast' && attackerSlot.terastallized) {
+		moveType = attackerSlot.terastallized;
+	} else if (move.id === 'weatherball') {
+		if (RPGAbilities.isWeatherActive(battle)) {
+			switch (battle.weather!.type) {
+			case 'sun': moveType = 'Fire'; break;
+			case 'rain': moveType = 'Water'; break;
+			case 'sand': moveType = 'Rock'; break;
+			case 'hail': moveType = 'Ice'; break;
+			}
+		} else if (battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
+			switch (battle.terrain.type) {
+			case 'electric': moveType = 'Electric'; break;
+			case 'grassy': moveType = 'Grass'; break;
+			case 'psychic': moveType = 'Psychic'; break;
+			case 'misty': moveType = 'Fairy'; break;
+			}
+		}
+	} else if (move.id === 'terrainpulse' && battle.terrain && RPGAbilities.isGrounded(attacker, battle)) {
+		switch (battle.terrain.type) {
+		case 'electric': moveType = 'Electric'; break;
+		case 'grassy': moveType = 'Grass'; break;
+		case 'psychic': moveType = 'Psychic'; break;
+		case 'misty': moveType = 'Fairy'; break;
+		}
+	}
+
+	moveType = RPGAbilities.applyTypeModifier(abilityContext, moveType);
+	return moveType;
+}
+
+export function applyFinalDamageModifiers(
+	baseDamage: number,
+	move: Move,
+	moveType: string,
+	attacker: RPGPokemon,
+	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
+	battle: BattleState,
+	effectiveness: number,
+	isCritical: boolean,
+	abilityContext: AbilityContext
+): number {
+	let damage = baseDamage;
+
+	const attackerAbility = toID(attacker.ability || '');
+	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
+
+	if (attackerAbility !== 'infiltrator' && !isCritical) {
+		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+		if (defenderVeilTurns > 0) {
+			damage = Math.floor(damage * 0.5);
+		} else {
+			if (move.category === 'Physical') {
+				const defenderReflectTurns = isDefenderPlayer ? battle.playerReflectTurns : battle.opponentReflectTurns;
+				if (defenderReflectTurns > 0) damage = Math.floor(damage * 0.5);
+			} else if (move.category === 'Special') {
+				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
+				if (defenderLightScreenTurns > 0) damage = Math.floor(damage * 0.5);
+			}
+		}
+	}
+
+	if (RPGAbilities.isWeatherActive(battle)) {
+		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
+			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
+			if (moveType === 'Water') damage = Math.floor(damage * 0.5);
+		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
+			if (moveType === 'Water') damage = Math.floor(damage * 1.5);
+			if (moveType === 'Fire') damage = Math.floor(damage * 0.5);
+		}
+	}
+
+	if (battle.terrain) {
+		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
+		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
+
+		if (battle.terrain.type === 'electric' && moveType === 'Electric' && attackerIsGrounded) {
+			damage = Math.floor(damage * 1.3);
+		} else if (battle.terrain.type === 'grassy' && moveType === 'Grass' && attackerIsGrounded) {
+			damage = Math.floor(damage * 1.3);
+		} else if (battle.terrain.type === 'psychic' && moveType === 'Psychic' && attackerIsGrounded) {
+			damage = Math.floor(damage * 1.3);
+		}
+
+		if (battle.terrain.type === 'misty' && moveType === 'Dragon' && defenderIsGrounded) {
+			damage = Math.floor(damage * 0.5);
+		} else if (battle.terrain.type === 'grassy' && ['earthquake', 'bulldoze', 'magnitude'].includes(move.id) && defenderIsGrounded) {
+			damage = Math.floor(damage * 0.5);
+		}
+	}
+
+	if (battle.mudSportTurns > 0 && moveType === 'Electric') {
+		damage = Math.floor(damage * 0.33);
+	}
+	if (battle.waterSportTurns > 0 && moveType === 'Fire') {
+		damage = Math.floor(damage * 0.33);
+	}
+
+	damage = RPGAbilities.applyDamageModifier(abilityContext, damage);
+
+	if (battle.magicRoomTurns === 0) {
+		if (attacker.item === 'lifeorb') {
+			damage = Math.floor(damage * 1.3);
+		}
+		if (attacker.item === 'expertbelt' && effectiveness > 1) {
+			damage = Math.floor(damage * 1.2);
+		}
+	}
+
+	return damage;
+}
+
+export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
+	const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+	if (RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility)) {
+	} else if (defenderAbility === 'battlearmor' || defenderAbility === 'shellarmor') {
+		return 0;
+	}
+
+	if (['frostbreath', 'stormthrow', 'zipzapzap', 'surginstrikes'].includes(move.id)) {
+		return 1;
+	}
+
+	let critStage = 0;
+	const attacker = attackerSlot.pokemon;
+
+	const abilityId = toID(attacker.ability || '');
+	if (abilityId === 'merciless' && (defenderSlot.status === 'psn' || defenderSlot.status === 'tox')) {
+		return 1;
+	}
+
+	if (attackerSlot.focusEnergy) {
+		critStage += 2;
+	}
+
+	if (['slash', 'razorleaf', 'crabhammer', 'karatechop', 'attackorder', 'blazekick', 'crosschop', 'crosspoison', 'nightslash', 'poisontail', 'psychocut', 'shadowclaw', 'spacialrend', 'stoneedge'].includes(move.id)) {
+		critStage += 1;
+	}
+
+	if (battle.magicRoomTurns === 0 && (attacker.item === 'scopelens' || attacker.item === 'razorclaw')) {
+		critStage += 1;
+	}
+
+	const attackerAbility = toID(attacker.ability || '');
+	if (attackerAbility === 'superluck') {
+		critStage += 1;
+	}
+
+	const critChances = [1 / 24, 1 / 8, 1 / 2, 1 / 1];
+	return critChances[Math.min(critStage, 3)];
+}
+
+export function getStatMultiplier(stage: number): number {
+	if (stage >= 0) {
+		return (2 + stage) / 2;
+	} else {
+		return 2 / (2 + Math.abs(stage));
+	}
+}
+
 export function applyDamageAndEnduranceEffects(
 	defenderSlot: ActivePokemonSlot,
 	damageDealt: number,
 	move: Move,
 	battle: BattleState,
 	messageLog: string[],
-	abilityContext: AbilityContext // Added for Infiltrator
+	abilityContext: AbilityContext
 ): number {
 	const defender = defenderSlot.pokemon;
 	const defenderAbility = toID(defender.ability || '');
-	const attackerAbility = toID(abilityContext.attacker.ability || ''); // Get attacker's ability
+	const attackerAbility = toID(abilityContext.attacker.ability || '');
 
 	if (defenderSlot.isDisguised && damageDealt > 0 && move.category !== 'Status') {
 		defenderSlot.isDisguised = false;
@@ -770,7 +758,6 @@ export function applyDamageAndEnduranceEffects(
 			defender.species = 'Mimikyu-Busted';
 		}
 		messageLog.push(`<strong>${defender.species}'s Disguise was broken!</strong>`);
-		// Mimikyu no longer takes damage from its disguise breaking (Gen 8+)
 		defenderSlot.lastMoveThatHitMe = move;
 		return 0;
 	}
@@ -829,7 +816,7 @@ export function applyPostDamageContactEffects(
 
 	if (defender.hp <= 0 || damageDealt <= 0) return;
 
-	const defenderAbility = toID(defender.ability || ''); // Get defender ability ID once
+	const defenderAbility = toID(defender.ability || '');
 	if (isCritical && defenderAbility === 'angerpoint') {
 		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 			applyStatChange(defenderSlot, 'atk', 6, battle, messageLog, defenderSlot);
@@ -850,7 +837,6 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
-	// Long Reach prevents contact effects
 	const attackerAbility = toID(attacker.ability || '');
 	const isContact = move.flags.contact && attackerAbility !== 'longreach';
 
@@ -933,7 +919,6 @@ export function handleOnHitAbilityResponses(
 	const defenderAbility = toID(defender.ability || '');
 	const attacker = attackerSlot.pokemon;
 
-	// Justified - Boosts Attack when hit by Dark move
 	if (defenderAbility === 'justified' && move.type === 'Dark' && damageDealt > 0) {
 		if (defenderSlot.statStages.atk < 6) {
 			defenderSlot.statStages.atk++;
@@ -941,7 +926,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Rattled - Boosts Speed when hit by Bug/Dark/Ghost move
 	if (defenderAbility === 'rattled' && ['Bug', 'Dark', 'Ghost'].includes(move.type) && damageDealt > 0) {
 		if (defenderSlot.statStages.spe < 6) {
 			defenderSlot.statStages.spe++;
@@ -949,7 +933,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Stamina - Boosts Defense when hit
 	if (defenderAbility === 'stamina' && damageDealt > 0) {
 		if (defenderSlot.statStages.def < 6) {
 			defenderSlot.statStages.def++;
@@ -957,7 +940,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Weak Armor - Defense down, Speed up when hit by physical move
 	if (defenderAbility === 'weakarmor' && move.category === 'Physical' && damageDealt > 0) {
 		let changed = false;
 		if (defenderSlot.statStages.def > -6) {
@@ -972,7 +954,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Anger Point - Maxes Attack on critical hit received
 	if (defenderAbility === 'angerpoint' && isCritical && damageDealt > 0) {
 		if (defenderSlot.statStages.atk < 6) {
 			defenderSlot.statStages.atk = 6;
@@ -980,11 +961,9 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Berserk - Boosts Sp. Atk when HP drops below 50%
 	if (defenderAbility === 'berserk' && damageDealt > 0) {
 		const hpBefore = defender.hp + damageDealt;
 		const halfHP = defender.maxHp / 2;
-		// Trigger if HP dropped below 50% from this hit
 		if (hpBefore >= halfHP && defender.hp < halfHP) {
 			if (defenderSlot.statStages.spa < 6) {
 				defenderSlot.statStages.spa++;
@@ -993,7 +972,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Thermal Exchange - Boosts Attack when hit by Fire move
 	if (defenderAbility === 'thermalexchange' && move.type === 'Fire' && damageDealt > 0) {
 		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 			if (defenderSlot.statStages.atk < 6) {
@@ -1003,7 +981,6 @@ export function handleOnHitAbilityResponses(
 		}
 	}
 
-	// Cotton Down - Lowers Speed of all opponents when hit by an attack
 	if (defenderAbility === 'cottondown' && damageDealt > 0 && move.category !== 'Status') {
 		if (!RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
 			const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
@@ -1026,7 +1003,6 @@ export function handleOnHitAbilityResponses(
 	if (defenderAbility === 'angershell' && damageDealt > 0) {
 		const hpBefore = defender.hp + damageDealt;
 		const halfHP = defender.maxHp / 2;
-		// Trigger if HP dropped below 50% from this hit
 		if (hpBefore >= halfHP && defender.hp < halfHP) {
 			const messages: string[] = [];
 			if (defenderSlot.statStages.def > -6) {
@@ -1078,7 +1054,6 @@ export function handleOnHitAbilityResponses(
 		const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
 		const opponentHazards = isDefenderPlayer ? battle.opponentHazards : battle.playerHazards;
 
-		// Can only set up to 2 layers of Toxic Spikes
 		const toxicSpikesCount = opponentHazards.filter(h => h === 'toxicspikes').length;
 		if (toxicSpikesCount < 2) {
 			opponentHazards.push('toxicspikes');
@@ -1090,7 +1065,6 @@ export function handleOnHitAbilityResponses(
 		const gulpForm = (defenderSlot as any).gulpMissileForm;
 
 		if (gulpForm === 'gulping') {
-			// Arrokuda form - deals 1/4 max HP damage and lowers Defense
 			const damageAmount = Math.floor(attacker.maxHp / 4);
 			attacker.hp = Math.max(0, attacker.hp - damageAmount);
 			messageLog.push(`${defender.species} spit out its catch at ${attacker.species}!`);
@@ -1100,13 +1074,11 @@ export function handleOnHitAbilityResponses(
 				messageLog.push(`${attacker.species}'s Defense fell!`);
 			}
 
-			// Revert form
 			if (defender.species.includes('Gulping')) {
 				defender.species = 'Cramorant';
 			}
 			(defenderSlot as any).gulpMissileForm = null;
 		} else if (gulpForm === 'gorging') {
-			// Pikachu form - deals 1/4 max HP damage and causes paralysis
 			const damageAmount = Math.floor(attacker.maxHp / 4);
 			attacker.hp = Math.max(0, attacker.hp - damageAmount);
 			messageLog.push(`${defender.species} spit out its catch at ${attacker.species}!`);
@@ -1119,7 +1091,6 @@ export function handleOnHitAbilityResponses(
 				}
 			}
 
-			// Revert form
 			if (defender.species.includes('Gorging')) {
 				defender.species = 'Cramorant';
 			}
@@ -1178,7 +1149,6 @@ export function applyRecoilAndSelfEffects(
 		for (const stat in boosts) {
 			const statKey = stat as keyof ActivePokemonSlot['statStages'];
 			const boostValue = boosts[statKey]!;
-			// Use the central applyStatChange function to handle all abilities (Clear Body, Simple, Contrary)
 			applyStatChange(attackerSlot, statKey, boostValue, battle, messageLog, attackerSlot);
 		}
 	}
@@ -1203,13 +1173,11 @@ export function applySecondaryEffects(
 	chance = RPGAbilities.applySereneGrace(abilityContext, chance);
 
 	if (Math.random() * 100 < chance) {
-		// Check if defender-targeted effects can be applied
 		const canApplyToDefender = defenderSlot.pokemon.hp > 0 && !defenderSlot.substitute;
 		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 		const shieldDustBlocks = defenderAbility === 'shielddust' &&
 			!RPGAbilities.isAbilityIgnored(attackerSlot.pokemon, defenderSlot.pokemon, defenderAbility);
 
-		// Apply effects to defender (status, boosts, volatile status)
 		if (canApplyToDefender && !shieldDustBlocks) {
 			if (move.secondary.status && !defenderSlot.status) {
 				const defender = defenderSlot.pokemon;
@@ -1245,7 +1213,7 @@ export function applySecondaryEffects(
 					if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
 						if (!defenderSlot.isConfused) {
 							defenderSlot.isConfused = true;
-							defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1; // 1-4 turns
+							defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1;
 							messageLog.push(`${defender.species} became confused from Poison Puppeteer!`);
 						}
 					}
@@ -1293,7 +1261,6 @@ export function applySecondaryEffects(
 							messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} prevents its accuracy from being lowered!`);
 							continue;
 						}
-						// Flower Veil protects Grass-types from stat drops
 						if (targetAbility === 'flowerveil') {
 							const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
 							if (defenderSpecies.types.includes('Grass')) {
@@ -1301,7 +1268,6 @@ export function applySecondaryEffects(
 								continue;
 							}
 						}
-						// Check if any ally has Flower Veil that would protect this Grass-type
 						const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
 						if (defenderSpecies.types.includes('Grass')) {
 							const isPlayerDefender = battle.playerSlots.some(s => s?.pokemon.id === defenderSlot.pokemon.id);
@@ -1341,17 +1307,14 @@ export function applySecondaryEffects(
 					messageLog.push(`${defenderSlot.pokemon.species}'s Inner Focus prevents flinching!`);
 				}
 			}
-		} // End of defender-targeted effects block
+		}
 
-		// Handle self-boosts (effects that apply to the attacker)
-		// These should work even if the defender has Shield Dust or a Substitute
 		if (move.secondary.self?.boosts) {
 			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 
 			for (const stat in move.secondary.self.boosts) {
 				let boostValue = move.secondary.self.boosts[stat as keyof typeof move.secondary.self.boosts]!;
 
-				// Contrary reverses stat changes on the user
 				if (attackerAbility === 'contrary') {
 					boostValue *= -1;
 				}
@@ -1359,7 +1322,6 @@ export function applySecondaryEffects(
 				const currentStage = attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages];
 
 				if (boostValue < 0) {
-					// Self-lowering (e.g., Superpower, Close Combat - though these are primary effects)
 					if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'clearamulet') {
 						messageLog.push(`${attackerSlot.pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
 						continue;
@@ -1380,7 +1342,6 @@ export function applySecondaryEffects(
 						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue < -1 ? 'sharply ' : ''}fell!`);
 					}
 				} else if (boostValue > 0) {
-					// Self-boosting (e.g., Power-Up Punch, Flame Charge)
 					if (currentStage < 6) {
 						const newStage = Math.max(-6, Math.min(6, currentStage + boostValue));
 						attackerSlot.statStages[stat as keyof typeof attackerSlot.statStages] = newStage as any;
@@ -1399,320 +1360,262 @@ export function applySecondaryEffects(
 	}
 }
 
-export function handleDamagingMove(
-	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot,
-	move: Move,
-	battle: BattleState,
-	messageLog: string[],
-	spreadMultiplier: number
-) {
-	if (RPGMoves.handleDamagingMovePreamble(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return;
+/**
+ * Get the current types of a Pokemon, accounting for terastallization.
+ */
+export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
+	if (slot?.terastallized) {
+		return [slot.terastallized];
 	}
+	const species = Dex.species.get(pokemon.species);
+	return species.types;
+}
 
-	const attacker = attackerSlot.pokemon;
-	let moveWasSuccessful = false;
-	const hitCount = RPGAbilities.getMultiHitCount(attacker, move);
-	const hasParentalBond = RPGAbilities.hasParentalBond(attacker);
-	const totalHits = hasParentalBond && hitCount === 1 ? 2 : hitCount;
+export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState, attacker?: RPGPokemon): number {
+	let effectiveness = 1;
+	const chartEntry = TYPE_CHART[moveType];
+	if (!chartEntry) return 1;
 
-	if (totalHits > 1) {
-		const hitMessage = hasParentalBond ?
-			` <i style="color: #6c757d;">(Parental Bond hit twice!)</i>` :
-			` <i style="color: #6c757d;">(It hit ${totalHits} times!)</i>`;
-		if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += hitMessage;
-		} else {
-			messageLog.push(hitMessage);
-		}
-	}
+	const hasStrongWinds = battle.weather?.type === 'strong-winds';
+	const isFlyingType = defenderTypes.includes('Flying');
 
-	for (let i = 0; i < totalHits; i++) {
-		let parentalBondSpreadMultiplier = spreadMultiplier;
-		if (hasParentalBond && i === 1) {
-			parentalBondSpreadMultiplier *= 0.25;
-		}
+	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
+	const hasMindEye = attackerAbility === 'mindseye';
+	const hasScrappy = attackerAbility === 'scrappy';
 
-		const attackResult = calculateDamage(attackerSlot, defenderSlot, move.id, battle, parentalBondSpreadMultiplier);
-		if (attackResult.effectiveness > 0) {
-			moveWasSuccessful = true;
-		}
-		// Allow Spit Up to run its logic even if it fails
-		if (move.id === 'spitup') {
-			moveWasSuccessful = true;
-		}
-
-		if (attackResult.berryConsumed) {
-			const itemName = ITEMS_DATABASE[attackResult.berryConsumed]?.name;
-			if (TYPE_RESIST_BERRIES[attackResult.berryConsumed]) {
-				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
-			}
-			consumeBerry(defenderSlot, attackResult.berryConsumed, messageLog);
-		}
-
-		// We need the ability context here for Infiltrator
-		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
-		const damageDealt = applyDamageAndEnduranceEffects(defenderSlot, attackResult.damage, move, battle, messageLog, abilityContext);
-
-		if (damageDealt > 0 && move.category !== 'Status') {
-			defenderSlot.lastDamageTaken = {
-				amount: damageDealt,
-				category: move.category,
-				from: attacker.id,
-			};
-		}
-
-		if (totalHits > 1) {
-			messageLog.push(`Dealt ${damageDealt} damage!` + attackResult.message);
-		} else if (messageLog.length > 0) {
-			messageLog[messageLog.length - 1] += ` <i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message;
-		} else {
-			messageLog.push(`<i style="color: #007bff;">(${damageDealt} damage)</i>` + attackResult.message);
-		}
-
-		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
-			damageDealt > 0 && move.category !== 'Status') {
-			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
-		}
-
-		if (attackResult.effectiveness > 0 && damageDealt > 0) {
-			if (move.drain && attacker.hp < attacker.maxHp) {
-				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
-					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
-					if (RPGAbilities.takesIndirectDamage(attacker)) {
-						attacker.hp = Math.max(0, attacker.hp - drainAmount);
-						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
-					}
-				} else if (attackerSlot.healBlockTurns > 0) {
-					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
-				} else {
-					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
-					attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
-					messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
-				}
-			}
-			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
-				if (attackerSlot.healBlockTurns <= 0) {
-					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
-					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
-					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
-				}
-			}
-
-			applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
-
-			handleOnHitAbilityResponses(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.isCritical);
-
-			handleHPDropEffects(defenderSlot, battle, messageLog);
-		}
-
-		// Moved all post-hit effects that don't depend on effectiveness > 0
-		// This ensures they run even on 0 damage hits (like a failed Spit Up)
-		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
-
-		// Handle Knock Off item removal
-		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
-			const defender = defenderSlot.pokemon;
-			if (defenderSlot.substitute) {
-				// Substitute blocks item removal
-				messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
-			} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
-				// Abilities like Sticky Hold block item removal
-				messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
+	for (const defenderType of defenderTypes) {
+		if (chartEntry.superEffective.includes(defenderType)) {
+			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
+				['Rock', 'Electric', 'Ice'].includes(moveType)) {
+				effectiveness *= 1;
 			} else {
-				// Remove the item
-				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
-				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
-				defender.item = undefined;
-
-				// Activate Unburden if the defender had it
-				activateUnburden(defenderSlot, messageLog);
+				effectiveness *= 2;
+			}
+		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
+			effectiveness *= 0.5;
+		} else if (chartEntry.noEffect.includes(defenderType)) {
+			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				effectiveness *= 1;
+			} else if (hasScrappy && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				effectiveness *= 1;
+			} else {
+				effectiveness *= 0;
 			}
 		}
+	}
+	return effectiveness;
+}
 
-		// Handle Rapid Spin effects (clearing hazards and raising speed)
-		if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
-			const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-			const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
-			if (userHazards.length > 0) {
-				userHazards.length = 0; // Clear the array
-				messageLog.push(`${attacker.species} blew away the hazards!`);
-			}
-			// Also remove Leech Seed
-			if (attackerSlot.isSeeded) {
-				attackerSlot.isSeeded = false;
-				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
-			}
-			// Raise Speed
-			// applyStatChange already adds its own message
-			applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
+export function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+
+	const speciesId = toID(opponentActivePokemon.species);
+	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
+
+	const ballBonus = getBallBonus(ballId, battle, targetSlot);
+	if (ballBonus === 255) return { success: true, shakes: 4 };
+
+	let statusBonus = 1;
+	if (opponentStatus === 'slp' || opponentStatus === 'frz') {
+		statusBonus = 2.5;
+	} else if (opponentStatus === 'par' || opponentStatus === 'psn' || opponentStatus === 'brn') {
+		statusBonus = 1.5;
+	}
+
+	const { maxHp, hp } = opponentActivePokemon;
+	const modifiedCatchRate = catchRate;
+
+	const a = Math.floor(
+		(((3 * maxHp - 2 * hp) * modifiedCatchRate * ballBonus) / (3 * maxHp)) * statusBonus
+	);
+
+	if (a >= 255) return { success: true, shakes: 4 };
+
+	const b = Math.floor(65536 / (255 / a) ** 0.1875);
+
+	let shakes = 0;
+	for (let i = 0; i < 4; i++) {
+		const rand = Math.floor(Math.random() * 65536);
+		if (rand >= b) {
+			return { success: false, shakes };
 		}
+		shakes++;
+	}
 
-		// Handle Clear Smog stat reset effect
-		if (move.id === 'clearsmog' && defenderSlot.pokemon.hp > 0 && moveWasSuccessful) {
-			// This effect bypasses abilities like Clear Body and Substitute in official games
-			defenderSlot.statStages = { ...INITIAL_STAT_STAGES };
-			messageLog.push(`${defenderSlot.pokemon.species}'s stat changes were reset!`);
-		}
+	return { success: true, shakes: 4 };
+}
 
-		// Handle Steel Roller terrain removal
-		if (move.id === 'steelroller' && moveWasSuccessful && battle.terrain) {
-			const terrainName = battle.terrain.type.charAt(0).toUpperCase() + battle.terrain.type.slice(1);
-			battle.terrain = undefined;
-			messageLog.push(`The ${terrainName} Terrain was removed!`);
-		}
+export function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+	const playerSlot = getActiveSlots(battle.playerSlots)[0];
+	if (!playerSlot) return 1;
+	const activePokemon = playerSlot.pokemon;
+	const turn = battle.turn;
 
-		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
+	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
 
-		if (move.id === 'terablast' && attackerSlot.terastallized === 'Stellar' && moveWasSuccessful) {
-			if (attackerSlot.statStages.atk > -6) {
-				attackerSlot.statStages.atk--;
-				messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell!`);
-			}
-			if (attackerSlot.statStages.spa > -6) {
-				attackerSlot.statStages.spa--;
-				messageLog.push(`${attackerSlot.pokemon.species}'s Special Attack fell!`);
-			}
-		}
-
-		// Special trap moves (Anchor Shot, Spirit Shackle, Jaw Lock, Thousand Waves)
-		if (attackResult.effectiveness > 0 && damageDealt > 0) {
-			const defenderSpecies = Dex.species.get(defenderSlot.pokemon.species);
-			const isGhost = defenderSpecies.types.includes('Ghost');
-
-			// Special trap moves (Anchor Shot, Spirit Shackle, Thousand Waves)
-			if (['anchorshot', 'spiritshackle', 'thousandwaves'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
-				// Spirit Shackle can trap Ghosts, other moves cannot
-				if (!defenderSlot.isTrapped && (move.id === 'spiritshackle' || !isGhost)) {
-					defenderSlot.isTrapped = { turns: 5 };
-					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
-				}
-			}
-			if (move.id === 'jawlock' && defenderSlot?.pokemon.hp > 0 && attackerSlot?.pokemon.hp > 0) {
-				// Jaw Lock cannot trap Ghost-types
-				if (!defenderSlot.isTrapped && !isGhost) {
-					defenderSlot.isTrapped = { turns: 5 };
-					messageLog.push(`${defenderSlot.pokemon.species} can no longer escape!`);
-				}
-				if (!attackerSlot.isTrapped) {
-					attackerSlot.isTrapped = { turns: 5 };
-					messageLog.push(`${attackerSlot.pokemon.species} can no longer escape!`);
-				}
-			}
-
-			// Wake-Up Slap wakes up the target after dealing damage
-			if (move.id === 'wakeupslap' && defenderSlot.status === 'slp' && defenderSlot?.pokemon.hp > 0) {
-				defenderSlot.status = null;
-				defenderSlot.sleepCounter = 0;
-				messageLog.push(`${defenderSlot.pokemon.species} woke up!`);
-			}
-
-			// Smelling Salts cures paralysis after dealing damage
-			if (move.id === 'smellingsalts' && defenderSlot.status === 'par' && defenderSlot?.pokemon.hp > 0) {
-				defenderSlot.status = null;
-				messageLog.push(`${defenderSlot.pokemon.species} was cured of paralysis!`);
-			}
-
-			// Force switch moves (Dragon Tail, Circle Throw)
-			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
-				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-				// Suction Cups and similar abilities prevent forced switches
-				if (defenderAbility === 'suctioncups') {
-					messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
-				} else if (defenderSlot.isIngrained) {
-					messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
-				} else {
-					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
-					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
-					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
-
-					const availableReplacements = party.filter(p =>
-						p.hp > 0 &&
-						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
-						!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
-					);
-
-					if (availableReplacements.length === 0) {
-						messageLog.push(`But it failed! (No Pokémon to switch to!)`);
-					} else {
-						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
-						if (defenderSlotIndex !== -1) {
-							// Set the slot to null to trigger forced switch logic in battle-flow
-							if (isDefenderPlayer) {
-								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
-							} else {
-								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if (defenderSlot.pokemon.hp <= 0) break;
+	switch (ballId) {
+	case 'greatball': return 1.5;
+	case 'ultraball': return 2;
+	case 'masterball': return 255;
+	case 'fastball':
+		return opponentSpecies.baseStats.spe >= 100 ? 4 : 1;
+	case 'levelball':
+		if (activePokemon.level >= opponentActivePokemon.level * 4) return 8;
+		if (activePokemon.level >= opponentActivePokemon.level * 2) return 4;
+		if (activePokemon.level > opponentActivePokemon.level) return 2;
+		return 1;
+	case 'nestball':
+		return opponentActivePokemon.level <= 30 ? Math.max(1, (41 - opponentActivePokemon.level) / 10) : 1;
+	case 'netball':
+		return opponentSpecies.types.includes('Bug') || opponentSpecies.types.includes('Water') ? 3.5 : 1;
+	case 'quickball':
+		return turn === 0 ? 5 : 1;
+	case 'timerball':
+		return Math.min(4, 1 + turn * (1229 / 4096));
+	case 'dreamball':
+		return opponentStatus === 'slp' ? 4 : 1;
+	default:
+		return 1;
 	}
 }
 
-export function handleStatusMove(
-	attackerSlot: ActivePokemonSlot,
-	defenderSlot: ActivePokemonSlot | null,
-	move: Move,
-	battle: BattleState,
-	messageLog: string[]
-) {
-	const attacker = attackerSlot.pokemon;
-	const defender = defenderSlot?.pokemon;
-	const defenderSpecies = defender ? Dex.species.get(defender.species) : null;
+export function gainExperience(
+	player: PlayerData,
+	participantSlots: ActivePokemonSlot[],
+	defeatedPokemon: RPGPokemon,
+	room: ChatRoom,
+	user: User
+): { messages: string[], leveledUp: boolean } {
+	const defeatedSpeciesId = toID(defeatedPokemon.species);
+	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
 
-	const attackerAbility = toID(attacker.ability || '');
-	if (attackerAbility === 'prankster' && defenderSpecies?.types.includes('Dark')) {
-		messageLog.push(`${defender!.species} is immune to Prankster-boosted moves!`);
-		return;
-	}
+	let leveledUp = false;
+	const messages: string[] = [];
+	const participantExpGains = new Map<string, number>();
 
-	if (defender && defenderSpecies && move.target !== 'self' && !move.flags.heal) {
-		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle, attackerSlot.pokemon);
-		if (effectiveness === 0) {
-			messageLog.push(`It doesn't affect ${defender.species}...`);
-			return;
+	const opponentLevel = defeatedPokemon.level;
+	const X = 2 * opponentLevel + 10;
+	const Z = Math.floor((baseExp * opponentLevel) / 5);
+
+	const activeParticipantIds = new Set<string>();
+	for (const slot of participantSlots) {
+		if (slot?.pokemon && slot.pokemon.hp > 0) {
+			activeParticipantIds.add(slot.pokemon.id);
 		}
 	}
 
-	if (RPGMoves.handleSpecificStatusMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return;
+	for (const pokemon of player.party) {
+		if (pokemon.level >= 100) continue;
+
+		const participantLevel = pokemon.level;
+		const Y = opponentLevel + participantLevel + 10;
+
+		const scalingFactor = (Math.sqrt(X) * X * X) / (Math.sqrt(Y) * Y * Y);
+		const expGained = Math.floor(scalingFactor * Z) + 1;
+
+		participantExpGains.set(pokemon.species, expGained);
+
+		if (activeParticipantIds.has(pokemon.id)) {
+			gainEffortValues(pokemon, defeatedPokemon);
+		}
+
+		pokemon.experience += expGained;
 	}
 
-	if (RPGMoves.handleGenericBoostMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return;
+	if (participantExpGains.size === 0) return { messages: [], leveledUp: false };
+
+	if (participantExpGains.size === 1) {
+		const [species, exp] = Array.from(participantExpGains.entries())[0];
+		messages.push(`<b>${species} gained ${exp} Experience Points!</b>`);
+	} else {
+		const expValues = Array.from(participantExpGains.values());
+		const allSame = expValues.every(v => v === expValues[0]);
+
+		if (allSame) {
+			const participantNames = Array.from(participantExpGains.keys());
+			messages.push(`<b>${participantNames.join(' and ')} gained ${expValues[0]} Experience Points!</b>`);
+		} else {
+			const expStrings = Array.from(participantExpGains.entries()).map(([name, exp]) =>
+				`${name} gained ${exp} Experience Points`
+			);
+			messages.push(`<b>${expStrings.join(' and ')}!</b>`);
+		}
 	}
 
-	if (RPGMoves.handleGenericStatusInflictMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return;
+	for (const pokemon of player.party) {
+		if (pokemon.level >= 100) continue;
+
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+			messages.push(...levelUp(pokemon));
+			leveledUp = true;
+			const evolveMessage = checkEvolution(player, pokemon, { room, user });
+			if (evolveMessage) {
+				messages.push(evolveMessage);
+				break;
+			}
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messages.push(...newMoveMessages);
+		}
 	}
 
-	if (RPGMoves.handleGenericVolatileMove(attackerSlot, defenderSlot, move, battle, messageLog)) {
-		return;
+	return { messages, leveledUp };
+}
+
+export function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
+	const defeatedSpeciesId = toID(defeatedPokemon.species);
+	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
+
+	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+	for (const stat in evYield) {
+		if (totalEVs >= 510) break;
+		const statKey = stat as keyof Stats;
+		const evGained = evYield[statKey]!;
+		const currentEV = pokemon.evs[statKey];
+		if (currentEV >= 252) continue;
+		const canAdd = Math.min(evGained, 252 - currentEV, 510 - totalEVs);
+		pokemon.evs[statKey] += canAdd;
+		totalEVs += canAdd;
+	}
+	const species = Dex.species.get(pokemon.species);
+	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	const hpDiff = newStats.maxHp - pokemon.maxHp;
+	pokemon.hp = Math.max(1, pokemon.hp + hpDiff);
+	pokemon.maxHp = newStats.maxHp;
+	pokemon.atk = newStats.atk;
+	pokemon.def = newStats.def;
+	pokemon.spa = newStats.spa;
+	pokemon.spd = newStats.spd;
+	pokemon.spe = newStats.spe;
+}
+
+export function saveBattleStatus(battle: BattleState) {
+	const player = getPlayerData(battle.playerId);
+	const playerParty = getActiveParty(battle, player);
+
+	for (const slot of battle.playerSlots) {
+		if (slot) {
+			const pokemonInParty = playerParty.find(p => p.id === slot.pokemon.id);
+			if (pokemonInParty) {
+				if (slot.status === 'slp' || slot.status === 'frz') {
+					pokemonInParty.status = null;
+				} else {
+					pokemonInParty.status = slot.status;
+				}
+			}
+		}
 	}
 
-	if (RPGMoves.handleGenericFieldMove(attackerSlot, move, battle, messageLog)) {
-		return;
+	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+		for (const slot of battle.opponentSlots) {
+			if (slot) {
+				const opponentPokemonInParty = battle.opponentParty.find(p => p.id === slot.pokemon.id);
+				if (opponentPokemonInParty) {
+					opponentPokemonInParty.status = slot.status;
+				}
+			}
+		}
 	}
-
-	if (RPGMoves.handleGenericSideMove(attackerSlot, move, battle, messageLog)) {
-		return;
-	}
-
-	if (RPGMoves.handleGenericHealMove(attackerSlot, move, messageLog)) {
-		return;
-	}
-
-	if (move.selfSwitch) {
-		return;
-	}
-
-	messageLog.push(`But it failed!`);
 }
