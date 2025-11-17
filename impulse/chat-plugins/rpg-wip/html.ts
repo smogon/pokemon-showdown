@@ -50,8 +50,10 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto;">`;
 	let sellableItems = 0;
 	for (const [id, item] of player.inventory) {
-		const sellPrice = ITEM_PRICES[id]; // Using ITEM_PRICES as sell price for now
-		if (sellPrice && item.category === 'misc') { // Only allow selling 'misc' items
+		const purchasePrice = ITEM_PRICES[id];
+		if (purchasePrice && item.category === 'misc') { // Only allow selling 'misc' items
+			// Sell price is 50% of the purchase price
+			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
 			html += `<div style="border: 1px solid #ccc; padding: 8px; border-radius: 5px;">`;
 			html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;

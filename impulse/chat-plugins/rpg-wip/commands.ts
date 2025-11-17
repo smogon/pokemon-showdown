@@ -967,11 +967,13 @@ export const commands: ChatCommands = {
 				return this.errorReply("Key items cannot be sold.");
 			}
 
-			const sellPrice = ITEM_PRICES[itemId];
-			if (!sellPrice) {
+			const purchasePrice = ITEM_PRICES[itemId];
+			if (!purchasePrice) {
 				return this.errorReply("This item cannot be sold.");
 			}
 
+			// Sell price is 50% of the purchase price
+			const sellPrice = Math.floor(purchasePrice / 2);
 			const totalGain = sellPrice * quantity;
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
