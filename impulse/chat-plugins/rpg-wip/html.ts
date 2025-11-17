@@ -14,6 +14,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core'; // We will export this from core.ts
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
+import { TOTAL_BADGES } from './badges';
 
 /**
  * Generate bottom navigation buttons for story UI
@@ -252,8 +253,8 @@ function getSpriteFilename(speciesId: string): string {
 	}
 
 	const regionalFormSuffixes = [
-		'alola', 'galar', 'hisui', 'paldea', 
-		'alolan', 'galarian', 'hisuian', 'paldean'
+		'alola', 'galar', 'hisui', 'paldea',
+		'alolan', 'galarian', 'hisuian', 'paldean',
 	];
 
 	for (const suffix of regionalFormSuffixes) {
@@ -266,7 +267,7 @@ function getSpriteFilename(speciesId: string): string {
 	if (filename.endsWith('gmax')) {
 		filename = filename.replace(/gmax$/, '-gmax');
 	}
-	
+
 	const hyphenatedForms: Record<string, string> = {
 		'taurospaldeacombat': 'tauros-paldea-combat', 'taurospaldeablaze': 'tauros-paldea-blaze', 'taurospaldeaaqua': 'tauros-paldea-aqua',
 		'palafinhero': 'palafin-hero', 'gimmighoulroaming': 'gimmighoul-roaming', 'gholdengochest': 'gholdengo-chest',
@@ -291,11 +292,11 @@ function getSpriteFilename(speciesId: string): string {
 		'silvallypoison': 'silvally-poison', 'silvallypsychic': 'silvally-psychic', 'silvallyrock': 'silvally-rock',
 		'silvallysteel': 'silvally-steel', 'silvallywater': 'silvally-water',
 		'wishiwashischool': 'wishiwashi-school',
-		
+
 		'kyuremblack': 'kyurem-black', 'kyuremwhite': 'kyurem-white',
-		
+
 		'necrozmaduskmane': 'necrozma-dusk-mane', 'necrozmadawnwings': 'necrozma-dawn-wings',
-		
+
 		'dialgaorigin': 'dialga-origin', 'palkiaorigin': 'palkia-origin', 'giratinaorigin': 'giratina-origin',
 		'arceusbug': 'arceus-bug', 'arceusdark': 'arceus-dark', 'arceusdragon': 'arceus-dragon',
 		'arceuselectric': 'arceus-electric', 'arceusfairy': 'arceus-fairy', 'arceusfighting': 'arceus-fighting',
@@ -335,7 +336,7 @@ function getSpriteFilename(speciesId: string): string {
 	filename = filename.replace(/\+/g, '-');
 
 	filename = filename.replace(/-{2,}/g, '-');
-	
+
 	return filename;
 }
 
@@ -449,7 +450,7 @@ export function generateSharedBattlePokemonInfo(
 		return html;
 	} else {
 		const spriteFilename = getSpriteFilename(species.id);
-		
+
 		const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
 		const spriteHTML =
 			'<div style="text-align: center; margin-top: 4px;">' +
@@ -518,11 +519,11 @@ function generateWeatherTags(battle: BattleState): string {
 	};
 
 	const weatherTypeKey = battle.weather.type;
-	
-	const weatherClass = weatherNames.hasOwnProperty(weatherTypeKey)
-		? `rpg-weather-${weatherTypeKey}`
-		: 'rpg-weather-default';
-	
+
+	const weatherClass = weatherNames.hasOwnProperty(weatherTypeKey) ?
+		`rpg-weather-${weatherTypeKey}` :
+		'rpg-weather-default';
+
 	const name = weatherNames[weatherTypeKey] || weatherTypeKey;
 	const turnsText = battle.weather.turns > 0 ? ` (${battle.weather.turns})` : '';
 
@@ -543,11 +544,11 @@ function generateTerrainTags(battle: BattleState): string {
 	};
 
 	const terrainTypeKey = battle.terrain.type;
-	
-	const terrainClass = terrainNames.hasOwnProperty(terrainTypeKey)
-		? `rpg-terrain-${terrainTypeKey}`
-		: 'rpg-terrain-default';
-	
+
+	const terrainClass = terrainNames.hasOwnProperty(terrainTypeKey) ?
+		`rpg-terrain-${terrainTypeKey}` :
+		'rpg-terrain-default';
+
 	const name = terrainNames[terrainTypeKey] || terrainTypeKey;
 	const turnsText = battle.terrain.turns > 0 ? ` (${battle.terrain.turns})` : '';
 
@@ -559,7 +560,7 @@ function generateTerrainTags(battle: BattleState): string {
  */
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
-	
+
 	const tagClass = 'rpg-field-effect-tag';
 
 	if (battle.trickRoomTurns > 0) {
@@ -1567,7 +1568,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	let html = `<div class="infobox">`;
 	html += `<h2>Poké Mart - ${player.location}</h2>`;
 	html += `<p>Welcome! What would you like to do?</p>`;
-	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/8</p>`;
+	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	// Show next tier info if available
 	if (nextTier) {
@@ -2267,7 +2268,7 @@ export function generateDBSaveHTML(player: PlayerData): string {
 		`<p>Your game has been successfully saved to the database.</p>` +
 		`<p><strong>Trainer:</strong> ${player.name}</p>` +
 		`<p><strong>Location:</strong> ${player.location}</p>` +
-		`<p><strong>Badges:</strong> ${player.badges}/8</p>` +
+		`<p><strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>` +
 		`<p><strong>Party:</strong> ${player.party.length} Pokémon</p>` +
 		`<p><strong>Money:</strong> ₽${player.money}</p>` +
 		`<p><small>You can load your save anytime using the Load from Database button.</small></p>` +
@@ -2297,7 +2298,7 @@ export function generateDBLoadConfirmHTML(loadedPlayer: PlayerData): string {
 		`<h2>Game Loaded from Database!</h2>` +
 		`<p>Your saved game has been loaded successfully!</p>` +
 		`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
-		`<p><strong>Badges:</strong> ${loadedPlayer.badges}/8</p>` +
+		`<p><strong>Badges:</strong> ${loadedPlayer.badges}/${TOTAL_BADGES}</p>` +
 		`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
 		`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
 		`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +

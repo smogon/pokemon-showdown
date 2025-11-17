@@ -15,7 +15,7 @@ import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
 import { addItemToInventory } from './items';
 import { getStartingLocation } from './locations';
 import { ImpulseDB } from '../../impulse-db';
-import { TOTAL_BADGES } from './badges';
+import { TOTAL_BADGES, isValidBadge } from './badges';
 
 export const playerData = new Map<string, PlayerData>();
 export const activeBattles = new Map<string, BattleState>();
@@ -261,6 +261,17 @@ export function deserializePlayerData(data: any): PlayerData {
 	}
 	if (data.obtainedBadges.length > TOTAL_BADGES) {
 		throw new Error(`Invalid save data: cannot have more than ${TOTAL_BADGES} badges`);
+	}
+	// Validate each badge name is valid and check for duplicates
+	const seenBadges = new Set<string>();
+	for (const badgeName of data.obtainedBadges) {
+		if (typeof badgeName !== 'string' || !isValidBadge(badgeName)) {
+			throw new Error(`Invalid save data: invalid badge name '${badgeName}'`);
+		}
+		if (seenBadges.has(badgeName)) {
+			throw new Error(`Invalid save data: duplicate badge '${badgeName}'`);
+		}
+		seenBadges.add(badgeName);
 	}
 
 	// Validate Pokemon in party
