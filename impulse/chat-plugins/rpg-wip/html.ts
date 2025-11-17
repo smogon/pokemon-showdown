@@ -14,7 +14,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
-import { TOTAL_BADGES } from './badges';
+import { TOTAL_BADGES }N'./badges';
 
 // ###################################
 // C O R E   U T I L I T I E S
@@ -177,6 +177,10 @@ function generateStarterChoiceBoxHTML(speciesId: string, command: string): strin
 		`</div>`;
 }
 
+/**
+ * [DEPRECATED] This function is kept for backward compatibility with non-battle menus (Party, PC, etc.).
+ * The new battle UI uses generateRevampedStatusTags.
+ */
 function generatePokemonStatusTagsHTML(
 	slot: ActivePokemonSlot,
 	isDoubleBattle: boolean = false,
@@ -258,6 +262,10 @@ function generatePokemonStatusTagsHTML(
 	return [statusTag, volatileTags, abilityTags, chargingTag, statStageTags, battleConditionTags].filter(Boolean).join('');
 }
 
+/**
+* [DEPRECATED] This function is kept for backward compatibility.
+* The new battle UI uses generateRevampedActionPanel.
+*/
 function generateBattleActionButtonsHTML(
 	battle: BattleState,
 	playerSlot: ActivePokemonSlot | null
@@ -553,7 +561,7 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 // ###################################
 
 /**
- * [MODIFIED] Generates the main battle HTML.
+ * [REVAMPED] Generates the main battle HTML using the new Phase 1 layout.
  * This is a BATTLE UI, so it does NOT get 'rpg-menu-box'.
  */
 export function generateBattleHTML(
@@ -565,7 +573,7 @@ export function generateBattleHTML(
 
 	// --- 1. Handle Battle End ---
 	const newEventsHTML = messageLog.length > 0 ?
-		`<div class="rpg-battle-new-events">${messageLog.join('<br>')}</div>` :
+		`<div class="rpg-message-box">${messageLog.join('<br>')}</div>` :
 		'';
 	
 	const reversedBattleLog = [...battle.battleLog].reverse();
@@ -593,13 +601,17 @@ export function generateBattleHTML(
 	// --- 2. Render Active Battle ---
 	const headerHTML = generateBattleHeader(battle);
 	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
-	const battlefieldHTML = generateBattlefield(battle, targetSelection);
+	// [REVAMP] Call the new battlefield generator
+	const battlefieldHTML = generateRevampedBattlefield(battle, targetSelection);
 
 	let actionPanelHTML = '';
+	// [REVAMP] Call new action/move panel generators
 	if (targetSelection && battle.battleType.includes('double')) {
-		actionPanelHTML = generateBattleTargetSelection(battle, targetSelection);
+		// We are in target selection mode
+		actionPanelHTML = generateRevampedMovePanel(battle, targetSelection, teraToggled);
 	} else {
-		actionPanelHTML = generateBattleActionPanel(battle, teraToggled);
+		// We are in main action selection mode
+		actionPanelHTML = generateRevampedActionPanel(battle, teraToggled);
 	}
 
 	return '<div class="infobox">' + // NO 'rpg-menu-box'
@@ -607,8 +619,8 @@ export function generateBattleHTML(
 		globalConditionsHTML +
 		battlefieldHTML +
 		newEventsHTML + 
-		historyLogHTML + 
 		actionPanelHTML +
+		historyLogHTML + // Log is now below action panel
 		'</div>';
 }
 
@@ -845,12 +857,10 @@ export function generateMultipleOpponentsCatchErrorHTML(): string {
 // B A T T L E   U I   -   H E L P E R S
 // ###################################
 
-function getDisplayLog(battle: BattleState, messageLog: string[] = []): string {
-	const reversedBattleLog = [...battle.battleLog].reverse();
-	const allLogs = [...messageLog, ...reversedBattleLog];
-	return allLogs.length > 0 ? allLogs.join('<br>') : 'Battle started...';
-}
-
+/**
+* [DEPRECATED] Kept for backward compatibility.
+* The new battle UI uses generateRevampedMovePanel.
+*/
 function generateBattleMoveSelectionHTML(
 	battle: BattleState,
 	slot: ActivePokemonSlot,
@@ -995,9 +1005,8 @@ function generateAvailablePokemonListHTML(
 }
 
 /**
- * [REFACTORED] to restore sprite/psicon logic AND
- * maintain the new display order:
- * 1. Name, 2. HP Bar, 3. Tags, 4. Sprite (in singles)
+ * [DEPRECATED] Kept for backward compatibility.
+ * The new battle UI does not use this function.
  */
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
@@ -1265,7 +1274,7 @@ export function generateBattleTowerLossHTML(floor: number): string {
 // ###################################
 
 /**
- * [NEW] Generates the HTML for a Pokemon's HP bar.
+ * [NEW] Generates the HTML for a Pokemon's HP bar. (Used by menus)
  */
 function generateHPBar(pokemon: RPGPokemon): string {
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
@@ -1278,7 +1287,7 @@ function generateHPBar(pokemon: RPGPokemon): string {
 }
 
 /**
- * [NEW] Generates the HTML for a Pokemon's EXP bar.
+ * [NEW] Generates the HTML for a Pokemon's EXP bar. (Used by menus)
  */
 function generateExpBar(pokemon: RPGPokemon): string {
 	const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
@@ -1394,6 +1403,7 @@ function generateSummaryMovesGrid(pokemon: RPGPokemon): string {
 
 /**
  * [REFACTORED] to use new component helpers.
+ * This is the NON-BATTLE version, used for Party, PC, etc.
  */
 export function generatePokemonInfoHTML(
 	slot: ActivePokemonSlot,
@@ -1945,8 +1955,296 @@ export function generateDBDeleteSuccessHTML(): string {
 // ###################################
 
 /**
+ * [NEW REVAMP HELPER] Generates the new HP bar from Phase 1.
+ */
+function generateRevampedHPBar(pokemon: RPGPokemon, showNumbers: boolean): string {
+	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
+	
+	let hpBarColorClass = 'rpg-hp-bar-fill-green';
+	if (hpPercentage <= 25) {
+		hpBarColorClass = 'rpg-hp-bar-fill-red';
+	} else if (hpPercentage <= 50) {
+		hpBarColorClass = 'rpg-hp-bar-fill-yellow';
+	}
+	
+	const hpText = showNumbers ? `<span class="rpg-hp-text">${pokemon.hp}/${pokemon.maxHp}</span>` : '';
+
+	return `<div class="rpg-hp-container">` +
+		`<div class="rpg-hp-bar-fill ${hpBarColorClass}" style="width: ${hpPercentage}%;"></div>` +
+		hpText +
+		`</div>`;
+}
+
+/**
+ * [NEW REVAMP HELPER] Generates the new status bubbles from Phase 1.
+ */
+function generateRevampedStatusTags(slot: ActivePokemonSlot): string {
+	const pokemon = slot.pokemon;
+	const displayStatus = slot.status || pokemon.status;
+	const statusClass: Record<Status, string> = { 
+		'brn': 'rpg-status-brn', 
+		'par': 'rpg-status-par', 
+		'psn': 'rpg-status-psn', 
+		'tox': 'rpg-status-tox', 
+		'slp': 'rpg-status-slp', 
+		'frz': 'rpg-status-frz' 
+	};
+	
+	let statusTag = '';
+	if (displayStatus) {
+		statusTag = `<span class="rpg-status-bubble ${statusClass[displayStatus]}">${displayStatus.toUpperCase()}</span>`;
+	}
+
+	// For volatile statuses, we use the simpler text tags for now as per plan
+	const volatileTags = [
+		slot.isConfused ? '<span class="rpg-tag rpg-tag-confused">Confused</span>' : '',
+		// Add other minor statuses here if needed, e.g., 'Seeded', 'Taunted'
+		// Keeping it simple for the main info box
+	].filter(Boolean).join(' ');
+
+	return `${statusTag} ${volatileTags}`;
+}
+
+/**
+ * [NEW REVAMP HELPER] Generates the new info box for a single Pokemon.
+ */
+function generateRevampedBattleInfoBox(slot: ActivePokemonSlot, isPlayerSide: boolean): string {
+	const pokemon = slot.pokemon;
+	const shinySymbol = pokemon.shiny ? '<span style="color: #d4af37;">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span style="color: #007bff;">♂</span>' : pokemon.gender === 'F' ? '<span style="color: #f06292;">♀</span>' : '';
+
+	const hpBarHTML = generateRevampedHPBar(pokemon, isPlayerSide); // Show numbers only for player
+	const statusTagsHTML = generateRevampedStatusTags(slot);
+	
+	let expBarHTML = '';
+	if (isPlayerSide) {
+		const expForLastLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
+		const expForNextLevel = pokemon.expToNextLevel;
+		const expProgress = pokemon.experience - expForLastLevel;
+		const expNeededForLevel = expForNextLevel - expForLastLevel;
+		const expPercentage = calculateExpBarPercentage(expProgress, expNeededForLevel);
+		
+		expBarHTML = `<div class="rpg-info-exp-section">` +
+			`<div class="rpg-info-exp-bar-fill" style="width: ${expPercentage}%;"></div>` +
+			`</div>`;
+	}
+
+	return `<div class="rpg-info-box">` +
+		`<div class="rpg-info-header">${(pokemon.nickname || pokemon.species)} ${genderSymbol} ${shinySymbol} Lv${pokemon.level}</div>` +
+		`<div class="rpg-info-hp-section">${hpBarHTML}</div>` +
+		`<div class="rpg-info-status-section">${statusTagsHTML}</div>` +
+		`${expBarHTML}` +
+		`</div>`;
+}
+
+/**
+ * [NEW REVAMP HELPER] Generates the new battlefield layout (Phase 1.1).
+ */
+function generateRevampedBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
+	const isDoubleBattle = battle.battleType.includes('double');
+	let html = '<div class="rpg-battle-field">';
+
+	if (isDoubleBattle) {
+		// --- Double Battle Layout ---
+		html += '<div class="rpg-battle-opponent-area-double">';
+		html += (battle.opponentSlots[0] && battle.opponentSlots[0].pokemon.hp > 0) ? generateRevampedBattleInfoBox(battle.opponentSlots[0], false) : '<div></div>'; // Empty grid cell
+		html += (battle.opponentSlots[1] && battle.opponentSlots[1].pokemon.hp > 0) ? generateRevampedBattleInfoBox(battle.opponentSlots[1], false) : '<div></div>'; // Empty grid cell
+		html += '</div>';
+		
+		html += '<div class="rpg-battle-player-area-double">';
+		html += (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp > 0) ? generateRevampedBattleInfoBox(battle.playerSlots[0], true) : '<div></div>'; // Empty grid cell
+		html += (battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp > 0) ? generateRevampedBattleInfoBox(battle.playerSlots[1], true) : '<div></div>'; // Empty grid cell
+		html += '</div>';
+
+	} else {
+		// --- Single Battle Layout ---
+		if (battle.opponentSlots[0]) {
+			const oppSlot = battle.opponentSlots[0];
+			const oppSprite = getSpriteFilename(oppSlot.pokemon.species);
+			html += `<div class="rpg-battle-sprite-opponent-single"><img src="https://play.pokemonshowdown.com/sprites/gen5/${oppSprite}.png" width="96" height="96" /></div>`;
+			html += '<div class="rpg-battle-opponent-area-single">';
+			html += generateRevampedBattleInfoBox(oppSlot, false);
+			html += '</div>';
+		}
+		
+		if (battle.playerSlots[0]) {
+			const playerSlot = battle.playerSlots[0];
+			const playerSprite = getSpriteFilename(playerSlot.pokemon.species);
+			const spriteDir = playerSlot.pokemon.shiny ? 'gen5-shiny' : 'gen5';
+			html += `<div class="rpg-battle-sprite-player-single"><img src="https://play.pokemonshowdown.com/sprites/ani-back/${playerSprite}.gif" width="96" height="96" /></div>`;
+			html += '<div class="rpg-battle-player-area-single">';
+			html += generateRevampedBattleInfoBox(playerSlot, true);
+			html += '</div>';
+		}
+	}
+
+	html += '</div>';
+	return html;
+}
+
+/**
+ * [NEW REVAMP HELPER] Generates the new move selection panel (Phase 1.5).
+ */
+function generateRevampedMovePanel(
+	battle: BattleState,
+	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
+	teraToggled?: boolean
+): string {
+	const isDoubleBattle = battle.battleType.includes('double');
+
+	// Determine which slot is active
+	let activeSlot: ActivePokemonSlot | null = null;
+	let activeSlotIndex = -1;
+	
+	if (targetSelection) {
+		activeSlotIndex = targetSelection.attackerSlotIndex;
+		activeSlot = battle.playerSlots[activeSlotIndex];
+	} else {
+		if (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp > 0 && !battle.pendingActions[0]) {
+			activeSlot = battle.playerSlots[0];
+			activeSlotIndex = 0;
+		} else if (isDoubleBattle && battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp > 0 && !battle.pendingActions[1]) {
+			activeSlot = battle.playerSlots[1];
+			activeSlotIndex = 1;
+		}
+	}
+
+	if (!activeSlot) return ''; // No active slot, or waiting
+
+	const pokemon = activeSlot.pokemon;
+	
+	let html = `<div class="rpg-move-panel">`;
+	
+	if (targetSelection) {
+		// --- Target Selection Mode ---
+		const move = getMove(targetSelection.moveId);
+		const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
+		html += `<div class="rpg-move-panel-header">Select a target for ${move.name}${teraText}</div>`;
+
+		html += '<div class="rpg-move-panel-grid">';
+		const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
+		const command = `/rpg battleaction move ${activeSlotIndex} ${targetSelection.moveId}`;
+
+		// Simplified targeting: Add all possible targets
+		const targets = [
+			{ slot: battle.opponentSlots[0], name: "Opponent 1", index: 2 },
+			{ slot: battle.opponentSlots[1], name: "Opponent 2", index: 3 },
+			{ slot: battle.playerSlots[0], name: "Ally 1", index: 0 },
+			{ slot: battle.playerSlots[1], name: "Ally 2", index: 1 },
+		];
+
+		for (const target of targets) {
+			if (target.slot && target.slot.pokemon.hp > 0 && target.index !== activeSlotIndex) {
+				html += `<button name="send" value="${command} ${target.index}${teraParam}" class="button rpg-move-button-enhanced">${target.name}</button>`;
+			}
+		}
+		html += '</div>';
+		
+	} else {
+		// --- Move Selection Mode ---
+		html += `<div class="rpg-move-panel-header">What will ${pokemon.nickname || pokemon.species} do?</div>`;
+		html += '<div class="rpg-move-panel-grid">';
+
+		const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
+		// (Add other "must struggle" checks here if needed)
+
+		if (allMovesOutOfPP) {
+			// STRUGGLE
+			const struggleCommand = isDoubleBattle ?
+				`/rpg battleaction selecttarget ${activeSlotIndex} struggle` :
+				`/rpg battleaction move ${activeSlotIndex} struggle 2`;
+			html += `<button name="send" value="${struggleCommand}" class="button rpg-move-button-enhanced rpg-move-type-normal">` +
+				`<div class="rpg-move-name-text">Struggle</div>` +
+				`<div><span class="rpg-move-type-text">Normal</span><span class="rpg-move-pp-text">--/--</span></div>` +
+				`</button>`;
+		} else {
+			// REGULAR MOVES
+			const canTerastallize = !battle.playerTerastallizeUsed && !activeSlot.terastallized;
+			const teraActive = teraToggled || false;
+			
+			for (const move of pokemon.moves) {
+				const moveData = getMove(move.id);
+				const isDisabled = move.pp === 0; // Simplified; add other checks as needed
+				
+				const teraParam = teraActive ? ' terastallize' : '';
+				const moveCommand = isDoubleBattle ?
+					`/rpg battleaction selecttarget ${activeSlotIndex} ${move.id}${teraParam}` :
+					`/rpg battleaction move ${activeSlotIndex} ${move.id} 2${teraParam}`;
+				
+				html += `<button name="send" value="${moveCommand}" class="button rpg-move-button-enhanced rpg-move-type-${toID(moveData.type)}" ${isDisabled ? 'disabled' : ''}>` +
+					`<div class="rpg-move-name-text">${moveData.name}</div>` +
+					`<div><span class="rpg-move-type-text">${moveData.type}</span><span class="rpg-move-pp-text">${move.pp}/${moveData.pp}</span></div>` +
+					`</button>`;
+			}
+			
+			// Tera Toggle Button (if applicable)
+			if (canTerastallize) {
+				const teraToggleClasses = 'button rpg-tera-toggle' + (teraActive ? ' rpg-tera-toggle-on' : '');
+				const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+				const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
+				html += `</div><div class="rpg-text-center" style="margin-top: 8px;"><button name="send" value="${teraToggleCommand}" class="${teraToggleClasses}">${teraToggleText}</button>`;
+			}
+		}
+		
+		html += '</div>'; // Close grid
+	}
+	
+	html += '</div>'; // Close panel
+	return html;
+}
+
+/**
+ * [NEW REVAMP HELPER] Generates the new 2x2 action panel (Phase 1.6).
+ */
+function generateRevampedActionPanel(battle: BattleState, teraToggled?: boolean): string {
+	const isDoubleBattle = battle.battleType.includes('double');
+
+	// Find the active slot
+	let activeSlot: ActivePokemonSlot | null = null;
+	let activeSlotIndex = -1;
+	if (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp > 0 && !battle.pendingActions[0]) {
+		activeSlot = battle.playerSlots[0];
+		activeSlotIndex = 0;
+	} else if (isDoubleBattle && battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp > 0 && !battle.pendingActions[1]) {
+		activeSlot = battle.playerSlots[1];
+		activeSlotIndex = 1;
+	}
+
+	if (activeSlot) {
+		// --- Show Move Panel ---
+		return generateRevampedMovePanel(battle, undefined, teraToggled);
+	} else if (battle.pendingActions[0] && (!isDoubleBattle || battle.pendingActions[1])) {
+		// --- Show Main Action Panel (waiting) ---
+		// This state is brief, but we can show the disabled panel
+		return `<div class="rpg-action-panel">` +
+			`<button class="button rpg-action-button" disabled>⚔️ FIGHT</button>` +
+			`<button class="button rpg-action-button" disabled>🎒 BAG</button>` +
+			`<button class="button rpg-action-button" disabled>🔄 POKÉMON</button>` +
+			`<button class="button rpg-action-button" disabled>🏃 RUN</button>` +
+			`</div>`;
+	} else {
+		// --- Show Main Action Panel (Active) ---
+		// This is the default view if no move panel is shown (e.g. first view)
+		// We'll link "FIGHT" to the move panel
+		
+		// Find the *next* slot to move to pass to switchmenu
+		const nextSlotToMove = (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp > 0 && !battle.pendingActions[0]) ? 0 : 1;
+
+		const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
+		const runDisabled = battle.battleType.includes('trainer') || battle.battleType === 'battletower';
+		const catchDisabled = !isWild || battle.battleType === 'battletower';
+
+		return `<div class="rpg-action-panel">` +
+			`<button name="send" value="/rpg battleaction back" class="button rpg-action-button rpg-action-button-fight">⚔️ FIGHT</button>` +
+			`<button name="send" value="/rpg battleaction catchmenu" class="button rpg-action-button rpg-action-button-bag" ${catchDisabled ? 'disabled' : ''}>🎒 BAG</button>` +
+			`<button name="send" value="/rpg battleaction switchmenu ${nextSlotToMove}" class="button rpg-action-button rpg-action-button-pokemon">🔄 POKÉMON</button>` +
+			`<button name="send" value="/rpg battleaction run" class="button rpg-action-button rpg-action-button-run" ${runDisabled ? 'disabled' : ''}>🏃 RUN</button>` +
+			`</div>`;
+	}
+}
+
+/**
  * [NEW HELPER] Generates the top header for a battle screen.
- * This is a new component for Suggestion #4.
  */
 function generateBattleHeader(battle: BattleState): string {
 	if (battle.battleType === 'battletower') {
@@ -1962,9 +2260,8 @@ function generateBattleHeader(battle: BattleState): string {
 }
 
 /**
- * [REFACTORED] to restore correct single-battle (side-by-side) 
- * and double-battle (grid) layouts.
- * [FIXED] Swapped player and opponent in single battle to place player on the left.
+ * [DEPRECATED] Kept for backward compatibility.
+ * The new battle UI does not use this function.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -2060,8 +2357,8 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 }
 
 /**
- * [NEW HELPER] Generates the target selection panel for double battles.
- * This is a new component for Suggestion #4.
+ * [DEPRECATED] Kept for backward compatibility.
+ * The new battle UI does not use this function.
  */
 function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
@@ -2111,8 +2408,8 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 }
 
 /**
- * [NEW HELPER] Generates the main action panel (moves + switch/run/catch).
- * This is a new component for Suggestion #4.
+ * [DEPRECATED] Kept for backward compatibility.
+ * The new battle UI uses generateRevampedActionPanel.
  */
 function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
 	const isDoubleBattle = battle.battleType.includes('double');
