@@ -1972,7 +1972,11 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 	return 1;
 }
 
-export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
+/**
+ * Applies speed modifications from ABILITIES ONLY.
+ * Item and status speed mods are handled in battle-flow.ts
+ */
+export function applyAbilitySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
 	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) ||
@@ -2009,10 +2013,6 @@ export function applySpeedModifier(pokemon: RPGPokemon, battle: BattleState, spe
 		if (slot?.unburdenActive) {
 			return speed * 2;
 		}
-	}
-
-	if (battle.magicRoomTurns === 0 && pokemon.item === 'choicescarf') {
-		speed = Math.floor(speed * 1.5);
 	}
 
 	return speed;
@@ -2753,7 +2753,7 @@ export const RPGAbilities = {
 	applyPowerModifier: applyAbilityPowerModifier,
 	applyTypeModifier: applyAbilityTypeModifier,
 	applyAbilityStatModifier,
-	applySpeedModifier,
+	applyAbilitySpeedModifier,
 	applyDamageModifier,
 	checkItemRemovalPrevention,
 	getSTABMultiplier,
