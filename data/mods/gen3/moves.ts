@@ -190,7 +190,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onModifyTarget(targetRelayVar, source, target, move) {
 				if (move.id !== 'counter') return;
 				if (source !== this.effectState.target || !this.effectState.slot) {
-					targetRelayVar.target = source;
+					targetRelayVar.target = source; // do not deduct PP against Pressure targets
 				}
 				targetRelayVar.target = this.getAtSlot(this.effectState.slot);
 			},
@@ -513,7 +513,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onModifyTarget(targetRelayVar, source, target, move) {
 				if (move.id !== 'mirrorcoat') return;
 				if (source !== this.effectState.target || !this.effectState.slot) {
-					targetRelayVar.target = source;
+					targetRelayVar.target = source; // do not deduct PP against Pressure targets
 				}
 				targetRelayVar.target = this.getAtSlot(this.effectState.slot);
 			},
