@@ -1062,7 +1062,7 @@ export function executeMove(
 				}
 			} else {
 				if (!attacker.species.includes('Gorging')) {
-					attacker.species = 'Cramorant-GGorging';
+					attacker.species = 'Cramorant-Gorging';
 					(attackerSlot as any).gulpMissileForm = 'gorging';
 					messageLog.push(`${attacker.nickname || 'Cramorant'} caught a Pikachu!`);
 				}
