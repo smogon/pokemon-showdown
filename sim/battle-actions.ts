@@ -415,7 +415,7 @@ export class BattleActions {
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
 		const baseTarget = move.target;
-		let targetRelayVar = { target };
+		const targetRelayVar = { target };
 		this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
