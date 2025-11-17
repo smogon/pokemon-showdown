@@ -1403,8 +1403,9 @@ export function generatePokemonInfoHTML(
 	if (isPlayerSide) {
 		expBarHTML = generateExpBar(pokemon);
 	} else {
-		// Maintain layout spacing
-		expBarHTML = `<div style="height: 24px; margin: 5px 0;"></div>`;
+		
+		// Use an empty bar with the same class to maintain identical layout
+		expBarHTML = `<div class="rpg-exp-bar"></div>`;
 	}
 
 	const statusTagsHTML = generatePokemonStatusTagsHTML(slot, false);
