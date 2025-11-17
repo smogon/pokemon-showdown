@@ -544,9 +544,36 @@ export const commands: ChatCommands = {
 				}
 
 				if (!pokemonId) {
+					// [NEW] Context-Aware Logic (Suggestion #2)
+					// Check if there is only one obvious target for the item
+					
+					// Define item categories based on existing logic
+					const revivalItems = ['revive', 'maxrevive', 'revivalherb'];
+					const healingItems = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'];
+
+					if (revivalItems.includes(itemId)) {
+						const faintedPokemon = player.party.filter(p => p.hp <= 0);
+						if (faintedPokemon.length === 1) {
+							// Only one fainted Pokémon, auto-select it.
+							return this.parse(`/rpg useitem ${itemId} ${faintedPokemon[0].id}`);
+						}
+					}
+
+					if (healingItems.includes(itemId)) {
+						// Auto-select if only one Pokémon is damaged (and not fainted)
+						const damagedPokemon = player.party.filter(p => p.hp > 0 && p.hp < p.maxHp);
+						if (damagedPokemon.length === 1) {
+							// Auto-select the only damaged Pokémon
+							return this.parse(`/rpg useitem ${itemId} ${damagedPokemon[0].id}`);
+						}
+					}
+					// [END NEW LOGIC]
+
+					// If no auto-selection was made, show the selection screen
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
 				}
 
+				// The rest of the function (for when pokemonId *is* provided) remains the same.
 				const targetPokemon = player.party.find(p => p.id === pokemonId);
 				if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
