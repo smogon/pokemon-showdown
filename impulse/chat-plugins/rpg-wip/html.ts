@@ -1960,7 +1960,8 @@ function generateBattleHeader(battle: BattleState): string {
 }
 
 /**
- * [REFACTORED] to unify single and double battle logic.
+ * [REFACTORED] to restore correct single-battle (side-by-side) 
+ * and double-battle (grid) layouts.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -1988,7 +1989,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		}
 
 		let borderStyle = "1px solid #ccc"; // Default border
-		if (battle.battleType === 'wild_double' || battle.battleType === 'trainer_double') {
+		if (isDoubleBattle) {
 			// Only apply targeting/pending borders in double battles where it matters
 			if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
 				borderStyle = "3px dashed #007bff";
@@ -1998,49 +1999,62 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			}
 		}
 
-		return '<div style="border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;">' +
+		// Use padding for the slot wrapper in doubles, but let the card handle it in singles
+		const wrapperStyle = isDoubleBattle ? 
+			'border: ' + borderStyle + '; padding: 10px; margin: 5px; border-radius: 5px;' :
+			'border: ' + borderStyle + '; margin: 5px; border-radius: 5px;';
+
+
+		return '<div style="' + wrapperStyle + '">' +
 				generateSharedBattlePokemonInfo(slot, side === 'player', isDoubleBattle, ownerName, battle) +
 				'</div>';
 	};
 
 	let html = '<table style="width: 100%; margin-bottom: 5px;">';
-	
-	// Opponent Row
-	html += '<tr>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// Always render the first opponent slot
-	html += generateSlotHTML(battle.opponentSlots[0], 2, 'opponent');
-	html += '</td>';
-	
-	// Only add the second opponent cell if it's a double battle
+
 	if (isDoubleBattle) {
+		// --- Double Battle Layout (Top/Bottom Grid) ---
+		// Opponent Row
+		html += '<tr>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(battle.opponentSlots[0], 2, 'opponent');
+		html += '</td>';
 		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
 		html += generateSlotHTML(battle.opponentSlots[1], 3, 'opponent');
 		html += '</td>';
-	}
-	
-	html += '</tr>';
-	
-	// Player Row
-	html += '<tr>';
-	html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
-	// Always render the first player slot
-	html += generateSlotHTML(battle.playerSlots[0], 0, 'player');
-	html += '</td>';
-	
-	// Only add the second player cell if it's a double battle
-	if (isDoubleBattle) {
+		html += '</tr>';
+		
+		// Player Row
+		html += '<tr>';
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(battle.playerSlots[0], 0, 'player');
+		html += '</td>';
 		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
 		html += generateSlotHTML(battle.playerSlots[1], 1, 'player');
 		html += '</td>';
+		html += '</tr>';
+
+	} else {
+		// --- Single Battle Layout (Side-by-Side) ---
+		// A single row with two cells
+		html += '<tr>';
+		
+		// Opponent Cell (Slot 0)
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(battle.opponentSlots[0], 2, 'opponent');
+		html += '</td>';
+		
+		// Player Cell (Slot 0)
+		html += '<td style="width: 50%; padding: 0; vertical-align: top; text-align: center;">';
+		html += generateSlotHTML(battle.playerSlots[0], 0, 'player');
+		html += '</td>';
+
+		html += '</tr>';
 	}
-	
-	html += '</tr>';
+
 	html += '</table>';
-	
 	return html;
 }
-
 
 /**
  * [NEW HELPER] Generates the target selection panel for double battles.
