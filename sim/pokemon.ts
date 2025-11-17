@@ -818,6 +818,8 @@ export class Pokemon {
 				if (!isCharging && !(move.id === 'pursuit' && (target.beingCalledBack || target.switchFlag))) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 				}
+			} else if (move.target === 'scripted') {
+				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 			}
 			if (move.smartTarget) {
 				targets = this.getSmartTargets(target, move);

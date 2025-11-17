@@ -3120,7 +3120,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2, move) {
 				if (move.id !== 'counter') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
+				if (source !== this.effectState.target || !this.effectState.slot) return source;
 				return this.getAtSlot(this.effectState.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
@@ -12455,7 +12455,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2, move) {
 				if (move.id !== 'mirrorcoat') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
+				if (source !== this.effectState.target || !this.effectState.slot) return source;
 				return this.getAtSlot(this.effectState.slot);
 			},
 			onDamagingHit(damage, target, source, move) {

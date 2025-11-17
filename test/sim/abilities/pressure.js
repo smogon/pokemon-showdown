@@ -265,4 +265,18 @@ describe('Pressure [Gen 4]', () => {
 		const move = battle.p1.active[0].getMoveData(Dex.moves.get('calmmind'));
 		assert.equal(move.pp, move.maxpp - 1);
 	});
+
+	it(`should deduct additional PP from moves reflected by Magic Coat if successful`, () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'reuniclus', moves: ['magiccoat'] },
+		], [
+			{ species: 'dusclops', ability: 'pressure', moves: ['tackle', 'leer'] },
+		]]);
+		const move = battle.p1.active[0].getMoveData(Dex.moves.get('magiccoat'));
+		battle.makeChoices();
+		assert.equal(move.pp, move.maxpp - 1);
+		battle.makeChoices('move magiccoat', 'move leer');
+		console.log(battle.log);
+		assert.equal(move.pp, move.maxpp - 3);
+	});
 });

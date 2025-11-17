@@ -1040,7 +1040,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.removeVolatile('magiccoat');
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
-				this.actions.useMove(newMove, target, { target: source });
+				this.actions.useMove(newMove, target, {
+					target: source,
+					sourceEffect: this.effectState.sourceEffect, // deduct PP
+				});
 				return null;
 			},
 		},

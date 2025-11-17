@@ -85,6 +85,21 @@ describe('Counter', () => {
 		battle.makeChoices('auto', 'move sleeptalk, move dragonclaw 1');
 		assert.equal(wynaut.maxhp, wynaut.hp);
 	});
+
+	it(`should only deduct additional Pressure PP from Counter if the Counter was successful`, () => {
+		battle = common.createBattle([[
+			{ species: 'Palkia', ability: 'pressure', moves: ['tackle', 'leer'] },
+		], [
+			{ species: 'Dialga', moves: ['counter'] },
+		]]);
+		battle.makeChoices('move leer', 'move counter');
+
+		const move = battle.p2.active[0].getMoveData('counter');
+		assert.equal(move.pp, move.maxpp - 1);
+
+		battle.makeChoices('move tackle', 'move counter');
+		assert.equal(move.pp, move.maxpp - 3);
+	});
 });
 
 describe('Mirror Coat', () => {
@@ -166,6 +181,20 @@ describe('Mirror Coat', () => {
 		const wynaut = battle.p2.active[0];
 		battle.makeChoices('auto', 'move sleeptalk, move dragonpulse 1');
 		assert.equal(wynaut.maxhp, wynaut.hp);
+	});
+
+	it(`should only deduct additional Pressure PP from Mirror Coat if the Mirror Coat was successful`, () => {
+		battle = common.createBattle([[
+			{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'leer'] },
+		], [
+			{ species: 'Dialga', moves: ['mirrorcoat'] },
+		]]);
+		battle.makeChoices('move leer', 'move mirrorcoat');
+		const move = battle.p2.active[0].getMoveData('mirrorcoat');
+		assert.equal(move.pp, move.maxpp - 1);
+
+		battle.makeChoices('move watergun', 'move mirrorcoat');
+		assert.equal(move.pp, move.maxpp - 3);
 	});
 });
 
