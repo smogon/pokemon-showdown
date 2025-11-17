@@ -1679,6 +1679,7 @@ export const Scripts: ModdedBattleScriptsData = {
     this.modData('Learnsets', 'emboar').learnset.submission = ['9L1'];
     this.modData('Learnsets', 'watchog').learnset.megakick = ['9L1'];
     this.modData('Learnsets', 'watchog').learnset.glare = ['9L1'];
+    this.modData('Learnsets', 'watchog').learnset.hypervoice = ['9L1'];
     this.modData('Learnsets', 'stoutland').learnset.doubleedge = ['9L1'];
     this.modData('Learnsets', 'stoutland').learnset.closecombat = ['9L1'];
     this.modData('Learnsets', 'stoutland').learnset.highhorsepower = ['9L1'];

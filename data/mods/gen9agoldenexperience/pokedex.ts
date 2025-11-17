@@ -1843,7 +1843,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	watchog: {
 		inherit: true,
-		baseStats: {hp: 60, atk: 85, def: 69, spa: 80, spd: 69, spe: 87},
+		baseStats: {hp: 60, atk: 85, def: 69, spa: 60, spd: 69, spe: 97},
+		abilities: {0: "Illuminate", 1: "Tinted Lens", H: "Light Power"},
 	},
 	herdier: {
 		inherit: true,
