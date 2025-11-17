@@ -61,6 +61,10 @@ function getSpriteFilename(speciesId: string): string {
 		filename = filename.replace(/gmax$/, '-gmax');
 	}
 
+	if (filename.endsWith('f')) {
+		filename = filename.replace(/f$/, '-f');
+	}
+
 	const hyphenatedForms: Record<string, string> = {
 		'taurospaldeacombat': 'tauros-paldea-combat', 'taurospaldeablaze': 'tauros-paldea-blaze', 'taurospaldeaaqua': 'tauros-paldea-aqua',
 		'palafinhero': 'palafin-hero', 'gimmighoulroaming': 'gimmighoul-roaming', 'gholdengochest': 'gholdengo-chest',
