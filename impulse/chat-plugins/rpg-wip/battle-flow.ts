@@ -324,19 +324,69 @@ export function buildActionQueue(battle: BattleState, messageLog: string[]): Non
 			return priorityB - priorityA;
 		}
 
+		// --- Start Speed Calculation ---
+
+		// Slot A Speed
 		let speedA = slotA.pokemon.spe * getStatMultiplier(slotA.statStages.spe);
 		const abilityA = toID(slotA.pokemon.ability || '');
+
+		// 1. Item Modifiers (before abilities)
+		if (battle.magicRoomTurns === 0) {
+			if (slotA.pokemon.item === 'choicescarf') {
+				speedA = Math.floor(speedA * 1.5);
+			}
+			if (slotA.pokemon.item === 'ironball') {
+				speedA = Math.floor(speedA * 0.5);
+			}
+		}
+
+		// 2. Ability Modifiers
+		speedA = RPGAbilities.applyAbilitySpeedModifier(slotA.pokemon, battle, speedA);
+
+		// 3. Paralysis
 		if (slotA.status === 'par' && abilityA !== 'quickfeet') {
 			speedA = Math.floor(speedA / 2);
 		}
-		speedA = RPGAbilities.applySpeedModifier(slotA.pokemon, battle, speedA);
+		
+		// 4. Team Modifiers (e.g., Tailwind - not yet implemented)
+		// const isPlayerSlotA = battle.playerSlots.includes(slotA);
+		// if (isPlayerSlotA && battle.playerTailwindTurns > 0) {
+		// 	speedA = Math.floor(speedA * 2);
+		// } else if (!isPlayerSlotA && battle.opponentTailwindTurns > 0) {
+		// 	speedA = Math.floor(speedA * 2);
+		// }
 
+		// Slot B Speed
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		const abilityB = toID(slotB.pokemon.ability || '');
+		
+		// 1. Item Modifiers (before abilities)
+		if (battle.magicRoomTurns === 0) {
+			if (slotB.pokemon.item === 'choicescarf') {
+				speedB = Math.floor(speedB * 1.5);
+			}
+			if (slotB.pokemon.item === 'ironball') {
+				speedB = Math.floor(speedB * 0.5);
+			}
+		}
+
+		// 2. Ability Modifiers
+		speedB = RPGAbilities.applyAbilitySpeedModifier(slotB.pokemon, battle, speedB);
+
+		// 3. Paralysis
 		if (slotB.status === 'par' && abilityB !== 'quickfeet') {
 			speedB = Math.floor(speedB / 2);
 		}
-		speedB = RPGAbilities.applySpeedModifier(slotB.pokemon, battle, speedB);
+
+		// 4. Team Modifiers (e.g., Tailwind - not yet implemented)
+		// const isPlayerSlotB = battle.playerSlots.includes(slotB);
+		// if (isPlayerSlotB && battle.playerTailwindTurns > 0) {
+		// 	speedB = Math.floor(speedB * 2);
+		// } else if (!isPlayerSlotB && battle.opponentTailwindTurns > 0) {
+		// 	speedB = Math.floor(speedB * 2);
+		// }
+		
+		// --- End Speed Calculation ---
 
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 		const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
