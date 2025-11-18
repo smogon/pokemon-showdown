@@ -15064,6 +15064,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Magnet Pull" },
 		heightm: 0.2,
 		weightkg: 8,
+		evos: ["Melmetal"],
 		color: "Gray",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
