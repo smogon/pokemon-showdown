@@ -829,8 +829,8 @@
 /* === NEW: Battle Slot Wrappers (Holds Info + Sprite) === */
 .rpg-opponent-slot {
     position: absolute;
-    top: 45px; /* CHANGED: Anchored to the top now */
-    right: -18px; /* Stays anchored to the right */
+    top: 47px; /* CHANGED: Anchored to the top now */
+    right: 0px; /* Stays anchored to the right */
     width: 220px; /* Width of the info block */
     z-index: 10;
     text-align: center; /* Center the sprite */
@@ -840,7 +840,7 @@
 .rpg-player-slot {
     position: absolute;
     bottom: 8px; /* Sits near the bottom edge */
-    left: -15px; /* Position of the whole group */
+    left: 0px; /* Position of the whole group */
     width: 220px; /* Width of the info block */
     z-index: 10;
     text-align: center; /* Center the sprite */
