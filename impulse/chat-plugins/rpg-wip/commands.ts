@@ -104,13 +104,11 @@ import {
 	generateDBDeleteNoSaveHTML,
 	generateDBDeleteConfirmHTML,
 	generateDBDeleteSuccessHTML,
-	// [NEW] Import new HTML functions
 	generateModeSelectionHTML,
 	generateBattleTowerWelcomeHTML,
 	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
-	// [STEP 4 IMPORT]
 	generatePartyScreenHTML,
 } from './html';
 import {
@@ -298,7 +296,7 @@ function handleUseMiscItem(
 		const tempSlot = createActivePokemonSlot(updatedPokemon);
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
 	}
-	
+
 	if (itemId.startsWith('expcandy')) {
 		const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
 		if (!result.success) {
@@ -312,7 +310,7 @@ function handleUseMiscItem(
 		const tempSlot = createActivePokemonSlot(updatedPokemon);
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
 	}
-	
+
 	if (itemId === 'terashard') {
 		const allTypes = Object.keys(TYPE_CHART);
 		if (allTypes.length === 0) return this.errorReply("Error: Could not find type list.");
@@ -323,7 +321,7 @@ function handleUseMiscItem(
 		const tempSlot = createActivePokemonSlot(targetPokemon);
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTeraShardResultHTML(targetPokemon, oldTeraType, newTeraType, tempSlot)}`);
 	}
-	
+
 	if (itemId === 'eggmovetutor') {
 		const speciesId = toID(targetPokemon.species);
 		const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
@@ -333,7 +331,7 @@ function handleUseMiscItem(
 		}
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 	}
-	
+
 	if (itemId.startsWith('tm-')) {
 		// TM Usage
 		if (targetPokemon.hp <= 0) {
@@ -370,7 +368,7 @@ function handleUseMiscItem(
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
 	}
-	
+
 	if (item.id.endsWith('stone')) {
 		const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
 
@@ -394,7 +392,7 @@ function handleUseMiscItem(
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
 		}
 	}
-	
+
 	return this.errorReply("This item cannot be used right now.");
 }
 
@@ -419,7 +417,6 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
-		// [NEW] Main mode selection
 		modes(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot change modes during a battle.");
@@ -427,7 +424,6 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModeSelectionHTML()}`);
 		},
 
-		// [NEW] Battle Tower commands
 		battletower: {
 			start(target, room, user) {
 				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
@@ -800,7 +796,7 @@ export const commands: ChatCommands = {
 				}
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSacredAshResultHTML(result.message)}`);
 			}
-			
+
 			// --- Handle "NO POKEMON SELECTED" ---
 			if (!pokemonId) {
 				// We need to show a selection screen
@@ -825,18 +821,18 @@ export const commands: ChatCommands = {
 					// No auto-selection, show the list
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
 				}
-				
+
 				if (item.category === 'misc') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
 				}
-				
+
 				if (item.category === 'held' || item.category === 'berry') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 				}
-				
+
 				return this.errorReply("This item category cannot be used from the bag.");
 			}
-			
+
 			// --- Handle "POKEMON IS SELECTED" ---
 			const targetPokemon = player.party.find(p => p.id === pokemonId);
 			if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
@@ -844,8 +840,8 @@ export const commands: ChatCommands = {
 			// Route to the correct handler
 			if (item.category === 'medicine') {
 				return handleUseMedicine.call(this, player, item, targetPokemon, room, user);
-			} 
-			
+			}
+
 			if (item.category === 'misc') {
 				return handleUseMiscItem.call(this, player, item, targetPokemon, room, user);
 			}
@@ -1361,13 +1357,7 @@ export const commands: ChatCommands = {
 					// NOTE: Additional scripted event types can be integrated here using scripted-events.ts handlers
 					// Examples:
 					// case 'cutscene': {
-					//   const result = ScriptedEvents.handleCutscene(player, firstEvent);
-					//   if (result.success && result.script) { ... }
-					// }
 					// case 'pokemonswarm': {
-					//   const result = ScriptedEvents.handlePokemonSwarm(player, firstEvent);
-					//   if (result.success) { ... }
-					// }
 					// See scripted-events.ts for all 42 handler functions
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
@@ -1570,7 +1560,6 @@ export const commands: ChatCommands = {
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
 					battleLog: [],
-					// [NEW] Default Battle Tower fields
 					floor: 0,
 					overridePlayerParty: null,
 				};
@@ -1690,7 +1679,6 @@ export const commands: ChatCommands = {
 					playerFutureMoves: [],
 					opponentFutureMoves: [],
 					battleLog: [],
-					// [NEW] Default Battle Tower fields
 					floor: 0,
 					overridePlayerParty: null,
 				};
@@ -1831,7 +1819,6 @@ export const commands: ChatCommands = {
 				playerFutureMoves: [],
 				opponentFutureMoves: [],
 				battleLog: [],
-				// [NEW] Default Battle Tower fields
 				floor: 0,
 				overridePlayerParty: null,
 			};
@@ -1918,7 +1905,6 @@ export const commands: ChatCommands = {
 				const moveData = getMove(moveId);
 				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
 
-				// [MODIFIED] Check the correct moves list (story party or tower party)
 				const partyToUse = battle.overridePlayerParty || getPlayerData(battle.playerId).party;
 				const currentPokemon = partyToUse.find(p => p.id === attackerSlot.pokemon.id);
 
@@ -1929,7 +1915,6 @@ export const commands: ChatCommands = {
 						return this.errorReply(`${attackerSlot.pokemon.species} does not know ${moveData.name}.`);
 					}
 				}
-				// [END MODIFICATION]
 
 				// --- Terastallization validation ---
 				if (shouldTerastallize) {
@@ -2011,7 +1996,6 @@ export const commands: ChatCommands = {
 			},
 			// --- END NEW FUNCTION ---
 
-			// [NEW] Terastallize toggle handler
 			teratoggle(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
@@ -2047,9 +2031,7 @@ export const commands: ChatCommands = {
 
 				const player = getPlayerData(battle.playerId);
 
-				// --- [MODIFIED] Use overridePlayerParty if it exists ---
 				const partyToUse = battle.overridePlayerParty || player.party;
-				// --- [END MODIFICATION] ---
 
 				// Find the Pokemon in the correct party
 				const partyIndex = partyToUse.findIndex(p => p.id === pokemonId && p.hp > 0);
@@ -2079,14 +2061,12 @@ export const commands: ChatCommands = {
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
 					const pivotingPokemon = battle.pendingPivot.slot.pokemon;
 
-					// [MODIFIED] Only add back to party in Story Mode
 					if (!battle.overridePlayerParty) {
 						const pivotIndex = player.party.findIndex(p => p.id === pivotingPokemon.id);
 						if (pivotIndex === -1) {
 							player.party.push(pivotingPokemon);
 						}
 					}
-					// [END MODIFICATION]
 
 					// Handle Baton Pass
 					if (battle.pendingPivot.isBatonPass) {
@@ -2115,7 +2095,6 @@ export const commands: ChatCommands = {
 				const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
 
-				// [MODIFIED] Use partyToUse
 				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
 					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 
@@ -2175,9 +2154,7 @@ export const commands: ChatCommands = {
 
 				const player = getPlayerData(battle.playerId);
 
-				// --- [MODIFIED] Use overridePlayerParty if it exists ---
 				const partyToUse = battle.overridePlayerParty || player.party;
-				// --- [END MODIFICATION] ---
 
 				// Check if incoming Pokemon is valid
 				const incomingPokemon = partyToUse.find(p => p.id === pokemonIdIn && p.hp > 0);
@@ -2222,12 +2199,10 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
 				}
-				// [END MODIFICATION]
 
 				// In double battles, can only catch when one opponent remains
 				if (battle.battleType === 'wild_double') {
@@ -2246,12 +2221,10 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
 				}
-				// [END MODIFICATION]
 
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
@@ -2274,12 +2247,10 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You cannot catch Pokémon in the Battle Tower!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You cannot catch Pokémon in the Battle Tower!"])}`);
 				}
-				// [END MODIFICATION]
 
 				// --- NEW: Read target ---
 				const [ballId, slotIndexStr] = target.split(' ');
@@ -2372,12 +2343,10 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
-				// [MODIFIED] Add Battle Tower check
 				if (battle.battleType === 'battletower') {
 					this.errorReply("You can't run from a Battle Tower challenge!");
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't run from a Battle Tower challenge!"])}`);
 				}
-				// [END MODIFICATION]
 
 				if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
 					this.errorReply("You can't run from a Trainer battle!");
@@ -2918,15 +2887,7 @@ export const commands: ChatCommands = {
 			// NOTE: Additional NPC action types can be integrated here using npc-actions.ts handlers
 			// Examples:
 			// case 'fossilrevival': {
-			//   const result = NPCActions.handleFossilRevival(player, action, fossilId);
-			//   if (result.success && result.pokemon) { ... }
-			//   break;
-			// }
 			// case 'dailyreward': {
-			//   const result = NPCActions.handleDailyReward(player, action, npcId);
-			//   if (result.success && result.rewards) { ... }
-			//   break;
-			// }
 			// See npc-actions.ts for all 34+ handler functions
 			default:
 				resultHTML += `<p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
