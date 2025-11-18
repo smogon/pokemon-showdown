@@ -173,17 +173,18 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
-	readonly evoType?: 'trade'
-		| 'useItem'
-		| 'levelMove'
-		| 'levelExtra'
-		| 'levelFriendship'
-		| 'levelHold'
+	readonly evoType?: 'trade' |
+		'useItem' |
+		'levelMove' |
+		'levelExtra' |
+		// @pokebedrock: 'levelFriendship' -> 'levelHappiness'
+		'levelHappiness' |
+		'levelHold' |
 		// @pokebedrock
-		| 'levelShed'
+		'levelShed' |
 		// @pokebedrock
-		| 'steps'
-		| 'other';
+		'steps' |
+		'other';
 	/**
 	 * The evolving Pokémon species must know a move with this type during the evolution trigger event
 	 * in order to evolve into this Pokémon species.
