@@ -110,6 +110,8 @@ import {
 	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
+	// [STEP 4 IMPORT]
+	generatePartyScreenHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -381,7 +383,7 @@ function handleUseMiscItem(
 
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				resultHTML += `<hr/><p style="color:red; font-weight:bold;">Your Pokémon wants to learn a new move!</p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
+				resultHTML += `<hr /><p class="rpg-text-error"><strong>Your Pokémon wants to learn a new move!</strong></p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
 			} else {
 				resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
 			}
@@ -723,28 +725,17 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
 		},
 
+		/**
+		 * [STEP 4 REFACTOR]
+		 * This command now calls the new `generatePartyScreenHTML` function.
+		 * The old logic for looping and building HTML is no longer needed.
+		 */
 		party(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot view your party during a battle.");
 			}
 			const player = getPlayerData(user.id);
-			let partyHTML = `<div class="infobox"><h2>Your Party</h2>`;
-			if (player.party.length === 0) {
-				partyHTML += `<p>No Pokemon in party.</p>`;
-			} else {
-				for (let i = 0; i < 6; i++) {
-					if (player.party[i]) {
-						// We pass the slot info directly to the HTML generator
-						// and no longer wrap it in an extra <div>
-						const tempSlot = createActivePokemonSlot(player.party[i]);
-						partyHTML += generatePokemonInfoHTML(tempSlot, true, true, { index: i, partyLength: player.party.length });
-					} else {
-						partyHTML += `<p><strong>Slot ${i + 1}:</strong> Empty</p>`;
-					}
-				}
-			}
-			partyHTML += `${generateBottomNavigation()}`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${partyHTML}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player)}`);
 		},
 
 		swapslot(target, room, user) {
@@ -957,6 +948,10 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateWithdrawPCHTML(pokemon.species, tempSlot)}`);
 		},
 
+		/**
+		 * [STEP 4 REFACTOR]
+		 * Updated to use "Buy 10".
+		 */
 		shop(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
@@ -1006,6 +1001,10 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePurchaseCompleteHTML(item.name, quantity, totalCost, player.money)}`);
 		},
 
+		/**
+		 * [STEP 4 REFACTOR]
+		 * Updated to use "Sell 10".
+		 */
 		sell(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot sell items during a battle.");
@@ -1150,15 +1149,15 @@ export const commands: ChatCommands = {
 					if (canAccess) {
 						exploreButtons += `<button name="send" value="/rpg travel ${connection.id}" class="button">🗺️ ${connection.name}</button> `;
 					} else {
-						exploreButtons += `<button class="button" disabled style="opacity: 0.5;">🗺️ ${connection.name}${lockReason}</button> `;
+						exploreButtons += `<button class="button" disabled>🗺️ ${connection.name}${lockReason}</button> `;
 					}
 				}
 				exploreButtons += '<hr />';
 			}
 
 			const exploreHTML = `<div class="infobox">` +
-				`<h2><center><b>${currentLocation.name}</b></center></h2>` +
-				`<center><p><em>${currentLocation.description}</em></p></center>` +
+				`<div class="rpg-text-center"><h2><b>${currentLocation.name}</b></h2>` +
+				`<p><em>${currentLocation.description}</em></p></div>` +
 				`${exploreButtons}` +
 				generateBottomNavigation() +
 				`</div>`;
@@ -1208,7 +1207,7 @@ export const commands: ChatCommands = {
 						if (canAccess) {
 							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 						} else {
-							travelHTML += `<button class="button" disabled style="opacity: 0.5;">${connection.name}${lockReason}</button> `;
+							travelHTML += `<button class="button" disabled>${connection.name}${lockReason}</button> `;
 						}
 					}
 				}
@@ -1372,7 +1371,7 @@ export const commands: ChatCommands = {
 					// See scripted-events.ts for all 42 handler functions
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
-					eventHTML += `<p style="color: orange;">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
+					eventHTML += `<p class="rpg-text-warning">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
 					eventHTML += `<p><em>Handler exists in scripted-events.ts but needs to be wired up here.</em></p>`;
 					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 				}
@@ -1382,9 +1381,9 @@ export const commands: ChatCommands = {
 			}
 
 			const arrivalHTML = `<div class="infobox">` +
-				`<h2><center><b>Arrived at ${targetLocation.name}</b></center></h2>` +
-				`<em><center><p>${targetLocation.description}</p></center></em>` +
-				`<center><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></center>` +
+				`<div class="rpg-text-center"><h2><b>Arrived at ${targetLocation.name}</b></h2>` +
+				`<em><p>${targetLocation.description}</p></em></div>` +
+				`<div class="rpg-text-center"><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></div>` +
 				`</div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
 		},
@@ -1422,7 +1421,7 @@ export const commands: ChatCommands = {
 			}
 
 			// Handle different building types
-			let buildingHTML = `<div class="infobox"><center><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></center><hr>`;
+			let buildingHTML = `<div class="infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
 
 			// NPCs in this building
 			if (building.npcs && building.npcs.length > 0) {
@@ -2074,7 +2073,7 @@ export const commands: ChatCommands = {
 
 				const playerColor = '#007bff';
 				const infoColor = '#dc3545';
-				const messageLog = [`<span style="color: ${playerColor};">Go, ${nextPokemon.species}!</span>`];
+				const messageLog = [`<span class="rpg-text-info">Go, ${nextPokemon.species}!</span>`];
 
 				// Check if this is a pivot switch
 				if (battle.pendingPivot?.slotIndex === slotToFill) {
@@ -2107,7 +2106,7 @@ export const commands: ChatCommands = {
 				// --- Apply Hazards ---
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
 				if (faintedOnEntry) {
-					messageLog.push(`<span style="color: ${infoColor};"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
+					messageLog.push(`<span class="rpg-text-error"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
 				} else {
 					handleMirrorHerb(newSlot, battle, messageLog);
 				}
@@ -2323,12 +2322,8 @@ export const commands: ChatCommands = {
 
 				removeItemFromInventory(player, ballId, 1);
 
-				const playerColor = '#007bff';
-				const infoColor = '#dc3545';
-				const neutralColor = '#6c757d';
-
 				const messageLog: string[] = [];
-				messageLog.push(`<span style="color: ${playerColor};">${player.name} used a ${ballItem.name}!</span>`);
+				messageLog.push(`<span class="rpg-text-info">${player.name} used a ${ballItem.name}!</span>`);
 
 				// --- NEW: Pass the target slot to performCatchAttempt ---
 				const catchResult = performCatchAttempt(battle, ballId, targetSlot);
@@ -2339,7 +2334,7 @@ export const commands: ChatCommands = {
 
 				for (let i = 1; i <= catchResult.shakes; i++) {
 					if (i < 4) {
-						messageLog.push(`<i style="color: ${neutralColor};">...The ball shook...</i>`);
+						messageLog.push(`<i class="rpg-text-muted">...The ball shook...</i>`);
 					}
 				}
 
@@ -2365,7 +2360,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, wasHealed)}`);
 				} else {
 					// --- FAILED CATCH PATH (FIXED) ---
-					messageLog.push(`<span style="color: ${infoColor};"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
+					messageLog.push(`<span class="rpg-text-error"><strong>${shakeMessages[catchResult.shakes]}</strong></span>`);
 
 					// The catch attempt failed. In Pokémon games, using an item (including Pokéballs) consumes your turn.
 					// The opponent gets to attack, so we need to process the turn.
@@ -2681,17 +2676,17 @@ export const commands: ChatCommands = {
 						if (action.pokemon) {
 							const species = Dex.species.get(action.pokemon.species);
 							if (!species.exists) {
-								dialogueHTML += `<p style="color: red;">❌ Invalid Pokemon species.</p>`;
+								dialogueHTML += `<p class="rpg-text-error">❌ Invalid Pokemon species.</p>`;
 								break;
 							}
 							dialogueHTML += `<p><strong>Offer:</strong> ${species.name} (Lvl ${action.pokemon.level})</p>`;
 
 							// Check if player has space
 							if (player.party.length >= 6 && player.pc.size >= 100) {
-								dialogueHTML += `<p style="color: red;">❌ Your party and PC are both full! Free up space first.</p>`;
+								dialogueHTML += `<p class="rpg-text-error">❌ Your party and PC are both full! Free up space first.</p>`;
 							} else {
 								if (player.party.length >= 6) {
-									dialogueHTML += `<p style="color: orange;">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
+									dialogueHTML += `<p class="rpg-text-warning">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
 								}
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Pokémon</button> `;
 							}
@@ -2707,10 +2702,10 @@ export const commands: ChatCommands = {
 							dialogueHTML += `<p><strong>Trade:</strong> ${requiredItem?.name || action.requiredItem} x${action.requiredQuantity} → ${rewardItem?.name || action.itemId} x${action.quantity}</p>`;
 
 							if (hasRequired >= action.requiredQuantity) {
-								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<p class="rpg-text-success">✅ You have the required items!</p>`;
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🔄 Make Trade</button> `;
 							} else {
-								dialogueHTML += `<p style="color: red;">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
+								dialogueHTML += `<p class="rpg-text-error">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
 							}
 						}
 						break;
@@ -2723,10 +2718,10 @@ export const commands: ChatCommands = {
 							dialogueHTML += `<p><strong>Request:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
 
 							if (hasItem >= action.quantity) {
-								dialogueHTML += `<p style="color: green;">✅ You have the required items!</p>`;
+								dialogueHTML += `<p class="rpg-text-success">✅ You have the required items!</p>`;
 								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🎁 Give Items</button> `;
 							} else {
-								dialogueHTML += `<p style="color: red;">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
+								dialogueHTML += `<p class="rpg-text-error">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
 							}
 						}
 						break;
@@ -2739,7 +2734,7 @@ export const commands: ChatCommands = {
 					case 'choosestarter':
 						// Check if player already has a starter
 						if (player.party.length > 0) {
-							dialogueHTML += `<p style="color: gray;"><em>You already have your Pokémon partner!</em></p>`;
+							dialogueHTML += `<p class="rpg-text-muted"><em>You already have your Pokémon partner!</em></p>`;
 						} else {
 							dialogueHTML += `<p><strong>Choose your starter Pokémon:</strong></p>`;
 							dialogueHTML += `<button name="send" value="/rpg starterchoice ${npcId}" class="button">👀 View Available Starters</button> `;
@@ -2747,7 +2742,7 @@ export const commands: ChatCommands = {
 						break;
 					}
 				} else {
-					dialogueHTML += `<hr /><p style="color: gray;"><em>You've already completed this NPC's request.</em></p>`;
+					dialogueHTML += `<hr /><p class="rpg-text-muted"><em>You've already completed this NPC's request.</em></p>`;
 				}
 			}
 
@@ -2806,7 +2801,7 @@ export const commands: ChatCommands = {
 					addItemToInventory(player, action.itemId, action.quantity);
 					const item = ITEMS_DATABASE[action.itemId];
 					resultHTML += `<p>"Here you go!"</p>`;
-					resultHTML += `<p style="color: green;">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					resultHTML += `<p class="rpg-text-success">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
 				break;
@@ -2840,11 +2835,11 @@ export const commands: ChatCommands = {
 					if (player.party.length < 6) {
 						player.party.push(pokemon);
 						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> joined your party!</p>`;
+						resultHTML += `<p class="rpg-text-success">✅ <strong>${species.name}</strong> joined your party!</p>`;
 					} else {
 						storePokemonInPC(player, pokemon);
 						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p style="color: green;">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
+						resultHTML += `<p class="rpg-text-success">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
 					}
 
 					// Show Pokemon info
@@ -2870,7 +2865,7 @@ export const commands: ChatCommands = {
 					const rewardItem = ITEMS_DATABASE[action.itemId];
 
 					resultHTML += `<p>"Here's your trade!"</p>`;
-					resultHTML += `<p style="color: green;">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					resultHTML += `<p class="rpg-text-success">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2888,12 +2883,12 @@ export const commands: ChatCommands = {
 					const item = ITEMS_DATABASE[action.itemId];
 
 					resultHTML += `<p>"Thank you so much!"</p>`;
-					resultHTML += `<p style="color: green;">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
+					resultHTML += `<p class="rpg-text-success">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
 
 					// Give a reward (example: money)
 					const reward = action.quantity * 1000; // 1000 per item
 					player.money += reward;
-					resultHTML += `<p style="color: gold;">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
+					resultHTML += `<p class="rpg-text-warning">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2913,9 +2908,9 @@ export const commands: ChatCommands = {
 					}
 
 					resultHTML += `<p>"${result.message}"</p>`;
-					resultHTML += `<p style="color: green;">✅ Your Pokémon have been restored to full health!</p>`;
+					resultHTML += `<p class="rpg-text-success">✅ Your Pokémon have been restored to full health!</p>`;
 				} else {
-					resultHTML += `<p style="color: red;">❌ ${result.message}</p>`;
+					resultHTML += `<p class="rpg-text-error">❌ ${result.message}</p>`;
 				}
 				break;
 			}
@@ -2934,7 +2929,7 @@ export const commands: ChatCommands = {
 			// }
 			// See npc-actions.ts for all 34+ handler functions
 			default:
-				resultHTML += `<p style="color: orange;">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
+				resultHTML += `<p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
 				resultHTML += `<p><em>The handler exists in npc-actions.ts but needs to be wired up here.</em></p>`;
 				break;
 			}
@@ -3085,12 +3080,12 @@ export const commands: ChatCommands = {
 				{ cmd: "/rpg unstuck", desc: "Exit a battle if you're stuck." },
 				{ cmd: "/rpg battleaction back", desc: "Return to battle if ui disappears while you're in battle." },
 			];
-			const html = `<center><strong>RPG Commands</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+			const html = `<div class="rpg-text-center"><strong>RPG Commands</strong></div><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
 				`</ul>`;
-			this.sendReplyBox(`<div style="max-height: 380px; overflow-y: auto;">${html}</div>`);
+			this.sendReplyBox(`<div>${html}</div>`);
 		},
 		'': 'help',
 
