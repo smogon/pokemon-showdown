@@ -139,6 +139,38 @@ describe('Protosynthesis', () => {
 		assert.bounded(tail.maxhp - tail.hp, [84, 102]);
 	});
 
+	it(`should react to Sunny Day when Neutralizing Gas leaves the field`, () => {
+		battle = common.createBattle([[
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Scream Tail', ability: 'protosynthesis', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('auto', 'switch 3');
+		assert(battle.p1.active[0].abilityState.bestStat);
+	});
+
+	it(`should not react to other weathers when Neutralizing Gas leaves the field`, () => {
+		battle = common.createBattle([[
+			{ species: 'Scream Tail', ability: 'protosynthesis', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', moves: ['raindance'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices('auto', 'move raindance');
+		battle.makeChoices('auto', 'switch 3');
+		const tail = battle.p1.active[0];
+		assert(tail.abilityState.bestStat);
+		for (let i = 0; i < 3; i++) battle.makeChoices(); // Rain ends
+		assert(!tail.abilityState.bestStat);
+	});
+
 	it(`should not activate while the user is Transformed`, () => {
 		battle = common.createBattle([[
 			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },

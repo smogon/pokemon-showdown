@@ -2863,7 +2863,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const ability = target.getAbility();
 				if (ability.id === 'neutralizinggas' || ability.flags['cantsuppress']) continue;
 				// Can't suppress a Tatsugiri inside of Dondozo already
-				// Flash Fire (and gen9dlc1 protosynthesis/quark drive) should not clear its condition
+				// Flash Fire should not clear its condition
 				if (target.volatiles['commanding'] || target.volatiles[ability.id]) continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
@@ -3441,7 +3441,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	protosynthesis: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			((this.effect as any).onWeatherChange as (p: Pokemon) => void).call(this, pokemon);
+			if (this.field.isWeather('sunnyday')) {
+				if (!this.effectState.bestStat) {
+					this.effectState.bestStat = pokemon.getBestStat(false, true);
+					this.add('-activate', pokemon, 'ability: Protosynthesis');
+					this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
+				}
+				return;
+			}
+			if (!this.effectState.bestStat && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				this.effectState.fromBooster = true;
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'ability: Protosynthesis', '[fromitem]');
+				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
+			}
 		},
 		onWeatherChange(pokemon) {
 			// Protosynthesis is not affected by Utility Umbrella
@@ -3453,7 +3467,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				return;
 			}
-			if (!this.effectState.fromBooster) {
+			if (this.effectState.bestStat && !this.effectState.fromBooster) {
 				delete this.effectState.bestStat;
 				this.add('-end', pokemon, 'Protosynthesis');
 			}
@@ -3464,11 +3478,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', pokemon, 'ability: Protosynthesis', '[fromitem]');
 				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			}
-		},
-		onUpdate(pokemon) {
-			// don't run between when a Pokemon switches in and the resulting SwitchIn event
-			if (this.queue.peek()?.choice === 'runSwitch') return;
-			((this.effect as any).onWeatherChange as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
@@ -3582,7 +3591,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	quarkdrive: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			((this.effect as any).onTerrainChange as (p: Pokemon) => void).call(this, pokemon);
+			if (this.field.isTerrain('electricterrain')) {
+				if (!this.effectState.bestStat) {
+					this.effectState.bestStat = pokemon.getBestStat(false, true);
+					this.add('-activate', pokemon, 'ability: Quark Drive');
+					this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
+				}
+				return;
+			}
+			if (!this.effectState.bestStat && pokemon.hasItem('boosterenergy') &&
+				pokemon.useItem(pokemon, this.effect)) {
+				this.effectState.fromBooster = true;
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'ability: Quark Drive', '[fromitem]');
+				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
+			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
@@ -3593,7 +3616,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				return;
 			}
-			if (!this.effectState.fromBooster) {
+			if (this.effectState.bestStat && !this.effectState.fromBooster) {
 				delete this.effectState.bestStat;
 				this.add('-end', pokemon, 'Quark Drive');
 			}
@@ -3604,11 +3627,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', pokemon, 'ability: Quark Drive', '[fromitem]');
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			}
-		},
-		onUpdate(pokemon) {
-			// don't run between when a Pokemon switches in and the resulting SwitchIn event
-			if (this.queue.peek()?.choice === 'runSwitch') return;
-			((this.effect as any).onTerrainChange as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
