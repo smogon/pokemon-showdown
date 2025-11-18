@@ -346,6 +346,7 @@
     left: 0;
     right: 0;
     text-align: center;
+	 text-shadow: none;
     font-size: 9px;
     line-height: 12px;
     color: #000;
