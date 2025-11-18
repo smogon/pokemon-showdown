@@ -16,14 +16,7 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
-interface ProfileBackgroundDocument {
-	_id: string;
-	background: string;
-	updatedAt: Date;
-}
-
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
-const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackground');
 
 /**
  * Get the avatar display for a user, including custom avatars
@@ -62,7 +55,6 @@ async function getUserProfileData(userid: string) {
 		level?: number,
 		ontime?: number,
 		customStatus?: string,
-		background?: string,
 		registrationDate?: string,
 	} = {};
 
@@ -95,16 +87,6 @@ async function getUserProfileData(userid: string) {
 		}
 	} catch {
 		// Profile status not available
-	}
-
-	// Get custom profile background if available
-	try {
-		const backgroundDoc = await ProfileBackgroundDB.findOne({ _id: userid });
-		if (backgroundDoc) {
-			data.background = backgroundDoc.background;
-		}
-	} catch {
-		// Profile background not available
 	}
 
 	// Get registration date from login server
@@ -259,50 +241,18 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Your profile status has been cleared.");
 		},
 
-		async setbackground(target, room, user): Promise<void> {
-			if (!target) {
-				return this.errorReply("Please provide a background image URL (e.g., 'https://example.com/image.jpg').");
-			}
-
-			// Basic validation for URL
-			if (target.length > 300) {
-				return this.errorReply("Background URL is too long (max 300 characters).");
-			}
-
-			// Basic URL validation
-			if (!target.startsWith('http://') && !target.startsWith('https://')) {
-				return this.errorReply("Background must be a valid URL starting with http:// or https://");
-			}
-
-			await ProfileBackgroundDB.updateOne(
-				{ _id: user.id },
-				{ $set: { _id: user.id, background: target, updatedAt: new Date() } },
-				{ upsert: true }
-			);
-
-			this.sendReply(`Your profile background has been set. Use /uprofile to see it!`);
-		},
-
-		async clearbackground(target, room, user): Promise<void> {
-			await ProfileBackgroundDB.deleteOne({ _id: user.id });
-			this.sendReply("Your profile background has been cleared.");
-		},
-
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
 				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
-				{ cmd: "/uprofile setbackground [url]", desc: "Set a custom background image for your profile (image URL)." },
-				{ cmd: "/uprofile clearbackground", desc: "Clear your custom profile background." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
-				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>` +
-				`<br><small>Background example: 'https://example.com/image.jpg'</small>`;
+				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>`;
 			this.sendReplyBox(html);
 		},
 	},
