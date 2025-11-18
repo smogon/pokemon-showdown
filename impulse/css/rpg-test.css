@@ -809,7 +809,7 @@
     height: 220px; /* REDUCED from 240px */
     position: relative;
     background: #f0f0f0;
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
 }
 .dark .rpg-battle-ui {
@@ -826,8 +826,8 @@
 /* === NEW: Battle Slot Wrappers (Holds Info + Sprite) === */
 .rpg-opponent-slot {
     position: absolute;
-    top: 5px; /* CHANGED: Anchored to the top now */
-    right: 5px; /* Stays anchored to the right */
+    top: 3px; /* CHANGED: Anchored to the top now */
+    right: -15px; /* Stays anchored to the right */
     width: 220px; /* Width of the info block */
     z-index: 10;
     text-align: center; /* Center the sprite */
@@ -836,8 +836,8 @@
 /* (The .rpg-player-slot class is correct as-is) */
 .rpg-player-slot {
     position: absolute;
-    bottom: 5px; /* Sits near the bottom edge */
-    left: 5px; /* Position of the whole group */
+    bottom: 8px; /* Sits near the bottom edge */
+    left: -15px; /* Position of the whole group */
     width: 220px; /* Width of the info block */
     z-index: 10;
     text-align: center; /* Center the sprite */
