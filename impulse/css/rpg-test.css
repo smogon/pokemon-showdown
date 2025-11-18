@@ -255,14 +255,13 @@
 .rpg-hp-bar {
     max-width: 120px;
     height: 12px;
+    background: #f0f0f0;
+    border: 1px solid #aaa;
     border-radius: 8px;
     position: relative;
     margin-top: 4px;
     margin-left: auto;
     margin-right: auto;
-    /* NEW: Base background */
-    background: #f0f0f0;
-    border: 1px solid #aaa;
 }
 
 .dark .rpg-hp-bar {
@@ -320,18 +319,17 @@
 .rpg-exp-bar {
     max-width: 120px;
     height: 12px;
+    background: #f0f0f0;
+    border: 1px solid #aaa;
     border-radius: 8px;
     position: relative;
     margin-top: 4px;
     margin-left: auto;
     margin-right: auto;
-    /* NEW: Base background */
-    background: #f0f0f0;
-    border: 1px solid #aaa;
 }
 
 .dark .rpg-exp-bar {
-    background: #555;
+    background: #333;
     border-color: #777;
 }
 
@@ -725,6 +723,7 @@
     text-align: left;
 }
 
+
 /*********************************
 * RPG REVAMP - NEW CLASSES
 **********************************/
@@ -791,70 +790,64 @@
 .rpg-battle-ui {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    height: 320px; /* Creates a good 4:3-ish aspect for the battle area */
+    height: 220px; /* REDUCED from 240px */
     position: relative;
-    background: #f0f0f0; /* Fallback background */
+    background: #f0f0f0;
     border-radius: 8px;
-    overflow: hidden; /* Ensures sprites don't bleed out */
+    overflow: hidden;
 }
 .dark .rpg-battle-ui {
     background: #222;
 }
 
 .rpg-opponent-side {
-    position: relative; /* Container for opponent sprite + info box */
+    position: relative;
 }
 .rpg-player-side {
-    position: relative; /* Container for player sprite + info box */
+    position: relative;
 }
 
-/* === Battle Sprites === */
-.rpg-pokemon-sprite-front {
+/* === NEW: Battle Slot Wrappers (Holds Info + Sprite) === */
+.rpg-opponent-slot {
     position: absolute;
-    bottom: -10px; /* Sits on the dividing line */
-    left: 60%;
-    width: 60px;
-    height: 60px;
-    image-rendering: pixelated; /* Keeps the pixel art sharp */
+    top: 10px; /* CHANGED: Anchored to the top now */
+    right: 5px; /* Stays anchored to the right */
+    width: 220px; /* Width of the info block */
     z-index: 10;
+    text-align: center; /* Center the sprite */
 }
-.rpg-pokemon-sprite-back {
+
+/* (The .rpg-player-slot class is correct as-is) */
+.rpg-player-slot {
     position: absolute;
-    bottom: -20px; /* Sits on the bottom edge */
-    left: 20px;
+    bottom: 5px; /* Sits near the bottom edge */
+    left: 5px; /* Position of the whole group */
+    width: 220px; /* Width of the info block */
+    z-index: 10;
+    text-align: center; /* Center the sprite */
+}
+
+/* === Battle Sprites (Now inside the slot) === */
+.rpg-pokemon-sprite-front,
+.rpg-pokemon-sprite-back {
     width: 60px;
     height: 60px;
     image-rendering: pixelated;
-    z-index: 10;
+    display: block; /* Makes margin auto work */
+    margin: 0 auto; /* Center sprite within the slot wrapper */
 }
 
-/* === Battle Info Boxes (Floating) === */
-
-/* NEW class for the opponent's info block */
-.rpg-opponent-info {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 220px;
-    z-index: 20;
-    /* Basic text shadow for readability */
-    color: #333;
-    text-shadow: 1px 1px 0 #f8f8f8, -1px -1px 0 #f8f8f8, 1px -1px 0 #f8f8f8, -1px 1px 0 #f8f8f8;
-}
-
-/* NEW class for the player's info block */
+/* === Battle Info Blocks (Now inside the slot) === */
+.rpg-opponent-info,
 .rpg-player-info {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 220px;
+    width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
     z-index: 20;
-    /* Basic text shadow for readability */
     color: #333;
     text-shadow: 1px 1px 0 #f8f8f8, -1px -1px 0 #f8f8f8, 1px -1px 0 #f8f8f8, -1px 1px 0 #f8f8f8;
+    margin-bottom: -10px; /* Pull sprite up slightly */
+    position: relative; /* Sits above the sprite */
 }
 
-/* Dark mode text shadows */
 .dark .rpg-opponent-info,
 .dark .rpg-player-info {
     color: #eee;
@@ -890,3 +883,8 @@
     height: 48px;
     image-rendering: pixelated;
 }
+
+
+/*************************
+* RPG CUSTOM CSS ENDS
+**************************/
