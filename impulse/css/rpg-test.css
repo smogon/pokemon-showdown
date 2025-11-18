@@ -243,7 +243,7 @@
     margin: 5px 0;
     border: 1px solid #666;
     min-height: 50px;
-    max-height: 150px;
+    max-height: 100px;
     overflow-y: auto;
     border-radius: 5px;
 }
@@ -399,9 +399,9 @@
 /* RPG Weather Tags */
 
 .rpg-weather-tag {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    padding: 2px 6px;
+    padding: 2px 4px;
     border-radius: 4px;
     margin-left: 5px;
     vertical-align: middle;
@@ -810,7 +810,7 @@
 /* === NEW: Battle Slot Wrappers (Holds Info + Sprite) === */
 .rpg-opponent-slot {
     position: absolute;
-    top: 10px; /* CHANGED: Anchored to the top now */
+    top: 5px; /* CHANGED: Anchored to the top now */
     right: 5px; /* Stays anchored to the right */
     width: 220px; /* Width of the info block */
     z-index: 10;
@@ -830,8 +830,8 @@
 /* === Battle Sprites (Now inside the slot) === */
 .rpg-pokemon-sprite-front,
 .rpg-pokemon-sprite-back {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     image-rendering: pixelated;
     display: block; /* Makes margin auto work */
     margin: 0 auto; /* Center sprite within the slot wrapper */
@@ -844,7 +844,7 @@
     z-index: 20;
     color: #333;
     text-shadow: 1px 1px 0 #f8f8f8, -1px -1px 0 #f8f8f8, 1px -1px 0 #f8f8f8, -1px 1px 0 #f8f8f8;
-    margin-bottom: -10px; /* Pull sprite up slightly */
+    margin-bottom: -5px; /* Pull sprite up slightly */
     position: relative; /* Sits above the sprite */
 }
 
