@@ -7,6 +7,7 @@
 import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
 import { Net } from '../../../lib';
+import { getAvatarName } from '../../avatar-names';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
@@ -31,14 +32,16 @@ function getAvatarDisplay(user: User): string {
 		// Don't use Avatars.src() as it returns empty string for files with extensions
 		avatarUrl = `${getAvatarBaseUrl()}${avatar}`;
 	} else {
+		// Convert numeric avatar to name, then use the server's avatar system
+		const avatarName = getAvatarName(avatar);
+
 		// Use the server's avatar system for official avatars
 		if (Users.Avatars?.src) {
-			// Convert avatar to string format expected by src function
-			const avatarStr = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
-			avatarUrl = Users.Avatars.src(avatarStr);
-		} else {
-			// Fallback to default sprite URL
-			const avatarName = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
+			avatarUrl = Users.Avatars.src(avatarName);
+		}
+
+		// Fallback to default sprite URL if src() returns empty or doesn't exist
+		if (!avatarUrl) {
 			avatarUrl = `https://${Config.routes.client}/sprites/trainers/${avatarName}.png`;
 		}
 	}
@@ -183,9 +186,6 @@ export const commands: Chat.ChatCommands = {
 			// Info section (right side)
 			buf += '<td>';
 
-			// Username in info section
-			buf += `<p style="margin: 4px 0"><u>Name:</u> <b class="username">${nameColor(targetName, true, true)}</b></p>`;
-
 			// Status with custom status integrated
 			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
@@ -207,11 +207,6 @@ export const commands: Chat.ChatCommands = {
 					totalOntime += Date.now() - targetUser.lastConnected;
 				}
 				buf += `<p style="margin: 4px 0"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
-			}
-
-			// Global rank (if available)
-			if (targetUser && Config.groups[targetUser.tempGroup]?.name) {
-				buf += `<p style="margin: 4px 0"><u>Staff Rank:</u> <b>${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})</b></p>`;
 			}
 
 			buf += '</td>';
