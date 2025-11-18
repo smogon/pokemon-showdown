@@ -16,14 +16,7 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
-interface ProfileBackgroundDocument {
-	_id: string;
-	background: string;
-	updatedAt: Date;
-}
-
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
-const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackground');
 
 /**
  * Get the avatar display for a user, including custom avatars
@@ -62,7 +55,6 @@ async function getUserProfileData(userid: string) {
 		level?: number,
 		ontime?: number,
 		customStatus?: string,
-		background?: string,
 		registrationDate?: string,
 	} = {};
 
@@ -95,16 +87,6 @@ async function getUserProfileData(userid: string) {
 		}
 	} catch {
 		// Profile status not available
-	}
-
-	// Get custom profile background if available
-	try {
-		const backgroundDoc = await ProfileBackgroundDB.findOne({ _id: userid });
-		if (backgroundDoc) {
-			data.background = backgroundDoc.background;
-		}
-	} catch {
-		// Profile background not available
 	}
 
 	// Get registration date from login server
@@ -144,25 +126,25 @@ function getStatusDisplay(user: User | null, customStatus?: string): string {
 	let statusText = '';
 
 	if (!user) {
-		statusText = `<span style="color:red;">○ Offline</span>`;
+		statusText = `<b style="color: red;">●&nbsp;Offline</b>`;
 	} else {
 		const statusType = user.statusType || 'online';
 		switch (statusType) {
 		case 'busy':
-			statusText = `<span style="color:#cc6600;">● Busy</span>`;
+			statusText = `<b style="color: orange;">●&nbsp;Busy</b>`;
 			break;
 		case 'idle':
-			statusText = `<span style="color:gray;">● Idle</span>`;
+			statusText = `<b style="color: gray;">●&nbsp;Idle</b>`;
 			break;
 		case 'online':
 		default:
-			statusText = `<span style="color:green;">● Online</span>`;
+			statusText = `<b style="color: green;">●&nbsp;Online</b>`;
 		}
 	}
 
 	// Append custom status if provided
 	if (customStatus) {
-		statusText += ` [${Chat.escapeHTML(customStatus)}]`;
+		statusText += ` - ${Chat.escapeHTML(customStatus)}`;
 	}
 
 	return statusText;
@@ -181,33 +163,40 @@ export const commands: Chat.ChatCommands = {
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
-			// Build the profile HTML with optional background image
-			const backgroundStyle = profileData.background ?
-				`background-image: url('${profileData.background}'); background-size: cover; background-position: center; padding: 10px;` : '';
-			let buf = `<div style="${backgroundStyle}">`;
+			// Build the profile HTML in table format
+			let buf = '<table cellspacing="0" cellpadding="3" style="min-width:100%;">';
+			buf += '<tr>';
 
-			// Header with name and avatar
-			buf += '<div style="text-align:center;margin-bottom:10px;">';
-			buf += `<strong style="font-size:18px;">${nameColor(targetName, true, true)}</strong><br>`;
+			// Avatar section (left side)
+			buf += '<td style="width: 80px; text-align: center; border-right: solid 1px black; padding: 12px;">';
+
+			// Username in avatar section
+			buf += `<div style="text-align: center; padding-bottom: 6px;"><b class="username">${nameColor(targetName, true, true)}</b></div>`;
+
+			// Avatar image
 			if (targetUser) {
-				buf += getAvatarDisplay(targetUser);
+				buf += `<div style="text-align: center;">${getAvatarDisplay(targetUser)}</div>`;
 			}
-			buf += '</div>';
 
-			// Profile information
-			buf += '<div style="text-align:left;padding:0 10px;">';
+			buf += '</td>';
+
+			// Info section (right side)
+			buf += '<td>';
+
+			// Username in info section
+			buf += `<p style="margin: 4px 0"><u>Name:</u> <b class="username">${nameColor(targetName, true, true)}</b></p>`;
 
 			// Status with custom status integrated
-			buf += `<strong>Status:</strong> ${getStatusDisplay(targetUser, profileData.customStatus)}<br>`;
+			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
 			// Registration date
 			if (profileData.registrationDate) {
-				buf += `<strong>Registration Date:</strong> ${profileData.registrationDate}<br>`;
+				buf += `<p style="margin: 4px 0"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
 			}
 
 			// Level (if available)
 			if (profileData.level !== undefined) {
-				buf += `<strong>Level:</strong> ${profileData.level}<br>`;
+				buf += `<p style="margin: 4px 0"><u>Level:</u> <span>${profileData.level}</span></p>`;
 			}
 
 			// Ontime (if available)
@@ -217,16 +206,18 @@ export const commands: Chat.ChatCommands = {
 				if (targetUser?.connected && targetUser.lastConnected) {
 					totalOntime += Date.now() - targetUser.lastConnected;
 				}
-				buf += `<strong>Total Ontime:</strong> ${formatOntime(totalOntime)}<br>`;
+				buf += `<p style="margin: 4px 0"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
 			}
 
 			// Global rank (if available)
 			if (targetUser && Config.groups[targetUser.tempGroup]?.name) {
-				buf += `<strong>Staff Rank:</strong> ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})<br>`;
+				buf += `<p style="margin: 4px 0"><u>Staff Rank:</u> <b>${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})</b></p>`;
 			}
 
-			buf += '</div>';
-			buf += '</div>';
+			buf += '</td>';
+
+			buf += '</tr>';
+			buf += '</table>';
 
 			this.sendReplyBox(buf);
 		},
@@ -250,50 +241,18 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Your profile status has been cleared.");
 		},
 
-		async setbackground(target, room, user): Promise<void> {
-			if (!target) {
-				return this.errorReply("Please provide a background image URL (e.g., 'https://example.com/image.jpg').");
-			}
-
-			// Basic validation for URL
-			if (target.length > 300) {
-				return this.errorReply("Background URL is too long (max 300 characters).");
-			}
-
-			// Basic URL validation
-			if (!target.startsWith('http://') && !target.startsWith('https://')) {
-				return this.errorReply("Background must be a valid URL starting with http:// or https://");
-			}
-
-			await ProfileBackgroundDB.updateOne(
-				{ _id: user.id },
-				{ $set: { _id: user.id, background: target, updatedAt: new Date() } },
-				{ upsert: true }
-			);
-
-			this.sendReply(`Your profile background has been set. Use /uprofile to see it!`);
-		},
-
-		async clearbackground(target, room, user): Promise<void> {
-			await ProfileBackgroundDB.deleteOne({ _id: user.id });
-			this.sendReply("Your profile background has been cleared.");
-		},
-
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
 				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
-				{ cmd: "/uprofile setbackground [url]", desc: "Set a custom background image for your profile (image URL)." },
-				{ cmd: "/uprofile clearbackground", desc: "Clear your custom profile background." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
-				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>` +
-				`<br><small>Background example: 'https://example.com/image.jpg'</small>`;
+				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>`;
 			this.sendReplyBox(html);
 		},
 	},
