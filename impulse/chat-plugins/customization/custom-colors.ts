@@ -35,6 +35,10 @@ const updateColor = async () => {
 			css += generateCSS(doc.userid, doc.color);
 		});
 
+		// Add rule to override custom colors for idle/busy users
+		css += '/* Override custom colors for idle/busy status */\n';
+		css += '.idle-status { color: #948A88 !important; }\n';
+
 		css += '/* COLORS END */\n';
 
 		const fileContent = await FS('config/custom.css').readIfExists();

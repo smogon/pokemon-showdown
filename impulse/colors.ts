@@ -123,8 +123,7 @@ export const nameColor = (
 	const user = Users.getExact(name);
 	const isIdleOrBusy = user && (user.statusType === 'idle' || user.statusType === 'busy');
 	const color = isIdleOrBusy ? '#948A88' : hashColor(name);
-	// Use !important for idle/busy to override custom CSS colors
-	const colorStyle = isIdleOrBusy ? `color:${color} !important` : `color=${color}`;
+	const statusClass = isIdleOrBusy ? ' class="idle-status"' : '';
 
-	return symbol + (bold ? '<b>' : '') + `<font style="${colorStyle}">${userName}</font>` + (bold ? '</b>' : '');
+	return symbol + (bold ? '<b>' : '') + `<font color=${color}${statusClass}>${userName}</font>` + (bold ? '</b>' : '');
 };
