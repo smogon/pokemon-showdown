@@ -1872,7 +1872,8 @@ function generateBattleHeader(battle: BattleState): string {
 /**
  * [STEP 3+ REFACTOR]
  * Generates the "Top vs. Bottom" sprite layout.
- * Now handles Double Battle positioning via the `rpg-slot-offset` class.
+ * Now assigns specific position classes (rpg-slot-pos-0, rpg-slot-pos-1) 
+ * to allow precise CSS positioning for Double Battles.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -1884,10 +1885,9 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		slot: ActivePokemonSlot | null,
 		slotIndex: number,
 		side: 'player' | 'opponent',
-		isOffset: boolean = false
+		positionIndex: number // 0 for primary, 1 for secondary
 	) => {
 		// If no slot, or Pokemon fainted, return an empty placeholder
-		// In doubles, we might still want the space occupied, but for now we hide it.
 		if (!slot || slot.pokemon.hp <= 0) {
 			return ''; 
 		}
@@ -1915,8 +1915,9 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 
 		// 3. Assemble the slot wrapper classes
 		const slotWrapperClass = side === 'player' ? 'rpg-player-slot' : 'rpg-opponent-slot';
-		const offsetClass = isOffset ? ' rpg-slot-offset' : '';
-		const wrapperClasses = `${slotWrapperClass}${offsetClass}`;
+		// New: Explicit position class based on index (0 or 1)
+		const posClass = `rpg-slot-pos-${positionIndex}`;
+		const wrapperClasses = `${slotWrapperClass} ${posClass}`;
 
 		// 4. Assemble inner info classes
 		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
@@ -1943,22 +1944,22 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += generateGlobalBattleConditionsHTML(battle);
 
 	// Opponent Side (Top)
-	// Slot 0 (Index 2) is the primary (Right aligned)
-	// Slot 1 (Index 3) is the secondary (Offset to the left)
 	html += '<div class="rpg-opponent-side">';
-	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent', false); 
+	// Slot 0 (Index 2): Primary
+	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent', 0); 
 	if (isDoubleBattle) {
-		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent', true);
+		// Slot 1 (Index 3): Secondary
+		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent', 1);
 	}
 	html += '</div>';
 
 	// Player Side (Bottom)
-	// Slot 0 (Index 0) is the primary (Left aligned)
-	// Slot 1 (Index 1) is the secondary (Offset to the right)
 	html += '<div class="rpg-player-side">';
-	html += generateBattleSlot(battle.playerSlots[0], 0, 'player', false);
+	// Slot 0 (Index 0): Primary
+	html += generateBattleSlot(battle.playerSlots[0], 0, 'player', 0);
 	if (isDoubleBattle) {
-		html += generateBattleSlot(battle.playerSlots[1], 1, 'player', true);
+		// Slot 1 (Index 1): Secondary
+		html += generateBattleSlot(battle.playerSlots[1], 1, 'player', 1);
 	}
 	html += '</div>';
 
