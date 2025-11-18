@@ -2,6 +2,11 @@
 * RPG CUSTOM CSS
 **************************/
 
+/* Global RPG Text Shadow Reset */
+[class*="rpg-"], .dark [class*="rpg-"] {
+    text-shadow: none !important;
+}
+
 /* RPG Main Classes */
 
 .rpg-card {
@@ -280,7 +285,7 @@
     right: 0;
     top: 0;
     background: #b0b0b0;
-	 text-shadow: none;
+    text-shadow: none;
     color: #fff;
     font-size: 9px;
     font-weight: bold;
@@ -346,7 +351,7 @@
     left: 0;
     right: 0;
     text-align: center;
-	 text-shadow: none;
+    text-shadow: none;
     font-size: 9px;
     line-height: 12px;
     color: #000;
@@ -845,7 +850,7 @@
     width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
     z-index: 20;
     color: #333;
-    text-shadow: 1px 1px 0 #f8f8f8, -1px -1px 0 #f8f8f8, 1px -1px 0 #f8f8f8, -1px 1px 0 #f8f8f8;
+    text-shadow: none; /* Removed shadow */
     margin-bottom: -5px; /* Pull sprite up slightly */
     position: relative; /* Sits above the sprite */
 }
@@ -853,7 +858,7 @@
 .dark .rpg-opponent-info,
 .dark .rpg-player-info {
     color: #eee;
-    text-shadow: 1px 1px 0 #222, -1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222;
+    text-shadow: none; /* Removed shadow */
 }
 
 /* === Party/Menu Layouts === */
