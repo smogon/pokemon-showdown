@@ -183,7 +183,7 @@ export const commands: Chat.ChatCommands = {
 			// Build the profile HTML with optional background image
 			const backgroundStyle = profileData.background ?
 				`background-image: url('${profileData.background}'); background-size: cover; background-position: center; padding: 10px;` : '';
-			let buf = `<div class="infobox" style="${backgroundStyle}">`;
+			let buf = `<div style="${backgroundStyle}">`;
 
 			// Header with name and avatar
 			buf += '<div style="text-align:center;margin-bottom:10px;">';
@@ -199,16 +199,9 @@ export const commands: Chat.ChatCommands = {
 			// Status with custom status integrated
 			buf += `<strong>Status:</strong> ${getStatusDisplay(targetUser, profileData.customStatus)}<br>`;
 
-			// Registration status and date
-			if (targetUser) {
-				if (targetUser.registered) {
-					buf += `<strong>Registered:</strong> Yes<br>`;
-					if (profileData.registrationDate) {
-						buf += `<strong>Registration Date:</strong> ${profileData.registrationDate}<br>`;
-					}
-				} else {
-					buf += `<strong>Registered:</strong> No<br>`;
-				}
+			// Registration date
+			if (profileData.registrationDate) {
+				buf += `<strong>Registration Date:</strong> ${profileData.registrationDate}<br>`;
 			}
 
 			// Level (if available)
