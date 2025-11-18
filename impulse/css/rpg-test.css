@@ -860,7 +860,7 @@
 .rpg-opponent-info {
     width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
     z-index: 20;
-    color: white;
+    color: black;
     text-shadow: none; /* Removed shadow */
     margin-bottom: -5px; /* Pull sprite up slightly */
     position: relative; /* Sits above the sprite */
@@ -869,7 +869,7 @@
 .rpg-player-info {
     width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
     z-index: 20;
-    color: black;
+    color: #fafafa;
     text-shadow: none; /* Removed shadow */
     margin-bottom: -5px; /* Pull sprite up slightly */
     position: relative; /* Sits above the sprite */
