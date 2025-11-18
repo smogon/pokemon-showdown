@@ -2995,13 +2995,13 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Fire') {
-				if (pokemon.species.id !== 'draggoyleactive') {
-					pokemon.formeChange('Draggoyle-Active', this.effect, false, '[msg]');
+				if (target !== source && target.species.id !== 'draggoyleactive') {
+					target.formeChange('Draggoyle-Active', this.effect, false, '[msg]');
 				}
 			}
 			if (move.type === 'Ice') {
-				if (pokemon.species.id !== 'draggoyle') {
-					pokemon.formeChange('Draggoyle', this.effect, false, '[msg]');
+				if (target !== source && target.species.id !== 'draggoyle') {
+					target.formeChange('Draggoyle', this.effect, false, '[msg]');
 				}
 			}
 		},
