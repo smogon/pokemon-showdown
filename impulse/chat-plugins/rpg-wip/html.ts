@@ -1965,7 +1965,8 @@ function generateBattleHeader(battle: BattleState): string {
  * [STEP 3+ REFACTOR]
  * This function is completely rewritten to produce the "Top vs. Bottom"
  * sprite-based layout.
- * It no longer uses the `.rpg-battle-infobox` wrapper.
+ * It now creates a wrapper (.rpg-player-slot or .rpg-opponent-slot)
+ * and places the info block *above* the sprite.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -2005,7 +2006,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		}
 
 		// 3. Assemble the slot
-		let html = '';
+		const slotWrapperClass = side === 'player' ? 'rpg-player-slot' : 'rpg-opponent-slot';
 		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
 		
 		// Add targeting/pending classes if needed
@@ -2017,14 +2018,14 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			containerClasses += " rpg-action-pending";
 		}
 
-		// Combine the info block and the sprite
-		if (side === 'player') {
-			html = `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />` +
-			       `<div class="${containerClasses}">${infoContents}</div>`;
-		} else {
-			html = `<div class="${containerClasses}">${infoContents}</div>` +
-			       `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
-		}
+        // [NEW STRUCTURE]
+        // Wrapper div (positioned)
+        //   -> Info div (static, on top)
+        //   -> Sprite img (static, on bottom)
+		let html = `<div class="${slotWrapperClass}">`;
+        html += `<div class="${containerClasses}">${infoContents}</div>`;
+        html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
+		html += `</div>`;
 		
 		return html;
 	};
