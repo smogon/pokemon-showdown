@@ -1,0 +1,1686 @@
+/* Impulse Themed Table */
+
+.themed-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 12px;
+  background: rgba(245, 242, 233, 0.9);
+  border: 2px solid #5b7952;
+  box-shadow: 0 4px 12px rgba(91, 121, 82, 0.15);
+}
+
+/* Dark theme support */
+.dark .themed-table-container {
+  background: rgba(28, 40, 30, 0.9);
+  border-color: #4b3a32;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.themed-table-title {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #4b3a32 !important;
+  border-bottom: 2px solid #5b7952;
+  background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .themed-table-title {
+  color: #e8e3d3 !important;
+  background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+  border-bottom-color: #6e5745;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.themed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+}
+
+.themed-table-header th {
+  padding: 0.6rem 0.8rem;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 9pt !important;
+  color: #2a3d2c !important;
+  background: linear-gradient(to bottom, #e8e3d3, #bba47a) !important;
+  border-bottom: 2px solid #5b7952;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.dark .themed-table-header th {
+  color: #f5f2e9 !important;
+  background: linear-gradient(to bottom, #6e5745, #4b3a32) !important;
+  border-bottom-color: #6e5745;
+}
+
+.themed-table-row:nth-child(even) {
+  background-color: rgba(123, 159, 109, 0.1);
+}
+
+.dark .themed-table-row:nth-child(even) {
+  background-color: rgba(245, 242, 233, 0.04);
+}
+
+.themed-table-row:hover {
+  background-color: rgba(123, 159, 109, 0.25);
+}
+
+.dark .themed-table-row:hover {
+  background-color: rgba(245, 242, 233, 0.08);
+}
+
+.themed-table-row td {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid rgba(91, 121, 82, 0.15);
+  color: #2a3d2c !important;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.dark .themed-table-row td {
+  color: #d8d3c3 !important;
+  border-top-color: rgba(75, 58, 50, 0.3);
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .themed-table-title {
+    font-size: 1rem !important;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .themed-table-header th,
+  .themed-table-row td {
+    padding: 0.4rem 0.6rem;
+    font-size: 8pt !important;
+  }
+}
+
+/* Smooth scrolling for overflow */
+.themed-table-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  }
+
+/* Impulse Themed Table Ends */
+
+/*****************************
+* Impulse Server
+* Modern Custom Theme
+******************************/
+
+/* BACKGROUND */
+body {
+background: url("https://i.postimg.cc/sXRp00fx/pokemon-emerald-waterfall-wallpaperwaves-com.gif") no-repeat left center fixed;
+background-size: cover;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* LOGO */
+img[class="logo"] {
+content: url("https://i.ibb.co/Rf8KzRM/cooltext493024926086347.png");
+}
+
+/* HEADER BACKGROUND - Earthy green gradient */
+div[id="header"] {
+background: linear-gradient(135deg, #7b9f6d 0%, #5b7952 50%, #4b3a32 100%);
+box-shadow: 0 2px 8px rgba(75, 58, 50, 0.3);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+}
+
+/* HEADER BAR BACKGROUND - Light earthy tones */
+div[class="maintabbarbottom"] {
+border: 2px solid #5b7952;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* HEADER BUTTONS - Earthy theme */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button,
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur,
+div[class="userbar"] > button {
+border: 2px solid #5b7952;
+color: #4b3a32;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+font-weight: 700;
+border-radius: 6px;
+transition: all 0.2s ease;
+}
+
+/* HEADER BUTTONS HOVER - Deeper earthy green */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button:hover,
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur:hover,
+div[class="userbar"] > button:hover {
+border-color: #2a3d2c;
+color: #fceb83;
+background: linear-gradient(to bottom, #6e5745, #5b7952);
+box-shadow: 0 4px 8px rgba(91, 121, 82, 0.4);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+transform: translateY(-1px);
+}
+
+/* REGULAR BUTTONS */
+div[class^="tabbar maintabbar"] > div > ul > li > button {
+color: #4b3a32;
+font-weight: 700;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+transition: all 0.2s ease;
+}
+
+/* REGULAR BUTTONS HOVER */
+div[class^="tabbar maintabbar"] > div > ul > li > button:hover {
+color: #fceb83;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* NOTIFICATION BUTTONS - Warm red for visibility */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying {
+background: linear-gradient(to bottom, #d75c4e, #b7433a);
+border: 2px solid #4b3a32;
+color: #ffffff;
+box-shadow: 0 0 12px rgba(183, 67, 58, 0.7);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+font-weight: 700;
+animation: pulse 2s infinite;
+}
+
+/* NOTIFICATION BUTTONS HOVER */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying:hover {
+background: linear-gradient(to bottom, #b7433a, #d75c4e);
+border-color: #b7433a;
+color: #ffffff;
+box-shadow: 0 0 16px rgba(215, 92, 78, 0.9);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+transform: translateY(-1px);
+}
+
+/* PULSE ANIMATION for notifications */
+@keyframes pulse {
+0% {
+box-shadow: 0 0 12px rgba(183, 67, 58, 0.6);
+}
+50% {
+box-shadow: 0 0 20px rgba(183, 67, 58, 0.8);
+}
+100% {
+box-shadow: 0 0 12px rgba(183, 67, 58, 0.6);
+}
+}
+
+/* ADDITIONAL MODERN ENHANCEMENTS */
+/* Focus states for accessibility */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button:focus,
+div[class="userbar"] > button:focus {
+outline: 3px solid #8f785b;
+outline-offset: 2px;
+}
+
+/* Improved text readability across all elements */
+* {
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+/* LAYOUT STRUCTURE */
+.leftmenu {
+padding: 40px 0 0 0;
+width: 324px;
+}
+
+.rightmenu {
+position: absolute;
+top: 40px;
+right: 25px;
+width: 294px;
+}
+
+.activitymenu {
+position: absolute;
+left: 325px;
+top: 40px;
+}
+
+.mainmenu {
+padding: 0 0 51px 0;
+}
+
+.mainmenuwrapper {
+position: relative;
+min-height: 100%;
+}
+
+/* BATTLE FORM */
+.battleform {
+width: 230px;
+text-align: left;
+margin: 0 auto;
+}
+
+.battleform .buttonbar {
+text-align: center;
+}
+
+/* MAIN MENU FOOTER - Earthy theme */
+.mainmenufooter {
+position: absolute;
+bottom: 15px;
+left: 20px;
+color: #2a3d2c;
+text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 4px rgba(255, 255, 255, 0.7);
+font-weight: 600;
+background: rgba(245, 242, 233, 0.8);
+padding: 8px 12px;
+border-radius: 8px;
+border: 1px solid rgba(91, 121, 82, 0.3);
+}
+
+.mainmenufooter blockquote {
+margin: 0 0 1em 0;
+padding: 0;
+}
+
+.mainmenufooter small {
+font-size: 9pt;
+}
+
+.mainmenufooter small small {
+font-size: 8pt;
+}
+
+.mainmenufooter a {
+text-decoration: underline;
+color: #5b7952;
+font-weight: 700;
+}
+
+.mainmenufooter a:hover {
+text-decoration: underline;
+color: #2a3d2c;
+}
+
+/* PM BOXES - Earthy theme */
+.pmbox {
+width: 270px;
+margin: 0 auto;
+min-height: 2px;
+}
+
+.pm-window {
+margin: 0 -12px 12px -10px;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 4px 16px rgba(91, 121, 82, 0.2);
+}
+
+.tiny-layout .pm-window {
+margin: 0 0 12px 0;
+}
+
+.pm-window h3 {
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+color: #4b3a32;
+margin: 0;
+padding: 2px 4px 2px 5px;
+font-size: 11pt;
+font-weight: 700;
+border: 2px solid #5b7952;
+border-top-left-radius: 12px;
+border-top-right-radius: 12px;
+cursor: pointer;
+transition: all 0.2s ease;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.pm-window h3:hover {
+color: #fceb83;
+background: linear-gradient(to bottom, #6e5745, #5b7952);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pm-window h3.pm-minimized {
+border-radius: 12px;
+}
+
+.pm-window h3.pm-notifying {
+border-color: #4b3a32;
+background: linear-gradient(to bottom, #d75c4e, #b7433a);
+color: #ffffff;
+animation: pulse 2s infinite;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pm-window h3.pm-notifying:hover {
+border-color: #b7433a;
+background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+}
+
+.pm-window h3 .closebutton,
+.pm-window h3 .minimizebutton {
+float: right;
+margin: -2px -5px 0 0;
+width: 22px;
+height: 21px;
+border-radius: 4px;
+transition: all 0.2s ease;
+}
+
+.pm-window h3 .closebutton:hover,
+.pm-window h3 .minimizebutton:hover {
+background: rgba(255, 255, 255, 0.2);
+}
+
+.pm-window h3 small {
+color: #555;
+font-weight: normal;
+vertical-align: 1px;
+}
+
+.pm-log {
+min-height: 100px;
+max-height: 300px;
+background: rgba(245, 242, 233, 0.98);
+color: #2a3d2c;
+border: 2px solid #5b7952;
+border-top: 0;
+border-bottom: 0;
+overflow: auto;
+-webkit-overflow-scrolling: touch;
+word-wrap: break-word;
+font-weight: 500;
+}
+
+.pm-buttonbar {
+padding-bottom: 3px;
+}
+
+.pm-log-add {
+color: #2a3d2c;
+border: 2px solid #5b7952;
+border-bottom-left-radius: 12px;
+border-bottom-right-radius: 12px;
+background: rgba(245, 242, 233, 0.95);
+font-weight: 500;
+}
+
+.pm-window.collapsed .pm-log,
+.pm-window.collapsed .pm-log-add {
+display: none;
+}
+
+.pm-window.focused h3,
+.pm-window.focused .pm-log,
+.pm-window.focused .pm-log-add {
+border-color: #2a3d2c;
+}
+
+.pm-window.focused h3,
+.pm-window.focused h3:hover {
+background: linear-gradient(to bottom, #6e5745, #5b7952);
+color: #fceb83;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* CHALLENGES - Earthy theme */
+.challenge {
+margin-top: -1px;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+border: 2px solid #5b7952;
+color: #4b3a32;
+padding: 1px 5px;
+border-radius: 8px;
+font-weight: 700;
+}
+
+.challenge p {
+margin: 4px 0;
+}
+
+/* NEWS ENTRIES */
+.newsentry {
+font-size: 9pt;
+padding: 1px 10px;
+border-bottom: 2px solid #7b9f6d;
+font-weight: 600;
+color: #2a3d2c;
+}
+
+.unread {
+background: rgba(123, 159, 109, 0.7);
+}
+
+/* RESPONSIVE LAYOUT */
+.tiny-layout .leftmenu,
+.tiny-layout .rightmenu,
+.tiny-layout .activitymenu {
+position: static;
+top: 0;
+right: 0;
+left: 0;
+width: auto;
+margin: 0;
+padding: 0;
+}
+
+.tiny-layout .leftmenu {
+padding-top: 30px;
+}
+
+.tiny-layout .activitymenu {
+padding-bottom: 8px;
+}
+
+/* MAIN MESSAGES - Earthy styling */
+.mainmessage {
+display: block;
+padding: 10px 15px;
+margin: 30px 40px;
+max-width: 400px;
+border-radius: 20px;
+background: rgba(245, 242, 233, 0.95);
+color: #2a3d2c;
+font-weight: 600;
+border: 2px solid #5b7952;
+box-shadow: 0 4px 16px rgba(91, 121, 82, 0.3);
+}
+
+/* MENU GROUPS - Earthy theme */
+.menugroup {
+display: block;
+padding: 10px 0;
+margin: 0 auto 30px auto;
+max-width: 270px;
+border-radius: 20px;
+background: linear-gradient(135deg, rgba(91, 121, 82, 0.9), rgba(75, 58, 50, 0.9));
+color: #f5f2e9;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+text-align: center;
+border: 2px solid #6e5745;
+box-shadow: 0 8px 24px rgba(91, 121, 82, 0.3);
+backdrop-filter: blur(10px);
+}
+
+.mainmessage p,
+.menugroup p {
+margin: 10px 0;
+}
+
+/* MENU GROUP BUTTONS - Earthy variants */
+.menugroup .button {
+box-sizing: border-box;
+font-size: 12pt;
+font-weight: 600;
+display: inline-block;
+padding: 5px 7px 3px 7px;
+width: 200px;
+border-radius: 8px;
+transition: all 0.2s ease;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+/* Earthy default colors */
+color: #ffffff;
+border: 2px solid #4b3a32;
+background: linear-gradient(to bottom, #8f785b, #6e5745);
+}
+
+.menugroup .button.big {
+width: 230px;
+height: 50px;
+padding: 0;
+font-size: 14pt;
+}
+
+.menugroup .button.big small {
+display: block;
+font-size: 9pt;
+}
+
+.menugroup .button:hover {
+background: linear-gradient(to bottom, #bba47a, #8f785b);
+border-color: #6e5745;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menugroup .button:active {
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 -1px 1px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(0, 0, 0, 0.4);
+background: linear-gradient(to bottom, #6e5745, #8f785b);
+border-color: #6e5745;
+transform: translateY(0px);
+}
+
+.menugroup .button.disabled,
+.menugroup .button.disabled:hover,
+.menugroup .button.disabled:active {
+cursor: default;
+background: linear-gradient(to bottom, #cccccc, #aaaaaa);
+border-color: #999999;
+color: #666666;
+text-shadow: none;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+transform: none;
+}
+
+/* COLORED MENU BUTTONS - Earthy/Forest variations */
+.button.mainmenu1 {
+background: linear-gradient(to bottom, #8f785b, #6e5745);
+border-color: #4b3a32;
+}
+
+.button.mainmenu1:hover {
+background: linear-gradient(to bottom, #bba47a, #8f785b);
+border-color: #6e5745;
+}
+
+.button.mainmenu1:active {
+background: linear-gradient(to bottom, #8f785b, #bba47a);
+border-color: #6e5745;
+}
+
+.button.mainmenu2 {
+background: linear-gradient(to bottom, #7b9f6d, #5b7952);
+border-color: #2a3d2c;
+}
+
+.button.mainmenu2:hover {
+background: linear-gradient(to bottom, #a3c586, #7b9f6d);
+border-color: #5b7952;
+}
+
+.button.mainmenu2:active {
+background: linear-gradient(to bottom, #7b9f6d, #a3c586);
+border-color: #5b7952;
+}
+
+.button.mainmenu3 {
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+border-color: #5b7952;
+color: #4b3a32;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.button.mainmenu3:hover {
+background: linear-gradient(to bottom, #bba47a, #8f785b);
+border-color: #6e5745;
+color: #ffffff;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.button.mainmenu3:active {
+background: linear-gradient(to bottom, #8f785b, #bba47a);
+border-color: #6e5745;
+}
+
+.button.mainmenu4 {
+background: linear-gradient(to bottom, #5f9fa4, #3f6b70);
+border-color: #2a3d2c;
+}
+
+.button.mainmenu4:hover {
+background: linear-gradient(to bottom, #8cd3d6, #5f9fa4);
+border-color: #3f6b70;
+}
+
+.button.mainmenu4:active {
+background: linear-gradient(to bottom, #5f9fa4, #8cd3d6);
+border-color: #3f6b70;
+}
+
+.button.mainmenu5 {
+background: linear-gradient(to bottom, #dde7f0, #b6d7f0);
+border-color: #5f9ea0;
+color: #2f4f4f;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.button.mainmenu5:hover {
+background: linear-gradient(to bottom, #b6d7f0, #95c8e6);
+border-color: #4682b4;
+color: #ffffff;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.button.mainmenu5:active {
+background: linear-gradient(to bottom, #95c8e6, #b6d7f0);
+border-color: #4682b4;
+}
+
+.button.mainmenu6 {
+background: linear-gradient(to bottom, #d75c4e, #b7433a);
+border-color: #4b3a32;
+}
+
+.button.mainmenu6:hover {
+background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+border-color: #b7433a;
+}
+
+.button.mainmenu6:active {
+background: linear-gradient(to bottom, #d75c4e, #e89f4b);
+border-color: #b7433a;
+}
+
+.rightmenu .menugroup .button {
+width: 180px;
+}
+
+/* LADDER - Earthy theme */
+.ladder table, .ladder td, .ladder th {
+border-collapse: collapse;
+border: 1px solid #5b7952;
+}
+
+.ladder td, .ladder th {
+padding: 3px 5px;
+}
+
+.ladder th {
+text-align: left;
+font-size: 9pt;
+background: linear-gradient(to bottom, #e8e3d3, #bba47a);
+color: #2a3d2c;
+font-weight: 700;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.ladder span {
+color: #5b7952;
+}
+
+.hidden {
+display: none;
+}
+
+/* ROOM LIST - Earthy theme */
+.roomlisttop {
+max-width: 480px;
+margin-bottom: 10px;
+}
+
+.roomcounters {
+max-width: 480px;
+margin: 8px 0 15px 0;
+text-align: center;
+}
+
+@media (max-width: 382px) {
+.roomcounters {
+margin: 38px 0 15px 0;
+}
+}
+
+.roomcounters button {
+margin: 0 auto;
+width: 120px;
+height: 60px;
+padding: 3px 8px;
+text-align: center;
+vertical-align: middle;
+font-size: 10pt;
+position: relative;
+border: 2px solid #5b7952;
+color: #4b3a32;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+font-weight: 700;
+border-radius: 6px;
+transition: all 0.2s ease;
+}
+
+.roomcounters button:hover {
+border-color: #2a3d2c;
+color: #fceb83;
+background: linear-gradient(to bottom, #6e5745, #5b7952);
+box-shadow: 0 4px 8px rgba(91, 121, 82, 0.4);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+transform: translateY(-1px);
+}
+
+.roomcounters button strong {
+display: block;
+font-size: 18pt;
+font-weight: normal;
+}
+
+.roomcounters .usercount {
+display: block;
+width: 49px;
+height: 63px;
+position: absolute;
+left: -30px;
+bottom: -5px;
+background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta.png) center no-repeat;
+}
+
+.roomcounters button:hover .usercount {
+background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta.gif) center no-repeat;
+}
+
+.roomcounters .battlecount {
+display: block;
+width: 46px;
+height: 76px;
+position: absolute;
+right: -30px;
+bottom: -10px;
+background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta-pirouette.png) center no-repeat;
+}
+
+.roomcounters button:hover .battlecount {
+background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta-pirouette.gif) center no-repeat;
+}
+
+.roomlist {
+max-width: 480px;
+text-align: left;
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.roomlist .subrooms {
+font-size: 8pt;
+padding-left: 20px;
+margin: -5px 0 4px;
+color: #5b7952;
+}
+
+.roomlist .subrooms i.fa-level-up {
+margin-right: 5px;
+}
+
+.roomlist .subrooms a.blocklink {
+display: inline-block;
+margin: 0;
+vertical-align: middle;
+font-size: 8pt;
+color: #5b7952;
+font-weight: 600;
+}
+
+.roomlist .subrooms a.blocklink:hover {
+color: #2a3d2c;
+}
+
+/* CHAT LOG - Earthy theme */
+.chat-log {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 40px;
+font-size: 10pt;
+background: rgba(245, 242, 233, 0.6);
+color: #2a3d2c;
+overflow: auto;
+overflow-x: hidden;
+-webkit-overflow-scrolling: touch;
+word-wrap: break-word;
+}
+
+.chat-log-add {
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+min-height: 36px;
+padding: 3px 4px 0 4px;
+border-top: 1px solid #5b7952;
+background: rgba(245, 242, 233, 0.95);
+}
+
+.chat-log .notice,
+.chat-log .chat,
+.pm-log .chat {
+padding: 3px 0 3px 0;
+font-size: 9pt;
+}
+
+.chat-log .chat.mine,
+.pm-log .chat.mine {
+margin-left: -8px;
+margin-right: -8px;
+padding-left: 8px;
+padding-right: 8px;
+background: rgba(123, 159, 109, 0.3);
+}
+
+.chat em {
+padding: 0 4px 0 3px;
+font-style: normal;
+}
+
+.chat small {
+font-weight: normal;
+font-size: 8pt;
+color: #5b7952;
+}
+
+.chat .message-announce small {
+color: #2a3d2c;
+}
+
+.chat.timer {
+color: #6e5745;
+}
+
+.debug {
+display: none;
+}
+
+.highlighted {
+background: rgba(123, 159, 109, 0.4);
+}
+
+.chat.highlighted {
+margin-left: -8px;
+margin-right: -8px;
+padding-left: 8px;
+padding-right: 8px;
+}
+
+.revealed {
+background-color: rgba(232, 227, 211, 0.8);
+}
+
+.message-pm {
+color: #b7433a;
+}
+
+.message-pm .pmnote {
+cursor: pointer;
+}
+
+.chat-log .inner,
+.pm-log .inner {
+padding: 4px 8px 6px 8px;
+}
+
+/* CHATBOX - Earthy theme */
+.chatbox {
+margin: 0 10px 0 80px;
+padding: 5px 0 0 0;
+}
+
+.chatbox.nolabel {
+margin: 0 14px 0 6px;
+padding: 5px 0 5px 0;
+}
+
+.chatbox label {
+float: left;
+margin-left: -78px;
+padding-top: 2px;
+width: 73px;
+text-align: right;
+overflow: hidden;
+white-space: pre;
+font-weight: bold;
+font-size: 8pt;
+color: #2a3d2c;
+}
+
+.chatbox textarea {
+display: block;
+height: 1.1em;
+width: 100%;
+resize: none;
+font-size: 9pt;
+font-family: Verdana, Helvetica, Arial, sans-serif;
+overflow-x: hidden;
+overflow-wrap: break-word;
+border: 1px solid #5b7952;
+border-radius: 4px;
+padding: 2px 4px;
+background: rgba(255, 255, 255, 0.95);
+color: #2a3d2c;
+}
+
+.chatbox textarea:focus {
+border-color: #6e5745;
+outline: none;
+box-shadow: 0 0 4px rgba(110, 87, 69, 0.3);
+}
+
+/* USERLIST - Earthy theme */
+.userlist {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+width: 145px;
+height: auto;
+border-right: 1px solid #5b7952;
+background: rgba(245, 242, 233, 0.95);
+overflow: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+.pm-buttonbar {
+height: 21px;
+}
+
+.pm-buttonbar button {
+float: left;
+font: 8pt Verdana, sans-serif;
+height: 21px;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+color: #4b3a32;
+border: 0;
+border-right: 1px solid #5b7952;
+border-bottom: 1px solid #5b7952;
+font-weight: 600;
+transition: all 0.2s ease;
+}
+
+.userlist-minimized {
+height: 21px;
+bottom: auto;
+overflow: hidden;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+border-bottom: 1px solid #5b7952;
+}
+
+.userlist-maximized {
+height: auto;
+bottom: 0;
+overflow: auto;
+background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+}
+
+.userlist-minimized .userlist-count,
+.userlist-maximized .userlist-count {
+cursor: pointer;
+font-weight: 600;
+color: #4b3a32;
+}
+
+.userlist-minimized .userlist-count:hover,
+.userlist-maximized .userlist-count:hover,
+.pm-buttonbar button:hover {
+background: linear-gradient(to bottom, #bba47a, #8f785b);
+color: #2a3d2c;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.chat-log.hasuserlist,
+.chat-log-add.hasuserlist,
+.tournament-wrapper.hasuserlist {
+left: 146px;
+}
+
+.userlist,
+.userlist li {
+display: block;
+list-style-type: none;
+margin: 0;
+padding: 0;
+text-align: left;
+}
+
+.userlist li {
+height: 20px;
+font: 10pt Verdana, sans-serif;
+white-space: nowrap;
+}
+
+.userlist li em.group {
+font-style: normal;
+font-size: 8pt;
+color: #5b7952;
+display: block;
+float: left;
+text-align: center;
+padding: 1px 0 0 1px;
+width: 14px;
+font-weight: 600;
+}
+
+.userlist li button {
+box-sizing: border-box;
+display: block;
+overflow: hidden;
+height: auto;
+background: transparent;
+border: 0;
+padding: 1px 0;
+margin: 0;
+height: 20px;
+width: 100%;
+white-space: nowrap;
+font: 9pt Verdana, sans-serif;
+text-align: left;
+color: #2a3d2c;
+font-weight: 500;
+transition: all 0.2s ease;
+}
+
+/* Remove Firefox's magic padding */
+.userlist li button::-moz-focus-inner {
+padding: 0;
+}
+
+.userlist li button:hover {
+background: rgba(123, 159, 109, 0.4);
+color: #2a3d2c;
+}
+
+.userlist li button:active {
+background: rgba(91, 121, 82, 0.3);
+}
+
+.userlist li.cur {
+background: rgba(255, 255, 255, 0.9);
+border-left: 3px solid #5b7952;
+}
+
+.userlist li.cur button,
+.userlist li.cur button:hover {
+background: rgba(255, 255, 255, 0.9);
+margin: 0 0 0 -1px;
+color: #2a3d2c;
+font-weight: 700;
+}
+
+@media (max-width:895px) {
+.mainmenu {
+padding-bottom: 1px;
+}
+
+.rightmenu, .tiny-layout .rightmenu {
+position: static;
+top: 0;
+right: 0;
+padding-bottom: 51px;
+}
+
+.rightmenu {
+width: 324px;
+}
+
+.rightmenu .menugroup .button {
+width: 200px;
+}
+
+/* Dark Theme */
+
+.dark .roomlisttop {
+	max-width: 480px;
+	margin-bottom: 10px;
+}
+
+.dark .roomcounters {
+	max-width: 480px;
+	margin: 8px 0 15px 0;
+	text-align: center;
+}
+
+@media (max-width: 382px) {
+	.dark .roomcounters {
+		margin: 38px 0 15px 0;
+	}
+}
+
+.dark .roomcounters button {
+	margin: 0 auto;
+	width: 120px;
+	height: 60px;
+	padding: 3px 8px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 10pt;
+	position: relative;
+	border: 2px solid #6e5745;
+	color: #e8e3d3;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+	font-weight: 700;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.dark .roomcounters button:hover {
+	border-color: #8f785b;
+	color: #fceb83;
+	background: linear-gradient(to bottom, #6e5745, #4b3a32);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	transform: translateY(-1px);
+}
+
+.dark .roomcounters button strong {
+	display: block;
+	font-size: 18pt;
+	font-weight: normal;
+}
+
+.dark .roomcounters .usercount {
+	display: block;
+	width: 49px;
+	height: 63px;
+	position: absolute;
+	left: -30px;
+	bottom: -5px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .usercount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta.gif) center no-repeat;
+}
+
+.dark .roomcounters .battlecount {
+	display: block;
+	width: 46px;
+	height: 76px;
+	position: absolute;
+	right: -30px;
+	bottom: -10px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta-pirouette.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .battlecount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta-pirouette.gif) center no-repeat;
+}
+
+.dark .roomlist {
+	max-width: 480px;
+	text-align: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.dark .roomlist .subrooms {
+	font-size: 8pt;
+	padding-left: 20px;
+	margin: -5px 0 4px;
+	color: #7b9f6d;
+}
+
+.dark .roomlist .subrooms i.fa-level-up {
+	margin-right: 5px;
+}
+
+.dark .roomlist .subrooms a.blocklink {
+	display: inline-block;
+	margin: 0;
+	vertical-align: middle;
+	font-size: 8pt;
+	color: #7b9f6d;
+	font-weight: 600;
+}
+
+.dark .roomlist .subrooms a.blocklink:hover {
+	color: #a3c586;
+}
+
+.dark .menugroup .button {
+	box-sizing: border-box;
+	font-size: 12pt;
+	font-weight: 600;
+	display: inline-block;
+	padding: 5px 7px 3px 7px;
+	width: 200px;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+	/* Dark theme default colors */
+	color: #f5f2e9;
+	border: 2px solid #6e5745;
+	background: linear-gradient(to bottom, #8f785b, #6e5745);
+}
+
+.dark .menugroup .button.big {
+	width: 230px;
+	height: 50px;
+	padding: 0;
+	font-size: 14pt;
+}
+
+.dark .menugroup .button.big small {
+	display: block;
+	font-size: 9pt;
+}
+
+.dark .menugroup .button:hover {
+	background: linear-gradient(to bottom, #bba47a, #8f785b);
+	border-color: #8f785b;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .menugroup .button:active {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: linear-gradient(to bottom, #6e5745, #8f785b);
+	border-color: #8f785b;
+	transform: translateY(0px);
+}
+
+.dark .menugroup .button.disabled,
+.dark .menugroup .button.disabled:hover,
+.dark .menugroup .button.disabled:active {
+	cursor: default;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	border-color: #6e5745;
+	color: #8f785b;
+	text-shadow: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	transform: none;
+}
+
+/* COLORED MENU BUTTONS - Dark variations */
+.dark .button.mainmenu1 {
+	background: linear-gradient(to bottom, #8f785b, #6e5745);
+	border-color: #4b3a32;
+}
+
+.dark .button.mainmenu1:hover {
+	background: linear-gradient(to bottom, #bba47a, #8f785b);
+	border-color: #6e5745;
+}
+
+.dark .button.mainmenu1:active {
+	background: linear-gradient(to bottom, #8f785b, #bba47a);
+	border-color: #6e5745;
+}
+
+.dark .button.mainmenu2 {
+	background: linear-gradient(to bottom, #7b9f6d, #5b7952);
+	border-color: #2a3d2c;
+}
+
+.dark .button.mainmenu2:hover {
+	background: linear-gradient(to bottom, #a3c586, #7b9f6d);
+	border-color: #5b7952;
+}
+
+.dark .button.mainmenu2:active {
+	background: linear-gradient(to bottom, #7b9f6d, #a3c586);
+	border-color: #5b7952;
+}
+
+.dark .button.mainmenu3 {
+	background: linear-gradient(to bottom, #5f9fa4, #3f6b70);
+	border-color: #2a3d2c;
+	color: #f5f2e9;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark .button.mainmenu3:hover {
+	background: linear-gradient(to bottom, #8cd3d6, #5f9fa4);
+	border-color: #3f6b70;
+	color: #ffffff;
+}
+
+.dark .button.mainmenu3:active {
+	background: linear-gradient(to bottom, #5f9fa4, #8cd3d6);
+	border-color: #3f6b70;
+}
+
+.dark .button.mainmenu4 {
+	background: linear-gradient(to bottom, #d75c4e, #b7433a);
+	border-color: #4b3a32;
+}
+
+.dark .button.mainmenu4:hover {
+	background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+	border-color: #b7433a;
+}
+
+.dark .button.mainmenu4:active {
+	background: linear-gradient(to bottom, #d75c4e, #e89f4b);
+	border-color: #b7433a;
+}
+
+.dark .button.mainmenu5 {
+    background: linear-gradient(to bottom, #4b3a32, #3f6b70);
+    border-color: #2a3d2c;
+    color: #e8e3d3;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+}
+
+.dark .button.mainmenu5:hover {
+    background: linear-gradient(to bottom, #6e5745, #5b7952);
+    border-color: #4b3a32;
+    color: #ffffff;
+}
+
+.dark .button.mainmenu5:active {
+    background: linear-gradient(to bottom, #5b7952, #6e5745);
+    border-color: #4b3a32;
+}
+
+
+.dark .button.mainmenu6 {
+	background: linear-gradient(to bottom, #5b7952, #2a3d2c);
+	border-color: #1c281e;
+}
+
+.dark .button.mainmenu6:hover {
+	background: linear-gradient(to bottom, #7b9f6d, #5b7952);
+	border-color: #2a3d2c;
+}
+
+.dark .button.mainmenu6:active {
+	background: linear-gradient(to bottom, #5b7952, #7b9f6d);
+	border-color: #2a3d2c;
+}
+
+.dark .rightmenu .menugroup .button {
+	width: 180px;
+}
+
+.dark .userlist {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 145px;
+	height: auto;
+	border-right: 1px solid #4b3a32;
+	background: rgba(28, 40, 30, 0.9);
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.dark .pm-buttonbar {
+	height: 21px;
+}
+
+.dark .pm-buttonbar button {
+	float: left;
+	font: 8pt Verdana, sans-serif;
+	height: 21px;
+	background: #1c281e;
+	color: #8cd3d6;
+	border: 0;
+	border-right: 1px solid #4b3a32;
+	border-bottom: 1px solid #4b3a32;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.dark .userlist-minimized {
+	height: 21px;
+	bottom: auto;
+	overflow: hidden;
+	background: #1c281e;
+	border-bottom: 1px solid #4b3a32;
+}
+
+.dark .userlist-maximized {
+	height: auto;
+	bottom: 0;
+	overflow: auto;
+	background: #1c281e;
+}
+
+.dark .userlist-minimized .userlist-count,
+.dark .userlist-maximized .userlist-count {
+	cursor: pointer;
+	font-weight: 600;
+	color: #bba47a;
+}
+
+.dark .userlist-minimized .userlist-count:hover,
+.dark .userlist-maximized .userlist-count:hover,
+.dark .pm-buttonbar button:hover {
+	background: #2a3d2c;
+	color: #f5f2e9;
+	text-shadow: none;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist,
+.dark .tournament-wrapper.hasuserlist {
+	left: 146px;
+}
+
+.dark .userlist li {
+	display: block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	height: 20px;
+	font: 10pt Verdana, sans-serif;
+	white-space: nowrap;
+}
+
+.dark .userlist li em.group {
+	font-style: normal;
+	font-size: 8pt;
+	color: #8cd3d6;
+	display: block;
+	float: left;
+	text-align: center;
+	padding: 1px 0 0 1px;
+	width: 14px;
+	font-weight: 600;
+}
+
+.dark .userlist li button {
+	box-sizing: border-box;
+	display: block;
+	overflow: hidden;
+	height: auto;
+	background: transparent;
+	border: 0;
+	padding: 1px 0;
+	margin: 0;
+	width: 100%;
+	white-space: nowrap;
+	font: 9pt Verdana, sans-serif;
+	text-align: left;
+	color: #d8d3c3;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+/* Remove Firefox's magic padding */
+.dark .userlist li button::-moz-focus-inner {
+	padding: 0;
+}
+
+.dark .userlist li button:hover {
+	background: rgba(75, 58, 50, 0.3);
+	color: #f5f2e9;
+}
+
+.dark .userlist li button:active {
+	background: rgba(91, 121, 82, 0.2);
+}
+
+.dark .userlist li.cur {
+	background: transparent;
+	border-left: 3px solid #fceb83;
+}
+
+.dark .userlist li.cur button,
+.dark .userlist li.cur button:hover {
+	background: transparent;
+	margin: 0 0 0 -1px;
+	color: #fceb83;
+	font-weight: 700;
+}
+
+.dark div[class="maintabbarbottom"] {
+	border: 2px solid #6e5745;
+	background: #1c281e;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* HEADER BUTTONS - Ultra-dark Earthy theme */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur {
+	border: 2px solid #6e5745;
+	color: #e8e3d3;
+	background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+/* HEADER BUTTONS HOVER - Lighter earthy green */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:hover,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur:hover {
+	border-color: #8f785b;
+	color: #fceb83;
+	background: linear-gradient(to bottom, #6e5745, #4b3a32);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* REGULAR BUTTONS in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button {
+	color: #bba47a;
+	font-weight: 700;
+	text-shadow: none;
+	transition: all 0.2s ease;
+}
+
+/* REGULAR BUTTONS HOVER in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button:hover {
+	color: #fceb83;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* NOTIFICATION BUTTONS - Still vibrant */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying {
+	background: linear-gradient(to bottom, #d75c4e, #b7433a);
+	border: 2px solid #d75c4e;
+	color: #ffffff;
+	box-shadow: 0 0 12px rgba(183, 67, 58, 0.7);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	animation: pulse 2s infinite;
+}
+
+/* NOTIFICATION BUTTONS HOVER */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying:hover {
+	background: linear-gradient(to bottom, #e89f4b, #d75c4e);
+	border-color: #e89f4b;
+	color: #ffffff;
+	box-shadow: 0 0 16px rgba(232, 159, 75, 0.9);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	transform: translateY(-1px);
+}
+
+/* Focus states for accessibility */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:focus {
+	outline: 3px solid #bba47a;
+	outline-offset: 2px;
+}
+
+.dark .chat-log {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 40px;
+	font-size: 10pt;
+	background: rgba(18, 26, 20, 0.9);
+	color: #e8e3d3;
+	overflow: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	word-wrap: break-word;
+}
+
+.dark .chat-log-add {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	min-height: 36px;
+	padding: 3px 4px 0 4px;
+	border-top: 1px solid #4b3a32;
+	background: rgba(18, 26, 20, 0.95);
+}
+
+.dark .chat-log .notice,
+.dark .chat-log .chat,
+.dark .pm-log .chat {
+	padding: 3px 0 3px 0;
+	font-size: 9pt;
+}
+
+.dark .chat-log .chat.mine,
+.dark .pm-log .chat.mine {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: rgba(245, 242, 233, 0.04);
+}
+
+.dark .chat em {
+	padding: 0 4px 0 3px;
+	font-style: normal;
+}
+
+.dark .chat small {
+	font-weight: normal;
+	font-size: 8pt;
+	color: #5b7952;
+}
+
+.dark .chat .message-announce small {
+	color: #7b9f6d;
+}
+
+.dark .chat.timer {
+	color: #8f785b;
+}
+
+.dark .debug {
+	display: none;
+}
+
+.dark .highlighted {
+	background: rgba(252, 235, 131, 0.15);
+}
+
+.dark .chat.highlighted {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.dark .revealed {
+	background-color: rgba(123, 159, 109, 0.1);
+}
+
+.dark .message-pm {
+	color: #e89f4b;
+}
+
+.dark .message-pm .pmnote {
+	cursor: pointer;
+}
+
+.dark .chat-log .inner,
+.dark .pm-log .inner {
+	padding: 4px 8px 6px 8px;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist {
+	left: 146px;
+}
+
