@@ -1011,7 +1011,7 @@ export function generateSharedBattlePokemonInfo(
 	const pokemon = slot.pokemon;
 	
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, false, battle);
-	const statusDisplay = allStatusTags || '&nbsp;'; // Keep a placeholder for layout stability
+	const statusDisplay = allStatusTags || '&nbsp;';
 
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
@@ -1022,16 +1022,14 @@ export function generateSharedBattlePokemonInfo(
 
 	const hpBarHTML = generateHPBar(pokemon);
 
-	// [NEW] Add EXP bar for player, or an empty placeholder for opponent
-	const expBarHTML = isPlayerSide ? 
-		generateExpBar(pokemon) : 
-		'<div class="rpg-exp-bar"><div class="rpg-exp-bar-text">&nbsp;</div></div>';
+	// CHANGED: Only generate EXP bar HTML if it is the player side.
+    // Previously this returned a placeholder div for opponents.
+	const expBarHTML = isPlayerSide ? generateExpBar(pokemon) : '';
 
-	// Assemble the info box contents
 	let html = '';
 	html += nameLineHTML;
 	html += hpBarHTML;
-	html += expBarHTML; // Shows placeholder for opponent
+	html += expBarHTML; 
 	html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
 	return html;
 }
