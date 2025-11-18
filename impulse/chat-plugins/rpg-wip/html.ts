@@ -1871,10 +1871,8 @@ function generateBattleHeader(battle: BattleState): string {
 
 /**
  * [STEP 3+ REFACTOR]
- * This function is completely rewritten to produce the "Top vs. Bottom"
- * sprite-based layout.
- * It now creates a wrapper (.rpg-player-slot or .rpg-opponent-slot)
- * and places the info block *above* the sprite.
+ * Generates the "Top vs. Bottom" sprite layout.
+ * Now handles Double Battle positioning via the `rpg-slot-offset` class.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -1885,11 +1883,13 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	const generateBattleSlot = (
 		slot: ActivePokemonSlot | null,
 		slotIndex: number,
-		side: 'player' | 'opponent'
+		side: 'player' | 'opponent',
+		isOffset: boolean = false
 	) => {
 		// If no slot, or Pokemon fainted, return an empty placeholder
+		// In doubles, we might still want the space occupied, but for now we hide it.
 		if (!slot || slot.pokemon.hp <= 0) {
-			return ''; // Return nothing for an empty slot
+			return ''; 
 		}
 
 		const pokemon = slot.pokemon;
@@ -1913,25 +1913,24 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			spriteClass = 'rpg-pokemon-sprite-front';
 		}
 
-		// 3. Assemble the slot
+		// 3. Assemble the slot wrapper classes
 		const slotWrapperClass = side === 'player' ? 'rpg-player-slot' : 'rpg-opponent-slot';
-		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
+		const offsetClass = isOffset ? ' rpg-slot-offset' : '';
+		const wrapperClasses = `${slotWrapperClass}${offsetClass}`;
 
-		// Add targeting/pending classes if needed
-		let containerClasses = `${infoClass}`;
+		// 4. Assemble inner info classes
+		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
+		
+		let innerClasses = `${infoClass}`;
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			containerClasses += " rpg-target-select";
+			innerClasses += " rpg-target-select";
 		}
 		if (battle.pendingActions[slotIndex]) {
-			containerClasses += " rpg-action-pending";
+			innerClasses += " rpg-action-pending";
 		}
 
-		// [NEW STRUCTURE]
-		// Wrapper div (positioned)
-		//   -> Info div (static, on top)
-		//   -> Sprite img (static, on bottom)
-		let html = `<div class="${slotWrapperClass}">`;
-		html += `<div class="${containerClasses}">${infoContents}</div>`;
+		let html = `<div class="${wrapperClasses}">`;
+		html += `<div class="${innerClasses}">${infoContents}</div>`;
 		html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
 		html += `</div>`;
 
@@ -1944,20 +1943,22 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += generateGlobalBattleConditionsHTML(battle);
 
 	// Opponent Side (Top)
+	// Slot 0 (Index 2) is the primary (Right aligned)
+	// Slot 1 (Index 3) is the secondary (Offset to the left)
 	html += '<div class="rpg-opponent-side">';
-	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent');
+	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent', false); 
 	if (isDoubleBattle) {
-		// Note: Positioning for double battle sprites/info will need CSS adjustments
-		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent');
+		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent', true);
 	}
 	html += '</div>';
 
 	// Player Side (Bottom)
+	// Slot 0 (Index 0) is the primary (Left aligned)
+	// Slot 1 (Index 1) is the secondary (Offset to the right)
 	html += '<div class="rpg-player-side">';
-	html += generateBattleSlot(battle.playerSlots[0], 0, 'player');
+	html += generateBattleSlot(battle.playerSlots[0], 0, 'player', false);
 	if (isDoubleBattle) {
-		// Note: Positioning for double battle sprites/info will need CSS adjustments
-		html += generateBattleSlot(battle.playerSlots[1], 1, 'player');
+		html += generateBattleSlot(battle.playerSlots[1], 1, 'player', true);
 	}
 	html += '</div>';
 
