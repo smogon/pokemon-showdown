@@ -806,14 +806,17 @@
 .rpg-battle-ui {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    height: 220px; /* REDUCED from 240px */
-    position: relative;
-    background: #f0f0f0;
+    height: 220px;
+	 background: url('https://i.ibb.co/6RQXD1Xx/pokemon-swsh-route-5-by-phoenixoflight92-de33uqj-350t.jpg') no-repeat center bottom !important;
+    background-size: cover !important;
+	 border: 1px solid #444 !important;
+	 position: relative;
     border-radius: 4px;
     overflow: hidden;
 }
 .dark .rpg-battle-ui {
-    background: #222;
+    background: url('https://i.ibb.co/RGyJczN6/de33uyt-aab270ae-87c5-4511-89a9-05f39dcb1de8.jpg') no-repeat center bottom !important;
+	 background-size: cover !important;
 }
 
 .rpg-opponent-side {
