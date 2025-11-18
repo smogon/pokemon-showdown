@@ -32,12 +32,13 @@ function getAvatarDisplay(user: User): string {
 	const avatar = user.avatar;
 	let avatarUrl = '';
 
-	// Check if user has a custom avatar
+	// Check if user has a custom avatar (file with extension)
 	if (avatar && typeof avatar === 'string' && avatar.includes('.')) {
-		// Custom avatar from config/avatars/
-		avatarUrl = `${getAvatarBaseUrl()}${avatar}?v=${Date.now()}`;
+		// Custom avatar from config/avatars/ - serve directly
+		// Don't use Avatars.src() as it returns empty string for files with extensions
+		avatarUrl = `${getAvatarBaseUrl()}${avatar}`;
 	} else {
-		// Use the server's avatar system for official/custom avatars
+		// Use the server's avatar system for official avatars
 		if (Chat.plugins.avatars?.Avatars?.src) {
 			// Convert avatar to string format expected by src function
 			const avatarStr = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
