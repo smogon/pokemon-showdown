@@ -469,9 +469,9 @@
 /* RPG Terrains Tags */
 
 .rpg-terrain-tag {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    padding: 2px 6px;
+    padding: 2px 4px;
     border-radius: 4px;
     margin-left: 5px;
     vertical-align: middle;
@@ -521,9 +521,9 @@
 /* RPG Field Effects Tags */
 
 .rpg-field-effect-tag {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    padding: 2px 6px;
+    padding: 2px 4px;
     border-radius: 4px;
     margin-left: 5px;
     vertical-align: middle;
@@ -544,9 +544,9 @@
 /* RPG TAGS */
 
 .rpg-tag {
-    font-size: 10px;
+    font-size: 8px;
     font-weight: bold;
-    padding: 1px 4px;
+    padding: 1px 2px;
     border-radius: 3px;
     margin-left: 5px;
     vertical-align: middle;
