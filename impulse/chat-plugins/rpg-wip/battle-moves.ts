@@ -8,6 +8,7 @@ import {
 	checkMentalHerb,
 	activateUnburden,
 	applySynchronize,
+	applyStatChange,
 	INITIAL_STAT_STAGES,
 } from './battle-shared';
 import { getStatMultiplier } from './battle-core';
