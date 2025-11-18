@@ -347,19 +347,11 @@ export function buildActionQueue(battle: BattleState, messageLog: string[]): Non
 		if (slotA.status === 'par' && abilityA !== 'quickfeet') {
 			speedA = Math.floor(speedA / 2);
 		}
-		
-		// 4. Team Modifiers (e.g., Tailwind - not yet implemented)
-		// const isPlayerSlotA = battle.playerSlots.includes(slotA);
-		// if (isPlayerSlotA && battle.playerTailwindTurns > 0) {
-		// 	speedA = Math.floor(speedA * 2);
-		// } else if (!isPlayerSlotA && battle.opponentTailwindTurns > 0) {
-		// 	speedA = Math.floor(speedA * 2);
-		// }
 
 		// Slot B Speed
 		let speedB = slotB.pokemon.spe * getStatMultiplier(slotB.statStages.spe);
 		const abilityB = toID(slotB.pokemon.ability || '');
-		
+
 		// 1. Item Modifiers (before abilities)
 		if (battle.magicRoomTurns === 0) {
 			if (slotB.pokemon.item === 'choicescarf') {
@@ -378,14 +370,6 @@ export function buildActionQueue(battle: BattleState, messageLog: string[]): Non
 			speedB = Math.floor(speedB / 2);
 		}
 
-		// 4. Team Modifiers (e.g., Tailwind - not yet implemented)
-		// const isPlayerSlotB = battle.playerSlots.includes(slotB);
-		// if (isPlayerSlotB && battle.playerTailwindTurns > 0) {
-		// 	speedB = Math.floor(speedB * 2);
-		// } else if (!isPlayerSlotB && battle.opponentTailwindTurns > 0) {
-		// 	speedB = Math.floor(speedB * 2);
-		// }
-		
 		// --- End Speed Calculation ---
 
 		const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;

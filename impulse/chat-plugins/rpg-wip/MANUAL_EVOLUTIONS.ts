@@ -354,8 +354,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'swirlix': [{ evoTo: 'slurpuff', evoLevel: 36, evoItem: 'whippeddream' }],
 	'eevee': [
 		{ evoTo: 'vaporeon', evoLevel: 99, evoItem: 'waterstone' },
-		// { evoTo: 'jolteon', evoLevel: 99, evoItem: 'thunderstone' },
-		// { evoTo: 'flareon', evoLevel: 99, evoItem: 'firestone' },
 		{ evoTo: 'espeon', evoLevel: 30 },
 		{ evoTo: 'umbreon', evoLevel: 30 },
 		{ evoTo: 'leafeon', evoLevel: 36 },

@@ -235,7 +235,6 @@ export interface BattleState {
 	// Cumulative battle log for all turns
 	battleLog: string[];
 
-	// [NEW] Added for Battle Tower mode
 	floor: number;
 	overridePlayerParty: RPGPokemon[] | null;
 	battleTowerFormat?: string; // Format used in Battle Tower (e.g., 'battlefactory')

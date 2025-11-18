@@ -20,15 +20,11 @@ import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
 
-// ###################################
 // C O R E   U T I L I T I E S
-// ###################################
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
-	
 	if (expNeededForLevel <= 0) return 100;
 
-	
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 }
 
@@ -135,7 +131,6 @@ function getSpriteFilename(speciesId: string): string {
 	return filename;
 }
 
-
 /**
  * [STEP 4 REFACTOR]
  * Main navigation is now a 2x3 grid.
@@ -151,9 +146,7 @@ export function generateBottomNavigation(): string {
 		`</div>`;
 }
 
-// ###################################
 // N E W   H E L P E R S
-// ###################################
 
 function generateItemCategoryFilters(baseCommand: string): string {
 	const categories = [
@@ -189,7 +182,7 @@ function generateStarterChoiceBoxHTML(speciesId: string, command: string): strin
 
 function generatePokemonStatusTagsHTML(
 	slot: ActivePokemonSlot,
-	isDoubleBattle: boolean = false,
+	isDoubleBattle = false,
 	battle?: BattleState
 ): string {
 	const pokemon = slot.pokemon;
@@ -289,7 +282,7 @@ function generateBattleActionButtonsHTML(
 	let runButton = '<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>';
 
 	if (isWild) {
-		const canRun = !playerSlot || !playerSlot.isTrapped;
+		const canRun = !playerSlot?.isTrapped;
 		runButton = canRun ?
 			'<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 RUN</button>' :
 			'<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>';
@@ -309,9 +302,7 @@ function generateBattleActionButtonsHTML(
 	return `<p class="rpg-text-center rpg-margin-top">${switchButton} ${catchButton} ${runButton}</p>`;
 }
 
-// ###################################
 // S Y S T E M   &   M A I N   M E N U
-// ###################################
 
 export function generateWelcomeHTML(): string {
 	return `<div class="infobox rpg-menu-box">` +
@@ -355,7 +346,6 @@ export function generateStoryModeStartHTML(): string {
 
 	let labBuildingId = '';
 
-	
 	if (location?.buildings) {
 		for (const building of location.buildings) {
 			if (building.type === 'lab') {
@@ -378,9 +368,7 @@ export function generateStoryModeStartHTML(): string {
 		`</div>`;
 }
 
-// ###################################
 // M A I N   M E N U   S C R E E N S
-// ###################################
 
 export function generateExploreHTML(player: PlayerData, availableZones: string[], zoneData: typeof ENCOUNTER_ZONES): string {
 	let exploreButtons = '';
@@ -394,10 +382,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 		exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
 	}
 
-	
-	
 	exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
-	
 
 	const exploreHTML = `<div class="infobox rpg-menu-box">` +
 		`<div class="rpg-text-center"><h2><b>${player.location}</b></h2>` +
@@ -417,7 +402,6 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	html += `<h2>Inventory</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
 
-	
 	html += generateItemCategoryFilters('/rpg items');
 
 	html += `<div class="rpg-grid-2col">`;
@@ -461,9 +445,7 @@ export function generatePCHTML(player: PlayerData): string {
 	return html;
 }
 
-// ###################################
 // S H O P   U I
-// ###################################
 
 /**
  * [STEP 4 REFACTOR]
@@ -479,15 +461,12 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += `<p>Welcome! What would you like to do?</p>`;
 	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
-	
 	if (nextTier) {
 		html += `<p class="rpg-text-muted"><small>🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</small></p>`;
 	}
 
-	
 	html += `<p><button name="send" value="/rpg sell" class="button rpg-button-sell">Sell Items</button></p>`;
 
-	
 	html += `<h3>Buy Items</h3>`;
 	html += generateItemCategoryFilters('/rpg shop');
 
@@ -530,8 +509,7 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	let sellableItems = 0;
 	for (const [id, item] of player.inventory) {
 		const purchasePrice = ITEM_PRICES[id];
-		if (purchasePrice && item.category === 'misc') { 
-			
+		if (purchasePrice && item.category === 'misc') {
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
 			html += `<div class="rpg-card">`;
@@ -559,9 +537,7 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 	return `<div class="infobox rpg-menu-box"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemName}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${remainingMoney}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 }
 
-// ###################################
 // B A T T L E   U I   -   M A I N
-// ###################################
 
 export function generateBattleHTML(
 	battle: BattleState,
@@ -569,12 +545,11 @@ export function generateBattleHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean
 ): string {
-
 	// --- 1. Handle Battle End ---
 	const newEventsHTML = messageLog.length > 0 ?
 		`<div class="rpg-battle-new-events">${messageLog.join('<br>')}</div>` :
 		'';
-	
+
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const historyLogHTML = `<div class="rpg-battle-log">` +
 		(reversedBattleLog.length > 0 ? reversedBattleLog.join('<br>') : 'Battle started...') +
@@ -590,77 +565,64 @@ export function generateBattleHTML(
 		}
 
 		return '<div class="infobox">' +
-			generateBattleHeader(battle) + 
-			newEventsHTML + 
-			historyLogHTML + 
+			generateBattleHeader(battle) +
+			newEventsHTML +
+			historyLogHTML +
 			actionHTML +
 			'</div>';
 	}
 
 	// --- 2. Render Active Battle ---
 	const headerHTML = generateBattleHeader(battle);
-	
-    // [REMOVED] globalConditionsHTML is no longer generated here.
-    // It is now injected inside generateBattlefield() so it sits inside the UI container.
 
-	// [STEP 3] Call the new battlefield generator (now includes weather/terrain tags)
+	// [REMOVED] globalConditionsHTML is no longer generated here.
+	// It is now injected inside generateBattlefield() so it sits inside the UI container.
+
 	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
 	let actionPanelHTML = '';
 	if (targetSelection && battle.battleType.includes('double')) {
 		actionPanelHTML = generateBattleTargetSelection(battle, targetSelection);
 	} else {
-		// [STEP 3] Call the new action panel generator
 		actionPanelHTML = generateBattleActionPanel(battle, teraToggled);
 	}
 
 	return '<div class="infobox">' +
-		headerHTML + 
+		headerHTML +
 		battlefieldHTML +
-		newEventsHTML + 
-		historyLogHTML + 
+		newEventsHTML +
+		historyLogHTML +
 		actionPanelHTML +
 		'</div>';
 }
 
-// ###################################
 // B A T T L E   U I   -   S C R E E N S
-// ###################################
 
 export function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="infobox"><h2>Choose a Pokémon to switch</h2>`;
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSlots;
 
-	
 	let slotToSwitchOut: number;
 
 	if (target !== undefined && target !== '') {
-		
 		slotToSwitchOut = parseInt(target);
 	} else {
-		
-		
-		
-		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double' || battle.battleType === 'battletower'; 
+		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double' || battle.battleType === 'battletower';
 
-		if (!isDoubleBattle && battle.battleType !== 'battletower') { 
-			
+		if (!isDoubleBattle && battle.battleType !== 'battletower') {
 			slotToSwitchOut = 0;
 		} else {
-			
 			if (pSlot0 && pSlot0.pokemon.hp > 0 && !battle.pendingActions[0]) {
 				slotToSwitchOut = 0;
 			} else if (pSlot1 && pSlot1.pokemon.hp > 0 && !battle.pendingActions[1]) {
 				slotToSwitchOut = 1;
 			} else {
-				
 				slotToSwitchOut = 0;
 			}
 		}
 	}
 
-	
 	const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
 	if (!outgoingPokemon) {
 		return `<div class="infobox"><h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p></div>`;
@@ -668,7 +630,6 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 
 	html += `<p>Select a Pokémon to replace <strong>${outgoingPokemon.species}</strong>:</p>`;
 
-	
 	const commandPrefix = `/rpg battleaction playerswitch ${slotToSwitchOut}`;
 	html += generateAvailablePokemonListHTML(battle, player, commandPrefix);
 
@@ -680,27 +641,22 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	let html = `<div class="infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 
-	
 	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
 
 	let slotToFill = -1;
-	
+
 	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
 	} else if (isDoubleBattle && (battle.playerSlots[1] === null ||
 		(battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
-		
 		slotToFill = 1;
 	}
-	
 
 	if (slotToFill === -1) {
-		
 		html += `<p>Error: No empty slot found.</p><button name="send" value="/rpg battleaction back" class="button">Back</button>`;
 	} else {
 		html += `<p>Choose a Pokémon to send to <strong>Slot ${slotToFill + 1}</strong>:</p>`;
 
-		
 		const commandPrefix = `/rpg battleaction forceswitch ${slotToFill}`;
 		html += generateAvailablePokemonListHTML(battle, player, commandPrefix);
 	}
@@ -715,12 +671,9 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 
 	html += `<p>Choose a Pokémon to replace <strong>${pivotingPokemon?.species || 'your Pokémon'}</strong> in <strong>Slot ${pivotSlotIndex + 1}</strong>:</p>`;
 
-	
-	
 	const commandPrefix = `/rpg battleaction forceswitch ${pivotSlotIndex}`;
 	const filter = (p: RPGPokemon) => p.id !== pivotingPokemon?.id;
 	html += generateAvailablePokemonListHTML(battle, player, commandPrefix, filter);
-	
 
 	if (!battle.overridePlayerParty && player.party.filter(p => p.hp > 0 && p.id !== pivotingPokemon?.id && !battle.playerSlots.some(s => s?.pokemon.id === p.id)).length === 0) {
 		html += `<p><button name="send" value="/rpg battleaction forceswitch ${pivotSlotIndex} cancel" class="button">Continue</button></p>`;
@@ -747,17 +700,13 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	} else {
 		html += `<div class="rpg-grid-3col">`;
 		for (const ball of pokeBalls) {
-			
 			let command = '';
 			if (isDoubleBattle && activeOpponents.length > 1) {
-				
 				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
 			} else if (isDoubleBattle && activeOpponents.length === 1) {
-				
 				const targetSlot = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
 				command = `/rpg battleaction catch ${ball.id} ${targetSlot}`;
 			} else {
-				
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
@@ -773,14 +722,13 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 	let html = `<div class="infobox"><h2>Select a Target</h2>`;
 	html += `<p>Choose which wild Pokémon to throw the ${ITEMS_DATABASE[ballId]?.name || 'Poke Ball'} at:</p>`;
 
-	
 	let hasTargets = false;
 	for (let i = 0; i < battle.opponentSlots.length; i++) {
 		const slot = battle.opponentSlots[i];
 		if (!slot || slot.pokemon.hp <= 0) continue;
 
 		hasTargets = true;
-		const slotIndex = i + 2; 
+		const slotIndex = i + 2;
 		const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
 		const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
 
@@ -799,9 +747,7 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 	return html;
 }
 
-// ###################################
 // B A T T L E   R E S U L T S
-// ###################################
 
 export function generateRunHTML(zoneId: string): string {
 	return `<div class="infobox rpg-menu-box">` +
@@ -837,9 +783,7 @@ export function generateMultipleOpponentsCatchErrorHTML(): string {
 	return `<div class="infobox rpg-menu-box"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 }
 
-// ###################################
 // B A T T L E   U I   -   H E L P E R S
-// ###################################
 
 function getDisplayLog(battle: BattleState, messageLog: string[] = []): string {
 	const reversedBattleLog = [...battle.battleLog].reverse();
@@ -859,39 +803,32 @@ function generateBattleMoveSelectionHTML(
 
 	const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
 
-	
 	const isRampagingWithNoPP = (slot.lockedMoveCounter > 0 || slot.uproarTurns > 0) &&
 		slot.lockedMove &&
 		pokemon.moves.find(m => m.id === slot.lockedMove)?.pp === 0;
 
-	
 	const isEncoredWithNoPP = slot.encoreMove &&
 		pokemon.moves.find(m => m.id === slot.encoreMove!.moveId)?.pp === 0;
 
-	
 	const isChargingWithNoPP = slot.chargingMove &&
 		pokemon.moves.find(m => m.id === slot.chargingMove)?.pp === 0;
 
-	
 	const isChoiceLockedWithNoPP = slot.lockedMove &&
 		slot.lockedMoveCounter === 0 &&
 		slot.uproarTurns === 0 &&
 		battle.magicRoomTurns === 0 &&
 		pokemon.moves.find(m => m.id === slot.lockedMove)?.pp === 0;
 
-	
 	if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
-		
 		const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
 			'<div class="rpg-move-info">' +
 			'<span>Normal</span>' +
 			'<span class="rpg-move-pp">-- / --</span>' +
 			'</div> ';
 
-		
 		const struggleCommand = isDoubleBattle ?
 			`/rpg battleaction selecttarget ${slotIndex} struggle` :
-			`/rpg battleaction move ${slotIndex} struggle 2`; 
+			`/rpg battleaction move ${slotIndex} struggle 2`;
 
 		moveButtonsHTML = '<table class="rpg-move-grid">';
 		moveButtonsHTML += '<tr>';
@@ -904,7 +841,6 @@ function generateBattleMoveSelectionHTML(
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
-		
 		const canTerastallize = !battle.playerTerastallizeUsed && !slot.terastallized;
 		const teraActive = teraToggled || false;
 
@@ -927,15 +863,14 @@ function generateBattleMoveSelectionHTML(
 				'</div> ';
 
 			const teraParam = teraActive ? ' terastallize' : '';
-			
+
 			const moveCommand = isDoubleBattle ?
 				`/rpg battleaction selecttarget ${slotIndex} ${move.id}${teraParam}` :
-				`/rpg battleaction move ${slotIndex} ${move.id} 2${teraParam}`; 
+				`/rpg battleaction move ${slotIndex} ${move.id} 2${teraParam}`;
 
 			return `<button name="send" value="${moveCommand}" class="${buttonClasses}" ${isDisabled ? 'disabled' : ''}> ${buttonContent}</button>`;
 		});
 
-		
 		let teraToggleHTML = '';
 		if (canTerastallize) {
 			const teraToggleClasses = 'button rpg-tera-toggle' + (teraActive ? ' rpg-tera-toggle-on' : '');
@@ -1009,7 +944,7 @@ export function generateSharedBattlePokemonInfo(
 	battle?: BattleState
 ): string {
 	const pokemon = slot.pokemon;
-	
+
 	const allStatusTags = generatePokemonStatusTagsHTML(slot, false, battle);
 	const statusDisplay = allStatusTags || '&nbsp;';
 
@@ -1023,13 +958,13 @@ export function generateSharedBattlePokemonInfo(
 	const hpBarHTML = generateHPBar(pokemon);
 
 	// CHANGED: Only generate EXP bar HTML if it is the player side.
-    // Previously this returned a placeholder div for opponents.
+	// Previously this returned a placeholder div for opponents.
 	const expBarHTML = isPlayerSide ? generateExpBar(pokemon) : '';
 
 	let html = '';
 	html += nameLineHTML;
 	html += hpBarHTML;
-	html += expBarHTML; 
+	html += expBarHTML;
 	html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
 	return html;
 }
@@ -1047,14 +982,14 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 			`</div>`;
 	}
 
-	return ''; 
+	return '';
 }
 
 function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'): string {
 	const effects: string[] = [];
 	const reflectTurns = (side === 'player') ? battle.playerReflectTurns : battle.opponentReflectTurns;
 	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
-	const auroraVeilTurns = (side ==='player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
 	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
@@ -1102,7 +1037,6 @@ function generateWeatherTags(battle: BattleState): string {
 	return `<span class="rpg-weather-tag ${weatherClass}">${name}${turnsText}</span>`;
 }
 
-
 function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 
@@ -1124,7 +1058,6 @@ function generateTerrainTags(battle: BattleState): string {
 
 	return `<span class="rpg-terrain-tag ${terrainClass}">${name}${turnsText}</span>`;
 }
-
 
 function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
@@ -1159,9 +1092,7 @@ function generateFieldEffectTags(battle: BattleState): string {
 	return effects.join('');
 }
 
-// ###################################
 // B A T T L E   T O W E R   U I
-// ###################################
 
 export function generateBattleTowerWelcomeHTML(floor: number): string {
 	let html = `<div class="infobox rpg-menu-box"><h2>🗼 Welcome to the Battle Tower</h2>`;
@@ -1169,7 +1100,6 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
 	html += `<hr />`;
 
-	
 	html += `<h3>Random Formats:</h3>`;
 	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
 		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button rpg-button-medium">🎲 ${config.name}</button></p>`;
@@ -1182,7 +1112,6 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 }
 
 export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
-	
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
 	const formatName = formatConfig.name;
 
@@ -1221,10 +1150,6 @@ export function generateBattleTowerLossHTML(floor: number): string {
 	return html;
 }
 
-// ###################################
-// [NEW] COMPONENT HELPERS
-// ###################################
-
 /**
  * [REFACTORED] Generates the HTML for a Pokemon's HP bar.
  */
@@ -1261,7 +1186,7 @@ function generatePartyActionButtons(pokemon: RPGPokemon): string {
 	const itemButton = pokemon.item ?
 		`<button name="send" value="/rpg takeitem ${pokemon.id}" class="button rpg-button-small">Take Item</button>` :
 		`<button name="send" value="/rpg giveitem ${pokemon.id}" class="button rpg-button-small">Give Item</button>`;
-	
+
 	return `<br><div class="rpg-margin-top">` +
 		`<button name="send" value="/rpg summary ${pokemon.id}" class="button rpg-button-small">Summary</button> ` +
 		`${itemButton} ` +
@@ -1349,9 +1274,7 @@ function generateSummaryMovesGrid(pokemon: RPGPokemon): string {
 		'</div>';
 }
 
-// ###################################
 // P O K E M O N   M A N A G E M E N T
-// ###################################
 
 /**
  * [REFACTORED] to use new component helpers.
@@ -1391,7 +1314,7 @@ export function generatePokemonInfoHTML(
 	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})<br>`;
 	html += `<div class="rpg-battle-status-line">${statusTagsHTML}</div>`;
 	html += `<small>Type: ${typeDisplay}</small><br>`;
-	
+
 	html += generateHPBar(pokemon);
 	html += expBarHTML;
 
@@ -1418,7 +1341,7 @@ export function generatePokemonInfoHTML(
  */
 export function generatePartyScreenHTML(player: PlayerData): string {
 	let html = `<div class="infobox rpg-menu-box"><h2>Your Party</h2>`;
-	
+
 	if (player.party.length === 0) {
 		html += `<p>No Pokemon in party.</p>`;
 	} else {
@@ -1454,7 +1377,6 @@ export function generatePartyScreenHTML(player: PlayerData): string {
 	html += `</div>`;
 	return html;
 }
-
 
 export function generateSummarySelectionHTML(player: PlayerData): string {
 	let html = `<div class="infobox rpg-menu-box"><h2>Select a Pokémon</h2><p>Choose a Pokémon to view its summary:</p>`;
@@ -1524,20 +1446,19 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
 	const queueArray = player.pendingMoveLearnQueue;
 	if (!queueArray || queueArray.length === 0) return `<h2>Error: No pending moves found.</h2>`;
-	const queue = queueArray[0]; 
+	const queue = queueArray[0];
 	if (!queue || queue.moveIds.length === 0) {
-		player.pendingMoveLearnQueue?.shift(); 
+		player.pendingMoveLearnQueue?.shift();
 		return `<h2>Error: No pending moves found.</h2>`;
 	}
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
-		player.pendingMoveLearnQueue?.shift(); 
+		player.pendingMoveLearnQueue?.shift();
 		return `<h2>Error: Invalid Pokemon or move data.</h2>` + generateBottomNavigation();
 	}
 	let html = `<div class="infobox rpg-menu-box">`;
 
-	
 	if (additionalMessages && additionalMessages.length > 0) {
 		html += `<div class="rpg-battle-new-events">${additionalMessages.join('<br>')}</div>`;
 	}
@@ -1567,14 +1488,11 @@ export function generateWithdrawPCHTML(pokemonSpecies: string, tempSlot: ActiveP
 	return `<div class="infobox rpg-menu-box"><h2>Pokemon Withdrawn</h2><p><strong>${pokemonSpecies}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 }
 
-// ###################################
 // I T E M   &   P O K E M O N   U I
-// ###################################
 
 export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
 	let html = `<div class="infobox rpg-menu-box"><h2>Use ${itemName}</h2><p>Select a Pokemon to use this item on:</p>`;
 
-	
 	const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
 	const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
 	const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
@@ -1731,9 +1649,7 @@ export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: stri
 	return html;
 }
 
-// ###################################
 // I T E M   R E S U L T   U I
-// ###################################
 
 export function generateItemUseErrorHTML(message: string, itemId: string): string {
 	return `<div class="infobox rpg-menu-box"><p class="rpg-text-error"><strong>${message}</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
@@ -1767,9 +1683,7 @@ export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, 
 	return `<div class="infobox rpg-menu-box"><h2>Item Taken</h2><p>You took the <strong>${itemName}</strong> from <strong>${pokemonSpecies}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
 }
 
-// ###################################
 // N P C   U I
-// ###################################
 
 export function generateNPCSelectionHTML(availableNPCs: [string, { name: string }][]): string {
 	let html = `<div class="infobox rpg-menu-box"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
@@ -1817,9 +1731,7 @@ export function generateNPCStarterConfirmHTML(
 		`</div>`;
 }
 
-// ###################################
 // S T O R Y   P R O G R E S S I O N
-// ###################################
 
 export function generateStarterSelectionHTML(type: string, starters: string[]): string {
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
@@ -1863,9 +1775,7 @@ export function generateStarterConfirmHTML(
 		`</div>`;
 }
 
-// ###################################
 // S Y S T E M   &   P R O F I L E
-// ###################################
 
 export function generateResetHTML(): string {
 	return `<div class="infobox rpg-menu-box"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
@@ -1945,9 +1855,7 @@ export function generateDBDeleteSuccessHTML(): string {
 		`</div>`;
 }
 
-// ###################################
 // B A T T L E   U I   -   N E W   H E L P E R S
-// ###################################
 
 function generateBattleHeader(battle: BattleState): string {
 	if (battle.battleType === 'battletower') {
@@ -1986,7 +1894,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 
 		const pokemon = slot.pokemon;
 		const species = Dex.species.get(pokemon.species);
-		
+
 		// 1. Get Info Block Contents
 		const infoContents = generateSharedBattlePokemonInfo(slot, side === 'player', battle);
 
@@ -2008,7 +1916,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		// 3. Assemble the slot
 		const slotWrapperClass = side === 'player' ? 'rpg-player-slot' : 'rpg-opponent-slot';
 		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
-		
+
 		// Add targeting/pending classes if needed
 		let containerClasses = `${infoClass}`;
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
@@ -2018,23 +1926,22 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			containerClasses += " rpg-action-pending";
 		}
 
-        // [NEW STRUCTURE]
-        // Wrapper div (positioned)
-        //   -> Info div (static, on top)
-        //   -> Sprite img (static, on bottom)
+		// [NEW STRUCTURE]
+		// Wrapper div (positioned)
+		//   -> Info div (static, on top)
+		//   -> Sprite img (static, on bottom)
 		let html = `<div class="${slotWrapperClass}">`;
-        html += `<div class="${containerClasses}">${infoContents}</div>`;
-        html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
+		html += `<div class="${containerClasses}">${infoContents}</div>`;
+		html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
 		html += `</div>`;
-		
+
 		return html;
 	};
 
 	// --- Assemble the Battlefield ---
 	let html = '<div class="rpg-battle-ui">';
 
-    // [NEW] Inject Weather/Terrain tags here so they are inside the relative UI container
-    html += generateGlobalBattleConditionsHTML(battle);
+	html += generateGlobalBattleConditionsHTML(battle);
 
 	// Opponent Side (Top)
 	html += '<div class="rpg-opponent-side">';
@@ -2053,7 +1960,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		html += generateBattleSlot(battle.playerSlots[1], 1, 'player');
 	}
 	html += '</div>';
-	
+
 	html += '</div>';
 	return html;
 }
@@ -2077,25 +1984,25 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	];
 
 	const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
-	
-    const validTargets = targets.filter(target => {
-        if (!target.slot || target.slot.pokemon.hp <= 0) return false;
-        return target.index !== targetSelection.attackerSlotIndex;
-    });
-    
+
+	const validTargets = targets.filter(target => {
+		if (!target.slot || target.slot.pokemon.hp <= 0) return false;
+		return target.index !== targetSelection.attackerSlotIndex;
+	});
+
 	const targetButtons = validTargets.map(target => {
-			return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button">${target.name}</button>`;
+		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button">${target.name}</button>`;
 	});
 
 	let targetButtonsHTML = '<table class="rpg-move-grid"><tr>';
-    let count = 0;
-    for (const button of targetButtons) {
-        targetButtonsHTML += `<td class="rpg-move-grid-cell">${button}</td>`;
-        count++;
-        if (count % 2 === 0 && count < targetButtons.length) {
-            targetButtonsHTML += '</tr><tr>';
-        }
-    }
+	let count = 0;
+	for (const button of targetButtons) {
+		targetButtonsHTML += `<td class="rpg-move-grid-cell">${button}</td>`;
+		count++;
+		if (count % 2 === 0 && count < targetButtons.length) {
+			targetButtonsHTML += '</tr><tr>';
+		}
+	}
 	targetButtonsHTML += '</tr></table>';
 
 	html += targetButtonsHTML;
@@ -2125,9 +2032,9 @@ function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): 
 	}
 
 	let html = '';
-	
+
 	// NO MORE 2-COLUMN GRID. This is now a simple vertical stack.
-	
+
 	// --- Section 1: Moves ---
 	if (activeSlot) {
 		const pokemon = activeSlot.pokemon;
@@ -2141,6 +2048,6 @@ function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): 
 	// The action buttons will now appear *below* the move grid.
 	const anyActivePlayerSlot = (pSlot0 && pSlot0.pokemon.hp > 0) ? pSlot0 : (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0) ? pSlot1 : null;
 	html += generateBattleActionButtonsHTML(battle, anyActivePlayerSlot);
-	
+
 	return html;
 }
