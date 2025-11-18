@@ -39,7 +39,9 @@ function getAvatarDisplay(user: User): string {
 	} else {
 		// Use the server's avatar system for official/custom avatars
 		if (Chat.plugins.avatars?.Avatars?.src) {
-			avatarUrl = Chat.plugins.avatars.Avatars.src(avatar || 'unknown');
+			// Convert avatar to string format expected by src function
+			const avatarStr = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
+			avatarUrl = Chat.plugins.avatars.Avatars.src(avatarStr);
 		} else {
 			// Fallback to default sprite URL
 			const avatarName = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
