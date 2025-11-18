@@ -1,6 +1,6 @@
 /**
  * Gen 1 mechanics are fairly different to those we know on current gen.
- * Therefor we need to make a lot of changes to the battle engine for this game simulation.
+ * Therefore we need to make a lot of changes to the battle engine for this game simulation.
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
@@ -554,7 +554,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					didSomething = true;
 					// Check the status of the Pokémon whose turn is not.
 					// When a move that affects stat levels is used, if the Pokémon whose turn it is not right now is paralyzed or
-					// burned, the correspoding stat penalties will be applied again to that Pokémon.
+					// burned, the corresponding stat penalties will be applied again to that Pokémon.
 					if (pokemon.side.foe.active[0].status) {
 						// If it's paralysed, quarter its speed.
 						if (pokemon.side.foe.active[0].status === 'par') {
