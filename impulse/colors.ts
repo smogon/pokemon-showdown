@@ -118,12 +118,13 @@ export const nameColor = (
 		`<font color=#948A88>${Users.globalAuth.get(userId)}</font>` :
 		'';
 	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
-	
+
 	// Check if user is idle or busy and override color with gray
 	const user = Users.getExact(name);
-	const color = (user && (user.statusType === 'idle' || user.statusType === 'busy')) 
-		? '#948A88' 
-		: hashColor(name);
-	
-	return symbol + (bold ? '<b>' : '') + `<font color=${color}>${userName}</font>` + (bold ? '</b>' : '');
+	const isIdleOrBusy = user && (user.statusType === 'idle' || user.statusType === 'busy');
+	const color = isIdleOrBusy ? '#948A88' : hashColor(name);
+	// Use !important for idle/busy to override custom CSS colors
+	const colorStyle = isIdleOrBusy ? `color:${color} !important` : `color=${color}`;
+
+	return symbol + (bold ? '<b>' : '') + `<font style="${colorStyle}">${userName}</font>` + (bold ? '</b>' : '');
 };
