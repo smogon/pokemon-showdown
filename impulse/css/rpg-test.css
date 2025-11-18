@@ -373,10 +373,10 @@
 }
 
 .rpg-side-effect-tag {
-    font-size: 10px;
-    padding: 1px 4px;
+    font-size: 6px;
+    padding: 1px 2px;
     border-radius: 3px;
-    margin-left: 5px;
+    margin-left: 4px;
     vertical-align: middle;
 }
 
