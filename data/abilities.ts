@@ -3441,6 +3441,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	protosynthesis: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
+			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
 				if (!this.effectState.bestStat) {
 					this.effectState.bestStat = pokemon.getBestStat(false, true);
