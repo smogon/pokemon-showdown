@@ -39,7 +39,9 @@ function getAvatarDisplay(user: User): string {
 	} else {
 		// Use the server's avatar system for official/custom avatars
 		if (Chat.plugins.avatars?.Avatars?.src) {
-			avatarUrl = Chat.plugins.avatars.Avatars.src(avatar || 'unknown');
+			// Convert avatar to string format expected by src function
+			const avatarStr = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
+			avatarUrl = Chat.plugins.avatars.Avatars.src(avatarStr);
 		} else {
 			// Fallback to default sprite URL
 			const avatarName = typeof avatar === 'string' ? avatar : (typeof avatar === 'number' ? `trainer-${avatar}` : 'unknown');
@@ -135,23 +137,34 @@ function formatOntime(time: number): string {
 }
 
 /**
- * Get status display with color and icon
+ * Get status display with color and icon, optionally with custom status
  */
-function getStatusDisplay(user: User | null): string {
+function getStatusDisplay(user: User | null, customStatus?: string): string {
+	let statusText = '';
+
 	if (!user) {
-		return `<span style="color:red;">○ Offline</span>`;
+		statusText = `<span style="color:red;">○ Offline</span>`;
+	} else {
+		const statusType = user.statusType || 'online';
+		switch (statusType) {
+		case 'busy':
+			statusText = `<span style="color:#cc6600;">● Busy</span>`;
+			break;
+		case 'idle':
+			statusText = `<span style="color:gray;">● Idle</span>`;
+			break;
+		case 'online':
+		default:
+			statusText = `<span style="color:green;">● Online</span>`;
+		}
 	}
 
-	const statusType = user.statusType || 'online';
-	switch (statusType) {
-	case 'busy':
-		return `<span style="color:yellow;">● Busy</span>`;
-	case 'idle':
-		return `<span style="color:gray;">● Idle</span>`;
-	case 'online':
-	default:
-		return `<span style="color:green;">● Online</span>`;
+	// Append custom status if provided
+	if (customStatus) {
+		statusText += ` [${Chat.escapeHTML(customStatus)}]`;
 	}
+
+	return statusText;
 }
 
 export const commands: Chat.ChatCommands = {
@@ -167,32 +180,24 @@ export const commands: Chat.ChatCommands = {
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
-			// Build the profile HTML with optional background
+			// Build the profile HTML with optional background image
 			const backgroundStyle = profileData.background ?
-				`background: ${profileData.background}; padding: 10px;` : '';
+				`background-image: url('${profileData.background}'); background-size: cover; background-position: center; padding: 10px;` : '';
 			let buf = `<div class="infobox" style="${backgroundStyle}">`;
 
-			// Header with avatar and name
+			// Header with name and avatar
 			buf += '<div style="text-align:center;margin-bottom:10px;">';
+			buf += `<strong style="font-size:18px;">${nameColor(targetName, true, true)}</strong><br>`;
 			if (targetUser) {
 				buf += getAvatarDisplay(targetUser);
 			}
-			buf += `<br><strong style="font-size:18px;">${nameColor(targetName, true, true)}</strong>`;
 			buf += '</div>';
 
 			// Profile information
 			buf += '<div style="text-align:left;padding:0 10px;">';
 
-			// Status
-			buf += `<strong>Status:</strong> ${getStatusDisplay(targetUser)}<br>`;
-
-			// Custom status message
-			if (profileData.customStatus) {
-				buf += `<strong>Custom Status:</strong> ${Chat.escapeHTML(profileData.customStatus)}<br>`;
-			}
-
-			// User ID
-			buf += `<strong>User ID:</strong> ${targetId}<br>`;
+			// Status with custom status integrated
+			buf += `<strong>Status:</strong> ${getStatusDisplay(targetUser, profileData.customStatus)}<br>`;
 
 			// Registration status and date
 			if (targetUser) {
@@ -206,12 +211,9 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			// Level and EXP (if available)
+			// Level (if available)
 			if (profileData.level !== undefined) {
 				buf += `<strong>Level:</strong> ${profileData.level}<br>`;
-			}
-			if (profileData.exp !== undefined) {
-				buf += `<strong>EXP:</strong> ${profileData.exp.toLocaleString()}<br>`;
 			}
 
 			// Ontime (if available)
@@ -256,12 +258,17 @@ export const commands: Chat.ChatCommands = {
 
 		async setbackground(target, room, user): Promise<void> {
 			if (!target) {
-				return this.errorReply("Please provide a CSS background value (e.g., 'linear-gradient(to right, #ff7e5f, #feb47b)' or a color like '#2c3e50').");
+				return this.errorReply("Please provide a background image URL (e.g., 'https://example.com/image.jpg').");
 			}
 
-			// Basic validation for CSS background
-			if (target.length > 200) {
-				return this.errorReply("Background value is too long (max 200 characters).");
+			// Basic validation for URL
+			if (target.length > 300) {
+				return this.errorReply("Background URL is too long (max 300 characters).");
+			}
+
+			// Basic URL validation
+			if (!target.startsWith('http://') && !target.startsWith('https://')) {
+				return this.errorReply("Background must be a valid URL starting with http:// or https://");
 			}
 
 			await ProfileBackgroundDB.updateOne(
@@ -284,7 +291,7 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
 				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
-				{ cmd: "/uprofile setbackground [css]", desc: "Set a custom background for your profile (CSS background value)." },
+				{ cmd: "/uprofile setbackground [url]", desc: "Set a custom background image for your profile (image URL)." },
 				{ cmd: "/uprofile clearbackground", desc: "Clear your custom profile background." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
@@ -292,7 +299,7 @@ export const commands: Chat.ChatCommands = {
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
 				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>` +
-				`<br><small>Background examples: 'linear-gradient(to right, #ff7e5f, #feb47b)' or '#2c3e50'</small>`;
+				`<br><small>Background example: 'https://example.com/image.jpg'</small>`;
 			this.sendReplyBox(html);
 		},
 	},
