@@ -405,6 +405,15 @@
 
 /* RPG Weather Tags */
 
+.rpg-weather-container {
+    position: absolute;
+    top: 5px;
+    left: 4px;
+	 z-index: 5; 
+    text-align: left;
+    pointer-events: none;
+}
+
 .rpg-weather-tag {
     font-size: 10px;
     font-weight: bold;
