@@ -22923,7 +22923,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	// Touhou
 	reimuhakurei: {
-		num: 1,
+		num: -2001,
 		name: "Reimu Hakurei",
 		types: ["Flying", "Fighting"],
 		gender: "F",
@@ -22931,7 +22931,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Cloud Nine", 1: "Justified", H: "Purifying Salt"},
 	},
 	marisakirisame: {
-		num: 2,
+		num: -2002,
 		name: "Marisa Kirisame",
 		types: ["Fire", "Normal"],
 		gender: "F",
@@ -22939,7 +22939,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Magician", 1: "Hakkero", H: "Reckless"},
 	},
 	rumia: {
-		num: 3,
+		num: -2003,
 		name: "Rumia",
 		types: ["Dark"],
 		gender: "F",
@@ -22947,7 +22947,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Levitate", 1: "Dark Aura", H: "Dark Border"},
 	},
 	daiyousei: {
-		num: 4,
+		num: -2004,
 		name: "Daiyousei",
 		types: ["Fairy"],
 		gender: "F",
@@ -22955,7 +22955,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Misty Step"},
 	},
 	cirno: {
-		num: 5,
+		num: -2005,
 		name: "Cirno",
 		types: ["Ice", "Fairy"],
 		gender: "F",
@@ -22963,7 +22963,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Hustle", 1: "Ice Body", H: "Slush Rush"},
 	},
 	cirnotanned: {
-		num: 6,
+		num: -2006,
 		name: "Cirno-Tanned",
 		baseSpecies: "Cirno",
 		forme: "Tanned",
@@ -22974,7 +22974,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Summer Backdoor",
 	},
 	hongmeiling: {
-		num: 7,
+		num: -2007,
 		name: "Hong Meiling",
 		types: ["Fighting", "Dragon"],
 		gender: "F",
@@ -22982,7 +22982,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Steadfast", 1: "Sand Rush", H: "Comatose"},
 	},
 	koakuma: {
-		num: 8,
+		num: -2008,
 		name: "Koakuma",
 		types: ["Dark"],
 		gender: "F",
@@ -22990,7 +22990,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Prankster", H: "Quick Feet"},
 	},
 	patchouliknowledge: {
-		num: 9,
+		num: -2009,
 		name: "Patchouli Knowledge",
 		types: ["Psychic"],
 		gender: "F",
@@ -22998,7 +22998,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Neuroforce", H: "Anemic"},
 	},
 	sakuyaizayoi: {
-		num: 10,
+		num: -2010,
 		name: "Sakuya Izayoi",
 		types: ["Steel"],
 		gender: "F",
@@ -23006,7 +23006,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Own Tempo", 1: "Insomnia", H: "Maid's Trick"},
 	},
 	remiliascarlet: {
-		num: 11,
+		num: -2011,
 		name: "Remilia Scarlet",
 		types: ["Dark", "Flying"],
 		gender: "F",
@@ -23014,7 +23014,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Vampirism"},
 	},
 	flandrescarlet: {
-		num: 12,
+		num: -2012,
 		name: "Flandre Scarlet",
 		types: ["Dark", "Fire"],
 		gender: "F",
@@ -23022,7 +23022,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Mold Breaker", 1: "Pressure", H: "Moxie"},
 	},
 	lettywhiterock: {
-		num: 13,
+		num: -2013,
 		name: "Letty Whiterock",
 		types: ["Ice"],
 		gender: "F",
@@ -23030,7 +23030,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Snow Warning", H: "Heatproof"},
 	},
 	chen: {
-		num: 14,
+		num: -2014,
 		name: "Chen",
 		types: ["Normal"],
 		gender: "F",
@@ -23038,7 +23038,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Quick Feet", 1: "Technician", H: "Sheer Force"},
 	},
 	alicemargatroid: {
-		num: 15,
+		num: -2015,
 		name: "Alice Margatroid",
 		types: ["Steel", "Psychic"],
 		gender: "F",
@@ -23046,7 +23046,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Analytic", 1: "Ice Body", H: "Competitive"},
 	},
 	lilywhite: {
-		num: 16,
+		num: -2016,
 		name: "Lily White",
 		types: ["Fairy", "Grass"],
 		gender: "F",
@@ -23054,7 +23054,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Regenerator", 1: "Chlorophyll", H: "Grassy Surge"},
 	},
 	lunasaprismriver: {
-		num: 17,
+		num: -2017,
 		name: "Lunasa Prismriver",
 		types: ["Ghost"],
 		gender: "F",
@@ -23062,7 +23062,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Soundproof", H: "Shadow Shield"},
 	},
 	merlinprismriver: {
-		num: 18,
+		num: -2018,
 		name: "Merlin Prismriver",
 		types: ["Ghost"],
 		gender: "F",
@@ -23070,7 +23070,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Soundproof", H: "Berserk"},
 	},
 	lyricaprismriver: {
-		num: 19,
+		num: -2019,
 		name: "Lyrica Prismriver",
 		types: ["Ghost"],
 		gender: "F",
@@ -23078,7 +23078,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Soundproof", H: "Illusory Backing"},
 	},
 	youmukonpaku: {
-		num: 20,
+		num: -2020,
 		name: "Youmu Konpaku",
 		types: ["Fighting", "Ghost"],
 		gender: "F",
@@ -23086,7 +23086,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Bulletproof", 1: "Hyper Cutter", H: "Rattled"},
 	},
 	yuyukosaigyouji: {
-		num: 21,
+		num: -2021,
 		name: "Yuyuko Saigyouji",
 		types: ["Ghost", "Fairy"],
 		gender: "F",
@@ -23094,7 +23094,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Gluttony", 1: "Netherworld's Spring", H: "Flower Veil"},
 	},
 	ranyakumo: {
-		num: 22,
+		num: -2022,
 		name: "Ran Yakumo",
 		types: ["Psychic"],
 		gender: "F",
@@ -23102,7 +23102,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Download", H: "Fluffy"},
 	},
 	yukariyakumo: {
-		num: 23,
+		num: -2023,
 		name: "Yukari Yakumo",
 		types: ["Psychic", "Dark"],
 		gender: "F",
@@ -23110,7 +23110,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Frisk", 1: "Pressure", H: "Intimidate"},
 	},
 	suikaibuki: {
-		num: 24,
+		num: -2024,
 		name: "Suika Ibuki",
 		types: ["Ground", "Fighting"],
 		gender: "F",
@@ -23118,7 +23118,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Misty Surge", H: "Demon Parade"},
 	},
 	wrigglenightbug: {
-		num: 25,
+		num: -2025,
 		name: "Wriggle Nightbug",
 		types: ["Bug"],
 		gender: "F",
@@ -23126,7 +23126,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Illuminate", 1: "Swarm", H: "Opportunist"},
 	},
 	mystialorelei: {
-		num: 26,
+		num: -2026,
 		name: "Mystia Lorelei",
 		types: ["Dark", "Flying"],
 		gender: "F",
@@ -23134,7 +23134,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Night Song", 1: "Tough Claws", H: "Punk Rock"},
 	},
 	keine: {
-		num: 27,
+		num: -2027,
 		name: "Keine",
 		types: ["Steel", "Normal"],
 		gender: "F",
@@ -23142,7 +23142,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Were-Hakutaku", H: "Stalwart"},
 	},
 	keinehakutaku: {
-		num: 28,
+		num: -2028,
 		name: "Keine-Hakutaku",
 		baseSpecies: "Keine",
 		forme: "Hakutaku",
@@ -23152,7 +23152,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Were-Hakutaku"},
 	},
 	tewiinaba: {
-		num: 29,
+		num: -2029,
 		name: "Tewi Inaba",
 		types: ["Normal", "Fairy"],
 		gender: "F",
@@ -23160,7 +23160,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Huge Power", 1: "Super Luck", H: "Prankster"},
 	},
 	reiseninaba: {
-		num: 30,
+		num: -2030,
 		name: "Reisen Inaba",
 		types: ["Psychic", "Electric"],
 		gender: "F",
@@ -23168,7 +23168,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Unnerve", H: "Psychic Surge"},
 	},
 	eirinyagokoro: {
-		num: 31,
+		num: -2031,
 		name: "Eirin Yagokoro",
 		types: ["Poison", "Psychic"],
 		gender: "F",
@@ -23176,7 +23176,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Natural Cure", 1: "Brain of the Moon", H: "Curious Medicine"},
 	},
 	kaguyahouraisan: {
-		num: 32,
+		num: -2032,
 		name: "Kaguya Houraisan",
 		types: ["Fairy"],
 		gender: "F",
@@ -23184,7 +23184,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Magic Guard"},
 	},
 	fujiwaranomokou: {
-		num: 33,
+		num: -2033,
 		name: "Fujiwara no Mokou",
 		types: ["Fire", "Fighting"],
 		gender: "F",
@@ -23192,7 +23192,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Regenerator"},
 	},
 	ayashameimaru: {
-		num: 34,
+		num: -2034,
 		name: "Aya Shameimaru",
 		types: ["Flying"],
 		gender: "F",
@@ -23200,7 +23200,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Infiltrator", 1: "Early Bird", H: "Forewarn"},
 	},
 	medicinemelancholy: {
-		num: 35,
+		num: -2035,
 		name: "Medicine Melancholy",
 		types: ["Poison"],
 		gender: "F",
@@ -23208,7 +23208,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Liquid Ooze", 1: "Poison Point", H: "Soul-Heart"},
 	},
 	yuukakazami: {
-		num: 36,
+		num: -2036,
 		name: "Yuuka Kazami",
 		types: ["Grass"],
 		gender: "F",
@@ -23216,7 +23216,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Overgrow", H: "Solar Power"},
 	},
 	komachionozuka: {
-		num: 37,
+		num: -2037,
 		name: "Komachi Onozuka",
 		types: ["Water", "Ghost"],
 		gender: "F",
@@ -23224,7 +23224,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Sharpness", 1: "Truant", H: "Unaware"},
 	},
 	eikishiki: {
-		num: 38,
+		num: -2038,
 		name: "Eiki Shiki",
 		types: ["Normal"],
 		gender: "F",
@@ -23232,7 +23232,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Black and White", H: "No Guard"},
 	},
 	shizuhaaki: {
-		num: 39,
+		num: -2039,
 		name: "Shizuha Aki",
 		types: ["Grass"],
 		gender: "F",
@@ -23240,7 +23240,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Wind Rider", H: "Leaf Guard"},
 	},
 	minorikoaki: {
-		num: 40,
+		num: -2040,
 		name: "Minoriko Aki",
 		types: ["Grass", "Ground"],
 		gender: "F",
@@ -23248,7 +23248,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Harvest", H: "Sap Sipper"},
 	},
 	hinakagiyama: {
-		num: 41,
+		num: -2041,
 		name: "Hina Kagiyama",
 		types: ["Poison", "Dark"],
 		gender: "F",
@@ -23256,7 +23256,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Curse Gathering", H: "Flare Boost"},
 	},
 	nitorikawashiro: {
-		num: 42,
+		num: -2042,
 		name: "Nitori Kawashiro",
 		types: ["Water", "Steel"],
 		gender: "F",
@@ -23264,7 +23264,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Transistor"},
 	},
 	momijiinubashiri: {
-		num: 43,
+		num: -2043,
 		name: "Momiji Inubashiri",
 		types: ["Steel", "Fighting"],
 		gender: "F",
@@ -23272,7 +23272,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Keen Eye", 1: "Guard Dog", H: "Strong Jaw"},
 	},
 	sanaekochiya: {
-		num: 44,
+		num: -2044,
 		name: "Sanae Kochiya",
 		types: ["Flying", "Water"],
 		gender: "F",
@@ -23280,7 +23280,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Drizzle", H: "Serene Grace"},
 	},
 	kanakoyasaka: {
-		num: 45,
+		num: -2045,
 		name: "Kanako Yasaka",
 		types: ["Ground", "Flying"],
 		gender: "F",
@@ -23288,7 +23288,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Storm Drain", H: "Mirror Armor"},
 	},
 	suwakomoriya: {
-		num: 46,
+		num: -2046,
 		name: "Suwako Moriya",
 		types: ["Water", "Ground"],
 		gender: "F",
@@ -23296,14 +23296,14 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Earth Eater", H: "Hydration"},
 	},
 	ikunagae: {
-		num: 47,
+		num: -2047,
 		name: "Iku Nagae",
 		types: ["Dragon", "Electric"],
 		baseStats: {hp: 75, atk: 100, def: 70, spa: 110, spd: 90, spe: 95},
 		abilities: {0: "Swift Swim", 1: "Levitate", H: "Multiscale"},
 	},
 	tenshihinanawi: {
-		num: 48,
+		num: -2048,
 		name: "Tenshi Hinanawi",
 		types: ["Ground", "Rock"],
 		gender: "F",
@@ -23311,14 +23311,14 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Sword of Hisou"},
 	},
 	kisume: {
-		num: 49,
+		num: -2049,
 		name: "Kisume",
 		types: ["Rock", "Dark"],
 		baseStats: {hp: 45, atk: 85, def: 130, spa: 80, spd: 125, spe: 45},
 		abilities: {0: "Sturdy", 1: "Guts", H: "Flash Fire"},
 	},
 	yamamekurodani: {
-		num: 50,
+		num: -2050,
 		name: "Yamame Kurodani",
 		types: ["Poison", "Bug"],
 		gender: "F",
@@ -23326,7 +23326,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Stakeout", 1: "Poison Touch", H: "Dexterity"},
 	},
 	parseemizuhashi: {
-		num: 51,
+		num: -2051,
 		name: "Parsee Mizuhashi",
 		types: ["Dark"],
 		gender: "F",
@@ -23334,7 +23334,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Jealous", H: "Aftermath"},
 	},
 	yuugihoshiguma: {
-		num: 52,
+		num: -2052,
 		name: "Yuugi Hoshiguma",
 		types: ["Fighting", "Rock"],
 		gender: "F",
@@ -23342,7 +23342,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Sand Stream", 1: "Mold Breaker", H: "Sheer Force"},
 	},
 	satorikomeiji: {
-		num: 53,
+		num: -2053,
 		name: "Satori Komeiji",
 		types: ["Psychic"],
 		gender: "F",
@@ -23350,7 +23350,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Trace", 1: "Insomnia", H: "Recollection"},
 	},
 	rinkaenbyou: {
-		num: 54,
+		num: -2054,
 		name: "Rin Kaenbyou",
 		types: ["Fire", "Ghost"],
 		gender: "F",
@@ -23358,7 +23358,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Infiltrator", H: "Unburden"},
 	},
 	utsuhoreiuji: {
-		num: 55,
+		num: -2055,
 		name: "Utsuho Reiuji",
 		types: ["Fire", "Flying"],
 		gender: "F",
@@ -23366,7 +23366,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Klutz"},
 	},
 	koishikomeiji: {
-		num: 56,
+		num: -2056,
 		name: "Koishi Komeiji",
 		types: ["Psychic", "Normal"],
 		gender: "F",
@@ -23374,7 +23374,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Unaware", 1: "Synchronize", H: "Delusion"},
 	},
 	nazrin: {
-		num: 57,
+		num: -2057,
 		name: "Nazrin",
 		types: ["Ground", "Steel"],
 		gender: "F",
@@ -23382,7 +23382,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Lightning Rod", H: "Pickup"},
 	},
 	kogasatatara: {
-		num: 58,
+		num: -2058,
 		name: "Kogasa Tatara",
 		types: ["Water", "Fairy"],
 		gender: "F",
@@ -23390,7 +23390,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Surprise", 1: "Bulletproof", H: "Steelworker"},
 	},
 	ichirinkumoi: {
-		num: 59,
+		num: -2059,
 		name: "Ichirin Kumoi",
 		types: ["Fighting"],
 		gender: "F",
@@ -23398,7 +23398,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Summon Nyuudou"},
 	},
 	ichirinandunzan: {
-		num: 60,
+		num: -2060,
 		name: "Ichirin and Unzan",
 		baseSpecies: "Ichirin Kumoi",
 		forme: "Unzan",
@@ -23407,7 +23407,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Iron Fist"},
 	},
 	minamitsumurasa: {
-		num: 61,
+		num: -2061,
 		name: "Minamitsu Murasa",
 		types: ["Water", "Ghost"],
 		gender: "F",
@@ -23415,7 +23415,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Steelworker", 1: "Aftermath", H: "Watery Grave"},
 	},
 	shoutoramaru: {
-		num: 62,
+		num: -2062,
 		name: "Shou Toramaru",
 		types: ["Fairy", "Electric"],
 		gender: "F",
@@ -23423,7 +23423,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Pressure", H: "Illuminate"},
 	},
 	byakurenhijiri: {
-		num: 63,
+		num: -2063,
 		name: "Byakuren Hijiri",
 		types: ["Fighting", "Psychic"],
 		gender: "F",
@@ -23431,7 +23431,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Inner Focus", H: "Devil's Recitation"},
 	},
 	nuehoujuu: {
-		num: 64,
+		num: -2064,
 		name: "Nue Houjuu",
 		types: ["Dark", "Ghost"],
 		gender: "F",
@@ -23439,7 +23439,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Shed Skin", H: "Undefined Defense"},
 	},
 	hatatehimekaidou: {
-		num: 65,
+		num: -2065,
 		name: "Hatate Himekaidou",
 		types: ["Psychic", "Flying"],
 		gender: "F",
@@ -23447,7 +23447,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Trace", 1: "Anticipation", H: "Technician"},
 	},
 	sunnymilk: {
-		num: 66,
+		num: -2066,
 		name: "Sunny Milk",
 		types: ["Fire", "Fairy"],
 		gender: "F",
@@ -23455,7 +23455,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Solar Power", H: "Dazzling"},
 	},
 	lunachild: {
-		num: 67,
+		num: -2067,
 		name: "Luna Child",
 		types: ["Dark", "Fairy"],
 		gender: "F",
@@ -23463,7 +23463,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Soundproof", H: "Insomnia"},
 	},
 	starsapphire: {
-		num: 68,
+		num: -2068,
 		name: "Star Sapphire",
 		types: ["Psychic", "Fairy"],
 		gender: "F",
@@ -23471,7 +23471,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Telepathy", H: "Pixilate"},
 	},
 	kyoukokasodani: {
-		num: 69,
+		num: -2069,
 		name: "Kyouko Kasodani",
 		types: ["Normal"],
 		gender: "F",
@@ -23479,7 +23479,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Echo"},
 	},
 	yoshikamiyako: {
-		num: 70,
+		num: -2070,
 		name: "Yoshika Miyako",
 		types: ["Poison", "Ghost"],
 		gender: "F",
@@ -23487,7 +23487,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Heal by Desire", 1: "Gluttony", H: "Steadfast"},
 	},
 	seigakaku: {
-		num: 71,
+		num: -2071,
 		name: "Seiga Kaku",
 		types: ["Dark"],
 		gender: "F",
@@ -23495,7 +23495,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Infiltrator", H: "Limber"},
 	},
 	soganotojiko: {
-		num: 72,
+		num: -2072,
 		name: "Soga no Tojiko",
 		types: ["Electric", "Ghost"],
 		gender: "F",
@@ -23503,7 +23503,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Static", H: "Levitate"},
 	},
 	mononobenofuto: {
-		num: 73,
+		num: -2073,
 		name: "Mononobe no Futo",
 		types: ["Water", "Fire"],
 		gender: "F",
@@ -23511,7 +23511,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Natural Cure", 1: "Super Luck", H: "Power Spot"},
 	},
 	toyosatomiminomiko: {
-		num: 74,
+		num: -2074,
 		name: "Toyosatomimi no Miko",
 		types: ["Fighting", "Fairy"],
 		gender: "F",
@@ -23519,7 +23519,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Telepathy", H: "Soundproof"},
 	},
 	mamizoufutatsuiwa: {
-		num: 75,
+		num: -2075,
 		name: "Mamizou Futatsuiwa",
 		types: ["Grass", "Normal"],
 		gender: "F",
@@ -23527,7 +23527,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Infiltrator", H: "Solid Rock"},
 	},
 	kasenibaraki: {
-		num: 76,
+		num: -2076,
 		name: "Kasen Ibaraki",
 		types: ["Grass", "Fighting"],
 		gender: "F",
@@ -23535,7 +23535,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Steadfast", 1: "100 Medicines", H: "Wicked Power"},
 	},
 	hatanokokoro: {
-		num: 77,
+		num: -2077,
 		name: "Hata no Kokoro",
 		types: ["Psychic", "Ghost"],
 		gender: "F",
@@ -23543,7 +23543,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Libero"},
 	},
 	wakasagihime: {
-		num: 78,
+		num: -2078,
 		name: "Wakasagihime",
 		types: ["Water"],
 		gender: "F",
@@ -23551,7 +23551,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Swift Swim", 1: "Hydration", H: "Marvel Scale"},
 	},
 	sekibanki: {
-		num: 79,
+		num: -2079,
 		name: "Sekibanki",
 		types: ["Ghost"],
 		gender: "F",
@@ -23559,7 +23559,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Intimidate", H: "Unnerve"},
 	},
 	kagerouimaizumi: {
-		num: 80,
+		num: -2080,
 		name: "Kagerou Imaizumi",
 		types: ["Dark", "Normal"],
 		gender: "F",
@@ -23567,7 +23567,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Fluffy", H: "Strong Jaw"},
 	},
 	benbentsukumo: {
-		num: 81,
+		num: -2081,
 		name: "Benben Tsukumo",
 		types: ["Normal", "Electric"],
 		gender: "F",
@@ -23575,7 +23575,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Vital Spirit", 1: "Volt Absorb", H: "Minus"},
 	},
 	yatsuhashitsukumo: {
-		num: 82,
+		num: -2082,
 		name: "Yatsuhashi Tsukumo",
 		types: ["Normal", "Electric"],
 		gender: "F",
@@ -23583,7 +23583,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Vital Spirit", 1: "Motor Drive", H: "Plus"},
 	},
 	seijakijin: {
-		num: 83,
+		num: -2083,
 		name: "Seija Kijin",
 		types: ["Dark"],
 		gender: "F",
@@ -23591,7 +23591,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Contrary"},
 	},
 	shinmyoumarusukuna: {
-		num: 84,
+		num: -2084,
 		name: "Shinmyoumaru Sukuna",
 		canDynamax: true,
 		types: ["Steel", "Fairy"],
@@ -23600,7 +23600,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Grow Bigger"},
 	},
 	raikohorikawa: {
-		num: 85,
+		num: -2085,
 		name: "Raiko Horikawa",
 		types: ["Electric"],
 		gender: "F",
@@ -23608,7 +23608,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Lightning Rod", 1: "Inner Focus", H: "Pristine Beat"},
 	},
 	sumirekousami: {
-		num: 86,
+		num: -2086,
 		name: "Sumireko Usami",
 		types: ["Psychic"],
 		gender: "F",
@@ -23616,7 +23616,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Levitate", H: "Comatose"},
 	},
 	seiran: {
-		num: 87,
+		num: -2087,
 		name: "Seiran",
 		types: ["Steel", "Psychic"],
 		gender: "F",
@@ -23624,7 +23624,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Guts", 1: "Synchronize", H: "Sniper"},
 	},
 	ringo: {
-		num: 88,
+		num: -2088,
 		name: "Ringo",
 		types: ["Grass"],
 		gender: "F",
@@ -23632,7 +23632,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Cheek Pouch", H: "Dango Influence"},
 	},
 	doremysweet: {
-		num: 89,
+		num: -2089,
 		name: "Doremy Sweet",
 		types: ["Psychic"],
 		gender: "F",
@@ -23640,7 +23640,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Psychic Surge", H: "Bad Dreams"},
 	},
 	sagumekishin: {
-		num: 90,
+		num: -2090,
 		name: "Sagume Kishin",
 		types: ["Normal", "Flying"],
 		gender: "F",
@@ -23648,7 +23648,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Contrary", 1: "Inner Focus", H: "Immunity"},
 	},
 	clownpiece: {
-		num: 91,
+		num: -2091,
 		name: "Clownpiece",
 		types: ["Fairy", "Fire"],
 		gender: "F",
@@ -23656,7 +23656,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Flame Body", H: "Lunatic Torch"},
 	},
 	junko: {
-		num: 92,
+		num: -2092,
 		name: "Junko",
 		types: ["Normal"],
 		gender: "F",
@@ -23664,7 +23664,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Mold Breaker"},
 	},
 	hecatiaotherworld: {
-		num: 93,
+		num: -2093,
 		name: "Hecatia-Otherworld",
 		types: ["Dark", "Ghost"],
 		gender: "F",
@@ -23672,7 +23672,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Pressure"},
 	},
 	hecatiaearth: {
-		num: 94,
+		num: -2094,
 		name: "Hecatia-Earth",
 		baseSpecies: "Hecatia-Otherworld",
 		forme: "Earth",
@@ -23682,7 +23682,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Natural Cure"},
 	},
 	hecatiamoon: {
-		num: 95,
+		num: -2095,
 		name: "Hecatia-Moon",
 		baseSpecies: "Hecatia-Otherworld",
 		forme: "Moon",
@@ -23692,7 +23692,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Dazzling"},
 	},
 	joonyorigami: {
-		num: 96,
+		num: -2096,
 		name: "Joon Yorigami",
 		types: ["Steel", "Poison"],
 		gender: "F",
@@ -23700,7 +23700,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Fool's Gold"},
 	},
 	shionyorigami: {
-		num: 97,
+		num: -2097,
 		name: "Shion Yorigami",
 		types: ["Poison", "Ghost"],
 		gender: "F",
@@ -23708,7 +23708,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Cursed Body", H: "Poison Touch"},
 	},
 	eternitylarva: {
-		num: 98,
+		num: -2098,
 		name: "Eternity Larva",
 		types: ["Bug", "Flying"],
 		gender: "F",
@@ -23716,7 +23716,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Flash Fire", 1: "Regenerator", H: "Chlorophyll"},
 	},
 	nemunosakata: {
-		num: 99,
+		num: -2099,
 		name: "Nemuno Sakata",
 		types: ["Grass", "Rock"],
 		gender: "F",
@@ -23724,7 +23724,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Cut Deep", H: "Intimidate"},
 	},
 	aunnkomano: {
-		num: 100,
+		num: -2100,
 		name: "Aunn Komano",
 		types: ["Rock", "Fairy"],
 		gender: "F",
@@ -23732,7 +23732,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Rock Head", 1: "Solid Rock", H: "Guard Dog"},
 	},
 	narumiyatadera: {
-		num: 101,
+		num: -2101,
 		name: "Narumi Yatadera",
 		types: ["Ice", "Rock"],
 		gender: "F",
@@ -23740,7 +23740,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Sturdy", H: "Winter Hearth"},
 	},
 	maiteireida: {
-		num: 102,
+		num: -2102,
 		name: "Mai Teireida",
 		types: ["Fighting"],
 		gender: "F",
@@ -23748,7 +23748,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Dancer", H: "Vital Spirit"},
 	},
 	satononishida: {
-		num: 103,
+		num: -2103,
 		name: "Satono Nishida",
 		types: ["Fighting"],
 		gender: "F",
@@ -23756,7 +23756,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Dancer", H: "Wandering Spirit"},
 	},
 	okinamatara: {
-		num: 104,
+		num: -2104,
 		name: "Okina Matara",
 		types: ["Normal", "Dark"],
 		gender: "F",
@@ -23764,7 +23764,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Four Seasons"},
 	},
 	eikaebisu: {
-		num: 105,
+		num: -2105,
 		name: "Eika Ebisu",
 		types: ["Ghost", "Rock"],
 		gender: "F",
@@ -23772,7 +23772,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Water Absorb", H: "Friend Guard"},
 	},
 	urumiushizaki: {
-		num: 106,
+		num: -2106,
 		name: "Urumi Ushizaki",
 		types: ["Water", "Rock"],
 		gender: "F",
@@ -23780,7 +23780,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Torrent", 1: "Pressure", H: "Heavy Stone"},
 	},
 	kutakaniwatari: {
-		num: 107,
+		num: -2107,
 		name: "Kutaka Niwatari",
 		types: ["Water", "Flying"],
 		gender: "F",
@@ -23788,7 +23788,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Natural Cure", 1: "Simple", H: "Steadfast"},
 	},
 	yachiekicchou: {
-		num: 108,
+		num: -2108,
 		name: "Yachie Kicchou",
 		types: ["Dragon", "Dark"],
 		gender: "F",
@@ -23796,7 +23796,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Shell Armor", 1: "Pressure", H: "Beast Boost"},
 	},
 	mayumijoutouguu: {
-		num: 109,
+		num: -2109,
 		name: "Mayumi Joutouguu",
 		types: ["Ground", "Steel"],
 		gender: "F",
@@ -23804,7 +23804,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Stalwart", 1: "Marching Orders", H: "Defiant"},
 	},
 	keikihaniyasushin: {
-		num: 110,
+		num: -2110,
 		name: "Keiki Haniyasushin",
 		types: ["Ground", "Electric"],
 		gender: "F",
@@ -23812,7 +23812,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Analytic", 1: "Sand Force", H: "Electric Surge"},
 	},
 	sakikurokuma: {
-		num: 111,
+		num: -2111,
 		name: "Saki Kurokuma",
 		types: ["Fighting", "Flying"],
 		gender: "F",
@@ -23820,7 +23820,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Limber", 1: "No Guard", H: "Beast Boost"},
 	},
 	yuumatoutetsu: {
-		num: 112,
+		num: -2112,
 		name: "Yuuma Toutetsu",
 		types: ["Water", "Dark"],
 		gender: "F",
@@ -23828,7 +23828,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Gluttony", 1: "Stamina", H: "Beast Boost"},
 	},
 	mikegotoukuji: {
-		num: 113,
+		num: -2113,
 		name: "Mike Gotoukuji",
 		types: ["Steel"],
 		gender: "F",
@@ -23836,7 +23836,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Super Luck", H: "Competitive"},
 	},
 	takaneyamashiro: {
-		num: 114,
+		num: -2114,
 		name: "Takane Yamashiro",
 		types: ["Grass", "Water"],
 		gender: "F",
@@ -23844,7 +23844,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Pickpocket", 1: "Overcoat", H: "Grass Pelt"},
 	},
 	sannyokomakusa: {
-		num: 115,
+		num: -2115,
 		name: "Sannyo Komakusa",
 		types: ["Fire", "Dragon"],
 		gender: "F",
@@ -23852,7 +23852,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "White Smoke", H: "Black Smoke"},
 	},
 	misumarutamatsukuri: {
-		num: 116,
+		num: -2116,
 		name: "Misumaru Tamatsukuri",
 		types: ["Rock"],
 		gender: "F",
@@ -23860,7 +23860,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Beads of Ruin"},
 	},
 	tsukasakudamaki: {
-		num: 117,
+		num: -2117,
 		name: "Tsukasa Kudamaki",
 		types: ["Ghost", "Normal"],
 		gender: "F",
@@ -23868,7 +23868,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Technician", 1: "Infiltrator", H: "Prankster"},
 	},
 	megumuiizunamaru: {
-		num: 118,
+		num: -2118,
 		name: "Megumu Iinzumaru",
 		types: ["Flying", "Psychic"],
 		gender: "F",
@@ -23876,7 +23876,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Air Lock", H: "Pressure"},
 	},
 	chimatatenkyuu: {
-		num: 119,
+		num: -2119,
 		name: "Chimata Tenkyuu",
 		types: ["Steel", "Flying"],
 		gender: "F",
@@ -23884,7 +23884,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Property"},
 	},
 	momoyohimemushi: {
-		num: 120,
+		num: -2120,
 		name: "Momoyo Himemushi",
 		types: ["Bug", "Rock"],
 		gender: "F",
@@ -23892,7 +23892,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Swarm", 1: "Dragon Eater", H: "Speed Boost"},
 	},
 	sonbiten: {
-		num: 121,
+		num: -2121,
 		name: "Son Biten",
 		types: ["Fighting"],
 		gender: "F",
@@ -23900,7 +23900,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Inner Focus", H: "Magic Guard"},
 	},
 	enokomitsugashira: {
-		num: 122,
+		num: -2122,
 		name: "Enoko Mitsugashira",
 		types: ["Steel", "Dark"],
 		gender: "F",
@@ -23908,7 +23908,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Iron Barbs", 1: "Scrappy", H: "Strong Jaw"},
 	},
 	chiyaritenkajin: {
-		num: 123,
+		num: -2123,
 		name: "Chiyari Tenkajin",
 		types: ["Fire", "Ghost"],
 		gender: "F",
@@ -23916,7 +23916,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Flame Body", 1: "Cursed Body", H: "Bloodsucker"},
 	},
 	hisamiyomotsu: {
-		num: 124,
+		num: -2124,
 		name: "Hisami Yomotsu",
 		types: ["Grass", "Ghost"],
 		gender: "F",
@@ -23924,7 +23924,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Sticky Hold", 1: "Poison Point", H: "Oblivious"},
 	},
 	zanmunippaku: {
-		num: 125,
+		num: -2125,
 		name: "Zanmu Nippaku",
 		types: ["Dark"],
 		gender: "F",
@@ -23932,7 +23932,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: {0: "Void"},
 	},
 	vivit: {
-		num: 126,
+		num: -2126,
 		name: "VIVIT",
 		types: ["Steel", "Electric"],
 		gender: "F",
