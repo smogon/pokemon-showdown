@@ -280,7 +280,8 @@ function generateBattleActionButtonsHTML(
 	const switchButton = '<button name="send" value="/rpg battleaction switchmenu" class="button rpg-battle-action-button">🔄 POKÉMON</button>';
 
 	if (battle.battleType === 'battletower') {
-		return '<div class="rpg-battle-action-list">' + switchButton + '</div>';
+		// Render as a horizontal row
+		return `<p class="rpg-text-center rpg-margin-top">${switchButton}</p>`;
 	}
 
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
@@ -304,7 +305,8 @@ function generateBattleActionButtonsHTML(
 		}
 	}
 
-	return '<div class="rpg-battle-action-list">' + switchButton + catchButton + runButton + '</div>';
+	// Render as a horizontal row
+	return `<p class="rpg-text-center rpg-margin-top">${switchButton} ${catchButton} ${runButton}</p>`;
 }
 
 // ###################################
@@ -2109,11 +2111,9 @@ function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): 
 
 	let html = '';
 	
-	// Create the 2-column grid
-	html += '<div class="rpg-grid-2col">';
-
-	// --- Left Column (Moves) ---
-	html += '<div>';
+	// NO MORE 2-COLUMN GRID. This is now a simple vertical stack.
+	
+	// --- Section 1: Moves ---
 	if (activeSlot) {
 		const pokemon = activeSlot.pokemon;
 		html += '<p>What will <strong>' + (pokemon.nickname || pokemon.species) + '</strong> do?</p>';
@@ -2121,16 +2121,11 @@ function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): 
 	} else if (!battle.battleEnded) {
 		html += '<p class="rpg-margin-top rpg-text-center rpg-text-muted">Waiting for opponent...</p>';
 	}
-	html += '</div>';
 
-	// --- Right Column (Actions) ---
-	html += '<div>';
+	// --- Section 2: Actions (Switch, Bag, Run) ---
+	// The action buttons will now appear *below* the move grid.
 	const anyActivePlayerSlot = (pSlot0 && pSlot0.pokemon.hp > 0) ? pSlot0 : (isDoubleBattle && pSlot1 && pSlot1.pokemon.hp > 0) ? pSlot1 : null;
 	html += generateBattleActionButtonsHTML(battle, anyActivePlayerSlot);
-	html += '</div>';
-	
-	// Close grid
-	html += '</div>'; 
 	
 	return html;
 }
