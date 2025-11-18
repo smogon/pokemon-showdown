@@ -599,8 +599,11 @@ export function generateBattleHTML(
 
 	// --- 2. Render Active Battle ---
 	const headerHTML = generateBattleHeader(battle);
-	const globalConditionsHTML = generateGlobalBattleConditionsHTML(battle);
-	// [STEP 3] Call the new battlefield generator
+	
+    // [REMOVED] globalConditionsHTML is no longer generated here.
+    // It is now injected inside generateBattlefield() so it sits inside the UI container.
+
+	// [STEP 3] Call the new battlefield generator (now includes weather/terrain tags)
 	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
 	let actionPanelHTML = '';
@@ -612,8 +615,7 @@ export function generateBattleHTML(
 	}
 
 	return '<div class="infobox">' +
-		headerHTML +
-		globalConditionsHTML +
+		headerHTML + 
 		battlefieldHTML +
 		newEventsHTML + 
 		historyLogHTML + 
@@ -1042,7 +1044,7 @@ function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 	const allTags = [weatherTags, terrainTags, fieldEffectTags].filter(Boolean).join('');
 
 	if (allTags) {
-		return `<div class="rpg-text-center rpg-margin-top">` +
+		return `<div class="rpg-weather-container">` +
 			allTags +
 			`</div>`;
 	}
@@ -2032,6 +2034,9 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 
 	// --- Assemble the Battlefield ---
 	let html = '<div class="rpg-battle-ui">';
+
+    // [NEW] Inject Weather/Terrain tags here so they are inside the relative UI container
+    html += generateGlobalBattleConditionsHTML(battle);
 
 	// Opponent Side (Top)
 	html += '<div class="rpg-opponent-side">';
