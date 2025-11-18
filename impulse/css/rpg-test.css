@@ -857,11 +857,19 @@
 }
 
 /* === Battle Info Blocks (Now inside the slot) === */
-.rpg-opponent-info,
+.rpg-opponent-info {
+    width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
+    z-index: 20;
+    color: white;
+    text-shadow: none; /* Removed shadow */
+    margin-bottom: -5px; /* Pull sprite up slightly */
+    position: relative; /* Sits above the sprite */
+}
+
 .rpg-player-info {
     width: 100%; /* Take width from the .rpg-opponent-slot wrapper */
     z-index: 20;
-    color: #333;
+    color: black;
     text-shadow: none; /* Removed shadow */
     margin-bottom: -5px; /* Pull sprite up slightly */
     position: relative; /* Sits above the sprite */
