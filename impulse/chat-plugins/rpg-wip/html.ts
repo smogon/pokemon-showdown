@@ -1962,16 +1962,16 @@ function generateBattleHeader(battle: BattleState): string {
 }
 
 /**
- * [STEP 3 REFACTOR]
+ * [STEP 3+ REFACTOR]
  * This function is completely rewritten to produce the "Top vs. Bottom"
- * sprite-based layout from the CSS classes in Step 1.
+ * sprite-based layout.
+ * It no longer uses the `.rpg-battle-infobox` wrapper.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
 
 	/**
-	 * Inner helper to generate a single slot (sprite + info box).
-	 * This now handles the Pokémon-style layout.
+	 * Inner helper to generate a single slot (sprite + info).
 	 */
 	const generateBattleSlot = (
 		slot: ActivePokemonSlot | null,
@@ -1980,16 +1980,14 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	) => {
 		// If no slot, or Pokemon fainted, return an empty placeholder
 		if (!slot || slot.pokemon.hp <= 0) {
-			return '<div class="rpg-battle-slot-placeholder"></div>';
+			return ''; // Return nothing for an empty slot
 		}
 
 		const pokemon = slot.pokemon;
 		const species = Dex.species.get(pokemon.species);
 		
-		// 1. Get Info Box Contents
-		// We pass 'false' for isDoubleBattle because the info box itself
-		// doesn't need to know; only the tags do.
-		const infoBoxContents = generateSharedBattlePokemonInfo(slot, side === 'player', battle);
+		// 1. Get Info Block Contents
+		const infoContents = generateSharedBattlePokemonInfo(slot, side === 'player', battle);
 
 		// 2. Get Sprite
 		const spriteFilename = getSpriteFilename(species.id);
@@ -2008,10 +2006,10 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 
 		// 3. Assemble the slot
 		let html = '';
-		const infoBoxClass = side === 'player' ? 'rpg-player-infobox' : 'rpg-opponent-infobox';
+		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
 		
 		// Add targeting/pending classes if needed
-		let containerClasses = `rpg-battle-infobox ${infoBoxClass}`;
+		let containerClasses = `${infoClass}`;
 		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
 			containerClasses += " rpg-target-select";
 		}
@@ -2019,11 +2017,12 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			containerClasses += " rpg-action-pending";
 		}
 
+		// Combine the info block and the sprite
 		if (side === 'player') {
-			html = `<img class"="${spriteClass}" src="${spriteUrl}" width="60" height="60" />` +
-			       `<div class="${containerClasses}">${infoBoxContents}</div>`;
+			html = `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />` +
+			       `<div class="${containerClasses}">${infoContents}</div>`;
 		} else {
-			html = `<div class="${containerClasses}">${infoBoxContents}</div>` +
+			html = `<div class="${containerClasses}">${infoContents}</div>` +
 			       `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
 		}
 		
@@ -2037,6 +2036,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += '<div class="rpg-opponent-side">';
 	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent');
 	if (isDoubleBattle) {
+		// Note: Positioning for double battle sprites/info will need CSS adjustments
 		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent');
 	}
 	html += '</div>';
@@ -2045,6 +2045,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += '<div class="rpg-player-side">';
 	html += generateBattleSlot(battle.playerSlots[0], 0, 'player');
 	if (isDoubleBattle) {
+		// Note: Positioning for double battle sprites/info will need CSS adjustments
 		html += generateBattleSlot(battle.playerSlots[1], 1, 'player');
 	}
 	html += '</div>';
