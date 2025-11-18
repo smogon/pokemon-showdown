@@ -1159,7 +1159,8 @@ export class Pokemon {
 
 	getSwitchRequestData(forAlly?: boolean): PokemonSwitchRequestData {
 		const entry: PokemonSwitchRequestData = {
-			ident: this.fullname,
+			// @pokebedrock - Add position to ident
+			ident: `${this.getSlot()}: ${this.name}`,
 			// @pokebedrock
 			uuid: this.uuid || '',
 			details: this.details,

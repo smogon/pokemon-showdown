@@ -61,7 +61,8 @@ export interface Choice {
 
 export interface PokemonSwitchRequestData {
 	/**
-	 * `` `${sideid}: ${name}` ``
+	 * @pokebedrock - Add position to ident
+	 * `` `${sideid}${position}: ${name}` ``
 	 * @see {Pokemon#fullname}
 	 */
 	ident: string;
