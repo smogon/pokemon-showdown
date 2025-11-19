@@ -147,7 +147,7 @@ export const Scripts: ModdedBattleScriptsData = {
         poke.draggedIn = null;
       }
       return true;
-    }
+    },
 
     modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
       const tr = this.battle.trunc;
