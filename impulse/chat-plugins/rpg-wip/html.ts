@@ -1870,6 +1870,7 @@ function generateBattleHeader(battle: BattleState): string {
  * sprite-based layout.
  * It now creates a wrapper (.rpg-player-slot or .rpg-opponent-slot)
  * and places the info block *above* the sprite.
+ * * UPDATED: Adds 'rpg-slot-${index}' class to allow specific positioning for Double Battles.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
