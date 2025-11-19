@@ -227,7 +227,7 @@ export function generateProfileHTML(player: PlayerData): string {
 	if (player.obtainedBadges.length > 0) {
 		badgeHTML = `<div class="rpg-memo-box" style="margin-top:5px; text-align:center;">`;
 		for (const badge of player.obtainedBadges) {
-			badgeHTML += `<span title="${badge}" style="font-size:1.2em; cursor:help;"></span> `;
+			badgeHTML += `<span title="${badge}" style="font-size:1.2em; cursor:help;">⭐</span> `;
 		}
 		badgeHTML += `</div>`;
 	} else {
