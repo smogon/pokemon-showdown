@@ -2864,6 +2864,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onAnyAfterTakeItem(item, target) {
+			if (item.id !== 'abilityshield' || target.ignoringItem()) return;
+			const pokemon = this.effectState.target;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (target.volatiles['commanding']) {
+				return;
+			}
+			if (target.illusion) {
+				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+			}
+			if (target.volatiles['slowstart']) {
+				delete target.volatiles['slowstart'];
+				this.add('-end', target, 'Slow Start', '[silent]');
+			}
+			if (strongWeathers.includes(target.getAbility().id)) {
+				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+			}
+		},
 		onEnd(source) {
 			if (source.transformed) return;
 			for (const pokemon of this.getAllActive()) {
@@ -2886,14 +2904,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
 					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
-					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
+					if (pokemon.hasItem('Ability Shield')) continue; // don't restart abilities that weren't suppressed
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.ability === "gluttony") {
+					if (pokemon.ability === 'gluttony') {
 						pokemon.abilityState.gluttony = false;
 					}
 				}
+			}
+		},
+		onAnyAfterSetItem(item, pokemon) {
+			if (item.id !== 'abilityshield' || !pokemon.hasItem('Ability Shield')) return;
+			if (pokemon.getAbility().flags['cantsuppress']) return;
+			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			if (pokemon.ability === 'gluttony') {
+				pokemon.abilityState.gluttony = false;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },

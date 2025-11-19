@@ -164,8 +164,9 @@ describe('Ability Shield', () => {
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 
-	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
-	it(`should not trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
+	// original: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
+	// patched:
+	it(`should trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'intimidate', moves: ['splash'] },
 		], [
@@ -173,7 +174,7 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices();
-		assert.statStage(battle.p2.active[0], 'atk', 0);
+		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273

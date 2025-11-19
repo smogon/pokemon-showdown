@@ -1861,6 +1861,7 @@ export class Pokemon {
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 		}
+		this.battle.runEvent('AfterSetItem', this, null, null, item);
 		return true;
 	}
 
