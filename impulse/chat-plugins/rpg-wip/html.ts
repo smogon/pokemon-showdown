@@ -212,17 +212,6 @@ function generateItemCategoryFilters(baseCommand: string): string {
 	return html;
 }
 
-function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
-	const species = Dex.species.get(speciesId);
-	if (!species.exists) return '';
-
-	return `<div class="rpg-card rpg-text-center">` +
-		`<strong>${species.name}</strong><br>` +
-		`<small>Type: ${species.types.join('/')}</small><br>` +
-		`<button name="send" value="${command}" class="button rpg-button-small">Choose ${species.name}</button>` +
-		`</div>`;
-}
-
 function generatePokemonStatusTagsHTML(
 	slot: ActivePokemonSlot,
 	isDoubleBattle = false,
@@ -441,28 +430,26 @@ export function generateWelcomeHTML(): string {
 }
 
 export function generateModeSelectionHTML(): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Select a Mode</h2>`;
-	html += `<p><button name="send" value="/rpg storymode" class="button rpg-button-medium">📖 Story Mode</button></p>`;
-	html += `<p><button name="send" value="/rpg battletower start" class="button rpg-button-medium">🗼 Battle Tower</button></p>`;
-	html += `</div>`;
-	return html;
-}
-
-export function generateRPGModeSelectionHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>RPG Menu</h2>` +
-		`<p>Select a game mode to begin:</p>` +
-		`<p><button name="send" value="/rpg storymode" class="button">📖 Story Mode</button></p>` +
-		`<p><em>More modes will be added in future updates!</em></p>` +
+	let html = `<div class="rpg-infobox"><h2>Select a Mode</h2>` +
+		`<p>Choose a game mode to begin:</p>` +
+		`<div class="rpg-grid-2col">` +
+			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:15px;">` +
+				`<span style="font-size:2em">📖</span><br><strong>Story Mode</strong><br><small>The classic adventure</small>` +
+			`</button>` +
+			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:15px;">` +
+				`<span style="font-size:2em">🗼</span><br><strong>Battle Tower</strong><br><small>Roguelike challenge</small>` +
+			`</button>` +
+		`</div>` +
 		`</div>`;
+	return html;
 }
 
 export function generateStoryModeStartHTML(): string {
 	const startingLocation = getStartingLocation();
 	const location = LOCATIONS[startingLocation.id];
 
+	// Check for Lab
 	let labBuildingId = '';
-
 	if (location?.buildings) {
 		for (const building of location.buildings) {
 			if (building.type === 'lab') {
@@ -472,18 +459,61 @@ export function generateStoryModeStartHTML(): string {
 		}
 	}
 
-	let labButtonHTML = '';
-	if (labBuildingId) {
-		labButtonHTML = `<p><button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button></p>`;
-	}
-
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<p><em>To get your first Pokémon partner, head to the lab and talk to the Professor!</em></p>` +
-		`<hr />` +
-		labButtonHTML +
-		`<p><button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button></p>` +
+	return `<div class="rpg-infobox">` +
+		`<h2>Welcome to Kanto!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p>Your adventure is about to begin.</p>` +
+			`<p>To get your first Pokémon partner, head to the lab and talk to the Professor!</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			(labBuildingId ? `<button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button> ` : '') +
+			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button>` +
+		`</p>` +
 		`</div>`;
 }
+
+export function generateStarterSelectionHTML(type: string, starters: string[]): string {
+	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
+	let typeDescription = '';
+	if (type === 'fire') typeDescription = "Fire-types are passionate and offensive.";
+	else if (type === 'water') typeDescription = "Water-types are versatile and adaptable.";
+	else if (type === 'grass') typeDescription = "Grass-types are strategic and resilient.";
+
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Professor Oak's Lab</h2>` +
+		`<div class="rpg-memo-box">` +
+			`<p><strong>Oak:</strong> "${typeDescription}"</p>` +
+			`<p>Which ${typeTitle}-type Pokémon will you choose?</p>` +
+		`</div>` +
+		`<div class="rpg-grid-3col" style="margin-top:10px;">`;
+
+	for (const starterId of starters) {
+		const command = `/rpg selectstarter ${starterId}`;
+		html += generateStarterChoiceBoxHTML(starterId, command);
+	}
+	
+	html += `</div>` +
+		`<p style="text-align:center; margin-top:15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p>` +
+		`</div>`;
+	return html;
+}
+
+// Helper for the specific starter cards (keeps them compact)
+function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
+	const species = Dex.species.get(speciesId);
+	if (!species.exists) return '';
+	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${getSpriteFilename(species.id)}.png`;
+
+	return `<div class="rpg-party-card" style="align-items:center; text-align:center; justify-content:center;">` +
+		`<img src="${spriteUrl}" style="width:60px; height:60px; margin:0 auto;" />` +
+		`<strong>${species.name}</strong><br>` +
+		`<small>${species.types.join('/')}</small><br>` +
+		`<div class="rpg-party-actions" style="width:100%">` +
+			`<button name="send" value="${command}" class="button">Choose!</button>` +
+		`</div>` +
+		`</div>`;
+		}
+
 
 // M A I N   M E N U   S C R E E N S
 
