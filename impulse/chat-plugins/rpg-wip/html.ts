@@ -2207,22 +2207,6 @@ export function generateNPCSelectionHTML(availableNPCs: [string, { name: string 
 	return html;
 }
 
-// Make sure you have this helper from the previous step
-function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
-	const species = Dex.species.get(speciesId);
-	if (!species.exists) return '';
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${getSpriteFilename(species.id)}.png`;
-
-	return `<div class="rpg-starter-card">` +
-		`<img src="${spriteUrl}" />` +
-		`<div class="rpg-starter-info">` +
-			`<strong>${species.name}</strong><br>` +
-			`<small class="rpg-text-muted">${species.types.join('/')}</small>` +
-		`</div>` +
-		`<button name="send" value="${command}" class="button">Choose</button>` +
-		`</div>`;
-}
-
 // The function you asked to update
 export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, allStarters: string[]): string {
 	let html = `<div class="rpg-infobox">` +
