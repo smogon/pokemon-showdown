@@ -304,29 +304,27 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
-	// --- 1. Wild Pokemon Zones ---
+	// --- 1. Wild Pokemon Zones (Compact) ---
 	const availableZones = location.encounterZones || [];
 	if (availableZones.length > 0) {
-		html += `<hr /><h3>Wild Pokémon</h3><div class="rpg-grid-2col">`;
+		html += `<hr /><strong>Wild Pokémon:</strong><br>`;
+		html += `<p class="rpg-text-center">`; // Use paragraph for natural inline button flow
 		for (const zoneId of availableZones) {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (zone) {
-				const icon = zone.battleType === 'double' ? '👥' : 'Tall Grass';
-				// Using "Tall Grass" or icon based on your preference
-				const displayIcon = zone.battleType === 'double' ? '👥' : '🌿';
-				html += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button" style="text-align:left; padding:8px;">` +
-					`<strong>${zone.name}</strong><br><small>${displayIcon} Level ${zone.levelRange[0]}-${zone.levelRange[1]}</small>` +
-					`</button>`;
+				const icon = zone.battleType === 'double' ? '👥' : '🌿';
+				// Simple Button: Icon + Name only
+				html += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
 			}
 		}
-		html += `</div>`;
+		html += `</p>`;
 	}
 
-	// --- 2. Buildings ---
+	// --- 2. Buildings (Compact) ---
 	if (location.buildings && location.buildings.length > 0) {
-		html += `<hr /><h3>Buildings</h3><div class="rpg-grid-2col">`;
+		html += `<hr /><strong>Buildings:</strong><br>`;
+		html += `<p class="rpg-text-center">`;
 		for (const building of location.buildings) {
-			// Skip if not accessible
 			if (building.accessible === false) continue;
 			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
 
@@ -336,59 +334,46 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			else if (building.type === 'gym') icon = '⚔️';
 			else if (building.type === 'lab') icon = '🔬';
 
-			html += `<button name="send" value="/rpg building ${building.id}" class="button" style="text-align:left; padding:8px;">` +
-				`<strong>${building.name}</strong><br><small>${icon}</small>` +
-				`</button>`;
+			html += `<button name="send" value="/rpg building ${building.id}" class="button">${icon} ${building.name}</button> `;
 		}
-		html += `</div>`;
+		html += `</p>`;
 	}
 
-	// --- 3. Trainers ---
-	const locationId = toID(location.name); // or location.id if available
+	// --- 3. Trainers (Compact) ---
+	const locationId = toID(location.name);
 	const locationTrainers = TRAINER_LOCATIONS[locationId];
 	if (locationTrainers && locationTrainers.length > 0) {
 		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
 		if (availableTrainers.length > 0) {
-			html += `<hr /><h3>Trainers</h3><div class="rpg-grid-2col">`;
+			html += `<hr /><strong>Trainers:</strong><br>`;
+			html += `<p class="rpg-text-center">`;
 			for (const trainerId of availableTrainers) {
 				const trainerData = TRAINER_DATABASE[trainerId];
 				if (trainerData) {
-					html += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="text-align:left; padding:8px;">` +
-						`<strong>${trainerData.name}</strong><br><small>🥊 Battle</small>` +
-						`</button>`;
+					html += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
 				}
 			}
-			html += `</div>`;
+			html += `</p>`;
 		}
 	}
 
-	// --- 4. Travel / Connections ---
+	// --- 4. Travel (Compact) ---
 	if (location.connectedLocations && location.connectedLocations.length > 0) {
-		html += `<hr /><h3>Travel</h3><div class="rpg-grid-2col">`;
+		html += `<hr /><strong>Travel:</strong><br>`;
+		html += `<p class="rpg-text-center">`;
 		for (const connection of location.connectedLocations) {
 			let canAccess = true;
-			let lockReason = '';
-
-			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
-				canAccess = false;
-				lockReason = `🔒`;
-			}
-			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
-				canAccess = false;
-				lockReason = `🔒`;
-			}
+			
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) canAccess = false;
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) canAccess = false;
 
 			if (canAccess) {
-				html += `<button name="send" value="/rpg travel ${connection.id}" class="button" style="text-align:left; padding:8px;">` +
-					`<strong>${connection.name}</strong><br><small>➡️ Go</small>` +
-					`</button>`;
+				html += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 			} else {
-				html += `<button class="button disabled" disabled style="text-align:left; padding:8px; opacity:0.6;">` +
-					`<strong>${connection.name}</strong><br><small>${lockReason} Locked</small>` +
-					`</button>`;
+				html += `<button class="button disabled" disabled>🔒 ${connection.name}</button> `;
 			}
 		}
-		html += `</div>`;
+		html += `</p>`;
 	}
 
 	html += generateBottomNavigation();
