@@ -652,7 +652,7 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 		flags: { contact: 1, protect: 1, mirror: 1 },
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.moveLastTurnResult === false) return move.basePower * 2; // if the last move failed
-			if (pokemon.volatiles['indomitablespirit'].boost === 'lastMoveResisted') return move.basePower * 2; // if the last move was resisted - problematic line
+			if (pokemon.volatiles['indomitablespirit']?.boost === 'lastMoveResisted') return move.basePower * 2; // if the last move was resisted - problematic line
 			return move.basePower;
 		},
 		onPrepareHit(target, source) {

@@ -780,7 +780,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	starmiemega: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	mimejr: {
@@ -1303,7 +1303,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	weavile: {
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	teddiursa: {
@@ -3181,7 +3181,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUber",
 	},
 	landorus: {
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	landorustherian: {
@@ -3335,8 +3335,8 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	floetteeternal: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	floettemega: {
 		tier: "OU",
@@ -4163,7 +4163,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	corviknight: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	corviknightgmax: {
@@ -5016,7 +5016,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	ceruledge: {
-		tier: "UUBL",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	toedscool: {
@@ -5125,7 +5125,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	terapagos: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	terapagosstellar: {
@@ -5460,11 +5460,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	gevauyena: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	arsief: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	corpsetrap: {
