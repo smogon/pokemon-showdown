@@ -215,6 +215,10 @@ interface ModdedBattleActions {
 		this: BattleActions, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => [SpreadMoveDamage, SpreadMoveTargets];
+	spreadMoveHitInner?: (
+		this: BattleActions, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
+		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	) => [SpreadMoveDamage, SpreadMoveTargets];
 	switchIn?: (
 		this: BattleActions, pokemon: Pokemon, pos: number, sourceEffect: Effect | null, isDrag?: boolean
 	) => boolean | "pursuitfaint";
