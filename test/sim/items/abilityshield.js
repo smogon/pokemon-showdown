@@ -165,7 +165,7 @@ describe('Ability Shield', () => {
 	});
 
 	// original: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
-	// patched:
+	// patched: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10780426
 	it(`should trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'intimidate', moves: ['splash'] },
