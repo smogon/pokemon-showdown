@@ -1541,55 +1541,80 @@ export function generateSummarySelectionHTML(player: PlayerData): string {
 }
 
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
+	const species = Dex.species.get(pokemon.species);
+	const spriteFilename = getSpriteFilename(species.id);
+	// Use front sprite for summary
+	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
+	
+	const typesHTML = species.types.map(t => `<span class="rpg-tag" style="background-color:#777;">${t}</span>`).join(' '); // You can add specific type colors later if desired
+	const teraHTML = pokemon.teraType ? `<span class="rpg-tag rpg-tag-tera">Tera ${pokemon.teraType}</span>` : '';
+	const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
 
-	return '<div class="rpg-infobox rpg-menu-box">' +
-		'<h2>' + pokemon.nickname + '\'s Summary ' + shinySymbol + '</h2>' +
-		'<div class="rpg-grid-2col">' +
-		// Column 1: Info
-		'<div>' +
-		'<p><strong>Species:</strong> ' + pokemon.species + ' ' + genderSymbol + '</p>' +
-		'<p><strong>Level:</strong> ' + String(pokemon.level) + '</p>' +
-		'<p><strong>Nature:</strong> ' + pokemon.nature + '</p>' +
-		'<p><strong>Ability:</strong> ' + (pokemon.ability || 'Unknown') + '</p>' +
-		'<p><strong>Tera Type:</strong> <span class="rpg-tag rpg-tag-tera">⭐ ' + pokemon.teraType + '</span></p>' +
-		'<p><strong>Held Item:</strong> ' + (pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None') + '</p>' +
-		'</div>' +
-		// Column 2: Stats
-		'<div>' +
-		generateSummaryStatsTable(pokemon) +
-		'</div>' +
-		'</div>' +
-		'<hr />' +
-		'<div class="rpg-grid-2col">' +
-		// Column 3: Memo
-		'<div>' +
-		'<h4>Trainer Memo</h4>' +
-		'<p><strong>ID:</strong> ' + pokemon.id + '</p>' +
-		'<p><strong>Caught In:</strong> ' + (ITEMS_DATABASE[pokemon.caughtIn]?.name || 'a Ball') + '</p>' +
-		'<p><strong>Height:</strong> ' + String(pokemon.heightm) + ' m</p>' +
-		'<p><strong>Weight:</strong> ' + String(pokemon.weightkg) + ' kg</p>' +
-		'<p><strong>Friendship:</strong> ' + String(pokemon.friendship) + '/255</p>' +
-		'</div>' +
-		// Column 4: IVs
-		'<div>' +
-		generateSummaryIVsTable(pokemon) +
-		'</div>' +
-		'</div>' +
-		'<hr />' +
-		'<div class="rpg-grid-2col">' +
-		// Column 5: EVs
-		'<div>' +
-		generateSummaryEVsTable(pokemon) +
-		'</div>' +
-		// Column 6: Moves
-		'<div>' +
-		generateSummaryMovesGrid(pokemon) +
-		'</div>' +
-		'</div>' +
-		'<p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">← Back to Party</button></p>' +
-		'</div>';
+	// Generate Moves Grid (Visual Only)
+	let movesHTML = `<div class="rpg-grid-2col">`;
+	for (let i = 0; i < 4; i++) {
+		const move = pokemon.moves[i];
+		if (move) {
+			const moveData = getMove(move.id);
+			movesHTML += `<div class="rpg-summary-move">` +
+				`<strong>${moveData.name}</strong><br>` +
+				`<small>${moveData.type} | PP: ${move.pp}/${moveData.pp || 5}</small>` +
+				`</div>`;
+		} else {
+			movesHTML += `<div class="rpg-summary-move rpg-text-muted">-</div>`;
+		}
+	}
+	movesHTML += `</div>`;
+
+	// Build the HTML structure
+	let html = `<div class="rpg-infobox">` +
+		// --- HEADER ---
+		`<div class="rpg-summary-header">` +
+			`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
+			`<div class="rpg-summary-info">` +
+				`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
+				`<p>Level ${pokemon.level}</p>` +
+				`${generateHPBar(pokemon)}` +
+				`${generateExpBar(pokemon)}` +
+			`</div>` +
+		`</div>` +
+
+		// --- GRID LAYOUT (Stats | Details) ---
+		`<div class="rpg-grid-2col">` +
+			// Left Column: Stats
+			`<div>` +
+				`<h4>Battle Stats</h4>` +
+				generateUnifiedStatsTable(pokemon) +
+			`</div>` +
+
+			// Right Column: Memo & Details
+			`<div>` +
+				`<h4>Trainer Memo</h4>` +
+				`<div class="rpg-memo-box">` +
+					`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
+					`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
+					`<p><strong>Item:</strong> ${itemText}</p>` +
+					`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
+					`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+					`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
+					`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
+				`</div>` +
+			`</div>` +
+		`</div>` +
+		
+		`<hr />` +
+		
+		// --- MOVES SECTION ---
+		`<h4>Known Moves</h4>` +
+		movesHTML +
+
+		`<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">← Back to Party</button></p></center>` +
+	`</div>`;
+
+	return html;
 }
 
 export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
