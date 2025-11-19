@@ -2137,7 +2137,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			console.log("I am here!");
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
-				console.log(target);
+				console.log(target.species.id);
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
