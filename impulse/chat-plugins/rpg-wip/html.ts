@@ -473,9 +473,9 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
 
-	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;>`; // Updated class
-	html += `<h2>Poké Mart - ${player.location}</h2>`;
-	html += `<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Poké Mart - ${player.location}</h2>` +
+		`<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {
 		html += `<p class="rpg-text-muted"><small>🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badges</small></p>`;
@@ -485,7 +485,8 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += generateItemCategoryFilters('/rpg shop');
 
 	let itemsFound = false;
-	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	// Start wrapper
+	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
 	let count = 0;
 
 	for (const itemId of shopInventory) {
@@ -495,26 +496,27 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-			const iconUrl = getItemIcon({ ...item, id: itemId }); // Construct object for helper
 
 			const cellContent = `<div class="rpg-item-container">` +
-					`<div class="rpg-item-header">` +
-						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
-						`<div class="rpg-item-details">` +
-							`<strong>${item.name}</strong><br>` +
-							`<span class="rpg-text-info">₽${price}</span>` +
-						`</div></div>` +
-					`<div class="rpg-item-actions">` +
-						`<button name="send" value="/rpg buy ${itemId} 1" class="button">Buy 1</button>` +
-						`<button name="send" value="/rpg buy ${itemId} 10" class="button">Buy 10</button>` +
-					`</div></div>`;
+				`<div class="rpg-item-header">` +
+					`<div class="rpg-item-details">` +
+						`<strong>${item.name}</strong><br>` +
+						`<span class="rpg-text-info">₽${price}</span>` +
+					`</div>` +
+				`</div>` +
+				`<div class="rpg-item-actions">` +
+					`<button name="send" value="/rpg buy ${itemId} 1" class="button">Buy 1</button> ` +
+					`<button name="send" value="/rpg buy ${itemId} 10" class="button">Buy 10</button>` +
+				`</div>` +
+			`</div>`;
 
 			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
 			count++;
 			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table>';
+	// Close table and wrapper
+	gridHTML += '</tr></table></div>';
 
 	if (itemsFound) {
 		html += gridHTML;
@@ -522,8 +524,8 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 		html += `<p>No items found in this category.</p>`;
 	}
 
-	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></center>`;
-	html += `</div></div>`;
+	html += `<p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `</div>`;
 	return html;
 }
 
@@ -532,38 +534,39 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
  * Changed "Sell 5" to "Sell 10".
  */
 export function generateSellMenuHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
+	let html = `<div class="rpg-infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	
 	let sellableItems = 0;
-	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	// Start wrapper
+	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
 	let count = 0;
 
 	for (const [id, item] of player.inventory) {
 		const purchasePrice = ITEM_PRICES[id];
-		// Generally, only misc, balls, medicines, etc are sellable. Key items are not.
 		if (purchasePrice && item.category !== 'key') {
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
-			const iconUrl = getItemIcon(item);
 
 			const cellContent = `<div class="rpg-item-container">` +
-					`<div class="rpg-item-header">` +
-						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
-						`<div class="rpg-item-details">` +
-							`<strong>${item.name}</strong> (x${item.quantity})<br>` +
-							`<small>Sell: ₽${sellPrice}</small>` +
-						`</div></div>` +
-					`<div class="rpg-item-actions">` +
-						`<button name="send" value="/rpg sell ${id} 1" class="button">Sell 1</button>` +
-						`${item.quantity >= 10 ? `<button name="send" value="/rpg sell ${id} 10" class="button">Sell 10</button>` : ''}` +
-					`</div></div>`;
+				`<div class="rpg-item-header">` +
+					`<div class="rpg-item-details">` +
+						`<strong>${item.name}</strong> (x${item.quantity})<br>` +
+						`<small>Sell: ₽${sellPrice}</small>` +
+					`</div>` +
+				`</div>` +
+				`<div class="rpg-item-actions">` +
+					`<button name="send" value="/rpg sell ${id} 1" class="button">Sell 1</button> ` +
+					(item.quantity >= 10 ? `<button name="send" value="/rpg sell ${id} 10" class="button">Sell 10</button>` : '') +
+				`</div>` +
+			`</div>`;
 
 			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
 			count++;
 			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table>';
+	// Close table and wrapper
+	gridHTML += '</tr></table></div>';
 
 	if (sellableItems > 0) {
 		html += gridHTML;
@@ -571,7 +574,7 @@ export function generateSellMenuHTML(player: PlayerData): string {
 		html += `<p>You have no valuable items to sell.</p>`;
 	}
 	
-	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div></div></center>`;
+	html += `<p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 	return html;
 }
 
