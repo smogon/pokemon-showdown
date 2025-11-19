@@ -991,7 +991,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
-			// If no target, show travel menu
+			// If no target, show travel menu (Selection Screen)
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) {
@@ -1036,7 +1036,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// Travel to target location
+			// --- EXECUTE TRAVEL ---
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1104,7 +1104,7 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// If there are triggered events, show them
+			// If there are triggered events, show them (Interrupts Streamlined Travel)
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				let eventHTML = `<div class="rpg-infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
@@ -1177,11 +1177,10 @@ export const commands: ChatCommands = {
 					eventHTML += `<p><button name="send" value="/rpg challenge ${firstEvent.trainerId}" class="button">⚔️ Battle!</button></p>`;
 					eventHTML += `<p><em>(You can't avoid this battle)</em></p>`;
 				} else {
-					// NOTE: Additional scripted event types can be integrated here using scripted-events.ts handlers
+					// Generic handler fallback
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
 					eventHTML += `<p class="rpg-text-warning">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
-					eventHTML += `<p><em>Handler exists in scripted-events.ts but needs to be wired up here.</em></p>`;
 					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 				}
 
@@ -1189,12 +1188,9 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
-			const arrivalHTML = `<div class="rpg-infobox">` +
-				`<div class="rpg-text-center"><h2><b>Arrived at ${targetLocation.name}</b></h2>` +
-				`<em><p>${targetLocation.description}</p></em></div>` +
-				`<div class="rpg-text-center"><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></div>` +
-				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${arrivalHTML}`);
+			// STREAMLINED: Immediate transition to Explore with notification
+			const msg = `You arrived at ${targetLocation.name}.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
 
 		building(target, room, user) {
