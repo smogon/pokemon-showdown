@@ -129,7 +129,7 @@ export const Scripts: ModdedBattleScriptsData = {
       return item.megaStone;
     },
 
-    /*runSwitch(pokemon: Pokemon) {
+    runSwitch(pokemon: Pokemon) {
       this.battle.runEvent('Swap', pokemon);
 
       if (this.battle.gen >= 5) {
@@ -160,11 +160,10 @@ export const Scripts: ModdedBattleScriptsData = {
           foeActive.removeVolatile('substitutebroken');
         }
       }
-      this.battle.runEvent('HiveMind', pokemon); // making Hive Mind activate at the appropriate time
       pokemon.addVolatile('indomitablespirit'); // yes this is a really ugly way to do this but it's better than a ruleset okay
       pokemon.draggedIn = null;
       return true;
-    },*/
+    },
     /*modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
       const tr = this.battle.trunc;
       if (!move.type) move.type = '???';
