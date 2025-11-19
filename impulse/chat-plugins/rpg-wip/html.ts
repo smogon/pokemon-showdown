@@ -904,33 +904,6 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	return html;
 }
 
-export function generatePurchaseCompleteHTML(itemName: string, quantity: number, totalCost: number, remainingMoney: number): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Purchase Complete!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p>You bought <strong>${quantity}x ${itemName}</strong></p>` +
-			`<p class="rpg-text-error">- ₽${totalCost}</p>` +
-		`</div>` +
-		`<p style="text-align:center"><strong>Money remaining:</strong> ₽${remainingMoney}</p>` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>` +
-		generateBottomNavigation() +
-		`</div>`;
-}
-
-export function generateSellCompleteHTML(itemName: string, quantity: number, totalGain: number, remainingMoney: number): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Item Sold!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p>You sold <strong>${quantity}x ${itemName}</strong></p>` +
-			`<p class="rpg-text-success">+ ₽${totalGain}</p>` +
-		`</div>` +
-		`<p style="text-align:center"><strong>Money remaining:</strong> ₽${remainingMoney}</p>` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg sell" class="button">Sell More</button> <button name="send" value="/rpg shop" class="button">Back to Shop</button></p>` +
-		`</div>`;
-		}
-
 function generateSelectionCard(pokemon: RPGPokemon, actionButton: string, details: string = ''): string {
 	const species = Dex.species.get(pokemon.species);
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
