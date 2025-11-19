@@ -855,7 +855,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 
 	let itemsFound = false;
 	// Wrap the table in the new 3-column grid utility
-	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
+	let gridHTML = `<br><div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [itemId, item] of player.inventory) {
@@ -911,7 +911,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 	let itemsFound = false;
 	// Wrap the table in the new 3-column grid utility
-	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
+	let gridHTML = `<br><div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const itemId of shopInventory) {
