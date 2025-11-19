@@ -2232,26 +2232,6 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 		
 	return html;
 }
-
-
-export function generateNPCStarterConfirmHTML(
-	npcName: string,
-	message: string,
-	tempSlot: ActivePokemonSlot,
-	speciesName: string
-): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>Congratulations!</h2>` +
-		`<p><strong>${npcName}:</strong> "${message}"</p>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
-		`<p>"Now, head out and begin your journey. Good luck!"</p>` +
-		`<hr />` +
-		`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
-		generateBottomNavigation() +
-		`</div>`;
-}
-
 // S T O R Y   P R O G R E S S I O N
 
 export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesName: string, startingLocationName: string): string {
