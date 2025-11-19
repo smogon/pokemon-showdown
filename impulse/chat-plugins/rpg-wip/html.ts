@@ -854,7 +854,8 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	html += generateItemCategoryFilters('/rpg items');
 
 	let itemsFound = false;
-	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
+	// Wrap the table in the new 3-column grid utility
+	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [itemId, item] of player.inventory) {
@@ -873,13 +874,13 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 					`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
 				`</div>` +
 			`</div>`;
-
-			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			// NOTE: Changed from <td> to <div> to use the CSS Grid layout instead of table row/cell logic
+			gridHTML += `<div>${cellContent}</div>`;
 			count++;
-			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table></div>';
+	// Close grid wrapper and scroll div
+	gridHTML += '</div></div>';
 
 	if (itemsFound) {
 		html += gridHTML;
@@ -909,7 +910,8 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	html += generateItemCategoryFilters('/rpg shop');
 
 	let itemsFound = false;
-	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
+	// Wrap the table in the new 3-column grid utility
+	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const itemId of shopInventory) {
@@ -933,12 +935,13 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 				`</div>` +
 			`</div>`;
 
-			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			// NOTE: Changed from <td> to <div>
+			gridHTML += `<div>${cellContent}</div>`;
 			count++;
-			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table></div>';
+	// Close grid wrapper and scroll div
+	gridHTML += '</div></div>';
 
 	if (itemsFound) {
 		html += gridHTML;
@@ -955,7 +958,8 @@ export function generateSellMenuHTML(player: PlayerData): string {
 	let html = `<div class="rpg-infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	
 	let sellableItems = 0;
-	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
+	// Wrap the table in the new 3-column grid utility
+	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [id, item] of player.inventory) {
@@ -977,12 +981,13 @@ export function generateSellMenuHTML(player: PlayerData): string {
 				`</div>` +
 			`</div>`;
 
-			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			// NOTE: Changed from <td> to <div>
+			gridHTML += `<div>${cellContent}</div>`;
 			count++;
-			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table></div>';
+	// Close grid wrapper and scroll div
+	gridHTML += '</div></div>';
 
 	if (sellableItems > 0) {
 		html += gridHTML;
@@ -1118,7 +1123,8 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 	let html = `<div class="rpg-infobox"><h2>Give to ${pokemon.species}</h2><p>Select an item from your bag:</p>`;
 	
 	let itemsFound = false;
-	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
+	// Wrap the table in the new 3-column grid utility
+	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [id, item] of player.inventory) {
@@ -1137,12 +1143,13 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 				`</div>` +
 			`</div>`;
 
-			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			// NOTE: Changed from <td> to <div>
+			gridHTML += `<div>${cellContent}</div>`;
 			count++;
-			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table></div>';
+	// Close grid wrapper and scroll div
+	gridHTML += '</div></div>';
 
 	if (itemsFound) {
 		html += gridHTML;
@@ -1573,7 +1580,7 @@ function generateAvailablePokemonListHTML(
 	return html;
 }
 
-export function generateSharedBattlePokemonInfo(
+function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	battle?: BattleState
