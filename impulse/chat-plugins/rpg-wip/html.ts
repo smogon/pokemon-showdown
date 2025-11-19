@@ -350,15 +350,14 @@ function generateBattleActionButtonsHTML(
 }
 
 // S Y S T E M   &   M A I N   M E N U
-
 /**
  * [NEW] Generates the Player Profile screen.
- * Replaces the inline HTML in commands.ts
+ * Updated: No avatar icon, uses scrollable grid.
  */
 export function generateProfileHTML(player: PlayerData): string {
 	// Calculate progress
 	let progressText = 'Just starting out';
-	if (player.storyFlags.has('champion')) progressText = 'Champion! 🏆';
+	if (player.storyFlags.has('champion')) progressText = 'Champion!';
 	else if (player.storyFlags.has('all_badges')) progressText = 'Ready for Elite Four';
 	else if (player.badges >= 4) progressText = `${player.badges}/${TOTAL_BADGES} Badges - Halfway there!`;
 	else if (player.badges > 0) progressText = `${player.badges}/${TOTAL_BADGES} Badges - On your journey`;
@@ -368,50 +367,58 @@ export function generateProfileHTML(player: PlayerData): string {
 	if (player.obtainedBadges.length > 0) {
 		badgeHTML = `<div class="rpg-memo-box" style="margin-top:5px; text-align:center;">`;
 		for (const badge of player.obtainedBadges) {
-			badgeHTML += `<span title="${badge}" style="font-size:1.2em; cursor:help;">🏆</span> `;
+			badgeHTML += `<span title="${badge}" style="font-size:1.2em; cursor:help;"></span> `;
 		}
 		badgeHTML += `</div>`;
 	} else {
 		badgeHTML = `<span class="rpg-text-muted">None yet</span>`;
 	}
 
-	const html = `<div class="rpg-infobox">` +
-		`<div class="rpg-summary-header">` +
-			`<div class="rpg-summary-sprite" style="background:#ddd; color:#555; font-size:2em;">👤</div>` + // Placeholder avatar
-			`<div class="rpg-summary-info">` +
-				`<h3>${player.name}</h3>` +
-				`<p class="rpg-text-info"><strong>${progressText}</strong></p>` +
-			`</div>` +
-		`</div>` +
+	let html = `<div class="rpg-infobox">` +
+		// START SCROLLABLE AREA
+		`<div class="rpg-scrollable-grid">` +
 
-		`<div class="rpg-grid-2col">` +
-			`<div>` +
-				`<h4>Trainer Card</h4>` +
-				`<table class="rpg-stats-table">` +
-					`<tr><td>Money</td><td class="rpg-stat-val">₽${player.money}</td></tr>` +
-					`<tr><td>Badges</td><td>${badgeHTML}</td></tr>` +
-					`<tr><td>Pokedex</td><td class="rpg-stat-val">0</td></tr>` + // Placeholder
-					`<tr><td>Trainers Defeated</td><td class="rpg-stat-val">${player.defeatedTrainers.size}</td></tr>` +
-				`</table>` +
-			`</div>` +
-			`<div>` +
-				`<h4>Adventure</h4>` +
-				`<div class="rpg-memo-box">` +
-					`<p><strong>Location:</strong><br>${player.location}</p>` +
-					`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
-					`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
-					`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
+			// Header (Avatar Removed)
+			`<div class="rpg-summary-header">` +
+				`<div class="rpg-summary-info">` +
+					`<h3>${player.name}</h3>` +
+					`<p class="rpg-text-info"><strong>${progressText}</strong></p>` +
 				`</div>` +
 			`</div>` +
+
+			// Two Column Stats
+			`<div class="rpg-grid-2col">` +
+				`<div>` +
+					`<h4>Trainer Card</h4>` +
+					`<table class="rpg-stats-table">` +
+						`<tr><td>Money</td><td class="rpg-stat-val">₽${player.money}</td></tr>` +
+						`<tr><td>Badges</td><td>${badgeHTML}</td></tr>` +
+						`<tr><td>Pokedex</td><td class="rpg-stat-val">0</td></tr>` + // Placeholder
+						`<tr><td>Trainers Defeated</td><td class="rpg-stat-val">${player.defeatedTrainers.size}</td></tr>` +
+					`</table>` +
+				`</div>` +
+				`<div>` +
+					`<h4>Adventure</h4>` +
+					`<div class="rpg-memo-box">` +
+						`<p><strong>Location:</strong><br>${player.location}</p>` +
+						`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+						`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
+						`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
+					`</div>` +
+				`</div>` +
+			`</div>` +
+
+			`<hr />` +
+			`<h4>System</h4>` +
+			`<p style="text-align:center">` +
+				`<button name="send" value="/rpg dbsave" class="button">💾 Save Game</button> ` +
+				`<button name="send" value="/rpg dbload" class="button">📁 Load Game</button> ` +
+				`<button name="send" value="/rpg dbdelete" class="button rpg-text-error">🗑️ Delete Save</button>` +
+			`</p>` +
+		
+		// END SCROLLABLE AREA
 		`</div>` +
 
-		`<hr />` +
-		`<h4>System</h4>` +
-		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg dbsave" class="button">💾 Save Game</button> ` +
-			`<button name="send" value="/rpg dbload" class="button">📁 Load Game</button> ` +
-			`<button name="send" value="/rpg dbdelete" class="button rpg-text-error">🗑️ Delete Save</button>` +
-		`</p>` +
 		generateBottomNavigation() +
 	`</div>`;
 
