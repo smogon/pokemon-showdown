@@ -563,19 +563,45 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 }
 
 export function generatePCHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Pokemon PC System</h2><p>Welcome to Bill's PC!</p><p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>`;
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Pokemon Storage System</h2>` +
+		`<p><strong>Stored:</strong> ${player.pc.size} / 100</p>`;
+
 	if (player.pc.size === 0) {
-		html += `<p>No Pokemon stored in PC.</p>`;
+		html += `<div class="rpg-memo-box" style="text-align:center; margin:20px 0; color:#888;">Box is empty.</div>`;
 	} else {
-		html += `<div class="rpg-scroll-list-medium">`;
+		// Start Scrollable Area
+		html += `<div class="rpg-scrollable-grid">` +
+			// Use the 2-column party grid for consistency
+			`<div class="rpg-party-grid">`;
+
 		for (const [pokemonId, pokemon] of player.pc) {
-			html += `<div class="rpg-list-item"><div><strong>${pokemon.species}</strong> (Level ${pokemon.level})<br><small>HP: ${pokemon.hp}/${pokemon.maxHp}</small></div><button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button></div>`;
+			const species = Dex.species.get(pokemon.species);
+			const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
+			const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
+
+			html += `<div class="rpg-party-card">` +
+				`<div class="rpg-party-main">` +
+					`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+					`<div class="rpg-party-stats">` +
+						`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+						`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
+					`</div>` +
+				`</div>` +
+				`<div class="rpg-party-actions">` +
+					`<button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button>` +
+					`<button name="send" value="/rpg summary ${pokemonId}" class="button">Summary</button>` +
+				`</div>` +
+			`</div>`;
 		}
-		html += `</div>`;
+		
+		html += `</div></div>`; // Close grid and scroll wrapper
 	}
-	html += `<p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">View Party</button></p>`;
-	html += generateBottomNavigation();
-	html += `</div>`;
+
+	html += `<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">View Party</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
 	return html;
 }
 
