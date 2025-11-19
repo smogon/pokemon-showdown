@@ -1540,6 +1540,41 @@ export function generateSummarySelectionHTML(player: PlayerData): string {
 	return html;
 }
 
+/**
+ * [NEW] Generates a unified table for Stats, IVs, and EVs.
+ */
+function generateUnifiedStatsTable(pokemon: RPGPokemon): string {
+	const stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
+	const statNames = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+
+	let html = `<table class="rpg-stats-table">` +
+		`<tr><th>Stat</th><th>Value</th><th>IV</th><th>EV</th></tr>`;
+
+	for (const stat of stats) {
+		const value = stat === 'hp' ? pokemon.maxHp : pokemon[stat];
+		const iv = pokemon.ivs[stat];
+		const ev = pokemon.evs[stat];
+		
+		// Highlight high IVs/EVs
+		const ivClass = iv === 31 ? 'rpg-text-success' : '';
+		const evClass = ev > 0 ? 'rpg-stat-ev' : 'rpg-text-muted';
+
+		html += `<tr>` +
+			`<td>${statNames[stat]}</td>` +
+			`<td class="rpg-stat-val">${value}</td>` +
+			`<td class="${ivClass}">${iv}</td>` +
+			`<td class="${evClass}">${ev}</td>` +
+			`</tr>`;
+	}
+	
+	// Total EVs row
+	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+	html += `<tr><td colspan="3" style="text-align:right"><small>Total EVs:</small></td><td><strong>${totalEVs}/510</strong></td></tr>`;
+	
+	html += `</table>`;
+	return html;
+}
+
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const species = Dex.species.get(pokemon.species);
 	const spriteFilename = getSpriteFilename(species.id);
