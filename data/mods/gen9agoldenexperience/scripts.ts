@@ -71,7 +71,7 @@ export const Scripts: ModdedBattleScriptsData = {
       return false;
     },
   },
-  /*actions: {
+  actions: {
     canMegaEvo(pokemon) {
       const species = pokemon.baseSpecies;
       const altForme = pokemon.baseSpecies.otherFormes && this.dex.species.get(pokemon.baseSpecies.otherFormes[0]);
@@ -129,7 +129,7 @@ export const Scripts: ModdedBattleScriptsData = {
       return item.megaStone;
     },
 
-    runSwitch(pokemon: Pokemon) {
+    /*runSwitch(pokemon: Pokemon) {
       this.battle.runEvent('Swap', pokemon);
 
       if (this.battle.gen >= 5) {
@@ -164,8 +164,8 @@ export const Scripts: ModdedBattleScriptsData = {
       pokemon.addVolatile('indomitablespirit'); // yes this is a really ugly way to do this but it's better than a ruleset okay
       pokemon.draggedIn = null;
       return true;
-    },
-    modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+    },*/
+    /*modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
       const tr = this.battle.trunc;
       if (!move.type) move.type = '???';
       const type = move.type;
@@ -282,12 +282,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
       // ...but 16-bit truncation happens even later, and can truncate to 0
       return tr(baseDamage, 16);
-    },
+    },*/
 
 
 
 
-    hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
+    /*hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
       let damage: (number | boolean | undefined)[] = [];
       for (const i of targets.keys()) {
         damage[i] = 0;
@@ -472,13 +472,13 @@ export const Scripts: ModdedBattleScriptsData = {
       }
 
       return damage;
-    },
+    },*/
 
     calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
       if (move.id === 'chloroblast') return Math.round(pokemon.maxhp / 2);
       return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
     }
-  },*/
+  },
 
 
 
