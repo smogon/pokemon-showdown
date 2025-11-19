@@ -118,7 +118,5 @@ export const nameColor = (
 		`<font color=#948A88>${Users.globalAuth.get(userId)}</font>` :
 		'';
 	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
-	const color = hashColor(name);
-
-	return symbol + (bold ? '<b>' : '') + `<font color=${color}>${userName}</font>` + (bold ? '</b>' : '');
+	return symbol + (bold ? '<b>' : '') + `<font color=${hashColor(name)}>${userName}</font>` + (bold ? '</b>' : '');
 };
