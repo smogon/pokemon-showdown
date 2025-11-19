@@ -160,11 +160,12 @@ function getSpriteFilename(speciesId: string): string {
 
 export function generateBottomNavigation(): string {
 	return `<div class="rpg-nav-bar">` +
+		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +		
 		`<button name="send" value="/rpg profile" class="button rpg-nav-button"><span class="rpg-nav-icon">👤</span> Profile</button>` +
 		`<button name="send" value="/rpg party" class="button rpg-nav-button"><span class="rpg-nav-icon">⚡</span> Party</button>` +
 		`<button name="send" value="/rpg items" class="button rpg-nav-button"><span class="rpg-nav-icon">🎒</span> Items</button>` +
-		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +
 		`<button name="send" value="/rpg pokedex" class="button rpg-nav-button"><span class="rpg-nav-icon">📖</span> Pokédex</button>` +
+		`<button name="send" value="/rpg battletower start" class="button rpg-nav-button"><span class="rpg-nav-icon">🗼</span> Tower</button>` +
 		`</div>`;
 }
 
