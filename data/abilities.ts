@@ -2865,7 +2865,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnyAfterTakeItem(item, target) {
-			if (item.id !== 'abilityshield' || target.ignoringItem()) return;
+			if (item.id !== 'abilityshield' || !target.isActive ||
+				target.volatiles['embargo'] || this.field.pseudoWeather['magicroom']) return;
 			const pokemon = this.effectState.target;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (target.volatiles['commanding']) {
