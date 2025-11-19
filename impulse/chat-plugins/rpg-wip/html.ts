@@ -2025,12 +2025,22 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 }
 
 export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: string[]): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Teach an Egg Move</h2><p>Choose a move for <strong>${pokemon.species}</strong> to learn:</p>`;
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Egg Move Tutor</h2>` +
+		`<p>Choose a move for <strong>${pokemon.species}</strong> to learn:</p>` +
+		`<div class="rpg-grid-2col">`;
+
 	for (const moveId of eggMoves) {
 		const move = getMove(moveId);
-		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button">${move.name}</button> `;
+		html += `<button name="send" value="/rpg learneggmove ${pokemon.id} ${moveId}" class="button" style="padding:8px; height:auto;">` +
+			`<strong>${move.name}</strong><br>` +
+			`<small>${move.type} | Power: ${move.basePower || '-'}</small>` +
+			`</button> `;
 	}
-	html += `<hr /><p><button name="send" value="/rpg items" class="button">Cancel</button></p></div>`;
+	
+	html += `</div>` +
+		`<hr /><p style="text-align:center"><button name="send" value="/rpg items" class="button">Cancel</button></p>` +
+		`</div>`;
 	return html;
 }
 
