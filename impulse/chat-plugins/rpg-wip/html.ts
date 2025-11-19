@@ -1974,37 +1974,116 @@ export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: stri
 
 // I T E M   R E S U L T   U I
 
+export function generateItemGivenHTML(pokemonSpecies: string, itemName: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Item Given</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p><strong>${pokemonSpecies}</strong> is now holding:</p>` +
+			`<p><strong>${itemName}</strong></p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
+		`</div>`;
+}
+
+export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Item Taken</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p>Took <strong>${itemName}</strong> from <strong>${pokemonSpecies}</strong></p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
+		`</div>`;
+}
+
+export function generateDepositPCHTML(pokemonSpecies: string): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Pokemon Deposited</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p><strong>${pokemonSpecies}</strong> was sent to Bill's PC.</p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg pc" class="button">View PC</button> <button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
+		`</div>`;
+}
+
+export function generateWithdrawPCHTML(pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Pokemon Withdrawn</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p><strong>${pokemonSpecies}</strong> was added to your party!</p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<p style="text-align:center"><button name="send" value="/rpg pc" class="button">View PC</button> <button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
+		`</div>`;
+}
+
+export function generateNicknameChangedHTML(oldNickname: string, pokemon: RPGPokemon, tempSlot: ActivePokemonSlot): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Nickname Changed!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p><strong>${oldNickname}</strong> is now known as:</p>` +
+			`<p><strong>${pokemon.nickname}</strong></p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
+		`</div>`;
+}
+
 export function generateItemUseErrorHTML(message: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>${message}</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
 
 export function generateItemUseResultHTML(message: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Used!</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>Item Used!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">${message}</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
+		`</div>`;
+}
+
+export function generatePPRestoreResultHTML(itemName: string, pokemonSpecies: string, moveName: string, restored: number, tempSlot: ActivePokemonSlot): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Item Used!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p>Used <strong>${itemName}</strong> on <strong>${pokemonSpecies}</strong></p>` +
+			`<p class="rpg-text-success">+${restored} PP for ${moveName}</p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
+		`</div>`;
 }
 
 export function generateSacredAshResultHTML(message: string): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Used!</h2><p>${message}</p><p><button name="send" value="/rpg party" class="button">View Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>Sacred Ash Used!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">${message}</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
+		`</div>`;
 }
 
 export function generateTeraShardResultHTML(pokemon: RPGPokemon, oldTeraType: string, newTeraType: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Tera Type Changed!</h2><p>You used a <strong>Tera Shard</strong> on <strong>${pokemon.species}</strong>!</p><p>Its Tera Type changed from <strong>${oldTeraType}</strong> to <strong>${newTeraType}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>Tera Type Changed!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p><strong>${pokemon.species}</strong>'s Tera Type changed!</p>` +
+			`<p>${oldTeraType} ➝ <strong class="rpg-text-success">${newTeraType}</strong></p>` +
+		`</div>` +
+		`${generatePokemonInfoHTML(tempSlot, true)}` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
+		`</div>`;
 }
 
 export function generateEvolutionStoneErrorHTML(pokemonSpecies: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>It had no effect... (${pokemonSpecies} is not compatible with this item).</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
 
-export function generatePPRestoreResultHTML(itemName: string, pokemonSpecies: string, moveName: string, restored: number, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Used!</h2><p>You used an <strong>${itemName}</strong> on <strong>${pokemonSpecies}</strong>!</p><p><strong>${moveName}</strong>'s PP was restored by ${restored}.</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-}
-
-export function generateItemGivenHTML(pokemonSpecies: string, itemName: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Given</h2><p><strong>${pokemonSpecies}</strong> is now holding the <strong>${itemName}</strong>!</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-}
-
-export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Taken</h2><p>You took the <strong>${itemName}</strong> from <strong>${pokemonSpecies}</strong>.</p>${generatePokemonInfoHTML(tempSlot, true, true)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-}
 
 // N P C   U I
 
