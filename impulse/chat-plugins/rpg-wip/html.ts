@@ -562,86 +562,46 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	return html;
 }
 
-/**
- * Updated to accept a backLocation ('party' or 'pc')
- */
-export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'party' | 'pc' = 'party'): string {
-	const species = Dex.species.get(pokemon.species);
-	const spriteFilename = getSpriteFilename(species.id);
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
-
-	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
-	
-	const typesHTML = species.types.map(t => `<span class="rpg-tag" style="background-color:#777;">${t}</span>`).join(' ');
-	const teraHTML = pokemon.teraType ? `<span class="rpg-tag rpg-tag-tera">Tera ${pokemon.teraType}</span>` : '';
-	const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
-
-	// Generate Moves Grid
-	let movesHTML = `<div class="rpg-grid-2col">`;
-	for (let i = 0; i < 4; i++) {
-		const move = pokemon.moves[i];
-		if (move) {
-			const moveData = getMove(move.id);
-			movesHTML += `<div class="rpg-summary-move">` +
-				`<strong>${moveData.name}</strong><br>` +
-				`<small>${moveData.type} | PP: ${move.pp}/${moveData.pp || 5}</small>` +
-				`</div>`;
-		} else {
-			movesHTML += `<div class="rpg-summary-move rpg-text-muted">-</div>`;
-		}
-	}
-	movesHTML += `</div>`;
-
-	// Determine Back Button Target
-	const backButton = backLocation === 'pc' 
-		? `<button name="send" value="/rpg pc" class="button">← Back to PC</button>`
-		: `<button name="send" value="/rpg party" class="button">← Back to Party</button>`;
-
+export function generatePCHTML(player: PlayerData): string {
 	let html = `<div class="rpg-infobox">` +
-		`<div class="rpg-scrollable-grid">` +
-		
-			// --- HEADER ---
-			`<div class="rpg-summary-header">` +
-				`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
-				`<div class="rpg-summary-info">` +
-					`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
-					`<p>Level ${pokemon.level}</p>` +
-					`${generateHPBar(pokemon)}` +
-					`${generateExpBar(pokemon)}` +
-				`</div>` +
-			`</div>` +
+		`<h2>Pokemon Storage System</h2>` +
+		`<p><strong>Stored:</strong> ${player.pc.size} / 100</p>`;
 
-			// --- GRID LAYOUT ---
-			`<div class="rpg-grid-2col">` +
-				`<div>` +
-					`<h4>Battle Stats</h4>` +
-					generateUnifiedStatsTable(pokemon) +
-				`</div>` +
-				`<div>` +
-					`<h4>Trainer Memo</h4>` +
-					`<div class="rpg-memo-box">` +
-						`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
-						`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
-						`<p><strong>Item:</strong> ${itemText}</p>` +
-						`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
-						`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
-						`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
-						`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
+	if (player.pc.size === 0) {
+		html += `<div class="rpg-memo-box" style="text-align:center; margin:20px 0; color:#888;">Box is empty.</div>`;
+	} else {
+		// Start Scrollable Area
+		html += `<div class="rpg-scrollable-grid">` +
+			// Use the 2-column party grid for consistency
+			`<div class="rpg-party-grid">`;
+
+		for (const [pokemonId, pokemon] of player.pc) {
+			const species = Dex.species.get(pokemon.species);
+			const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
+			const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
+
+			html += `<div class="rpg-party-card">` +
+				`<div class="rpg-party-main">` +
+					`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+					`<div class="rpg-party-stats">` +
+						`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+						`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
 					`</div>` +
 				`</div>` +
-			`</div>` +
-			
-			`<hr />` +
-			`<h4>Known Moves</h4>` +
-			movesHTML +
+				`<div class="rpg-party-actions">` +
+					`<button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button>` +
+					`<button name="send" value="/rpg summary ${pokemonId}" class="button">Summary</button>` +
+				`</div>` +
+			`</div>`;
+		}
 		
-		`</div>` +
+		html += `</div></div>`; // Close grid and scroll wrapper
+	}
 
-		// Dynamic Back Button
-		`<p class="rpg-margin-top">${backButton}</p>` +
-	`</div>`;
-
+	html += `<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">View Party</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
 	return html;
 }
 
