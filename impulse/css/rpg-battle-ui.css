@@ -68,6 +68,64 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* --- Navigation Bar Revamp --- */
+
+.rpg-nav-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns = 2 rows for 6 items */
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-nav-bar {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-nav-button {
+    display: flex;
+    flex-direction: column; /* Stack Icon on top of Text */
+    align-items: center;
+    justify-content: center;
+    padding: 6px 2px;
+    height: 50px; /* Fixed height for uniform look */
+    
+    /* Modern styling to match Infobox */
+    background-color: #fff;
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    color: #555;
+    
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1.2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.dark .rpg-nav-button {
+    background-color: #33383d;
+    border-color: #555;
+    color: #ccc;
+}
+
+/* Hover State */
+.rpg-nav-button:hover {
+    background-color: #f0f8ff; /* Light AliceBlue hover */
+    border-color: #87cefa;
+    transform: translateY(-1px); /* Subtle lift effect */
+}
+.dark .rpg-nav-button:hover {
+    background-color: #3e444a;
+    border-color: #777;
+}
+
+.rpg-nav-icon {
+    font-size: 1.4em;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
 /* --- Party Screen Grid Layout --- */
 
 .rpg-party-grid {
