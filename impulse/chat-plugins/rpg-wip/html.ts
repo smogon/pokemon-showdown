@@ -2193,3 +2193,135 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 		generateBottomNavigation() +
 	`</div>`;
 }
+
+// -------------------------------------------------------------------------------------
+// 9. New Event & Interaction UI Handlers
+// -------------------------------------------------------------------------------------
+
+export function generateScriptedEventHTML(event: any, message: string): string {
+	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
+	
+	// Display the narrative text
+	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
+	html += `<p>${message}</p>`;
+	html += `</div>`;
+
+	// --- Interactive Elements ---
+	if (event.type === 'choice' && event.choices) {
+		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
+		event.choices.forEach((choice: any, idx: number) => {
+			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
+		});
+		html += `</div>`;
+	} 
+	else if (event.type === 'quiz' && event.answers) {
+		html += `<p><strong>Select an answer:</strong></p><div class="rpg-grid-2col">`;
+		event.answers.forEach((ans: string, idx: number) => {
+			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${ans}</button> `;
+		});
+		html += `</div>`;
+	}
+	else if (event.type === 'moralchoice' && event.moralChoices) {
+		html += `<div class="rpg-grid-2col">`;
+		event.moralChoices.forEach((choice: any, idx: number) => {
+			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
+		});
+		html += `</div>`;
+	}
+	else if (event.type === 'branching' && event.pathOptions) {
+		html += `<div class="rpg-grid-2col">`;
+		event.pathOptions.forEach((path: any, idx: number) => {
+			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${path.name}</button> `;
+		});
+		html += `</div>`;
+	}
+	// --- Action Buttons ---
+	else if (event.type === 'wildbattle' || event.type === 'bossbattle') {
+		// Note: 'bossTrainerId' handling would be passed in logic, assuming ID is in event for simple button generation
+		const cmd = event.type === 'bossbattle' ? `/rpg challenge ${event.bossTrainerId}` : `/rpg scriptedbattle ${event.id}`;
+		html += `<p class="rpg-text-center"><button name="send" value="${cmd}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+	} 
+	else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
+		const trainerId = event.trainerId || event.gymLeaderId;
+		html += `<p class="rpg-text-center"><button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+	} 
+	else {
+		// Standard continue button
+		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+	}
+
+	html += `</div>`;
+	return html;
+}
+
+export function generateNPCInteractionHTML(npc: any): string {
+	let html = `<div class="rpg-infobox">` +
+		`<h2>${npc.name}</h2>` +
+		`<div class="rpg-memo-box"><p>"${npc.dialogue}"</p></div>`;
+
+	const action = npc.action;
+
+	if (action) {
+		html += `<hr />`;
+		
+		// --- Complex Menus ---
+		if (action.type === 'itemcraft' && action.recipes) {
+			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
+			action.recipes.forEach((recipe: any, index: number) => {
+				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
+				// List inputs
+				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
+				
+				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
+				html += `<strong>${itemName}</strong> <small>(${inputs})</small>`;
+				html += `<button name="send" value="/rpg npcaction ${npc.id} ${index}" class="button rpg-button-float-right">Craft</button>`;
+				html += `</div>`;
+			});
+			html += `</div>`;
+		}
+		else if (action.type === 'fossilrevival' && action.fossils) {
+			html += `<p><strong>Select a Fossil to Revive:</strong></p><div class="rpg-grid-2col">`;
+			action.fossils.forEach((fossilId: string) => {
+				const fossilName = ITEMS_DATABASE[fossilId]?.name || fossilId;
+				html += `<button name="send" value="/rpg npcaction ${npc.id} ${fossilId}" class="button">🦴 ${fossilName}</button> `;
+			});
+			html += `</div>`;
+		}
+		else if (action.type === 'choosestarter') {
+			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${npc.id}" class="button rpg-button-large">View Starters</button></p>`;
+		}
+		// --- Simple Actions ---
+		else {
+			let btnText = "Interact";
+			if (action.type === 'heal') btnText = "💊 Heal Party";
+			else if (action.type === 'giveitem' || action.type === 'givepokemon') btnText = "✅ Accept Offer";
+			else if (action.type === 'battlerequest') btnText = "⚔️ Challenge";
+			
+			html += `<p class="rpg-text-center"><button name="send" value="/rpg npcaction ${npc.id}" class="button">${btnText}</button></p>`;
+		}
+	}
+
+	html += `<hr /><p class="rpg-text-center"><button name="send" value="/rpg npc" class="button">Talk to Others</button> <button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += generateBottomNavigation() + `</div>`;
+	
+	return html;
+}
+
+export function generatePokedexHTML(player: PlayerData): string {
+	// Calculate counts
+	const seenCount = player.pokedex ? player.pokedex.seen.size : 0; // Assuming standard player.pokedex structure
+	const caughtCount = player.party.length + player.pc.size; // Simplified count for now, ideally track unique species
+	
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Pokédex</h2>` +
+		`<div class="rpg-grid-2col" style="text-align:center; margin-bottom:10px;">` +
+			`<div class="rpg-memo-box"><strong>Seen</strong><br><span style="font-size:1.5em">${seenCount}</span></div>` +
+			`<div class="rpg-memo-box"><strong>Owned</strong><br><span style="font-size:1.5em">${caughtCount}</span></div>` +
+		`</div>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+			`<p><em>(Detailed Pokedex list view is coming soon!)</em></p>` +
+		`</div>`;
+
+	html += generateBottomNavigation() + `</div>`;
+	return html;
+}
