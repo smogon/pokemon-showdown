@@ -662,14 +662,27 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			const targetId = target.trim();
+			
 			if (!targetId) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSummarySelectionHTML(player)}`);
 			}
-			const pokemon = player.party.find(p => p.id === targetId);
+
+			// Check Party first
+			let pokemon = player.party.find(p => p.id === targetId);
+			let source: 'party' | 'pc' = 'party';
+
+			// If not in party, check PC
 			if (!pokemon) {
-				return this.errorReply("Pokemon not found in your party.");
+				pokemon = player.pc.get(targetId);
+				source = 'pc';
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon)}`);
+
+			if (!pokemon) {
+				return this.errorReply("Pokemon not found in your party or PC.");
+			}
+
+			// Pass the source ('party' or 'pc') so the back button goes to the right place
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokemonSummaryHTML(pokemon, source)}`);
 		},
 
 		profile(target, room, user) {
