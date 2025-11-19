@@ -571,7 +571,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 		html += `<p>No items found in this category.</p>`;
 	}
 
-	html += `<p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></center>`;
 	html += `</div>`;
 	return html;
 }
