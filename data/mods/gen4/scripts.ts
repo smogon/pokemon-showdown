@@ -5,10 +5,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		runSwitch(pokemon) {
-			this.battle.runEvent('EntryHazard', pokemon);
-
-			this.battle.runEvent('SwitchIn', pokemon);
-
+			if (this.battle.gen === 4 || this.battle.turn === 0) {
+				this.battle.runEvent('EntryHazard', pokemon);
+				this.battle.runEvent('SwitchIn', pokemon);
+			}
 			if (this.battle.gen <= 2) {
 				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
@@ -17,11 +17,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (!pokemon.hp) return false;
-			pokemon.isStarted = true;
 			if (!pokemon.fainted) {
-				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				if (!pokemon.isStarted) {
+					// in gen 3, some abilities trigger right after the switch-in
+					this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				}
 				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
 			}
+			pokemon.isStarted = true;
 			if (this.battle.gen === 4) {
 				for (const foeActive of pokemon.foes()) {
 					foeActive.removeVolatile('substitutebroken');
