@@ -20,13 +20,13 @@ Impulse.reloadCSS = () => {
 
 const generateCSS = (name: string, color: string): string => {
 	const id = toID(name);
-	// Use !important for both chat and userlist to override inline styles
-	// The PS client uses inline styles (color:#888) for away users, which !important overrides
+	// Use !important for both chat and userlist, but exclude away users with :not([data-away])
+	// The PS client uses data-away attribute and inline styles (color:#888) for away users
 	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, ` +
 		`[class$="chatmessage-${id} highlighted"] strong { color: ${color} !important; }\n` +
-		`[id$="-userlist-user-${id}"] strong em, ` +
-		`[id$="-userlist-user-${id}"] strong, ` +
-		`[id$="-userlist-user-${id}"] span ` +
+		`[id$="-userlist-user-${id}"]:not([data-away]) strong em, ` +
+		`[id$="-userlist-user-${id}"]:not([data-away]) strong, ` +
+		`[id$="-userlist-user-${id}"]:not([data-away]) span ` +
 		`{ color: ${color} !important; }\n`;
 };
 
