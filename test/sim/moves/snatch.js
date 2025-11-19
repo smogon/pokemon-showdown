@@ -27,7 +27,7 @@ describe('Snatch', () => {
 
 	it('should not Choice lock the user from the snatched move', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
-			{ species: 'wynaut', moves: ['snatch', 'howl'] },
+			{ species: 'wynaut', moves: ['snatch', 'howl', 'sleeptalk'] },
 			{ species: 'accelgor', item: 'choicescarf', moves: ['trick'] },
 		], [
 			{ species: 'dratini', moves: ['howl'] },
@@ -36,8 +36,8 @@ describe('Snatch', () => {
 
 		battle.makeChoices('move snatch, move trick -1', 'auto');
 
-		// This would fail if Choice locked into Howl
-		battle.makeChoices('move snatch, move trick 1', 'auto');
+		// This would fail if Choice locked
+		battle.makeChoices('move sleeptalk, move trick 1', 'auto');
 	});
 
 	it('should not be able to steal Rest when the Rest user is at full HP', () => {
@@ -136,5 +136,37 @@ describe('Snatch [Gen 4]', () => {
 
 		battle.makeChoices('move calmmind', 'move snatch');
 		assert.equal(move.pp, move.maxpp - 3, `Snatch should be at 13 PP after losing 1 PP earlier and 2 PP this turn`);
+	});
+
+	it("should not lock the user after using Snatch if it does not have the move", () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'gyarados', moves: ['snatch', 'sleeptalk'], item: 'choicescarf' },
+		], [
+			{ species: 'wynaut', moves: ['calmmind'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move sleeptalk', 'auto');
+	});
+
+	it("should lock the user into the stolen move after using Snatch if it has the move", () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'gyarados', moves: ['snatch', 'calmmind'], item: 'choicescarf' },
+		], [
+			{ species: 'wynaut', moves: ['calmmind'] },
+		]]);
+		battle.makeChoices();
+		assert.throws(() => battle.choose('p1', 'move snatch'));
+		battle.makeChoices('move calmmind', 'auto');
+	});
+
+	it("should lock the user into Snatch if it fails to steal a move", () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'gyarados', moves: ['snatch', 'watergun'], item: 'choicescarf' },
+		], [
+			{ species: 'wynaut', moves: ['watergun'] },
+		]]);
+		battle.makeChoices();
+		assert.throws(() => battle.choose('p1', 'move watergun'));
+		battle.makeChoices('move snatch', 'auto');
 	});
 });
