@@ -4,10 +4,10 @@ import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
-import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 
 // -------------------------------------------------------------------------------------
 // 1. Core Utilities & Data Helpers
@@ -17,42 +17,6 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 	if (expNeededForLevel <= 0) return 100;
 
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
-}
-
-function getItemIcon(item: InventoryItem | { name: string, category: string, id: string }): string {
-	const baseUrl = "https://raw.githubusercontent.com/msikma/pokesprite/master/items";
-	
-	let filename = item.name.toLowerCase().replace(/ /g, '-').replace(/'/g, '');
-
-	let directory = "medicine"; 
-
-	if (item.category === 'pokeball') {
-		directory = "ball";
-		filename = filename.replace(/-ball$/, '');
-        if (filename === 'poke') filename = 'poke'; 
-	} else if (item.category === 'berry') {
-		directory = "berry";
-		filename = filename.replace(/-berry$/, '');
-	} else if (item.category === 'tm') {
-		directory = "tms";
-		if (filename.startsWith('tm')) filename = 'tm-normal'; 
-        if (filename.startsWith('tr')) filename = 'tm-fire'; 
-	} else if (item.category === 'evo-item' || item.id.endsWith('stone') || item.id.includes('scale') || item.id.includes('disk')) {
-		directory = "evo-item";
-	} else if (item.category === 'held') {
-		directory = "held-item";
-	} else if (item.category === 'key') {
-		directory = "key-item";
-	} else if (item.category === 'misc') {
-        if (filename.includes('candy')) directory = "medicine"; 
-        else directory = "data-item";
-    }
-
-	if (filename === 'leftovers') directory = "held-item";
-    if (filename === 'rare-candy') directory = "medicine";
-    if (filename === 'pp-up' || filename === 'pp-max') directory = "medicine";
-
-	return `${baseUrl}/${directory}/${filename}.png`;
 }
 
 function getSpriteFilename(speciesId: string): string {
@@ -160,10 +124,10 @@ function getSpriteFilename(speciesId: string): string {
 
 export function generateBottomNavigation(): string {
 	return `<div class="rpg-nav-bar">` +
-		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +		
 		`<button name="send" value="/rpg profile" class="button rpg-nav-button"><span class="rpg-nav-icon">👤</span> Profile</button>` +
 		`<button name="send" value="/rpg party" class="button rpg-nav-button"><span class="rpg-nav-icon">⚡</span> Party</button>` +
 		`<button name="send" value="/rpg items" class="button rpg-nav-button"><span class="rpg-nav-icon">🎒</span> Items</button>` +
+		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +
 		`<button name="send" value="/rpg pokedex" class="button rpg-nav-button"><span class="rpg-nav-icon">📖</span> Pokédex</button>` +
 		`<button name="send" value="/rpg battletower start" class="button rpg-nav-button"><span class="rpg-nav-icon">🗼</span> Tower</button>` +
 		`</div>`;
@@ -305,7 +269,6 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
-	// Shared button style for consistent spacing
 	const btnStyle = 'margin: 3px;';
 
 	// --- 1. Wild Pokemon Zones (Compact) ---
@@ -382,29 +345,6 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 	html += generateBottomNavigation();
 	html += `</div>`;
 	return html;
-}
-
-export function generateResetHTML(): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>RPG Progress Reset</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p><strong>⚠️ Warning</strong></p>` +
-			`<p>All of your RPG progress has been reset!</p>` +
-			`<p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p>` +
-		`</div>` +
-		`<p style="text-align:center"><button name="send" value="/rpg start" class="button">Start New Game</button></p>` +
-		`</div>`;
-}
-
-export function generateUnstuckHTML(): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Battle Exited</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p>You have been force-removed from your battle.</p>` +
-			`<p>Your Pokémon's status has been saved.</p>` +
-		`</div>` +
-		generateBottomNavigation() + 
-		`</div>`;
 }
 
 export function generateDBDeleteConfirmHTML(): string {
@@ -1134,16 +1074,6 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 
 export function generateItemUseErrorHTML(message: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>${message}</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
-}
-
-export function generateItemUseResultHTML(message: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Item Used!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">${message}</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
-		`</div>`;
 }
 
 export function generatePPRestoreResultHTML(itemName: string, pokemonSpecies: string, moveName: string, restored: number, tempSlot: ActivePokemonSlot): string {
@@ -2007,17 +1937,6 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 	return html;
 }
 
-export function generateRunHTML(zoneId: string): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>Got away safely!</h2>` +
-		`<p>You ran away from the wild Pokemon.</p>` +
-		`<p>` +
-		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
-		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
-		`</p>` +
-		`</div>`;
-}
-
 export function generateCatchSuccessHTML(
 	caughtPokemon: RPGPokemon,
 	tempSlot: ActivePokemonSlot,
@@ -2065,7 +1984,7 @@ export function generateBattleTowerWelcomeHTML(floor: number): string {
 	}
 
 	html += `</div></div>` +
-		`<p style="text-align:center"><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>` +
+		`<p style="text-align:center"><button name="send" value="/rpg start" class="button">Back to Menu</button></p>` +
 		`</div>`;
 	return html;
 }
@@ -2107,7 +2026,7 @@ export function generateBattleTowerLossHTML(floor: number): string {
 		`</div>` +
 		`<p style="text-align:center">` +
 			`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
-			`<button name="send" value="/rpg modes" class="button">Exit</button>` +
+			`<button name="send" value="/rpg start" class="button">Exit</button>` +
 		`</p>` +
 		`</div>`;
 }

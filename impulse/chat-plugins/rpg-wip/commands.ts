@@ -52,9 +52,6 @@ import {
 import {
 	generateSellMenuHTML,
 	generateExploreHTML,
-	generateRunHTML,
-	generateResetHTML,
-	generateUnstuckHTML,
 	generatePokemonInfoHTML,
 	generateBattleHTML,
 	generateWelcomeHTML,
@@ -76,7 +73,6 @@ import {
 	generateSacredAshResultHTML,
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
-	generateItemUseResultHTML,
 	generateMiscItemPokemonSelectionHTML,
 	generateTeraShardResultHTML,
 	generateEvolutionStoneErrorHTML,
@@ -96,6 +92,7 @@ import {
 	generateBattleTowerLossHTML,
 	generatePartyScreenHTML,
 	generateProfileHTML,
+	generateMoveSelectionHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -246,13 +243,13 @@ function handleUseMedicine(
 	}
 
 	// If successful, remove item and show result
-	// (Vitamin function already removes item, so skip for them)
 	if (!['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(item.id)) {
 		removeItemFromInventory(player, item.id, 1);
 	}
 
-	const tempSlot = createActivePokemonSlot(targetPokemon);
-	return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+	// Streamlined Feedback (PM)
+	user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
+    return this.parse('/rpg party');
 }
 
 /**
@@ -277,10 +274,10 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-		const updatedPokemon = player.party.find(p => p.id === targetPokemon.id);
-		if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-		const tempSlot = createActivePokemonSlot(updatedPokemon);
-		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+        
+		// Streamlined Feedback (PM)
+		user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
+        return this.parse('/rpg party');
 	}
 
 	if (itemId.startsWith('expcandy')) {
@@ -291,10 +288,10 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-		const updatedPokemon = player.party.find(p => p.id === targetPokemon.id);
-		if (!updatedPokemon) return this.errorReply("Pokemon not found in party.");
-		const tempSlot = createActivePokemonSlot(updatedPokemon);
-		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseResultHTML(result.message, tempSlot)}`);
+        
+		// Streamlined Feedback (PM)
+		user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
+        return this.parse('/rpg party');
 	}
 
 	if (itemId === 'terashard') {
@@ -341,9 +338,10 @@ function handleUseMiscItem(
 			const newMoveData = getMove(moveId);
 			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
 			removeItemFromInventory(player, itemId, 1);
-			const tempSlot = createActivePokemonSlot(targetPokemon);
-			const resultHTML = `<div class="rpg-infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+			
+            // Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
+			return this.parse('/rpg party');
 		} else {
 			// Queue move for replacement
 			if (!player.pendingMoveLearnQueue) {
@@ -361,18 +359,15 @@ function handleUseMiscItem(
 		if (evoMessage) {
 			// Evolution was successful
 			removeItemFromInventory(player, itemId, 1);
-			const updatedPokemon = player.party.find(p => p.id === targetPokemon.id); // Refetch in case of evolution
-			const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
-			let resultHTML = `<div class="rpg-infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+			
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${evoMessage}`);
 
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
-				resultHTML += `<hr /><p class="rpg-text-error"><strong>Your Pokémon wants to learn a new move!</strong></p><p><button name="send" value="/rpg learnmove" class="button">Learn Move</button></p>`;
-			} else {
-				resultHTML += `<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>`;
-			}
-			resultHTML += `</div>`;
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+			} 
+            return this.parse('/rpg party');
 		} else {
 			// Evolution failed
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
@@ -590,9 +585,9 @@ export const commands: ChatCommands = {
 				if (queueArray.length > 0) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
-					const tempSlot = createActivePokemonSlot(pokemon);
-					const resultHTML = `<div class="rpg-infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+					// Streamlined Feedback (PM)
+					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${message}`);
+                    return this.parse('/rpg party');
 				}
 			}
 		},
@@ -632,9 +627,10 @@ export const commands: ChatCommands = {
 			if (pokemon.moves.length < 4) {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
-				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="rpg-infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+				
+                // Streamlined Feedback (PM)
+                user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
+                return this.parse('/rpg party');
 			} else {
 				if (!player.pendingMoveLearnQueue) {
 					player.pendingMoveLearnQueue = [];
@@ -875,7 +871,8 @@ export const commands: ChatCommands = {
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
 
-			this.sendReplyBox(`Sent <strong>${pokemon.species}</strong> to the PC.`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Sent <strong>${pokemon.species}</strong> to the PC.`);
 			return this.parse('/rpg party');
 		},
 
@@ -891,7 +888,8 @@ export const commands: ChatCommands = {
 			
 			player.party.push(pokemon);
 			
-			this.sendReplyBox(`Withdrew <strong>${pokemon.species}</strong> to your party.`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Withdrew <strong>${pokemon.species}</strong> to your party.`);
 			return this.parse('/rpg pc');
 		},
 
@@ -931,7 +929,8 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
 
-			this.sendReplyBox(`<span style="color:green">Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.</span>`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green">Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.</span>`);
 			return this.parse('/rpg shop');
 		},
 
@@ -963,7 +962,8 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			this.sendReplyBox(`<span style="color:green">Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.</span>`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green">Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.</span>`);
 			return this.parse('/rpg sell');
 		},
 
@@ -986,10 +986,10 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Unknown location: ${player.location}`);
 			}
 
-			// UPDATED: Pass the full currentLocation object
+			// UPDATED: Pass the full currentLocation object to support the new dynamic HTML
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation)}`);
 		},
-		
+
 		travel(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot travel during a battle.");
@@ -2199,12 +2199,13 @@ export const commands: ChatCommands = {
 				}
 				// END: Trapping check
 
-				const zoneId = battle.zoneId;
 				saveBattleStatus(battle);
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRunHTML(zoneId)}`);
+				// Streamlined Feedback (PM)
+				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html You ran away safely!`);
+				return this.parse('/rpg explore');
 			},
 
 			back(target, room, user) {
@@ -2258,7 +2259,8 @@ export const commands: ChatCommands = {
 			pokemon.item = itemId;
 			removeItemFromInventory(player, itemId, 1);
 
-			this.sendReplyBox(`Gave <strong>${item.name}</strong> to ${pokemon.species}.`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Gave <strong>${item.name}</strong> to ${pokemon.species}.`);
 			return this.parse('/rpg party');
 		},
 
@@ -2290,7 +2292,8 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, pokemon.item, 1);
 			pokemon.item = undefined;
 
-			this.sendReplyBox(`Took <strong>${item.name}</strong> from ${pokemon.species}.`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Took <strong>${item.name}</strong> from ${pokemon.species}.`);
 			return this.parse('/rpg party');
 		},
 
@@ -2321,7 +2324,8 @@ export const commands: ChatCommands = {
 			const oldNickname = pokemon.nickname;
 			pokemon.nickname = newNickname;
 
-			this.sendReplyBox(`Changed ${oldNickname}'s name to <strong>${pokemon.nickname}</strong>.`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Changed ${oldNickname}'s name to <strong>${pokemon.nickname}</strong>.`);
 			return this.parse('/rpg party');
 		},
 
@@ -2346,8 +2350,9 @@ export const commands: ChatCommands = {
 			// Clear all player data
 			playerData.delete(user.id);
 
-			// Send confirmation
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateResetHTML()}`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Game data reset.`);
+            return this.parse('/rpg start');
 		},
 
 		unstuck(target, room, user) {
@@ -2364,8 +2369,9 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 			teraToggleState.delete(user.id);
 
-			// Send confirmation
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateUnstuckHTML()}`);
+			// Streamlined Feedback (PM)
+			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Battle force-exited.`);
+			return this.parse('/rpg explore');
 		},
 
 		npc(target, room, user) {
@@ -2588,15 +2594,13 @@ export const commands: ChatCommands = {
 			}
 
 			const action = npc.action;
-			let resultHTML = `<div class="rpg-infobox"><h2>${npc.name}</h2>`;
 
 			switch (action.type) {
 			case 'giveitem':
 				if (action.itemId && action.quantity) {
 					addItemToInventory(player, action.itemId, action.quantity);
 					const item = ITEMS_DATABASE[action.itemId];
-					resultHTML += `<p>"Here you go!"</p>`;
-					resultHTML += `<p class="rpg-text-success">✅ You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!`);
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
 				break;
@@ -2629,17 +2633,11 @@ export const commands: ChatCommands = {
 
 					if (player.party.length < 6) {
 						player.party.push(pokemon);
-						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p class="rpg-text-success">✅ <strong>${species.name}</strong> joined your party!</p>`;
+						user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${species.name}</strong> joined your party!`);
 					} else {
 						storePokemonInPC(player, pokemon);
-						resultHTML += `<p>"Take good care of this Pokémon!"</p>`;
-						resultHTML += `<p class="rpg-text-success">✅ <strong>${species.name}</strong> was sent to your PC!</p>`;
+						user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${species.name}</strong> was sent to your PC.`);
 					}
-
-					// Show Pokemon info
-					const tempSlot = createActivePokemonSlot(pokemon);
-					resultHTML += generatePokemonInfoHTML(tempSlot, true);
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2656,11 +2654,8 @@ export const commands: ChatCommands = {
 					removeItemFromInventory(player, action.requiredItem, action.requiredQuantity);
 					addItemToInventory(player, action.itemId, action.quantity);
 
-					const requiredItem = ITEMS_DATABASE[action.requiredItem];
 					const rewardItem = ITEMS_DATABASE[action.itemId];
-
-					resultHTML += `<p>"Here's your trade!"</p>`;
-					resultHTML += `<p class="rpg-text-success">✅ Traded <strong>${requiredItem?.name || action.requiredItem} x${action.requiredQuantity}</strong> for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!</p>`;
+					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Traded for <strong>${rewardItem?.name} x${action.quantity}</strong>!`);
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2675,15 +2670,11 @@ export const commands: ChatCommands = {
 					}
 
 					removeItemFromInventory(player, action.itemId, action.quantity);
-					const item = ITEMS_DATABASE[action.itemId];
-
-					resultHTML += `<p>"Thank you so much!"</p>`;
-					resultHTML += `<p class="rpg-text-success">✅ Gave <strong>${item?.name || action.itemId} x${action.quantity}</strong> to ${npc.name}!</p>`;
-
+					
 					// Give a reward (example: money)
 					const reward = action.quantity * 1000; // 1000 per item
 					player.money += reward;
-					resultHTML += `<p class="rpg-text-warning">💰 Received <strong>₽${reward}</strong> as thanks!</p>`;
+					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Gave item and received <strong>₽${reward}</strong>!`);
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2702,10 +2693,9 @@ export const commands: ChatCommands = {
 						}
 					}
 
-					resultHTML += `<p>"${result.message}"</p>`;
-					resultHTML += `<p class="rpg-text-success">✅ Your Pokémon have been restored to full health!</p>`;
+					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green"><strong>Your party was healed to full health!</strong></span>`);
 				} else {
-					resultHTML += `<p class="rpg-text-error">❌ ${result.message}</p>`;
+					return this.errorReply(result.message);
 				}
 				break;
 			}
@@ -2716,17 +2706,12 @@ export const commands: ChatCommands = {
 			// case 'dailyreward': {
 			// See npc-actions.ts for all 34+ handler functions
 			default:
-				resultHTML += `<p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated into the command system.</p>`;
-				resultHTML += `<p><em>The handler exists in npc-actions.ts but needs to be wired up here.</em></p>`;
+				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated.</p>`);
 				break;
 			}
 
-			resultHTML += `<hr />` +
-				`<p><button name="send" value="/rpg npc ${npcId}" class="button">Talk Again</button> ` +
-				`<button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
-				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
-				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
+            // Refresh the NPC dialog
+			return this.parse(`/rpg npc ${npcId}`);
 		},
 
 		starterchoice(target, room, user) {
@@ -2801,8 +2786,8 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-				// Streamlined feedback via chat box
-				this.sendReplyBox(`<span style="color: green"><strong>Game saved successfully!</strong></span>`);
+				// Streamlined feedback via PM
+				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color: green"><strong>Game saved successfully!</strong></span>`);
 				return this.parse('/rpg profile');
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
@@ -2826,8 +2811,8 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-				// Streamlined feedback via chat box
-				this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
+				// Streamlined feedback via PM
+				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
 				return this.parse('/rpg explore');
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
@@ -2857,7 +2842,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error deleting save from database.");
 				}
 
-				this.sendReplyBox("Save file deleted.");
+				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Save file deleted.`);
 				return this.parse('/rpg start');
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
