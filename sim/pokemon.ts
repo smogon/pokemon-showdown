@@ -1860,8 +1860,8 @@ export class Pokemon {
 		if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
+			this.battle.runEvent('AfterSetItem', this, null, null, item);
 		}
-		this.battle.runEvent('AfterSetItem', this, null, null, item);
 		return true;
 	}
 
