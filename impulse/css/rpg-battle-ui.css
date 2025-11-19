@@ -1,11 +1,46 @@
 /*************************
 * RPG CUSTOM CSS
-* Updated: Double Battle Height & Spacing Fix
 **************************/
 
 /* Global RPG Text Shadow Reset */
 [class*="rpg-"], .dark [class*="rpg-"] {
     text-shadow: none !important;
+}
+
+/* --- RPG Infobox (Standalone Replacement) --- */
+
+.rpg-infobox {
+    display: block;
+    clear: both;
+    background-color: #eeeeee;  /* Soft cool white/gray */
+    border: 1px solid #b0c4de;  /* Pleasant blue-gray border */
+    color: #2c3e50;             /* Dark slate text for contrast */
+    border-radius: 8px;         /* Modern rounded corners */
+    padding: 8px;              /* Comfortable spacing */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 2px;
+    margin-top: 2px;
+    overflow: hidden;           /* Contains internal floats */
+}
+
+/* Dark Mode Variant */
+.dark .rpg-infobox {
+    background-color: rgba(25, 25, 25, 0.9);  /* Deep modern charcoal */
+    border: 1px solid #3e444a;  /* Subtle lighter border */
+    color: #e0e6ed;             /* Bright, clear text */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Ensure headers inside look clean */
+.rpg-infobox h2 {
+	 text-align: center;
+    margin-top: 0;
+    margin-bottom: 2px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 3px;
+}
+.dark .rpg-infobox h2 {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 /* --- Battle Specific List Styles (Switch Menu) --- */
@@ -532,6 +567,33 @@
 /* Hide text inside the tiny button HP bar to save space */
 .rpg-switch-button .rpg-hp-bar-text {
     display: none;
+}
+
+/* --- Catch Menu Buttons (Compact) --- */
+
+.rpg-catch-button {
+    width: 140px;       /* Reduced width (was 160px) */
+    height: 38px;       /* Reduced height (was 55px) */
+    padding: 3px 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+/* Override inner icon size specifically for balls */
+.rpg-catch-button .rpg-switch-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Compact text styling */
+.rpg-catch-button .rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.75em;
+    line-height: 1.1;
 }
 
 /*********************************
