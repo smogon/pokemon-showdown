@@ -524,7 +524,7 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 }
 
 export function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="rpg-infobox">`; // Updated class
+	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;">`; // Updated class
 	html += `<h2>Inventory</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
 
@@ -567,7 +567,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	}
 
 	html += generateBottomNavigation();
-	html += `</div>`;
+	html += `</div></div>`;
 	return html;
 }
 
