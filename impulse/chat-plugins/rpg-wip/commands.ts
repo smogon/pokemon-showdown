@@ -45,9 +45,9 @@ import {
 	getSlotFromIndex,
 	applyHazardEffectsOnSwitchIn,
 	handleMirrorHerb,
-	startBattleTowerFloor, // [NEW] Import Battle Tower starter
-	getLocationWeatherData, // [MODIFIED] Import from battle-engine
-	getWeatherStartMessage, // [MODIFIED] Import from battle-engine
+	startBattleTowerFloor,
+	getLocationWeatherData,
+	getWeatherStartMessage,
 } from './battle-engine';
 import {
 	generateSellMenuHTML,
@@ -58,8 +58,6 @@ import {
 	generatePokemonInfoHTML,
 	generateBattleHTML,
 	generateWelcomeHTML,
-	generateRPGModeSelectionHTML,
-	generateStoryModeStartHTML,
 	generateStarterSelectionHTML,
 	generatePokemonSummaryHTML,
 	generateEggMoveSelectionHTML,
@@ -83,28 +81,15 @@ import {
 	generateTeraShardResultHTML,
 	generateEvolutionStoneErrorHTML,
 	generatePPRestoreResultHTML,
-	generateDepositPCHTML,
-	generateWithdrawPCHTML,
-	generatePurchaseCompleteHTML,
-	generateSellCompleteHTML,
 	generateMultipleOpponentsCatchErrorHTML,
 	generateCatchSuccessHTML,
 	generateGiveItemSelectionHTML,
 	generateGiveItemToSpecificPokemonHTML,
-	generateItemGivenHTML,
 	generateTakeItemSelectionHTML,
-	generateItemTakenHTML,
-	generateNicknameChangedHTML,
 	generateNPCSelectionHTML,
 	generateNPCStarterChoiceHTML,
 	generateNPCStarterConfirmHTML,
-	generateDBSaveHTML,
-	generateDBLoadNoSaveHTML,
-	generateDBLoadConfirmHTML,
-	generateDBDeleteNoSaveHTML,
 	generateDBDeleteConfirmHTML,
-	generateDBDeleteSuccessHTML,
-	generateModeSelectionHTML,
 	generateBattleTowerWelcomeHTML,
 	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
@@ -414,11 +399,15 @@ export const commands: ChatCommands = {
 				return this.parse('/rpg explore');
 			}
 
-			// New players: show welcome screen
+			// New players: show welcome screen (Now acts as Main Menu)
 			this.sendReply(`|uhtml|rpg-${user.id}|${generateWelcomeHTML()}`);
 		},
 
 		modes(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot change modes during a battle.");
+			}
+			// Redirect to start since mode selection is now in the welcome screen
 			return this.parse('/rpg start');
 		},
 
@@ -495,17 +484,15 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
-    
-			// If player exists and has pokemon, just explore
 			if (player.party.length > 0) {
+				// Player has already started their adventure, take them to explore
 				return this.parse('/rpg explore');
 			}
-    
-			// Initialize new player location
+			// Set player location to starting location
 			const startingLocation = getStartingLocation();
 			player.location = startingLocation.name;
-    
-			// DIRECTLY redirect to explore, skipping generateStoryModeStartHTML
+			
+			// Directly redirect to explore, skipping the Welcome to Kanto screen
 			return this.parse('/rpg explore');
 		},
 
@@ -695,11 +682,6 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateProfileHTML(player)}`);
 		},
 
-		/**
-		 * [STEP 4 REFACTOR]
-		 * This command now calls the new `generatePartyScreenHTML` function.
-		 * The old logic for looping and building HTML is no longer needed.
-		 */
 		party(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot view your party during a battle.");
@@ -775,7 +757,6 @@ export const commands: ChatCommands = {
 			if (!pokemonId) {
 				// We need to show a selection screen
 				if (item.category === 'medicine') {
-					// [Context-Aware Logic from Suggestion #2]
 					const revivalItems = ['revive', 'maxrevive', 'revivalherb'];
 					const healingItems = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'];
 
@@ -883,45 +864,37 @@ export const commands: ChatCommands = {
 		},
 
 		depositpc(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot access the PC during a battle.");
-			}
+			if (activeBattles.has(user.id)) return this.errorReply("You cannot access the PC during a battle.");
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
-			if (player.party.length <= 1) {
-				return this.errorReply("You must keep at least one Pokemon in your party!");
-			}
+			
+			if (player.party.length <= 1) return this.errorReply("You must keep at least one Pokemon in your party!");
 			const pokemonIndex = player.party.findIndex(p => p.id === pokemonId);
-			if (pokemonIndex === -1) {
-				return this.errorReply("Pokemon not found in party.");
-			}
+			if (pokemonIndex === -1) return this.errorReply("Pokemon not found in party.");
+
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDepositPCHTML(pokemon.species)}`);
+
+			this.sendReplyBox(`Sent <strong>${pokemon.species}</strong> to the PC.`);
+			return this.parse('/rpg party');
 		},
 
 		withdrawpc(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot access the PC during a battle.");
-			}
+			if (activeBattles.has(user.id)) return this.errorReply("You cannot access the PC during a battle.");
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
-			if (player.party.length >= 6) {
-				return this.errorReply("Your party is full!");
-			}
+			
+			if (player.party.length >= 6) return this.errorReply("Your party is full!");
+			
 			const pokemon = withdrawPokemonFromPC(player, pokemonId);
-			if (!pokemon) {
-				return this.errorReply("Pokemon not found in PC.");
-			}
+			if (!pokemon) return this.errorReply("Pokemon not found in PC.");
+			
 			player.party.push(pokemon);
-			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateWithdrawPCHTML(pokemon.species, tempSlot)}`);
+			
+			this.sendReplyBox(`Withdrew <strong>${pokemon.species}</strong> to your party.`);
+			return this.parse('/rpg pc');
 		},
 
-		/**
-		 * [STEP 4 REFACTOR]
-		 * Updated to use "Buy 10".
-		 */
 		shop(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
@@ -941,40 +914,27 @@ export const commands: ChatCommands = {
 			const [itemId, quantityStr] = target.split(' ');
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
-			if (!itemId || !ITEMS_DATABASE[itemId]) {
-				return this.errorReply("Invalid item specified.");
-			}
+			
+			if (!itemId || !ITEMS_DATABASE[itemId]) return this.errorReply("Invalid item specified.");
+			if (quantity <= 0) return this.errorReply("You must buy at least 1 item.");
 
-			// Validate quantity is positive
-			if (quantity <= 0) {
-				return this.errorReply("You must buy at least 1 item.");
-			}
-
-			// Check if item is available in current location's shop
 			const locationId = toID(player.location);
 			const shopInventory = getShopInventory(locationId, player.badges);
-			if (!shopInventory.includes(itemId)) {
-				return this.errorReply("This item is not available in this shop. You may need more badges to unlock it!");
-			}
+			if (!shopInventory.includes(itemId)) return this.errorReply("This item is not available in this shop. You may need more badges to unlock it!");
 
 			const itemPrice = ITEM_PRICES[itemId];
-			if (!itemPrice) {
-				return this.errorReply("This item is not for sale.");
-			}
+			if (!itemPrice) return this.errorReply("This item is not for sale.");
 			const totalCost = itemPrice * quantity;
-			if (player.money < totalCost) {
-				return this.errorReply(`You don't have enough money! You need ₽${totalCost}.`);
-			}
+			if (player.money < totalCost) return this.errorReply(`You don't have enough money! You need ₽${totalCost}.`);
+			
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePurchaseCompleteHTML(item.name, quantity, totalCost, player.money)}`);
+
+			this.sendReplyBox(`<span style="color:green">Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.</span>`);
+			return this.parse('/rpg shop');
 		},
 
-		/**
-		 * [STEP 4 REFACTOR]
-		 * Updated to use "Sell 10".
-		 */
 		sell(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot sell items during a battle.");
@@ -984,38 +944,27 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 
 			if (!itemId) {
-				// If no item specified, show sell menu
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player)}`);
 			}
 
-			// Validate quantity is positive
-			if (quantity <= 0) {
-				return this.errorReply("You must sell at least 1 item.");
-			}
+			if (quantity <= 0) return this.errorReply("You must sell at least 1 item.");
 
 			const itemInBag = player.inventory.get(itemId);
-			if (!itemInBag) {
-				return this.errorReply("You don't have that item.");
-			}
-			if (itemInBag.quantity < quantity) {
-				return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
-			}
-			if (itemInBag.category === 'key') {
-				return this.errorReply("Key items cannot be sold.");
-			}
+			if (!itemInBag) return this.errorReply("You don't have that item.");
+			if (itemInBag.quantity < quantity) return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
+			if (itemInBag.category === 'key') return this.errorReply("Key items cannot be sold.");
 
 			const purchasePrice = ITEM_PRICES[itemId];
-			if (!purchasePrice) {
-				return this.errorReply("This item cannot be sold.");
-			}
+			if (!purchasePrice) return this.errorReply("This item cannot be sold.");
 
-			// Sell price is 50% of the purchase price
 			const sellPrice = Math.floor(purchasePrice / 2);
 			const totalGain = sellPrice * quantity;
+			
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellCompleteHTML(itemInBag.name, quantity, totalGain, player.money)}`);
+			this.sendReplyBox(`<span style="color:green">Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.</span>`);
+			return this.parse('/rpg sell');
 		},
 
 		pokedex(target, room, user) {
@@ -1040,98 +989,9 @@ export const commands: ChatCommands = {
 			// Get encounter zones from location's encounterZones array
 			const availableZones = currentLocation.encounterZones || [];
 
-			let exploreButtons = '';
-
-			// Wild Pokemon zones
-			if (availableZones.length > 0) {
-				exploreButtons += '<hr />';
-				exploreButtons += '<p><strong>Wild Pokemon:</strong></p>';
-				for (const zoneId of availableZones) {
-					const zone = ENCOUNTER_ZONES[zoneId];
-					if (zone) {
-						const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-						exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
-					}
-				}
-				exploreButtons += '<hr />';
-			}
-
-			// Buildings (for towns/cities)
-			if (currentLocation.buildings && currentLocation.buildings.length > 0) {
-				exploreButtons += '<p><strong>Buildings:</strong></p>';
-				for (const building of currentLocation.buildings) {
-					// Check if building is accessible
-					if (building.accessible === false) continue;
-					if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
-
-					let icon = '🏠';
-					if (building.type === 'pokecenter') icon = '🏥';
-					else if (building.type === 'pokemart') icon = '🏪';
-					else if (building.type === 'gym') icon = '⚔️';
-					else if (building.type === 'lab') icon = '🔬';
-					else if (building.type === 'museum') icon = '🏛️';
-					else if (building.type === 'department') icon = '🏬';
-					else if (building.type === 'gameCorner') icon = '🎰';
-
-					exploreButtons += `<button name="send" value="/rpg building ${building.id}" class="button">${icon} ${building.name}</button> `;
-				}
-				exploreButtons += '<hr />';
-			}
-
-			// Route trainers
-			const locationTrainers = TRAINER_LOCATIONS[currentLocationId];
-			if (locationTrainers && locationTrainers.length > 0) {
-				const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
-				if (availableTrainers.length > 0) {
-					exploreButtons += `<p><strong>Trainers:</strong></p>`;
-					for (const trainerId of availableTrainers) {
-						const trainerData = TRAINER_DATABASE[trainerId];
-						if (trainerData) {
-							exploreButtons += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
-						}
-					}
-					exploreButtons += '<hr />';
-				}
-			}
-
-			// Connected Locations (Travel destinations)
-			if (currentLocation.connectedLocations && currentLocation.connectedLocations.length > 0) {
-				exploreButtons += '<p><strong>Travel to:</strong></p>';
-				for (const connection of currentLocation.connectedLocations) {
-					// Check if location is accessible
-					let canAccess = true;
-					let lockReason = '';
-
-					if (connection.requiredBadge) {
-						if (!player.obtainedBadges.includes(connection.requiredBadge)) {
-							canAccess = false;
-							lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
-						}
-					}
-
-					if (connection.requiredFlag) {
-						if (!player.storyFlags.has(connection.requiredFlag)) {
-							canAccess = false;
-							lockReason = ` 🔒 (Not accessible yet)`;
-						}
-					}
-
-					if (canAccess) {
-						exploreButtons += `<button name="send" value="/rpg travel ${connection.id}" class="button">🗺️ ${connection.name}</button> `;
-					} else {
-						exploreButtons += `<button class="button" disabled>🗺️ ${connection.name}${lockReason}</button> `;
-					}
-				}
-				exploreButtons += '<hr />';
-			}
-
-			const exploreHTML = `<div class="rpg-infobox">` +
-				`<div class="rpg-text-center"><h2><b>${currentLocation.name}</b></h2>` +
-				`<p><em>${currentLocation.description}</em></p></div>` +
-				`${exploreButtons}` +
-				generateBottomNavigation() +
-				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${exploreHTML}`);
+			// Generate Explore HTML based on location data
+			// This requires passing the available zones and zone data to the HTML generator
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, availableZones, ENCOUNTER_ZONES)}`);
 		},
 
 		travel(target, room, user) {
@@ -1329,10 +1189,6 @@ export const commands: ChatCommands = {
 					eventHTML += `<p><em>(You can't avoid this battle)</em></p>`;
 				} else {
 					// NOTE: Additional scripted event types can be integrated here using scripted-events.ts handlers
-					// Examples:
-					// case 'cutscene': {
-					// case 'pokemonswarm': {
-					// See scripted-events.ts for all 42 handler functions
 					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
 					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
 					eventHTML += `<p class="rpg-text-warning">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
@@ -2406,8 +2262,8 @@ export const commands: ChatCommands = {
 			pokemon.item = itemId;
 			removeItemFromInventory(player, itemId, 1);
 
-			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemGivenHTML(pokemon.species, item.name, tempSlot)}`);
+			this.sendReplyBox(`Gave <strong>${item.name}</strong> to ${pokemon.species}.`);
+			return this.parse('/rpg party');
 		},
 
 		takeitem(target, room, user) {
@@ -2438,8 +2294,8 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, pokemon.item, 1);
 			pokemon.item = undefined;
 
-			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemTakenHTML(item.name, pokemon.species, tempSlot)}`);
+			this.sendReplyBox(`Took <strong>${item.name}</strong> from ${pokemon.species}.`);
+			return this.parse('/rpg party');
 		},
 
 		nickname(target, room, user) {
@@ -2469,8 +2325,8 @@ export const commands: ChatCommands = {
 			const oldNickname = pokemon.nickname;
 			pokemon.nickname = newNickname;
 
-			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNicknameChangedHTML(oldNickname, pokemon, tempSlot)}`);
+			this.sendReplyBox(`Changed ${oldNickname}'s name to <strong>${pokemon.nickname}</strong>.`);
+			return this.parse('/rpg party');
 		},
 
 		reset(target, room, user) {
@@ -2949,7 +2805,7 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-				// Streamlined: Feedback via chat box, then refresh Profile immediately
+				// Streamlined feedback via chat box
 				this.sendReplyBox(`<span style="color: green"><strong>Game saved successfully!</strong></span>`);
 				return this.parse('/rpg profile');
 			} catch (error) {
@@ -2965,7 +2821,6 @@ export const commands: ChatCommands = {
 				const hasSave = await hasSaveInDB(user.id);
 
 				if (!hasSave) {
-                    // Streamlined: Error message instead of full HTML screen
 					return this.errorReply("No saved game found in the database.");
 				}
 
@@ -2975,8 +2830,8 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-                // Streamlined: Go directly to Explore
-                this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
+				// Streamlined feedback via chat box
+				this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
 				return this.parse('/rpg explore');
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
@@ -2994,7 +2849,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("You don't have a save file to delete.");
 				}
 
-				// Keep confirmation for safety (Action is destructive)
+				// Require confirmation
 				if (!target || target !== 'confirm') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteConfirmHTML()}`);
 				}
@@ -3006,8 +2861,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error deleting save from database.");
 				}
 
-                // Streamlined: Redirect to Start Screen immediately
-                this.sendReplyBox("Save file deleted.");
+				this.sendReplyBox("Save file deleted.");
 				return this.parse('/rpg start');
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
