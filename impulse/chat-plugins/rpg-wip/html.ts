@@ -1393,59 +1393,67 @@ function generateFieldEffectTags(battle: BattleState): string {
 // B A T T L E   T O W E R   U I
 
 export function generateBattleTowerWelcomeHTML(floor: number): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>🗼 Welcome to the Battle Tower</h2>`;
-	html += `<p>Challenge the Battle Tower with different random formats!</p>`;
-	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
-	html += `<hr />`;
+	let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
+		`<div class="rpg-memo-box" style="margin-bottom:15px;">` +
+			`<p><strong>Roguelike Challenge</strong></p>` +
+			`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
+		`</div>` +
+		`<h3>Select Format</h3>` +
+		`<div class="rpg-scrollable-grid"><div class="rpg-grid-2col">`;
 
-	html += `<h3>Random Formats:</h3>`;
 	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-		html += `<p><button name="send" value="/rpg battletower selectformat ${formatId}" class="button rpg-button-medium">🎲 ${config.name}</button></p>`;
-		html += `<p class="rpg-text-muted"><small><em>${config.description}</em></small></p>`;
+		html += `<button name="send" value="/rpg battletower selectformat ${formatId}" class="button" style="height:auto; padding:10px; text-align:left;">` +
+			`<strong>${config.name}</strong><br>` +
+			`<small class="rpg-text-muted">${config.description}</small>` +
+			`</button>`;
 	}
 
-	html += `<p><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>`;
-	html += `</div>`;
+	html += `</div></div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg modes" class="button">Back to Modes</button></p>` +
+		`</div>`;
 	return html;
 }
 
 export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
-	const formatName = formatConfig.name;
+	const btnText = floor > 1 ? `Continue Floor ${floor}` : `Start Floor 1`;
 
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>🗼 Battle Tower - ${formatName}</h2>`;
-	html += `<p>You will be assigned a random team of ${formatConfig.teamSize} Pokémon, all at Level ${formatConfig.level}.</p>`;
-	html += `<p>Your goal is to climb as high as you can, floor by floor. Your team will be re-rolled on every floor.</p>`;
-	html += `<p>Good luck!</p><hr />`;
-	if (floor > 1) {
-		html += `<p>Your current streak is <strong>Floor ${floor}</strong>.</p>`;
-		html += `<p><button name="send" value="/rpg battletower beginfloor ${format}" class="button">Begin Floor ${floor}</button></p>`;
-	} else {
-		html += `<p>You are starting on <strong>Floor 1</strong>.</p>`;
-		html += `<p><button name="send" value="/rpg battletower beginfloor ${format}" class="button">Begin!</button></p>`;
-	}
-	html += `<p><button name="send" value="/rpg battletower start" class="button">Back to Format Selection</button></p>`;
-	html += `</div>`;
-	return html;
+	return `<div class="rpg-infobox"><h2>🗼 ${formatConfig.name}</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
+			`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg battletower beginfloor ${format}" class="button rpg-button-large">${btnText}</button>` +
+		`</p>` +
+		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">Back</button></p>` +
+		`</div>`;
 }
 
 export function generateBattleTowerFloorCompleteHTML(floor: number): string {
-	let html = `<div class="rpg-infobox rpg-text-center"><h2>🗼 Floor ${floor} Cleared!</h2>`;
-	html += `<p>You defeated the trainer! Your team has been healed.</p>`;
-	html += `<p>Your new random team is being prepared for the next floor.</p><hr />`;
-	html += `<p><button name="send" value="/rpg battletower nextfloor" class="button rpg-button-medium">Continue to Floor ${floor + 1}</button></p>`;
-	html += `</div>`;
-	return html;
+	return `<div class="rpg-infobox"><h2>🗼 Floor ${floor} Cleared!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
+			`<p>Your team has been healed.</p>` +
+			`<p>Preparing new team for the next floor...</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg battletower nextfloor" class="button">Next Floor (F${floor + 1}) →</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateBattleTowerLossHTML(floor: number): string {
-	let html = `<div class="rpg-infobox rpg-text-center"><h2>🗼 Battle Lost on Floor ${floor}</h2>`;
-	html += `<p>You were defeated. Your Battle Tower streak has ended.</p>`;
-	html += `<p><strong>Final Floor: ${floor}</strong></p><hr />`;
-	html += `<p><button name="send" value="/rpg battletower start" class="button rpg-button-medium">Try Again (from Floor 1)</button></p>`;
-	html += `<p><button name="send" value="/rpg modes" class="button rpg-button-medium">Exit Battle Tower</button></p>`;
-	html += `</div>`;
-	return html;
+	return `<div class="rpg-infobox"><h2>🗼 Challenge Failed</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
+			`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
+			`<button name="send" value="/rpg modes" class="button">Exit</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 /**
