@@ -445,31 +445,48 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 }
 
 export function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="rpg-infobox rpg-menu-box">`;
+	let html = `<div class="rpg-infobox">`; // Updated class
 	html += `<h2>Inventory</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
 
 	html += generateItemCategoryFilters('/rpg items');
 
-	html += `<div class="rpg-grid-2col">`;
-
 	let itemsFound = false;
+	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	let count = 0;
+
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-			html += `<div class="rpg-card">`;
-			html += `<strong>${item.name}</strong> x${item.quantity}<br>`;
-			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg useitem ${itemId}" class="button rpg-button-small">Use</button>`;
-			html += `</div>`;
+			
+			const iconUrl = getItemIcon(item);
+			
+			// Grid Cell Content
+			const cellContent = `<div class="rpg-item-container">` +
+					`<div class="rpg-item-header">` +
+						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
+						`<div class="rpg-item-details">` +
+							`<strong>${item.name}</strong><br>` +
+							`<small>Qty: ${item.quantity}</small>` +
+						`</div></div>` +
+					`<div class="rpg-item-actions">` +
+						`<button name="send" value="/rpg useitem ${itemId}" class="button">Use</button>` +
+                        `<button name="send" value="/rpg giveitem" class="button">Give</button>` +
+					`</div></div>`;
+
+			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			count++;
+			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
+	gridHTML += '</tr></table>';
 
-	if (!itemsFound) {
+	if (itemsFound) {
+		html += gridHTML;
+	} else {
 		html += `<p>You have no items in this category.</p>`;
 	}
 
-	html += `</div>`;
 	html += generateBottomNavigation();
 	html += `</div>`;
 	return html;
