@@ -696,12 +696,31 @@ export function generateSellMenuHTML(player: PlayerData): string {
 }
 
 export function generatePurchaseCompleteHTML(itemName: string, quantity: number, totalCost: number, remainingMoney: number): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Purchase Complete!</h2><p>You bought <strong>${quantity}x ${itemName}</strong> for ₽${totalCost}!</p><p><strong>Money remaining:</strong> ₽${remainingMoney}</p><p><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>${generateBottomNavigation()}</div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>Purchase Complete!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p>You bought <strong>${quantity}x ${itemName}</strong></p>` +
+			`<p class="rpg-text-error">- ₽${totalCost}</p>` +
+		`</div>` +
+		`<p style="text-align:center"><strong>Money remaining:</strong> ₽${remainingMoney}</p>` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg shop" class="button">Continue Shopping</button> <button name="send" value="/rpg items" class="button">View Inventory</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
 }
 
 export function generateSellCompleteHTML(itemName: string, quantity: number, totalGain: number, remainingMoney: number): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Item Sold!</h2><p>You sold <strong>${quantity}x ${itemName}</strong> for ₽${totalGain}!</p><p><strong>Money remaining:</strong> ₽${remainingMoney}</p><p><button name="send" value="/rpg sell" class="button">Sell More</button><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
-}
+	return `<div class="rpg-infobox">` +
+		`<h2>Item Sold!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p>You sold <strong>${quantity}x ${itemName}</strong></p>` +
+			`<p class="rpg-text-success">+ ₽${totalGain}</p>` +
+		`</div>` +
+		`<p style="text-align:center"><strong>Money remaining:</strong> ₽${remainingMoney}</p>` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg sell" class="button">Sell More</button> <button name="send" value="/rpg shop" class="button">Back to Shop</button></p>` +
+		`</div>`;
+		}
 
 // B A T T L E   U I   -   M A I N
 // In html.ts
