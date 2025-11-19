@@ -398,41 +398,41 @@ export function generateExploreHTML(player: PlayerData, availableZones: string[]
 }
 
 export function generateInventoryHTML(player: PlayerData, category?: string): string {
-	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;">`; // Updated class
-	html += `<h2>Inventory</h2>`;
-	html += `<p><strong>Money:</strong> ₽${player.money}</p>`;
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Inventory</h2>` +
+		`<p><strong>Money:</strong> ₽${player.money}</p>`;
 
 	html += generateItemCategoryFilters('/rpg items');
 
 	let itemsFound = false;
-	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	// Start the wrapper div here
+	let gridHTML = `<div class="rpg-scrollable-grid"><table class="rpg-move-grid"><tr>`;
 	let count = 0;
 
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
 			
-			const iconUrl = getItemIcon(item);
-			
-			// Grid Cell Content
 			const cellContent = `<div class="rpg-item-container">` +
-					`<div class="rpg-item-header">` +
-						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
-						`<div class="rpg-item-details">` +
-							`<strong>${item.name}</strong><br>` +
-							`<small>Qty: ${item.quantity}</small>` +
-						`</div></div>` +
-					`<div class="rpg-item-actions">` +
-						`<button name="send" value="/rpg useitem ${itemId}" class="button">Use</button>` +
-                        `<button name="send" value="/rpg giveitem" class="button">Give</button>` +
-					`</div></div>`;
+				`<div class="rpg-item-header">` +
+					`<div class="rpg-item-details">` +
+						`<strong>${item.name}</strong><br>` +
+						`<small>Qty: ${item.quantity}</small>` +
+					`</div>` +
+				`</div>` +
+				`<div class="rpg-item-actions">` +
+					`<button name="send" value="/rpg useitem ${itemId}" class="button">Use</button> ` +
+					`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
+				`</div>` +
+			`</div>`;
 
 			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
 			count++;
 			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	gridHTML += '</tr></table>';
+	// Close table and wrapper div
+	gridHTML += '</tr></table></div>';
 
 	if (itemsFound) {
 		html += gridHTML;
@@ -441,7 +441,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	}
 
 	html += generateBottomNavigation();
-	html += `</div></div>`;
+	html += `</div>`;
 	return html;
 }
 
