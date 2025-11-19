@@ -177,6 +177,17 @@ describe('Ability Shield', () => {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
+	it.skip(`should not re-trigger abilities if Ability Shields are tricked, while Neutralizing Gas is in effect`, () => {
+		battle = common.createBattle([[
+			{ species: 'wynaut', ability: 'intimidate', item: 'abilityshield', moves: ['splash'] },
+		], [
+			{ species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick'] },
+		]]);
+
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', -1);
+	});
+
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
 	it(`should not trigger holder's Trace`, () => {
 		battle = common.createBattle([[
