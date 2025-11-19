@@ -649,39 +649,6 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'p
 	return html;
 }
 
-export function generateDepositPCHTML(pokemonSpecies: string): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Pokemon Deposited</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p><strong>${pokemonSpecies}</strong> was sent to Bill's PC.</p>` +
-		`</div>` +
-		`<p style="text-align:center"><button name="send" value="/rpg pc" class="button">View PC</button> <button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
-		`</div>`;
-}
-
-export function generateWithdrawPCHTML(pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Pokemon Withdrawn</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p><strong>${pokemonSpecies}</strong> was added to your party!</p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<p style="text-align:center"><button name="send" value="/rpg pc" class="button">View PC</button> <button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
-		`</div>`;
-}
-
-export function generateNicknameChangedHTML(oldNickname: string, pokemon: RPGPokemon, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Nickname Changed!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p><strong>${oldNickname}</strong> is now known as:</p>` +
-			`<p><strong>${pokemon.nickname}</strong></p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
-		`</div>`;
-}
-
 export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
 	const queueArray = player.pendingMoveLearnQueue;
 	if (!queueArray || queueArray.length === 0) return `<div class="rpg-infobox"><h2>Error</h2><p>No pending moves found.</p></div>`;
