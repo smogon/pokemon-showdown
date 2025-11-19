@@ -538,6 +538,8 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 }
 
 // B A T T L E   U I   -   M A I N
+// In html.ts
+
 export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
@@ -545,6 +547,7 @@ export function generateBattleHTML(
 	teraToggled?: boolean
 ): string {
 	// --- 1. Prepare Log Data ---
+	// Combine new messages (blue box content) with the historical log
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const combinedLogs = [...messageLog, ...reversedBattleLog];
 	
@@ -564,21 +567,14 @@ export function generateBattleHTML(
 
 		return '<div class="infobox">' +
 			generateBattleHeader(battle) +
-			historyLogHTML + 
+			historyLogHTML + // Now contains both new events and history
 			actionHTML +
 			'</div>';
 	}
 
 	// --- 3. Render Active Battle ---
 	const headerHTML = generateBattleHeader(battle);
-	
-	// [CHANGE] Route to specific generator based on battle type
-	let battlefieldHTML = '';
-	if (battle.battleType.includes('double')) {
-		battlefieldHTML = generateDoubleBattlefield(battle, targetSelection);
-	} else {
-		battlefieldHTML = generateBattlefield(battle, targetSelection);
-	}
+	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
 	let actionPanelHTML = '';
 	if (targetSelection && battle.battleType.includes('double')) {
@@ -593,82 +589,6 @@ export function generateBattleHTML(
 		historyLogHTML +
 		actionPanelHTML +
 		'</div>';
-}
-
-/**
- * [NEW] Dedicated Double Battle Generator
- * Uses Flexbox rows instead of absolute positioning.
- */
-function generateDoubleBattlefield(
-	battle: BattleState, 
-	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }
-): string {
-	
-	// Helper to create a doubles slot
-	const generateDoublesSlot = (
-		slot: ActivePokemonSlot | null,
-		slotIndex: number,
-		side: 'player' | 'opponent'
-	) => {
-		if (!slot || slot.pokemon.hp <= 0) {
-			// Render placeholder to maintain grid spacing
-			return `<div class="rpg-doubles-slot"></div>`;
-		}
-
-		const pokemon = slot.pokemon;
-		const species = Dex.species.get(pokemon.species);
-		const infoContents = generateSharedBattlePokemonInfo(slot, side === 'player', battle);
-
-		const spriteFilename = getSpriteFilename(species.id);
-		let spriteUrl = '';
-		let spriteClass = '';
-
-		if (side === 'player') {
-			const spriteDir = pokemon.shiny ? 'gen5-back-shiny' : 'gen5-back';
-			spriteUrl = `https://play.pokemonshowdown.com/sprites/${spriteDir}/${spriteFilename}.png`;
-			spriteClass = 'rpg-pokemon-sprite-back';
-		} else {
-			const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
-			spriteUrl = `https://play.pokemonshowdown.com/sprites/${spriteDir}/${spriteFilename}.png`;
-			spriteClass = 'rpg-pokemon-sprite-front';
-		}
-
-		// Container Classes
-		let containerClasses = "rpg-doubles-slot";
-		if (targetSelection && targetSelection.attackerSlotIndex !== slotIndex) {
-			// If in target selection mode and this isn't the attacker, highlight the info box
-			// We apply the highlighting class to the wrapper in this new layout
-			containerClasses += " rpg-target-select"; 
-		}
-		if (battle.pendingActions[slotIndex]) {
-			containerClasses += " rpg-action-pending";
-		}
-
-		return `<div class="${containerClasses}">` +
-			`<div>${infoContents}</div>` +
-			`<img class="${spriteClass}" src="${spriteUrl}" />` +
-			`</div>`;
-	};
-
-	// --- Assemble Doubles Grid ---
-	let html = '<div class="rpg-battle-ui rpg-doubles-mode">';
-
-	html += generateGlobalBattleConditionsHTML(battle);
-
-	// Row 1: Opponents (Top)
-	html += '<div class="rpg-doubles-row rpg-doubles-row-opponent">';
-	html += generateDoublesSlot(battle.opponentSlots[0], 2, 'opponent');
-	html += generateDoublesSlot(battle.opponentSlots[1], 3, 'opponent');
-	html += '</div>';
-
-	// Row 2: Players (Bottom)
-	html += '<div class="rpg-doubles-row rpg-doubles-row-player">';
-	html += generateDoublesSlot(battle.playerSlots[0], 0, 'player');
-	html += generateDoublesSlot(battle.playerSlots[1], 1, 'player');
-	html += '</div>';
-
-	html += '</div>';
-	return html;
 }
 
 // B A T T L E   U I   -   S C R E E N S
