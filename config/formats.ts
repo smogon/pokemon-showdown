@@ -306,7 +306,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 	},
-	/**{
+	{
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
 		mod: 'gen9toho',
@@ -314,14 +314,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
 		unbanlist: ['Light of Ruin'],
 		teambuilderFormat: 'National Dex',
-		onValidateTeam(team, format) {
+		/*onValidateTeam(team, format) {
 			for (const set of team) {
 				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
 					 return ["Cirno-Tanned can only have Drought as its ability."]
 				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
-		},
+		},*/
 	},
 	{
 		name: "[Gen 9] Touhoumons Doubles",
@@ -339,8 +339,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
 					 return ["Only Cirno-Tanned can have Drought as its ability."]
 			}
-		},
-	},*/
+		},*/
+	},
 	{
 		name: "[Gen 9] Toho",
 		desc: `2hu`,
