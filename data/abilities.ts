@@ -2137,16 +2137,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			console.log("I am here!");
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
+				console.log(target);
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
-					console.log("I activate");
 					activated = true;
 				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
 					this.boost({ atk: -1 }, target, pokemon, null, true);
-					console.log("I did the debuff");
 				}
 			}
 			console.log(activated);
