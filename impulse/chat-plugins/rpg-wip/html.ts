@@ -1071,31 +1071,6 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 	return html;
 }
 
-export function generateItemGivenHTML(pokemonSpecies: string, itemName: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Item Given</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p><strong>${pokemonSpecies}</strong> is now holding:</p>` +
-			`<p><strong>${itemName}</strong></p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
-		`</div>`;
-}
-
-export function generateItemTakenHTML(itemName: string, pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Item Taken</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p>Took <strong>${itemName}</strong> from <strong>${pokemonSpecies}</strong></p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true, true)}` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button></p>` +
-		`</div>`;
-}
-
 export function generateItemUseErrorHTML(message: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>${message}</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
