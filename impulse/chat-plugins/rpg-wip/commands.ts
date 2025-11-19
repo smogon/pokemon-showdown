@@ -419,10 +419,7 @@ export const commands: ChatCommands = {
 		},
 
 		modes(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot change modes during a battle.");
-			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModeSelectionHTML()}`);
+			return this.parse('/rpg start');
 		},
 
 		battletower: {
@@ -498,14 +495,18 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
+    
+			// If player exists and has pokemon, just explore
 			if (player.party.length > 0) {
-				// Player has already started their adventure, take them to explore
 				return this.parse('/rpg explore');
 			}
-			// Set player location to starting location
+    
+			// Initialize new player location
 			const startingLocation = getStartingLocation();
 			player.location = startingLocation.name;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStoryModeStartHTML()}`);
+    
+			// DIRECTLY redirect to explore, skipping generateStoryModeStartHTML
+			return this.parse('/rpg explore');
 		},
 
 		choosestarter(target, room, user) {
