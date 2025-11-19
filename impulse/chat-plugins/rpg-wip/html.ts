@@ -1925,7 +1925,8 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		// Wrapper div (positioned)
 		//   -> Info div (static, on top)
 		//   -> Sprite img (static, on bottom)
-		let html = `<div class="${slotWrapperClass}">`;
+		// ADDED: rpg-slot-${slotIndex} for specific positioning
+		let html = `<div class="${slotWrapperClass} rpg-slot-${slotIndex}">`;
 		html += `<div class="${containerClasses}">${infoContents}</div>`;
 		html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
 		html += `</div>`;
@@ -1942,7 +1943,6 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += '<div class="rpg-opponent-side">';
 	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent');
 	if (isDoubleBattle) {
-		// Note: Positioning for double battle sprites/info will need CSS adjustments
 		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent');
 	}
 	html += '</div>';
@@ -1951,7 +1951,6 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 	html += '<div class="rpg-player-side">';
 	html += generateBattleSlot(battle.playerSlots[0], 0, 'player');
 	if (isDoubleBattle) {
-		// Note: Positioning for double battle sprites/info will need CSS adjustments
 		html += generateBattleSlot(battle.playerSlots[1], 1, 'player');
 	}
 	html += '</div>';
