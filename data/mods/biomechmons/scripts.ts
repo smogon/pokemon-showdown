@@ -5,7 +5,9 @@ export const Scripts: ModdedBattleScriptsData = {
   		return this.battle.dex.abilities.getByID(this.ability);
     },
     getItem() {
-  		return this.battle.dex.items.getByID(this.item);
+      let item = this.battle.dex.items.getByID(this.item);
+      if (item.exists) return item;
+      return this.item;
     },
   },
 };
