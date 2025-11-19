@@ -110,6 +110,7 @@ import {
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
 	generatePartyScreenHTML,
+	generateProfileHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -676,49 +677,8 @@ export const commands: ChatCommands = {
 				return this.errorReply("You are in a battle!");
 			}
 			const player = getPlayerData(user.id);
-
-			// Badge display
-			let badgeHTML = '';
-			if (player.obtainedBadges.length > 0) {
-				badgeHTML = `<p><strong>Gym Badges:</strong></p><p>`;
-				for (const badge of player.obtainedBadges) {
-					badgeHTML += `🏆 ${badge} `;
-				}
-				badgeHTML += `</p>`;
-			} else {
-				badgeHTML = `<p><strong>Gym Badges:</strong> None yet</p>`;
-			}
-
-			// Story progress
-			let progressHTML = '<p><strong>Progress:</strong> ';
-			if (player.storyFlags.has('champion')) {
-				progressHTML += 'Champion! 🏆</p>';
-			} else if (player.storyFlags.has('all_badges')) {
-				progressHTML += 'Ready for Elite Four</p>';
-			} else if (player.badges >= 4) {
-				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - Halfway there!</p>`;
-			} else if (player.badges > 0) {
-				progressHTML += `${player.badges}/${TOTAL_BADGES} Badges - On your journey</p>`;
-			} else {
-				progressHTML += 'Just starting out</p>';
-			}
-
-			const profileHTML = `<div class="rpg-infobox"><h2>Player Profile</h2>` +
-				`<p><strong>Trainer:</strong> ${player.name}</p>` +
-				`<p><strong>Level:</strong> ${player.level}</p>` +
-				`<p><strong>Location:</strong> ${player.location}</p>` +
-				`${badgeHTML}` +
-				`${progressHTML}` +
-				`<p><strong>Pokemon in Party:</strong> ${player.party.length}/6</p>` +
-				`<p><strong>Pokemon in PC:</strong> ${player.pc.size}</p>` +
-				`<p><strong>Money:</strong> ₽${player.money}</p>` +
-				`<p><strong>Trainers Defeated:</strong> ${player.defeatedTrainers.size}</p>` +
-				`<hr /><h3>Save & Load</h3><p><button name="send" value="/rpg dbsave" class="button">💾 Save to Database</button> ` +
-				`<button name="send" value="/rpg dbload" class="button">📁 Load from Database</button> ` +
-				`<button name="send" value="/rpg dbdelete" class="button">🗑️ Delete Save</button></p>` +
-				generateBottomNavigation() +
-				`</div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${profileHTML}`);
+			// Use the new helper function
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateProfileHTML(player)}`);
 		},
 
 		/**
