@@ -164,7 +164,6 @@ export function generateBottomNavigation(): string {
 		`<button name="send" value="/rpg items" class="button rpg-nav-button"><span class="rpg-nav-icon">🎒</span> Items</button>` +
 		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +
 		`<button name="send" value="/rpg pokedex" class="button rpg-nav-button"><span class="rpg-nav-icon">📖</span> Pokédex</button>` +
-		`<button name="send" value="/rpg modes" class="button rpg-nav-button"><span class="rpg-nav-icon">🎮</span> Modes</button>` +
 		`</div>`;
 }
 
@@ -289,51 +288,11 @@ export function generateWelcomeHTML(): string {
 			`<p>This is a text-based adventure where your journey unfolds through chat commands. We are currently in an <strong>active testing phase</strong>.</p>` +
 			`<p><small>You may encounter bugs, placeholder text, or progress resets as we improve the game. Your feedback is valuable!</small></p>` +
 		`</div>` +
-		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg modes" class="button rpg-button-large">Start Adventure</button>` +
-		`</p>` +
-		`</div>`;
-}
-
-export function generateModeSelectionHTML(): string {
-	let html = `<div class="rpg-infobox"><h2>Select a Mode</h2>` +
-		`<p>Choose a game mode to begin:</p>` +
-		`<div class="rpg-grid-2col">` +
-			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:15px;">` +
-				`<span style="font-size:2em">📖</span><br><strong>Story Mode</strong><br><small>The classic adventure</small>` +
-			`</button>` +
-			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:15px;">` +
-				`<span style="font-size:2em">🗼</span><br><strong>Battle Tower</strong><br><small>Roguelike challenge</small>` +
-			`</button>` +
+		`<div class="rpg-grid-3col-items">` +
+			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:10px;"><strong>New Game</strong><br><small>Start Fresh</small></button>` +
+			`<button name="send" value="/rpg dbload" class="button" style="height:auto; padding:10px;"><strong>Load Game</strong><br><small>Continue</small></button>` +
+			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:10px;"><strong>Battle Tower</strong><br><small>Roguelike</small></button>` +
 		`</div>` +
-		`</div>`;
-	return html;
-}
-
-export function generateStoryModeStartHTML(): string {
-	const startingLocation = getStartingLocation();
-	const location = LOCATIONS[startingLocation.id];
-
-	let labBuildingId = '';
-	if (location?.buildings) {
-		for (const building of location.buildings) {
-			if (building.type === 'lab') {
-				labBuildingId = building.id;
-				break;
-			}
-		}
-	}
-
-	return `<div class="rpg-infobox">` +
-		`<h2>Welcome to Kanto!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p>Your adventure is about to begin.</p>` +
-			`<p>To get your first Pokémon partner, head to the lab and talk to the Professor!</p>` +
-		`</div>` +
-		`<p style="text-align:center">` +
-			(labBuildingId ? `<button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button> ` : '') +
-			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button>` +
-		`</p>` +
 		`</div>`;
 }
 
