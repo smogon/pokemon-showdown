@@ -986,14 +986,10 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Unknown location: ${player.location}`);
 			}
 
-			// Get encounter zones from location's encounterZones array
-			const availableZones = currentLocation.encounterZones || [];
-
-			// Generate Explore HTML based on location data
-			// This requires passing the available zones and zone data to the HTML generator
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, availableZones, ENCOUNTER_ZONES)}`);
+			// UPDATED: Pass the full currentLocation object
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation)}`);
 		},
-
+		
 		travel(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot travel during a battle.");
