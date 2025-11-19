@@ -1049,6 +1049,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		validateSet(set, teamHas) {
 			return null;
 		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				// do something i dont know what yet
+			}
+		},
 	},
 	{
 		name: "[Gen 9] Category Swap",
