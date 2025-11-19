@@ -694,11 +694,9 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
-		// Map balls to buttons
 		const ballButtons = pokeBalls.map(ball => {
 			let command = '';
 			
-			// Command Logic
 			if (isDoubleBattle && activeOpponents.length > 1) {
 				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
 			} else if (isDoubleBattle && activeOpponents.length === 1) {
@@ -708,14 +706,9 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
-			// Image Logic
-			// The URL pattern requires removing "ball" from the end (e.g. "greatball" -> "great")
-			// "pokeball" -> "poke" which matches the user provided example
 			const filename = ball.id.replace(/ball$/, '');
 			const spriteUrl = `https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/${filename}.png`;
 
-			// Structure content to match the Switch Button layout (Icon Left, Info Right)
-			// We reuse the .rpg-switch-icon and .rpg-switch-info classes for consistent styling
 			const buttonContent = 
 				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${ball.name}" /></div>` +
 				`<div class="rpg-switch-info">` +
@@ -723,11 +716,10 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 					`<small>x${ball.quantity}</small>` +
 				`</div>`;
 
-			// Use .rpg-switch-button to get the flex row layout
-			return `<button name="send" value="${command}" class="button rpg-switch-button">${buttonContent}</button>`;
+			// CHANGED: Use .rpg-catch-button instead of .rpg-switch-button
+			return `<button name="send" value="${command}" class="button rpg-catch-button">${buttonContent}</button>`;
 		});
 
-		// Generate 2-Column Grid
 		html += '<table class="rpg-move-grid"><tr>';
 		let count = 0;
 		for (const button of ballButtons) {
