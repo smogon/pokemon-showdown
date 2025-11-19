@@ -2987,6 +2987,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		ruleset: ['Force of the Fallen Mod'],
 		bestOfDefault: true,
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue">The Ladder Achievements Project for Force of the Fallen Random Roulette has officially started! Check <a href="https://www.smogon.com/forums/threads/3773734">this thread</a> to see what the project is all about and the challenges for this cycle!</div>`);
+		},
 	},
 
 	// Randomized Metas
