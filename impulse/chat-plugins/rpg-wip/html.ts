@@ -1986,21 +1986,11 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	});
 
 	const targetButtons = validTargets.map(target => {
-		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button">${target.name}</button>`;
+		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button rpg-move-button">${target.name}</button>`;
 	});
 
-	let targetButtonsHTML = '<table class="rpg-move-grid"><tr>';
-	let count = 0;
-	for (const button of targetButtons) {
-		targetButtonsHTML += `<td class="rpg-move-grid-cell">${button}</td>`;
-		count++;
-		if (count % 2 === 0 && count < targetButtons.length) {
-			targetButtonsHTML += '</tr><tr>';
-		}
-	}
-	targetButtonsHTML += '</tr></table>';
-
-	html += targetButtonsHTML;
+	// REFACTORED: Use div container instead of table loop
+	html += `<div class="rpg-move-grid">${targetButtons.join('')}</div>`;
 	html += `<p class="rpg-margin-top"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
 	return html;
 }
