@@ -2949,7 +2949,9 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBSaveHTML(player)}`);
+				// Streamlined: Feedback via chat box, then refresh Profile immediately
+				this.sendReplyBox(`<span style="color: green"><strong>Game saved successfully!</strong></span>`);
+				return this.parse('/rpg profile');
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
 			}
@@ -2963,7 +2965,8 @@ export const commands: ChatCommands = {
 				const hasSave = await hasSaveInDB(user.id);
 
 				if (!hasSave) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBLoadNoSaveHTML()}`);
+                    // Streamlined: Error message instead of full HTML screen
+					return this.errorReply("No saved game found in the database.");
 				}
 
 				const loadedPlayer = await loadPlayerFromDB(user.id);
@@ -2972,7 +2975,9 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBLoadConfirmHTML(loadedPlayer)}`);
+                // Streamlined: Go directly to Explore
+                this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
+				return this.parse('/rpg explore');
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
 			}
@@ -2986,10 +2991,10 @@ export const commands: ChatCommands = {
 				const hasSave = await hasSaveInDB(user.id);
 
 				if (!hasSave) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteNoSaveHTML()}`);
+					return this.errorReply("You don't have a save file to delete.");
 				}
 
-				// Require confirmation
+				// Keep confirmation for safety (Action is destructive)
 				if (!target || target !== 'confirm') {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteConfirmHTML()}`);
 				}
@@ -3001,7 +3006,9 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error deleting save from database.");
 				}
 
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteSuccessHTML()}`);
+                // Streamlined: Redirect to Start Screen immediately
+                this.sendReplyBox("Save file deleted.");
+				return this.parse('/rpg start');
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
 			}
