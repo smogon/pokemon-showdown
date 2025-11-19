@@ -20,10 +20,12 @@ Impulse.reloadCSS = () => {
 
 const generateCSS = (name: string, color: string): string => {
 	const id = toID(name);
+	// Don't use !important for userlist to allow default away/idle styling to work
 	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, ` +
-		`[class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, ` +
+		`[class$="chatmessage-${id} highlighted"] strong { color: ${color} !important; }\n` +
+		`[id$="-userlist-user-${id}"] strong em, ` +
 		`[id$="-userlist-user-${id}"] strong, [id$="-userlist-user-${id}"] span ` +
-		`{ color: ${color} !important; }\n`;
+		`{ color: ${color}; }\n`;
 };
 
 const updateColor = async () => {
@@ -34,10 +36,6 @@ const updateColor = async () => {
 		colorDocs.forEach(doc => {
 			css += generateCSS(doc.userid, doc.color);
 		});
-
-		// Add rule to override custom colors for idle/busy users
-		css += '/* Override custom colors for idle/busy status */\n';
-		css += '.idle-status { color: #948A88 !important; }\n';
 
 		css += '/* COLORS END */\n';
 

@@ -121,9 +121,9 @@ export const nameColor = (
 
 	// Check if user is idle or busy and override color with gray
 	const user = Users.getExact(name);
-	const isIdleOrBusy = user && (user.statusType === 'idle' || user.statusType === 'busy');
-	const color = isIdleOrBusy ? '#948A88' : hashColor(name);
-	const statusClass = isIdleOrBusy ? ' class="idle-status"' : '';
+	const color = (user && (user.statusType === 'idle' || user.statusType === 'busy')) ?
+		'#948A88' :
+		hashColor(name);
 
-	return symbol + (bold ? '<b>' : '') + `<font color=${color}${statusClass}>${userName}</font>` + (bold ? '</b>' : '');
+	return symbol + (bold ? '<b>' : '') + `<font color=${color}>${userName}</font>` + (bold ? '</b>' : '');
 };
