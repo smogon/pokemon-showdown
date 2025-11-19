@@ -2288,81 +2288,95 @@ export function generateStarterConfirmHTML(
 }
 
 // S Y S T E M   &   P R O F I L E
-
 export function generateResetHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>RPG Progress Reset</h2><p>All of your RPG progress has been reset!</p><p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p><p>You can start fresh by typing <code>/rpg start</code>.</p></div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>RPG Progress Reset</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p><strong>⚠️ Warning</strong></p>` +
+			`<p>All of your RPG progress has been reset!</p>` +
+			`<p>Your profile, party, PC storage, inventory, and battle state have all been cleared.</p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg start" class="button">Start New Game</button></p>` +
+		`</div>`;
 }
 
 export function generateUnstuckHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Battle Exited</h2><p>You have been removed from your battle.</p><p>Your Pokémon's status has been saved, and you can now use other RPG commands again.</p>` +
-		generateBottomNavigation() + `</div>`;
+	return `<div class="rpg-infobox">` +
+		`<h2>Battle Exited</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
+			`<p>You have been force-removed from your battle.</p>` +
+			`<p>Your Pokémon's status has been saved.</p>` +
+		`</div>` +
+		generateBottomNavigation() + 
+		`</div>`;
 }
 
 export function generateDBSaveHTML(player: PlayerData): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>Game Saved to Database!</h2>` +
-		`<p>Your game has been successfully saved to the database.</p>` +
-		`<p><strong>Trainer:</strong> ${player.name}</p>` +
-		`<p><strong>Location:</strong> ${player.location}</p>` +
-		`<p><strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>` +
-		`<p><strong>Party:</strong> ${player.party.length} Pokémon</p>` +
-		`<p><strong>Money:</strong> ₽${player.money}</p>` +
-		`<p><small>You can load your save anytime using the Load from Database button.</small></p>` +
-		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+	return `<div class="rpg-infobox">` +
+		`<h2>Game Saved!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p class="rpg-text-success"><strong>Saved successfully to database.</strong></p>` +
+			`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+			`<p><small>Location: ${player.location}</small></p>` +
+			`<p><small>Badges: ${player.badges}/${TOTAL_BADGES}</small></p>` +
+			`<p><small>Money: ₽${player.money}</small></p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
 
 export function generateDBLoadNoSaveHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
+	return `<div class="rpg-infobox">` +
 		`<h2>No Save Found</h2>` +
-		`<p>You don't have a saved game in the database yet.</p>` +
-		`<p>Use the "Save to Database" button to save your progress first.</p>` +
-		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+			`<p>You don't have a saved game in the database yet.</p>` +
+			`<p>Use the <strong>Save Game</strong> button on your profile first.</p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
 
 export function generateDBLoadConfirmHTML(loadedPlayer: PlayerData): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>Game Loaded from Database!</h2>` +
-		`<p>Your saved game has been loaded successfully!</p>` +
-		`<p><strong>Location:</strong> ${loadedPlayer.location}</p>` +
-		`<p><strong>Badges:</strong> ${loadedPlayer.badges}/${TOTAL_BADGES}</p>` +
-		`<p><strong>Party:</strong> ${loadedPlayer.party.length} Pokémon</p>` +
-		`<p><strong>Money:</strong> ₽${loadedPlayer.money}</p>` +
-		`<p><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
-		generateBottomNavigation() +
-		`</div>`;
-}
-
-export function generateDBDeleteNoSaveHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>No Save Found</h2>` +
-		`<p>You don't have a saved game in the database to delete.</p>` +
-		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+	return `<div class="rpg-infobox">` +
+		`<h2>Game Loaded!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p class="rpg-text-success"><strong>Save loaded successfully.</strong></p>` +
+			`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+			`<p><strong>${loadedPlayer.name}</strong></p>` +
+			`<p><small>Location: ${loadedPlayer.location}</small></p>` +
+			`<p><small>Party: ${loadedPlayer.party.length} Pokémon</small></p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg explore" class="button">Continue Adventure</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
 
 export function generateDBDeleteConfirmHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>⚠️ Delete Save Confirmation</h2>` +
-		`<p><strong>Warning:</strong> This will permanently delete your saved game from the database!</p>` +
-		`<p>Your current in-memory progress will NOT be affected, but you won't be able to load this save anymore.</p>` +
-		`<p>Are you sure you want to delete your database save?</p>` +
-		`<p><button name="send" value="/rpg dbdelete confirm" class="button rpg-text-error">⚠️ Yes, Delete Save</button> ` +
-		`<button name="send" value="/rpg profile" class="button">Cancel</button></p>` +
+	return `<div class="rpg-infobox">` +
+		`<h2>Delete Save?</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; border:1px solid #e57373; background:rgba(229, 115, 115, 0.1);">` +
+			`<p class="rpg-text-error"><strong>⚠️ WARNING</strong></p>` +
+			`<p>This will <strong>permanently delete</strong> your save file from the database.</p>` +
+			`<p>This action cannot be undone.</p>` +
+		`</div>` +
+		`<p style="text-align:center; margin-top:15px;">` +
+			`<button name="send" value="/rpg dbdelete confirm" class="button rpg-text-error">Yes, Delete Forever</button> ` +
+			`<button name="send" value="/rpg profile" class="button">Cancel</button>` +
+		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
 
 export function generateDBDeleteSuccessHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
+	return `<div class="rpg-infobox">` +
 		`<h2>Save Deleted</h2>` +
-		`<p>Your saved game has been permanently deleted from the database.</p>` +
-		`<p><small>Your current game progress is still in memory. Use "Save to Database" if you want to save your current progress.</small></p>` +
-		`<p><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+			`<p>Your database save file has been deleted.</p>` +
+			`<p><small>Your current session is still active in memory.</small></p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
