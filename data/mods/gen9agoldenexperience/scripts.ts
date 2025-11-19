@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
   gen: 9,
-  pokemon: {
+  /*pokemon: {
     inherit: true,
     addType(newType: string) {
       if (this.terastallized) return false;
@@ -478,7 +478,7 @@ export const Scripts: ModdedBattleScriptsData = {
       if (move.id === 'chloroblast') return Math.round(pokemon.maxhp / 2);
       return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
     }
-  },
+  },*/
 
 
 
