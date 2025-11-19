@@ -73,6 +73,7 @@ import {
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
 	generateMiscItemPokemonSelectionHTML,
+	generateTeraShardResultHTML,
 	generateEvolutionStoneErrorHTML,
 	generateMultipleOpponentsCatchErrorHTML,
 	generateCatchSuccessHTML,
@@ -90,6 +91,9 @@ import {
 	generatePartyScreenHTML,
 	generateProfileHTML,
 	generateMoveSelectionHTML,
+	generateScriptedEventHTML,
+	generateNPCInteractionHTML,
+	generatePokedexHTML,
 } from './html';
 import {
 	STARTER_POKEMON,
@@ -244,8 +248,9 @@ function handleUseMedicine(
 		removeItemFromInventory(player, item.id, 1);
 	}
 
-	// USE IN-MENU NOTIFICATION (Refresh Party Screen)
-	return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
+	// Streamlined Feedback
+	this.sendReplyBox(result.message);
+    return this.parse('/rpg party');
 }
 
 /**
@@ -270,9 +275,9 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-        
-		// USE IN-MENU NOTIFICATION
-		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
+		// Streamlined Feedback
+		this.sendReplyBox(result.message);
+        return this.parse('/rpg party');
 	}
 
 	if (itemId.startsWith('expcandy')) {
@@ -283,9 +288,9 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-        
-		// USE IN-MENU NOTIFICATION
-		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
+		// Streamlined Feedback
+		this.sendReplyBox(result.message);
+        return this.parse('/rpg party');
 	}
 
 	if (itemId === 'terashard') {
@@ -296,7 +301,6 @@ function handleUseMiscItem(
 		targetPokemon.teraType = newTeraType;
 		removeItemFromInventory(player, 'terashard', 1);
 		const tempSlot = createActivePokemonSlot(targetPokemon);
-		
 		const successMsg = `${targetPokemon.species}'s Tera Type changed to ${newTeraType}!`;
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 	}
@@ -335,9 +339,9 @@ function handleUseMiscItem(
 			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
 			removeItemFromInventory(player, itemId, 1);
 			
-            // USE IN-MENU NOTIFICATION
-			const successMsg = `${targetPokemon.species} learned ${newMoveData.name}!`;
-            return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
+            // Streamlined Feedback
+            this.sendReplyBox(`<strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
+			return this.parse('/rpg party');
 		} else {
 			// Queue move for replacement
 			if (!player.pendingMoveLearnQueue) {
@@ -356,12 +360,14 @@ function handleUseMiscItem(
 			// Evolution was successful
 			removeItemFromInventory(player, itemId, 1);
 			
+			// Streamlined Feedback
+			this.sendReplyBox(evoMessage);
+
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} 
-			// USE IN-MENU NOTIFICATION
-            return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, evoMessage)}`);
+            return this.parse('/rpg party');
 		} else {
 			// Evolution failed
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
@@ -579,8 +585,9 @@ export const commands: ChatCommands = {
 				if (queueArray.length > 0) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
-					// USE IN-MENU NOTIFICATION
-                    return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, message)}`);
+					// Streamlined Feedback - Go back to Party
+					this.sendReplyBox(message);
+                    return this.parse('/rpg party');
 				}
 			}
 		},
@@ -621,9 +628,9 @@ export const commands: ChatCommands = {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				
-                // USE IN-MENU NOTIFICATION
-                const msg = `<strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`;
-                return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
+                // Streamlined Feedback
+                this.sendReplyBox(`<strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
+                return this.parse('/rpg party');
 			} else {
 				if (!player.pendingMoveLearnQueue) {
 					player.pendingMoveLearnQueue = [];
@@ -844,6 +851,8 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, 1);
 			const item = ITEMS_DATABASE[itemId];
 
+			const tempSlot = createActivePokemonSlot(pokemon);
+			
 			// USE IN-MENU NOTIFICATION
 			const msg = `Used <strong>${item.name}</strong>. Restored <strong>${restored} PP</strong> to ${moveData.name}.`;
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
@@ -930,7 +939,9 @@ export const commands: ChatCommands = {
 		},
 
 		sell(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot sell items during a battle.");
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("You cannot sell items during a battle.");
+			}
 			const [itemId, quantityStr] = target.split(' ');
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
@@ -964,6 +975,8 @@ export const commands: ChatCommands = {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot use the Pokedex during a battle.");
 			}
+			const player = getPlayerData(user.id);
+            this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokedexHTML(player)}`);
 		},
 
 		explore(target, room, user) {
@@ -991,7 +1004,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
-			// --- 1. Travel Menu (Selection Screen) ---
+			// If no target, show travel menu
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) {
@@ -1036,7 +1049,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// --- 2. Execute Travel Logic ---
+			// Travel to target location
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1064,11 +1077,11 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
 			}
 
-			// Perform travel updates
+			// Perform travel
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
-			// --- 3. Scripted Events Check ---
+			// Check for scripted events
 			const triggeredEvents = [];
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
@@ -1104,13 +1117,13 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// --- 4. Handle Triggered Events (Interrupts Travel) ---
+			// If there are triggered events, show them
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				let eventHTML = `<div class="rpg-infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
 				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
 
-                // --- MAPPING ALL HANDLERS ---
+                // --- INTEGRATED SCRIPTED EVENTS HANDLERS ---
                 let result = { success: true, message: '' };
                 
                 switch (firstEvent.type) {
@@ -1243,12 +1256,11 @@ export const commands: ChatCommands = {
                     default: result = { success: true, message: firstEvent.dialogue || 'Event occurred.' }; break;
                 }
 
-                // Show message if not a choice-based UI
                 if (!['choice', 'quiz', 'moralchoice', 'branching'].includes(firstEvent.type)) {
                     eventHTML += `<p>${result.message}</p>`;
                 }
 
-                // Buttons for Battles and Continuation
+                // Specific Buttons for Battles
                 if (firstEvent.type === 'wildbattle' || firstEvent.type === 'bossbattle') {
                      const battleId = firstEvent.type === 'bossbattle' ? (result as any).bossTrainerId : firstEvent.id; 
                      const cmd = firstEvent.type === 'bossbattle' ? `/rpg challenge ${battleId}` : `/rpg scriptedbattle ${firstEvent.id}`;
@@ -1264,77 +1276,59 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
-			// --- 5. Streamlined Travel (No Event Triggered) ---
+			// STREAMLINED: Immediate transition to Explore with notification
 			const msg = `You arrived at ${targetLocation.name}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
 
-		eventchoice(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("Cannot do this in battle.");
-			}
+        // NEW COMMAND: Handle interactive event choices (Quiz, Moral, Branching)
+        eventchoice(target, room, user) {
+            if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
+            const player = getPlayerData(user.id);
+            const location = LOCATIONS[toID(player.location)];
+            const index = parseInt(target);
 
-			const player = getPlayerData(user.id);
-			const location = LOCATIONS[toID(player.location)];
-			const index = parseInt(target);
-
-			// --- Identify the Active Event ---
-			// We must replicate the check logic from 'travel' to find which event is currently 
-			// blocking the user/waiting for input.
-			let activeEvent = null;
-			if (location && location.scriptedEvents) {
-				for (const event of location.scriptedEvents) {
-					const eventFlagId = `scripted_${event.id}`;
-
-					// Skip if completed or locked (Logic must match travel command)
+            // Identify active event
+            let activeEvent = null;
+            if (location && location.scriptedEvents) {
+                for (const event of location.scriptedEvents) {
+                    const eventFlagId = `scripted_${event.id}`;
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
-					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
-					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
-					
-					// Found the first active event
-					activeEvent = event;
-					break;
-				}
-			}
+                    if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+                    if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+                    if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+                    if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+                    
+                    activeEvent = event;
+                    break;
+                }
+            }
 
-			if (!activeEvent) {
-				return this.errorReply("No active event found to make a choice for.");
-			}
+            if (!activeEvent) return this.errorReply("No active event to choose for.");
 
-			// --- Execute Logic based on Type ---
-			let result: { success: boolean, message: string } = { success: false, message: "Invalid choice." };
+            let result = { success: false, message: "Invalid choice." };
 
-			if (activeEvent.type === 'choice') {
-				result = ScriptedEvents.handleChoice(player, activeEvent, index);
-			} else if (activeEvent.type === 'quiz') {
-				result = ScriptedEvents.handleQuiz(player, activeEvent, index);
-			} else if (activeEvent.type === 'moralchoice') {
-				result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
-			} else if (activeEvent.type === 'branching') {
-				result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
-			} else {
-				return this.errorReply("This event does not accept choices.");
-			}
+            if (activeEvent.type === 'choice') {
+                result = ScriptedEvents.handleChoice(player, activeEvent, index);
+            } else if (activeEvent.type === 'quiz') {
+                result = ScriptedEvents.handleQuiz(player, activeEvent, index);
+            } else if (activeEvent.type === 'moralchoice') {
+                result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
+            } else if (activeEvent.type === 'branching') {
+                result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
+            }
 
-			// --- Handle Result ---
-			if (result.success) {
-				// Show the result text (e.g. "Correct answer!" or "You chose the left path.")
-				this.sendReplyBox(result.message);
-
-				// If the event is "triggerOnce", making a valid choice usually marks it as complete
-				// so the player can proceed past it.
-				if (activeEvent.triggerOnce) {
-					player.storyFlags.add(`scripted_${activeEvent.id}`);
-				}
-
-				// Return to the Explore screen (simulating the event ending)
-				return this.parse('/rpg explore');
-			} else {
-				return this.errorReply(result.message);
-			}
-		},
+            if (result.success) {
+                this.sendReplyBox(result.message);
+                // Mark event complete if needed
+                if (activeEvent.triggerOnce) {
+                    player.storyFlags.add(`scripted_${activeEvent.id}`);
+                }
+                return this.parse('/rpg explore');
+            } else {
+                return this.errorReply(result.message);
+            }
+        },
 
 		building(target, room, user) {
 			if (activeBattles.has(user.id)) {
@@ -2335,7 +2329,7 @@ export const commands: ChatCommands = {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 
-				// Standard Chat Feedback
+				// Streamlined Feedback
 				this.sendReplyBox("You ran away safely!");
 				return this.parse('/rpg explore');
 			},
@@ -2482,7 +2476,7 @@ export const commands: ChatCommands = {
 			// Clear all player data
 			playerData.delete(user.id);
 
-			// Standard Chat Feedback
+			// Streamlined Feedback
 			this.sendReplyBox("Game data reset.");
             return this.parse('/rpg start');
 		},
@@ -2501,7 +2495,7 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 			teraToggleState.delete(user.id);
 
-			// Standard Chat Feedback
+			// Streamlined Feedback
 			this.sendReplyBox("Battle force-exited.");
 			return this.parse('/rpg explore');
 		},
@@ -2582,108 +2576,21 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot talk to this NPC yet.");
 			}
 
-			// Build base dialogue HTML
-			let dialogueHTML = `<div class="rpg-infobox">` +
-				`<h2>${npc.name}</h2>` +
-				`<p>"${npc.dialogue}"</p>`;
-
-			// Handle NPC actions
+			// Handle completion state
+			let npcToRender = npc;
 			if (npc.action) {
-				const action = npc.action;
 				const actionCompleted = player.completedNPCActions.has(npcId);
-
-				// Check if action is available
-				if (!action.onceOnly || !actionCompleted) {
-					dialogueHTML += `<hr />`;
-
-					switch (action.type) {
-					case 'giveitem':
-						if (action.itemId && action.quantity) {
-							const item = ITEMS_DATABASE[action.itemId];
-							dialogueHTML += `<p><strong>Offer:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
-							dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Gift</button> `;
-						}
-						break;
-
-					case 'givepokemon':
-						if (action.pokemon) {
-							const species = Dex.species.get(action.pokemon.species);
-							if (!species.exists) {
-								dialogueHTML += `<p class="rpg-text-error">❌ Invalid Pokemon species.</p>`;
-								break;
-							}
-							dialogueHTML += `<p><strong>Offer:</strong> ${species.name} (Lvl ${action.pokemon.level})</p>`;
-
-							// Check if player has space
-							if (player.party.length >= 6 && player.pc.size >= 100) {
-								dialogueHTML += `<p class="rpg-text-error">❌ Your party and PC are both full! Free up space first.</p>`;
-							} else {
-								if (player.party.length >= 6) {
-									dialogueHTML += `<p class="rpg-text-warning">⚠️ Your party is full! The Pokémon will go to your PC.</p>`;
-								}
-								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">✅ Accept Pokémon</button> `;
-							}
-						}
-						break;
-
-					case 'exchangeitems':
-						if (action.requiredItem && action.requiredQuantity && action.itemId && action.quantity) {
-							const requiredItem = ITEMS_DATABASE[action.requiredItem];
-							const rewardItem = ITEMS_DATABASE[action.itemId];
-							const hasRequired = player.inventory.get(action.requiredItem)?.quantity || 0;
-
-							dialogueHTML += `<p><strong>Trade:</strong> ${requiredItem?.name || action.requiredItem} x${action.requiredQuantity} → ${rewardItem?.name || action.itemId} x${action.quantity}</p>`;
-
-							if (hasRequired >= action.requiredQuantity) {
-								dialogueHTML += `<p class="rpg-text-success">✅ You have the required items!</p>`;
-								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🔄 Make Trade</button> `;
-							} else {
-								dialogueHTML += `<p class="rpg-text-error">❌ You need ${action.requiredQuantity - hasRequired} more ${requiredItem?.name || action.requiredItem}</p>`;
-							}
-						}
-						break;
-
-					case 'takeitem':
-						if (action.itemId && action.quantity) {
-							const item = ITEMS_DATABASE[action.itemId];
-							const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
-
-							dialogueHTML += `<p><strong>Request:</strong> ${item?.name || action.itemId} x${action.quantity}</p>`;
-
-							if (hasItem >= action.quantity) {
-								dialogueHTML += `<p class="rpg-text-success">✅ You have the required items!</p>`;
-								dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">🎁 Give Items</button> `;
-							} else {
-								dialogueHTML += `<p class="rpg-text-error">❌ You need ${action.quantity - hasItem} more ${item?.name || action.itemId}</p>`;
-							}
-						}
-						break;
-
-					case 'heal':
-						dialogueHTML += `<p><strong>Service:</strong> Heal all Pokémon</p>`;
-						dialogueHTML += `<button name="send" value="/rpg npcaction ${npcId}" class="button">💊 Heal Party</button> `;
-						break;
-
-					case 'choosestarter':
-						// Check if player already has a starter
-						if (player.party.length > 0) {
-							dialogueHTML += `<p class="rpg-text-muted"><em>You already have your Pokémon partner!</em></p>`;
-						} else {
-							dialogueHTML += `<p><strong>Choose your starter Pokémon:</strong></p>`;
-							dialogueHTML += `<button name="send" value="/rpg starterchoice ${npcId}" class="button">👀 View Available Starters</button> `;
-						}
-						break;
-					}
-				} else {
-					dialogueHTML += `<hr /><p class="rpg-text-muted"><em>You've already completed this NPC's request.</em></p>`;
+				if (npc.action.onceOnly && actionCompleted) {
+                     // Clone and modify to hide action and show completed text
+                     npcToRender = { 
+                        ...npc, 
+                        action: null, 
+                        dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(You have completed this request.)</em>' 
+                     };
 				}
 			}
 
-			dialogueHTML += `<hr />` +
-				`<p><button name="send" value="/rpg npc" class="button">Talk to Others</button> ` +
-				`<button name="send" value="/rpg explore" class="button">Back to Explore</button></p>` +
-				generateBottomNavigation() +
-				`</div>`;
+			const dialogueHTML = generateNPCInteractionHTML(npcToRender);
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${dialogueHTML}`);
 		},
 
@@ -2695,7 +2602,6 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const args = target.split(' ');
 			const npcId = toID(args[0]);
-			// param1 is used for arguments like: recipe index, fossilID, berryID, etc.
 			const param1 = args.slice(1).join(' '); 
 			
 			const npc = NPC_DATABASE[npcId];
@@ -2708,7 +2614,6 @@ export const commands: ChatCommands = {
 				return this.errorReply("You've already completed this NPC's request.");
 			}
 
-			// Result object to track success/failure and special flags like starting a battle
 			let result: { success: boolean, message: string, canBattle?: boolean } = { success: false, message: "Action failed." };
 
 			switch (action.type) {
@@ -2724,20 +2629,16 @@ export const commands: ChatCommands = {
 
 				case 'givepokemon':
 					if (action.pokemon) {
-						// Check space
 						if (player.party.length >= 6 && player.pc.size >= 100) {
 							return this.errorReply("Your party and PC are both full! Free up space first.");
 						}
-
 						const pokemon = createPokemon(action.pokemon.species, action.pokemon.level);
-						// Apply custom moves
 						if (action.pokemon.moves && action.pokemon.moves.length > 0) {
 							pokemon.moves = action.pokemon.moves.map(moveId => {
 								const moveData = getMove(moveId);
 								return { id: moveId, pp: moveData.pp || 5 };
 							});
 						}
-
 						const species = Dex.species.get(action.pokemon.species);
 						if (!species.exists) return this.errorReply("Invalid Pokemon species.");
 
@@ -2748,7 +2649,6 @@ export const commands: ChatCommands = {
 							storePokemonInPC(player, pokemon);
 							result = { success: true, message: `<strong>${species.name}</strong> was sent to your PC.` };
 						}
-
 						if (action.onceOnly) player.completedNPCActions.add(npcId);
 					}
 					break;
@@ -2759,10 +2659,8 @@ export const commands: ChatCommands = {
 						if (hasRequired >= action.requiredQuantity) {
 							removeItemFromInventory(player, action.requiredItem, action.requiredQuantity);
 							addItemToInventory(player, action.itemId, action.quantity);
-							
 							const rewardItem = ITEMS_DATABASE[action.itemId];
 							result = { success: true, message: `Traded for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!` };
-							
 							if (action.onceOnly) player.completedNPCActions.add(npcId);
 						} else {
 							return this.errorReply("You don't have enough of the required items.");
@@ -2775,12 +2673,9 @@ export const commands: ChatCommands = {
 						const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
 						if (hasItem >= action.quantity) {
 							removeItemFromInventory(player, action.itemId, action.quantity);
-							
-							// Give a reward (example: money calculation)
 							const reward = action.quantity * 1000;
 							player.money += reward;
 							result = { success: true, message: `Gave item and received <strong>₽${reward}</strong>!` };
-
 							if (action.onceOnly) player.completedNPCActions.add(npcId);
 						} else {
 							return this.errorReply("You don't have the required item.");
@@ -2789,216 +2684,141 @@ export const commands: ChatCommands = {
 					break;
 
 				case 'choosestarter':
-					// Redirect to specific starter selection logic
 					return this.parse(`/rpg starterchoice ${npcId}`);
 
 				// --- COMPLEX ACTIONS (Mapped to npc-actions.ts) ---
-				
 				case 'heal':
 					result = NPCActions.handleHeal(player);
 					break;
-
 				case 'fossilrevival':
-					result = NPCActions.handleFossilRevival(player, action, param1); // param1 = fossilId
+					result = NPCActions.handleFossilRevival(player, action, param1);
 					break;
-
 				case 'dailyreward':
 					result = NPCActions.handleDailyReward(player, action, npcId);
 					break;
-
 				case 'battlerequest':
-					// Check if battle is possible (cooldowns etc)
 					const battleReq = NPCActions.handleBattleRequest(player, action, npcId);
 					result = { success: battleReq.success, message: battleReq.message, canBattle: battleReq.canBattle };
 					break;
-
 				case 'questchain':
 					result = NPCActions.handleQuestChain(player, action, npcId);
 					break;
-
 				case 'itemcraft':
-					result = NPCActions.handleItemCraft(player, action, parseInt(param1)); // param1 = recipeIndex
+					result = NPCActions.handleItemCraft(player, action, parseInt(param1));
 					break;
-
 				case 'berryplant':
-					result = NPCActions.handleBerryPlant(player, action, npcId, param1); // param1 = berryId
+					result = NPCActions.handleBerryPlant(player, action, npcId, param1);
 					break;
-
 				case 'pokemongrooming':
-					if (player.party.length > 0) {
-						result = NPCActions.handlePokemonGrooming(player, action, player.party[0]);
-					} else {
-						return this.errorReply("You need a Pokemon in your party.");
-					}
+					if (player.party.length > 0) result = NPCActions.handlePokemonGrooming(player, action, player.party[0]);
+					else return this.errorReply("You need a Pokemon in your party.");
 					break;
-
 				case 'fortuneteller':
 					result = NPCActions.handleFortuneTeller(player, action, npcId, param1 || 'luck');
 					break;
-
 				case 'pokemonbreeder':
-					if (player.party.length >= 2) {
-						result = NPCActions.handlePokemonBreeder(player, action, player.party[0], player.party[1]);
-					} else {
-						return this.errorReply("You need at least 2 Pokemon in your party.");
-					}
+					if (player.party.length >= 2) result = NPCActions.handlePokemonBreeder(player, action, player.party[0], player.party[1]);
+					else return this.errorReply("You need at least 2 Pokemon in your party.");
 					break;
-
 				case 'moverelearner':
 					result = { success: false, message: "Move Relearner UI is under construction." };
 					break;
-
 				case 'abilitycapsule':
-					if (player.party.length > 0) {
-						result = NPCActions.handleAbilityCapsule(player, action, player.party[0]);
-					}
+					if (player.party.length > 0) result = NPCActions.handleAbilityCapsule(player, action, player.party[0]);
 					break;
-
 				case 'evtrainer':
-					if (player.party.length > 0) {
-						result = NPCActions.handleEVTrainer(player, action, player.party[0], param1); // param1 = stat (e.g. 'atk')
-					}
+					if (player.party.length > 0) result = NPCActions.handleEVTrainer(player, action, player.party[0], param1);
 					break;
-
 				case 'ivchecker':
-					if (player.party.length > 0) {
-						result = NPCActions.handleIVChecker(player.party[0]);
-					}
+					if (player.party.length > 0) result = NPCActions.handleIVChecker(player.party[0]);
 					break;
-
 				case 'mysterygift':
 					result = NPCActions.handleMysteryGift(player, action, npcId);
 					break;
-
 				case 'lottery':
 					result = NPCActions.handleLottery(player, action);
 					break;
-
 				case 'masseuse':
-					if (player.party.length > 0) {
-						result = NPCActions.handleMasseuse(player, action, player.party[0]);
-					}
+					if (player.party.length > 0) result = NPCActions.handleMasseuse(player, action, player.party[0]);
 					break;
-
 				case 'haircutter':
-					if (player.party.length > 0) {
-						result = NPCActions.handleHairCutter(player, action, player.party[0]);
-					}
+					if (player.party.length > 0) result = NPCActions.handleHairCutter(player, action, player.party[0]);
 					break;
-
 				case 'fishing':
 					result = NPCActions.handleFishing(player, action);
 					break;
-
 				case 'bikeshop':
 					result = NPCActions.handleBikeShop(player, action);
 					break;
-
 				case 'coinexchange':
-					// param1 defaults to buying 50 coins if not specified
-					result = NPCActions.handleCoinExchange(player, action, 'buy', parseInt(param1) || 50); 
+					result = NPCActions.handleCoinExchange(player, action, 'buy', parseInt(param1) || 50);
 					break;
-
 				case 'tutorcombo':
-					result = { success: false, message: "Move Tutor UI is under construction." };
+					result = { success: false, message: "Tutor UI not yet implemented." };
 					break;
-
 				case 'apricorncrafter':
-					result = NPCActions.handleApricornCrafter(player, action, param1); // param1 = apricorn color
+					result = NPCActions.handleApricornCrafter(player, action, param1);
 					break;
-
-				case 'pokeathlon':
-					// param1 = eventName, score is simulated here for now
-					result = NPCActions.handlePokeathlon(player, action, param1, Math.floor(Math.random() * 100)); 
-					break;
-
-				case 'berryblender':
-					// param1 = comma separated berries
-					const berries = param1 ? param1.split(',') : [];
-					result = NPCActions.handleBerryBlender(player, action, berries);
-					break;
-
 				case 'shardtrader':
-					result = NPCActions.handleShardTrader(player, action, param1); // param1 = shard color
+					result = NPCActions.handleShardTrader(player, action, param1);
 					break;
-
 				case 'wingcollector':
-					result = NPCActions.handleWingCollector(player, action, param1); // param1 = wing type
+					result = NPCActions.handleWingCollector(player, action, param1);
 					break;
-
 				case 'scalecollector':
 					result = NPCActions.handleScaleCollector(player, action);
 					break;
-
 				case 'opower':
 					result = NPCActions.handleOPower(player, action, npcId);
 					break;
-
 				case 'collectionquest':
 					result = NPCActions.handleCollectionQuest(player, action, npcId);
 					break;
-
 				case 'reputation':
 					result = NPCActions.handleReputation(player, action, npcId);
 					break;
-
 				case 'deliveryquest':
-					result = NPCActions.handleDeliveryQuest(player, action, npcId, true); // 'true' implies picking up/interacting
+					result = NPCActions.handleDeliveryQuest(player, action, npcId, true);
 					break;
-
 				case 'timebased':
 					result = NPCActions.handleTimeBasedAction(player, action);
 					break;
-
 				case 'conditionaldialogue':
 					result = NPCActions.handleConditionalDialogue(player, action);
 					break;
-
 				case 'escortquest':
 					result = NPCActions.handleEscortQuest(player, action, npcId, player.location);
 					break;
-
 				case 'achievement':
-					result = NPCActions.handleAchievement(player, action, param1); // param1 = achievementId
+					result = NPCActions.handleAchievement(player, action, param1);
 					break;
-
 				case 'battlegauntlet':
 					result = NPCActions.handleBattleGauntlet(player, action, npcId);
 					break;
-
 				case 'battlearena':
 					result = NPCActions.handleBattleArena(player, action, npcId);
 					break;
-
 				case 'trainingbattle':
 					result = NPCActions.handleTrainingBattle(player, action, npcId);
-					if (result.success && result.canBattle) {
-						return this.parse(`/rpg challenge ${action.trainerId}`);
-					}
+					if (result.success && result.canBattle) return this.parse(`/rpg challenge ${action.trainerId}`);
 					break;
-
 				case 'battlechallenge':
 					result = NPCActions.handleBattleChallenge(player, action);
 					break;
-
 				case 'survivalbattle':
 					result = NPCActions.handleSurvivalBattle(player, action, npcId);
 					break;
-
 				case 'rematchtracker':
 					result = NPCActions.handleRematchTracker(player, action, npcId);
 					break;
 				
 				default:
-					result = { success: false, message: `Unknown or unimplemented action type: ${action.type}` };
+					result = { success: false, message: `Unknown action type: ${action.type}` };
 					break;
 			}
 
-			// --- Handle Results ---
 			if (result.success) {
 				this.sendReplyBox(result.message);
-				
-				// Special Handling for Battles triggered by NPCs
 				if (result.canBattle && action.trainerId) {
 					return this.parse(`/rpg challenge ${action.trainerId}`);
 				}
@@ -3006,11 +2826,13 @@ export const commands: ChatCommands = {
 				this.errorReply(result.message);
 			}
 			
-			// Refresh the dialog to update state (e.g., showing new buttons or updated quest status)
 			return this.parse(`/rpg npc ${npcId}`);
 		},
 
-		starterchoice(target, room, user) {
+		// ... (save, load, dbsave, dbload, dbdelete, help, starterchoice are unchanged from previous block) ...
+        // IMPORTANT: Paste the remaining standard commands here.
+        // (starterchoice, dbsave, dbload, dbdelete, help)
+        starterchoice(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot choose a starter during a battle.");
 			}
