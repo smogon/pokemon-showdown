@@ -895,7 +895,6 @@ function generateAvailablePokemonListHTML(
 	commandPrefix: string,
 	additionalFilter?: (pokemon: RPGPokemon) => boolean
 ): string {
-	let html = '';
 	const partyToUse = battle.overridePlayerParty || player.party;
 
 	let availableParty = partyToUse.filter(p =>
@@ -908,15 +907,44 @@ function generateAvailablePokemonListHTML(
 	}
 
 	if (availableParty.length === 0) {
-		html += `<p>You have no other Pokémon to switch to!</p>`;
-	} else {
-		for (const pokemon of availableParty) {
-			html += `<div class="rpg-switch-list-item">` +
-				`<strong>${pokemon.species}</strong> (Lvl ${pokemon.level}) | HP: ${pokemon.hp}/${pokemon.maxHp}` +
-				`<button name="send" value="${commandPrefix} ${pokemon.id}" class="button rpg-button-float-right">Switch In</button>` +
-				`</div>`;
+		return `<p>You have no other Pokémon to switch to!</p>`;
+	}
+
+	// Map pokemon to button strings
+	const switchButtons = availableParty.map(pokemon => {
+		const species = Dex.species.get(pokemon.species);
+		const spriteFilename = getSpriteFilename(species.id);
+		// Use the icon-sized sprite (box sprite) if available, or fallback to small gen5 sprite
+		// Using gen5 sprite here to match battle style, scaled down via CSS
+		const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+
+		const hpBar = generateHPBar(pokemon);
+		const statusTag = pokemon.status ? `<span class="rpg-tag rpg-tag-${pokemon.status}">${pokemon.status.toUpperCase()}</span>` : '';
+
+		const buttonContent = 
+			`<div class="rpg-switch-icon"><img src="${spriteUrl}" /></div>` +
+			`<div class="rpg-switch-info">` +
+				`<strong>${pokemon.nickname || pokemon.species}</strong> ${statusTag}<br>` +
+				`<small>Lvl ${pokemon.level}</small>` +
+				`${hpBar}` +
+			`</div>`;
+
+		return `<button name="send" value="${commandPrefix} ${pokemon.id}" class="button rpg-switch-button">${buttonContent}</button>`;
+	});
+
+	// Format into 2-column grid (reusing rpg-move-grid structure)
+	let html = '<table class="rpg-move-grid"><tr>';
+	let count = 0;
+
+	for (const button of switchButtons) {
+		html += `<td class="rpg-move-grid-cell">${button}</td>`;
+		count++;
+		if (count % 2 === 0 && count < switchButtons.length) {
+			html += '</tr><tr>';
 		}
 	}
+	
+	html += '</tr></table>';
 	return html;
 }
 
