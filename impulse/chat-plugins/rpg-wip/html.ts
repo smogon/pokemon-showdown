@@ -520,7 +520,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
 
-	let html = `<div class="rpg-infobox">`; // Updated class
+	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;>`; // Updated class
 	html += `<h2>Poké Mart - ${player.location}</h2>`;
 	html += `<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
@@ -570,7 +570,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	}
 
 	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></center>`;
-	html += `</div>`;
+	html += `</div></div>`;
 	return html;
 }
 
@@ -579,7 +579,7 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
  * Changed "Sell 5" to "Sell 10".
  */
 export function generateSellMenuHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
+	let html = `<div class="rpg-infobox"><div style="max-height: 360px; overflow: y;"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	
 	let sellableItems = 0;
 	let gridHTML = '<table class="rpg-move-grid"><tr>';
@@ -618,7 +618,7 @@ export function generateSellMenuHTML(player: PlayerData): string {
 		html += `<p>You have no valuable items to sell.</p>`;
 	}
 	
-	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div></center>`;
+	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div></div></center>`;
 	return html;
 }
 
