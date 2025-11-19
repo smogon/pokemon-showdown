@@ -2134,10 +2134,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	intimidate: {
 		onStart(pokemon) {
-			console.log("I am here!");
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
-				console.log(target.species.id);
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
@@ -2148,7 +2146,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ atk: -1 }, target, pokemon, null, true);
 				}
 			}
-			console.log(activated);
 		},
 		flags: {},
 		name: "Intimidate",
