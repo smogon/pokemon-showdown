@@ -1794,23 +1794,6 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	return html;
 }
 
-export function generateNicknameChangedHTML(
-	oldNickname: string,
-	pokemon: RPGPokemon,
-	tempSlot: ActivePokemonSlot
-): string {
-	const infoHTML = generatePokemonInfoHTML(tempSlot, true, true);
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Nickname Changed!</h2><p>Changed <strong>${oldNickname}</strong>'s name to <strong>${pokemon.nickname}</strong>!</p>${infoHTML}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-}
-
-export function generateDepositPCHTML(pokemonSpecies: string): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Pokemon Deposited</h2><p><strong>${pokemonSpecies}</strong> has been deposited into the PC!</p><p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-}
-
-export function generateWithdrawPCHTML(pokemonSpecies: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox rpg-menu-box"><h2>Pokemon Withdrawn</h2><p><strong>${pokemonSpecies}</strong> has been withdrawn from the PC!</p>${generatePokemonInfoHTML(tempSlot, true)}<p><button name="send" value="/rpg pc" class="button">View PC</button><button name="send" value="/rpg party" class="button">Back to Party</button></p></div>`;
-}
-
 // I T E M   &   P O K E M O N   U I
 
 export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
