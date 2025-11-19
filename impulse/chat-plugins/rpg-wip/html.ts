@@ -178,18 +178,14 @@ function getSpriteFilename(speciesId: string): string {
 	return filename;
 }
 
-/**
- * [STEP 4 REFACTOR]
- * Main navigation is now a 2x3 grid.
- */
 export function generateBottomNavigation(): string {
-	return `<hr /><div class="rpg-grid-3col">` +
-		`<button name="send" value="/rpg profile" class="button">👤 Profile</button>` +
-		`<button name="send" value="/rpg party" class="button">⚡ Party</button>` +
-		`<button name="send" value="/rpg items" class="button">🎒 Items</button>` +
-		`<button name="send" value="/rpg explore" class="button">🗺️ Explore</button>` +
-		`<button name="send" value="/rpg pokedex" class="button">📖 Pokédex</button>` +
-		`<button name="send" value="/rpg modes" class="button">🎮 Modes</button>` +
+	return `<div class="rpg-nav-bar">` +
+		`<button name="send" value="/rpg profile" class="button rpg-nav-button"><span class="rpg-nav-icon">👤</span> Profile</button>` +
+		`<button name="send" value="/rpg party" class="button rpg-nav-button"><span class="rpg-nav-icon">⚡</span> Party</button>` +
+		`<button name="send" value="/rpg items" class="button rpg-nav-button"><span class="rpg-nav-icon">🎒</span> Items</button>` +
+		`<button name="send" value="/rpg explore" class="button rpg-nav-button"><span class="rpg-nav-icon">🗺️</span> Explore</button>` +
+		`<button name="send" value="/rpg pokedex" class="button rpg-nav-button"><span class="rpg-nav-icon">📖</span> Pokédex</button>` +
+		`<button name="send" value="/rpg modes" class="button rpg-nav-button"><span class="rpg-nav-icon">🎮</span> Modes</button>` +
 		`</div>`;
 }
 
