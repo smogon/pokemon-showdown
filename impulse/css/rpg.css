@@ -7,6 +7,31 @@
     text-shadow: none !important;
 }
 
+/* --- Success Notification Banner --- */
+
+.rpg-notification {
+	background-color: #d4edda;
+    color: #155724;
+	border: 1px solid #c3e6cb;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    animation: fadeIn 0.3s;
+}
+
+.dark .rpg-notification {
+    background-color: #1e4d2b;
+    color: #d4edda;
+    border-color: #28a745;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(-5px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
 /* --- Text Utilities --- */
 .rpg-text-center { text-align: center; }
 .rpg-margin-top { margin-top: 15px; }
