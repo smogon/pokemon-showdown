@@ -29,49 +29,128 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 }
 
 function getItemIcon(item: InventoryItem | { name: string, category: string, id: string }): string {
-	// Base URL for PokeSprite
 	const baseUrl = "https://raw.githubusercontent.com/msikma/pokesprite/master/items";
 	
-	// 1. Convert Name to Kebab-Case (e.g. "Full Restore" -> "full-restore")
-	// This matches PokeSprite's naming convention 99% of the time
-	let filename = item.name.toLowerCase().replace(/ /g, '-').replace(/'/g, '');
+	// 1. Sanitize Filename
+	// Lowercase, replace spaces with dashes, remove dots/apostrophes
+	// e.g. "King's Rock" -> "kings-rock", "Exp. Candy S" -> "exp-candy-s"
+	let filename = item.name.toLowerCase()
+		.replace(/ /g, '-')
+		.replace(/'/g, '')
+		.replace(/\./g, '')
+		.replace(/é/g, 'e'); // e.g. Flabébé or Poké
 
-	// 2. Determine Directory based on Category
-	let directory = "medicine"; // Default fallback
+	let directory = "other-item"; // Default safe fallback
 
+	// 2. Category Routing & Exception Handling
 	if (item.category === 'pokeball') {
 		directory = "ball";
-		// PokeSprite balls don't use the word "ball" in filename (e.g. "great-ball" -> "great")
+		// Exception: "poke-ball" -> "poke" (repo naming)
 		filename = filename.replace(/-ball$/, '');
-        if (filename === 'poke') filename = 'poke'; // explicit safety
-	} else if (item.category === 'berry') {
+		if (filename === 'poke') filename = 'poke';
+		if (filename === 'hisuian-poke') filename = 'hisuian-poke';
+	} 
+	else if (item.category === 'medicine') {
+		directory = "medicine";
+		// Exp Candies are in "medicine" in Gen 8+ updates of the repo
+		// and strictly named "exp-candy-s", "exp-candy-xl", etc.
+		// (Rare Candy is also here as "rare-candy")
+	} 
+	else if (item.category === 'berry') {
 		directory = "berry";
-		// Berries usually strip the word "berry" (e.g. "oran-berry" -> "oran")
+		// Repo uses "oran", "sitrus" (no -berry suffix)
 		filename = filename.replace(/-berry$/, '');
-	} else if (item.category === 'tm') {
-		directory = "tms";
-		// TMs in PokeSprite are usually generic or typed. 
-		// For simplicity, we can use a generic TM icon or map types if known.
-        // Fallback to generic normal TM if specific doesn't exist
-		if (filename.startsWith('tm')) filename = 'tm-normal'; 
-        if (filename.startsWith('tr')) filename = 'tm-fire'; // Visual distinction for TRs
-	} else if (item.category === 'evo-item' || item.id.endsWith('stone') || item.id.includes('scale') || item.id.includes('disk')) {
+	} 
+	else if (item.category === 'battle-item') {
+		directory = "battle-item";
+		// x-attack, dire-hit, guard-spec are standard here
+	} 
+	else if (item.category === 'evo-item') {
 		directory = "evo-item";
-	} else if (item.category === 'held') {
-		directory = "held-item";
-	} else if (item.category === 'key') {
+		// "fire-stone", "upgrade", "dragon-scale" are standard here
+		if (item.id === 'galaricacuff') filename = 'galarica-cuff';
+		if (item.id === 'galaricawreath') filename = 'galarica-wreath';
+	} 
+	else if (item.category === 'tm') {
+		directory = "tm";
+		// Repo only has type icons (tm/fire.png, tm/water.png), not tm-01.png.
+		// We attempt to detect type from name, otherwise default to normal.
+		const types = ['normal', 'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'steel', 'dark', 'fairy'];
+		
+		// Check if filename contains a type (e.g. "tm-fire-blast" -> maps to "fire" if logic allowed, 
+		// but typically TMs are just "tm-01". We default to 'normal' or a specific type if known).
+		// For this system, better to default to a generic TM icon:
+		filename = 'normal'; 
+		if (item.name.toLowerCase().includes('fire')) filename = 'fire';
+		else if (item.name.toLowerCase().includes('water')) filename = 'water';
+		else if (item.name.toLowerCase().includes('grass')) filename = 'grass';
+		// ... (add more type checks if desired)
+	} 
+	else if (item.category === 'held') {
+		directory = "hold-item";
+		// Exceptions mapping
+		if (item.id === 'leftovers') filename = 'leftovers';
+		if (item.id === 'choiceband') filename = 'choice-band';
+		if (item.id === 'choicespecs') filename = 'choice-specs';
+		if (item.id === 'choicescarf') filename = 'choice-scarf';
+		if (item.id === 'lifeorb') filename = 'life-orb';
+	} 
+	else if (item.category === 'key') {
 		directory = "key-item";
-	} else if (item.category === 'misc') {
-        // Exp candies and other misc items
-        if (filename.includes('candy')) directory = "medicine"; // Exp candies are often in medicine or generic
-        else directory = "data-item";
-    }
+	}
+	else if (item.category === 'misc') {
+		// Valuable items (Nugget, Stardust) often in valuable-item
+		// Others in other-item or medicine
+		if (['nugget', 'pearl', 'big-pearl', 'stardust', 'star-piece', 'big-nugget'].includes(filename)) {
+			directory = "valuable-item";
+		} else {
+			directory = "other-item";
+		}
+	}
 
-	// 3. Handle Special Cases / Fixes
-	if (filename === 'leftovers') directory = "held-item";
-    if (filename === 'rare-candy') directory = "medicine";
-    if (filename === 'pp-up' || filename === 'pp-max') directory = "medicine";
+	// 3. Specific ID-based overrides (for items with tricky names)
+	// Medicine Exceptions
+	if (item.id === 'freshwater') { directory = 'medicine'; filename = 'fresh-water'; }
+	if (item.id === 'sodapop') { directory = 'medicine'; filename = 'soda-pop'; }
+	if (item.id === 'moomoomilk') { directory = 'medicine'; filename = 'moomoo-milk'; }
+	if (item.id === 'lemonade') { directory = 'medicine'; filename = 'lemonade'; }
+	if (item.id === 'energypowder') { directory = 'medicine'; filename = 'energy-powder'; }
+	if (item.id === 'energyroot') { directory = 'medicine'; filename = 'energy-root'; }
+	if (item.id === 'healpowder') { directory = 'medicine'; filename = 'heal-powder'; }
+	if (item.id === 'revivalherb') { directory = 'medicine'; filename = 'revival-herb'; }
+	if (item.id === 'berryjuice') { directory = 'medicine'; filename = 'berry-juice'; }
+	if (item.id === 'sacredash') { directory = 'medicine'; filename = 'sacred-ash'; }
+	if (item.id === 'ragecandybar') { directory = 'medicine'; filename = 'rage-candy-bar'; }
+	if (item.id === 'pewtercrunchies') { directory = 'medicine'; filename = 'pewter-crunchies'; }
+	if (item.id === 'lavacookie') { directory = 'medicine'; filename = 'lava-cookie'; }
+	if (item.id === 'oldgateau') { directory = 'medicine'; filename = 'old-gateau'; }
+	if (item.id === 'casteliacone') { directory = 'medicine'; filename = 'casteliacone'; }
+	if (item.id === 'lumiosegalette') { directory = 'medicine'; filename = 'lumiose-galette'; }
+	if (item.id === 'shaloursable') { directory = 'medicine'; filename = 'shalour-sable'; }
+	if (item.id === 'bigmalasada') { directory = 'medicine'; filename = 'big-malasada'; }
 
+	// Vitamins & Wings (Medicine)
+	if (['hp-up', 'protein', 'iron', 'calcium', 'zinc', 'carbos', 'pp-up', 'pp-max'].includes(filename)) {
+		directory = 'medicine';
+	}
+	if (filename.endsWith('-wing') || filename.endsWith('-feather')) {
+		directory = 'medicine';
+	}
+
+	// Other Item Exceptions
+	if (['repel', 'super-repel', 'max-repel', 'escape-rope', 'honey', 'poke-doll'].includes(filename)) {
+		directory = 'other-item';
+	}
+	if (filename.includes('bottle-cap')) directory = 'other-item';
+	if (filename.includes('ability-patch')) directory = 'other-item';
+	if (filename.includes('wishing-piece')) directory = 'other-item';
+	if (filename.includes('nectar')) directory = 'other-item'; // e.g. red-nectar
+
+	// Mega Stones
+	if (filename.endsWith('ite') && !['eviolite', 'white-herb', 'power-white'].includes(filename)) {
+		directory = 'mega-stone';
+	}
+	
 	return `${baseUrl}/${directory}/${filename}.png`;
 }
 
