@@ -1738,7 +1738,10 @@ function generateUnifiedStatsTable(pokemon: RPGPokemon): string {
 	return html;
 }
 
-export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
+/**
+ * Updated to accept a backLocation ('party' or 'pc')
+ */
+export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'party' | 'pc' = 'party'): string {
 	const species = Dex.species.get(pokemon.species);
 	const spriteFilename = getSpriteFilename(species.id);
 	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
@@ -1750,7 +1753,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const teraHTML = pokemon.teraType ? `<span class="rpg-tag rpg-tag-tera">Tera ${pokemon.teraType}</span>` : '';
 	const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
 
-	// Generate Moves Grid (Visual Only)
+	// Generate Moves Grid
 	let movesHTML = `<div class="rpg-grid-2col">`;
 	for (let i = 0; i < 4; i++) {
 		const move = pokemon.moves[i];
@@ -1766,9 +1769,12 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	}
 	movesHTML += `</div>`;
 
-	// Build the HTML structure
+	// Determine Back Button Target
+	const backButton = backLocation === 'pc' 
+		? `<button name="send" value="/rpg pc" class="button">← Back to PC</button>`
+		: `<button name="send" value="/rpg party" class="button">← Back to Party</button>`;
+
 	let html = `<div class="rpg-infobox">` +
-		// START SCROLLABLE AREA
 		`<div class="rpg-scrollable-grid">` +
 		
 			// --- HEADER ---
@@ -1782,15 +1788,12 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 				`</div>` +
 			`</div>` +
 
-			// --- GRID LAYOUT (Stats | Details) ---
+			// --- GRID LAYOUT ---
 			`<div class="rpg-grid-2col">` +
-				// Left Column: Stats
 				`<div>` +
 					`<h4>Battle Stats</h4>` +
 					generateUnifiedStatsTable(pokemon) +
 				`</div>` +
-
-				// Right Column: Memo & Details
 				`<div>` +
 					`<h4>Trainer Memo</h4>` +
 					`<div class="rpg-memo-box">` +
@@ -1806,15 +1809,13 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 			`</div>` +
 			
 			`<hr />` +
-			
-			// --- MOVES SECTION ---
 			`<h4>Known Moves</h4>` +
 			movesHTML +
 		
-		// END SCROLLABLE AREA
 		`</div>` +
 
-		`<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">← Back to Party</button></p></center>` +
+		// Dynamic Back Button
+		`<p class="rpg-margin-top">${backButton}</p>` +
 	`</div>`;
 
 	return html;
