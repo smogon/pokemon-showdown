@@ -95,9 +95,9 @@
 .rpg-infobox h2 {
 	 text-align: center;
     margin-top: 0;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 3px;
+    padding-bottom: 4px;
 }
 .dark .rpg-infobox h2 {
     border-bottom: 1px solid rgba(255,255,255,0.1);
