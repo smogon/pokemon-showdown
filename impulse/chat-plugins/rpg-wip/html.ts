@@ -579,28 +579,46 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
  * Changed "Sell 5" to "Sell 10".
  */
 export function generateSellMenuHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
-	html += `<div class="rpg-scroll-grid-2col">`;
+	let html = `<div class="rpg-infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
+	
 	let sellableItems = 0;
+	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	let count = 0;
+
 	for (const [id, item] of player.inventory) {
 		const purchasePrice = ITEM_PRICES[id];
-		if (purchasePrice && item.category === 'misc') {
+		// Generally, only misc, balls, medicines, etc are sellable. Key items are not.
+		if (purchasePrice && item.category !== 'key') {
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
-			html += `<div class="rpg-card">`;
-			html += `<strong>${item.name}</strong> (x${item.quantity})<br>`;
-			html += `<small>Sell for: ₽${sellPrice} each</small><br>`;
-			html += `<button name="send" value="/rpg sell ${id} 1" class="button rpg-button-small">Sell 1</button>`;
-			if (item.quantity >= 10) {
-				html += `<button name="send" value="/rpg sell ${id} 10" class="button rpg-button-small">Sell 10</button>`;
-			}
-			html += `</div>`;
+			const iconUrl = getItemIcon(item);
+
+			const cellContent = `<div class="rpg-item-container">` +
+					`<div class="rpg-item-header">` +
+						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
+						`<div class="rpg-item-details">` +
+							`<strong>${item.name}</strong> (x${item.quantity})<br>` +
+							`<small>Sell: ₽${sellPrice}</small>` +
+						`</div></div>` +
+					`<div class="rpg-item-actions">` +
+						`<button name="send" value="/rpg sell ${id} 1" class="button">Sell 1</button>` +
+						`${item.quantity >= 10 ? `<button name="send" value="/rpg sell ${id} 10" class="button">Sell 10</button>` : ''}` +
+					`</div></div>`;
+
+			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			count++;
+			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
-	if (sellableItems === 0) {
+	gridHTML += '</tr></table>';
+
+	if (sellableItems > 0) {
+		html += gridHTML;
+	} else {
 		html += `<p>You have no valuable items to sell.</p>`;
 	}
-	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
+	
+	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div></center>`;
 	return html;
 }
 
