@@ -390,7 +390,7 @@
 }
 
 .rpg-exp-bar-inner {
-    background: #4488ff;
+    background: #5daae0;
     height: 100%;
     border-radius: 10px;
 }
@@ -415,14 +415,14 @@
 
 
 /* --- HP Colors --- */
-.rpg-hp-high { background-color: #32CD32; }
-.dark .rpg-hp-high { background-color: #40c040; }
+.rpg-hp-high { background-color: #6abf69;; }
+.dark .rpg-hp-high { background-color: #59b359; }
 
-.rpg-hp-mid { background-color: #F8D030; }
-.dark .rpg-hp-mid { background-color: #e8c020; }
+.rpg-hp-mid { background-color: #ffd54f; }
+.dark .rpg-hp-mid { background-color: #ffca28; }
 
-.rpg-hp-low { background-color: #E63946; }
-.dark .rpg-hp-low { background-color: #d84040; }
+.rpg-hp-low { background-color: #e57373; }
+.dark .rpg-hp-low { background-color: #ef5350; }
 
 
 /*********************************
