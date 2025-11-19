@@ -473,9 +473,14 @@ export function generatePokemonInfoHTML(
 	return html;
 }
 
-export function generatePartyScreenHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox">` +
-		`<h2>Your Party</h2>`;
+export function generatePartyScreenHTML(player: PlayerData, notification?: string): string {
+	let html = `<div class="rpg-infobox">`;
+
+	if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
+
+	html += `<h2>Your Party</h2>`;
 
 	if (player.party.length === 0) {
 		html += `<p>No Pokemon in party.</p>`;
@@ -522,9 +527,14 @@ export function generatePartyScreenHTML(player: PlayerData): string {
 	return html;
 }
 
-export function generatePCHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox">` +
-		`<h2>Pokemon Storage System</h2>` +
+export function generatePCHTML(player: PlayerData, notification?: string): string {
+	let html = `<div class="rpg-infobox">`;
+
+	if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
+
+	html += `<h2>Pokemon Storage System</h2>` +
 		`<p><strong>Stored:</strong> ${player.pc.size} / 100</p>`;
 
 	if (player.pc.size === 0) {
@@ -766,13 +776,18 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	return html;
 }
 
-export function generateShopHTML(player: PlayerData, category?: string): string {
+export function generateShopHTML(player: PlayerData, category?: string, notification?: string): string {
 	const locationId = toID(player.location);
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
 
-	let html = `<div class="rpg-infobox">` +
-		`<h2>Poké Mart - ${player.location}</h2>` +
+	let html = `<div class="rpg-infobox">`;
+
+	if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
+
+	html += `<h2>Poké Mart - ${player.location}</h2>` +
 		`<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {
@@ -827,8 +842,14 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	return html;
 }
 
-export function generateSellMenuHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox"><h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
+export function generateSellMenuHTML(player: PlayerData, notification?: string): string {
+	let html = `<div class="rpg-infobox">`;
+
+	if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
+
+	html += `<h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	
 	let sellableItems = 0;
 	// Wrap the table in the new 3-column grid utility
@@ -1076,40 +1097,6 @@ export function generateItemUseErrorHTML(message: string, itemId: string): strin
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>${message}</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
 
-export function generatePPRestoreResultHTML(itemName: string, pokemonSpecies: string, moveName: string, restored: number, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Item Used!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p>Used <strong>${itemName}</strong> on <strong>${pokemonSpecies}</strong></p>` +
-			`<p class="rpg-text-success">+${restored} PP for ${moveName}</p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
-		`</div>`;
-}
-
-export function generateSacredAshResultHTML(message: string): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Sacred Ash Used!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">${message}</div>` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">View Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
-		`</div>`;
-}
-
-export function generateTeraShardResultHTML(pokemon: RPGPokemon, oldTeraType: string, newTeraType: string, tempSlot: ActivePokemonSlot): string {
-	return `<div class="rpg-infobox">` +
-		`<h2>Tera Type Changed!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;">` +
-			`<p><strong>${pokemon.species}</strong>'s Tera Type changed!</p>` +
-			`<p>${oldTeraType} ➝ <strong class="rpg-text-success">${newTeraType}</strong></p>` +
-		`</div>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">Back to Party</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p>` +
-		`</div>`;
-}
-
 export function generateEvolutionStoneErrorHTML(pokemonSpecies: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>It had no effect... (${pokemonSpecies} is not compatible with this item).</strong></p><p><button name="send" value="/rpg useitem ${itemId}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
@@ -1150,7 +1137,7 @@ function generatePokemonStatusTagsHTML(
 		slot.healBlockTurns && slot.healBlockTurns > 0 ? '<span class="rpg-tag rpg-tag-heal-block">Heal Block (' + String(slot.healBlockTurns) + ')</span>' : '',
 		slot.isCharged ? '<span class="rpg-tag rpg-tag-charged">Charged</span>' : '',
 		slot.stockpileCount && slot.stockpileCount > 0 ? '<span class="rpg-tag rpg-tag-stockpile">Stockpile ×' + String(slot.stockpileCount) + '</span>' : '',
-		slot.lockedMoveCounter && slot.lockedMoveCounter > 0 ? '<span class="rpg-tag rpg-tag-rampage">Rampage' + (isDoubleBattle ? '' : ': ' + (slot.lockedMove || '') + ' (' + String(slot.lockedMoveCounter) + ')') + '</span>' : '',
+		slot.lockedMoveCounter && slot.lockedMoveCounter > 0 ? '<span class="rpg-tag rpg-tag-rampage">Rampage' + (isDoubleBattle ? '' : ' (' + String(slot.lockedMoveCounter) + ')') + '</span>' : '',
 		slot.uproarTurns && slot.uproarTurns > 0 ? '<span class="rpg-tag rpg-tag-uproar">Uproar (' + String(slot.uproarTurns) + ')</span>' : '',
 		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? '<span class="rpg-tag rpg-tag-locked">Locked' + (isDoubleBattle ? '' : ': ' + slot.lockedMove) + '</span>' : '',
 		slot.mustRecharge ? '<span class="rpg-tag rpg-tag-must-recharge">Must Recharge</span>' : '',

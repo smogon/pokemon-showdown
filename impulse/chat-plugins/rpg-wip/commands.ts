@@ -70,13 +70,10 @@ import {
 	generateBottomNavigation,
 	generateStarterConfirmHTML,
 	generateSummarySelectionHTML,
-	generateSacredAshResultHTML,
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
 	generateMiscItemPokemonSelectionHTML,
-	generateTeraShardResultHTML,
 	generateEvolutionStoneErrorHTML,
-	generatePPRestoreResultHTML,
 	generateMultipleOpponentsCatchErrorHTML,
 	generateCatchSuccessHTML,
 	generateGiveItemSelectionHTML,
@@ -247,9 +244,8 @@ function handleUseMedicine(
 		removeItemFromInventory(player, item.id, 1);
 	}
 
-	// Streamlined Feedback (PM)
-	user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
-    return this.parse('/rpg party');
+	// USE IN-MENU NOTIFICATION (Refresh Party Screen)
+	return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 }
 
 /**
@@ -275,9 +271,8 @@ function handleUseMiscItem(
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
         
-		// Streamlined Feedback (PM)
-		user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
-        return this.parse('/rpg party');
+		// USE IN-MENU NOTIFICATION
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 	}
 
 	if (itemId.startsWith('expcandy')) {
@@ -289,9 +284,8 @@ function handleUseMiscItem(
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
         
-		// Streamlined Feedback (PM)
-		user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${result.message}`);
-        return this.parse('/rpg party');
+		// USE IN-MENU NOTIFICATION
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 	}
 
 	if (itemId === 'terashard') {
@@ -302,7 +296,9 @@ function handleUseMiscItem(
 		targetPokemon.teraType = newTeraType;
 		removeItemFromInventory(player, 'terashard', 1);
 		const tempSlot = createActivePokemonSlot(targetPokemon);
-		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTeraShardResultHTML(targetPokemon, oldTeraType, newTeraType, tempSlot)}`);
+		
+		const successMsg = `${targetPokemon.species}'s Tera Type changed to ${newTeraType}!`;
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 	}
 
 	if (itemId === 'eggmovetutor') {
@@ -339,9 +335,9 @@ function handleUseMiscItem(
 			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
 			removeItemFromInventory(player, itemId, 1);
 			
-            // Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
-			return this.parse('/rpg party');
+            // USE IN-MENU NOTIFICATION
+			const successMsg = `${targetPokemon.species} learned ${newMoveData.name}!`;
+            return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		} else {
 			// Queue move for replacement
 			if (!player.pendingMoveLearnQueue) {
@@ -360,14 +356,12 @@ function handleUseMiscItem(
 			// Evolution was successful
 			removeItemFromInventory(player, itemId, 1);
 			
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${evoMessage}`);
-
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} 
-            return this.parse('/rpg party');
+			// USE IN-MENU NOTIFICATION
+            return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, evoMessage)}`);
 		} else {
 			// Evolution failed
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
@@ -585,9 +579,8 @@ export const commands: ChatCommands = {
 				if (queueArray.length > 0) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
-					// Streamlined Feedback (PM)
-					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html ${message}`);
-                    return this.parse('/rpg party');
+					// USE IN-MENU NOTIFICATION
+                    return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, message)}`);
 				}
 			}
 		},
@@ -628,9 +621,9 @@ export const commands: ChatCommands = {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				
-                // Streamlined Feedback (PM)
-                user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
-                return this.parse('/rpg party');
+                // USE IN-MENU NOTIFICATION
+                const msg = `<strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`;
+                return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
 			} else {
 				if (!player.pendingMoveLearnQueue) {
 					player.pendingMoveLearnQueue = [];
@@ -746,7 +739,10 @@ export const commands: ChatCommands = {
 				if (!result.success) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'sacredash')}`);
 				}
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSacredAshResultHTML(result.message)}`);
+				
+				removeItemFromInventory(player, itemId, 1);
+				// USE IN-MENU NOTIFICATION
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 			}
 
 			// --- Handle "NO POKEMON SELECTED" ---
@@ -848,8 +844,9 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, 1);
 			const item = ITEMS_DATABASE[itemId];
 
-			const tempSlot = createActivePokemonSlot(pokemon);
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePPRestoreResultHTML(item.name, pokemon.species, moveData.name, restored, tempSlot)}`);
+			// USE IN-MENU NOTIFICATION
+			const msg = `Used <strong>${item.name}</strong>. Restored <strong>${restored} PP</strong> to ${moveData.name}.`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
 		},
 
 		pc(target, room, user) {
@@ -871,9 +868,9 @@ export const commands: ChatCommands = {
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Sent <strong>${pokemon.species}</strong> to the PC.`);
-			return this.parse('/rpg party');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Sent <strong>${pokemon.species}</strong> to the PC.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
 
 		withdrawpc(target, room, user) {
@@ -888,9 +885,9 @@ export const commands: ChatCommands = {
 			
 			player.party.push(pokemon);
 			
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Withdrew <strong>${pokemon.species}</strong> to your party.`);
-			return this.parse('/rpg pc');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Withdrew <strong>${pokemon.species}</strong> to your party.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, successMsg)}`);
 		},
 
 		shop(target, room, user) {
@@ -906,9 +903,7 @@ export const commands: ChatCommands = {
 		},
 
 		buy(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot shop during a battle.");
-			}
+			if (activeBattles.has(user.id)) return this.errorReply("You cannot shop during a battle.");
 			const [itemId, quantityStr] = target.split(' ');
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
@@ -929,15 +924,13 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green">Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.</span>`);
-			return this.parse('/rpg shop');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, successMsg)}`);
 		},
 
 		sell(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot sell items during a battle.");
-			}
+			if (activeBattles.has(user.id)) return this.errorReply("You cannot sell items during a battle.");
 			const [itemId, quantityStr] = target.split(' ');
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
@@ -962,9 +955,9 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green">Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.</span>`);
-			return this.parse('/rpg sell');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, successMsg)}`);
 		},
 
 		pokedex(target, room, user) {
@@ -2203,8 +2196,8 @@ export const commands: ChatCommands = {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 
-				// Streamlined Feedback (PM)
-				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html You ran away safely!`);
+				// Standard Chat Feedback
+				this.sendReplyBox("You ran away safely!");
 				return this.parse('/rpg explore');
 			},
 
@@ -2259,9 +2252,9 @@ export const commands: ChatCommands = {
 			pokemon.item = itemId;
 			removeItemFromInventory(player, itemId, 1);
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Gave <strong>${item.name}</strong> to ${pokemon.species}.`);
-			return this.parse('/rpg party');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Gave <strong>${item.name}</strong> to ${pokemon.species}.`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
 
 		takeitem(target, room, user) {
@@ -2292,9 +2285,9 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, pokemon.item, 1);
 			pokemon.item = undefined;
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Took <strong>${item.name}</strong> from ${pokemon.species}.`);
-			return this.parse('/rpg party');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Took <strong>${item.name}</strong> from ${pokemon.species}.`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
 
 		nickname(target, room, user) {
@@ -2324,9 +2317,9 @@ export const commands: ChatCommands = {
 			const oldNickname = pokemon.nickname;
 			pokemon.nickname = newNickname;
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Changed ${oldNickname}'s name to <strong>${pokemon.nickname}</strong>.`);
-			return this.parse('/rpg party');
+			// USE IN-MENU NOTIFICATION
+			const successMsg = `Changed ${oldNickname}'s name to <strong>${pokemon.nickname}</strong>.`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
 
 		reset(target, room, user) {
@@ -2350,8 +2343,8 @@ export const commands: ChatCommands = {
 			// Clear all player data
 			playerData.delete(user.id);
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Game data reset.`);
+			// Standard Chat Feedback
+			this.sendReplyBox("Game data reset.");
             return this.parse('/rpg start');
 		},
 
@@ -2369,8 +2362,8 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 			teraToggleState.delete(user.id);
 
-			// Streamlined Feedback (PM)
-			user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Battle force-exited.`);
+			// Standard Chat Feedback
+			this.sendReplyBox("Battle force-exited.");
 			return this.parse('/rpg explore');
 		},
 
@@ -2600,7 +2593,7 @@ export const commands: ChatCommands = {
 				if (action.itemId && action.quantity) {
 					addItemToInventory(player, action.itemId, action.quantity);
 					const item = ITEMS_DATABASE[action.itemId];
-					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!`);
+					this.sendReplyBox(`You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!`);
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
 				break;
@@ -2633,10 +2626,10 @@ export const commands: ChatCommands = {
 
 					if (player.party.length < 6) {
 						player.party.push(pokemon);
-						user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${species.name}</strong> joined your party!`);
+						this.sendReplyBox(`<strong>${species.name}</strong> joined your party!`);
 					} else {
 						storePokemonInPC(player, pokemon);
-						user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <strong>${species.name}</strong> was sent to your PC.`);
+						this.sendReplyBox(`<strong>${species.name}</strong> was sent to your PC.`);
 					}
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
@@ -2655,7 +2648,7 @@ export const commands: ChatCommands = {
 					addItemToInventory(player, action.itemId, action.quantity);
 
 					const rewardItem = ITEMS_DATABASE[action.itemId];
-					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Traded for <strong>${rewardItem?.name} x${action.quantity}</strong>!`);
+					this.sendReplyBox(`Traded for <strong>${rewardItem?.name} x${action.quantity}</strong>!`);
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2674,7 +2667,7 @@ export const commands: ChatCommands = {
 					// Give a reward (example: money)
 					const reward = action.quantity * 1000; // 1000 per item
 					player.money += reward;
-					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Gave item and received <strong>₽${reward}</strong>!`);
+					this.sendReplyBox(`Gave item and received <strong>₽${reward}</strong>!`);
 
 					if (action.onceOnly) player.completedNPCActions.add(npcId);
 				}
@@ -2693,7 +2686,7 @@ export const commands: ChatCommands = {
 						}
 					}
 
-					user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color:green"><strong>Your party was healed to full health!</strong></span>`);
+					this.sendReplyBox(`<span style="color:green"><strong>Your party was healed to full health!</strong></span>`);
 				} else {
 					return this.errorReply(result.message);
 				}
@@ -2706,7 +2699,7 @@ export const commands: ChatCommands = {
 			// case 'dailyreward': {
 			// See npc-actions.ts for all 34+ handler functions
 			default:
-				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated.</p>`);
+				this.sendReplyBox(`<p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated.</p>`);
 				break;
 			}
 
@@ -2786,8 +2779,8 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-				// Streamlined feedback via PM
-				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color: green"><strong>Game saved successfully!</strong></span>`);
+				// Standard Chat Feedback
+				this.sendReplyBox(`<span style="color: green"><strong>Game saved successfully!</strong></span>`);
 				return this.parse('/rpg profile');
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
@@ -2811,8 +2804,8 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-				// Streamlined feedback via PM
-				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html <span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
+				// Standard Chat Feedback
+				this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
 				return this.parse('/rpg explore');
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
@@ -2842,7 +2835,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error deleting save from database.");
 				}
 
-				user.send(`|pm|~RPG Bot|${user.getIdentity()}|/html Save file deleted.`);
+				this.sendReplyBox("Save file deleted.");
 				return this.parse('/rpg start');
 			} catch (error) {
 				return this.errorReply("Error deleting save from database: " + String(error));
