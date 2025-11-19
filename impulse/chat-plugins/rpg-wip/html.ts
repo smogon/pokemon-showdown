@@ -304,17 +304,19 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
+	// Shared button style for consistent spacing
+	const btnStyle = 'margin: 3px;';
+
 	// --- 1. Wild Pokemon Zones (Compact) ---
 	const availableZones = location.encounterZones || [];
 	if (availableZones.length > 0) {
 		html += `<hr /><strong>Wild Pokémon:</strong><br>`;
-		html += `<p class="rpg-text-center">`; // Use paragraph for natural inline button flow
+		html += `<p class="rpg-text-center">`;
 		for (const zoneId of availableZones) {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (zone) {
 				const icon = zone.battleType === 'double' ? '👥' : '🌿';
-				// Simple Button: Icon + Name only
-				html += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button> `;
+				html += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
 			}
 		}
 		html += `</p>`;
@@ -334,7 +336,7 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			else if (building.type === 'gym') icon = '⚔️';
 			else if (building.type === 'lab') icon = '🔬';
 
-			html += `<button name="send" value="/rpg building ${building.id}" class="button">${icon} ${building.name}</button> `;
+			html += `<button name="send" value="/rpg building ${building.id}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
 		html += `</p>`;
 	}
@@ -350,7 +352,7 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			for (const trainerId of availableTrainers) {
 				const trainerData = TRAINER_DATABASE[trainerId];
 				if (trainerData) {
-					html += `<button name="send" value="/rpg challenge ${trainerId}" class="button">🥊 ${trainerData.name}</button> `;
+					html += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">🥊 ${trainerData.name}</button>`;
 				}
 			}
 			html += `</p>`;
@@ -368,9 +370,9 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) canAccess = false;
 
 			if (canAccess) {
-				html += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
+				html += `<button name="send" value="/rpg travel ${connection.id}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
 			} else {
-				html += `<button class="button disabled" disabled>🔒 ${connection.name}</button> `;
+				html += `<button class="button disabled" disabled style="${btnStyle}">🔒 ${connection.name}</button>`;
 			}
 		}
 		html += `</p>`;
