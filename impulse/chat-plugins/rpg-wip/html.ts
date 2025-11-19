@@ -411,20 +411,15 @@ export function generateProfileHTML(player: PlayerData): string {
 }
 
 export function generateWelcomeHTML(): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2><b>Developer's Note</b></h2>` +
-		`<p>Welcome to the <strong>Impulse RPG System</strong>!</p>` +
-		`<p>This is a <strong>text-based adventure</strong>, where your journey will unfold through descriptions and commands. We're building an immersive Pokémon-style world, and your imagination is a key part of the experience.</p>` +
-		`<p><strong>You are joining us during an active testing phase.</strong></p>` +
-		`<p>This means you get a sneak peek, but it also means the game is still a work-in-progress. As you explore, you might encounter:</p>` +
-		`<ul>` +
-		`<li>Bugs, typos, or unexpected command responses.</li>` +
-		`<li>Unfinished story sections, features, or placeholder text.</li>` +
-		`<li>Potential server resets or updates that may clear your progress as we fix major issues.</li>` +
-		`</ul>` +
-		`<p>Your feedback is incredibly valuable and will help us fix, polish, and build the best game possible. Thank you for being a part of this early journey!</p>` +
-		`<p class="rpg-text-center rpg-margin-top">` +
-		`<button name="send" value="/rpg modes" class="button rpg-button-large">View Modes</button>` +
+	return `<div class="rpg-infobox">` +
+		`<h2>Developer's Note</h2>` +
+		`<div class="rpg-memo-box" style="margin-bottom: 15px; line-height: 1.5;">` +
+			`<p>Welcome to the <strong>Impulse RPG System</strong>!</p>` +
+			`<p>This is a text-based adventure where your journey unfolds through chat commands. We are currently in an <strong>active testing phase</strong>.</p>` +
+			`<p><small>You may encounter bugs, placeholder text, or progress resets as we improve the game. Your feedback is valuable!</small></p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg modes" class="button rpg-button-large">Start Adventure</button>` +
 		`</p>` +
 		`</div>`;
 }
