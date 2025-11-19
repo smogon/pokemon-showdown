@@ -1794,34 +1794,6 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	return html;
 }
 
-export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
-	const queueArray = player.pendingMoveLearnQueue;
-	if (!queueArray || queueArray.length === 0) return `<h2>Error: No pending moves found.</h2>`;
-	const queue = queueArray[0];
-	if (!queue || queue.moveIds.length === 0) {
-		player.pendingMoveLearnQueue?.shift();
-		return `<h2>Error: No pending moves found.</h2>`;
-	}
-	const pokemon = player.party.find(p => p.id === queue.pokemonId);
-	const newMove = getMove(queue.moveIds[0]);
-	if (!pokemon || !newMove.exists) {
-		player.pendingMoveLearnQueue?.shift();
-		return `<h2>Error: Invalid Pokemon or move data.</h2>` + generateBottomNavigation();
-	}
-	let html = `<div class="rpg-infobox rpg-menu-box">`;
-
-	if (additionalMessages && additionalMessages.length > 0) {
-		html += `<div class="rpg-battle-new-events">${additionalMessages.join('<br>')}</div>`;
-	}
-
-	html += `<h2>Move Learning Result</h2><p><strong>${pokemon.species}</strong> wants to learn the move <strong>${newMove.name}</strong>!</p><p>However, ${pokemon.species} already knows four moves. Which move should be forgotten?</p>`;
-	for (const move of pokemon.moves) {
-		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button">${getMove(move.id).name}</button>`;
-	}
-	html += `<hr /><p>...or, give up on learning the move <strong>${newMove.name}</strong>?</p><button name="send" value="/rpg learnmove skip" class="button rpg-text-error">Give Up</button></div>`;
-	return html;
-}
-
 export function generateNicknameChangedHTML(
 	oldNickname: string,
 	pokemon: RPGPokemon,
