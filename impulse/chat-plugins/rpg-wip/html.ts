@@ -264,6 +264,10 @@ export function generateWelcomeHTML(): string {
 
 export function generateExploreHTML(player: PlayerData, location: any): string {
 	let html = `<div class="rpg-infobox">` +
+		// Add Notification Banner
+		if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
 		`<div class="rpg-text-center">` +
 			`<h2><b>${location.name}</b></h2>` +
 			`<p><em>${location.description || ''}</em></p>` +
