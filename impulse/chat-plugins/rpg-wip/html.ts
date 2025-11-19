@@ -1815,7 +1815,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'p
 		`</div>` +
 
 		// Dynamic Back Button
-		`<p class="rpg-margin-top">${backButton}</p>` +
+		`<hr><center><p class="rpg-margin-top">${backButton}</p></center>` +
 	`</div>`;
 
 	return html;
