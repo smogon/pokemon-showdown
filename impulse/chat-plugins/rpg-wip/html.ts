@@ -262,17 +262,20 @@ export function generateWelcomeHTML(): string {
 		`</div>`;
 }
 
-export function generateExploreHTML(player: PlayerData, location: any): string {
-	let html = `<div class="rpg-infobox">` +
-		// Add Notification Banner
-		if (notification) {
+export function generateExploreHTML(player: PlayerData, location: any, notification?: string): string {
+	let html = `<div class="rpg-infobox">`;
+
+	// Optional Notification Banner (e.g. "You arrived at Route 1")
+	if (notification) {
 		html += `<div class="rpg-notification">${notification}</div>`;
 	}
-		`<div class="rpg-text-center">` +
+
+	html += `<div class="rpg-text-center">` +
 			`<h2><b>${location.name}</b></h2>` +
 			`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
+	// Shared button style for consistent spacing
 	const btnStyle = 'margin: 3px;';
 
 	// --- 1. Wild Pokemon Zones (Compact) ---
@@ -295,6 +298,7 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 		html += `<hr /><strong>Buildings:</strong><br>`;
 		html += `<p class="rpg-text-center">`;
 		for (const building of location.buildings) {
+			// Check accessibility
 			if (building.accessible === false) continue;
 			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
 
@@ -303,6 +307,8 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 			else if (building.type === 'pokemart') icon = '🏪';
 			else if (building.type === 'gym') icon = '⚔️';
 			else if (building.type === 'lab') icon = '🔬';
+			else if (building.type === 'department') icon = '🏬';
+			else if (building.type === 'gameCorner') icon = '🎰';
 
 			html += `<button name="send" value="/rpg building ${building.id}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
@@ -310,10 +316,13 @@ export function generateExploreHTML(player: PlayerData, location: any): string {
 	}
 
 	// --- 3. Trainers (Compact) ---
+	// We derive the ID from the name to look up trainers for this location
 	const locationId = toID(location.name);
 	const locationTrainers = TRAINER_LOCATIONS[locationId];
+	
 	if (locationTrainers && locationTrainers.length > 0) {
 		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
+		
 		if (availableTrainers.length > 0) {
 			html += `<hr /><strong>Trainers:</strong><br>`;
 			html += `<p class="rpg-text-center">`;
