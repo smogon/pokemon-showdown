@@ -90,7 +90,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		format.onBegin?.call(this);
+		this.format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
