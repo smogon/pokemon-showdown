@@ -970,16 +970,64 @@ export function generateCatchSuccessHTML(
 	zoneId: string,
 	wasHealed: boolean
 ): string {
-	let successMessage = `<h2>Gotcha!</h2><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
-	if (wasHealed) successMessage += `<p>${caughtPokemon.species} was fully healed!</p>`;
+	let successMessage = `<h2>Gotcha!</h2><div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;"><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
+	if (wasHealed) successMessage += `<p class="rpg-text-success"><small>${caughtPokemon.species} was fully healed!</small></p>`;
+	successMessage += `</div>`;
 
-	return `<div class="rpg-infobox rpg-menu-box">` + `${successMessage}` +
+	return `<div class="rpg-infobox">` + 
+		`${successMessage}` +
 		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<p>${caughtPokemon.species} has been sent to ${location}.</p>` +
-		`<p><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
+		`<p style="text-align:center; margin-top:10px;">${caughtPokemon.species} has been sent to ${location}.</p>` +
+		`<hr />` +
+		`<p style="text-align:center"><button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button> ` +
 		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
+}
+
+export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
+	const queueArray = player.pendingMoveLearnQueue;
+	if (!queueArray || queueArray.length === 0) return `<div class="rpg-infobox"><h2>Error</h2><p>No pending moves found.</p></div>`;
+	
+	const queue = queueArray[0];
+	if (!queue || queue.moveIds.length === 0) {
+		player.pendingMoveLearnQueue?.shift();
+		return `<div class="rpg-infobox"><h2>Error</h2><p>No pending moves found.</p></div>`;
+	}
+	
+	const pokemon = player.party.find(p => p.id === queue.pokemonId);
+	const newMove = getMove(queue.moveIds[0]);
+	if (!pokemon || !newMove.exists) {
+		player.pendingMoveLearnQueue?.shift();
+		return `<div class="rpg-infobox"><h2>Error</h2><p>Invalid Pokemon or move data.</p>${generateBottomNavigation()}</div>`;
+	}
+
+	let html = `<div class="rpg-infobox">`;
+
+	if (additionalMessages && additionalMessages.length > 0) {
+		html += `<div class="rpg-memo-box" style="margin-bottom:10px;">${additionalMessages.join('<br>')}</div>`;
+	}
+
+	html += `<h2>Move Learning</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p><strong>${pokemon.species}</strong> wants to learn <strong>${newMove.name}</strong>!</p>` +
+			`<p><small>But ${pokemon.species} already knows 4 moves.</small></p>` +
+		`</div>` +
+		`<p>Select a move to forget:</p>`;
+
+	// Use grid for move buttons
+	html += `<div class="rpg-grid-2col">`;
+	for (const move of pokemon.moves) {
+		html += `<button name="send" value="/rpg learnmove ${move.id}" class="button" style="text-align:center; height:auto; padding:8px;">` +
+			`<strong>${getMove(move.id).name}</strong>` +
+			`</button>`;
+	}
+	html += `</div>`;
+
+	html += `<hr /><p style="text-align:center;">...or give up on ${newMove.name}?</p>` +
+		`<p style="text-align:center;"><button name="send" value="/rpg learnmove skip" class="button rpg-text-error">Give Up on New Move</button></p>` +
+		`</div>`;
+	return html;
 }
 
 export function generateMultipleOpponentsCatchErrorHTML(): string {
