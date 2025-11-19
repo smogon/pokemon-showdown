@@ -308,10 +308,10 @@
 .rpg-starter-card {
     background-color: rgba(255,255,255,0.6);
     border: 1px solid #b0c4de;
+	 height: 70px;
     border-radius: 6px;
     padding: 8px 4px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: space-between;
     gap: 4px;
@@ -335,8 +335,8 @@
 }
 
 .rpg-starter-card img {
-    width: 48px;
-    height: 48px;
+    width: 96px;
+    height: 96px;
     image-rendering: pixelated;
     margin-bottom: 2px;
 }
@@ -348,26 +348,11 @@
 }
 
 .rpg-starter-card .button {
-    width: 90%;
+    width: 120px;
     padding: 3px 0;
     font-size: 0.8em;
     margin: 0;
 }
-
-/* --- 3-Column Grid Utility --- */
-.rpg-grid-3col {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 100%;
-}
-
-/* Mobile responsiveness: switch to 1 column on small screens */
-@media only screen and (max-width: 480px) {
-    .rpg-grid-3col {
-        grid-template-columns: 1fr;
-    }
-	}
 
 /* --- Item & Shop Grid Styling (No Icons) --- */
 
