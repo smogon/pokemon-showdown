@@ -1578,13 +1578,12 @@ function generateUnifiedStatsTable(pokemon: RPGPokemon): string {
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 	const species = Dex.species.get(pokemon.species);
 	const spriteFilename = getSpriteFilename(species.id);
-	// Use front sprite for summary
 	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
 
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
 	
-	const typesHTML = species.types.map(t => `<span class="rpg-tag" style="background-color:#777;">${t}</span>`).join(' '); // You can add specific type colors later if desired
+	const typesHTML = species.types.map(t => `<span class="rpg-tag" style="background-color:#777;">${t}</span>`).join(' ');
 	const teraHTML = pokemon.teraType ? `<span class="rpg-tag rpg-tag-tera">Tera ${pokemon.teraType}</span>` : '';
 	const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
 
@@ -1606,45 +1605,51 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon): string {
 
 	// Build the HTML structure
 	let html = `<div class="rpg-infobox">` +
-		// --- HEADER ---
-		`<div class="rpg-summary-header">` +
-			`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
-			`<div class="rpg-summary-info">` +
-				`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
-				`<p>Level ${pokemon.level}</p>` +
-				`${generateHPBar(pokemon)}` +
-				`${generateExpBar(pokemon)}` +
-			`</div>` +
-		`</div>` +
-
-		// --- GRID LAYOUT (Stats | Details) ---
-		`<div class="rpg-grid-2col">` +
-			// Left Column: Stats
-			`<div>` +
-				`<h4>Battle Stats</h4>` +
-				generateUnifiedStatsTable(pokemon) +
-			`</div>` +
-
-			// Right Column: Memo & Details
-			`<div>` +
-				`<h4>Trainer Memo</h4>` +
-				`<div class="rpg-memo-box">` +
-					`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
-					`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
-					`<p><strong>Item:</strong> ${itemText}</p>` +
-					`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
-					`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
-					`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
-					`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
+		// START SCROLLABLE AREA
+		`<div class="rpg-scrollable-grid">` +
+		
+			// --- HEADER ---
+			`<div class="rpg-summary-header">` +
+				`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
+				`<div class="rpg-summary-info">` +
+					`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
+					`<p>Level ${pokemon.level}</p>` +
+					`${generateHPBar(pokemon)}` +
+					`${generateExpBar(pokemon)}` +
 				`</div>` +
 			`</div>` +
+
+			// --- GRID LAYOUT (Stats | Details) ---
+			`<div class="rpg-grid-2col">` +
+				// Left Column: Stats
+				`<div>` +
+					`<h4>Battle Stats</h4>` +
+					generateUnifiedStatsTable(pokemon) +
+				`</div>` +
+
+				// Right Column: Memo & Details
+				`<div>` +
+					`<h4>Trainer Memo</h4>` +
+					`<div class="rpg-memo-box">` +
+						`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
+						`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
+						`<p><strong>Item:</strong> ${itemText}</p>` +
+						`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
+						`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+						`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
+						`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
+					`</div>` +
+				`</div>` +
+			`</div>` +
+			
+			`<hr />` +
+			
+			// --- MOVES SECTION ---
+			`<h4>Known Moves</h4>` +
+			movesHTML +
+		
+		// END SCROLLABLE AREA
 		`</div>` +
-		
-		`<hr />` +
-		
-		// --- MOVES SECTION ---
-		`<h4>Known Moves</h4>` +
-		movesHTML +
 
 		`<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg party" class="button">← Back to Party</button></p></center>` +
 	`</div>`;
