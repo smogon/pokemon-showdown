@@ -3,10 +3,11 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 
 // -------------------------------------------------------------------------------------
 // 1. Core Utilities & Data Helpers
@@ -296,31 +297,103 @@ export function generateWelcomeHTML(): string {
 		`</div>`;
 }
 
-export function generateExploreHTML(player: PlayerData, availableZones: string[], zoneData: typeof ENCOUNTER_ZONES): string {
-	let exploreButtons = '';
+export function generateExploreHTML(player: PlayerData, location: any): string {
+	let html = `<div class="rpg-infobox">` +
+		`<div class="rpg-text-center">` +
+			`<h2><b>${location.name}</b></h2>` +
+			`<p><em>${location.description || ''}</em></p>` +
+		`</div>`;
+
+	// --- 1. Wild Pokemon Zones ---
+	const availableZones = location.encounterZones || [];
 	if (availableZones.length > 0) {
+		html += `<hr /><h3>Wild Pokémon</h3><div class="rpg-grid-2col">`;
 		for (const zoneId of availableZones) {
-			const zone = zoneData[zoneId];
-			const icon = zone.battleType === 'double' ? '👥' : '🛤️';
-			exploreButtons += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">${icon} ${zone.name}</button>`;
+			const zone = ENCOUNTER_ZONES[zoneId];
+			if (zone) {
+				const icon = zone.battleType === 'double' ? '👥' : 'Tall Grass';
+				// Using "Tall Grass" or icon based on your preference
+				const displayIcon = zone.battleType === 'double' ? '👥' : '🌿';
+				html += `<button name="send" value="/rpg wildpokemon ${zoneId}" class="button" style="text-align:left; padding:8px;">` +
+					`<strong>${zone.name}</strong><br><small>${displayIcon} Level ${zone.levelRange[0]}-${zone.levelRange[1]}</small>` +
+					`</button>`;
+			}
 		}
-	} else {
-		exploreButtons = `<p>There's nowhere to explore here right now.</p>`;
+		html += `</div>`;
 	}
 
-	exploreButtons += `<button name="send" value="/rpg challenge gym_brock" class="button">🔥 Challenge Brock</button>`;
+	// --- 2. Buildings ---
+	if (location.buildings && location.buildings.length > 0) {
+		html += `<hr /><h3>Buildings</h3><div class="rpg-grid-2col">`;
+		for (const building of location.buildings) {
+			// Skip if not accessible
+			if (building.accessible === false) continue;
+			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
 
-	const exploreHTML = `<div class="rpg-infobox rpg-menu-box">` +
-		`<div class="rpg-text-center"><h2><b>${player.location}</b></h2>` +
-		`<p><em>${LOCATIONS[toID(player.location)]?.description || ''}</em></p></div>` +
-		`<p>${exploreButtons}</p>` +
-		`<hr />` +
-		`<p>` +
-		`<button name="send" value="/rpg shop" class="button">🏪 Poké Mart</button>` +
-		`</p>` +
-		generateBottomNavigation() +
-		`</div>`;
-	return exploreHTML;
+			let icon = '🏠';
+			if (building.type === 'pokecenter') icon = '🏥';
+			else if (building.type === 'pokemart') icon = '🏪';
+			else if (building.type === 'gym') icon = '⚔️';
+			else if (building.type === 'lab') icon = '🔬';
+
+			html += `<button name="send" value="/rpg building ${building.id}" class="button" style="text-align:left; padding:8px;">` +
+				`<strong>${building.name}</strong><br><small>${icon}</small>` +
+				`</button>`;
+		}
+		html += `</div>`;
+	}
+
+	// --- 3. Trainers ---
+	const locationId = toID(location.name); // or location.id if available
+	const locationTrainers = TRAINER_LOCATIONS[locationId];
+	if (locationTrainers && locationTrainers.length > 0) {
+		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
+		if (availableTrainers.length > 0) {
+			html += `<hr /><h3>Trainers</h3><div class="rpg-grid-2col">`;
+			for (const trainerId of availableTrainers) {
+				const trainerData = TRAINER_DATABASE[trainerId];
+				if (trainerData) {
+					html += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="text-align:left; padding:8px;">` +
+						`<strong>${trainerData.name}</strong><br><small>🥊 Battle</small>` +
+						`</button>`;
+				}
+			}
+			html += `</div>`;
+		}
+	}
+
+	// --- 4. Travel / Connections ---
+	if (location.connectedLocations && location.connectedLocations.length > 0) {
+		html += `<hr /><h3>Travel</h3><div class="rpg-grid-2col">`;
+		for (const connection of location.connectedLocations) {
+			let canAccess = true;
+			let lockReason = '';
+
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
+				canAccess = false;
+				lockReason = `🔒`;
+			}
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
+				canAccess = false;
+				lockReason = `🔒`;
+			}
+
+			if (canAccess) {
+				html += `<button name="send" value="/rpg travel ${connection.id}" class="button" style="text-align:left; padding:8px;">` +
+					`<strong>${connection.name}</strong><br><small>➡️ Go</small>` +
+					`</button>`;
+			} else {
+				html += `<button class="button disabled" disabled style="text-align:left; padding:8px; opacity:0.6;">` +
+					`<strong>${connection.name}</strong><br><small>${lockReason} Locked</small>` +
+					`</button>`;
+			}
+		}
+		html += `</div>`;
+	}
+
+	html += generateBottomNavigation();
+	html += `</div>`;
+	return html;
 }
 
 export function generateResetHTML(): string {
