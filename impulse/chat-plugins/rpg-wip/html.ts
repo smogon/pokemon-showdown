@@ -921,17 +921,9 @@ function generateAvailablePokemonListHTML(
 }
 
 /**
- * [STEP 3 REFACTOR]
- * This function is now *only* responsible for generating the *contents*
- * of a battle info box (Name, HP, Statuses, etc.).
- * The box container and sprite are now handled by `generateBattlefield`.
- */
-/**
  * [STEP 3+ REFACTOR]
  * This function is now *only* responsible for generating the *contents*
  * of a battle info block (Name, HP, Statuses, etc.).
- * It no longer includes any wrapper.
- * It also now includes the EXP bar placeholder for the opponent.
  */
 export function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
@@ -952,9 +944,10 @@ export function generateSharedBattlePokemonInfo(
 
 	const hpBarHTML = generateHPBar(pokemon);
 
-	// CHANGED: Only generate EXP bar HTML if it is the player side.
-	// Previously this returned a placeholder div for opponents.
-	const expBarHTML = isPlayerSide ? generateExpBar(pokemon) : '';
+	// CHANGED: Check if it is Battle Tower. If so, hide EXP bar for everyone.
+	// Otherwise, show it only for the player side.
+	const isBattleTower = battle?.battleType === 'battletower';
+	const expBarHTML = (isPlayerSide && !isBattleTower) ? generateExpBar(pokemon) : '';
 
 	let html = '';
 	html += nameLineHTML;
@@ -963,7 +956,7 @@ export function generateSharedBattlePokemonInfo(
 	html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
 	return html;
 }
-
+	
 function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 	const weatherTags = generateWeatherTags(battle);
 	const terrainTags = generateTerrainTags(battle);
