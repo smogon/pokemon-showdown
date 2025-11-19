@@ -2693,156 +2693,320 @@ export const commands: ChatCommands = {
 			}
 
 			const player = getPlayerData(user.id);
-			const npcId = toID(target);
-
+			const args = target.split(' ');
+			const npcId = toID(args[0]);
+			// param1 is used for arguments like: recipe index, fossilID, berryID, etc.
+			const param1 = args.slice(1).join(' '); 
+			
 			const npc = NPC_DATABASE[npcId];
-			if (!npc?.action) {
-				return this.errorReply("Invalid NPC or no action available.");
-			}
-
-			// Check location (NPC can be in the location directly or in a building in this location)
-			const currentLocationId = toID(player.location);
-			const currentLocation = LOCATIONS[currentLocationId];
-			const npcLocationId = toID(npc.location);
-
-			let npcAccessible = false;
-			if (npcLocationId === currentLocationId) {
-				npcAccessible = true;
-			} else if (currentLocation?.buildings) {
-				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-				if (building?.npcs?.includes(npcId)) {
-					npcAccessible = true;
-				}
-			}
-
-			if (!npcAccessible) {
-				return this.errorReply("That NPC is not in this location.");
-			}
-
-			// Check if already completed
-			const actionCompleted = player.completedNPCActions.has(npcId);
-			if (npc.action.onceOnly && actionCompleted) {
-				return this.errorReply("You've already completed this NPC's request.");
-			}
+			if (!npc?.action) return this.errorReply("Invalid NPC action.");
 
 			const action = npc.action;
 
+			// Check completion for one-time events
+			if (action.onceOnly && player.completedNPCActions.has(npcId)) {
+				return this.errorReply("You've already completed this NPC's request.");
+			}
+
+			// Result object to track success/failure and special flags like starting a battle
+			let result: { success: boolean, message: string, canBattle?: boolean } = { success: false, message: "Action failed." };
+
 			switch (action.type) {
-			case 'giveitem':
-				if (action.itemId && action.quantity) {
-					addItemToInventory(player, action.itemId, action.quantity);
-					const item = ITEMS_DATABASE[action.itemId];
-					this.sendReplyBox(`You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!`);
-					if (action.onceOnly) player.completedNPCActions.add(npcId);
-				}
-				break;
-
-			case 'givepokemon':
-				if (action.pokemon) {
-					// Check if player has space
-					if (player.party.length >= 6 && player.pc.size >= 100) {
-						return this.errorReply("Your party and PC are both full! Free up space first.");
+				// --- BASIC INVENTORY ACTIONS (Inline Logic) ---
+				case 'giveitem':
+					if (action.itemId && action.quantity) {
+						addItemToInventory(player, action.itemId, action.quantity);
+						const item = ITEMS_DATABASE[action.itemId];
+						result = { success: true, message: `You received <strong>${item?.name || action.itemId} x${action.quantity}</strong>!` };
+						if (action.onceOnly) player.completedNPCActions.add(npcId);
 					}
+					break;
 
-					const pokemon = createPokemon(action.pokemon.species, action.pokemon.level);
+				case 'givepokemon':
+					if (action.pokemon) {
+						// Check space
+						if (player.party.length >= 6 && player.pc.size >= 100) {
+							return this.errorReply("Your party and PC are both full! Free up space first.");
+						}
 
-					// Apply custom moves if specified
-					if (action.pokemon.moves && action.pokemon.moves.length > 0) {
-						pokemon.moves = action.pokemon.moves.map(moveId => {
-							const moveData = getMove(moveId);
-							if (!moveData?.exists) {
-								// Fallback to default pp if move data not found
-								return { id: moveId, pp: 5 };
-							}
-							return { id: moveId, pp: moveData.pp || 5 };
-						});
+						const pokemon = createPokemon(action.pokemon.species, action.pokemon.level);
+						// Apply custom moves
+						if (action.pokemon.moves && action.pokemon.moves.length > 0) {
+							pokemon.moves = action.pokemon.moves.map(moveId => {
+								const moveData = getMove(moveId);
+								return { id: moveId, pp: moveData.pp || 5 };
+							});
+						}
+
+						const species = Dex.species.get(action.pokemon.species);
+						if (!species.exists) return this.errorReply("Invalid Pokemon species.");
+
+						if (player.party.length < 6) {
+							player.party.push(pokemon);
+							result = { success: true, message: `<strong>${species.name}</strong> joined your party!` };
+						} else {
+							storePokemonInPC(player, pokemon);
+							result = { success: true, message: `<strong>${species.name}</strong> was sent to your PC.` };
+						}
+
+						if (action.onceOnly) player.completedNPCActions.add(npcId);
 					}
+					break;
 
-					const species = Dex.species.get(action.pokemon.species);
-					if (!species.exists) {
-						return this.errorReply("Invalid Pokemon species.");
-					}
-
-					if (player.party.length < 6) {
-						player.party.push(pokemon);
-						this.sendReplyBox(`<strong>${species.name}</strong> joined your party!`);
-					} else {
-						storePokemonInPC(player, pokemon);
-						this.sendReplyBox(`<strong>${species.name}</strong> was sent to your PC.`);
-					}
-
-					if (action.onceOnly) player.completedNPCActions.add(npcId);
-				}
-				break;
-
-			case 'exchangeitems':
-				if (action.requiredItem && action.requiredQuantity && action.itemId && action.quantity) {
-					const hasRequired = player.inventory.get(action.requiredItem)?.quantity || 0;
-
-					if (hasRequired < action.requiredQuantity) {
-						return this.errorReply("You don't have enough of the required items.");
-					}
-
-					removeItemFromInventory(player, action.requiredItem, action.requiredQuantity);
-					addItemToInventory(player, action.itemId, action.quantity);
-
-					const rewardItem = ITEMS_DATABASE[action.itemId];
-					this.sendReplyBox(`Traded for <strong>${rewardItem?.name} x${action.quantity}</strong>!`);
-
-					if (action.onceOnly) player.completedNPCActions.add(npcId);
-				}
-				break;
-
-			case 'takeitem':
-				if (action.itemId && action.quantity) {
-					const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
-
-					if (hasItem < action.quantity) {
-						return this.errorReply("You don't have enough of the required items.");
-					}
-
-					removeItemFromInventory(player, action.itemId, action.quantity);
-					
-					// Give a reward (example: money)
-					const reward = action.quantity * 1000; // 1000 per item
-					player.money += reward;
-					this.sendReplyBox(`Gave item and received <strong>₽${reward}</strong>!`);
-
-					if (action.onceOnly) player.completedNPCActions.add(npcId);
-				}
-				break;
-
-			case 'heal': {
-				const result = NPCActions.handleHeal(player);
-				if (result.success) {
-					// Update last Pokemon Center visited
-					const currentLocationId = toID(player.location);
-					const currentLocationData = LOCATIONS[currentLocationId];
-					if (currentLocationData?.buildings) {
-						const hasPokeCenter = currentLocationData.buildings.some(b => b.type === 'pokecenter');
-						if (hasPokeCenter) {
-							player.lastPokemonCenter = currentLocationId;
+				case 'exchangeitems':
+					if (action.requiredItem && action.requiredQuantity && action.itemId && action.quantity) {
+						const hasRequired = player.inventory.get(action.requiredItem)?.quantity || 0;
+						if (hasRequired >= action.requiredQuantity) {
+							removeItemFromInventory(player, action.requiredItem, action.requiredQuantity);
+							addItemToInventory(player, action.itemId, action.quantity);
+							
+							const rewardItem = ITEMS_DATABASE[action.itemId];
+							result = { success: true, message: `Traded for <strong>${rewardItem?.name || action.itemId} x${action.quantity}</strong>!` };
+							
+							if (action.onceOnly) player.completedNPCActions.add(npcId);
+						} else {
+							return this.errorReply("You don't have enough of the required items.");
 						}
 					}
+					break;
 
-					this.sendReplyBox(`<span style="color:green"><strong>Your party was healed to full health!</strong></span>`);
-				} else {
-					return this.errorReply(result.message);
+				case 'takeitem':
+					if (action.itemId && action.quantity) {
+						const hasItem = player.inventory.get(action.itemId)?.quantity || 0;
+						if (hasItem >= action.quantity) {
+							removeItemFromInventory(player, action.itemId, action.quantity);
+							
+							// Give a reward (example: money calculation)
+							const reward = action.quantity * 1000;
+							player.money += reward;
+							result = { success: true, message: `Gave item and received <strong>₽${reward}</strong>!` };
+
+							if (action.onceOnly) player.completedNPCActions.add(npcId);
+						} else {
+							return this.errorReply("You don't have the required item.");
+						}
+					}
+					break;
+
+				case 'choosestarter':
+					// Redirect to specific starter selection logic
+					return this.parse(`/rpg starterchoice ${npcId}`);
+
+				// --- COMPLEX ACTIONS (Mapped to npc-actions.ts) ---
+				
+				case 'heal':
+					result = NPCActions.handleHeal(player);
+					break;
+
+				case 'fossilrevival':
+					result = NPCActions.handleFossilRevival(player, action, param1); // param1 = fossilId
+					break;
+
+				case 'dailyreward':
+					result = NPCActions.handleDailyReward(player, action, npcId);
+					break;
+
+				case 'battlerequest':
+					// Check if battle is possible (cooldowns etc)
+					const battleReq = NPCActions.handleBattleRequest(player, action, npcId);
+					result = { success: battleReq.success, message: battleReq.message, canBattle: battleReq.canBattle };
+					break;
+
+				case 'questchain':
+					result = NPCActions.handleQuestChain(player, action, npcId);
+					break;
+
+				case 'itemcraft':
+					result = NPCActions.handleItemCraft(player, action, parseInt(param1)); // param1 = recipeIndex
+					break;
+
+				case 'berryplant':
+					result = NPCActions.handleBerryPlant(player, action, npcId, param1); // param1 = berryId
+					break;
+
+				case 'pokemongrooming':
+					if (player.party.length > 0) {
+						result = NPCActions.handlePokemonGrooming(player, action, player.party[0]);
+					} else {
+						return this.errorReply("You need a Pokemon in your party.");
+					}
+					break;
+
+				case 'fortuneteller':
+					result = NPCActions.handleFortuneTeller(player, action, npcId, param1 || 'luck');
+					break;
+
+				case 'pokemonbreeder':
+					if (player.party.length >= 2) {
+						result = NPCActions.handlePokemonBreeder(player, action, player.party[0], player.party[1]);
+					} else {
+						return this.errorReply("You need at least 2 Pokemon in your party.");
+					}
+					break;
+
+				case 'moverelearner':
+					result = { success: false, message: "Move Relearner UI is under construction." };
+					break;
+
+				case 'abilitycapsule':
+					if (player.party.length > 0) {
+						result = NPCActions.handleAbilityCapsule(player, action, player.party[0]);
+					}
+					break;
+
+				case 'evtrainer':
+					if (player.party.length > 0) {
+						result = NPCActions.handleEVTrainer(player, action, player.party[0], param1); // param1 = stat (e.g. 'atk')
+					}
+					break;
+
+				case 'ivchecker':
+					if (player.party.length > 0) {
+						result = NPCActions.handleIVChecker(player.party[0]);
+					}
+					break;
+
+				case 'mysterygift':
+					result = NPCActions.handleMysteryGift(player, action, npcId);
+					break;
+
+				case 'lottery':
+					result = NPCActions.handleLottery(player, action);
+					break;
+
+				case 'masseuse':
+					if (player.party.length > 0) {
+						result = NPCActions.handleMasseuse(player, action, player.party[0]);
+					}
+					break;
+
+				case 'haircutter':
+					if (player.party.length > 0) {
+						result = NPCActions.handleHairCutter(player, action, player.party[0]);
+					}
+					break;
+
+				case 'fishing':
+					result = NPCActions.handleFishing(player, action);
+					break;
+
+				case 'bikeshop':
+					result = NPCActions.handleBikeShop(player, action);
+					break;
+
+				case 'coinexchange':
+					// param1 defaults to buying 50 coins if not specified
+					result = NPCActions.handleCoinExchange(player, action, 'buy', parseInt(param1) || 50); 
+					break;
+
+				case 'tutorcombo':
+					result = { success: false, message: "Move Tutor UI is under construction." };
+					break;
+
+				case 'apricorncrafter':
+					result = NPCActions.handleApricornCrafter(player, action, param1); // param1 = apricorn color
+					break;
+
+				case 'pokeathlon':
+					// param1 = eventName, score is simulated here for now
+					result = NPCActions.handlePokeathlon(player, action, param1, Math.floor(Math.random() * 100)); 
+					break;
+
+				case 'berryblender':
+					// param1 = comma separated berries
+					const berries = param1 ? param1.split(',') : [];
+					result = NPCActions.handleBerryBlender(player, action, berries);
+					break;
+
+				case 'shardtrader':
+					result = NPCActions.handleShardTrader(player, action, param1); // param1 = shard color
+					break;
+
+				case 'wingcollector':
+					result = NPCActions.handleWingCollector(player, action, param1); // param1 = wing type
+					break;
+
+				case 'scalecollector':
+					result = NPCActions.handleScaleCollector(player, action);
+					break;
+
+				case 'opower':
+					result = NPCActions.handleOPower(player, action, npcId);
+					break;
+
+				case 'collectionquest':
+					result = NPCActions.handleCollectionQuest(player, action, npcId);
+					break;
+
+				case 'reputation':
+					result = NPCActions.handleReputation(player, action, npcId);
+					break;
+
+				case 'deliveryquest':
+					result = NPCActions.handleDeliveryQuest(player, action, npcId, true); // 'true' implies picking up/interacting
+					break;
+
+				case 'timebased':
+					result = NPCActions.handleTimeBasedAction(player, action);
+					break;
+
+				case 'conditionaldialogue':
+					result = NPCActions.handleConditionalDialogue(player, action);
+					break;
+
+				case 'escortquest':
+					result = NPCActions.handleEscortQuest(player, action, npcId, player.location);
+					break;
+
+				case 'achievement':
+					result = NPCActions.handleAchievement(player, action, param1); // param1 = achievementId
+					break;
+
+				case 'battlegauntlet':
+					result = NPCActions.handleBattleGauntlet(player, action, npcId);
+					break;
+
+				case 'battlearena':
+					result = NPCActions.handleBattleArena(player, action, npcId);
+					break;
+
+				case 'trainingbattle':
+					result = NPCActions.handleTrainingBattle(player, action, npcId);
+					if (result.success && result.canBattle) {
+						return this.parse(`/rpg challenge ${action.trainerId}`);
+					}
+					break;
+
+				case 'battlechallenge':
+					result = NPCActions.handleBattleChallenge(player, action);
+					break;
+
+				case 'survivalbattle':
+					result = NPCActions.handleSurvivalBattle(player, action, npcId);
+					break;
+
+				case 'rematchtracker':
+					result = NPCActions.handleRematchTracker(player, action, npcId);
+					break;
+				
+				default:
+					result = { success: false, message: `Unknown or unimplemented action type: ${action.type}` };
+					break;
+			}
+
+			// --- Handle Results ---
+			if (result.success) {
+				this.sendReplyBox(result.message);
+				
+				// Special Handling for Battles triggered by NPCs
+				if (result.canBattle && action.trainerId) {
+					return this.parse(`/rpg challenge ${action.trainerId}`);
 				}
-				break;
+			} else {
+				this.errorReply(result.message);
 			}
-
-			// NOTE: Additional NPC action types can be integrated here using npc-actions.ts handlers
-			// Examples:
-			// case 'fossilrevival': {
-			// case 'dailyreward': {
-			// See npc-actions.ts for all 34+ handler functions
-			default:
-				this.sendReplyBox(`<p class="rpg-text-warning">⚠️ This NPC action type (${action.type}) is not yet integrated.</p>`);
-				break;
-			}
-
-            // Refresh the NPC dialog
+			
+			// Refresh the dialog to update state (e.g., showing new buttons or updated quest status)
 			return this.parse(`/rpg npc ${npcId}`);
 		},
 
