@@ -520,23 +520,21 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
 
-	let html = `<div class="rpg-infobox rpg-menu-box">`;
+	let html = `<div class="rpg-infobox">`; // Updated class
 	html += `<h2>Poké Mart - ${player.location}</h2>`;
-	html += `<p>Welcome! What would you like to do?</p>`;
-	html += `<p><strong>Your Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
+	html += `<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {
-		html += `<p class="rpg-text-muted"><small>🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badge${nextTier.requiredBadges === 1 ? '' : 's'}</small></p>`;
+		html += `<p class="rpg-text-muted"><small>🔒 ${nextTier.itemCount} more items will unlock with ${nextTier.requiredBadges} badges</small></p>`;
 	}
 
-	html += `<p><button name="send" value="/rpg sell" class="button rpg-button-sell">Sell Items</button></p>`;
-
-	html += `<h3>Buy Items</h3>`;
+	html += `<p><button name="send" value="/rpg sell" class="button rpg-button-sell">Go to Sell Menu</button></p>`;
 	html += generateItemCategoryFilters('/rpg shop');
 
-	html += `<div class="rpg-scroll-grid-2col">`;
-
 	let itemsFound = false;
+	let gridHTML = '<table class="rpg-move-grid"><tr>';
+	let count = 0;
+
 	for (const itemId of shopInventory) {
 		const item = ITEMS_DATABASE[itemId];
 		const price = ITEM_PRICES[itemId];
@@ -544,21 +542,34 @@ export function generateShopHTML(player: PlayerData, category?: string): string 
 
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-			html += `<div class="rpg-card">`;
-			html += `<strong>${item.name}</strong> - ₽${price}<br>`;
-			html += `<small>${item.description}</small><br>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 1" class="button rpg-button-small">Buy 1</button>`;
-			html += `<button name="send" value="/rpg buy ${itemId} 10" class="button rpg-button-small">Buy 10</button>`;
-			html += `</div>`;
+			const iconUrl = getItemIcon({ ...item, id: itemId }); // Construct object for helper
+
+			const cellContent = `<div class="rpg-item-container">` +
+					`<div class="rpg-item-header">` +
+						`<div class="rpg-item-icon"><img src="${iconUrl}" alt="${item.name}" /></div>` +
+						`<div class="rpg-item-details">` +
+							`<strong>${item.name}</strong><br>` +
+							`<span class="rpg-text-info">₽${price}</span>` +
+						`</div></div>` +
+					`<div class="rpg-item-actions">` +
+						`<button name="send" value="/rpg buy ${itemId} 1" class="button">Buy 1</button>` +
+						`<button name="send" value="/rpg buy ${itemId} 10" class="button">Buy 10</button>` +
+					`</div></div>`;
+
+			gridHTML += `<td class="rpg-move-grid-cell" style="height: auto;">${cellContent}</td>`;
+			count++;
+			if (count % 2 === 0) gridHTML += '</tr><tr>';
 		}
 	}
+	gridHTML += '</tr></table>';
 
-	if (!itemsFound) {
+	if (itemsFound) {
+		html += gridHTML;
+	} else {
 		html += `<p>No items found in this category.</p>`;
 	}
 
-	html += `</div>`;
-	html += `<p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></center>`;
 	html += `</div>`;
 	return html;
 }
