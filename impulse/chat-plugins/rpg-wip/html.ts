@@ -679,7 +679,9 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 }
 
 export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
+	// Ensure we use the new class
 	let html = `<div class="rpg-infobox"><h2>Select a Poke Ball</h2>`;
+	
 	const pokeBalls = [];
 	for (const [itemId, item] of player.inventory) {
 		if (item.category === 'pokeball' && item.quantity > 0) {
@@ -693,9 +695,11 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
 	} else {
-		html += `<div class="rpg-grid-3col">`;
-		for (const ball of pokeBalls) {
+		// Map balls to buttons
+		const ballButtons = pokeBalls.map(ball => {
 			let command = '';
+			
+			// Command Logic
 			if (isDoubleBattle && activeOpponents.length > 1) {
 				command = `/rpg battleaction selectcatchtarget ${ball.id}`;
 			} else if (isDoubleBattle && activeOpponents.length === 1) {
@@ -705,11 +709,28 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
-			html += `<div class="rpg-card rpg-text-center"><strong>${ball.name}</strong><br><small>x${ball.quantity}</small><br><button name="send" value="${command}" class="button rpg-button-small">Use</button></div>`;
+			// Structure content to match Move Button (Name on top, Quantity on bottom)
+			const buttonContent = 
+				`<div class="rpg-move-name">${ball.name}</div>` +
+				`<div class="rpg-move-info" style="text-align: center;">x${ball.quantity}</div>`;
+
+			return `<button name="send" value="${command}" class="button rpg-move-button">${buttonContent}</button>`;
+		});
+
+		// Generate 2-Column Grid
+		html += '<table class="rpg-move-grid"><tr>';
+		let count = 0;
+		for (const button of ballButtons) {
+			html += `<td class="rpg-move-grid-cell">${button}</td>`;
+			count++;
+			if (count % 2 === 0 && count < ballButtons.length) {
+				html += '</tr><tr>';
+			}
 		}
-		html += `</div>`;
+		html += '</tr></table>';
 	}
-	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+	
+	html += `<hr /><center><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></center></div>`;
 	return html;
 }
 
