@@ -1870,7 +1870,7 @@ function generateBattleHeader(battle: BattleState): string {
  * sprite-based layout.
  * It now creates a wrapper (.rpg-player-slot or .rpg-opponent-slot)
  * and places the info block *above* the sprite.
- * * UPDATED: Adds 'rpg-slot-${index}' class to allow specific positioning for Double Battles.
+ * * UPDATED: Distinguishes between Single and Double battle classes.
  */
 function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
@@ -1922,12 +1922,17 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 			containerClasses += " rpg-action-pending";
 		}
 
-		// [NEW STRUCTURE]
-		// Wrapper div (positioned)
-		//   -> Info div (static, on top)
-		//   -> Sprite img (static, on bottom)
-		// ADDED: rpg-slot-${slotIndex} for specific positioning
-		let html = `<div class="${slotWrapperClass} rpg-slot-${slotIndex}">`;
+		// [NEW LOGIC] Determine specific positioning class
+		let posClass = '';
+		if (isDoubleBattle) {
+			// Double Battle: Use index-based classes (0-3)
+			posClass = `rpg-double-slot-${slotIndex}`;
+		} else {
+			// Single Battle: Use explicit side-based classes
+			posClass = side === 'player' ? 'rpg-single-slot-player' : 'rpg-single-slot-opponent';
+		}
+
+		let html = `<div class="${slotWrapperClass} ${posClass}">`;
 		html += `<div class="${containerClasses}">${infoContents}</div>`;
 		html += `<img class="${spriteClass}" src="${spriteUrl}" width="60" height="60" />`;
 		html += `</div>`;
