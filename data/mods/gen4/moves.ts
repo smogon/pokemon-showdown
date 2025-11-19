@@ -1567,15 +1567,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onAnyPrepareHitPriority: -1,
 			onAnyPrepareHit(source, target, move) {
-				const snatchUser = this.effectState.source;
+				const snatchUser = this.effectState.source as Pokemon;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				if (this.actions.useMove(move.id, snatchUser)) {
+				const snatchedMove = this.dex.getActiveMove(move.id);
+				snatchUser.lastMove = snatchedMove;
+				if (this.actions.useMove(snatchedMove, snatchUser)) {
 					snatchUser.deductPP('snatch');
+				}
+				if (snatchUser.getItem().isChoice) {
+					delete snatchUser.volatiles['choicelock'];
+					snatchUser.addVolatile('choicelock');
 				}
 				return null;
 			},

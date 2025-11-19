@@ -123,7 +123,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	choicelock: {
 		inherit: true,
 		onStart(pokemon) {
-			if (!pokemon.lastMove) return false;
+			if (!pokemon.lastMove || !pokemon.hasMove(pokemon.lastMove.id)) return false;
 			this.effectState.move = pokemon.lastMove.id;
 		},
 	},
