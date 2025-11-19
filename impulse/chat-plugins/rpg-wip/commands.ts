@@ -991,7 +991,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
-			// If no target, show travel menu (Selection Screen)
+			// --- 1. Travel Menu (Selection Screen) ---
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) {
@@ -1036,7 +1036,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// --- EXECUTE TRAVEL ---
+			// --- 2. Execute Travel Logic ---
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1064,11 +1064,11 @@ export const commands: ChatCommands = {
 				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
 			}
 
-			// Perform travel
+			// Perform travel updates
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
-			// Check for scripted events
+			// --- 3. Scripted Events Check ---
 			const triggeredEvents = [];
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
@@ -1104,93 +1104,236 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// If there are triggered events, show them (Interrupts Streamlined Travel)
+			// --- 4. Handle Triggered Events (Interrupts Travel) ---
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				let eventHTML = `<div class="rpg-infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
 				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
 
-				if (firstEvent.type === 'dialogue') {
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue}</p>`;
-					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-				} else if (firstEvent.type === 'item') {
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue || 'You found an item!'}</p>`;
-					if (firstEvent.itemId && firstEvent.itemQuantity) {
-						addItemToInventory(player, firstEvent.itemId, firstEvent.itemQuantity);
-						const itemData = ITEMS_DATABASE[firstEvent.itemId];
-						eventHTML += `<p>You received ${firstEvent.itemQuantity}x ${itemData?.name || firstEvent.itemId}!</p>`;
-					}
-					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-				} else if (firstEvent.type === 'pokemon') {
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue || 'You received a Pokemon!'}</p>`;
-					if (firstEvent.pokemon) {
-						const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
-						if (firstEvent.pokemon.moves) {
-							newPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
-								const moveData = getMove(moveId);
-								return { id: moveId, pp: moveData.pp || 5 };
-							});
-						}
-						if (firstEvent.pokemon.shiny) {
-							newPokemon.shiny = true;
-						}
-						if (player.party.length < 6) {
-							player.party.push(newPokemon);
-							eventHTML += `<p>${newPokemon.species} joined your party!</p>`;
-						} else {
-							storePokemonInPC(player, newPokemon);
-							eventHTML += `<p>${newPokemon.species} was sent to your PC!</p>`;
-						}
-					}
-					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-				} else if (firstEvent.type === 'wildbattle' && firstEvent.pokemon) {
-					// Scripted wild Pokemon encounter
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue || 'A wild Pokemon appeared!'}</p>`;
+                // --- MAPPING ALL HANDLERS ---
+                let result = { success: true, message: '' };
+                
+                switch (firstEvent.type) {
+                    case 'cutscene': result = ScriptedEvents.handleCutscene(player, firstEvent); break;
+                    case 'choice': 
+                        result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
+                        eventHTML += `<p>${result.message}</p>`;
+                        if (firstEvent.choices) {
+                            firstEvent.choices.forEach((choice, idx) => {
+                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
+                            });
+                        }
+                        break;
+                    case 'quiz':
+                        result = { success: true, message: firstEvent.question || 'Quiz Time!' };
+                        eventHTML += `<p>${result.message}</p>`;
+                        if (firstEvent.answers) {
+                            firstEvent.answers.forEach((ans, idx) => {
+                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${ans}</button> `;
+                            });
+                        }
+                        break;
+                    case 'weather': result = ScriptedEvents.handleWeatherChange(player, firstEvent); break;
+                    case 'earthquake': result = ScriptedEvents.handleEarthquake(player, firstEvent); break;
+                    case 'explosion': result = ScriptedEvents.handleExplosion(player, firstEvent); break;
+                    case 'flood': result = ScriptedEvents.handleFlood(player, firstEvent); break;
+                    case 'meteor': result = ScriptedEvents.handleMeteor(player, firstEvent); break;
+                    case 'eclipse': result = ScriptedEvents.handleEclipse(player, firstEvent); break;
+                    case 'timewarp': result = ScriptedEvents.handleTimeWarp(player, firstEvent); break;
+                    case 'dimensionrift': result = ScriptedEvents.handleDimensionRift(player, firstEvent); break;
+                    case 'swarm': result = ScriptedEvents.handlePokemonSwarm(player, firstEvent); break;
+                    case 'bossbattle': result = ScriptedEvents.handleBossBattle(player, firstEvent); break;
+                    case 'tournament': result = ScriptedEvents.handleTournament(player, firstEvent, firstEvent.id); break;
+                    case 'scavengerhunt': result = ScriptedEvents.handleScavengerHunt(player, firstEvent, firstEvent.id); break;
+                    case 'investigation': result = ScriptedEvents.handleInvestigation(player, firstEvent, firstEvent.id); break;
+                    case 'stealth': result = ScriptedEvents.handleStealth(player, firstEvent); break;
+                    case 'escape': result = ScriptedEvents.handleEscape(player, firstEvent); break;
+                    case 'rescue': result = ScriptedEvents.handleRescue(player, firstEvent); break;
+                    case 'defense': result = ScriptedEvents.handleDefense(player, firstEvent); break;
+                    case 'ambush': result = ScriptedEvents.handleAmbush(player, firstEvent); break;
+                    case 'betrayal': result = ScriptedEvents.handleBetrayal(player, firstEvent); break;
+                    case 'alliance': result = ScriptedEvents.handleAlliance(player, firstEvent); break;
+                    case 'negotiation': result = ScriptedEvents.handleNegotiation(player, firstEvent); break;
+                    case 'discovery': result = ScriptedEvents.handleDiscovery(player, firstEvent); break;
+                    case 'revelation': result = ScriptedEvents.handleRevelation(player, firstEvent); break;
+                    case 'ancientseal': result = ScriptedEvents.handleAncientSeal(player, firstEvent); break;
+                    case 'portalopening': result = ScriptedEvents.handlePortalOpening(player, firstEvent); break;
+                    case 'dimensionmerge': result = ScriptedEvents.handleDimensionMerge(player, firstEvent); break;
+                    case 'timeloop': result = ScriptedEvents.handleTimeLoop(player, firstEvent, firstEvent.id); break;
+                    case 'prophecy': result = ScriptedEvents.handleProphecy(player, firstEvent); break;
+                    case 'fishingevent': result = ScriptedEvents.handleFishingEvent(player, firstEvent); break;
+                    case 'surfingevent': result = ScriptedEvents.handleSurfingEvent(player, firstEvent); break;
+                    case 'divingevent': result = ScriptedEvents.handleDivingEvent(player, firstEvent); break;
+                    case 'itemball': result = ScriptedEvents.handleItemBall(player, firstEvent); break;
+                    case 'hiddenitem': result = ScriptedEvents.handleHiddenItemEvent(player, firstEvent); break;
+                    case 'roaming': result = ScriptedEvents.handleRoamingEvent(player, firstEvent); break;
+                    case 'multibattle': result = ScriptedEvents.handleMultiBattle(player, firstEvent); break;
+                    case 'festival': result = ScriptedEvents.handleFestivalEvent(player, firstEvent); break;
+                    case 'secretarea': result = ScriptedEvents.handleSecretArea(player, firstEvent); break;
+                    case 'warp': result = ScriptedEvents.handleWarpEvent(player, firstEvent); break;
+                    case 'gymchallenge': result = ScriptedEvents.handleGymChallengeEvent(player, firstEvent); break;
+                    case 'elitefour': result = ScriptedEvents.handleEliteFourChallengeEvent(player, firstEvent); break;
+                    case 'halloffame': result = ScriptedEvents.handleHallOfFameEvent(player, firstEvent); break;
+                    case 'safarizone': result = ScriptedEvents.handleSafariZoneEvent(player, firstEvent); break;
+                    case 'bugcatching': result = ScriptedEvents.handleBugCatchingContestEvent(player, firstEvent); break;
+                    case 'battlefrontier': result = ScriptedEvents.handleBattleFrontierEvent(player, firstEvent); break;
+                    case 'flashback': result = ScriptedEvents.handleFlashback(player, firstEvent); break;
+                    case 'dreamsequence': result = ScriptedEvents.handleDreamSequence(player, firstEvent); break;
+                    case 'reputationchange': result = ScriptedEvents.handleReputationChange(player, firstEvent); break;
+                    case 'companionjoin': result = ScriptedEvents.handleCompanionJoin(player, firstEvent); break;
+                    case 'companionleave': result = ScriptedEvents.handleCompanionLeave(player, firstEvent); break;
+                    case 'moralchoice': 
+                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
+                         eventHTML += `<p>${result.message}</p>`;
+                         if (firstEvent.moralChoices) {
+                            firstEvent.moralChoices.forEach((choice, idx) => {
+                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
+                            });
+                         }
+                        break;
+                    case 'lore': result = ScriptedEvents.handleLoreDiscovery(player, firstEvent, firstEvent.id); break;
+                    case 'branching': 
+                         result = { success: true, message: firstEvent.dialogue || 'Choose a path:' };
+                         eventHTML += `<p>${result.message}</p>`;
+                         if (firstEvent.pathOptions) {
+                             firstEvent.pathOptions.forEach((path, idx) => {
+                                 eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${path.name}</button> `;
+                             });
+                         }
+                        break;
+                    case 'chapter': result = ScriptedEvents.handleChapterTransition(player, firstEvent); break;
+                    case 'epilogue': result = ScriptedEvents.handleEpilogue(player, firstEvent); break;
+                    case 'collectible': result = ScriptedEvents.handleCollectibleItem(player, firstEvent, firstEvent.id); break;
+                    case 'voicefromabove': result = ScriptedEvents.handleVoiceFromAbove(player, firstEvent); break;
+                    case 'memory': result = ScriptedEvents.handleMemoryRestoration(player, firstEvent, firstEvent.id); break;
+                    case 'hordebattle': result = ScriptedEvents.handleHordeBattle(player, firstEvent); break;
+                    case 'inversebattle': result = ScriptedEvents.handleInverseBattle(player, firstEvent); break;
+                    case 'rotationbattle': result = ScriptedEvents.handleRotationBattle(player, firstEvent); break;
+                    case 'battleroyale': result = ScriptedEvents.handleBattleRoyale(player, firstEvent); break;
+                    case 'triplebattle': result = ScriptedEvents.handleTripleBattle(player, firstEvent); break;
+                    case 'skybattle': result = ScriptedEvents.handleSkyBattle(player, firstEvent); break;
+                    case 'underwaterbattle': result = ScriptedEvents.handleUnderwaterBattle(player, firstEvent); break;
+                    case 'raidbattle': result = ScriptedEvents.handleRaidBattle(player, firstEvent); break;
+                    case 'gauntletbattle': result = ScriptedEvents.handleGauntletBattle(player, firstEvent, firstEvent.id); break;
+                    case 'championdefense': result = ScriptedEvents.handleChampionDefense(player, firstEvent, firstEvent.id); break;
+                    case 'battletest': result = ScriptedEvents.handleBattleTest(player, firstEvent); break;
+                    case 'warbattle': result = ScriptedEvents.handleWarBattle(player, firstEvent, firstEvent.id); break;
 
-					// Create the wild Pokemon
-					const wildPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
-					if (firstEvent.pokemon.moves) {
-						wildPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
-							const moveData = getMove(moveId);
-							return { id: moveId, pp: moveData.pp || 5 };
-						});
-					}
-					if (firstEvent.pokemon.shiny) {
-						wildPokemon.shiny = true;
-					}
+                    // Legacy Handlers
+                    case 'dialogue': result = { success: true, message: firstEvent.dialogue || '' }; break;
+                    case 'item': 
+                        if (firstEvent.itemId && firstEvent.itemQuantity) {
+                            addItemToInventory(player, firstEvent.itemId, firstEvent.itemQuantity);
+                            result = { success: true, message: `${firstEvent.dialogue || ''}<br>Received ${firstEvent.itemQuantity}x ${firstEvent.itemId}!` };
+                        }
+                        break;
+                    case 'pokemon':
+                        if (firstEvent.pokemon) {
+                            const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+                            if (player.party.length < 6) player.party.push(newPokemon);
+                            else storePokemonInPC(player, newPokemon);
+                            result = { success: true, message: `${firstEvent.dialogue || ''}<br>Received ${firstEvent.pokemon.species}!` };
+                        }
+                        break;
+                    case 'wildbattle':
+                    case 'trainer':
+                         result = { success: true, message: firstEvent.dialogue || 'Battle start!' };
+                         break;
 
-					// Store the wild Pokemon temporarily
-					const tempWildId = `scripted_wild_${firstEvent.id}`;
-					player.pc.set(tempWildId, wildPokemon);
+                    default: result = { success: true, message: firstEvent.dialogue || 'Event occurred.' }; break;
+                }
 
-					const species = Dex.species.get(firstEvent.pokemon.species);
-					eventHTML += `<p>A wild ${wildPokemon.shiny ? '✨ ' : ''}${species.name} (Lv. ${wildPokemon.level}) appeared!</p>`;
-					eventHTML += `<p><button name="send" value="/rpg scriptedbattle ${tempWildId}" class="button">⚔️ Battle!</button></p>`;
-					eventHTML += `<p><em>(This is a special encounter!)</em></p>`;
-				} else if (firstEvent.type === 'trainer' && firstEvent.trainerId) {
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue || 'A trainer wants to battle!'}</p>`;
-					eventHTML += `<p><button name="send" value="/rpg challenge ${firstEvent.trainerId}" class="button">⚔️ Battle!</button></p>`;
-					eventHTML += `<p><em>(You can't avoid this battle)</em></p>`;
-				} else {
-					// Generic handler fallback
-					eventHTML += `<p><strong>${firstEvent.name}</strong></p>`;
-					eventHTML += `<p>${firstEvent.dialogue || 'Something happened...'}</p>`;
-					eventHTML += `<p class="rpg-text-warning">⚠️ Event type '${firstEvent.type}' handler not yet integrated.</p>`;
-					eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-				}
+                // Show message if not a choice-based UI
+                if (!['choice', 'quiz', 'moralchoice', 'branching'].includes(firstEvent.type)) {
+                    eventHTML += `<p>${result.message}</p>`;
+                }
+
+                // Buttons for Battles and Continuation
+                if (firstEvent.type === 'wildbattle' || firstEvent.type === 'bossbattle') {
+                     const battleId = firstEvent.type === 'bossbattle' ? (result as any).bossTrainerId : firstEvent.id; 
+                     const cmd = firstEvent.type === 'bossbattle' ? `/rpg challenge ${battleId}` : `/rpg scriptedbattle ${firstEvent.id}`;
+                     eventHTML += `<p><button name="send" value="${cmd}" class="button">⚔️ Battle!</button></p>`;
+                } else if (firstEvent.type === 'trainer' || firstEvent.type === 'gymchallenge' || firstEvent.type === 'elitefour') {
+                     const trainerId = firstEvent.trainerId || (result as any).gymLeaderId;
+                     eventHTML += `<p><button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Battle!</button></p>`;
+                } else if (!['choice', 'quiz', 'moralchoice', 'branching'].includes(firstEvent.type)) {
+                     eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+                }
 
 				eventHTML += `</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
-			// STREAMLINED: Immediate transition to Explore with notification
+			// --- 5. Streamlined Travel (No Event Triggered) ---
 			const msg = `You arrived at ${targetLocation.name}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
+		},
+
+		eventchoice(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("Cannot do this in battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const location = LOCATIONS[toID(player.location)];
+			const index = parseInt(target);
+
+			// --- Identify the Active Event ---
+			// We must replicate the check logic from 'travel' to find which event is currently 
+			// blocking the user/waiting for input.
+			let activeEvent = null;
+			if (location && location.scriptedEvents) {
+				for (const event of location.scriptedEvents) {
+					const eventFlagId = `scripted_${event.id}`;
+
+					// Skip if completed or locked (Logic must match travel command)
+					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
+					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+					
+					// Found the first active event
+					activeEvent = event;
+					break;
+				}
+			}
+
+			if (!activeEvent) {
+				return this.errorReply("No active event found to make a choice for.");
+			}
+
+			// --- Execute Logic based on Type ---
+			let result: { success: boolean, message: string } = { success: false, message: "Invalid choice." };
+
+			if (activeEvent.type === 'choice') {
+				result = ScriptedEvents.handleChoice(player, activeEvent, index);
+			} else if (activeEvent.type === 'quiz') {
+				result = ScriptedEvents.handleQuiz(player, activeEvent, index);
+			} else if (activeEvent.type === 'moralchoice') {
+				result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
+			} else if (activeEvent.type === 'branching') {
+				result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
+			} else {
+				return this.errorReply("This event does not accept choices.");
+			}
+
+			// --- Handle Result ---
+			if (result.success) {
+				// Show the result text (e.g. "Correct answer!" or "You chose the left path.")
+				this.sendReplyBox(result.message);
+
+				// If the event is "triggerOnce", making a valid choice usually marks it as complete
+				// so the player can proceed past it.
+				if (activeEvent.triggerOnce) {
+					player.storyFlags.add(`scripted_${activeEvent.id}`);
+				}
+
+				// Return to the Explore screen (simulating the event ending)
+				return this.parse('/rpg explore');
+			} else {
+				return this.errorReply(result.message);
+			}
 		},
 
 		building(target, room, user) {
