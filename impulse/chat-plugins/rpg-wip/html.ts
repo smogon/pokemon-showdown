@@ -2254,22 +2254,97 @@ export function generateNPCStarterConfirmHTML(
 
 // S T O R Y   P R O G R E S S I O N
 
+export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesName: string, startingLocationName: string): string {
+	const pokemon = tempSlot.pokemon;
+	const species = Dex.species.get(pokemon.species);
+	const spriteFilename = getSpriteFilename(species.id);
+	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+	
+	// Symbols
+	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
 
-export function generateStarterConfirmHTML(
-	tempSlot: ActivePokemonSlot,
-	speciesName: string,
-	startingLocationName: string
-): string {
-	return `<div class="rpg-infobox rpg-menu-box">` +
+	return `<div class="rpg-infobox">` +
 		`<h2>Congratulations!</h2>` +
-		`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
-		`${generatePokemonInfoHTML(tempSlot, true)}` +
-		`<p>"Your adventure begins now. Remember, the bond between a trainer and their Pokémon is special. Take good care of ${speciesName}!"</p>` +
-		`<p>"Now, head out into ${startingLocationName} and begin your journey. Good luck!"</p>` +
+		
+		// 1. Dialogue Box
+		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
+			`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
+		`</div>` +
+
+		// 2. Pokemon Showcase (Using Summary Header Style)
+		`<div class="rpg-summary-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">` +
+			`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
+				`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
+			`</div>` +
+			`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
+				`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
+				`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
+				`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
+			`</div>` +
+		`</div>` +
+
 		`<hr />` +
-		`<p><button name="send" value="/rpg explore" class="button">Begin Your Adventure</button></p>` +
+
+		// 3. Flavor Text
+		`<div class="rpg-memo-box" style="text-align: center; font-style: italic; margin-bottom: 15px;">` +
+			`<p>Your adventure begins now. Take good care of ${speciesName}!</p>` +
+			`<p>Head out into ${startingLocationName} and begin your journey!</p>` +
+		`</div>` +
+
+		// 4. Action Button
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg explore" class="button rpg-button-large">Begin Your Adventure</button>` +
+		`</p>` +
+		
 		generateBottomNavigation() +
-		`</div>`;
+	`</div>`;
+}
+
+export function generateNPCStarterConfirmHTML(npcName: string, message: string, tempSlot: ActivePokemonSlot, speciesName: string): string {
+	const pokemon = tempSlot.pokemon;
+	const species = Dex.species.get(pokemon.species);
+	const spriteFilename = getSpriteFilename(species.id);
+	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+	
+	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
+	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
+
+	return `<div class="rpg-infobox">` +
+		`<h2>Congratulations!</h2>` +
+		
+		// 1. Dialogue Box
+		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
+			`<p><strong>${npcName}:</strong> "${message}"</p>` +
+		`</div>` +
+
+		// 2. Pokemon Showcase
+		`<div class="rpg-summary-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">` +
+			`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
+				`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
+			`</div>` +
+			`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
+				`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
+				`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
+				`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
+			`</div>` +
+		`</div>` +
+
+		`<hr />` +
+
+		// 3. Flavor Text
+		`<div class="rpg-memo-box" style="text-align: center; font-style: italic; margin-bottom: 15px;">` +
+			`<p>You received <strong>${speciesName}</strong>!</p>` +
+			`<p>Take good care of your new partner.</p>` +
+		`</div>` +
+
+		// 4. Action Button
+		`<p style="text-align:center">` +
+			`<button name="send" value="/rpg explore" class="button rpg-button-large">Continue Adventure</button>` +
+		`</p>` +
+		
+		generateBottomNavigation() +
+	`</div>`;
 }
 
 // S Y S T E M   &   P R O F I L E
