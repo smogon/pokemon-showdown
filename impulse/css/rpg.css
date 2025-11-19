@@ -35,10 +35,22 @@
     width: 100%;
 }
 
+/* NEW: 3 Column Grid for items */
+.rpg-grid-3col-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns for items */
+    gap: 10px;
+    width: 100%;
+}
+
 /* Responsive adjustment for mobile: stack columns */
 @media only screen and (max-width: 480px) {
     .rpg-grid-2col {
         grid-template-columns: 1fr;
+    }
+    /* NEW: 3-column grid stacks to 2 columns on mobile */
+    .rpg-grid-3col-items {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
@@ -83,9 +95,9 @@
 .rpg-infobox h2 {
 	 text-align: center;
     margin-top: 0;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 4px;
+    padding-bottom: 3px;
 }
 .dark .rpg-infobox h2 {
     border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -999,4 +1011,5 @@
     .rpg-hp-bar, .rpg-exp-bar {
         max-width: 100px;
     }
-  }
+  
+}
