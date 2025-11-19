@@ -327,7 +327,7 @@ function handleUseMiscItem(
 		const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
 		const learnableEggMoves = allEggMoves.filter(moveId => !targetPokemon.moves.some(m => m.id === toID(moveId)));
 		if (learnableEggMoves.length === 0) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="rpg-infobox"><h2>No Moves Available</h2><p><strong>${targetPokemon.species}</strong> either has no Egg Moves or already knows all of them.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 		}
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 	}
@@ -335,7 +335,7 @@ function handleUseMiscItem(
 	if (itemId.startsWith('tm-')) {
 		// TM Usage
 		if (targetPokemon.hp <= 0) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="rpg-infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 		}
 
 		const moveId = itemId.substring(3); // Remove 'tm-' prefix to get move ID
@@ -343,11 +343,11 @@ function handleUseMiscItem(
 		const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
 
 		if (!tmMoves.includes(moveId)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Incompatible TM</h2><p><strong>${targetPokemon.species}</strong> cannot learn this move from a TM.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="rpg-infobox"><h2>Incompatible TM</h2><p><strong>${targetPokemon.species}</strong> cannot learn this move from a TM.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 		}
 
 		if (targetPokemon.moves.some(m => m.id === moveId)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="infobox"><h2>Move Already Known</h2><p><strong>${targetPokemon.species}</strong> already knows this move!</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="rpg-infobox"><h2>Move Already Known</h2><p><strong>${targetPokemon.species}</strong> already knows this move!</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
 		}
 
 		// Teach the move
@@ -356,7 +356,7 @@ function handleUseMiscItem(
 			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
 			removeItemFromInventory(player, itemId, 1);
 			const tempSlot = createActivePokemonSlot(targetPokemon);
-			const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
+			const resultHTML = `<div class="rpg-infobox"><h2>Move Learned!</h2><p><strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong> from the TM!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 		} else {
 			// Queue move for replacement
@@ -377,7 +377,7 @@ function handleUseMiscItem(
 			removeItemFromInventory(player, itemId, 1);
 			const updatedPokemon = player.party.find(p => p.id === targetPokemon.id); // Refetch in case of evolution
 			const tempSlot = createActivePokemonSlot(updatedPokemon || targetPokemon);
-			let resultHTML = `<div class="infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
+			let resultHTML = `<div class="rpg-infobox"><h2>Item Used!</h2><p>${evoMessage}</p>${generatePokemonInfoHTML(tempSlot, true)}`;
 
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
@@ -602,7 +602,7 @@ export const commands: ChatCommands = {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
 					const tempSlot = createActivePokemonSlot(pokemon);
-					const resultHTML = `<div class="infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
+					const resultHTML = `<div class="rpg-infobox"><h2>Move Learning Result</h2><p>${message}</p>${generatePokemonInfoHTML(tempSlot, true)}${generateBottomNavigation()}</div>`;
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 				}
 			}
@@ -644,7 +644,7 @@ export const commands: ChatCommands = {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				const tempSlot = createActivePokemonSlot(pokemon);
-				const resultHTML = `<div class="infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
+				const resultHTML = `<div class="rpg-infobox"><h2>Move Learned!</h2><p><strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!</p>${generatePokemonInfoHTML(tempSlot)}<p><button name="send" value="/rpg party" class="button">Back to Party</button></p>${generateBottomNavigation()}</div>`;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${resultHTML}`);
 			} else {
 				if (!player.pendingMoveLearnQueue) {
@@ -703,7 +703,7 @@ export const commands: ChatCommands = {
 				progressHTML += 'Just starting out</p>';
 			}
 
-			const profileHTML = `<div class="infobox"><h2>Player Profile</h2>` +
+			const profileHTML = `<div class="rpg-infobox"><h2>Player Profile</h2>` +
 				`<p><strong>Trainer:</strong> ${player.name}</p>` +
 				`<p><strong>Level:</strong> ${player.level}</p>` +
 				`<p><strong>Location:</strong> ${player.location}</p>` +
@@ -1151,7 +1151,7 @@ export const commands: ChatCommands = {
 				exploreButtons += '<hr />';
 			}
 
-			const exploreHTML = `<div class="infobox">` +
+			const exploreHTML = `<div class="rpg-infobox">` +
 				`<div class="rpg-text-center"><h2><b>${currentLocation.name}</b></h2>` +
 				`<p><em>${currentLocation.description}</em></p></div>` +
 				`${exploreButtons}` +
@@ -1175,7 +1175,7 @@ export const commands: ChatCommands = {
 					return this.errorReply(`Unknown location: ${player.location}`);
 				}
 
-				let travelHTML = `<div class="infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${currentLocation.name}</h2>`;
 				travelHTML += `<p>Where would you like to go?</p>`;
 
 				if (currentLocation.connectedLocations.length === 0) {
@@ -1284,7 +1284,7 @@ export const commands: ChatCommands = {
 			// If there are triggered events, show them
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
-				let eventHTML = `<div class="infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
+				let eventHTML = `<div class="rpg-infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
 				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
 
 				if (firstEvent.type === 'dialogue') {
@@ -1370,7 +1370,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
-			const arrivalHTML = `<div class="infobox">` +
+			const arrivalHTML = `<div class="rpg-infobox">` +
 				`<div class="rpg-text-center"><h2><b>Arrived at ${targetLocation.name}</b></h2>` +
 				`<em><p>${targetLocation.description}</p></em></div>` +
 				`<div class="rpg-text-center"><p><button name="send" value="/rpg explore" class="button">Explore ${targetLocation.name}</button></p></div>` +
@@ -1411,7 +1411,7 @@ export const commands: ChatCommands = {
 			}
 
 			// Handle different building types
-			let buildingHTML = `<div class="infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
+			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
 
 			// NPCs in this building
 			if (building.npcs && building.npcs.length > 0) {
@@ -2619,7 +2619,7 @@ export const commands: ChatCommands = {
 			}
 
 			// Build base dialogue HTML
-			let dialogueHTML = `<div class="infobox">` +
+			let dialogueHTML = `<div class="rpg-infobox">` +
 				`<h2>${npc.name}</h2>` +
 				`<p>"${npc.dialogue}"</p>`;
 
@@ -2762,7 +2762,7 @@ export const commands: ChatCommands = {
 			}
 
 			const action = npc.action;
-			let resultHTML = `<div class="infobox"><h2>${npc.name}</h2>`;
+			let resultHTML = `<div class="rpg-infobox"><h2>${npc.name}</h2>`;
 
 			switch (action.type) {
 			case 'giveitem':
