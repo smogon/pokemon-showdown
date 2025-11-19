@@ -798,6 +798,7 @@ function generateBattleMoveSelectionHTML(
 
 	const allMovesOutOfPP = pokemon.moves.every(m => m.pp === 0);
 
+	// ... (Complex logic checks for Rampage, Encore, etc. remain exactly the same) ...
 	const isRampagingWithNoPP = (slot.lockedMoveCounter > 0 || slot.uproarTurns > 0) &&
 		slot.lockedMove &&
 		pokemon.moves.find(m => m.id === slot.lockedMove)?.pp === 0;
@@ -815,6 +816,7 @@ function generateBattleMoveSelectionHTML(
 		pokemon.moves.find(m => m.id === slot.lockedMove)?.pp === 0;
 
 	if (allMovesOutOfPP || isRampagingWithNoPP || isEncoredWithNoPP || isChargingWithNoPP || isChoiceLockedWithNoPP) {
+		// --- STRUGGLE BUTTON ---
 		const buttonContent = '<div class="rpg-move-name">Struggle</div>' +
 			'<div class="rpg-move-info">' +
 			'<span>Normal</span>' +
@@ -825,20 +827,17 @@ function generateBattleMoveSelectionHTML(
 			`/rpg battleaction selecttarget ${slotIndex} struggle` :
 			`/rpg battleaction move ${slotIndex} struggle 2`;
 
-		moveButtonsHTML = '<table class="rpg-move-grid">';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += `<td class="rpg-move-grid-cell"><button name="send" value="${struggleCommand}" class="button rpg-move-button">${buttonContent}</button></td>`;
-		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell"></td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '</table>';
+		// REFACTORED: Use div container instead of table
+		moveButtonsHTML = '<div class="rpg-move-grid">';
+		moveButtonsHTML += `<button name="send" value="${struggleCommand}" class="button rpg-move-button">${buttonContent}</button>`;
+		moveButtonsHTML += '</div>';
+
 	} else {
+		// --- NORMAL MOVE BUTTONS ---
 		const canTerastallize = !battle.playerTerastallizeUsed && !slot.terastallized;
 		const teraActive = teraToggled || false;
 
+		// (Map logic remains the same)
 		const moveButtons = pokemon.moves.map(move => {
 			const moveData = getMove(move.id);
 
@@ -869,21 +868,15 @@ function generateBattleMoveSelectionHTML(
 		let teraToggleHTML = '';
 		if (canTerastallize) {
 			const teraToggleClasses = 'button rpg-tera-toggle' + (teraActive ? ' rpg-tera-toggle-on' : '');
-			const teraToggleText = teraActive ? '⭐ Terastallize: ON' : 'Terastallize: OFF';
+			const teraToggleText = teraActive ? 'Tera: ON' : 'Terastallize: OFF'; // Shortened text slightly for layout
 			const teraToggleCommand = teraActive ? '/rpg battleaction teratoggle off' : '/rpg battleaction teratoggle on';
 			teraToggleHTML = `<div class="rpg-text-center"><button name="send" value="${teraToggleCommand}" class="${teraToggleClasses}">${teraToggleText}</button></div>`;
 		}
 
-		moveButtonsHTML = teraToggleHTML + '<table class="rpg-move-grid">';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[0] || '') + '</td>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[1] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '<tr>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[2] || '') + '</td>';
-		moveButtonsHTML += '<td class="rpg-move-grid-cell">' + (moveButtons[3] || '') + '</td>';
-		moveButtonsHTML += '</tr>';
-		moveButtonsHTML += '</table>';
+		// REFACTORED: Use div container and join array directly
+		moveButtonsHTML = teraToggleHTML + '<div class="rpg-move-grid">';
+		moveButtonsHTML += moveButtons.join('');
+		moveButtonsHTML += '</div>';
 	}
 
 	return moveButtonsHTML;
