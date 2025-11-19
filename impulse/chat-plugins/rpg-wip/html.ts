@@ -2207,11 +2207,31 @@ export function generateNPCSelectionHTML(availableNPCs: [string, { name: string 
 	return html;
 }
 
+// Make sure you have this helper from the previous step
+function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
+	const species = Dex.species.get(speciesId);
+	if (!species.exists) return '';
+	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${getSpriteFilename(species.id)}.png`;
+
+	return `<div class="rpg-starter-card">` +
+		`<img src="${spriteUrl}" />` +
+		`<div class="rpg-starter-info">` +
+			`<strong>${species.name}</strong><br>` +
+			`<small class="rpg-text-muted">${species.types.join('/')}</small>` +
+		`</div>` +
+		`<button name="send" value="${command}" class="button">Choose</button>` +
+		`</div>`;
+}
+
+// The function you asked to update
 export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, allStarters: string[]): string {
-	let html = `<div class="rpg-infobox rpg-menu-box">` +
+	let html = `<div class="rpg-infobox">` +
 		`<h2>${npcName}</h2>` +
-		`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
-		`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
+		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
+			`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
+			`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
+		`</div>` +
+		// Use the 3-column grid here
 		`<div class="rpg-grid-3col">`;
 
 	for (const starterId of allStarters) {
@@ -2219,11 +2239,16 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
 
-	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg npc ${npcId}" class="button">← Back</button></p>` +
+	html += `</div>` +
+		`<p class="rpg-margin-top" style="text-align:center">` +
+		`<button name="send" value="/rpg npc ${npcId}" class="button">← Back</button>` +
+		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
+		
 	return html;
 }
+
 
 export function generateNPCStarterConfirmHTML(
 	npcName: string,
