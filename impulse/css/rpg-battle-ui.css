@@ -487,6 +487,53 @@
 }
 .dark .rpg-battle-log { border-color: #888; }
 
+/* --- Battle Switch Menu (Grid Layout) --- */
+
+.rpg-switch-button {
+    width: 160px;       /* Matches move button width approx */
+    height: 55px;       /* Taller to fit HP bar and name */
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;      /* Flexbox for Icon + Info layout */
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+.rpg-switch-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;     /* Prevent icon squishing */
+}
+
+.rpg-switch-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.8em;
+    line-height: 1.3;
+}
+
+/* Adjust HP bar within the button to fit nicely */
+.rpg-switch-button .rpg-hp-bar {
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+    height: 6px;
+    margin: 2px 0 0 0;
+}
+
+/* Hide text inside the tiny button HP bar to save space */
+.rpg-switch-button .rpg-hp-bar-text {
+    display: none;
+}
+
 /*********************************
 * RESPONSIVE ADJUSTMENTS
 **********************************/
