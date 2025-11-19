@@ -1967,6 +1967,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 
 /**
  * [NEW HELPER] Generates the target selection panel for double battles.
+ * Updated to match Move Button styling.
  */
 function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const [pSlot0, pSlot1] = battle.playerSlots;
@@ -1977,10 +1978,10 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	let html = '<p>Select a target for <strong>' + move.name + '</strong>' + teraText + ':</p>';
 
 	const targets = [
-		{ slot: pSlot0, name: "Ally 1", index: 0 },
-		{ slot: pSlot1, name: "Ally 2", index: 1 },
 		{ slot: oSlot0, name: "Opponent 1", index: 2 },
 		{ slot: oSlot1, name: "Opponent 2", index: 3 },
+		{ slot: pSlot0, name: "Ally 1", index: 0 },
+		{ slot: pSlot1, name: "Ally 2", index: 1 },
 	];
 
 	const teraParam = targetSelection.shouldTerastallize ? ' terastallize' : '';
@@ -1991,9 +1992,18 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	});
 
 	const targetButtons = validTargets.map(target => {
-		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button">${target.name}</button>`;
+		// Calculate HP for the "Info" line (mimicking PP display)
+		const hpPercent = Math.floor((target.slot!.pokemon.hp / target.slot!.pokemon.maxHp) * 100);
+		
+		// Match the inner HTML structure of move buttons
+		const buttonContent = 
+			`<div class="rpg-move-name">${target.name}</div>` +
+			`<div class="rpg-move-info" style="text-align: center;">HP: ${hpPercent}%</div>`;
+
+		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${targetSelection.moveId} ${String(target.index)}${teraParam}" class="button rpg-move-button">${buttonContent}</button>`;
 	});
 
+	// Use standard rpg-move-grid layout
 	let targetButtonsHTML = '<table class="rpg-move-grid"><tr>';
 	let count = 0;
 	for (const button of targetButtons) {
@@ -2006,7 +2016,7 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	targetButtonsHTML += '</tr></table>';
 
 	html += targetButtonsHTML;
-	html += `<p class="rpg-margin-top"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p>`;
+	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p></center>`;
 	return html;
 }
 
