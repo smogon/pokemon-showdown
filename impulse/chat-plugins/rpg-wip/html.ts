@@ -2245,30 +2245,6 @@ export function generateNPCStarterConfirmHTML(
 
 // S T O R Y   P R O G R E S S I O N
 
-export function generateStarterSelectionHTML(type: string, starters: string[]): string {
-	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let typeDescription = '';
-	if (type === 'fire') {
-		typeDescription = '"Fire-type Pokémon are passionate and strong! They\'re excellent for trainers who like to take the offensive approach."';
-	} else if (type === 'water') {
-		typeDescription = '"Water-type Pokémon are versatile and adaptable! They can handle many different situations with grace."';
-	} else if (type === 'grass') {
-		typeDescription = '"Grass-type Pokémon are resilient and strategic! They excel at wearing down opponents over time."';
-	}
-
-	let html = `<div class="rpg-infobox rpg-menu-box">` +
-		`<h2>Professor Oak's Laboratory</h2>` +
-		`<p><strong>Professor Oak:</strong> ${typeDescription}</p>` +
-		`<p>"Now, which ${typeTitle}-type Pokémon would you like to choose as your partner?"</p>` +
-		`<div class="rpg-grid-3col">`;
-
-	for (const starterId of starters) {
-		const command = `/rpg selectstarter ${starterId}`;
-		html += generateStarterChoiceBoxHTML(starterId, command);
-	}
-	html += `</div><p class="rpg-margin-top"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p></div>`;
-	return html;
-}
 
 export function generateStarterConfirmHTML(
 	tempSlot: ActivePokemonSlot,
