@@ -28,6 +28,53 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 }
 
+function getItemIcon(item: InventoryItem | { name: string, category: string, id: string }): string {
+	// Base URL for PokeSprite
+	const baseUrl = "https://raw.githubusercontent.com/msikma/pokesprite/master/items";
+	
+	// 1. Convert Name to Kebab-Case (e.g. "Full Restore" -> "full-restore")
+	// This matches PokeSprite's naming convention 99% of the time
+	let filename = item.name.toLowerCase().replace(/ /g, '-').replace(/'/g, '');
+
+	// 2. Determine Directory based on Category
+	let directory = "medicine"; // Default fallback
+
+	if (item.category === 'pokeball') {
+		directory = "ball";
+		// PokeSprite balls don't use the word "ball" in filename (e.g. "great-ball" -> "great")
+		filename = filename.replace(/-ball$/, '');
+        if (filename === 'poke') filename = 'poke'; // explicit safety
+	} else if (item.category === 'berry') {
+		directory = "berry";
+		// Berries usually strip the word "berry" (e.g. "oran-berry" -> "oran")
+		filename = filename.replace(/-berry$/, '');
+	} else if (item.category === 'tm') {
+		directory = "tms";
+		// TMs in PokeSprite are usually generic or typed. 
+		// For simplicity, we can use a generic TM icon or map types if known.
+        // Fallback to generic normal TM if specific doesn't exist
+		if (filename.startsWith('tm')) filename = 'tm-normal'; 
+        if (filename.startsWith('tr')) filename = 'tm-fire'; // Visual distinction for TRs
+	} else if (item.category === 'evo-item' || item.id.endsWith('stone') || item.id.includes('scale') || item.id.includes('disk')) {
+		directory = "evo-item";
+	} else if (item.category === 'held') {
+		directory = "held-item";
+	} else if (item.category === 'key') {
+		directory = "key-item";
+	} else if (item.category === 'misc') {
+        // Exp candies and other misc items
+        if (filename.includes('candy')) directory = "medicine"; // Exp candies are often in medicine or generic
+        else directory = "data-item";
+    }
+
+	// 3. Handle Special Cases / Fixes
+	if (filename === 'leftovers') directory = "held-item";
+    if (filename === 'rare-candy') directory = "medicine";
+    if (filename === 'pp-up' || filename === 'pp-max') directory = "medicine";
+
+	return `${baseUrl}/${directory}/${filename}.png`;
+}
+
 function getSpriteFilename(speciesId: string): string {
 	let filename = speciesId;
 
