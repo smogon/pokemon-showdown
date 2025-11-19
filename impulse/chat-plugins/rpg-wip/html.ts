@@ -538,6 +538,7 @@ export function generateSellCompleteHTML(itemName: string, quantity: number, tot
 }
 
 // B A T T L E   U I   -   M A I N
+// In html.ts
 
 export function generateBattleHTML(
 	battle: BattleState,
@@ -545,16 +546,16 @@ export function generateBattleHTML(
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean
 ): string {
-	// --- 1. Handle Battle End ---
-	const newEventsHTML = messageLog.length > 0 ?
-		`<div class="rpg-battle-new-events">${messageLog.join('<br>')}</div>` :
-		'';
-
+	// --- 1. Prepare Log Data ---
+	// Combine new messages (blue box content) with the historical log
 	const reversedBattleLog = [...battle.battleLog].reverse();
+	const combinedLogs = [...messageLog, ...reversedBattleLog];
+	
 	const historyLogHTML = `<div class="rpg-battle-log">` +
-		(reversedBattleLog.length > 0 ? reversedBattleLog.join('<br>') : 'Battle started...') +
+		(combinedLogs.length > 0 ? combinedLogs.join('<br>') : 'Battle started...') +
 		`</div>`;
 
+	// --- 2. Handle Battle End ---
 	if (battle.battleEnded) {
 		let actionHTML = '';
 		if (battle.battleType !== 'battletower') {
@@ -566,18 +567,13 @@ export function generateBattleHTML(
 
 		return '<div class="infobox">' +
 			generateBattleHeader(battle) +
-			newEventsHTML +
-			historyLogHTML +
+			historyLogHTML + // Now contains both new events and history
 			actionHTML +
 			'</div>';
 	}
 
-	// --- 2. Render Active Battle ---
+	// --- 3. Render Active Battle ---
 	const headerHTML = generateBattleHeader(battle);
-
-	// [REMOVED] globalConditionsHTML is no longer generated here.
-	// It is now injected inside generateBattlefield() so it sits inside the UI container.
-
 	const battlefieldHTML = generateBattlefield(battle, targetSelection);
 
 	let actionPanelHTML = '';
@@ -590,7 +586,6 @@ export function generateBattleHTML(
 	return '<div class="infobox">' +
 		headerHTML +
 		battlefieldHTML +
-		newEventsHTML +
 		historyLogHTML +
 		actionPanelHTML +
 		'</div>';
