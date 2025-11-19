@@ -1475,7 +1475,8 @@ export function generatePokemonInfoHTML(
  * It will be called by the `/rpg party` command.
  */
 export function generatePartyScreenHTML(player: PlayerData): string {
-	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Your Party</h2>`;
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Your Party</h2>`;
 
 	if (player.party.length === 0) {
 		html += `<p>No Pokemon in party.</p>`;
@@ -1486,23 +1487,36 @@ export function generatePartyScreenHTML(player: PlayerData): string {
 			if (pokemon) {
 				const species = Dex.species.get(pokemon.species);
 				const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
-				const itemIcon = pokemon.item ? ` <img src="https://play.pokemonshowdown.com/sprites/itemicons/${toID(ITEMS_DATABASE[pokemon.item].name)}.png" alt="${ITEMS_DATABASE[pokemon.item].name}" />` : '';
+				const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
+				
+				// Determine item icon (or text if no icon system for items yet)
+				// Using psicon for pokemon and text for item is standard if item icons aren't integrated here
+				const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
 
-				html += `<div class="rpg-party-card">`;
-				// Left Column: Psicon
-				html += `<div><psicon pokemon="${species.id}" /></div>`;
-				// Right Column: Info
-				html += `<div>` +
-					`<strong>${pokemon.nickname || pokemon.species}</strong> ${shinySymbol} (Lvl ${pokemon.level})<br>` +
-					`${generateHPBar(pokemon)}` +
-					`<small>Item: ${itemIcon || 'None'}</small><br>` +
-					`<button name="send" value="/rpg summary ${pokemon.id}" class="button rpg-button-small">Summary</button> ` +
-					`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button rpg-button-small">Deposit</button>` +
-					`</div>`;
-				html += `</div>`;
+				// Move Buttons Logic
+				const moveUpBtn = i > 0 ? `<button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button rpg-party-move-btn" title="Move Up">↑</button>` : '';
+				const moveDownBtn = i < player.party.length - 1 ? `<button name="send" value="/rpg swapslot ${i} ${i + 1}" class="button rpg-party-move-btn" title="Move Down">↓</button>` : '';
+
+				html += `<div class="rpg-party-card">` +
+					`<div class="rpg-party-main">` +
+						`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+						`<div class="rpg-party-stats">` +
+							`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+							`<small>Lvl ${pokemon.level}</small><br>` +
+							`${generateHPBar(pokemon)}` +
+							`<small class="rpg-text-muted">Item: ${itemText}</small>` +
+						`</div>` +
+					`</div>` +
+					`<div class="rpg-party-actions">` +
+						`<button name="send" value="/rpg summary ${pokemon.id}" class="button">Summary</button>` +
+						`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button">Deposit</button>` +
+						moveUpBtn +
+						moveDownBtn +
+					`</div>` +
+				`</div>`;
 			} else {
-				// Empty slot
-				html += `<div class="rpg-party-card rpg-text-muted">(Empty Slot)</div>`;
+				// Empty slot placeholder
+				html += `<div class="rpg-party-card rpg-party-empty">Empty Slot</div>`;
 			}
 		}
 		html += `</div>`;
