@@ -103,7 +103,7 @@ function getSpriteFilename(speciesId: string): string {
 	}
 
 	if (filename.endsWith('f')) {
-		filename = filename.replace(/f$/, '-F');
+		filename = filename.replace(/f$/, '-f');
 	}
 
 	const hyphenatedForms: Record<string, string> = {
