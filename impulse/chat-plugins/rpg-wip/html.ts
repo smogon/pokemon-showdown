@@ -679,7 +679,6 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 }
 
 export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
-	// Ensure we use the new class
 	let html = `<div class="rpg-infobox"><h2>Select a Poke Ball</h2>`;
 	
 	const pokeBalls = [];
@@ -709,12 +708,23 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
-			// Structure content to match Move Button (Name on top, Quantity on bottom)
-			const buttonContent = 
-				`<div class="rpg-move-name">${ball.name}</div>` +
-				`<div class="rpg-move-info" style="text-align: center;">x${ball.quantity}</div>`;
+			// Image Logic
+			// The URL pattern requires removing "ball" from the end (e.g. "greatball" -> "great")
+			// "pokeball" -> "poke" which matches the user provided example
+			const filename = ball.id.replace(/ball$/, '');
+			const spriteUrl = `https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/${filename}.png`;
 
-			return `<button name="send" value="${command}" class="button rpg-move-button">${buttonContent}</button>`;
+			// Structure content to match the Switch Button layout (Icon Left, Info Right)
+			// We reuse the .rpg-switch-icon and .rpg-switch-info classes for consistent styling
+			const buttonContent = 
+				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${ball.name}" /></div>` +
+				`<div class="rpg-switch-info">` +
+					`<strong>${ball.name}</strong><br>` +
+					`<small>x${ball.quantity}</small>` +
+				`</div>`;
+
+			// Use .rpg-switch-button to get the flex row layout
+			return `<button name="send" value="${command}" class="button rpg-switch-button">${buttonContent}</button>`;
 		});
 
 		// Generate 2-Column Grid
@@ -730,7 +740,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 		html += '</tr></table>';
 	}
 	
-	html += `<hr /><center><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></center></div>`;
+	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
 
