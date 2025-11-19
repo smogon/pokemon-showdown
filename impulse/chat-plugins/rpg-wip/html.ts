@@ -498,22 +498,22 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 	return html;
 }
 
-// Helper for the specific starter cards (keeps them compact)
+// Helper for the specific starter cards (Compact Version)
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
 	const species = Dex.species.get(speciesId);
 	if (!species.exists) return '';
 	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${getSpriteFilename(species.id)}.png`;
 
-	return `<div class="rpg-party-card" style="align-items:center; text-align:center; justify-content:center;">` +
-		`<img src="${spriteUrl}" style="width:60px; height:60px; margin:0 auto;" />` +
-		`<strong>${species.name}</strong><br>` +
-		`<small>${species.types.join('/')}</small><br>` +
-		`<div class="rpg-party-actions" style="width:100%">` +
-			`<button name="send" value="${command}" class="button">Choose!</button>` +
+	// Use the new compact .rpg-starter-card class
+	return `<div class="rpg-starter-card">` +
+		`<img src="${spriteUrl}" />` +
+		`<div class="rpg-starter-info">` +
+			`<strong>${species.name}</strong><br>` +
+			`<small class="rpg-text-muted">${species.types.join('/')}</small>` +
 		`</div>` +
+		`<button name="send" value="${command}" class="button">Choose</button>` +
 		`</div>`;
-		}
-
+}
 
 // M A I N   M E N U   S C R E E N S
 
