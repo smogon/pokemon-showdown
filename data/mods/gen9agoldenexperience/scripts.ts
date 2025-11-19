@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
   gen: 9,
-  /*pokemon: {
+  pokemon: {
     inherit: true,
     addType(newType: string) {
       if (this.terastallized) return false;
@@ -71,7 +71,7 @@ export const Scripts: ModdedBattleScriptsData = {
       return false;
     },
   },
-  actions: {
+  /*actions: {
     canMegaEvo(pokemon) {
       const species = pokemon.baseSpecies;
       const altForme = pokemon.baseSpecies.otherFormes && this.dex.species.get(pokemon.baseSpecies.otherFormes[0]);
@@ -477,8 +477,8 @@ export const Scripts: ModdedBattleScriptsData = {
     calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
       if (move.id === 'chloroblast') return Math.round(pokemon.maxhp / 2);
       return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
-    }
-  },*/
+    }*/
+  },
 
 
 
