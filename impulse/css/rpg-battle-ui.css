@@ -7,6 +7,21 @@
     text-shadow: none !important;
 }
 
+/* --- Generic Grid Utilities --- */
+.rpg-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Responsive adjustment for mobile: stack columns */
+@media only screen and (max-width: 480px) {
+    .rpg-grid-2col {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* --- Scrollable Grid Wrapper --- */
 .rpg-scrollable-grid {
     max-height: 380px;
@@ -52,6 +67,184 @@
 .dark .rpg-infobox h2 {
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+
+/* --- Party Screen Grid Layout --- */
+
+.rpg-party-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns for a 3x2 layout */
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rpg-party-card {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+.dark .rpg-party-card {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-party-empty {
+    background-color: rgba(0,0,0,0.05);
+    border: 2px dashed #ccc;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    height: 100%;
+    min-height: 100px; /* Match approx height of filled card */
+}
+.dark .rpg-party-empty {
+    background-color: rgba(255,255,255,0.05);
+    border-color: #555;
+    color: #777;
+}
+
+/* Upper Section: Icon + Stats */
+.rpg-party-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rpg-party-icon {
+    flex-shrink: 0;
+    width: 40px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.rpg-party-stats {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.9em;
+    line-height: 1.3;
+}
+
+/* Lower Section: Action Buttons */
+.rpg-party-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-party-actions {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-party-actions .button {
+    flex-grow: 1;
+    font-size: 0.75em;
+    padding: 2px 4px;
+    margin: 0;
+}
+
+/* Tiny Move Arrows */
+.rpg-party-move-btn {
+    flex-grow: 0 !important;
+    width: 24px;
+    text-align: center;
+    padding: 2px 0 !important;
+}
+
+/* --- Summary Screen Styling --- */
+
+/* Header Section */
+.rpg-summary-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-header { border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-summary-sprite {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 50%; /* Circle background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-sprite {
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.rpg-summary-sprite img {
+    max-width: 64px;
+    max-height: 64px;
+    image-rendering: pixelated;
+}
+
+.rpg-summary-info {
+    flex-grow: 1;
+}
+
+/* Unified Stats Table */
+.rpg-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.rpg-stats-table th {
+    text-align: left;
+    color: #666;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    padding: 4px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-stats-table th { color: #aaa; border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-stats-table td {
+    padding: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-stats-table td { border-bottom-color: rgba(255,255,255,0.05); }
+
+.rpg-stat-val { font-weight: bold; }
+.rpg-stat-iv { color: #888; font-size: 0.85em; }
+.rpg-stat-ev { color: #5daae0; font-size: 0.85em; font-weight: bold; }
+
+/* Move Cards in Summary */
+.rpg-summary-move {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+}
+.dark .rpg-summary-move {
+    background: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+/* Trainer Memo Box */
+.rpg-memo-box {
+    background: rgba(0,0,0,0.03);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+.dark .rpg-memo-box { background: rgba(255,255,255,0.05); }
 
 /* --- Item & Shop Grid Styling (No Icons) --- */
 
