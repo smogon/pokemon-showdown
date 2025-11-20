@@ -48,9 +48,17 @@ export const LOCATIONS: Record<string, Location> = {
 export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
     'path_zone_1': {
         name: 'Tall Grass',
-        pokemon: ['rattata', 'pidgey', 'sentret'],
-        levelRange: [2, 5],
+        // Make sure these IDs match valid species in Pokemon Showdown
+        pokemon: ['rattata', 'pidgey', 'caterpie', 'zigzagoon'], 
+        levelRange: [2, 4],
         battleType: 'single'
+    },
+    // Add a harder zone
+    'deep_woods': {
+        name: 'Deep Woods',
+        pokemon: ['beedrill', 'pikachu', 'murkrow'],
+        levelRange: [5, 8],
+        battleType: 'double' // Test double battles
     }
 };
 
