@@ -6,7 +6,7 @@
 import type { TrainerSpec } from './interface';
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
-    'youngster_joey': {
+    'youngsterjoey': {
         name: 'Youngster Joey',
         money: 200,
         party: [
@@ -22,5 +22,5 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 
 // Map him to the location ID defined in locations.ts
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-    'grassypath': ['youngster_joey']
+    'grassypath': ['youngsterjoey']
 };
