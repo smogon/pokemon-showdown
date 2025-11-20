@@ -1563,6 +1563,7 @@ export function checkForWinLoss(
 	);
 	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
 
+	// --- PLAYER DEFEAT ---
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		if (battle.battleType === 'battletower') {
 			saveBattleStatus(battle);
@@ -1608,11 +1609,17 @@ export function checkForWinLoss(
 		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
 		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
+		
 		activeBattles.delete(user.id);
 		teraToggleState.delete(user.id);
+		
+		// FIXED: Clear the active event so it doesn't persist to the next battle
+		activeScriptedEvents.delete(user.id);
+		
 		return true;
 	}
 
+	// --- PLAYER VICTORY ---
 	const opponentHasLivingPokemon = battle.opponentParty.some(p =>
 		p.hp > 0 &&
 		!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
@@ -1620,6 +1627,7 @@ export function checkForWinLoss(
 	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
 
 	if (!opponentHasActivePokemon && !opponentHasLivingPokemon) {
+		// Battle Tower Victory
 		if (battle.battleType === 'battletower') {
 			battle.battleEnded = true;
 			battle.battleResult = 'victory';
@@ -1632,9 +1640,13 @@ export function checkForWinLoss(
 			return true;
 		}
 
+		// Standard Victory
 		saveBattleStatus(battle);
 		battle.battleEnded = true;
 		battle.battleResult = 'victory';
+
+		// Retrieve the Event ID associated with this battle (if any)
+		const eventId = activeScriptedEvents.get(user.id);
 
 		let moneyGained = 0;
 		if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
@@ -1673,7 +1685,8 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
+				// FIXED: Pass the eventId to the generator
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
@@ -1687,7 +1700,8 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
+				// FIXED: Pass the eventId to the generator
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		}
 		activeBattles.delete(user.id);
