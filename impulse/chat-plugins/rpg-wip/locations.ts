@@ -41,7 +41,7 @@ export const LOCATIONS: Record<string, Location> = {
         connectedLocations: [
             { id: 'startingroom', name: 'Starting Room' }
         ],
-        encounterZones: ['path_zone_1'],
+        encounterZones: ['pathzone1'],
     }
 };
 
