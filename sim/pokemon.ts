@@ -1857,13 +1857,9 @@ export class Pokemon {
 		const oldItemState = this.itemState;
 		this.item = item.id;
 		this.itemState = this.battle.initEffectState({ id: item.id, target: this });
-		if (oldItem.exists) {
-			this.battle.singleEvent('End', oldItem, oldItemState, this);
-			this.battle.runEvent('AfterTakeItem', this, null, null, oldItem);
-		}
+		if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
-			this.battle.runEvent('AfterSetItem', this, null, null, item);
 		}
 		return true;
 	}
