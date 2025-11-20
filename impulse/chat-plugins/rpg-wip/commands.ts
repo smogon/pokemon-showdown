@@ -101,6 +101,19 @@ import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 import { GameConfig } from './game-config';
 
+/**
+ * Helper function to check if a player is in an active (ongoing) battle.
+ * Returns true only if the battle exists AND has not ended.
+ * This prevents soft-locking when a battle has ended but hasn't been cleaned up yet.
+ */
+function isInActiveBattle(userId: string): boolean {
+	const battle = activeBattles.get(userId);
+	if (!battle) return false;
+	// If the battle has ended, we should allow the player to use commands
+	if (battle.battleEnded) return false;
+	return true;
+}
+
 function initializeAndStartBattle(
 	ctx: CommandContext,
 	room: ChatRoom,
@@ -374,7 +387,7 @@ export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
 			const player = getPlayerData(user.id);
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			if (player.party.length > 0) {
@@ -384,7 +397,7 @@ export const commands: ChatCommands = {
 		},
 
 		modes(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot change modes during a battle.");
 			}
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateModeSelectionHTML()}`);
@@ -392,14 +405,14 @@ export const commands: ChatCommands = {
 
 		battletower: {
 			start(target, room, user) {
-				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle.");
 				const player = getPlayerData(user.id);
 				if (player.battleTowerFloor <= 1) player.battleTowerFloor = 1;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerWelcomeHTML(player.battleTowerFloor)}`);
 			},
 
 			selectformat(target, room, user) {
-				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle.");
 				const player = getPlayerData(user.id);
 				const format = toID(target) || 'battlefactory';
 
@@ -412,7 +425,7 @@ export const commands: ChatCommands = {
 			},
 
 			beginfloor(target, room, user) {
-				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
+				if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle.");
 				const player = getPlayerData(user.id);
 
 				if (player.party.length === 0) return this.errorReply("You must start Story Mode and get a Pokémon before you can enter the Battle Tower.");
@@ -430,7 +443,7 @@ export const commands: ChatCommands = {
 
 					const player = getPlayerData(user.id);
 					startBattleTowerFloor(player, player.battleTowerFloor, this, room, user, format);
-				} else if (activeBattles.has(user.id)) {
+				} else if (isInActiveBattle(user.id)) {
 					return this.errorReply("You are still in a battle.");
 				} else {
 					const player = getPlayerData(user.id);
@@ -442,7 +455,7 @@ export const commands: ChatCommands = {
 		},
 
 		storymode(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -457,7 +470,7 @@ export const commands: ChatCommands = {
 		},
 
 		choosestarter(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const type = target.trim().toLowerCase();
@@ -469,7 +482,7 @@ export const commands: ChatCommands = {
 		},
 
 		starterchoice(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 
 			const args = target.split(' ');
 			const npcId = toID(args[0]);
@@ -508,7 +521,7 @@ export const commands: ChatCommands = {
 		},
 
 		selectstarter(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
 			const starterId = toID(target);
@@ -543,7 +556,7 @@ export const commands: ChatCommands = {
 		},
 
 		learnmove(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this during a battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -636,7 +649,7 @@ export const commands: ChatCommands = {
 		},
 
 		summary(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot view a summary during battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -662,7 +675,7 @@ export const commands: ChatCommands = {
 		},
 
 		profile(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You are in a battle!");
 			}
 			const player = getPlayerData(user.id);
@@ -670,7 +683,7 @@ export const commands: ChatCommands = {
 		},
 
 		party(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot view your party during a battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -678,7 +691,7 @@ export const commands: ChatCommands = {
 		},
 
 		swapslot(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot swap party slots during a battle.");
 			}
 			const [slot1Str, slot2Str] = target.split(' ');
@@ -707,7 +720,7 @@ export const commands: ChatCommands = {
 		},
 
 		items(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot access your bag in battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -718,7 +731,7 @@ export const commands: ChatCommands = {
 		},
 
 		useitem(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot use items from the menu during a battle.");
 			}
 			const [itemId, pokemonId] = target.split(' ').map(arg => toID(arg));
@@ -777,7 +790,7 @@ export const commands: ChatCommands = {
 		},
 
 		restorepp(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot do this during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot do this during a battle.");
 			const [pokemonId, moveId, itemId] = target.split(' ').map(arg => toID(arg));
 
 			const player = getPlayerData(user.id);
@@ -806,14 +819,14 @@ export const commands: ChatCommands = {
 		},
 
 		pc(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`);
 		},
 
 		depositpc(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot access the PC during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot access the PC during a battle.");
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
 
@@ -829,7 +842,7 @@ export const commands: ChatCommands = {
 		},
 
 		withdrawpc(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot access the PC during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot access the PC during a battle.");
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
 
@@ -845,7 +858,7 @@ export const commands: ChatCommands = {
 		},
 
 		shop(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot shop during a battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -856,7 +869,7 @@ export const commands: ChatCommands = {
 		},
 
 		buy(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot shop during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot shop during a battle.");
 			const [itemId, quantityStr] = target.split(' ');
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
@@ -883,7 +896,7 @@ export const commands: ChatCommands = {
 		},
 
 		sell(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot sell items during a battle.");
 			}
 			const [itemId, quantityStr] = target.split(' ');
@@ -916,7 +929,7 @@ export const commands: ChatCommands = {
 		},
 
 		pokedex(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot use the Pokedex during a battle.");
 			}
 			const player = getPlayerData(user.id);
@@ -924,7 +937,7 @@ export const commands: ChatCommands = {
 		},
 
 		explore(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot explore during a battle.");
 			}
 
@@ -940,7 +953,7 @@ export const commands: ChatCommands = {
 		},
 
 		travel(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot travel during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot travel during a battle.");
 
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
@@ -1062,7 +1075,7 @@ export const commands: ChatCommands = {
 		},
 
 		eventchoice(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 			const player = getPlayerData(user.id);
 			const location = LOCATIONS[toID(player.location)];
 			const index = parseInt(target);
@@ -1118,7 +1131,7 @@ export const commands: ChatCommands = {
 		},
 
 		building(target, room, user) {
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot enter a building during a battle.");
 			}
 
@@ -1167,7 +1180,7 @@ export const commands: ChatCommands = {
 		},
 
 		wildpokemon(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle!");
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
 
 			const player = getPlayerData(user.id);
 			const activeParty = player.party.filter(p => p.hp > 0);
@@ -1213,7 +1226,7 @@ export const commands: ChatCommands = {
 		},
 
 		scriptedbattle(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle!");
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
 
 			const eventId = target.trim();
 			const player = getPlayerData(user.id);
@@ -1245,7 +1258,7 @@ export const commands: ChatCommands = {
 		},
 
 		challenge(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle!");
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
 
 			const args = target.split(' ');
 			const trainerId = toID(args[0]);
@@ -1290,7 +1303,7 @@ export const commands: ChatCommands = {
 		},
 
 		battle(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle!");
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
 
 			const availableZoneIds = Object.keys(ENCOUNTER_ZONES);
 			if (availableZoneIds.length === 0) return this.errorReply("There are no wild Pokémon zones configured yet.");
@@ -1597,7 +1610,7 @@ export const commands: ChatCommands = {
 		},
 
 		giveitem(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const [pokemonId, itemId] = target.split(' ').map(toID);
 
@@ -1624,7 +1637,7 @@ export const commands: ChatCommands = {
 		},
 
 		takeitem(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot manage items during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
 			const pokemonId = toID(target);
 
@@ -1649,7 +1662,7 @@ export const commands: ChatCommands = {
 		},
 
 		nickname(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot change nicknames during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot change nicknames during a battle.");
 			const player = getPlayerData(user.id);
 			const parts = target.split(',');
 			const pokemonId = parts[0]?.trim();
@@ -1670,7 +1683,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			if (player.party.length === 0 && player.pc.size === 0 && player.inventory.size === 0) return this.errorReply("No data to reset.");
 
-			if (activeBattles.has(user.id)) {
+			if (isInActiveBattle(user.id)) {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 			}
@@ -1695,7 +1708,7 @@ export const commands: ChatCommands = {
 		},
 
 		npc(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("You cannot talk to NPCs during a battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot talk to NPCs during a battle.");
 
 			const player = getPlayerData(user.id);
 			const npcId = toID(target);
@@ -1736,7 +1749,7 @@ export const commands: ChatCommands = {
 		},
 
 		npcaction(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot interact during battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot interact during battle.");
 
 			const player = getPlayerData(user.id);
 			const args = target.split(' ');
@@ -1857,7 +1870,7 @@ export const commands: ChatCommands = {
 		},
 
 		async dbsave(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot save during battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot save during battle.");
 			try {
 				await savePlayerToDB(getPlayerData(user.id));
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateProfileHTML(getPlayerData(user.id), "Game saved successfully!")}`);
@@ -1867,7 +1880,7 @@ export const commands: ChatCommands = {
 		},
 
 		async dbload(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot load during battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot load during battle.");
 			try {
 				if (!await hasSaveInDB(user.id)) return this.errorReply("No save found.");
 				const loadedPlayer = await loadPlayerFromDB(user.id);
@@ -1881,7 +1894,7 @@ export const commands: ChatCommands = {
 		},
 
 		async dbdelete(target, room, user) {
-			if (activeBattles.has(user.id)) return this.errorReply("Cannot delete during battle.");
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot delete during battle.");
 			try {
 				if (!await hasSaveInDB(user.id)) return this.errorReply("No save found.");
 				if (!target || target !== 'confirm') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateDBDeleteConfirmHTML()}`);
