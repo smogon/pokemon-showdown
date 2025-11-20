@@ -11,7 +11,7 @@
 
 export const GameConfig = {
 
-	startLocationId: 'startingroom',
+	startLocationId: 'pallettown',
 	startMoney: 3000,
 	startInventory: [
 		{ id: 'pokeball', quantity: 5 },
