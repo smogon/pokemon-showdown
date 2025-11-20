@@ -11,9 +11,7 @@ import {
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
 } from './html';
-import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
-import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
-import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
+import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
 import {
 	INITIAL_STAT_STAGES,
