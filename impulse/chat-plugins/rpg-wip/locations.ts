@@ -16,14 +16,14 @@ export const LOCATIONS: Record<string, Location> = {
         ],
 		buildings: [
              {
-                 id: 'start_shop',
+                 id: 'startshop',
                  name: 'General Store',
                  type: 'pokemart',
                  description: 'A small supply shop.',
                  accessible: true
              },
              {
-                id: 'town_hall',
+                id: 'townhall',
                 name: 'Town Hall',
                 type: 'house',
                 description: 'The local administration building.',
@@ -46,7 +46,7 @@ export const LOCATIONS: Record<string, Location> = {
 };
 
 export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
-    'path_zone_1': {
+    'pathzone1': {
         name: 'Tall Grass',
         pokemon: ['rattata', 'pidgey', 'sentret'],
         levelRange: [2, 5],
