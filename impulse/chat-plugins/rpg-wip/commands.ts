@@ -1,9 +1,6 @@
 /*
 * Pokemon Showdown
 * RPG Commands
-*
-* This is the "Controller" layer. It handles user input and calls
-* functions from core, battle-engine, items, and html.
 */
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
@@ -19,7 +16,7 @@ import {
 	useRareCandyItem,
 	useExpCandyItem,
 	ITEMS_DATABASE,
-    ITEM_PRICES, // Kept for export compatibility
+    ITEM_PRICES, 
 } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import {
@@ -99,18 +96,14 @@ import {
 	TYPE_CHART,
 } from './data';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
-import { GameConfig } from './game-config'; // [NEW] Configuration import
+import { GameConfig } from './game-config'; 
 
-/**
- * Handles all logic for using items in the 'medicine' category.
- * [REFACTOR] Now relies on ItemEffects instead of hardcoded IDs
- */
 function handleUseMedicine(
 	this: CommandContext,
 	player: PlayerData,
@@ -122,7 +115,6 @@ function handleUseMedicine(
 	let result: { success: boolean, message: string } = { success: false, message: "This item cannot be used." };
 	let requiresMoveSelection = false;
     
-    // Refresh item data to ensure effects are present
     const itemData = ITEMS_DATABASE[item.id];
     const eff = itemData?.effects;
 
@@ -130,22 +122,17 @@ function handleUseMedicine(
         return this.errorReply("Error: Item data missing effects.");
     }
 
-    // 1. Revival Items
     if (eff.revive) {
         result = useRevivalItem(player, targetPokemon, item.id);
     }
-    // 2. Healing / Status Items
     else if (eff.healAmount || eff.healPercent || eff.statusCure) {
         result = useHealingItem(player, targetPokemon, item.id);
     }
-    // 3. Vitamins (Stat Boosts)
     else if (eff.evBoost) {
         result = useVitaminItem(player, targetPokemon, item.id);
     }
-    // 4. PP Restoration
     else if (eff.ppRestore || eff.ppRestoreAll) {
         if (eff.ppRestoreAll) {
-            // Restore All Moves (Elixir/Max Elixir)
             let totalPPRestored = 0;
             for (const move of targetPokemon.moves) {
                 const moveData = getMove(move.id);
@@ -164,7 +151,6 @@ function handleUseMedicine(
                 result = { success: false, message: `${targetPokemon.species}'s moves are already at full PP.` };
             }
         } else {
-            // Restore Single Move (Ether) -> Requires Selection
             requiresMoveSelection = true;
         }
     } 
@@ -180,13 +166,9 @@ function handleUseMedicine(
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, item.id)}`);
 	}
 
-	// In-Menu Notification
 	return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 }
 
-/**
- * Handles all logic for using items in the 'misc' category.
- */
 function handleUseMiscItem(
 	this: CommandContext,
 	player: PlayerData,
@@ -199,7 +181,6 @@ function handleUseMiscItem(
     const itemData = ITEMS_DATABASE[itemId];
     const eff = itemData?.effects;
 
-    // [REFACTOR] Dynamic checks based on effects
     if (eff?.levelBoost) {
 		const result = useRareCandyItem(player, targetPokemon, room, user);
 		if (!result.success) {
@@ -231,7 +212,6 @@ function handleUseMiscItem(
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 	}
 
-    // Special Case: Egg Move Tutor (Requires specific UI logic not generic yet)
 	if (itemId === 'eggmovetutor') {
 		const speciesId = toID(targetPokemon.species);
 		const allEggMoves = MANUAL_LEARNSETS[speciesId]?.egg || [];
@@ -242,7 +222,6 @@ function handleUseMiscItem(
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEggMoveSelectionHTML(targetPokemon, learnableEggMoves)}`);
 	}
 
-    // TMs
 	if (item.category === 'tm' || itemId.startsWith('tm-')) {
 		if (targetPokemon.hp <= 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|<div class="rpg-infobox"><h2>Cannot Use TM</h2><p><strong>${targetPokemon.species}</strong> has fainted! Heal it before teaching a move.</p><p><button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`);
@@ -250,16 +229,11 @@ function handleUseMiscItem(
 
 		const moveId = itemId.replace('tm-', ''); 
 		const speciesId = toID(targetPokemon.species);
-		// In a full generic system, TM compatibility would be in data.ts or similar.
-        // For now, we assume MANUAL_LEARNSETS or Dex.learnsets handles it.
 		const tmMoves = MANUAL_LEARNSETS[speciesId]?.tm || [];
-
-        // Fallback to Showdown Dex if manual learnset empty/missing
         const dexLearnset = Dex.species.get(speciesId).learnset;
         let canLearn = tmMoves.includes(moveId);
         
         if (!canLearn && dexLearnset) {
-             // Very basic check for 'tm' source in learnset
              const learnData = dexLearnset[moveId];
              if (learnData) canLearn = true; 
         }
@@ -288,9 +262,6 @@ function handleUseMiscItem(
 		}
 	}
 
-    // Evolution Items (Stones, etc)
-    // Generally identified by ending in 'stone' or being in a specific list in standard pokemon
-    // For generic RPG, checking if checkEvolution accepts it is safe
     const evoMessage = checkEvolution(player, targetPokemon, { room, user }, itemId);
     if (evoMessage) {
         removeItemFromInventory(player, itemId, 1);
@@ -300,7 +271,6 @@ function handleUseMiscItem(
         return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, evoMessage)}`);
     }
 
-    // If it's a stone but didn't work
 	if (itemId.endsWith('stone')) {
 		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
 	}
@@ -308,7 +278,6 @@ function handleUseMiscItem(
 	return this.errorReply("This item cannot be used right now.");
 }
 
-// Exported states for battle engine access
 export const teraToggleState = new Map<string, boolean>();
 export const activeScriptedEvents = new Map<string, string>();
 
@@ -336,7 +305,6 @@ export const commands: ChatCommands = {
 			start(target, room, user) {
 				if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle.");
 				const player = getPlayerData(user.id);
-				// Don't reset floor here, let them continue if they exited
 				if (player.battleTowerFloor <= 1) player.battleTowerFloor = 1;
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerWelcomeHTML(player.battleTowerFloor)}`);
 			},
@@ -392,7 +360,6 @@ export const commands: ChatCommands = {
 			if (player.party.length > 0) {
 				return this.parse('/rpg explore');
 			}
-            // [REFACTOR] Use Config
 			const startLocId = GameConfig.startLocationId;
             const locationData = LOCATIONS[startLocId];
 			player.location = locationData?.name || 'Unknown';
@@ -412,17 +379,16 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
 
-		starterchoice(target, room, user) {
+        starterchoice(target, room, user) {
             if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
             
             const args = target.split(' ');
             const npcId = toID(args[0]);
-            const pokemonId = toID(args[1]); // Optional
+            const pokemonId = toID(args[1]); 
 
             const npc = NPC_DATABASE[npcId];
             if (!npc?.action || npc.action.type !== 'choosestarter') return this.errorReply("Invalid NPC.");
 
-            // Case 1: Selection Made (ID and Pokemon provided)
             if (pokemonId) {
                 const player = getPlayerData(user.id);
                 const allStarters = Object.values(STARTER_POKEMON).flat();
@@ -433,7 +399,6 @@ export const commands: ChatCommands = {
                 if (result.success) {
                      if (npc.action.onceOnly) player.completedNPCActions.add(npcId);
                      
-                     // Set default location if not set
                      const startLocId = GameConfig.startLocationId;
                      const locationData = LOCATIONS[startLocId];
                      if (player.location === 'Unknown Location' || !player.location) {
@@ -449,7 +414,6 @@ export const commands: ChatCommands = {
                 }
             } 
             
-            // Case 2: Show List (Only NPC ID provided)
             else {
                 const allStarters = Object.values(STARTER_POKEMON).flat();
                 return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterChoiceHTML(npcId, npc.name, allStarters)}`);
@@ -474,7 +438,7 @@ export const commands: ChatCommands = {
 				const starterPokemon = createPokemon(starterId, 5);
 				player.party.push(starterPokemon);
 				player.name = user.name;
-                // [REFACTOR] Use Config
+
 				const startLocId = GameConfig.startLocationId;
                 const locationData = LOCATIONS[startLocId];
 				player.location = locationData?.name || 'Unknown';
@@ -689,33 +653,23 @@ export const commands: ChatCommands = {
 
 			// --- Handle "NO POKEMON SELECTED" ---
 			if (!pokemonId) {
-                // [REFACTOR] Dynamic Auto-Selection based on Effects
                 if (eff) {
-                    // Revives: Check for fainted
                     if (eff.revive) {
                         const faintedPokemon = player.party.filter(p => p.hp <= 0);
 						if (faintedPokemon.length === 1) return this.parse(`/rpg useitem ${itemId} ${faintedPokemon[0].id}`);
                         return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
                     }
                     
-                    // Healing/Status: Check for damaged/status
                     if (eff.healAmount || eff.healPercent || eff.statusCure) {
                         const damagedPokemon = player.party.filter(p => p.hp > 0 && (p.hp < p.maxHp || p.status));
 						if (damagedPokemon.length === 1) return this.parse(`/rpg useitem ${itemId} ${damagedPokemon[0].id}`);
                         return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
                     }
 
-                    // EV Vitamins
-                    if (eff.evBoost) {
+                    if (eff.evBoost || eff.ppRestore || eff.ppRestoreAll) {
                         return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
                     }
-                    
-                    // PP Restore
-                    if (eff.ppRestore || eff.ppRestoreAll) {
-                         return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
-                    }
 
-                    // Default UI handling
                     if (item.category === 'misc') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
                     if (item.category === 'held' || item.category === 'berry') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
                 }
@@ -723,11 +677,9 @@ export const commands: ChatCommands = {
 				return this.errorReply("This item category cannot be used from the bag directly.");
 			}
 
-			// --- Handle "POKEMON IS SELECTED" ---
 			const targetPokemon = player.party.find(p => p.id === pokemonId);
 			if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
-			// Route to the correct handler
 			if (item.category === 'medicine') {
 				return handleUseMedicine.call(this, player, item, targetPokemon, room, user);
 			}
@@ -831,7 +783,6 @@ export const commands: ChatCommands = {
 			const shopInventory = getShopInventory(locationId, player.badges);
 			if (!shopInventory.includes(itemId)) return this.errorReply("This item is not available in this shop.");
 
-            // [REFACTOR] Use price from database directly
             const itemData = ITEMS_DATABASE[itemId];
 			const itemPrice = itemData.price || 0;
 			
@@ -865,7 +816,6 @@ export const commands: ChatCommands = {
 			if (itemInBag.quantity < quantity) return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
 			if (itemInBag.category === 'key') return this.errorReply("Key items cannot be sold.");
 
-            // [REFACTOR] Use price from database
             const itemData = ITEMS_DATABASE[itemId];
 			const purchasePrice = itemData.price || 0;
 			if (purchasePrice <= 0) return this.errorReply("This item cannot be sold.");
@@ -1139,7 +1089,7 @@ export const commands: ChatCommands = {
 			const activeParty = player.party.filter(p => p.hp > 0);
 			if (activeParty.length === 0) return this.errorReply("All your Pokémon have fainted!");
 
-			const zoneId = target.trim();
+			const zoneId = toID(target);
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (!zone) return this.errorReply("This is not a valid area to explore.");
 
@@ -1960,9 +1910,8 @@ export const commands: ChatCommands = {
 				case 'choosestarter':
 					return this.parse(`/rpg starterchoice ${npcId}`);
 
-                // Dispatch to specific handlers
 				case 'heal': result = NPCActions.handleHeal(player); break;
-				case 'fossilrevival': result = NPCActions.handleFossilRevival(player, action, param1); break;
+				case 'fossilrevival': result = NPCActions.handleFossilRevival(player, action, toID(param1)); break;
 				case 'dailyreward': result = NPCActions.handleDailyReward(player, action, npcId); break;
 				case 'battlerequest': 
                     const br = NPCActions.handleBattleRequest(player, action, npcId);
@@ -1970,12 +1919,12 @@ export const commands: ChatCommands = {
                     break;
 				case 'questchain': result = NPCActions.handleQuestChain(player, action, npcId); break;
 				case 'itemcraft': result = NPCActions.handleItemCraft(player, action, parseInt(param1)); break;
-				case 'berryplant': result = NPCActions.handleBerryPlant(player, action, npcId, param1); break;
+				case 'berryplant': result = NPCActions.handleBerryPlant(player, action, npcId, toID(param1)); break;
 				case 'pokemongrooming': 
                     if(player.party.length > 0) result = NPCActions.handlePokemonGrooming(player, action, player.party[0]); 
                     else return this.errorReply("No Pokemon."); 
                     break;
-				case 'fortuneteller': result = NPCActions.handleFortuneTeller(player, action, npcId, param1 || 'luck'); break;
+				case 'fortuneteller': result = NPCActions.handleFortuneTeller(player, action, npcId, toID(param1) || 'luck'); break;
 				case 'pokemonbreeder': 
                     if(player.party.length>=2) result = NPCActions.handlePokemonBreeder(player, action, player.party[0], player.party[1]);
                     else return this.errorReply("Need 2 Pokemon.");
@@ -2024,7 +1973,6 @@ export const commands: ChatCommands = {
 				const loadedPlayer = await loadPlayerFromDB(user.id);
 				if (!loadedPlayer) return this.errorReply("Load failed.");
 				const msg = `Save loaded! Welcome back, ${loadedPlayer.name}.`;
-                // [REFACTOR] Fallback to Config start location
                 const loc = LOCATIONS[toID(loadedPlayer.location)] || LOCATIONS[GameConfig.startLocationId];
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(loadedPlayer, loc, msg)}`);
 			} catch (error) {
