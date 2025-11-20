@@ -4,7 +4,13 @@ import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type Check
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
-import { BATTLE_TOWER_FORMATS, generateRandomTeamFromBSS, generateRandomTeamFromBaby } from './battle-tower';
+import {
+	startBattleTowerFloor,
+	getLocationWeatherData,
+	getWeatherStartMessage,
+	generateBattleTowerFloorCompleteHTML,
+	generateBattleTowerLossHTML,
+} from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
 import { teraToggleState, activeScriptedEvents } from './commands';
 import {
@@ -12,8 +18,6 @@ import {
 	generateMoveLearnHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
-	generateBattleTowerFloorCompleteHTML,
-	generateBattleTowerLossHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
 import { getBadgeForGymLeader, TOTAL_BADGES } from './badges';
@@ -43,159 +47,6 @@ import {
 } from './battle-core';
 
 import { processEndOfTurn } from './battle-eot';
-
-export function getLocationWeatherData(player: PlayerData): {
-	weather: BattleState['weather'],
-	locationWeather: BattleState['locationWeather'],
-} {
-	const locationId = toID(player.location);
-	const location = LOCATIONS[locationId];
-
-	if (!location?.weather) {
-		return { weather: undefined, locationWeather: undefined };
-	}
-
-	const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
-		'sun': 'sun',
-		'rain': 'rain',
-		'sandstorm': 'sand',
-		'hail': 'hail',
-	};
-
-	const battleWeatherType = weatherMap[location.weather];
-	if (!battleWeatherType) {
-		return { weather: undefined, locationWeather: undefined };
-	}
-
-	return {
-		weather: {
-			type: battleWeatherType,
-			turns: 9999,
-		},
-		locationWeather: {
-			type: battleWeatherType,
-		},
-	};
-}
-
-export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'hail'): string {
-	const weatherStartMessages: Record<string, string> = {
-		'sun': 'The sunlight is strong.',
-		'rain': 'It started to rain!',
-		'sand': 'A sandstorm is raging!',
-		'hail': 'It started to hail!',
-	};
-	return weatherStartMessages[weatherType];
-}
-
-export function startBattleTowerFloor(
-	player: PlayerData,
-	floor: number,
-	context: CommandContext,
-	room: ChatRoom,
-	user: User,
-	format = 'battlefactory'
-) {
-	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
-	const level = formatConfig.level;
-	const teamSize = formatConfig.teamSize;
-
-	const battleMessages: string[] = [];
-	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-
-	try {
-		let playerTeam: RPGPokemon[];
-		let aiTeam: RPGPokemon[];
-
-		if (formatConfig.teamGeneration === 'bss') {
-			playerTeam = generateRandomTeamFromBSS(teamSize, level);
-			aiTeam = generateRandomTeamFromBSS(teamSize, level);
-		} else if (formatConfig.teamGeneration === 'baby') {
-			playerTeam = generateRandomTeamFromBaby(teamSize);
-			aiTeam = generateRandomTeamFromBaby(teamSize);
-		} else {
-			playerTeam = generateRandomTeam(teamSize, level);
-			aiTeam = generateRandomTeam(teamSize, level);
-		}
-
-		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
-		opponentSlots[0] = createActivePokemonSlot(aiTeam[0]);
-
-		battleMessages.push(`<b>Battle Tower - Floor ${floor}</b>`);
-		battleMessages.push(`Your random team for this floor is: ${playerTeam.map(p => p.species).join(', ')}.`);
-
-		const locationWeatherData = getLocationWeatherData(player);
-		if (locationWeatherData.weather) {
-			battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
-		}
-
-		const battle: BattleState = {
-			battleType: 'battletower',
-			floor,
-			overridePlayerParty: playerTeam,
-			battleTowerFormat: format,
-			opponentName: `Battle Tower Trainer`,
-			opponentParty: aiTeam,
-			opponentMoney: 500 * floor,
-			playerSlots,
-			opponentSlots,
-			pendingActions: {},
-			playerId: user.id,
-			turn: 0,
-			zoneId: 'battletower',
-			playerHazards: [],
-			opponentHazards: [],
-			weather: locationWeatherData.weather,
-			locationWeather: locationWeatherData.locationWeather,
-			trickRoomTurns: 0,
-			magicRoomTurns: 0,
-			wonderRoomTurns: 0,
-			terrain: undefined,
-			playerShouldSwitch: undefined,
-			pendingPivot: undefined,
-			aiPendingPivot: undefined,
-			forceEnd: false,
-			playerTerastallizeUsed: false,
-			opponentTerastallizeUsed: false,
-			playerQuickGuard: false,
-			opponentQuickGuard: false,
-			playerWideGuard: false,
-			opponentWideGuard: false,
-			playerCraftyShield: false,
-			opponentCraftyShield: false,
-			playerReflectTurns: 0,
-			opponentReflectTurns: 0,
-			playerLightScreenTurns: 0,
-			opponentLightScreenTurns: 0,
-			playerAuroraVeilTurns: 0,
-			opponentAuroraVeilTurns: 0,
-			gravityTurns: 0,
-			mudSportTurns: 0,
-			waterSportTurns: 0,
-			fairyLockTurns: 0,
-			ionDelugeTurns: 0,
-			playerFutureMoves: [],
-			opponentFutureMoves: [],
-			battleLog: [],
-		};
-
-		if (playerSlots[0]) {
-			applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
-		}
-		if (opponentSlots[0]) {
-			applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
-		}
-
-		activeBattles.set(user.id, battle);
-		battle.battleLog.push(...battleMessages);
-
-		context.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
-	} catch (error) {
-		console.error(error);
-		context.errorReply(`Error starting Battle Tower floor: ${error}`);
-	}
-}
 
 export function processTurn(context: CommandContext, battle: BattleState, room: ChatRoom, user: User, initialMessages: string[] = []) {
 	const messageLog: string[] = [...initialMessages];
@@ -1340,6 +1191,9 @@ export function checkForWinLoss(
 			battle.battleResult = 'victory';
 			const currentFloor = battle.floor || 1;
 			player.battleTowerFloor = currentFloor + 1;
+			if (currentFloor > player.battleTowerHighestFloor) {
+				player.battleTowerHighestFloor = currentFloor;
+			}
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerFloorCompleteHTML(currentFloor)}`);
 			return true;
 		}
@@ -1405,3 +1259,6 @@ export function checkForWinLoss(
 
 	return false;
 }
+
+// Re-export battle tower functions for backwards compatibility
+export { startBattleTowerFloor, getLocationWeatherData, getWeatherStartMessage } from './battle-tower';

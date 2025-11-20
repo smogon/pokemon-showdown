@@ -1969,70 +1969,14 @@ export function generateMultipleOpponentsCatchErrorHTML(): string {
 	return `<div class="rpg-infobox rpg-menu-box"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 }
 
-export function generateBattleTowerWelcomeHTML(floor: number): string {
-	let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
-		`<div class="rpg-memo-box" style="margin-bottom:15px;">` +
-		`<p><strong>Roguelike Challenge</strong></p>` +
-		`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
-		`</div>` +
-		`<h3>Select Format</h3>` +
-		`<div class="rpg-scrollable-grid"><div class="rpg-grid-2col">`;
-
-	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-		html += `<button name="send" value="/rpg battletower selectformat ${toID(formatId)}" class="button" style="height:auto; padding:10px; text-align:left;">` +
-			`<strong>${config.name}</strong><br>` +
-			`<small class="rpg-text-muted">${config.description}</small>` +
-			`</button>`;
-	}
-
-	html += `</div></div>` +
-		`<p style="text-align:center"><button name="send" value="/rpg start" class="button">Back to Menu</button></p>` +
-		`</div>`;
-	return html;
-}
-
-export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
-	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
-	const btnText = floor > 1 ? `Continue Floor ${floor}` : `Start Floor 1`;
-
-	return `<div class="rpg-infobox"><h2>🗼 ${formatConfig.name}</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-		`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
-		`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
-		`</div>` +
-		`<p style="text-align:center">` +
-
-		`<button name="send" value="/rpg battletower beginfloor ${toID(format)}" class="button rpg-button-large">${btnText}</button>` +
-		`</p>` +
-		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">Back</button></p>` +
-		`</div>`;
-}
-
-export function generateBattleTowerFloorCompleteHTML(floor: number): string {
-	return `<div class="rpg-infobox"><h2>🗼 Floor ${floor} Cleared!</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-		`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
-		`<p>Your team has been healed.</p>` +
-		`<p>Preparing new team for the next floor...</p>` +
-		`</div>` +
-		`<p style="text-align:center">` +
-		`<button name="send" value="/rpg battletower nextfloor" class="button">Next Floor (F${floor + 1}) →</button>` +
-		`</p>` +
-		`</div>`;
-}
-
-export function generateBattleTowerLossHTML(floor: number): string {
-	return `<div class="rpg-infobox"><h2>🗼 Challenge Failed</h2>` +
-		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-		`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
-		`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
-		`</div>` +
-		`<p style="text-align:center">` +
-		`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
-		`<button name="send" value="/rpg start" class="button">Exit</button>` +
-		`</p>` +
-		`</div>`;
-}
+// Battle Tower HTML functions are now in battle-tower.ts - re-export for backwards compatibility
+export {
+	generateBattleTowerWelcomeHTML,
+	generateBattleTowerFormatSelectedHTML,
+	generateBattleTowerFloorCompleteHTML,
+	generateBattleTowerLossHTML,
+	generateBattleTowerLadderHTML,
+} from './battle-tower';
 
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
 	const species = Dex.species.get(speciesId);
