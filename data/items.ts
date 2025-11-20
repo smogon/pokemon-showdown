@@ -17,34 +17,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onSwitchIn() {},
 		onStart(pokemon) {
-			if (pokemon.getAbility().flags['cantsuppress']) return; // does not interact with e.g Ice Face, Zen Mode
+			if (pokemon.getAbility().flags['cantsuppress']) return;
 
-			// Will be suppressed by Pokemon#ignoringAbility if needed
 			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			if (pokemon.ability === 'gluttony') {
 				pokemon.abilityState.gluttony = false;
 			}
 		},
-		// onEnd(pokemon) {
-		// 	if (pokemon.beingCalledBack) return;
-		// 	const newItem = pokemon.item;
-		// 	pokemon.item = 'abilityshield' as ID;
-		// 	const ignoringAbility = pokemon.ignoringAbility();
-		// 	pokemon.item = newItem;
-
-		// 	if (pokemon.volatiles['commanding']) return;
-		// 	if (pokemon.illusion) {
-		// 		this.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon, null, 'neutralizinggas');
-		// 	}
-		// 	if (pokemon.volatiles['slowstart']) {
-		// 		delete pokemon.volatiles['slowstart'];
-		// 		this.add('-end', pokemon, 'Slow Start', '[silent]');
-		// 	}
-		// 	const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-		// 	if (strongWeathers.includes(pokemon.getAbility().id)) {
-		// 		this.singleEvent('End', this.dex.abilities.get(pokemon.getAbility().id), pokemon.abilityState, pokemon, null, 'neutralizinggas');
-		// 	}
-		// },
+		// onEnd(pokemon) {}, needs testing
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
 		num: 1881,
 		gen: 9,
