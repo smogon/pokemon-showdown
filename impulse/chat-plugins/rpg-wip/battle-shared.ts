@@ -1,7 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES } from './data';
-import { ITEMS_DATABASE } from './items';
+import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, ITEMS_DATABASE } from './items';
 import type { ActivePokemonSlot, BattleState, Stats, Status, Move, RPGPokemon } from './interface';
 import { getActiveSlots, NATURES } from './utils';
 
