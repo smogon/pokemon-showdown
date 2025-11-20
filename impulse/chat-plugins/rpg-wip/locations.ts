@@ -6,7 +6,7 @@
 import type { Location } from './interface';
 
 export const LOCATIONS: Record<string, Location> = {
-	'startingroom': { // [CHANGED] Key matches toID("Starting Room")
+	'startingroom': {
 		id: 'startingroom',
 		name: 'Starting Room',
 		type: 'town',
@@ -33,7 +33,7 @@ export const LOCATIONS: Record<string, Location> = {
         ],
 		encounterZones: [], 
 	},
-    'grassypath': { // [CHANGED] Consistent ID format
+    'grassypath': {
         id: 'grassypath',
         name: 'Grassy Path',
         type: 'route',
@@ -48,17 +48,9 @@ export const LOCATIONS: Record<string, Location> = {
 export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
     'path_zone_1': {
         name: 'Tall Grass',
-        // Make sure these IDs match valid species in Pokemon Showdown
-        pokemon: ['rattata', 'pidgey', 'caterpie', 'zigzagoon'], 
-        levelRange: [2, 4],
+        pokemon: ['rattata', 'pidgey', 'sentret'],
+        levelRange: [2, 5],
         battleType: 'single'
-    },
-    // Add a harder zone
-    'deep_woods': {
-        name: 'Deep Woods',
-        pokemon: ['beedrill', 'pikachu', 'murkrow'],
-        levelRange: [5, 8],
-        battleType: 'double' // Test double battles
     }
 };
 
