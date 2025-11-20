@@ -1,6 +1,18 @@
-import type { Location } from './interface';
+/**
+ * Game Locations Configuration
+ *
+ * This file contains all location-related story data including:
+ * - Locations and their connections
+ * - Encounter zones with wild Pokemon
+ *
+ * Edit this file to create new stories and adventures.
+ */
 
-export const LOCATIONS: Record<string, Location> = {
+// ============================================================================
+// LOCATIONS
+// ============================================================================
+
+export const LOCATIONS: Record<string, any> = {
 	'startingroom': {
 		id: 'startingroom',
 		name: 'Starting Room',
@@ -40,7 +52,16 @@ export const LOCATIONS: Record<string, Location> = {
 	},
 };
 
-export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], levelRange: [number, number], battleType?: 'single' | 'double' }> = {
+// ============================================================================
+// ENCOUNTER ZONES
+// ============================================================================
+
+export const ENCOUNTER_ZONES: Record<string, {
+	name: string,
+	pokemon: string[],
+	levelRange: [number, number],
+	battleType?: 'single' | 'double',
+}> = {
 	'pathzone1': {
 		name: 'Tall Grass',
 		pokemon: ['rattata', 'pidgey', 'sentret'],
@@ -48,6 +69,10 @@ export const ENCOUNTER_ZONES: Record<string, { name: string, pokemon: string[], 
 		battleType: 'single',
 	},
 };
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
 export function getStartingLocation(): { id: string, name: string } {
 	return { id: 'startingroom', name: 'Starting Room' };

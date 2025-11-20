@@ -1,10 +1,7 @@
 import type { Stats } from './interface';
 
-export const STARTER_POKEMON = {
-	fire: ['torchic'],
-	water: ['mudkip'],
-	grass: ['grookey'],
-};
+// Re-export story data from game-config.ts
+export { STARTER_POKEMON, FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './game-config';
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
 	'figyberry': { flavor: 'Spicy', stat: 'atk' },
@@ -45,25 +42,4 @@ export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEf
 	Dark: { superEffective: ['Psychic', 'Ghost'], notVeryEffective: ['Fighting', 'Dark', 'Fairy'], noEffect: [] },
 	Steel: { superEffective: ['Ice', 'Rock', 'Fairy'], notVeryEffective: ['Fire', 'Water', 'Electric', 'Steel'], noEffect: [] },
 	Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
-};
-
-export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number }> = {
-	'helixfossil': { species: 'omanyte', level: 20 },
-	'domefossil': { species: 'kabuto', level: 20 },
-	'oldamber': { species: 'aerodactyl', level: 20 },
-	'rootfossil': { species: 'lileep', level: 20 },
-	'clawfossil': { species: 'anorith', level: 20 },
-	'skullfossil': { species: 'cranidos', level: 20 },
-	'armorfossil': { species: 'shieldon', level: 20 },
-	'coverfossil': { species: 'tirtouga', level: 20 },
-	'plumefossil': { species: 'archen', level: 20 },
-	'jawfossil': { species: 'tyrunt', level: 20 },
-	'sailfossil': { species: 'amaura', level: 20 },
-
-};
-
-export const FORTUNE_TELLER_MESSAGES: Record<string, string> = {
-	'luck': 'Your luck will shine today! Shiny encounter rate increased!',
-	'battle': 'Victory awaits you! Battle rewards increased!',
-	'catch': 'The Pokemon will come to you! Catch rate increased!',
 };

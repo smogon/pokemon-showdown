@@ -1,5 +1,19 @@
 import { ITEMS_DATABASE } from './items';
 
+/**
+ * Game Shops Configuration
+ *
+ * This file contains all shop-related story data including:
+ * - Shop inventories by location
+ * - Item availability based on badge progress
+ *
+ * Edit this file to create new stories and adventures.
+ */
+
+// ============================================================================
+// SHOP CONFIGURATION
+// ============================================================================
+
 export interface ShopTier {
 	requiredBadges: number;
 	items: string[];
@@ -24,7 +38,6 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 				],
 			},
 			{
-
 				requiredBadges: 1,
 				items: [
 					'greatball',
@@ -34,6 +47,10 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 		],
 	},
 };
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
 export function getShopInventory(locationId: string, playerBadges: number): string[] {
 	const shopData = SHOP_INVENTORIES[locationId];
