@@ -4908,7 +4908,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	terashift: {
 		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos') return;
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
