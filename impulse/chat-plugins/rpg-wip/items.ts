@@ -1,6 +1,48 @@
 import { Dex, toID } from '../../../sim/dex';
 import type { InventoryItem, PlayerData, RPGPokemon, Stats } from './interface';
 import { calculateStats, levelUp, checkEvolution, handleLearningMoves, calculateTotalExpForLevel, getMove, type CheckEvolutionContext } from './utils';
+import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+
+// ==========================================
+// ITEM CONSTANTS & CONFIGURATION
+// ==========================================
+
+export const VIABLE_HELD_ITEMS: string[] = [
+	'leftovers', 'sitrusberry', 'blacksludge',
+	'shellbell', 'lifeorb', 'choiceband', 'choicespecs',
+	'expertbelt', 'choicescarf', 'quickclaw', 'focussash',
+	'assaultvest', 'heavydutyboots', 'rockyhelmet', 'airballoon',
+	'shedshell', 'clearamulet', 'lumberry', 'mentalherb', 'whiteherb',
+	'powerherb', 'weaknesspolicy', 'flameorb', 'toxicorb', 'stickybarb',
+	'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry', 'apicotberry',
+	'starfberry', 'chopleberry', 'yacheberry', 'shucaberry', 'occaberry',
+	'passhoberry', 'wacanberry', 'rindoberry', 'kasibberry', 'colburberry',
+	'babiriberry',
+];
+
+export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
+	'figyberry': { flavor: 'Spicy', stat: 'atk' },
+	'wikiberry': { flavor: 'Dry', stat: 'spa' },
+	'magoberry': { flavor: 'Sweet', stat: 'spe' },
+	'aguavberry': { flavor: 'Bitter', stat: 'spd' },
+	'iapapaberry': { flavor: 'Sour', stat: 'def' },
+};
+
+export const NATURE_FLAVOR_PREFERENCES: Record<keyof Stats, string> = {
+	atk: 'Spicy', def: 'Sour', spa: 'Dry', spd: 'Bitter', spe: 'Sweet', maxHp: '',
+};
+
+export const TYPE_RESIST_BERRIES: Record<string, string> = {
+	'babiriberry': 'Steel', 'chartiberry': 'Rock', 'chilanberry': 'Normal', 'chopleberry': 'Fighting',
+	'cobaberry': 'Flying', 'colburberry': 'Dark', 'habanberry': 'Dragon', 'kasibberry': 'Ghost',
+	'kebiaberry': 'Poison', 'occaberry': 'Fire', 'passhoberry': 'Water', 'payapaberry': 'Psychic',
+	'rindoberry': 'Grass', 'roseliberry': 'Fairy', 'shucaberry': 'Ground', 'tangaberry': 'Bug',
+	'wacanberry': 'Electric', 'yacheberry': 'Ice',
+};
+
+// ==========================================
+// ITEM DATABASE
+// ==========================================
 
 export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'Restores 20 HP.', price: 300, effects: { healAmount: 20 } },
@@ -57,6 +99,10 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'masterball': { id: 'masterball', name: 'Master Ball', category: 'pokeball', description: 'Catches any Pokémon without fail.', price: 0 },
 	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
 };
+
+// ==========================================
+// ITEM LOGIC FUNCTIONS
+// ==========================================
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	const id = toID(itemId);
@@ -323,6 +369,10 @@ export const RPGItems = {
 	CUSTOM_ITEMS_DATABASE,
 	ITEMS_DATABASE,
 	ITEM_PRICES,
+	VIABLE_HELD_ITEMS,
+	BERRY_FLAVORS,
+	NATURE_FLAVOR_PREFERENCES,
+	TYPE_RESIST_BERRIES,
 };
 
 export default RPGItems;
