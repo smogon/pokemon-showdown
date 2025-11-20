@@ -2,8 +2,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { getActiveSlots, getActiveParty, calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, type CheckEvolutionContext, TYPE_CHART } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
-import { ITEMS_DATABASE, ITEM_PRICES } from './items';
-import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES } from './items';
+import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getPlayerData, activeBattles, playerData } from './core';
 import {
 	generateBattleHTML,
