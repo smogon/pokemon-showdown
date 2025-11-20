@@ -1720,7 +1720,7 @@ export const commands: Chat.ChatCommands = {
 
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/posts/10715136/">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 	staffhelp: [`/staff - View the staff list.`],
 
