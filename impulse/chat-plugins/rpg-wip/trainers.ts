@@ -1,3 +1,8 @@
+/*
+* Pokemon Showdown
+* RPG Trainers Data
+*/
+
 import type { TrainerSpec } from './interface';
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
