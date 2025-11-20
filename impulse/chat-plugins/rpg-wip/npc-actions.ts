@@ -3,84 +3,17 @@
 * RPG NPC Actions Handler
 *
 * This file implements logic for all NPC action types.
-*
-* All handlers are exported and can be imported individually or as a namespace:
-*   import * as NPCActions from './npc-actions';
-*   import { handleHeal, handleChooseStarter } from './npc-actions';
-*
-* Available NPC Action Handlers (40+ handlers):
-*  - handleFossilRevival: Revive fossils into Pokemon
-*  - handleDailyReward: Daily login rewards system
-*  - handleBattleRequest: NPC battle challenges with cooldowns
-*  - completeBattleRequest: Mark battle as completed
-*  - handleQuestChain: Multi-stage quest system
-*  - advanceQuestStage: Progress quest to next stage
-*  - handleItemCraft: Combine items to create new ones
-*  - handleBerryPlant: Plant berries that grow over time
-*  - checkBerryHarvest: Check and harvest berries
-*  - handlePokemonGrooming: Groom Pokemon for friendship
-*  - handleFortuneTeller: Fortune telling for temporary boosts
-*  - checkActiveFortune: Check if fortune is active
-*  - handlePokemonBreeder: Breed Pokemon to produce eggs
-*  - handleMoveRelearner: Relearn moves from learnset
-*  - handleAbilityCapsule: Change Pokemon ability
-*  - handleEVTrainer: Train specific EVs
-*  - handleIVChecker: Check Pokemon IVs
-*  - handleMysteryGift: Distribute special mystery gifts
-*  - handleLottery: Lottery system with prizes
-*  - handleMasseuse: Massages for friendship
-*  - handleHairCutter: Haircuts for friendship
-*  - handleFishing: Give or use fishing rods
-*  - handleBikeShop: Purchase bikes
-*  - handleCoinExchange: Exchange money for coins
-*  - handleTutorCombo: Teach multiple moves
-*  - handleApricornCrafter: Craft Pokeballs from Apricorns
-*  - handlePokeathlon: Pokeathlon events
-*  - handleBerryBlender: Blend berries together
-*  - handlePokeblockMixer: Mix berries into Pokeblocks
-*  - handlePoffinCooking: Cook berries into Poffins
-*  - handleRivalBattle: Trigger rival battles
-*  - handleGymRematch: Rematch gym leaders
-*  - handleShardTrader: Trade shards for moves/items
-*  - handleWingCollector: Collect wings for stat boosts
-*  - handleScaleCollector: Collect scales for rewards
-*  - handleOPower: Distribute O-Powers
-*  - handleHeal: Heal all Pokemon to full health
-*  - handleChooseStarter: Handle starter Pokemon selection
-*  - handleCollectionQuest: Quest to collect specific items
-*  - handleReputation: Manage faction/town reputation
-*  - addReputationPoints: Add reputation points
-*  - handleDeliveryQuest: Deliver items to other NPCs
-*  - handleTimeBasedAction: Actions available at certain times
-*  - handleConditionalDialogue: Dynamic dialogue based on progress
-*  - handleEscortQuest: Escort NPCs to locations
-*  - handleAchievement: Track and reward achievements
-*  - handleBattleGauntlet: Consecutive battle challenges
-*  - advanceBattleGauntlet: Progress to next gauntlet battle
-*  - handleBattleArena: Repeatable arena battles with rankings
-*  - recordArenaWin: Record arena victory
-*  - handleTrainingBattle: Practice battles for story
-*  - recordTrainingAttempt: Track training attempts
-*  - handleBattleChallenge: Special condition battles
-*  - handleSurvivalBattle: Win streak battle system
-*  - recordSurvivalResult: Record survival win/loss
-*  - handleRematchTracker: Manage trainer rematches
-*  - recordRematch: Record rematch completion
-*
-* Usage in npcs.ts:
-*   Define NPCs with action types that match these handlers.
-*   The handler will be automatically called by commands.ts when
-*   the player interacts with the NPC.
 */
 
 import type { PlayerData, RPGPokemon, NPCAction } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
+// [NEW] Import data lists
+import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './data';
 
 /**
  * Utility: Parse timestamp from flag string
- * Flags follow format: prefix_suffix_timestamp
  */
 function parseTimestampFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
@@ -90,7 +23,6 @@ function parseTimestampFromFlag(flagStr: string): number {
 
 /**
  * Utility: Parse numeric value from flag string
- * Flags follow format: prefix_suffix_number
  */
 function parseNumberFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
@@ -121,30 +53,14 @@ export function handleFossilRevival(
 		return { success: false, message: `You need ₽${revivalCost} to revive this fossil.` };
 	}
 
-	// Map fossils to Pokemon
-	const fossilMap: Record<string, { species: string, level: number }> = {
-		'helixfossil': { species: 'omanyte', level: 20 },
-		'domefossil': { species: 'kabuto', level: 20 },
-		'oldamber': { species: 'aerodactyl', level: 20 },
-		'rootfossil': { species: 'lileep', level: 20 },
-		'clawfossil': { species: 'anorith', level: 20 },
-		'skullfossil': { species: 'cranidos', level: 20 },
-		'armorfossil': { species: 'shieldon', level: 20 },
-		'coverfossil': { species: 'tirtouga', level: 20 },
-		'plumefossil': { species: 'archen', level: 20 },
-		'jawfossil': { species: 'tyrunt', level: 20 },
-		'sailfossil': { species: 'amaura', level: 20 },
-	};
-
-	const fossilData = fossilMap[fossilItemId];
+    // [REFACTOR] Use external map
+	const fossilData = FOSSIL_REVIVAL_MAP[fossilItemId];
 	if (!fossilData) {
 		return { success: false, message: 'Unknown fossil type.' };
 	}
 
-	// Create the Pokemon
 	const revivedPokemon = createPokemon(fossilData.species, fossilData.level);
 
-	// Remove fossil and deduct money
 	fossilItem.quantity -= 1;
 	if (fossilItem.quantity === 0) {
 		player.inventory.delete(fossilItemId);
@@ -171,7 +87,6 @@ export function handleDailyReward(
 		return { success: false, message: 'No rewards configured.' };
 	}
 
-	// Track last claim time using a special flag
 	const lastClaimFlag = `dailyreward_${npcId}_lastclaim`;
 	const lastClaimStr = Array.from(player.storyFlags).find(f => f.startsWith(lastClaimFlag));
 
@@ -191,7 +106,6 @@ export function handleDailyReward(
 		};
 	}
 
-	// Calculate streak (days logged in)
 	const streakFlag = `dailyreward_${npcId}_streak`;
 	const streakStr = Array.from(player.storyFlags).find(f => f.startsWith(streakFlag));
 	let streak = 1;
@@ -200,7 +114,6 @@ export function handleDailyReward(
 		player.storyFlags.delete(streakStr);
 	}
 
-	// Give rewards based on streak
 	const givenRewards: { itemId: string, quantity: number }[] = [];
 	for (const reward of action.rewards) {
 		if (!reward.days || streak >= reward.days) {
@@ -208,7 +121,6 @@ export function handleDailyReward(
 		}
 	}
 
-	// Update flags
 	if (lastClaimStr) player.storyFlags.delete(lastClaimStr);
 	player.storyFlags.add(`${lastClaimFlag}_${now}`);
 	player.storyFlags.add(`${streakFlag}_${streak}`);
@@ -262,7 +174,7 @@ export function handleBattleRequest(
 }
 
 /**
- * Mark battle as completed (call after battle ends)
+ * Mark battle as completed
  */
 export function completeBattleRequest(player: PlayerData, npcId: string): void {
 	const cooldownFlag = `battlerequest_${npcId}_lastbattle`;
@@ -302,7 +214,6 @@ export function handleQuestChain(
 
 	const stageInfo = action.questStages[currentStage];
 
-	// Check if requirements are met
 	if (stageInfo.requiredFlag && !player.storyFlags.has(stageInfo.requiredFlag)) {
 		return {
 			success: false,
@@ -320,9 +231,6 @@ export function handleQuestChain(
 	};
 }
 
-/**
- * Advance quest to next stage
- */
 export function advanceQuestStage(player: PlayerData, questId: string): void {
 	const questFlag = `quest_${questId}_stage`;
 	const questStageStr = Array.from(player.storyFlags).find(f => f.startsWith(questFlag));
@@ -338,7 +246,6 @@ export function advanceQuestStage(player: PlayerData, questId: string): void {
 
 /**
  * Item Craft Action
- * Combine items to create new items
  */
 export function handleItemCraft(
 	player: PlayerData,
@@ -351,7 +258,6 @@ export function handleItemCraft(
 
 	const recipe = action.recipes[recipeIndex];
 
-	// Check if player has all inputs
 	for (const input of recipe.inputs) {
 		const item = player.inventory.get(input.itemId);
 		if (!item || item.quantity < input.quantity) {
@@ -363,7 +269,6 @@ export function handleItemCraft(
 		}
 	}
 
-	// Remove inputs
 	for (const input of recipe.inputs) {
 		const item = player.inventory.get(input.itemId)!;
 		item.quantity -= input.quantity;
@@ -381,7 +286,6 @@ export function handleItemCraft(
 
 /**
  * Berry Plant Action
- * Plant berries that grow over time
  */
 export function handleBerryPlant(
 	player: PlayerData,
@@ -398,19 +302,17 @@ export function handleBerryPlant(
 		return { success: false, message: 'You do not have that berry.' };
 	}
 
-	// Check if already planted
 	const plantFlag = `berryplant_${npcId}_planted`;
 	if (Array.from(player.storyFlags).some(f => f.startsWith(plantFlag))) {
 		return { success: false, message: 'A berry is already growing here!' };
 	}
 
-	// Plant the berry
 	berry.quantity -= 1;
 	if (berry.quantity === 0) {
 		player.inventory.delete(berryId);
 	}
 
-	const growthTime = action.growthTime || 48; // hours
+	const growthTime = action.growthTime || 48;
 	const readyTime = Date.now() + (growthTime * 60 * 60 * 1000);
 	player.storyFlags.add(`${plantFlag}_${readyTime}`);
 
@@ -420,9 +322,6 @@ export function handleBerryPlant(
 	};
 }
 
-/**
- * Check and harvest berry if ready
- */
 export function checkBerryHarvest(
 	player: PlayerData,
 	action: NPCAction,
@@ -455,7 +354,6 @@ export function checkBerryHarvest(
 
 /**
  * Pokemon Grooming Action
- * Groom Pokemon to increase friendship
  */
 export function handlePokemonGrooming(
 	player: PlayerData,
@@ -496,12 +394,11 @@ export function handleFortuneTeller(
 		return { success: false, message: 'This fortune is not available.' };
 	}
 
-	const cost = 1000; // Fixed cost for fortune
+	const cost = 1000;
 	if (player.money < cost) {
 		return { success: false, message: `A fortune reading costs ₽${cost}.` };
 	}
 
-	// Check if fortune is already active
 	const fortuneFlag = `fortune_${fortuneType}_active`;
 	const existingFortune = Array.from(player.storyFlags).find(f => f.startsWith(fortuneFlag));
 	if (existingFortune) {
@@ -510,26 +407,20 @@ export function handleFortuneTeller(
 
 	player.money -= cost;
 
-	const duration = action.fortuneDuration || 24; // hours
+	const duration = action.fortuneDuration || 24;
 	const expiryTime = Date.now() + (duration * 60 * 60 * 1000);
 	player.storyFlags.add(`${fortuneFlag}_${expiryTime}`);
 
-	const fortunes: Record<string, string> = {
-		'luck': 'Your luck will shine today! Shiny encounter rate increased!',
-		'battle': 'Victory awaits you! Battle rewards increased!',
-		'catch': 'The Pokemon will come to you! Catch rate increased!',
-	};
+    // [REFACTOR] Use external messages
+	const fortuneMsg = FORTUNE_TELLER_MESSAGES[fortuneType] || 'Your future looks bright!';
 
 	return {
 		success: true,
 		message: `Fortune told! Effect lasts ${duration} hours.`,
-		fortune: fortunes[fortuneType] || 'Your future looks bright!',
+		fortune: fortuneMsg,
 	};
 }
 
-/**
- * Check if fortune is active
- */
 export function checkActiveFortune(player: PlayerData, fortuneType: string): boolean {
 	const fortuneFlag = `fortune_${fortuneType}_active`;
 	const fortuneStr = Array.from(player.storyFlags).find(f => f.startsWith(fortuneFlag));
@@ -549,7 +440,6 @@ export function checkActiveFortune(player: PlayerData, fortuneType: string): boo
 
 /**
  * Pokemon Breeder Action
- * Breed Pokemon to produce eggs (simplified)
  */
 export function handlePokemonBreeder(
 	player: PlayerData,
@@ -562,7 +452,6 @@ export function handlePokemonBreeder(
 		return { success: false, message: `Breeding costs ₽${cost}.` };
 	}
 
-	// Check genders
 	if (pokemon1.gender === pokemon2.gender && pokemon1.gender !== 'N') {
 		return { success: false, message: 'These Pokemon cannot breed together (same gender).' };
 	}
@@ -571,7 +460,6 @@ export function handlePokemonBreeder(
 		return { success: false, message: 'These Pokemon cannot breed together (both genderless).' };
 	}
 
-	// Check species compatibility (simplified - same evolution line)
 	const species1 = Dex.species.get(pokemon1.species);
 	const species2 = Dex.species.get(pokemon2.species);
 
@@ -581,7 +469,6 @@ export function handlePokemonBreeder(
 
 	player.money -= cost;
 
-	// Determine egg species (always the female's species, or the non-Ditto species)
 	let eggSpecies = pokemon1.species;
 	if (pokemon1.species === 'Ditto') eggSpecies = pokemon2.species;
 	if (pokemon2.species === 'Ditto') eggSpecies = pokemon1.species;
@@ -597,7 +484,6 @@ export function handlePokemonBreeder(
 
 /**
  * Move Relearner Action
- * Relearn moves
  */
 export function handleMoveRelearner(
 	player: PlayerData,
@@ -610,12 +496,10 @@ export function handleMoveRelearner(
 		return { success: false, message: `Move relearning costs ₽${cost} per move.` };
 	}
 
-	// Check if Pokemon already knows this move
 	if (pokemon.moves.some(m => m.id === moveId)) {
 		return { success: false, message: `${pokemon.nickname} already knows this move!` };
 	}
 
-	// Check if move is in learnset
 	const species = Dex.species.get(pokemon.species);
 	const learnset = species.learnset;
 
@@ -638,7 +522,6 @@ export function handleMoveRelearner(
 
 /**
  * Ability Capsule Action
- * Change Pokemon's ability
  */
 export function handleAbilityCapsule(
 	player: PlayerData,
@@ -651,13 +534,12 @@ export function handleAbilityCapsule(
 	}
 
 	const species = Dex.species.get(pokemon.species);
-	const abilities = Object.values(species.abilities).filter(a => a !== 'H'); // Exclude hidden ability
+	const abilities = Object.values(species.abilities).filter(a => a !== 'H');
 
 	if (abilities.length <= 1) {
 		return { success: false, message: 'This Pokemon has only one regular ability!' };
 	}
 
-	// Find the other ability
 	const currentAbility = pokemon.ability;
 	const newAbility = abilities.find(a => a !== currentAbility) || abilities[0];
 
@@ -673,7 +555,6 @@ export function handleAbilityCapsule(
 
 /**
  * EV Trainer Action
- * Train specific EVs
  */
 export function handleEVTrainer(
 	player: PlayerData,
@@ -693,14 +574,12 @@ export function handleEVTrainer(
 		return { success: false, message: `Training ${evAmount} EVs costs ₽${totalCost}.` };
 	}
 
-	// Validate stat is a valid EV key
 	type EVKey = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 	const validEVKeys: EVKey[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 	if (!validEVKeys.includes(stat as EVKey)) {
 		return { success: false, message: 'Invalid stat specified.' };
 	}
 
-	// Check current EVs
 	const evKey = stat as EVKey;
 	const currentEVs = pokemon.evs[evKey] || 0;
 	const totalEVs = Object.values(pokemon.evs).reduce((sum, ev) => sum + ev, 0);
@@ -730,7 +609,6 @@ export function handleEVTrainer(
 
 /**
  * IV Checker Action
- * Check Pokemon's IVs
  */
 export function handleIVChecker(
 	pokemon: RPGPokemon
@@ -744,7 +622,6 @@ export function handleIVChecker(
 
 /**
  * Mystery Gift Action
- * Distribute special mystery gifts
  */
 export function handleMysteryGift(
 	player: PlayerData,
@@ -771,7 +648,6 @@ export function handleMysteryGift(
 
 /**
  * Lottery Action
- * Run lottery system with prizes
  */
 export function handleLottery(
 	player: PlayerData,
@@ -788,7 +664,6 @@ export function handleLottery(
 
 	player.money -= ticketCost;
 
-	// Determine prize based on chances
 	const roll = Math.random();
 	let cumulativeChance = 0;
 
@@ -811,7 +686,6 @@ export function handleLottery(
 
 /**
  * Masseuse Action
- * Give Pokemon massages for friendship
  */
 export function handleMasseuse(
 	player: PlayerData,
@@ -840,7 +714,6 @@ export function handleMasseuse(
 
 /**
  * Hair Cutter Action
- * Give Pokemon haircuts for friendship
  */
 export function handleHairCutter(
 	player: PlayerData,
@@ -869,7 +742,6 @@ export function handleHairCutter(
 
 /**
  * Fishing Action
- * Give or use fishing rods
  */
 export function handleFishing(
 	player: PlayerData,
@@ -893,7 +765,6 @@ export function handleFishing(
 
 /**
  * Bike Shop Action
- * Purchase bikes
  */
 export function handleBikeShop(
 	player: PlayerData,
@@ -917,7 +788,6 @@ export function handleBikeShop(
 
 /**
  * Coin Exchange Action
- * Exchange money for coins or buy prizes
  */
 export function handleCoinExchange(
 	player: PlayerData,
@@ -927,7 +797,7 @@ export function handleCoinExchange(
 ): { success: boolean, message: string, coins?: number, item?: string } {
 	if (mode === 'buy' && typeof itemIdOrAmount === 'number') {
 		const coinsToBuy = itemIdOrAmount;
-		const rate = action.coinRate || 50; // Default: 50 coins per money unit
+		const rate = action.coinRate || 50;
 		const cost = Math.ceil(coinsToBuy / rate);
 
 		if (player.money < cost) {
@@ -942,7 +812,6 @@ export function handleCoinExchange(
 			return { success: false, message: 'That item is not available.' };
 		}
 
-		// Assume coins are tracked in player inventory or flags (implementation detail)
 		return {
 			success: true,
 			message: `You redeemed ${prize.itemId} for ${prize.coinCost} coins!`,
@@ -955,7 +824,6 @@ export function handleCoinExchange(
 
 /**
  * Tutor Combo Action
- * Teach multiple moves
  */
 export function handleTutorCombo(
 	player: PlayerData,
@@ -982,7 +850,6 @@ export function handleTutorCombo(
 
 /**
  * Apricorn Crafter Action
- * Craft Pokeballs from Apricorns
  */
 export function handleApricornCrafter(
 	player: PlayerData,
@@ -1010,7 +877,6 @@ export function handleApricornCrafter(
 
 /**
  * Pokeathlon Action
- * Participate in Pokeathlon events
  */
 export function handlePokeathlon(
 	player: PlayerData,
@@ -1033,7 +899,6 @@ export function handlePokeathlon(
 
 /**
  * Berry Blender Action
- * Blend berries together
  */
 export function handleBerryBlender(
 	player: PlayerData,
@@ -1057,7 +922,6 @@ export function handleBerryBlender(
 
 /**
  * Pokeblock Mixer Action
- * Mix berries into Pokeblocks
  */
 export function handlePokeblockMixer(
 	player: PlayerData,
@@ -1082,7 +946,6 @@ export function handlePokeblockMixer(
 
 /**
  * Poffin Cooking Action
- * Cook berries into Poffins
  */
 export function handlePoffinCooking(
 	player: PlayerData,
@@ -1107,7 +970,6 @@ export function handlePoffinCooking(
 
 /**
  * Rival Battle Action
- * Trigger rival battles
  */
 export function handleRivalBattle(
 	player: PlayerData,
@@ -1124,7 +986,6 @@ export function handleRivalBattle(
 
 /**
  * Gym Rematch Action
- * Rematch gym leaders
  */
 export function handleGymRematch(
 	player: PlayerData,
@@ -1144,7 +1005,6 @@ export function handleGymRematch(
 
 /**
  * Shard Trader Action
- * Trade shards for moves or items
  */
 export function handleShardTrader(
 	player: PlayerData,
@@ -1166,7 +1026,6 @@ export function handleShardTrader(
 
 /**
  * Wing Collector Action
- * Collect wings for stat boosts
  */
 export function handleWingCollector(
 	player: PlayerData,
@@ -1186,7 +1045,6 @@ export function handleWingCollector(
 
 /**
  * Scale Collector Action
- * Collect scales (like Heart Scales) for rewards
  */
 export function handleScaleCollector(
 	player: PlayerData,
@@ -1201,7 +1059,6 @@ export function handleScaleCollector(
 
 /**
  * O-Power Action
- * Distribute O-Powers
  */
 export function handleOPower(
 	player: PlayerData,
@@ -1221,16 +1078,13 @@ export function handleOPower(
 
 /**
  * Heal Action
- * Heal all Pokemon in player's party to full health (like Pokemon Centers)
  */
 export function handleHeal(
 	player: PlayerData
 ): { success: boolean, message: string } {
-	// Heal all Pokemon in party
 	for (const pokemon of player.party) {
 		pokemon.hp = pokemon.maxHp;
 		pokemon.status = null;
-		// Restore PP for all moves
 		for (const move of pokemon.moves) {
 			const moveData = Dex.moves.get(move.id);
 			move.pp = moveData.pp || 5;
@@ -1245,14 +1099,12 @@ export function handleHeal(
 
 /**
  * Choose Starter Action
- * Handle starter Pokemon selection (simplified single-step like Pokemon games)
  */
 export function handleChooseStarter(
 	player: PlayerData,
 	action: NPCAction,
 	selectedPokemon: string
 ): { success: boolean, message: string, pokemon?: RPGPokemon } {
-	// Check if player already has a starter
 	if (player.party.length > 0) {
 		return {
 			success: false,
@@ -1262,7 +1114,6 @@ export function handleChooseStarter(
 
 	const starterLevel = action.starterLevel || 5;
 
-	// Create the starter Pokemon
 	const starter = createPokemon(selectedPokemon, starterLevel);
 	player.party.push(starter);
 
@@ -1277,7 +1128,6 @@ export function handleChooseStarter(
 
 /**
  * Collection Quest Action
- * Quest to collect specific items for rewards
  */
 export function handleCollectionQuest(
 	player: PlayerData,
@@ -1288,13 +1138,11 @@ export function handleCollectionQuest(
 		return { success: false, message: 'No collection quest configured.' };
 	}
 
-	// Check if quest is already completed
 	const questFlag = `collection_${npcId}_completed`;
 	if (action.onceOnly && player.storyFlags.has(questFlag)) {
 		return { success: false, message: 'You have already completed this collection quest!' };
 	}
 
-	// Check if player has all required items
 	let hasAllItems = true;
 	let collectedCount = 0;
 
@@ -1318,7 +1166,6 @@ export function handleCollectionQuest(
 		};
 	}
 
-	// Remove items from inventory
 	for (const reqItem of action.requiredItems) {
 		const item = player.inventory.get(reqItem.itemId)!;
 		item.quantity -= reqItem.quantity;
@@ -1327,7 +1174,6 @@ export function handleCollectionQuest(
 		}
 	}
 
-	// Mark as completed
 	if (action.onceOnly) {
 		player.storyFlags.add(questFlag);
 	}
@@ -1343,7 +1189,6 @@ export function handleCollectionQuest(
 
 /**
  * Reputation Action
- * Manage reputation with factions/towns
  */
 export function handleReputation(
 	player: PlayerData,
@@ -1362,7 +1207,6 @@ export function handleReputation(
 		currentPoints = parseInt(repStr.split('_').pop() || '0');
 	}
 
-	// Determine reputation level
 	let level = 'Neutral';
 	if (currentPoints >= 1000) level = 'Exalted';
 	else if (currentPoints >= 750) level = 'Revered';
@@ -1377,9 +1221,6 @@ export function handleReputation(
 	};
 }
 
-/**
- * Add reputation points
- */
 export function addReputationPoints(
 	player: PlayerData,
 	factionId: string,
@@ -1400,7 +1241,6 @@ export function addReputationPoints(
 
 /**
  * Delivery Quest Action
- * Deliver items to another NPC
  */
 export function handleDeliveryQuest(
 	player: PlayerData,
@@ -1420,7 +1260,6 @@ export function handleDeliveryQuest(
 	}
 
 	if (isPickup) {
-		// Picking up the item to deliver
 		if (player.storyFlags.has(deliveryFlag)) {
 			return { success: false, message: 'You already have an active delivery!' };
 		}
@@ -1433,7 +1272,6 @@ export function handleDeliveryQuest(
 			targetNpcId: action.targetNpcId,
 		};
 	} else {
-		// Completing the delivery
 		if (!player.storyFlags.has(deliveryFlag)) {
 			return { success: false, message: 'You don\'t have a delivery for me!' };
 		}
@@ -1452,7 +1290,6 @@ export function handleDeliveryQuest(
 
 /**
  * Time-based Action
- * Actions available only at certain times
  */
 export function handleTimeBasedAction(
 	player: PlayerData,
@@ -1487,7 +1324,6 @@ export function handleTimeBasedAction(
 
 /**
  * Conditional Dialogue Action
- * NPCs with different dialogues based on player progress
  */
 export function handleConditionalDialogue(
 	player: PlayerData,
@@ -1501,9 +1337,7 @@ export function handleConditionalDialogue(
 		};
 	}
 
-	// Check conditions in order and return first matching dialogue
 	for (const condition of action.dialogueConditions) {
-		// Check badge count
 		if (condition.minBadges && player.obtainedBadges.length < condition.minBadges) {
 			continue;
 		}
@@ -1511,17 +1345,14 @@ export function handleConditionalDialogue(
 			continue;
 		}
 
-		// Check required flags
 		if (condition.requiredFlag && !player.storyFlags.has(condition.requiredFlag)) {
 			continue;
 		}
 
-		// Check prevented flags
 		if (condition.preventIfFlag && player.storyFlags.has(condition.preventIfFlag)) {
 			continue;
 		}
 
-		// Condition matched!
 		return {
 			success: true,
 			message: condition.dialogue,
@@ -1529,7 +1360,6 @@ export function handleConditionalDialogue(
 		};
 	}
 
-	// No conditions matched, use default
 	return {
 		success: true,
 		message: action.defaultDialogue || 'Hello!',
@@ -1539,7 +1369,6 @@ export function handleConditionalDialogue(
 
 /**
  * Escort Quest Action
- * Escort NPC to a location
  */
 export function handleEscortQuest(
 	player: PlayerData,
@@ -1561,7 +1390,6 @@ export function handleEscortQuest(
 	const isEscorting = player.storyFlags.has(escortFlag);
 
 	if (!isEscorting) {
-		// Start escort
 		player.storyFlags.add(escortFlag);
 		return {
 			success: true,
@@ -1571,7 +1399,6 @@ export function handleEscortQuest(
 			arrived: false,
 		};
 	} else {
-		// Check if at destination
 		if (currentLocation === action.escortDestination) {
 			player.storyFlags.delete(escortFlag);
 			if (action.onceOnly) {
@@ -1598,7 +1425,6 @@ export function handleEscortQuest(
 
 /**
  * Achievement Tracker Action
- * Track and reward achievements
  */
 export function handleAchievement(
 	player: PlayerData,
@@ -1620,7 +1446,6 @@ export function handleAchievement(
 		};
 	}
 
-	// Check achievement requirements
 	if (achievement.requiredFlag && !player.storyFlags.has(achievement.requiredFlag)) {
 		return {
 			success: false,
@@ -1629,7 +1454,6 @@ export function handleAchievement(
 		};
 	}
 
-	// Unlock achievement
 	player.storyFlags.add(achievementFlag);
 
 	return {
@@ -1642,7 +1466,6 @@ export function handleAchievement(
 
 /**
  * Battle Gauntlet Action
- * Challenge player to consecutive battles
  */
 export function handleBattleGauntlet(
 	player: PlayerData,
@@ -1680,9 +1503,6 @@ export function handleBattleGauntlet(
 	};
 }
 
-/**
- * Advance gauntlet to next battle
- */
 export function advanceBattleGauntlet(player: PlayerData, npcId: string): void {
 	const gauntletFlag = `gauntlet_${npcId}_battle`;
 	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
@@ -1698,7 +1518,6 @@ export function advanceBattleGauntlet(player: PlayerData, npcId: string): void {
 
 /**
  * Battle Arena Action
- * Repeatable arena battles with rankings
  */
 export function handleBattleArena(
 	player: PlayerData,
@@ -1717,7 +1536,6 @@ export function handleBattleArena(
 		wins = parseInt(winsStr.split('_').pop() || '0');
 	}
 
-	// Determine rank based on wins
 	let rank = 'Novice';
 	if (wins >= 50) rank = 'Champion';
 	else if (wins >= 30) rank = 'Master';
@@ -1725,7 +1543,6 @@ export function handleBattleArena(
 	else if (wins >= 10) rank = 'Veteran';
 	else if (wins >= 5) rank = 'Skilled';
 
-	// Select opponent based on wins
 	const opponentIndex = Math.min(Math.floor(wins / 5), action.arenaOpponents.length - 1);
 	const nextOpponent = action.arenaOpponents[opponentIndex];
 
@@ -1738,9 +1555,6 @@ export function handleBattleArena(
 	};
 }
 
-/**
- * Record arena win
- */
 export function recordArenaWin(player: PlayerData, npcId: string): void {
 	const winsFlag = `arena_${npcId}_wins`;
 	const winsStr = Array.from(player.storyFlags).find(f => f.startsWith(winsFlag));
@@ -1756,7 +1570,6 @@ export function recordArenaWin(player: PlayerData, npcId: string): void {
 
 /**
  * Training Battle Action
- * Practice battles for story progression
  */
 export function handleTrainingBattle(
 	player: PlayerData,
@@ -1775,7 +1588,7 @@ export function handleTrainingBattle(
 		attempts = parseInt(attemptsStr.split('_').pop() || '0');
 	}
 
-	const maxAttempts = action.maxAttempts || 999; // Default unlimited
+	const maxAttempts = action.maxAttempts || 999;
 	if (attempts >= maxAttempts) {
 		return {
 			success: false,
@@ -1794,9 +1607,6 @@ export function handleTrainingBattle(
 	};
 }
 
-/**
- * Record training attempt
- */
 export function recordTrainingAttempt(player: PlayerData, npcId: string): void {
 	const attemptsFlag = `training_${npcId}_attempts`;
 	const attemptsStr = Array.from(player.storyFlags).find(f => f.startsWith(attemptsFlag));
@@ -1812,7 +1622,6 @@ export function recordTrainingAttempt(player: PlayerData, npcId: string): void {
 
 /**
  * Battle Challenge Action
- * Special condition battles (no items, level cap, etc.)
  */
 export function handleBattleChallenge(
 	player: PlayerData,
@@ -1845,7 +1654,6 @@ export function handleBattleChallenge(
 
 /**
  * Survival Battle Action
- * Win streak battle system
  */
 export function handleSurvivalBattle(
 	player: PlayerData,
@@ -1872,7 +1680,6 @@ export function handleSurvivalBattle(
 		bestStreak = parseInt(bestStr.split('_').pop() || '0');
 	}
 
-	// Select opponent based on streak
 	const opponentIndex = Math.min(currentStreak, action.survivalOpponents.length - 1);
 	const nextOpponent = action.survivalOpponents[opponentIndex];
 
@@ -1885,9 +1692,6 @@ export function handleSurvivalBattle(
 	};
 }
 
-/**
- * Record survival win/loss
- */
 export function recordSurvivalResult(player: PlayerData, npcId: string, won: boolean): void {
 	const streakFlag = `survival_${npcId}_streak`;
 	const bestFlag = `survival_${npcId}_best`;
@@ -1922,7 +1726,6 @@ export function recordSurvivalResult(player: PlayerData, npcId: string, won: boo
 
 /**
  * Rematch Tracker Action
- * Track and manage trainer rematches
  */
 export function handleRematchTracker(
 	player: PlayerData,
@@ -1951,7 +1754,6 @@ export function handleRematchTracker(
 		};
 	}
 
-	// Scale difficulty based on rematches
 	const rematchLevel = (action.baseLevel || 50) + (timesDefeated * (action.levelIncrease || 5));
 
 	return {
@@ -1963,9 +1765,6 @@ export function handleRematchTracker(
 	};
 }
 
-/**
- * Record rematch completion
- */
 export function recordRematch(player: PlayerData, npcId: string): void {
 	const defeatedFlag = `rematch_${npcId}_defeated`;
 	const defeatedStr = Array.from(player.storyFlags).find(f => f.startsWith(defeatedFlag));
