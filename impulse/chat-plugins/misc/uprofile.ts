@@ -127,9 +127,9 @@ function formatOntime(time: number): string {
 }
 
 /**
- * Get status display with color and icon
+ * Get status display with color and icon, optionally with custom status
  */
-function getStatusDisplay(user: User | null): string {
+function getStatusDisplay(user: User | null, customStatus?: string): string {
 	let statusText = '';
 
 	if (!user) {
@@ -147,6 +147,11 @@ function getStatusDisplay(user: User | null): string {
 		default:
 			statusText = `<b style="color: green;">●&nbsp;Online</b>`;
 		}
+	}
+
+	// Append custom status in square brackets if provided
+	if (customStatus) {
+		statusText += ` - [${Chat.escapeHTML(customStatus)}]`;
 	}
 
 	return statusText;
@@ -185,13 +190,8 @@ export const commands: Chat.ChatCommands = {
 			// Info section (right side)
 			buf += '<td>';
 
-			// Status
-			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser)}</p>`;
-
-			// Custom status message under [status message]
-			if (profileData.customStatus) {
-				buf += `<p style="margin: 4px 0"><u>[status message]:</u> ${Chat.escapeHTML(profileData.customStatus)}</p>`;
-			}
+			// Status with custom status in brackets if available
+			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
 			// Registration date
 			if (profileData.registrationDate) {
