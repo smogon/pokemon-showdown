@@ -2848,8 +2848,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
-				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (pokemon.volatiles['commanding']) continue;
+				if (pokemon.volatiles['commanding']) continue; // Can't suppress a Tatsugiri inside of Dondozo already
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
