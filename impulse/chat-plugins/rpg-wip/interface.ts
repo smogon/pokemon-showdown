@@ -169,7 +169,6 @@ export interface PlayerData {
 	lastPokemonCenter?: string;
 	completedNPCActions: Set<string>;
 	battleTowerFloor: number;
-	battleTowerHighestFloor: number;
 }
 
 export interface BattleState {
