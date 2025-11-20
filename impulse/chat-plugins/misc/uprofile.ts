@@ -98,7 +98,11 @@ async function getUserProfileData(userid: string) {
 		const result = JSON.parse(rawResult);
 		if (result.registertime) {
 			const date = new Date(result.registertime * 1000);
-			data.registrationDate = date.toDateString();
+			const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+			const month = date.toLocaleString('en-US', { month: 'short' });
+			const day = String(date.getDate()).padStart(2, '0');
+			const year = date.getFullYear();
+			data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
 		}
 	} catch {
 		// Registration date not available
@@ -145,9 +149,9 @@ function getStatusDisplay(user: User | null, customStatus?: string): string {
 		}
 	}
 
-	// Append custom status if provided
+	// Append custom status in square brackets if provided
 	if (customStatus) {
-		statusText += ` - ${Chat.escapeHTML(customStatus)}`;
+		statusText += ` - [${Chat.escapeHTML(customStatus)}]`;
 	}
 
 	return statusText;
@@ -186,7 +190,7 @@ export const commands: Chat.ChatCommands = {
 			// Info section (right side)
 			buf += '<td>';
 
-			// Status with custom status integrated
+			// Status with custom status in brackets if available
 			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
 			// Registration date
