@@ -1,11 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Battle End-of-Turn (EOT) Effects
-*
-* This file contains all logic that happens after
-* all actions for the turn have been completed.
-*/
-
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
 import { getActiveSlots, getMove } from './utils';
@@ -21,16 +13,9 @@ import {
 	getStatMultiplier,
 } from './battle-core';
 
-/**
- * Main EOT orchestrator.
- * This function loops through effects in their correct priority order,
- * applying each effect to all active Pokemon before moving to the next.
- */
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
-	// TODO: Sort allSlots by speed (descending, Trick Room aware) for perfect accuracy
 
-	// --- EOT Priority 1: Perish Song & Future Sight ---
 	allSlots.forEach(slot => {
 		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
 			slot.perishSongCounter--;
@@ -98,30 +83,25 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
-	// --- EOT Priority 2: Reset Flags ---
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 		slot.isProtected = false;
 	}
 
-	// --- EOT Priority 3: Weather (Damage/Healing) ---
 	handleEndOfTurnWeather(battle, messageLog, allSlots);
 
-	// --- EOT Priority 4: Item Healing (Leftovers, Black Sludge-Heal) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTHealingItemEffects(slot, battle, messageLog);
 		}
 	}
 
-	// --- EOT Priority 5: Ability Healing (Aqua Ring, Ingrained, Wish) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTHealingEffects(slot, battle, messageLog);
 		}
 	}
 
-	// --- EOT Priority 6: Status Cure (Lum Berry) & Non-Healing Items ---
 	const lumCuredStatus = new Map<string, boolean>();
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
@@ -130,32 +110,28 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	// --- EOT Priority 7: Status Damage (Poison, Burn, Toxic) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0 && !lumCuredStatus.get(slot.pokemon.id)) {
 			applyEOTStatusDamage(slot, battle, messageLog);
 		}
 	}
 
-	// --- EOT Priority 8: Leech Seed ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTLeechSeedDamage(slot, battle, messageLog);
 		}
 	}
 
-	// --- EOT Priority 9: Volatile Status Damage (Curse, Nightmare, Trap) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTVolatileStatusDamage(slot, battle, messageLog);
 		}
 	}
 
-	// --- EOT Priority 10: Timers & Counters (Yawn, Taunt, Field Effects) ---
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			decrementEOTVolatileCounters(slot, battle, messageLog);
-			slot.isCharged = false; // Reset Charge
+			slot.isCharged = false;
 		}
 	}
 
@@ -400,9 +376,6 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 	}
 }
 
-/**
- * Applies healing items (Leftovers, Black Sludge-Heal).
- */
 export function applyEOTHealingItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return;
 
@@ -422,10 +395,6 @@ export function applyEOTHealingItemEffects(slot: ActivePokemonSlot, battle: Batt
 	}
 }
 
-/**
- * Applies status-inflicting items (Orbs), status-curing (Lum), and damage (Barb, Sludge-Damage).
- * Returns true if a Lum Berry cured a status.
- */
 export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (slot.pokemon.hp <= 0 || battle.magicRoomTurns > 0) return false;
 
@@ -447,7 +416,7 @@ export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: B
 		slot.status = null;
 		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
 		consumeBerry(slot, 'lumberry', messageLog);
-		return true; // Status was cured
+		return true;
 	}
 
 	if (pokemon.item === 'blacksludge') {
@@ -462,7 +431,7 @@ export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: B
 		}
 	}
 
-	return false; // Status was not cured by Lum Berry
+	return false;
 }
 
 export function applyEOTVolatileStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {

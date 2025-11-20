@@ -1,39 +1,22 @@
-/*
-* Pokemon Showdown
-* RPG NPC Actions Handler
-*
-* This file implements logic for all NPC action types.
-*/
-
 import type { PlayerData, RPGPokemon, NPCAction } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
-// [NEW] Import data lists
+
 import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './data';
 
-/**
- * Utility: Parse timestamp from flag string
- */
 function parseTimestampFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
 	const timestamp = parts[parts.length - 1];
 	return parseInt(timestamp) || 0;
 }
 
-/**
- * Utility: Parse numeric value from flag string
- */
 function parseNumberFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
 	const value = parts[parts.length - 1];
 	return parseInt(value) || 0;
 }
 
-/**
- * Fossil Revival Action
- * Revives a fossil item into a Pokemon
- */
 export function handleFossilRevival(
 	player: PlayerData,
 	action: NPCAction,
@@ -53,7 +36,6 @@ export function handleFossilRevival(
 		return { success: false, message: `You need ₽${revivalCost} to revive this fossil.` };
 	}
 
-    // [REFACTOR] Use external map
 	const fossilData = FOSSIL_REVIVAL_MAP[fossilItemId];
 	if (!fossilData) {
 		return { success: false, message: 'Unknown fossil type.' };
@@ -74,10 +56,6 @@ export function handleFossilRevival(
 	};
 }
 
-/**
- * Daily Reward Action
- * Gives daily rewards to players
- */
 export function handleDailyReward(
 	player: PlayerData,
 	action: NPCAction,
@@ -132,10 +110,6 @@ export function handleDailyReward(
 	};
 }
 
-/**
- * Battle Request Action
- * Challenge player to a battle with cooldown
- */
 export function handleBattleRequest(
 	player: PlayerData,
 	action: NPCAction,
@@ -173,9 +147,6 @@ export function handleBattleRequest(
 	};
 }
 
-/**
- * Mark battle as completed
- */
 export function completeBattleRequest(player: PlayerData, npcId: string): void {
 	const cooldownFlag = `battlerequest_${npcId}_lastbattle`;
 	const lastBattleStr = Array.from(player.storyFlags).find(f => f.startsWith(cooldownFlag));
@@ -184,10 +155,6 @@ export function completeBattleRequest(player: PlayerData, npcId: string): void {
 	player.storyFlags.add(`${cooldownFlag}_${Date.now()}`);
 }
 
-/**
- * Quest Chain Action
- * Multi-stage quest system
- */
 export function handleQuestChain(
 	player: PlayerData,
 	action: NPCAction,
@@ -244,9 +211,6 @@ export function advanceQuestStage(player: PlayerData, questId: string): void {
 	player.storyFlags.add(`${questFlag}_${currentStage + 1}`);
 }
 
-/**
- * Item Craft Action
- */
 export function handleItemCraft(
 	player: PlayerData,
 	action: NPCAction,
@@ -284,9 +248,6 @@ export function handleItemCraft(
 	};
 }
 
-/**
- * Berry Plant Action
- */
 export function handleBerryPlant(
 	player: PlayerData,
 	action: NPCAction,
@@ -352,9 +313,6 @@ export function checkBerryHarvest(
 	};
 }
 
-/**
- * Pokemon Grooming Action
- */
 export function handlePokemonGrooming(
 	player: PlayerData,
 	action: NPCAction,
@@ -380,10 +338,6 @@ export function handlePokemonGrooming(
 	};
 }
 
-/**
- * Fortune Teller Action
- * Tell fortunes that provide temporary boosts
- */
 export function handleFortuneTeller(
 	player: PlayerData,
 	action: NPCAction,
@@ -411,7 +365,6 @@ export function handleFortuneTeller(
 	const expiryTime = Date.now() + (duration * 60 * 60 * 1000);
 	player.storyFlags.add(`${fortuneFlag}_${expiryTime}`);
 
-    // [REFACTOR] Use external messages
 	const fortuneMsg = FORTUNE_TELLER_MESSAGES[fortuneType] || 'Your future looks bright!';
 
 	return {
@@ -438,9 +391,6 @@ export function checkActiveFortune(player: PlayerData, fortuneType: string): boo
 	return true;
 }
 
-/**
- * Pokemon Breeder Action
- */
 export function handlePokemonBreeder(
 	player: PlayerData,
 	action: NPCAction,
@@ -482,9 +432,6 @@ export function handlePokemonBreeder(
 	};
 }
 
-/**
- * Move Relearner Action
- */
 export function handleMoveRelearner(
 	player: PlayerData,
 	action: NPCAction,
@@ -520,9 +467,6 @@ export function handleMoveRelearner(
 	};
 }
 
-/**
- * Ability Capsule Action
- */
 export function handleAbilityCapsule(
 	player: PlayerData,
 	action: NPCAction,
@@ -553,9 +497,6 @@ export function handleAbilityCapsule(
 	};
 }
 
-/**
- * EV Trainer Action
- */
 export function handleEVTrainer(
 	player: PlayerData,
 	action: NPCAction,
@@ -607,9 +548,6 @@ export function handleEVTrainer(
 	};
 }
 
-/**
- * IV Checker Action
- */
 export function handleIVChecker(
 	pokemon: RPGPokemon
 ): { success: boolean, message: string, ivs: typeof pokemon.ivs } {
@@ -620,9 +558,6 @@ export function handleIVChecker(
 	};
 }
 
-/**
- * Mystery Gift Action
- */
 export function handleMysteryGift(
 	player: PlayerData,
 	action: NPCAction,
@@ -646,9 +581,6 @@ export function handleMysteryGift(
 	};
 }
 
-/**
- * Lottery Action
- */
 export function handleLottery(
 	player: PlayerData,
 	action: NPCAction
@@ -684,9 +616,6 @@ export function handleLottery(
 	};
 }
 
-/**
- * Masseuse Action
- */
 export function handleMasseuse(
 	player: PlayerData,
 	action: NPCAction,
@@ -712,9 +641,6 @@ export function handleMasseuse(
 	};
 }
 
-/**
- * Hair Cutter Action
- */
 export function handleHairCutter(
 	player: PlayerData,
 	action: NPCAction,
@@ -740,9 +666,6 @@ export function handleHairCutter(
 	};
 }
 
-/**
- * Fishing Action
- */
 export function handleFishing(
 	player: PlayerData,
 	action: NPCAction
@@ -763,9 +686,6 @@ export function handleFishing(
 	};
 }
 
-/**
- * Bike Shop Action
- */
 export function handleBikeShop(
 	player: PlayerData,
 	action: NPCAction
@@ -786,9 +706,6 @@ export function handleBikeShop(
 	};
 }
 
-/**
- * Coin Exchange Action
- */
 export function handleCoinExchange(
 	player: PlayerData,
 	action: NPCAction,
@@ -822,9 +739,6 @@ export function handleCoinExchange(
 	return { success: false, message: 'Invalid coin exchange operation.' };
 }
 
-/**
- * Tutor Combo Action
- */
 export function handleTutorCombo(
 	player: PlayerData,
 	action: NPCAction,
@@ -848,9 +762,6 @@ export function handleTutorCombo(
 	};
 }
 
-/**
- * Apricorn Crafter Action
- */
 export function handleApricornCrafter(
 	player: PlayerData,
 	action: NPCAction,
@@ -875,9 +786,6 @@ export function handleApricornCrafter(
 	};
 }
 
-/**
- * Pokeathlon Action
- */
 export function handlePokeathlon(
 	player: PlayerData,
 	action: NPCAction,
@@ -897,9 +805,6 @@ export function handlePokeathlon(
 	};
 }
 
-/**
- * Berry Blender Action
- */
 export function handleBerryBlender(
 	player: PlayerData,
 	action: NPCAction,
@@ -920,9 +825,6 @@ export function handleBerryBlender(
 	};
 }
 
-/**
- * Pokeblock Mixer Action
- */
 export function handlePokeblockMixer(
 	player: PlayerData,
 	action: NPCAction,
@@ -944,9 +846,6 @@ export function handlePokeblockMixer(
 	};
 }
 
-/**
- * Poffin Cooking Action
- */
 export function handlePoffinCooking(
 	player: PlayerData,
 	action: NPCAction,
@@ -968,9 +867,6 @@ export function handlePoffinCooking(
 	};
 }
 
-/**
- * Rival Battle Action
- */
 export function handleRivalBattle(
 	player: PlayerData,
 	action: NPCAction,
@@ -984,9 +880,6 @@ export function handleRivalBattle(
 	};
 }
 
-/**
- * Gym Rematch Action
- */
 export function handleGymRematch(
 	player: PlayerData,
 	action: NPCAction,
@@ -1003,9 +896,6 @@ export function handleGymRematch(
 	};
 }
 
-/**
- * Shard Trader Action
- */
 export function handleShardTrader(
 	player: PlayerData,
 	action: NPCAction,
@@ -1024,9 +914,6 @@ export function handleShardTrader(
 	};
 }
 
-/**
- * Wing Collector Action
- */
 export function handleWingCollector(
 	player: PlayerData,
 	action: NPCAction,
@@ -1043,9 +930,6 @@ export function handleWingCollector(
 	};
 }
 
-/**
- * Scale Collector Action
- */
 export function handleScaleCollector(
 	player: PlayerData,
 	action: NPCAction
@@ -1057,9 +941,6 @@ export function handleScaleCollector(
 	};
 }
 
-/**
- * O-Power Action
- */
 export function handleOPower(
 	player: PlayerData,
 	action: NPCAction,
@@ -1076,9 +957,6 @@ export function handleOPower(
 	};
 }
 
-/**
- * Heal Action
- */
 export function handleHeal(
 	player: PlayerData
 ): { success: boolean, message: string } {
@@ -1097,9 +975,6 @@ export function handleHeal(
 	};
 }
 
-/**
- * Choose Starter Action
- */
 export function handleChooseStarter(
 	player: PlayerData,
 	action: NPCAction,
@@ -1126,9 +1001,6 @@ export function handleChooseStarter(
 	};
 }
 
-/**
- * Collection Quest Action
- */
 export function handleCollectionQuest(
 	player: PlayerData,
 	action: NPCAction,
@@ -1187,9 +1059,6 @@ export function handleCollectionQuest(
 	};
 }
 
-/**
- * Reputation Action
- */
 export function handleReputation(
 	player: PlayerData,
 	action: NPCAction,
@@ -1239,9 +1108,6 @@ export function addReputationPoints(
 	player.storyFlags.add(`${repFlag}_${currentPoints}`);
 }
 
-/**
- * Delivery Quest Action
- */
 export function handleDeliveryQuest(
 	player: PlayerData,
 	action: NPCAction,
@@ -1288,9 +1154,6 @@ export function handleDeliveryQuest(
 	}
 }
 
-/**
- * Time-based Action
- */
 export function handleTimeBasedAction(
 	player: PlayerData,
 	action: NPCAction
@@ -1322,9 +1185,6 @@ export function handleTimeBasedAction(
 	};
 }
 
-/**
- * Conditional Dialogue Action
- */
 export function handleConditionalDialogue(
 	player: PlayerData,
 	action: NPCAction
@@ -1367,9 +1227,6 @@ export function handleConditionalDialogue(
 	};
 }
 
-/**
- * Escort Quest Action
- */
 export function handleEscortQuest(
 	player: PlayerData,
 	action: NPCAction,
@@ -1423,9 +1280,6 @@ export function handleEscortQuest(
 	}
 }
 
-/**
- * Achievement Tracker Action
- */
 export function handleAchievement(
 	player: PlayerData,
 	action: NPCAction,
@@ -1464,9 +1318,6 @@ export function handleAchievement(
 	};
 }
 
-/**
- * Battle Gauntlet Action
- */
 export function handleBattleGauntlet(
 	player: PlayerData,
 	action: NPCAction,
@@ -1516,9 +1367,6 @@ export function advanceBattleGauntlet(player: PlayerData, npcId: string): void {
 	player.storyFlags.add(`${gauntletFlag}_${currentBattle + 1}`);
 }
 
-/**
- * Battle Arena Action
- */
 export function handleBattleArena(
 	player: PlayerData,
 	action: NPCAction,
@@ -1568,9 +1416,6 @@ export function recordArenaWin(player: PlayerData, npcId: string): void {
 	player.storyFlags.add(`${winsFlag}_${wins + 1}`);
 }
 
-/**
- * Training Battle Action
- */
 export function handleTrainingBattle(
 	player: PlayerData,
 	action: NPCAction,
@@ -1620,9 +1465,6 @@ export function recordTrainingAttempt(player: PlayerData, npcId: string): void {
 	player.storyFlags.add(`${attemptsFlag}_${attempts + 1}`);
 }
 
-/**
- * Battle Challenge Action
- */
 export function handleBattleChallenge(
 	player: PlayerData,
 	action: NPCAction
@@ -1652,9 +1494,6 @@ export function handleBattleChallenge(
 	};
 }
 
-/**
- * Survival Battle Action
- */
 export function handleSurvivalBattle(
 	player: PlayerData,
 	action: NPCAction,
@@ -1724,9 +1563,6 @@ export function recordSurvivalResult(player: PlayerData, npcId: string, won: boo
 	player.storyFlags.add(`${bestFlag}_${bestStreak}`);
 }
 
-/**
- * Rematch Tracker Action
- */
 export function handleRematchTracker(
 	player: PlayerData,
 	action: NPCAction,

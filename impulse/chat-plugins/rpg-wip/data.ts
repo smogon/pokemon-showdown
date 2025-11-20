@@ -1,11 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Data
-*
-* This file contains static game data such as type charts, berry data,
-* starter Pokemon lists, and other gameplay constants.
-*/
-
 import type { Stats } from './interface';
 
 export const STARTER_POKEMON = {
@@ -55,7 +47,6 @@ export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEf
 	Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
 };
 
-// [NEW] Fossil Map moved from npc-actions.ts
 export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number }> = {
 	'helixfossil': { species: 'omanyte', level: 20 },
 	'domefossil': { species: 'kabuto', level: 20 },
@@ -68,10 +59,9 @@ export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number
 	'plumefossil': { species: 'archen', level: 20 },
 	'jawfossil': { species: 'tyrunt', level: 20 },
 	'sailfossil': { species: 'amaura', level: 20 },
-	// Add custom fossils here
+
 };
 
-// [NEW] Fortune Teller Messages moved from npc-actions.ts
 export const FORTUNE_TELLER_MESSAGES: Record<string, string> = {
 	'luck': 'Your luck will shine today! Shiny encounter rate increased!',
 	'battle': 'Victory awaits you! Battle rewards increased!',

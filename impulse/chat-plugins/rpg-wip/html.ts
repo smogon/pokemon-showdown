@@ -10,10 +10,6 @@ import { GameConfig } from './game-config';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
 
-// -------------------------------------------------------------------------------------
-// 1. Core Utilities & Data Helpers
-// -------------------------------------------------------------------------------------
-
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
 	if (expNeededForLevel <= 0) return 100;
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
@@ -90,17 +86,17 @@ function getSpriteFilename(speciesId: string): string {
 }
 
 function getSpriteUrl(pokemon: RPGPokemon, facing: 'front' | 'back' = 'front'): string {
-    const species = Dex.species.get(pokemon.species);
-    const filename = getSpriteFilename(species.id);
-    const shiny = pokemon.shiny;
+	const species = Dex.species.get(pokemon.species);
+	const filename = getSpriteFilename(species.id);
+	const shiny = pokemon.shiny;
 
-    if (facing === 'front') {
-        const base = shiny ? GameConfig.assets.shinySpriteBaseUrl : GameConfig.assets.spriteBaseUrl;
-        return `${base}${filename}.png`;
-    } else {
-        const base = shiny ? GameConfig.assets.shinySpriteBackUrl : GameConfig.assets.spriteBackUrl;
-        return `${base}${filename}.png`;
-    }
+	if (facing === 'front') {
+		const base = shiny ? GameConfig.assets.shinySpriteBaseUrl : GameConfig.assets.spriteBaseUrl;
+		return `${base}${filename}.png`;
+	} else {
+		const base = shiny ? GameConfig.assets.shinySpriteBackUrl : GameConfig.assets.spriteBackUrl;
+		return `${base}${filename}.png`;
+	}
 }
 
 export function generateBottomNavigation(): string {
@@ -158,10 +154,6 @@ function generateExpBar(pokemon: RPGPokemon): string {
 		`</div>`;
 }
 
-// -------------------------------------------------------------------------------------
-// 2. System & Main Menu HTML
-// -------------------------------------------------------------------------------------
-
 export function generateProfileHTML(player: PlayerData, notification?: string): string {
 	let progressText = 'Just starting out';
 	if (player.storyFlags.has('champion')) progressText = 'Champion!';
@@ -181,45 +173,45 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 	}
 
 	let html = `<div class="rpg-infobox">`;
-    if (notification) html += `<div class="rpg-notification">${notification}</div>`;
+	if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-scrollable-grid">` +
-			`<div class="rpg-summary-header">` +
-				`<div class="rpg-summary-info">` +
-					`<h3>${player.name}</h3>` +
-					`<p class="rpg-text-info"><strong>${progressText}</strong></p>` +
-				`</div>` +
-			`</div>` +
-			`<div class="rpg-grid-2col">` +
-				`<div>` +
-					`<h4>Trainer Card</h4>` +
-					`<table class="rpg-stats-table">` +
-						`<tr><td>Money</td><td class="rpg-stat-val">₽${player.money}</td></tr>` +
-						`<tr><td>Badges</td><td>${badgeHTML}</td></tr>` +
-						`<tr><td>Pokedex</td><td class="rpg-stat-val">0</td></tr>` + 
-						`<tr><td>Trainers Defeated</td><td class="rpg-stat-val">${player.defeatedTrainers.size}</td></tr>` +
-					`</table>` +
-				`</div>` +
-				`<div>` +
-					`<h4>Adventure</h4>` +
-					`<div class="rpg-memo-box">` +
-						`<p><strong>Location:</strong><br>${player.location}</p>` +
-						`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
-						`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
-						`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
-					`</div>` +
-				`</div>` +
-			`</div>` +
-			`<hr />` +
-			`<h4>System</h4>` +
-			`<p style="text-align:center">` +
-				`<button name="send" value="/rpg dbsave" class="button">💾 Save Game</button> ` +
-				`<button name="send" value="/rpg dbload" class="button">📁 Load Game</button> ` +
-				`<button name="send" value="/rpg dbdelete" class="button rpg-text-error">🗑️ Delete Save</button>` +
-			`</p>` +
+		`<div class="rpg-summary-header">` +
+		`<div class="rpg-summary-info">` +
+		`<h3>${player.name}</h3>` +
+		`<p class="rpg-text-info"><strong>${progressText}</strong></p>` +
+		`</div>` +
+		`</div>` +
+		`<div class="rpg-grid-2col">` +
+		`<div>` +
+		`<h4>Trainer Card</h4>` +
+		`<table class="rpg-stats-table">` +
+		`<tr><td>Money</td><td class="rpg-stat-val">₽${player.money}</td></tr>` +
+		`<tr><td>Badges</td><td>${badgeHTML}</td></tr>` +
+		`<tr><td>Pokedex</td><td class="rpg-stat-val">0</td></tr>` +
+		`<tr><td>Trainers Defeated</td><td class="rpg-stat-val">${player.defeatedTrainers.size}</td></tr>` +
+		`</table>` +
+		`</div>` +
+		`<div>` +
+		`<h4>Adventure</h4>` +
+		`<div class="rpg-memo-box">` +
+		`<p><strong>Location:</strong><br>${player.location}</p>` +
+		`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+		`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
+		`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
+		`</div>` +
+		`</div>` +
+		`</div>` +
+		`<hr />` +
+		`<h4>System</h4>` +
+		`<p style="text-align:center">` +
+		`<button name="send" value="/rpg dbsave" class="button">💾 Save Game</button> ` +
+		`<button name="send" value="/rpg dbload" class="button">📁 Load Game</button> ` +
+		`<button name="send" value="/rpg dbdelete" class="button rpg-text-error">🗑️ Delete Save</button>` +
+		`</p>` +
 		`</div>` +
 		generateBottomNavigation() +
-	`</div>`;
+		`</div>`;
 	return html;
 }
 
@@ -227,35 +219,35 @@ export function generateWelcomeHTML(): string {
 	return `<div class="rpg-infobox">` +
 		`<h2>Developer's Note</h2>` +
 		`<div class="rpg-memo-box" style="margin-bottom: 15px; line-height: 1.5;">` +
-			`<p>Welcome to the <strong>Impulse RPG System</strong>!</p>` +
-			`<p>This is a text-based adventure where your journey unfolds through chat commands. We are currently in an <strong>active testing phase</strong>.</p>` +
-			`<p><small>You may encounter bugs, placeholder text, or progress resets as we improve the game. Your feedback is valuable!</small></p>` +
+		`<p>Welcome to the <strong>Impulse RPG System</strong>!</p>` +
+		`<p>This is a text-based adventure where your journey unfolds through chat commands. We are currently in an <strong>active testing phase</strong>.</p>` +
+		`<p><small>You may encounter bugs, placeholder text, or progress resets as we improve the game. Your feedback is valuable!</small></p>` +
 		`</div>` +
 		`<div class="rpg-grid-3col-items">` +
-			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:10px;"><strong>New Game</strong><br><small>Start Fresh</small></button>` +
-			`<button name="send" value="/rpg dbload" class="button" style="height:auto; padding:10px;"><strong>Load Game</strong><br><small>Continue</small></button>` +
-			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:10px;"><strong>Battle Tower</strong><br><small>Roguelike</small></button>` +
+		`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:10px;"><strong>New Game</strong><br><small>Start Fresh</small></button>` +
+		`<button name="send" value="/rpg dbload" class="button" style="height:auto; padding:10px;"><strong>Load Game</strong><br><small>Continue</small></button>` +
+		`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:10px;"><strong>Battle Tower</strong><br><small>Roguelike</small></button>` +
 		`</div>` +
 		`</div>`;
 }
 
 export function generateModeSelectionHTML(): string {
-	let html = `<div class="rpg-infobox"><h2>Select a Mode</h2>` +
+	const html = `<div class="rpg-infobox"><h2>Select a Mode</h2>` +
 		`<p>Choose a game mode to begin:</p>` +
 		`<div class="rpg-grid-2col">` +
-			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:15px;">` +
-				`<span style="font-size:2em">📖</span><br><strong>Story Mode</strong><br><small>The classic adventure</small>` +
-			`</button>` +
-			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:15px;">` +
-				`<span style="font-size:2em">🗼</span><br><strong>Battle Tower</strong><br><small>Roguelike challenge</small>` +
-			`</button>` +
+		`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:15px;">` +
+		`<span style="font-size:2em">📖</span><br><strong>Story Mode</strong><br><small>The classic adventure</small>` +
+		`</button>` +
+		`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:15px;">` +
+		`<span style="font-size:2em">🗼</span><br><strong>Battle Tower</strong><br><small>Roguelike challenge</small>` +
+		`</button>` +
 		`</div>` +
 		`</div>`;
 	return html;
 }
 
 export function generateStoryModeStartHTML(): string {
-    const startLocId = GameConfig.startLocationId;
+	const startLocId = GameConfig.startLocationId;
 	const location = LOCATIONS[startLocId];
 
 	let labBuildingId = '';
@@ -271,12 +263,12 @@ export function generateStoryModeStartHTML(): string {
 	return `<div class="rpg-infobox">` +
 		`<h2>Welcome to ${location.name}!</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p>Your adventure is about to begin.</p>` +
-			`<p>To get your first Pokémon partner, head to the lab!</p>` +
+		`<p>Your adventure is about to begin.</p>` +
+		`<p>To get your first Pokémon partner, head to the lab!</p>` +
 		`</div>` +
 		`<p style="text-align:center">` +
-			(labBuildingId ? `<button name="send" value="/rpg building ${toID(labBuildingId)}" class="button">🔬 Enter the Lab</button> ` : '') +
-			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${location.name}</button>` +
+		(labBuildingId ? `<button name="send" value="/rpg building ${toID(labBuildingId)}" class="button">🔬 Enter the Lab</button> ` : '') +
+		`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${location.name}</button>` +
 		`</p>` +
 		`</div>`;
 }
@@ -287,8 +279,8 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-text-center">` +
-			`<h2><b>${location.name}</b></h2>` +
-			`<p><em>${location.description || ''}</em></p>` +
+		`<h2><b>${location.name}</b></h2>` +
+		`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
 	const btnStyle = 'margin: 3px;';
@@ -299,7 +291,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (zone) {
 				const icon = zone.battleType === 'double' ? '👥' : '🌿';
-                // [SAFETY] toID() applied to zoneId
+
 				html += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
 			}
 		}
@@ -320,7 +312,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			else if (building.type === 'department') icon = '🏬';
 			else if (building.type === 'gameCorner') icon = '🎰';
 
-            // [SAFETY] toID() applied to building.id
 			html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
 		html += `</p>`;
@@ -335,7 +326,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			for (const trainerId of availableTrainers) {
 				const trainerData = TRAINER_DATABASE[trainerId];
 				if (trainerData) {
-                    // [SAFETY] toID() applied to trainerId
 					html += `<button name="send" value="/rpg challenge ${toID(trainerId)}" class="button" style="${btnStyle}">🥊 ${trainerData.name}</button>`;
 				}
 			}
@@ -351,7 +341,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) canAccess = false;
 
 			if (canAccess) {
-                // [SAFETY] toID() applied to connection.id
 				html += `<button name="send" value="/rpg travel ${toID(connection.id)}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
 			} else {
 				html += `<button class="button disabled" disabled style="${btnStyle}">🔒 ${connection.name}</button>`;
@@ -368,13 +357,13 @@ export function generateDBDeleteConfirmHTML(): string {
 	return `<div class="rpg-infobox">` +
 		`<h2>Delete Save?</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; border:1px solid #e57373; background:rgba(229, 115, 115, 0.1);">` +
-			`<p class="rpg-text-error"><strong>⚠️ WARNING</strong></p>` +
-			`<p>This will <strong>permanently delete</strong> your save file from the database.</p>` +
-			`<p>This action cannot be undone.</p>` +
+		`<p class="rpg-text-error"><strong>⚠️ WARNING</strong></p>` +
+		`<p>This will <strong>permanently delete</strong> your save file from the database.</p>` +
+		`<p>This action cannot be undone.</p>` +
 		`</div>` +
 		`<p style="text-align:center; margin-top:15px;">` +
-			`<button name="send" value="/rpg dbdelete confirm" class="button rpg-text-error">Yes, Delete Forever</button> ` +
-			`<button name="send" value="/rpg profile" class="button">Cancel</button>` +
+		`<button name="send" value="/rpg dbdelete confirm" class="button rpg-text-error">Yes, Delete Forever</button> ` +
+		`<button name="send" value="/rpg profile" class="button">Cancel</button>` +
 		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
@@ -384,8 +373,8 @@ export function generateDBLoadNoSaveHTML(): string {
 	return `<div class="rpg-infobox">` +
 		`<h2>No Save Found</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center;">` +
-			`<p>You don't have a saved game in the database yet.</p>` +
-			`<p>Use the <strong>Save Game</strong> button on your profile first.</p>` +
+		`<p>You don't have a saved game in the database yet.</p>` +
+		`<p>Use the <strong>Save Game</strong> button on your profile first.</p>` +
 		`</div>` +
 		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
@@ -393,31 +382,27 @@ export function generateDBLoadNoSaveHTML(): string {
 }
 
 export function generateDBDeleteNoSaveHTML(): string {
-    return `<div class="rpg-infobox">` +
-        `<h2>No Save Found</h2>` +
-        `<div class="rpg-memo-box" style="text-align:center;">` +
-            `<p>You don't have a saved game to delete.</p>` +
-        `</div>` +
-        `<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
-        generateBottomNavigation() +
-        `</div>`;
-}
-
-export function generateDBDeleteSuccessHTML(): string {
 	return `<div class="rpg-infobox">` +
-		`<h2>Save Deleted</h2>` +
+		`<h2>No Save Found</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center;">` +
-			`<p>Your database save file has been deleted.</p>` +
-			`<p><small>Your current session is still active in memory.</small></p>` +
+		`<p>You don't have a saved game to delete.</p>` +
 		`</div>` +
 		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
 
-// -------------------------------------------------------------------------------------
-// 3. Party & Storage HTML
-// -------------------------------------------------------------------------------------
+export function generateDBDeleteSuccessHTML(): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Save Deleted</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+		`<p>Your database save file has been deleted.</p>` +
+		`<p><small>Your current session is still active in memory.</small></p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
 
 function generatePartyActionButtons(pokemon: RPGPokemon): string {
 	const itemButton = pokemon.item ?
@@ -454,7 +439,7 @@ function generateUnifiedStatsTable(pokemon: RPGPokemon): string {
 		const value = stat === 'hp' ? pokemon.maxHp : pokemon[stat];
 		const iv = pokemon.ivs[stat];
 		const ev = pokemon.evs[stat];
-		
+
 		const ivClass = iv === 31 ? 'rpg-text-success' : '';
 		const evClass = ev > 0 ? 'rpg-stat-ev' : 'rpg-text-muted';
 
@@ -465,10 +450,10 @@ function generateUnifiedStatsTable(pokemon: RPGPokemon): string {
 			`<td class="${evClass}">${ev}</td>` +
 			`</tr>`;
 	}
-	
+
 	const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 	html += `<tr><td colspan="3" style="text-align:right"><small>Total EVs:</small></td><td><strong>${totalEVs}/510</strong></td></tr>`;
-	
+
 	html += `</table>`;
 	return html;
 }
@@ -544,7 +529,7 @@ export function generatePartyScreenHTML(player: PlayerData, notification?: strin
 				const species = Dex.species.get(pokemon.species);
 				const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 				const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
-				
+
 				const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
 
 				const moveUpBtn = i > 0 ? `<button name="send" value="/rpg swapslot ${i} ${i - 1}" class="button rpg-party-move-btn" title="Move Up">↑</button>` : '';
@@ -552,21 +537,21 @@ export function generatePartyScreenHTML(player: PlayerData, notification?: strin
 
 				html += `<div class="rpg-party-card">` +
 					`<div class="rpg-party-main">` +
-						`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
-						`<div class="rpg-party-stats">` +
-							`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
-							`<small>Lvl ${pokemon.level}</small><br>` +
-							`${generateHPBar(pokemon)}` +
-							`<small class="rpg-text-muted">Item: ${itemText}</small>` +
-						`</div>` +
+					`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+					`<div class="rpg-party-stats">` +
+					`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+					`<small>Lvl ${pokemon.level}</small><br>` +
+					`${generateHPBar(pokemon)}` +
+					`<small class="rpg-text-muted">Item: ${itemText}</small>` +
+					`</div>` +
 					`</div>` +
 					`<div class="rpg-party-actions">` +
-						`<button name="send" value="/rpg summary ${pokemon.id}" class="button">Summary</button>` +
-						`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button">Deposit</button>` +
-						moveUpBtn +
-						moveDownBtn +
+					`<button name="send" value="/rpg summary ${pokemon.id}" class="button">Summary</button>` +
+					`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button">Deposit</button>` +
+					moveUpBtn +
+					moveDownBtn +
 					`</div>` +
-				`</div>`;
+					`</div>`;
 			} else {
 				html += `<div class="rpg-party-card rpg-party-empty">Empty Slot</div>`;
 			}
@@ -602,20 +587,20 @@ export function generatePCHTML(player: PlayerData, notification?: string): strin
 
 			html += `<div class="rpg-party-card">` +
 				`<div class="rpg-party-main">` +
-					`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
-					`<div class="rpg-party-stats">` +
-						`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
-						`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
-					`</div>` +
+				`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+				`<div class="rpg-party-stats">` +
+				`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+				`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
+				`</div>` +
 				`</div>` +
 				`<div class="rpg-party-actions">` +
-					`<button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button>` +
-					`<button name="send" value="/rpg summary ${pokemonId}" class="button">Summary</button>` +
+				`<button name="send" value="/rpg withdrawpc ${pokemonId}" class="button">Withdraw</button>` +
+				`<button name="send" value="/rpg summary ${pokemonId}" class="button">Summary</button>` +
 				`</div>` +
-			`</div>`;
+				`</div>`;
 		}
-		
-		html += `</div></div>`; 
+
+		html += `</div></div>`;
 	}
 
 	html += `<hr />` +
@@ -644,7 +629,7 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'p
 
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
-	
+
 	const typesHTML = species.types.map(t => `<span class="rpg-tag" style="background-color:#777;">${t}</span>`).join(' ');
 	const teraHTML = pokemon.teraType ? `<span class="rpg-tag rpg-tag-tera">Tera ${pokemon.teraType}</span>` : '';
 	const itemText = pokemon.item ? (ITEMS_DATABASE[pokemon.item]?.name || pokemon.item) : 'None';
@@ -664,49 +649,49 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'p
 	}
 	movesHTML += `</div>`;
 
-	const backButton = backLocation === 'pc' 
-		? `<button name="send" value="/rpg pc" class="button">← Back to PC</button>`
-		: `<button name="send" value="/rpg party" class="button">← Back to Party</button>`;
+	const backButton = backLocation === 'pc' ?
+		`<button name="send" value="/rpg pc" class="button">← Back to PC</button>` :
+		`<button name="send" value="/rpg party" class="button">← Back to Party</button>`;
 
-	let html = `<div class="rpg-infobox">` +
+	const html = `<div class="rpg-infobox">` +
 		`<div class="rpg-scrollable-grid">` +
-			`<div class="rpg-summary-header">` +
-				`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
-				`<div class="rpg-summary-info">` +
-					`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
-					`<p>Level ${pokemon.level}</p>` +
-					`${generateHPBar(pokemon)}` +
-					`${generateExpBar(pokemon)}` +
-				`</div>` +
-			`</div>` +
+		`<div class="rpg-summary-header">` +
+		`<div class="rpg-summary-sprite"><img src="${spriteUrl}" /></div>` +
+		`<div class="rpg-summary-info">` +
+		`<h3>${pokemon.nickname || pokemon.species} ${genderSymbol} ${shinySymbol}</h3>` +
+		`<p>Level ${pokemon.level}</p>` +
+		`${generateHPBar(pokemon)}` +
+		`${generateExpBar(pokemon)}` +
+		`</div>` +
+		`</div>` +
 
-			`<div class="rpg-grid-2col">` +
-				`<div>` +
-					`<h4>Battle Stats</h4>` +
-					generateUnifiedStatsTable(pokemon) +
-				`</div>` +
-				`<div>` +
-					`<h4>Trainer Memo</h4>` +
-					`<div class="rpg-memo-box">` +
-						`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
-						`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
-						`<p><strong>Item:</strong> ${itemText}</p>` +
-						`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
-						`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
-						`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
-						`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
-					`</div>` +
-				`</div>` +
-			`</div>` +
-			
-			`<hr />` +
-			`<h4>Known Moves</h4>` +
-			movesHTML +
-		
+		`<div class="rpg-grid-2col">` +
+		`<div>` +
+		`<h4>Battle Stats</h4>` +
+		generateUnifiedStatsTable(pokemon) +
+		`</div>` +
+		`<div>` +
+		`<h4>Trainer Memo</h4>` +
+		`<div class="rpg-memo-box">` +
+		`<p><strong>Nature:</strong> ${pokemon.nature}</p>` +
+		`<p><strong>Ability:</strong> ${pokemon.ability || 'Unknown'}</p>` +
+		`<p><strong>Item:</strong> ${itemText}</p>` +
+		`<p><strong>Types:</strong> ${typesHTML} ${teraHTML}</p>` +
+		`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
+		`<p><small>Caught In: ${ITEMS_DATABASE[pokemon.caughtIn]?.name || 'Poké Ball'}</small></p>` +
+		`<p><small>Friendship: ${pokemon.friendship}</small></p>` +
+		`</div>` +
+		`</div>` +
+		`</div>` +
+
+		`<hr />` +
+		`<h4>Known Moves</h4>` +
+		movesHTML +
+
 		`</div>` +
 
 		`<hr><center><p class="rpg-margin-top">${backButton}</p></center>` +
-	`</div>`;
+		`</div>`;
 
 	return html;
 }
@@ -714,13 +699,13 @@ export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'p
 export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: string[]): string {
 	const queueArray = player.pendingMoveLearnQueue;
 	if (!queueArray || queueArray.length === 0) return `<div class="rpg-infobox"><h2>Error</h2><p>No pending moves found.</p></div>`;
-	
+
 	const queue = queueArray[0];
 	if (!queue || queue.moveIds.length === 0) {
 		player.pendingMoveLearnQueue?.shift();
 		return `<div class="rpg-infobox"><h2>Error</h2><p>No pending moves found.</p></div>`;
 	}
-	
+
 	const pokemon = player.party.find(p => p.id === queue.pokemonId);
 	const newMove = getMove(queue.moveIds[0]);
 	if (!pokemon || !newMove.exists) {
@@ -736,8 +721,8 @@ export function generateMoveLearnHTML(player: PlayerData, additionalMessages?: s
 
 	html += `<h2>Move Learning</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p><strong>${pokemon.species}</strong> wants to learn <strong>${newMove.name}</strong>!</p>` +
-			`<p><small>But ${pokemon.species} already knows 4 moves.</small></p>` +
+		`<p><strong>${pokemon.species}</strong> wants to learn <strong>${newMove.name}</strong>!</p>` +
+		`<p><small>But ${pokemon.species} already knows 4 moves.</small></p>` +
 		`</div>` +
 		`<p>Select a move to forget:</p>`;
 
@@ -768,17 +753,12 @@ export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: stri
 			`<small>${move.type} | Power: ${move.basePower || '-'}</small>` +
 			`</button> `;
 	}
-	
+
 	html += `</div>` +
 		`<hr /><p style="text-align:center"><button name="send" value="/rpg items" class="button">Cancel</button></p>` +
 		`</div>`;
 	return html;
 }
-
-
-// -------------------------------------------------------------------------------------
-// 4. Item & Shop HTML
-// -------------------------------------------------------------------------------------
 
 export function generateInventoryHTML(player: PlayerData, category?: string): string {
 	let html = `<div class="rpg-infobox">` +
@@ -794,21 +774,21 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-            // [SAFETY] ID sanitization
-            const safeId = toID(itemId);
-			
+
+			const safeId = toID(itemId);
+
 			const cellContent = `<div class="rpg-item-container">` +
 				`<div class="rpg-item-header">` +
-					`<div class="rpg-item-details">` +
-						`<strong>${item.name}</strong><br>` +
-						`<small>Qty: ${item.quantity}</small>` +
-					`</div>` +
+				`<div class="rpg-item-details">` +
+				`<strong>${item.name}</strong><br>` +
+				`<small>Qty: ${item.quantity}</small>` +
+				`</div>` +
 				`</div>` +
 				`<div class="rpg-item-actions">` +
-					`<button name="send" value="/rpg useitem ${safeId}" class="button">Use</button> ` +
-					`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
+				`<button name="send" value="/rpg useitem ${safeId}" class="button">Use</button> ` +
+				`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
 				`</div>` +
-			`</div>`;
+				`</div>`;
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
 		}
@@ -858,20 +838,20 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
-            const safeId = toID(itemId);
+			const safeId = toID(itemId);
 
 			const cellContent = `<div class="rpg-item-container">` +
 				`<div class="rpg-item-header">` +
-					`<div class="rpg-item-details">` +
-						`<strong>${item.name}</strong><br>` +
-						`<span class="rpg-text-info">₽${price}</span>` +
-					`</div>` +
+				`<div class="rpg-item-details">` +
+				`<strong>${item.name}</strong><br>` +
+				`<span class="rpg-text-info">₽${price}</span>` +
+				`</div>` +
 				`</div>` +
 				`<div class="rpg-item-actions">` +
-					`<button name="send" value="/rpg buy ${safeId} 1" class="button">Buy 1</button> ` +
-					`<button name="send" value="/rpg buy ${safeId} 10" class="button">Buy 10</button>` +
+				`<button name="send" value="/rpg buy ${safeId} 1" class="button">Buy 1</button> ` +
+				`<button name="send" value="/rpg buy ${safeId} 10" class="button">Buy 10</button>` +
 				`</div>` +
-			`</div>`;
+				`</div>`;
 
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
@@ -898,32 +878,32 @@ export function generateSellMenuHTML(player: PlayerData, notification?: string):
 	}
 
 	html += `<h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
-	
+
 	let sellableItems = 0;
 	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [id, item] of player.inventory) {
-        const itemData = ITEMS_DATABASE[id];
+		const itemData = ITEMS_DATABASE[id];
 		const purchasePrice = itemData?.price || 0;
 
 		if (purchasePrice && item.category !== 'key') {
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
-            const safeId = toID(id);
+			const safeId = toID(id);
 
 			const cellContent = `<div class="rpg-item-container">` +
 				`<div class="rpg-item-header">` +
-					`<div class="rpg-item-details">` +
-						`<strong>${item.name}</strong> (x${item.quantity})<br>` +
-						`<small>Sell: ₽${sellPrice}</small>` +
-					`</div>` +
+				`<div class="rpg-item-details">` +
+				`<strong>${item.name}</strong> (x${item.quantity})<br>` +
+				`<small>Sell: ₽${sellPrice}</small>` +
+				`</div>` +
 				`</div>` +
 				`<div class="rpg-item-actions">` +
-					`<button name="send" value="/rpg sell ${safeId} 1" class="button">Sell 1</button> ` +
-					(item.quantity >= 10 ? `<button name="send" value="/rpg sell ${safeId} 10" class="button">Sell 10</button>` : '') +
+				`<button name="send" value="/rpg sell ${safeId} 1" class="button">Sell 1</button> ` +
+				(item.quantity >= 10 ? `<button name="send" value="/rpg sell ${safeId} 10" class="button">Sell 10</button>` : '') +
 				`</div>` +
-			`</div>`;
+				`</div>`;
 
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
@@ -936,12 +916,12 @@ export function generateSellMenuHTML(player: PlayerData, notification?: string):
 	} else {
 		html += `<p>You have no valuable items to sell.</p>`;
 	}
-	
+
 	html += `<p class="rpg-margin-top"><button name="send" value="/rpg shop" class="button">Back to Shop</button></p></div>`;
 	return html;
 }
 
-function generateSelectionCard(pokemon: RPGPokemon, actionButton: string, details: string = ''): string {
+function generateSelectionCard(pokemon: RPGPokemon, actionButton: string, details = ''): string {
 	const species = Dex.species.get(pokemon.species);
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
@@ -949,41 +929,36 @@ function generateSelectionCard(pokemon: RPGPokemon, actionButton: string, detail
 
 	return `<div class="rpg-party-card">` +
 		`<div class="rpg-party-main">` +
-			`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
-			`<div class="rpg-party-stats">` +
-				`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
-				`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small><br>` +
-				(details ? `<small>${details}</small>` : `<small class="rpg-text-muted">Item: ${itemText}</small>`) +
-			`</div>` +
+		`<div class="rpg-party-icon"><psicon pokemon="${species.id}" /></div>` +
+		`<div class="rpg-party-stats">` +
+		`<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol}${shinySymbol}<br>` +
+		`<small>Lvl ${pokemon.level} | HP: ${pokemon.hp}/${pokemon.maxHp}</small><br>` +
+		(details ? `<small>${details}</small>` : `<small class="rpg-text-muted">Item: ${itemText}</small>`) +
+		`</div>` +
 		`</div>` +
 		`<div class="rpg-party-actions">` +
-			actionButton +
+		actionButton +
 		`</div>` +
-	`</div>`;
+		`</div>`;
 }
 
 export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
 	let html = `<div class="rpg-infobox"><h2>Use ${itemName}</h2><p>Select a Pokemon to use this item on:</p>`;
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
 
-    const itemData = ITEMS_DATABASE[itemId];
-    const eff = itemData?.effects || {};
+	const itemData = ITEMS_DATABASE[itemId];
+	const eff = itemData?.effects || {};
 
 	for (const pokemon of player.party) {
 		let show = false;
 		let details = '';
 
-		if (eff.revive && pokemon.hp <= 0) { show = true; details = `<span class="rpg-text-error">Fainted</span>`; }
-		else if ((eff.healAmount || eff.healPercent) && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) { show = true; }
-		else if (eff.statusCure && pokemon.hp > 0 && pokemon.status) { show = true; details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`; }
-		else if ((eff.ppRestore || eff.ppRestoreAll) && pokemon.hp > 0) { show = true; }
-		else if (eff.evBoost && pokemon.hp > 0) {
+		if (eff.revive && pokemon.hp <= 0) { show = true; details = `<span class="rpg-text-error">Fainted</span>`; } else if ((eff.healAmount || eff.healPercent) && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) { show = true; } else if (eff.statusCure && pokemon.hp > 0 && pokemon.status) { show = true; details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`; } else if ((eff.ppRestore || eff.ppRestoreAll) && pokemon.hp > 0) { show = true; } else if (eff.evBoost && pokemon.hp > 0) {
 			const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 			if (totalEVs < 510) { show = true; details = `EVs: ${totalEVs}/510`; }
 		}
 
 		if (show) {
-            // [SAFETY] toID()
 			const btn = `<button name="send" value="/rpg useitem ${toID(itemId)} ${pokemon.id}" class="button">Use Here</button>`;
 			html += generateSelectionCard(pokemon, btn, details);
 		}
@@ -996,12 +971,12 @@ export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId:
 export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
 	let html = `<div class="rpg-infobox"><h2>Use ${itemName}</h2><p>Select a Pokémon to use this item on:</p>`;
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
-	
+
 	for (const pokemon of player.party) {
 		let canUse = true;
 		let details = '';
 
-        const itemData = ITEMS_DATABASE[itemId];
+		const itemData = ITEMS_DATABASE[itemId];
 		if (itemData?.effects?.levelBoost || itemData?.effects?.expBoost) {
 			if (pokemon.level >= 100) canUse = false;
 			details = `${pokemon.experience} / ${pokemon.expToNextLevel} EXP`;
@@ -1011,7 +986,6 @@ export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId:
 		}
 
 		if (canUse) {
-            // [SAFETY] toID()
 			const btn = `<button name="send" value="/rpg useitem ${toID(itemId)} ${pokemon.id}" class="button">Use Here</button>`;
 			html += generateSelectionCard(pokemon, btn, details);
 		}
@@ -1035,7 +1009,7 @@ export function generateGiveItemSelectionHTML(player: PlayerData): string {
 
 export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemon: RPGPokemon): string {
 	let html = `<div class="rpg-infobox"><h2>Give to ${pokemon.species}</h2><p>Select an item from your bag:</p>`;
-	
+
 	let itemsFound = false;
 	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
@@ -1043,19 +1017,18 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 	for (const [id, item] of player.inventory) {
 		if (item.category === 'held' || item.category === 'berry') {
 			itemsFound = true;
-			
-            // [SAFETY] toID()
+
 			const cellContent = `<div class="rpg-item-container">` +
 				`<div class="rpg-item-header">` +
-					`<div class="rpg-item-details">` +
-						`<strong>${item.name}</strong><br>` +
-						`<small>Qty: ${item.quantity}</small>` +
-					`</div>` +
+				`<div class="rpg-item-details">` +
+				`<strong>${item.name}</strong><br>` +
+				`<small>Qty: ${item.quantity}</small>` +
+				`</div>` +
 				`</div>` +
 				`<div class="rpg-item-actions">` +
-					`<button name="send" value="/rpg giveitem ${pokemon.id} ${toID(id)}" class="button">Give</button>` +
+				`<button name="send" value="/rpg giveitem ${pokemon.id} ${toID(id)}" class="button">Give</button>` +
 				`</div>` +
-			`</div>`;
+				`</div>`;
 
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
@@ -1068,10 +1041,10 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 	} else {
 		html += `<p>You have no holdable items in your bag.</p>`;
 	}
-	
+
 	html += `<hr /><p style="text-align:center"><button name="send" value="/rpg giveitem" class="button">Back to Pokémon</button></p></div>`;
 	return html;
-	}
+}
 
 export function generateTakeItemSelectionHTML(player: PlayerData): string {
 	let html = `<div class="rpg-infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
@@ -1094,7 +1067,6 @@ export function generateGiveItemPokemonSelectionHTML(player: PlayerData, itemId:
 	let html = `<div class="rpg-infobox"><h2>Give ${item.name}</h2><p>Select a Pokémon to give this item to:</p>`;
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
 	for (const pokemon of player.party) {
-        // [SAFETY] toID()
 		const btn = `<button name="send" value="/rpg giveitem ${pokemon.id} ${toID(itemId)}" class="button">Give Here</button>`;
 		html += generateSelectionCard(pokemon, btn);
 	}
@@ -1117,11 +1089,11 @@ export function generateMoveSelectionHTML(player: PlayerData, pokemonId: string,
 		const moveData = getMove(move.id);
 		const maxPP = moveData.pp || 5;
 		const isFull = move.pp >= maxPP;
-		
+
 		if (!isFull) canRestoreAny = true;
 
 		const btnClass = isFull ? 'button disabled' : 'button';
-        // [SAFETY] toID()
+
 		const btnAction = isFull ? '' : `name="send" value="/rpg restorepp ${pokemon.id} ${toID(move.id)} ${toID(itemId)}"`;
 		const statusText = isFull ? `<span class="rpg-text-success">Full</span>` : `${move.pp} / ${maxPP}`;
 
@@ -1147,10 +1119,6 @@ export function generateItemUseErrorHTML(message: string, itemId: string): strin
 export function generateEvolutionStoneErrorHTML(pokemonSpecies: string, itemId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box"><p class="rpg-text-error"><strong>It had no effect... (${pokemonSpecies} is not compatible with this item).</strong></p><p><button name="send" value="/rpg useitem ${toID(itemId)}" class="button">Try Again</button> <button name="send" value="/rpg items" class="button">Back to Items</button></p></div>`;
 }
-
-// -------------------------------------------------------------------------------------
-// 5. Battle UI Helpers
-// -------------------------------------------------------------------------------------
 
 function generatePokemonStatusTagsHTML(
 	slot: ActivePokemonSlot,
@@ -1340,7 +1308,6 @@ function generateBattleMoveSelectionHTML(
 
 			const teraParam = teraActive ? ' terastallize' : '';
 
-            // [SAFETY] toID() applied to move.id
 			const moveCommand = isDoubleBattle ?
 				`/rpg battleaction selecttarget ${slotIndex} ${toID(move.id)}${teraParam}` :
 				`/rpg battleaction move ${slotIndex} ${toID(move.id)} 2${teraParam}`;
@@ -1398,12 +1365,12 @@ function generateAvailablePokemonListHTML(
 		const hpBar = generateHPBar(pokemon);
 		const statusTag = pokemon.status ? `<span class="rpg-tag rpg-tag-${pokemon.status}">${pokemon.status.toUpperCase()}</span>` : '';
 
-		const buttonContent = 
+		const buttonContent =
 			`<div class="rpg-switch-icon"><img src="${spriteUrl}" /></div>` +
 			`<div class="rpg-switch-info">` +
-				`<strong>${pokemon.nickname || pokemon.species}</strong> ${statusTag}<br>` +
-				`<small>Lvl ${pokemon.level}</small>` +
-				`${hpBar}` +
+			`<strong>${pokemon.nickname || pokemon.species}</strong> ${statusTag}<br>` +
+			`<small>Lvl ${pokemon.level}</small>` +
+			`${hpBar}` +
 			`</div>`;
 
 		return `<button name="send" value="${commandPrefix} ${pokemon.id}" class="button rpg-switch-button">${buttonContent}</button>`;
@@ -1419,7 +1386,7 @@ function generateAvailablePokemonListHTML(
 			html += '</tr><tr>';
 		}
 	}
-	
+
 	html += '</tr></table>';
 	return html;
 }
@@ -1453,7 +1420,7 @@ function generateSharedBattlePokemonInfo(
 	html += `<div class="rpg-battle-status-line">${statusDisplay}</div>`;
 	return html;
 }
-	
+
 function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 	const weatherTags = generateWeatherTags(battle);
 	const terrainTags = generateTerrainTags(battle);
@@ -1632,12 +1599,11 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 
 	const targetButtons = validTargets.map(target => {
 		const hpPercent = Math.floor((target.slot!.pokemon.hp / target.slot!.pokemon.maxHp) * 100);
-		
-		const buttonContent = 
+
+		const buttonContent =
 			`<div class="rpg-move-name">${target.name}</div>` +
 			`<div class="rpg-move-info" style="text-align: center;">HP: ${hpPercent}%</div>`;
 
-        // [SAFETY] toID() applied to moveId
 		return `<button name="send" value="/rpg battleaction move ${String(targetSelection.attackerSlotIndex)} ${toID(targetSelection.moveId)} ${String(target.index)}${teraParam}" class="button rpg-move-button">${buttonContent}</button>`;
 	});
 
@@ -1656,11 +1622,6 @@ function generateBattleTargetSelection(battle: BattleState, targetSelection: { a
 	html += `<center><p class="rpg-margin-top"><button name="send" value="/rpg battleaction back" class="button">Cancel</button></p></center>`;
 	return html;
 }
-
-
-// -------------------------------------------------------------------------------------
-// 6. Main Battle UI
-// -------------------------------------------------------------------------------------
 
 function generateBattleHeader(battle: BattleState): string {
 	if (battle.battleType === 'battletower') {
@@ -1683,7 +1644,7 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		side: 'player' | 'opponent'
 	) => {
 		if (!slot || slot.pokemon.hp <= 0) {
-			return ''; 
+			return '';
 		}
 
 		const pokemon = slot.pokemon;
@@ -1719,8 +1680,8 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		return html;
 	};
 
-    const bgUrl = GameConfig.assets.battleBackgroundUrl;
-    
+	const bgUrl = GameConfig.assets.battleBackgroundUrl;
+
 	let html = `<div class="rpg-battle-ui" style="background: url('${bgUrl}') no-repeat center bottom !important; background-size: cover !important;">`;
 
 	html += generateGlobalBattleConditionsHTML(battle);
@@ -1748,11 +1709,11 @@ export function generateBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean,
-	scriptedEventId?: string 
+	scriptedEventId?: string
 ): string {
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const combinedLogs = [...messageLog, ...reversedBattleLog];
-	
+
 	const historyLogHTML = `<div class="rpg-battle-log">` +
 		(combinedLogs.length > 0 ? combinedLogs.join('<br>') : 'Battle started...') +
 		`</div>`;
@@ -1762,7 +1723,6 @@ export function generateBattleHTML(
 		if (battle.battleType !== 'battletower') {
 			let continueCommand = '/rpg explore';
 			if (battle.battleResult === 'victory' && scriptedEventId) {
-                // [SAFETY] toID()
 				continueCommand = `/rpg completeevent ${toID(scriptedEventId)}`;
 			}
 
@@ -1773,7 +1733,7 @@ export function generateBattleHTML(
 
 		return '<div class="rpg-infobox">' +
 			generateBattleHeader(battle) +
-			historyLogHTML + 
+			historyLogHTML +
 			actionHTML +
 			'</div>';
 	}
@@ -1883,7 +1843,7 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 
 export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Poke Ball</h2>`;
-	
+
 	const pokeBalls = [];
 	for (const [itemId, item] of player.inventory) {
 		if (item.category === 'pokeball' && item.quantity > 0) {
@@ -1899,9 +1859,8 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	} else {
 		const ballButtons = pokeBalls.map(ball => {
 			let command = '';
-			
-            // [SAFETY] toID()
-            const safeBallId = toID(ball.id);
+
+			const safeBallId = toID(ball.id);
 
 			if (isDoubleBattle && activeOpponents.length > 1) {
 				command = `/rpg battleaction selectcatchtarget ${safeBallId}`;
@@ -1915,11 +1874,11 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 			const filename = safeBallId.replace(/ball$/, '');
 			const spriteUrl = `${GameConfig.assets.itemIconUrl}${filename}.png`;
 
-			const buttonContent = 
+			const buttonContent =
 				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${ball.name}" /></div>` +
 				`<div class="rpg-switch-info">` +
-					`<strong>${ball.name}</strong><br>` +
-					`<small>x${ball.quantity}</small>` +
+				`<strong>${ball.name}</strong><br>` +
+				`<small>x${ball.quantity}</small>` +
 				`</div>`;
 
 			return `<button name="send" value="${command}" class="button rpg-catch-button">${buttonContent}</button>`;
@@ -1936,15 +1895,15 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 		}
 		html += '</tr></table>';
 	}
-	
+
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
 
 export function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Target</h2>`;
-    const item = ITEMS_DATABASE[ballId];
-    const ballName = item?.name || 'Poke Ball';
+	const item = ITEMS_DATABASE[ballId];
+	const ballName = item?.name || 'Poke Ball';
 	html += `<p>Choose which wild Pokémon to throw the ${ballName} at:</p>`;
 
 	let hasTargets = false;
@@ -1957,7 +1916,6 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 		const hpPercent = Math.floor((slot.pokemon.hp / slot.pokemon.maxHp) * 100);
 		const statusText = slot.status ? ` (${slot.status.toUpperCase()})` : '';
 
-        // [SAFETY] toID()
 		html += `<div class="rpg-card">` +
 			`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
 			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
@@ -1978,7 +1936,7 @@ export function generateRunHTML(zoneId: string): string {
 		`<h2>Got away safely!</h2>` +
 		`<p>You ran away from the wild Pokemon.</p>` +
 		`<p>` +
-        // [SAFETY] toID()
+
 		`<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button">Find Another</button>` +
 		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
 		`</p>` +
@@ -1996,7 +1954,7 @@ export function generateCatchSuccessHTML(
 	if (wasHealed) successMessage += `<p class="rpg-text-success"><small>${caughtPokemon.species} was fully healed!</small></p>`;
 	successMessage += `</div>`;
 
-	return `<div class="rpg-infobox">` + 
+	return `<div class="rpg-infobox">` +
 		`${successMessage}` +
 		`${generatePokemonInfoHTML(tempSlot, true)}` +
 		`<p style="text-align:center; margin-top:10px;">${caughtPokemon.species} has been sent to ${location}.</p>` +
@@ -2011,21 +1969,16 @@ export function generateMultipleOpponentsCatchErrorHTML(): string {
 	return `<div class="rpg-infobox rpg-menu-box"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 }
 
-// -------------------------------------------------------------------------------------
-// 7. Battle Tower HTML
-// -------------------------------------------------------------------------------------
-
 export function generateBattleTowerWelcomeHTML(floor: number): string {
 	let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
 		`<div class="rpg-memo-box" style="margin-bottom:15px;">` +
-			`<p><strong>Roguelike Challenge</strong></p>` +
-			`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
+		`<p><strong>Roguelike Challenge</strong></p>` +
+		`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
 		`</div>` +
 		`<h3>Select Format</h3>` +
 		`<div class="rpg-scrollable-grid"><div class="rpg-grid-2col">`;
 
 	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-        // [SAFETY] toID()
 		html += `<button name="send" value="/rpg battletower selectformat ${toID(formatId)}" class="button" style="height:auto; padding:10px; text-align:left;">` +
 			`<strong>${config.name}</strong><br>` +
 			`<small class="rpg-text-muted">${config.description}</small>` +
@@ -2044,12 +1997,12 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 
 	return `<div class="rpg-infobox"><h2>🗼 ${formatConfig.name}</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
-			`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
+		`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
+		`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
 		`</div>` +
 		`<p style="text-align:center">` +
-            // [SAFETY] toID()
-			`<button name="send" value="/rpg battletower beginfloor ${toID(format)}" class="button rpg-button-large">${btnText}</button>` +
+
+		`<button name="send" value="/rpg battletower beginfloor ${toID(format)}" class="button rpg-button-large">${btnText}</button>` +
 		`</p>` +
 		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">Back</button></p>` +
 		`</div>`;
@@ -2058,12 +2011,12 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 	return `<div class="rpg-infobox"><h2>🗼 Floor ${floor} Cleared!</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
-			`<p>Your team has been healed.</p>` +
-			`<p>Preparing new team for the next floor...</p>` +
+		`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
+		`<p>Your team has been healed.</p>` +
+		`<p>Preparing new team for the next floor...</p>` +
 		`</div>` +
 		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg battletower nextfloor" class="button">Next Floor (F${floor + 1}) →</button>` +
+		`<button name="send" value="/rpg battletower nextfloor" class="button">Next Floor (F${floor + 1}) →</button>` +
 		`</p>` +
 		`</div>`;
 }
@@ -2071,31 +2024,27 @@ export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 export function generateBattleTowerLossHTML(floor: number): string {
 	return `<div class="rpg-infobox"><h2>🗼 Challenge Failed</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-			`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
-			`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
+		`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
+		`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
 		`</div>` +
 		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
-			`<button name="send" value="/rpg start" class="button">Exit</button>` +
+		`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
+		`<button name="send" value="/rpg start" class="button">Exit</button>` +
 		`</p>` +
 		`</div>`;
 }
 
-// -------------------------------------------------------------------------------------
-// 8. NPC & Story Progression HTML
-// -------------------------------------------------------------------------------------
-
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
 	const species = Dex.species.get(speciesId);
 	if (!species.exists) return '';
-    const tempMon: any = { species: speciesId }; // partial for util
+	const tempMon: any = { species: speciesId };
 	const spriteUrl = getSpriteUrl(tempMon, 'front');
 
 	return `<div class="rpg-starter-card">` +
 		`<img src="${spriteUrl}" />` +
 		`<div class="rpg-starter-info">` +
-			`<strong>${species.name}</strong><br>` +
-			`<small class="rpg-text-muted">${species.types.join('/')}</small>` +
+		`<strong>${species.name}</strong><br>` +
+		`<small class="rpg-text-muted">${species.types.join('/')}</small>` +
 		`</div>` +
 		`<button name="send" value="${command}" class="button">Choose</button>` +
 		`</div>`;
@@ -2111,17 +2060,16 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Professor Oak's Lab</h2>` +
 		`<div class="rpg-memo-box">` +
-			`<p><strong>Oak:</strong> "${typeDescription}"</p>` +
-			`<p>Which ${typeTitle}-type Pokémon will you choose?</p>` +
+		`<p><strong>Oak:</strong> "${typeDescription}"</p>` +
+		`<p>Which ${typeTitle}-type Pokémon will you choose?</p>` +
 		`</div>` +
 		`<div class="rpg-grid-3col" style="margin-top:10px;">`;
 
 	for (const starterId of starters) {
-        // [SAFETY] toID()
 		const command = `/rpg selectstarter ${toID(starterId)}`;
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
-	
+
 	html += `</div>` +
 		`<p style="text-align:center; margin-top:15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p>` +
 		`</div>`;
@@ -2131,7 +2079,6 @@ export function generateStarterSelectionHTML(type: string, starters: string[]): 
 export function generateNPCSelectionHTML(availableNPCs: [string, { name: string }][]): string {
 	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
 	for (const [id, npc] of availableNPCs) {
-        // [SAFETY] toID()
 		html += `<button name="send" value="/rpg npc ${toID(id)}" class="button">💬 ${npc.name}</button> `;
 	}
 	html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
@@ -2143,13 +2090,12 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 	let html = `<div class="rpg-infobox">` +
 		`<h2>${npcName}</h2>` +
 		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
-			`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
-			`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
+		`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
+		`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
 		`</div>` +
 		`<div class="rpg-grid-3col">`;
 
 	for (const starterId of allStarters) {
-        // [SAFETY] toID()
 		const command = `/rpg starterchoice ${toID(npcId)} ${toID(starterId)}`;
 		html += generateStarterChoiceBoxHTML(starterId, command);
 	}
@@ -2160,7 +2106,7 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
-		
+
 	return html;
 }
 
@@ -2168,90 +2114,87 @@ export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesN
 	const pokemon = tempSlot.pokemon;
 	const species = Dex.species.get(pokemon.species);
 	const spriteUrl = getSpriteUrl(pokemon, 'front');
-	
+
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
 
 	return `<div class="rpg-infobox">` +
 		`<h2>Congratulations!</h2>` +
-		
+
 		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
-			`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
+		`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
 		`</div>` +
 
 		`<div class="rpg-summary-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">` +
-			`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
-				`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
-			`</div>` +
-			`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
-				`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
-				`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
-				`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
-			`</div>` +
+		`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
+		`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
+		`</div>` +
+		`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
+		`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
+		`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
+		`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
+		`</div>` +
 		`</div>` +
 
 		`<hr />` +
 
 		`<div class="rpg-memo-box" style="text-align: center; font-style: italic; margin-bottom: 15px;">` +
-			`<p>Your adventure begins now. Take good care of ${speciesName}!</p>` +
-			`<p>Head out into ${startingLocationName} and begin your journey!</p>` +
+		`<p>Your adventure begins now. Take good care of ${speciesName}!</p>` +
+		`<p>Head out into ${startingLocationName} and begin your journey!</p>` +
 		`</div>` +
 
 		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg explore" class="button rpg-button-large">Begin Your Adventure</button>` +
+		`<button name="send" value="/rpg explore" class="button rpg-button-large">Begin Your Adventure</button>` +
 		`</p>` +
-		
+
 		generateBottomNavigation() +
-	`</div>`;
+		`</div>`;
 }
 
 export function generateNPCStarterConfirmHTML(npcName: string, message: string, tempSlot: ActivePokemonSlot, speciesName: string): string {
 	const pokemon = tempSlot.pokemon;
 	const species = Dex.species.get(pokemon.species);
 	const spriteUrl = getSpriteUrl(pokemon, 'front');
-	
+
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
 
 	return `<div class="rpg-infobox">` +
 		`<h2>Congratulations!</h2>` +
-		
+
 		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
-			`<p><strong>${npcName}:</strong> "${message}"</p>` +
+		`<p><strong>${npcName}:</strong> "${message}"</p>` +
 		`</div>` +
 
 		`<div class="rpg-summary-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">` +
-			`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
-				`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
-			`</div>` +
-			`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
-				`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
-				`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
-				`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
-			`</div>` +
+		`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
+		`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
+		`</div>` +
+		`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
+		`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
+		`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
+		`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
+		`</div>` +
 		`</div>` +
 
 		`<hr />` +
 
 		`<div class="rpg-memo-box" style="text-align: center; font-style: italic; margin-bottom: 15px;">` +
-			`<p>You received <strong>${speciesName}</strong>!</p>` +
-			`<p>Take good care of your new partner.</p>` +
+		`<p>You received <strong>${speciesName}</strong>!</p>` +
+		`<p>Take good care of your new partner.</p>` +
 		`</div>` +
 
 		`<p style="text-align:center">` +
-			`<button name="send" value="/rpg explore" class="button rpg-button-large">Continue Adventure</button>` +
+		`<button name="send" value="/rpg explore" class="button rpg-button-large">Continue Adventure</button>` +
 		`</p>` +
-		
+
 		generateBottomNavigation() +
-	`</div>`;
+		`</div>`;
 }
 
-// -------------------------------------------------------------------------------------
-// 9. New Event & Interaction UI Handlers
-// -------------------------------------------------------------------------------------
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
-	
+
 	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
 	html += `<p>${message}</p>`;
 	html += `</div>`;
@@ -2262,33 +2205,28 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
 		});
 		html += `</div>`;
-	} 
-	else if (event.type === 'quiz' && event.answers) {
+	} else if (event.type === 'quiz' && event.answers) {
 		html += `<p><strong>Select an answer:</strong></p><div class="rpg-grid-2col">`;
 		event.answers.forEach((ans: string, idx: number) => {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${ans}</button> `;
 		});
 		html += `</div>`;
-	}
-	else if (event.type === 'moralchoice' && event.moralChoices) {
+	} else if (event.type === 'moralchoice' && event.moralChoices) {
 		html += `<div class="rpg-grid-2col">`;
 		event.moralChoices.forEach((choice: any, idx: number) => {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
 		});
 		html += `</div>`;
-	}
-	else if (event.type === 'branching' && event.pathOptions) {
+	} else if (event.type === 'branching' && event.pathOptions) {
 		html += `<div class="rpg-grid-2col">`;
 		event.pathOptions.forEach((path: any, idx: number) => {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${path.name}</button> `;
 		});
 		html += `</div>`;
-	}
-	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
-        // [SAFETY] toID()
+	} else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
 		let cmd = `/rpg scriptedbattle ${toID(event.id)}`;
 		let btnText = "⚔️ Battle!";
-		
+
 		if (event.type === 'bossbattle' && event.bossTrainerId) {
 			cmd = `/rpg challenge ${toID(event.bossTrainerId)} ${toID(event.id)}`;
 			btnText = "⚔️ Challenge Boss";
@@ -2300,25 +2238,22 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
-	} 
-	else if (['trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'].includes(event.type)) {
+	} else if (['trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'].includes(event.type)) {
 		const trainerId = event.nextOpponent || event.trainerId || event.gymLeaderId;
-		
-        if (trainerId) {
-            // [SAFETY] toID()
-            const cmd = `/rpg challenge ${toID(trainerId)} ${toID(event.id)}`;
-            html += `<p class="rpg-text-center">`;
-            html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Challenge!</button><br>`;
-            
-            if (event.type !== 'gauntletbattle') {
-                html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
-            }
-            html += `</p>`;
-        } else {
-            html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-        }
-	} 
-	else {
+
+		if (trainerId) {
+			const cmd = `/rpg challenge ${toID(trainerId)} ${toID(event.id)}`;
+			html += `<p class="rpg-text-center">`;
+			html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Challenge!</button><br>`;
+
+			if (event.type !== 'gauntletbattle') {
+				html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+			}
+			html += `</p>`;
+		} else {
+			html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+		}
+	} else {
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
 
@@ -2328,9 +2263,9 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 
 export function generateNPCInteractionHTML(npc: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
-    if (notification) {
-        html += `<div class="rpg-notification">${notification}</div>`;
-    }
+	if (notification) {
+		html += `<div class="rpg-notification">${notification}</div>`;
+	}
 
 	html += `<h2>${npc.name}</h2>` +
 		`<div class="rpg-memo-box"><p>"${npc.dialogue}"</p></div>`;
@@ -2339,63 +2274,57 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 
 	if (action) {
 		html += `<hr />`;
-		
+
 		if (action.type === 'itemcraft' && action.recipes) {
 			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
 			action.recipes.forEach((recipe: any, index: number) => {
 				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
 				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
-				
-                // [SAFETY] toID()
+
 				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
 				html += `<strong>${itemName}</strong> <small>(${inputs})</small>`;
 				html += `<button name="send" value="/rpg npcaction ${toID(npc.id)} ${index}" class="button rpg-button-float-right">Craft</button>`;
 				html += `</div>`;
 			});
 			html += `</div>`;
-		}
-		else if (action.type === 'fossilrevival' && action.fossils) {
+		} else if (action.type === 'fossilrevival' && action.fossils) {
 			html += `<p><strong>Select a Fossil to Revive:</strong></p><div class="rpg-grid-2col">`;
 			action.fossils.forEach((fossilId: string) => {
 				const fossilName = ITEMS_DATABASE[fossilId]?.name || fossilId;
-                // [SAFETY] toID()
+
 				html += `<button name="send" value="/rpg npcaction ${toID(npc.id)} ${toID(fossilId)}" class="button">🦴 ${fossilName}</button> `;
 			});
 			html += `</div>`;
-		}
-		else if (action.type === 'choosestarter') {
-            // [SAFETY] toID()
+		} else if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${toID(npc.id)}" class="button rpg-button-large">View Starters</button></p>`;
-		}
-		else {
+		} else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
 			else if (action.type === 'giveitem' || action.type === 'givepokemon') btnText = "✅ Accept Offer";
 			else if (action.type === 'battlerequest') btnText = "⚔️ Challenge";
-			
-            // [SAFETY] toID()
+
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg npcaction ${toID(npc.id)}" class="button">${btnText}</button></p>`;
 		}
 	}
 
 	html += `<hr /><p class="rpg-text-center"><button name="send" value="/rpg npc" class="button">Talk to Others</button> <button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 	html += generateBottomNavigation() + `</div>`;
-	
+
 	return html;
 }
 
 export function generatePokedexHTML(player: PlayerData): string {
 	const seenCount = player.pokedex ? player.pokedex.seen.size : 0;
 	const caughtCount = player.party.length + player.pc.size;
-	
+
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Pokédex</h2>` +
 		`<div class="rpg-grid-2col" style="text-align:center; margin-bottom:10px;">` +
-			`<div class="rpg-memo-box"><strong>Seen</strong><br><span style="font-size:1.5em">${seenCount}</span></div>` +
-			`<div class="rpg-memo-box"><strong>Owned</strong><br><span style="font-size:1.5em">${caughtCount}</span></div>` +
+		`<div class="rpg-memo-box"><strong>Seen</strong><br><span style="font-size:1.5em">${seenCount}</span></div>` +
+		`<div class="rpg-memo-box"><strong>Owned</strong><br><span style="font-size:1.5em">${caughtCount}</span></div>` +
 		`</div>` +
 		`<div class="rpg-memo-box" style="text-align:center;">` +
-			`<p><em>(Detailed Pokedex list view is coming soon!)</em></p>` +
+		`<p><em>(Detailed Pokedex list view is coming soon!)</em></p>` +
 		`</div>`;
 
 	html += generateBottomNavigation() + `</div>`;

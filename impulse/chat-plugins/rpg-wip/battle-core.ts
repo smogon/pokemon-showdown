@@ -11,9 +11,7 @@ import {
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
 } from './html';
-import { MANUAL_CATCH_RATES } from './MANUAL_CATCH_RATES';
-import { MANUAL_BASE_EXP } from './MANUAL_BASE_EXP';
-import { MANUAL_EV_YIELDS } from './MANUAL_EV_YIELDS';
+import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
 import {
 	INITIAL_STAT_STAGES,
@@ -255,9 +253,6 @@ export function handleDamagingMove(
 		if (defenderSlot.pokemon.hp <= 0) break;
 	}
 
-	// [!!!] FIX IMPLEMENTED [!!!]
-	// applySecondaryEffects is now called *after* the multi-hit loop has finished.
-	// We only apply secondary effects if the move was successful and the defender is still active.
 	if (moveWasSuccessful && defenderSlot.pokemon.hp > 0) {
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
@@ -1366,9 +1361,6 @@ export function applySecondaryEffects(
 	}
 }
 
-/**
- * Get the current types of a Pokemon, accounting for terastallization.
- */
 export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
 	if (slot?.terastallized) {
 		return [slot.terastallized];

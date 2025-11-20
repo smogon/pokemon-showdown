@@ -1,8 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Badge Data
-*/
-
 export interface BadgeInfo {
 	gymLeaderId: string;
 	badgeName: string;
@@ -10,16 +5,13 @@ export interface BadgeInfo {
 	description?: string;
 }
 
-/**
- * Complete list of badges in order
- */
 export const BADGES: BadgeInfo[] = [
-    {
-        gymLeaderId: 'youngsterjoey', // Defeating him awards this badge
-        badgeName: 'Rat Badge',
-        order: 1,
-        description: 'Awarded for defeating the Top Percentage Rattata.'
-    }
+	{
+		gymLeaderId: 'youngsterjoey',
+		badgeName: 'Rat Badge',
+		order: 1,
+		description: 'Awarded for defeating the Top Percentage Rattata.',
+	},
 ];
 
 export const TOTAL_BADGES = BADGES.length;
