@@ -98,7 +98,11 @@ async function getUserProfileData(userid: string) {
 		const result = JSON.parse(rawResult);
 		if (result.registertime) {
 			const date = new Date(result.registertime * 1000);
-			data.registrationDate = date.toDateString();
+			// Format as day, month, year for better readability
+			const day = date.getDate();
+			const month = date.getMonth() + 1; // getMonth() returns 0-11
+			const year = date.getFullYear();
+			data.registrationDate = `${day}, ${month}, ${year}`;
 		}
 	} catch {
 		// Registration date not available
@@ -123,9 +127,9 @@ function formatOntime(time: number): string {
 }
 
 /**
- * Get status display with color and icon, optionally with custom status
+ * Get status display with color and icon
  */
-function getStatusDisplay(user: User | null, customStatus?: string): string {
+function getStatusDisplay(user: User | null): string {
 	let statusText = '';
 
 	if (!user) {
@@ -143,11 +147,6 @@ function getStatusDisplay(user: User | null, customStatus?: string): string {
 		default:
 			statusText = `<b style="color: green;">●&nbsp;Online</b>`;
 		}
-	}
-
-	// Append custom status if provided
-	if (customStatus) {
-		statusText += ` - ${Chat.escapeHTML(customStatus)}`;
 	}
 
 	return statusText;
@@ -186,8 +185,13 @@ export const commands: Chat.ChatCommands = {
 			// Info section (right side)
 			buf += '<td>';
 
-			// Status with custom status integrated
-			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
+			// Status
+			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser)}</p>`;
+
+			// Custom status message under [status message]
+			if (profileData.customStatus) {
+				buf += `<p style="margin: 4px 0"><u>[status message]:</u> ${Chat.escapeHTML(profileData.customStatus)}</p>`;
+			}
 
 			// Registration date
 			if (profileData.registrationDate) {
