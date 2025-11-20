@@ -90,4 +90,21 @@ describe(`Sword of Ruin`, () => {
 		const damage = wynaut.maxhp - wynaut.hp;
 		assert.bounded(damage, [90, 107]);
 	});
+
+	it(`should lower the Defense of other Pokemon dragged in by a Mold Breaker move`, () => {
+		battle = common.createBattle([[
+			{ species: 'wynaut', ability: 'moldbreaker', moves: ['roar'] },
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace'] },
+		], [
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace', 'sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'move sleeptalk');
+		const regularPao = battle.p1.active[0];
+		const moldedPao = battle.p2.active[0];
+		battle.makeChoices();
+		assert.bounded(regularPao.maxhp - regularPao.hp, [61, 72]);
+		assert.bounded(moldedPao.maxhp - moldedPao.hp, [81, 96]);
+	});
 });
