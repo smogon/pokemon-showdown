@@ -991,9 +991,7 @@ export const commands: ChatCommands = {
 		},
 
 		travel(target, room, user) {
-			if (activeBattles.has(user.id)) {
-				return this.errorReply("You cannot travel during a battle.");
-			}
+			if (activeBattles.has(user.id)) return this.errorReply("You cannot travel during a battle.");
 
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
@@ -1001,9 +999,7 @@ export const commands: ChatCommands = {
 			// If no target, show travel menu
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
-				if (!currentLocation) {
-					return this.errorReply(`Unknown location: ${player.location}`);
-				}
+				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
 
 				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${currentLocation.name}</h2>`;
 				travelHTML += `<p>Where would you like to go?</p>`;
@@ -1012,7 +1008,6 @@ export const commands: ChatCommands = {
 					travelHTML += `<p>There are no paths from this location yet.</p>`;
 				} else {
 					for (const connection of currentLocation.connectedLocations) {
-						// Check if location is accessible
 						let canAccess = true;
 						let lockReason = '';
 
@@ -1037,81 +1032,64 @@ export const commands: ChatCommands = {
 						}
 					}
 				}
-
 				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 				travelHTML += generateBottomNavigation() + `</div>`;
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// Travel to target location
+			// --- EXECUTE TRAVEL ---
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
 
-			if (!targetLocation) {
-				return this.errorReply("That location doesn't exist.");
-			}
+			if (!targetLocation || !currentLocation) return this.errorReply("Invalid location.");
 
-			if (!currentLocation) {
-				return this.errorReply("Your current location is invalid.");
-			}
-
-			// Check if the location is connected
 			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
-			if (!connection) {
-				return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
-			}
+			if (!connection) return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
 
-			// Check requirements
-			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
-				return this.errorReply(`You need the ${connection.requiredBadge} to travel to ${targetLocation.name}.`);
-			}
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) return this.errorReply(`Locked: Requires ${connection.requiredBadge}.`);
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) return this.errorReply(`Locked.`);
 
-			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
-				return this.errorReply(`You can't access ${targetLocation.name} yet.`);
-			}
-
-			// Perform travel
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
-			// Check for scripted events
+			// --- CHECK EVENTS ---
 			const triggeredEvents = [];
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
-					// Check if event should trigger
 					const eventFlagId = `scripted_${event.id}`;
 
-					// Skip if already triggered and marked as triggerOnce
+					// Skip if completed
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-
-					// Skip if required flag is not present
+					
+					// Skip if requirements not met
 					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
-
-					// Skip if player doesn't have enough badges
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
-
-					// Skip if player has too many badges (for early-game only events)
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-
-					// Skip if preventIfFlag is set and player has that flag
 					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 
 					triggeredEvents.push(event);
 
-					// Mark as triggered if it's a once-only event
-					if (event.triggerOnce) {
+					// --- FIX: AUTO-COMPLETE LOGIC ---
+					// Only mark "Passive" events (dialogue, weather) as done immediately.
+					// "Interactive" events (Choices, Battles) must wait for user input.
+					const interactiveTypes = [
+						'choice', 'quiz', 'moralchoice', 'branching', 
+						'wildbattle', 'bossbattle', 'raidbattle', 'trainer', 'gymchallenge', 'elitefour'
+					];
+
+					if (event.triggerOnce && !interactiveTypes.includes(event.type)) {
 						player.storyFlags.add(eventFlagId);
 					}
 
-					// Set flag if specified
-					if (event.setFlag) {
+					// Set flag if specified (usually for discovery/passive events)
+					if (event.setFlag && !interactiveTypes.includes(event.type)) {
 						player.storyFlags.add(event.setFlag);
 					}
 				}
 			}
 
-			// If there are triggered events, show them
+			// --- HANDLE TRIGGERED EVENT ---
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				
@@ -1119,12 +1097,19 @@ export const commands: ChatCommands = {
                 let result = { success: true, message: '' };
                 
                 switch (firstEvent.type) {
+                    // ... (Keep standard handlers from previous turn) ...
                     case 'cutscene': result = ScriptedEvents.handleCutscene(player, firstEvent); break;
                     case 'choice': 
                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
                         break;
                     case 'quiz':
                         result = { success: true, message: firstEvent.question || 'Quiz Time!' };
+                        break;
+                    case 'moralchoice': 
+                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
+                        break;
+                    case 'branching': 
+                         result = { success: true, message: firstEvent.dialogue || 'Choose a path:' };
                         break;
                     case 'weather': result = ScriptedEvents.handleWeatherChange(player, firstEvent); break;
                     case 'earthquake': result = ScriptedEvents.handleEarthquake(player, firstEvent); break;
@@ -1175,13 +1160,7 @@ export const commands: ChatCommands = {
                     case 'reputationchange': result = ScriptedEvents.handleReputationChange(player, firstEvent); break;
                     case 'companionjoin': result = ScriptedEvents.handleCompanionJoin(player, firstEvent); break;
                     case 'companionleave': result = ScriptedEvents.handleCompanionLeave(player, firstEvent); break;
-                    case 'moralchoice': 
-                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
-                        break;
                     case 'lore': result = ScriptedEvents.handleLoreDiscovery(player, firstEvent, firstEvent.id); break;
-                    case 'branching': 
-                         result = { success: true, message: firstEvent.dialogue || 'Choose a path:' };
-                        break;
                     case 'chapter': result = ScriptedEvents.handleChapterTransition(player, firstEvent); break;
                     case 'epilogue': result = ScriptedEvents.handleEpilogue(player, firstEvent); break;
                     case 'collectible': result = ScriptedEvents.handleCollectibleItem(player, firstEvent, firstEvent.id); break;
@@ -1194,14 +1173,47 @@ export const commands: ChatCommands = {
                     case 'triplebattle': result = ScriptedEvents.handleTripleBattle(player, firstEvent); break;
                     case 'skybattle': result = ScriptedEvents.handleSkyBattle(player, firstEvent); break;
                     case 'underwaterbattle': result = ScriptedEvents.handleUnderwaterBattle(player, firstEvent); break;
-                    case 'raidbattle': result = ScriptedEvents.handleRaidBattle(player, firstEvent); break;
                     case 'gauntletbattle': result = ScriptedEvents.handleGauntletBattle(player, firstEvent, firstEvent.id); break;
                     case 'championdefense': result = ScriptedEvents.handleChampionDefense(player, firstEvent, firstEvent.id); break;
                     case 'battletest': result = ScriptedEvents.handleBattleTest(player, firstEvent); break;
                     case 'warbattle': result = ScriptedEvents.handleWarBattle(player, firstEvent, firstEvent.id); break;
 
-                    // Legacy Handlers
-                    case 'dialogue': result = { success: true, message: firstEvent.dialogue || '' }; break;
+                    
+                    // --- FIX: RAID BATTLE LOGIC ---
+                    case 'raidbattle':
+                        const raidRes = ScriptedEvents.handleRaidBattle(player, firstEvent);
+                        result = { success: true, message: raidRes.message };
+                        if (raidRes.raidBoss) {
+                             // Create Boss logic (simplified)
+                             const level = raidRes.raidLevel ? raidRes.raidLevel * 10 : 50;
+                             const raidMon = createPokemon(raidRes.raidBoss.species, level);
+                             // In a real implementation, you'd apply Dynamax HP bonuses here
+                             player.pc.set(`scripted_wild_${firstEvent.id}`, raidMon);
+                        }
+                        break;
+
+                    // --- FIX: WILD BATTLE CREATION ---
+                    case 'wildbattle':
+                        if (firstEvent.pokemon) {
+                            const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+                            if (firstEvent.pokemon.moves) {
+                                newPokemon.moves = firstEvent.pokemon.moves.map(moveId => {
+                                    const moveData = getMove(moveId);
+                                    return { id: moveId, pp: moveData.pp || 5 };
+                                });
+                            }
+                            if (firstEvent.pokemon.shiny) newPokemon.shiny = true;
+
+                            // Store in temp PC slot using the specific ID format required by scriptedbattle
+                            player.pc.set(`scripted_wild_${firstEvent.id}`, newPokemon);
+
+                            result = { success: true, message: firstEvent.dialogue || `A wild ${newPokemon.species} appeared!` };
+                        } else {
+                            result = { success: false, message: "Error: No Pokemon data." };
+                        }
+                        break;
+
+                    // ... (Rest of handlers) ...
                     case 'item': 
                         if (firstEvent.itemId && firstEvent.itemQuantity) {
                             addItemToInventory(player, firstEvent.itemId, firstEvent.itemQuantity);
@@ -1216,12 +1228,13 @@ export const commands: ChatCommands = {
                             result = { success: true, message: `${firstEvent.dialogue || ''}<br>Received ${firstEvent.pokemon.species}!` };
                         }
                         break;
-                    case 'wildbattle':
                     case 'trainer':
                          result = { success: true, message: firstEvent.dialogue || 'Battle start!' };
                          break;
 
-                    default: result = { success: true, message: firstEvent.dialogue || 'Event occurred.' }; break;
+                    default: 
+                        result = { success: true, message: firstEvent.dialogue || 'Event occurred.' }; 
+                        break;
                 }
 
 				// If boss battle handler returned bossTrainerId, update event for display
@@ -1229,64 +1242,85 @@ export const commands: ChatCommands = {
 					firstEvent.bossTrainerId = (result as any).bossTrainerId;
 				}
                 
-                // Use the HTML generator for the event UI
-				const eventHTML = generateScriptedEventHTML(firstEvent, result.message);
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
+                // Use the updated UI generator
+				const html = generateScriptedEventHTML(firstEvent, result.message);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
-			// STREAMLINED: Immediate transition to Explore with notification
+			// Streamlined Travel (No Event)
 			const msg = `You arrived at ${targetLocation.name}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
+		
+		eventchoice(target, room, user) {
+			if (activeBattles.has(user.id)) {
+				return this.errorReply("Cannot do this in battle.");
+			}
 
-        // NEW COMMAND: Handle interactive event choices (Quiz, Moral, Branching)
-        eventchoice(target, room, user) {
-            if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
-            const player = getPlayerData(user.id);
-            const location = LOCATIONS[toID(player.location)];
-            const index = parseInt(target);
+			const player = getPlayerData(user.id);
+			const location = LOCATIONS[toID(player.location)];
+			const index = parseInt(target);
 
-            // Identify active event
-            let activeEvent = null;
-            if (location && location.scriptedEvents) {
-                for (const event of location.scriptedEvents) {
-                    const eventFlagId = `scripted_${event.id}`;
+			// --- 1. Identify the Active Event ---
+			// We must scan the location's events using the EXACT same logic as 'travel'
+			// to find the one that is currently blocking the player.
+			let activeEvent = null;
+			if (location && location.scriptedEvents) {
+				for (const event of location.scriptedEvents) {
+					const eventFlagId = `scripted_${event.id}`;
+
+					// Skip if already completed
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-                    if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
-                    if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
-                    if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-                    if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
-                    
-                    activeEvent = event;
-                    break;
-                }
-            }
+					
+					// Skip if requirements are not met (same checks as travel)
+					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+					
+					// Found the active interactive event
+					activeEvent = event;
+					break;
+				}
+			}
 
-            if (!activeEvent) return this.errorReply("No active event to choose for.");
+			if (!activeEvent) {
+				return this.errorReply("No active event found to make a choice for.");
+			}
 
-            let result: { success: boolean, message: string } = { success: false, message: "Invalid choice." };
+			// --- 2. Execute Logic based on Event Type ---
+			let result: { success: boolean, message: string } = { success: false, message: "Invalid choice." };
 
-            if (activeEvent.type === 'choice') {
-                result = ScriptedEvents.handleChoice(player, activeEvent, index);
-            } else if (activeEvent.type === 'quiz') {
-                result = ScriptedEvents.handleQuiz(player, activeEvent, index);
-            } else if (activeEvent.type === 'moralchoice') {
-                result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
-            } else if (activeEvent.type === 'branching') {
-                result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
-            }
+			if (activeEvent.type === 'choice') {
+				result = ScriptedEvents.handleChoice(player, activeEvent, index);
+			} else if (activeEvent.type === 'quiz') {
+				result = ScriptedEvents.handleQuiz(player, activeEvent, index);
+			} else if (activeEvent.type === 'moralchoice') {
+				result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
+			} else if (activeEvent.type === 'branching') {
+				result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
+			} else {
+				return this.errorReply("This event does not accept choices.");
+			}
 
-            if (result.success) {
-                this.sendReplyBox(result.message);
-                // Mark event complete if needed
-                if (activeEvent.triggerOnce) {
-                    player.storyFlags.add(`scripted_${activeEvent.id}`);
-                }
-                return this.parse('/rpg explore');
-            } else {
-                return this.errorReply(result.message);
-            }
-        },
+			// --- 3. Handle Result ---
+			if (result.success) {
+				// Show the result text (e.g. "Correct answer!" or "You chose the left path.")
+				// We use sendReplyBox here so it persists in chat history as a record of the choice.
+				this.sendReplyBox(result.message);
+
+				// CRITICAL FIX: Mark the event as complete NOW.
+				// This allows the player to pass this event next time 'travel' runs.
+				if (activeEvent.triggerOnce) {
+					player.storyFlags.add(`scripted_${activeEvent.id}`);
+				}
+
+				// Return to the Explore screen (which will now show the location since the event is done)
+				return this.parse('/rpg explore');
+			} else {
+				return this.errorReply(result.message);
+			}
+		},
 
 		building(target, room, user) {
 			if (activeBattles.has(user.id)) {
