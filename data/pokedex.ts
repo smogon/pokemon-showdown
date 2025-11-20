@@ -12364,7 +12364,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		evos: ["Floette"],
 		eggGroups: ["Fairy"],
-		cosmeticFormes: ["Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
+		cosmeticFormes: ["Flabe\u0301be\u0301-Yellow", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-White"],
 		formeOrder: ["Flabe\u0301be\u0301", "Flabe\u0301be\u0301-Yellow", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-White"],
 	},
 	floette: {
@@ -12383,7 +12383,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Florges"],
 		eggGroups: ["Fairy"],
 		otherFormes: ["Floette-Eternal", "Floette-Mega"],
-		cosmeticFormes: ["Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow"],
+		cosmeticFormes: ["Floette-Yellow", "Floette-Orange", "Floette-Blue", "Floette-White"],
 		formeOrder: ["Floette", "Floette-Yellow", "Floette-Orange", "Floette-Blue", "Floette-White", "Floette-Eternal", "Floette-Mega"],
 	},
 	floetteeternal: {
@@ -12432,7 +12432,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "useItem",
 		evoItem: "Shiny Stone",
 		eggGroups: ["Fairy"],
-		cosmeticFormes: ["Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
+		cosmeticFormes: ["Florges-Yellow", "Florges-Orange", "Florges-Blue", "Florges-White"],
 		formeOrder: ["Florges", "Florges-Yellow", "Florges-Orange", "Florges-Blue", "Florges-White"],
 	},
 	skiddo: {
