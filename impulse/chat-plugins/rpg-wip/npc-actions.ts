@@ -3,7 +3,7 @@ import { ITEMS_DATABASE } from './items';
 import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
 
-import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './data';
+import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './utils';
 
 function parseTimestampFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
