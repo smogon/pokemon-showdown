@@ -6,7 +6,7 @@ import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './locations';
 import { BATTLE_TOWER_FORMATS, generateRandomTeamFromBSS, generateRandomTeamFromBaby } from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
-import { teraToggleState } from './commands';
+import { teraToggleState, activeScriptedEvents } from './commands';
 import {
 	generateBattleHTML,
 	generateMoveLearnHTML,
