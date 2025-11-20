@@ -3,8 +3,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
-import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
+import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
@@ -1758,7 +1757,8 @@ export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
-	teraToggled?: boolean
+	teraToggled?: boolean,
+	scriptedEventId?: string // NEW PARAMETER
 ): string {
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const combinedLogs = [...messageLog, ...reversedBattleLog];
@@ -1770,7 +1770,12 @@ export function generateBattleHTML(
 	if (battle.battleEnded) {
 		let actionHTML = '';
 		if (battle.battleType !== 'battletower') {
-			const continueCommand = (battle.battleResult === 'victory') ? '/rpg explore' : '/rpg explore';
+			// If we won a scripted event, use the completion command
+			let continueCommand = '/rpg explore';
+			if (battle.battleResult === 'victory' && scriptedEventId) {
+				continueCommand = `/rpg completeevent ${scriptedEventId}`;
+			}
+
 			actionHTML = `<p class="rpg-margin-top rpg-text-center">` +
 				`<button name="send" value="${continueCommand}" class="button rpg-button-victory">Continue</button>` +
 				'</p>';
@@ -1970,6 +1975,17 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
+}
+
+export function generateRunHTML(zoneId: string): string {
+	return `<div class="rpg-infobox rpg-menu-box">` +
+		`<h2>Got away safely!</h2>` +
+		`<p>You ran away from the wild Pokemon.</p>` +
+		`<p>` +
+		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
+		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateCatchSuccessHTML(
@@ -2232,6 +2248,7 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 // -------------------------------------------------------------------------------------
 // 9. New Event & Interaction UI Handlers
 // -------------------------------------------------------------------------------------
+
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
@@ -2240,7 +2257,7 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 	html += `<p>${message}</p>`;
 	html += `</div>`;
 
-	// --- Interactive Elements (Choices) ---
+	// --- Interactive Elements ---
 	if (event.type === 'choice' && event.choices) {
 		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
 		event.choices.forEach((choice: any, idx: number) => {
@@ -2269,36 +2286,37 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	// --- Action Buttons (Battles) ---
+	// --- Action Buttons ---
 	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
-		// Determine command and button text based on battle type
+		// Pass Event ID (event.id) to the command so we can track it
 		let cmd = `/rpg scriptedbattle ${event.id}`;
 		let btnText = "⚔️ Battle!";
 		
 		if (event.type === 'bossbattle' && event.bossTrainerId) {
-			// Trainer Bosses use the challenge command
-			cmd = `/rpg challenge ${event.bossTrainerId}`;
+			cmd = `/rpg challenge ${event.bossTrainerId} ${event.id}`;
 			btnText = "⚔️ Challenge Boss";
 		} else if (event.type === 'raidbattle') {
-			// Raid Battles use scriptedbattle but have special text
 			btnText = "⚔️ Start Raid";
 		}
 
 		html += `<p class="rpg-text-center">`;
 		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
-		// Safety "Run Away" button to prevent Soft Locks if player can't/won't fight
+		// Safety "Run Away" button to prevent Soft Locks
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
 	} 
 	else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
 		const trainerId = event.trainerId || event.gymLeaderId;
+		// Pass Event ID (event.id) to challenge command
+		const cmd = `/rpg challenge ${trainerId} ${event.id}`;
+		
 		html += `<p class="rpg-text-center">`;
-		html += `<button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Battle!</button><br>`;
+		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Battle!</button><br>`;
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
 	} 
-	// --- Standard Event (No interaction required) ---
 	else {
+		// Standard continue button
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
 
@@ -2308,7 +2326,8 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 
 export function generateNPCInteractionHTML(npc: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
-
+	
+	// ADDED NOTIFICATION HERE
     if (notification) {
         html += `<div class="rpg-notification">${notification}</div>`;
     }
@@ -2321,10 +2340,12 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 	if (action) {
 		html += `<hr />`;
 		
+		// --- Complex Menus ---
 		if (action.type === 'itemcraft' && action.recipes) {
 			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
 			action.recipes.forEach((recipe: any, index: number) => {
 				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
+				// List inputs
 				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
 				
 				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
@@ -2345,6 +2366,7 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 		else if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${npc.id}" class="button rpg-button-large">View Starters</button></p>`;
 		}
+		// --- Simple Actions ---
 		else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
@@ -2362,8 +2384,9 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 }
 
 export function generatePokedexHTML(player: PlayerData): string {
-	const seenCount = player.pokedex ? player.pokedex.seen.size : 0;
-	const caughtCount = player.party.length + player.pc.size; 
+	// Calculate counts
+	const seenCount = player.pokedex ? player.pokedex.seen.size : 0; // Assuming standard player.pokedex structure
+	const caughtCount = player.party.length + player.pc.size; // Simplified count for now, ideally track unique species
 	
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Pokédex</h2>` +
