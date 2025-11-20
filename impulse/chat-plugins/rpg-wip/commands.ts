@@ -438,10 +438,6 @@ export const commands: ChatCommands = {
 				}
 			},
 
-			ladder(target, room, user) {
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerLadderHTML()}`);
-			},
-
 			'': 'start',
 		},
 
