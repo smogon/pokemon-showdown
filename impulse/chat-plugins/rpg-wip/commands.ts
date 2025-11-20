@@ -412,6 +412,50 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
 
+		starterchoice(target, room, user) {
+            if (activeBattles.has(user.id)) return this.errorReply("Cannot do this in battle.");
+            
+            const args = target.split(' ');
+            const npcId = toID(args[0]);
+            const pokemonId = toID(args[1]); // Optional
+
+            const npc = NPC_DATABASE[npcId];
+            if (!npc?.action || npc.action.type !== 'choosestarter') return this.errorReply("Invalid NPC.");
+
+            // Case 1: Selection Made (ID and Pokemon provided)
+            if (pokemonId) {
+                const player = getPlayerData(user.id);
+                const allStarters = Object.values(STARTER_POKEMON).flat();
+                
+                if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter.");
+
+                const result = NPCActions.handleChooseStarter(player, npc.action, pokemonId);
+                if (result.success) {
+                     if (npc.action.onceOnly) player.completedNPCActions.add(npcId);
+                     
+                     // Set default location if not set
+                     const startLocId = GameConfig.startLocationId;
+                     const locationData = LOCATIONS[startLocId];
+                     if (player.location === 'Unknown Location' || !player.location) {
+                         player.location = locationData?.name || 'Unknown';
+                     }
+
+                     const species = Dex.species.get(result.pokemon!.species);
+                     const tempSlot = createActivePokemonSlot(result.pokemon!);
+                     
+                     return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterConfirmHTML(npc.name, result.message, tempSlot, species.name)}`);
+                } else {
+                     return this.errorReply(result.message);
+                }
+            } 
+            
+            // Case 2: Show List (Only NPC ID provided)
+            else {
+                const allStarters = Object.values(STARTER_POKEMON).flat();
+                return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterChoiceHTML(npcId, npc.name, allStarters)}`);
+            }
+        },
+
 		selectstarter(target, room, user) {
 			if (activeBattles.has(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
