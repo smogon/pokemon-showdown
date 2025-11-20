@@ -3,7 +3,6 @@ import { FS } from '../../../lib';
 import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './MANUAL_EVOLUTIONS';
-import { isCustomMove, getCustomMove } from './CUSTOM_MOVES';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState } from './interface';
 import { VIABLE_HELD_ITEMS } from './items';
 
@@ -135,11 +134,6 @@ export function calculateStats(
 }
 
 export function getMove(moveId: string): any {
-	if (isCustomMove(moveId)) {
-		const customMove = getCustomMove(moveId);
-		return { ...customMove, exists: true };
-	}
-
 	return Dex.moves.get(moveId);
 }
 
