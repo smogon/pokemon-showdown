@@ -140,8 +140,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
 		tryMoveHit(target, pokemon, move) {
-			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
-			const negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 			const doSelfDestruct = true;
 			let damage: number | false | undefined = 0;
 
@@ -207,49 +205,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-immune', target, '[ohko]');
 				return false;
 			}
-
-			let accuracy = move.accuracy;
-			if (move.alwaysHit) {
-				accuracy = true;
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			// Now, let's calculate the accuracy.
-			if (accuracy !== true) {
-				accuracy = Math.floor(accuracy * 255 / 100);
-				if (move.ohko) {
-					accuracy += (pokemon.level - target.level) * 2;
-					accuracy = Math.min(accuracy, 255);
-				}
-				if (!move.ignoreAccuracy) {
-					if (pokemon.boosts.accuracy > 0) {
-						accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
-					} else {
-						accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
-					}
-				}
-				if (!move.ignoreEvasion) {
-					if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-						accuracy *= negativeBoostTable[target.boosts.evasion];
-					} else if (target.boosts.evasion < 0) {
-						accuracy *= positiveBoostTable[-target.boosts.evasion];
-					}
-				}
-				accuracy = Math.min(Math.floor(accuracy), 255);
-				accuracy = Math.max(accuracy, 1);
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-			if (accuracy !== true) accuracy = Math.max(accuracy, 0);
-			if (move.alwaysHit) {
-				accuracy = true;
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			if (accuracy !== true && accuracy !== 255 && !this.battle.randomChance(accuracy, 256)) {
+			if (!this.accuracyCheck(pokemon, target, move)) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				this.battle.runEvent('MoveMiss', target, pokemon, move);
 				damage = false;
 				return damage;
 			}
@@ -712,6 +671,46 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We are done, this is the final damage
 			return damage;
+		},
+		accuracyCheck(attacker, defender, move) {
+			if (
+				this.checkAlwaysHit(attacker, defender) ||
+				!this.battle.singleEvent('CheckAccuracy', move, null, defender, attacker, move) ||
+				!this.battle.runEvent('CheckAccuracy', defender, attacker, move) ||
+				move.accuracy === true
+			) {
+				return true;
+			}
+
+			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
+			const negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
+			let accuracy = move.accuracy;
+			accuracy = Math.floor(accuracy * 255 / 100);
+			if (move.ohko) {
+				accuracy += (attacker.level - defender.level) * 2;
+				accuracy = Math.min(accuracy, 255);
+			}
+			if (!move.ignoreAccuracy) {
+				if (attacker.boosts.accuracy > 0) {
+					accuracy *= positiveBoostTable[attacker.boosts.accuracy];
+				} else {
+					accuracy *= negativeBoostTable[-attacker.boosts.accuracy];
+				}
+			}
+			if (!move.ignoreEvasion) {
+				if (defender.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
+					accuracy *= negativeBoostTable[defender.boosts.evasion];
+				} else if (defender.boosts.evasion < 0) {
+					accuracy *= positiveBoostTable[-defender.boosts.evasion];
+				}
+			}
+			accuracy = Math.min(Math.floor(accuracy), 255);
+			accuracy = Math.max(accuracy, 1);
+
+			accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, defender, attacker, move, accuracy);
+			accuracy = this.battle.runEvent('ModifyAccuracy', defender, attacker, move, accuracy);
+			accuracy = Math.max(accuracy, 0);
+			return accuracy === 255 || this.battle.randomChance(accuracy, 256);
 		},
 	},
 };
