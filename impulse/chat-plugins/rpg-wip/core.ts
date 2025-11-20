@@ -1,7 +1,7 @@
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { Dex, toID } from '../../../sim/dex';
 import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
-import type { PlayerData, RPGPokemon, Stats, BattleState } from './interface';
+import type { PlayerData, RPGPokemon, BattleState } from './interface';
 import { addItemToInventory } from './items';
 import { LOCATIONS } from './locations';
 import { ImpulseDB } from '../../impulse-db';
@@ -111,7 +111,11 @@ export function createPokemon(speciesId: string, level = 5): RPGPokemon {
 	}
 
 	const randomNature = NATURE_LIST[Math.floor(Math.random() * NATURE_LIST.length)];
-	const ivs = { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) };
+	const ivs = {
+		hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32),
+		def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32),
+		spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32),
+	};
 	const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	const stats = calculateStats(species, level, randomNature, ivs, evs);
 
@@ -168,6 +172,33 @@ export function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RP
 	return null;
 }
 
+// Helper function to convert PlayerData to MongoDB document format
+function playerDataToDocument(player: PlayerData): any {
+	return {
+		id: player.id,
+		name: player.name,
+		level: player.level,
+		experience: player.experience,
+		badges: player.badges,
+		party: player.party,
+		location: player.location,
+		money: player.money,
+		inventory: Object.fromEntries(player.inventory),
+		pc: Object.fromEntries(player.pc),
+		storyFlags: Array.from(player.storyFlags),
+		defeatedTrainers: Array.from(player.defeatedTrainers),
+		obtainedBadges: player.obtainedBadges,
+		visitedLocations: Array.from(player.visitedLocations),
+		pendingMoveLearnQueue: player.pendingMoveLearnQueue,
+		lastPokemonCenter: player.lastPokemonCenter,
+		completedNPCActions: Array.from(player.completedNPCActions),
+		battleTowerFloor: player.battleTowerFloor || 1,
+		battleTowerHighestFloor: player.battleTowerHighestFloor || 0,
+	};
+}
+
+// Export for test compatibility - converts PlayerData to serializable format
+// This uses array format for inventory/pc to maintain test compatibility
 export function serializePlayerData(player: PlayerData): any {
 	return {
 		id: player.id,
@@ -192,7 +223,67 @@ export function serializePlayerData(player: PlayerData): any {
 	};
 }
 
+// Helper function to convert MongoDB document to PlayerData
+function documentToPlayerData(data: any): PlayerData {
+	const startLocName = LOCATIONS[GameConfig.startLocationId]?.name || 'Unknown';
+
+	// Support both object and array formats for inventory and pc
+	let inventory: Map<string, any>;
+	if (data.inventory) {
+		if (Array.isArray(data.inventory)) {
+			// Old array format from tests
+			inventory = new Map(data.inventory);
+		} else {
+			// New object format from MongoDB
+			inventory = new Map(Object.entries(data.inventory));
+		}
+	} else {
+		inventory = new Map();
+	}
+
+	let pc: Map<string, any>;
+	if (data.pc) {
+		if (Array.isArray(data.pc)) {
+			// Old array format from tests
+			pc = new Map(data.pc);
+		} else {
+			// New object format from MongoDB
+			pc = new Map(Object.entries(data.pc));
+		}
+	} else {
+		pc = new Map();
+	}
+
+	return {
+		id: data.id,
+		name: data.name,
+		level: data.level,
+		experience: data.experience,
+		badges: data.badges,
+		party: data.party,
+		location: data.location || startLocName,
+		money: data.money,
+		inventory,
+		pc,
+		storyFlags: new Set(data.storyFlags || []),
+		defeatedTrainers: new Set(data.defeatedTrainers || []),
+		obtainedBadges: data.obtainedBadges || [],
+		visitedLocations: new Set(data.visitedLocations || [data.location]),
+		pendingMoveLearnQueue: data.pendingMoveLearnQueue ?
+			(Array.isArray(data.pendingMoveLearnQueue) ?
+				data.pendingMoveLearnQueue :
+				[data.pendingMoveLearnQueue]) :
+			undefined,
+		lastPokemonCenter: data.lastPokemonCenter || GameConfig.startLocationId,
+		completedNPCActions: new Set(data.completedNPCActions || []),
+		battleTowerFloor: data.battleTowerFloor || 1,
+		battleTowerHighestFloor: data.battleTowerHighestFloor || 0,
+	};
+}
+
+// Validation function for testing - validates data and converts to PlayerData
 export function deserializePlayerData(data: any): PlayerData {
+	// Basic validation
 	if (!data || typeof data !== 'object') {
 		throw new Error('Invalid save data format');
 	}
@@ -218,10 +309,12 @@ export function deserializePlayerData(data: any): PlayerData {
 		throw new Error('Invalid save data: money must be between 0 and 999999999');
 	}
 
-	if (!Array.isArray(data.inventory)) {
-		throw new Error('Invalid save data: inventory must be an array');
+	// Validate inventory
+	if (!Array.isArray(data.inventory) && typeof data.inventory !== 'object') {
+		throw new Error('Invalid save data: inventory must be an array or object');
 	}
-	for (const [itemId, itemData] of data.inventory) {
+	const inventoryEntries = Array.isArray(data.inventory) ? data.inventory : Object.entries(data.inventory || {});
+	for (const [itemId, itemData] of inventoryEntries) {
 		if (typeof itemId !== 'string') {
 			throw new Error('Invalid save data: item ID must be a string');
 		}
@@ -233,10 +326,12 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	if (!Array.isArray(data.pc)) {
-		throw new Error('Invalid save data: PC must be an array');
+	// Validate pc
+	if (!Array.isArray(data.pc) && typeof data.pc !== 'object') {
+		throw new Error('Invalid save data: PC must be an array or object');
 	}
-	if (data.pc.length > 100) {
+	const pcEntries = Array.isArray(data.pc) ? data.pc : Object.entries(data.pc || {});
+	if (pcEntries.length > 100) {
 		throw new Error('Invalid save data: PC cannot have more than 100 Pokemon');
 	}
 
@@ -261,6 +356,7 @@ export function deserializePlayerData(data: any): PlayerData {
 		seenBadges.add(badgeName);
 	}
 
+	// Validate party Pokemon
 	for (const pokemon of data.party) {
 		if (!pokemon || typeof pokemon !== 'object') {
 			throw new Error('Invalid save data: invalid Pokemon in party');
@@ -357,7 +453,8 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	for (const [pcId, pokemon] of data.pc) {
+	// Validate PC Pokemon
+	for (const [pcId, pokemon] of pcEntries) {
 		if (!pokemon || typeof pokemon !== 'object') {
 			throw new Error('Invalid save data: invalid Pokemon in PC');
 		}
@@ -376,57 +473,14 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	const startLocName = LOCATIONS[GameConfig.startLocationId]?.name || 'Unknown';
-
-	return {
-		id: data.id,
-		name: data.name,
-		level: data.level,
-		experience: data.experience,
-		badges: data.badges,
-		party: data.party,
-		location: data.location || startLocName,
-		money: data.money,
-		inventory: new Map(data.inventory),
-		pc: new Map(data.pc),
-		storyFlags: new Set(data.storyFlags || []),
-		defeatedTrainers: new Set(data.defeatedTrainers || []),
-		obtainedBadges: data.obtainedBadges || [],
-		visitedLocations: new Set(data.visitedLocations || [data.location]),
-		pendingMoveLearnQueue: data.pendingMoveLearnQueue ?
-			(Array.isArray(data.pendingMoveLearnQueue) ?
-				data.pendingMoveLearnQueue :
-				[data.pendingMoveLearnQueue]) :
-			undefined,
-		lastPokemonCenter: data.lastPokemonCenter || GameConfig.startLocationId,
-		completedNPCActions: new Set(data.completedNPCActions || []),
-		battleTowerFloor: data.battleTowerFloor || 1,
-		battleTowerHighestFloor: data.battleTowerHighestFloor || 0,
-	};
-}
-
-export function savePlayerToString(player: PlayerData): string {
-	const serialized = serializePlayerData(player);
-	return JSON.stringify(serialized);
-}
-
-export function loadPlayerFromString(jsonString: string): PlayerData {
-	const data = JSON.parse(jsonString);
-	return deserializePlayerData(data);
-}
-
-export function loadPlayer(userid: string, savedData: string): PlayerData {
-	const player = loadPlayerFromString(savedData);
-	player.id = userid;
-	playerData.set(userid, player);
-	return player;
+	// After validation, convert to PlayerData
+	return documentToPlayerData(data);
 }
 
 export async function savePlayerToDB(player: PlayerData): Promise<void> {
 	const collection = ImpulseDB('rpg_saves');
-	const serialized = serializePlayerData(player);
 	const saveDocument = {
-		...serialized,
+		...playerDataToDocument(player),
 		lastSaved: new Date(),
 	};
 	await collection.upsert(
@@ -443,7 +497,7 @@ export async function loadPlayerFromDB(userid: string): Promise<PlayerData | nul
 		return null;
 	}
 
-	const player = deserializePlayerData(savedData);
+	const player = documentToPlayerData(savedData);
 	playerData.set(userid, player);
 	return player;
 }
