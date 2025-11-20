@@ -1613,7 +1613,7 @@ export function checkForWinLoss(
 		activeBattles.delete(user.id);
 		teraToggleState.delete(user.id);
 		
-		// FIXED: Clear the active event so it doesn't persist to the next battle
+		// FIXED: Clear the active event on loss so it can be retried later
 		activeScriptedEvents.delete(user.id);
 		
 		return true;
@@ -1645,7 +1645,8 @@ export function checkForWinLoss(
 		battle.battleEnded = true;
 		battle.battleResult = 'victory';
 
-		// Retrieve the Event ID associated with this battle (if any)
+		// --- CRITICAL FIX HERE ---
+		// Retrieve the Event ID to pass to the UI
 		const eventId = activeScriptedEvents.get(user.id);
 
 		let moneyGained = 0;
@@ -1685,7 +1686,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				// FIXED: Pass the eventId to the generator
+				// FIXED: Pass eventId as the 5th argument
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		} else {
@@ -1700,7 +1701,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				// FIXED: Pass the eventId to the generator
+				// FIXED: Pass eventId as the 5th argument
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		}
