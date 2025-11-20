@@ -305,8 +305,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	},
 	artemis: {
 		noCopy: true,
-		onFoeAfterFaint(target, source, effect) {
-			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
+		onFoeFaintCount(length, target) {
+			this.add('message', `${target.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
 	arya: {
@@ -1212,7 +1212,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('Kennedy')}|FUCK OFF, REALLY?????`);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			const message = this.sample(['ALLEZZZZZ', 'VAMOSSSSS', 'FORZAAAAA', 'LET\'S GOOOOO']);
 			this.add(`c:|${getName('Kennedy')}|${message}`);
 			if (source.species.id === 'cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
@@ -1384,7 +1384,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add(`c:|${getName('Loethalion')}|...from Zero`);
 			}
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (enemyStaff(source) === 'Swiffix') {
 				this.add(`c:|${getName('Loethalion')}|It's still pfp...`);
 			} else if (enemyStaff(source) === 'Appletun a la Mode') {
@@ -1905,7 +1905,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('PYRO')}|Just remember ALL CAPS when you spell the man name...`);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect?.effectType === 'Move') {
 				if (effect.id === 'meatgrinder') {
 					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
@@ -2654,7 +2654,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('WarriorGallade')}|a wig flew, and now i must bid you adieu. farewell my berries accrued, for this is the end of my etude.`);
 		},
-		onSourceAfterFaint() {
+		onSourceFaintCount() {
 			this.add(`c:|${getName('WarriorGallade')}|Triumphant through trouncing tough, tenacious threats today, though testing 212 takeovers tarry. Theorizing these techniques tends to torrid, terribly tiresome tabulations, therefore torrential tactics traverse thorough thoughts.`);
 		},
 		innateName: "Nutrient Boost",
@@ -2920,7 +2920,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onResidual(target, source, effect) {
 			this.heal(target.baseMaxhp / 8);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			this.add(`c:|${getName('Elliot')}|Get Bovriled`);
 		},
 	},
