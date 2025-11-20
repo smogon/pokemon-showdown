@@ -14,7 +14,7 @@ import {
 	ITEMS_DATABASE,
 	ITEM_PRICES,
 } from './items';
-import { getShopInventory, getNextShopTier } from './shop';
+import { getShopInventory, getNextShopTier } from './game-shops';
 import {
 	getPlayerData,
 	createPokemon,
@@ -93,9 +93,8 @@ import {
 	TYPE_CHART,
 } from './data';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
-import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
-import { NPC_DATABASE } from './npcs';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';

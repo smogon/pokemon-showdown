@@ -3,9 +3,9 @@ import { Dex, toID } from '../../../sim/dex';
 import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
 import type { PlayerData, RPGPokemon, BattleState } from './interface';
 import { addItemToInventory } from './items';
-import { LOCATIONS } from './locations';
+import { LOCATIONS } from './game-locations';
 import { ImpulseDB } from '../../impulse-db';
-import { TOTAL_BADGES, isValidBadge } from './badges';
+import { TOTAL_BADGES, isValidBadge } from './game-npcs';
 import { GameConfig } from './game-config';
 
 export const playerData = new Map<string, PlayerData>();

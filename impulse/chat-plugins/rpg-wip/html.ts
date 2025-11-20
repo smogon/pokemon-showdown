@@ -1,14 +1,14 @@
 import { Dex, toID } from '../../../sim/dex';
 import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
-import { getShopInventory, getNextShopTier } from './shop';
+import { getShopInventory, getNextShopTier } from './game-shops';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
-import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
+import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './game-npcs';
 import { getPlayerData } from './core';
 import { GameConfig } from './game-config';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
-import { TOTAL_BADGES } from './badges';
+import { TOTAL_BADGES } from './game-npcs';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
 	if (expNeededForLevel <= 0) return 100;

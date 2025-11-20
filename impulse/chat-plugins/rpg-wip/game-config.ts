@@ -1,3 +1,14 @@
+/**
+ * Game Configuration
+ *
+ * This file contains general game settings and mechanics configuration.
+ *
+ * For story-specific data, see:
+ * - game-locations.ts - Locations and encounter zones
+ * - game-npcs.ts - NPCs, trainers, trainer locations, and badges
+ * - game-shops.ts - Shop inventories and item availability
+ */
+
 export const GameConfig = {
 
 	startLocationId: 'startingroom',

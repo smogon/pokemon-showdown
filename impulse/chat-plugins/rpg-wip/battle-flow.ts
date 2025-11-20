@@ -3,7 +3,7 @@ import { RPGAbilities } from './abilities';
 import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
-import { LOCATIONS } from './locations';
+import { LOCATIONS } from './game-locations';
 import {
 	startBattleTowerFloor,
 	getLocationWeatherData,
@@ -20,7 +20,7 @@ import {
 	generateFaintSwitchHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
-import { getBadgeForGymLeader, TOTAL_BADGES } from './badges';
+import { getBadgeForGymLeader, TOTAL_BADGES } from './game-npcs';
 import { GameConfig } from './game-config';
 
 import {
