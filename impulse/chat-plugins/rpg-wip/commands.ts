@@ -1144,12 +1144,6 @@ export const commands: ChatCommands = {
                     case 'quiz':
                         result = { success: true, message: firstEvent.question || 'Quiz Time!' };
                         break;
-                    case 'moralchoice': 
-                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
-                        break;
-                    case 'branching': 
-                         result = { success: true, message: firstEvent.dialogue || 'Choose a path:' };
-                        break;
                     case 'weather': result = ScriptedEvents.handleWeatherChange(player, firstEvent); break;
                     case 'earthquake': result = ScriptedEvents.handleEarthquake(player, firstEvent); break;
                     case 'explosion': result = ScriptedEvents.handleExplosion(player, firstEvent); break;
@@ -1218,7 +1212,6 @@ export const commands: ChatCommands = {
                     case 'triplebattle': result = ScriptedEvents.handleTripleBattle(player, firstEvent); break;
                     case 'skybattle': result = ScriptedEvents.handleSkyBattle(player, firstEvent); break;
                     case 'underwaterbattle': result = ScriptedEvents.handleUnderwaterBattle(player, firstEvent); break;
-                    case 'raidbattle': result = ScriptedEvents.handleRaidBattle(player, firstEvent); break;
                     case 'gauntletbattle': result = ScriptedEvents.handleGauntletBattle(player, firstEvent, firstEvent.id); break;
                     case 'championdefense': result = ScriptedEvents.handleChampionDefense(player, firstEvent, firstEvent.id); break;
                     case 'battletest': result = ScriptedEvents.handleBattleTest(player, firstEvent); break;
