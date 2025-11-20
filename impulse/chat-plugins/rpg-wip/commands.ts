@@ -102,7 +102,114 @@ import { NPC_DATABASE } from './npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
-import { GameConfig } from './game-config'; 
+import { GameConfig } from './game-config';
+
+/**
+ * SHARED HELPER: Centralizes Battle State creation and initialization.
+ * Used by wildpokemon, scriptedbattle, and challenge commands.
+ */
+function initializeAndStartBattle(
+	ctx: CommandContext,
+	room: ChatRoom,
+	user: User,
+	player: PlayerData,
+	activeParty: RPGPokemon[],
+	opponent: {
+		name: string;
+		party: RPGPokemon[];
+		money: number;
+		trainerId?: string;
+	},
+	config: {
+		battleType: BattleState['battleType'];
+		zoneId: string;
+		eventId?: string;
+	},
+	initialMessages: string[]
+) {
+	// 1. Setup Slots
+	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+
+	// Slot 0 is always filled by the first available member
+	playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+	opponentSlots[0] = createActivePokemonSlot(opponent.party[0]);
+
+	// Handle Double Battles (Fill Slot 1)
+	if (config.battleType.includes('double')) {
+		if (activeParty[1]) playerSlots[1] = createActivePokemonSlot(activeParty[1]);
+		if (opponent.party[1]) opponentSlots[1] = createActivePokemonSlot(opponent.party[1]);
+	}
+
+	// 2. Apply Weather from Location
+	const locationWeatherData = getLocationWeatherData(player);
+	if (locationWeatherData.weather) {
+		initialMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
+	}
+
+	// 3. Construct Battle State
+	const battle: BattleState = {
+		battleType: config.battleType,
+		opponentName: opponent.name,
+		opponentParty: opponent.party,
+		opponentMoney: opponent.money,
+		trainerId: opponent.trainerId,
+		playerSlots,
+		opponentSlots,
+		pendingActions: {},
+		playerId: user.id,
+		turn: 0,
+		zoneId: config.zoneId,
+		playerHazards: [],
+		opponentHazards: [],
+		weather: locationWeatherData.weather,
+		locationWeather: locationWeatherData.locationWeather,
+		trickRoomTurns: 0,
+		magicRoomTurns: 0,
+		wonderRoomTurns: 0,
+		terrain: undefined,
+		playerShouldSwitch: undefined,
+		pendingPivot: undefined,
+		aiPendingPivot: undefined,
+		forceEnd: false,
+		playerTerastallizeUsed: false,
+		opponentTerastallizeUsed: false,
+		playerQuickGuard: false,
+		opponentQuickGuard: false,
+		playerWideGuard: false,
+		opponentWideGuard: false,
+		playerCraftyShield: false,
+		opponentCraftyShield: false,
+		playerReflectTurns: 0,
+		opponentReflectTurns: 0,
+		playerLightScreenTurns: 0,
+		opponentLightScreenTurns: 0,
+		playerAuroraVeilTurns: 0,
+		opponentAuroraVeilTurns: 0,
+		gravityTurns: 0,
+		mudSportTurns: 0,
+		waterSportTurns: 0,
+		fairyLockTurns: 0,
+		ionDelugeTurns: 0,
+		playerFutureMoves: [],
+		opponentFutureMoves: [],
+		battleLog: [],
+		floor: 0,
+		overridePlayerParty: null,
+	};
+
+	// 4. Apply Entry Hazards / Abilities
+	if (playerSlots[0]) applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, initialMessages);
+	if (playerSlots[1]) applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, initialMessages);
+	if (opponentSlots[0]) applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, initialMessages);
+	if (opponentSlots[1]) applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, initialMessages);
+
+	// 5. Start Battle
+	activeBattles.set(user.id, battle);
+	battle.battleLog.push(...initialMessages);
+	
+	ctx.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), config.eventId)}`);
+}
 
 function handleUseMedicine(
 	this: CommandContext,
@@ -1093,96 +1200,38 @@ export const commands: ChatCommands = {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (!zone) return this.errorReply("This is not a valid area to explore.");
 
-			const battleType = zone.battleType || 'single';
-			const battleMessages: string[] = [];
-			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const zoneBattleType = zone.battleType || 'single';
 			let finalBattleType: BattleState['battleType'] = 'wild';
+			const battleMessages: string[] = [];
+			const opponentParty: RPGPokemon[] = [];
 
 			try {
-				playerSlots[0] = createActivePokemonSlot(activeParty[0]);
+				// Generate Wild Pokemon 1
 				const wildSpecies1 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
 				const [minLevel, maxLevel] = zone.levelRange;
 				const wildLevel1 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
-				opponentSlots[0] = createActivePokemonSlot(wildPokemon1);
+				opponentParty.push(wildPokemon1);
 
-				if (battleType === 'double') {
+				if (zoneBattleType === 'double') {
 					finalBattleType = 'wild_double';
-					if (activeParty[1]) playerSlots[1] = createActivePokemonSlot(activeParty[1]);
+					// Generate Wild Pokemon 2
 					const wildSpecies2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
 					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
-					opponentSlots[1] = createActivePokemonSlot(wildPokemon2);
+					opponentParty.push(wildPokemon2);
 					battleMessages.push(`A wild ${wildPokemon1.species} and ${wildPokemon2.species} appeared!`);
 				} else {
-					finalBattleType = 'wild';
 					battleMessages.push(`A wild ${wildPokemon1.species} appeared!`);
 				}
 
-				const opponentParty = [opponentSlots[0].pokemon];
-				if (opponentSlots[1]) opponentParty.push(opponentSlots[1].pokemon);
+				initializeAndStartBattle(
+					this, room, user, player, activeParty,
+					{ name: 'Wild Pokémon', party: opponentParty, money: 0 },
+					{ battleType: finalBattleType, zoneId: zoneId },
+					battleMessages
+				);
 
-				const locationWeatherData = getLocationWeatherData(player);
-				if (locationWeatherData.weather) battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
-
-				const battle: BattleState = {
-					battleType: finalBattleType,
-					opponentName: `Wild Pokémon`,
-					opponentParty,
-					opponentMoney: 0,
-					playerSlots,
-					opponentSlots,
-					pendingActions: {},
-					playerId: user.id,
-					turn: 0,
-					zoneId,
-					playerHazards: [],
-					opponentHazards: [],
-					weather: locationWeatherData.weather,
-					locationWeather: locationWeatherData.locationWeather,
-					trickRoomTurns: 0,
-					magicRoomTurns: 0,
-					wonderRoomTurns: 0,
-					terrain: undefined,
-					playerShouldSwitch: undefined,
-					pendingPivot: undefined,
-					aiPendingPivot: undefined,
-					forceEnd: false,
-					playerTerastallizeUsed: false,
-					opponentTerastallizeUsed: false,
-					playerQuickGuard: false,
-					opponentQuickGuard: false,
-					playerWideGuard: false,
-					opponentWideGuard: false,
-					playerCraftyShield: false,
-					opponentCraftyShield: false,
-					playerReflectTurns: 0,
-					opponentReflectTurns: 0,
-					playerLightScreenTurns: 0,
-					opponentLightScreenTurns: 0,
-					playerAuroraVeilTurns: 0,
-					opponentAuroraVeilTurns: 0,
-					gravityTurns: 0,
-					mudSportTurns: 0,
-					waterSportTurns: 0,
-					fairyLockTurns: 0,
-					ionDelugeTurns: 0,
-					playerFutureMoves: [],
-					opponentFutureMoves: [],
-					battleLog: [],
-					floor: 0,
-					overridePlayerParty: null,
-				};
-
-				if (playerSlots[0]) applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
-				if (playerSlots[1]) applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, battleMessages);
-				if (opponentSlots[0]) applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
-				if (opponentSlots[1]) applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, battleMessages);
-
-				activeBattles.set(user.id, battle);
-				battle.battleLog.push(...battleMessages);
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 			} catch (error) {
 				this.errorReply(`Error generating wild Pokémon: ${error}`);
 			}
@@ -1193,6 +1242,8 @@ export const commands: ChatCommands = {
 
 			const eventId = target.trim();
 			const player = getPlayerData(user.id);
+			
+			// Retrieve stored pokemon from PC/Temp storage
 			const tempKey = `scripted_wild_${eventId}`;
 			const wildPokemon = player.pc.get(tempKey);
 
@@ -1203,73 +1254,15 @@ export const commands: ChatCommands = {
 			const activeParty = player.party.filter(p => p.hp > 0);
 			if (activeParty.length === 0) return this.errorReply("Your team is fainted!");
 
-			const battleMessages: string[] = [];
-			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-
 			try {
-				playerSlots[0] = createActivePokemonSlot(activeParty[0]);
-				opponentSlots[0] = createActivePokemonSlot(wildPokemon);
-				battleMessages.push(`A wild ${wildPokemon.shiny ? '✨ ' : ''}${wildPokemon.species} appeared!`);
-
-				const locationWeatherData3 = getLocationWeatherData(player);
-				if (locationWeatherData3.weather) battleMessages.push(getWeatherStartMessage(locationWeatherData3.weather.type));
-
-				const battle: BattleState = {
-					battleType: 'wild',
-					opponentName: `Wild ${wildPokemon.species}`,
-					opponentParty: [wildPokemon],
-					opponentMoney: 0,
-					playerSlots,
-					opponentSlots,
-					pendingActions: {},
-					playerId: user.id,
-					turn: 0,
-					zoneId: 'scripted',
-					playerHazards: [],
-					opponentHazards: [],
-					weather: locationWeatherData3.weather,
-					locationWeather: locationWeatherData3.locationWeather,
-					terrain: undefined,
-					playerShouldSwitch: undefined,
-					pendingPivot: undefined,
-					aiPendingPivot: undefined,
-					forceEnd: false,
-					trickRoomTurns: 0,
-					magicRoomTurns: 0,
-					wonderRoomTurns: 0,
-					gravityTurns: 0,
-					mudSportTurns: 0,
-					waterSportTurns: 0,
-					fairyLockTurns: 0,
-					ionDelugeTurns: 0,
-					playerQuickGuard: false,
-					opponentQuickGuard: false,
-					playerWideGuard: false,
-					opponentWideGuard: false,
-					playerCraftyShield: false,
-					opponentCraftyShield: false,
-					playerReflectTurns: 0,
-					opponentReflectTurns: 0,
-					playerLightScreenTurns: 0,
-					opponentLightScreenTurns: 0,
-					playerAuroraVeilTurns: 0,
-					opponentAuroraVeilTurns: 0,
-					playerTerastallizeUsed: false,
-					opponentTerastallizeUsed: false,
-					playerFutureMoves: [],
-					opponentFutureMoves: [],
-					battleLog: [],
-					floor: 0,
-					overridePlayerParty: null,
-				};
-
-				if (playerSlots[0]) applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
-				if (opponentSlots[0]) applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
-
-				activeBattles.set(user.id, battle);
-				battle.battleLog.push(...battleMessages);
-				this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), eventId)}`);
+				const startMsg = `A wild ${wildPokemon.shiny ? '✨ ' : ''}${wildPokemon.species} appeared!`;
+				
+				initializeAndStartBattle(
+					this, room, user, player, activeParty,
+					{ name: `Wild ${wildPokemon.species}`, party: [wildPokemon], money: 0 },
+					{ battleType: 'wild', zoneId: 'scripted', eventId: eventId },
+					[startMsg]
+				);
 			} catch (error) {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
@@ -1293,6 +1286,7 @@ export const commands: ChatCommands = {
 			const trainerSpec = TRAINER_DATABASE[trainerId];
 			if (!trainerSpec) return this.errorReply("That trainer could not be found.");
 
+			// Reconstruct Trainer Party
 			const trainerParty: RPGPokemon[] = [];
 			for (const spec of trainerSpec.party) {
 				const pokemon = createPokemon(spec.species, spec.level);
@@ -1308,86 +1302,20 @@ export const commands: ChatCommands = {
 
 			if (trainerParty.length === 0) return this.errorReply("This trainer has no Pokémon!");
 
-			const battleType = trainerSpec.battleType || 'single';
-			const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-			const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+			const specBattleType = trainerSpec.battleType || 'single';
 			let finalBattleType: BattleState['battleType'] = 'trainer';
+			if (specBattleType === 'double') finalBattleType = 'trainer_double';
 
-			playerSlots[0] = createActivePokemonSlot(activeParty[0]);
-			opponentSlots[0] = createActivePokemonSlot(trainerParty[0]);
-
-			if (battleType === 'double') {
-				finalBattleType = 'trainer_double';
-				if (activeParty[1]) playerSlots[1] = createActivePokemonSlot(activeParty[1]);
-				if (trainerParty[1]) opponentSlots[1] = createActivePokemonSlot(trainerParty[1]);
-			}
-
-			const locationWeatherData2 = getLocationWeatherData(player);
 			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
-			const challengeMessages = [startMessage];
 
-			const battle: BattleState = {
-				battleType: finalBattleType,
-				opponentName: trainerSpec.name,
-				opponentParty: trainerParty,
-				opponentMoney: trainerSpec.money,
-				trainerId,
-				playerSlots,
-				opponentSlots,
-				pendingActions: {},
-				playerId: user.id,
-				turn: 0,
-				zoneId: 'trainer_battle',
-				playerHazards: [],
-				opponentHazards: [],
-				weather: locationWeatherData2.weather,
-				locationWeather: locationWeatherData2.locationWeather,
-				trickRoomTurns: 0,
-				magicRoomTurns: 0,
-				wonderRoomTurns: 0,
-				terrain: undefined, 
-				playerShouldSwitch: undefined,
-				pendingPivot: undefined,
-				aiPendingPivot: undefined,
-				forceEnd: false,
-				playerTerastallizeUsed: false,
-				opponentTerastallizeUsed: false,
-				playerQuickGuard: false,
-				opponentQuickGuard: false,
-				playerWideGuard: false,
-				opponentWideGuard: false,
-				playerCraftyShield: false,
-				opponentCraftyShield: false,
-				playerReflectTurns: 0,
-				opponentReflectTurns: 0,
-				playerLightScreenTurns: 0,
-				opponentLightScreenTurns: 0,
-				playerAuroraVeilTurns: 0,
-				opponentAuroraVeilTurns: 0,
-				gravityTurns: 0,
-				mudSportTurns: 0,
-				waterSportTurns: 0,
-				fairyLockTurns: 0,
-				ionDelugeTurns: 0,
-				playerFutureMoves: [],
-				opponentFutureMoves: [],
-				battleLog: [],
-				floor: 0,
-				overridePlayerParty: null,
-			};
-
-			if (playerSlots[0]) applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, challengeMessages);
-			if (playerSlots[1]) applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, challengeMessages);
-			if (opponentSlots[0]) applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, challengeMessages);
-			if (opponentSlots[1]) applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, challengeMessages);
-
-			activeBattles.set(user.id, battle);
-			if (locationWeatherData2.weather) challengeMessages.push(getWeatherStartMessage(locationWeatherData2.weather.type));
-			battle.battleLog.push(...challengeMessages);
-
-			this.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), eventId)}`);
+			initializeAndStartBattle(
+				this, room, user, player, activeParty,
+				{ name: trainerSpec.name, party: trainerParty, money: trainerSpec.money, trainerId: trainerId },
+				{ battleType: finalBattleType, zoneId: 'trainer_battle', eventId: eventId },
+				[startMessage]
+			);
 		},
-
+		
 		battle(target, room, user) {
 			if (activeBattles.has(user.id)) return this.errorReply("You are already in a battle!");
 			
