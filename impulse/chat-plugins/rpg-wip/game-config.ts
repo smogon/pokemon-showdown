@@ -1,14 +1,11 @@
 /*
 * Pokemon Showdown
 * RPG Game Configuration
-*
-* This file holds all the "Magic Numbers" and constants for the game.
-* Modify this file to change the starting state without touching the engine code.
 */
 
 export const GameConfig = {
 	// Starting State
-	startLocationId: 'start_room', // Matches locations.ts
+	startLocationId: 'startingroom', // [CHANGED] Matches toID("Starting Room")
 	startMoney: 3000,
 	startInventory: [
 		{ id: 'pokeball', quantity: 5 },
