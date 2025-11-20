@@ -98,11 +98,12 @@ async function getUserProfileData(userid: string) {
 		const result = JSON.parse(rawResult);
 		if (result.registertime) {
 			const date = new Date(result.registertime * 1000);
-			// Format as day, month, year for better readability
-			const day = date.getDate();
-			const month = date.getMonth() + 1; // getMonth() returns 0-11
+			// Format as Mon, Oct 07, 2024 for better readability
+			const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+			const month = date.toLocaleString('en-US', { month: 'short' });
+			const day = String(date.getDate()).padStart(2, '0');
 			const year = date.getFullYear();
-			data.registrationDate = `${day}, ${month}, ${year}`;
+			data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
 		}
 	} catch {
 		// Registration date not available
