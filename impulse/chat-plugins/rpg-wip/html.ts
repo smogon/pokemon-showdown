@@ -2232,14 +2232,15 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 // -------------------------------------------------------------------------------------
 // 9. New Event & Interaction UI Handlers
 // -------------------------------------------------------------------------------------
-
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
+	// Display the narrative text
 	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
 	html += `<p>${message}</p>`;
 	html += `</div>`;
 
+	// --- Interactive Elements (Choices) ---
 	if (event.type === 'choice' && event.choices) {
 		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
 		event.choices.forEach((choice: any, idx: number) => {
@@ -2268,14 +2269,35 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	else if (event.type === 'wildbattle' || event.type === 'bossbattle') {
-		const cmd = event.type === 'bossbattle' ? `/rpg challenge ${event.bossTrainerId}` : `/rpg scriptedbattle ${event.id}`;
-		html += `<p class="rpg-text-center"><button name="send" value="${cmd}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+	// --- Action Buttons (Battles) ---
+	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
+		// Determine command and button text based on battle type
+		let cmd = `/rpg scriptedbattle ${event.id}`;
+		let btnText = "⚔️ Battle!";
+		
+		if (event.type === 'bossbattle' && event.bossTrainerId) {
+			// Trainer Bosses use the challenge command
+			cmd = `/rpg challenge ${event.bossTrainerId}`;
+			btnText = "⚔️ Challenge Boss";
+		} else if (event.type === 'raidbattle') {
+			// Raid Battles use scriptedbattle but have special text
+			btnText = "⚔️ Start Raid";
+		}
+
+		html += `<p class="rpg-text-center">`;
+		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
+		// Safety "Run Away" button to prevent Soft Locks if player can't/won't fight
+		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+		html += `</p>`;
 	} 
 	else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
 		const trainerId = event.trainerId || event.gymLeaderId;
-		html += `<p class="rpg-text-center"><button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+		html += `<p class="rpg-text-center">`;
+		html += `<button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Battle!</button><br>`;
+		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+		html += `</p>`;
 	} 
+	// --- Standard Event (No interaction required) ---
 	else {
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
