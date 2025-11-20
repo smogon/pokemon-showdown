@@ -3,7 +3,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
