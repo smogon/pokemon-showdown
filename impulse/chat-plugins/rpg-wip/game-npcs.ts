@@ -286,6 +286,252 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 	},
 
+	// Hoenn Gym Leaders (Badges 17-24)
+	roxanne: {
+		name: 'Roxanne (Stone Badge)',
+		money: 4500,
+		party: [
+			{ species: 'geodude', level: 74, moves: ['rockthrow', 'defensecurl', 'rollout', 'earthquake'] },
+			{ species: 'nosepass', level: 77, moves: ['rockslide', 'thunderbolt', 'block', 'sandstorm'] },
+		],
+		dialogue: { start: "I'm Roxanne, Rustboro Gym Leader. Rock types are my specialty!", win: "Your Pokemon are impressive. Take the Stone Badge.", lose: "Rock solid power!" },
+	},
+	brawly: {
+		name: 'Brawly (Knuckle Badge)',
+		money: 4700,
+		party: [
+			{ species: 'machop', level: 76, moves: ['karatechop', 'vitalthrow', 'seismictoss', 'crosschop'] },
+			{ species: 'makuhita', level: 79, moves: ['armthrust', 'vitalthrow', 'reversal', 'closecombat'] },
+		],
+		dialogue: { start: "I'm Brawly! Let's see your fighting spirit!", win: "You've got serious strength!", lose: "Fighting spirit never dies!" },
+	},
+	wattson: {
+		name: 'Wattson (Dynamo Badge)',
+		money: 4900,
+		party: [
+			{ species: 'voltorb', level: 78, moves: ['spark', 'sonicboom', 'selfdestruct', 'explosion'] },
+			{ species: 'magneton', level: 79, moves: ['thunderbolt', 'sonicboom', 'supersonic', 'screech'] },
+			{ species: 'manectric', level: 82, moves: ['thunderbolt', 'quickattack', 'bite', 'thunder'] },
+		],
+		dialogue: { start: "Wahahahaha! I'm Wattson! Prepare to be shocked!", win: "You're electrifying! Take the Dynamo Badge!", lose: "The power of electricity!" },
+	},
+	flannery: {
+		name: 'Flannery (Heat Badge)',
+		money: 5100,
+		party: [
+			{ species: 'slugma', level: 80, moves: ['ember', 'rockthrow', 'harden', 'flamethrower'] },
+			{ species: 'camerupt', level: 81, moves: ['earthquake', 'overheat', 'rockslide', 'eruption'] },
+			{ species: 'torkoal', level: 83, moves: ['overheat', 'bodyslam', 'flamethrower', 'irondefense'] },
+		],
+		dialogue: { start: "I'm Flannery! My fiery passion will overwhelm you!", win: "Your intensity burns bright!", lose: "Feel the heat!" },
+	},
+	norman: {
+		name: 'Norman (Balance Badge)',
+		money: 5300,
+		party: [
+			{ species: 'slaking', level: 84, moves: ['yawn', 'facade', 'feintattack', 'hyperbeam'] },
+			{ species: 'vigoroth', level: 82, moves: ['slash', 'furycutter', 'endure', 'reversal'] },
+			{ species: 'slaking', level: 86, moves: ['hyperbeam', 'counter', 'facade', 'earthquake'] },
+		],
+		dialogue: { start: "I'm Norman, your father! Show me what you've learned!", win: "I'm proud of you! Take the Balance Badge!", lose: "That's my child!" },
+	},
+	winona: {
+		name: 'Winona (Feather Badge)',
+		money: 5500,
+		party: [
+			{ species: 'swablu', level: 83, moves: ['perish song', 'mirrorof', 'safeguard', 'aerialace'] },
+			{ species: 'tropius', level: 83, moves: ['sunnyday', 'synthesis', 'solarbeam', 'aerialace'] },
+			{ species: 'pelipper', level: 84, moves: ['watersport', 'stockpile', 'swallow', 'surf'] },
+			{ species: 'altaria', level: 87, moves: ['earthquake', 'dragonbreath', 'dragondance', 'aerialace'] },
+		],
+		dialogue: { start: "I'm Winona! My bird Pokemon dance in the sky!", win: "You truly soar! Take the Feather Badge!", lose: "Grace of the skies!" },
+	},
+	tateandliza: {
+		name: 'Tate & Liza (Mind Badge)',
+		money: 5700,
+		party: [
+			{ species: 'lunatone', level: 86, moves: ['hypnosis', 'psychic', 'lightscreen', 'cosmicpower'] },
+			{ species: 'solrock', level: 86, moves: ['sunnyday', 'solarbeam', 'psychic', 'flamethrower'] },
+		],
+		dialogue: { start: "We are Tate and Liza! Our minds are one!", win: "Your bond with your Pokemon rivals ours!", lose: "Unity is strength!" },
+	},
+	juan: {
+		name: 'Juan (Rain Badge)',
+		money: 6000,
+		party: [
+			{ species: 'luvdisc', level: 85, moves: ['watergun', 'attract', 'sweetkiss', 'waterpulse'] },
+			{ species: 'whiscash', level: 86, moves: ['earthquake', 'surf', 'amnesia', 'rest'] },
+			{ species: 'sealeo', level: 86, moves: ['bodyslam', 'surf', 'aurorabeam', 'hail'] },
+			{ species: 'crawdaunt', level: 87, moves: ['crabhammer', 'swordsdance', 'surf', 'guillotine'] },
+			{ species: 'kingdra', level: 89, moves: ['waterpulse', 'smokescreen', 'icebeam', 'hydropump'] },
+		],
+		dialogue: { start: "I am Juan, master of Water Pokemon! Beauty and elegance!", win: "Magnifique! Take the Rain Badge!", lose: "The beauty of water!" },
+	},
+
+	// Sinnoh Gym Leaders (Badges 25-32)
+	roark: {
+		name: 'Roark (Coal Badge)',
+		money: 6200,
+		party: [
+			{ species: 'geodude', level: 86, moves: ['rockthrow', 'rollout', 'magnitude', 'rockslide'] },
+			{ species: 'onix', level: 87, moves: ['screech', 'rockthrow', 'rockslide', 'ironhead'] },
+			{ species: 'cranidos', level: 90, moves: ['headbutt', 'zenheadbutt', 'pursuit', 'headsmash'] },
+		],
+		dialogue: { start: "I'm Roark! I'll show you the power of Rock Pokemon!", win: "Your Pokemon are rock solid! Coal Badge is yours!", lose: "Mining through opposition!" },
+	},
+	gardenia: {
+		name: 'Gardenia (Forest Badge)',
+		money: 6400,
+		party: [
+			{ species: 'cherubi', level: 87, moves: ['magicalleaf', 'leechseed', 'grassknot', 'solarbeam'] },
+			{ species: 'turtwig', level: 88, moves: ['razorleaf', 'curse', 'bite', 'absorb'] },
+			{ species: 'roserade', level: 91, moves: ['grassknot', 'sludgebomb', 'gigadrain', 'weatherball'] },
+		],
+		dialogue: { start: "I'm Gardenia! Grass Pokemon are my life!", win: "You've blossomed beautifully! Forest Badge!", lose: "Nature's power!" },
+	},
+	fantina: {
+		name: 'Fantina (Relic Badge)',
+		money: 6600,
+		party: [
+			{ species: 'duskull', level: 89, moves: ['shadowsneak', 'confuseray', 'shadowball', 'willowisp'] },
+			{ species: 'haunter', level: 89, moves: ['shadowclaw', 'confuseray', 'shadowball', 'sludgebomb'] },
+			{ species: 'mismagius', level: 92, moves: ['psybeam', 'shadowball', 'magicalleaf', 'confuseray'] },
+		],
+		dialogue: { start: "I am Fantina! Ghosts are très magnifique!", win: "C'est la vie! The Relic Badge is yours!", lose: "Spectral beauty!" },
+	},
+	maylene: {
+		name: 'Maylene (Cobble Badge)',
+		money: 6800,
+		party: [
+			{ species: 'meditite', level: 90, moves: ['drainpunch', 'confusion', 'detect', 'highjumpkick'] },
+			{ species: 'machoke', level: 90, moves: ['karatechop', 'seismictoss', 'rockslide', 'revenge'] },
+			{ species: 'lucario', level: 93, moves: ['forcepulm', 'boneme rush', 'aurasphere', 'metalclaw'] },
+		],
+		dialogue: { start: "I'm Maylene! Fighting is my way!", win: "You've got true fighting spirit!", lose: "Combat excellence!" },
+	},
+	crasherwake: {
+		name: 'Crasher Wake (Fen Badge)',
+		money: 7000,
+		party: [
+			{ species: 'gyarados', level: 91, moves: ['waterfall', 'icefang', 'bite', 'aquatail'] },
+			{ species: 'quagsire', level: 91, moves: ['surf', 'earthquake', 'rockslide', 'recover'] },
+			{ species: 'floatzel', level: 94, moves: ['crunch', 'aquajet', 'icebeam', 'aquatail'] },
+		],
+		dialogue: { start: "I am the torrential Crasher Wake!", win: "CRASHER WAKE! You are strong! Fen Badge!", lose: "The crashing waves!" },
+	},
+	byron: {
+		name: 'Byron (Mine Badge)',
+		money: 7200,
+		party: [
+			{ species: 'magneton', level: 92, moves: ['thunderbolt', 'triattack', 'metalsound', 'flashcannon'] },
+			{ species: 'steelix', level: 92, moves: ['earthquake', 'ironhead', 'crunch', 'sandstorm'] },
+			{ species: 'bastiodon', level: 95, moves: ['metalburst', 'ironhead', 'stoneedge', 'flashcannon'] },
+		],
+		dialogue: { start: "I'm Byron! Steel is the strongest!", win: "Your Pokemon shine! Mine Badge is yours!", lose: "Steel forged in battle!" },
+	},
+	candice: {
+		name: 'Candice (Icicle Badge)',
+		money: 7400,
+		party: [
+			{ species: 'sneasel', level: 93, moves: ['iceshard', 'slash', 'avalanche', 'icebeam'] },
+			{ species: 'piloswine', level: 93, moves: ['earthquake', 'avalanche', 'iceshard', 'stoneedge'] },
+			{ species: 'abomasnow', level: 94, moves: ['grassknot', 'iceshard', 'blizzard', 'woodhammer'] },
+			{ species: 'froslass', level: 96, moves: ['ominouswind', 'blizzard', 'psychic', 'shadowball'] },
+		],
+		dialogue: { start: "I'm Candice! Ice Pokemon freeze all!", win: "You melted my defenses! Icicle Badge!", lose: "Frozen perfection!" },
+	},
+	volkner: {
+		name: 'Volkner (Beacon Badge)',
+		money: 7600,
+		party: [
+			{ species: 'raichu', level: 94, moves: ['thunderbolt', 'quickattack', 'irontail', 'voltswitch'] },
+			{ species: 'luxray', level: 95, moves: ['crunch', 'thunderfang', 'icefang', 'wildcharge'] },
+			{ species: 'electivire', level: 96, moves: ['thunderpunch', 'crosschop', 'earthquake', 'gigaimpact'] },
+			{ species: 'jolteon', level: 97, moves: ['thunderbolt', 'shadowball', 'signalbeam', 'thunder'] },
+		],
+		dialogue: { start: "I'm Volkner! Finally, a worthy challenge!", win: "You electrified me! Beacon Badge is yours!", lose: "Ultimate electricity!" },
+	},
+
+	// Unova Gym Leaders (Badges 33-40)
+	striatonbrothers: {
+		name: 'Striaton Brothers (Trio Badge)',
+		money: 7800,
+		party: [
+			{ species: 'pansage', level: 94, moves: ['vinewhip', 'bite', 'seedbomb', 'solarbeam'] },
+			{ species: 'pansear', level: 94, moves: ['incinerate', 'bite', 'flamethrower', 'fireblast'] },
+			{ species: 'panpour', level: 94, moves: ['watergun', 'bite', 'scald', 'hydropump'] },
+		],
+		dialogue: { start: "We are Cilan, Chili, and Cress! Three brothers, one goal!", win: "A tri-fecta of talent! Trio Badge!", lose: "Three types, one victory!" },
+	},
+	lenora: {
+		name: 'Lenora (Basic Badge)',
+		money: 8000,
+		party: [
+			{ species: 'watchog', level: 95, moves: ['crunch', 'hypnosis', 'superfang', 'retaliate'] },
+			{ species: 'lil lipup', level: 96, moves: ['takedown', 'workup', 'crunch', 'gigaimpact'] },
+		],
+		dialogue: { start: "I'm Lenora! History and Pokemon are my passions!", win: "You've made history! Basic Badge!", lose: "Knowledge is power!" },
+	},
+	burgh: {
+		name: 'Burgh (Insect Badge)',
+		money: 8200,
+		party: [
+			{ species: 'whirlipede', level: 96, moves: ['poisontail', 'screech', 'steamroller', 'venoshock'] },
+			{ species: 'dwebble', level: 96, moves: ['smackdown', 'rockslide', 'bugbite', 'shellsmash'] },
+			{ species: 'leavanny', level: 99, moves: ['stringshot', 'bugbuzz', 'leafblade', 'swordsdance'] },
+		],
+		dialogue: { start: "I'm Burgh, the artistic Bug Pokemon master!", win: "Your battle art is beautiful! Insect Badge!", lose: "Artistic excellence!" },
+	},
+	elesa: {
+		name: 'Elesa (Bolt Badge)',
+		money: 8400,
+		party: [
+			{ species: 'emolga', level: 97, moves: ['voltswitch', 'aerialace', 'electroball', 'acrobatics'] },
+			{ species: 'zebstrika', level: 98, moves: ['flamech arge', 'pursuit', 'wildcharge', 'overheat'] },
+		],
+		dialogue: { start: "I'm Elesa! My Pokemon shine like stars!", win: "You're dazzling! Bolt Badge is yours!", lose: "Electrifying beauty!" },
+	},
+	clay: {
+		name: 'Clay (Quake Badge)',
+		money: 8600,
+		party: [
+			{ species: 'krokorok', level: 98, moves: ['crunch', 'dig', 'earthquake', 'stoneedge'] },
+			{ species: 'palpitoad', level: 98, moves: ['mudshot', 'aquaring', 'surf', 'earthpower'] },
+			{ species: 'excadrill', level: 100, moves: ['rockslide', 'earthquake', 'slash', 'horndrill'] },
+		],
+		dialogue: { start: "I'm Clay! I dig for victory!", win: "You struck gold! Quake Badge!", lose: "Earth-shaking power!" },
+	},
+	skyla: {
+		name: 'Skyla (Jet Badge)',
+		money: 8800,
+		party: [
+			{ species: 'swoobat', level: 99, moves: ['acrobatics', 'psychic', 'airslash', 'attract'] },
+			{ species: 'unfezant', level: 99, moves: ['quickattack', 'skyattack', 'detect', 'aerialace'] },
+			{ species: 'swanna', level: 100, moves: ['bubblebeam', 'airslash', 'bravebird', 'hurricane'] },
+		],
+		dialogue: { start: "I'm Skyla! The sky is my playground!", win: "You soared to victory! Jet Badge!", lose: "Wings of freedom!" },
+	},
+	brycen: {
+		name: 'Brycen (Freeze Badge)',
+		money: 9000,
+		party: [
+			{ species: 'vanillish', level: 99, moves: ['iciclespear', 'mirrorshot', 'blizzard', 'flashcannon'] },
+			{ species: 'cryogonal', level: 99, moves: ['rapidspin', 'icebeam', 'recover', 'solarbeam'] },
+			{ species: 'beartic', level: 100, moves: ['brine', 'iciclecrash', 'swagger', 'superpower'] },
+		],
+		dialogue: { start: "I'm Brycen! Former actor, now Ice master!", win: "A performance worthy of applause! Freeze Badge!", lose: "Cold as ice!" },
+	},
+	drayden: {
+		name: 'Drayden (Legend Badge)',
+		money: 9200,
+		party: [
+			{ species: 'druddigon', level: 100, moves: ['dragonrage', 'slash', 'revenge', 'dragontail'] },
+			{ species: 'flygon', level: 100, moves: ['earthquake', 'dragonclaw', 'crunch', 'gigaimpact'] },
+			{ species: 'haxorus', level: 100, moves: ['dragonpulse', 'assurance', 'slash', 'dragondance'] },
+		],
+		dialogue: { start: "I'm Drayden! Mayor and Dragon Master!", win: "You are legendary! Legend Badge is yours!", lose: "Dragon supremacy!" },
+	},
+
 	// Regular Trainers
 	youngsterjoey: {
 		name: 'Youngster Joey',
@@ -341,8 +587,75 @@ export const BADGES: BadgeInfo[] = [
 	{ gymLeaderId: 'pryce', badgeName: 'Glacier Badge', order: 15, description: 'Mahogany Town - Ice Badge' },
 	{ gymLeaderId: 'clair', badgeName: 'Rising Badge', order: 16, description: 'Blackthorn City - Dragon Badge' },
 	
-	// Future regions (Hoenn through Paldea) would continue here
-	// Total of 72 badges across all 9 regions
+	// Hoenn Badges (16-23, order 17-24)
+	{ gymLeaderId: 'roxanne', badgeName: 'Stone Badge', order: 17, description: 'Rustboro City - Rock Badge' },
+	{ gymLeaderId: 'brawly', badgeName: 'Knuckle Badge', order: 18, description: 'Dewford Town - Fighting Badge' },
+	{ gymLeaderId: 'wattson', badgeName: 'Dynamo Badge', order: 19, description: 'Mauville City - Electric Badge' },
+	{ gymLeaderId: 'flannery', badgeName: 'Heat Badge', order: 20, description: 'Lavaridge Town - Fire Badge' },
+	{ gymLeaderId: 'norman', badgeName: 'Balance Badge', order: 21, description: 'Petalburg City - Normal Badge' },
+	{ gymLeaderId: 'winona', badgeName: 'Feather Badge', order: 22, description: 'Fortree City - Flying Badge' },
+	{ gymLeaderId: 'tateandliza', badgeName: 'Mind Badge', order: 23, description: 'Mossdeep City - Psychic Badge' },
+	{ gymLeaderId: 'juan', badgeName: 'Rain Badge', order: 24, description: 'Sootopolis City - Water Badge' },
+	
+	// Sinnoh Badges (24-31, order 25-32)
+	{ gymLeaderId: 'roark', badgeName: 'Coal Badge', order: 25, description: 'Oreburgh City - Rock Badge' },
+	{ gymLeaderId: 'gardenia', badgeName: 'Forest Badge', order: 26, description: 'Eterna City - Grass Badge' },
+	{ gymLeaderId: 'fantina', badgeName: 'Relic Badge', order: 27, description: 'Hearthome City - Ghost Badge' },
+	{ gymLeaderId: 'maylene', badgeName: 'Cobble Badge', order: 28, description: 'Veilstone City - Fighting Badge' },
+	{ gymLeaderId: 'crasherwake', badgeName: 'Fen Badge', order: 29, description: 'Pastoria City - Water Badge' },
+	{ gymLeaderId: 'byron', badgeName: 'Mine Badge', order: 30, description: 'Canalave City - Steel Badge' },
+	{ gymLeaderId: 'candice', badgeName: 'Icicle Badge', order: 31, description: 'Snowpoint City - Ice Badge' },
+	{ gymLeaderId: 'volkner', badgeName: 'Beacon Badge', order: 32, description: 'Sunyshore City - Electric Badge' },
+	
+	// Unova Badges (32-39, order 33-40)
+	{ gymLeaderId: 'striatonbrothers', badgeName: 'Trio Badge', order: 33, description: 'Striaton City - Multi-type Badge' },
+	{ gymLeaderId: 'lenora', badgeName: 'Basic Badge', order: 34, description: 'Nacrene City - Normal Badge' },
+	{ gymLeaderId: 'burgh', badgeName: 'Insect Badge', order: 35, description: 'Castelia City - Bug Badge' },
+	{ gymLeaderId: 'elesa', badgeName: 'Bolt Badge', order: 36, description: 'Nimbasa City - Electric Badge' },
+	{ gymLeaderId: 'clay', badgeName: 'Quake Badge', order: 37, description: 'Driftveil City - Ground Badge' },
+	{ gymLeaderId: 'skyla', badgeName: 'Jet Badge', order: 38, description: 'Mistralton City - Flying Badge' },
+	{ gymLeaderId: 'brycen', badgeName: 'Freeze Badge', order: 39, description: 'Icirrus City - Ice Badge' },
+	{ gymLeaderId: 'drayden', badgeName: 'Legend Badge', order: 40, description: 'Opelucid City - Dragon Badge' },
+	
+	// Kalos Badges (40-47, order 41-48) - Simplified
+	{ gymLeaderId: 'kalosleader1', badgeName: 'Bug Badge', order: 41, description: 'Kalos Badge 1' },
+	{ gymLeaderId: 'kalosleader2', badgeName: 'Cliff Badge', order: 42, description: 'Kalos Badge 2' },
+	{ gymLeaderId: 'kalosleader3', badgeName: 'Rumble Badge', order: 43, description: 'Kalos Badge 3' },
+	{ gymLeaderId: 'kalosleader4', badgeName: 'Plant Badge', order: 44, description: 'Kalos Badge 4' },
+	{ gymLeaderId: 'kalosleader5', badgeName: 'Voltage Badge', order: 45, description: 'Kalos Badge 5' },
+	{ gymLeaderId: 'kalosleader6', badgeName: 'Fairy Badge', order: 46, description: 'Kalos Badge 6' },
+	{ gymLeaderId: 'kalosleader7', badgeName: 'Psychic Badge', order: 47, description: 'Kalos Badge 7' },
+	{ gymLeaderId: 'kalosleader8', badgeName: 'Iceberg Badge', order: 48, description: 'Kalos Badge 8' },
+	
+	// Alola Trials (48-55, order 49-56) - Island Challenge
+	{ gymLeaderId: 'alolatrial1', badgeName: 'Normalium Z', order: 49, description: 'Melemele Island Trial' },
+	{ gymLeaderId: 'alolatrial2', badgeName: 'Fightinium Z', order: 50, description: 'Akala Island Trial 1' },
+	{ gymLeaderId: 'alolatrial3', badgeName: 'Firium Z', order: 51, description: 'Akala Island Trial 2' },
+	{ gymLeaderId: 'alolatrial4', badgeName: 'Grassium Z', order: 52, description: 'Akala Island Trial 3' },
+	{ gymLeaderId: 'alolatrial5', badgeName: 'Electrium Z', order: 53, description: 'Ula\'ula Island Trial 1' },
+	{ gymLeaderId: 'alolatrial6', badgeName: 'Ghostium Z', order: 54, description: 'Ula\'ula Island Trial 2' },
+	{ gymLeaderId: 'alolatrial7', badgeName: 'Darkinium Z', order: 55, description: 'Po Town' },
+	{ gymLeaderId: 'alolatrial8', badgeName: 'Dragonium Z', order: 56, description: 'Poni Island Trial' },
+	
+	// Galar Badges (56-63, order 57-64)
+	{ gymLeaderId: 'galarleader1', badgeName: 'Grass Badge', order: 57, description: 'Turffield Stadium' },
+	{ gymLeaderId: 'galarleader2', badgeName: 'Water Badge', order: 58, description: 'Hulbury Stadium' },
+	{ gymLeaderId: 'galarleader3', badgeName: 'Fire Badge', order: 59, description: 'Motostoke Stadium' },
+	{ gymLeaderId: 'galarleader4', badgeName: 'Fighting Badge', order: 60, description: 'Stow-on-Side Stadium' },
+	{ gymLeaderId: 'galarleader5', badgeName: 'Fairy Badge', order: 61, description: 'Ballonlea Stadium' },
+	{ gymLeaderId: 'galarleader6', badgeName: 'Rock Badge', order: 62, description: 'Circhester Stadium' },
+	{ gymLeaderId: 'galarleader7', badgeName: 'Ice Badge', order: 63, description: 'Circhester Stadium' },
+	{ gymLeaderId: 'galarleader8', badgeName: 'Dragon Badge', order: 64, description: 'Hammerlocke Stadium' },
+	
+	// Paldea Badges (64-71, order 65-72)
+	{ gymLeaderId: 'paldealeader1', badgeName: 'Bug Badge', order: 65, description: 'Cortondo Gym' },
+	{ gymLeaderId: 'paldealeader2', badgeName: 'Grass Badge', order: 66, description: 'Artazon Gym' },
+	{ gymLeaderId: 'paldealeader3', badgeName: 'Electric Badge', order: 67, description: 'Levincia Gym' },
+	{ gymLeaderId: 'paldealeader4', badgeName: 'Water Badge', order: 68, description: 'Cascarrafa Gym' },
+	{ gymLeaderId: 'paldealeader5', badgeName: 'Normal Badge', order: 69, description: 'Medali Gym' },
+	{ gymLeaderId: 'paldealeader6', badgeName: 'Ghost Badge', order: 70, description: 'Montenevera Gym' },
+	{ gymLeaderId: 'paldealeader7', badgeName: 'Psychic Badge', order: 71, description: 'Alfornada Gym' },
+	{ gymLeaderId: 'paldealeader8', badgeName: 'Ice Badge', order: 72, description: 'Glaseado Gym' },
 ];
 
 // ============================================================================
