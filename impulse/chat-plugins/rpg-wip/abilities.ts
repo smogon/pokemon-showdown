@@ -1,7 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Abilities
-*/
 import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots } from './utils';
 import { applyStatChange } from './battle-shared';
@@ -10,8 +6,6 @@ import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, 
 export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
 	const attackerAbility = toID(attacker.ability || '');
 	if (['moldbreaker', 'turboblaze', 'teravolt'].includes(attackerAbility)) {
-		// These abilities ignore most defensive abilities
-		// Add any abilities that CANNOT be ignored here
 		if (['disguise', 'stancechange', 'schooling', 'comatose'].includes(defenderAbilityId)) {
 			return false;
 		}
@@ -108,7 +102,6 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	'windpower': ctx => {
 		const windMoves = ['twister', 'gust', 'whirlwind', 'hurricane', 'tailwind', 'icy wind', 'heat wave', 'sandstorm', 'blizzard'];
 		if (windMoves.includes(ctx.move.id)) {
-			// Handled in battle flow - gains Charge status
 			return {
 				immune: true,
 				message: `${ctx.defender.species}'s Wind Power charged it up!`,
@@ -234,7 +227,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 		}
 
 		const defenderSpecies = Dex.species.get(ctx.defender.species);
-		// Get actual types (accounting for terastallization)
+
 		const defenderTypes = ctx.defenderSlot.terastallized ? [ctx.defenderSlot.terastallized] : defenderSpecies.types;
 		let effectiveness = 1;
 
@@ -293,13 +286,10 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	},
 
 	'telepathy': ctx => {
-		// Telepathy makes the Pokemon immune to allies' moves
-		// Check if attacker is an ally (same side in double battles)
 		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
 		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
 
 		if (attackerIsPlayer === defenderIsPlayer) {
-			// Same team - Telepathy blocks the move
 			return {
 				immune: true,
 				message: `${ctx.defender.species}'s Telepathy protects it from its ally's move!`,
@@ -490,7 +480,7 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler> = {
 	'normalize': (ctx, moveType) => {
 		if (ctx.move.category !== 'Status') {
-			(ctx.move as any).typeConversionBoost = true;
+			(ctx.move).typeConversionBoost = true;
 			return 'Normal';
 		}
 		return moveType;
@@ -498,7 +488,7 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 
 	'pixilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
-			(ctx.move as any).typeConversionBoost = true;
+			(ctx.move).typeConversionBoost = true;
 			return 'Fairy';
 		}
 		return moveType;
@@ -506,7 +496,7 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 
 	'refrigerate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
-			(ctx.move as any).typeConversionBoost = true;
+			(ctx.move).typeConversionBoost = true;
 			return 'Ice';
 		}
 		return moveType;
@@ -514,7 +504,7 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 
 	'aerilate': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
-			(ctx.move as any).typeConversionBoost = true;
+			(ctx.move).typeConversionBoost = true;
 			return 'Flying';
 		}
 		return moveType;
@@ -522,7 +512,7 @@ export const TYPE_MODIFIER_ABILITIES: Record<string, AbilityTypeModifierHandler>
 
 	'galvanize': (ctx, moveType) => {
 		if (moveType === 'Normal' && ctx.move.category !== 'Status') {
-			(ctx.move as any).typeConversionBoost = true;
+			(ctx.move).typeConversionBoost = true;
 			return 'Electric';
 		}
 		return moveType;
@@ -676,14 +666,12 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'protosynthesis': (pokemon, stat, value, slot, battle) => {
-		// Check if active (in sun or has Booster Energy consumed)
 		const inSun = battle && RPGAbilities.isWeatherActive(battle) &&
 			(battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun');
-		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
+		const hasBoosterActive = slot?.boosterEnergyActive;
 
 		if (!inSun && !hasBoosterActive) return value;
 
-		// Determine highest stat
 		const stats = {
 			atk: pokemon.atk,
 			def: pokemon.def,
@@ -702,7 +690,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			}
 		}
 
-		// Boost the highest stat by 1.3x (rounded down in Gen 9)
 		if (stat === highestStat) {
 			return Math.floor(value * 1.3);
 		}
@@ -710,13 +697,11 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 	},
 
 	'quarkdrive': (pokemon, stat, value, slot, battle) => {
-		// Check if active (in Electric Terrain or has Booster Energy consumed)
 		const inElectricTerrain = battle?.terrain?.type === 'electric';
-		const hasBoosterActive = slot && (slot as any).boosterEnergyActive;
+		const hasBoosterActive = slot?.boosterEnergyActive;
 
 		if (!inElectricTerrain && !hasBoosterActive) return value;
 
-		// Determine highest stat
 		const stats = {
 			atk: pokemon.atk,
 			def: pokemon.def,
@@ -735,17 +720,14 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 			}
 		}
 
-		// Boost the highest stat by 1.3x (rounded down in Gen 9)
 		if (stat === highestStat) {
 			return Math.floor(value * 1.3);
 		}
 		return value;
 	},
 
-	// Ruin Abilities - Lower stats of all opponents by 25%
 	'swordofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'def' && battle) {
-			// Check if any opponent has Sword of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 			const hasSwordOfRuin = opponents.some(s =>
@@ -763,7 +745,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'tabletsofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'atk' && battle) {
-			// Check if any opponent has Tablets of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 			const hasTabletsOfRuin = opponents.some(s =>
@@ -781,7 +762,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'vesselofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spa' && battle) {
-			// Check if any opponent has Vessel of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 			const hasVesselOfRuin = opponents.some(s =>
@@ -799,7 +779,6 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'beadsofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spd' && battle) {
-			// Check if any opponent has Beads of Ruin
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 			const hasBeadsOfRuin = opponents.some(s =>
@@ -922,7 +901,6 @@ export const WEATHER_ABILITIES = {
 			battle.weather = null;
 			battle.terrain = null;
 
-			// Set flag to prevent weather/terrain activation (cleared at end of turn)
 			(battle as any).teraformZeroActive = true;
 
 			if (hadWeather || hadTerrain) {
@@ -1043,18 +1021,18 @@ export const PRIORITY_ABILITIES = {
 
 	'stall': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
-			return -9999; // Extremely low priority
+			return -9999;
 		},
 	},
 
 	'myceliummight': {
 		modifyPriority: (move: Move, pokemon: RPGPokemon) => {
 			if (move.category === 'Status') {
-				return -999; // Status moves go last
+				return -999;
 			}
 			return 0;
 		},
-		ignoresAbilities: true, // For status moves only
+		ignoresAbilities: true,
 	},
 };
 
@@ -1221,7 +1199,6 @@ export const HEALING_ABILITIES = {
 	},
 };
 
-// On-KO Abilities - abilities that trigger when a Pokemon is KO'd
 export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
 	'moxie': {
 		handler: (slot, battle, messageLog) => {
@@ -1264,7 +1241,7 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
-	// As One (Glastrier) - Combines Unnerve and Chilling Neigh
+
 	'asoneglastrier': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.statStages.atk < 6) {
@@ -1273,7 +1250,7 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 			}
 		},
 	},
-	// As One (Spectrier) - Combines Unnerve and Grim Neigh
+
 	'asonespectrier': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.statStages.spa < 6) {
@@ -1292,18 +1269,17 @@ export const ON_KO_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot
 	},
 	'aftermath': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled in the battle flow when a Pokemon faints from a contact move
+
 		},
 	},
 
 	'innardsout': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled in the battle flow when a Pokemon faints
+
 		},
 	},
 };
 
-// End of Turn Abilities - abilities that trigger at the end of each turn
 export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void }> = {
 	'speedboost': {
 		handler: (slot, battle, messageLog) => {
@@ -1332,16 +1308,15 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 	},
 	'colorchange': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled when Pokemon is hit by a move (see battle flow)
+
 		},
 	},
 	'moody': {
 		handler: (slot, battle, messageLog) => {
 			const stats: (keyof typeof slot.statStages)[] = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 
-			// Find stats that can be raised (not at +6)
 			const raisableStats = stats.filter(stat => slot.statStages[stat] < 6);
-			// Find stats that can be lowered (not at -6)
+
 			const lowerableStats = stats.filter(stat => slot.statStages[stat] > -6);
 
 			if (raisableStats.length > 0) {
@@ -1353,7 +1328,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 				};
 				messageLog.push(`${slot.pokemon.species}'s Moody sharply raised its ${statNames[statToRaise]}!`);
 
-				// Lower a different stat
 				const lowerableDifferentStats = lowerableStats.filter(stat => stat !== statToRaise);
 				if (lowerableDifferentStats.length > 0) {
 					const statToLower = lowerableDifferentStats[Math.floor(Math.random() * lowerableDifferentStats.length)];
@@ -1368,11 +1342,9 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		handler: (slot, battle, messageLog) => {
 			if (Math.random() >= 0.3) return;
 
-			// Find which side this Pokemon is on
 			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
 			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
 
-			// Find allies with status conditions
 			for (const allySlot of allies) {
 				if (allySlot && allySlot.pokemon.id !== slot.pokemon.id && allySlot.pokemon.hp > 0 && allySlot.status) {
 					const statusName = {
@@ -1385,7 +1357,7 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 					}[allySlot.status] || 'status condition';
 					allySlot.status = null;
 					messageLog.push(`${slot.pokemon.species}'s Healer cured ${allySlot.pokemon.species}'s ${statusName}!`);
-					return; // Only heal one ally per turn
+					return;
 				}
 			}
 		},
@@ -1393,10 +1365,8 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 
 	'harvest': {
 		handler: (slot, battle, messageLog) => {
-			// Only restore if we have a consumed berry and no current item
 			if (!slot.consumedBerry || slot.pokemon.item || slot.harvestUsedThisTurn) return;
 
-			// Check if in sunlight (50% chance normally, 100% in sun)
 			const inSunlight = isWeatherActive(battle) &&
 				(battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun');
 			const chance = inSunlight ? 1.0 : 0.5;
@@ -1404,18 +1374,16 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			if (Math.random() < chance) {
 				slot.pokemon.item = slot.consumedBerry;
 				messageLog.push(`${slot.pokemon.species}'s Harvest restored its ${slot.consumedBerry}!`);
-				slot.harvestUsedThisTurn = true; // Prevent multiple restores in one turn
+				slot.harvestUsedThisTurn = true;
 			}
 		},
 	},
 
 	'baddreams': {
 		handler: (slot, battle, messageLog) => {
-			// Find which side this Pokemon is on
 			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
 			const opponents = isPlayerPokemon ? battle.opponentSlots : battle.playerSlots;
 
-			// Damage each sleeping opponent
 			for (const opponentSlot of opponents) {
 				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.status === 'slp') {
 					const damage = Math.floor(opponentSlot.pokemon.maxHp / 8);
@@ -1428,14 +1396,10 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 
 	'cudchew': {
 		handler: (slot, battle, messageLog) => {
-			// If we have a berry to chew and no current item
 			if (slot.cudChewBerry && !slot.pokemon.item) {
-				// Temporarily restore the berry to trigger its effect
 				slot.pokemon.item = slot.cudChewBerry;
 				messageLog.push(`${slot.pokemon.species} is chewing its ${slot.cudChewBerry} again!`);
 
-				// The berry will be consumed through normal HP drop effects
-				// Clear the cud chew tracker after use
 				slot.cudChewBerry = undefined;
 			}
 		},
@@ -1443,28 +1407,26 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 
 	'windpower': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled when hit by wind moves (see battle flow)
+
 		},
 	},
 
 	'windrider': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled when hit by wind moves (see battle flow)
+
 		},
 	},
 
 	'electromorphosis': {
 		handler: (slot, battle, messageLog) => {
-			// This is handled when Pokemon takes damage (see battle flow)
+
 		},
 	},
 };
 
-// Stat Drop Response Abilities - abilities that trigger when stats are lowered
 export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void }> = {
 	'defiant': {
 		handler: (slot, battle, messageLog, sourceSlot) => {
-			// Don't trigger if self-inflicted
 			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
 				return;
 			}
@@ -1476,7 +1438,6 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 	},
 	'competitive': {
 		handler: (slot, battle, messageLog, sourceSlot) => {
-			// Don't trigger if self-inflicted
 			if (sourceSlot && sourceSlot.pokemon.id === slot.pokemon.id) {
 				return;
 			}
@@ -1488,13 +1449,11 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 	},
 	'mirrorarmor': {
 		handler: (slot, battle, messageLog, sourceSlot) => {
-			// This is handled during stat drop attempts (see battle-shared.ts)
-			// When a stat drop is attempted, it's reflected back to sourceSlot
+
 		},
 	},
 };
 
-// Status Interaction Abilities - abilities that interact with status conditions
 export const STATUS_INTERACTION_ABILITIES: Record<string, {
 	healFromPoison?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
 	cureStatusInRain?: (slot: ActivePokemonSlot, messageLog: string[]) => void,
@@ -1519,7 +1478,6 @@ export const STATUS_INTERACTION_ABILITIES: Record<string, {
 	},
 };
 
-// Trapping Abilities - abilities that prevent opponents from switching
 export const TRAPPING_ABILITIES = {
 	'shadowtag': {
 		preventsSwitch: true,
@@ -1537,7 +1495,6 @@ export const TRAPPING_ABILITIES = {
 	},
 };
 
-// Aura Abilities - abilities that boost move types for all Pokemon
 export const AURA_ABILITIES = {
 	'darkaura': {
 		boostedType: 'Dark',
@@ -1555,7 +1512,6 @@ export const AURA_ABILITIES = {
 	},
 };
 
-// Ruin Abilities - abilities that lower stats of all opponents
 export const RUIN_ABILITIES = {
 	'swordofruin': {
 		stat: 'def',
@@ -1575,7 +1531,6 @@ export const RUIN_ABILITIES = {
 	},
 };
 
-// Special Mechanic Abilities - abilities with unique mechanics
 export const SPECIAL_MECHANIC_ABILITIES = {
 	'protean': {
 		changeTypeOnMove: true,
@@ -1631,30 +1586,30 @@ export const SPECIAL_MECHANIC_ABILITIES = {
 
 export const RPG_SPECIFIC_ABILITIES = {
 	'noability': {
-		// Placeholder ability with no effect
+
 		description: 'No ability - does nothing',
 	},
 	'runaway': {
-		// Guarantees escape from wild battles
+
 		description: 'Guarantees escape from wild battles (implemented in encounter system)',
 		escapeGuaranteed: true,
 	},
 	'illuminate': {
-		// Increases wild encounter rate
+
 		description: 'Increases wild encounter rate by 2x (implemented in encounter system)',
 		encounterRateMultiplier: 2,
 	},
 	'honeygather': {
-		// May gather Honey after battle
+
 		description: 'May gather Honey after battle (implemented in post-battle rewards)',
 		postBattleItem: 'honey',
-		chance: 0.05, // 5% chance per battle level
+		chance: 0.05,
 	},
 	'pickup': {
-		// May pick up items after battle
+
 		description: 'May pick up items after battle based on level (implemented in post-battle rewards)',
 		postBattlePickup: true,
-		chanceByLevel: true, // Increases with level
+		chanceByLevel: true,
 	},
 	'ballfetch': {
 		description: 'Fetches failed Poké Ball after battle (implemented in catch system)',
@@ -1761,7 +1716,6 @@ export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
 	const ability = toID(ctx.defender.ability || '');
 
-	// Check for Mold Breaker
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, ability)) {
 		return null;
 	}
@@ -1825,22 +1779,17 @@ export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: 
 	const species = Dex.species.get(pokemon.species);
 	let hasSTAB = false;
 
-	// Check if terastallized
 	if (slot?.terastallized) {
-		// When terastallized, STAB is only from the tera type
-		// But if the move type matches BOTH the tera type AND one of the original types, it gets 2.0x STAB
 		hasSTAB = slot.terastallized === moveType;
 		if (hasSTAB && species.types.includes(moveType)) {
-			// With Adaptability: 2.25x when Tera Type matches move type and original type
 			const ability = toID(pokemon.ability || '');
 			if (ability === 'adaptability') {
 				return 2.25;
 			}
-			// Standard: 2.0x when Tera Type matches move type and original type
+
 			return 2.0;
 		}
 	} else {
-		// Normal STAB check (not terastallized)
 		hasSTAB = species.types.includes(moveType);
 	}
 
@@ -1865,7 +1814,6 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 	const ability = toID(pokemon.ability || '');
 
 	if (attacker && toID(attacker.ability || '') === 'corrosion' && (status === 'psn' || status === 'tox')) {
-		// Corrosion bypasses type immunity but not ability immunity
 		if (ability === 'immunity' || ability === 'purifyingsalt') {
 			return true;
 		}
@@ -1900,18 +1848,14 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 		return true;
 	}
 
-	// Check for team protection abilities
 	if (battle) {
-		// Find which side this Pokemon is on
 		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
 
-		// Pastel Veil protects team from poison
 		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
 			return true;
 		}
 
-		// Sweet Veil protects team from sleep
 		if (status === 'slp' && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'sweetveil')) {
 			return true;
 		}
@@ -1943,9 +1887,8 @@ export function applyAccuracyModifier(moveAccuracy: number, attacker: RPGPokemon
 	const handler = ACCURACY_EVASION_ABILITIES[ability];
 
 	if (handler?.accuracyMultiplier) {
-		// Special case for Hustle
 		if (ability === 'hustle' && move.category !== 'Physical') {
-			return moveAccuracy; // Do not apply penalty to Special or Status moves
+			return moveAccuracy;
 		}
 		return Math.floor(moveAccuracy * handler.accuracyMultiplier);
 	}
@@ -1972,10 +1915,6 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 	return 1;
 }
 
-/**
- * Applies speed modifications from ABILITIES ONLY.
- * Item and status speed mods are handled in battle-flow.ts
- */
 export function applyAbilitySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
@@ -2106,7 +2045,6 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		}
 	}
 
-	// Check if there are any allies with Friend Guard
 	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
 	const defenderAllies = isPlayerDefender ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
 	const hasFriendGuard = defenderAllies.some(s =>
@@ -2118,7 +2056,6 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 
 	if (defenderAbility === 'terashell' && ctx.defender.hp === ctx.defender.maxHp && ctx.move.category !== 'Status') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			// Make the attack not very effective (0.5x damage)
 			damage = Math.floor(damage * 0.5);
 		}
 	}
@@ -2196,54 +2133,42 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 	}
 
 	if (ability === 'gulpmissile') {
-		// When hit, Cramorant spits out the catch
 		if ((slot as any).gulpMissileForm && slot.lastDamageTaken) {
 			const form = (slot as any).gulpMissileForm;
 
-			// Revert to normal form
 			if (pokemon.species.includes('Gulping') || pokemon.species.includes('Gorging')) {
 				pokemon.species = 'Cramorant';
 				(slot as any).gulpMissileForm = null;
-
-				// The attacker takes damage and gets affected
-				// This is handled in the battle-core.ts when Cramorant takes damage
 			}
 		}
 	}
-
-	// This is handled differently - the form changes during the switch, not during battle
-	// Palafin-Hero form is set when it switches in after being out
 }
 
 export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
 
 	if (move.multihit) {
-		// Skill Link always grants the maximum number of hits
 		if (ability === 'skilllink') {
 			if (Array.isArray(move.multihit)) {
 				return move.multihit[1];
 			}
-			return 5; // Fallback for moves that just say "multihit: 5"
+			return 5;
 		}
 
-		// This handles moves that hit 2-5 times with the standard Gen 5+ distribution
 		if (Array.isArray(move.multihit) && move.multihit[0] === 2 && move.multihit[1] === 5) {
 			const rand = Math.random() * 100;
-			if (rand < 35) return 2; // 35% chance
-			if (rand < 70) return 3; // 35% chance
-			if (rand < 85) return 4; // 15% chance
-			return 5; // 15% chance
+			if (rand < 35) return 2;
+			if (rand < 70) return 3;
+			if (rand < 85) return 4;
+			return 5;
 		}
 
-		// This handles other multi-hit moves, like Triple Kick or simple ranges
 		if (Array.isArray(move.multihit)) {
 			const min = move.multihit[0];
 			const max = move.multihit[1];
 			return min + Math.floor(Math.random() * (max - min + 1));
 		}
 
-		// Fallback for moves where multihit is just a number (e.g., Double Slap)
 		return move.multihit;
 	}
 
@@ -2288,7 +2213,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 		};
 	}
 
-	// Check for Mold Breaker
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 		return null;
 	}
@@ -2311,7 +2235,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 	return null;
 }
 
-// Stat Change Modifier Abilities - abilities that modify stat changes (Contrary, Simple)
 export function applyStatChangeModifier(value: number, ability: string): number {
 	if (ability === 'contrary') {
 		return -value;
@@ -2322,7 +2245,6 @@ export function applyStatChangeModifier(value: number, ability: string): number 
 	return value;
 }
 
-// Helper functions for the newly organized abilities
 export function applyOnKOAbilities(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
 	const handler = ON_KO_ABILITIES[ability];
@@ -2386,7 +2308,7 @@ export function getAllImplementedAbilities(): string[] {
 		...Object.keys(END_OF_TURN_ABILITIES),
 		...Object.keys(STAT_DROP_RESPONSE_ABILITIES),
 		...Object.keys(STATUS_INTERACTION_ABILITIES),
-		'contrary', 'simple', // Stat change modifiers handled by applyStatChangeModifier
+		'contrary', 'simple',
 	];
 }
 
@@ -2406,13 +2328,11 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	const pokemon = slot.pokemon;
 	const ability = toID(pokemon.ability || '');
 
-	// Apply weather abilities
 	const weatherAbility = WEATHER_ABILITIES[ability];
 	if (weatherAbility?.onSwitchIn) {
 		weatherAbility.onSwitchIn(slot, battle, messageLog);
 	}
 
-	// Apply terrain abilities
 	const terrainAbility = TERRAIN_ABILITIES[ability];
 	if (terrainAbility?.onSwitchIn) {
 		terrainAbility.onSwitchIn(slot, battle, messageLog);
@@ -2463,7 +2383,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
 
 		if (ally) {
-			// Copy all stat stages from ally
 			slot.statStages = { ...ally.statStages };
 			messageLog.push(`${pokemon.species} copied ${ally.pokemon.species}'s stat changes!`);
 		}
@@ -2475,7 +2394,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 		for (const ally of allies) {
 			if (ally && ally.pokemon.id !== pokemon.id && ally.pokemon.hp > 0) {
-				// Reset all negative stat stages
 				const hadNegative = Object.values(ally.statStages).some(stage => stage < 0);
 				if (hadNegative) {
 					ally.statStages = {
@@ -2505,7 +2423,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		}
 	}
 
-	// Supersweet Syrup - Lowers evasion of all foes by 1 stage on switch-in
 	if (ability === 'supersweetsynup' || ability === 'supersweetsynip') {
 		const opponents = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		for (const opponent of opponents) {
@@ -2521,11 +2438,9 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const dondozo = allies.find(s => s && s.pokemon.species === 'Dondozo' && s.pokemon.hp > 0);
 
 		if (dondozo) {
-			// Mark Tatsugiri as inside Dondozo (remove from active slot)
 			(slot as any).commanderActive = true;
 			(dondozo as any).commanderBoost = true;
 
-			// Boost Dondozo's stats
 			const statBoosts = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 			for (const stat of statBoosts) {
 				if (dondozo.statStages[stat] < 6) {
@@ -2543,22 +2458,18 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		messageLog.push(`${pokemon.nickname || 'Palafin'} transformed into its Hero form!`);
 	}
 
-	// Embody Aspect (Teal) - Boosts Speed on switch-in for Ogerpon-Teal
 	if (ability === 'embodyaspectteal' && pokemon.species.includes('Ogerpon')) {
 		applyStatChange(slot, 'spe', 1, battle, messageLog, slot);
 	}
 
-	// Embody Aspect (Wellspring) - Boosts Sp. Def on switch-in for Ogerpon-Wellspring
 	if (ability === 'embodyaspectwellspring' && pokemon.species.includes('Ogerpon')) {
 		applyStatChange(slot, 'spd', 1, battle, messageLog, slot);
 	}
 
-	// Embody Aspect (Hearthflame) - Boosts Attack on switch-in for Ogerpon-Hearthflame
 	if (ability === 'embodyaspecthearthflame' && pokemon.species.includes('Ogerpon')) {
 		applyStatChange(slot, 'atk', 1, battle, messageLog, slot);
 	}
 
-	// Embody Aspect (Cornerstone) - Boosts Defense on switch-in for Ogerpon-Cornerstone
 	if (ability === 'embodyaspectcornerstone' && pokemon.species.includes('Ogerpon')) {
 		applyStatChange(slot, 'def', 1, battle, messageLog, slot);
 	}
@@ -2592,13 +2503,11 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if ((ability === 'protosynthesis' || ability === 'quarkdrive') && pokemon.item === 'boosterenergy') {
-		// Check if not already active from weather/terrain
 		const hasWeatherBuff = ability === 'protosynthesis' && battle.weather &&
 			(battle.weather.type === 'sun' || battle.weather.type === 'harsh-sun');
 		const hasTerrainBuff = ability === 'quarkdrive' && battle.terrain?.type === 'electric';
 
 		if (!hasWeatherBuff && !hasTerrainBuff && !(slot as any).boosterEnergyActive) {
-			// Consume Booster Energy
 			pokemon.item = undefined;
 			(slot as any).boosterEnergyActive = true;
 			messageLog.push(`${pokemon.species} consumed its Booster Energy to activate ${pokemon.ability}!`);
@@ -2609,7 +2518,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	const defenderAbility = toID(ctx.defender.ability || '');
 
-	// Check for Mold Breaker
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
 		return;
 	}
@@ -2630,14 +2538,11 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		}
 	}
 
-	// New logic for stat-lowering contact abilities
 	if (handler.onContactStat && attacker.hp > 0) {
 		const stat = handler.onContactStat as keyof ActivePokemonSlot['statStages'];
 		const value = handler.value as number;
-		// Use applyStatChange on the attacker, sourced from the defender
-		// This will be correctly blocked by abilities like Clear Body
+
 		if (applyStatChange(attackerSlot, stat, value, ctx.battle, ctx.messageLog, ctx.defenderSlot)) {
-			// applyStatChange already adds the "fell!" message, we just add the cause.
 			ctx.messageLog[ctx.messageLog.length - 1] += ` (from ${ctx.defender.species}'s ${ctx.defender.ability})!`;
 		}
 	}
@@ -2646,7 +2551,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const statusToInflict = handler.effect as string;
 		let canBeAfflicted = true;
 
-		// Get actual types (accounting for terastallization)
 		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
 
 		if ((statusToInflict === 'par' && attackerTypes.includes('Electric')) ||
@@ -2655,7 +2559,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			canBeAfflicted = false;
 		}
 
-		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle)) { // Added ctx.battle
+		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle)) {
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
@@ -2667,7 +2571,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		if (canBeAfflicted) {
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1;
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s ${ctx.defender.ability}!`);
 		}
@@ -2675,16 +2579,16 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
 		const possibleStatuses: string[] = [];
-		// Get actual types (accounting for terastallization)
+
 		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
 
-		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle)) { // Added ctx.battle
+		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle)) {
 			possibleStatuses.push('psn');
 		}
-		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle)) { // Added ctx.battle
+		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle)) {
 			possibleStatuses.push('par');
 		}
-		if (!preventsStatus(attacker, 'slp', ctx.battle)) { // Added ctx.battle
+		if (!preventsStatus(attacker, 'slp', ctx.battle)) {
 			possibleStatuses.push('slp');
 		}
 
@@ -2692,7 +2596,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
-				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1; // Gen 9: 1-3 turns
+				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1;
 			}
 			ctx.messageLog.push(`${attacker.species} was afflicted with ${statusToInflict} by ${ctx.defender.species}'s Effect Spore!`);
 		}
@@ -2700,7 +2604,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	if (handler.stealItem && attacker.hp > 0 && !ctx.defender.item && attacker.item) {
 		const attackerAbility = toID(attacker.ability || '');
-		// Sticky Hold prevents item removal
+
 		if (attackerAbility !== 'stickyhold') {
 			ctx.defender.item = attacker.item;
 			attacker.item = undefined;
@@ -2710,7 +2614,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 	if (handler.changeAbility && attacker.hp > 0) {
 		const attackerAbility = toID(attacker.ability || '');
-		// Some abilities cannot be changed (Multitype, Stance Change, etc.)
+
 		const unchangeableAbilities = ['multitype', 'stancechange', 'schooling', 'shieldsdown', 'battlebond',
 			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode'];
 
@@ -2724,7 +2628,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	if (handler.swapAbility && attacker.hp > 0) {
 		const attackerAbility = toID(attacker.ability || '');
 		const defenderAbilityName = ctx.defender.ability;
-		// Some abilities cannot be swapped
+
 		const unswappableAbilities = ['multitype', 'stancechange', 'schooling', 'shieldsdown', 'battlebond',
 			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode', 'wonderguard', 'illusion'];
 

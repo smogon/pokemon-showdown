@@ -1,12 +1,7 @@
-/*
-* Pokemon Showdown
-* RPG Items
-*/
 import { Dex, toID } from '../../../sim/dex';
 import type { InventoryItem, PlayerData, RPGPokemon, Stats } from './interface';
 import { calculateStats, levelUp, checkEvolution, handleLearningMoves, calculateTotalExpForLevel, getMove, type CheckEvolutionContext } from './utils';
 
-// [REFACTOR] Data-Driven Item Database
 export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'Restores 20 HP.', price: 300, effects: { healAmount: 20 } },
 	'superpotion': { id: 'superpotion', name: 'Super Potion', category: 'medicine', description: 'Restores 60 HP.', price: 700, effects: { healAmount: 60 } },
@@ -60,11 +55,11 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'greatball': { id: 'greatball', name: 'Great Ball', category: 'pokeball', description: 'A good, high-performance Ball.', price: 600 },
 	'ultraball': { id: 'ultraball', name: 'Ultra Ball', category: 'pokeball', description: 'An ultra-high-performance Ball.', price: 1200 },
 	'masterball': { id: 'masterball', name: 'Master Ball', category: 'pokeball', description: 'Catches any Pokémon without fail.', price: 0 },
-    'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
+	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
 };
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
-    const id = toID(itemId); // [SAFETY] Force ID
+	const id = toID(itemId);
 	if (CUSTOM_ITEMS_DATABASE[id]) {
 		return CUSTOM_ITEMS_DATABASE[id];
 	}
@@ -73,14 +68,14 @@ export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | n
 		let category: InventoryItem['category'] = 'held';
 		if (dexItem.isPokeball) category = 'pokeball';
 		else if (dexItem.isBerry) category = 'berry';
-		
+
 		let price = 0;
 		if (category === 'pokeball') price = 1000;
 		if (category === 'berry') price = 200;
 		if (category === 'held') price = 4000;
 
 		return {
-			id: id,
+			id,
 			name: dexItem.name,
 			category,
 			description: dexItem.shortDesc || dexItem.desc || 'An item.',
@@ -97,7 +92,7 @@ export const ITEMS_DATABASE = new Proxy({} as Record<string, Omit<InventoryItem,
 });
 
 export function addItemToInventory(player: PlayerData, itemId: string, quantity: number): boolean {
-    const id = toID(itemId); // [SAFETY] Force ID
+	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
 	if (!itemData) return false;
 	if (player.inventory.has(id)) {
@@ -109,7 +104,7 @@ export function addItemToInventory(player: PlayerData, itemId: string, quantity:
 }
 
 export function removeItemFromInventory(player: PlayerData, itemId: string, quantity: number): boolean {
-    const id = toID(itemId); // [SAFETY] Force ID
+	const id = toID(itemId);
 	if (!player.inventory.has(id)) return false;
 	const item = player.inventory.get(id)!;
 	if (item.quantity < quantity) return false;
@@ -123,13 +118,13 @@ export function removeItemFromInventory(player: PlayerData, itemId: string, quan
 export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
 	if (pokemon.hp <= 0) return { success: false, message: `${pokemon.species} has fainted!` };
 
-    const id = toID(itemId);
+	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
-	if (!itemData || !itemData.effects) return { success: false, message: `This item cannot be used to heal.` };
-	
+	if (!itemData?.effects) return { success: false, message: `This item cannot be used to heal.` };
+
 	const eff = itemData.effects;
 	let success = false;
-	let messageParts: string[] = [];
+	const messageParts: string[] = [];
 
 	if (eff.statusCure) {
 		if (pokemon.status) {
@@ -148,7 +143,7 @@ export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 			let heal = 0;
 			if (eff.healPercent) heal += Math.floor(pokemon.maxHp * eff.healPercent);
 			if (eff.healAmount) heal += eff.healAmount;
-			
+
 			const prevHp = pokemon.hp;
 			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + heal);
 			const actualHeal = pokemon.hp - prevHp;
@@ -168,9 +163,9 @@ export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 
 	if (success) {
 		removeItemFromInventory(player, id, 1);
-		return { 
-			success: true, 
-			message: `Used <strong>${itemData.name}</strong>! ${pokemon.species} ${messageParts.join(' and ')}.` 
+		return {
+			success: true,
+			message: `Used <strong>${itemData.name}</strong>! ${pokemon.species} ${messageParts.join(' and ')}.`,
 		};
 	}
 
@@ -180,13 +175,13 @@ export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 export function useRevivalItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
 	if (pokemon.hp > 0) return { success: false, message: `${pokemon.species} has not fainted!` };
 
-    const id = toID(itemId);
+	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
-	if (!itemData || !itemData.effects || !itemData.effects.revive) return { success: false, message: `This item cannot revive.` };
+	if (!itemData?.effects?.revive) return { success: false, message: `This item cannot revive.` };
 
 	const eff = itemData.effects;
 	const healPercent = eff.reviveHealthPercent || 0.5;
-	
+
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * healPercent));
 	pokemon.status = null;
 
@@ -204,9 +199,9 @@ export function useRevivalItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 }
 
 export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
-    const id = toID(itemId);
+	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
-	if (!itemData || !itemData.effects || !itemData.effects.evBoost) return { success: false, message: "This is not a vitamin." };
+	if (!itemData?.effects?.evBoost) return { success: false, message: "This is not a vitamin." };
 	if (pokemon.hp <= 0) return { success: false, message: "Cannot use on fainted Pokemon." };
 
 	const { stat, amount } = itemData.effects.evBoost;
@@ -220,15 +215,15 @@ export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 	if (actualAmount <= 0) return { success: false, message: "It won't have any effect." };
 
 	pokemon.evs[stat] += actualAmount;
-	
+
 	const species = Dex.species.get(pokemon.species);
 	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-	
+
 	if (stat === 'hp') {
 		const diff = newStats.maxHp - pokemon.maxHp;
 		if (diff > 0) pokemon.hp += diff;
 	}
-	
+
 	pokemon.maxHp = newStats.maxHp;
 	pokemon.atk = newStats.atk;
 	pokemon.def = newStats.def;
@@ -242,11 +237,11 @@ export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 
 export function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: CheckEvolutionContext['room'], user: CheckEvolutionContext['user']): { success: boolean, message: string } {
 	if (pokemon.level >= 100) return { success: false, message: "Already Level 100." };
-	
+
 	try {
 		const msgs = levelUp(pokemon);
 		pokemon.experience = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level);
-		
+
 		const evoMsg = checkEvolution(player, pokemon, { room, user });
 		if (evoMsg) {
 			msgs.push(evoMsg);
@@ -254,7 +249,7 @@ export function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: 
 			const moveMsgs = handleLearningMoves(player, pokemon);
 			msgs.push(...moveMsgs.messages);
 		}
-		
+
 		removeItemFromInventory(player, 'rarecandy', 1);
 		return { success: true, message: `Used Rare Candy! ${msgs.join(' ')}` };
 	} catch (e) {
@@ -263,25 +258,25 @@ export function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: 
 }
 
 export function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: CheckEvolutionContext['room'], user: CheckEvolutionContext['user']): { success: boolean, message: string } {
-    const id = toID(itemId);
+	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
-	if (!itemData || !itemData.effects || !itemData.effects.expBoost) return { success: false, message: "Invalid Exp Candy." };
+	if (!itemData?.effects?.expBoost) return { success: false, message: "Invalid Exp Candy." };
 	if (pokemon.level >= 100) return { success: false, message: "Already Level 100." };
 
 	const amount = itemData.effects.expBoost;
 	pokemon.experience += amount;
-	
+
 	const msgs = [`Gained ${amount} Exp.`];
-	
-	while(pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+
+	while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
 		msgs.push(...levelUp(pokemon));
-		
+
 		const evoMsg = checkEvolution(player, pokemon, { room, user });
-		if (evoMsg) { 
-			msgs.push(evoMsg); 
+		if (evoMsg) {
+			msgs.push(evoMsg);
 			break;
 		}
-		
+
 		const moveMsgs = handleLearningMoves(player, pokemon);
 		msgs.push(...moveMsgs.messages);
 	}
@@ -308,11 +303,11 @@ export function useSacredAsh(player: PlayerData): { success: boolean, message: s
 	return { success: true, message: `Used <strong>Sacred Ash</strong>! All fainted Pokémon were revived!` };
 }
 
-export const ITEM_PRICES: Record<string, number> = {}; 
-Object.keys(CUSTOM_ITEMS_DATABASE).forEach(k => { 
-    if (CUSTOM_ITEMS_DATABASE[k].price) {
-        ITEM_PRICES[k] = CUSTOM_ITEMS_DATABASE[k].price!;
-    }
+export const ITEM_PRICES: Record<string, number> = {};
+Object.keys(CUSTOM_ITEMS_DATABASE).forEach(k => {
+	if (CUSTOM_ITEMS_DATABASE[k].price) {
+		ITEM_PRICES[k] = CUSTOM_ITEMS_DATABASE[k].price!;
+	}
 });
 
 export const RPGItems = {

@@ -1,13 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Core
-*
-* This is the main entry point for the RPG.
-* It manages global state (playerData, activeBattles)
-* and exports core, non-battle functions.
-* It also exports the commands from commands.ts to be used by Showdown.
-*/
-
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { Dex, toID } from '../../../sim/dex';
 import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
@@ -29,7 +19,7 @@ export function getPlayerData(userid: string): PlayerData {
 	if (!playerData.has(userid)) {
 		const startLocId = GameConfig.startLocationId;
 		const startLocationName = LOCATIONS[startLocId]?.name || 'Unknown Location';
-		
+
 		const newPlayer: PlayerData = {
 			id: userid,
 			name: userid,
@@ -47,7 +37,7 @@ export function getPlayerData(userid: string): PlayerData {
 			visitedLocations: new Set([startLocationName]),
 			lastPokemonCenter: startLocId,
 			completedNPCActions: new Set(),
-            battleTowerFloor: 1,
+			battleTowerFloor: 1,
 		};
 
 		for (const item of GameConfig.startInventory) {
@@ -196,7 +186,7 @@ export function serializePlayerData(player: PlayerData): any {
 		pendingMoveLearnQueue: player.pendingMoveLearnQueue,
 		lastPokemonCenter: player.lastPokemonCenter,
 		completedNPCActions: Array.from(player.completedNPCActions),
-        battleTowerFloor: player.battleTowerFloor || 1, 
+		battleTowerFloor: player.battleTowerFloor || 1,
 	};
 }
 
@@ -257,7 +247,7 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (data.obtainedBadges.length > TOTAL_BADGES) {
 		throw new Error(`Invalid save data: cannot have more than ${TOTAL_BADGES} badges`);
 	}
-	
+
 	const seenBadges = new Set<string>();
 	for (const badgeName of data.obtainedBadges) {
 		if (typeof badgeName !== 'string' || !isValidBadge(badgeName)) {
@@ -384,7 +374,7 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-    const startLocName = LOCATIONS[GameConfig.startLocationId]?.name || 'Unknown';
+	const startLocName = LOCATIONS[GameConfig.startLocationId]?.name || 'Unknown';
 
 	return {
 		id: data.id,
@@ -408,7 +398,7 @@ export function deserializePlayerData(data: any): PlayerData {
 			undefined,
 		lastPokemonCenter: data.lastPokemonCenter || GameConfig.startLocationId,
 		completedNPCActions: new Set(data.completedNPCActions || []),
-        battleTowerFloor: data.battleTowerFloor || 1,
+		battleTowerFloor: data.battleTowerFloor || 1,
 	};
 }
 

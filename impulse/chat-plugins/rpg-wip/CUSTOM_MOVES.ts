@@ -1,38 +1,3 @@
-/**
- * Custom Moves for Pokemon RPG
- *
- * This file defines custom moves that extend beyond the standard Pokemon Showdown Dex.
- * Moves are defined in the same format as Dex moves for compatibility.
- *
- * Move Properties Reference:
- * - id: string (lowercase, no spaces)
- * - name: string (Display name)
- * - basePower: number (0 for status moves)
- * - category: 'Physical' | 'Special' | 'Status'
- * - type: string (Pokemon type)
- * - accuracy: number | true (true = never misses)
- * - pp: number (Power Points)
- * - priority: number (0 = normal, higher = faster, negative = slower)
- * - target: string (see TARGET_OPTIONS below)
- * - flags: object (see FLAG_OPTIONS below)
- * - secondary?: object (secondary effects with chance)
- * - boosts?: object (stat changes)
- * - status?: string (status to inflict: 'psn', 'brn', 'par', 'slp', 'frz')
- * - volatileStatus?: string (volatile status: 'confusion', 'flinch', etc.)
- * - drain?: [number, number] (heal ratio e.g., [1, 2] = heal 1/2 damage)
- * - recoil?: [number, number] (recoil ratio e.g., [1, 4] = 1/4 recoil)
- * - heal?: [number, number] (heal ratio e.g., [1, 2] = heal 1/2 max HP)
- * - multihit?: number | [number, number] (hit multiple times)
- * - weather?: string ('sun', 'rain', 'sand', 'hail')
- * - terrain?: string ('electric', 'grassy', 'psychic', 'misty')
- * - pseudoWeather?: string ('trickroom', 'magicroom', 'wonderroom', 'gravity')
- * - sideCondition?: string ('spikes', 'toxicspikes', 'stealthrock', 'stickyweb')
- * - selfSwitch?: true | 'copyvolatile' (U-turn, Baton Pass)
- * - ohko?: string (OHKO type: 'Normal', 'Ice')
- * - breaksProtect?: boolean (ignores Protect/Detect)
- * - self?: object (effects on user)
- */
-
 export interface CustomMove {
 	id: string;
 	name: string;
@@ -84,26 +49,8 @@ export interface CustomMove {
 	};
 }
 
-/**
- * TARGET OPTIONS:
- * - 'normal': Single adjacent target
- * - 'any': Any single Pokemon
- * - 'self': User only
- * - 'allAdjacentFoes': Both adjacent opponents (doubles)
- * - 'allAdjacent': All adjacent Pokemon (doubles)
- * - 'scripted': All Pokemon but user (like Earthquake)
- * - 'ally': Single ally (doubles)
- * - 'allySide': User's entire team
- * - 'foeSide': Opponent's entire team
- * - 'all': All Pokemon in battle
- */
-
-/**
- * Custom Moves Database
- * Add your custom moves here!
- */
 export const CUSTOM_MOVES: Record<string, CustomMove> = {
-	// Example 1: Custom Physical Attack
+
 	'shadowstrike': {
 		id: 'shadowstrike',
 		name: 'Shadow Strike',
@@ -121,7 +68,6 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		},
 	},
 
-	// Example 2: Custom Special Attack with Stat Drop
 	'voidblast': {
 		id: 'voidblast',
 		name: 'Void Blast',
@@ -132,7 +78,7 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		pp: 10,
 		priority: 0,
 		target: 'normal',
-		flags: { protect: 1, mirror: 1, pulse: 1 }, // Added pulse flag for Mega Launcher compatibility
+		flags: { protect: 1, mirror: 1, pulse: 1 },
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -141,7 +87,6 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		},
 	},
 
-	// Example 3: Custom Status Move
 	'cosmicshield': {
 		id: 'cosmicshield',
 		name: 'Cosmic Shield',
@@ -159,7 +104,6 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		},
 	},
 
-	// Example 4: Custom Healing Move
 	'moongrace': {
 		id: 'moongrace',
 		name: 'Moon Grace',
@@ -171,10 +115,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'self',
 		flags: { heal: 1 },
-		heal: [1, 2], // Heals 50% HP
+		heal: [1, 2],
 	},
 
-	// Example 5: Custom Multi-Hit Move
 	'rapidfire': {
 		id: 'rapidfire',
 		name: 'Rapid Fire',
@@ -185,11 +128,10 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		pp: 10,
 		priority: 0,
 		target: 'normal',
-		flags: { protect: 1, mirror: 1, bullet: 1 }, // Added bullet flag for Bulletproof interaction
-		multihit: [2, 5], // Hits 2-5 times
+		flags: { protect: 1, mirror: 1, bullet: 1 },
+		multihit: [2, 5],
 	},
 
-	// Example 6: Custom Priority Move
 	'quickslash': {
 		id: 'quickslash',
 		name: 'Quick Slash',
@@ -198,12 +140,11 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		type: 'Steel',
 		accuracy: 100,
 		pp: 30,
-		priority: 1, // +1 priority like Quick Attack
+		priority: 1,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1, contact: 1 },
 	},
 
-	// Example 7: Custom Drain Move
 	'lifedrain': {
 		id: 'lifedrain',
 		name: 'Life Drain',
@@ -215,10 +156,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1, heal: 1 },
-		drain: [1, 2], // Heals 50% of damage dealt
+		drain: [1, 2],
 	},
 
-	// Example 8: Custom Recoil Move
 	'berserkcharge': {
 		id: 'berserkcharge',
 		name: 'Berserk Charge',
@@ -230,10 +170,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1, contact: 1 },
-		recoil: [1, 3], // Takes 1/3 recoil damage
+		recoil: [1, 3],
 	},
 
-	// Example 9: Custom Weather Move
 	'mysticmist': {
 		id: 'mysticmist',
 		name: 'Mystic Mist',
@@ -248,7 +187,6 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		weather: 'rain',
 	},
 
-	// Example 10: Custom Pivot Move
 	'phantomswitch': {
 		id: 'phantomswitch',
 		name: 'Phantom Switch',
@@ -260,10 +198,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1 },
-		selfSwitch: true, // Like U-turn
+		selfSwitch: true,
 	},
 
-	// Example 11: Custom Spread Move (Doubles)
 	'earthquakex': {
 		id: 'earthquakex',
 		name: 'Earthquake X',
@@ -273,11 +210,10 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		accuracy: 100,
 		pp: 10,
 		priority: 0,
-		target: 'allAdjacent', // Hits everyone but user
+		target: 'allAdjacent',
 		flags: { protect: 1, mirror: 1 },
 	},
 
-	// Example 12: Custom Entry Hazard
 	'crystalspikes': {
 		id: 'crystalspikes',
 		name: 'Crystal Spikes',
@@ -289,10 +225,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'foeSide',
 		flags: { mirror: 1 },
-		sideCondition: 'spikes', // Uses existing hazard system
+		sideCondition: 'spikes',
 	},
 
-	// Example 13: Custom OHKO Move
 	'dimensionalrift': {
 		id: 'dimensionalrift',
 		name: 'Dimensional Rift',
@@ -304,10 +239,9 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		priority: 0,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1 },
-		ohko: 'Normal', // OHKO move
+		ohko: 'Normal',
 	},
 
-	// Example 14: Custom Self-Boost Move
 	'powersurge': {
 		id: 'powersurge',
 		name: 'Power Surge',
@@ -325,7 +259,6 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		},
 	},
 
-	// Example 15: Custom Charging Move
 	'solarflare': {
 		id: 'solarflare',
 		name: 'Solar Flare',
@@ -336,34 +269,22 @@ export const CUSTOM_MOVES: Record<string, CustomMove> = {
 		pp: 5,
 		priority: 0,
 		target: 'normal',
-		flags: { charge: 1, protect: 1, mirror: 1 }, // Two-turn move
+		flags: { charge: 1, protect: 1, mirror: 1 },
 	},
 };
 
-/**
- * Check if a move ID is a custom move
- */
 export function isCustomMove(moveId: string): boolean {
 	return moveId in CUSTOM_MOVES;
 }
 
-/**
- * Get a custom move by ID
- */
 export function getCustomMove(moveId: string): CustomMove | null {
 	return CUSTOM_MOVES[moveId] || null;
 }
 
-/**
- * Get all custom move IDs
- */
 export function getAllCustomMoveIds(): string[] {
 	return Object.keys(CUSTOM_MOVES);
 }
 
-/**
- * Get all custom moves
- */
 export function getAllCustomMoves(): CustomMove[] {
 	return Object.values(CUSTOM_MOVES);
 }

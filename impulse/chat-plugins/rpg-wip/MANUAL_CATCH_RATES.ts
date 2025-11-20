@@ -1,6 +1,3 @@
-/*
-* Auto Generated Catch Rates.
-*/
 export const MANUAL_CATCH_RATES: Record<string, number> = {
 	'bulbasaur': 45,
 	'ivysaur': 45,

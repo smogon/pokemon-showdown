@@ -1,10 +1,5 @@
-/*
-* Pokemon Showdown
-* RPG Evolution Data
-* Note: Trade Evolution are changed to be level based.
-*/
 export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: number, evoItem?: string }[] } = {
-	// Starters - Gen 1
+
 	'bulbasaur': [{ evoTo: 'ivysaur', evoLevel: 16 }],
 	'ivysaur': [{ evoTo: 'venusaur', evoLevel: 32 }],
 	'charmander': [{ evoTo: 'charmeleon', evoLevel: 16 }],
@@ -12,7 +7,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'squirtle': [{ evoTo: 'wartortle', evoLevel: 16 }],
 	'wartortle': [{ evoTo: 'blastoise', evoLevel: 36 }],
 
-	// Starters - Gen 2
 	'chikorita': [{ evoTo: 'bayleef', evoLevel: 16 }],
 	'bayleef': [{ evoTo: 'meganium', evoLevel: 32 }],
 	'cyndaquil': [{ evoTo: 'quilava', evoLevel: 14 }],
@@ -20,7 +14,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'totodile': [{ evoTo: 'croconaw', evoLevel: 18 }],
 	'croconaw': [{ evoTo: 'feraligatr', evoLevel: 30 }],
 
-	// Starters - Gen 3
 	'treecko': [{ evoTo: 'grovyle', evoLevel: 16 }],
 	'grovyle': [{ evoTo: 'sceptile', evoLevel: 36 }],
 	'torchic': [{ evoTo: 'combusken', evoLevel: 16 }],
@@ -28,7 +21,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'mudkip': [{ evoTo: 'marshtomp', evoLevel: 16 }],
 	'marshtomp': [{ evoTo: 'swampert', evoLevel: 36 }],
 
-	// Starters - Gen 4
 	'turtwig': [{ evoTo: 'grotle', evoLevel: 18 }],
 	'grotle': [{ evoTo: 'torterra', evoLevel: 32 }],
 	'chimchar': [{ evoTo: 'monferno', evoLevel: 14 }],
@@ -36,7 +28,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'piplup': [{ evoTo: 'prinplup', evoLevel: 16 }],
 	'prinplup': [{ evoTo: 'empoleon', evoLevel: 36 }],
 
-	// Starters - Gen 5
 	'snivy': [{ evoTo: 'servine', evoLevel: 17 }],
 	'servine': [{ evoTo: 'serperior', evoLevel: 36 }],
 	'tepig': [{ evoTo: 'pignite', evoLevel: 17 }],
@@ -44,7 +35,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'oshawott': [{ evoTo: 'dewott', evoLevel: 17 }],
 	'dewott': [{ evoTo: 'samurott', evoLevel: 36 }],
 
-	// Starters - Gen 6
 	'chespin': [{ evoTo: 'quilladin', evoLevel: 16 }],
 	'quilladin': [{ evoTo: 'chesnaught', evoLevel: 36 }],
 	'fennekin': [{ evoTo: 'braixen', evoLevel: 16 }],
@@ -52,7 +42,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'froakie': [{ evoTo: 'frogadier', evoLevel: 16 }],
 	'frogadier': [{ evoTo: 'greninja', evoLevel: 36 }],
 
-	// Starters - Gen 7
 	'rowlet': [{ evoTo: 'dartrix', evoLevel: 17 }],
 	'dartrix': [{ evoTo: 'decidueye', evoLevel: 34 }],
 	'litten': [{ evoTo: 'torracat', evoLevel: 17 }],
@@ -60,7 +49,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'popplio': [{ evoTo: 'brionne', evoLevel: 17 }],
 	'brionne': [{ evoTo: 'primarina', evoLevel: 34 }],
 
-	// Starters - Gen 8
 	'grookey': [{ evoTo: 'thwackey', evoLevel: 16 }],
 	'thwackey': [{ evoTo: 'rillaboom', evoLevel: 35 }],
 	'scorbunny': [{ evoTo: 'cinderace', evoLevel: 16 }],
@@ -68,7 +56,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'sobble': [{ evoTo: 'drizzile', evoLevel: 16 }],
 	'drizzile': [{ evoTo: 'inteleon', evoLevel: 35 }],
 
-	// Starters - Gen 9
 	'sprigatito': [{ evoTo: 'floragato', evoLevel: 16 }],
 	'floragato': [{ evoTo: 'meowscarada', evoLevel: 36 }],
 	'fuecoco': [{ evoTo: 'crocalor', evoLevel: 16 }],
@@ -76,7 +63,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'quaxly': [{ evoTo: 'quaxwell', evoLevel: 16 }],
 	'quaxwell': [{ evoTo: 'quaquaval', evoLevel: 36 }],
 
-	// Bug Types
 	'caterpie': [{ evoTo: 'metapod', evoLevel: 7 }],
 	'metapod': [{ evoTo: 'butterfree', evoLevel: 10 }],
 	'weedle': [{ evoTo: 'kakuna', evoLevel: 7 }],
@@ -133,7 +119,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	],
 	'dipplin': [{ evoTo: 'hydrapple', evoLevel: 42, evoItem: 'dragonchesto' }],
 
-	// Normal Types
 	'pidgey': [{ evoTo: 'pidgeotto', evoLevel: 18 }],
 	'pidgeotto': [{ evoTo: 'pidgeot', evoLevel: 36 }],
 	'rattata': [{ evoTo: 'raticate', evoLevel: 20 }],
@@ -174,7 +159,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'lechonk': [{ evoTo: 'oinkologne', evoLevel: 18 }],
 	'tandemaus': [{ evoTo: 'maushold', evoLevel: 25 }],
 
-	// Poison Types
 	'ekans': [{ evoTo: 'arbok', evoLevel: 22 }],
 	'nidoranf': [{ evoTo: 'nidorina', evoLevel: 16 }],
 	'nidorina': [{ evoTo: 'nidoqueen', evoLevel: 99, evoItem: 'moonstone' }],
@@ -199,7 +183,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 		{ evoTo: 'toxtricitylowkey', evoLevel: 30 },
 	],
 
-	// Ground/Rock Types
 	'sandshrew': [{ evoTo: 'sandslash', evoLevel: 22 }],
 	'diglett': [{ evoTo: 'dugtrio', evoLevel: 26 }],
 	'geodude': [{ evoTo: 'graveler', evoLevel: 25 }],
@@ -240,13 +223,11 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'naclstack': [{ evoTo: 'garganacl', evoLevel: 38 }],
 	'duraludon': [{ evoTo: 'archaludon', evoLevel: 36, evoItem: 'metalalloy' }],
 
-	// Fire Types
 	'vulpix': [{ evoTo: 'ninetales', evoLevel: 99, evoItem: 'firestone' }],
 	'growlithe': [{ evoTo: 'arcanine', evoLevel: 99, evoItem: 'firestone' }],
 	'ponyta': [{ evoTo: 'rapidash', evoLevel: 40 }],
 	'magmar': [{ evoTo: 'magmortar', evoLevel: 36, evoItem: 'magmarizer' }],
 
-	// Water Types
 	'psyduck': [{ evoTo: 'golduck', evoLevel: 33 }],
 	'poliwag': [{ evoTo: 'poliwhirl', evoLevel: 25 }],
 	'poliwhirl': [
@@ -280,7 +261,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'arrokuda': [{ evoTo: 'barraskewda', evoLevel: 26 }],
 	'finizen': [{ evoTo: 'palafin', evoLevel: 38 }],
 
-	// Psychic Types
 	'abra': [{ evoTo: 'kadabra', evoLevel: 16 }],
 	'kadabra': [{ evoTo: 'alakazam', evoLevel: 36 }],
 	'drowzee': [{ evoTo: 'hypno', evoLevel: 26 }],
@@ -304,7 +284,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'hattrem': [{ evoTo: 'hatterene', evoLevel: 42 }],
 	'flittle': [{ evoTo: 'espathra', evoLevel: 35 }],
 
-	// Fighting Types
 	'mankey': [{ evoTo: 'primeape', evoLevel: 28 }],
 	'machop': [{ evoTo: 'machoke', evoLevel: 28 }],
 	'machoke': [{ evoTo: 'machamp', evoLevel: 36 }],
@@ -328,7 +307,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'pawmi': [{ evoTo: 'pawmo', evoLevel: 18 }],
 	'pawmo': [{ evoTo: 'pawmot', evoLevel: 36 }],
 
-	// Electric Types
 	'pikachu': [{ evoTo: 'raichu', evoLevel: 99, evoItem: 'thunderstone' }],
 	'magnemite': [{ evoTo: 'magneton', evoLevel: 30 }],
 	'voltorb': [{ evoTo: 'electrode', evoLevel: 30 }],
@@ -343,7 +321,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'tadbulb': [{ evoTo: 'bellibolt', evoLevel: 25 }],
 	'wattrel': [{ evoTo: 'kilowattrel', evoLevel: 25 }],
 
-	// Fairy Types
 	'clefairy': [{ evoTo: 'clefable', evoLevel: 99, evoItem: 'moonstone' }],
 	'jigglypuff': [{ evoTo: 'wigglytuff', evoLevel: 99, evoItem: 'moonstone' }],
 	'cleffa': [{ evoTo: 'clefairy', evoLevel: 30 }],
@@ -365,7 +342,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'tinkatuff': [{ evoTo: 'tinkaton', evoLevel: 38 }],
 	'fidough': [{ evoTo: 'dachsbun', evoLevel: 26 }],
 
-	// Ghost Types
 	'duskull': [{ evoTo: 'dusclops', evoLevel: 37 }],
 	'dusclops': [{ evoTo: 'dusknoir', evoLevel: 36, evoItem: 'reapercloth' }],
 	'drifloon': [{ evoTo: 'drifblim', evoLevel: 27 }],
@@ -385,7 +361,6 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'gimmighoul': [{ evoTo: 'gholdengo', evoLevel: 36 }],
 	'poltchageist': [{ evoTo: 'sinistcha', evoLevel: 36, evoItem: 'masterpiece' }],
 
-	// Miscellaneous Evolutions
 	'sunkern': [{ evoTo: 'sunflora', evoLevel: 99, evoItem: 'sunstone' }],
 	'murkrow': [{ evoTo: 'honchkrow', evoLevel: 36, evoItem: 'duskstone' }],
 	'misdreavus': [{ evoTo: 'mismagius', evoLevel: 36, evoItem: 'duskstone' }],
@@ -413,11 +388,9 @@ export const MANUAL_EVOLUTIONS: { [key: string]: { evoTo: string, evoLevel: numb
 	'capsakid': [{ evoTo: 'scovillain', evoLevel: 99, evoItem: 'firestone' }],
 	'cetoddle': [{ evoTo: 'cetitan', evoLevel: 30, evoItem: 'icestone' }],
 
-	// Fossil Types
 	'omanyte': [{ evoTo: 'omastar', evoLevel: 40 }],
 	'kabuto': [{ evoTo: 'kabutops', evoLevel: 40 }],
 
-	// Dragon Types
 	'dratini': [{ evoTo: 'dragonair', evoLevel: 30 }],
 	'dragonair': [{ evoTo: 'dragonite', evoLevel: 55 }],
 	'bagon': [{ evoTo: 'shelgon', evoLevel: 30 }],

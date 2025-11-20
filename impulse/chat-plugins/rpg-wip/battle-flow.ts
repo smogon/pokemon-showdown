@@ -16,8 +16,8 @@ import {
 	generateBattleTowerLossHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
-import { getBadgeForGymLeader, TOTAL_BADGES } from './badges'; // [REFACTOR] Badge source of truth
-import { GameConfig } from './game-config'; // [REFACTOR] Game Configuration
+import { getBadgeForGymLeader, TOTAL_BADGES } from './badges';
+import { GameConfig } from './game-config';
 
 import {
 	activateUnburden,
@@ -44,11 +44,6 @@ import {
 
 import { processEndOfTurn } from './battle-eot';
 
-/**
- * Get the initial weather for a battle based on the player's location
- * Converts location weather format to battle weather format
- * Returns both the active weather and the location weather type for restoration
- */
 export function getLocationWeatherData(player: PlayerData): {
 	weather: BattleState['weather'],
 	locationWeather: BattleState['locationWeather'],
@@ -83,9 +78,6 @@ export function getLocationWeatherData(player: PlayerData): {
 	};
 }
 
-/**
- * Get the weather message for the start of a battle based on weather type
- */
 export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'hail'): string {
 	const weatherStartMessages: Record<string, string> = {
 		'sun': 'The sunlight is strong.',
@@ -96,10 +88,6 @@ export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'h
 	return weatherStartMessages[weatherType];
 }
 
-/**
- * Creates a new Battle Tower battle state.
- * Generates random teams for both player and AI for the specified floor.
- */
 export function startBattleTowerFloor(
 	player: PlayerData,
 	floor: number,
@@ -721,9 +709,9 @@ export function executeAction(
 			const isPlayer = attackerSlotIndex <= 1;
 			const partyToUse = isPlayer ? getActiveParty(battle, player) : battle.opponentParty;
 			const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
-			
+
 			const hasReplacement = partyToUse.some(p => p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id));
-			
+
 			if (hasReplacement) {
 				if (isPlayer) {
 					battle.pendingPivot = { slotIndex: attackerSlotIndex, slot: attackerSlot, isBatonPass: move.selfSwitch === 'copyvolatile' };
@@ -771,7 +759,7 @@ export function executeMove(
 		if (attackerSlot.pokemon.hp <= 0) break;
 		if (defenderSlot.pokemon.hp <= 0) continue;
 
-		let truePriority = move.priority + RPGAbilities.applyPriorityModifier(move, attackerSlot.pokemon);
+		const truePriority = move.priority + RPGAbilities.applyPriorityModifier(move, attackerSlot.pokemon);
 
 		if (battle.terrain?.type === 'psychic' && truePriority > 0) {
 			const isDefenderGrounded = RPGAbilities.isGrounded(defenderSlot.pokemon, battle);
@@ -863,7 +851,7 @@ export function executeMove(
 				}
 			});
 		}
-		
+
 		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
 		if (toID(attackerSlot.pokemon.ability || '') === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
 			const hpPercent = attackerSlot.pokemon.hp / attackerSlot.pokemon.maxHp;
@@ -878,8 +866,8 @@ export function executeMove(
 			}
 		}
 	}
-	
-	targetSlots.forEach(s => { if(s && s.pokemon.hp > 0) RPGAbilities.checkFormChangeAbilities(s, battle, messageLog); });
+
+	targetSlots.forEach(s => { if (s && s.pokemon.hp > 0) RPGAbilities.checkFormChangeAbilities(s, battle, messageLog); });
 	if (attackerSlot.pokemon.hp > 0 && toID(attackerSlot.pokemon.ability || '') === 'truant') attackerSlot.isLoafing = true;
 }
 
@@ -891,7 +879,6 @@ export function handleSwitchAction(
 	player: PlayerData,
 	messageLog: string[]
 ) {
-	// Switch Validation (Trapping, etc)
 	if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'shedshell') {
 		if (attackerSlot.isIngrained) {
 			messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
@@ -916,7 +903,7 @@ export function handleSwitchAction(
 			return;
 		}
 	}
-    
+
 	const outgoingPokemon = attackerSlot.pokemon;
 	const outgoingAbility = toID(outgoingPokemon.ability || '');
 	if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
@@ -938,9 +925,9 @@ export function handleSwitchAction(
 		const playerParty = getActiveParty(battle, player);
 		const incomingPokemon = playerParty.find(p => p.id === pokemonToSwitchInId);
 		if (!incomingPokemon) {
-            messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
-            return;
-        }
+			messageLog.push(`${outgoingPokemon.species} tried to switch out, but there was no one to switch to!`);
+			return;
+		}
 
 		const newSlot = createActivePokemonSlot(incomingPokemon);
 		if ((incomingPokemon as any).hasSwitchedOut) (newSlot as any).hasSwitchedOut = true;
@@ -967,8 +954,8 @@ export function handleSwitchAction(
 				RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
 			}
 		} else {
-            messageLog.push(`${outgoingPokemon.species} tried to switch out, but no one was left!`);
-        }
+			messageLog.push(`${outgoingPokemon.species} tried to switch out, but no one was left!`);
+		}
 	}
 }
 
@@ -1012,14 +999,13 @@ export function resolveMoveTarget(
 
 export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
 	const pokemon = slot.pokemon;
-    const ability = toID(pokemon.ability || '');
-    
+	const ability = toID(pokemon.ability || '');
+
 	const runSwitchInAbilities = () => {
 		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
-        // Download/Frisk/Trace logic could be here if not in RPGAbilities, assuming simple call for now or adding inline:
-        
-        const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
-        if (ability === 'frisk') {
+
+		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		if (ability === 'frisk') {
 			for (const opponentSlot of opponentSlots) {
 				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
 					const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
@@ -1054,11 +1040,10 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 		return false;
 	}
 
-    // Hazard Damage Logic
-    const species = Dex.species.get(pokemon.species);
+	const species = Dex.species.get(pokemon.species);
 	const isGrounded = RPGAbilities.isGrounded(pokemon, battle);
 	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-    let totalDamage = 0;
+	let totalDamage = 0;
 
 	if (isGrounded) {
 		if (hazards.includes('stickyweb')) {
@@ -1085,15 +1070,15 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 				}
 			}
 		}
-        
-        const spikeLayers = hazards.filter(h => h === 'spikes').length;
+
+		const spikeLayers = hazards.filter(h => h === 'spikes').length;
 		if (spikeLayers > 0) {
 			const damageFraction = [0, 1 / 8, 1 / 6, 1 / 4][spikeLayers];
 			totalDamage += Math.floor(pokemon.maxHp * damageFraction);
 		}
 	}
 
-    if (hazards.includes('stealthrock')) {
+	if (hazards.includes('stealthrock')) {
 		if (hasAirBalloon) {
 			messageLog.push(`${pokemon.species}'s Air Balloon popped from the pointed stones!`);
 			pokemon.item = undefined;
@@ -1102,11 +1087,11 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
 	}
 
-    if (totalDamage > 0) {
+	if (totalDamage > 0) {
 		if (RPGAbilities.takesIndirectDamage(pokemon)) {
 			if (hazards.includes('stealthrock')) messageLog.push(`Pointed stones dug into ${pokemon.species}!`);
 			else if (hazards.includes('spikes')) messageLog.push(`${pokemon.species} was hurt by the spikes!`);
-			
+
 			pokemon.hp = Math.max(0, pokemon.hp - totalDamage);
 			if (pokemon.hp <= 0) return true;
 		} else {
@@ -1126,26 +1111,26 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 		const slot = battle.playerSlots[i];
 		if (slot && slot.pokemon.hp <= 0) {
 			messageLog.push(`<b>Your ${slot.pokemon.species} fainted!</b>`);
-            
-            const faintedAbility = toID(slot.pokemon.ability || '');
-            const lastMove = slot.lastMoveThatHitMe;
-            if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-                const opponentSlots = getActiveSlots(battle.opponentSlots);
-                const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
-                if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
-                    const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
-                    attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
-                    messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
-                }
-            }
 
-            const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
-            for (const activeSlot of allActiveSlots) {
-                if (activeSlot.pokemon.hp > 0 && toID(activeSlot.pokemon.ability || '') === 'soulheart' && activeSlot.statStages.spa < 6) {
-                    activeSlot.statStages.spa++;
-                    messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
-                }
-            }
+			const faintedAbility = toID(slot.pokemon.ability || '');
+			const lastMove = slot.lastMoveThatHitMe;
+			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+				const opponentSlots = getActiveSlots(battle.opponentSlots);
+				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
+					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
+					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+					messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+				}
+			}
+
+			const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+			for (const activeSlot of allActiveSlots) {
+				if (activeSlot.pokemon.hp > 0 && toID(activeSlot.pokemon.ability || '') === 'soulheart' && activeSlot.statStages.spa < 6) {
+					activeSlot.statStages.spa++;
+					messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+				}
+			}
 
 			battle.playerSlots[i as 0 | 1] = null;
 			switchNeeded = true;
@@ -1170,30 +1155,30 @@ export function handleOpponentFaint(
 		if (slot && slot.pokemon.hp <= 0) {
 			faintedThisCheck = true;
 			messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
-            
-            const faintedAbility = toID(slot.pokemon.ability || '');
-            const lastMove = slot.lastMoveThatHitMe;
-            if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-                const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
-                if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
-                    const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
-                    attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
-                    messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
-                }
-            }
+
+			const faintedAbility = toID(slot.pokemon.ability || '');
+			const lastMove = slot.lastMoveThatHitMe;
+			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
+					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
+					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+					messageLog.push(`${attackerSlot.pokemon.species} was hurt by ${slot.pokemon.species}'s Aftermath!`);
+				}
+			}
 
 			for (const participantSlot of playerParticipants) {
 				if (participantSlot.pokemon.hp <= 0) continue;
 				RPGAbilities.applyOnKOAbilities(participantSlot, battle, messageLog);
 			}
 
-            const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
-            for (const activeSlot of allActiveSlots) {
-                if (activeSlot.pokemon.hp > 0 && toID(activeSlot.pokemon.ability || '') === 'soulheart' && activeSlot.statStages.spa < 6) {
-                    activeSlot.statStages.spa++;
-                    messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
-                }
-            }
+			const allActiveSlots = [...getActiveSlots(battle.playerSlots), ...getActiveSlots(battle.opponentSlots)];
+			for (const activeSlot of allActiveSlots) {
+				if (activeSlot.pokemon.hp > 0 && toID(activeSlot.pokemon.ability || '') === 'soulheart' && activeSlot.statStages.spa < 6) {
+					activeSlot.statStages.spa++;
+					messageLog.push(`${activeSlot.pokemon.species}'s Soul-Heart raised its Sp. Atk!`);
+				}
+			}
 
 			if (battle.battleType !== 'battletower' && playerParticipants.length > 0) {
 				const expResult = gainExperience(player, playerParticipants, slot.pokemon, room, user);
@@ -1227,36 +1212,36 @@ export function handleAiPivot(battle: BattleState, messageLog: string[]) {
 	if (!battle.aiPendingPivot) return;
 	const slotIndex = battle.aiPendingPivot.slotIndex;
 	const pivotSlot = battle.aiPendingPivot.slot;
-    const isBatonPass = battle.aiPendingPivot.isBatonPass;
+	const isBatonPass = battle.aiPendingPivot.isBatonPass;
 
 	messageLog.push(`<b>${battle.opponentName} withdrew ${pivotSlot.pokemon.species}!</b>`);
-    
-    let foundReplacement = false;
-    while (!foundReplacement) {
-        const nextOpponent = battle.opponentParty.find(p => p.hp > 0 && p.id !== pivotSlot.pokemon.id && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
-        if (nextOpponent) {
-            messageLog.push(`<b>${battle.opponentName} sent out ${nextOpponent.species}!</b>`);
-            const newSlot = createActivePokemonSlot(nextOpponent);
-            if (isBatonPass) {
-                 newSlot.statStages = {...pivotSlot.statStages};
-                 newSlot.isConfused = pivotSlot.isConfused;
-                 newSlot.confusionCounter = pivotSlot.confusionCounter;
-                 newSlot.isSeeded = pivotSlot.isSeeded;
-                 messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
-            }
-            battle.opponentSlots[slotIndex as 0|1] = newSlot;
-            const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
-            if (faintedOnEntry) messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
-            else {
-                handleMirrorHerb(newSlot, battle, messageLog);
-                foundReplacement = true;
-            }
-        } else {
-            battle.opponentSlots[slotIndex as 0|1] = pivotSlot; // Pivot failed, return to battle
-            messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
-            foundReplacement = true;
-        }
-    }
+
+	let foundReplacement = false;
+	while (!foundReplacement) {
+		const nextOpponent = battle.opponentParty.find(p => p.hp > 0 && p.id !== pivotSlot.pokemon.id && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
+		if (nextOpponent) {
+			messageLog.push(`<b>${battle.opponentName} sent out ${nextOpponent.species}!</b>`);
+			const newSlot = createActivePokemonSlot(nextOpponent);
+			if (isBatonPass) {
+				newSlot.statStages = { ...pivotSlot.statStages };
+				newSlot.isConfused = pivotSlot.isConfused;
+				newSlot.confusionCounter = pivotSlot.confusionCounter;
+				newSlot.isSeeded = pivotSlot.isSeeded;
+				messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
+			}
+			battle.opponentSlots[slotIndex as 0 | 1] = newSlot;
+			const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, false, messageLog);
+			if (faintedOnEntry) messageLog.push(`<b>${newSlot.pokemon.species} fainted upon entry!</b>`);
+			else {
+				handleMirrorHerb(newSlot, battle, messageLog);
+				foundReplacement = true;
+			}
+		} else {
+			battle.opponentSlots[slotIndex as 0 | 1] = pivotSlot;
+			messageLog.push(`${pivotSlot.pokemon.species} had no one to switch to!`);
+			foundReplacement = true;
+		}
+	}
 	battle.aiPendingPivot = undefined;
 }
 
@@ -1304,7 +1289,6 @@ export function checkForWinLoss(
 	const playerHasLivingPokemon = getActiveParty(battle, player).some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
 	const playerHasActivePokemon = getActiveSlots(battle.playerSlots).length > 0;
 
-	// --- PLAYER DEFEAT ---
 	if (!playerHasActivePokemon && !playerHasLivingPokemon) {
 		if (battle.battleType === 'battletower') {
 			saveBattleStatus(battle);
@@ -1347,7 +1331,6 @@ export function checkForWinLoss(
 		return true;
 	}
 
-	// --- PLAYER VICTORY ---
 	const opponentHasLivingPokemon = battle.opponentParty.some(p => p.hp > 0 && !battle.opponentSlots.some(s => s?.pokemon.id === p.id));
 	const opponentHasActivePokemon = getActiveSlots(battle.opponentSlots).length > 0;
 
@@ -1375,7 +1358,6 @@ export function checkForWinLoss(
 			if (battle.trainerId) {
 				player.defeatedTrainers.add(battle.trainerId);
 
-				// [REFACTOR] Abstract Badge Awarding using helper
 				const badgeName = getBadgeForGymLeader(battle.trainerId);
 				if (badgeName && !player.obtainedBadges.includes(badgeName)) {
 					player.obtainedBadges.push(badgeName);
@@ -1388,7 +1370,6 @@ export function checkForWinLoss(
 					}
 				}
 
-				// [REFACTOR] Abstract Champion Trigger using Config
 				if (battle.trainerId === GameConfig.specialIds.champion) {
 					player.storyFlags.add('champion');
 					player.storyFlags.add('game_complete');
@@ -1399,8 +1380,7 @@ export function checkForWinLoss(
 			messageLog.push(`<hr><center><b>Victory!</b></center>`);
 			messageLog.push(`<center><strong>You defeated ${battle.opponentName}!</strong></center>`);
 			messageLog.push(`<center><b>You received ₽${moneyGained} for winning!</b></center>`);
-            
-            // If script event active, use it for "Continue" button logic
+
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {

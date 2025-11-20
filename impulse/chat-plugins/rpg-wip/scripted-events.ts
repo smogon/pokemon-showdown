@@ -1,135 +1,18 @@
-/*
-* Pokemon Showdown
-* RPG Scripted Events Handler
-*
-* This file implements logic for all scripted event types.
-*
-* All handlers are exported and can be imported individually or as a namespace:
-*   import * as ScriptedEvents from './scripted-events';
-*   import { handleCutscene, handlePokemonSwarm } from './scripted-events';
-*
-* Available Scripted Event Handlers (60+ handlers):
-*  - handleCutscene: Display cinematic cutscenes
-*  - handleChoice: Player makes a choice that affects story
-*  - handleQuiz: Answer quiz questions
-*  - handlePuzzle: Solve puzzles
-*  - handleRiddle: Answer riddles
-*  - handleMinigame: Play minigames
-*  - handleWeatherChange: Change weather in location
-*  - handleEarthquake: Earthquake event
-*  - handleExplosion: Explosion event
-*  - handleFlood: Flood event
-*  - handleMeteor: Meteor fall event
-*  - handleEclipse: Eclipse event
-*  - handleTimeWarp: Time manipulation
-*  - handleDimensionRift: Dimension rift opening
-*  - handlePokemonSwarm: Pokemon swarms appear
-*  - checkActiveSwarm: Check if swarm is active
-*  - handleBossBattle: Multi-phase boss battles
-*  - handleTournament: Tournament against AI trainers
-*  - advanceTournamentRound: Progress tournament
-*  - handleContest: Pokemon contests
-*  - handleRace: Racing events
-*  - handleScavengerHunt: Find hidden items
-*  - markScavengerItemFound: Mark item as found
-*  - handleInvestigation: Investigate mysteries
-*  - markClueFound: Mark clue as found
-*  - handleStealth: Stealth missions
-*  - handleEscape: Escape sequences
-*  - handleRescue: Rescue missions
-*  - handleDefense: Defend location
-*  - handleAmbush: Player ambushed
-*  - handleBetrayal: Betrayal occurs
-*  - handleAlliance: Form alliances
-*  - handleNegotiation: Negotiate with NPCs
-*  - handleDiscovery: Discover something new
-*  - handleRevelation: Story revelations
-*  - handleTransformation: Pokemon transformations
-*  - handleEvolutionCeremony: Special evolution
-*  - handleLegendaryAwakening: Legendary Pokemon awakens
-*  - handleAncientSeal: Ancient seal activated
-*  - handlePortalOpening: Portal opens
-*  - handleDimensionMerge: Dimensions merge
-*  - handleTimeLoop: Time loop event
-*  - handleProphecy: Prophecy revealed
-*  - handleFishingEvent: Fishing encounter
-*  - handleSurfingEvent: Surfing encounter
-*  - handleDivingEvent: Diving encounter
-*  - handleItemBall: Find items in pokeballs
-*  - handleHiddenItemEvent: Hidden item pickup
-*  - handleRoamingEvent: Roaming Pokemon
-*  - handleMultiBattle: Tag team battles
-*  - handleFestivalEvent: Festival/celebration
-*  - handleSecretArea: Unlock secret areas
-*  - handleWarpEvent: Teleportation/warp
-*  - handleGymChallengeEvent: Gym challenge start
-*  - handleEliteFourChallengeEvent: Elite Four gauntlet
-*  - handleHallOfFameEvent: Hall of Fame induction
-*  - handleSafariZoneEvent: Safari Zone special
-*  - handleBugCatchingContestEvent: Bug Catching Contest
-*  - handleBattleFrontierEvent: Battle Frontier
-*  - handleFlashback: Show flashback scenes
-*  - handleDreamSequence: Dream sequences and nightmares
-*  - handleReputationChange: Change faction reputation
-*  - handleCompanionJoin: NPC joins as companion
-*  - handleCompanionLeave: Companion leaves party
-*  - handleMoralChoice: Moral choices affecting karma
-*  - handleLoreDiscovery: Discover world lore/history
-*  - handleBranchingPath: Story branches based on choices
-*  - handleChapterTransition: Transition between chapters
-*  - handleEpilogue: Show epilogue after main story
-*  - handleCollectibleItem: Find special collectibles
-*  - handleVoiceFromAbove: Mysterious voice guidance
-*  - handleMemoryRestoration: Regain lost memories
-*  - handleHordeBattle: Battle multiple Pokemon at once
-*  - handleInverseBattle: Type effectiveness reversed
-*  - handleRotationBattle: Rotation battle format
-*  - handleBattleRoyale: Four-way free-for-all
-*  - handleTripleBattle: 3v3 simultaneous battle
-*  - handleSkyBattle: Flying-type only battle
-*  - handleUnderwaterBattle: Water-type only battle
-*  - handleRaidBattle: Single-player boss battles
-*  - handleGauntletBattle: Series of consecutive battles
-*  - advanceGauntletEvent: Progress gauntlet event
-*  - handleChampionDefense: Defend champion title
-*  - recordChampionDefense: Record title defense
-*  - handleBattleTest: Trial battles with conditions
-*  - handleWarBattle: Large-scale multi-wave battles
-*  - advanceWarWave: Progress to next war wave
-*
-* Usage in locations.ts:
-*   Define scriptedEvents in location objects with types that match
-*   these handlers. The handler will be automatically called by
-*   commands.ts when the event is triggered.
-*/
-
 import type { PlayerData, RPGPokemon, ScriptedEvent } from './interface';
 import { Dex } from '../../../sim/dex';
 
-/**
- * Utility: Parse timestamp from flag string
- * Flags follow format: prefix_suffix_timestamp
- */
 function parseTimestampFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
 	const timestamp = parts[parts.length - 1];
 	return parseInt(timestamp) || 0;
 }
 
-/**
- * Utility: Parse numeric value from flag string
- * Flags follow format: prefix_suffix_number
- */
 function parseNumberFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');
 	const value = parts[parts.length - 1];
 	return parseInt(value) || 0;
 }
 
-/**
- * Cutscene Event
- * Display a cinematic cutscene
- */
 export function handleCutscene(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -145,10 +28,6 @@ export function handleCutscene(
 	};
 }
 
-/**
- * Choice Event
- * Player makes a choice that affects the story
- */
 export function handleChoice(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -160,7 +39,6 @@ export function handleChoice(
 
 	const choice = event.choices[choiceIndex];
 
-	// Set result flag if specified
 	if (choice.resultFlag) {
 		player.storyFlags.add(choice.resultFlag);
 	}
@@ -173,10 +51,6 @@ export function handleChoice(
 	};
 }
 
-/**
- * Quiz Event
- * Answer quiz questions
- */
 export function handleQuiz(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -195,10 +69,6 @@ export function handleQuiz(
 	};
 }
 
-/**
- * Puzzle Event
- * Solve a puzzle
- */
 export function handlePuzzle(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -221,10 +91,6 @@ export function handlePuzzle(
 	};
 }
 
-/**
- * Riddle Event
- * Answer a riddle
- */
 export function handleRiddle(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -243,10 +109,6 @@ export function handleRiddle(
 	};
 }
 
-/**
- * Minigame Event
- * Play a minigame (framework for future implementation)
- */
 export function handleMinigame(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -257,10 +119,6 @@ export function handleMinigame(
 	};
 }
 
-/**
- * Weather Change Event
- * Change the weather in the current location
- */
 export function handleWeatherChange(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -286,10 +144,6 @@ export function handleWeatherChange(
 	};
 }
 
-/**
- * Earthquake Event
- * An earthquake occurs
- */
 export function handleEarthquake(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -300,10 +154,6 @@ export function handleEarthquake(
 	};
 }
 
-/**
- * Explosion Event
- * An explosion occurs
- */
 export function handleExplosion(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -314,10 +164,6 @@ export function handleExplosion(
 	};
 }
 
-/**
- * Flood Event
- * A flood occurs
- */
 export function handleFlood(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -328,10 +174,6 @@ export function handleFlood(
 	};
 }
 
-/**
- * Meteor Event
- * A meteor falls
- */
 export function handleMeteor(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -342,10 +184,6 @@ export function handleMeteor(
 	};
 }
 
-/**
- * Eclipse Event
- * An eclipse occurs
- */
 export function handleEclipse(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -356,10 +194,6 @@ export function handleEclipse(
 	};
 }
 
-/**
- * Time Warp Event
- * Time manipulation event
- */
 export function handleTimeWarp(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -370,10 +204,6 @@ export function handleTimeWarp(
 	};
 }
 
-/**
- * Dimension Rift Event
- * A rift to another dimension opens
- */
 export function handleDimensionRift(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -384,10 +214,6 @@ export function handleDimensionRift(
 	};
 }
 
-/**
- * Pokemon Swarm Event
- * A swarm of Pokemon appears
- */
 export function handlePokemonSwarm(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -401,9 +227,8 @@ export function handlePokemonSwarm(
 		return { success: false, message: 'Invalid Pokemon species.' };
 	}
 
-	// Set swarm flag
 	const swarmFlag = `swarm_${event.swarmSpecies}_active`;
-	const duration = event.swarmDuration || 24; // hours
+	const duration = event.swarmDuration || 24;
 	const expiryTime = Date.now() + (duration * 60 * 60 * 1000);
 	player.storyFlags.add(`${swarmFlag}_${expiryTime}`);
 
@@ -415,9 +240,6 @@ export function handlePokemonSwarm(
 	};
 }
 
-/**
- * Check if a swarm is active
- */
 export function checkActiveSwarm(player: PlayerData, species: string): boolean {
 	const swarmFlag = `swarm_${species}_active`;
 	const swarmStr = Array.from(player.storyFlags).find(f => f.startsWith(swarmFlag));
@@ -435,10 +257,6 @@ export function checkActiveSwarm(player: PlayerData, species: string): boolean {
 	return true;
 }
 
-/**
- * Boss Battle Event
- * Special multi-phase boss battle
- */
 export function handleBossBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -455,10 +273,6 @@ export function handleBossBattle(
 	};
 }
 
-/**
- * Tournament Event
- * Single-player tournament against AI trainers
- */
 export function handleTournament(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -493,9 +307,6 @@ export function handleTournament(
 	};
 }
 
-/**
- * Advance to next tournament round
- */
 export function advanceTournamentRound(player: PlayerData, eventId: string): void {
 	const tournamentFlag = `tournament_${eventId}_round`;
 	const roundStr = Array.from(player.storyFlags).find(f => f.startsWith(tournamentFlag));
@@ -509,10 +320,6 @@ export function advanceTournamentRound(player: PlayerData, eventId: string): voi
 	player.storyFlags.add(`${tournamentFlag}_${currentRound + 1}`);
 }
 
-/**
- * Contest Event
- * Pokemon contest (simplified)
- */
 export function handleContest(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -522,7 +329,6 @@ export function handleContest(
 		return { success: false, message: 'No contest type specified.' };
 	}
 
-	// Simple scoring based on Pokemon stats and type
 	let score = 0;
 	const contestType = event.contestType;
 
@@ -544,7 +350,7 @@ export function handleContest(
 		break;
 	}
 
-	score = Math.floor(score / 10); // Scale down
+	score = Math.floor(score / 10);
 
 	return {
 		success: true,
@@ -553,18 +359,13 @@ export function handleContest(
 	};
 }
 
-/**
- * Race Event
- * Racing event
- */
 export function handleRace(
 	player: PlayerData,
 	event: ScriptedEvent,
 	pokemon: RPGPokemon
 ): { success: boolean, message: string, time?: number, won?: boolean } {
-	// Simple race based on speed stat
 	const time = Math.max(10, 100 - pokemon.spe);
-	const won = time < 50; // Win if time is under 50
+	const won = time < 50;
 
 	return {
 		success: true,
@@ -576,10 +377,6 @@ export function handleRace(
 	};
 }
 
-/**
- * Scavenger Hunt Event
- * Find hidden items
- */
 export function handleScavengerHunt(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -600,18 +397,11 @@ export function handleScavengerHunt(
 	};
 }
 
-/**
- * Mark item as found in scavenger hunt
- */
 export function markScavengerItemFound(player: PlayerData, eventId: string, itemIndex: number): void {
 	const huntFlag = `scavengerhunt_${eventId}_found_${itemIndex}`;
 	player.storyFlags.add(huntFlag);
 }
 
-/**
- * Investigation Event
- * Investigate a mystery
- */
 export function handleInvestigation(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -634,18 +424,11 @@ export function handleInvestigation(
 	};
 }
 
-/**
- * Mark clue as found
- */
 export function markClueFound(player: PlayerData, eventId: string, clueIndex: number): void {
 	const invFlag = `investigation_${eventId}_clue_${clueIndex}`;
 	player.storyFlags.add(invFlag);
 }
 
-/**
- * Stealth Event
- * Stealth mission
- */
 export function handleStealth(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -656,10 +439,6 @@ export function handleStealth(
 	};
 }
 
-/**
- * Escape Event
- * Escape sequence
- */
 export function handleEscape(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -670,10 +449,6 @@ export function handleEscape(
 	};
 }
 
-/**
- * Rescue Event
- * Rescue mission
- */
 export function handleRescue(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -684,10 +459,6 @@ export function handleRescue(
 	};
 }
 
-/**
- * Defense Event
- * Defend a location
- */
 export function handleDefense(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -698,10 +469,6 @@ export function handleDefense(
 	};
 }
 
-/**
- * Ambush Event
- * Player is ambushed
- */
 export function handleAmbush(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -712,10 +479,6 @@ export function handleAmbush(
 	};
 }
 
-/**
- * Betrayal Event
- * A betrayal occurs
- */
 export function handleBetrayal(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -726,10 +489,6 @@ export function handleBetrayal(
 	};
 }
 
-/**
- * Alliance Event
- * Form an alliance
- */
 export function handleAlliance(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -740,10 +499,6 @@ export function handleAlliance(
 	};
 }
 
-/**
- * Negotiation Event
- * Negotiate with NPCs
- */
 export function handleNegotiation(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -754,10 +509,6 @@ export function handleNegotiation(
 	};
 }
 
-/**
- * Discovery Event
- * Discover something new
- */
 export function handleDiscovery(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -768,10 +519,6 @@ export function handleDiscovery(
 	};
 }
 
-/**
- * Revelation Event
- * A story revelation
- */
 export function handleRevelation(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -782,10 +529,6 @@ export function handleRevelation(
 	};
 }
 
-/**
- * Transformation Event
- * Pokemon transformation
- */
 export function handleTransformation(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -810,10 +553,6 @@ export function handleTransformation(
 	};
 }
 
-/**
- * Evolution Ceremony Event
- * Special evolution event
- */
 export function handleEvolutionCeremony(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -825,10 +564,6 @@ export function handleEvolutionCeremony(
 	};
 }
 
-/**
- * Legendary Awakening Event
- * A legendary Pokemon awakens
- */
 export function handleLegendaryAwakening(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -849,10 +584,6 @@ export function handleLegendaryAwakening(
 	};
 }
 
-/**
- * Ancient Seal Event
- * An ancient seal is broken or activated
- */
 export function handleAncientSeal(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -863,10 +594,6 @@ export function handleAncientSeal(
 	};
 }
 
-/**
- * Portal Opening Event
- * A portal opens
- */
 export function handlePortalOpening(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -877,10 +604,6 @@ export function handlePortalOpening(
 	};
 }
 
-/**
- * Dimension Merge Event
- * Dimensions begin to merge
- */
 export function handleDimensionMerge(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -891,10 +614,6 @@ export function handleDimensionMerge(
 	};
 }
 
-/**
- * Time Loop Event
- * Player enters a time loop
- */
 export function handleTimeLoop(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -918,10 +637,6 @@ export function handleTimeLoop(
 	};
 }
 
-/**
- * Prophecy Event
- * A prophecy is revealed
- */
 export function handleProphecy(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -932,10 +647,6 @@ export function handleProphecy(
 	};
 }
 
-/**
- * Fishing Event
- * Fishing encounter
- */
 export function handleFishingEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -948,10 +659,6 @@ export function handleFishingEvent(
 	};
 }
 
-/**
- * Surfing Event
- * Surfing encounter
- */
 export function handleSurfingEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -963,10 +670,6 @@ export function handleSurfingEvent(
 	};
 }
 
-/**
- * Diving Event
- * Diving encounter
- */
 export function handleDivingEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -979,10 +682,6 @@ export function handleDivingEvent(
 	};
 }
 
-/**
- * Item Ball Event
- * Finding items in pokeballs
- */
 export function handleItemBall(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -994,10 +693,6 @@ export function handleItemBall(
 	};
 }
 
-/**
- * Hidden Item Event
- * Hidden item pickup
- */
 export function handleHiddenItemEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1009,10 +704,6 @@ export function handleHiddenItemEvent(
 	};
 }
 
-/**
- * Roaming Event
- * Roaming Pokemon encounter
- */
 export function handleRoamingEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1025,10 +716,6 @@ export function handleRoamingEvent(
 	};
 }
 
-/**
- * Multi Battle Event
- * Tag team battle event
- */
 export function handleMultiBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1041,10 +728,6 @@ export function handleMultiBattle(
 	};
 }
 
-/**
- * Festival Event
- * Festival/celebration event
- */
 export function handleFestivalEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1057,10 +740,6 @@ export function handleFestivalEvent(
 	};
 }
 
-/**
- * Secret Area Event
- * Unlocking secret areas
- */
 export function handleSecretArea(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1072,10 +751,6 @@ export function handleSecretArea(
 	};
 }
 
-/**
- * Warp Event
- * Teleportation/warp events
- */
 export function handleWarpEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1089,10 +764,6 @@ export function handleWarpEvent(
 	};
 }
 
-/**
- * Gym Challenge Event
- * Formal gym challenge start
- */
 export function handleGymChallengeEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1105,10 +776,6 @@ export function handleGymChallengeEvent(
 	};
 }
 
-/**
- * Elite Four Challenge Event
- * Elite Four gauntlet
- */
 export function handleEliteFourChallengeEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1121,10 +788,6 @@ export function handleEliteFourChallengeEvent(
 	};
 }
 
-/**
- * Hall of Fame Event
- * Hall of Fame induction
- */
 export function handleHallOfFameEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1139,10 +802,6 @@ export function handleHallOfFameEvent(
 	};
 }
 
-/**
- * Safari Zone Event
- * Safari Zone special event
- */
 export function handleSafariZoneEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1156,10 +815,6 @@ export function handleSafariZoneEvent(
 	};
 }
 
-/**
- * Bug Catching Contest Event
- * Bug Catching Contest
- */
 export function handleBugCatchingContestEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1172,10 +827,6 @@ export function handleBugCatchingContestEvent(
 	};
 }
 
-/**
- * Battle Frontier Event
- * Battle Frontier event
- */
 export function handleBattleFrontierEvent(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1188,10 +839,6 @@ export function handleBattleFrontierEvent(
 	};
 }
 
-/**
- * Flashback Event
- * Show a flashback scene revealing backstory
- */
 export function handleFlashback(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1208,10 +855,6 @@ export function handleFlashback(
 	};
 }
 
-/**
- * Dream Sequence Event
- * Dream sequence for foreshadowing or story
- */
 export function handleDreamSequence(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1228,10 +871,6 @@ export function handleDreamSequence(
 	};
 }
 
-/**
- * Reputation Change Event
- * Change reputation with factions based on actions
- */
 export function handleReputationChange(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1262,10 +901,6 @@ export function handleReputationChange(
 	};
 }
 
-/**
- * Companion Join Event
- * NPC joins player as companion
- */
 export function handleCompanionJoin(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1288,10 +923,6 @@ export function handleCompanionJoin(
 	};
 }
 
-/**
- * Companion Leave Event
- * Companion leaves the party
- */
 export function handleCompanionLeave(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1314,10 +945,6 @@ export function handleCompanionLeave(
 	};
 }
 
-/**
- * Moral Choice Event
- * Player makes a moral choice affecting karma/alignment
- */
 export function handleMoralChoice(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1329,7 +956,6 @@ export function handleMoralChoice(
 
 	const choice = event.moralChoices[choiceIndex];
 
-	// Update karma
 	const karmaFlag = 'player_karma_points';
 	const karmaStr = Array.from(player.storyFlags).find(f => f.startsWith(karmaFlag));
 
@@ -1342,14 +968,12 @@ export function handleMoralChoice(
 	currentKarma += choice.karmaChange || 0;
 	player.storyFlags.add(`${karmaFlag}_${currentKarma}`);
 
-	// Determine alignment
 	let alignment = 'Neutral';
 	if (currentKarma >= 50) alignment = 'Hero';
 	else if (currentKarma >= 20) alignment = 'Good';
 	else if (currentKarma <= -50) alignment = 'Villain';
 	else if (currentKarma <= -20) alignment = 'Evil';
 
-	// Set result flag if specified
 	if (choice.resultFlag) {
 		player.storyFlags.add(choice.resultFlag);
 	}
@@ -1362,10 +986,6 @@ export function handleMoralChoice(
 	};
 }
 
-/**
- * Lore Discovery Event
- * Discover lore/history about the world
- */
 export function handleLoreDiscovery(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1395,10 +1015,6 @@ export function handleLoreDiscovery(
 	};
 }
 
-/**
- * Branching Path Event
- * Story branches based on player choices
- */
 export function handleBranchingPath(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1410,12 +1026,10 @@ export function handleBranchingPath(
 
 	const path = event.pathOptions[pathChoice];
 
-	// Set the path flag
 	if (path.pathFlag) {
 		player.storyFlags.add(path.pathFlag);
 	}
 
-	// Clear other path flags if exclusive
 	if (event.exclusivePaths) {
 		for (const otherPath of event.pathOptions) {
 			if (otherPath.pathFlag && otherPath.pathFlag !== path.pathFlag) {
@@ -1432,10 +1046,6 @@ export function handleBranchingPath(
 	};
 }
 
-/**
- * Chapter Transition Event
- * Transition between story chapters
- */
 export function handleChapterTransition(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1455,10 +1065,6 @@ export function handleChapterTransition(
 	};
 }
 
-/**
- * Epilogue Event
- * Show epilogue after main story
- */
 export function handleEpilogue(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1477,10 +1083,6 @@ export function handleEpilogue(
 	};
 }
 
-/**
- * Collectible Item Event
- * Find special collectible items (badges, medals, etc.)
- */
 export function handleCollectibleItem(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1505,10 +1107,6 @@ export function handleCollectibleItem(
 	};
 }
 
-/**
- * Voice From Above Event
- * Mysterious voice gives guidance
- */
 export function handleVoiceFromAbove(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1524,10 +1122,6 @@ export function handleVoiceFromAbove(
 	};
 }
 
-/**
- * Memory Restoration Event
- * Player regains lost memories
- */
 export function handleMemoryRestoration(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1551,10 +1145,6 @@ export function handleMemoryRestoration(
 	};
 }
 
-/**
- * Horde Battle Event
- * Battle against multiple Pokemon at once
- */
 export function handleHordeBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1573,10 +1163,6 @@ export function handleHordeBattle(
 	};
 }
 
-/**
- * Inverse Battle Event
- * Type effectiveness is reversed
- */
 export function handleInverseBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1592,10 +1178,6 @@ export function handleInverseBattle(
 	};
 }
 
-/**
- * Rotation Battle Event
- * Special battle format with rotation mechanic
- */
 export function handleRotationBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1612,10 +1194,6 @@ export function handleRotationBattle(
 	};
 }
 
-/**
- * Battle Royale Event
- * Four-way free-for-all battle
- */
 export function handleBattleRoyale(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1631,10 +1209,6 @@ export function handleBattleRoyale(
 	};
 }
 
-/**
- * Triple Battle Event
- * 3v3 simultaneous battle
- */
 export function handleTripleBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1650,10 +1224,6 @@ export function handleTripleBattle(
 	};
 }
 
-/**
- * Sky Battle Event
- * Only Flying-type or Levitate Pokemon can participate
- */
 export function handleSkyBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1669,10 +1239,6 @@ export function handleSkyBattle(
 	};
 }
 
-/**
- * Underwater Battle Event
- * Only Water-type Pokemon can participate
- */
 export function handleUnderwaterBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1688,10 +1254,6 @@ export function handleUnderwaterBattle(
 	};
 }
 
-/**
- * Boss Encounter Event
- * Single-player battle against powerful boss Pokemon
- */
 export function handleRaidBattle(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1708,10 +1270,6 @@ export function handleRaidBattle(
 	};
 }
 
-/**
- * Gauntlet Battle Event
- * Series of consecutive battles
- */
 export function handleGauntletBattle(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1747,9 +1305,6 @@ export function handleGauntletBattle(
 	};
 }
 
-/**
- * Advance gauntlet event
- */
 export function advanceGauntletEvent(player: PlayerData, eventId: string): void {
 	const gauntletFlag = `gauntlet_event_${eventId}_battle`;
 	const battleStr = Array.from(player.storyFlags).find(f => f.startsWith(gauntletFlag));
@@ -1763,10 +1318,6 @@ export function advanceGauntletEvent(player: PlayerData, eventId: string): void 
 	player.storyFlags.add(`${gauntletFlag}_${currentBattle + 1}`);
 }
 
-/**
- * Champion Defense Event
- * Defend champion title against challengers
- */
 export function handleChampionDefense(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1784,7 +1335,6 @@ export function handleChampionDefense(
 		defenses = parseInt(defensesStr.split('_').pop() || '0');
 	}
 
-	// Select challenger based on defenses
 	const challengerIndex = Math.min(defenses, event.challengers.length - 1);
 	const challenger = event.challengers[challengerIndex];
 
@@ -1796,9 +1346,6 @@ export function handleChampionDefense(
 	};
 }
 
-/**
- * Record championship defense
- */
 export function recordChampionDefense(player: PlayerData, eventId: string): void {
 	const defensesFlag = `champion_defenses_${eventId}`;
 	const defensesStr = Array.from(player.storyFlags).find(f => f.startsWith(defensesFlag));
@@ -1812,10 +1359,6 @@ export function recordChampionDefense(player: PlayerData, eventId: string): void
 	player.storyFlags.add(`${defensesFlag}_${defenses + 1}`);
 }
 
-/**
- * Battle Test Event
- * Trial battle to test player's skills
- */
 export function handleBattleTest(
 	player: PlayerData,
 	event: ScriptedEvent
@@ -1841,10 +1384,6 @@ export function handleBattleTest(
 	};
 }
 
-/**
- * War Battle Event
- * Large-scale battle with multiple waves
- */
 export function handleWarBattle(
 	player: PlayerData,
 	event: ScriptedEvent,
@@ -1879,9 +1418,6 @@ export function handleWarBattle(
 	};
 }
 
-/**
- * Advance war battle wave
- */
 export function advanceWarWave(player: PlayerData, eventId: string): void {
 	const waveFlag = `war_${eventId}_wave`;
 	const waveStr = Array.from(player.storyFlags).find(f => f.startsWith(waveFlag));

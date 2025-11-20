@@ -1,26 +1,9 @@
-/*
-* Pokemon Showdown
-* RPG Handlers - Central Export
-*
-* This file re-exports all NPC action handlers and scripted event handlers
-* to make them easily accessible from data files (locations.ts, npcs.ts, story-events.ts)
-* and other modules that need to process game events.
-*
-* Usage:
-*   import * as Handlers from './handlers';
-*   const result = Handlers.NPC.handleHeal(player);
-*   const result = Handlers.Events.handleCutscene(player, event);
-*/
-
-// Re-export all NPC action handlers
 export * as NPC from './npc-actions';
 
-// Re-export all scripted event handlers
 export * as Events from './scripted-events';
 
-// Re-export for convenience - individual imports
 export {
-	// NPC Action Handlers
+
 	handleFossilRevival,
 	handleDailyReward,
 	handleBattleRequest,
@@ -81,7 +64,7 @@ export {
 } from './npc-actions';
 
 export {
-	// Scripted Event Handlers
+
 	handleCutscene,
 	handleChoice,
 	handleQuiz,

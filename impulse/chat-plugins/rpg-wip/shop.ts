@@ -1,8 +1,3 @@
-/*
-* Pokemon Showdown
-* RPG Shop System
-*/
-
 import { ITEMS_DATABASE } from './items';
 
 export interface ShopTier {
@@ -22,27 +17,27 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 			{
 				requiredBadges: 0,
 				items: [
-					'pokeball', 
-					'potion', 
-                    'antidote',
-                    'oranberry' 
+					'pokeball',
+					'potion',
+					'antidote',
+					'oranberry',
 				],
 			},
-            {
-                // This tier unlocks after beating Joey because of the Badge setup above
-                requiredBadges: 1,
-                items: [
-                    'greatball',
-                    'superpotion'
-                ]
-            }
+			{
+
+				requiredBadges: 1,
+				items: [
+					'greatball',
+					'superpotion',
+				],
+			},
 		],
 	},
 };
 
 export function getShopInventory(locationId: string, playerBadges: number): string[] {
 	const shopData = SHOP_INVENTORIES[locationId];
-	// Fallback for locations without shops
+
 	if (!shopData) return ['pokeball', 'potion'];
 
 	const availableItems: string[] = [];
