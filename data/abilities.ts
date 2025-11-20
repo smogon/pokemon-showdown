@@ -4290,6 +4290,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Slow Start', '[silent]');
+		},
 		flags: {},
 		name: "Slow Start",
 		rating: -1,
@@ -4676,6 +4679,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
 				this.effectState.fallen = fallen;
 			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
