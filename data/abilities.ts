@@ -4677,9 +4677,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.effectState.fallen = fallen;
 			}
 		},
-		onEnd(pokemon) {
-			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
-		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.effectState.fallen) {
