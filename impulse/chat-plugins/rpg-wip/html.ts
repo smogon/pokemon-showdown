@@ -2234,7 +2234,6 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 // -------------------------------------------------------------------------------------
 // 9. New Event & Interaction UI Handlers
 // -------------------------------------------------------------------------------------
-
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
@@ -2272,9 +2271,8 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	// --- Action Buttons ---
+	// --- Battle Events (Wild/Boss/Raid) ---
 	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
-		// Pass Event ID (event.id) to the command so we can track it
 		let cmd = `/rpg scriptedbattle ${event.id}`;
 		let btnText = "⚔️ Battle!";
 		
@@ -2287,22 +2285,32 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 
 		html += `<p class="rpg-text-center">`;
 		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
-		// Safety "Run Away" button to prevent Soft Locks
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
 	} 
-	else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
-		const trainerId = event.trainerId || event.gymLeaderId;
-		// Pass Event ID (event.id) to challenge command
-		const cmd = `/rpg challenge ${trainerId} ${event.id}`;
+	// --- Trainer, Tournament & Gauntlet Events ---
+	else if (['trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'].includes(event.type)) {
+		// Determine the opponent ID. 
+        // For tournaments/gauntlets, 'nextOpponent' is injected by commands.ts logic.
+		const trainerId = event.nextOpponent || event.trainerId || event.gymLeaderId;
 		
-		html += `<p class="rpg-text-center">`;
-		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Battle!</button><br>`;
-		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
-		html += `</p>`;
+        if (trainerId) {
+            const cmd = `/rpg challenge ${trainerId} ${event.id}`;
+            html += `<p class="rpg-text-center">`;
+            html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Challenge!</button><br>`;
+            
+            // Only show Run button if it's NOT a Gauntlet (Gauntlets trap you)
+            if (event.type !== 'gauntletbattle') {
+                html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+            }
+            html += `</p>`;
+        } else {
+            // Fallback if completed or no opponent found
+            html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
+        }
 	} 
+	// --- Standard Event (No interaction required) ---
 	else {
-		// Standard continue button
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
 
