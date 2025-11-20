@@ -1,6 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, checkEvolution, handleLearningMoves, getActiveSlots } from './utils';
+import { getMove, checkEvolution, handleLearningMoves, getActiveSlots, STARTER_POKEMON, TYPE_CHART } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
 import {
 	addItemToInventory,
@@ -88,10 +88,6 @@ import {
 	generateNPCInteractionHTML,
 	generatePokedexHTML,
 } from './html';
-import {
-	STARTER_POKEMON,
-	TYPE_CHART,
-} from './data';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
