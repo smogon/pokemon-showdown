@@ -514,7 +514,7 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 		`class="button rpg-button-large">${btnText}</button>` +
 		`</p>` +
 		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">` +
-			`Back</button></p>` +
+		`Back</button></p>` +
 		`</div>`;
 }
 

@@ -39,3 +39,41 @@ export const GameConfig = {
 		darkBattleBackgroundUrl: 'https://play.pokemonshowdown.com/fx/bg-forest-dark.png',
 	},
 };
+
+// ============================================================================
+// STARTER POKEMON
+// ============================================================================
+
+export const STARTER_POKEMON = {
+	fire: ['torchic'],
+	water: ['mudkip'],
+	grass: ['grookey'],
+};
+
+// ============================================================================
+// FOSSIL REVIVAL
+// ============================================================================
+
+export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number }> = {
+	'helixfossil': { species: 'omanyte', level: 20 },
+	'domefossil': { species: 'kabuto', level: 20 },
+	'oldamber': { species: 'aerodactyl', level: 20 },
+	'rootfossil': { species: 'lileep', level: 20 },
+	'clawfossil': { species: 'anorith', level: 20 },
+	'skullfossil': { species: 'cranidos', level: 20 },
+	'armorfossil': { species: 'shieldon', level: 20 },
+	'coverfossil': { species: 'tirtouga', level: 20 },
+	'plumefossil': { species: 'archen', level: 20 },
+	'jawfossil': { species: 'tyrunt', level: 20 },
+	'sailfossil': { species: 'amaura', level: 20 },
+};
+
+// ============================================================================
+// FORTUNE TELLER MESSAGES
+// ============================================================================
+
+export const FORTUNE_TELLER_MESSAGES: Record<string, string> = {
+	'luck': 'Your luck will shine today! Shiny encounter rate increased!',
+	'battle': 'Victory awaits you! Battle rewards increased!',
+	'catch': 'The Pokemon will come to you! Catch rate increased!',
+};
