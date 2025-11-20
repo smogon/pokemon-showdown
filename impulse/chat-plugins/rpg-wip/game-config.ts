@@ -33,4 +33,19 @@ export const GameConfig = {
 		'stickybarb', 'toxicorb'
 	],
 	shinyChance: 1 / 4096,
+
+	assets: {
+        // Base URL for sprites (Gen 5 Animated is standard for Showdown)
+        spriteBaseUrl: 'https://play.pokemonshowdown.com/sprites/gen5/',
+        spriteBackUrl: 'https://play.pokemonshowdown.com/sprites/gen5-back/',
+        shinySpriteBaseUrl: 'https://play.pokemonshowdown.com/sprites/gen5-shiny/',
+        shinySpriteBackUrl: 'https://play.pokemonshowdown.com/sprites/gen5-back-shiny/',
+        
+        // Icon for generic items (if specific sprite not found)
+        itemIconUrl: 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/',
+        
+        // Background image for battles
+        battleBackgroundUrl: 'https://i.ibb.co/6RQXD1Xx/pokemon-swsh-route-5-by-phoenixoflight92-de33uqj-350t.jpg',
+        darkBattleBackgroundUrl: 'https://i.ibb.co/RGyJczN6/de33uyt-aab270ae-87c5-4511-89a9-05f39dcb1de8.jpg',
+	}
 };
