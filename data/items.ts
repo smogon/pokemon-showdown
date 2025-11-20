@@ -15,7 +15,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			this.add('-block', target, 'item: Ability Shield');
 			return null;
 		},
-		onSwitchIn() {},
+		onSwitchIn() {}, // don't run the Start event on switch-in
 		onStart(pokemon) {
 			if (pokemon.getAbility().flags['cantsuppress']) return;
 
