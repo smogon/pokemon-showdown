@@ -22929,6 +22929,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 100, def: 70, spa: 115, spd: 125, spe: 60},
 		abilities: {0: "Cloud Nine", 1: "Justified", H: "Purifying Salt"},
+		gen: 9,
 	},
 	marisakirisame: {
 		num: -2002,
@@ -22937,6 +22938,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 61, atk: 112, def: 45, spa: 120, spd: 87, spe: 125},
 		abilities: {0: "Magician", 1: "Hakkero", H: "Reckless"},
+		gen: 9,
 	},
 	rumia: {
 		num: -2003,
@@ -22945,6 +22947,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 108, def: 116, spa: 60, spd: 95, spe: 82},
 		abilities: {0: "Levitate", 1: "Dark Aura", H: "Dark Border"},
+		gen: 9,
 	},
 	daiyousei: {
 		num: -2004,
@@ -22953,6 +22956,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 95, atk: 57, def: 45, spa: 120, spd: 78, spe: 100},
 		abilities: {0: "Misty Step"},
+		gen: 9,
 	},
 	cirno: {
 		num: -2005,
@@ -22961,6 +22965,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 60, atk: 99, def: 59, spa: 119, spd: 64, spe: 109},
 		abilities: {0: "Hustle", 1: "Ice Body", H: "Slush Rush"},
+		gen: 9,
 	},
 	cirnotanned: {
 		num: -2006,
@@ -22972,6 +22977,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseStats: {hp: 60, atk: 139, def: 59, spa: 139, spd: 64, spe: 109},
 		abilities: {0: "Drought"},
 		requiredItem: "Summer Backdoor",
+		gen: 9,
 	},
 	hongmeiling: {
 		num: -2007,
@@ -22980,6 +22986,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 125, def: 100, spa: 84, spd: 60, spe: 100},
 		abilities: {0: "Steadfast", 1: "Sand Rush", H: "Comatose"},
+		gen: 9,
 	},
 	koakuma: {
 		num: -2008,
@@ -22988,6 +22995,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 67, def: 71, spa: 102, spd: 80, spe: 95},
 		abilities: {0: "Prankster", H: "Quick Feet"},
+		gen: 9,
 	},
 	patchouliknowledge: {
 		num: -2009,
@@ -22996,6 +23004,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 73, atk: 33, def: 38, spa: 140, spd: 101, spe: 95},
 		abilities: {0: "Neuroforce", H: "Anemic"},
+		gen: 9,
 	},
 	sakuyaizayoi: {
 		num: -2010,
@@ -23004,6 +23013,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 90, def: 110, spa: 85, spd: 95, spe: 80},
 		abilities: {0: "Own Tempo", 1: "Insomnia", H: "Maid's Trick"},
+		gen: 9,
 	},
 	remiliascarlet: {
 		num: -2011,
@@ -23012,6 +23022,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 50, atk: 125, def: 98, spa: 111, spd: 98, spe: 113},
 		abilities: {0: "Vampirism"},
+		gen: 9,
 	},
 	flandrescarlet: {
 		num: -2012,
@@ -23020,6 +23031,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 50, atk: 130, def: 83, spa: 135, spd: 98, spe: 99},
 		abilities: {0: "Mold Breaker", 1: "Pressure", H: "Moxie"},
+		gen: 9,
 	},
 	lettywhiterock: {
 		num: -2013,
@@ -23028,6 +23040,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 132, atk: 70, def: 104, spa: 95, spd: 64, spe: 54},
 		abilities: {0: "Snow Warning", H: "Heatproof"},
+		gen: 9,
 	},
 	chen: {
 		num: -2014,
@@ -23036,6 +23049,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 100, def: 62, spa: 88, spd: 70, spe: 120},
 		abilities: {0: "Quick Feet", 1: "Technician", H: "Sheer Force"},
+		gen: 9,
 	},
 	alicemargatroid: {
 		num: -2015,
@@ -23044,6 +23058,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 92, def: 80, spa: 118, spd: 130, spe: 70},
 		abilities: {0: "Analytic", 1: "Ice Body", H: "Competitive"},
+		gen: 9,
 	},
 	lilywhite: {
 		num: -2016,
@@ -23052,6 +23067,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 94, atk: 30, def: 82, spa: 92, spd: 82, spe: 105},
 		abilities: {0: "Regenerator", 1: "Chlorophyll", H: "Grassy Surge"},
+		gen: 9,
 	},
 	lunasaprismriver: {
 		num: -2017,
@@ -23060,6 +23076,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 65, def: 75, spa: 90, spd: 120, spe: 100},
 		abilities: {0: "Soundproof", H: "Shadow Shield"},
+		gen: 9,
 	},
 	merlinprismriver: {
 		num: -2018,
@@ -23068,6 +23085,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 75, def: 65, spa: 120, spd: 90, spe: 100},
 		abilities: {0: "Soundproof", H: "Berserk"},
+		gen: 9,
 	},
 	lyricaprismriver: {
 		num: -2019,
@@ -23076,6 +23094,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 65, def: 65, spa: 110, spd: 110, spe: 100},
 		abilities: {0: "Soundproof", H: "Illusory Backing"},
+		gen: 9,
 	},
 	youmukonpaku: {
 		num: -2020,
@@ -23084,6 +23103,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 59, atk: 110, def: 84, spa: 90, spd: 62, spe: 130},
 		abilities: {0: "Bulletproof", 1: "Hyper Cutter", H: "Rattled"},
+		gen: 9,
 	},
 	yuyukosaigyouji: {
 		num: -2021,
@@ -23092,6 +23112,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 115, atk: 91, def: 73, spa: 96, spd: 85, spe: 60},
 		abilities: {0: "Gluttony", 1: "Netherworld's Spring", H: "Flower Veil"},
+		gen: 9,
 	},
 	ranyakumo: {
 		num: -2022,
@@ -23100,6 +23121,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 115, def: 75, spa: 115, spd: 75, spe: 115},
 		abilities: {0: "Download", H: "Fluffy"},
+		gen: 9,
 	},
 	yukariyakumo: {
 		num: -2023,
@@ -23108,6 +23130,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 80, def: 100, spa: 140, spd: 100, spe: 80},
 		abilities: {0: "Frisk", 1: "Pressure", H: "Intimidate"},
+		gen: 9,
 	},
 	suikaibuki: {
 		num: -2024,
@@ -23116,6 +23139,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 67, atk: 136, def: 117, spa: 117, spd: 85, spe: 78},
 		abilities: {0: "Misty Surge", H: "Demon Parade"},
+		gen: 9,
 	},
 	wrigglenightbug: {
 		num: -2025,
@@ -23124,6 +23148,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 115, def: 70, spa: 107, spd: 70, spe: 105},
 		abilities: {0: "Illuminate", 1: "Swarm", H: "Opportunist"},
+		gen: 9,
 	},
 	mystialorelei: {
 		num: -2026,
@@ -23132,6 +23157,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 79, def: 70, spa: 110, spd: 98, spe: 108},
 		abilities: {0: "Night Song", 1: "Tough Claws", H: "Punk Rock"},
+		gen: 9,
 	},
 	keine: {
 		num: -2027,
@@ -23140,6 +23166,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 110, def: 92, spa: 100, spd: 88, spe: 80},
 		abilities: {0: "Were-Hakutaku", H: "Stalwart"},
+		gen: 9,
 	},
 	keinehakutaku: {
 		num: -2028,
@@ -23150,6 +23177,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 135, def: 92, spa: 155, spd: 108, spe: 110},
 		abilities: {0: "Were-Hakutaku"},
+		gen: 9,
 	},
 	tewiinaba: {
 		num: -2029,
@@ -23158,6 +23186,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 40, def: 60, spa: 80, spd: 95, spe: 105},
 		abilities: {0: "Huge Power", 1: "Super Luck", H: "Prankster"},
+		gen: 9,
 	},
 	reiseninaba: {
 		num: -2030,
@@ -23166,6 +23195,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 76, atk: 94, def: 70, spa: 100, spd: 80, spe: 120},
 		abilities: {0: "Unnerve", H: "Psychic Surge"},
+		gen: 9,
 	},
 	eirinyagokoro: {
 		num: -2031,
@@ -23174,6 +23204,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 90, def: 65, spa: 95, spd: 200, spe: 55},
 		abilities: {0: "Natural Cure", 1: "Brain of the Moon", H: "Curious Medicine"},
+		gen: 9,
 	},
 	kaguyahouraisan: {
 		num: -2032,
@@ -23182,6 +23213,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 120, atk: 60, def: 79, spa: 102, spd: 60, spe: 94},
 		abilities: {0: "Magic Guard"},
+		gen: 9,
 	},
 	fujiwaranomokou: {
 		num: -2033,
@@ -23190,6 +23222,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 112, def: 55, spa: 91, spd: 63, spe: 94},
 		abilities: {0: "Regenerator"},
+		gen: 9,
 	},
 	ayashameimaru: {
 		num: -2034,
@@ -23198,6 +23231,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 66, atk: 100, def: 72, spa: 100, spd: 72, spe: 170},
 		abilities: {0: "Infiltrator", 1: "Early Bird", H: "Forewarn"},
+		gen: 9,
 	},
 	medicinemelancholy: {
 		num: -2035,
@@ -23206,6 +23240,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 74, atk: 75, def: 135, spa: 100, spd: 83, spe: 58},
 		abilities: {0: "Liquid Ooze", 1: "Poison Point", H: "Soul-Heart"},
+		gen: 9,
 	},
 	yuukakazami: {
 		num: -2036,
@@ -23214,6 +23249,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 105, atk: 145, def: 115, spa: 120, spd: 95, spe: 20},
 		abilities: {0: "Overgrow", H: "Solar Power"},
+		gen: 9,
 	},
 	komachionozuka: {
 		num: -2037,
@@ -23222,6 +23258,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 97, atk: 118, def: 100, spa: 88, spd: 77, spe: 30},
 		abilities: {0: "Sharpness", 1: "Truant", H: "Unaware"},
+		gen: 9,
 	},
 	eikishiki: {
 		num: -2038,
@@ -23230,6 +23267,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 100, def: 77, spa: 118, spd: 140, spe: 90},
 		abilities: {0: "Black and White", H: "No Guard"},
+		gen: 9,
 	},
 	shizuhaaki: {
 		num: -2039,
@@ -23238,6 +23276,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 63, atk: 125, def: 50, spa: 135, spd: 40, spe: 117},
 		abilities: {0: "Wind Rider", H: "Leaf Guard"},
+		gen: 9,
 	},
 	minorikoaki: {
 		num: -2040,
@@ -23246,6 +23285,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 110, atk: 55, def: 110, spa: 90, spd: 85, spe: 44},
 		abilities: {0: "Harvest", H: "Sap Sipper"},
+		gen: 9,
 	},
 	hinakagiyama: {
 		num: -2041,
@@ -23254,6 +23294,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 65, def: 80, spa: 95, spd: 110, spe: 75},
 		abilities: {0: "Curse Gathering", H: "Flare Boost"},
+		gen: 9,
 	},
 	nitorikawashiro: {
 		num: -2042,
@@ -23262,6 +23303,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 96, def: 92, spa: 110, spd: 61, spe: 70},
 		abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Transistor"},
+		gen: 9,
 	},
 	momijiinubashiri: {
 		num: -2043,
@@ -23270,6 +23312,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 115, def: 135, spa: 55, spd: 50, spe: 100},
 		abilities: {0: "Keen Eye", 1: "Guard Dog", H: "Strong Jaw"},
+		gen: 9,
 	},
 	sanaekochiya: {
 		num: -2044,
@@ -23278,6 +23321,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 70, def: 80, spa: 95, spd: 90, spe: 75},
 		abilities: {0: "Drizzle", H: "Serene Grace"},
+		gen: 9,
 	},
 	kanakoyasaka: {
 		num: -2045,
@@ -23286,6 +23330,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 115, def: 120, spa: 88, spd: 77, spe: 70},
 		abilities: {0: "Storm Drain", H: "Mirror Armor"},
+		gen: 9,
 	},
 	suwakomoriya: {
 		num: -2046,
@@ -23294,6 +23339,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 115, def: 70, spa: 115, spd: 120, spe: 65},
 		abilities: {0: "Earth Eater", H: "Hydration"},
+		gen: 9,
 	},
 	ikunagae: {
 		num: -2047,
@@ -23301,6 +23347,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dragon", "Electric"],
 		baseStats: {hp: 75, atk: 100, def: 70, spa: 110, spd: 90, spe: 95},
 		abilities: {0: "Swift Swim", 1: "Levitate", H: "Multiscale"},
+		gen: 9,
 	},
 	tenshihinanawi: {
 		num: -2048,
@@ -23309,6 +23356,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 105, atk: 115, def: 140, spa: 67, spd: 60, spe: 65},
 		abilities: {0: "Sword of Hisou"},
+		gen: 9,
 	},
 	kisume: {
 		num: -2049,
@@ -23316,6 +23364,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Rock", "Dark"],
 		baseStats: {hp: 45, atk: 85, def: 130, spa: 80, spd: 125, spe: 45},
 		abilities: {0: "Sturdy", 1: "Guts", H: "Flash Fire"},
+		gen: 9,
 	},
 	yamamekurodani: {
 		num: -2050,
@@ -23324,6 +23373,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 91, atk: 130, def: 70, spa: 74, spd: 60, spe: 96},
 		abilities: {0: "Stakeout", 1: "Poison Touch", H: "Dexterity"},
+		gen: 9,
 	},
 	parseemizuhashi: {
 		num: -2051,
@@ -23332,6 +23382,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 93, atk: 100, def: 75, spa: 92, spd: 120, spe: 56},
 		abilities: {0: "Jealous", H: "Aftermath"},
+		gen: 9,
 	},
 	yuugihoshiguma: {
 		num: -2052,
@@ -23340,6 +23391,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 132, def: 81, spa: 93, spd: 70, spe: 74},
 		abilities: {0: "Sand Stream", 1: "Mold Breaker", H: "Sheer Force"},
+		gen: 9,
 	},
 	satorikomeiji: {
 		num: -2053,
@@ -23348,6 +23400,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 60, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Trace", 1: "Insomnia", H: "Recollection"},
+		gen: 9,
 	},
 	rinkaenbyou: {
 		num: -2054,
@@ -23356,6 +23409,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 61, atk: 72, def: 55, spa: 114, spd: 65, spe: 128},
 		abilities: {0: "Infiltrator", H: "Unburden"},
+		gen: 9,
 	},
 	utsuhoreiuji: {
 		num: -2055,
@@ -23364,6 +23418,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 140, def: 90, spa: 155, spd: 95, spe: 100},
 		abilities: {0: "Klutz"},
+		gen: 9,
 	},
 	koishikomeiji: {
 		num: -2056,
@@ -23372,6 +23427,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 49, atk: 42, def: 118, spa: 96, spd: 157, spe: 108},
 		abilities: {0: "Unaware", 1: "Synchronize", H: "Delusion"},
+		gen: 9,
 	},
 	nazrin: {
 		num: -2057,
@@ -23380,6 +23436,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 89, def: 80, spa: 95, spd: 80, spe: 130},
 		abilities: {0: "Lightning Rod", H: "Pickup"},
+		gen: 9,
 	},
 	kogasatatara: {
 		num: -2058,
@@ -23388,6 +23445,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 100, def: 81, spa: 83, spd: 73, spe: 113},
 		abilities: {0: "Surprise", 1: "Bulletproof", H: "Steelworker"},
+		gen: 9,
 	},
 	ichirinkumoi: {
 		num: -2059,
@@ -23396,6 +23454,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 80, def: 55, spa: 45, spd: 65, spe: 85},
 		abilities: {0: "Summon Nyuudou"},
+		gen: 9,
 	},
 	ichirinandunzan: {
 		num: -2060,
@@ -23405,6 +23464,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fighting", "Flying"],
 		baseStats: {hp: 75, atk: 140, def: 105, spa: 105, spd: 85, spe: 55},
 		abilities: {0: "Iron Fist"},
+		gen: 9,
 	},
 	minamitsumurasa: {
 		num: -2061,
@@ -23413,6 +23473,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 104, atk: 118, def: 50, spa: 82, spd: 43, spe: 108},
 		abilities: {0: "Steelworker", 1: "Aftermath", H: "Watery Grave"},
+		gen: 9,
 	},
 	shoutoramaru: {
 		num: -2062,
@@ -23421,6 +23482,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 100, def: 61, spa: 110, spd: 79, spe: 95},
 		abilities: {0: "Pressure", H: "Illuminate"},
+		gen: 9,
 	},
 	byakurenhijiri: {
 		num: -2063,
@@ -23429,6 +23491,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 83, atk: 110, def: 50, spa: 105, spd: 80, spe: 117},
 		abilities: {0: "Inner Focus", H: "Devil's Recitation"},
+		gen: 9,
 	},
 	nuehoujuu: {
 		num: -2064,
@@ -23437,6 +23500,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 105, atk: 90, def: 60, spa: 120, spd: 80, spe: 70},
 		abilities: {0: "Shed Skin", H: "Undefined Defense"},
+		gen: 9,
 	},
 	hatatehimekaidou: {
 		num: -2065,
@@ -23445,6 +23509,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 82, def: 60, spa: 108, spd: 78, spe: 140},
 		abilities: {0: "Trace", 1: "Anticipation", H: "Technician"},
+		gen: 9,
 	},
 	sunnymilk: {
 		num: -2066,
@@ -23453,6 +23518,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 65, atk: 125, def: 80, spa: 85, spd: 40, spe: 105},
 		abilities: {0: "Solar Power", H: "Dazzling"},
+		gen: 9,
 	},
 	lunachild: {
 		num: -2067,
@@ -23461,6 +23527,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 65, atk: 45, def: 50, spa: 100, spd: 130, spe: 110},
 		abilities: {0: "Soundproof", H: "Insomnia"},
+		gen: 9,
 	},
 	starsapphire: {
 		num: -2068,
@@ -23469,6 +23536,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 65, atk: 55, def: 120, spa: 95, spd: 90, spe: 75},
 		abilities: {0: "Telepathy", H: "Pixilate"},
+		gen: 9,
 	},
 	kyoukokasodani: {
 		num: -2069,
@@ -23477,6 +23545,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 74, atk: 76, def: 87, spa: 93, spd: 69, spe: 106},
 		abilities: {0: "Echo"},
+		gen: 9,
 	},
 	yoshikamiyako: {
 		num: -2070,
@@ -23485,6 +23554,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 140, atk: 100, def: 80, spa: 60, spd: 45, spe: 75},
 		abilities: {0: "Heal by Desire", 1: "Gluttony", H: "Steadfast"},
+		gen: 9,
 	},
 	seigakaku: {
 		num: -2071,
@@ -23493,6 +23563,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 66, atk: 74, def: 70, spa: 130, spd: 80, spe: 120},
 		abilities: {0: "Infiltrator", H: "Limber"},
+		gen: 9,
 	},
 	soganotojiko: {
 		num: -2072,
@@ -23501,6 +23572,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 70, def: 73, spa: 116, spd: 50, spe: 125},
 		abilities: {0: "Static", H: "Levitate"},
+		gen: 9,
 	},
 	mononobenofuto: {
 		num: -2073,
@@ -23509,6 +23581,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 105, def: 70, spa: 110, spd: 100, spe: 70},
 		abilities: {0: "Natural Cure", 1: "Super Luck", H: "Power Spot"},
+		gen: 9,
 	},
 	toyosatomiminomiko: {
 		num: -2074,
@@ -23517,6 +23590,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 110, def: 55, spa: 126, spd: 112, spe: 92},
 		abilities: {0: "Telepathy", H: "Soundproof"},
+		gen: 9,
 	},
 	mamizoufutatsuiwa: {
 		num: -2075,
@@ -23525,6 +23599,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 105, atk: 121, def: 80, spa: 83, spd: 61, spe: 50},
 		abilities: {0: "Infiltrator", H: "Solid Rock"},
+		gen: 9,
 	},
 	kasenibaraki: {
 		num: -2076,
@@ -23533,6 +23608,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 130, def: 50, spa: 95, spd: 120, spe: 95},
 		abilities: {0: "Steadfast", 1: "100 Medicines", H: "Wicked Power"},
+		gen: 9,
 	},
 	hatanokokoro: {
 		num: -2077,
@@ -23541,6 +23617,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 112, def: 80, spa: 112, spd: 80, spe: 90},
 		abilities: {0: "Libero"},
+		gen: 9,
 	},
 	wakasagihime: {
 		num: -2078,
@@ -23549,6 +23626,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 105, def: 75, spa: 95, spd: 80, spe: 55},
 		abilities: {0: "Swift Swim", 1: "Hydration", H: "Marvel Scale"},
+		gen: 9,
 	},
 	sekibanki: {
 		num: -2079,
@@ -23557,6 +23635,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 57, def: 87, spa: 133, spd: 50, spe: 88},
 		abilities: {0: "Intimidate", H: "Unnerve"},
+		gen: 9,
 	},
 	kagerouimaizumi: {
 		num: -2080,
@@ -23565,6 +23644,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 78, atk: 112, def: 95, spa: 62, spd: 86, spe: 100},
 		abilities: {0: "Fluffy", H: "Strong Jaw"},
+		gen: 9,
 	},
 	benbentsukumo: {
 		num: -2081,
@@ -23573,6 +23653,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 62, def: 99, spa: 105, spd: 70, spe: 99},
 		abilities: {0: "Vital Spirit", 1: "Volt Absorb", H: "Minus"},
+		gen: 9,
 	},
 	yatsuhashitsukumo: {
 		num: -2082,
@@ -23581,6 +23662,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 65, atk: 62, def: 99, spa: 115, spd: 70, spe: 99},
 		abilities: {0: "Vital Spirit", 1: "Motor Drive", H: "Plus"},
+		gen: 9,
 	},
 	seijakijin: {
 		num: -2083,
@@ -23589,6 +23671,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 110, def: 60, spa: 75, spd: 95, spe: 110},
 		abilities: {0: "Contrary"},
+		gen: 9,
 	},
 	shinmyoumarusukuna: {
 		num: -2084,
@@ -23598,6 +23681,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 20, atk: 105, def: 130, spa: 35, spd: 170, spe: 90},
 		abilities: {0: "Grow Bigger"},
+		gen: 9,
 	},
 	raikohorikawa: {
 		num: -2085,
@@ -23606,6 +23690,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 105, atk: 130, def: 75, spa: 130, spd: 68, spe: 40},
 		abilities: {0: "Lightning Rod", 1: "Inner Focus", H: "Pristine Beat"},
+		gen: 9,
 	},
 	sumirekousami: {
 		num: -2086,
@@ -23614,6 +23699,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 65, atk: 62, def: 76, spa: 130, spd: 69, spe: 110},
 		abilities: {0: "Levitate", H: "Comatose"},
+		gen: 9,
 	},
 	seiran: {
 		num: -2087,
@@ -23622,6 +23708,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 100, def: 45, spa: 110, spd: 55, spe: 120},
 		abilities: {0: "Guts", 1: "Synchronize", H: "Sniper"},
+		gen: 9,
 	},
 	ringo: {
 		num: -2088,
@@ -23630,6 +23717,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 87, atk: 120, def: 72, spa: 66, spd: 93, spe: 77},
 		abilities: {0: "Cheek Pouch", H: "Dango Influence"},
+		gen: 9,
 	},
 	doremysweet: {
 		num: -2089,
@@ -23638,6 +23726,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 75, def: 122, spa: 94, spd: 73, spe: 40},
 		abilities: {0: "Psychic Surge", H: "Bad Dreams"},
+		gen: 9,
 	},
 	sagumekishin: {
 		num: -2090,
@@ -23646,6 +23735,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 90, def: 69, spa: 90, spd: 125, spe: 81},
 		abilities: {0: "Contrary", 1: "Inner Focus", H: "Immunity"},
+		gen: 9,
 	},
 	clownpiece: {
 		num: -2091,
@@ -23654,6 +23744,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 150, atk: 40, def: 55, spa: 85, spd: 50, spe: 110},
 		abilities: {0: "Flame Body", H: "Lunatic Torch"},
+		gen: 9,
 	},
 	junko: {
 		num: -2092,
@@ -23662,6 +23753,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Mold Breaker"},
+		gen: 9,
 	},
 	hecatiaotherworld: {
 		num: -2093,
@@ -23670,6 +23762,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 60, def: 120, spa: 90, spd: 120, spe: 100},
 		abilities: {0: "Pressure"},
+		gen: 9,
 	},
 	hecatiaearth: {
 		num: -2094,
@@ -23680,6 +23773,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 60, def: 105, spa: 110, spd: 105, spe: 110},
 		abilities: {0: "Natural Cure"},
+		gen: 9,
 	},
 	hecatiamoon: {
 		num: -2095,
@@ -23690,6 +23784,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 60, def: 90, spa: 130, spd: 90, spe: 120},
 		abilities: {0: "Dazzling"},
+		gen: 9,
 	},
 	joonyorigami: {
 		num: -2096,
@@ -23698,6 +23793,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 70, def: 88, spa: 118, spd: 62, spe: 92},
 		abilities: {0: "Fool's Gold"},
+		gen: 9,
 	},
 	shionyorigami: {
 		num: -2097,
@@ -23706,6 +23802,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 77, def: 60, spa: 130, spd: 88, spe: 75},
 		abilities: {0: "Cursed Body", H: "Poison Touch"},
+		gen: 9,
 	},
 	eternitylarva: {
 		num: -2098,
@@ -23714,6 +23811,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 60, atk: 56, def: 66, spa: 138, spd: 37, spe: 103},
 		abilities: {0: "Flash Fire", 1: "Regenerator", H: "Chlorophyll"},
+		gen: 9,
 	},
 	nemunosakata: {
 		num: -2099,
@@ -23722,6 +23820,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 71, atk: 110, def: 105, spa: 64, spd: 70, spe: 75},
 		abilities: {0: "Cut Deep", H: "Intimidate"},
+		gen: 9,
 	},
 	aunnkomano: {
 		num: -2100,
@@ -23730,6 +23829,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 115, def: 72, spa: 60, spd: 110, spe: 65},
 		abilities: {0: "Rock Head", 1: "Solid Rock", H: "Guard Dog"},
+		gen: 9,
 	},
 	narumiyatadera: {
 		num: -2101,
@@ -23738,6 +23838,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 65, def: 70, spa: 120, spd: 70, spe: 100},
 		abilities: {0: "Sturdy", H: "Winter Hearth"},
+		gen: 9,
 	},
 	maiteireida: {
 		num: -2102,
@@ -23746,6 +23847,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 100, def: 65, spa: 95, spd: 65, spe: 120},
 		abilities: {0: "Dancer", H: "Vital Spirit"},
+		gen: 9,
 	},
 	satononishida: {
 		num: -2103,
@@ -23754,6 +23856,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 110, def: 65, spa: 95, spd: 65, spe: 110},
 		abilities: {0: "Dancer", H: "Wandering Spirit"},
+		gen: 9,
 	},
 	okinamatara: {
 		num: -2104,
@@ -23762,6 +23865,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 120, def: 80, spa: 130, spd: 80, spe: 85},
 		abilities: {0: "Four Seasons"},
+		gen: 9,
 	},
 	eikaebisu: {
 		num: -2105,
@@ -23770,6 +23874,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 55, atk: 80, def: 140, spa: 95, spd: 100, spe: 50},
 		abilities: {0: "Water Absorb", H: "Friend Guard"},
+		gen: 9,
 	},
 	urumiushizaki: {
 		num: -2106,
@@ -23778,6 +23883,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 98, atk: 104, def: 82, spa: 71, spd: 60, spe: 60},
 		abilities: {0: "Torrent", 1: "Pressure", H: "Heavy Stone"},
+		gen: 9,
 	},
 	kutakaniwatari: {
 		num: -2107,
@@ -23786,6 +23892,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 97, def: 70, spa: 114, spd: 80, spe: 95},
 		abilities: {0: "Natural Cure", 1: "Simple", H: "Steadfast"},
+		gen: 9,
 	},
 	yachiekicchou: {
 		num: -2108,
@@ -23794,6 +23901,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 95, atk: 90, def: 133, spa: 85, spd: 65, spe: 40},
 		abilities: {0: "Shell Armor", 1: "Pressure", H: "Beast Boost"},
+		gen: 9,
 	},
 	mayumijoutouguu: {
 		num: -2109,
@@ -23802,6 +23910,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 100, atk: 115, def: 65, spa: 75, spd: 65, spe: 70},
 		abilities: {0: "Stalwart", 1: "Marching Orders", H: "Defiant"},
+		gen: 9,
 	},
 	keikihaniyasushin: {
 		num: -2110,
@@ -23810,6 +23919,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 80, atk: 105, def: 80, spa: 115, spd: 92, spe: 100},
 		abilities: {0: "Analytic", 1: "Sand Force", H: "Electric Surge"},
+		gen: 9,
 	},
 	sakikurokuma: {
 		num: -2111,
@@ -23818,6 +23928,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 70, atk: 140, def: 87, spa: 85, spd: 49, spe: 97},
 		abilities: {0: "Limber", 1: "No Guard", H: "Beast Boost"},
+		gen: 9,
 	},
 	yuumatoutetsu: {
 		num: -2112,
@@ -23826,6 +23937,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 130, atk: 100, def: 80, spa: 96, spd: 58, spe: 64},
 		abilities: {0: "Gluttony", 1: "Stamina", H: "Beast Boost"},
+		gen: 9,
 	},
 	mikegotoukuji: {
 		num: -2113,
@@ -23834,6 +23946,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 55, atk: 93, def: 72, spa: 109, spd: 70, spe: 115},
 		abilities: {0: "Super Luck", H: "Competitive"},
+		gen: 9,
 	},
 	takaneyamashiro: {
 		num: -2114,
@@ -23842,6 +23955,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 58, def: 102, spa: 100, spd: 90, spe: 70},
 		abilities: {0: "Pickpocket", 1: "Overcoat", H: "Grass Pelt"},
+		gen: 9,
 	},
 	sannyokomakusa: {
 		num: -2115,
@@ -23850,6 +23964,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 84, atk: 60, def: 70, spa: 105, spd: 122, spe: 75},
 		abilities: {0: "White Smoke", H: "Black Smoke"},
+		gen: 9,
 	},
 	misumarutamatsukuri: {
 		num: -2116,
@@ -23858,6 +23973,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 60, atk: 75, def: 65, spa: 120, spd: 102, spe: 102},
 		abilities: {0: "Beads of Ruin"},
+		gen: 9,
 	},
 	tsukasakudamaki: {
 		num: -2117,
@@ -23866,6 +23982,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 75, def: 42, spa: 104, spd: 70, spe: 118},
 		abilities: {0: "Technician", 1: "Infiltrator", H: "Prankster"},
+		gen: 9,
 	},
 	megumuiizunamaru: {
 		num: -2118,
@@ -23874,6 +23991,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 110, atk: 90, def: 55, spa: 100, spd: 85, spe: 110},
 		abilities: {0: "Air Lock", H: "Pressure"},
+		gen: 9,
 	},
 	chimatatenkyuu: {
 		num: -2119,
@@ -23882,6 +24000,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 95, atk: 70, def: 90, spa: 110, spd: 110, spe: 85},
 		abilities: {0: "Property"},
+		gen: 9,
 	},
 	momoyohimemushi: {
 		num: -2120,
@@ -23890,6 +24009,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 134, def: 84, spa: 90, spd: 72, spe: 65},
 		abilities: {0: "Swarm", 1: "Dragon Eater", H: "Speed Boost"},
+		gen: 9,
 	},
 	sonbiten: {
 		num: -2121,
@@ -23898,6 +24018,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 83, atk: 85, def: 60, spa: 127, spd: 60, spe: 105},
 		abilities: {0: "Inner Focus", H: "Magic Guard"},
+		gen: 9,
 	},
 	enokomitsugashira: {
 		num: -2122,
@@ -23906,6 +24027,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 75, atk: 127, def: 102, spa: 73, spd: 60, spe: 58},
 		abilities: {0: "Iron Barbs", 1: "Scrappy", H: "Strong Jaw"},
+		gen: 9,
 	},
 	chiyaritenkajin: {
 		num: -2123,
@@ -23914,6 +24036,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 81, atk: 112, def: 83, spa: 70, spd: 70, spe: 84},
 		abilities: {0: "Flame Body", 1: "Cursed Body", H: "Bloodsucker"},
+		gen: 9,
 	},
 	hisamiyomotsu: {
 		num: -2124,
@@ -23922,6 +24045,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 85, atk: 60, def: 110, spa: 98, spd: 71, spe: 76},
 		abilities: {0: "Sticky Hold", 1: "Poison Point", H: "Oblivious"},
+		gen: 9,
 	},
 	zanmunippaku: {
 		num: -2125,
@@ -23930,6 +24054,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 90, atk: 120, def: 80, spa: 120, spd: 90, spe: 100},
 		abilities: {0: "Void"},
+		gen: 9,
 	},
 	vivit: {
 		num: -2126,
@@ -23938,6 +24063,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "F",
 		baseStats: {hp: 60, atk: 110, def: 90, spa: 110, spd: 90, spe: 120},
 		abilities: {0: "Cactus Drive"},
+		gen: 9,
 	},
 }
 
