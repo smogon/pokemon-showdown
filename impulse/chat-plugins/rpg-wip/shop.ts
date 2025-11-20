@@ -16,8 +16,8 @@ export interface ShopInventory {
 }
 
 export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
-	'start_room': {
-		locationId: 'start_room',
+	'startingroom': { // [CHANGED] Updated to match new ID
+		locationId: 'startingroom',
 		tiers: [
 			{
 				requiredBadges: 0,
