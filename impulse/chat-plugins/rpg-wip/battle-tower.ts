@@ -2,7 +2,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { FS } from '../../../lib';
 import type { RPGPokemon, PlayerData, BattleState, ActivePokemonSlot } from './interface';
 import { getMove, calculateStats, generateRandomTeam } from './utils';
-import { createPokemon, activeBattles, getPlayerData } from './core';
+import { createPokemon, activeBattles } from './core';
 import { createActivePokemonSlot } from './battle-shared';
 import { teraToggleState } from './commands';
 
@@ -319,228 +319,228 @@ export function getLocationWeatherData(player: PlayerData): {
 	locationWeather: BattleState['locationWeather'],
 } {
 // Import LOCATIONS dynamically to avoid circular dependency
-const { LOCATIONS } = require('./locations');
-const locationId = toID(player.location);
-const location = LOCATIONS[locationId];
+	const { LOCATIONS } = require('./locations');
+	const locationId = toID(player.location);
+	const location = LOCATIONS[locationId];
 
-if (!location?.weather) {
-return { weather: undefined, locationWeather: undefined };
-}
+	if (!location?.weather) {
+		return { weather: undefined, locationWeather: undefined };
+	}
 
-const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
-'sun': 'sun',
-'rain': 'rain',
-'sandstorm': 'sand',
-'hail': 'hail',
-};
+	const weatherMap: Record<string, 'sun' | 'rain' | 'sand' | 'hail'> = {
+		'sun': 'sun',
+		'rain': 'rain',
+		'sandstorm': 'sand',
+		'hail': 'hail',
+	};
 
-const battleWeatherType = weatherMap[location.weather];
-if (!battleWeatherType) {
-return { weather: undefined, locationWeather: undefined };
-}
+	const battleWeatherType = weatherMap[location.weather];
+	if (!battleWeatherType) {
+		return { weather: undefined, locationWeather: undefined };
+	}
 
-return {
-weather: {
-type: battleWeatherType,
-turns: 9999,
-},
-locationWeather: {
-type: battleWeatherType,
-},
-};
+	return {
+		weather: {
+			type: battleWeatherType,
+			turns: 9999,
+		},
+		locationWeather: {
+			type: battleWeatherType,
+		},
+	};
 }
 
 export function getWeatherStartMessage(weatherType: 'sun' | 'rain' | 'sand' | 'hail'): string {
-const weatherStartMessages: Record<string, string> = {
-'sun': 'The sunlight is strong.',
-'rain': 'It started to rain!',
-'sand': 'A sandstorm is raging!',
-'hail': 'It started to hail!',
-};
-return weatherStartMessages[weatherType];
+	const weatherStartMessages: Record<string, string> = {
+		'sun': 'The sunlight is strong.',
+		'rain': 'It started to rain!',
+		'sand': 'A sandstorm is raging!',
+		'hail': 'It started to hail!',
+	};
+	return weatherStartMessages[weatherType];
 }
 
 export function startBattleTowerFloor(
-player: PlayerData,
-floor: number,
-context: CommandContext,
-room: ChatRoom,
-user: User,
-format = 'battlefactory'
+	player: PlayerData,
+	floor: number,
+	context: CommandContext,
+	room: ChatRoom,
+	user: User,
+	format = 'battlefactory'
 ) {
 // Import dynamically to avoid circular dependency
-const { generateBattleHTML } = require('./html');
-const { applyHazardEffectsOnSwitchIn } = require('./battle-flow');
+	const { generateBattleHTML } = require('./html');
+	const { applyHazardEffectsOnSwitchIn } = require('./battle-flow');
 
-const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
-const level = formatConfig.level;
-const teamSize = formatConfig.teamSize;
+	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
+	const level = formatConfig.level;
+	const teamSize = formatConfig.teamSize;
 
-const battleMessages: string[] = [];
-const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+	const battleMessages: string[] = [];
+	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
+	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
 
-try {
-let playerTeam: RPGPokemon[];
-let aiTeam: RPGPokemon[];
+	try {
+		let playerTeam: RPGPokemon[];
+		let aiTeam: RPGPokemon[];
 
-if (formatConfig.teamGeneration === 'bss') {
-playerTeam = generateRandomTeamFromBSS(teamSize, level);
-aiTeam = generateRandomTeamFromBSS(teamSize, level);
-} else if (formatConfig.teamGeneration === 'baby') {
-playerTeam = generateRandomTeamFromBaby(teamSize);
-aiTeam = generateRandomTeamFromBaby(teamSize);
-} else {
-playerTeam = generateRandomTeam(teamSize, level);
-aiTeam = generateRandomTeam(teamSize, level);
-}
+		if (formatConfig.teamGeneration === 'bss') {
+			playerTeam = generateRandomTeamFromBSS(teamSize, level);
+			aiTeam = generateRandomTeamFromBSS(teamSize, level);
+		} else if (formatConfig.teamGeneration === 'baby') {
+			playerTeam = generateRandomTeamFromBaby(teamSize);
+			aiTeam = generateRandomTeamFromBaby(teamSize);
+		} else {
+			playerTeam = generateRandomTeam(teamSize, level);
+			aiTeam = generateRandomTeam(teamSize, level);
+		}
 
-playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
-opponentSlots[0] = createActivePokemonSlot(aiTeam[0]);
+		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
+		opponentSlots[0] = createActivePokemonSlot(aiTeam[0]);
 
-battleMessages.push(`<b>Battle Tower - Floor ${floor}</b>`);
-battleMessages.push(`Your random team for this floor is: ${playerTeam.map(p => p.species).join(', ')}.`);
+		battleMessages.push(`<b>Battle Tower - Floor ${floor}</b>`);
+		battleMessages.push(`Your random team for this floor is: ${playerTeam.map(p => p.species).join(', ')}.`);
 
-const locationWeatherData = getLocationWeatherData(player);
-if (locationWeatherData.weather) {
-battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
-}
+		const locationWeatherData = getLocationWeatherData(player);
+		if (locationWeatherData.weather) {
+			battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
+		}
 
-const battle: BattleState = {
-battleType: 'battletower',
-floor,
-overridePlayerParty: playerTeam,
-battleTowerFormat: format,
-opponentName: `Battle Tower Trainer`,
-opponentParty: aiTeam,
-opponentMoney: 500 * floor,
-playerSlots,
-opponentSlots,
-pendingActions: {},
-playerId: user.id,
-turn: 0,
-zoneId: 'battletower',
-playerHazards: [],
-opponentHazards: [],
-weather: locationWeatherData.weather,
-locationWeather: locationWeatherData.locationWeather,
-trickRoomTurns: 0,
-magicRoomTurns: 0,
-wonderRoomTurns: 0,
-terrain: undefined,
-playerShouldSwitch: undefined,
-pendingPivot: undefined,
-aiPendingPivot: undefined,
-forceEnd: false,
-playerTerastallizeUsed: false,
-opponentTerastallizeUsed: false,
-playerQuickGuard: false,
-opponentQuickGuard: false,
-playerWideGuard: false,
-opponentWideGuard: false,
-playerCraftyShield: false,
-opponentCraftyShield: false,
-playerReflectTurns: 0,
-opponentReflectTurns: 0,
-playerLightScreenTurns: 0,
-opponentLightScreenTurns: 0,
-playerAuroraVeilTurns: 0,
-opponentAuroraVeilTurns: 0,
-gravityTurns: 0,
-mudSportTurns: 0,
-waterSportTurns: 0,
-fairyLockTurns: 0,
-ionDelugeTurns: 0,
-playerFutureMoves: [],
-opponentFutureMoves: [],
-battleLog: [],
-};
+		const battle: BattleState = {
+			battleType: 'battletower',
+			floor,
+			overridePlayerParty: playerTeam,
+			battleTowerFormat: format,
+			opponentName: `Battle Tower Trainer`,
+			opponentParty: aiTeam,
+			opponentMoney: 500 * floor,
+			playerSlots,
+			opponentSlots,
+			pendingActions: {},
+			playerId: user.id,
+			turn: 0,
+			zoneId: 'battletower',
+			playerHazards: [],
+			opponentHazards: [],
+			weather: locationWeatherData.weather,
+			locationWeather: locationWeatherData.locationWeather,
+			trickRoomTurns: 0,
+			magicRoomTurns: 0,
+			wonderRoomTurns: 0,
+			terrain: undefined,
+			playerShouldSwitch: undefined,
+			pendingPivot: undefined,
+			aiPendingPivot: undefined,
+			forceEnd: false,
+			playerTerastallizeUsed: false,
+			opponentTerastallizeUsed: false,
+			playerQuickGuard: false,
+			opponentQuickGuard: false,
+			playerWideGuard: false,
+			opponentWideGuard: false,
+			playerCraftyShield: false,
+			opponentCraftyShield: false,
+			playerReflectTurns: 0,
+			opponentReflectTurns: 0,
+			playerLightScreenTurns: 0,
+			opponentLightScreenTurns: 0,
+			playerAuroraVeilTurns: 0,
+			opponentAuroraVeilTurns: 0,
+			gravityTurns: 0,
+			mudSportTurns: 0,
+			waterSportTurns: 0,
+			fairyLockTurns: 0,
+			ionDelugeTurns: 0,
+			playerFutureMoves: [],
+			opponentFutureMoves: [],
+			battleLog: [],
+		};
 
-if (playerSlots[0]) {
-applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
-}
-if (opponentSlots[0]) {
-applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
-}
+		if (playerSlots[0]) {
+			applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
+		}
+		if (opponentSlots[0]) {
+			applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
+		}
 
-activeBattles.set(user.id, battle);
-battle.battleLog.push(...battleMessages);
+		activeBattles.set(user.id, battle);
+		battle.battleLog.push(...battleMessages);
 
-context.sendReply(
-`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`
-);
-} catch (error) {
-console.error(error);
-context.errorReply(`Error starting Battle Tower floor: ${error}`);
-}
+		context.sendReply(
+			`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`
+		);
+	} catch (error) {
+		console.error(error);
+		context.errorReply(`Error starting Battle Tower floor: ${error}`);
+	}
 }
 
 // Battle Tower HTML generation functions
 export function generateBattleTowerWelcomeHTML(floor: number): string {
-let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
-`<div class="rpg-memo-box" style="margin-bottom:15px;">` +
-`<p><strong>Roguelike Challenge</strong></p>` +
-`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
-`</div>` +
-`<h3>Select Format</h3>` +
-`<div class="rpg-scrollable-grid"><div class="rpg-grid-2col">`;
+	let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
+		`<div class="rpg-memo-box" style="margin-bottom:15px;">` +
+		`<p><strong>Roguelike Challenge</strong></p>` +
+		`<p>Climb as high as you can. Your team is re-rolled every floor.</p>` +
+		`</div>` +
+		`<h3>Select Format</h3>` +
+		`<div class="rpg-scrollable-grid"><div class="rpg-grid-2col">`;
 
-for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
-html += `<button name="send" value="/rpg battletower selectformat ${toID(formatId)}" ` +
-`class="button" style="height:auto; padding:10px; text-align:left;">` +
-`<strong>${config.name}</strong><br>` +
-`<small class="rpg-text-muted">${config.description}</small>` +
-`</button>`;
-}
+	for (const [formatId, config] of Object.entries(BATTLE_TOWER_FORMATS)) {
+		html += `<button name="send" value="/rpg battletower selectformat ${toID(formatId)}" ` +
+			`class="button" style="height:auto; padding:10px; text-align:left;">` +
+			`<strong>${config.name}</strong><br>` +
+			`<small class="rpg-text-muted">${config.description}</small>` +
+			`</button>`;
+	}
 
-html += `</div></div>` +
-`<p style="text-align:center"><button name="send" value="/rpg start" class="button">` +
-`Back to Menu</button></p>` +
-`</div>`;
-return html;
+	html += `</div></div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg start" class="button">` +
+		`Back to Menu</button></p>` +
+		`</div>`;
+	return html;
 }
 
 export function generateBattleTowerFormatSelectedHTML(floor: number, format: string): string {
-const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
-const btnText = floor > 1 ? `Continue Floor ${floor}` : `Start Floor 1`;
+	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
+	const btnText = floor > 1 ? `Continue Floor ${floor}` : `Start Floor 1`;
 
-return `<div class="rpg-infobox"><h2>🗼 ${formatConfig.name}</h2>` +
-`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
-`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
-`</div>` +
-`<p style="text-align:center">` +
-`<button name="send" value="/rpg battletower beginfloor ${toID(format)}" ` +
-`class="button rpg-button-large">${btnText}</button>` +
-`</p>` +
-`<p style="text-align:center"><button name="send" value="/rpg battletower start" ` +
-`class="button">Back</button></p>` +
-`</div>`;
+	return `<div class="rpg-infobox"><h2>🗼 ${formatConfig.name}</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+		`<p>Team Size: <strong>${formatConfig.teamSize}</strong> | Level: <strong>${formatConfig.level}</strong></p>` +
+		`<p>Current Streak: <strong>${floor - 1} Wins</strong></p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+		`<button name="send" value="/rpg battletower beginfloor ${toID(format)}" ` +
+		`class="button rpg-button-large">${btnText}</button>` +
+		`</p>` +
+		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">` +
+			`Back</button></p>` +
+		`</div>`;
 }
 
 export function generateBattleTowerFloorCompleteHTML(floor: number): string {
-return `<div class="rpg-infobox"><h2>🗼 Floor ${floor} Cleared!</h2>` +
-`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
-`<p>Your team has been healed.</p>` +
-`<p>Preparing new team for the next floor...</p>` +
-`</div>` +
-`<p style="text-align:center">` +
-`<button name="send" value="/rpg battletower nextfloor" class="button">` +
-`Next Floor (F${floor + 1}) →</button>` +
-`</p>` +
-`</div>`;
+	return `<div class="rpg-infobox"><h2>🗼 Floor ${floor} Cleared!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+		`<p class="rpg-text-success"><strong>Victory!</strong></p>` +
+		`<p>Your team has been healed.</p>` +
+		`<p>Preparing new team for the next floor...</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+		`<button name="send" value="/rpg battletower nextfloor" class="button">` +
+		`Next Floor (F${floor + 1}) →</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateBattleTowerLossHTML(floor: number): string {
-return `<div class="rpg-infobox"><h2>�� Challenge Failed</h2>` +
-`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
-`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
-`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
-`</div>` +
-`<p style="text-align:center">` +
-`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
-`<button name="send" value="/rpg start" class="button">Exit</button>` +
-`</p>` +
-`</div>`;
+	return `<div class="rpg-infobox"><h2>�� Challenge Failed</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+		`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
+		`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+		`<button name="send" value="/rpg battletower start" class="button">Try Again</button> ` +
+		`<button name="send" value="/rpg start" class="button">Exit</button>` +
+		`</p>` +
+		`</div>`;
 }
