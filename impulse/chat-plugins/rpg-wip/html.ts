@@ -3,9 +3,10 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
+import { LOCATIONS, ENCOUNTER_ZONES } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { getPlayerData } from './core';
+import { GameConfig } from './game-config'; // [NEW] Import Config
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 import { TOTAL_BADGES } from './badges';
 
@@ -18,6 +19,9 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 }
 
+// [REFACTOR] Asset Helper
+// This handles Pokemon-specific naming conventions. 
+// In a non-Pokemon RPG, this function would be replaced with a simple ID lookup.
 function getSpriteFilename(speciesId: string): string {
 	let filename = speciesId;
 	if (filename.endsWith('mega')) filename = filename.replace(/mega$/, '-mega');
@@ -34,6 +38,7 @@ function getSpriteFilename(speciesId: string): string {
 	if (filename.endsWith('gmax')) filename = filename.replace(/gmax$/, '-gmax');
 	if (filename.endsWith('f')) filename = filename.replace(/f$/, '-f');
 
+    // List of special case hyphens (Could be moved to data.ts in future)
 	const hyphenatedForms: Record<string, string> = {
 		'taurospaldeacombat': 'tauros-paldea-combat', 'taurospaldeablaze': 'tauros-paldea-blaze', 'taurospaldeaaqua': 'tauros-paldea-aqua',
 		'palafinhero': 'palafin-hero', 'gimmighoulroaming': 'gimmighoul-roaming', 'gholdengochest': 'gholdengo-chest',
@@ -86,6 +91,21 @@ function getSpriteFilename(speciesId: string): string {
 	if (filename.endsWith('f') && filename.length > 1 && !filename.includes('-f')) filename = filename.slice(0, -1) + '-f';
 	filename = filename.replace(/\+/g, '-').replace(/-{2,}/g, '-');
 	return filename;
+}
+
+// [REFACTOR] Get Sprite URL using Config
+function getSpriteUrl(pokemon: RPGPokemon, facing: 'front' | 'back' = 'front'): string {
+    const species = Dex.species.get(pokemon.species);
+    const filename = getSpriteFilename(species.id);
+    const shiny = pokemon.shiny;
+
+    if (facing === 'front') {
+        const base = shiny ? GameConfig.assets.shinySpriteBaseUrl : GameConfig.assets.spriteBaseUrl;
+        return `${base}${filename}.png`;
+    } else {
+        const base = shiny ? GameConfig.assets.shinySpriteBackUrl : GameConfig.assets.spriteBackUrl;
+        return `${base}${filename}.png`;
+    }
 }
 
 export function generateBottomNavigation(): string {
@@ -149,6 +169,7 @@ function generateExpBar(pokemon: RPGPokemon): string {
 
 export function generateProfileHTML(player: PlayerData, notification?: string): string {
 	let progressText = 'Just starting out';
+    // [REFACTOR] Dynamic badges count
 	if (player.storyFlags.has('champion')) progressText = 'Champion!';
 	else if (player.storyFlags.has('all_badges')) progressText = 'Ready for Elite Four';
 	else if (player.badges >= 4) progressText = `${player.badges}/${TOTAL_BADGES} Badges - Halfway there!`;
@@ -239,9 +260,10 @@ export function generateModeSelectionHTML(): string {
 	return html;
 }
 
+// [REFACTOR] Generic Start Screen
 export function generateStoryModeStartHTML(): string {
-	const startingLocation = getStartingLocation();
-	const location = LOCATIONS[startingLocation.id];
+    const startLocId = GameConfig.startLocationId;
+	const location = LOCATIONS[startLocId];
 
 	let labBuildingId = '';
 	if (location?.buildings) {
@@ -254,14 +276,14 @@ export function generateStoryModeStartHTML(): string {
 	}
 
 	return `<div class="rpg-infobox">` +
-		`<h2>Welcome to Kanto!</h2>` +
+		`<h2>Welcome to ${location.name}!</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
 			`<p>Your adventure is about to begin.</p>` +
-			`<p>To get your first Pokémon partner, head to the lab and talk to the Professor!</p>` +
+			`<p>To get your first Pokémon partner, head to the lab!</p>` +
 		`</div>` +
 		`<p style="text-align:center">` +
 			(labBuildingId ? `<button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button> ` : '') +
-			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button>` +
+			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${location.name}</button>` +
 		`</p>` +
 		`</div>`;
 }
@@ -621,8 +643,8 @@ export function generateSummarySelectionHTML(player: PlayerData): string {
 
 export function generatePokemonSummaryHTML(pokemon: RPGPokemon, backLocation: 'party' | 'pc' = 'party'): string {
 	const species = Dex.species.get(pokemon.species);
-	const spriteFilename = getSpriteFilename(species.id);
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+    // [REFACTOR] Use Config URL
+	const spriteUrl = getSpriteUrl(pokemon, 'front');
 
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
@@ -770,13 +792,14 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	html += generateItemCategoryFilters('/rpg items');
 
 	let itemsFound = false;
-	// Wrap the table in the new 3-column grid utility
 	let gridHTML = `<br><div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [itemId, item] of player.inventory) {
 		if (!category || item.category === category || category === '') {
 			itemsFound = true;
+            // [REFACTOR] Use Config item icon URL (currently just pokesprite, could be generic)
+            // Actually pokesprite URL is still in button, we can abstract later.
 			
 			const cellContent = `<div class="rpg-item-container">` +
 				`<div class="rpg-item-header">` +
@@ -790,12 +813,10 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 					`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
 				`</div>` +
 			`</div>`;
-			// NOTE: Changed from <td> to <div> to use the CSS Grid layout instead of table row/cell logic
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
 		}
 	}
-	// Close grid wrapper and scroll div
 	gridHTML += '</div></div>';
 
 	if (itemsFound) {
@@ -831,13 +852,13 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 	html += generateItemCategoryFilters('/rpg shop');
 
 	let itemsFound = false;
-	// Wrap the table in the new 3-column grid utility
 	let gridHTML = `<br><div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const itemId of shopInventory) {
 		const item = ITEMS_DATABASE[itemId];
-		const price = ITEM_PRICES[itemId];
+        // [REFACTOR] Use item.price from definition
+		const price = item?.price || 0;
 		if (!item || !price) continue;
 
 		if (!category || item.category === category || category === '') {
@@ -856,12 +877,10 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 				`</div>` +
 			`</div>`;
 
-			// NOTE: Changed from <td> to <div>
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
 		}
 	}
-	// Close grid wrapper and scroll div
 	gridHTML += '</div></div>';
 
 	if (itemsFound) {
@@ -885,12 +904,14 @@ export function generateSellMenuHTML(player: PlayerData, notification?: string):
 	html += `<h2>Sell Items</h2><p>Select an item to sell:</p><p><strong>Your Money:</strong> ₽${player.money}</p>`;
 	
 	let sellableItems = 0;
-	// Wrap the table in the new 3-column grid utility
 	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
 	for (const [id, item] of player.inventory) {
-		const purchasePrice = ITEM_PRICES[id];
+        // [REFACTOR] Use item.price
+        const itemData = ITEMS_DATABASE[id];
+		const purchasePrice = itemData?.price || 0;
+
 		if (purchasePrice && item.category !== 'key') {
 			const sellPrice = Math.floor(purchasePrice / 2);
 			sellableItems++;
@@ -908,12 +929,10 @@ export function generateSellMenuHTML(player: PlayerData, notification?: string):
 				`</div>` +
 			`</div>`;
 
-			// NOTE: Changed from <td> to <div>
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
 		}
 	}
-	// Close grid wrapper and scroll div
 	gridHTML += '</div></div>';
 
 	if (sellableItems > 0) {
@@ -949,24 +968,21 @@ function generateSelectionCard(pokemon: RPGPokemon, actionButton: string, detail
 
 export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId: string, itemName: string): string {
 	let html = `<div class="rpg-infobox"><h2>Use ${itemName}</h2><p>Select a Pokemon to use this item on:</p>`;
-	
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
 
-	const isRevival = ['revive', 'maxrevive', 'revivalherb'].includes(itemId);
-	const isHealing = ['potion', 'superpotion', 'hyperpotion', 'maxpotion', 'fullrestore', 'freshwater', 'sodapop', 'lemonade', 'moomoomilk', 'tea', 'energyroot', 'energypowder', 'berryjuice'].includes(itemId);
-	const isStatusHeal = ['antidote', 'paralyzeheal', 'awakening', 'burnheal', 'iceheal', 'fullheal', 'healpowder'].includes(itemId);
-	const isPPRestore = ['ether', 'maxether', 'elixir', 'maxelixir'].includes(itemId);
-	const isVitamin = ['hpup', 'protein', 'iron', 'calcium', 'zinc', 'carbos'].includes(itemId);
+    // [REFACTOR] Use effects for filtering
+    const itemData = ITEMS_DATABASE[itemId];
+    const eff = itemData?.effects || {};
 
 	for (const pokemon of player.party) {
 		let show = false;
 		let details = '';
 
-		if (isRevival && pokemon.hp <= 0) { show = true; details = `<span class="rpg-text-error">Fainted</span>`; }
-		else if (isHealing && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) { show = true; }
-		else if (isStatusHeal && pokemon.hp > 0 && pokemon.status) { show = true; details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`; }
-		else if (isPPRestore && pokemon.hp > 0) { show = true; }
-		else if (isVitamin && pokemon.hp > 0) {
+		if (eff.revive && pokemon.hp <= 0) { show = true; details = `<span class="rpg-text-error">Fainted</span>`; }
+		else if ((eff.healAmount || eff.healPercent) && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) { show = true; }
+		else if (eff.statusCure && pokemon.hp > 0 && pokemon.status) { show = true; details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`; }
+		else if ((eff.ppRestore || eff.ppRestoreAll) && pokemon.hp > 0) { show = true; }
+		else if (eff.evBoost && pokemon.hp > 0) {
 			const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 			if (totalEVs < 510) { show = true; details = `EVs: ${totalEVs}/510`; }
 		}
@@ -989,11 +1005,13 @@ export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId:
 		let canUse = true;
 		let details = '';
 
-		if (itemId === 'rarecandy' || itemId.startsWith('expcandy')) {
+        // [REFACTOR] Check effects
+        const itemData = ITEMS_DATABASE[itemId];
+		if (itemData?.effects?.levelBoost || itemData?.effects?.expBoost) {
 			if (pokemon.level >= 100) canUse = false;
 			details = `${pokemon.experience} / ${pokemon.expToNextLevel} EXP`;
 		}
-		if (itemId === 'terashard') {
+		if (itemData?.effects?.canTerastallize) {
 			details = `Tera: ${pokemon.teraType}`;
 		}
 
@@ -1023,7 +1041,6 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 	let html = `<div class="rpg-infobox"><h2>Give to ${pokemon.species}</h2><p>Select an item from your bag:</p>`;
 	
 	let itemsFound = false;
-	// Wrap the table in the new 3-column grid utility
 	let gridHTML = `<div class="rpg-scrollable-grid"><div class="rpg-grid-3col-items">`;
 	let count = 0;
 
@@ -1043,12 +1060,10 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 				`</div>` +
 			`</div>`;
 
-			// NOTE: Changed from <td> to <div>
 			gridHTML += `<div>${cellContent}</div>`;
 			count++;
 		}
 	}
-	// Close grid wrapper and scroll div
 	gridHTML += '</div></div>';
 
 	if (itemsFound) {
@@ -1378,9 +1393,8 @@ function generateAvailablePokemonListHTML(
 	}
 
 	const switchButtons = availableParty.map(pokemon => {
-		const species = Dex.species.get(pokemon.species);
-		const spriteFilename = getSpriteFilename(species.id);
-		const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+		// [REFACTOR] Use Config URL
+        const spriteUrl = getSpriteUrl(pokemon, 'front');
 
 		const hpBar = generateHPBar(pokemon);
 		const statusTag = pokemon.status ? `<span class="rpg-tag rpg-tag-${pokemon.status}">${pokemon.status.toUpperCase()}</span>` : '';
@@ -1673,23 +1687,12 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		}
 
 		const pokemon = slot.pokemon;
-		const species = Dex.species.get(pokemon.species);
 
 		const infoContents = generateSharedBattlePokemonInfo(slot, side === 'player', battle);
 
-		const spriteFilename = getSpriteFilename(species.id);
-		let spriteUrl = '';
-		let spriteClass = '';
-
-		if (side === 'player') {
-			const spriteDir = pokemon.shiny ? 'gen5-back-shiny' : 'gen5-back';
-			spriteUrl = `https://play.pokemonshowdown.com/sprites/${spriteDir}/${spriteFilename}.png`;
-			spriteClass = 'rpg-pokemon-sprite-back';
-		} else {
-			const spriteDir = pokemon.shiny ? 'gen5-shiny' : 'gen5';
-			spriteUrl = `https://play.pokemonshowdown.com/sprites/${spriteDir}/${spriteFilename}.png`;
-			spriteClass = 'rpg-pokemon-sprite-front';
-		}
+        // [REFACTOR] Use Config URL
+        const spriteUrl = getSpriteUrl(pokemon, side === 'player' ? 'back' : 'front');
+		const spriteClass = side === 'player' ? 'rpg-pokemon-sprite-back' : 'rpg-pokemon-sprite-front';
 
 		const slotWrapperClass = side === 'player' ? 'rpg-player-slot' : 'rpg-opponent-slot';
 		const infoClass = side === 'player' ? 'rpg-player-info' : 'rpg-opponent-info';
@@ -1717,7 +1720,10 @@ function generateBattlefield(battle: BattleState, targetSelection?: { attackerSl
 		return html;
 	};
 
-	let html = '<div class="rpg-battle-ui">';
+	// [REFACTOR] Dynamic Background from Config
+    const bgUrl = GameConfig.assets.battleBackgroundUrl;
+    
+	let html = `<div class="rpg-battle-ui" style="background: url('${bgUrl}') no-repeat center bottom !important; background-size: cover !important;">`;
 
 	html += generateGlobalBattleConditionsHTML(battle);
 
@@ -1744,7 +1750,7 @@ export function generateBattleHTML(
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
 	teraToggled?: boolean,
-	scriptedEventId?: string // NEW PARAMETER
+	scriptedEventId?: string 
 ): string {
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const combinedLogs = [...messageLog, ...reversedBattleLog];
@@ -1756,7 +1762,6 @@ export function generateBattleHTML(
 	if (battle.battleEnded) {
 		let actionHTML = '';
 		if (battle.battleType !== 'battletower') {
-			// If we won a scripted event, use the completion command
 			let continueCommand = '/rpg explore';
 			if (battle.battleResult === 'victory' && scriptedEventId) {
 				continueCommand = `/rpg completeevent ${scriptedEventId}`;
@@ -1802,7 +1807,7 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 	if (target !== undefined && target !== '') {
 		slotToSwitchOut = parseInt(target);
 	} else {
-		const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double' || battle.battleType === 'battletower';
+		const isDoubleBattle = battle.battleType.includes('double') || battle.battleType === 'battletower'; // Simplified check
 
 		if (!isDoubleBattle && battle.battleType !== 'battletower') {
 			slotToSwitchOut = 0;
@@ -1835,7 +1840,7 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	let html = `<div class="rpg-infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 
-	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	const isDoubleBattle = battle.battleType.includes('double');
 
 	let slotToFill = -1;
 
@@ -1887,7 +1892,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 		}
 	}
 
-	const isDoubleBattle = battle.battleType === 'wild_double' || battle.battleType === 'trainer_double';
+	const isDoubleBattle = battle.battleType.includes('double');
 	const activeOpponents = getActiveSlots(battle.opponentSlots);
 
 	if (pokeBalls.length === 0) {
@@ -1905,8 +1910,10 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${ball.id} 2`;
 			}
 
+            // [REFACTOR] Use item icon from Config
+            // Fallback to pokesprite logic if needed, or use generic icon
 			const filename = ball.id.replace(/ball$/, '');
-			const spriteUrl = `https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/${filename}.png`;
+			const spriteUrl = `${GameConfig.assets.itemIconUrl}${filename}.png`;
 
 			const buttonContent = 
 				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${ball.name}" /></div>` +
@@ -1936,7 +1943,9 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 
 export function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Target</h2>`;
-	html += `<p>Choose which wild Pokémon to throw the ${ITEMS_DATABASE[ballId]?.name || 'Poke Ball'} at:</p>`;
+    const item = ITEMS_DATABASE[ballId];
+    const ballName = item?.name || 'Poke Ball';
+	html += `<p>Choose which wild Pokémon to throw the ${ballName} at:</p>`;
 
 	let hasTargets = false;
 	for (let i = 0; i < battle.opponentSlots.length; i++) {
@@ -1951,7 +1960,7 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 		html += `<div class="rpg-card">` +
 			`<strong>${slot.pokemon.species}</strong> (Lvl ${slot.pokemon.level})${statusText}<br>` +
 			`HP: ${slot.pokemon.hp}/${slot.pokemon.maxHp} (${hpPercent}%)<br>` +
-			`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ITEMS_DATABASE[ballId]?.name || 'Ball'}</button>` +
+			`<button name="send" value="/rpg battleaction catch ${ballId} ${slotIndex}" class="button">Throw ${ballName}</button>` +
 			`</div>`;
 	}
 
@@ -2075,7 +2084,9 @@ export function generateBattleTowerLossHTML(floor: number): string {
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
 	const species = Dex.species.get(speciesId);
 	if (!species.exists) return '';
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${getSpriteFilename(species.id)}.png`;
+    // [REFACTOR] Use Config Sprite URL
+    const tempMon: any = { species: speciesId }; // partial for util
+	const spriteUrl = getSpriteUrl(tempMon, 'front');
 
 	return `<div class="rpg-starter-card">` +
 		`<img src="${spriteUrl}" />` +
@@ -2090,6 +2101,7 @@ function generateStarterChoiceBoxHTML(speciesId: string, command: string): strin
 export function generateStarterSelectionHTML(type: string, starters: string[]): string {
 	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
 	let typeDescription = '';
+    // This flavor text could be moved to data/config but minor enough to leave for now
 	if (type === 'fire') typeDescription = "Fire-types are passionate and offensive.";
 	else if (type === 'water') typeDescription = "Water-types are versatile and adaptable.";
 	else if (type === 'grass') typeDescription = "Grass-types are strategic and resilient.";
@@ -2150,8 +2162,7 @@ export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, all
 export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesName: string, startingLocationName: string): string {
 	const pokemon = tempSlot.pokemon;
 	const species = Dex.species.get(pokemon.species);
-	const spriteFilename = getSpriteFilename(species.id);
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+	const spriteUrl = getSpriteUrl(pokemon, 'front');
 	
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
@@ -2192,8 +2203,7 @@ export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesN
 export function generateNPCStarterConfirmHTML(npcName: string, message: string, tempSlot: ActivePokemonSlot, speciesName: string): string {
 	const pokemon = tempSlot.pokemon;
 	const species = Dex.species.get(pokemon.species);
-	const spriteFilename = getSpriteFilename(species.id);
-	const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen5/${spriteFilename}.png`;
+	const spriteUrl = getSpriteUrl(pokemon, 'front');
 	
 	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
 	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
@@ -2237,12 +2247,10 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
-	// Display the narrative text
 	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
 	html += `<p>${message}</p>`;
 	html += `</div>`;
 
-	// --- Interactive Elements ---
 	if (event.type === 'choice' && event.choices) {
 		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
 		event.choices.forEach((choice: any, idx: number) => {
@@ -2271,7 +2279,6 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	// --- Battle Events (Wild/Boss/Raid) ---
 	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
 		let cmd = `/rpg scriptedbattle ${event.id}`;
 		let btnText = "⚔️ Battle!";
@@ -2288,10 +2295,7 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
 	} 
-	// --- Trainer, Tournament & Gauntlet Events ---
 	else if (['trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'].includes(event.type)) {
-		// Determine the opponent ID. 
-        // For tournaments/gauntlets, 'nextOpponent' is injected by commands.ts logic.
 		const trainerId = event.nextOpponent || event.trainerId || event.gymLeaderId;
 		
         if (trainerId) {
@@ -2299,17 +2303,14 @@ export function generateScriptedEventHTML(event: any, message: string): string {
             html += `<p class="rpg-text-center">`;
             html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Challenge!</button><br>`;
             
-            // Only show Run button if it's NOT a Gauntlet (Gauntlets trap you)
             if (event.type !== 'gauntletbattle') {
                 html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
             }
             html += `</p>`;
         } else {
-            // Fallback if completed or no opponent found
             html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
         }
 	} 
-	// --- Standard Event (No interaction required) ---
 	else {
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
@@ -2320,8 +2321,6 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 
 export function generateNPCInteractionHTML(npc: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
-	
-	// ADDED NOTIFICATION HERE
     if (notification) {
         html += `<div class="rpg-notification">${notification}</div>`;
     }
@@ -2334,12 +2333,10 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 	if (action) {
 		html += `<hr />`;
 		
-		// --- Complex Menus ---
 		if (action.type === 'itemcraft' && action.recipes) {
 			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
 			action.recipes.forEach((recipe: any, index: number) => {
 				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
-				// List inputs
 				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
 				
 				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
@@ -2360,7 +2357,6 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 		else if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${npc.id}" class="button rpg-button-large">View Starters</button></p>`;
 		}
-		// --- Simple Actions ---
 		else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
@@ -2378,9 +2374,8 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 }
 
 export function generatePokedexHTML(player: PlayerData): string {
-	// Calculate counts
-	const seenCount = player.pokedex ? player.pokedex.seen.size : 0; // Assuming standard player.pokedex structure
-	const caughtCount = player.party.length + player.pc.size; // Simplified count for now, ideally track unique species
+	const seenCount = player.pokedex ? player.pokedex.seen.size : 0;
+	const caughtCount = player.party.length + player.pc.size;
 	
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Pokédex</h2>` +
