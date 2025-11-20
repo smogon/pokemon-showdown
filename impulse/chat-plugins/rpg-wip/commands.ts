@@ -248,9 +248,8 @@ function handleUseMedicine(
 		removeItemFromInventory(player, item.id, 1);
 	}
 
-	// Streamlined Feedback
-	this.sendReplyBox(result.message);
-    return this.parse('/rpg party');
+	// USE IN-MENU NOTIFICATION (Refresh Party Screen)
+    return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 }
 
 /**
@@ -275,9 +274,8 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-		// Streamlined Feedback
-		this.sendReplyBox(result.message);
-        return this.parse('/rpg party');
+		// NOTIFICATION
+        return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 	}
 
 	if (itemId.startsWith('expcandy')) {
@@ -288,9 +286,8 @@ function handleUseMiscItem(
 		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 		}
-		// Streamlined Feedback
-		this.sendReplyBox(result.message);
-        return this.parse('/rpg party');
+		// NOTIFICATION
+        return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 	}
 
 	if (itemId === 'terashard') {
@@ -339,9 +336,9 @@ function handleUseMiscItem(
 			targetPokemon.moves.push({ id: moveId, pp: newMoveData.pp || 5 });
 			removeItemFromInventory(player, itemId, 1);
 			
-            // Streamlined Feedback
-            this.sendReplyBox(`<strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
-			return this.parse('/rpg party');
+            // NOTIFICATION
+            const successMsg = `<strong>${targetPokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`;
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		} else {
 			// Queue move for replacement
 			if (!player.pendingMoveLearnQueue) {
@@ -360,14 +357,12 @@ function handleUseMiscItem(
 			// Evolution was successful
 			removeItemFromInventory(player, itemId, 1);
 			
-			// Streamlined Feedback
-			this.sendReplyBox(evoMessage);
-
 			// Check if new moves were queued
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 			} 
-            return this.parse('/rpg party');
+            // NOTIFICATION
+            return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, evoMessage)}`);
 		} else {
 			// Evolution failed
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateEvolutionStoneErrorHTML(targetPokemon.species, itemId)}`);
@@ -585,9 +580,8 @@ export const commands: ChatCommands = {
 				if (queueArray.length > 0) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
 				} else {
-					// Streamlined Feedback - Go back to Party
-					this.sendReplyBox(message);
-                    return this.parse('/rpg party');
+					// NOTIFICATION
+                    return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, message)}`);
 				}
 			}
 		},
@@ -628,9 +622,9 @@ export const commands: ChatCommands = {
 				const newMoveData = getMove(newMoveId);
 				pokemon.moves.push({ id: newMoveId, pp: newMoveData.pp || 5 });
 				
-                // Streamlined Feedback
-                this.sendReplyBox(`<strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`);
-                return this.parse('/rpg party');
+                // NOTIFICATION
+                const msg = `<strong>${pokemon.species}</strong> learned <strong>${newMoveData.name}</strong>!`;
+                return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
 			} else {
 				if (!player.pendingMoveLearnQueue) {
 					player.pendingMoveLearnQueue = [];
@@ -744,11 +738,11 @@ export const commands: ChatCommands = {
 			if (itemId === 'sacredash') {
 				const result = useSacredAsh(player);
 				if (!result.success) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, 'sacredash')}`);
+					return this.errorReply(result.message); // Error as popup
 				}
 				
 				removeItemFromInventory(player, itemId, 1);
-				// USE IN-MENU NOTIFICATION
+				// NOTIFICATION
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 			}
 
@@ -853,7 +847,7 @@ export const commands: ChatCommands = {
 
 			const tempSlot = createActivePokemonSlot(pokemon);
 			
-			// USE IN-MENU NOTIFICATION
+			// NOTIFICATION
 			const msg = `Used <strong>${item.name}</strong>. Restored <strong>${restored} PP</strong> to ${moveData.name}.`;
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, msg)}`);
 		},
@@ -877,7 +871,7 @@ export const commands: ChatCommands = {
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
 
-			// USE IN-MENU NOTIFICATION
+			// NOTIFICATION
 			const successMsg = `Sent <strong>${pokemon.species}</strong> to the PC.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
@@ -894,7 +888,7 @@ export const commands: ChatCommands = {
 			
 			player.party.push(pokemon);
 			
-			// USE IN-MENU NOTIFICATION
+			// NOTIFICATION
 			const successMsg = `Withdrew <strong>${pokemon.species}</strong> to your party.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, successMsg)}`);
 		},
@@ -933,7 +927,7 @@ export const commands: ChatCommands = {
 			addItemToInventory(player, itemId, quantity);
 			const item = ITEMS_DATABASE[itemId];
 
-			// USE IN-MENU NOTIFICATION
+			// NOTIFICATION
 			const successMsg = `Purchased <strong>${quantity}x ${item.name}</strong> for ₽${totalCost}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, successMsg)}`);
 		},
@@ -966,7 +960,7 @@ export const commands: ChatCommands = {
 			removeItemFromInventory(player, itemId, quantity);
 			player.money += totalGain;
 
-			// USE IN-MENU NOTIFICATION
+			// NOTIFICATION
 			const successMsg = `Sold <strong>${quantity}x ${itemInBag.name}</strong> for ₽${totalGain}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, successMsg)}`);
 		},
@@ -1120,9 +1114,7 @@ export const commands: ChatCommands = {
 			// If there are triggered events, show them
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
-				let eventHTML = `<div class="rpg-infobox"><h2>Arrived at ${targetLocation.name}</h2>`;
-				eventHTML += `<p><em>${targetLocation.description}</em></p><hr />`;
-
+				
                 // --- INTEGRATED SCRIPTED EVENTS HANDLERS ---
                 let result = { success: true, message: '' };
                 
@@ -1130,21 +1122,9 @@ export const commands: ChatCommands = {
                     case 'cutscene': result = ScriptedEvents.handleCutscene(player, firstEvent); break;
                     case 'choice': 
                         result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
-                        eventHTML += `<p>${result.message}</p>`;
-                        if (firstEvent.choices) {
-                            firstEvent.choices.forEach((choice, idx) => {
-                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
-                            });
-                        }
                         break;
                     case 'quiz':
                         result = { success: true, message: firstEvent.question || 'Quiz Time!' };
-                        eventHTML += `<p>${result.message}</p>`;
-                        if (firstEvent.answers) {
-                            firstEvent.answers.forEach((ans, idx) => {
-                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${ans}</button> `;
-                            });
-                        }
                         break;
                     case 'weather': result = ScriptedEvents.handleWeatherChange(player, firstEvent); break;
                     case 'earthquake': result = ScriptedEvents.handleEarthquake(player, firstEvent); break;
@@ -1197,22 +1177,10 @@ export const commands: ChatCommands = {
                     case 'companionleave': result = ScriptedEvents.handleCompanionLeave(player, firstEvent); break;
                     case 'moralchoice': 
                          result = { success: true, message: firstEvent.dialogue || 'Make a choice:' };
-                         eventHTML += `<p>${result.message}</p>`;
-                         if (firstEvent.moralChoices) {
-                            firstEvent.moralChoices.forEach((choice, idx) => {
-                                eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
-                            });
-                         }
                         break;
                     case 'lore': result = ScriptedEvents.handleLoreDiscovery(player, firstEvent, firstEvent.id); break;
                     case 'branching': 
                          result = { success: true, message: firstEvent.dialogue || 'Choose a path:' };
-                         eventHTML += `<p>${result.message}</p>`;
-                         if (firstEvent.pathOptions) {
-                             firstEvent.pathOptions.forEach((path, idx) => {
-                                 eventHTML += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${path.name}</button> `;
-                             });
-                         }
                         break;
                     case 'chapter': result = ScriptedEvents.handleChapterTransition(player, firstEvent); break;
                     case 'epilogue': result = ScriptedEvents.handleEpilogue(player, firstEvent); break;
@@ -1256,23 +1224,13 @@ export const commands: ChatCommands = {
                     default: result = { success: true, message: firstEvent.dialogue || 'Event occurred.' }; break;
                 }
 
-                if (!['choice', 'quiz', 'moralchoice', 'branching'].includes(firstEvent.type)) {
-                    eventHTML += `<p>${result.message}</p>`;
-                }
-
-                // Specific Buttons for Battles
-                if (firstEvent.type === 'wildbattle' || firstEvent.type === 'bossbattle') {
-                     const battleId = firstEvent.type === 'bossbattle' ? (result as any).bossTrainerId : firstEvent.id; 
-                     const cmd = firstEvent.type === 'bossbattle' ? `/rpg challenge ${battleId}` : `/rpg scriptedbattle ${firstEvent.id}`;
-                     eventHTML += `<p><button name="send" value="${cmd}" class="button">⚔️ Battle!</button></p>`;
-                } else if (firstEvent.type === 'trainer' || firstEvent.type === 'gymchallenge' || firstEvent.type === 'elitefour') {
-                     const trainerId = firstEvent.trainerId || (result as any).gymLeaderId;
-                     eventHTML += `<p><button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Battle!</button></p>`;
-                } else if (!['choice', 'quiz', 'moralchoice', 'branching'].includes(firstEvent.type)) {
-                     eventHTML += `<p><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
-                }
-
-				eventHTML += `</div>`;
+				// If boss battle handler returned bossTrainerId, update event for display
+				if (firstEvent.type === 'bossbattle' && (result as any).bossTrainerId) {
+					firstEvent.bossTrainerId = (result as any).bossTrainerId;
+				}
+                
+                // Use the HTML generator for the event UI
+				const eventHTML = generateScriptedEventHTML(firstEvent, result.message);
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${eventHTML}`);
 			}
 
@@ -1306,7 +1264,7 @@ export const commands: ChatCommands = {
 
             if (!activeEvent) return this.errorReply("No active event to choose for.");
 
-            let result = { success: false, message: "Invalid choice." };
+            let result: { success: boolean, message: string } = { success: false, message: "Invalid choice." };
 
             if (activeEvent.type === 'choice') {
                 result = ScriptedEvents.handleChoice(player, activeEvent, index);
@@ -2329,9 +2287,10 @@ export const commands: ChatCommands = {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 
-				// Streamlined Feedback
-				this.sendReplyBox("You ran away safely!");
-				return this.parse('/rpg explore');
+				// Streamlined Feedback (Notification)
+				const player = getPlayerData(user.id);
+				const location = LOCATIONS[toID(player.location)];
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "You ran away safely!")}`);
 			},
 
 			back(target, room, user) {
@@ -2476,7 +2435,7 @@ export const commands: ChatCommands = {
 			// Clear all player data
 			playerData.delete(user.id);
 
-			// Streamlined Feedback
+			// Standard Chat Feedback
 			this.sendReplyBox("Game data reset.");
             return this.parse('/rpg start');
 		},
@@ -2495,9 +2454,10 @@ export const commands: ChatCommands = {
 			activeBattles.delete(user.id);
 			teraToggleState.delete(user.id);
 
-			// Streamlined Feedback
-			this.sendReplyBox("Battle force-exited.");
-			return this.parse('/rpg explore');
+			// Streamlined Feedback (Notification)
+			const player = getPlayerData(user.id);
+			const location = LOCATIONS[toID(player.location)];
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "Battle force-exited.")}`);
 		},
 
 		npc(target, room, user) {
@@ -2576,12 +2536,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot talk to this NPC yet.");
 			}
 
-			// Handle completion state
+			// Handle completion state (Update dialogue object for renderer)
 			let npcToRender = npc;
 			if (npc.action) {
 				const actionCompleted = player.completedNPCActions.has(npcId);
 				if (npc.action.onceOnly && actionCompleted) {
-                     // Clone and modify to hide action and show completed text
                      npcToRender = { 
                         ...npc, 
                         action: null, 
@@ -2817,19 +2776,33 @@ export const commands: ChatCommands = {
 					break;
 			}
 
+			// --- RENDER RESULT (Notification in Menu) ---
+			// Update completion state visual again after success
+			let npcToRender = npc;
+			if (result.success && npc.action && npc.action.onceOnly) {
+				 npcToRender = { 
+					...npc, 
+					action: null, 
+					dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(You have completed this request.)</em>' 
+				 };
+			}
+			
 			if (result.success) {
-				this.sendReplyBox(result.message);
+				// Show UI with Green Notification
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, result.message)}`);
+				
+				// Special Handling for Battles (Trigger immediately)
 				if (result.canBattle && action.trainerId) {
 					return this.parse(`/rpg challenge ${action.trainerId}`);
 				}
 			} else {
-				this.errorReply(result.message);
+				// Show UI with Error Notification
+                const errorMsg = `<span class="rpg-text-error">${result.message}</span>`;
+                this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, errorMsg)}`);
 			}
-			
-			return this.parse(`/rpg npc ${npcId}`);
 		},
 
-		// ... (save, load, dbsave, dbload, dbdelete, help, starterchoice are unchanged from previous block) ...
+		// ... (save, load, dbsave, dbload, dbdelete, help, starterchoice are unchanged) ...
         // IMPORTANT: Paste the remaining standard commands here.
         // (starterchoice, dbsave, dbload, dbdelete, help)
         starterchoice(target, room, user) {
@@ -2904,9 +2877,8 @@ export const commands: ChatCommands = {
 
 			try {
 				await savePlayerToDB(player);
-				// Standard Chat Feedback
-				this.sendReplyBox(`<span style="color: green"><strong>Game saved successfully!</strong></span>`);
-				return this.parse('/rpg profile');
+				// Notification on Profile
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateProfileHTML(player, "Game saved successfully!")}`);
 			} catch (error) {
 				return this.errorReply("Error saving game to database: " + String(error));
 			}
@@ -2929,9 +2901,9 @@ export const commands: ChatCommands = {
 					return this.errorReply("Error loading game from database.");
 				}
 
-				// Standard Chat Feedback
-				this.sendReplyBox(`<span style="color: green"><strong>Save loaded! Welcome back, ${loadedPlayer.name}.</strong></span>`);
-				return this.parse('/rpg explore');
+				// Notification on Explore
+				const msg = `Save loaded! Welcome back, ${loadedPlayer.name}.`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(loadedPlayer, LOCATIONS[toID(loadedPlayer.location)], msg)}`);
 			} catch (error) {
 				return this.errorReply("Error loading game from database: " + String(error));
 			}

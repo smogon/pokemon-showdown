@@ -19,6 +19,42 @@ function calculateExpBarPercentage(expProgress: number, expNeededForLevel: numbe
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
 }
 
+function getItemIcon(item: InventoryItem | { name: string, category: string, id: string }): string {
+	const baseUrl = "https://raw.githubusercontent.com/msikma/pokesprite/master/items";
+	
+	let filename = item.name.toLowerCase().replace(/ /g, '-').replace(/'/g, '');
+
+	let directory = "medicine"; 
+
+	if (item.category === 'pokeball') {
+		directory = "ball";
+		filename = filename.replace(/-ball$/, '');
+        if (filename === 'poke') filename = 'poke'; 
+	} else if (item.category === 'berry') {
+		directory = "berry";
+		filename = filename.replace(/-berry$/, '');
+	} else if (item.category === 'tm') {
+		directory = "tms";
+		if (filename.startsWith('tm')) filename = 'tm-normal'; 
+        if (filename.startsWith('tr')) filename = 'tm-fire'; 
+	} else if (item.category === 'evo-item' || item.id.endsWith('stone') || item.id.includes('scale') || item.id.includes('disk')) {
+		directory = "evo-item";
+	} else if (item.category === 'held') {
+		directory = "held-item";
+	} else if (item.category === 'key') {
+		directory = "key-item";
+	} else if (item.category === 'misc') {
+        if (filename.includes('candy')) directory = "medicine"; 
+        else directory = "data-item";
+    }
+
+	if (filename === 'leftovers') directory = "held-item";
+    if (filename === 'rare-candy') directory = "medicine";
+    if (filename === 'pp-up' || filename === 'pp-max') directory = "medicine";
+
+	return `${baseUrl}/${directory}/${filename}.png`;
+}
+
 function getSpriteFilename(speciesId: string): string {
 	let filename = speciesId;
 
@@ -181,7 +217,7 @@ function generateExpBar(pokemon: RPGPokemon): string {
 // 2. System & Main Menu HTML
 // -------------------------------------------------------------------------------------
 
-export function generateProfileHTML(player: PlayerData): string {
+export function generateProfileHTML(player: PlayerData, notification?: string): string {
 	let progressText = 'Just starting out';
 	if (player.storyFlags.has('champion')) progressText = 'Champion!';
 	else if (player.storyFlags.has('all_badges')) progressText = 'Ready for Elite Four';
@@ -199,8 +235,13 @@ export function generateProfileHTML(player: PlayerData): string {
 		badgeHTML = `<span class="rpg-text-muted">None yet</span>`;
 	}
 
-	let html = `<div class="rpg-infobox">` +
-		`<div class="rpg-scrollable-grid">` +
+	let html = `<div class="rpg-infobox">`;
+    
+    if (notification) {
+        html += `<div class="rpg-notification">${notification}</div>`;
+    }
+
+	html += `<div class="rpg-scrollable-grid">` +
 
 			`<div class="rpg-summary-header">` +
 				`<div class="rpg-summary-info">` +
@@ -265,7 +306,6 @@ export function generateWelcomeHTML(): string {
 export function generateExploreHTML(player: PlayerData, location: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
 
-	// Optional Notification Banner (e.g. "You arrived at Route 1")
 	if (notification) {
 		html += `<div class="rpg-notification">${notification}</div>`;
 	}
@@ -275,7 +315,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
-	// Shared button style for consistent spacing
 	const btnStyle = 'margin: 3px;';
 
 	// --- 1. Wild Pokemon Zones (Compact) ---
@@ -298,7 +337,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		html += `<hr /><strong>Buildings:</strong><br>`;
 		html += `<p class="rpg-text-center">`;
 		for (const building of location.buildings) {
-			// Check accessibility
 			if (building.accessible === false) continue;
 			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
 
@@ -316,13 +354,10 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	}
 
 	// --- 3. Trainers (Compact) ---
-	// We derive the ID from the name to look up trainers for this location
 	const locationId = toID(location.name);
 	const locationTrainers = TRAINER_LOCATIONS[locationId];
-	
 	if (locationTrainers && locationTrainers.length > 0) {
 		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
-		
 		if (availableTrainers.length > 0) {
 			html += `<hr /><strong>Trainers:</strong><br>`;
 			html += `<p class="rpg-text-center">`;
@@ -2201,12 +2236,10 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
-	// Display the narrative text
 	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
 	html += `<p>${message}</p>`;
 	html += `</div>`;
 
-	// --- Interactive Elements ---
 	if (event.type === 'choice' && event.choices) {
 		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
 		event.choices.forEach((choice: any, idx: number) => {
@@ -2235,9 +2268,7 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	// --- Action Buttons ---
 	else if (event.type === 'wildbattle' || event.type === 'bossbattle') {
-		// Note: 'bossTrainerId' handling would be passed in logic, assuming ID is in event for simple button generation
 		const cmd = event.type === 'bossbattle' ? `/rpg challenge ${event.bossTrainerId}` : `/rpg scriptedbattle ${event.id}`;
 		html += `<p class="rpg-text-center"><button name="send" value="${cmd}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
 	} 
@@ -2246,7 +2277,6 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
 	} 
 	else {
-		// Standard continue button
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
 
@@ -2254,9 +2284,14 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 	return html;
 }
 
-export function generateNPCInteractionHTML(npc: any): string {
-	let html = `<div class="rpg-infobox">` +
-		`<h2>${npc.name}</h2>` +
+export function generateNPCInteractionHTML(npc: any, notification?: string): string {
+	let html = `<div class="rpg-infobox">`;
+
+    if (notification) {
+        html += `<div class="rpg-notification">${notification}</div>`;
+    }
+
+	html += `<h2>${npc.name}</h2>` +
 		`<div class="rpg-memo-box"><p>"${npc.dialogue}"</p></div>`;
 
 	const action = npc.action;
@@ -2264,12 +2299,10 @@ export function generateNPCInteractionHTML(npc: any): string {
 	if (action) {
 		html += `<hr />`;
 		
-		// --- Complex Menus ---
 		if (action.type === 'itemcraft' && action.recipes) {
 			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
 			action.recipes.forEach((recipe: any, index: number) => {
 				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
-				// List inputs
 				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
 				
 				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
@@ -2290,7 +2323,6 @@ export function generateNPCInteractionHTML(npc: any): string {
 		else if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${npc.id}" class="button rpg-button-large">View Starters</button></p>`;
 		}
-		// --- Simple Actions ---
 		else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
@@ -2308,9 +2340,8 @@ export function generateNPCInteractionHTML(npc: any): string {
 }
 
 export function generatePokedexHTML(player: PlayerData): string {
-	// Calculate counts
-	const seenCount = player.pokedex ? player.pokedex.seen.size : 0; // Assuming standard player.pokedex structure
-	const caughtCount = player.party.length + player.pc.size; // Simplified count for now, ideally track unique species
+	const seenCount = player.pokedex ? player.pokedex.seen.size : 0;
+	const caughtCount = player.party.length + player.pc.size; 
 	
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Pokédex</h2>` +
