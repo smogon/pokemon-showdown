@@ -3,7 +3,7 @@ import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './shop';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './locations';
+import { LOCATIONS, type ENCOUNTER_ZONES, getStartingLocation } from './locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './trainers';
 import { getPlayerData } from './core';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
@@ -15,76 +15,24 @@ import { TOTAL_BADGES } from './badges';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
 	if (expNeededForLevel <= 0) return 100;
-
 	return Math.min(100, Math.max(0, Math.floor((expProgress / expNeededForLevel) * 100)));
-}
-
-function getItemIcon(item: InventoryItem | { name: string, category: string, id: string }): string {
-	const baseUrl = "https://raw.githubusercontent.com/msikma/pokesprite/master/items";
-	
-	let filename = item.name.toLowerCase().replace(/ /g, '-').replace(/'/g, '');
-
-	let directory = "medicine"; 
-
-	if (item.category === 'pokeball') {
-		directory = "ball";
-		filename = filename.replace(/-ball$/, '');
-        if (filename === 'poke') filename = 'poke'; 
-	} else if (item.category === 'berry') {
-		directory = "berry";
-		filename = filename.replace(/-berry$/, '');
-	} else if (item.category === 'tm') {
-		directory = "tms";
-		if (filename.startsWith('tm')) filename = 'tm-normal'; 
-        if (filename.startsWith('tr')) filename = 'tm-fire'; 
-	} else if (item.category === 'evo-item' || item.id.endsWith('stone') || item.id.includes('scale') || item.id.includes('disk')) {
-		directory = "evo-item";
-	} else if (item.category === 'held') {
-		directory = "held-item";
-	} else if (item.category === 'key') {
-		directory = "key-item";
-	} else if (item.category === 'misc') {
-        if (filename.includes('candy')) directory = "medicine"; 
-        else directory = "data-item";
-    }
-
-	if (filename === 'leftovers') directory = "held-item";
-    if (filename === 'rare-candy') directory = "medicine";
-    if (filename === 'pp-up' || filename === 'pp-max') directory = "medicine";
-
-	return `${baseUrl}/${directory}/${filename}.png`;
 }
 
 function getSpriteFilename(speciesId: string): string {
 	let filename = speciesId;
+	if (filename.endsWith('mega')) filename = filename.replace(/mega$/, '-mega');
+	else if (filename.endsWith('megax')) filename = filename.replace(/megax$/, '-megax');
+	else if (filename.endsWith('megay')) filename = filename.replace(/megay$/, '-megay');
 
-	if (filename.endsWith('mega')) {
-		filename = filename.replace(/mega$/, '-mega');
-	} else if (filename.endsWith('megax')) {
-		filename = filename.replace(/megax$/, '-megax');
-	} else if (filename.endsWith('megay')) {
-		filename = filename.replace(/megay$/, '-megay');
-	}
-
-	const regionalFormSuffixes = [
-		'alola', 'galar', 'hisui', 'paldea',
-		'alolan', 'galarian', 'hisuian', 'paldean',
-	];
-
+	const regionalFormSuffixes = ['alola', 'galar', 'hisui', 'paldea', 'alolan', 'galarian', 'hisuian', 'paldean'];
 	for (const suffix of regionalFormSuffixes) {
 		if (filename.endsWith(suffix) && filename.length > suffix.length && !filename.includes('-' + suffix)) {
 			filename = filename.slice(0, -suffix.length) + '-' + suffix;
 			break;
 		}
 	}
-
-	if (filename.endsWith('gmax')) {
-		filename = filename.replace(/gmax$/, '-gmax');
-	}
-
-	if (filename.endsWith('f')) {
-		filename = filename.replace(/f$/, '-f');
-	}
+	if (filename.endsWith('gmax')) filename = filename.replace(/gmax$/, '-gmax');
+	if (filename.endsWith('f')) filename = filename.replace(/f$/, '-f');
 
 	const hyphenatedForms: Record<string, string> = {
 		'taurospaldeacombat': 'tauros-paldea-combat', 'taurospaldeablaze': 'tauros-paldea-blaze', 'taurospaldeaaqua': 'tauros-paldea-aqua',
@@ -93,28 +41,20 @@ function getSpriteFilename(speciesId: string): string {
 		'miraidonlimited': 'miraidon-limited', 'ogerponwellspring': 'ogerpon-wellspring',
 		'ogerponhearthflame': 'ogerpon-hearthflame', 'ogerponcornerstone': 'ogerpon-cornerstone',
 		'ursalunabloodmoon': 'ursaluna-bloodmoon',
-
 		'cramorantgorging': 'cramorant-gorging', 'cramorantgulping': 'cramorant-gulping',
 		'zaciancrowned': 'zacian-crowned', 'zamazentacrowned': 'zamazenta-crowned',
 		'urshifusinglestrike': 'urshifu-singlestrike', 'urshifurapidstrike': 'urshifu-rapidstrike',
 		'eternatuseternamax': 'eternatus-eternamax',
-
-		'lycanrocdusk': 'lycanroc-dusk', 'lycanrocmidnight': 'lycanroc-midnight',
-		'rockruffowtempo': 'rockruff-own-tempo',
-		'miniorviolet': 'minior-violet', 'miniorindigo': 'minior-indigo',
-		'typenull': 'type:null',
+		'lycanrocdusk': 'lycanroc-dusk', 'lycanrocmidnight': 'lycanroc-midnight', 'rockruffowtempo': 'rockruff-own-tempo',
+		'miniorviolet': 'minior-violet', 'miniorindigo': 'minior-indigo', 'typenull': 'type:null',
 		'silvallybug': 'silvally-bug', 'silvallydark': 'silvally-dark', 'silvallydragon': 'silvally-dragon',
 		'silvallyelectric': 'silvally-electric', 'silvallyfairy': 'silvally-fairy', 'silvallyfighting': 'silvally-fighting',
 		'silvallyfire': 'silvally-fire', 'silvallyflying': 'silvally-flying', 'silvallyghost': 'silvally-ghost',
 		'silvallygrass': 'silvally-grass', 'silvallyground': 'silvally-ground', 'silvallyice': 'silvally-ice',
 		'silvallypoison': 'silvally-poison', 'silvallypsychic': 'silvally-psychic', 'silvallyrock': 'silvally-rock',
 		'silvallysteel': 'silvally-steel', 'silvallywater': 'silvally-water',
-		'wishiwashischool': 'wishiwashi-school',
-
-		'kyuremblack': 'kyurem-black', 'kyuremwhite': 'kyurem-white',
-
+		'wishiwashischool': 'wishiwashi-school', 'kyuremblack': 'kyurem-black', 'kyuremwhite': 'kyurem-white',
 		'necrozmaduskmane': 'necrozma-dusk-mane', 'necrozmadawnwings': 'necrozma-dawn-wings',
-
 		'dialgaorigin': 'dialga-origin', 'palkiaorigin': 'palkia-origin', 'giratinaorigin': 'giratina-origin',
 		'arceusbug': 'arceus-bug', 'arceusdark': 'arceus-dark', 'arceusdragon': 'arceus-dragon',
 		'arceuselectric': 'arceus-electric', 'arceusfairy': 'arceus-fairy', 'arceusfighting': 'arceus-fighting',
@@ -128,7 +68,6 @@ function getSpriteFilename(speciesId: string): string {
 		'landorustherian': 'landorus-therian', 'thundurusincarnate': 'thundurus-incarnate',
 		'thundurustherian': 'thundurustherian', 'tornadusincarnate': 'tornadus-incarnate',
 		'tornadustherian': 'tornadus-therian',
-
 		'darmanitanzigzag': 'darmanitan-zen-galar', 'darmanitanzen': 'darmanitan-zen',
 		'aegislashblade': 'aegislash-blade', 'meloettapirouette': 'meloetta-pirouette',
 		'basculinblu': 'basculin-blue-striped', 'basculinwhite': 'basculin-white-striped',
@@ -143,18 +82,9 @@ function getSpriteFilename(speciesId: string): string {
 		'indeedeeunbound': 'indeedee-f',
 	};
 
-	if (hyphenatedForms[filename]) {
-		filename = hyphenatedForms[filename];
-	}
-
-	if (filename.endsWith('f') && filename.length > 1 && !filename.includes('-f')) {
-		filename = filename.slice(0, -1) + '-f';
-	}
-
-	filename = filename.replace(/\+/g, '-');
-
-	filename = filename.replace(/-{2,}/g, '-');
-
+	if (hyphenatedForms[filename]) filename = hyphenatedForms[filename];
+	if (filename.endsWith('f') && filename.length > 1 && !filename.includes('-f')) filename = filename.slice(0, -1) + '-f';
+	filename = filename.replace(/\+/g, '-').replace(/-{2,}/g, '-');
 	return filename;
 }
 
@@ -236,20 +166,15 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 	}
 
 	let html = `<div class="rpg-infobox">`;
-    
-    if (notification) {
-        html += `<div class="rpg-notification">${notification}</div>`;
-    }
+    if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-scrollable-grid">` +
-
 			`<div class="rpg-summary-header">` +
 				`<div class="rpg-summary-info">` +
 					`<h3>${player.name}</h3>` +
 					`<p class="rpg-text-info"><strong>${progressText}</strong></p>` +
 				`</div>` +
 			`</div>` +
-
 			`<div class="rpg-grid-2col">` +
 				`<div>` +
 					`<h4>Trainer Card</h4>` +
@@ -270,7 +195,6 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 					`</div>` +
 				`</div>` +
 			`</div>` +
-
 			`<hr />` +
 			`<h4>System</h4>` +
 			`<p style="text-align:center">` +
@@ -278,12 +202,9 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 				`<button name="send" value="/rpg dbload" class="button">📁 Load Game</button> ` +
 				`<button name="send" value="/rpg dbdelete" class="button rpg-text-error">🗑️ Delete Save</button>` +
 			`</p>` +
-		
 		`</div>` +
-
 		generateBottomNavigation() +
 	`</div>`;
-
 	return html;
 }
 
@@ -303,12 +224,52 @@ export function generateWelcomeHTML(): string {
 		`</div>`;
 }
 
+export function generateModeSelectionHTML(): string {
+	let html = `<div class="rpg-infobox"><h2>Select a Mode</h2>` +
+		`<p>Choose a game mode to begin:</p>` +
+		`<div class="rpg-grid-2col">` +
+			`<button name="send" value="/rpg storymode" class="button" style="height:auto; padding:15px;">` +
+				`<span style="font-size:2em">📖</span><br><strong>Story Mode</strong><br><small>The classic adventure</small>` +
+			`</button>` +
+			`<button name="send" value="/rpg battletower start" class="button" style="height:auto; padding:15px;">` +
+				`<span style="font-size:2em">🗼</span><br><strong>Battle Tower</strong><br><small>Roguelike challenge</small>` +
+			`</button>` +
+		`</div>` +
+		`</div>`;
+	return html;
+}
+
+export function generateStoryModeStartHTML(): string {
+	const startingLocation = getStartingLocation();
+	const location = LOCATIONS[startingLocation.id];
+
+	let labBuildingId = '';
+	if (location?.buildings) {
+		for (const building of location.buildings) {
+			if (building.type === 'lab') {
+				labBuildingId = building.id;
+				break;
+			}
+		}
+	}
+
+	return `<div class="rpg-infobox">` +
+		`<h2>Welcome to Kanto!</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
+			`<p>Your adventure is about to begin.</p>` +
+			`<p>To get your first Pokémon partner, head to the lab and talk to the Professor!</p>` +
+		`</div>` +
+		`<p style="text-align:center">` +
+			(labBuildingId ? `<button name="send" value="/rpg building ${labBuildingId}" class="button">🔬 Enter the Lab</button> ` : '') +
+			`<button name="send" value="/rpg explore" class="button">🗺️ Explore ${startingLocation.name}</button>` +
+		`</p>` +
+		`</div>`;
+}
+
 export function generateExploreHTML(player: PlayerData, location: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
 
-	if (notification) {
-		html += `<div class="rpg-notification">${notification}</div>`;
-	}
+	if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-text-center">` +
 			`<h2><b>${location.name}</b></h2>` +
@@ -316,12 +277,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		`</div>`;
 
 	const btnStyle = 'margin: 3px;';
-
-	// --- 1. Wild Pokemon Zones (Compact) ---
 	const availableZones = location.encounterZones || [];
 	if (availableZones.length > 0) {
-		html += `<hr /><strong>Wild Pokémon:</strong><br>`;
-		html += `<p class="rpg-text-center">`;
+		html += `<hr /><strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
 		for (const zoneId of availableZones) {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (zone) {
@@ -332,10 +290,8 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		html += `</p>`;
 	}
 
-	// --- 2. Buildings (Compact) ---
 	if (location.buildings && location.buildings.length > 0) {
-		html += `<hr /><strong>Buildings:</strong><br>`;
-		html += `<p class="rpg-text-center">`;
+		html += `<hr /><strong>Buildings:</strong><br><p class="rpg-text-center">`;
 		for (const building of location.buildings) {
 			if (building.accessible === false) continue;
 			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
@@ -353,14 +309,12 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		html += `</p>`;
 	}
 
-	// --- 3. Trainers (Compact) ---
 	const locationId = toID(location.name);
 	const locationTrainers = TRAINER_LOCATIONS[locationId];
 	if (locationTrainers && locationTrainers.length > 0) {
 		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
 		if (availableTrainers.length > 0) {
-			html += `<hr /><strong>Trainers:</strong><br>`;
-			html += `<p class="rpg-text-center">`;
+			html += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
 			for (const trainerId of availableTrainers) {
 				const trainerData = TRAINER_DATABASE[trainerId];
 				if (trainerData) {
@@ -371,13 +325,10 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		}
 	}
 
-	// --- 4. Travel (Compact) ---
 	if (location.connectedLocations && location.connectedLocations.length > 0) {
-		html += `<hr /><strong>Travel:</strong><br>`;
-		html += `<p class="rpg-text-center">`;
+		html += `<hr /><strong>Travel:</strong><br><p class="rpg-text-center">`;
 		for (const connection of location.connectedLocations) {
 			let canAccess = true;
-			
 			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) canAccess = false;
 			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) canAccess = false;
 
@@ -390,8 +341,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		html += `</p>`;
 	}
 
-	html += generateBottomNavigation();
-	html += `</div>`;
+	html += generateBottomNavigation() + `</div>`;
 	return html;
 }
 
@@ -407,6 +357,41 @@ export function generateDBDeleteConfirmHTML(): string {
 			`<button name="send" value="/rpg dbdelete confirm" class="button rpg-text-error">Yes, Delete Forever</button> ` +
 			`<button name="send" value="/rpg profile" class="button">Cancel</button>` +
 		`</p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+export function generateDBLoadNoSaveHTML(): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>No Save Found</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+			`<p>You don't have a saved game in the database yet.</p>` +
+			`<p>Use the <strong>Save Game</strong> button on your profile first.</p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+		generateBottomNavigation() +
+		`</div>`;
+}
+
+export function generateDBDeleteNoSaveHTML(): string {
+    return `<div class="rpg-infobox">` +
+        `<h2>No Save Found</h2>` +
+        `<div class="rpg-memo-box" style="text-align:center;">` +
+            `<p>You don't have a saved game to delete.</p>` +
+        `</div>` +
+        `<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
+        generateBottomNavigation() +
+        `</div>`;
+}
+
+export function generateDBDeleteSuccessHTML(): string {
+	return `<div class="rpg-infobox">` +
+		`<h2>Save Deleted</h2>` +
+		`<div class="rpg-memo-box" style="text-align:center;">` +
+			`<p>Your database save file has been deleted.</p>` +
+			`<p><small>Your current session is still active in memory.</small></p>` +
+		`</div>` +
+		`<p style="text-align:center"><button name="send" value="/rpg profile" class="button">Back to Profile</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }
@@ -1758,7 +1743,8 @@ export function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
-	teraToggled?: boolean
+	teraToggled?: boolean,
+	scriptedEventId?: string // NEW PARAMETER
 ): string {
 	const reversedBattleLog = [...battle.battleLog].reverse();
 	const combinedLogs = [...messageLog, ...reversedBattleLog];
@@ -1770,7 +1756,12 @@ export function generateBattleHTML(
 	if (battle.battleEnded) {
 		let actionHTML = '';
 		if (battle.battleType !== 'battletower') {
-			const continueCommand = (battle.battleResult === 'victory') ? '/rpg explore' : '/rpg explore';
+			// If we won a scripted event, use the completion command
+			let continueCommand = '/rpg explore';
+			if (battle.battleResult === 'victory' && scriptedEventId) {
+				continueCommand = `/rpg completeevent ${scriptedEventId}`;
+			}
+
 			actionHTML = `<p class="rpg-margin-top rpg-text-center">` +
 				`<button name="send" value="${continueCommand}" class="button rpg-button-victory">Continue</button>` +
 				'</p>';
@@ -1970,6 +1961,17 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 
 	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
+}
+
+export function generateRunHTML(zoneId: string): string {
+	return `<div class="rpg-infobox rpg-menu-box">` +
+		`<h2>Got away safely!</h2>` +
+		`<p>You ran away from the wild Pokemon.</p>` +
+		`<p>` +
+		`<button name="send" value="/rpg wildpokemon ${zoneId}" class="button">Find Another</button>` +
+		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button>` +
+		`</p>` +
+		`</div>`;
 }
 
 export function generateCatchSuccessHTML(
@@ -2236,10 +2238,12 @@ export function generateNPCStarterConfirmHTML(npcName: string, message: string, 
 export function generateScriptedEventHTML(event: any, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>${event.name || 'Event'}</h2>`;
 	
+	// Display the narrative text
 	html += `<div class="rpg-memo-box" style="margin-bottom:15px;">`;
 	html += `<p>${message}</p>`;
 	html += `</div>`;
 
+	// --- Interactive Elements ---
 	if (event.type === 'choice' && event.choices) {
 		html += `<p><strong>Make a choice:</strong></p><div class="rpg-grid-2col">`;
 		event.choices.forEach((choice: any, idx: number) => {
@@ -2268,15 +2272,37 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		});
 		html += `</div>`;
 	}
-	else if (event.type === 'wildbattle' || event.type === 'bossbattle') {
-		const cmd = event.type === 'bossbattle' ? `/rpg challenge ${event.bossTrainerId}` : `/rpg scriptedbattle ${event.id}`;
-		html += `<p class="rpg-text-center"><button name="send" value="${cmd}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+	// --- Action Buttons ---
+	else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
+		// Pass Event ID (event.id) to the command so we can track it
+		let cmd = `/rpg scriptedbattle ${event.id}`;
+		let btnText = "⚔️ Battle!";
+		
+		if (event.type === 'bossbattle' && event.bossTrainerId) {
+			cmd = `/rpg challenge ${event.bossTrainerId} ${event.id}`;
+			btnText = "⚔️ Challenge Boss";
+		} else if (event.type === 'raidbattle') {
+			btnText = "⚔️ Start Raid";
+		}
+
+		html += `<p class="rpg-text-center">`;
+		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
+		// Safety "Run Away" button to prevent Soft Locks
+		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+		html += `</p>`;
 	} 
 	else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
 		const trainerId = event.trainerId || event.gymLeaderId;
-		html += `<p class="rpg-text-center"><button name="send" value="/rpg challenge ${trainerId}" class="button rpg-button-large">⚔️ Battle!</button></p>`;
+		// Pass Event ID (event.id) to challenge command
+		const cmd = `/rpg challenge ${trainerId} ${event.id}`;
+		
+		html += `<p class="rpg-text-center">`;
+		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Battle!</button><br>`;
+		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
+		html += `</p>`;
 	} 
 	else {
+		// Standard continue button
 		html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
 	}
 
@@ -2286,7 +2312,8 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 
 export function generateNPCInteractionHTML(npc: any, notification?: string): string {
 	let html = `<div class="rpg-infobox">`;
-
+	
+	// ADDED NOTIFICATION HERE
     if (notification) {
         html += `<div class="rpg-notification">${notification}</div>`;
     }
@@ -2299,10 +2326,12 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 	if (action) {
 		html += `<hr />`;
 		
+		// --- Complex Menus ---
 		if (action.type === 'itemcraft' && action.recipes) {
 			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
 			action.recipes.forEach((recipe: any, index: number) => {
 				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
+				// List inputs
 				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
 				
 				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
@@ -2323,6 +2352,7 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 		else if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${npc.id}" class="button rpg-button-large">View Starters</button></p>`;
 		}
+		// --- Simple Actions ---
 		else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
@@ -2340,8 +2370,9 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 }
 
 export function generatePokedexHTML(player: PlayerData): string {
-	const seenCount = player.pokedex ? player.pokedex.seen.size : 0;
-	const caughtCount = player.party.length + player.pc.size; 
+	// Calculate counts
+	const seenCount = player.pokedex ? player.pokedex.seen.size : 0; // Assuming standard player.pokedex structure
+	const caughtCount = player.party.length + player.pc.size; // Simplified count for now, ideally track unique species
 	
 	let html = `<div class="rpg-infobox">` +
 		`<h2>Pokédex</h2>` +
