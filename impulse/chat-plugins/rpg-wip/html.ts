@@ -1975,6 +1975,7 @@ export {
 	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
+	generateBattleTowerLadderHTML,
 } from './battle-tower';
 
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {

@@ -1191,6 +1191,9 @@ export function checkForWinLoss(
 			battle.battleResult = 'victory';
 			const currentFloor = battle.floor || 1;
 			player.battleTowerFloor = currentFloor + 1;
+			if (currentFloor > player.battleTowerHighestFloor) {
+				player.battleTowerHighestFloor = currentFloor;
+			}
 			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerFloorCompleteHTML(currentFloor)}`);
 			return true;
 		}

@@ -80,6 +80,7 @@ import {
 	generateBattleTowerFormatSelectedHTML,
 	generateBattleTowerFloorCompleteHTML,
 	generateBattleTowerLossHTML,
+	generateBattleTowerLadderHTML,
 	generatePartyScreenHTML,
 	generateProfileHTML,
 	generateMoveSelectionHTML,
@@ -435,6 +436,10 @@ export const commands: ChatCommands = {
 					const player = getPlayerData(user.id);
 					startBattleTowerFloor(player, player.battleTowerFloor, this, room, user, 'battlefactory');
 				}
+			},
+
+			ladder(target, room, user) {
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleTowerLadderHTML()}`);
 			},
 
 			'': 'start',

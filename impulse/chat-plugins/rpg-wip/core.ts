@@ -38,6 +38,7 @@ export function getPlayerData(userid: string): PlayerData {
 			lastPokemonCenter: startLocId,
 			completedNPCActions: new Set(),
 			battleTowerFloor: 1,
+			battleTowerHighestFloor: 0,
 		};
 
 		for (const item of GameConfig.startInventory) {
@@ -187,6 +188,7 @@ export function serializePlayerData(player: PlayerData): any {
 		lastPokemonCenter: player.lastPokemonCenter,
 		completedNPCActions: Array.from(player.completedNPCActions),
 		battleTowerFloor: player.battleTowerFloor || 1,
+		battleTowerHighestFloor: player.battleTowerHighestFloor || 0,
 	};
 }
 
@@ -399,6 +401,7 @@ export function deserializePlayerData(data: any): PlayerData {
 		lastPokemonCenter: data.lastPokemonCenter || GameConfig.startLocationId,
 		completedNPCActions: new Set(data.completedNPCActions || []),
 		battleTowerFloor: data.battleTowerFloor || 1,
+		battleTowerHighestFloor: data.battleTowerHighestFloor || 0,
 	};
 }
 

@@ -514,7 +514,7 @@ export function generateBattleTowerFormatSelectedHTML(floor: number, format: str
 		`class="button rpg-button-large">${btnText}</button>` +
 		`</p>` +
 		`<p style="text-align:center"><button name="send" value="/rpg battletower start" class="button">` +
-			`Back</button></p>` +
+		`Back</button></p>` +
 		`</div>`;
 }
 
@@ -543,4 +543,55 @@ export function generateBattleTowerLossHTML(floor: number): string {
 		`<button name="send" value="/rpg start" class="button">Exit</button>` +
 		`</p>` +
 		`</div>`;
+}
+
+export function generateBattleTowerLadderHTML(): string {
+// Import dynamically to avoid circular dependency
+	const { playerData } = require('./core');
+	const { generateThemedTable } = require('../../utils');
+
+	// Get all players and their battle tower stats
+	const ladderData: { name: string, currentFloor: number, highestFloor: number }[] = [];
+
+	for (const [userid, player] of playerData) {
+		if (player.battleTowerHighestFloor > 0) {
+			ladderData.push({
+				name: player.name,
+				currentFloor: player.battleTowerFloor,
+				highestFloor: player.battleTowerHighestFloor,
+			});
+		}
+	}
+
+	// Sort by highest floor descending
+	ladderData.sort((a, b) => b.highestFloor - a.highestFloor);
+
+	// Prepare data for table
+	const headerRow = ['Rank', 'User', 'Current Floor', 'Highest Floor'];
+	const dataRows = ladderData.map((entry, index) => [
+		String(index + 1),
+		entry.name,
+		String(entry.currentFloor),
+		String(entry.highestFloor),
+	]);
+
+	let html = `<div class="rpg-infobox">`;
+	html += `<h2>🗼 Battle Tower Ladder</h2>`;
+
+	if (dataRows.length === 0) {
+		html += `<div class="rpg-memo-box" style="text-align:center; margin:20px 0;">`;
+		html += `<p>No players have completed any Battle Tower floors yet.</p>`;
+		html += `</div>`;
+	} else {
+		html += generateThemedTable('Top Players', headerRow, dataRows);
+	}
+
+	html += `<hr />`;
+	html += `<p style="text-align:center">`;
+	html += `<button name="send" value="/rpg battletower start" class="button">Battle Tower</button> `;
+	html += `<button name="send" value="/rpg start" class="button">Back to Menu</button>`;
+	html += `</p>`;
+	html += `</div>`;
+
+	return html;
 }
