@@ -2346,24 +2346,23 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 	if (ability === 'intimidate') {
 		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		messageLog.push(`${pokemon.species}'s Intimidate cuts the opposing Pokémon's Attack!`);
+		
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
 				const oppAbility = toID(opponentSlot.pokemon.ability || '');
-				const blockAbilities = ['clearbody', 'whitesmoke', 'hypercutter', 'fullmetalbody', 'oblivious'];
-
-				if (opponentSlot.substitute) {
-					messageLog.push(`${pokemon.species}'s Intimidate was blocked by ${opponentSlot.pokemon.species}'s Substitute!`);
-				} else if (blockAbilities.includes(oppAbility)) {
-					messageLog.push(`${opponentSlot.pokemon.species}'s ${opponentSlot.pokemon.ability} prevents its stats from being lowered!`);
-				} else if (oppAbility === 'guarddog') {
+				
+				// Special case for Guard Dog (prevents drop and raises Attack)
+				if (oppAbility === 'guarddog') {
 					if (opponentSlot.statStages.atk < 6) {
 						opponentSlot.statStages.atk++;
 						messageLog.push(`${opponentSlot.pokemon.species}'s Guard Dog raised its Attack!`);
 					}
-				} else if (opponentSlot.statStages.atk > -6) {
-					opponentSlot.statStages.atk--;
-					messageLog.push(`${pokemon.species}'s Intimidate lowered ${opponentSlot.pokemon.species}'s Attack!`);
+					continue; 
 				}
+
+                // FIX: Use applyStatChange so it triggers Mirror Armor, Mist, Clear Amulet, etc.
+				applyStatChange(opponentSlot, 'atk', -1, battle, messageLog, slot);
 			}
 		}
 	}
