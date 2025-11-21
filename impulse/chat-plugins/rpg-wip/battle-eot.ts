@@ -152,7 +152,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		'sun': 'The sunlight is harsh.',
 		'rain': 'Rain continues to fall.',
 		'sand': 'The sandstorm rages.',
-		'hail': 'The hail crashes down.',
+		'hail': 'The snow is falling.', // Changed from "The hail crashes down."
 		'harsh-sun': 'The sunlight is extremely harsh!',
 		'heavy-rain': 'The downpour continues!',
 		'strong-winds': 'Strong winds continue to blow!',
@@ -186,11 +186,14 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		let takeDamage = false;
 		let damageAmount = Math.floor(pokemon.maxHp / 16);
 
+		// Snow (formerly Hail) no longer deals damage in Gen 9
 		if (battle.weather!.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
-			takeDamage = true;
-		} else if (battle.weather!.type === 'hail' && !species.types.includes('Ice') && ability !== 'icebody') {
-			takeDamage = true;
+			// Sandstorm Logic
+			if (ability !== 'sandforce' && ability !== 'sandrush' && ability !== 'sandveil' && ability !== 'magicguard' && ability !== 'overcoat' && !pokemon.item?.includes('goggles')) {
+				takeDamage = true;
+			}
 		} else if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
+			// Sun Logic
 			if (ability === 'dryskin') {
 				takeDamage = true;
 				damageAmount = Math.floor(pokemon.maxHp / 8);
@@ -217,7 +220,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			'sun': 'The sunlight faded.',
 			'rain': 'The rain stopped.',
 			'sand': 'The sandstorm subsided.',
-			'hail': 'The hail stopped.',
+			'hail': 'The snow stopped.', // Changed from "The hail stopped."
 			'harsh-sun': 'The extremely harsh sunlight faded.',
 			'heavy-rain': 'The heavy rain stopped.',
 			'strong-winds': 'The strong winds subsided.',
@@ -235,7 +238,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 				'sun': 'The harsh sunlight returned!',
 				'rain': 'The rain resumed!',
 				'sand': 'The sandstorm picked up again!',
-				'hail': 'It started hailing again!',
+				'hail': 'The snow started falling again!',
 				'harsh-sun': 'The extremely harsh sunlight returned!',
 				'heavy-rain': 'The heavy rain resumed!',
 				'strong-winds': 'The strong winds picked up again!',
@@ -269,6 +272,7 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		}
 	}
 
+	// Screen Management
 	if (battle.playerReflectTurns > 0) {
 		battle.playerReflectTurns--;
 		if (battle.playerReflectTurns === 0) messageLog.push(`Your team's Reflect wore off!`);
@@ -292,6 +296,16 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 	if (battle.opponentAuroraVeilTurns > 0) {
 		battle.opponentAuroraVeilTurns--;
 		if (battle.opponentAuroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
+	}
+
+	// Mist Management (Added)
+	if ((battle as any).playerMistTurns > 0) {
+		(battle as any).playerMistTurns--;
+		if ((battle as any).playerMistTurns === 0) messageLog.push(`Your team's Mist wore off!`);
+	}
+	if ((battle as any).opponentMistTurns > 0) {
+		(battle as any).opponentMistTurns--;
+		if ((battle as any).opponentMistTurns === 0) messageLog.push(`The opposing team's Mist wore off!`);
 	}
 
 	if (battle.trickRoomTurns > 0) {
@@ -355,24 +369,30 @@ export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleStat
 
 	if (status === 'brn') {
 		const ability = toID(pokemon.ability || '');
-		if (ability !== 'heatproof') {
+		if (ability !== 'heatproof' && ability !== 'magicguard') {
 			const damage = Math.max(1, Math.floor(pokemon.maxHp / 16));
 			pokemon.hp = Math.max(0, pokemon.hp - damage);
 			messageLog.push(`<span style="color: #F08030;"><strong>${pokemon.species}</strong> was hurt by its burn!</span>`);
 		}
 	} else if (status === 'psn') {
 		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
-			const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+			const ability = toID(pokemon.ability || '');
+			if (ability !== 'magicguard') {
+				const damage = Math.max(1, Math.floor(pokemon.maxHp / 8));
+				pokemon.hp = Math.max(0, pokemon.hp - damage);
+				messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+			}
 		}
 	} else if (status === 'tox') {
 		if (!RPGAbilities.handlePoisonHeal(slot, messageLog)) {
-			if (!slot.toxicCounter) slot.toxicCounter = 1;
-			const damage = Math.max(1, Math.floor(pokemon.maxHp * slot.toxicCounter / 16));
-			pokemon.hp = Math.max(0, pokemon.hp - damage);
-			messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
-			slot.toxicCounter++;
+			const ability = toID(pokemon.ability || '');
+			if (ability !== 'magicguard') {
+				if (!slot.toxicCounter) slot.toxicCounter = 1;
+				const damage = Math.max(1, Math.floor(pokemon.maxHp * slot.toxicCounter / 16));
+				pokemon.hp = Math.max(0, pokemon.hp - damage);
+				messageLog.push(`<span style="color: #A040A0;"><strong>${pokemon.species}</strong> was hurt by its poison!</span>`);
+				slot.toxicCounter++;
+			}
 		}
 	}
 }
