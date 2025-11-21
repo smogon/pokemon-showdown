@@ -1438,6 +1438,9 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const reflectTurns = (side === 'player') ? battle.playerReflectTurns : battle.opponentReflectTurns;
 	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
 	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+	// ADDED: Mist Turns
+	const mistTurns = (side === 'player') ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns; 
+	
 	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
 	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
@@ -1446,6 +1449,7 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	if (reflectTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-reflect">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-lightscreen">Light Screen</span>');
 	if (auroraVeilTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-auroraveil">Aurora Veil</span>');
+	if (mistTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-mist">Mist</span>'); // Added Logic
 	if (quickGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-quickguard">Quick Guard</span>');
 	if (wideGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-wideguard">Wide Guard</span>');
 	if (craftyShield) effects.push('<span class="rpg-side-effect-tag rpg-side-craftyshield">Crafty Shield</span>');
@@ -1467,7 +1471,7 @@ function generateWeatherTags(battle: BattleState): string {
 		'sun': 'Sun',
 		'rain': 'Rain',
 		'sand': 'Sandstorm',
-		'hail': 'Hail',
+		'hail': 'Snow', // CHANGED: Hail -> Snow for Gen 9 Accuracy
 		'harsh-sun': 'Harsh Sun',
 		'heavy-rain': 'Heavy Rain',
 		'strong-winds': 'Strong Winds',
