@@ -1,17 +1,17 @@
 import { Dex, toID } from '../../../sim/dex';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, Stats } from './interface';
-import { getMove } from './utils';
-import { getActiveSlots } from './battle-shared';
-import { ITEMS_DATABASE } from './items';
-import { RPGAbilities } from './abilities';
 import {
+	getMove,
+	getActiveSlots,
 	checkStatDropAbilities,
 	checkMentalHerb,
 	activateUnburden,
 	applySynchronize,
 	applyStatChange,
 	INITIAL_STAT_STAGES,
-} from './battle-shared';
+} from './utils';
+import { ITEMS_DATABASE } from './items';
+import { RPGAbilities } from './abilities';
 import { getStatMultiplier } from './battle-core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState): boolean {

@@ -1,9 +1,8 @@
 import { Dex, toID } from '../../../sim/dex';
 import { FS } from '../../../lib';
 import type { RPGPokemon, PlayerData, BattleState, ActivePokemonSlot } from './interface';
-import { getMove, calculateStats, generateRandomTeam } from './utils';
+import { getMove, calculateStats, generateRandomTeam, createActivePokemonSlot } from './utils';
 import { createPokemon, activeBattles } from './core';
-import { createActivePokemonSlot } from './battle-shared';
 import { teraToggleState } from './commands';
 
 export interface BattleTowerFormatConfig {
