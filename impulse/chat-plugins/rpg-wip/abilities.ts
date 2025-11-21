@@ -1,5 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getActiveSlots, applyStatChange } from './utils';
+import { getActiveSlots, applyStatChange, getActiveParty } from './utils';
+import { getPlayerData } from './core';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler } from './interface';
 
 // #region Helper & Config Constants
@@ -122,10 +123,9 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	'overgrow': (ctx, bp) => (ctx.move.type === 'Grass' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) ? Math.floor(bp * 1.5) : bp,
 	'swarm': (ctx, bp) => (ctx.move.type === 'Bug' && ctx.attacker.hp <= ctx.attacker.maxHp / 3) ? Math.floor(bp * 1.5) : bp,
 	'supremeoverlord': (ctx, bp) => {
-		const party = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id) ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
-		const fainted = party.filter(s => s?.pokemon && s.pokemon.hp === 0).length; // Logic assumption: slots persist fainted mons or check party data in full implementation
-		// *Correction based on context:* We can't easily check party fainted count from Slots alone if they are cleared. 
-		// Assuming implementation provided in original file was correct for the context available.
+		const isPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const party = isPlayer ? getActiveParty(ctx.battle, getPlayerData(ctx.battle.playerId)) : ctx.battle.opponentParty;
+		const fainted = party.filter(p => p.hp === 0).length;
 		return fainted > 0 ? Math.floor(bp * (1 + fainted * 0.1)) : bp;
 	}
 };
@@ -223,7 +223,8 @@ const SWITCH_IN_HANDLERS: Record<string, (slot: ActivePokemonSlot, battle: Battl
 		}
 	},
 	'supersweetsynup': (slot, battle, log) => {
-		const opps = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id) ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
+		const opps = isPlayer ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		opps.forEach(o => applyStatChange(o, 'evasion', -1, battle, log, slot));
 	},
 	'commander': (slot, battle, log) => {
