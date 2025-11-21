@@ -1,6 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, checkEvolution, handleLearningMoves, getActiveSlots, STARTER_POKEMON, TYPE_CHART } from './utils';
+import { getMove, checkEvolution, handleLearningMoves, getActiveSlots, TYPE_CHART } from './utils';
+import { STARTER_POKEMON } from './game-config';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
 import {
 	addItemToInventory,
@@ -29,15 +30,19 @@ import {
 	deletePlayerFromDB,
 } from './core';
 import { createActivePokemonSlot, checkTrappingAbility, getSlotFromIndex, handleMirrorHerb } from './battle-shared';
+import { validateMoveAction, processTurn, applyHazardEffectsOnSwitchIn } from './battle-flow';
+import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import {
-	validateMoveAction,
-	processTurn,
-	applyHazardEffectsOnSwitchIn,
 	startBattleTowerFloor,
 	getLocationWeatherData,
 	getWeatherStartMessage,
-} from './battle-flow';
-import { saveBattleStatus, performCatchAttempt } from './battle-core';
+	BATTLE_TOWER_FORMATS,
+	generateBattleTowerWelcomeHTML,
+	generateBattleTowerFormatSelectedHTML,
+	generateBattleTowerFloorCompleteHTML,
+	generateBattleTowerLossHTML,
+	generateBattleTowerLadderHTML,
+} from './battle-tower';
 import {
 	generateSellMenuHTML,
 	generateExploreHTML,
@@ -72,11 +77,6 @@ import {
 	generateNPCStarterChoiceHTML,
 	generateNPCStarterConfirmHTML,
 	generateDBDeleteConfirmHTML,
-	generateBattleTowerWelcomeHTML,
-	generateBattleTowerFormatSelectedHTML,
-	generateBattleTowerFloorCompleteHTML,
-	generateBattleTowerLossHTML,
-	generateBattleTowerLadderHTML,
 	generatePartyScreenHTML,
 	generateProfileHTML,
 	generateMoveSelectionHTML,
@@ -84,7 +84,6 @@ import {
 	generateNPCInteractionHTML,
 	generatePokedexHTML,
 } from './html';
-import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';

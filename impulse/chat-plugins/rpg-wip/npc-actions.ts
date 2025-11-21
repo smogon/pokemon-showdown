@@ -2,8 +2,7 @@ import type { PlayerData, RPGPokemon, NPCAction } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { createPokemon } from './core';
 import { Dex } from '../../../sim/dex';
-
-import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './utils';
+import { FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './game-config';
 
 function parseTimestampFromFlag(flagStr: string): number {
 	const parts = flagStr.split('_');

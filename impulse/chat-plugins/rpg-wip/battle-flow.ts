@@ -1259,6 +1259,3 @@ export function checkForWinLoss(
 
 	return false;
 }
-
-// Re-export battle tower functions for backwards compatibility
-export { startBattleTowerFloor, getLocationWeatherData, getWeatherStartMessage } from './battle-tower';

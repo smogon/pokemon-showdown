@@ -6,9 +6,6 @@ import { MANUAL_EVOLUTIONS } from './data-exp-evs-catch-rates';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState } from './interface';
 import { VIABLE_HELD_ITEMS } from './items';
 
-// Re-export story data from game-config.ts
-export { STARTER_POKEMON, FOSSIL_REVIVAL_MAP, FORTUNE_TELLER_MESSAGES } from './game-config';
-
 export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEffective: string[], noEffect: string[] } } = {
 	Normal: { superEffective: [], notVeryEffective: ['Rock', 'Steel'], noEffect: ['Ghost'] },
 	Fire: { superEffective: ['Grass', 'Ice', 'Bug', 'Steel'], notVeryEffective: ['Fire', 'Water', 'Rock', 'Dragon'], noEffect: [] },
