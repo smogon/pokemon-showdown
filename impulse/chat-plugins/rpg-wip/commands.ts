@@ -28,20 +28,16 @@ import {
 	hasSaveInDB,
 	deletePlayerFromDB,
 } from './core';
+import { createActivePokemonSlot, checkTrappingAbility, getSlotFromIndex, handleMirrorHerb } from './battle-shared';
 import {
-	createActivePokemonSlot,
 	validateMoveAction,
 	processTurn,
-	checkTrappingAbility,
-	saveBattleStatus,
-	performCatchAttempt,
-	getSlotFromIndex,
 	applyHazardEffectsOnSwitchIn,
-	handleMirrorHerb,
 	startBattleTowerFloor,
 	getLocationWeatherData,
 	getWeatherStartMessage,
-} from './battle-engine';
+} from './battle-flow';
+import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import {
 	generateSellMenuHTML,
 	generateExploreHTML,
