@@ -979,7 +979,7 @@ export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId:
 
 		const itemData = ITEMS_DATABASE[itemId];
 		if (itemData?.effects?.levelBoost || itemData?.effects?.expBoost) {
-			if (pokemon.level >= 100) canUse = false;
+			if (pokemon.level >= GameConfig.levelCap) canUse = false;
 			details = `${pokemon.experience} / ${pokemon.expToNextLevel} EXP`;
 		}
 		if (itemData?.effects?.canTerastallize) {

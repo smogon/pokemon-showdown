@@ -5,6 +5,7 @@ import { getActiveSlots, getActiveParty, TYPE_CHART } from './battle-shared';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getPlayerData, activeBattles, playerData } from './core';
+import { GameConfig } from './game-config';
 import {
 	generateBattleHTML,
 	generateMoveLearnHTML,
@@ -1506,7 +1507,7 @@ export function gainExperience(
 	}
 
 	for (const pokemon of player.party) {
-		if (pokemon.level >= 100) continue;
+		if (pokemon.level >= GameConfig.levelCap) continue;
 
 		const participantLevel = pokemon.level;
 		const Y = opponentLevel + participantLevel + 10;
@@ -1544,9 +1545,9 @@ export function gainExperience(
 	}
 
 	for (const pokemon of player.party) {
-		if (pokemon.level >= 100) continue;
+		if (pokemon.level >= GameConfig.levelCap) continue;
 
-		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < GameConfig.levelCap) {
 			messages.push(...levelUp(pokemon));
 			leveledUp = true;
 			const evolveMessage = checkEvolution(player, pokemon, { room, user });
