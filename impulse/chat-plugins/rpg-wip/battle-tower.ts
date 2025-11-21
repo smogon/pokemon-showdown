@@ -446,6 +446,8 @@ export function startBattleTowerFloor(
 			opponentLightScreenTurns: 0,
 			playerAuroraVeilTurns: 0,
 			opponentAuroraVeilTurns: 0,
+			playerMistTurns: 0, // Added
+			opponentMistTurns: 0, // Added
 			gravityTurns: 0,
 			mudSportTurns: 0,
 			waterSportTurns: 0,
@@ -533,7 +535,7 @@ export function generateBattleTowerFloorCompleteHTML(floor: number): string {
 }
 
 export function generateBattleTowerLossHTML(floor: number): string {
-	return `<div class="rpg-infobox"><h2>�� Challenge Failed</h2>` +
+	return `<div class="rpg-infobox"><h2> Challenge Failed</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
 		`<p class="rpg-text-error"><strong>You were defeated.</strong></p>` +
 		`<p>You reached <strong>Floor ${floor}</strong>.</p>` +
