@@ -211,6 +211,8 @@ export interface BattleState {
 	opponentLightScreenTurns: number;
 	playerAuroraVeilTurns: number;
 	opponentAuroraVeilTurns: number;
+	playerMistTurns: number;
+	opponentMistTurns: number;
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;
