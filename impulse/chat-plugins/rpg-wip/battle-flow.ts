@@ -527,7 +527,8 @@ export function handleSwitchAction(
 		saveBattleStatus(battle);
 
 		const isPlayer = idx <= 1;
-		const nextId = action.switchToPokemonId!;
+		const nextId = action.switchToPokemonId;
+		if (!nextId) { log.push('But there was no one to switch to!'); return; }
 		
 		if (isPlayer) {
 			const nextP = getActiveParty(battle, player).find(p => p.id === nextId);
