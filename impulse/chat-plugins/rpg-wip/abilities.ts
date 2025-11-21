@@ -691,7 +691,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 
 		if (stat === highestStat) {
-			return Math.floor(value * 1.3);
+			const multiplier = stat === 'spe' ? 1.5 : 1.3;
+			return Math.floor(value * multiplier);
 		}
 		return value;
 	},
@@ -721,7 +722,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 		}
 
 		if (stat === highestStat) {
-			return Math.floor(value * 1.3);
+			const multiplier = stat === 'spe' ? 1.5 : 1.3;
+			return Math.floor(value * multiplier);
 		}
 		return value;
 	},
@@ -1777,22 +1779,24 @@ export function checkItemRemovalPrevention(pokemon: RPGPokemon): boolean {
 
 export function getSTABMultiplier(pokemon: RPGPokemon, moveType: string, slot?: ActivePokemonSlot): number {
 	const species = Dex.species.get(pokemon.species);
-	let hasSTAB = false;
 
 	if (slot?.terastallized) {
-		hasSTAB = slot.terastallized === moveType;
-		if (hasSTAB && species.types.includes(moveType)) {
-			const ability = toID(pokemon.ability || '');
-			if (ability === 'adaptability') {
-				return 2.25;
-			}
+		const isTeraMatch = slot.terastallized === moveType;
+		const isOriginalMatch = species.types.includes(moveType);
+		const ability = toID(pokemon.ability || '');
 
-			return 2.0;
+		if (isTeraMatch) {
+			if (isOriginalMatch) {
+				return ability === 'adaptability' ? 2.25 : 2.0;
+			}
+			return ability === 'adaptability' ? 2.0 : 1.5;
+		} else if (isOriginalMatch) {
+			return 1.5;
 		}
-	} else {
-		hasSTAB = species.types.includes(moveType);
+		return 1;
 	}
 
+	const hasSTAB = species.types.includes(moveType);
 	if (!hasSTAB) {
 		return 1;
 	}
