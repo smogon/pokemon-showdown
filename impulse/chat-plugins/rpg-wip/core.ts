@@ -1,7 +1,7 @@
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { Dex, toID } from '../../../sim/dex';
-import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
-import type { PlayerData, RPGPokemon, BattleState } from './interface';
+import { calculateTotalExpForLevel, calculateStats, getMove, NATURES, NATURE_LIST } from './utils';
+import type { PlayerData, RPGPokemon, BattleState, Stats } from './interface';
 import { addItemToInventory } from './items';
 import { LOCATIONS } from './game-locations';
 import { ImpulseDB } from '../../impulse-db';
@@ -38,6 +38,7 @@ export function getPlayerData(userid: string): PlayerData {
 			lastPokemonCenter: startLocId,
 			completedNPCActions: new Set(),
 			battleTowerFloor: 1,
+			battleTowerHighestFloor: 0, // Added initialization
 		};
 
 		for (const item of GameConfig.startInventory) {
@@ -192,6 +193,7 @@ function playerDataToDocument(player: PlayerData): any {
 		lastPokemonCenter: player.lastPokemonCenter,
 		completedNPCActions: Array.from(player.completedNPCActions),
 		battleTowerFloor: player.battleTowerFloor || 1,
+		battleTowerHighestFloor: player.battleTowerHighestFloor || 0, // Added serialization
 	};
 }
 
@@ -217,6 +219,7 @@ export function serializePlayerData(player: PlayerData): any {
 		lastPokemonCenter: player.lastPokemonCenter,
 		completedNPCActions: Array.from(player.completedNPCActions),
 		battleTowerFloor: player.battleTowerFloor || 1,
+		battleTowerHighestFloor: player.battleTowerHighestFloor || 0, // Added serialization
 	};
 }
 
@@ -274,6 +277,7 @@ function documentToPlayerData(data: any): PlayerData {
 		lastPokemonCenter: data.lastPokemonCenter || GameConfig.startLocationId,
 		completedNPCActions: new Set(data.completedNPCActions || []),
 		battleTowerFloor: data.battleTowerFloor || 1,
+		battleTowerHighestFloor: data.battleTowerHighestFloor || 0, // Added deserialization
 	};
 }
 
