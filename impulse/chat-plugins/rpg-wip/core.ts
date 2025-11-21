@@ -289,8 +289,8 @@ export function deserializePlayerData(data: any): PlayerData {
 	if (!data.name || typeof data.name !== 'string') {
 		throw new Error('Invalid save data: missing or invalid name');
 	}
-	if (typeof data.level !== 'number' || data.level < 1 || data.level > 100) {
-		throw new Error('Invalid save data: level must be between 1 and 100');
+	if (typeof data.level !== 'number' || data.level < 1 || data.level > GameConfig.levelCap) {
+		throw new Error(`Invalid save data: level must be between 1 and ${GameConfig.levelCap}`);
 	}
 	if (typeof data.badges !== 'number' || data.badges < 0 || data.badges > TOTAL_BADGES) {
 		throw new Error(`Invalid save data: badges must be between 0 and ${TOTAL_BADGES}`);
@@ -364,8 +364,8 @@ export function deserializePlayerData(data: any): PlayerData {
 		if (!species.exists) {
 			throw new Error(`Invalid save data: Pokemon species "${pokemon.species}" does not exist`);
 		}
-		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > 100) {
-			throw new Error('Invalid save data: Pokemon level must be between 1 and 100');
+		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > GameConfig.levelCap) {
+			throw new Error(`Invalid save data: Pokemon level must be between 1 and ${GameConfig.levelCap}`);
 		}
 		if (typeof pokemon.hp !== 'number' || pokemon.hp < 0) {
 			throw new Error('Invalid save data: Pokemon HP cannot be negative');
@@ -461,8 +461,8 @@ export function deserializePlayerData(data: any): PlayerData {
 		if (!species.exists) {
 			throw new Error(`Invalid save data: PC Pokemon species "${pokemon.species}" does not exist`);
 		}
-		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > 100) {
-			throw new Error('Invalid save data: PC Pokemon level must be between 1 and 100');
+		if (typeof pokemon.level !== 'number' || pokemon.level < 1 || pokemon.level > GameConfig.levelCap) {
+			throw new Error(`Invalid save data: PC Pokemon level must be between 1 and ${GameConfig.levelCap}`);
 		}
 		if (typeof pokemon.maxHp !== 'number' || pokemon.maxHp < 1 || pokemon.maxHp > 9999) {
 			throw new Error('Invalid save data: PC Pokemon maxHp must be between 1 and 9999');

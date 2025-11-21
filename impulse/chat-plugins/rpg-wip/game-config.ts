@@ -19,7 +19,10 @@ export const GameConfig = {
 	],
 
 	defaultMoves: ['tackle', 'growl'],
+	// Pokemon level cap - can be adjusted between 5 and 1000, default is 100
 	levelCap: 100,
+	minLevelCap: 5,
+	maxLevelCap: 1000,
 
 	// Battle settings
 	allowItemUsageInBattle: true, // Enable/disable using items (potions, revives, stat boosters, etc.) during battle (Poké Balls for catching are not affected)

@@ -2,6 +2,7 @@ import { Dex, toID } from '../../../sim/dex';
 import type { InventoryItem, PlayerData, RPGPokemon, Stats } from './interface';
 import { calculateStats, levelUp, checkEvolution, handleLearningMoves, calculateTotalExpForLevel, getMove, type CheckEvolutionContext } from './utils';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { GameConfig } from './game-config';
 
 // ==========================================
 // ITEM CONSTANTS & CONFIGURATION
@@ -292,7 +293,9 @@ export function useVitaminItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 }
 
 export function useRareCandyItem(player: PlayerData, pokemon: RPGPokemon, room: CheckEvolutionContext['room'], user: CheckEvolutionContext['user']): { success: boolean, message: string } {
-	if (pokemon.level >= 100) return { success: false, message: "Already Level 100." };
+	if (pokemon.level >= GameConfig.levelCap) {
+		return { success: false, message: `Already at level cap (${GameConfig.levelCap}).` };
+	}
 
 	try {
 		const msgs = levelUp(pokemon);
@@ -317,14 +320,16 @@ export function useExpCandyItem(player: PlayerData, pokemon: RPGPokemon, itemId:
 	const id = toID(itemId);
 	const itemData = ITEMS_DATABASE[id];
 	if (!itemData?.effects?.expBoost) return { success: false, message: "Invalid Exp Candy." };
-	if (pokemon.level >= 100) return { success: false, message: "Already Level 100." };
+	if (pokemon.level >= GameConfig.levelCap) {
+		return { success: false, message: `Already at level cap (${GameConfig.levelCap}).` };
+	}
 
 	const amount = itemData.effects.expBoost;
 	pokemon.experience += amount;
 
 	const msgs = [`Gained ${amount} Exp.`];
 
-	while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < 100) {
+	while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < GameConfig.levelCap) {
 		msgs.push(...levelUp(pokemon));
 
 		const evoMsg = checkEvolution(player, pokemon, { room, user });
