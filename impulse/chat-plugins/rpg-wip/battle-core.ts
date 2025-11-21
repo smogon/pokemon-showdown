@@ -181,8 +181,8 @@ function processPostHit(aSlot: ActivePokemonSlot, dSlot: ActivePokemonSlot, move
 	const a = aSlot.pokemon; const d = dSlot.pokemon;
 	
 	// Items & Balloons
-	if (battle.magicRoomTurns === 0 && d.pokemon.hp > 0 && d.pokemon.item === 'airballoon' && move.category !== 'Status') {
-		log.push(`${d.pokemon.species}'s Air Balloon popped!`); d.pokemon.item = undefined; activateUnburden(dSlot, log);
+	if (battle.magicRoomTurns === 0 && d.hp > 0 && d.item === 'airballoon' && move.category !== 'Status') {
+		log.push(`${d.species}'s Air Balloon popped!`); d.item = undefined; activateUnburden(dSlot, log);
 	}
 
 	// Drain & Shell Bell
