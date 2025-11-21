@@ -96,6 +96,7 @@ import {
 	generatePokedexHTML,
 	generateBattleItemMenuHTML,
 	generateBattleItemTargetHTML,
+	generateBattleBagMenuHTML,
 } from './html';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
@@ -1606,6 +1607,13 @@ export const commands: ChatCommands = {
 				}
 			},
 
+			bagmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				const player = getPlayerData(battle.playerId);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleBagMenuHTML(battle, player)}`);
+			},
+
 			itemmenu(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
@@ -1778,7 +1786,7 @@ export const commands: ChatCommands = {
 			},
 
 			help() {
-				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|itemmenu|run]");
+				this.sendReply("Battle commands: /rpg battleaction [move|switch|bagmenu|run]");
 			},
 		},
 
