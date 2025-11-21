@@ -1,6 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, checkEvolution, handleLearningMoves, getActiveSlots, TYPE_CHART } from './utils';
+import { getMove, checkEvolution, handleLearningMoves } from './utils';
+import { getActiveSlots, TYPE_CHART } from './battle-shared';
 import { STARTER_POKEMON } from './game-config';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
 import {

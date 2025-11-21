@@ -1,6 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { generateRandomTeam, getActiveSlots, getActiveParty, getMove, type CheckEvolutionContext } from './utils';
+import { generateRandomTeam, getMove, type CheckEvolutionContext } from './utils';
+import { getActiveSlots, getActiveParty } from './battle-shared';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './game-locations';

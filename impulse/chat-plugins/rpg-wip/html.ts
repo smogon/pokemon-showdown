@@ -1,5 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
+import { getMove, calculateTotalExpForLevel } from './utils';
+import { getActiveSlots } from './battle-shared';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './game-shops';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';

@@ -1,5 +1,5 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getActiveSlots } from './utils';
+import { getActiveSlots } from './battle-shared';
 import { applyStatChange } from './battle-shared';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
