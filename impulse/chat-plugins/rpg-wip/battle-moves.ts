@@ -1426,6 +1426,7 @@ export function handleGenericFieldMove(
 			'sunnyday': 'sun',
 			'sandstorm': 'sand',
 			'hail': 'hail',
+			'snowscape': 'hail',
 		};
 		const weatherId = toID(move.weather);
 		const normalizedWeather = weatherMap[weatherId];
@@ -1449,7 +1450,7 @@ export function handleGenericFieldMove(
 				'sun': 'The sunlight turned harsh!',
 				'rain': 'It started to rain!',
 				'sand': 'A sandstorm kicked up!',
-				'hail': 'It started to hail!',
+				'hail': 'It started to snow!',
 			};
 			messageLog.push(weatherStartMessages[normalizedWeather]);
 		}
@@ -1566,6 +1567,24 @@ export function handleGenericSideMove(
 ): boolean {
 	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attackerSlot.pokemon.id);
 	let hadEffect = false;
+
+	if (move.id === 'mist') {
+		if (isPlayerAttacker) {
+			if ((battle as any).playerMistTurns === 0) {
+				(battle as any).playerMistTurns = 5;
+				messageLog.push(`Your team became shrouded in mist!`);
+				hadEffect = true;
+			}
+		} else {
+			if ((battle as any).opponentMistTurns === 0) {
+				(battle as any).opponentMistTurns = 5;
+				messageLog.push(`The opposing team became shrouded in mist!`);
+				hadEffect = true;
+			}
+		}
+		if (!hadEffect) messageLog.push('But it failed!');
+		return true;
+	}
 
 	if (['reflect', 'lightscreen', 'auroraveil'].includes(move.id)) {
 		const duration = (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'lightclay') ? 8 : 5;
