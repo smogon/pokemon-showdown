@@ -84,8 +84,8 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'xspdef': { id: 'xspdef', name: 'X Sp. Def', category: 'medicine', description: 'Sharply raises Sp. Def in battle.', price: 350, effects: { battleStatBoost: { stat: 'spd', stages: 2 } } },
 	'xspeed': { id: 'xspeed', name: 'X Speed', category: 'medicine', description: 'Sharply raises Speed in battle.', price: 350, effects: { battleStatBoost: { stat: 'spe', stages: 2 } } },
 	'xaccuracy': { id: 'xaccuracy', name: 'X Accuracy', category: 'medicine', description: 'Sharply raises Accuracy in battle.', price: 950, effects: { battleStatBoost: { stat: 'accuracy', stages: 2 } } },
-	'direhit': { id: 'direhit', name: 'Dire Hit', category: 'medicine', description: 'Greatly raises critical-hit ratio.', price: 650, effects: { battleStatBoost: { stat: 'accuracy', stages: 2 } } },
-	'guardspec': { id: 'guardspec', name: 'Guard Spec.', category: 'medicine', description: 'Prevents stat reduction in battle.', price: 700, effects: {} },
+	'direhit': { id: 'direhit', name: 'Dire Hit', category: 'medicine', description: 'Greatly raises critical-hit ratio.', price: 650, effects: {} }, // Handled separately via focusEnergy
+	'guardspec': { id: 'guardspec', name: 'Guard Spec.', category: 'medicine', description: 'Prevents stat reduction in battle.', price: 700, effects: {} }, // TODO: Implement stat drop protection
 
 	'hpup': { id: 'hpup', name: 'HP Up', category: 'medicine', description: 'Raises HP EV.', price: 9800, effects: { evBoost: { stat: 'hp', amount: 10 } } },
 	'protein': { id: 'protein', name: 'Protein', category: 'medicine', description: 'Raises Attack EV.', price: 9800, effects: { evBoost: { stat: 'atk', amount: 10 } } },
@@ -460,6 +460,11 @@ export function useBattleRevivalItem(pokemon: RPGPokemon, itemId: string): { suc
  */
 export function canUseItemInBattle(itemId: string): boolean {
 	const id = toID(itemId);
+
+	// Special items that can be used in battle
+	if (id === 'direhit') return true;
+	// Guard Spec not yet implemented: if (id === 'guardspec') return true;
+
 	const itemData = ITEMS_DATABASE[id];
 	if (!itemData) return false;
 

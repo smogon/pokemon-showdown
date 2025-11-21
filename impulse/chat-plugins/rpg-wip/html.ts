@@ -1213,13 +1213,13 @@ function generateBattleActionButtonsHTML(
 	}
 
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
-	
+
 	// Item menu button (only if enabled in config)
 	let itemButton = '';
 	if (GameConfig.allowItemUsageInBattle) {
 		itemButton = '<button name="send" value="/rpg battleaction itemmenu" class="button rpg-battle-action-button">🎒 ITEM</button>';
 	}
-	
+
 	// Catch button (only for wild battles)
 	let catchButton = '';
 	if (isWild) {
@@ -1233,7 +1233,7 @@ function generateBattleActionButtonsHTML(
 				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">⚾ CATCH</button>';
 		}
 	}
-	
+
 	// Run button (only for wild battles)
 	let runButton = '';
 	if (isWild) {
