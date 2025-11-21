@@ -1837,15 +1837,16 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 	return html;
 }
 
+function getAvailablePokeBalls(player: PlayerData): InventoryItem[] {
+	return Array.from(player.inventory.values()).filter(item =>
+		item.category === 'pokeball' && item.quantity > 0
+	);
+}
+
 export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Poke Ball</h2>`;
 
-	const pokeBalls = [];
-	for (const [itemId, item] of player.inventory) {
-		if (item.category === 'pokeball' && item.quantity > 0) {
-			pokeBalls.push(item);
-		}
-	}
+	const pokeBalls = getAvailablePokeBalls(player);
 
 	const isDoubleBattle = battle.battleType.includes('double');
 	const activeOpponents = getActiveSlots(battle.opponentSlots);
@@ -2277,12 +2278,7 @@ export function generateBattleBagMenuHTML(battle: BattleState, player: PlayerDat
 
 	// Poké Balls button (only in wild battles)
 	if (isWild) {
-		const pokeBalls = [];
-		for (const [itemId, item] of player.inventory) {
-			if (item.category === 'pokeball' && item.quantity > 0) {
-				pokeBalls.push(item);
-			}
-		}
+		const pokeBalls = getAvailablePokeBalls(player);
 
 		if (pokeBalls.length > 0) {
 			html += `<p class="rpg-text-center">` +
