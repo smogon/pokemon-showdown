@@ -406,7 +406,7 @@ export function applyFinalDamageModifiers(damage: number, move: Move, type: stri
 export function getCriticalHitChance(aSlot: ActivePokemonSlot, dSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
 	const dAbil = toID(dSlot.pokemon.ability || '');
 	if (!RPGAbilities.isAbilityIgnored(aSlot.pokemon, dSlot.pokemon, dAbil) && ['battlearmor', 'shellarmor'].includes(dAbil)) return 0;
-	if (['frostbreath', 'stormthrow', 'zipzapzap', 'surginstrikes'].includes(move.id) || (toID(aSlot.pokemon.ability || '') === 'merciless' && ['psn', 'tox'].includes(dSlot.status || ''))) return 1;
+	if (['frostbreath', 'stormthrow', 'zipzapzap', 'surgingstrikes'].includes(move.id) || (toID(aSlot.pokemon.ability || '') === 'merciless' && ['psn', 'tox'].includes(dSlot.status || ''))) return 1;
 
 	let stage = 0;
 	if (aSlot.focusEnergy) stage += 2;

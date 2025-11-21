@@ -13,6 +13,7 @@ import {
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 import { getStatMultiplier } from './battle-core';
+import { getPlayerData } from './core'; // Added missing import
 
 // #region Constants & Config
 
@@ -75,7 +76,7 @@ const BP_CALCULATORS: Record<string, BPCalculator> = {
 	'waterspout': (m, a) => Math.max(1, Math.floor(150 * (a.hp / a.maxHp))),
 	'grassknot': (m, a, d) => getWeightPower(RPGAbilities.getModifiedWeight(d), [10, 25, 50, 100, 200], [20, 40, 60, 80, 100, 120]),
 	'lowkick': (m, a, d) => getWeightPower(RPGAbilities.getModifiedWeight(d), [10, 25, 50, 100, 200], [20, 40, 60, 80, 100, 120]),
-	'heavyslam': (m, a, d) => getRatioPower(RPGAbilities.getModifiedWeight(a) / RPGAbilities.getModifiedWeight(d), [2, 3, 4, 5], [40, 60, 80, 100, 120]), // Logic reversed in generic helper, handled by order or custom logic? Re-implementing specific logic for clarity:
+	'heavyslam': (m, a, d) => getRatioPower(RPGAbilities.getModifiedWeight(a) / RPGAbilities.getModifiedWeight(d), [2, 3, 4, 5], [40, 60, 80, 100, 120]),
 	'heatcrash': (m, a, d) => {
 		const r = RPGAbilities.getModifiedWeight(a) / RPGAbilities.getModifiedWeight(d);
 		if (r >= 5) return 120; if (r >= 4) return 100; if (r >= 3) return 80; if (r >= 2) return 60; return 40;
@@ -94,7 +95,7 @@ const BP_CALCULATORS: Record<string, BPCalculator> = {
 	},
 	'storedpower': (m, a, d, aSlot) => 20 + (20 * Object.values(aSlot.statStages).reduce((acc, val) => acc + (val > 0 ? val : 0), 0)),
 	'powertrip': (m, a, d, aSlot) => 20 + (20 * Object.values(aSlot.statStages).reduce((acc, val) => acc + (val > 0 ? val : 0), 0)),
-	'acrobatics': (m, a, d, aSlot, dSlot, battle) => (!a.item || battle.magicRoomTurns > 0) ? 110 : 55, // Base is 55, doubled is 110
+	'acrobatics': (m, a, d, aSlot, dSlot, battle) => (!a.item || battle.magicRoomTurns > 0) ? 110 : 55,
 	'present': () => { const r = Math.random(); return r < 0.4 ? 40 : r < 0.7 ? 80 : r < 0.8 ? 120 : -1; },
 	'magnitude': () => {
 		const r = Math.random();
@@ -124,13 +125,11 @@ export function getDamageBasePower(
 		? BP_CALCULATORS[move.id](move, attacker, defender, attackerSlot, defenderSlot, battle)
 		: move.basePower;
 
-	if (move.id === 'acrobatics' && bp === 110) return bp; // Handled in calculator
+	if (move.id === 'acrobatics' && bp === 110) return bp;
 	if (move.id === 'acrobatics') bp = move.basePower * ((!attacker.item || battle.magicRoomTurns > 0) ? 2 : 1);
 
-	// General Modifiers
 	if (attackerSlot.isHelped) bp = Math.floor(bp * 1.5);
 
-	// Charging Move Vulnerability
 	const dCharge = defenderSlot.chargingMove;
 	if (dCharge) {
 		if (dCharge === 'dig' && ['earthquake', 'magnitude'].includes(move.id)) bp *= 2;
@@ -138,7 +137,6 @@ export function getDamageBasePower(
 		if ((dCharge === 'fly' || dCharge === 'bounce') && ['twister', 'gust', 'skyuppercut'].includes(move.id)) bp *= 2;
 	}
 
-	// Conditional Multipliers
 	const isStatus = (s: ActivePokemonSlot, list: string[]) => s.status && list.includes(s.status);
 	const isWeather = RPGAbilities.isWeatherActive(battle);
 	const isGroundedA = RPGAbilities.isGrounded(attacker, battle);
@@ -161,7 +159,6 @@ export function getDamageBasePower(
 	if (move.id === 'barbbarrage' && ['psn', 'tox'].includes(defenderSlot.status || '')) bp *= 2;
 	if (move.id === 'infernalparade' && defenderSlot.status) bp *= 2;
 
-	// Terrain Multipliers
 	if (battle.terrain) {
 		if (move.id === 'risingvoltage' && battle.terrain.type === 'electric' && isGroundedD) bp *= 2;
 		if (move.id === 'expandingforce' && battle.terrain.type === 'psychic' && isGroundedA) bp = Math.floor(bp * 1.5);
@@ -174,7 +171,7 @@ export function getDamageBasePower(
 
 // #endregion
 
-// #region Move Preamble (Failures & Special Effects)
+// #region Move Preamble
 
 function checkSemiInvulnerable(attacker: ActivePokemonSlot, defender: ActivePokemonSlot, move: Move, log: string[]): boolean {
 	const dCharge = defender.chargingMove;
@@ -291,10 +288,9 @@ const STATUS_HANDLERS: Record<string, StatusHandler> = {
 		if (dSlot.isIngrained) { log.push(`${dSlot.pokemon.species} is rooted in place!`); return true; }
 
 		const isPlayer = battle.playerSlots.includes(dSlot);
-		const party = isPlayer ? (battle as any).playerParty || [] : battle.opponentParty; // Logic assumes structure
-		// Mock getting party logic based on original file, original implies separate access
 		const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
-		const unused = (isPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty).filter(p => p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id));
+		const party = isPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+		const unused = party.filter(p => p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id));
 
 		if (unused.length === 0) { log.push(`But it failed! (No Pokémon to switch to!)`); return true; }
 		log.push(`${dSlot.pokemon.species} was blown away!`);
@@ -914,8 +910,7 @@ export function handleGenericSideMove(
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === attackerSlot.pokemon.id);
 	const targetHazards = isPlayer ? battle.opponentHazards : battle.playerHazards;
 	const prefix = isPlayer ? 'player' : 'opponent';
-	const opPrefix = isPlayer ? 'opponent' : 'player'; // For Mist/Reflect target
-
+	
 	if (move.id === 'mist') {
 		const key = `${isPlayer ? 'player' : 'opponent'}MistTurns` as keyof BattleState;
 		if ((battle as any)[key] === 0) { (battle as any)[key] = 5; messageLog.push(`${isPlayer ? 'Your' : 'The opposing'} team became shrouded in mist!`); }
@@ -927,7 +922,6 @@ export function handleGenericSideMove(
 		const dur = (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'lightclay') ? 8 : 5;
 		const key = `${prefix}${move.id === 'reflect' ? 'Reflect' : move.id === 'lightscreen' ? 'LightScreen' : 'AuroraVeil'}Turns` as keyof BattleState;
 		
-		// Logic correction: Screens are set on the USER'S side
 		if (move.id === 'auroraveil' && (!RPGAbilities.isWeatherActive(battle) || battle.weather?.type !== 'hail')) { messageLog.push('But it failed!'); return true; }
 
 		if ((battle as any)[key] === 0) {
