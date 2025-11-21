@@ -117,6 +117,28 @@ export function applyStatChange(
 		messageLog.push(msg);
 		return true;
 	} else if (actualValue < 0) {
+		// Mirror Armor: Reflects stat drops from opponents
+		if (!isSelf && ability === 'mirrorarmor') {
+			messageLog.push(`${pokemon.species}'s Mirror Armor reflected the stat drop!`);
+			if (source) {
+				// Pass null as source to prevent infinite reflection if both have Mirror Armor
+				applyStatChange(source, stat, actualValue, battle, messageLog, null);
+			}
+			return false;
+		}
+
+		// Mist protection
+		if (!isSelf) {
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			// Casting battle to any to access potential mist properties not yet in interface
+			const sideMist = isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
+			
+			if (sideMist > 0) {
+				messageLog.push(`${pokemon.species} is protected by the mist!`);
+				return false;
+			}
+		}
+
 		if (!isSelf && battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
 			messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
 			return false;

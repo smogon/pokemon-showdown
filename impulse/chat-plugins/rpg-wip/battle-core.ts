@@ -410,16 +410,13 @@ export function calculateDamage(
 	const defenderAbility = toID(defender.ability || '');
 	const attackerAbility = toID(attacker.ability || '');
 
+	// Unaware Fix: Ignored ALL stages, positive and negative.
 	if (attackerAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, attackerAbility)) {
-		if (defenseStage > 0) {
-			defenseStage = 0;
-		}
+		defenseStage = 0;
 	}
 
 	if (defenderAbility === 'unaware' && !RPGAbilities.isAbilityIgnored(attacker, defender, defenderAbility)) {
-		if (attackStage > 0) {
-			attackStage = 0;
-		}
+		attackStage = 0;
 	}
 
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
@@ -565,6 +562,17 @@ export function getDamageDefense(
 					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
 				}
 			}
+		}
+	}
+
+	// Weather Defense Boosts
+	if (RPGAbilities.isWeatherActive(battle)) {
+		const species = Dex.species.get(defender.species);
+		if (battle.weather?.type === 'sand' && isSpecial && species.types.includes('Rock')) {
+			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
+		}
+		if (battle.weather?.type === 'hail' && !isSpecial && species.types.includes('Ice')) {
+			defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
 		}
 	}
 
