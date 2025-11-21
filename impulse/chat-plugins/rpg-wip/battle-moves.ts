@@ -1,6 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, Stats } from './interface';
-import { getMove, getActiveSlots } from './utils';
+import { getMove } from './utils';
+import { getActiveSlots } from './battle-shared';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 import {

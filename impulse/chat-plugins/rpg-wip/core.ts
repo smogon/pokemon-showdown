@@ -508,6 +508,3 @@ export async function hasSaveInDB(userid: string): Promise<boolean> {
 	const collection = ImpulseDB('rpg_saves');
 	return await collection.exists({ id: userid });
 }
-
-import { commands } from './commands';
-export { commands };

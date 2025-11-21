@@ -1,6 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getActiveSlots, getMove } from './utils';
+import { getMove } from './utils';
+import { getActiveSlots } from './battle-shared';
 import type { ActivePokemonSlot, BattleState } from './interface';
 import {
 	activateUnburden,

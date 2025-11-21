@@ -1,5 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getMove, calculateTotalExpForLevel, getActiveSlots } from './utils';
+import { getMove, calculateTotalExpForLevel } from './utils';
+import { getActiveSlots } from './battle-shared';
 import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './game-shops';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
@@ -1968,15 +1969,6 @@ export function generateCatchSuccessHTML(
 export function generateMultipleOpponentsCatchErrorHTML(): string {
 	return `<div class="rpg-infobox rpg-menu-box"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 }
-
-// Battle Tower HTML functions are now in battle-tower.ts - re-export for backwards compatibility
-export {
-	generateBattleTowerWelcomeHTML,
-	generateBattleTowerFormatSelectedHTML,
-	generateBattleTowerFloorCompleteHTML,
-	generateBattleTowerLossHTML,
-	generateBattleTowerLadderHTML,
-} from './battle-tower';
 
 function generateStarterChoiceBoxHTML(speciesId: string, command: string): string {
 	const species = Dex.species.get(speciesId);
