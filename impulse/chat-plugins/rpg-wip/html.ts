@@ -1214,25 +1214,8 @@ function generateBattleActionButtonsHTML(
 
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
 
-	// Item menu button (only if enabled in config)
-	let itemButton = '';
-	if (GameConfig.allowItemUsageInBattle) {
-		itemButton = '<button name="send" value="/rpg battleaction itemmenu" class="button rpg-battle-action-button">🎒 ITEM</button>';
-	}
-
-	// Catch button (only for wild battles)
-	let catchButton = '';
-	if (isWild) {
-		if (battle.battleType === 'wild') {
-			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚾ CATCH</button>';
-		} else if (battle.battleType === 'wild_double') {
-			const activeOpponents = getActiveSlots(battle.opponentSlots);
-			const canCatch = activeOpponents.length === 1;
-			catchButton = canCatch ?
-				'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚾ CATCH</button>' :
-				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">⚾ CATCH</button>';
-		}
-	}
+	// Bag button (combines items and poké balls)
+	const bagButton = '<button name="send" value="/rpg battleaction bagmenu" class="button rpg-battle-action-button">🎒 BAG</button>';
 
 	// Run button (only for wild battles)
 	let runButton = '';
@@ -1244,7 +1227,7 @@ function generateBattleActionButtonsHTML(
 	}
 
 	// Build button row with available buttons
-	const buttons = [switchButton, itemButton, catchButton, runButton].filter(b => b !== '').join(' ');
+	const buttons = [switchButton, bagButton, runButton].filter(b => b !== '').join(' ');
 	return `<p class="rpg-text-center rpg-margin-top">${buttons}</p>`;
 }
 
@@ -2276,6 +2259,44 @@ export function generatePokedexHTML(player: PlayerData): string {
 		`</div>`;
 
 	html += generateBottomNavigation() + `</div>`;
+	return html;
+}
+
+export function generateBattleBagMenuHTML(battle: BattleState, player: PlayerData): string {
+	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
+
+	let html = `<div class="rpg-infobox"><h2>Bag</h2>`;
+	html += `<p>What would you like to do?</p>`;
+
+	// Items button
+	if (GameConfig.allowItemUsageInBattle) {
+		html += `<p class="rpg-text-center">` +
+			`<button name="send" value="/rpg battleaction itemmenu" class="button rpg-button-large" ` +
+			`style="margin:5px; min-width:200px;">🎒 Items</button></p>`;
+	}
+
+	// Poké Balls button (only in wild battles)
+	if (isWild) {
+		const pokeBalls = [];
+		for (const [itemId, item] of player.inventory) {
+			if (item.category === 'pokeball' && item.quantity > 0) {
+				pokeBalls.push(item);
+			}
+		}
+
+		if (pokeBalls.length > 0) {
+			html += `<p class="rpg-text-center">` +
+				`<button name="send" value="/rpg battleaction catchmenu" class="button rpg-button-large" ` +
+				`style="margin:5px; min-width:200px;">⚾ Poké Balls</button></p>`;
+		} else {
+			html += `<p class="rpg-text-center">` +
+				`<button class="button rpg-button-large disabled" disabled ` +
+				`style="margin:5px; min-width:200px;">⚾ Poké Balls (Empty)</button></p>`;
+		}
+	}
+
+	html += `<hr /><p class="rpg-text-center">` +
+		`<button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 	return html;
 }
 
