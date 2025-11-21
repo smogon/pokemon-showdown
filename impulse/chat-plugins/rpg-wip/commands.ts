@@ -1786,7 +1786,7 @@ export const commands: ChatCommands = {
 			},
 
 			help() {
-				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|itemmenu|run]");
+				this.sendReply("Battle commands: /rpg battleaction [move|switch|bagmenu|run]");
 			},
 		},
 
