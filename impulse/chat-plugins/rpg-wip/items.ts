@@ -77,6 +77,16 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'elixir': { id: 'elixir', name: 'Elixir', category: 'medicine', description: 'Restores 10 PP to all moves.', price: 3000, effects: { ppRestore: 10, ppRestoreAll: true } },
 	'maxelixir': { id: 'maxelixir', name: 'Max Elixir', category: 'medicine', description: 'Fully restores PP to all moves.', price: 4500, effects: { ppRestore: -1, ppRestoreAll: true } },
 
+	// Battle stat-boosting items
+	'xattack': { id: 'xattack', name: 'X Attack', category: 'medicine', description: 'Sharply raises Attack in battle.', price: 500, effects: { battleStatBoost: { stat: 'atk', stages: 2 } } },
+	'xdefense': { id: 'xdefense', name: 'X Defense', category: 'medicine', description: 'Sharply raises Defense in battle.', price: 550, effects: { battleStatBoost: { stat: 'def', stages: 2 } } },
+	'xspatk': { id: 'xspatk', name: 'X Sp. Atk', category: 'medicine', description: 'Sharply raises Sp. Atk in battle.', price: 350, effects: { battleStatBoost: { stat: 'spa', stages: 2 } } },
+	'xspdef': { id: 'xspdef', name: 'X Sp. Def', category: 'medicine', description: 'Sharply raises Sp. Def in battle.', price: 350, effects: { battleStatBoost: { stat: 'spd', stages: 2 } } },
+	'xspeed': { id: 'xspeed', name: 'X Speed', category: 'medicine', description: 'Sharply raises Speed in battle.', price: 350, effects: { battleStatBoost: { stat: 'spe', stages: 2 } } },
+	'xaccuracy': { id: 'xaccuracy', name: 'X Accuracy', category: 'medicine', description: 'Sharply raises Accuracy in battle.', price: 950, effects: { battleStatBoost: { stat: 'accuracy', stages: 2 } } },
+	'direhit': { id: 'direhit', name: 'Dire Hit', category: 'medicine', description: 'Greatly raises critical-hit ratio.', price: 650, effects: {} }, // Handled separately via focusEnergy
+	'guardspec': { id: 'guardspec', name: 'Guard Spec.', category: 'medicine', description: 'Prevents stat reduction in battle.', price: 700, effects: {} }, // TODO: Implement stat drop protection
+
 	'hpup': { id: 'hpup', name: 'HP Up', category: 'medicine', description: 'Raises HP EV.', price: 9800, effects: { evBoost: { stat: 'hp', amount: 10 } } },
 	'protein': { id: 'protein', name: 'Protein', category: 'medicine', description: 'Raises Attack EV.', price: 9800, effects: { evBoost: { stat: 'atk', amount: 10 } } },
 	'iron': { id: 'iron', name: 'Iron', category: 'medicine', description: 'Raises Defense EV.', price: 9800, effects: { evBoost: { stat: 'def', amount: 10 } } },
@@ -349,6 +359,142 @@ export function useSacredAsh(player: PlayerData): { success: boolean, message: s
 	return { success: true, message: `Used <strong>Sacred Ash</strong>! All fainted Pokémon were revived!` };
 }
 
+// ==========================================
+// BATTLE-SPECIFIC ITEM USAGE
+// ==========================================
+
+/**
+ * Use a healing item on a Pokemon during battle.
+ * Similar to useHealingItem but for in-battle use.
+ */
+export function useBattleHealingItem(pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
+	const id = toID(itemId);
+	const itemData = ITEMS_DATABASE[id];
+	if (!itemData?.effects) return { success: false, message: `This item cannot be used in battle.` };
+
+	const eff = itemData.effects;
+	let success = false;
+	const messageParts: string[] = [];
+
+	// Can't use healing items on fainted Pokemon during battle (use revive items instead)
+	if (pokemon.hp <= 0 && !eff.revive) {
+		return { success: false, message: `${pokemon.species} has fainted! Use a revive item instead.` };
+	}
+
+	// Handle status healing
+	if (eff.statusCure && pokemon.hp > 0) {
+		if (pokemon.status) {
+			if (eff.statusCure === 'all' || eff.statusCure === pokemon.status) {
+				pokemon.status = null;
+				messageParts.push(`was cured of its status condition`);
+				success = true;
+			}
+		} else if (!eff.healAmount && !eff.healPercent) {
+			return { success: false, message: `${pokemon.species} doesn't have a status condition.` };
+		}
+	}
+
+	// Handle HP healing
+	if (eff.healAmount || eff.healPercent) {
+		if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+			let heal = 0;
+			if (eff.healPercent) heal += Math.floor(pokemon.maxHp * eff.healPercent);
+			if (eff.healAmount) heal += eff.healAmount;
+
+			const prevHp = pokemon.hp;
+			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + heal);
+			const actualHeal = pokemon.hp - prevHp;
+			messageParts.push(`recovered ${actualHeal} HP`);
+			success = true;
+		} else if (pokemon.hp > 0 && !success) {
+			return { success: false, message: `${pokemon.species} is already at full health.` };
+		}
+	}
+
+	// Handle friendship changes
+	if (eff.friendshipChange && success) {
+		pokemon.friendship = Math.max(0, Math.min(255, pokemon.friendship + eff.friendshipChange));
+	}
+
+	if (success) {
+		return {
+			success: true,
+			message: `${pokemon.species} ${messageParts.join(' and ')}.`,
+		};
+	}
+
+	return { success: false, message: `It had no effect.` };
+}
+
+/**
+ * Use a revival item during battle to revive a fainted Pokemon.
+ */
+export function useBattleRevivalItem(pokemon: RPGPokemon, itemId: string): { success: boolean, message: string } {
+	if (pokemon.hp > 0) return { success: false, message: `${pokemon.species} hasn't fainted!` };
+
+	const id = toID(itemId);
+	const itemData = ITEMS_DATABASE[id];
+	if (!itemData?.effects?.revive) return { success: false, message: `This item cannot revive Pokemon.` };
+
+	const eff = itemData.effects;
+	const healPercent = eff.reviveHealthPercent || 0.5;
+
+	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * healPercent));
+	pokemon.status = null;
+
+	// Restore PP to all moves
+	for (const move of pokemon.moves) {
+		const moveData = getMove(move.id);
+		move.pp = moveData.pp || 5;
+	}
+
+	if (eff.friendshipChange) {
+		pokemon.friendship = Math.max(0, Math.min(255, pokemon.friendship + eff.friendshipChange));
+	}
+
+	return { success: true, message: `${pokemon.species} was revived!` };
+}
+
+/**
+ * Check if an item can be used in battle.
+ */
+export function canUseItemInBattle(itemId: string): boolean {
+	const id = toID(itemId);
+
+	// Special items that can be used in battle
+	if (id === 'direhit') return true;
+	// Guard Spec not yet implemented: if (id === 'guardspec') return true;
+
+	const itemData = ITEMS_DATABASE[id];
+	if (!itemData) return false;
+
+	const eff = itemData.effects;
+	if (!eff) return false;
+
+	// Usable in battle: healing items, status cure, revival, stat boosters, pp restore
+	return !!(
+		eff.healAmount ||
+		eff.healPercent ||
+		eff.statusCure ||
+		eff.revive ||
+		eff.battleStatBoost ||
+		eff.ppRestore
+	);
+}
+
+/**
+ * Get a list of items that can be used in battle from player's inventory.
+ */
+export function getBattleUsableItems(player: PlayerData): InventoryItem[] {
+	const items: InventoryItem[] = [];
+	for (const [itemId, item] of player.inventory) {
+		if (canUseItemInBattle(itemId)) {
+			items.push(item);
+		}
+	}
+	return items;
+}
+
 export const ITEM_PRICES: Record<string, number> = {};
 Object.keys(CUSTOM_ITEMS_DATABASE).forEach(k => {
 	if (CUSTOM_ITEMS_DATABASE[k].price) {
@@ -366,6 +512,10 @@ export const RPGItems = {
 	useSacredAsh,
 	useRareCandyItem,
 	useExpCandyItem,
+	useBattleHealingItem,
+	useBattleRevivalItem,
+	canUseItemInBattle,
+	getBattleUsableItems,
 	CUSTOM_ITEMS_DATABASE,
 	ITEMS_DATABASE,
 	ITEM_PRICES,
