@@ -462,10 +462,12 @@ export function handleSpecificStatusMove(
 			if (battle.opponentReflectTurns > 0) { battle.opponentReflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); }
 			if (battle.opponentLightScreenTurns > 0) { battle.opponentLightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); }
 			if (battle.opponentAuroraVeilTurns > 0) { battle.opponentAuroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); }
+			if ((battle as any).opponentMistTurns > 0) { (battle as any).opponentMistTurns = 0; messageLog.push(`The opposing team's Mist faded!`); }
 		} else {
 			if (battle.playerReflectTurns > 0) { battle.playerReflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); }
 			if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); }
 			if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); }
+			if ((battle as any).playerMistTurns > 0) { (battle as any).playerMistTurns = 0; messageLog.push(`Your team's Mist faded!`); }
 		}
 		if (defenderSlot) {
 			applyStatChange(defenderSlot, 'evasion', -1, battle, messageLog, attackerSlot);
@@ -798,6 +800,10 @@ export function handleSpecificStatusMove(
 		battle.playerAuroraVeilTurns = battle.opponentAuroraVeilTurns;
 		battle.opponentAuroraVeilTurns = tempAuroraVeil;
 
+		const tempMist = (battle as any).playerMistTurns;
+		(battle as any).playerMistTurns = (battle as any).opponentMistTurns;
+		(battle as any).opponentMistTurns = tempMist;
+
 		messageLog.push(`${attacker.species} swapped the battle effects on both sides of the field!`);
 		return true;
 
@@ -945,7 +951,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-	case 'painsplit':
+		case 'painsplit':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -962,7 +968,7 @@ export function handleSpecificStatusMove(
 		else if (defenderChange < 0) messageLog.push(`${defender.species} lost ${-defenderChange} HP!`);
 		return true;
 
-	case 'memento':
+		case 'memento':
 		if (!defenderSlot) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -985,7 +991,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-	case 'endeavor':
+		case 'endeavor':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -999,7 +1005,7 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
 		return true;
 
-	case 'block':
+		case 'block':
 	case 'meanlook':
 	case 'spiderweb':
 		if (!defenderSlot) {
@@ -1019,7 +1025,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-	case 'fakeout':
+		case 'fakeout':
 		if (attackerSlot.activeTurns !== 1) {
 			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
 			return true;
