@@ -110,7 +110,11 @@ export function applyStatChange(
 ): boolean {
 	const p = slot.pokemon;
 	const ability = toID(p.ability || '');
-	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
+	// Inline Simple/Contrary to reduce cyclic dependency risk on RPGAbilities.applyStatChangeModifier
+	let actualValue = value;
+	if (ability === 'contrary') actualValue = -value;
+	else if (ability === 'simple') actualValue = value * 2;
+
 	const current = slot.statStages[stat];
 	const isSelf = !source || source.pokemon.id === p.id;
 
@@ -164,7 +168,7 @@ function checkAllyAbility(slot: ActivePokemonSlot, battle: BattleState, ability:
 }
 
 export function checkStatDropAbilities(target: ActivePokemonSlot, source: ActivePokemonSlot | null, battle: BattleState, log: string[]) {
-	RPGAbilities.applyStatDropResponse(target, battle, log, source || undefined);
+	if (RPGAbilities) RPGAbilities.applyStatDropResponse(target, battle, log, source || undefined);
 }
 
 export function getAccuracyEvasionMultiplier(stage: number): number {
@@ -232,8 +236,13 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 			}
 		}
 	}
+
+	if (itemConsumed && pokemon.item) { // Re-checked after possible consumption
+		consumeBerry(slot, pokemon.item, messageLog);
+	}
 }
 
+// Internal logic moved to reduce size but keep clarity
 function getBerryHealAmount(p: RPGPokemon): number {
 	const ripen = toID(p.ability || '') === 'ripen' ? 2 : 1;
 	switch (p.item) {
@@ -248,7 +257,7 @@ function getBerryHealAmount(p: RPGPokemon): number {
 function getPinchBerryHeal(p: RPGPokemon): number {
 	const ripen = toID(p.ability || '') === 'ripen' ? 2 : 1;
 	if (['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'].includes(p.item!)) {
-		return Math.floor(p.maxHp / 2) * ripen; // Gen 9 buffed/restored logic assumption
+		return Math.floor(p.maxHp / 2) * ripen;
 	}
 	return 0;
 }
@@ -323,7 +332,7 @@ export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, m
 export function applySynchronize(status: Status, source: ActivePokemonSlot, target: ActivePokemonSlot, battle: BattleState, log: string[]) {
 	if (!target || target.pokemon.hp <= 0 || toID(target.pokemon.ability || '') !== 'synchronize') return;
 	if (!['psn', 'par', 'brn', 'tox'].includes(status || '')) return;
-	if (source.status) return; // Already has status
+	if (source.status) return;
 
 	const sType = Dex.species.get(source.pokemon.species);
 	let can = true;
@@ -467,7 +476,7 @@ export function getMoveTargets(attackerIdx: number, targetIdx: number, move: Mov
 	}
 	else if (t === 'foeSide') add(get(foes[0]) ? foes[0] : foes[1], targets);
 	else if (t === 'allySide') add(get(allies[0]) ? allies[0] : allies[1], targets);
-	else add(targetIdx, targets); // Default
+	else add(targetIdx, targets);
 
 	return [...new Set(targets)];
 }
@@ -490,7 +499,6 @@ export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
 		const s = viable[Math.floor(Math.random() * viable.length)];
 		const p = createPokemon(s.id, level);
 		const evs = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
-		// Simple shuffle for random EVs
 		const shuffled = [...evs].sort(() => 0.5 - Math.random());
 		p.evs[shuffled[0]] = 252; p.evs[shuffled[1]] = 252; p.evs[shuffled[2]] = 4;
 		
@@ -527,7 +535,6 @@ export function assignRandomMoveset(p: RPGPokemon): void {
 	moves.push(...dmg.slice(0, 4 - sCount));
 	moves.push(...status.slice(0, sCount));
 	
-	// Fill if under 4
 	if (moves.length < 4) moves.push(...status.slice(sCount, sCount + (4 - moves.length)));
 	if (moves.length < 4) moves.push(...dmg.slice(4 - sCount, (4 - sCount) + (4 - moves.length)));
 
