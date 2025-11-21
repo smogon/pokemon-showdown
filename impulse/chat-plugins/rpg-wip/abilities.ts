@@ -1450,9 +1450,11 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 		},
 	},
 	'mirrorarmor': {
-		handler: (slot, battle, messageLog, sourceSlot) => {
-
-		},
+    handler: (slot, battle, messageLog, sourceSlot) => {
+        // This handler is actually tricky to use for reflection because
+        // reflection needs to happen INSTEAD of the drop, not AFTER.
+        // It is cleaner to handle this directly in applyStatChange
+    },
 	},
 };
 
