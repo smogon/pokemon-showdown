@@ -19,6 +19,12 @@ export interface ItemEffects {
 		amount: number,
 	};
 
+	// Battle-only stat boost (temporary during battle, like X Attack, X Defense, etc.)
+	battleStatBoost?: {
+		stat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'accuracy' | 'evasion',
+		stages: number,
+	};
+
 	levelBoost?: number;
 	expBoost?: number;
 

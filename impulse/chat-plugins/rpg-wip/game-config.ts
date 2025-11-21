@@ -21,6 +21,9 @@ export const GameConfig = {
 	defaultMoves: ['tackle', 'growl'],
 	levelCap: 100,
 
+	// Battle settings
+	allowItemUsageInBattle: true, // Enable/disable using items (potions, revives, stat boosters, etc.) during battle (Poké Balls for catching are not affected)
+
 	specialIds: {
 		champion: 'final_boss',
 		rivals: [],

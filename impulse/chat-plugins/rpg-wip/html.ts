@@ -1213,27 +1213,39 @@ function generateBattleActionButtonsHTML(
 	}
 
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
-	let catchButton = '<button class="button rpg-battle-action-button" disabled>🎒 BAG</button>';
-	let runButton = '<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>';
-
+	
+	// Item menu button (only if enabled in config)
+	let itemButton = '';
+	if (GameConfig.allowItemUsageInBattle) {
+		itemButton = '<button name="send" value="/rpg battleaction itemmenu" class="button rpg-battle-action-button">🎒 ITEM</button>';
+	}
+	
+	// Catch button (only for wild battles)
+	let catchButton = '';
+	if (isWild) {
+		if (battle.battleType === 'wild') {
+			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚾ CATCH</button>';
+		} else if (battle.battleType === 'wild_double') {
+			const activeOpponents = getActiveSlots(battle.opponentSlots);
+			const canCatch = activeOpponents.length === 1;
+			catchButton = canCatch ?
+				'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">⚾ CATCH</button>' :
+				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">⚾ CATCH</button>';
+		}
+	}
+	
+	// Run button (only for wild battles)
+	let runButton = '';
 	if (isWild) {
 		const canRun = !playerSlot?.isTrapped;
 		runButton = canRun ?
 			'<button name="send" value="/rpg battleaction run" class="button rpg-battle-action-button">🏃 RUN</button>' :
 			'<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>';
-
-		if (battle.battleType === 'wild') {
-			catchButton = '<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">🎒 BAG</button>';
-		} else if (battle.battleType === 'wild_double') {
-			const activeOpponents = getActiveSlots(battle.opponentSlots);
-			const canCatch = activeOpponents.length === 1;
-			catchButton = canCatch ?
-				'<button name="send" value="/rpg battleaction catchmenu" class="button rpg-battle-action-button">🎒 BAG</button>' :
-				'<button class="button rpg-battle-action-button" disabled title="Can only catch when one opponent remains">🎒 BAG</button>';
-		}
 	}
 
-	return `<p class="rpg-text-center rpg-margin-top">${switchButton} ${catchButton} ${runButton}</p>`;
+	// Build button row with available buttons
+	const buttons = [switchButton, itemButton, catchButton, runButton].filter(b => b !== '').join(' ');
+	return `<p class="rpg-text-center rpg-margin-top">${buttons}</p>`;
 }
 
 function generateBattleMoveSelectionHTML(
@@ -2264,5 +2276,86 @@ export function generatePokedexHTML(player: PlayerData): string {
 		`</div>`;
 
 	html += generateBottomNavigation() + `</div>`;
+	return html;
+}
+
+export function generateBattleItemMenuHTML(battle: BattleState, player: PlayerData, usableItems: InventoryItem[]): string {
+	let html = `<div class="rpg-infobox"><h2>Select an Item</h2>`;
+
+	if (usableItems.length === 0) {
+		html += `<p>You don't have any items to use in battle!</p>`;
+	} else {
+		const itemButtons = usableItems.map(item => {
+			const command = `/rpg battleaction selectitemtarget ${toID(item.id)}`;
+			const itemIconId = toID(item.id).replace(/berry$/, '');
+			const spriteUrl = `${GameConfig.assets.itemIconUrl}${itemIconId}.png`;
+
+			const buttonContent =
+				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${item.name}" onerror="this.src='${GameConfig.assets.itemIconUrl}potion.png'" /></div>` +
+				`<div class="rpg-switch-info">` +
+				`<strong>${item.name}</strong><br>` +
+				`<small>x${item.quantity}</small><br>` +
+				`<small style="color: #888;">${item.description}</small>` +
+				`</div>`;
+
+			return `<button name="send" value="${command}" class="button rpg-catch-button">${buttonContent}</button>`;
+		});
+
+		html += '<table class="rpg-move-grid"><tr>';
+		let count = 0;
+		for (const button of itemButtons) {
+			html += `<td class="rpg-move-grid-cell">${button}</td>`;
+			count++;
+			if (count % 2 === 0 && count < itemButtons.length) {
+				html += '</tr><tr>';
+			}
+		}
+		html += '</tr></table>';
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
+	return html;
+}
+
+export function generateBattleItemTargetHTML(battle: BattleState, player: PlayerData, itemId: string): string {
+	const item = player.inventory.get(itemId);
+	if (!item) return generateBattleHTML(battle, ["Invalid item!"]);
+
+	let html = `<div class="rpg-infobox"><h2>Use ${item.name}</h2>`;
+	html += `<p>Select a Pokémon to use ${item.name} on:</p>`;
+
+	const itemData = ITEMS_DATABASE[itemId];
+	const isReviveItem = itemData?.effects?.revive || false;
+
+	// Show player's active Pokemon
+	for (let i = 0; i < battle.playerSlots.length; i++) {
+		const slot = battle.playerSlots[i];
+		if (!slot) continue;
+
+		const pokemon = slot.pokemon;
+		const canUse = isReviveItem ? (pokemon.hp <= 0) : (pokemon.hp > 0);
+
+		if (canUse) {
+			const spriteUrl = getSpriteUrl(pokemon, false);
+			const hpPercent = (pokemon.hp / pokemon.maxHp) * 100;
+			const hpColor = hpPercent > 50 ? '#4CAF50' : hpPercent > 25 ? '#FFC107' : '#F44336';
+
+			const buttonContent =
+				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${pokemon.species}" /></div>` +
+				`<div class="rpg-switch-info">` +
+				`<strong>${pokemon.species}</strong> Lv. ${pokemon.level}<br>` +
+				`<div class="rpg-hp-bar-container">` +
+				`<div class="rpg-hp-bar" style="width: ${hpPercent}%; background-color: ${hpColor};"></div>` +
+				`</div>` +
+				`<small>HP: ${pokemon.hp}/${pokemon.maxHp}</small>` +
+				(pokemon.status ? ` <small style="color: #F44336;">[${pokemon.status.toUpperCase()}]</small>` : '') +
+				`</div>`;
+
+			const command = `/rpg battleaction useitem ${itemId} ${i}`;
+			html += `<button name="send" value="${command}" class="button rpg-catch-button">${buttonContent}</button>`;
+		}
+	}
+
+	html += `<hr /><p><button name="send" value="/rpg battleaction itemmenu" class="button">Back</button></p></div>`;
 	return html;
 }

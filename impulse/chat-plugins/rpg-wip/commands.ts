@@ -13,6 +13,10 @@ import {
 	useVitaminItem,
 	useRareCandyItem,
 	useExpCandyItem,
+	useBattleHealingItem,
+	useBattleRevivalItem,
+	canUseItemInBattle,
+	getBattleUsableItems,
 	ITEMS_DATABASE,
 	ITEM_PRICES,
 } from './items';
@@ -1595,8 +1599,128 @@ export const commands: ChatCommands = {
 				}
 			},
 
+			itemmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const player = getPlayerData(battle.playerId);
+				const usableItems = getBattleUsableItems(player);
+
+				if (usableItems.length === 0) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have any items to use in battle!"])}`);
+				}
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemMenuHTML(battle, player, usableItems)}`);
+			},
+
+			selectitemtarget(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const itemId = toID(target);
+				const player = getPlayerData(battle.playerId);
+				const item = player.inventory.get(itemId);
+
+				if (!item || !canUseItemInBattle(itemId)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+				}
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemTargetHTML(battle, player, itemId)}`);
+			},
+
+			useitem(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const [itemIdStr, slotIndexStr] = target.split(' ');
+				const itemId = toID(itemIdStr);
+				const slotIndex = parseInt(slotIndexStr);
+
+				if (!itemId || isNaN(slotIndex)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item command!"])}`);
+				}
+
+				const player = getPlayerData(battle.playerId);
+				const item = player.inventory.get(itemId);
+
+				if (!item || !canUseItemInBattle(itemId)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have that item!"])}`);
+				}
+
+				if (slotIndex < 0 || slotIndex > 1) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target slot!"])}`);
+				}
+
+				const targetSlot = battle.playerSlots[slotIndex];
+				if (!targetSlot) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["No Pokémon in that slot!"])}`);
+				}
+
+				const pokemon = targetSlot.pokemon;
+				const itemData = ITEMS_DATABASE[itemId];
+				if (!itemData || !itemData.effects) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+				}
+
+				const eff = itemData.effects;
+				let result: { success: boolean, message: string };
+
+				// Handle different item types
+				if (eff.revive) {
+					result = useBattleRevivalItem(pokemon, itemId);
+				} else if (eff.healAmount || eff.healPercent || eff.statusCure) {
+					result = useBattleHealingItem(pokemon, itemId);
+				} else if (eff.battleStatBoost) {
+					// Handle stat boost items
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+					}
+					const boost = eff.battleStatBoost;
+					const currentStage = targetSlot.statStages[boost.stat];
+					if (currentStage >= 6) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species}'s ${boost.stat.toUpperCase()} is already maxed!`])}`);
+					}
+					const newStage = Math.min(6, currentStage + boost.stages);
+					targetSlot.statStages[boost.stat] = newStage as any;
+					result = { 
+						success: true, 
+						message: `${pokemon.species}'s ${boost.stat.toUpperCase()} ${boost.stages >= 2 ? 'sharply ' : ''}rose!` 
+					};
+				} else {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["This item cannot be used in battle!"])}`);
+				}
+
+				if (!result.success) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [result.message])}`);
+				}
+
+				// Remove item from inventory
+				removeItemFromInventory(player, itemId, 1);
+
+				// Queue the item usage as an action
+				const messageLog = [`Used <strong>${itemData.name}</strong>! ${result.message}`];
+
+				// Process turn after item usage
+				processTurn(this, battle, room, user, messageLog);
+			},
+
 			help() {
-				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|run]");
+				this.sendReply("Battle commands: /rpg battleaction [move|switch|catchmenu|itemmenu|run]");
 			},
 		},
 
