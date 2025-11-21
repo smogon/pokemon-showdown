@@ -319,7 +319,7 @@ export function getLocationWeatherData(player: PlayerData): {
 	locationWeather: BattleState['locationWeather'],
 } {
 // Import LOCATIONS dynamically to avoid circular dependency
-	const { LOCATIONS } = require('./locations');
+	const { LOCATIONS } = require('./game-locations');
 	const locationId = toID(player.location);
 	const location = LOCATIONS[locationId];
 
