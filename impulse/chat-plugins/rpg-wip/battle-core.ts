@@ -1,7 +1,25 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, type CheckEvolutionContext } from './utils';
-import { getActiveSlots, getActiveParty, TYPE_CHART } from './battle-shared';
+import {
+	calculateTotalExpForLevel,
+	calculateStats,
+	getMove,
+	levelUp,
+	handleLearningMoves,
+	checkEvolution,
+	NATURES,
+	type CheckEvolutionContext,
+	getActiveSlots,
+	getActiveParty,
+	TYPE_CHART,
+	INITIAL_STAT_STAGES,
+	applyStatChange,
+	checkStatDropAbilities,
+	activateUnburden,
+	applySynchronize,
+	handleHPDropEffects,
+	consumeBerry,
+} from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getPlayerData, activeBattles, playerData } from './core';
@@ -14,15 +32,6 @@ import {
 } from './html';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
-import {
-	INITIAL_STAT_STAGES,
-	applyStatChange,
-	checkStatDropAbilities,
-	activateUnburden,
-	applySynchronize,
-	handleHPDropEffects,
-	consumeBerry,
-} from './battle-shared';
 
 export function handleDamagingMove(
 	attackerSlot: ActivePokemonSlot,

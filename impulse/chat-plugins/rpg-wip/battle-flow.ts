@@ -1,7 +1,21 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { generateRandomTeam, getMove, type CheckEvolutionContext } from './utils';
-import { getActiveSlots, getActiveParty } from './battle-shared';
+import {
+	generateRandomTeam,
+	getMove,
+	type CheckEvolutionContext,
+	getActiveSlots,
+	getActiveParty,
+	activateUnburden,
+	applyStatChange,
+	handleHPDropEffects,
+	createActivePokemonSlot,
+	checkTrappingAbility,
+	getSlotFromIndex,
+	getMoveTargets,
+	getAccuracyEvasionMultiplier,
+	handleMirrorHerb,
+} from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
 import { LOCATIONS } from './game-locations';
@@ -23,18 +37,6 @@ import {
 import { RPGMoves } from './battle-moves';
 import { getBadgeForGymLeader, TOTAL_BADGES } from './game-npcs';
 import { GameConfig } from './game-config';
-
-import {
-	activateUnburden,
-	applyStatChange,
-	handleHPDropEffects,
-	createActivePokemonSlot,
-	checkTrappingAbility,
-	getSlotFromIndex,
-	getMoveTargets,
-	getAccuracyEvasionMultiplier,
-	handleMirrorHerb,
-} from './battle-shared';
 
 import {
 	gainExperience,

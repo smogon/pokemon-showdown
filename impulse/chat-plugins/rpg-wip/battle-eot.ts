@@ -1,13 +1,7 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove } from './utils';
-import { getActiveSlots } from './battle-shared';
+import { getMove, getActiveSlots, activateUnburden, applyStatChange, consumeBerry } from './utils';
 import type { ActivePokemonSlot, BattleState } from './interface';
-import {
-	activateUnburden,
-	applyStatChange,
-	consumeBerry,
-} from './battle-shared';
 
 import {
 	getCustomEffectiveness,

@@ -1,14 +1,16 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, checkEvolution, handleLearningMoves } from './utils';
 import {
+	getMove,
+	checkEvolution,
+	handleLearningMoves,
 	getActiveSlots,
 	TYPE_CHART,
 	createActivePokemonSlot,
 	checkTrappingAbility,
 	getSlotFromIndex,
 	handleMirrorHerb,
-} from './battle-shared';
+} from './utils';
 import { STARTER_POKEMON, GameConfig } from './game-config';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
 import {
