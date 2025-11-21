@@ -1,5 +1,4 @@
 import { Dex, toID } from '../../../sim/dex';
-import { FS } from '../../../lib';
 import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './data-exp-evs-catch-rates';
@@ -7,9 +6,11 @@ import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleStat
 import { VIABLE_HELD_ITEMS, BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 
+// #region Constants & Config
+
 export const INITIAL_STAT_STAGES = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
 
-export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEffective: string[], noEffect: string[] } } = {
+export const TYPE_CHART: Record<string, { superEffective: string[], notVeryEffective: string[], noEffect: string[] }> = {
 	Normal: { superEffective: [], notVeryEffective: ['Rock', 'Steel'], noEffect: ['Ghost'] },
 	Fire: { superEffective: ['Grass', 'Ice', 'Bug', 'Steel'], notVeryEffective: ['Fire', 'Water', 'Rock', 'Dragon'], noEffect: [] },
 	Water: { superEffective: ['Fire', 'Ground', 'Rock'], notVeryEffective: ['Water', 'Grass', 'Dragon'], noEffect: [] },
@@ -30,961 +31,513 @@ export const TYPE_CHART: { [type: string]: { superEffective: string[], notVeryEf
 	Fairy: { superEffective: ['Fighting', 'Dragon', 'Dark'], notVeryEffective: ['Fire', 'Poison', 'Steel'], noEffect: [] },
 };
 
-export function getActiveSlots(
-	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined
-): ActivePokemonSlot[] {
-	if (!slots) return [];
-	return slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[];
+export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
+	'Adamant': { plus: 'atk', minus: 'spa' }, 'Bashful': null, 'Brave': { plus: 'atk', minus: 'spe' },
+	'Bold': { plus: 'def', minus: 'atk' }, 'Calm': { plus: 'spd', minus: 'atk' }, 'Careful': { plus: 'spd', minus: 'spa' },
+	'Docile': null, 'Gentle': { plus: 'spd', minus: 'def' }, 'Hardy': null, 'Hasty': { plus: 'spe', minus: 'def' },
+	'Impish': { plus: 'def', minus: 'spa' }, 'Jolly': { plus: 'spe', minus: 'spa' }, 'Lax': { plus: 'def', minus: 'spd' },
+	'Lonely': { plus: 'atk', minus: 'def' }, 'Mild': { plus: 'spa', minus: 'def' }, 'Modest': { plus: 'spa', minus: 'atk' },
+	'Naive': { plus: 'spe', minus: 'spd' }, 'Naughty': { plus: 'atk', minus: 'spd' }, 'Quiet': { plus: 'spa', minus: 'spe' },
+	'Quirky': null, 'Rash': { plus: 'spa', minus: 'spd' }, 'Relaxed': { plus: 'def', minus: 'spe' },
+	'Sassy': { plus: 'spd', minus: 'spe' }, 'Serious': null, 'Timid': { plus: 'spe', minus: 'atk' },
+};
+
+export const NATURE_LIST = Object.keys(NATURES);
+
+const GROWTH_RATE_FORMULAS: Record<string, (n: number) => number> = {
+	'Slow': n => Math.floor((5 * n ** 3) / 4),
+	'Medium Fast': n => Math.floor(n ** 3),
+	'Fast': n => Math.floor((4 * n ** 3) / 5),
+	'Medium Slow': n => Math.floor(((6 / 5) * n ** 3) - (15 * n ** 2) + (100 * n) - 140),
+	'Erratic': n => {
+		if (n <= 50) return Math.floor((n ** 3 * (100 - n)) / 50);
+		if (n <= 68) return Math.floor((n ** 3 * (150 - n)) / 100);
+		if (n <= 98) return Math.floor((n ** 3 * Math.floor((1911 - 10 * n) / 3)) / 500);
+		return Math.floor((n ** 3 * (160 - n)) / 100);
+	},
+	'Fluctuating': n => {
+		if (n <= 15) return Math.floor(n ** 3 * ((Math.floor((n + 1) / 3) + 24) / 50));
+		if (n <= 36) return Math.floor(n ** 3 * ((n + 14) / 50));
+		return Math.floor(n ** 3 * ((Math.floor(n / 2) + 32) / 50));
+	}
+};
+
+const STAT_PROTECTION_ABILITIES = ['clearbody', 'whitesmoke', 'fullmetalbody'];
+const SPECIFIC_STAT_PROTECTION: Record<string, string> = { atk: 'hypercutter', def: 'bigpecks', accuracy: 'keeneye' };
+
+// #endregion
+
+// #region Party & Slot Management
+
+export function getActiveSlots(slots: [ActivePokemonSlot | null, ActivePokemonSlot | null] | undefined): ActivePokemonSlot[] {
+	return slots ? (slots.filter(slot => slot && slot.pokemon.hp > 0) as ActivePokemonSlot[]) : [];
 }
 
 export function getActiveParty(battle: BattleState, player: PlayerData): RPGPokemon[] {
 	return battle.overridePlayerParty || player.party;
 }
 
+export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
+	const slot = [battle.playerSlots[0], battle.playerSlots[1], battle.opponentSlots[0], battle.opponentSlots[1]][slotIndex];
+	return (slot && slot.pokemon.hp > 0) ? slot : null;
+}
+
 export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
-	const ability = toID(pokemon.ability || '');
 	return {
-		pokemon,
-		statStages: { ...INITIAL_STAT_STAGES },
-		status: pokemon.status,
-		sleepCounter: 0,
-		isConfused: false,
-		confusionCounter: 0,
-		isProtected: false,
-		protectSuccessCounter: 0,
-		willFlinch: false,
-		isLoafing: false,
-		isTrapped: null,
-		tauntTurns: 0,
-		isSeeded: false,
-		hasNightmare: false,
-		isCursed: false,
-		chargingMove: undefined,
-		activeTurns: 1,
-		lockedMove: undefined,
-		lockedMoveCounter: 0,
-		mustRecharge: false,
-		uproarTurns: 0,
-		lastDamageTaken: undefined,
-		yawnCounter: undefined,
-		substitute: undefined,
-		disabledMove: undefined,
-		encoreMove: undefined,
-		isIngrained: false,
-		hasAquaRing: false,
-		focusEnergy: false,
-		magnetRiseTurns: 0,
-		telekinesisCounter: 0,
-		isSmackedDown: false,
-		lastMoveUsed: undefined,
-		tormentActive: false,
-		embargoTurns: 0,
-		healBlockTurns: 0,
-		isCharged: false,
-		stockpileCount: 0,
-		flashFireBoost: false,
-		unburdenActive: false,
-		analyticBoost: false,
-		slowStartTurns: undefined,
-		volatileTypes: undefined,
-		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
-		lastMoveThatHitMe: undefined,
-		terastallized: undefined,
-		toxicCounter: pokemon.status === 'tox' ? 1 : undefined,
+		pokemon, statStages: { ...INITIAL_STAT_STAGES }, status: pokemon.status,
+		sleepCounter: 0, isConfused: false, confusionCounter: 0, isProtected: false,
+		protectSuccessCounter: 0, willFlinch: false, isLoafing: false, isTrapped: null,
+		tauntTurns: 0, isSeeded: false, hasNightmare: false, isCursed: false,
+		chargingMove: undefined, activeTurns: 1, lockedMove: undefined, lockedMoveCounter: 0,
+		mustRecharge: false, uproarTurns: 0, lastDamageTaken: undefined, yawnCounter: undefined,
+		substitute: undefined, disabledMove: undefined, encoreMove: undefined, isIngrained: false,
+		hasAquaRing: false, focusEnergy: false, magnetRiseTurns: 0, telekinesisCounter: 0,
+		isSmackedDown: false, lastMoveUsed: undefined, tormentActive: false, embargoTurns: 0,
+		healBlockTurns: 0, isCharged: false, stockpileCount: 0, flashFireBoost: false,
+		unburdenActive: false, analyticBoost: false, slowStartTurns: undefined, volatileTypes: undefined,
+		isDisguised: toID(pokemon.ability || '') === 'disguise' && pokemon.species.includes('Mimikyu'),
+		lastMoveThatHitMe: undefined, terastallized: undefined, toxicCounter: pokemon.status === 'tox' ? 1 : undefined,
 	};
 }
 
-export function applyStatChange(
-	slot: ActivePokemonSlot,
-	stat: keyof ActivePokemonSlot['statStages'],
-	value: number,
-	battle: BattleState,
-	messageLog: string[],
-	source: ActivePokemonSlot | null = null
-): boolean {
-	const pokemon = slot.pokemon;
-	const ability = toID(pokemon.ability || '');
-	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
+// #endregion
 
-	const currentStage = slot.statStages[stat];
-	const isSelf = !source || source.pokemon.id === pokemon.id;
+// #region Stat Mechanics
+
+export function applyStatChange(
+	slot: ActivePokemonSlot, stat: keyof ActivePokemonSlot['statStages'], value: number,
+	battle: BattleState, messageLog: string[], source: ActivePokemonSlot | null = null
+): boolean {
+	const p = slot.pokemon;
+	const ability = toID(p.ability || '');
+	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
+	const current = slot.statStages[stat];
+	const isSelf = !source || source.pokemon.id === p.id;
 
 	if (actualValue > 0) {
-		if (currentStage >= 6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any higher!`);
-			return false;
-		}
-		const newStage = Math.min(6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`;
-		messageLog.push(msg);
+		if (current >= 6) { messageLog.push(`${p.species}'s ${stat.toUpperCase()} won't go any higher!`); return false; }
+		slot.statStages[stat] = Math.min(6, current + actualValue) as any;
+		messageLog.push(`${p.species}'s ${stat.toUpperCase()} ${actualValue > 1 ? 'sharply ' : ''}rose!`);
 		return true;
-	} else if (actualValue < 0) {
-		// Mirror Armor: Reflects stat drops from opponents
-		if (!isSelf && ability === 'mirrorarmor') {
-			messageLog.push(`${pokemon.species}'s Mirror Armor reflected the stat drop!`);
-			if (source) {
-				// Pass null as source to prevent infinite reflection if both have Mirror Armor
-				applyStatChange(source, stat, actualValue, battle, messageLog, null);
-			}
-			return false;
-		}
-
-		// Mist protection
+	} 
+	
+	if (actualValue < 0) {
 		if (!isSelf) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			// Casting battle to any to access potential mist properties not yet in interface
-			const sideMist = isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
-			
-			if (sideMist > 0) {
-				messageLog.push(`${pokemon.species} is protected by the mist!`);
+			if (ability === 'mirrorarmor') {
+				messageLog.push(`${p.species}'s Mirror Armor reflected the stat drop!`);
+				if (source) applyStatChange(source, stat, actualValue, battle, messageLog, null);
 				return false;
+			}
+			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === p.id);
+			if ((isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns) > 0) {
+				messageLog.push(`${p.species} is protected by the mist!`); return false;
+			}
+			if (battle.magicRoomTurns === 0 && p.item === 'clearamulet') {
+				messageLog.push(`${p.species}'s Clear Amulet prevents stat loss!`); return false;
+			}
+			if (STAT_PROTECTION_ABILITIES.includes(ability)) {
+				messageLog.push(`${p.species}'s ${p.ability} prevents stat loss!`); return false;
+			}
+			if (SPECIFIC_STAT_PROTECTION[stat] === ability) {
+				messageLog.push(`${p.species}'s ${p.ability} prevents ${stat} loss!`); return false;
+			}
+			if (ability === 'flowerveil' || checkAllyAbility(slot, battle, 'flowerveil')) {
+				if (Dex.species.get(p.species).types.includes('Grass')) {
+					messageLog.push(`Flower Veil protects ${p.species} from stat drops!`); return false;
+				}
 			}
 		}
 
-		if (!isSelf && battle.magicRoomTurns === 0 && pokemon.item === 'clearamulet') {
-			messageLog.push(`${pokemon.species}'s Clear Amulet prevents its stats from being lowered!`);
-			return false;
-		}
-
-		const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
-		if (blockAbilities.includes(ability)) {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
-			return false;
-		}
-		if (stat === 'atk' && ability === 'hypercutter') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Attack from being lowered!`);
-			return false;
-		}
-		if (ability === 'flowerveil') {
-			const species = Dex.species.get(pokemon.species);
-			if (species.types.includes('Grass')) {
-				messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its stats from being lowered!`);
-				return false;
-			}
-		}
-		const species = Dex.species.get(pokemon.species);
-		if (species.types.includes('Grass')) {
-			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
-				messageLog.push(`Flower Veil protects ${pokemon.species} from stat drops!`);
-				return false;
-			}
-		}
-		if (stat === 'def' && ability === 'bigpecks') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its Defense from being lowered!`);
-			return false;
-		}
-		if (stat === 'accuracy' && ability === 'keeneye') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} prevents its accuracy from being lowered!`);
-			return false;
-		}
-
-		if (currentStage <= -6) {
-			messageLog.push(`${pokemon.species}'s ${stat.toUpperCase()} won't go any lower!`);
-			return false;
-		}
-		const newStage = Math.max(-6, currentStage + actualValue);
-		slot.statStages[stat] = newStage as any;
-		const msg = `${pokemon.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`;
-		messageLog.push(msg);
-
+		if (current <= -6) { messageLog.push(`${p.species}'s ${stat.toUpperCase()} won't go any lower!`); return false; }
+		slot.statStages[stat] = Math.max(-6, current + actualValue) as any;
+		messageLog.push(`${p.species}'s ${stat.toUpperCase()} ${actualValue < -1 ? 'sharply ' : ''}fell!`);
+		
 		checkStatDropAbilities(slot, source, battle, messageLog);
 		return true;
 	}
-
 	return false;
 }
 
-export function checkStatDropAbilities(
-	targetSlot: ActivePokemonSlot,
-	sourceSlot: ActivePokemonSlot | null,
-	battle: BattleState,
-	messageLog: string[]
-) {
-	RPGAbilities.applyStatDropResponse(targetSlot, battle, messageLog, sourceSlot);
+function checkAllyAbility(slot: ActivePokemonSlot, battle: BattleState, ability: string): boolean {
+	const allies = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id) ? battle.playerSlots : battle.opponentSlots;
+	return allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === ability && s.pokemon.id !== slot.pokemon.id);
+}
+
+export function checkStatDropAbilities(target: ActivePokemonSlot, source: ActivePokemonSlot | null, battle: BattleState, log: string[]) {
+	RPGAbilities.applyStatDropResponse(target, battle, log, source || undefined);
 }
 
 export function getAccuracyEvasionMultiplier(stage: number): number {
-	if (stage > 0) {
-		return (3 + stage) / 3;
-	} else if (stage < 0) {
-		return 3 / (3 - stage);
-	}
-	return 1;
+	return stage > 0 ? (3 + stage) / 3 : 3 / (3 - stage);
 }
 
-export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
-	const targets: ActivePokemonSlot[] = [];
-	const attackerSlot = getSlotFromIndex(battle, attackerSlotIndex);
-	if (!attackerSlot) return [];
+// #endregion
 
-	const isPlayerAttacker = attackerSlotIndex <= 1;
-
-	const pSlot0 = getSlotFromIndex(battle, 0);
-	const pSlot1 = getSlotFromIndex(battle, 1);
-	const oSlot0 = getSlotFromIndex(battle, 2);
-	const oSlot1 = getSlotFromIndex(battle, 3);
-
-	const allFoes = isPlayerAttacker ? [oSlot0, oSlot1] : [pSlot0, pSlot1];
-	const allOthers = [pSlot0, pSlot1, oSlot0, oSlot1];
-
-	const addTarget = (slot: ActivePokemonSlot | null) => {
-		if (slot && slot.pokemon.hp > 0) {
-			targets.push(slot);
-		}
-	};
-
-	switch (move.target) {
-	case 'normal':
-	case 'any':
-	case 'ally':
-		const chosenTarget = getSlotFromIndex(battle, targetSlotIndex);
-		addTarget(chosenTarget);
-		break;
-
-	case 'self':
-		addTarget(attackerSlot);
-		break;
-
-	case 'allAdjacentFoes':
-		allFoes.forEach(addTarget);
-		break;
-
-	case 'allAdjacent':
-	case 'scripted':
-		allOthers.forEach(slot => {
-			if (slot && slot.pokemon.id !== attackerSlot.pokemon.id) {
-				addTarget(slot);
-			}
-		});
-		break;
-
-	case 'randomNormal':
-		const validFoes = allFoes.filter(s => s && s.pokemon.hp > 0) as ActivePokemonSlot[];
-		if (validFoes.length > 0) {
-			const randomFoe = validFoes[Math.floor(Math.random() * validFoes.length)];
-			addTarget(randomFoe);
-		}
-		break;
-
-	case 'foeSide':
-		const primaryFoe = getSlotFromIndex(battle, isPlayerAttacker ? 2 : 0);
-		if (primaryFoe) addTarget(primaryFoe);
-		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 3 : 1));
-		break;
-
-	case 'allySide':
-		const primaryAlly = getSlotFromIndex(battle, isPlayerAttacker ? 0 : 2);
-		if (primaryAlly) addTarget(primaryAlly);
-		else addTarget(getSlotFromIndex(battle, isPlayerAttacker ? 1 : 3));
-		break;
-
-	case 'all':
-		allOthers.forEach(addTarget);
-		break;
-
-	default:
-		const defaultTarget = getSlotFromIndex(battle, targetSlotIndex);
-		addTarget(defaultTarget);
-		break;
-	}
-
-	return [...new Set(targets)];
-}
-
-export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
-	let slot: ActivePokemonSlot | null = null;
-	if (slotIndex === 0) slot = battle.playerSlots[0];
-	else if (slotIndex === 1) slot = battle.playerSlots[1];
-	else if (slotIndex === 2) slot = battle.opponentSlots[0];
-	else if (slotIndex === 3) slot = battle.opponentSlots[1];
-
-	if (slot && slot.pokemon.hp > 0) {
-		return slot;
-	}
-	return null;
-}
-
-export function checkTrappingAbility(
-	slotToSwitch: ActivePokemonSlot,
-	battle: BattleState
-): ActivePokemonSlot | null {
-	const isPlayer = battle.playerSlots.includes(slotToSwitch);
-	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-	const userPokemon = slotToSwitch.pokemon;
-	const userAbility = toID(userPokemon.ability || '');
-	const userTypes = Dex.species.get(userPokemon.species).types;
-
-	if (userAbility === 'shadowtag') return null;
-
-	for (const oppSlot of opponentSlots) {
-		const oppAbility = toID(oppSlot.pokemon.ability || '');
-		if (!oppAbility) continue;
-
-		switch (oppAbility) {
-		case 'shadowtag':
-			return oppSlot;
-
-		case 'arenatrap':
-			if (RPGAbilities.isGrounded(userPokemon, battle) && !userTypes.includes('Ghost')) {
-				return oppSlot;
-			}
-			break;
-
-		case 'magnetpull':
-			if (userTypes.includes('Steel') && !userTypes.includes('Ghost')) {
-				return oppSlot;
-			}
-			break;
-		}
-	}
-
-	return null;
-}
+// #region Item & HP Mechanics
 
 export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
-	const pokemon = slot.pokemon;
+	const p = slot.pokemon;
+	if (p.hp <= 0) return;
 
-	if (pokemon.hp > 0 && pokemon.hp <= pokemon.maxHp / 2) {
-		const ability = toID(pokemon.ability || '');
-		if (ability === 'emergencyexit' || ability === 'wimpout') {
-			messageLog.push(`${pokemon.species}'s ${pokemon.ability} wants to switch out!`);
+	// Ability Checks (Emergency Exit)
+	if (p.hp <= p.maxHp / 2 && ['emergencyexit', 'wimpout'].includes(toID(p.ability || ''))) {
+		messageLog.push(`${p.species}'s ${p.ability} wants to switch out!`);
+	}
+
+	if (battle.magicRoomTurns > 0 || !p.item) return;
+
+	// Unnerve Check
+	const opps = battle.playerSlots.some(s => s?.pokemon.id === p.id) ? battle.opponentSlots : battle.playerSlots;
+	if (opps.some(s => s && s.pokemon.hp > 0 && ['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || ''))) && p.item.toLowerCase().includes('berry')) return;
+
+	const gluttony = toID(p.ability || '') === 'gluttony';
+	const threshold = gluttony ? p.maxHp / 2 : p.maxHp / 4;
+	
+	// Healing Berries
+	if (p.hp <= p.maxHp / 2) {
+		const heal = getBerryHealAmount(p);
+		if (heal > 0) {
+			const old = p.hp;
+			p.hp = Math.min(p.maxHp, p.hp + heal);
+			messageLog.push(`${p.species} ate its ${ITEMS_DATABASE[p.item]?.name || p.item} and restored ${p.hp - old} HP!`);
+			consumeBerry(slot, p.item, messageLog);
+			return;
 		}
 	}
 
-	if (battle.magicRoomTurns > 0) return;
-
-	if (pokemon.hp <= 0 || !pokemon.item) return;
-
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
-	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
-		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
-	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
-		return;
-	}
-
-	let itemConsumed = false;
-	let consumedItemName = '';
-
-	const halfHP = pokemon.maxHp / 2;
-	const hasGluttony = toID(pokemon.ability || '') === 'gluttony';
-	const quarterHP = hasGluttony ? halfHP : pokemon.maxHp / 4;
-
-	if (pokemon.hp <= halfHP && !itemConsumed) {
-		const hasRipen = toID(pokemon.ability || '') === 'ripen';
-		const ripenMultiplier = hasRipen ? 2 : 1;
-
-		let healAmount = 0;
-		if (pokemon.item === 'berryjuice') {
-			healAmount = 20 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} drank its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'oranberry') {
-			healAmount = 10 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'goldberry') {
-			healAmount = 30 * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
-		} else if (pokemon.item === 'sitrusberry') {
-			healAmount = Math.floor(pokemon.maxHp / 4) * ripenMultiplier;
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${healAmount} HP!`);
-			itemConsumed = true;
+	// Pinch Berries
+	if (p.hp <= threshold) {
+		const pinchHeal = getPinchBerryHeal(p);
+		if (pinchHeal > 0) {
+			const old = p.hp;
+			p.hp = Math.min(p.maxHp, p.hp + pinchHeal);
+			messageLog.push(`${p.species} ate its ${ITEMS_DATABASE[p.item]?.name || p.item} and restored ${p.hp - old} HP!`);
+			checkBerryFlavorConfuse(slot, p.item, messageLog);
+			consumeBerry(slot, p.item, messageLog);
+			return;
 		}
 
-		if (healAmount > 0) {
-			const oldHp = pokemon.hp;
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-		}
-	}
-
-	if (!itemConsumed && pokemon.hp <= quarterHP) {
-		const pinchBerryHP = ['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'];
-		const pinchBerryStat: Record<string, keyof Omit<Stats, 'maxHp'>> = {
-			'liechiberry': 'atk', 'ganlonberry': 'def', 'salacberry': 'spe',
-			'petayaberry': 'spa', 'apicotberry': 'spd',
-		};
-
-		if (pinchBerryHP.includes(pokemon.item)) {
-			const hasRipen = toID(pokemon.ability || '') === 'ripen';
-			const ripenMultiplier = hasRipen ? 2 : 1;
-
-			const oldHp = pokemon.hp;
-			const healAmount = Math.floor(pokemon.maxHp / 2) * ripenMultiplier;
-			pokemon.hp = Math.min(pokemon.maxHp, pokemon.hp + healAmount);
-			consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-			messageLog.push(`${pokemon.species} ate its ${consumedItemName} and restored ${pokemon.hp - oldHp} HP!`);
-
-			const berryData = BERRY_FLAVORS[pokemon.item];
-			const natureData = NATURES[pokemon.nature];
-			if (natureData && berryData) {
-				const dislikedFlavor = natureData.minus ? NATURE_FLAVOR_PREFERENCES[natureData.minus] : null;
-				if (dislikedFlavor && berryData.flavor === dislikedFlavor) {
-					if (!slot.isConfused) {
-						const ability = toID(pokemon.ability || '');
-						if (ability !== 'owntempo') {
-							slot.isConfused = true;
-							slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
-							messageLog.push(`${pokemon.species} became confused due to the berry's flavor!`);
-						}
-					}
-				}
+		const statBoost = getPinchStatBoost(p.item);
+		if (statBoost) {
+			if (applyStatChange(slot, statBoost, 1, battle, messageLog, slot)) {
+				messageLog[messageLog.length - 1] += ` (from ${ITEMS_DATABASE[p.item]?.name || p.item})!`;
+				consumeBerry(slot, p.item, messageLog);
 			}
-			itemConsumed = true;
-		} else if (pokemon.item in pinchBerryStat) {
-			const statToBoost = pinchBerryStat[pokemon.item] as keyof ActivePokemonSlot['statStages'];
-
-			if (applyStatChange(slot, statToBoost, 1, battle, messageLog, slot)) {
-				consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-				messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
-				itemConsumed = true;
-			}
-		} else if (pokemon.item === 'starfberry') {
-			const targetStages = slot.statStages;
+		} else if (p.item === 'starfberry') {
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-			const availableStats = stats.filter(stat => targetStages[stat] < 6);
-
-			if (availableStats.length > 0) {
-				const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
-
-				if (applyStatChange(slot, randomStat, 2, battle, messageLog, slot)) {
-					consumedItemName = ITEMS_DATABASE[pokemon.item]?.name || pokemon.item;
-					messageLog[messageLog.length - 1] += ` (from ${consumedItemName})!`;
-					itemConsumed = true;
-				}
+			const valid = stats.filter(s => slot.statStages[s] < 6);
+			if (valid.length > 0 && applyStatChange(slot, valid[Math.floor(Math.random() * valid.length)], 2, battle, messageLog, slot)) {
+				messageLog[messageLog.length - 1] += ` (from Starf Berry)!`;
+				consumeBerry(slot, p.item, messageLog);
 			}
 		}
-	}
-
-	if (itemConsumed && pokemon.item) {
-		consumeBerry(slot, pokemon.item, messageLog);
 	}
 }
 
-export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
-	const ability = toID(slot.pokemon.ability || '');
-	if (ability === 'unburden' && !slot.unburdenActive) {
-		slot.unburdenActive = true;
-		messageLog.push(`${slot.pokemon.species}'s Unburden activated!`);
+function getBerryHealAmount(p: RPGPokemon): number {
+	const ripen = toID(p.ability || '') === 'ripen' ? 2 : 1;
+	switch (p.item) {
+		case 'berryjuice': return 20 * ripen;
+		case 'oranberry': return 10 * ripen;
+		case 'goldberry': return 30 * ripen;
+		case 'sitrusberry': return Math.floor(p.maxHp / 4) * ripen;
+		default: return 0;
+	}
+}
+
+function getPinchBerryHeal(p: RPGPokemon): number {
+	const ripen = toID(p.ability || '') === 'ripen' ? 2 : 1;
+	if (['figyberry', 'wikiberry', 'magoberry', 'aguavberry', 'iapapaberry'].includes(p.item!)) {
+		return Math.floor(p.maxHp / 2) * ripen; // Gen 9 buffed/restored logic assumption
+	}
+	return 0;
+}
+
+function getPinchStatBoost(item: string): keyof ActivePokemonSlot['statStages'] | null {
+	const map: Record<string, keyof ActivePokemonSlot['statStages']> = {
+		'liechiberry': 'atk', 'ganlonberry': 'def', 'salacberry': 'spe', 'petayaberry': 'spa', 'apicotberry': 'spd'
+	};
+	return map[item] || null;
+}
+
+function checkBerryFlavorConfuse(slot: ActivePokemonSlot, berry: string, log: string[]) {
+	const p = slot.pokemon;
+	const flavor = BERRY_FLAVORS[berry]?.flavor;
+	const dislike = NATURES[p.nature]?.minus ? NATURE_FLAVOR_PREFERENCES[NATURES[p.nature]!.minus] : null;
+	if (flavor && dislike && flavor === dislike && toID(p.ability || '') !== 'owntempo' && !slot.isConfused) {
+		slot.isConfused = true; slot.confusionCounter = Math.floor(Math.random() * 3) + 2;
+		log.push(`${p.species} became confused due to the berry's flavor!`);
 	}
 }
 
 export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
-
 	slot.consumedBerry = berryId;
 	slot.harvestUsedThisTurn = false;
-
-	if (ability === 'cudchew') {
-		slot.cudChewBerry = berryId;
-	}
-
+	if (ability === 'cudchew') slot.cudChewBerry = berryId;
 	slot.pokemon.item = undefined;
-
 	activateUnburden(slot, messageLog);
-
 	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
-		const healAmount = Math.floor(slot.pokemon.maxHp / 3);
-		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
+		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + Math.floor(slot.pokemon.maxHp / 3));
 		messageLog.push(`${slot.pokemon.species}'s Cheek Pouch restored its HP!`);
 	}
 }
 
-export function applySynchronize(
-	statusToInflict: Status,
-	sourceSlot: ActivePokemonSlot,
-	targetSlot: ActivePokemonSlot,
-	battle: BattleState,
-	messageLog: string[]
-) {
-	if (!targetSlot || targetSlot.pokemon.hp <= 0) return;
-
-	const targetPokemon = targetSlot.pokemon;
-	const targetAbility = toID(targetPokemon.ability || '');
-	if (targetAbility === 'synchronize') {
-		if (['psn', 'par', 'brn', 'tox'].includes(statusToInflict)) {
-			if (!sourceSlot.status) {
-				const sourceSpecies = Dex.species.get(sourceSlot.pokemon.species);
-				let canBeAfflicted = true;
-
-				if ((statusToInflict === 'brn' && sourceSpecies.types.includes('Fire')) ||
-					(statusToInflict === 'par' && sourceSpecies.types.includes('Electric')) ||
-					((statusToInflict === 'psn' || statusToInflict === 'tox') &&
-						(sourceSpecies.types.includes('Poison') || sourceSpecies.types.includes('Steel')))) {
-					canBeAfflicted = false;
-				}
-
-				if (canBeAfflicted && RPGAbilities.preventsStatus(sourceSlot.pokemon, statusToInflict, battle, targetPokemon)) {
-					canBeAfflicted = false;
-				}
-
-				if (canBeAfflicted) {
-					sourceSlot.status = statusToInflict;
-					if (statusToInflict === 'tox') {
-						sourceSlot.toxicCounter = 1;
-					}
-					messageLog.push(`${targetPokemon.species}'s Synchronize afflicted ${sourceSlot.pokemon.species} with ${statusToInflict}!`);
-				}
-			}
-		}
+export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
+	if (toID(slot.pokemon.ability || '') === 'unburden' && !slot.unburdenActive) {
+		slot.unburdenActive = true; messageLog.push(`${slot.pokemon.species}'s Unburden activated!`);
 	}
 }
 
 export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): boolean {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mentalherb') return false;
-
-	const hasBindingEffect =
-		slot.tauntTurns > 0 ||
-		slot.encoreMove !== undefined ||
-		slot.disabledMove !== undefined ||
-		slot.tormentActive ||
-		(slot.healBlockTurns || 0) > 0;
-
-	if (hasBindingEffect) {
-		slot.tauntTurns = 0;
-		slot.encoreMove = undefined;
-		slot.disabledMove = undefined;
-		slot.tormentActive = false;
-		slot.healBlockTurns = 0;
-
+	if (slot.tauntTurns > 0 || slot.encoreMove || slot.disabledMove || slot.tormentActive || (slot.healBlockTurns || 0) > 0) {
+		slot.tauntTurns = 0; slot.encoreMove = undefined; slot.disabledMove = undefined; slot.tormentActive = false; slot.healBlockTurns = 0;
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
-		slot.pokemon.item = undefined;
-		activateUnburden(slot, messageLog);
+		slot.pokemon.item = undefined; activateUnburden(slot, messageLog);
 		return true;
 	}
-
 	return false;
 }
 
 export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
-
-	const isPlayer = battle.playerSlots.includes(slot);
-	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
-
-	let copiedAnyBoost = false;
-
-	for (const oppSlot of opponentSlots) {
-		const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-		for (const stat of stats) {
-			const oppStage = oppSlot.statStages[stat];
-			if (oppStage > 0 && slot.statStages[stat] < 6) {
-				const stagesToCopy = Math.min(oppStage, 6 - slot.statStages[stat]);
-				slot.statStages[stat] = Math.min(6, slot.statStages[stat] + stagesToCopy);
-				copiedAnyBoost = true;
+	const opps = getActiveSlots(battle.playerSlots.includes(slot) ? battle.opponentSlots : battle.playerSlots);
+	let copied = false;
+	
+	opps.forEach(opp => {
+		(['atk', 'def', 'spa', 'spd', 'spe'] as const).forEach(stat => {
+			if (opp.statStages[stat] > 0 && slot.statStages[stat] < 6) {
+				slot.statStages[stat] = Math.min(6, slot.statStages[stat] + Math.min(opp.statStages[stat], 6 - slot.statStages[stat])) as any;
+				copied = true;
 			}
-		}
-	}
+		});
+	});
 
-	if (copiedAnyBoost) {
+	if (copied) {
 		messageLog.push(`${slot.pokemon.species}'s Mirror Herb copied the stat boosts!`);
-		slot.pokemon.item = undefined;
-		activateUnburden(slot, messageLog);
+		slot.pokemon.item = undefined; activateUnburden(slot, messageLog);
 	}
 }
 
-export function calculateTotalExpForLevel(growthRate: string, level: number): number {
-	if (level < 0) return 0;
-	if (level === 0) return 0;
-	if (!Number.isInteger(level)) level = Math.floor(level);
+export function applySynchronize(status: Status, source: ActivePokemonSlot, target: ActivePokemonSlot, battle: BattleState, log: string[]) {
+	if (!target || target.pokemon.hp <= 0 || toID(target.pokemon.ability || '') !== 'synchronize') return;
+	if (!['psn', 'par', 'brn', 'tox'].includes(status || '')) return;
+	if (source.status) return; // Already has status
 
-	const n = level;
-	let result: number;
+	const sType = Dex.species.get(source.pokemon.species);
+	let can = true;
+	if ((status === 'brn' && sType.types.includes('Fire')) || (status === 'par' && sType.types.includes('Electric')) || (['psn', 'tox'].includes(status || '') && (sType.types.includes('Poison') || sType.types.includes('Steel')))) can = false;
+	if (can && RPGAbilities.preventsStatus(source.pokemon, status!, battle, target.pokemon)) can = false;
 
-	switch (growthRate) {
-	case 'Slow':
-		result = Math.floor((5 * n ** 3) / 4);
-		break;
-	case 'Medium Fast':
-		result = Math.floor(n ** 3);
-		break;
-	case 'Fast':
-		result = Math.floor((4 * n ** 3) / 5);
-		break;
-	case 'Medium Slow':
-		result = Math.floor(((6 / 5) * n ** 3) - (15 * n ** 2) + (100 * n) - 140);
-		break;
-	case 'Erratic':
-		if (n <= 50) result = Math.floor((n ** 3 * (100 - n)) / 50);
-		else if (n <= 68) result = Math.floor((n ** 3 * (150 - n)) / 100);
-		else if (n <= 98) result = Math.floor((n ** 3 * Math.floor((1911 - 10 * n) / 3)) / 500);
-		else result = Math.floor((n ** 3 * (160 - n)) / 100);
-		break;
-	case 'Fluctuating':
-		if (n <= 15) result = Math.floor(n ** 3 * ((Math.floor((n + 1) / 3) + 24) / 50));
-		else if (n <= 36) result = Math.floor(n ** 3 * ((n + 14) / 50));
-		else result = Math.floor(n ** 3 * ((Math.floor(n / 2) + 32) / 50));
-		break;
-	default:
-		result = Math.floor(n ** 3);
+	if (can) {
+		source.status = status;
+		if (status === 'tox') source.toxicCounter = 1;
+		log.push(`${target.pokemon.species}'s Synchronize afflicted ${source.pokemon.species} with ${status}!`);
 	}
-
-	return Math.max(0, result);
 }
 
-export const NATURES: Record<string, { plus: keyof Stats, minus: keyof Stats } | null> = {
-	'Adamant': { plus: 'atk', minus: 'spa' },
-	'Bashful': null,
-	'Brave': { plus: 'atk', minus: 'spe' },
-	'Bold': { plus: 'def', minus: 'atk' },
-	'Calm': { plus: 'spd', minus: 'atk' },
-	'Careful': { plus: 'spd', minus: 'spa' },
-	'Docile': null,
-	'Gentle': { plus: 'spd', minus: 'def' },
-	'Hardy': null,
-	'Hasty': { plus: 'spe', minus: 'def' },
-	'Impish': { plus: 'def', minus: 'spa' },
-	'Jolly': { plus: 'spe', minus: 'spa' },
-	'Lax': { plus: 'def', minus: 'spd' },
-	'Lonely': { plus: 'atk', minus: 'def' },
-	'Mild': { plus: 'spa', minus: 'def' },
-	'Modest': { plus: 'spa', minus: 'atk' },
-	'Naive': { plus: 'spe', minus: 'spd' },
-	'Naughty': { plus: 'atk', minus: 'spd' },
-	'Quiet': { plus: 'spa', minus: 'spe' },
-	'Quirky': null,
-	'Rash': { plus: 'spa', minus: 'spd' },
-	'Relaxed': { plus: 'def', minus: 'spe' },
-	'Sassy': { plus: 'spd', minus: 'spe' },
-	'Serious': null,
-	'Timid': { plus: 'spe', minus: 'atk' },
-};
+export function checkTrappingAbility(slot: ActivePokemonSlot, battle: BattleState): ActivePokemonSlot | null {
+	const p = slot.pokemon;
+	if (toID(p.ability || '') === 'shadowtag') return null;
+	
+	const opps = getActiveSlots(battle.playerSlots.includes(slot) ? battle.opponentSlots : battle.playerSlots);
+	const types = Dex.species.get(p.species).types;
 
-export const NATURE_LIST = Object.keys(NATURES);
-
-export function calculateStats(
-	species: any,
-	level: number,
-	nature: string,
-	ivs: Record<keyof Stats, number>,
-	evs: Record<keyof Stats, number>
-): Stats {
-	const stats: Stats = { maxHp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-	stats.maxHp = Math.floor(((2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4)) * level) / 100) + level + 10;
-	stats.atk = Math.floor(((2 * species.baseStats.atk + ivs.atk + Math.floor(evs.atk / 4)) * level) / 100) + 5;
-	stats.def = Math.floor(((2 * species.baseStats.def + ivs.def + Math.floor(evs.def / 4)) * level) / 100) + 5;
-	stats.spa = Math.floor(((2 * species.baseStats.spa + ivs.spa + Math.floor(evs.spa / 4)) * level) / 100) + 5;
-	stats.spd = Math.floor(((2 * species.baseStats.spd + ivs.spd + Math.floor(evs.spd / 4)) * level) / 100) + 5;
-	stats.spe = Math.floor(((2 * species.baseStats.spe + ivs.spe + Math.floor(evs.spe / 4)) * level) / 100) + 5;
-
-	const natureEffect = NATURES[nature];
-	if (natureEffect) {
-		stats[natureEffect.plus] = Math.floor(stats[natureEffect.plus] * 110 / 100);
-		stats[natureEffect.minus] = Math.floor(stats[natureEffect.minus] * 90 / 100);
+	for (const opp of opps) {
+		const a = toID(opp.pokemon.ability || '');
+		if (a === 'shadowtag') return opp;
+		if (a === 'arenatrap' && RPGAbilities.isGrounded(p, battle) && !types.includes('Ghost')) return opp;
+		if (a === 'magnetpull' && types.includes('Steel') && !types.includes('Ghost')) return opp;
 	}
+	return null;
+}
+
+// #endregion
+
+// #region Math & Utilities
+
+export function getMove(moveId: string): any { return Dex.moves.get(moveId); }
+
+export function calculateTotalExpForLevel(rate: string, level: number): number {
+	const n = Math.max(0, Math.floor(level));
+	if (n === 0) return 0;
+	const formula = GROWTH_RATE_FORMULAS[rate] || GROWTH_RATE_FORMULAS['Medium Fast'];
+	return Math.max(0, formula(n));
+}
+
+export function calculateStats(species: any, level: number, nature: string, ivs: Record<keyof Stats, number>, evs: Record<keyof Stats, number>): Stats {
+	const calc = (base: number, iv: number, ev: number, isHp: boolean) => {
+		if (isHp) return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
+		return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5;
+	};
+	const stats = {
+		maxHp: calc(species.baseStats.hp, ivs.hp, evs.hp, true),
+		atk: calc(species.baseStats.atk, ivs.atk, evs.atk, false),
+		def: calc(species.baseStats.def, ivs.def, evs.def, false),
+		spa: calc(species.baseStats.spa, ivs.spa, evs.spa, false),
+		spd: calc(species.baseStats.spd, ivs.spd, evs.spd, false),
+		spe: calc(species.baseStats.spe, ivs.spe, evs.spe, false),
+	};
+	const mod = NATURES[nature];
+	if (mod) { stats[mod.plus] = Math.floor(stats[mod.plus] * 1.1); stats[mod.minus] = Math.floor(stats[mod.minus] * 0.9); }
 	return stats;
 }
 
-export function getMove(moveId: string): any {
-	return Dex.moves.get(moveId);
-}
-
 export function levelUp(pokemon: RPGPokemon): string[] {
-	const levelUpMessages: string[] = [];
 	pokemon.level++;
-	levelUpMessages.push(`**${pokemon.species} grew to Level ${pokemon.level}!**`);
-	const oldStats = { ...pokemon };
-	const species = Dex.species.get(pokemon.species);
-	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-
-	const hpPercentage = pokemon.hp / pokemon.maxHp;
-
-	pokemon.maxHp = newStats.maxHp;
-	pokemon.atk = newStats.atk;
-	pokemon.def = newStats.def;
-	pokemon.spa = newStats.spa;
-	pokemon.spd = newStats.spd;
-	pokemon.spe = newStats.spe;
-
-	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
-
+	const msgs = [`**${pokemon.species} grew to Level ${pokemon.level}!**`];
+	const newStats = calculateStats(Dex.species.get(pokemon.species), pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	const ratio = pokemon.hp / pokemon.maxHp;
+	
+	Object.assign(pokemon, newStats);
+	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * ratio));
 	pokemon.expToNextLevel = calculateTotalExpForLevel(pokemon.growthRate, pokemon.level + 1);
-	return levelUpMessages;
+	return msgs;
 }
 
 export function handleLearningMoves(player: PlayerData, pokemon: RPGPokemon): { messages: string[] } {
-	const messages: string[] = [];
-	const speciesId = toID(pokemon.species);
-	const manualLearnset = MANUAL_LEARNSETS[speciesId];
-	if (!manualLearnset?.levelup) return { messages };
+	const msgs: string[] = [];
+	const learnset = MANUAL_LEARNSETS[toID(pokemon.species)];
+	if (!learnset?.levelup) return { messages: msgs };
 
-	const movesLearnedAtThisLevel = manualLearnset.levelup
-		.filter(learnable => learnable.level === pokemon.level)
-		.map(learnable => toID(learnable.move))
-		.filter(moveId => {
-			const moveData = getMove(moveId);
-			return moveData.exists && !pokemon.moves.some(m => m.id === moveId);
-		});
-
-	if (movesLearnedAtThisLevel.length === 0) return { messages };
-
-	const openMoveSlots = 4 - pokemon.moves.length;
-	const movesToQueue: string[] = [];
-
-	if (openMoveSlots > 0) {
-		const movesToAutoLearn = movesLearnedAtThisLevel.slice(0, openMoveSlots);
-		for (const moveId of movesToAutoLearn) {
-			const moveData = getMove(moveId);
-			pokemon.moves.push({ id: moveId, pp: moveData.pp || 5 });
-			messages.push(`**${pokemon.species} learned ${moveData.name}!**`);
-		}
-	}
-
-	if (movesLearnedAtThisLevel.length > openMoveSlots) {
-		const remainingMoves = movesLearnedAtThisLevel.slice(openMoveSlots);
-		movesToQueue.push(...remainingMoves);
-	}
-
-	if (movesToQueue.length > 0) {
-		if (!player.pendingMoveLearnQueue) {
-			player.pendingMoveLearnQueue = [];
-		}
-
-		const existingEntry = player.pendingMoveLearnQueue.find(q => q.pokemonId === pokemon.id);
-		if (existingEntry) {
-			existingEntry.moveIds.push(...movesToQueue);
-		} else {
-			player.pendingMoveLearnQueue.push({ pokemonId: pokemon.id, moveIds: movesToQueue });
-		}
-	}
-
-	return { messages };
-}
-
-export interface CheckEvolutionContext {
-	room: { add: (message: string) => { update: () => void } };
-	user: { name: string };
-}
-
-export function checkEvolution(
-	player: PlayerData,
-	pokemon: RPGPokemon,
-	context: CheckEvolutionContext,
-	itemUsed?: string
-): string | null {
-	const speciesId = toID(pokemon.species);
-	const evolutionList = MANUAL_EVOLUTIONS[speciesId];
-
-	if (!evolutionList) return null;
-	if (pokemon.item === 'everstone') return null;
-
-	let foundEvo = null;
-
-	for (const evoData of evolutionList) {
-		const isLevelEvo = itemUsed === undefined && pokemon.level >= evoData.evoLevel && !evoData.evoItem;
-		const isItemEvo = itemUsed !== undefined && evoData.evoItem === itemUsed;
-		const isLevelItemEvo = itemUsed === evoData.evoItem && pokemon.level >= evoData.evoLevel;
-
-		if (itemUsed) {
-			if (isItemEvo || isLevelItemEvo) {
-				foundEvo = evoData;
-				break;
-			}
-		} else if (isLevelEvo) {
-			foundEvo = evoData;
-			break;
-		}
-	}
-
-	if (!foundEvo) return null;
-
-	const evoSpecies = Dex.species.get(foundEvo.evoTo);
-	if (!evoSpecies.exists) return null;
-	const oldSpeciesName = pokemon.species;
-	pokemon.species = evoSpecies.name;
-
-	if (pokemon.nickname === oldSpeciesName) {
-		pokemon.nickname = evoSpecies.name;
-	}
-
-	const newStats = calculateStats(evoSpecies, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-
-	const hpPercentage = pokemon.hp / pokemon.maxHp;
-
-	pokemon.maxHp = newStats.maxHp;
-	pokemon.atk = newStats.atk;
-	pokemon.def = newStats.def;
-	pokemon.spa = newStats.spa;
-	pokemon.spd = newStats.spd;
-	pokemon.spe = newStats.spe;
-
-	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * hpPercentage));
-
-	const { messages: evoMoveMessages } = handleLearningMoves(player, pokemon);
-	let evoMessage = `**What?! ${oldSpeciesName} is evolving!**<br>...Congratulations! Your ${oldSpeciesName} evolved into **${evoSpecies.name}**!`;
-	if (evoMoveMessages.length > 0) evoMessage += `<br>${evoMoveMessages.join('<br>')}`;
-
-	context.room.add(`|c|~RPG Bot|What?! ${context.user.name}'s ${oldSpeciesName} is evolving!`).update();
-	return evoMessage;
-}
-
-function shuffleArray(array: any[]) {
-	for (let i = array.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
-	}
-}
-
-export function assignRandomMoveset(pokemon: RPGPokemon): void {
-	const speciesId = toID(pokemon.species);
-	const learnsetData = MANUAL_LEARNSETS[speciesId];
-
-	if (!learnsetData) {
-		if (pokemon.moves.length === 0) {
-			const tackle = getMove('tackle');
-			pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
-		}
-		return;
-	}
-
-	const allMoveIds: string[] = [];
-
-	if (learnsetData.levelup) {
-		for (const entry of learnsetData.levelup) {
-			allMoveIds.push(toID(entry.move));
-		}
-	}
-
-	if (learnsetData.tm) {
-		allMoveIds.push(...learnsetData.tm.map(toID));
-	}
-
-	if (learnsetData.tutor) {
-		allMoveIds.push(...learnsetData.tutor.map(toID));
-	}
-
-	if (learnsetData.egg) {
-		allMoveIds.push(...learnsetData.egg.map(toID));
-	}
-
-	const uniqueMoveIds = [...new Set(allMoveIds)];
-	const validMoves: Move[] = [];
-	for (const moveId of uniqueMoveIds) {
-		const moveData = getMove(moveId) as Move;
-		if (moveData?.exists) {
-			if (moveData.category === 'Status' && moveData.basePower === 0 && !moveData.status && !moveData.boosts && !moveData.volatileStatus && !moveData.sideCondition && !moveData.pseudoWeather && !moveData.weather && !moveData.terrain && !moveData.flags?.heal) {
-				continue;
-			}
-			validMoves.push(moveData);
-		}
-	}
-
-	if (validMoves.length === 0) {
-		const tackle = getMove('tackle');
-		pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
-		return;
-	}
-
-	const damagingMoves = validMoves.filter(m => m.category === 'Physical' || m.category === 'Special');
-	const statusMoves = validMoves.filter(m => m.category === 'Status');
-
-	shuffleArray(damagingMoves);
-	shuffleArray(statusMoves);
-
-	const newMoveset: Move[] = [];
-
-	const statusMoveCount = statusMoves.length > 0 ? 1 : 0;
-	const damagingMoveCount = 4 - statusMoveCount;
-
-	newMoveset.push(...damagingMoves.slice(0, damagingMoveCount));
-
-	newMoveset.push(...statusMoves.slice(0, statusMoveCount));
-
-	if (newMoveset.length < 4 && statusMoves.length > statusMoveCount) {
-		const needed = 4 - newMoveset.length;
-		newMoveset.push(...statusMoves.slice(statusMoveCount, statusMoveCount + needed));
-	}
-
-	if (newMoveset.length < 4 && damagingMoves.length > damagingMoveCount) {
-		const needed = 4 - newMoveset.length;
-		newMoveset.push(...damagingMoves.slice(damagingMoveCount, damagingMoveCount + needed));
-	}
-
-	if (newMoveset.length === 0) {
-		const tackle = getMove('tackle');
-		pokemon.moves = [{ id: 'tackle', pp: tackle.pp || 35 }];
-		return;
-	}
-
-	pokemon.moves = newMoveset.map(move => ({
-		id: move.id,
-		pp: move.pp || 5,
-	}));
-}
-
-export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
-	const allSpecies = Dex.species.all();
-
-	const viableTiers = ['OU', 'UU', 'UUBL', 'RU', 'RUBL', 'NU', 'NUBL', 'PU', 'PUBL'];
-	const viableSpecies = allSpecies.filter(species => {
-		const isFullyEvolved = !species.nfe && (!species.evos || species.evos.length === 0);
-
-		const isInViableTier = viableTiers.includes(species.tier);
-
-		const hasManualLearnset = !!MANUAL_LEARNSETS[species.id];
-
-		return isFullyEvolved && isInViableTier && hasManualLearnset;
+	const newMoves = learnset.levelup.filter(l => l.level === pokemon.level).map(l => toID(l.move)).filter(id => {
+		const d = getMove(id); return d.exists && !pokemon.moves.some(m => m.id === id);
 	});
 
-	if (viableSpecies.length === 0) {
-		const fallback = createPokemon('pikachu', level);
-		assignRandomMoveset(fallback);
-		fallback.item = 'lightball';
-		return [fallback];
+	const queue: string[] = [];
+	newMoves.forEach(id => {
+		if (pokemon.moves.length < 4) {
+			const d = getMove(id); pokemon.moves.push({ id, pp: d.pp || 5 }); msgs.push(`**${pokemon.species} learned ${d.name}!**`);
+		} else queue.push(id);
+	});
+
+	if (queue.length > 0) {
+		const entry = player.pendingMoveLearnQueue?.find(q => q.pokemonId === pokemon.id);
+		if (entry) entry.moveIds.push(...queue);
+		else (player.pendingMoveLearnQueue || (player.pendingMoveLearnQueue = [])).push({ pokemonId: pokemon.id, moveIds: queue });
+	}
+	return { messages: msgs };
+}
+
+export function checkEvolution(player: PlayerData, pokemon: RPGPokemon, context: { room: { add: (m: string) => { update: () => void } }, user: { name: string } }, itemUsed?: string): string | null {
+	const evos = MANUAL_EVOLUTIONS[toID(pokemon.species)];
+	if (!evos || pokemon.item === 'everstone') return null;
+
+	const evo = evos.find(e => itemUsed ? (e.evoItem === itemUsed && pokemon.level >= e.evoLevel) : (pokemon.level >= e.evoLevel && !e.evoItem));
+	if (!evo) return null;
+
+	const species = Dex.species.get(evo.evoTo);
+	if (!species.exists) return null;
+
+	const oldName = pokemon.species;
+	pokemon.species = species.name;
+	if (pokemon.nickname === oldName) pokemon.nickname = species.name;
+
+	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	const ratio = pokemon.hp / pokemon.maxHp;
+	Object.assign(pokemon, newStats);
+	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * ratio));
+
+	const { messages } = handleLearningMoves(player, pokemon);
+	context.room.add(`|c|~RPG Bot|What?! ${context.user.name}'s ${oldName} is evolving!`).update();
+	return `**What?! ${oldName} is evolving!**<br>...Congratulations! Your ${oldName} evolved into **${species.name}**!${messages.length ? '<br>' + messages.join('<br>') : ''}`;
+}
+
+export function getMoveTargets(attackerIdx: number, targetIdx: number, move: Move, battle: BattleState): ActivePokemonSlot[] {
+	const attacker = getSlotFromIndex(battle, attackerIdx);
+	if (!attacker) return [];
+	const isPlayer = attackerIdx <= 1;
+	const foes = isPlayer ? [2, 3] : [0, 1];
+	const allies = isPlayer ? [0, 1] : [2, 3];
+	
+	const get = (i: number) => getSlotFromIndex(battle, i);
+	const add = (i: number, arr: ActivePokemonSlot[]) => { const s = get(i); if (s) arr.push(s); };
+
+	const targets: ActivePokemonSlot[] = [];
+	const t = move.target;
+
+	if (['normal', 'any', 'ally'].includes(t)) add(targetIdx, targets);
+	else if (t === 'self') targets.push(attacker);
+	else if (t === 'allAdjacentFoes') foes.forEach(i => add(i, targets));
+	else if (['allAdjacent', 'scripted', 'all'].includes(t)) [0, 1, 2, 3].forEach(i => { if (i !== attackerIdx) add(i, targets); });
+	else if (t === 'randomNormal') {
+		const valid = foes.map(get).filter(s => s) as ActivePokemonSlot[];
+		if (valid.length) targets.push(valid[Math.floor(Math.random() * valid.length)]);
+	}
+	else if (t === 'foeSide') add(get(foes[0]) ? foes[0] : foes[1], targets);
+	else if (t === 'allySide') add(get(allies[0]) ? allies[0] : allies[1], targets);
+	else add(targetIdx, targets); // Default
+
+	return [...new Set(targets)];
+}
+
+// #endregion
+
+// #region Team Generation (Random)
+
+export function generateRandomTeam(count: number, level: number): RPGPokemon[] {
+	const all = Dex.species.all();
+	const tiers = ['OU', 'UU', 'UUBL', 'RU', 'RUBL', 'NU', 'NUBL', 'PU', 'PUBL'];
+	const viable = all.filter(s => !s.nfe && (!s.evos || !s.evos.length) && tiers.includes(s.tier) && MANUAL_LEARNSETS[s.id]);
+
+	if (!viable.length) {
+		const p = createPokemon('pikachu', level); assignRandomMoveset(p); p.item = 'lightball'; return [p];
 	}
 
 	const team: RPGPokemon[] = [];
-
-	while (team.length < count) {
-		const randomSpecies = viableSpecies[Math.floor(Math.random() * viableSpecies.length)];
-
-		const pokemon = createPokemon(randomSpecies.id, level);
-
-		const stats: (keyof typeof pokemon.evs)[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-		shuffleArray(stats);
-
-		pokemon.evs[stats[0]] = 252;
-		pokemon.evs[stats[1]] = 252;
-		pokemon.evs[stats[2]] = 4;
-
-		const speciesData = Dex.species.get(pokemon.species);
-		const newStats = calculateStats(speciesData, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
-
-		pokemon.maxHp = newStats.maxHp;
-		pokemon.hp = newStats.maxHp;
-		pokemon.atk = newStats.atk;
-		pokemon.def = newStats.def;
-		pokemon.spa = newStats.spa;
-		pokemon.spd = newStats.spd;
-		pokemon.spe = newStats.spe;
-
-		assignRandomMoveset(pokemon);
-
-		pokemon.item = VIABLE_HELD_ITEMS[Math.floor(Math.random() * VIABLE_HELD_ITEMS.length)];
-
-		team.push(pokemon);
+	for (let i = 0; i < count; i++) {
+		const s = viable[Math.floor(Math.random() * viable.length)];
+		const p = createPokemon(s.id, level);
+		const evs = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
+		// Simple shuffle for random EVs
+		const shuffled = [...evs].sort(() => 0.5 - Math.random());
+		p.evs[shuffled[0]] = 252; p.evs[shuffled[1]] = 252; p.evs[shuffled[2]] = 4;
+		
+		Object.assign(p, calculateStats(Dex.species.get(p.species), p.level, p.nature, p.ivs, p.evs));
+		p.hp = p.maxHp;
+		assignRandomMoveset(p);
+		p.item = VIABLE_HELD_ITEMS[Math.floor(Math.random() * VIABLE_HELD_ITEMS.length)];
+		team.push(p);
 	}
-
 	return team;
 }
 
+export function assignRandomMoveset(p: RPGPokemon): void {
+	const data = MANUAL_LEARNSETS[toID(p.species)];
+	if (!data) { p.moves = [{ id: 'tackle', pp: 35 }]; return; }
+
+	const pool = new Set<string>();
+	if (data.levelup) data.levelup.forEach(l => pool.add(toID(l.move)));
+	if (data.tm) data.tm.forEach(m => pool.add(toID(m)));
+	if (data.tutor) data.tutor.forEach(m => pool.add(toID(m)));
+	if (data.egg) data.egg.forEach(m => pool.add(toID(m)));
+
+	const valid = Array.from(pool).map(id => getMove(id)).filter(m => 
+		m?.exists && !(m.category === 'Status' && m.basePower === 0 && !m.status && !m.boosts && !m.volatileStatus && !m.sideCondition && !m.pseudoWeather && !m.weather && !m.terrain && !m.flags?.heal)
+	);
+
+	if (!valid.length) { p.moves = [{ id: 'tackle', pp: 35 }]; return; }
+
+	const dmg = valid.filter(m => m.category !== 'Status').sort(() => 0.5 - Math.random());
+	const status = valid.filter(m => m.category === 'Status').sort(() => 0.5 - Math.random());
+
+	const moves: Move[] = [];
+	const sCount = status.length > 0 ? 1 : 0;
+	moves.push(...dmg.slice(0, 4 - sCount));
+	moves.push(...status.slice(0, sCount));
+	
+	// Fill if under 4
+	if (moves.length < 4) moves.push(...status.slice(sCount, sCount + (4 - moves.length)));
+	if (moves.length < 4) moves.push(...dmg.slice(4 - sCount, (4 - sCount) + (4 - moves.length)));
+
+	p.moves = moves.slice(0, 4).map(m => ({ id: m.id, pp: m.pp || 5 }));
+}
+
+// #endregion
+
 export const RPGUtils = {
-	calculateTotalExpForLevel,
-	calculateStats,
-	getMove,
-	levelUp,
-	handleLearningMoves,
-	checkEvolution,
-	NATURES,
-	NATURE_LIST,
+	calculateTotalExpForLevel, calculateStats, getMove, levelUp, handleLearningMoves, checkEvolution, NATURES, NATURE_LIST,
 };
 
 export default RPGUtils;
