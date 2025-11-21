@@ -40,12 +40,12 @@ describe('RPG System - Dual Type Pokemon Handling', function () {
 		it('should calculate 0.25x effectiveness for dual-resist types', function () {
 			if (!battleCore) this.skip();
 
-			// Ferrothorn is Grass/Steel, so it's 0.25x weak to Grass
+			// Ferrothorn is Grass/Steel, so it's 0.25x resistant to Grass
 			const ferrothornTypes = ['Grass', 'Steel'];
 			const effectiveness = battleCore.getCustomEffectiveness('Grass', ferrothornTypes, 
 				{ species: 'Ferrothorn' }, {}, undefined);
 			
-			assert.equal(effectiveness, 0.25, 'Ferrothorn should be 0.25x weak to Grass moves');
+			assert.equal(effectiveness, 0.25, 'Ferrothorn should be 0.25x resistant to Grass moves');
 		});
 
 		it('should calculate 2x effectiveness for single-effective type on dual type', function () {
@@ -81,10 +81,10 @@ describe('RPG System - Dual Type Pokemon Handling', function () {
 			assert.equal(effectiveness, 0, 'Flygon should be immune to Electric moves');
 		});
 
-		it('should handle super effective on one type and resist on another (neutral)', function () {
+		it('should handle super effective on one type and neutral on another', function () {
 			if (!battleCore) this.skip();
 
-			// Empoleon is Water/Steel, Fighting is super effective on Steel but not very effective on Water
+			// Empoleon is Water/Steel, Fighting is super effective on Steel and neutral on Water
 			const empoleonTypes = ['Water', 'Steel'];
 			const effectiveness = battleCore.getCustomEffectiveness('Fighting', empoleonTypes, 
 				{ species: 'Empoleon' }, {}, undefined);
