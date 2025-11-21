@@ -317,7 +317,7 @@ export function getLocationWeatherData(player: PlayerData): {
 	weather: BattleState['weather'],
 	locationWeather: BattleState['locationWeather'],
 } {
-	// Import LOCATIONS dynamically to avoid circular dependency
+// Import LOCATIONS dynamically to avoid circular dependency
 	const { LOCATIONS } = require('./game-locations');
 	const locationId = toID(player.location);
 	const location = LOCATIONS[locationId];
@@ -367,7 +367,7 @@ export function startBattleTowerFloor(
 	user: User,
 	format = 'battlefactory'
 ) {
-	// Import dynamically to avoid circular dependency
+// Import dynamically to avoid circular dependency
 	const { generateBattleHTML } = require('./html');
 	const { applyHazardEffectsOnSwitchIn } = require('./battle-flow');
 
@@ -445,8 +445,8 @@ export function startBattleTowerFloor(
 			opponentLightScreenTurns: 0,
 			playerAuroraVeilTurns: 0,
 			opponentAuroraVeilTurns: 0,
-			playerMistTurns: 0, 
-			opponentMistTurns: 0,
+			playerMistTurns: 0, // Added
+			opponentMistTurns: 0, // Added
 			gravityTurns: 0,
 			mudSportTurns: 0,
 			waterSportTurns: 0,

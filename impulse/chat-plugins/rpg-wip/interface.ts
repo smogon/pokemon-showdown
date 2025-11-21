@@ -130,7 +130,7 @@ export interface ActivePokemonSlot {
 	embargoTurns?: number;
 	healBlockTurns?: number;
 	isCharged?: boolean;
-	stockpileCount: number; // Changed from optional to number (initialized to 0 in utils)
+	stockpileCount?: number;
 	flashFireBoost?: boolean;
 	unburdenActive?: boolean;
 	analyticBoost?: boolean;
@@ -144,7 +144,6 @@ export interface ActivePokemonSlot {
 	consumedBerry?: string;
 	harvestUsedThisTurn?: boolean;
 	cudChewBerry?: string;
-	toxicCounter?: number; // Added missing property
 
 	boosterEnergyActive?: boolean;
 	gulpMissileForm?: 'gulping' | 'gorging' | null;
@@ -176,7 +175,6 @@ export interface PlayerData {
 	lastPokemonCenter?: string;
 	completedNPCActions: Set<string>;
 	battleTowerFloor: number;
-	battleTowerHighestFloor: number; // Added missing property
 }
 
 export interface BattleState {
@@ -269,8 +267,8 @@ export interface BattleState {
 
 	battleLog: string[];
 
-	floor?: number; // Changed to optional as it might not exist in wild battles
-	overridePlayerParty?: RPGPokemon[] | null;
+	floor: number;
+	overridePlayerParty: RPGPokemon[] | null;
 	battleTowerFormat?: string;
 }
 
@@ -318,18 +316,3 @@ export interface ScriptedEvent {
 	type: string;
 	[key: string]: any;
 }
-
-// #region Ability Handler Types (Required for abilities.ts)
-
-export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
-export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
-export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState) => number;
-export type AbilityTypeModifierHandler = (ctx: AbilityContext, type: string) => string;
-export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
-export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityOnDamageHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityOnMoveHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
-export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;

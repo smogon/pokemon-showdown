@@ -24,7 +24,6 @@ import {
 	useExpCandyItem,
 	useBattleHealingItem,
 	useBattleRevivalItem,
-	useBattleStatItem,
 	canUseItemInBattle,
 	getBattleUsableItems,
 	ITEMS_DATABASE,
@@ -100,7 +99,6 @@ import {
 	generateBattleItemMenuHTML,
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
-	generateModeSelectionHTML,
 } from './html';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
@@ -194,8 +192,8 @@ function initializeAndStartBattle(
 		opponentLightScreenTurns: 0,
 		playerAuroraVeilTurns: 0,
 		opponentAuroraVeilTurns: 0,
-		playerMistTurns: 0, 
-		opponentMistTurns: 0,
+		playerMistTurns: 0, // Added
+		opponentMistTurns: 0, // Added
 		gravityTurns: 0,
 		mudSportTurns: 0,
 		waterSportTurns: 0,
@@ -1624,6 +1622,7 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
+				// Check if item usage is enabled in config
 				if (!GameConfig.allowItemUsageInBattle) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 				}
@@ -1642,6 +1641,7 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
+				// Check if item usage is enabled in config
 				if (!GameConfig.allowItemUsageInBattle) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 				}
@@ -1661,6 +1661,7 @@ export const commands: ChatCommands = {
 				const battle = activeBattles.get(user.id);
 				if (!battle) return this.errorReply("You are not in a battle.");
 
+				// Check if item usage is enabled in config
 				if (!GameConfig.allowItemUsageInBattle) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 				}
@@ -1697,24 +1698,43 @@ export const commands: ChatCommands = {
 
 				const eff = itemData.effects;
 				let result: { success: boolean, message: string };
-				const messageLog: string[] = [];
 
-				if (itemId === 'guardspec') {
+				// Handle special items first
+				if (itemId === 'direhit') {
+					// Dire Hit raises critical-hit ratio
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+					}
+					if (targetSlot.focusEnergy) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} is already pumped!`])}`);
+					}
+					targetSlot.focusEnergy = true;
+					result = { success: true, message: `${pokemon.species} is getting pumped!` };
+				} else if (itemId === 'guardspec') {
 					// Guard Spec prevents stat reduction (not implemented yet)
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Guard Spec is not yet implemented!"])}`);
 				} else if (eff.revive) {
 					result = useBattleRevivalItem(pokemon, itemId);
 				} else if (eff.healAmount || eff.healPercent || eff.statusCure) {
 					result = useBattleHealingItem(pokemon, itemId);
-				} else if (eff.battleStatBoost || itemId === 'direhit') {
-					const statLog: string[] = [];
-					result = useBattleStatItem(targetSlot, itemId, battle, statLog);
-					if (result.success && statLog.length > 0) {
-						result.message = statLog.join(" ");
-					} else if (result.success && itemId !== 'direhit') {
-						result.message = ""; 
+				} else if (eff.battleStatBoost) {
+					// Handle stat boost items
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 					}
+					const boost = eff.battleStatBoost;
+					const currentStage = targetSlot.statStages[boost.stat];
+					if (currentStage >= 6) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species}'s ${boost.stat.toUpperCase()} is already maxed!`])}`);
+					}
+					const newStage = Math.min(6, currentStage + boost.stages);
+					targetSlot.statStages[boost.stat] = newStage as any;
+					result = {
+						success: true,
+						message: `${pokemon.species}'s ${boost.stat.toUpperCase()} ${boost.stages >= 2 ? 'sharply ' : ''}rose!`,
+					};
 				} else if (eff.ppRestore) {
+					// Handle PP restoration items
 					if (pokemon.hp <= 0) {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 					}
@@ -1723,6 +1743,7 @@ export const commands: ChatCommands = {
 					const ppAmount = eff.ppRestore === -1 ? 999 : eff.ppRestore;
 
 					if (eff.ppRestoreAll) {
+						// Restore PP to all moves
 						for (const move of pokemon.moves) {
 							const moveData = getMove(move.id);
 							const maxPP = moveData.pp || 5;
@@ -1735,6 +1756,7 @@ export const commands: ChatCommands = {
 							{ success: true, message: `PP was restored for all of ${pokemon.species}'s moves!` } :
 							{ success: false, message: `${pokemon.species}'s moves already have full PP!` };
 					} else {
+						// For single move PP items, restore the first move that needs PP
 						for (const move of pokemon.moves) {
 							const moveData = getMove(move.id);
 							const maxPP = moveData.pp || 5;
@@ -1757,10 +1779,13 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [result.message])}`);
 				}
 
+				// Remove item from inventory
 				removeItemFromInventory(player, itemId, 1);
 
-				messageLog.push(`Used <strong>${itemData.name}</strong>! ${result.message}`);
+				// Queue the item usage as an action
+				const messageLog = [`Used <strong>${itemData.name}</strong>! ${result.message}`];
 
+				// Process turn after item usage
 				processTurn(this, battle, room, user, messageLog);
 			},
 
