@@ -7,7 +7,8 @@
     text-shadow: none !important;
 }
 
-/* --- Success Notification Banner (Default) --- */
+/* --- Success Notification Banner --- */
+
 .rpg-notification {
 	background-color: #d4edda;
     color: #155724;
@@ -24,20 +25,6 @@
     background-color: #1e4d2b;
     color: #d4edda;
     border-color: #28a745;
-}
-
-/* --- Error Notification Banner Variant --- */
-/* Applied when .rpg-text-error is added to the notification div */
-.rpg-notification.rpg-text-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
-}
-
-.dark .rpg-notification.rpg-text-error {
-    background-color: #5a1e23;
-    color: #f8d7da;
-    border-color: #e57373;
 }
 
 @keyframes fadeIn {
