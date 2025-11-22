@@ -270,6 +270,12 @@ export interface BattleState {
 
 	battleLog: string[];
 
+	persistentPokemonState: Record<string, {
+		terastallized?: string;
+		sleepCounter?: number;
+		toxicCounter?: number;
+	}>;
+
 	floor: number;
 	overridePlayerParty: RPGPokemon[] | null;
 	battleTowerFormat?: string;
