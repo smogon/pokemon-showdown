@@ -25,6 +25,13 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'kingsrock', 'razorfang', 'metronome', 'safetygoggles', 'protectivepads',
 	'adrenalineorb', 'utilityumbrella', 'brightpowder',
 	'laxincense', 'terrainextender',
+	// Added Step 1 Items
+	'ejectbutton', 'ejectpack', 'blunderpolicy', 'throatspray', 'roomservice',
+	'loadeddice', 'covertcloak', 'punchingglove', 'abilityshield',
+	'quickpowder', 'souldew', 'adamantorb', 'lustrousorb', 'griseousorb',
+	'normalgem', 'firegem', 'watergem', 'electricgem', 'grassgem', 'icegem',
+	'fightinggem', 'poisongem', 'groundgem', 'flyinggem', 'psychicgem',
+	'buggem', 'rockgem', 'ghostgem', 'dragongem', 'darkgem', 'steelgem', 'fairygem',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -178,6 +185,21 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'brightpowder': { id: 'brightpowder', name: 'Bright Powder', category: 'held', description: 'Lowers the accuracy of moves targeting the holder by 10%.', price: 4000 },
 	'laxincense': { id: 'laxincense', name: 'Lax Incense', category: 'held', description: 'Lowers the accuracy of moves targeting the holder by 10%.', price: 4000 },
 
+	// New Items (Flow/Switching)
+	'ejectbutton': { id: 'ejectbutton', name: 'Eject Button', category: 'held', description: 'If holder is hit, it immediately switches out.', price: 4000 },
+	'ejectpack': { id: 'ejectpack', name: 'Eject Pack', category: 'held', description: 'If holder\'s stats are lowered, it switches out.', price: 4000 },
+
+	// New Items (Stat/Move Modifiers)
+	'blunderpolicy': { id: 'blunderpolicy', name: 'Blunder Policy', category: 'held', description: 'If holder misses, sharply raises Speed.', price: 4000 },
+	'throatspray': { id: 'throatspray', name: 'Throat Spray', category: 'held', description: 'Raises Sp. Atk after using a sound move.', price: 4000 },
+	'roomservice': { id: 'roomservice', name: 'Room Service', category: 'held', description: 'Lowers Speed if Trick Room is active.', price: 4000 },
+
+	// New Items (Mechanics)
+	'loadeddice': { id: 'loadeddice', name: 'Loaded Dice', category: 'held', description: 'Multi-strike moves hit more times.', price: 4000 },
+	'covertcloak': { id: 'covertcloak', name: 'Covert Cloak', category: 'held', description: 'Protects holder from secondary effects.', price: 4000 },
+	'punchingglove': { id: 'punchingglove', name: 'Punching Glove', category: 'held', description: 'Boosts punching moves and prevents contact.', price: 4000 },
+	'abilityshield': { id: 'abilityshield', name: 'Ability Shield', category: 'held', description: 'Protects holder\'s Ability from being changed or suppressed.', price: 4000 },
+
 	// Weather Rocks
 	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'Extends the duration of harsh sunlight set by the holder to 8 turns.', price: 4000 },
 	'damprock': { id: 'damprock', name: 'Damp Rock', category: 'held', description: 'Extends the duration of rain set by the holder to 8 turns.', price: 4000 },
@@ -207,6 +229,11 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'deepseatooth': { id: 'deepseatooth', name: 'Deep Sea Tooth', category: 'held', description: 'If held by a Clamperl, its Sp. Atk is doubled.', price: 4000 },
 	'deepseascale': { id: 'deepseascale', name: 'Deep Sea Scale', category: 'held', description: 'If held by a Clamperl, its Sp. Def is doubled.', price: 4000 },
 	'metalpowder': { id: 'metalpowder', name: 'Metal Powder', category: 'held', description: 'If held by a Ditto, its Defense is doubled.', price: 4000 },
+	'quickpowder': { id: 'quickpowder', name: 'Quick Powder', category: 'held', description: 'Doubles Speed of Ditto.', price: 4000 },
+	'souldew': { id: 'souldew', name: 'Soul Dew', category: 'held', description: 'Boosts Sp. Atk and Sp. Def of Latios/Latias.', price: 4000 },
+	'adamantorb': { id: 'adamantorb', name: 'Adamant Orb', category: 'held', description: 'Boosts Dragon/Steel moves of Dialga.', price: 4000 },
+	'lustrousorb': { id: 'lustrousorb', name: 'Lustrous Orb', category: 'held', description: 'Boosts Dragon/Water moves of Palkia.', price: 4000 },
+	'griseousorb': { id: 'griseousorb', name: 'Griseous Orb', category: 'held', description: 'Boosts Dragon/Ghost moves of Giratina.', price: 4000 },
 
 	// Type Enhancers
 	'charcoal': { id: 'charcoal', name: 'Charcoal', category: 'held', description: 'Powers up Fire-type moves.', price: 3000 },
@@ -226,6 +253,26 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'blackglasses': { id: 'blackglasses', name: 'Black Glasses', category: 'held', description: 'Powers up Dark-type moves.', price: 3000 },
 	'metalcoat': { id: 'metalcoat', name: 'Metal Coat', category: 'held', description: 'Powers up Steel-type moves.', price: 3000, effects: { evolutionItem: true } },
 	'fairymemory': { id: 'fairymemory', name: 'Fairy Memory', category: 'held', description: 'Powers up Fairy-type moves.', price: 3000 },
+
+	// Gems
+	'normalgem': { id: 'normalgem', name: 'Normal Gem', category: 'held', description: 'Boosts Normal-type moves once.', price: 4000 },
+	'firegem': { id: 'firegem', name: 'Fire Gem', category: 'held', description: 'Boosts Fire-type moves once.', price: 4000 },
+	'watergem': { id: 'watergem', name: 'Water Gem', category: 'held', description: 'Boosts Water-type moves once.', price: 4000 },
+	'electricgem': { id: 'electricgem', name: 'Electric Gem', category: 'held', description: 'Boosts Electric-type moves once.', price: 4000 },
+	'grassgem': { id: 'grassgem', name: 'Grass Gem', category: 'held', description: 'Boosts Grass-type moves once.', price: 4000 },
+	'icegem': { id: 'icegem', name: 'Ice Gem', category: 'held', description: 'Boosts Ice-type moves once.', price: 4000 },
+	'fightinggem': { id: 'fightinggem', name: 'Fighting Gem', category: 'held', description: 'Boosts Fighting-type moves once.', price: 4000 },
+	'poisongem': { id: 'poisongem', name: 'Poison Gem', category: 'held', description: 'Boosts Poison-type moves once.', price: 4000 },
+	'groundgem': { id: 'groundgem', name: 'Ground Gem', category: 'held', description: 'Boosts Ground-type moves once.', price: 4000 },
+	'flyinggem': { id: 'flyinggem', name: 'Flying Gem', category: 'held', description: 'Boosts Flying-type moves once.', price: 4000 },
+	'psychicgem': { id: 'psychicgem', name: 'Psychic Gem', category: 'held', description: 'Boosts Psychic-type moves once.', price: 4000 },
+	'buggem': { id: 'buggem', name: 'Bug Gem', category: 'held', description: 'Boosts Bug-type moves once.', price: 4000 },
+	'rockgem': { id: 'rockgem', name: 'Rock Gem', category: 'held', description: 'Boosts Rock-type moves once.', price: 4000 },
+	'ghostgem': { id: 'ghostgem', name: 'Ghost Gem', category: 'held', description: 'Boosts Ghost-type moves once.', price: 4000 },
+	'dragongem': { id: 'dragongem', name: 'Dragon Gem', category: 'held', description: 'Boosts Dragon-type moves once.', price: 4000 },
+	'darkgem': { id: 'darkgem', name: 'Dark Gem', category: 'held', description: 'Boosts Dark-type moves once.', price: 4000 },
+	'steelgem': { id: 'steelgem', name: 'Steel Gem', category: 'held', description: 'Boosts Steel-type moves once.', price: 4000 },
+	'fairygem': { id: 'fairygem', name: 'Fairy Gem', category: 'held', description: 'Boosts Fairy-type moves once.', price: 4000 },
 
 	// Berries
 	'cheriberry': { id: 'cheriberry', name: 'Cheri Berry', category: 'berry', description: 'Cures paralysis.', price: 200, effects: { statusCure: 'par' } },
