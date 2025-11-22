@@ -23,6 +23,8 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'lightball', 'thickclub', 'deepseatooth', 'deepseascale', 'metalpowder',
 	// Added viable new items
 	'widelens', 'scopelens', 'razorclaw', 'zoomlens', 'lightclay',
+	'kingsrock', 'razorfang', 'metronome', 'safetygoggles', 'protectivepads',
+	'adrenalineorb', 'utilityumbrella',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -139,7 +141,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'sportball': { id: 'sportball', name: 'Sport Ball', category: 'pokeball', description: 'A special Ball used in the Bug-Catching Contest.', price: 0 },
 	'strangeball': { id: 'strangeball', name: 'Strange Ball', category: 'pokeball', description: 'A mysterious Ball with unknown properties.', price: 0 },
 
-	// Competitive Held Items (The "Ghost" Items)
+	// Competitive Held Items
 	'leftovers': { id: 'leftovers', name: 'Leftovers', category: 'held', description: 'At the end of every turn, holder restores 1/16 of its max HP.', price: 4000 },
 	'blacksludge': { id: 'blacksludge', name: 'Black Sludge', category: 'held', description: 'Each turn, if holder is a Poison type, restores 1/16 max HP; otherwise, loses 1/8.', price: 4000 },
 	'choiceband': { id: 'choiceband', name: 'Choice Band', category: 'held', description: 'Holder\'s Attack is 1.5x, but it can only select the first move it uses.', price: 4000 },
@@ -166,6 +168,13 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'powerherb': { id: 'powerherb', name: 'Power Herb', category: 'held', description: 'Holder\'s two-turn moves complete in one turn.', price: 4000 },
 	'shellbell': { id: 'shellbell', name: 'Shell Bell', category: 'held', description: 'Holder heals 1/8 of damage dealt.', price: 4000 },
 	'quickclaw': { id: 'quickclaw', name: 'Quick Claw', category: 'held', description: 'Holder has a 20% chance to move first.', price: 4000 },
+	'kingsrock': { id: 'kingsrock', name: 'King\'s Rock', category: 'held', description: 'Holder\'s attacks without a chance to flinch gain a 10% chance to flinch.', price: 4000 },
+	'razorfang': { id: 'razorfang', name: 'Razor Fang', category: 'held', description: 'Holder\'s attacks without a chance to flinch gain a 10% chance to flinch.', price: 4000 },
+	'metronome': { id: 'metronome', name: 'Metronome', category: 'held', description: 'Damage of moves used consecutively increases. Each consecutive use increases damage by 20%.', price: 4000 },
+	'safetygoggles': { id: 'safetygoggles', name: 'Safety Goggles', category: 'held', description: 'Holder is immune to powder moves and damage from Sandstorm or Hail.', price: 4000 },
+	'protectivepads': { id: 'protectivepads', name: 'Protective Pads', category: 'held', description: 'Holder\'s contact moves do not trigger contact effects.', price: 4000 },
+	'adrenalineorb': { id: 'adrenalineorb', name: 'Adrenaline Orb', category: 'held', description: 'Raises holder\'s Speed by 1 stage if it gets Intimidated.', price: 4000 },
+	'utilityumbrella': { id: 'utilityumbrella', name: 'Utility Umbrella', category: 'held', description: 'The holder ignores rain- and sun-based effects.', price: 4000 },
 
 	// Weather Rocks
 	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'Extends the duration of harsh sunlight set by the holder to 8 turns.', price: 4000 },
