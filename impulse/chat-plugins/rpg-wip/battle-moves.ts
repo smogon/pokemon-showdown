@@ -13,9 +13,7 @@ import {
 } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
-import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness } from './battle-core';
-// Import the helper from battle-core to prevent soft locks
-import { executeForcedRandomSwitch } from './battle-core';
+import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness, executeForcedRandomSwitch } from './battle-core';
 import { getPlayerData } from './core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {

@@ -254,15 +254,27 @@ export function applyStatChange(
 			}
 
 			if (slotIndex !== -1) {
-				messageLog.push(`${pokemon.species} is being sent back due to its Eject Pack!`);
-				setItem(slot, undefined, undefined, battle, messageLog);
+				// Check if there are available replacements before setting up pivot
+				const party = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+				const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
 
-				if (isPlayer) {
-					battle.pendingPivot = { slotIndex, slot, isBatonPass: false };
-					battle.playerSlots[slotIndex as 0 | 1] = null;
+				const availableReplacements = party.filter(p =>
+					p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
+				);
+
+				if (availableReplacements.length === 0) {
+					messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 				} else {
-					battle.aiPendingPivot = { slotIndex, slot, isBatonPass: false };
-					battle.opponentSlots[slotIndex as 0 | 1] = null;
+					messageLog.push(`${pokemon.species} is being sent back due to its Eject Pack!`);
+					setItem(slot, undefined, undefined, battle, messageLog);
+
+					if (isPlayer) {
+						battle.pendingPivot = { slotIndex, slot, isBatonPass: false };
+						battle.playerSlots[slotIndex as 0 | 1] = null;
+					} else {
+						battle.aiPendingPivot = { slotIndex, slot, isBatonPass: false };
+						battle.opponentSlots[slotIndex as 0 | 1] = null;
+					}
 				}
 			}
 		}
