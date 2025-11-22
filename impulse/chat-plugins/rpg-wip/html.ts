@@ -1170,6 +1170,21 @@ function generatePokemonStatusTagsHTML(
 		slot.isRedirecting ? '<span class="rpg-tag rpg-tag-attention">Center of Attention</span>' : '',
 		slot.isHelped ? '<span class="rpg-tag rpg-tag-helped">Helped</span>' : '',
 		slot.terastallized ? '<span class="rpg-tag rpg-tag-tera">⭐ Tera: ' + slot.terastallized + '</span>' : '',
+
+		// --- NEW MECHANICS TAGS ---
+		// Perish Song (Visual countdown)
+		slot.perishSongCounter && slot.perishSongCounter > 0 ? `<span class="rpg-tag rpg-tag-perish">Perish (${slot.perishSongCounter})</span>` : '',
+		
+		// Commander (Tatsugiri / Dondozo interaction)
+		(slot as any).commanderActive ? '<span class="rpg-tag rpg-tag-commander">Commanding</span>' : '',
+		(slot as any).commanderBoost ? '<span class="rpg-tag rpg-tag-commander">Commander Boost</span>' : '',
+		
+		// Disguise (Mimikyu)
+		slot.isDisguised ? '<span class="rpg-tag rpg-tag-disguise">Disguised</span>' : '',
+		
+		// Gulp Missile (Cramorant forms)
+		(slot as any).gulpMissileForm === 'gulping' ? '<span class="rpg-tag rpg-tag-gulping">Gulping</span>' : '',
+		(slot as any).gulpMissileForm === 'gorging' ? '<span class="rpg-tag rpg-tag-gorging">Gorging</span>' : '',
 	].filter(Boolean).join('');
 
 	const abilityTags = [
@@ -1177,6 +1192,12 @@ function generatePokemonStatusTagsHTML(
 		slot.analyticBoost ? '<span class="rpg-tag rpg-tag-analytic">Analytic</span>' : '',
 		slot.slowStartTurns !== undefined && slot.slowStartTurns > 0 ? '<span class="rpg-tag rpg-tag-slow-start">Slow Start (' + String(slot.slowStartTurns) + ')</span>' : '',
 		slot.unburdenActive ? '<span class="rpg-tag rpg-tag-unburden">Unburden</span>' : '',
+
+		// --- PARADOX ABILITIES ---
+		// Quark Drive (Future)
+		(slot as any).boosterEnergyActive && pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-quark">Quark Drive</span>' : '', 
+		// Protosynthesis (Ancient)
+		(slot as any).boosterEnergyActive && !pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-proto">Protosynthesis</span>' : '',
 	].filter(Boolean).join('');
 
 	let chargingTag = '';
