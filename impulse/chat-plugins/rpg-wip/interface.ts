@@ -112,6 +112,7 @@ export interface ActivePokemonSlot {
 	mustRecharge?: boolean;
 	uproarTurns?: number;
 	isRedirecting?: boolean;
+	hasActedThisTurn?: boolean;
 	isHelped?: boolean;
 	lastDamageTaken?: { amount: number, category: 'Physical' | 'Special', from: string };
 	yawnCounter?: number;
