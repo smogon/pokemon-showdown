@@ -75,11 +75,11 @@ export function checkAccuracy(
 	if (move.accuracy === true) return true; // moves with accuracy: true always hit (e.g. self-target)
 
 	const moveAccuracyBase = typeof move.accuracy === 'number' ? move.accuracy : 100;
-	
-	let accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
+
+	const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 	const ignoresEvasion = attackerAbility === 'mindseye' || move.ignoreEvasion;
 	const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
-	
+
 	let moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracyBase, attacker, move);
 
 	const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
@@ -116,10 +116,10 @@ export function checkAccuracy(
 	}
 
 	const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
-	
+
 	if ((Math.random() * 100) > finalAccuracy) {
 		messageLog.push(`<span style="color: #dc3545;">${attacker.species}'s ${move.name} missed ${defender.species}!</span>`);
-		
+
 		// Crash effects on miss
 		if (['highjumpkick', 'jumpkick'].includes(move.id)) {
 			const crashDamage = Math.floor(attacker.maxHp / 2);
@@ -149,7 +149,7 @@ export function checkSubstituteBypass(
 	attackerSlot: ActivePokemonSlot,
 	move: Move
 ): boolean {
-	if (!defenderSlot.substitute) return true; 
+	if (!defenderSlot.substitute) return true;
 
 	if (move.flags.bypasssub) return true;
 	if (move.flags.sound) return true;
@@ -265,11 +265,11 @@ export function handleDamagingMove(
 					messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
 				}
 			}
-			
+
 			// Shell Bell Logic - Blocked by Sheer Force
 			if (!attackResult.sheerForceActive && battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
 				if (attackerSlot.healBlockTurns <= 0) {
-					let healAmount = Math.max(1, Math.floor(damageDealt / 8));
+					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
 					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
 				}
@@ -669,7 +669,7 @@ export function calculateDamage(
 
 	// Gem Consumable Logic
 	let gemConsumed: string | undefined = undefined;
-	if (battle.magicRoomTurns === 0 && attacker.item && attacker.item.endsWith('gem')) {
+	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
 		const gemType = attacker.item.replace('gem', '');
 		if (gemType.toLowerCase() === moveType.toLowerCase()) {
 			damage = Math.floor(damage * 1.3); // Modern gen boost
@@ -893,7 +893,7 @@ export function applyFinalDamageModifiers(
 
 	if (RPGAbilities.isWeatherActive(battle)) {
 		const attackerHasUmbrella = battle.magicRoomTurns === 0 && attacker.item === 'utilityumbrella';
-		
+
 		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
 			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
 			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
@@ -1213,7 +1213,7 @@ export function handleOnHitAbilityResponses(
 	// Justified, Rattled, Stamina, Anger Point, Berserk, Thermal Exchange, Cotton Down, Anger Shell, etc.
 	// Most of these are self-buffs, so Mold Breaker doesn't stop them.
 	// Weak Armor affects the defender (lowers def, raises speed), so it is not blocked by attacker's Mold Breaker.
-	
+
 	const defenderAbility = toID(defender.ability || '');
 	const attacker = attackerSlot.pokemon;
 
@@ -1401,7 +1401,7 @@ export function applyRecoilAndSelfEffects(
 	messageLog: string[],
 	damageDealt: number,
 	moveWasSuccessful: boolean,
-	sheerForceActive: boolean = false
+	sheerForceActive = false
 ) {
 	if (attackerSlot.pokemon.hp <= 0) return;
 	const attacker = attackerSlot.pokemon;
@@ -1462,7 +1462,7 @@ export function applySecondaryEffects(
 	battle: BattleState,
 	messageLog: string[],
 	abilityContext: AbilityContext,
-	sheerForceActive: boolean = false
+	sheerForceActive = false
 ) {
 	if (sheerForceActive) return;
 
@@ -1486,16 +1486,16 @@ export function applySecondaryEffects(
 				if (statusToInflict === 'toxic') statusToInflict = 'tox';
 
 				const canInflict = RPGAbilities.canInflictStatus(
-					defenderSlot, 
-					statusToInflict as any, 
-					battle, 
-					attackerSlot, 
-					move, 
+					defenderSlot,
+					statusToInflict,
+					battle,
+					attackerSlot,
+					move,
 					true
 				);
 
 				if (canInflict.success) {
-					const newStatus = statusToInflict as any;
+					const newStatus = statusToInflict;
 					defenderSlot.status = newStatus;
 					if (newStatus === 'tox') {
 						defenderSlot.toxicCounter = 1;
@@ -1577,7 +1577,7 @@ export function applySecondaryEffects(
 
 	// King's Rock / Razor Fang
 	if (battle.magicRoomTurns === 0 && ['kingsrock', 'razorfang'].includes(attackerSlot.pokemon.item || '') && move.category !== 'Status') {
-		const alreadyFlinches = move.secondary?.volatileStatus === 'flinch' || (move.secondaries && move.secondaries.some((s: any) => s.volatileStatus === 'flinch'));
+		const alreadyFlinches = move.secondary?.volatileStatus === 'flinch' || (move.secondaries?.some((s: any) => s.volatileStatus === 'flinch'));
 		if (!alreadyFlinches) {
 			if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
 				defenderSlot.willFlinch = true;
@@ -1615,7 +1615,7 @@ export function getCustomEffectiveness(
 	if (moveId === 'flyingpress') {
 		let fightingEff = 1;
 		let flyingEff = 1;
-		
+
 		const fightingChart = TYPE_CHART['Fighting'];
 		const flyingChart = TYPE_CHART['Flying'];
 
@@ -1652,8 +1652,8 @@ export function getCustomEffectiveness(
 		}
 
 		// Thousand Arrows check (grounding logic is usually elsewhere, but for effectiveness)
-		// If it hits flying, it should be neutral unless other types interact. 
-		// Standard chart says Ground vs Flying is 0. 
+		// If it hits flying, it should be neutral unless other types interact.
+		// Standard chart says Ground vs Flying is 0.
 		// If grounding logic happens before this, defenderTypes won't have Flying or isGrounded returns true.
 		// Assuming standard chart lookup:
 
@@ -1734,7 +1734,7 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 	case 'greatball': return 1.5;
 	case 'ultraball': return 2;
 	case 'masterball': return 255;
-	
+
 	// Condition-based balls
 	case 'quickball':
 		return turn === 0 ? 5 : 1;
@@ -1755,7 +1755,7 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 3.5; // For now, always give bonus
 	case 'healball':
 		return 1; // Same catch rate as Poké Ball, but heals after catch
-	
+
 	// Apricorn balls
 	case 'fastball':
 		return opponentSpecies.baseStats.spe >= 100 ? 4 : 1;
@@ -1766,8 +1766,8 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 1;
 	case 'heavyball':
 		return opponentActivePokemon.weightkg >= 300 ? 4 :
-		       opponentActivePokemon.weightkg >= 200 ? 3 :
-		       opponentActivePokemon.weightkg >= 100 ? 2 : 1;
+			opponentActivePokemon.weightkg >= 200 ? 3 :
+			opponentActivePokemon.weightkg >= 100 ? 2 : 1;
 	case 'loveball':
 		// TODO: Check if same species, opposite gender
 		return 8; // For now, always give bonus
@@ -1780,7 +1780,7 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return moonStoneEvolvers.includes(toID(opponentActivePokemon.species)) ? 4 : 1;
 	case 'friendball':
 		return 1; // Same catch rate, but sets friendship to 200
-	
+
 	// Premium balls
 	case 'luxuryball':
 		return 1; // Same catch rate, but increases friendship gain
@@ -1792,7 +1792,7 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 1.5; // Slightly better than Poké Ball
 	case 'parkball':
 		return 255; // Always catches in special areas
-	
+
 	// Special balls
 	case 'beastball':
 		// TODO: Check if Ultra Beast
@@ -1803,7 +1803,7 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 1.5; // Bug-Catching Contest ball
 	case 'strangeball':
 		return 1; // Mysterious ball
-	
+
 	default:
 		return 1;
 	}

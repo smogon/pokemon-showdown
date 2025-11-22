@@ -2047,9 +2047,9 @@ export const commands: ChatCommands = {
 
 			default:
 				const handlerName = `handle${action.type.charAt(0).toUpperCase() + action.type.slice(1)}`;
-				// @ts-ignore
+				// @ts-expect-error - Dynamic handler access
 				if (NPCActions[handlerName]) {
-					// @ts-ignore
+					// @ts-expect-error - Dynamic handler access
 					result = NPCActions[handlerName](player, action, npcId, param1);
 				} else {
 					result = { success: false, message: `Unknown action type: ${action.type}` };

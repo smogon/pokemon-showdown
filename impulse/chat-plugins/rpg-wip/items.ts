@@ -285,7 +285,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
 	'sitrusberry': { id: 'sitrusberry', name: 'Sitrus Berry', category: 'berry', description: 'Restores 1/4 max HP when at 1/2 HP or less.', price: 300 },
 	'lumberry': { id: 'lumberry', name: 'Lum Berry', category: 'berry', description: 'Cures any status condition.', price: 400 },
-	
+
 	// Pinch Berries
 	'figyberry': { id: 'figyberry', name: 'Figy Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
 	'wikiberry': { id: 'wikiberry', name: 'Wiki Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
@@ -618,7 +618,7 @@ export function useEvolutionStone(player: PlayerData, pokemon: RPGPokemon, itemI
 
 	// Check if this Pokemon can evolve with this stone
 	const evoMsg = checkEvolution(player, pokemon, { room, user }, id);
-	
+
 	if (evoMsg) {
 		removeItemFromInventory(player, id, 1);
 		return { success: true, message: `Used <strong>${itemData.name}</strong>! ${evoMsg}` };

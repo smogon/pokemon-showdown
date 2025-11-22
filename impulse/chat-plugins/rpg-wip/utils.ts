@@ -563,16 +563,16 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 
 export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (!slot.pokemon.item || battle.magicRoomTurns > 0) return;
-	
+
 	const pokemon = slot.pokemon;
 	const item = pokemon.item;
-	
+
 	// Check Unnerve
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
 		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
-	
+
 	if (hasUnnerve && item.toLowerCase().includes('berry')) return;
 
 	let itemConsumed = false;
@@ -603,7 +603,7 @@ export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleSt
 			itemConsumed = true;
 		} else if (item === 'lumberry') {
 			const statusMap: Record<string, string> = {
-				par: 'paralysis', slp: 'sleep', psn: 'poison', tox: 'poison', brn: 'burn', frz: 'freeze'
+				par: 'paralysis', slp: 'sleep', psn: 'poison', tox: 'poison', brn: 'burn', frz: 'freeze',
 			};
 			messageLog.push(`${pokemon.species} ate its ${itemName} and was cured of ${statusMap[slot.status] || 'status'}!`);
 			slot.status = null;
@@ -742,9 +742,9 @@ export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, me
 		slot.healBlockTurns = 0;
 
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
-		
+
 		setItem(slot, undefined, undefined, battle, messageLog);
-		
+
 		return true;
 	}
 

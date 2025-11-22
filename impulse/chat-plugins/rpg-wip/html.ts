@@ -4,11 +4,10 @@ import { ITEMS_DATABASE, ITEM_PRICES } from './items';
 import { getShopInventory, getNextShopTier } from './game-shops';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
-import { TRAINER_DATABASE, TRAINER_LOCATIONS } from './game-npcs';
+import { TRAINER_DATABASE, TRAINER_LOCATIONS, TOTAL_BADGES } from './game-npcs';
 import { getPlayerData } from './core';
 import { GameConfig } from './game-config';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
-import { TOTAL_BADGES } from './game-npcs';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
 	if (expNeededForLevel <= 0) return 100;
@@ -954,7 +953,17 @@ export function generateMedicinePokemonSelectionHTML(player: PlayerData, itemId:
 		let show = false;
 		let details = '';
 
-		if (eff.revive && pokemon.hp <= 0) { show = true; details = `<span class="rpg-text-error">Fainted</span>`; } else if ((eff.healAmount || eff.healPercent) && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) { show = true; } else if (eff.statusCure && pokemon.hp > 0 && pokemon.status) { show = true; details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`; } else if ((eff.ppRestore || eff.ppRestoreAll) && pokemon.hp > 0) { show = true; } else if (eff.evBoost && pokemon.hp > 0) {
+		if (eff.revive && pokemon.hp <= 0) {
+			show = true;
+			details = `<span class="rpg-text-error">Fainted</span>`;
+		} else if ((eff.healAmount || eff.healPercent) && pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
+			show = true;
+		} else if (eff.statusCure && pokemon.hp > 0 && pokemon.status) {
+			show = true;
+			details = `<span class="rpg-text-error">${pokemon.status.toUpperCase()}</span>`;
+		} else if ((eff.ppRestore || eff.ppRestoreAll) && pokemon.hp > 0) {
+			show = true;
+		} else if (eff.evBoost && pokemon.hp > 0) {
 			const totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
 			if (totalEVs < 510) { show = true; details = `EVs: ${totalEVs}/510`; }
 		}
@@ -1439,8 +1448,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
 	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
 	// ADDED: Mist Turns
-	const mistTurns = (side === 'player') ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns; 
-	
+	const mistTurns = (side === 'player') ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
+
 	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
 	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
 	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
