@@ -21,6 +21,8 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'babiriberry', 'roseliberry', 'chilanberry', 'chartiberry', 'cobaberry',
 	'payapaberry', 'habanberry', 'tangaberry', 'kebiaberry',
 	'lightball', 'thickclub', 'deepseatooth', 'deepseascale', 'metalpowder',
+	// Added viable new items
+	'widelens', 'scopelens', 'razorclaw', 'zoomlens', 'lightclay',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -164,6 +166,28 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'powerherb': { id: 'powerherb', name: 'Power Herb', category: 'held', description: 'Holder\'s two-turn moves complete in one turn.', price: 4000 },
 	'shellbell': { id: 'shellbell', name: 'Shell Bell', category: 'held', description: 'Holder heals 1/8 of damage dealt.', price: 4000 },
 	'quickclaw': { id: 'quickclaw', name: 'Quick Claw', category: 'held', description: 'Holder has a 20% chance to move first.', price: 4000 },
+
+	// Weather Rocks
+	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'Extends the duration of harsh sunlight set by the holder to 8 turns.', price: 4000 },
+	'damprock': { id: 'damprock', name: 'Damp Rock', category: 'held', description: 'Extends the duration of rain set by the holder to 8 turns.', price: 4000 },
+	'smoothrock': { id: 'smoothrock', name: 'Smooth Rock', category: 'held', description: 'Extends the duration of sandstorm set by the holder to 8 turns.', price: 4000 },
+	'icyrock': { id: 'icyrock', name: 'Icy Rock', category: 'held', description: 'Extends the duration of hailstorm set by the holder to 8 turns.', price: 4000 },
+
+	// Utility / Duration
+	'lightclay': { id: 'lightclay', name: 'Light Clay', category: 'held', description: 'Extends the duration of barrier moves like Reflect and Light Screen to 8 turns.', price: 4000 },
+	'gripclaw': { id: 'gripclaw', name: 'Grip Claw', category: 'held', description: 'Extends the duration of multi-turn binding moves to 7 turns.', price: 4000 },
+	'bindingband': { id: 'bindingband', name: 'Binding Band', category: 'held', description: 'Increases the damage dealt by binding moves.', price: 4000 },
+
+	// Stats / Mechanics
+	'bigroot': { id: 'bigroot', name: 'Big Root', category: 'held', description: 'Increases the amount of HP restored by draining moves.', price: 4000 },
+	'ironball': { id: 'ironball', name: 'Iron Ball', category: 'held', description: 'Halves Speed and grounds the holder.', price: 4000 },
+	'boosterenergy': { id: 'boosterenergy', name: 'Booster Energy', category: 'held', description: 'Activates the Protosynthesis or Quark Drive Ability.', price: 4000 },
+
+	// Accuracy & Crits
+	'widelens': { id: 'widelens', name: 'Wide Lens', category: 'held', description: 'Boosts accuracy of moves by 10%.', price: 4000 },
+	'zoomlens': { id: 'zoomlens', name: 'Zoom Lens', category: 'held', description: 'Boosts accuracy by 20% if the holder moves after the target.', price: 4000 },
+	'scopelens': { id: 'scopelens', name: 'Scope Lens', category: 'held', description: 'Boosts critical-hit ratio.', price: 4000 },
+	'razorclaw': { id: 'razorclaw', name: 'Razor Claw', category: 'held', description: 'Boosts critical-hit ratio.', price: 4000 },
 
 	// Species Specific
 	'lightball': { id: 'lightball', name: 'Light Ball', category: 'held', description: 'If held by a Pikachu, its Attack and Sp. Atk are doubled.', price: 4000 },
