@@ -2707,6 +2707,9 @@ export const commands: Chat.ChatCommands = {
 	triviahelp: triviaCommands.triviahelp,
 };
 
-process.nextTick(() => {
+export function start() {
+	if (Config.usesqlite) {
+		database.start();
+	}
 	Chat.multiLinePattern.register('/trivia add ', '/trivia submit ', '/trivia move ');
-});
+}

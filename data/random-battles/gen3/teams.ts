@@ -469,6 +469,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.id === 'shedinja') return 'Lum Berry';
 		if (species.id === 'shuckle') return 'Leftovers';
 		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
+		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
 		if (moves.has('trick')) return 'Choice Band';
 		if (
@@ -513,8 +514,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				return (counter.get('Physical') >= 3 && this.randomChance(1, 2)) ? 'Liechi Berry' : 'Lum Berry';
 			}
 		}
-
-		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
 		// Default to Leftovers
 		return 'Leftovers';

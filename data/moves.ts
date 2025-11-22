@@ -1982,12 +1982,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
-					this.runEvent('EatItem', source, null, null, item);
+				if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
 				if (item.onEat) source.ateBerry = true;
@@ -3152,30 +3152,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			];
 			let success = false;
 			if (this.gameType === "freeforall") {
-				// random integer from 1-3 inclusive
-				const offset = this.random(3) + 1;
-				// the list of all sides in counterclockwise order
-				const sides = [this.sides[0], this.sides[2]!, this.sides[1], this.sides[3]!];
+				// the list of all sides in clockwise order
+				const sides = [this.sides[0], this.sides[3]!, this.sides[1], this.sides[2]!];
 				const temp: { [k: number]: typeof source.side.sideConditions } = { 0: {}, 1: {}, 2: {}, 3: {} };
 				for (const side of sides) {
 					for (const id in side.sideConditions) {
 						if (!sideConditions.includes(id)) continue;
 						temp[side.n][id] = side.sideConditions[id];
 						delete side.sideConditions[id];
-						const effectName = this.dex.conditions.get(id).name;
-						this.add('-sideend', side, effectName, '[silent]');
 						success = true;
 					}
 				}
 				for (let i = 0; i < 4; i++) {
 					const sourceSideConditions = temp[sides[i].n];
-					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
+					const targetSide = sides[(i + 1) % 4]; // the next side in rotation
 					for (const id in sourceSideConditions) {
 						targetSide.sideConditions[id] = sourceSideConditions[id];
 						targetSide.sideConditions[id].target = targetSide;
-						const effectName = this.dex.conditions.get(id).name;
-						let layers = sourceSideConditions[id].layers || 1;
-						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
 					}
 				}
 			} else {
@@ -3203,9 +3196,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					sourceSideConditions[id] = targetTemp[id];
 					sourceSideConditions[id].target = source.side;
 				}
-				this.add('-swapsideconditions');
 			}
 			if (!success) return false;
+			this.add('-swapsideconditions');
 			this.add('-activate', source, 'move: Court Change');
 		},
 		secondary: null,
@@ -3761,6 +3754,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+	direclaw: {
+		num: 827,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Dire Claw",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 50,
+			onHit(target, source) {
+				const result = this.random(3);
+				if (result === 0) {
+					target.trySetStatus('psn', source);
+				} else if (result === 1) {
+					target.trySetStatus('par', source);
+				} else {
+					target.trySetStatus('slp', source);
+				}
+			},
+		},
+		target: "normal",
+		type: "Poison",
+	},
 	disable: {
 		num: 50,
 		accuracy: 100,
@@ -3772,7 +3790,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+			if (!target.lastMove || target.lastMove.isZOrMaxPowered || target.lastMove.isMax || target.lastMove.id === 'struggle') {
 				return false;
 			}
 		},
@@ -3812,7 +3830,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.id === this.effectState.move) {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
@@ -3861,31 +3879,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "allAdjacent",
 		type: "Electric",
 		contestType: "Beautiful",
-	},
-	direclaw: {
-		num: 827,
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		name: "Dire Claw",
-		pp: 15,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: {
-			chance: 50,
-			onHit(target, source) {
-				const result = this.random(3);
-				if (result === 0) {
-					target.trySetStatus('psn', source);
-				} else if (result === 1) {
-					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('slp', source);
-				}
-			},
-		},
-		target: "normal",
-		type: "Poison",
 	},
 	dive: {
 		num: 291,
@@ -4917,9 +4910,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
+				// Encore only works on Max Moves if the base move is not itself a Max Move
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				const moveSlot = target.getMoveData(move.id);
-				if (move.isZ || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+				if (move.isZ || move.isMax || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -5057,7 +5051,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility(source.ability);
+			const oldAbility = target.setAbility(source.ability, source);
 			if (!oldAbility) return oldAbility as false | null;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 		},
@@ -5813,23 +5807,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	flamewheel: {
-		num: 172,
-		accuracy: 100,
-		basePower: 60,
-		category: "Physical",
-		name: "Flame Wheel",
-		pp: 25,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1 },
-		secondary: {
-			chance: 10,
-			status: 'brn',
-		},
-		target: "normal",
-		type: "Fire",
-		contestType: "Beautiful",
-	},
 	flamethrower: {
 		num: 53,
 		accuracy: 100,
@@ -5839,6 +5816,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 10,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Fire",
+		contestType: "Beautiful",
+	},
+	flamewheel: {
+		num: 172,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Flame Wheel",
+		pp: 25,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1 },
 		secondary: {
 			chance: 10,
 			status: 'brn',
@@ -5958,9 +5952,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			move.basePower = item.fling.basePower;
 			this.debug(`BP: ${move.basePower}`);
 			if (item.isBerry) {
+				if (source.hasAbility('cudchew')) {
+					this.singleEvent('EatItem', source.getAbility(), source.abilityState, source, source, move, item);
+				}
 				move.onHit = function (foe) {
-					if (this.singleEvent('Eat', item, null, foe, null, null)) {
-						this.runEvent('EatItem', foe, null, null, item);
+					if (this.singleEvent('Eat', item, source.itemState, foe, source, move)) {
+						this.runEvent('EatItem', foe, source, move, item);
 						if (item.id === 'leppaberry') foe.staleness = 'external';
 					}
 					if (item.onEat) foe.ateBerry = true;
@@ -9863,7 +9860,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove(attacker, defender, move) {
-				if (move.id !== 'struggle' && this.effectState.source.hasMove(move.id) && !move.isZ && !move.isMax) {
+				if (move.id !== 'struggle' && this.effectState.source.hasMove(move.id) && !move.isZOrMaxPowered) {
 					this.add('cant', attacker, 'move: Imprison', move);
 					return false;
 				}
@@ -12853,6 +12850,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ground",
 		contestType: "Cute",
 	},
+	muddywater: {
+		num: 330,
+		accuracy: 85,
+		basePower: 90,
+		category: "Special",
+		name: "Muddy Water",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1,
+			},
+		},
+		target: "allAdjacentFoes",
+		type: "Water",
+		contestType: "Tough",
+	},
 	mudshot: {
 		num: 341,
 		accuracy: 95,
@@ -12925,25 +12941,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ground",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Cute",
-	},
-	muddywater: {
-		num: 330,
-		accuracy: 85,
-		basePower: 90,
-		category: "Special",
-		name: "Muddy Water",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
-		secondary: {
-			chance: 30,
-			boosts: {
-				accuracy: -1,
-			},
-		},
-		target: "allAdjacentFoes",
-		type: "Water",
-		contestType: "Tough",
 	},
 	multiattack: {
 		num: 718,
@@ -13217,6 +13214,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Dark",
 		contestType: "Cool",
+	},
+	nihillight: {
+		num: 920,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		isNonstandard: "Future",
+		name: "Nihil Light",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		ignoreImmunity: { 'Fairy': true },
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Dragon",
 	},
 	nobleroar: {
 		num: 568,
@@ -13927,12 +13941,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
-					this.runEvent('EatItem', source, null, null, item);
+				if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
 				if (item.onEat) source.ateBerry = true;
@@ -14543,40 +14557,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	psychup: {
-		num: 244,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Psych Up",
-		pp: 10,
-		priority: 0,
-		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
-		onHit(target, source) {
-			let i: BoostID;
-			for (i in target.boosts) {
-				source.boosts[i] = target.boosts[i];
-			}
-
-			const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
-			// we need to remove all crit stage volatiles first; otherwise copying e.g. dragoncheer onto a mon with focusenergy
-			// will crash the server (since addVolatile fails due to overlap, leaving the source mon with no hasDragonType to set)
-			for (const volatile of volatilesToCopy) source.removeVolatile(volatile);
-			for (const volatile of volatilesToCopy) {
-				if (target.volatiles[volatile]) {
-					source.addVolatile(volatile);
-					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
-					if (volatile === 'dragoncheer') source.volatiles[volatile].hasDragonType = target.volatiles[volatile].hasDragonType;
-				}
-			}
-			this.add('-copyboost', source, target, '[from] move: Psych Up');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-		zMove: { effect: 'heal' },
-		contestType: "Clever",
-	},
 	psychic: {
 		num: 94,
 		accuracy: 100,
@@ -14750,6 +14730,40 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 		zMove: { boost: { spa: 2 } },
+		contestType: "Clever",
+	},
+	psychup: {
+		num: 244,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Psych Up",
+		pp: 10,
+		priority: 0,
+		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
+		onHit(target, source) {
+			let i: BoostID;
+			for (i in target.boosts) {
+				source.boosts[i] = target.boosts[i];
+			}
+
+			const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
+			// we need to remove all crit stage volatiles first; otherwise copying e.g. dragoncheer onto a mon with focusenergy
+			// will crash the server (since addVolatile fails due to overlap, leaving the source mon with no hasDragonType to set)
+			for (const volatile of volatilesToCopy) source.removeVolatile(volatile);
+			for (const volatile of volatilesToCopy) {
+				if (target.volatiles[volatile]) {
+					source.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
+					if (volatile === 'dragoncheer') source.volatiles[volatile].hasDragonType = target.volatiles[volatile].hasDragonType;
+				}
+			}
+			this.add('-copyboost', source, target, '[from] move: Psych Up');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMove: { effect: 'heal' },
 		contestType: "Clever",
 	},
 	psyshieldbash: {
@@ -18304,30 +18318,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ghost",
 		contestType: "Tough",
 	},
-	spitup: {
-		num: 255,
-		accuracy: 100,
-		basePower: 0,
-		basePowerCallback(pokemon) {
-			if (!pokemon.volatiles['stockpile']?.layers) return false;
-			return pokemon.volatiles['stockpile'].layers * 100;
-		},
-		category: "Special",
-		name: "Spit Up",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, metronome: 1 },
-		onTry(source) {
-			return !!source.volatiles['stockpile'];
-		},
-		onAfterMove(pokemon) {
-			pokemon.removeVolatile('stockpile');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-		contestType: "Tough",
-	},
 	spite: {
 		num: 180,
 		accuracy: 100,
@@ -18350,6 +18340,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		zMove: { effect: 'heal' },
+		contestType: "Tough",
+	},
+	spitup: {
+		num: 255,
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback(pokemon) {
+			if (!pokemon.volatiles['stockpile']?.layers) return false;
+			return pokemon.volatiles['stockpile'].layers * 100;
+		},
+		category: "Special",
+		name: "Spit Up",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, metronome: 1 },
+		onTry(source) {
+			return !!source.volatiles['stockpile'];
+		},
+		onAfterMove(pokemon) {
+			pokemon.removeVolatile('stockpile');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 		contestType: "Tough",
 	},
 	splash: {
@@ -19728,7 +19742,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 5,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && !move.isMax && move.category === 'Status' && move.id !== 'mefirst') {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.category === 'Status' && move.id !== 'mefirst') {
 					this.add('cant', attacker, 'move: Taunt', move);
 					return false;
 				}
@@ -20150,13 +20164,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (!move.isZ && !move.isMax && move.flags['sound']) {
+				if (!move.isZOrMaxPowered && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
-				if (!move.isZ && !move.isMax && move.flags['sound']) {
+				if (!move.isZOrMaxPowered && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
@@ -20954,21 +20968,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	uturn: {
-		num: 369,
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		name: "U-turn",
-		pp: 20,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		selfSwitch: true,
-		secondary: null,
-		target: "normal",
-		type: "Bug",
-		contestType: "Cute",
-	},
 	upperhand: {
 		num: 918,
 		accuracy: 100,
@@ -21049,6 +21048,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
+		contestType: "Cute",
+	},
+	uturn: {
+		num: 369,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "U-turn",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Bug",
 		contestType: "Cute",
 	},
 	vacuumwave: {
