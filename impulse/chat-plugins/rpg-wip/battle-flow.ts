@@ -48,6 +48,7 @@ import {
 	saveBattleStatus,
 	getPokemonTypes,
 	getMoveType,
+	checkAccuracy, // Imported from battle-core
 } from './battle-core';
 
 import { processEndOfTurn } from './battle-eot';
@@ -644,64 +645,8 @@ export function executeMove(
 			}
 		}
 
-		let moveHit = true;
-		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
-		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
-		const hasNoGuard = attackerAbility === 'noguard' || defenderAbility === 'noguard';
-
-		if (['aerialace', 'struggle'].includes(move.id) || hasNoGuard) {
-		} else if (move.accuracy !== true) {
-			let accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
-			const ignoresEvasion = attackerAbility === 'mindseye';
-			const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
-			let moveAccuracy = RPGAbilities.applyAccuracyModifier(move.accuracy, attackerSlot.pokemon, move);
-
-			const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
-			const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
-
-			if (RPGAbilities.isWeatherActive(battle)) {
-				if (battle.weather!.type.includes('rain')) {
-					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
-				} else if (battle.weather!.type.includes('sun')) {
-					if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
-				}
-				if (battle.weather!.type === 'hail' && move.id === 'blizzard') moveAccuracy = 100;
-			}
-			if (battle.gravityTurns > 0) moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
-
-			if (battle.magicRoomTurns === 0) {
-				if (attackerSlot.pokemon.item === 'widelens') {
-					moveAccuracy = Math.floor(moveAccuracy * 1.1);
-				}
-				if (attackerSlot.pokemon.item === 'zoomlens') {
-					const attSpeed = attackerSlot.pokemon.spe * getStatMultiplier(attackerSlot.statStages.spe);
-					const defSpeed = defenderSlot.pokemon.spe * getStatMultiplier(defenderSlot.statStages.spe);
-					if (attSpeed < defSpeed) {
-						moveAccuracy = Math.floor(moveAccuracy * 1.2);
-					}
-				}
-			}
-
-			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
-			if ((Math.random() * 100) > finalAccuracy) {
-				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
-				moveHit = false;
-
-				if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'blunderpolicy') {
-					messageLog.push(`${attackerSlot.pokemon.species}'s Blunder Policy was activated!`);
-					attackerSlot.pokemon.item = undefined; // Consume
-					activateUnburden(attackerSlot, messageLog);
-					applyStatChange(attackerSlot, 'spe', 2, battle, messageLog, attackerSlot);
-				}
-
-				if (['highjumpkick', 'jumpkick'].includes(move.id)) {
-					const crashDamage = Math.floor(attackerSlot.pokemon.maxHp / 2);
-					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - crashDamage);
-					messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species} kept going and crashed!</span>`);
-				}
-			}
-		}
-
+		// Step 2: Generalized "Move Hit" Pipeline Usage
+		const moveHit = checkAccuracy(attackerSlot, defenderSlot, move, battle, messageLog);
 		if (!moveHit) continue;
 
 		moveHitAnyTarget = true;
@@ -958,7 +903,7 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 	if (hazards.includes('stealthrock')) {
 		if (hasAirBalloon) {
 			messageLog.push(`${pokemon.species}'s Air Balloon popped from the pointed stones!`);
-			pokemon.item = undefined;
+			setItem(slot, undefined, undefined, battle, messageLog);
 		}
 		const effectiveness = getCustomEffectiveness('Rock', species.types, pokemon, battle);
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);

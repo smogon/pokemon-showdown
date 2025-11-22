@@ -22,6 +22,7 @@ import {
 	handleMirrorHerb,
 	handleLeppaBerry,
 	setItem,
+	getAccuracyEvasionMultiplier,
 } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
@@ -35,6 +36,136 @@ import {
 } from './html';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
+
+/**
+ * Checks if a move hits the target based on accuracy and evasion.
+ * Returns true if hit, false if miss.
+ */
+export function checkAccuracy(
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
+	move: Move,
+	battle: BattleState,
+	messageLog: string[]
+): boolean {
+	const attacker = attackerSlot.pokemon;
+	const defender = defenderSlot.pokemon;
+
+	// Always Hit Moves
+	if (move.id === 'aerialace' || move.id === 'struggle' || move.id === 'swift' || move.id === 'magicalleaf' || move.id === 'shockwave') {
+		return true;
+	}
+
+	// Toxic hits automatically if user is Poison type (Gen 6+)
+	if (move.id === 'toxic') {
+		const attackerSpecies = Dex.species.get(attacker.species);
+		if (attackerSpecies.types.includes('Poison')) {
+			return true;
+		}
+	}
+
+	// No Guard Ability
+	const attackerAbility = toID(attacker.ability || '');
+	const defenderAbility = RPGAbilities.getActiveAbility(defender, attacker);
+	if (attackerAbility === 'noguard' || defenderAbility === 'noguard') {
+		return true;
+	}
+
+	// Lock-On / Mind Reader (Not fully implemented yet, but place holder)
+	// if (attackerSlot.lockedOnTarget === defenderSlot.id) return true;
+
+	// Standard Accuracy Check
+	if (move.accuracy === true) return true; // moves with accuracy: true always hit (e.g. self-target)
+
+	const moveAccuracyBase = typeof move.accuracy === 'number' ? move.accuracy : 100;
+	
+	let accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
+	const ignoresEvasion = attackerAbility === 'mindseye' || move.ignoreEvasion;
+	const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
+	
+	let moveAccuracy = RPGAbilities.applyAccuracyModifier(moveAccuracyBase, attacker, move);
+
+	const abilityEvasionMultiplier = RPGAbilities.getEvasionMultiplier(defenderSlot, battle);
+	const finalEvasionMultiplier = evasionMultiplier * abilityEvasionMultiplier;
+
+	// Weather Modifiers
+	if (RPGAbilities.isWeatherActive(battle)) {
+		if (battle.weather!.type.includes('rain')) {
+			if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 100;
+		} else if (battle.weather!.type.includes('sun')) {
+			if (['thunder', 'hurricane'].includes(move.id)) moveAccuracy = 50;
+		}
+		if (battle.weather!.type === 'hail' && move.id === 'blizzard') moveAccuracy = 100;
+	}
+
+	// Gravity Modifier
+	if (battle.gravityTurns > 0) moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
+
+	// Item Modifiers
+	if (battle.magicRoomTurns === 0) {
+		if (attacker.item === 'widelens') {
+			moveAccuracy = Math.floor(moveAccuracy * 1.1);
+		}
+		if (attacker.item === 'zoomlens') {
+			const attSpeed = attacker.spe * getStatMultiplier(attackerSlot.statStages.spe);
+			const defSpeed = defender.spe * getStatMultiplier(defenderSlot.statStages.spe);
+			if (attSpeed < defSpeed) {
+				moveAccuracy = Math.floor(moveAccuracy * 1.2);
+			}
+		}
+		if (defender.item === 'brightpowder' || defender.item === 'laxincense') {
+			moveAccuracy = Math.floor(moveAccuracy * 0.9);
+		}
+	}
+
+	const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
+	
+	if ((Math.random() * 100) > finalAccuracy) {
+		messageLog.push(`<span style="color: #dc3545;">${attacker.species}'s ${move.name} missed ${defender.species}!</span>`);
+		
+		// Crash effects on miss
+		if (['highjumpkick', 'jumpkick'].includes(move.id)) {
+			const crashDamage = Math.floor(attacker.maxHp / 2);
+			attacker.hp = Math.max(0, attacker.hp - crashDamage);
+			messageLog.push(`<span style="color: #dc3545;">${attacker.species} kept going and crashed!</span>`);
+			handleHPDropEffects(attackerSlot, battle, messageLog);
+		}
+
+		// Blunder Policy
+		if (battle.magicRoomTurns === 0 && attacker.item === 'blunderpolicy') {
+			messageLog.push(`${attacker.species}'s Blunder Policy was activated!`);
+			setItem(attackerSlot, undefined, undefined, battle, messageLog);
+			applyStatChange(attackerSlot, 'spe', 2, battle, messageLog, attackerSlot);
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Checks if a move bypasses the target's Substitute.
+ * Returns true if the move hits the Pokemon directly (bypassing Sub),
+ * Returns false if the move hits the Substitute.
+ */
+export function checkSubstituteBypass(
+	defenderSlot: ActivePokemonSlot,
+	attackerSlot: ActivePokemonSlot,
+	move: Move
+): boolean {
+	if (!defenderSlot.substitute) return true; // No sub to bypass
+
+	// Moves that specifically bypass substitute (e.g. Sound moves in Gen 6+)
+	if (move.flags.bypasssub) return true;
+	if (move.flags.sound) return true; // Sound moves bypass Substitute
+
+	// Infiltrator Ability
+	const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+	if (attackerAbility === 'infiltrator') return true;
+
+	return false;
+}
 
 export function handleDamagingMove(
 	attackerSlot: ActivePokemonSlot,
@@ -188,10 +319,12 @@ export function handleDamagingMove(
 
 		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
 			const defender = defenderSlot.pokemon;
-			if (defenderSlot.substitute) {
+			// Check substitute
+			if (!checkSubstituteBypass(defenderSlot, attackerSlot, move) && defenderSlot.substitute) {
 				messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
+			} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
+				messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
 			} else {
-				// Sticky Hold check is handled inside setItem
 				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
 				if (setItem(defenderSlot, undefined, attackerSlot, battle, messageLog)) {
 					messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
@@ -927,7 +1060,10 @@ export function applyDamageAndEnduranceEffects(
 		}
 	}
 
-	if (defenderSlot.substitute && damageDealt > 0 && !move.flags.bypasssub && attackerAbility !== 'infiltrator') {
+	// Use the new Substitute Bypass Logic from Step 2
+	const bypassesSub = checkSubstituteBypass(defenderSlot, abilityContext.attackerSlot, move);
+
+	if (defenderSlot.substitute && damageDealt > 0 && !bypassesSub) {
 		const subHP = defenderSlot.substitute.hp;
 		if (damageDealt >= subHP) {
 			defenderSlot.substitute = undefined;
@@ -1343,26 +1479,21 @@ export function applySecondaryEffects(
 
 		if (canApplyToDefender && !shieldDustBlocks) {
 			if (move.secondary.status && !defenderSlot.status) {
-				const defender = defenderSlot.pokemon;
-				const defenderSpecies = Dex.species.get(defender.species);
-				let canInflict = true;
+				// Use central status check
+				let statusToInflict = move.secondary.status;
+				if (statusToInflict === 'toxic') statusToInflict = 'tox';
 
-				if ((move.secondary.status === 'par' && defenderSpecies.types.includes('Electric')) ||
-					(move.secondary.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
-					(move.secondary.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel')))) {
-					canInflict = false;
-				}
-				if (canInflict && RPGAbilities.preventsStatus(defender, move.secondary.status, battle, attackerSlot.pokemon)) {
-					canInflict = false;
-					messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.secondary.status}!`);
-				}
-				if (canInflict && battle.terrain?.type === 'misty' && RPGAbilities.isGrounded(defender, battle)) {
-					canInflict = false;
-					messageLog.push('The Misty Terrain prevents status conditions!');
-				}
+				const canInflict = RPGAbilities.canInflictStatus(
+					defenderSlot, 
+					statusToInflict as any, 
+					battle, 
+					attackerSlot, 
+					move, 
+					true
+				);
 
-				if (canInflict) {
-					const newStatus = move.secondary.status as Status;
+				if (canInflict.success) {
+					const newStatus = statusToInflict as any;
 					defenderSlot.status = newStatus;
 					if (newStatus === 'tox') {
 						defenderSlot.toxicCounter = 1;
@@ -1370,18 +1501,18 @@ export function applySecondaryEffects(
 					if (newStatus === 'slp') {
 						defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 2;
 					}
-					messageLog.push(`${defender.species} was ${newStatus === 'par' ? 'paralyzed' : newStatus === 'brn' ? 'burned' : newStatus === 'psn' ? 'poisoned' : newStatus}!`);
+					messageLog.push(`${defenderSlot.pokemon.species} was afflicted with ${statusToInflict}!`);
 
 					const attackerAbilityId = toID(attackerSlot.pokemon.ability || '');
 					if (attackerAbilityId === 'poisonpuppeteer' && (newStatus === 'psn' || newStatus === 'tox')) {
 						if (!defenderSlot.isConfused) {
 							defenderSlot.isConfused = true;
 							defenderSlot.confusionCounter = Math.floor(Math.random() * 4) + 1;
-							messageLog.push(`${defender.species} became confused from Poison Puppeteer!`);
+							messageLog.push(`${defenderSlot.pokemon.species} became confused from Poison Puppeteer!`);
 						}
 					}
 
-					const defenderAbilitySync = toID(defender.ability || '');
+					const defenderAbilitySync = toID(defenderSlot.pokemon.ability || '');
 					if (defenderAbilitySync === 'synchronize') {
 						applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
 					}
