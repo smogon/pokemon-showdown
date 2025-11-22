@@ -719,16 +719,7 @@
 .rpg-weather-tag,
 .rpg-terrain-tag,
 .rpg-field-effect-tag,
-.rpg-side-effect-tag,
-/* NEW: Missing Tags */
-.rpg-tag-perish,
-.rpg-tag-proto,
-.rpg-tag-quark,
-.rpg-tag-commander,
-.rpg-tag-disguise,
-.rpg-tag-gulping,
-.rpg-tag-gorging
-{
+.rpg-side-effect-tag {
     font-size: 8px;
     font-weight: bold;
     padding: 1px 5px;
@@ -750,15 +741,7 @@
 .dark .rpg-weather-tag, 
 .dark .rpg-terrain-tag,
 .dark .rpg-field-effect-tag,
-.dark .rpg-side-effect-tag,
-.dark .rpg-tag-perish,
-.dark .rpg-tag-proto,
-.dark .rpg-tag-quark,
-.dark .rpg-tag-commander,
-.dark .rpg-tag-disguise,
-.dark .rpg-tag-gulping,
-.dark .rpg-tag-gorging
-{
+.dark .rpg-side-effect-tag {
     border: 1px solid rgba(255,255,255,0.3);
 }
 
@@ -801,46 +784,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.4);
     border: none;
 }
-
-/* --- NEW: Missing Mechanics Tags --- */
-
-/* Perish Song (Dark/Ominous) */
-.rpg-tag-perish { 
-    background-color: #2f3542; 
-    color: #ff4757; 
-    border: 1px solid #ff4757; 
-}
-
-/* Paradox Abilities (Ancient/Future themes) */
-.rpg-tag-proto { 
-    background: linear-gradient(135deg, #e17055 0%, #d63031 100%); 
-    color: white; 
-    border: none; 
-} 
-.rpg-tag-quark { 
-    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); 
-    color: white; 
-    border: none; 
-}
-
-/* Commander (Tatsugiri/Dondozo) */
-.rpg-tag-commander { 
-    background-color: #ffa502; 
-    color: #2f3542; 
-    border: 1px solid #eccc68; 
-}
-
-/* Disguise (Mimikyu) */
-.rpg-tag-disguise { 
-    background-color: #a4b0be; 
-    color: #2f3542; 
-    border: 1px dashed #57606f; 
-}
-
-/* Cramorant Forms */
-.rpg-tag-gulping { background-color: #70a1ff; color: white; }
-.rpg-tag-gorging { background-color: #ff6b81; color: white; }
-
 
 /* --- Weather & Terrain Colors --- */
 .rpg-weather-sun, .rpg-weather-harsh-sun { background-color: #F85858; }
