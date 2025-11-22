@@ -2846,6 +2846,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.addSourcedPseudoWeather('neutralizinggas', pokemon, this.effect);
 		},
 		onEnd(pokemon) {
+			if (!this.getAllActive().some(active => active !== pokemon && active.hasAbility('neutralizinggas'))) {
+				this.add('-end', pokemon, 'ability: Neutralizing Gas');
+			}
+
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
 			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
@@ -2855,7 +2859,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		condition: {
 			onFieldStart() {
-				this.add('-fieldstart', 'ability: Neutralizing Gas');
 				const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 				for (const target of this.getAllActive()) {
 					if (target.hasItem('Ability Shield')) {
@@ -2877,7 +2880,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			},
 			onFieldEnd() {
-				this.add('-fieldend', 'ability: Neutralizing Gas');
 				const sortedActive = this.getAllActive();
 				this.speedSort(sortedActive);
 				for (const pokemon of sortedActive) {
