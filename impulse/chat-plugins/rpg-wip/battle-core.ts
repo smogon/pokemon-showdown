@@ -37,6 +37,10 @@ import {
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
 
+function pokeRound(num: number): number {
+	return (num % 1 > 0.5) ? Math.ceil(num) : Math.floor(num);
+}
+
 /**
  * Checks if a move hits the target based on accuracy and evasion.
  * Returns true if hit, false if miss.
@@ -561,14 +565,20 @@ export function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false, sheerForceActive };
 	}
 
+	// ==========================================================================================
+	// STEP 5 FIX: Tera Blast Category Check (Uses stats with stages)
+	// ==========================================================================================
 	if (move.id === 'terablast' && attackerSlot.terastallized) {
-		if (attacker.atk > attacker.spa) {
+		const atk = attacker.atk * getStatMultiplier(attackerSlot.statStages.atk);
+		const spa = attacker.spa * getStatMultiplier(attackerSlot.statStages.spa);
+		if (atk > spa) {
 			move.category = 'Physical';
 		}
 		if (attackerSlot.terastallized === 'Stellar') {
 			move.basePower = 100;
 		}
 	}
+	// ==========================================================================================
 
 	let basePower = RPGMoves.getDamageBasePower(move, attacker, defender, attackerSlot, defenderSlot, battle);
 	if (basePower === -1) {
@@ -605,7 +615,6 @@ export function calculateDamage(
 	const defenderAbility = RPGAbilities.getActiveAbility(defender, attacker);
 	const attackerAbility = toID(attacker.ability || '');
 
-	// Unaware Fix: Ignored ALL stages, positive and negative.
 	if (attackerAbility === 'unaware') {
 		defenseStage = 0;
 	}
@@ -614,6 +623,9 @@ export function calculateDamage(
 		attackStage = 0;
 	}
 
+	// ==========================================================================================
+	// STEP 5 FIX: Stat Application & Rounding
+	// ==========================================================================================
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
 	let defenseStat = Math.floor(defenseStatRaw * getStatMultiplier(defenseStage));
 
@@ -627,6 +639,16 @@ export function calculateDamage(
 
 	defenseStat = Math.max(1, defenseStat);
 	finalAttackStat = Math.max(1, finalAttackStat);
+
+	// ==========================================================================================
+	// STEP 5 FIX: Strict Damage Formula Order
+	// Formula: ((((2 * Level) / 5 + 2) * Power * A / D) / 50) + 2
+	// ==========================================================================================
+	let levelFactor = Math.floor((2 * attacker.level) / 5 + 2);
+	let baseDamage = Math.floor((levelFactor * basePower * finalAttackStat) / defenseStat);
+	baseDamage = Math.floor(baseDamage / 50);
+	baseDamage += 2;
+	// ==========================================================================================
 
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
@@ -653,13 +675,11 @@ export function calculateDamage(
 		}
 	}
 
-	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
-
 	// Metronome Logic
 	if (battle.magicRoomTurns === 0 && attacker.item === 'metronome') {
 		const count = attackerSlot.consecutiveMoveCount || 0;
 		const multiplier = 1 + (Math.min(5, count) * 0.2);
-		baseDamage = Math.floor(baseDamage * multiplier);
+		baseDamage = Math.floor(baseDamage * multiplier); // Using floor to be safe, could be round
 	}
 
 	let damage = applyFinalDamageModifiers(
@@ -672,13 +692,20 @@ export function calculateDamage(
 	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
 		const gemType = attacker.item.replace('gem', '');
 		if (gemType.toLowerCase() === moveType.toLowerCase()) {
-			damage = Math.floor(damage * 1.3); // Modern gen boost
+			damage = Math.floor(damage * 1.3);
 			gemConsumed = attacker.item;
 		}
 	}
 
-	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
-	damage = Math.floor(damage * spreadMultiplier);
+	// ==========================================================================================
+	// STEP 5 FIX: Strict Rounding on Modifiers
+	// ==========================================================================================
+	damage = pokeRound(damage * stabMultiplier);
+	damage = Math.floor(damage * effectivenessMultiplier);
+	damage = pokeRound(damage * criticalMultiplier);
+	damage = Math.floor(damage * randomMultiplier);
+	damage = pokeRound(damage * spreadMultiplier);
+	// ==========================================================================================
 
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
