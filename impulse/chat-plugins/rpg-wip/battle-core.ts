@@ -19,6 +19,8 @@ import {
 	applySynchronize,
 	handleHPDropEffects,
 	consumeBerry,
+	handleMirrorHerb,
+	handleLeppaBerry,
 } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
@@ -82,6 +84,12 @@ export function handleDamagingMove(
 				messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} weakened the attack!`);
 			}
 			consumeBerry(defenderSlot, attackResult.berryConsumed, messageLog);
+		}
+
+		if (attackResult.gemConsumed) {
+			const itemName = ITEMS_DATABASE[attackResult.gemConsumed]?.name || attackResult.gemConsumed;
+			messageLog.push(`The ${itemName} strengthened ${attacker.species}'s power!`);
+			attacker.item = undefined; // Consume Gem
 		}
 
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
@@ -151,6 +159,30 @@ export function handleDamagingMove(
 			handleOnHitAbilityResponses(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.isCritical);
 
 			handleHPDropEffects(defenderSlot, battle, messageLog);
+
+			// Eject Button Logic
+			if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'ejectbutton' && defenderSlot.pokemon.hp > 0 && !battle.pendingPivot && !battle.aiPendingPivot) {
+				let slotIndex = battle.playerSlots.indexOf(defenderSlot);
+				let isPlayer = true;
+				if (slotIndex === -1) {
+					slotIndex = battle.opponentSlots.indexOf(defenderSlot);
+					isPlayer = false;
+				}
+
+				if (slotIndex !== -1) {
+					defenderSlot.pokemon.item = undefined;
+					messageLog.push(`${defenderSlot.pokemon.species} is being switched out by its Eject Button!`);
+					activateUnburden(defenderSlot, messageLog);
+
+					if (isPlayer) {
+						battle.pendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
+						battle.playerSlots[slotIndex as 0 | 1] = null;
+					} else {
+						battle.aiPendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
+						battle.opponentSlots[slotIndex as 0 | 1] = null;
+					}
+				}
+			}
 		}
 
 		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful);
@@ -278,6 +310,15 @@ export function handleDamagingMove(
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext);
 	}
+
+	// Throat Spray Logic
+	if (moveWasSuccessful && move.flags.sound && battle.magicRoomTurns === 0 && attacker.item === 'throatspray') {
+		if (applyStatChange(attackerSlot, 'spa', 1, battle, messageLog, attackerSlot)) {
+			messageLog[messageLog.length - 1] += ` (from Throat Spray)!`;
+			attacker.item = undefined;
+			activateUnburden(attackerSlot, messageLog);
+		}
+	}
 }
 
 export function handleStatusMove(
@@ -346,7 +387,7 @@ export function calculateDamage(
 	moveId: string,
 	battle: BattleState,
 	spreadMultiplier: number
-): { damage: number, message: string, effectiveness: number, berryConsumed?: string, isCritical: boolean } {
+): { damage: number, message: string, effectiveness: number, berryConsumed?: string, gemConsumed?: string, isCritical: boolean } {
 	const moveData = getMove(moveId);
 	const move = { ...moveData };
 	const attacker = attackerSlot.pokemon;
@@ -492,6 +533,16 @@ export function calculateDamage(
 		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
 	);
 
+	// Gem Consumable Logic
+	let gemConsumed: string | undefined = undefined;
+	if (battle.magicRoomTurns === 0 && attacker.item && attacker.item.endsWith('gem')) {
+		const gemType = attacker.item.replace('gem', '');
+		if (gemType.toLowerCase() === moveType.toLowerCase()) {
+			damage = Math.floor(damage * 1.3); // Modern gen boost
+			gemConsumed = attacker.item;
+		}
+	}
+
 	damage = Math.floor(damage * stabMultiplier * effectivenessMultiplier * criticalMultiplier * randomMultiplier);
 	damage = Math.floor(damage * spreadMultiplier);
 
@@ -506,7 +557,7 @@ export function calculateDamage(
 	if (effectiveness < 1 && effectiveness > 0) message += ` <i style="color: #d9534f;">It's not very effective...</i>`;
 	if (effectiveness === 0) message = ` <i style="color: #6c757d;">It had no effect on ${defender.species}!</i>`;
 
-	return { damage, message, effectiveness, berryConsumed, isCritical };
+	return { damage, message, effectiveness, berryConsumed, gemConsumed, isCritical };
 }
 
 export function getDamageOffense(
@@ -549,6 +600,10 @@ export function getDamageOffense(
 		}
 		if (attacker.item === 'deepseatooth' && attacker.species.includes('Clamperl') && isSpecial) {
 			attackStatRaw = Math.floor(attackStatRaw * 2);
+		}
+		// Soul Dew
+		if (attacker.item === 'souldew' && (attacker.species.includes('Latios') || attacker.species.includes('Latias'))) {
+			if (isSpecial) attackStatRaw = Math.floor(attackStatRaw * 1.5); // Gen 6- style stat boost based on item description
 		}
 	}
 
@@ -607,6 +662,10 @@ export function getDamageDefense(
 		}
 		if (defender.item === 'metalpowder' && defender.species.includes('Ditto') && !isSpecial) {
 			defenseStatRaw = Math.floor(defenseStatRaw * 2);
+		}
+		// Soul Dew
+		if (defender.item === 'souldew' && (defender.species.includes('Latios') || defender.species.includes('Latias'))) {
+			if (isSpecial) defenseStatRaw = Math.floor(defenseStatRaw * 1.5);
 		}
 	}
 
@@ -751,6 +810,10 @@ export function applyFinalDamageModifiers(
 		if (attacker.item === 'wiseglasses' && move.category === 'Special') {
 			damage = Math.floor(damage * 1.1);
 		}
+		// Punching Glove
+		if (attacker.item === 'punchingglove' && move.flags.punch) {
+			damage = Math.floor(damage * 1.1);
+		}
 
 		// Type Enhancers
 		if (attacker.item === 'charcoal' && moveType === 'Fire') damage = Math.floor(damage * 1.2);
@@ -770,6 +833,17 @@ export function applyFinalDamageModifiers(
 		if (attacker.item === 'blackglasses' && moveType === 'Dark') damage = Math.floor(damage * 1.2);
 		if (attacker.item === 'metalcoat' && moveType === 'Steel') damage = Math.floor(damage * 1.2);
 		if (attacker.item === 'fairymemory' && moveType === 'Fairy') damage = Math.floor(damage * 1.2);
+
+		// Creation Orbs
+		if (attacker.item === 'adamantorb' && attacker.species.includes('Dialga') && (moveType === 'Dragon' || moveType === 'Steel')) {
+			damage = Math.floor(damage * 1.2);
+		}
+		if (attacker.item === 'lustrousorb' && attacker.species.includes('Palkia') && (moveType === 'Dragon' || moveType === 'Water')) {
+			damage = Math.floor(damage * 1.2);
+		}
+		if (attacker.item === 'griseousorb' && attacker.species.includes('Giratina') && (moveType === 'Dragon' || moveType === 'Ghost')) {
+			damage = Math.floor(damage * 1.2);
+		}
 	}
 
 	return damage;
@@ -921,7 +995,8 @@ export function applyPostDamageContactEffects(
 	}
 
 	const attackerAbility = toID(attacker.ability || '');
-	const isContact = move.flags.contact && attackerAbility !== 'longreach' && attacker.item !== 'protectivepads';
+	// Punching Glove protects against contact effects
+	const isContact = move.flags.contact && attackerAbility !== 'longreach' && attacker.item !== 'protectivepads' && (battle.magicRoomTurns > 0 || attacker.item !== 'punchingglove');
 
 	if (isContact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
@@ -1250,6 +1325,9 @@ export function applySecondaryEffects(
 	messageLog: string[],
 	abilityContext: AbilityContext
 ) {
+	// Covert Cloak Check
+	if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'covertcloak') return;
+
 	if (!move.secondary || !RPGAbilities.shouldApplySecondaryEffects(attackerSlot.pokemon, move)) return;
 
 	let chance = move.secondary.chance || 100;
