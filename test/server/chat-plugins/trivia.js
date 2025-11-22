@@ -3,21 +3,28 @@
 const assert = require('assert').strict;
 
 const { makeUser, destroyUser } = require('../../users-utils');
-const trivia = require('../../../dist/server/chat-plugins/trivia/trivia');
-const Trivia = trivia.Trivia;
-const FirstModeTrivia = trivia.FirstModeTrivia;
-const TimerModeTrivia = trivia.TimerModeTrivia;
-const NumberModeTrivia = trivia.NumberModeTrivia;
-
-function makeTriviaUser(name, ip) {
-	const user = makeUser(name, ip);
-	assert.equal(Users.users.get(user.id), user);
-	user.joinRoom('trivia');
-	return user;
-}
 
 describe('Trivia', () => {
+	let trivia = null;
+	let Trivia = null;
+	let FirstModeTrivia = null;
+	let TimerModeTrivia = null;
+	let NumberModeTrivia = null;
+
+	function makeTriviaUser(name, ip) {
+		const user = makeUser(name, ip);
+		assert.equal(Users.users.get(user.id), user);
+		user.joinRoom('trivia');
+		return user;
+	}
+
 	before(function () {
+		trivia = require('../../../dist/server/chat-plugins/trivia/trivia');
+		Trivia = trivia.Trivia;
+		FirstModeTrivia = trivia.FirstModeTrivia;
+		TimerModeTrivia = trivia.TimerModeTrivia;
+		NumberModeTrivia = trivia.NumberModeTrivia;
+
 		Rooms.global.addChatRoom('Trivia');
 		this.room = Rooms.get('trivia');
 	});

@@ -1,0 +1,511 @@
+{
+    "aegislash": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bitter Malice", "Toxic", "Confuse Ray", "Protect", "Gyro Ball", "Night Slash", "Defog"],
+                "abilities": ["Bulletproof"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Attacker",
+                "movepool": ["Shadow Claw", "Shadow Sneak", "King's Shield", "Iron Head", "Close Combat", "Swords Dance"],
+                "abilities": ["Stance Change"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"banettemega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Shadow Claw", "Shadow Sneak", "Sucker Punch", "Pursuit", "Swords Dance", "Dark Pulse", "Grudge"],
+                "abilities": ["Tough Claws"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"ceruledge": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bitter Blade", "Spirit Shackle", "Close Combat", "Swords Dance"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Attacker",
+                "movepool": ["Bitter Blade", "Poltergeist", "Close Combat", "Swords Dance", "Shadow Sneak", "Taunt"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"dofagrigus": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Knock Off", "Haze", "Body Press"],
+                "abilities": ["Dummy"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Shadow Ball", "Calm Mind", "Strength Sap", "Dark Pulse"],
+                "abilities": ["Dummy"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"eddyazbear": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Spirit Shackle", "Close Combat", "Sucker Punch", "Bite", "Shadow Sneak", "Pursuit", "Grudge"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"fluttermane": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Astral Barrage", "Shadow Ball", "Moonblast", "Dark Pulse", "Mystical Fire", "Energy Ball", "Thunderbolt"],
+                "abilities": ["Protosynthesis", "Levitate"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"fluttermane2": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Wish", "Protect", "Moonblast", "Ominous Wind", "Night Shade", "Defog"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"gourgeist": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Moongeist Beam", "Moonlight", "Solar Beam", "Flamethrower"],
+                "abilities": ["Desolate Land"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Shadow Ball", "Moonblast", "Growth", "Solar Beam", "Flamethrower"],
+                "abilities": ["Desolate Land"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"gourgeistgigantic": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bitter Malice", "Flamethrower", "Infernal Parade", "Confuse Ray", "Moonblast", "Strength Sap", "Spit Up"],
+                "abilities": ["Pulp Up"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Bitter Malice", "Flamethrower", "Infernal Parade", "Moonblast", "Strength Sap", "Spit Up", "Nasty Plot"],
+                "abilities": ["Pulp Up"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"gourgeistlarge": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bitter Malice", "Flamethrower", "Infernal Parade", "Moonblast", "Strength Sap"],
+                "abilities": ["Spoky"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"gourgeisttiny": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Shadow Bone", "Shadow Punch", "Power Whip", "Flare Blitz", "Play Rough", "Strength Sap", "Pain Split"],
+                "abilities": ["Dazzling"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Support",
+                "movepool": ["Trick-or-Treat", "Shadow Punch", "Power Whip", "Flare Blitz", "Play Rough", "Strength Sap", "Pain Split"],
+                "abilities": ["Dazzling"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"houndstone": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Spirit Shackle", "Body Press", "Rapid Spin", "Cotton Guard", "Recover", "Will-O-Wisp"],
+                "abilities": ["Undead"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Support",
+                "movepool": ["Shadow Bone", "Crunch", "Roar", "Teleport", "Recover", "Will-O-Wisp"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Attacker",
+                "movepool": ["Last Respects", "Play Rough", "Crunch", "Sucker Punch", "Trick", "Shadow Sneak"],
+                "abilities": ["Undead"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"indeedee": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Shadow Ball", "Expanding Force", "Healing Wish", "Dazzling Gleam", "Encore", "Trick"],
+                "abilities": ["Psychic Surge"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Support",
+                "movepool": ["Shadow Ball", "Psychic", "Healing Wish", "Dazzling Gleam", "Encore", "Rapid Spin"],
+                "abilities": ["Scrappy"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"jableye": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bitter Malice", "Rage Fist", "Confuse Ray", "Dark Pulse", "Recover", "Strength Sap", "Thunder Wave", "Toxic", "Will-O-Wisp"],
+                "abilities": ["Jankster"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Support",
+                "movepool": ["Hex", "Nightmare", "Recover", "Will-O-Wisp"],
+                "abilities": ["Jankster"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Bitter Malice", "Calm Mind", "Dark Pulse", "Recover", "Strength Sap", "Thunder Wave", "Toxic", "Will-O-Wisp"],
+                "abilities": ["Jankster"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"jobapplication": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Spirit Shackle", "Lash Out", "Shadow Sneak", "Superpower", "Tidy Up", "Return", "Slack Off"],
+                "abilities": ["No Ability"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Attacker",
+                "movepool": ["Lash Out", "Shadow Sneak", "Astonish", "Parting Shot"],
+                "abilities": ["No Ability"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"kilotic": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Shadow Ball", "Scald", "Recover", "Flip Turn", "Ominous Wind", "Confuse Ray", "Haze"],
+                "abilities": ["Intimidate", "Cursed Body"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Shadow Ball", "Scald", "Recover", "Nasty Plot", "Alluring Voice"],
+                "abilities": ["Flare Boost", "Intimidate", "Cursed Body"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"lanturnevil": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Spite", "Confuse Ray", "Destiny Bond", "Confuse Ray", "Plasma Fists", "Shadow Sneak", "Volt Switch", "Liquidation"],
+                "abilities": ["Abyssal Light"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Swords Dance", "Phantom Force", "Destiny Bond", "Plasma Fists", "Shadow Sneak", "Volt Switch", "Liquidation"],
+                "abilities": ["Abyssal Light"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"merasmus": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["BOMBINOMICON!", "Substitute", "Expanding Force", "Spirit Break", "Protect"],
+                "abilities": ["Magician"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Feint Attack", "Substitute", "Curse", "Protect"],
+                "abilities": ["Magician"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"nursola": {
+        "level": 100,
+        "sets": [
+			{
+                "role": "Bulky Support",
+                "movepool": ["Ominous Wind", "Infernal Parade", "Giga Drain", "Stealth Rock", "Haze", "Wish", "Spiky Shield", "Will-O-Wisp"],
+                "abilities": ["Purifying Salt", "Solid Rock"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Support",
+                "movepool": ["Hex", "Giga Drain", "Strength Sap", "Will-O-Wisp"],
+                "abilities": ["Purifying Salt", "Solid Rock"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Shadow Ball", "Giga Drain", "Calm Mind", "Strength Sap", "Will-O-Wisp"],
+                "abilities": ["Purifying Salt", "Solid Rock"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"okestarspirit": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Lack Off", "Runch", "Ual Chop", "Words Dance"],
+                "abilities": ["Onder Guard"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"ppiritomb": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Ominous Wind", "Stone Axe", "Salt Cure", "Will-O-Wisp", "Protect"],
+                "abilities": ["PPressure", "Pinfiltrator"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Curse", "Salt Cure", "Rest", "Sleep Talk"],
+                "abilities": ["PPressure", "Pinfiltrator"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Power Gem", "Rest", "Sleep Talk", "Will-O-Wisp"],
+                "abilities": ["PPressure", "Pinfiltrator"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"quagsiredead": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Scald", "Earthquake", "Spirit Shackle", "Spikes", "Recover"],
+                "abilities": ["Cursed Body", "Unaware"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"rotom": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flamethrower", "Energy Ball", "Thunderbolt", "Volt Switch", "Ice Beam", "Shadow Ball", "Hurricane", "Surf", "Trick"],
+                "abilities": ["Shapeshift", "Levitate"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Flamethrower", "Energy Ball", "Thunderbolt", "Volt Switch", "Ice Beam", "Shadow Ball", "Hurricane", "Surf", "Nasty Plot"],
+                "abilities": ["Shapeshift"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"shedinja": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Shadow Force", "Nightmare", "Toxic", "Protect"],
+                "abilities": ["Wonder Guard"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Shadow Sneak", "Shadow Claw", "Sucker Punch", "Night Slash", "Swords Dance", "Protect"],
+                "abilities": ["Wonder Guard"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"trevenant": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Spirit Shackle", "Shadow Sneak", "Wood Hammer", "High Jump Kick", "Sucker Punch", "Swords Dance", "Destiny Bond"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Spirit Shackle", "Shadow Sneak", "Horn Leech", "Drain Punch", "Sucker Punch", "Swords Dance"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"ursalunabloodmoon": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Blood Moon", "Moongeist Beam", "Moonlight", "Calm Mind"],
+                "abilities": ["Mind's Eye"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Attacker",
+                "movepool": ["Blood Moon", "Spirit Shackle", "Moonlight", "Earth Power", "Calm Mind"],
+                "abilities": ["Undead"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"vampharos": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Volt Switch", "Thunderbolt", "Ominous Wind", "Moongeist Beam", "Spectral Thief", "Core Enforcer", "Moonlight"],
+                "abilities": ["Vamp"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Wallbreaker",
+                "movepool": ["Volt Switch", "Thunderbolt", "Shadow Ball", "Infernal Parade", "Core Enforcer", "Moonblast"],
+                "abilities": ["Vamp"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"wunala": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Shadow Ball", "Night Daze", "Moonblast", "Calm Mind"],
+                "abilities": ["Wand Rush"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Fast Attacker",
+                "movepool": ["Spectral Thief", "Moonblast", "Roost", "Will-O-Wisp", "Night Daze"],
+                "abilities": ["Wand Rush"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"xorygonz": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Shadow Ball", "Bitter Malice", "Night Shade", "Recover", "Ice Beam", "Thunderbolt", "Sludge Bomb"],
+                "abilities": ["Mutual Exclusion"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Shadow Ball", "Bitter Malice", "Nasty Plot", "Recover", "Ice Beam", "Thunderbolt", "Sludge Bomb"],
+                "abilities": ["Mutual Exclusion"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"yveltal": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Dragon Tail", "Oblivion Wing", "Shadow Ball", "Roost", "Defog", "U-Turn"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Bulky Attacker",
+                "movepool": ["Draco Meteor", "Oblivion Wing", "Shadow Ball", "Roost", "Dark Pulse", "U-Turn"],
+                "abilities": ["Dark Aura"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+	"zoroarkhisui": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Blizzard", "Shadow Ball", "Aurora Veil", "U-Turn", "Flamethrower", "Taunt", "Will-O-Wisp"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Ghost"]
+            },
+			{
+                "role": "Setup Sweeper",
+                "movepool": ["Ice Beam", "Shadow Ball", "Nasty Plot", "Flamethrower", "Taunt", "Sludge Bomb"],
+                "abilities": ["Cursed Body", "Illusion"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    }
+}

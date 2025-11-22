@@ -1264,6 +1264,7 @@ function createTournament(
 			if (settings.autostart === true) tour.setAutostartAtCap(true);
 		}
 		if (settings.autodq) tour.setAutoDisqualifyTimeout(settings.autodq, output);
+		if (settings.autoconfirmedOnly) tour.setAutoconfirmedOnly(true);
 		if (settings.forcePublic) tour.setForcePublic(true);
 		if (settings.forceTimer) tour.setForceTimer(true);
 		if (settings.allowModjoin === false) tour.setModjoin(false);

@@ -587,6 +587,7 @@ export const commands: Chat.ChatCommands = {
 
 		const { dex, format, targets } = this.splitFormat(target, true, true);
 
+		const prefix = `|c|${user.getIdentity(room)}|/raw `;
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -642,7 +643,7 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -664,6 +665,7 @@ export const commands: Chat.ChatCommands = {
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -710,7 +712,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(item.gen),
@@ -742,7 +744,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
@@ -848,7 +850,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
@@ -862,7 +864,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
-				buffer += `|raw|<font size="1">${Object.entries(details).map(([detail, value]) => (
+				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
 					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
@@ -1982,7 +1984,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		return this.sendReply(`|raw|${buf.join("")}`);
+		return this.sendReply(`|c|${user.getIdentity(room)}|/raw ${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,
@@ -2727,7 +2729,7 @@ export const commands: Chat.ChatCommands = {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) throw new Chat.ErrorMessage(`Specify a Twitch channel.`);
 			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
-			buf += `<twitch src="${link}" />`;
+			buf += Utils.html`<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
 				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video
@@ -2862,12 +2864,15 @@ export const commands: Chat.ChatCommands = {
 		const args = Chat.parseArguments(target, ' | ', {
 			allowEmpty: true, useIDs: false,
 		});
+		if (!args.format?.[0]) {
+			return this.popupReply(`No format specified.`);
+		}
 		const format = Dex.formats.get(toID(args.format[0]));
 		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
-		const targetUserID = toID(args.user[0]);
+		const targetUserID = toID(args.user?.[0] || '');
 		if (targetUserID) {
 			this.checkChat();
 			if (!Users.get(targetUserID)) {
