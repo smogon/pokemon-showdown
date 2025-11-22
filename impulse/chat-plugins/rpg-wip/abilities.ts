@@ -2173,6 +2173,7 @@ export function checkFormChangeAbilities(slot: ActivePokemonSlot, battle: Battle
 
 export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 	const ability = toID(attacker.ability || '');
+	const item = toID(attacker.item || '');
 
 	if (move.multihit) {
 		if (ability === 'skilllink') {
@@ -2180,6 +2181,10 @@ export function getMultiHitCount(attacker: RPGPokemon, move: Move): number {
 				return move.multihit[1];
 			}
 			return 5;
+		}
+
+		if (item === 'loadeddice' && Array.isArray(move.multihit) && move.multihit[0] === 2 && move.multihit[1] === 5) {
+			return Math.random() < 0.5 ? 4 : 5;
 		}
 
 		if (Array.isArray(move.multihit) && move.multihit[0] === 2 && move.multihit[1] === 5) {
