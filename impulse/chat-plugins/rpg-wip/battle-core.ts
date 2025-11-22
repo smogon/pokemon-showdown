@@ -72,7 +72,7 @@ export function checkAccuracy(
 	}
 
 	// Standard Accuracy Check
-	if (move.accuracy === true) return true; // moves with accuracy: true always hit (e.g. self-target)
+	if (move.accuracy === true) return true;
 
 	const moveAccuracyBase = typeof move.accuracy === 'number' ? move.accuracy : 100;
 	
@@ -143,21 +143,17 @@ export function checkAccuracy(
 
 /**
  * Checks if a move bypasses the target's Substitute.
- * Returns true if the move hits the Pokemon directly (bypassing Sub),
- * Returns false if the move hits the Substitute.
  */
 export function checkSubstituteBypass(
 	defenderSlot: ActivePokemonSlot,
 	attackerSlot: ActivePokemonSlot,
 	move: Move
 ): boolean {
-	if (!defenderSlot.substitute) return true; // No sub to bypass
+	if (!defenderSlot.substitute) return true; 
 
-	// Moves that specifically bypass substitute (e.g. Sound moves in Gen 6+)
 	if (move.flags.bypasssub) return true;
-	if (move.flags.sound) return true; // Sound moves bypass Substitute
+	if (move.flags.sound) return true;
 
-	// Infiltrator Ability
 	const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 	if (attackerAbility === 'infiltrator') return true;
 
@@ -286,7 +282,6 @@ export function handleDamagingMove(
 			handleHPDropEffects(defenderSlot, battle, messageLog);
 
 			// Eject Button Logic - Blocked by Sheer Force
-			// Red Card Logic - Blocked by Sheer Force (handled in applyPostDamageContactEffects)
 			if (!attackResult.sheerForceActive && battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'ejectbutton' && defenderSlot.pokemon.hp > 0 && !battle.pendingPivot && !battle.aiPendingPivot) {
 				let slotIndex = battle.playerSlots.indexOf(defenderSlot);
 				let isPlayer = true;
@@ -310,6 +305,7 @@ export function handleDamagingMove(
 			}
 		}
 
+		// Pass sheerForceActive to prevent Life Orb recoil
 		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful, attackResult.sheerForceActive);
 
 		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
@@ -440,7 +436,12 @@ export function handleDamagingMove(
 
 	if (moveWasSuccessful && defenderSlot.pokemon.hp > 0) {
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
-		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext, attackResult.sheerForceActive);
+		// Pass sheerForceActive
+		// Note: 'sheerForceActive' needs to be derived from at least one hit's calculation if multihit, 
+		// but it's consistent across hits. We can calculate it once or use the result from the last loop.
+		const appliesSecondaries = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
+		const sheerForceActive = !appliesSecondaries;
+		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext, sheerForceActive);
 	}
 
 	// Throat Spray Logic
@@ -535,27 +536,31 @@ export function calculateDamage(
 		messageLog: [],
 	};
 
+	// Calculate Sheer Force status early
+	const appliesSecondaries = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
+	const sheerForceActive = !appliesSecondaries;
+
 	if (move.flags.powder && defenderSpecies.types.includes('Grass')) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false, sheerForceActive: false };
+		return { damage: 0, message: ` <i style="color: #6c757d;">Grass-types are immune to powder moves!</i>`, effectiveness: 0, isCritical: false, sheerForceActive };
 	}
 	const immunityCheck = RPGAbilities.checkImmunity(abilityContext);
 	if (immunityCheck?.immune) {
-		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false, sheerForceActive: false };
+		return { damage: 0, message: ` <i style="color: #6c757d;">${immunityCheck.message}</i>`, effectiveness: 0, isCritical: false, sheerForceActive };
 	}
 
 	if (!move.basePower) {
-		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1, isCritical: false, sheerForceActive: false };
-		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1, isCritical: false, sheerForceActive: false };
+		if (moveId === 'dragonrage') return { damage: 40, message: '', effectiveness: 1, isCritical: false, sheerForceActive };
+		if (moveId === 'sonicboom') return { damage: 20, message: '', effectiveness: 1, isCritical: false, sheerForceActive };
 		if (moveId === 'seismictoss' || moveId === 'nightshade') {
-			return { damage: attacker.level, message: '', effectiveness: 1, isCritical: false, sheerForceActive: false };
+			return { damage: attacker.level, message: '', effectiveness: 1, isCritical: false, sheerForceActive };
 		}
 		if (moveId === 'psywave') {
-			return { damage: Math.floor(Math.random() * attacker.level * 1.5) + 1, message: '', effectiveness: 1, isCritical: false, sheerForceActive: false };
+			return { damage: Math.floor(Math.random() * attacker.level * 1.5) + 1, message: '', effectiveness: 1, isCritical: false, sheerForceActive };
 		}
 		if (moveId === 'superfang') {
-			return { damage: Math.floor(defender.hp / 2), message: '', effectiveness: 1, isCritical: false, sheerForceActive: false };
+			return { damage: Math.floor(defender.hp / 2), message: '', effectiveness: 1, isCritical: false, sheerForceActive };
 		}
-		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false, sheerForceActive: false };
+		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false, sheerForceActive };
 	}
 
 	if (move.id === 'terablast' && attackerSlot.terastallized) {
@@ -571,7 +576,7 @@ export function calculateDamage(
 	if (basePower === -1) {
 		const healAmount = Math.floor(defender.maxHp * 0.25);
 		defender.hp = Math.min(defender.maxHp, defender.hp + healAmount);
-		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false, sheerForceActive: false };
+		return { damage: 0, message: ` <i style="color: #6c757d;">${defender.species} was healed!</i>`, effectiveness: 0, isCritical: false, sheerForceActive };
 	}
 
 	const moveType = getMoveType(move, attacker, attackerSlot, battle, abilityContext);
@@ -687,10 +692,6 @@ export function calculateDamage(
 	if (effectiveness > 1) message += ` <i style="color: #28a745;">It's super effective!</i>`;
 	if (effectiveness < 1 && effectiveness > 0) message += ` <i style="color: #d9534f;">It's not very effective...</i>`;
 	if (effectiveness === 0) message = ` <i style="color: #6c757d;">It had no effect on ${defender.species}!</i>`;
-
-	// Calculate Sheer Force status
-	const appliesSecondaries = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
-	const sheerForceActive = !appliesSecondaries;
 
 	return { damage, message, effectiveness, berryConsumed, gemConsumed, isCritical, sheerForceActive };
 }
@@ -1182,83 +1183,6 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
-	// Red Card Logic - Blocked by Sheer Force if Sheer Force is active?
-	// Actually, Sheer Force prevents secondary effects. Red Card is an item effect.
-	// However, standard mechanics say Red Card/Eject Button activate *after* the hit.
-	// If Sheer Force is active, secondary effects are nullified, but Red Card is triggered by *damage*.
-	// Wait, Gen 5+ mechanics: "Sheer Force prevents the effect of ... Red Card ... Eject Button".
-	// So we need to check if the move was Sheer Force boosted.
-	// But applyPostDamageContactEffects doesn't receive the sheerForce flag yet?
-	// Ah, we haven't updated the signature of applyPostDamageContactEffects to accept sheerForceActive yet.
-	// We need to check that.
-	// Let's check if the previous step (Step 1) implementation included that.
-	// I just implemented Step 1 before this message.
-	// In Step 1's battle-core.ts, handleDamagingMove DOES pass sheerForceActive to applyPostDamageContactEffects!
-	// But applyPostDamageContactEffects signature in battle-core.ts was updated.
-	// But wait, applyPostDamageContactEffects is defined in battle-core.ts.
-	// Why am I seeing it in battle-core.ts in the previous step?
-	// Ah, the function is exported from battle-core.ts.
-	// I just pasted battle-core.ts in the previous message.
-	// So I am done with Step 1?
-	// The user asked to implement everything from Step 1.
-	// I did that.
-	// Now I am doing Step 2? Wait, I might have mixed up the order in my head or the prompt.
-	// The user said: "Lets implement everything from Step 1." (Previous prompt).
-	// I provided battle-core.ts (Step 1).
-	// I provided abilities.ts (Step 1).
-	// I provided battle-moves.ts (Step 1? No, I provided battle-moves.ts in Step 8/Step 2/Step 4).
-	// Wait, did I provide battle-moves.ts for Step 1?
-	// In the previous turn (Step 1), I provided battle-core.ts, abilities.ts, utils.ts (for setItem), and battle-moves.ts (for setItem usage).
-	
-	// Wait, `applyPostDamageContactEffects` is in `battle-core.ts`.
-	// `handleDamagingMove` is in `battle-core.ts`.
-	// So Red Card logic is in `battle-core.ts`.
-	
-	// Okay, I have successfully implemented Step 1 in the previous turn.
-	
-	// Now the user asked: "I have implemented everything from Step 4, Step 7, Step 8 and Step 2. Now show the updated list"
-	// And then "Ok Now let's implement everything from Step 2."
-	// Wait, the user asked to implement Step 2 *again*?
-	// Ah, I might have confused the "Step 2" request with the previous one.
-	// In the message before the last one, I implemented Step 2 (checkAccuracy, checkSubstituteBypass).
-	// Then the user said "I have implemented everything from Step 4, Step 7, Step 8 and Step 2."
-	// Then I showed the list.
-	// Then the user said "Lets implement everything from Step 1."
-	// Then I implemented Step 1.
-	// NOW the user says "I have implemented everything from Step 4, Step 7, Step 8 and Step 2." (Wait, they might have copy-pasted or I am misreading).
-	// No, the user said: "I have implemented everything from Step 4, Step 7, Step 8 and Step 2. Now show the updated list".
-	// Then I showed the list where Step 1 was the next priority.
-	// Then the user said "Lets implement everything from Step 1."
-	// Then I implemented Step 1.
-	
-	// Wait, I am currently replying to the prompt "Lets implement everything from Step 1."
-	// Yes.
-	
-	// In this response, I am providing the updated `battle-core.ts` which includes the Sheer Force logic.
-	// I am implementing Step 1 now.
-	
-	// Wait, I just realized I am typing the response for "Lets implement everything from Step 1."
-	// The code block above is `battle-core.ts`.
-	// I need to verify if I missed anything.
-	
-	// Red Card logic in `battle-core.ts`:
-	/*
-	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
-		// ...
-	}
-	*/
-	// I need to add `&& !attackResult.sheerForceActive`?
-	// But `applyPostDamageContactEffects` is called inside `handleDamagingMove`.
-	// In `handleDamagingMove`, I passed `attackResult.sheerForceActive` to `applyPostDamageContactEffects`?
-	// Let's check the `handleDamagingMove` code in `battle-core.ts` I provided.
-	/*
-	applyPostDamageContactEffects(attackerSlot, defenderSlot, move, battle, messageLog, damageDealt, attackResult.effectiveness, abilityContext, attackResult.isCritical);
-	*/
-	// It does NOT pass `sheerForceActive`.
-	// I need to update the signature of `applyPostDamageContactEffects` in `battle-core.ts` to accept it.
-	
-	// Let me correct `battle-core.ts` in this response to ensure `sheerForceActive` is passed and used.
-	
 	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
 		const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
 		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
@@ -1495,8 +1419,8 @@ export function applyRecoilAndSelfEffects(
 			messageLog.push(`${attacker.species}'s ${attacker.ability} prevents recoil!`);
 		}
 	} else if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
-		// If Sheer Force is active (because move has secondary effects and user has Sheer Force),
-		// Life Orb recoil is negated.
+		const attackerAbility = toID(attacker.ability || '');
+		const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
 		if (!sheerForceActive && RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 			messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
@@ -1667,6 +1591,317 @@ export function applySecondaryEffects(
 	if (attackerAbility === 'stench' && move.category !== 'Status' && defenderSlot.pokemon.hp > 0) {
 		if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
 			defenderSlot.willFlinch = true;
+		}
+	}
+}
+
+export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
+	if (slot?.terastallized) {
+		return [slot.terastallized];
+	}
+	const species = Dex.species.get(pokemon.species);
+	return species.types;
+}
+
+export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState, attacker?: RPGPokemon): number {
+	let effectiveness = 1;
+	const chartEntry = TYPE_CHART[moveType];
+	if (!chartEntry) return 1;
+
+	const hasStrongWinds = battle.weather?.type === 'strong-winds';
+	const isFlyingType = defenderTypes.includes('Flying');
+
+	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
+	const hasMindEye = attackerAbility === 'mindseye';
+	const hasScrappy = attackerAbility === 'scrappy';
+
+	for (const defenderType of defenderTypes) {
+		if (chartEntry.superEffective.includes(defenderType)) {
+			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
+				['Rock', 'Electric', 'Ice'].includes(moveType)) {
+				effectiveness *= 1;
+			} else {
+				effectiveness *= 2;
+			}
+		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
+			effectiveness *= 0.5;
+		} else if (chartEntry.noEffect.includes(defenderType)) {
+			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				effectiveness *= 1;
+			} else if (hasScrappy && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
+				effectiveness *= 1;
+			} else {
+				effectiveness *= 0;
+			}
+		}
+	}
+	return effectiveness;
+}
+
+export function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+
+	const speciesId = toID(opponentActivePokemon.species);
+	const catchRate = MANUAL_CATCH_RATES[speciesId] || 150;
+
+	const ballBonus = getBallBonus(ballId, battle, targetSlot);
+	if (ballBonus === 255) return { success: true, shakes: 4 };
+
+	let statusBonus = 1;
+	if (opponentStatus === 'slp' || opponentStatus === 'frz') {
+		statusBonus = 2.5;
+	} else if (opponentStatus === 'par' || opponentStatus === 'psn' || opponentStatus === 'brn') {
+		statusBonus = 1.5;
+	}
+
+	const { maxHp, hp } = opponentActivePokemon;
+	const modifiedCatchRate = catchRate;
+
+	const a = Math.floor(
+		(((3 * maxHp - 2 * hp) * modifiedCatchRate * ballBonus) / (3 * maxHp)) * statusBonus
+	);
+
+	if (a >= 255) return { success: true, shakes: 4 };
+
+	const b = Math.floor(65536 / (255 / a) ** 0.1875);
+
+	let shakes = 0;
+	for (let i = 0; i < 4; i++) {
+		const rand = Math.floor(Math.random() * 65536);
+		if (rand >= b) {
+			return { success: false, shakes };
+		}
+		shakes++;
+	}
+
+	return { success: true, shakes: 4 };
+}
+
+export function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
+	const opponentActivePokemon = targetSlot.pokemon;
+	const opponentStatus = targetSlot.status;
+	const playerSlot = getActiveSlots(battle.playerSlots)[0];
+	if (!playerSlot) return 1;
+	const activePokemon = playerSlot.pokemon;
+	const turn = battle.turn;
+
+	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
+
+	switch (ballId) {
+	case 'pokeball': return 1;
+	case 'greatball': return 1.5;
+	case 'ultraball': return 2;
+	case 'masterball': return 255;
+	
+	// Condition-based balls
+	case 'quickball':
+		return turn === 0 ? 5 : 1;
+	case 'timerball':
+		return Math.min(4, 1 + turn * (1229 / 4096));
+	case 'repeatball':
+		// TODO: Check if player has caught this species before
+		return 3.5; // For now, always give bonus
+	case 'nestball':
+		return opponentActivePokemon.level <= 30 ? Math.max(1, (41 - opponentActivePokemon.level) / 10) : 1;
+	case 'duskball':
+		// TODO: Check time of day or cave location
+		return 3; // For now, always give bonus
+	case 'netball':
+		return opponentSpecies.types.includes('Bug') || opponentSpecies.types.includes('Water') ? 3.5 : 1;
+	case 'diveball':
+		// TODO: Check if fishing/surfing encounter
+		return 3.5; // For now, always give bonus
+	case 'healball':
+		return 1; // Same catch rate as Poké Ball, but heals after catch
+	
+	// Apricorn balls
+	case 'fastball':
+		return opponentSpecies.baseStats.spe >= 100 ? 4 : 1;
+	case 'levelball':
+		if (activePokemon.level >= opponentActivePokemon.level * 4) return 8;
+		if (activePokemon.level >= opponentActivePokemon.level * 2) return 4;
+		if (activePokemon.level > opponentActivePokemon.level) return 2;
+		return 1;
+	case 'heavyball':
+		return opponentActivePokemon.weightkg >= 300 ? 4 :
+		       opponentActivePokemon.weightkg >= 200 ? 3 :
+		       opponentActivePokemon.weightkg >= 100 ? 2 : 1;
+	case 'loveball':
+		// TODO: Check if same species, opposite gender
+		return 8; // For now, always give bonus
+	case 'lureball':
+		// TODO: Check if fishing encounter
+		return 4; // For now, always give bonus
+	case 'moonball':
+		// Check if evolves with Moon Stone
+		const moonStoneEvolvers = ['nidorina', 'nidorino', 'clefairy', 'jigglypuff', 'skitty', 'munna'];
+		return moonStoneEvolvers.includes(toID(opponentActivePokemon.species)) ? 4 : 1;
+	case 'friendball':
+		return 1; // Same catch rate, but sets friendship to 200
+	
+	// Premium balls
+	case 'luxuryball':
+		return 1; // Same catch rate, but increases friendship gain
+	case 'premierball':
+		return 1; // Same as Poké Ball
+	case 'dreamball':
+		return opponentStatus === 'slp' ? 4 : 1;
+	case 'safariball':
+		return 1.5; // Slightly better than Poké Ball
+	case 'parkball':
+		return 255; // Always catches in special areas
+	
+	// Special balls
+	case 'beastball':
+		// TODO: Check if Ultra Beast
+		return 5; // For now, give good bonus
+	case 'cherishball':
+		return 1; // Event ball, same as Poké Ball
+	case 'sportball':
+		return 1.5; // Bug-Catching Contest ball
+	case 'strangeball':
+		return 1; // Mysterious ball
+	
+	default:
+		return 1;
+	}
+}
+
+export function gainExperience(
+	player: PlayerData,
+	participantSlots: ActivePokemonSlot[],
+	defeatedPokemon: RPGPokemon,
+	room: ChatRoom,
+	user: User
+): { messages: string[], leveledUp: boolean } {
+	const defeatedSpeciesId = toID(defeatedPokemon.species);
+	const baseExp = MANUAL_BASE_EXP[defeatedSpeciesId] || 150;
+
+	let leveledUp = false;
+	const messages: string[] = [];
+	const participantExpGains = new Map<string, number>();
+
+	const opponentLevel = defeatedPokemon.level;
+	const X = 2 * opponentLevel + 10;
+	const Z = Math.floor((baseExp * opponentLevel) / 5);
+
+	const activeParticipantIds = new Set<string>();
+	for (const slot of participantSlots) {
+		if (slot?.pokemon && slot.pokemon.hp > 0) {
+			activeParticipantIds.add(slot.pokemon.id);
+		}
+	}
+
+	for (const pokemon of player.party) {
+		if (pokemon.level >= GameConfig.levelCap) continue;
+
+		const participantLevel = pokemon.level;
+		const Y = opponentLevel + participantLevel + 10;
+
+		const scalingFactor = (Math.sqrt(X) * X * X) / (Math.sqrt(Y) * Y * Y);
+		const expGained = Math.floor(scalingFactor * Z) + 1;
+
+		participantExpGains.set(pokemon.species, expGained);
+
+		if (activeParticipantIds.has(pokemon.id)) {
+			gainEffortValues(pokemon, defeatedPokemon);
+		}
+
+		pokemon.experience += expGained;
+	}
+
+	if (participantExpGains.size === 0) return { messages: [], leveledUp: false };
+
+	if (participantExpGains.size === 1) {
+		const [species, exp] = Array.from(participantExpGains.entries())[0];
+		messages.push(`<b>${species} gained ${exp} Experience Points!</b>`);
+	} else {
+		const expValues = Array.from(participantExpGains.values());
+		const allSame = expValues.every(v => v === expValues[0]);
+
+		if (allSame) {
+			const participantNames = Array.from(participantExpGains.keys());
+			messages.push(`<b>${participantNames.join(' and ')} gained ${expValues[0]} Experience Points!</b>`);
+		} else {
+			const expStrings = Array.from(participantExpGains.entries()).map(([name, exp]) =>
+				`${name} gained ${exp} Experience Points`
+			);
+			messages.push(`<b>${expStrings.join(' and ')}!</b>`);
+		}
+	}
+
+	for (const pokemon of player.party) {
+		if (pokemon.level >= GameConfig.levelCap) continue;
+
+		while (pokemon.experience >= pokemon.expToNextLevel && pokemon.level < GameConfig.levelCap) {
+			messages.push(...levelUp(pokemon));
+			leveledUp = true;
+			const evolveMessage = checkEvolution(player, pokemon, { room, user });
+			if (evolveMessage) {
+				messages.push(evolveMessage);
+				break;
+			}
+			const { messages: newMoveMessages } = handleLearningMoves(player, pokemon);
+			messages.push(...newMoveMessages);
+		}
+	}
+
+	return { messages, leveledUp };
+}
+
+export function gainEffortValues(pokemon: RPGPokemon, defeatedPokemon: RPGPokemon) {
+	const defeatedSpeciesId = toID(defeatedPokemon.species);
+	const evYield = MANUAL_EV_YIELDS[defeatedSpeciesId] || { atk: 1 };
+
+	let totalEVs = Object.values(pokemon.evs).reduce((a, b) => a + b, 0);
+	for (const stat in evYield) {
+		if (totalEVs >= 510) break;
+		const statKey = stat as keyof Stats;
+		const evGained = evYield[statKey]!;
+		const currentEV = pokemon.evs[statKey];
+		if (currentEV >= 252) continue;
+		const canAdd = Math.min(evGained, 252 - currentEV, 510 - totalEVs);
+		pokemon.evs[statKey] += canAdd;
+		totalEVs += canAdd;
+	}
+	const species = Dex.species.get(pokemon.species);
+	const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+	const hpDiff = newStats.maxHp - pokemon.maxHp;
+	pokemon.hp = Math.max(1, pokemon.hp + hpDiff);
+	pokemon.maxHp = newStats.maxHp;
+	pokemon.atk = newStats.atk;
+	pokemon.def = newStats.def;
+	pokemon.spa = newStats.spa;
+	pokemon.spd = newStats.spd;
+	pokemon.spe = newStats.spe;
+}
+
+export function saveBattleStatus(battle: BattleState) {
+	const player = getPlayerData(battle.playerId);
+	const playerParty = getActiveParty(battle, player);
+
+	for (const slot of battle.playerSlots) {
+		if (slot) {
+			const pokemonInParty = playerParty.find(p => p.id === slot.pokemon.id);
+			if (pokemonInParty) {
+				if (slot.status === 'slp' || slot.status === 'frz') {
+					pokemonInParty.status = null;
+				} else {
+					pokemonInParty.status = slot.status;
+				}
+			}
+		}
+	}
+
+	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
+		for (const slot of battle.opponentSlots) {
+			if (slot) {
+				const opponentPokemonInParty = battle.opponentParty.find(p => p.id === slot.pokemon.id);
+				if (opponentPokemonInParty) {
+					opponentPokemonInParty.status = slot.status;
+				}
+			}
 		}
 	}
 }
