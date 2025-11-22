@@ -182,7 +182,7 @@ describe('Ability Shield', () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'desolateland', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{ species: 'weezinggalar', ability: 'neutralizinggas',moves: ['trick'] },
+			{ species: 'weezinggalar', ability: 'neutralizinggas', moves: ['trick'] },
 		]]);
 
 		battle.makeChoices();
