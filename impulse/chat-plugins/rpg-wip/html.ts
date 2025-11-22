@@ -1164,7 +1164,7 @@ function generatePokemonStatusTagsHTML(
 		slot.stockpileCount && slot.stockpileCount > 0 ? '<span class="rpg-tag rpg-tag-stockpile">Stockpile ×' + String(slot.stockpileCount) + '</span>' : '',
 		slot.lockedMoveCounter && slot.lockedMoveCounter > 0 ? '<span class="rpg-tag rpg-tag-rampage">Rampage' + (isDoubleBattle ? '' : ' (' + String(slot.lockedMoveCounter) + ')') + '</span>' : '',
 		slot.uproarTurns && slot.uproarTurns > 0 ? '<span class="rpg-tag rpg-tag-uproar">Uproar (' + String(slot.uproarTurns) + ')</span>' : '',
-		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? '<span class="rpg-tag rpg-tag-locked">Locked' + (isDoubleBattle ? '' : ': ' + slot.lockedMove) + '</span>' : '',
+		slot.lockedMove && slot.lockedMoveCounter === 0 && slot.uproarTurns === 0 ? '<span class="rpg-tag rpg-tag-locked">Locked' + (isDoubleBattle ? '' : ' (' + slot.lockedMove + ')') + '</span>' : '',
 		slot.mustRecharge ? '<span class="rpg-tag rpg-tag-must-recharge">Must Recharge</span>' : '',
 		slot.isProtected ? '<span class="rpg-tag rpg-tag-protected">Protected</span>' : '',
 		slot.isRedirecting ? '<span class="rpg-tag rpg-tag-attention">Center of Attention</span>' : '',
@@ -1447,8 +1447,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	const reflectTurns = (side === 'player') ? battle.playerReflectTurns : battle.opponentReflectTurns;
 	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
 	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
-	// ADDED: Mist Turns
 	const mistTurns = (side === 'player') ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
+	const tailwindTurns = (side === 'player') ? battle.playerTailwindTurns : battle.opponentTailwindTurns;
 
 	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
 	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
@@ -1458,7 +1458,8 @@ function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'
 	if (reflectTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-reflect">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-lightscreen">Light Screen</span>');
 	if (auroraVeilTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-auroraveil">Aurora Veil</span>');
-	if (mistTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-mist">Mist</span>'); // Added Logic
+	if (mistTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-mist">Mist</span>');
+	if (tailwindTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-tailwind">Tailwind</span>');
 	if (quickGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-quickguard">Quick Guard</span>');
 	if (wideGuard) effects.push('<span class="rpg-side-effect-tag rpg-side-wideguard">Wide Guard</span>');
 	if (craftyShield) effects.push('<span class="rpg-side-effect-tag rpg-side-craftyshield">Crafty Shield</span>');
@@ -1480,7 +1481,7 @@ function generateWeatherTags(battle: BattleState): string {
 		'sun': 'Sun',
 		'rain': 'Rain',
 		'sand': 'Sandstorm',
-		'hail': 'Snow', // CHANGED: Hail -> Snow for Gen 9 Accuracy
+		'hail': 'Snow',
 		'harsh-sun': 'Harsh Sun',
 		'heavy-rain': 'Heavy Rain',
 		'strong-winds': 'Strong Winds',

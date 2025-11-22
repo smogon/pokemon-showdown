@@ -216,6 +216,8 @@ export interface BattleState {
 	opponentAuroraVeilTurns: number;
 	playerMistTurns: number;
 	opponentMistTurns: number;
+	playerTailwindTurns: number; // Added Step 1
+	opponentTailwindTurns: number; // Added Step 1
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;

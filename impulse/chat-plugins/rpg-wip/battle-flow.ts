@@ -244,6 +244,12 @@ function compareActions(
 		if (slotA.pokemon.item === 'quickpowder' && slotA.pokemon.species === 'Ditto') speedA = Math.floor(speedA * 2);
 	}
 	speedA = RPGAbilities.applyAbilitySpeedModifier(slotA.pokemon, battle, speedA);
+	
+	// Apply Tailwind for A
+	const isPlayerA = battle.playerSlots.includes(slotA);
+	if (isPlayerA && battle.playerTailwindTurns > 0) speedA *= 2;
+	if (!isPlayerA && battle.opponentTailwindTurns > 0) speedA *= 2;
+
 	if (slotA.status === 'par' && abilityA !== 'quickfeet') speedA = Math.floor(speedA / 2);
 	if (slotA.pokemon.item === 'machobrace' || slotA.pokemon.item?.includes('power')) speedA = Math.floor(speedA / 2); // EV items drop speed
 
@@ -255,6 +261,12 @@ function compareActions(
 		if (slotB.pokemon.item === 'quickpowder' && slotB.pokemon.species === 'Ditto') speedB = Math.floor(speedB * 2);
 	}
 	speedB = RPGAbilities.applyAbilitySpeedModifier(slotB.pokemon, battle, speedB);
+
+	// Apply Tailwind for B
+	const isPlayerB = battle.playerSlots.includes(slotB);
+	if (isPlayerB && battle.playerTailwindTurns > 0) speedB *= 2;
+	if (!isPlayerB && battle.opponentTailwindTurns > 0) speedB *= 2;
+
 	if (slotB.status === 'par' && abilityB !== 'quickfeet') speedB = Math.floor(speedB / 2);
 	if (slotB.pokemon.item === 'machobrace' || slotB.pokemon.item?.includes('power')) speedB = Math.floor(speedB / 2);
 

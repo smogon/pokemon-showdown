@@ -193,8 +193,10 @@ function initializeAndStartBattle(
 		opponentLightScreenTurns: 0,
 		playerAuroraVeilTurns: 0,
 		opponentAuroraVeilTurns: 0,
-		playerMistTurns: 0, // Added
-		opponentMistTurns: 0, // Added
+		playerMistTurns: 0,
+		opponentMistTurns: 0,
+		playerTailwindTurns: 0, // Added for Step 1
+		opponentTailwindTurns: 0, // Added for Step 1
 		gravityTurns: 0,
 		mudSportTurns: 0,
 		waterSportTurns: 0,

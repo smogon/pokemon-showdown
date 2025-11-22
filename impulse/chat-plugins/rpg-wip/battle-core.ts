@@ -370,6 +370,72 @@ export function handleDamagingMove(
 		// Pass sheerForceActive to prevent Life Orb recoil
 		applyRecoilAndSelfEffects(attackerSlot, move, battle, messageLog, damageDealt, moveWasSuccessful, attackResult.sheerForceActive);
 
+		// STEP 2: OFFENSIVE ITEM MANIPULATION AND EFFECTS
+		if (moveWasSuccessful && damageDealt > 0 && defenderSlot.pokemon.hp > 0) {
+			// Thief / Covet
+			if ((move.id === 'thief' || move.id === 'covet')) {
+				if (attacker.hp > 0 && !attacker.item && defenderSlot.pokemon.item) {
+					const canSteal = !RPGAbilities.checkItemRemovalPrevention(defenderSlot.pokemon);
+					if (canSteal) {
+						const stolenItem = defenderSlot.pokemon.item;
+						if (setItem(attackerSlot, stolenItem, defenderSlot, battle, messageLog)) {
+							setItem(defenderSlot, undefined, undefined, battle, messageLog);
+							const itemName = ITEMS_DATABASE[stolenItem]?.name || stolenItem;
+							messageLog.push(`${attacker.species} stole ${defenderSlot.pokemon.species}'s ${itemName}!`);
+						}
+					} else {
+						messageLog.push(`${attacker.species} couldn't steal the item!`);
+					}
+				}
+			}
+
+			// Bug Bite / Pluck
+			if ((move.id === 'bugbite' || move.id === 'pluck')) {
+				const targetItem = defenderSlot.pokemon.item;
+				if (targetItem && (targetItem.endsWith('berry') || ITEMS_DATABASE[targetItem]?.category === 'berry')) {
+					const itemName = ITEMS_DATABASE[targetItem]?.name || targetItem;
+					messageLog.push(`${attacker.species} ate ${defenderSlot.pokemon.species}'s ${itemName}!`);
+					consumeBerry(defenderSlot, targetItem, messageLog);
+					
+					// Apply berry effect to attacker
+					const berryData = ITEMS_DATABASE[targetItem];
+					if (berryData?.effects) {
+						// Simple simulation of eating the berry
+						if (berryData.effects.healAmount || berryData.effects.healPercent) {
+							useHealingItem(getPlayerData(battle.playerId), attacker, targetItem); // Note: This is hacky using playerData context, ideal refactor is consumeBerry taking target
+							// Re-implementing heal logic simply for attacker here as consuming berry logic usually targets the holder
+							if (berryData.effects.healAmount) attacker.hp = Math.min(attacker.maxHp, attacker.hp + berryData.effects.healAmount);
+							if (berryData.effects.healPercent) attacker.hp = Math.min(attacker.maxHp, attacker.hp + Math.floor(attacker.maxHp * berryData.effects.healPercent));
+							messageLog.push(`${attacker.species} restored HP from the bug bite!`);
+						}
+						if (berryData.effects.battleStatBoost) {
+							applyStatChange(attackerSlot, berryData.effects.battleStatBoost.stat, berryData.effects.battleStatBoost.stages, battle, messageLog, attackerSlot);
+						}
+					}
+				}
+			}
+
+			// Incinerate
+			if (move.id === 'incinerate') {
+				const targetItem = defenderSlot.pokemon.item;
+				if (targetItem && (targetItem.endsWith('berry') || ITEMS_DATABASE[targetItem]?.category === 'berry' || targetItem.endsWith('gem'))) {
+					const itemName = ITEMS_DATABASE[targetItem]?.name || targetItem;
+					messageLog.push(`${defenderSlot.pokemon.species}'s ${itemName} was incinerated!`);
+					setItem(defenderSlot, undefined, undefined, battle, messageLog);
+				}
+			}
+
+			// Smack Down
+			if (move.id === 'smackdown') {
+				if (!defenderSlot.isSmackedDown) {
+					defenderSlot.isSmackedDown = true;
+					defenderSlot.magnetRiseTurns = 0;
+					defenderSlot.telekinesisCounter = 0;
+					messageLog.push(`${defenderSlot.pokemon.species} was knocked down!`);
+				}
+			}
+		}
+
 		if (move.id === 'knockoff' && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item && moveWasSuccessful) {
 			const defender = defenderSlot.pokemon;
 			// Check substitute

@@ -349,6 +349,16 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 	if (battle.ionDelugeTurns > 0) {
 		battle.ionDelugeTurns--;
 	}
+
+	// Tailwind Expiry (Step 1)
+	if (battle.playerTailwindTurns > 0) {
+		battle.playerTailwindTurns--;
+		if (battle.playerTailwindTurns === 0) messageLog.push(`Your team's Tailwind petered out!`);
+	}
+	if (battle.opponentTailwindTurns > 0) {
+		battle.opponentTailwindTurns--;
+		if (battle.opponentTailwindTurns === 0) messageLog.push(`The opposing team's Tailwind petered out!`);
+	}
 }
 
 export function applyEOTStatusDamage(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {

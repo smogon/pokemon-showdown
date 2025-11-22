@@ -1635,6 +1635,17 @@ export function handleGenericSideMove(
 		return true;
 	}
 
+	if (move.id === 'tailwind') {
+		if (isPlayerAttacker) {
+			battle.playerTailwindTurns = 4;
+			messageLog.push(`The Tailwind blew from behind your team!`);
+		} else {
+			battle.opponentTailwindTurns = 4;
+			messageLog.push(`The Tailwind blew from behind the opposing team!`);
+		}
+		return true;
+	}
+
 	if (['reflect', 'lightscreen', 'auroraveil'].includes(move.id)) {
 		const duration = (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'lightclay') ? 8 : 5;
 		if (isPlayerAttacker) {
