@@ -137,8 +137,9 @@ export function handleDamagingMove(
 				if (attackerSlot.healBlockTurns <= 0) {
 					let healAmount = Math.max(1, Math.floor(damageDealt / 8));
 					// Big Root affects Shell Bell
-					if (attacker.item === 'bigroot') { // This is redundant if we checked item for shellbell, but Big Root is a different item. Shell Bell AND Big Root can't be held simultaneously.
-						// Logic kept for reference, but since a Pokemon holds 1 item, it can't hold Shell Bell AND Big Root.
+					if (attacker.item === 'bigroot') { 
+						// Big Root is technically a different item, but for logic completeness:
+						// In standard mechanics, you can't hold both. 
 					}
 					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
@@ -477,7 +478,14 @@ export function calculateDamage(
 		}
 	}
 
-	const baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
+	let baseDamage = Math.floor((((2 * attacker.level / 5 + 2) * basePower * (finalAttackStat / defenseStat)) / 50) + 2);
+
+	// Metronome Logic
+	if (battle.magicRoomTurns === 0 && attacker.item === 'metronome') {
+		const count = attackerSlot.consecutiveMoveCount || 0;
+		const multiplier = 1 + (Math.min(5, count) * 0.2);
+		baseDamage = Math.floor(baseDamage * multiplier);
+	}
 
 	let damage = applyFinalDamageModifiers(
 		baseDamage, move, moveType, attacker, defender,
@@ -690,12 +698,14 @@ export function applyFinalDamageModifiers(
 	}
 
 	if (RPGAbilities.isWeatherActive(battle)) {
+		const attackerHasUmbrella = battle.magicRoomTurns === 0 && attacker.item === 'utilityumbrella';
+		
 		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
-			if (moveType === 'Fire') damage = Math.floor(damage * 1.5);
-			if (moveType === 'Water') damage = Math.floor(damage * 0.5);
+			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
+			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
 		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
-			if (moveType === 'Water') damage = Math.floor(damage * 1.5);
-			if (moveType === 'Fire') damage = Math.floor(damage * 0.5);
+			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
+			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
 		}
 	}
 
@@ -911,7 +921,7 @@ export function applyPostDamageContactEffects(
 	}
 
 	const attackerAbility = toID(attacker.ability || '');
-	const isContact = move.flags.contact && attackerAbility !== 'longreach';
+	const isContact = move.flags.contact && attackerAbility !== 'longreach' && attacker.item !== 'protectivepads';
 
 	if (isContact && attacker.hp > 0) {
 		if (battle.magicRoomTurns === 0) {
@@ -1421,6 +1431,16 @@ export function applySecondaryEffects(
 						messageLog.push(`${attackerSlot.pokemon.species}'s ${stat.toUpperCase()} ${boostValue > 1 ? 'sharply ' : ''}rose!`);
 					}
 				}
+			}
+		}
+	}
+
+	// King's Rock / Razor Fang
+	if (battle.magicRoomTurns === 0 && ['kingsrock', 'razorfang'].includes(attackerSlot.pokemon.item || '') && move.category !== 'Status') {
+		const alreadyFlinches = move.secondary?.volatileStatus === 'flinch' || (move.secondaries && move.secondaries.some((s: any) => s.volatileStatus === 'flinch'));
+		if (!alreadyFlinches) {
+			if (Math.random() < 0.1 && !RPGAbilities.preventsFlinch(defenderSlot.pokemon)) {
+				defenderSlot.willFlinch = true;
 			}
 		}
 	}
