@@ -1178,67 +1178,35 @@ export function handleGenericStatusInflictMove(
 		return true;
 	}
 
-	const defender = defenderSlot.pokemon;
-	const defenderSpecies = Dex.species.get(defender.species);
-	let canBeAfflicted = !defenderSlot.status;
-	const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
+	// Status move application (Will-O-Wisp, Thunder Wave, etc.)
+	// Use centralized status check logic
+	let statusToInflict = move.status;
+	if (move.id === 'toxic') statusToInflict = 'tox';
 
-	if (battle.terrain?.type === 'misty' && defenderIsGrounded) {
-		canBeAfflicted = false;
-		messageLog.push('The Misty Terrain prevents status conditions!');
-	}
-	if (battle.terrain?.type === 'electric' && move.status === 'slp' && defenderIsGrounded) {
-		canBeAfflicted = false;
-		messageLog.push('The Electric Terrain prevents sleep!');
-	}
-	const anyUproar = [...battle.playerSlots, ...battle.opponentSlots].some(s => s?.uproarTurns && s.uproarTurns > 0);
-	if (move.status === 'slp' && anyUproar) {
-		canBeAfflicted = false;
-		messageLog.push('But the uproar kept it awake!');
-	}
-	
-	// RPGAbilities.preventsStatus calls getActiveAbility internally? No, we must call it with attacker.
-	// Wait, the signature of preventsStatus in abilities.ts is (pokemon, status, battle, attacker).
-	// So we just pass the attacker here.
-	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status, battle, attackerSlot.pokemon)) {
-		canBeAfflicted = false;
-		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
-	}
-	if (canBeAfflicted) {
-		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
-		const isCorrosion = attackerAbility === 'corrosion';
+	const canInflict = RPGAbilities.canInflictStatus(
+		defenderSlot, 
+		statusToInflict as any, 
+		battle, 
+		attackerSlot, 
+		move
+	);
 
-		if (!isCorrosion) {
-			if ((move.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
-				(move.status === 'par' && defenderSpecies.types.includes('Electric')) ||
-				(move.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) ||
-				(move.status === 'frz' && defenderSpecies.types.includes('Ice'))) {
-				canBeAfflicted = false;
-			}
-		}
-	}
-
-	if (canBeAfflicted) {
-		let newStatus = move.status as 'psn' | 'brn' | 'par' | 'slp' | 'frz' | 'tox';
-		if (move.id === 'toxic') {
-			newStatus = 'tox';
-		}
-
-		defenderSlot.status = newStatus;
-		if (newStatus === 'tox') {
+	if (canInflict.success) {
+		defenderSlot.status = statusToInflict as any;
+		if (statusToInflict === 'tox') {
 			defenderSlot.toxicCounter = 1;
 		}
-		if (newStatus === 'slp') {
+		if (statusToInflict === 'slp') {
 			defenderSlot.sleepCounter = Math.floor(Math.random() * 3) + 1;
 		}
-		messageLog.push(`${defender.species} was afflicted with ${newStatus}!`);
+		messageLog.push(`${defenderSlot.pokemon.species} was afflicted with ${statusToInflict}!`);
 
-		const defenderAbility = toID(defender.ability || '');
+		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 		if (defenderAbility === 'synchronize') {
-			applySynchronize(newStatus, defenderSlot, attackerSlot, battle, messageLog);
+			applySynchronize(statusToInflict as any, defenderSlot, attackerSlot, battle, messageLog);
 		}
 	} else {
-		messageLog.push(`But it failed!`);
+		messageLog.push(canInflict.message || `But it failed!`);
 	}
 
 	return true;
@@ -1309,15 +1277,17 @@ export function handleGenericVolatileMove(
 		break;
 	case 'yawn':
 		if (!targetSlot.status && !targetSlot.yawnCounter) {
-			const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(target, battle);
-			const sleepPreventingAbilities = ['insomnia', 'vitalspirit', 'comatose', 'sweetveil'];
-			// Sweet Veil protects allies. We should check that separately properly or rely on preventing status fn.
-			// For now, check self immunity.
-			const isAbilityImmune = sleepPreventingAbilities.includes(targetAbility);
-			if (!isTerrainImmune && !isAbilityImmune) {
+			// Check if status CAN be inflicted later (e.g. Immunity to Sleep via Electric Terrain)
+			// Using canInflictStatus with 'slp'
+			const sleepCheck = RPGAbilities.canInflictStatus(targetSlot, 'slp', battle, attackerSlot, move);
+			
+			if (sleepCheck.success) {
 				targetSlot.yawnCounter = 2;
 				messageLog.push(`${target.species} grew drowsy!`);
 				hadEffect = true;
+			} else {
+				messageLog.push(sleepCheck.message || `But it failed!`);
+				hadEffect = false;
 			}
 		}
 		break;

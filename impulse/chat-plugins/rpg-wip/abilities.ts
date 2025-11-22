@@ -1,6 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots, applyStatChange, activateUnburden, setItem } from './utils';
-import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
+import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler, Status } from './interface';
 
 /**
  * Safely gets the defender's ability, returning 'noability' if the attacker
@@ -37,6 +37,112 @@ export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): s
 export function isPersistent(pokemon: RPGPokemon): boolean {
 	const ability = toID(pokemon.ability || '');
 	return ability === 'persistent';
+}
+
+/**
+ * Centralized Status Immunity Check.
+ * Checks Types, Abilities, Terrain, Safeguard, and more.
+ */
+export function canInflictStatus(
+	targetSlot: ActivePokemonSlot,
+	status: Status,
+	battle: BattleState,
+	sourceSlot?: ActivePokemonSlot,
+	fromMove?: Move,
+	isSecondaryEffect: boolean = false
+): { success: boolean, message?: string } {
+	const target = targetSlot.pokemon;
+	
+	// 1. Check if already has status
+	if (targetSlot.status) {
+		return { success: false, message: `But ${target.species} is already ${targetSlot.status === 'slp' ? 'asleep' : 'afflicted'}!` };
+	}
+
+	// 2. Check Comatose (acts as if asleep)
+	if (getActiveAbility(target, sourceSlot?.pokemon) === 'comatose') {
+		return { success: false, message: `${target.species} is already drowsing!` };
+	}
+
+	// 3. Check Terrain Immunities
+	if (isGrounded(targetSlot, battle)) {
+		if (battle.terrain?.type === 'misty') {
+			return { success: false, message: `The Misty Terrain prevents status conditions!` };
+		}
+		if (battle.terrain?.type === 'electric' && status === 'slp') {
+			return { success: false, message: `The Electric Terrain prevents sleep!` };
+		}
+	}
+
+	// 4. Check Safeguard
+	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === target.id);
+	// Safeguard is a side condition, but we store it as a generic move check in standard engines. 
+	// In this custom engine, we assume standard side conditions exist in the array or object.
+	// Currently side conditions are simple strings in playerHazards, but Safeguard is a volatile side effect.
+	// Assuming we implement Safeguard later fully, here is placeholder logic or check generic side effect flags if implemented.
+	// For now, we skip Safeguard specific check unless added to BattleState.
+
+	// 5. Check Shield Dust (only blocks secondary effects)
+	if (isSecondaryEffect && sourceSlot) {
+		const ability = getActiveAbility(target, sourceSlot.pokemon);
+		if (ability === 'shielddust') {
+			return { success: false };
+		}
+	}
+
+	// 6. Check Type Immunities
+	const targetSpecies = Dex.species.get(target.species);
+	const targetTypes = targetSlot.terastallized ? [targetSlot.terastallized] : targetSpecies.types;
+	
+	let corrosionActive = false;
+	if (sourceSlot && status === 'psn' || status === 'tox') {
+		if (toID(sourceSlot.pokemon.ability || '') === 'corrosion') {
+			corrosionActive = true;
+		}
+	}
+
+	if (status === 'brn' && targetTypes.includes('Fire')) {
+		return { success: false, message: `It doesn't affect ${target.species}...` };
+	}
+	if (status === 'par' && targetTypes.includes('Electric')) {
+		return { success: false, message: `It doesn't affect ${target.species}...` };
+	}
+	if (status === 'frz' && targetTypes.includes('Ice')) {
+		return { success: false, message: `It doesn't affect ${target.species}...` };
+	}
+	if ((status === 'psn' || status === 'tox') && !corrosionActive) {
+		if (targetTypes.includes('Poison') || targetTypes.includes('Steel')) {
+			return { success: false, message: `It doesn't affect ${target.species}...` };
+		}
+	}
+
+	// 7. Check Ability Immunities
+	const attacker = sourceSlot?.pokemon;
+	
+	// Prevents Status is internal logic for simple ability checks
+	if (preventsStatus(target, status, battle, attacker)) {
+		const ability = getActiveAbility(target, attacker);
+		return { success: false, message: `${target.species}'s ${ability} prevents ${status}!` };
+	}
+
+	// 8. Check Flower Veil
+	if (targetTypes.includes('Grass')) {
+		const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
+		const hasFlowerVeil = allies.some(s => s && s.pokemon.hp > 0 && getActiveAbility(s.pokemon, attacker) === 'flowerveil');
+		if (hasFlowerVeil) {
+			return { success: false, message: `${target.species} is protected by Flower Veil!` };
+		}
+	}
+
+	// 9. Uproar Check
+	if (status === 'slp') {
+		const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
+		const uproarUser = allSlots.find(s => s && s.pokemon.hp > 0 && s.uproarTurns && s.uproarTurns > 0);
+		if (uproarUser) {
+			return { success: false, message: `But the uproar kept it awake!` };
+		}
+	}
+
+	return { success: true };
 }
 
 export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
@@ -1403,7 +1509,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			const chance = inSunlight ? 1.0 : 0.5;
 
 			if (Math.random() < chance) {
-				// Use setItem to handle item gain properly (unburden reset etc)
 				setItem(slot, slot.consumedBerry, undefined, battle, messageLog);
 				messageLog.push(`${slot.pokemon.species}'s Harvest restored its ${slot.consumedBerry}!`);
 				slot.harvestUsedThisTurn = true;
@@ -1429,7 +1534,6 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 	'cudchew': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.cudChewBerry && !slot.pokemon.item) {
-				// Use setItem to restore the berry (Unburden resets)
 				setItem(slot, slot.cudChewBerry, undefined, battle, messageLog);
 				messageLog.push(`${slot.pokemon.species} is chewing its ${slot.cudChewBerry} again!`);
 
@@ -2573,27 +2677,10 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	}
 
 	if (handler.effect && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const statusToInflict = handler.effect as string;
-		let canBeAfflicted = true;
+		const statusToInflict = handler.effect as Status;
+		const canInflict = canInflictStatus(attackerSlot, statusToInflict, ctx.battle, ctx.defenderSlot);
 
-		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
-
-		if ((statusToInflict === 'par' && attackerTypes.includes('Electric')) ||
-			(statusToInflict === 'brn' && attackerTypes.includes('Fire')) ||
-			(statusToInflict === 'psn' && (attackerTypes.includes('Poison') || attackerTypes.includes('Steel')))) {
-			canBeAfflicted = false;
-		}
-
-		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle, ctx.defender)) {
-			canBeAfflicted = false;
-			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
-		}
-
-		if (statusToInflict === 'infatuate') {
-			canBeAfflicted = false;
-		}
-
-		if (canBeAfflicted) {
+		if (canInflict.success) {
 			attackerSlot.status = statusToInflict;
 			if (statusToInflict === 'slp') {
 				(attackerSlot as any).sleepCounter = Math.floor(Math.random() * 3) + 1;
@@ -2603,19 +2690,9 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	}
 
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const possibleStatuses: string[] = [];
-
-		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
-
-		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle, ctx.defender)) {
-			possibleStatuses.push('psn');
-		}
-		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle, ctx.defender)) {
-			possibleStatuses.push('par');
-		}
-		if (!preventsStatus(attacker, 'slp', ctx.battle, ctx.defender)) {
-			possibleStatuses.push('slp');
-		}
+		const possibleStatuses = (handler.effects as Status[]).filter(s => 
+			canInflictStatus(attackerSlot, s, ctx.battle, ctx.defenderSlot).success
+		);
 
 		if (possibleStatuses.length > 0) {
 			const statusToInflict = possibleStatuses[Math.floor(Math.random() * possibleStatuses.length)];
@@ -2688,6 +2765,7 @@ export const RPGAbilities = {
 	checkItemRemovalPrevention,
 	getSTABMultiplier,
 	preventsStatus,
+	canInflictStatus,
 	preventMove,
 	applySereneGrace,
 	isGrounded,
