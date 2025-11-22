@@ -186,7 +186,7 @@ describe('Ability Shield', () => {
 		]]);
 
 		battle.makeChoices();
-		assert.statStage(battle.field.weather, 'desolateland');
+		assert.equal(battle.field.weather, 'desolateland');
 	});
 
 	it.skip(`should not re-trigger abilities if Ability Shields are tricked, while Neutralizing Gas is in effect`, () => {

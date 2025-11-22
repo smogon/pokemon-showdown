@@ -19,6 +19,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (pokemon.getAbility().flags['cantsuppress']) return;
 
+			let neutralizingGasActive = false;
+			for (const active of this.getAllActive()) {
+				if (active.ability === ('neutralizinggas' as ID) && !active.volatiles['gastroacid'] &&
+					!active.transformed && !active.abilityState.ending && !pokemon.volatiles['commanding']) {
+					neutralizingGasActive = true;
+				}
+			}
+			if (!neutralizingGasActive) return;
+
 			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			if (pokemon.ability === 'gluttony') {
 				pokemon.abilityState.gluttony = false;
