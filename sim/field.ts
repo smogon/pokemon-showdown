@@ -258,8 +258,8 @@ export class Field {
 		if (!state.activeSources) throw new Error(`removing pseudoweather without a source`);
 		state.activeSources = state.activeSources.filter((s: Pokemon) => s !== source);
 		if (state.activeSources.length) return false;
-		this.battle.singleEvent('FieldEnd', status, state, this);
 		delete this.pseudoWeather[status.id];
+		this.battle.singleEvent('FieldEnd', status, state, this);
 		return true;
 	}
 

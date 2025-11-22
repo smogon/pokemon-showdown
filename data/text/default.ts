@@ -355,6 +355,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  Electricity's power was weakened!",
 		end: "  The effects of Mud Sport have faded.",
 	},
+	neutralizinggas: {
+		start: "  Neutralizing gas filled the area!",
+		end: "  The effects of the neutralizing gas wore off!",
+	},
 	trickroom: {
 		start: "  [POKEMON] twisted the dimensions!",
 		end: "  The twisted dimensions returned to normal!",
