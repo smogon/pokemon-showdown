@@ -190,6 +190,24 @@ export function applyStatChange(
 		messageLog.push(msg);
 
 		checkStatDropAbilities(slot, source, battle, messageLog);
+
+		// Handle White Herb
+		if (battle.magicRoomTurns === 0 && pokemon.item === 'whiteherb') {
+			let restored = false;
+			const stats = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'] as const;
+			for (const s of stats) {
+				if (slot.statStages[s] < 0) {
+					slot.statStages[s] = 0;
+					restored = true;
+				}
+			}
+			if (restored) {
+				messageLog.push(`${pokemon.species} returned its status to normal using its White Herb!`);
+				pokemon.item = undefined;
+				activateUnburden(slot, messageLog);
+			}
+		}
+
 		return true;
 	}
 

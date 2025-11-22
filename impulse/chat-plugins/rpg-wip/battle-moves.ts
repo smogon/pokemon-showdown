@@ -1477,7 +1477,10 @@ export function handleGenericFieldMove(
 			if (battle.terrain?.type === terrainType) {
 				messageLog.push('But it failed!');
 			} else {
-				battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
+				// Terrain Extender logic added here
+				const duration = (battle.magicRoomTurns === 0 && attacker.item === 'terrainextender') ?
+					EXTENDED_FIELD_EFFECT_DURATION : FIELD_EFFECT_DURATION;
+				battle.terrain = { type: terrainType, turns: duration };
 				messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
 			}
 			return true;
@@ -1521,7 +1524,9 @@ export function handleGenericFieldMove(
 		if (battle.terrain?.type === terrainType) {
 			messageLog.push('But it failed!');
 		} else {
-			battle.terrain = { type: terrainType, turns: FIELD_EFFECT_DURATION };
+			const duration = (battle.magicRoomTurns === 0 && attacker.item === 'terrainextender') ?
+				EXTENDED_FIELD_EFFECT_DURATION : FIELD_EFFECT_DURATION;
+			battle.terrain = { type: terrainType, turns: duration };
 			messageLog.push(`${attacker.species} turned the battlefield into ${terrainType} terrain!`);
 		}
 		return true;

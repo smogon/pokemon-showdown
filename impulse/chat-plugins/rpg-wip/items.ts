@@ -25,6 +25,8 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'widelens', 'scopelens', 'razorclaw', 'zoomlens', 'lightclay',
 	'kingsrock', 'razorfang', 'metronome', 'safetygoggles', 'protectivepads',
 	'adrenalineorb', 'utilityumbrella',
+	// Step 1 Additions
+	'brightpowder', 'laxincense', 'terrainextender',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -175,12 +177,15 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'protectivepads': { id: 'protectivepads', name: 'Protective Pads', category: 'held', description: 'Holder\'s contact moves do not trigger contact effects.', price: 4000 },
 	'adrenalineorb': { id: 'adrenalineorb', name: 'Adrenaline Orb', category: 'held', description: 'Raises holder\'s Speed by 1 stage if it gets Intimidated.', price: 4000 },
 	'utilityumbrella': { id: 'utilityumbrella', name: 'Utility Umbrella', category: 'held', description: 'The holder ignores rain- and sun-based effects.', price: 4000 },
+	'brightpowder': { id: 'brightpowder', name: 'Bright Powder', category: 'held', description: 'Lowers the accuracy of moves targeting the holder by 10%.', price: 4000 },
+	'laxincense': { id: 'laxincense', name: 'Lax Incense', category: 'held', description: 'Lowers the accuracy of moves targeting the holder by 10%.', price: 4000 },
 
 	// Weather Rocks
 	'heatrock': { id: 'heatrock', name: 'Heat Rock', category: 'held', description: 'Extends the duration of harsh sunlight set by the holder to 8 turns.', price: 4000 },
 	'damprock': { id: 'damprock', name: 'Damp Rock', category: 'held', description: 'Extends the duration of rain set by the holder to 8 turns.', price: 4000 },
 	'smoothrock': { id: 'smoothrock', name: 'Smooth Rock', category: 'held', description: 'Extends the duration of sandstorm set by the holder to 8 turns.', price: 4000 },
 	'icyrock': { id: 'icyrock', name: 'Icy Rock', category: 'held', description: 'Extends the duration of hailstorm set by the holder to 8 turns.', price: 4000 },
+	'terrainextender': { id: 'terrainextender', name: 'Terrain Extender', category: 'held', description: 'Extends the duration of terrain set by the holder to 8 turns.', price: 4000 },
 
 	// Utility / Duration
 	'lightclay': { id: 'lightclay', name: 'Light Clay', category: 'held', description: 'Extends the duration of barrier moves like Reflect and Light Screen to 8 turns.', price: 4000 },
@@ -288,7 +293,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 // ITEM LOGIC FUNCTIONS
 // ==========================================
 
-export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
+export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'>> | null {
 	const id = toID(itemId);
 	if (CUSTOM_ITEMS_DATABASE[id]) {
 		return CUSTOM_ITEMS_DATABASE[id];
