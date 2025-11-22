@@ -104,11 +104,65 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'terashard': { id: 'terashard', name: 'Tera Shard', category: 'misc', description: 'Changes Tera Type.', price: 5000, effects: { canTerastallize: true } },
 	'eggmovetutor': { id: 'eggmovetutor', name: 'Egg Move Tutor', category: 'misc', description: 'Teaches an Egg Move.', price: 3000 },
 
+	// Pokeballs
 	'pokeball': { id: 'pokeball', name: 'Poké Ball', category: 'pokeball', description: 'A device for catching wild Pokémon.', price: 200 },
 	'greatball': { id: 'greatball', name: 'Great Ball', category: 'pokeball', description: 'A good, high-performance Ball.', price: 600 },
 	'ultraball': { id: 'ultraball', name: 'Ultra Ball', category: 'pokeball', description: 'An ultra-high-performance Ball.', price: 1200 },
 	'masterball': { id: 'masterball', name: 'Master Ball', category: 'pokeball', description: 'Catches any Pokémon without fail.', price: 0 },
+	'quickball': { id: 'quickball', name: 'Quick Ball', category: 'pokeball', description: 'A Ball with a high catch rate on the first turn.', price: 1000 },
+	'timerball': { id: 'timerball', name: 'Timer Ball', category: 'pokeball', description: 'A Ball that becomes better the longer the battle goes on.', price: 1000 },
+	'repeatball': { id: 'repeatball', name: 'Repeat Ball', category: 'pokeball', description: 'A Ball that works well on Pokémon species already caught.', price: 1000 },
+	'nestball': { id: 'nestball', name: 'Nest Ball', category: 'pokeball', description: 'A Ball that works better on lower-level Pokémon.', price: 1000 },
+	'duskball': { id: 'duskball', name: 'Dusk Ball', category: 'pokeball', description: 'A Ball that works well at night or in caves.', price: 1000 },
+	'netball': { id: 'netball', name: 'Net Ball', category: 'pokeball', description: 'A Ball that works well on Water- and Bug-type Pokémon.', price: 1000 },
+	'diveball': { id: 'diveball', name: 'Dive Ball', category: 'pokeball', description: 'A Ball that works well on Pokémon in water.', price: 1000 },
+	'healball': { id: 'healball', name: 'Heal Ball', category: 'pokeball', description: 'A Ball that fully heals the Pokémon after catching.', price: 300 },
+	'fastball': { id: 'fastball', name: 'Fast Ball', category: 'pokeball', description: 'A Ball that works well on fast Pokémon.', price: 300 },
+	'levelball': { id: 'levelball', name: 'Level Ball', category: 'pokeball', description: 'A Ball that works better if your Pokémon is higher level.', price: 300 },
+	'heavyball': { id: 'heavyball', name: 'Heavy Ball', category: 'pokeball', description: 'A Ball that works well on heavy Pokémon.', price: 300 },
+	'loveball': { id: 'loveball', name: 'Love Ball', category: 'pokeball', description: 'A Ball that works well on opposite-gender Pokémon.', price: 300 },
+	'lureball': { id: 'lureball', name: 'Lure Ball', category: 'pokeball', description: 'A Ball that works well on Pokémon encountered while fishing.', price: 300 },
+	'moonball': { id: 'moonball', name: 'Moon Ball', category: 'pokeball', description: 'A Ball that works well on Pokémon that evolve with Moon Stone.', price: 300 },
+	'friendball': { id: 'friendball', name: 'Friend Ball', category: 'pokeball', description: 'A Ball that makes caught Pokémon friendlier.', price: 300 },
+	'luxuryball': { id: 'luxuryball', name: 'Luxury Ball', category: 'pokeball', description: 'A Ball that makes caught Pokémon grow friendlier faster.', price: 1000 },
+	'premierball': { id: 'premierball', name: 'Premier Ball', category: 'pokeball', description: 'A commemorative Ball with the same performance as a Poké Ball.', price: 200 },
+	'dreamball': { id: 'dreamball', name: 'Dream Ball', category: 'pokeball', description: 'A Ball that works well on sleeping Pokémon.', price: 1000 },
+	'safariball': { id: 'safariball', name: 'Safari Ball', category: 'pokeball', description: 'A special Ball used in Safari Zones.', price: 0 },
+	'parkball': { id: 'parkball', name: 'Park Ball', category: 'pokeball', description: 'A special Ball for catching Pokémon in special areas.', price: 0 },
+	'beastball': { id: 'beastball', name: 'Beast Ball', category: 'pokeball', description: 'A Ball designed to catch Ultra Beasts.', price: 1000 },
+	'cherishball': { id: 'cherishball', name: 'Cherish Ball', category: 'pokeball', description: 'A rare Ball made for special events.', price: 0 },
+	'sportball': { id: 'sportball', name: 'Sport Ball', category: 'pokeball', description: 'A special Ball used in the Bug-Catching Contest.', price: 0 },
+	'strangeball': { id: 'strangeball', name: 'Strange Ball', category: 'pokeball', description: 'A mysterious Ball with unknown properties.', price: 0 },
+
+	// Status Healing Berries
+	'cheriberry': { id: 'cheriberry', name: 'Cheri Berry', category: 'berry', description: 'Cures paralysis.', price: 200, effects: { statusCure: 'par' } },
+	'chestoberry': { id: 'chestoberry', name: 'Chesto Berry', category: 'berry', description: 'Cures sleep.', price: 200, effects: { statusCure: 'slp' } },
+	'pechaberry': { id: 'pechaberry', name: 'Pecha Berry', category: 'berry', description: 'Cures poison.', price: 200, effects: { statusCure: 'psn' } },
+	'rawstberry': { id: 'rawstberry', name: 'Rawst Berry', category: 'berry', description: 'Cures burn.', price: 200, effects: { statusCure: 'brn' } },
+	'aspearberry': { id: 'aspearberry', name: 'Aspear Berry', category: 'berry', description: 'Cures freeze.', price: 200, effects: { statusCure: 'frz' } },
+	'leppaberry': { id: 'leppaberry', name: 'Leppa Berry', category: 'berry', description: 'Restores 10 PP to a move.', price: 300, effects: { ppRestore: 10 } },
+	'persimberry': { id: 'persimberry', name: 'Persim Berry', category: 'berry', description: 'Cures confusion.', price: 200 },
 	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
+
+	// Evolution Stones
+	'firestone': { id: 'firestone', name: 'Fire Stone', category: 'stone', description: 'Evolves certain Fire-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'waterstone': { id: 'waterstone', name: 'Water Stone', category: 'stone', description: 'Evolves certain Water-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'thunderstone': { id: 'thunderstone', name: 'Thunder Stone', category: 'stone', description: 'Evolves certain Electric-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'leafstone': { id: 'leafstone', name: 'Leaf Stone', category: 'stone', description: 'Evolves certain Grass-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'moonstone': { id: 'moonstone', name: 'Moon Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'sunstone': { id: 'sunstone', name: 'Sun Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'shinystone': { id: 'shinystone', name: 'Shiny Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'duskstone': { id: 'duskstone', name: 'Dusk Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'dawnstone': { id: 'dawnstone', name: 'Dawn Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'icestone': { id: 'icestone', name: 'Ice Stone', category: 'stone', description: 'Evolves certain Ice-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
+	'metalcoat': { id: 'metalcoat', name: 'Metal Coat', category: 'stone', description: 'Evolves certain Steel-type Pokémon. Also boosts Steel moves.', price: 2100, effects: { evolutionItem: true } },
+	'dragonscale': { id: 'dragonscale', name: 'Dragon Scale', category: 'stone', description: 'Evolves Seadra.', price: 2100, effects: { evolutionItem: true } },
+	'upgrade': { id: 'upgrade', name: 'Up-Grade', category: 'stone', description: 'Evolves Porygon.', price: 2100, effects: { evolutionItem: true } },
+
+	// Type Enhancing Items (Phase 1 initial 3)
+	'charcoal': { id: 'charcoal', name: 'Charcoal', category: 'held', description: 'Powers up Fire-type moves.', price: 3000 },
+	'mysticwater': { id: 'mysticwater', name: 'Mystic Water', category: 'held', description: 'Powers up Water-type moves.', price: 3000 },
+	'miracleseed': { id: 'miracleseed', name: 'Miracle Seed', category: 'held', description: 'Powers up Grass-type moves.', price: 3000 },
 };
 
 // ==========================================
@@ -208,6 +262,29 @@ export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 			success = true;
 		} else if (!success) {
 			return { success: false, message: `${pokemon.species} is already at full health.` };
+		}
+	}
+
+	if (eff.ppRestore) {
+		// Find a move with less than max PP
+		let restoredMove = false;
+		for (const move of pokemon.moves) {
+			const moveData = getMove(move.id);
+			const maxPP = moveData.pp || 5;
+			if (move.pp < maxPP) {
+				if (eff.ppRestore === -1) {
+					move.pp = maxPP;
+				} else {
+					move.pp = Math.min(maxPP, move.pp + eff.ppRestore);
+				}
+				messageParts.push(`restored PP to ${moveData.name}`);
+				restoredMove = true;
+				success = true;
+				break;
+			}
+		}
+		if (!restoredMove && !success) {
+			return { success: false, message: `All moves have full PP!` };
 		}
 	}
 
@@ -364,6 +441,23 @@ export function useSacredAsh(player: PlayerData): { success: boolean, message: s
 	return { success: true, message: `Used <strong>Sacred Ash</strong>! All fainted Pokémon were revived!` };
 }
 
+export function useEvolutionStone(player: PlayerData, pokemon: RPGPokemon, itemId: string, room: CheckEvolutionContext['room'], user: CheckEvolutionContext['user']): { success: boolean, message: string } {
+	const id = toID(itemId);
+	const itemData = ITEMS_DATABASE[id];
+	if (!itemData?.effects?.evolutionItem) return { success: false, message: "This is not an evolution item." };
+	if (pokemon.hp <= 0) return { success: false, message: "Cannot use on fainted Pokemon." };
+
+	// Check if this Pokemon can evolve with this stone
+	const evoMsg = checkEvolution(player, pokemon, { room, user }, id);
+	
+	if (evoMsg) {
+		removeItemFromInventory(player, id, 1);
+		return { success: true, message: `Used <strong>${itemData.name}</strong>! ${evoMsg}` };
+	} else {
+		return { success: false, message: `${pokemon.species} cannot evolve with ${itemData.name}.` };
+	}
+}
+
 // ==========================================
 // BATTLE-SPECIFIC ITEM USAGE
 // ==========================================
@@ -517,6 +611,7 @@ export const RPGItems = {
 	useSacredAsh,
 	useRareCandyItem,
 	useExpCandyItem,
+	useEvolutionStone,
 	useBattleHealingItem,
 	useBattleRevivalItem,
 	canUseItemInBattle,

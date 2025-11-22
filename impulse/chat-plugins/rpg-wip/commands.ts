@@ -1562,10 +1562,15 @@ export const commands: ChatCommands = {
 					const caughtPokemon = targetSlot.pokemon;
 					caughtPokemon.caughtIn = ballId;
 
+					// Special ball effects after catching
 					if (ballId === 'healball') {
 						caughtPokemon.hp = caughtPokemon.maxHp;
 						caughtPokemon.status = null;
 					}
+					if (ballId === 'friendball') {
+						caughtPokemon.friendship = 200;
+					}
+					// Luxury Ball increases friendship gain (handled in friendship gain logic)
 
 					const location = player.party.length < 6 ? "your party" : "PC";
 					if (player.party.length < 6) player.party.push(caughtPokemon);
