@@ -191,6 +191,30 @@ export function applyStatChange(
 
 		checkStatDropAbilities(slot, source, battle, messageLog);
 
+		// Eject Pack Logic
+		if (battle.magicRoomTurns === 0 && pokemon.item === 'ejectpack' && !battle.pendingPivot && !battle.aiPendingPivot) {
+			let slotIndex = battle.playerSlots.indexOf(slot);
+			let isPlayer = true;
+			if (slotIndex === -1) {
+				slotIndex = battle.opponentSlots.indexOf(slot);
+				isPlayer = false;
+			}
+
+			if (slotIndex !== -1) {
+				pokemon.item = undefined;
+				messageLog.push(`${pokemon.species} is being sent back due to its Eject Pack!`);
+				activateUnburden(slot, messageLog);
+
+				if (isPlayer) {
+					battle.pendingPivot = { slotIndex, slot, isBatonPass: false };
+					battle.playerSlots[slotIndex as 0 | 1] = null;
+				} else {
+					battle.aiPendingPivot = { slotIndex, slot, isBatonPass: false };
+					battle.opponentSlots[slotIndex as 0 | 1] = null;
+				}
+			}
+		}
+
 		// Handle White Herb
 		if (battle.magicRoomTurns === 0 && pokemon.item === 'whiteherb') {
 			let restored = false;
