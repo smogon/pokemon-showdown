@@ -675,7 +675,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) target = user.name;
 
 		const values = await Ladders.visualizeAll(target);
-		let buffer = `<div class="ladder"><table>`;
+		let buffer = `<div class="ladder" style="overflow-x: auto;"><table>`;
 		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
 		const ratings = values.join(``);
