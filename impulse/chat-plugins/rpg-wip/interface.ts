@@ -36,7 +36,7 @@ export interface ItemEffects {
 export interface InventoryItem {
 	id: string;
 	name: string;
-	category: 'pokeball' | 'medicine' | 'berry' | 'tm' | 'key' | 'misc' | 'held';
+	category: 'pokeball' | 'medicine' | 'berry' | 'tm' | 'key' | 'misc' | 'held' | 'stone';
 	description: string;
 	quantity: number;
 	effects?: ItemEffects;

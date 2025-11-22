@@ -117,6 +117,7 @@ function generateItemCategoryFilters(baseCommand: string): string {
 		{ id: 'medicine', name: 'Medicines' },
 		{ id: 'held', name: 'Held Items' },
 		{ id: 'berry', name: 'Berries' },
+		{ id: 'stone', name: 'Stones' },
 		{ id: 'tm', name: 'TMs' },
 		{ id: 'key', name: 'Key Items' },
 		{ id: 'misc', name: 'Misc.' },

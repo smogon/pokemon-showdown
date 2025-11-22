@@ -22,6 +22,7 @@ import {
 	useVitaminItem,
 	useRareCandyItem,
 	useExpCandyItem,
+	useEvolutionStone,
 	useBattleHealingItem,
 	useBattleRevivalItem,
 	canUseItemInBattle,
@@ -303,6 +304,17 @@ function handleUseMiscItem(
 
 	if (eff?.expBoost) {
 		const result = useExpCandyItem(player, targetPokemon, itemId, room, user);
+		if (!result.success) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
+		}
+		if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player)}`);
+		}
+		return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
+	}
+
+	if (eff?.evolutionItem) {
+		const result = useEvolutionStone(player, targetPokemon, itemId, room, user);
 		if (!result.success) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateItemUseErrorHTML(result.message, itemId)}`);
 		}
@@ -732,7 +744,7 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			const category = toID(target);
-			const validCategories = ['pokeball', 'medicine', 'berry', 'tm', 'key', 'held', 'misc'];
+			const validCategories = ['pokeball', 'medicine', 'berry', 'tm', 'key', 'held', 'misc', 'stone'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, filterCategory)}`);
 		},
@@ -775,7 +787,7 @@ export const commands: ChatCommands = {
 						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMedicinePokemonSelectionHTML(player, itemId, item.name)}`);
 					}
 
-					if (item.category === 'misc') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
+					if (item.category === 'misc' || item.category === 'stone') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMiscItemPokemonSelectionHTML(player, itemId, item.name)}`);
 					if (item.category === 'held' || item.category === 'berry') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 				}
 
@@ -789,7 +801,7 @@ export const commands: ChatCommands = {
 				return handleUseMedicine.call(this, player, item, targetPokemon, room, user);
 			}
 
-			if (item.category === 'misc') {
+			if (item.category === 'misc' || item.category === 'stone') {
 				return handleUseMiscItem.call(this, player, item, targetPokemon, room, user);
 			}
 
@@ -870,7 +882,7 @@ export const commands: ChatCommands = {
 			}
 			const player = getPlayerData(user.id);
 			const category = toID(target);
-			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'tm', 'misc'];
+			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'tm', 'misc', 'stone'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
 		},
@@ -1562,10 +1574,15 @@ export const commands: ChatCommands = {
 					const caughtPokemon = targetSlot.pokemon;
 					caughtPokemon.caughtIn = ballId;
 
+					// Special ball effects after catching
 					if (ballId === 'healball') {
 						caughtPokemon.hp = caughtPokemon.maxHp;
 						caughtPokemon.status = null;
 					}
+					if (ballId === 'friendball') {
+						caughtPokemon.friendship = 200;
+					}
+					// Luxury Ball increases friendship gain (handled in friendship gain logic)
 
 					const location = player.party.length < 6 ? "your party" : "PC";
 					if (player.party.length < 6) player.party.push(caughtPokemon);

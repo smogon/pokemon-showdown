@@ -1473,9 +1473,33 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 	const opponentSpecies = Dex.species.get(opponentActivePokemon.species);
 
 	switch (ballId) {
+	case 'pokeball': return 1;
 	case 'greatball': return 1.5;
 	case 'ultraball': return 2;
 	case 'masterball': return 255;
+	
+	// Condition-based balls
+	case 'quickball':
+		return turn === 0 ? 5 : 1;
+	case 'timerball':
+		return Math.min(4, 1 + turn * (1229 / 4096));
+	case 'repeatball':
+		// TODO: Check if player has caught this species before
+		return 3.5; // For now, always give bonus
+	case 'nestball':
+		return opponentActivePokemon.level <= 30 ? Math.max(1, (41 - opponentActivePokemon.level) / 10) : 1;
+	case 'duskball':
+		// TODO: Check time of day or cave location
+		return 3; // For now, always give bonus
+	case 'netball':
+		return opponentSpecies.types.includes('Bug') || opponentSpecies.types.includes('Water') ? 3.5 : 1;
+	case 'diveball':
+		// TODO: Check if fishing/surfing encounter
+		return 3.5; // For now, always give bonus
+	case 'healball':
+		return 1; // Same catch rate as Poké Ball, but heals after catch
+	
+	// Apricorn balls
 	case 'fastball':
 		return opponentSpecies.baseStats.spe >= 100 ? 4 : 1;
 	case 'levelball':
@@ -1483,16 +1507,46 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		if (activePokemon.level >= opponentActivePokemon.level * 2) return 4;
 		if (activePokemon.level > opponentActivePokemon.level) return 2;
 		return 1;
-	case 'nestball':
-		return opponentActivePokemon.level <= 30 ? Math.max(1, (41 - opponentActivePokemon.level) / 10) : 1;
-	case 'netball':
-		return opponentSpecies.types.includes('Bug') || opponentSpecies.types.includes('Water') ? 3.5 : 1;
-	case 'quickball':
-		return turn === 0 ? 5 : 1;
-	case 'timerball':
-		return Math.min(4, 1 + turn * (1229 / 4096));
+	case 'heavyball':
+		return opponentActivePokemon.weightkg >= 300 ? 4 :
+		       opponentActivePokemon.weightkg >= 200 ? 3 :
+		       opponentActivePokemon.weightkg >= 100 ? 2 : 1;
+	case 'loveball':
+		// TODO: Check if same species, opposite gender
+		return 8; // For now, always give bonus
+	case 'lureball':
+		// TODO: Check if fishing encounter
+		return 4; // For now, always give bonus
+	case 'moonball':
+		// Check if evolves with Moon Stone
+		const moonStoneEvolvers = ['nidorina', 'nidorino', 'clefairy', 'jigglypuff', 'skitty', 'munna'];
+		return moonStoneEvolvers.includes(toID(opponentActivePokemon.species)) ? 4 : 1;
+	case 'friendball':
+		return 1; // Same catch rate, but sets friendship to 200
+	
+	// Premium balls
+	case 'luxuryball':
+		return 1; // Same catch rate, but increases friendship gain
+	case 'premierball':
+		return 1; // Same as Poké Ball
 	case 'dreamball':
 		return opponentStatus === 'slp' ? 4 : 1;
+	case 'safariball':
+		return 1.5; // Slightly better than Poké Ball
+	case 'parkball':
+		return 255; // Always catches in special areas
+	
+	// Special balls
+	case 'beastball':
+		// TODO: Check if Ultra Beast
+		return 5; // For now, give good bonus
+	case 'cherishball':
+		return 1; // Event ball, same as Poké Ball
+	case 'sportball':
+		return 1.5; // Bug-Catching Contest ball
+	case 'strangeball':
+		return 1; // Mysterious ball
+	
 	default:
 		return 1;
 	}
