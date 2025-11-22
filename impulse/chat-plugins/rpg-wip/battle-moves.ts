@@ -14,6 +14,9 @@ import {
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 import { getStatMultiplier, getPokemonTypes } from './battle-core';
+// Import the helper from battle-core to prevent soft locks
+import { executeForcedRandomSwitch } from './battle-core';
+import { getPlayerData } from './core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
@@ -444,30 +447,30 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
 			return true;
 		}
+		// Crafty Shield check
+		if (battle.playerSlots.includes(defenderSlot) ? battle.playerCraftyShield : battle.opponentCraftyShield) {
+			messageLog.push(`${defenderSlot.pokemon.species} is protected by Crafty Shield!`);
+			return true;
+		}
 
 		const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
-		const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
-		const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+		const party = isDefenderPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+		const slots = isDefenderPlayer ? battle.playerSlots : battle.opponentSlots;
 
-		const availableReplacements = party.filter(p =>
-			p.hp > 0 &&
-			!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
-			!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+		// Filter for valid switch candidates (Healthy and not active)
+		const candidates = party.filter(p =>
+			p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
 		);
 
-		if (availableReplacements.length === 0) {
+		if (candidates.length === 0) {
 			messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 			return true;
 		}
 
 		messageLog.push(`${defender.species} was blown away!`);
-		if (defenderSlotIndex !== -1) {
-			if (isDefenderPlayer) {
-				battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
-			} else {
-				battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
-			}
-		}
+
+		// Use the helper logic to force the switch
+		executeForcedRandomSwitch(battle, defenderSlot, messageLog);
 		return true;
 
 	case 'defog':
@@ -761,7 +764,7 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${attacker.species} foresaw an attack!`);
 		return true;
 	}
-	
+
 	case 'protect':
 	case 'detect':
 		const successCounter = attackerSlot.protectSuccessCounter;
@@ -773,7 +776,7 @@ export function handleSpecificStatusMove(
 		} else {
 			messageLog.push(`But it failed!`);
 			// FIX: Reset counter on failure so the next Protect has 100% chance
-			attackerSlot.protectSuccessCounter = 0; 
+			attackerSlot.protectSuccessCounter = 0;
 		}
 		return true;
 
