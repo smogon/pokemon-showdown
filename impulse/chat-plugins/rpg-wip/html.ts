@@ -610,14 +610,8 @@ export function generatePCHTML(player: PlayerData, notification?: string): strin
 	return html;
 }
 
-export function generateSummarySelectionHTML(player: PlayerData, notification?: string): string {
-	let html = `<div class="rpg-infobox rpg-menu-box">`;
-
-	if (notification) {
-		html += `<div class="rpg-notification">${notification}</div>`;
-	}
-
-	html += `<h2>Select a Pokémon</h2><p>Choose a Pokémon to view its summary:</p>`;
+export function generateSummarySelectionHTML(player: PlayerData): string {
+	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Select a Pokémon</h2><p>Choose a Pokémon to view its summary:</p>`;
 	if (player.party.length === 0) {
 		html += '<p>You have no Pokémon.</p>';
 	} else {
@@ -766,16 +760,9 @@ export function generateEggMoveSelectionHTML(pokemon: RPGPokemon, eggMoves: stri
 	return html;
 }
 
-export function generateInventoryHTML(player: PlayerData, category?: string, notification?: string): string {
-	let html = `<div class="rpg-infobox">`;
-
-	if (notification) {
-		const isError = notification.toLowerCase().includes('error') || notification.includes('!');
-		const notifyClass = isError ? 'rpg-text-error' : 'rpg-text-success';
-		html += `<div class="rpg-notification ${notifyClass}">${notification}</div>`;
-	}
-
-	html += `<h2>Inventory</h2>` +
+export function generateInventoryHTML(player: PlayerData, category?: string): string {
+	let html = `<div class="rpg-infobox">` +
+		`<h2>Inventory</h2>` +
 		`<p><strong>Money:</strong> ₽${player.money}</p>`;
 
 	html += generateItemCategoryFilters('/rpg items');
@@ -799,7 +786,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string, not
 				`</div>` +
 				`<div class="rpg-item-actions">` +
 				`<button name="send" value="/rpg useitem ${safeId}" class="button">Use</button> ` +
-				`<button name="send" value="/rpg giveitem ${safeId}" class="button">Give</button>` +
+				`<button name="send" value="/rpg giveitem" class="button">Give</button>` +
 				`</div>` +
 				`</div>`;
 			gridHTML += `<div>${cellContent}</div>`;
@@ -1018,14 +1005,8 @@ export function generateMiscItemPokemonSelectionHTML(player: PlayerData, itemId:
 	return html;
 }
 
-export function generateGiveItemSelectionHTML(player: PlayerData, notification?: string): string {
-	let html = `<div class="rpg-infobox">`;
-
-	if (notification) {
-		html += `<div class="rpg-notification">${notification}</div>`;
-	}
-
-	html += `<h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
+export function generateGiveItemSelectionHTML(player: PlayerData): string {
+	let html = `<div class="rpg-infobox"><h2>Give Item</h2><p>Select a Pokémon to give an item to:</p>`;
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
 	for (const pokemon of player.party) {
 		const btn = `<button name="send" value="/rpg giveitem ${pokemon.id}" class="button">Select</button>`;
@@ -1075,14 +1056,8 @@ export function generateGiveItemToSpecificPokemonHTML(player: PlayerData, pokemo
 	return html;
 }
 
-export function generateTakeItemSelectionHTML(player: PlayerData, notification?: string): string {
-	let html = `<div class="rpg-infobox">`;
-
-	if (notification) {
-		html += `<div class="rpg-notification">${notification}</div>`;
-	}
-
-	html += `<h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
+export function generateTakeItemSelectionHTML(player: PlayerData): string {
+	let html = `<div class="rpg-infobox"><h2>Take Item</h2><p>Select a Pokémon to take its item:</p>`;
 	html += `<div class="rpg-scrollable-grid"><div class="rpg-party-grid">`;
 	for (const pokemon of player.party) {
 		if (pokemon.item) {

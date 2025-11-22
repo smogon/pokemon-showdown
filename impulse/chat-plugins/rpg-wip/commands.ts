@@ -195,8 +195,8 @@ function initializeAndStartBattle(
 		opponentAuroraVeilTurns: 0,
 		playerMistTurns: 0,
 		opponentMistTurns: 0,
-		playerTailwindTurns: 0,
-		opponentTailwindTurns: 0,
+		playerTailwindTurns: 0, // Added for Step 1
+		opponentTailwindTurns: 0, // Added for Step 1
 		gravityTurns: 0,
 		mudSportTurns: 0,
 		waterSportTurns: 0,
@@ -719,25 +719,26 @@ export const commands: ChatCommands = {
 			const [slot1Str, slot2Str] = target.split(' ');
 			const slot1 = parseInt(slot1Str);
 			const slot2 = parseInt(slot2Str);
-			const player = getPlayerData(user.id);
 
 			if (isNaN(slot1) || isNaN(slot2)) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Invalid slot numbers.")}`);
+				return this.errorReply("Invalid slot numbers. Usage: /rpg swapslot <slot1> <slot2>");
 			}
 
+			const player = getPlayerData(user.id);
+
 			if (slot1 < 0 || slot1 >= player.party.length || slot2 < 0 || slot2 >= player.party.length) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Slots must be within your party.")}`);
+				return this.errorReply("Invalid slot numbers. Slots must be within your party.");
 			}
 
 			if (slot1 === slot2) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Cannot swap a slot with itself.")}`);
+				return this.errorReply("Cannot swap a slot with itself.");
 			}
 
 			const temp = player.party[slot1];
 			player.party[slot1] = player.party[slot2];
 			player.party[slot2] = temp;
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player)}`);
+			this.parse('/rpg party');
 		},
 
 		items(target, room, user) {
@@ -758,12 +759,8 @@ export const commands: ChatCommands = {
 			const [itemId, pokemonId] = target.split(' ').map(arg => toID(arg));
 			const player = getPlayerData(user.id);
 
-			if (!itemId) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, undefined, "Error: Please specify an item to use.")}`);
-			}
-			if (!player.inventory.has(itemId)) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, undefined, "Error: You don't have that item.")}`);
-			}
+			if (!itemId) return this.errorReply("Please specify an item to use.");
+			if (!player.inventory.has(itemId)) return this.errorReply("You don't have that item.");
 
 			const item = player.inventory.get(itemId)!;
 			const itemData = ITEMS_DATABASE[itemId];
@@ -771,9 +768,7 @@ export const commands: ChatCommands = {
 
 			if (itemId === 'sacredash') {
 				const result = useSacredAsh(player);
-				if (!result.success) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, 'medicine', result.message)}`);
-				}
+				if (!result.success) return this.errorReply(result.message);
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
 			}
 
@@ -799,11 +794,11 @@ export const commands: ChatCommands = {
 					if (item.category === 'held' || item.category === 'berry') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, itemId)}`);
 				}
 
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, item.category, "This item cannot be used from the bag directly.")}`);
+				return this.errorReply("This item category cannot be used from the bag directly.");
 			}
 
 			const targetPokemon = player.party.find(p => p.id === pokemonId);
-			if (!targetPokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, item.category, "Error: Pokémon not found in party.")}`);
+			if (!targetPokemon) return this.errorReply("Pokemon not found in party.");
 
 			if (item.category === 'medicine') {
 				return handleUseMedicine.call(this, player, item, targetPokemon, room, user);
@@ -813,7 +808,7 @@ export const commands: ChatCommands = {
 				return handleUseMiscItem.call(this, player, item, targetPokemon, room, user);
 			}
 
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateInventoryHTML(player, item.category, "This item cannot be used in this way.")}`);
+			return this.errorReply("This item cannot be used in this way.");
 		},
 
 		restorepp(target, room, user) {
@@ -857,13 +852,9 @@ export const commands: ChatCommands = {
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
 
-			if (player.party.length <= 1) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: You must keep at least one Pokemon in your party!")}`);
-			}
+			if (player.party.length <= 1) return this.errorReply("You must keep at least one Pokemon in your party!");
 			const pokemonIndex = player.party.findIndex(p => p.id === pokemonId);
-			if (pokemonIndex === -1) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Pokemon not found in party.")}`);
-			}
+			if (pokemonIndex === -1) return this.errorReply("Pokemon not found in party.");
 
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
@@ -877,14 +868,10 @@ export const commands: ChatCommands = {
 			const pokemonId = target.trim();
 			const player = getPlayerData(user.id);
 
-			if (player.party.length >= 6) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, "Error: Your party is full!")}`);
-			}
+			if (player.party.length >= 6) return this.errorReply("Your party is full!");
 
 			const pokemon = withdrawPokemonFromPC(player, pokemonId);
-			if (!pokemon) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, "Error: Pokemon not found in PC.")}`);
-			}
+			if (!pokemon) return this.errorReply("Pokemon not found in PC.");
 
 			player.party.push(pokemon);
 
@@ -909,26 +896,25 @@ export const commands: ChatCommands = {
 			const quantity = parseInt(quantityStr) || 1;
 			const player = getPlayerData(user.id);
 
-			if (!itemId || !ITEMS_DATABASE[itemId]) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, "Error: Invalid item specified.")}`);
-			if (quantity <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, "Error: You must buy at least 1 item.")}`);
+			if (!itemId || !ITEMS_DATABASE[itemId]) return this.errorReply("Invalid item specified.");
+			if (quantity <= 0) return this.errorReply("You must buy at least 1 item.");
 
 			const locationId = toID(player.location);
 			const shopInventory = getShopInventory(locationId, player.badges);
-			if (!shopInventory.includes(itemId)) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, "Error: This item is not available here.")}`);
+			if (!shopInventory.includes(itemId)) return this.errorReply("This item is not available in this shop.");
 
 			const itemData = ITEMS_DATABASE[itemId];
 			const itemPrice = itemData.price || 0;
 
-			if (itemPrice <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, "Error: This item is not for sale.")}`);
-			
+			if (itemPrice <= 0) return this.errorReply("This item is not for sale.");
 			const totalCost = itemPrice * quantity;
-			if (player.money < totalCost) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, itemData.category, `Error: You need ₽${totalCost}.`)}`);
+			if (player.money < totalCost) return this.errorReply(`You don't have enough money! You need ₽${totalCost}.`);
 
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 
 			const successMsg = `Purchased <strong>${quantity}x ${itemData.name}</strong> for ₽${totalCost}.`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, itemData.category, successMsg)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, successMsg)}`);
 		},
 
 		sell(target, room, user) {
@@ -943,16 +929,16 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player)}`);
 			}
 
-			if (quantity <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, "Error: Must sell at least 1 item.")}`);
+			if (quantity <= 0) return this.errorReply("You must sell at least 1 item.");
 
 			const itemInBag = player.inventory.get(itemId);
-			if (!itemInBag) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, "Error: You don't have that item.")}`);
-			if (itemInBag.quantity < quantity) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, `Error: You only have ${itemInBag.quantity}.`)}`);
-			if (itemInBag.category === 'key') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, "Error: Key items cannot be sold.")}`);
+			if (!itemInBag) return this.errorReply("You don't have that item.");
+			if (itemInBag.quantity < quantity) return this.errorReply(`You only have ${itemInBag.quantity} of that item.`);
+			if (itemInBag.category === 'key') return this.errorReply("Key items cannot be sold.");
 
 			const itemData = ITEMS_DATABASE[itemId];
 			const purchasePrice = itemData.price || 0;
-			if (purchasePrice <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, "Error: Item cannot be sold.")}`);
+			if (purchasePrice <= 0) return this.errorReply("This item cannot be sold.");
 
 			const sellPrice = Math.floor(purchasePrice / 2);
 			const totalGain = sellPrice * quantity;
@@ -964,47 +950,894 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSellMenuHTML(player, successMsg)}`);
 		},
 
+		pokedex(target, room, user) {
+			if (isInActiveBattle(user.id)) {
+				return this.errorReply("You cannot use the Pokedex during a battle.");
+			}
+			const player = getPlayerData(user.id);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePokedexHTML(player)}`);
+		},
+
+		explore(target, room, user) {
+			if (isInActiveBattle(user.id)) {
+				return this.errorReply("You cannot explore during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+
+			if (!currentLocation) {
+				return this.errorReply(`Unknown location: ${player.location}`);
+			}
+
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation)}`);
+		},
+
+		travel(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("You cannot travel during a battle.");
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+
+			if (!target) {
+				const currentLocation = LOCATIONS[currentLocationId];
+				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
+
+				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				travelHTML += `<p>Where would you like to go?</p>`;
+
+				if (currentLocation.connectedLocations.length === 0) {
+					travelHTML += `<p>There are no paths from this location yet.</p>`;
+				} else {
+					for (const connection of currentLocation.connectedLocations) {
+						let canAccess = true;
+						let lockReason = '';
+
+						if (connection.requiredBadge) {
+							if (!player.obtainedBadges.includes(connection.requiredBadge)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
+							}
+						}
+
+						if (connection.requiredFlag) {
+							if (!player.storyFlags.has(connection.requiredFlag)) {
+								canAccess = false;
+								lockReason = ` 🔒 (Not accessible yet)`;
+							}
+						}
+
+						if (canAccess) {
+							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
+						} else {
+							travelHTML += `<button class="button" disabled>${connection.name}${lockReason}</button> `;
+						}
+					}
+				}
+				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+				travelHTML += generateBottomNavigation() + `</div>`;
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
+			}
+
+			const targetLocationId = toID(target);
+			const targetLocation = LOCATIONS[targetLocationId];
+			const currentLocation = LOCATIONS[currentLocationId];
+
+			if (!targetLocation || !currentLocation) return this.errorReply("Invalid location.");
+
+			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
+			if (!connection) return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
+
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) return this.errorReply(`Locked: Requires ${connection.requiredBadge}.`);
+			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) return this.errorReply(`Locked.`);
+
+			player.location = targetLocation.name;
+			player.visitedLocations.add(targetLocationId);
+
+			const triggeredEvents = [];
+			if (targetLocation.scriptedEvents) {
+				for (const event of targetLocation.scriptedEvents) {
+					const eventFlagId = `scripted_${event.id}`;
+					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
+					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+					triggeredEvents.push(event);
+
+					const interactiveTypes = ['choice', 'quiz', 'moralchoice', 'branching', 'wildbattle', 'bossbattle', 'raidbattle', 'trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'];
+					if (event.triggerOnce && !interactiveTypes.includes(event.type)) player.storyFlags.add(eventFlagId);
+					if (event.setFlag && !interactiveTypes.includes(event.type)) player.storyFlags.add(event.setFlag);
+				}
+			}
+
+			if (triggeredEvents.length > 0) {
+				const firstEvent = triggeredEvents[0];
+				const result = { success: true, message: '' };
+
+				if (['wildbattle', 'bossbattle', 'raidbattle'].includes(firstEvent.type)) {
+					if (firstEvent.type === 'wildbattle' && firstEvent.pokemon) {
+						const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
+						if (firstEvent.pokemon.moves) {
+							newPokemon.moves = firstEvent.pokemon.moves.map(m => ({ id: toID(m), pp: 5 }));
+						}
+						if (firstEvent.pokemon.shiny) newPokemon.shiny = true;
+						player.pc.set(`scripted_wild_${firstEvent.id}`, newPokemon);
+						result.message = firstEvent.dialogue || `A wild ${newPokemon.species} appeared!`;
+					} else if (firstEvent.type === 'raidbattle') {
+						const r = ScriptedEvents.handleRaidBattle(player, firstEvent);
+						result.message = r.message;
+						if (r.raidBoss) {
+							const raidMon = createPokemon(r.raidBoss.species, r.raidLevel ? r.raidLevel * 10 : 50);
+							player.pc.set(`scripted_wild_${firstEvent.id}`, raidMon);
+						}
+					} else if (firstEvent.type === 'bossbattle') {
+						const r = ScriptedEvents.handleBossBattle(player, firstEvent);
+						result.message = r.message;
+					}
+				} else {
+					const handlerName = `handle${firstEvent.type.charAt(0).toUpperCase() + firstEvent.type.slice(1)}`;
+
+					if (ScriptedEvents[handlerName]) {
+						const r = ScriptedEvents[handlerName](player, firstEvent, firstEvent.id);
+						result.message = r.message;
+						if (r.opponent) firstEvent.nextOpponent = r.opponent;
+					} else {
+						result.message = firstEvent.dialogue || 'Event occurred.';
+					}
+				}
+
+				const html = generateScriptedEventHTML(firstEvent, result.message);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
+			}
+
+			const msg = `You arrived at ${targetLocation.name}.`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
+		},
+
+		eventchoice(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
+			const player = getPlayerData(user.id);
+			const location = LOCATIONS[toID(player.location)];
+			const index = parseInt(target);
+
+			let activeEvent = null;
+			if (location?.scriptedEvents) {
+				for (const event of location.scriptedEvents) {
+					const eventFlagId = `scripted_${event.id}`;
+					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
+					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
+					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
+					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+					activeEvent = event;
+					break;
+				}
+			}
+
+			if (!activeEvent) return this.errorReply("No active event found.");
+
+			let result = { success: false, message: "Invalid choice." };
+
+			if (activeEvent.type === 'choice') result = ScriptedEvents.handleChoice(player, activeEvent, index);
+			else if (activeEvent.type === 'quiz') result = ScriptedEvents.handleQuiz(player, activeEvent, index);
+			else if (activeEvent.type === 'moralchoice') result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
+			else if (activeEvent.type === 'branching') result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
+
+			if (result.success) {
+				this.sendReplyBox(result.message);
+				if (activeEvent.triggerOnce) player.storyFlags.add(`scripted_${activeEvent.id}`);
+				return this.parse('/rpg explore');
+			} else {
+				return this.errorReply(result.message);
+			}
+		},
+
+		completeevent(target, room, user) {
+			const eventId = target.trim();
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const location = LOCATIONS[currentLocationId];
+			const event = location?.scriptedEvents?.find(e => e.id === eventId);
+
+			if (event && eventId) {
+				if (event.type === 'tournament') ScriptedEvents.advanceTournamentRound(player, eventId);
+				else if (event.type === 'gauntletbattle') ScriptedEvents.advanceGauntletEvent(player, eventId);
+				else player.storyFlags.add(`scripted_${eventId}`);
+
+				activeScriptedEvents.delete(user.id);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "Battle Won!")}`);
+			}
+			return this.parse('/rpg explore');
+		},
+
+		building(target, room, user) {
+			if (isInActiveBattle(user.id)) {
+				return this.errorReply("You cannot enter a building during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+
+			if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
+			if (!target) return this.errorReply("Please specify which building to enter.");
+
+			const buildingId = toID(target);
+			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
+
+			if (!building) return this.errorReply("That building doesn't exist in this location.");
+			if (building.accessible === false) return this.errorReply("This building is currently locked.");
+			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) return this.errorReply("You can't access this building yet.");
+
+			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
+
+			if (building.npcs && building.npcs.length > 0) {
+				buildingHTML += '<p><strong>People here:</strong></p>';
+				for (const npcId of building.npcs) {
+					const npc = NPC_DATABASE[npcId];
+					if (npc) {
+						if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
+						buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+					}
+				}
+			}
+
+			buildingHTML += '<p><strong>Actions:</strong></p>';
+			if (building.type === 'pokecenter') buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			if (building.type === 'pokemart' || building.type === 'department') buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+			if (building.type === 'gym' && building.gymLeaderId) {
+				const gymLeaderId = building.gymLeaderId;
+				const gymData = TRAINER_DATABASE[gymLeaderId];
+				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button> `;
+				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				}
+			}
+
+			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
+		},
+
+		wildpokemon(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
+
+			const player = getPlayerData(user.id);
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) return this.errorReply("All your Pokémon have fainted!");
+
+			const zoneId = toID(target);
+			const zone = ENCOUNTER_ZONES[zoneId];
+			if (!zone) return this.errorReply("This is not a valid area to explore.");
+
+			const zoneBattleType = zone.battleType || 'single';
+			let finalBattleType: BattleState['battleType'] = 'wild';
+			const battleMessages: string[] = [];
+			const opponentParty: RPGPokemon[] = [];
+
+			try {
+				const wildSpecies1 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+				const [minLevel, maxLevel] = zone.levelRange;
+				const wildLevel1 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
+				opponentParty.push(wildPokemon1);
+
+				if (zoneBattleType === 'double') {
+					finalBattleType = 'wild_double';
+
+					const wildSpecies2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
+					opponentParty.push(wildPokemon2);
+					battleMessages.push(`A wild ${wildPokemon1.species} and ${wildPokemon2.species} appeared!`);
+				} else {
+					battleMessages.push(`A wild ${wildPokemon1.species} appeared!`);
+				}
+
+				initializeAndStartBattle(
+					this, room, user, player, activeParty,
+					{ name: 'Wild Pokémon', party: opponentParty, money: 0 },
+					{ battleType: finalBattleType, zoneId },
+					battleMessages
+				);
+			} catch (error) {
+				this.errorReply(`Error generating wild Pokémon: ${error}`);
+			}
+		},
+
+		scriptedbattle(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
+
+			const eventId = target.trim();
+			const player = getPlayerData(user.id);
+
+			const tempKey = `scripted_wild_${eventId}`;
+			const wildPokemon = player.pc.get(tempKey);
+
+			if (!wildPokemon) return this.errorReply("This encounter is no longer available.");
+			activeScriptedEvents.set(user.id, eventId);
+			player.pc.delete(tempKey);
+
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) return this.errorReply("Your team is fainted!");
+
+			try {
+				const startMsg = `A wild ${wildPokemon.shiny ? '✨ ' : ''}${wildPokemon.species} appeared!`;
+
+				initializeAndStartBattle(
+					this, room, user, player, activeParty,
+					{ name: `Wild ${wildPokemon.species}`, party: [wildPokemon], money: 0 },
+					{ battleType: 'wild', zoneId: 'scripted', eventId },
+					[startMsg]
+				);
+			} catch (error) {
+				activeBattles.delete(user.id);
+				teraToggleState.delete(user.id);
+				return this.errorReply("Error starting battle: " + String(error));
+			}
+		},
+
+		challenge(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
+
+			const args = target.split(' ');
+			const trainerId = toID(args[0]);
+			const eventId = args[1];
+
+			if (eventId) activeScriptedEvents.set(user.id, eventId);
+
+			const player = getPlayerData(user.id);
+			const activeParty = player.party.filter(p => p.hp > 0);
+			if (activeParty.length === 0) return this.errorReply("You must heal your Pokémon before challenging a trainer!");
+
+			const trainerSpec = TRAINER_DATABASE[trainerId];
+			if (!trainerSpec) return this.errorReply("That trainer could not be found.");
+
+			const trainerParty: RPGPokemon[] = [];
+			for (const spec of trainerSpec.party) {
+				const pokemon = createPokemon(spec.species, spec.level);
+				if (spec.moves) {
+					pokemon.moves = spec.moves.map(moveId => {
+						const moveData = getMove(moveId);
+						return { id: moveId, pp: moveData.pp || 5 };
+					});
+				}
+				if (spec.item) pokemon.item = spec.item;
+				trainerParty.push(pokemon);
+			}
+
+			if (trainerParty.length === 0) return this.errorReply("This trainer has no Pokémon!");
+
+			const specBattleType = trainerSpec.battleType || 'single';
+			let finalBattleType: BattleState['battleType'] = 'trainer';
+			if (specBattleType === 'double') finalBattleType = 'trainer_double';
+
+			const startMessage = trainerSpec.dialogue?.start || `You are challenged by ${trainerSpec.name}!`;
+
+			initializeAndStartBattle(
+				this, room, user, player, activeParty,
+				{ name: trainerSpec.name, party: trainerParty, money: trainerSpec.money, trainerId },
+				{ battleType: finalBattleType, zoneId: 'trainer_battle', eventId },
+				[startMessage]
+			);
+		},
+
+		battle(target, room, user) {
+			if (isInActiveBattle(user.id)) return this.errorReply("You are already in a battle!");
+
+			const availableZoneIds = Object.keys(ENCOUNTER_ZONES);
+			if (availableZoneIds.length === 0) return this.errorReply("There are no wild Pokémon zones configured yet.");
+
+			const randomZoneId = availableZoneIds[Math.floor(Math.random() * availableZoneIds.length)];
+			return this.parse(`/rpg wildpokemon ${randomZoneId}`);
+		},
+
+		battleaction: {
+			move(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const parts = target.split(' ');
+				const attackerSlotStr = parts[0];
+				const moveIdStr = parts[1];
+				const targetSlotStr = parts[2];
+				const shouldTerastallize = parts[3] === 'terastallize';
+
+				const attackerSlotIndex = parseInt(attackerSlotStr);
+				const targetSlotIndex = parseInt(targetSlotStr);
+				const moveId = toID(moveIdStr);
+
+				if (isNaN(attackerSlotIndex) || !moveId || isNaN(targetSlotIndex)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Invalid move command received."])}`);
+				}
+
+				if (attackerSlotIndex !== 0 && attackerSlotIndex !== 1) return this.errorReply("Invalid attacker slot.");
+
+				const attackerSlot = battle.playerSlots[attackerSlotIndex];
+				if (!attackerSlot || attackerSlot.pokemon.hp <= 0) return this.errorReply("This Pokémon cannot move.");
+				if (battle.pendingActions[attackerSlotIndex]) return this.errorReply("Action already queued.");
+
+				const moveData = getMove(moveId);
+				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
+
+				if (shouldTerastallize) {
+					if (battle.playerTerastallizeUsed) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+					if (attackerSlot.terastallized) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Already Terastallized!"])}`);
+				}
+
+				const validationError = validateMoveAction(attackerSlot, moveId, battle);
+				if (validationError) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [validationError])}`);
+
+				battle.pendingActions[attackerSlotIndex] = {
+					actionType: 'move',
+					moveId: moveData.id,
+					targetSlot: targetSlotIndex,
+					pokemonId: attackerSlot.pokemon.id,
+					terastallize: shouldTerastallize,
+				};
+
+				teraToggleState.delete(user.id);
+				const messageLog = shouldTerastallize ?
+					[`${attackerSlot.pokemon.species} is ready to Terastallize and use ${moveData.name}!`] :
+					[`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
+
+				const activePlayerSlots = battle.playerSlots.filter(s => s && s.pokemon.hp > 0).length;
+				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
+
+				if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
+				else this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+			},
+
+			selecttarget(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const parts = target.split(' ');
+				const attackerSlotIndex = parseInt(parts[0]);
+				const moveId = parts[1];
+				const shouldTerastallize = parts[2] === 'terastallize';
+
+				if (isNaN(attackerSlotIndex) || !moveId) return this.errorReply("Invalid command.");
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
+			},
+
+			teratoggle(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				const newState = target === 'on';
+				teraToggleState.set(user.id, newState);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, newState)}`);
+			},
+
+			forceswitch(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const [slotStr, pokemonId] = target.split(' ');
+				const slotToFill = parseInt(slotStr);
+
+				if (isNaN(slotToFill) || !pokemonId) return this.errorReply("Invalid switch command.");
+
+				if (pokemonId === 'cancel') {
+					if (battle.pendingPivot?.slotIndex === slotToFill) {
+						battle.playerSlots[slotToFill as 0 | 1] = battle.pendingPivot.slot;
+						battle.pendingPivot = undefined;
+					}
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["The battle continues..."])}`);
+				}
+
+				const player = getPlayerData(battle.playerId);
+				const partyToUse = battle.overridePlayerParty || player.party;
+				const partyIndex = partyToUse.findIndex(p => p.id === pokemonId && p.hp > 0);
+
+				if (partyIndex === -1) return this.errorReply("Invalid Pokemon or it has fainted.");
+				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonId)) return this.errorReply("This Pokemon is already in battle.");
+				if (battle.playerSlots[slotToFill] !== null && !battle.pendingPivot) return this.errorReply("This slot is not empty.");
+
+				const nextPokemon = partyToUse[partyIndex];
+				const newSlot = createActivePokemonSlot(nextPokemon);
+				const messageLog = [`<span class="rpg-text-info">Go, ${nextPokemon.species}!</span>`];
+
+				if (battle.pendingPivot?.slotIndex === slotToFill) {
+					if (battle.pendingPivot.isBatonPass) {
+						newSlot.statStages = { ...battle.pendingPivot.slot.statStages };
+						newSlot.isConfused = battle.pendingPivot.slot.isConfused;
+						newSlot.confusionCounter = battle.pendingPivot.slot.confusionCounter;
+						newSlot.isSeeded = battle.pendingPivot.slot.isSeeded;
+						messageLog.push(`${newSlot.pokemon.species} received the Baton Pass!`);
+					}
+					battle.pendingPivot = undefined;
+				}
+
+				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
+
+				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
+				if (faintedOnEntry) messageLog.push(`<span class="rpg-text-error"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
+				else handleMirrorHerb(newSlot, battle, messageLog);
+
+				const isDoubleBattle = battle.battleType.includes('double');
+				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
+				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
+					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+
+				if (needsAnotherSwitch) {
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+				} else {
+					if (!battle.pendingPivot) battle.pendingActions = {};
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+				}
+			},
+
+			playerswitch(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const [slotStr, pokemonIdIn] = target.split(' ');
+				const slotToSwitchOut = parseInt(slotStr);
+
+				if (isNaN(slotToSwitchOut) || !pokemonIdIn) return this.errorReply("Invalid switch command.");
+
+				const outgoingSlot = battle.playerSlots[slotToSwitchOut];
+				if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) return this.errorReply("Slot empty or fainted.");
+
+				const trappingPokemon = checkTrappingAbility(outgoingSlot, battle);
+				if (trappingPokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Trapped by ${trappingPokemon.pokemon.ability}!`])}`);
+				if (outgoingSlot.isTrapped || outgoingSlot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped!`])}`);
+				if (outgoingSlot.isIngrained) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted!`])}`);
+
+				const player = getPlayerData(battle.playerId);
+				const partyToUse = battle.overridePlayerParty || player.party;
+				const incomingPokemon = partyToUse.find(p => p.id === pokemonIdIn && p.hp > 0);
+
+				if (!incomingPokemon) return this.errorReply("Invalid Pokemon.");
+				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonIdIn)) return this.errorReply("Pokemon already in battle.");
+
+				outgoingSlot.lockedMove = undefined;
+				outgoingSlot.lockedMoveCounter = 0;
+
+				battle.pendingActions[slotToSwitchOut] = {
+					actionType: 'switch',
+					switchToPokemonId: pokemonIdIn,
+					pokemonId: outgoingSlot.pokemon.id,
+				};
+
+				const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
+				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
+
+				if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
+				else this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is ready to switch out!`])}`);
+			},
+
+			switchmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSwitchMenuHTML(battle, target)}`);
+			},
+
+			catchmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Cannot catch in Battle Tower!"])}`);
+
+				if (battle.battleType.includes('double')) {
+					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					if (activeOpponents.length > 1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMultipleOpponentsCatchErrorHTML()}`);
+				}
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
+			},
+
+			selectcatchtarget(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+
+				const ballId = toID(target);
+				const activeOpponents = getActiveSlots(battle.opponentSlots);
+				if (activeOpponents.length === 1) {
+					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
+					return this.parse(`/rpg battleaction catch ${ballId} ${slotIndex}`);
+				}
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchTargetHTML(battle, ballId)}`);
+			},
+
+			catch(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				const [ballId, slotIndexStr] = target.split(' ');
+				const targetSlotIndex = parseInt(slotIndexStr);
+
+				if (!ballId || isNaN(targetSlotIndex)) return this.errorReply("Invalid catch command.");
+				if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+
+				const targetSlot = getSlotFromIndex(battle, targetSlotIndex);
+				if (!targetSlot || targetSlot.pokemon.hp <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target!"])}`);
+
+				const player = getPlayerData(battle.playerId);
+				const ballItem = player.inventory.get(ballId);
+				if (ballItem?.category !== 'pokeball' || ballItem.quantity < 1) return this.errorReply("You don't have that ball!");
+
+				if (player.party.length >= 6 && player.pc.size >= 100) return this.errorReply("Storage full!");
+
+				removeItemFromInventory(player, ballId, 1);
+				const messageLog: string[] = [`<span class="rpg-text-info">${player.name} used a ${ballItem.name}!</span>`];
+				const catchResult = performCatchAttempt(battle, ballId, targetSlot);
+
+				for (let i = 1; i <= catchResult.shakes; i++) if (i < 4) messageLog.push(`<i class="rpg-text-muted">...The ball shook...</i>`);
+
+				if (catchResult.success) {
+					const zoneId = battle.zoneId;
+					saveBattleStatus(battle);
+					activeBattles.delete(user.id);
+					teraToggleState.delete(user.id);
+
+					const caughtPokemon = targetSlot.pokemon;
+					caughtPokemon.caughtIn = ballId;
+
+					// Special ball effects after catching
+					if (ballId === 'healball') {
+						caughtPokemon.hp = caughtPokemon.maxHp;
+						caughtPokemon.status = null;
+					}
+					if (ballId === 'friendball') {
+						caughtPokemon.friendship = 200;
+					}
+					// Luxury Ball increases friendship gain (handled in friendship gain logic)
+
+					const location = player.party.length < 6 ? "your party" : "PC";
+					if (player.party.length < 6) player.party.push(caughtPokemon);
+					else storePokemonInPC(player, caughtPokemon);
+
+					const tempSlot = createActivePokemonSlot(caughtPokemon);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball')}`);
+				} else {
+					messageLog.push(`<span class="rpg-text-error"><strong>${["Oh no! The Pokemon broke free!", "Aww! It appeared to be caught!", "Aargh! Almost had it!", "Gah! It was so close, too!"][catchResult.shakes]}</strong></span>`);
+					processTurn(this, battle, room, user, messageLog);
+				}
+			},
+
+			run(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from Battle Tower!"])}`);
+				if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from a Trainer!"])}`);
+
+				const playerSlots = getActiveSlots(battle.playerSlots);
+				for (const slot of playerSlots) {
+					const trapping = checkTrappingAbility(slot, battle);
+					if (trapping) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Trapped by ${trapping.pokemon.ability}!`])}`);
+					if (slot.isTrapped || slot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`You can't escape!`])}`);
+				}
+
+				saveBattleStatus(battle);
+				activeBattles.delete(user.id);
+				teraToggleState.delete(user.id);
+
+				const player = getPlayerData(user.id);
+				const location = LOCATIONS[toID(player.location)];
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "You ran away safely!")}`);
+			},
+
+			back(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (battle) {
+					for (let i = 0; i < battle.playerSlots.length; i++) {
+						if (battle.playerSlots[i] === null || battle.playerSlots[i]?.pokemon.hp === 0) delete battle.pendingActions[i];
+					}
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
+				}
+			},
+
+			bagmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+				const player = getPlayerData(battle.playerId);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleBagMenuHTML(battle, player)}`);
+			},
+
+			itemmenu(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const player = getPlayerData(battle.playerId);
+				const usableItems = getBattleUsableItems(player);
+
+				if (usableItems.length === 0) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have any items to use in battle!"])}`);
+				}
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemMenuHTML(battle, player, usableItems)}`);
+			},
+
+			selectitemtarget(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const itemId = toID(target);
+				const player = getPlayerData(battle.playerId);
+				const item = player.inventory.get(itemId);
+
+				if (!item || !canUseItemInBattle(itemId)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+				}
+
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemTargetHTML(battle, player, itemId)}`);
+			},
+
+			useitem(target, room, user) {
+				const battle = activeBattles.get(user.id);
+				if (!battle) return this.errorReply("You are not in a battle.");
+
+				// Check if item usage is enabled in config
+				if (!GameConfig.allowItemUsageInBattle) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+				}
+
+				const [itemIdStr, slotIndexStr] = target.split(' ');
+				const itemId = toID(itemIdStr);
+				const slotIndex = parseInt(slotIndexStr);
+
+				if (!itemId || isNaN(slotIndex)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item command!"])}`);
+				}
+
+				const player = getPlayerData(battle.playerId);
+				const item = player.inventory.get(itemId);
+
+				if (!item || !canUseItemInBattle(itemId)) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have that item!"])}`);
+				}
+
+				if (slotIndex < 0 || slotIndex > 1) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target slot!"])}`);
+				}
+
+				const targetSlot = battle.playerSlots[slotIndex];
+				if (!targetSlot) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["No Pokémon in that slot!"])}`);
+				}
+
+				const pokemon = targetSlot.pokemon;
+				const itemData = ITEMS_DATABASE[itemId];
+				if (!itemData?.effects) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+				}
+
+				const eff = itemData.effects;
+				let result: { success: boolean, message: string };
+
+				// Handle special items first
+				if (itemId === 'direhit') {
+					// Dire Hit raises critical-hit ratio
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+					}
+					if (targetSlot.focusEnergy) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} is already pumped!`])}`);
+					}
+					targetSlot.focusEnergy = true;
+					result = { success: true, message: `${pokemon.species} is getting pumped!` };
+				} else if (itemId === 'guardspec') {
+					// Guard Spec prevents stat reduction (not implemented yet)
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Guard Spec is not yet implemented!"])}`);
+				} else if (eff.revive) {
+					result = useBattleRevivalItem(pokemon, itemId);
+				} else if (eff.healAmount || eff.healPercent || eff.statusCure) {
+					result = useBattleHealingItem(pokemon, itemId);
+				} else if (eff.battleStatBoost) {
+					// Handle stat boost items
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+					}
+					const boost = eff.battleStatBoost;
+					const currentStage = targetSlot.statStages[boost.stat];
+					if (currentStage >= 6) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species}'s ${boost.stat.toUpperCase()} is already maxed!`])}`);
+					}
+					const newStage = Math.min(6, currentStage + boost.stages);
+					targetSlot.statStages[boost.stat] = newStage as any;
+					result = {
+						success: true,
+						message: `${pokemon.species}'s ${boost.stat.toUpperCase()} ${boost.stages >= 2 ? 'sharply ' : ''}rose!`,
+					};
+				} else if (eff.ppRestore) {
+					// Handle PP restoration items
+					if (pokemon.hp <= 0) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+					}
+
+					let restoredAny = false;
+					const ppAmount = eff.ppRestore === -1 ? 999 : eff.ppRestore;
+
+					if (eff.ppRestoreAll) {
+						// Restore PP to all moves
+						for (const move of pokemon.moves) {
+							const moveData = getMove(move.id);
+							const maxPP = moveData.pp || 5;
+							if (move.pp < maxPP) {
+								move.pp = Math.min(maxPP, move.pp + ppAmount);
+								restoredAny = true;
+							}
+						}
+						result = restoredAny ?
+							{ success: true, message: `PP was restored for all of ${pokemon.species}'s moves!` } :
+							{ success: false, message: `${pokemon.species}'s moves already have full PP!` };
+					} else {
+						// For single move PP items, restore the first move that needs PP
+						for (const move of pokemon.moves) {
+							const moveData = getMove(move.id);
+							const maxPP = moveData.pp || 5;
+							if (move.pp < maxPP) {
+								move.pp = Math.min(maxPP, move.pp + ppAmount);
+								result = { success: true, message: `PP was restored for ${pokemon.species}'s ${moveData.name}!` };
+								restoredAny = true;
+								break;
+							}
+						}
+						if (!restoredAny) {
+							result = { success: false, message: `${pokemon.species}'s moves already have full PP!` };
+						}
+					}
+				} else {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["This item cannot be used in battle!"])}`);
+				}
+
+				if (!result.success) {
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [result.message])}`);
+				}
+
+				// Remove item from inventory
+				removeItemFromInventory(player, itemId, 1);
+
+				// Queue the item usage as an action
+				const messageLog = [`Used <strong>${itemData.name}</strong>! ${result.message}`];
+
+				// Process turn after item usage
+				processTurn(this, battle, room, user, messageLog);
+			},
+
+			help() {
+				this.sendReply("Battle commands: /rpg battleaction [move|switch|bagmenu|run]");
+			},
+		},
+
 		giveitem(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("You cannot manage items during a battle.");
 			const player = getPlayerData(user.id);
-			const args = target.split(' ');
-			const arg1 = toID(args[0]);
-			const arg2 = toID(args[1]);
+			const [pokemonId, itemId] = target.split(' ').map(toID);
 
-			if (!arg1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemSelectionHTML(player)}`);
+			if (!pokemonId) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemSelectionHTML(player)}`);
 
-			const pokemon = player.party.find(p => p.id === arg1);
-			const itemFromBag = player.inventory.get(arg1);
+			const pokemon = player.party.find(p => p.id === pokemonId);
+			if (!pokemon) return this.errorReply("Pokémon not found.");
 
-			if (pokemon && !arg2) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemToSpecificPokemonHTML(player, pokemon)}`);
+			if (!itemId) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemToSpecificPokemonHTML(player, pokemon)}`);
+
+			const item = player.inventory.get(itemId);
+			if (!item || (item.category !== 'held' && item.category !== 'berry')) return this.errorReply("Invalid item.");
+
+			if (pokemon.item) {
+				if (RPGAbilities.checkItemRemovalPrevention(pokemon)) return this.errorReply("Cannot swap item.");
+				addItemToInventory(player, pokemon.item, 1);
 			}
 
-			if (itemFromBag && !pokemon) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemPokemonSelectionHTML(player, arg1)}`);
-			}
+			pokemon.item = itemId;
+			removeItemFromInventory(player, itemId, 1);
 
-			const targetPokemon = player.party.find(p => p.id === arg1);
-			const targetItemId = arg2;
-			
-			if (!targetPokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemSelectionHTML(player, "Error: Pokémon not found.")}`);
-			
-			const item = player.inventory.get(targetItemId);
-			if (!item || (item.category !== 'held' && item.category !== 'berry')) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemToSpecificPokemonHTML(player, targetPokemon)}`);
-			}
-
-			if (targetPokemon.item) {
-				if (RPGAbilities.checkItemRemovalPrevention(targetPokemon)) {
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateGiveItemToSpecificPokemonHTML(player, targetPokemon)}`);
-				}
-				addItemToInventory(player, targetPokemon.item, 1);
-			}
-
-			targetPokemon.item = targetItemId;
-			removeItemFromInventory(player, targetItemId, 1);
-
-			const successMsg = `Gave <strong>${item.name}</strong> to ${targetPokemon.species}.`;
+			const successMsg = `Gave <strong>${item.name}</strong> to ${pokemon.species}.`;
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
 		},
 
@@ -1020,10 +1853,10 @@ export const commands: ChatCommands = {
 			}
 
 			const pokemon = player.party.find(p => p.id === pokemonId);
-			if (!pokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTakeItemSelectionHTML(player, "Error: Pokémon not found.")}`);
-			if (!pokemon.item) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTakeItemSelectionHTML(player, "Error: No item to take.")}`);
+			if (!pokemon) return this.errorReply("Pokémon not found.");
+			if (!pokemon.item) return this.errorReply("No item to take.");
 
-			if (RPGAbilities.checkItemRemovalPrevention(pokemon)) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateTakeItemSelectionHTML(player, "Error: Cannot take item (Ability blocked).")}`);
+			if (RPGAbilities.checkItemRemovalPrevention(pokemon)) return this.errorReply("Cannot take item.");
 
 			const item = ITEMS_DATABASE[pokemon.item];
 			addItemToInventory(player, pokemon.item, 1);
@@ -1040,11 +1873,11 @@ export const commands: ChatCommands = {
 			const pokemonId = parts[0]?.trim();
 			const newNickname = parts.slice(1).join(',').trim();
 
-			if (!pokemonId || !newNickname) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Usage /rpg nickname [pokemonId], [new name]")}`);
+			if (!pokemonId || !newNickname) return this.errorReply("Usage: /rpg nickname [pokemonId], [new nickname]");
 
 			const pokemon = player.party.find(p => p.id === pokemonId);
-			if (!pokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Pokemon not found.")}`);
-			if (newNickname.length > 12) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, "Error: Nickname too long.")}`);
+			if (!pokemon) return this.errorReply("Pokemon not found.");
+			if (newNickname.length > 12) return this.errorReply("Nickname too long.");
 
 			const oldNickname = pokemon.nickname;
 			pokemon.nickname = newNickname;
