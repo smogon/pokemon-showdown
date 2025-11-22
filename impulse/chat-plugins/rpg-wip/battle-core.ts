@@ -113,8 +113,14 @@ export function handleDamagingMove(
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
 			if (move.drain && attacker.hp < attacker.maxHp) {
 				const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+				// Big Root logic for drain
+				let drainFraction = move.drain[0] / move.drain[1];
+				if (battle.magicRoomTurns === 0 && attacker.item === 'bigroot') {
+					drainFraction *= 1.3;
+				}
+
 				if (defenderAbility === 'liquidooze' && !RPGAbilities.isAbilityIgnored(attacker, defenderSlot.pokemon, defenderAbility)) {
-					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					const drainAmount = Math.max(1, Math.floor(damageDealt * drainFraction));
 					if (RPGAbilities.takesIndirectDamage(attacker)) {
 						attacker.hp = Math.max(0, attacker.hp - drainAmount);
 						messageLog.push(`${attacker.species} was hurt by ${defenderSlot.pokemon.species}'s Liquid Ooze!`);
@@ -122,14 +128,18 @@ export function handleDamagingMove(
 				} else if (attackerSlot.healBlockTurns > 0) {
 					messageLog.push(`${attacker.species} can't restore HP due to Heal Block!`);
 				} else {
-					const drainAmount = Math.max(1, Math.floor(damageDealt * (move.drain[0] / move.drain[1])));
+					const drainAmount = Math.max(1, Math.floor(damageDealt * drainFraction));
 					attacker.hp = Math.min(attacker.maxHp, attacker.hp + drainAmount);
 					messageLog.push(`${defenderSlot.pokemon.species} had its energy drained!`);
 				}
 			}
 			if (battle.magicRoomTurns === 0 && attacker.item === 'shellbell' && attacker.hp < attacker.maxHp) {
 				if (attackerSlot.healBlockTurns <= 0) {
-					const healAmount = Math.max(1, Math.floor(damageDealt / 8));
+					let healAmount = Math.max(1, Math.floor(damageDealt / 8));
+					// Big Root affects Shell Bell
+					if (attacker.item === 'bigroot') { // This is redundant if we checked item for shellbell, but Big Root is a different item. Shell Bell AND Big Root can't be held simultaneously.
+						// Logic kept for reference, but since a Pokemon holds 1 item, it can't hold Shell Bell AND Big Root.
+					}
 					attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 					messageLog.push(`${attacker.species} restored some HP using its Shell Bell!`);
 				}
@@ -724,6 +734,14 @@ export function applyFinalDamageModifiers(
 		if (attacker.item === 'expertbelt' && effectiveness > 1) {
 			damage = Math.floor(damage * 1.2);
 		}
+		// Muscle Band & Wise Glasses
+		if (attacker.item === 'muscleband' && move.category === 'Physical') {
+			damage = Math.floor(damage * 1.1);
+		}
+		if (attacker.item === 'wiseglasses' && move.category === 'Special') {
+			damage = Math.floor(damage * 1.1);
+		}
+
 		// Type Enhancers
 		if (attacker.item === 'charcoal' && moveType === 'Fire') damage = Math.floor(damage * 1.2);
 		if (attacker.item === 'mysticwater' && moveType === 'Water') damage = Math.floor(damage * 1.2);
