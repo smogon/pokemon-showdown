@@ -23,6 +23,7 @@ import {
 	handleLeppaBerry,
 	setItem,
 	getAccuracyEvasionMultiplier,
+	createActivePokemonSlot
 } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
@@ -36,9 +37,71 @@ import {
 } from './html';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
+// Circular dependency note: Ensure your build system handles this, or refactor hazard logic to a shared file.
+import { applyHazardEffectsOnSwitchIn } from './battle-flow';
 
+/**
+ * Helper for Gen 9 Damage Rounding
+ * Rounds .5 down (standard floor) except for specific modifiers,
+ * but standard integer math usually implies floor.
+ * Pokemon standard often uses "PokeRound" which is standard rounding (.5 rounds up).
+ * However, standard damage formula steps often truncate (floor).
+ * Step 5 specified 0.5 rounding logic.
+ */
 function pokeRound(num: number): number {
 	return (num % 1 > 0.5) ? Math.ceil(num) : Math.floor(num);
+}
+
+/**
+ * Executes a forced random switch (Roar, Whirlwind, Dragon Tail, Red Card).
+ * Prevents soft-locks by immediately filling the slot.
+ */
+export function executeForcedRandomSwitch(
+	battle: BattleState,
+	slot: ActivePokemonSlot,
+	messageLog: string[]
+): void {
+	const isPlayer = battle.playerSlots.includes(slot);
+	const party = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+	const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
+
+	// Find candidates: Healthy and not currently on field
+	const candidates = party.filter(p =>
+		p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
+	);
+
+	if (candidates.length === 0) return;
+
+	// Pick random
+	const replacement = candidates[Math.floor(Math.random() * candidates.length)];
+
+	// Save State of outgoing pokemon (Step 4 compliance)
+	if (!battle.persistentPokemonState) battle.persistentPokemonState = {};
+	battle.persistentPokemonState[slot.pokemon.id] = {
+		terastallized: slot.terastallized,
+		sleepCounter: slot.sleepCounter,
+		toxicCounter: slot.toxicCounter
+	};
+
+	// Load State for incoming
+	const savedState = battle.persistentPokemonState[replacement.id];
+	const newSlot = createActivePokemonSlot(replacement, savedState);
+
+	// Perform Switch
+	const slotIndex = slots.indexOf(slot);
+	if (slotIndex !== -1) {
+		slots[slotIndex as 0 | 1] = newSlot;
+		messageLog.push(`${replacement.species} was dragged out!`);
+
+		// Apply Hazards
+		const fainted = applyHazardEffectsOnSwitchIn(newSlot, battle, isPlayer, messageLog);
+		if (fainted) {
+			messageLog.push(`${newSlot.pokemon.species} fainted!`);
+		} else {
+			handleMirrorHerb(newSlot, battle, messageLog);
+			RPGAbilities.checkFormChangeAbilities(newSlot, battle, messageLog);
+		}
+	}
 }
 
 /**
@@ -402,6 +465,7 @@ export function handleDamagingMove(
 				messageLog.push(`${defenderSlot.pokemon.species} was cured of paralysis!`);
 			}
 
+			// Dragon Tail / Circle Throw Logic (Updated for Soft Lock Fix)
 			if (['dragontail', 'circlethrow'].includes(move.id) && defenderSlot?.pokemon.hp > 0) {
 				const defenderAbility = RPGAbilities.getActiveAbility(defenderSlot.pokemon, attacker);
 				if (defenderAbility === 'suctioncups') {
@@ -410,26 +474,18 @@ export function handleDamagingMove(
 					messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
 				} else {
 					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
-					const defenderSlotIndex = (isDefenderPlayer ? battle.playerSlots : battle.opponentSlots).indexOf(defenderSlot);
-					const party = isDefenderPlayer ? getPlayerData(battle.playerId).party : battle.opponentParty;
+					const party = isDefenderPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+					const slots = isDefenderPlayer ? battle.playerSlots : battle.opponentSlots;
 
 					const availableReplacements = party.filter(p =>
-						p.hp > 0 &&
-						!battle.playerSlots.some(s => s?.pokemon.id === p.id) &&
-						!battle.opponentSlots.some(s => s?.pokemon.id === p.id)
+						p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
 					);
 
 					if (availableReplacements.length === 0) {
 						messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 					} else {
 						messageLog.push(`${defenderSlot.pokemon.species} was blown away!`);
-						if (defenderSlotIndex !== -1) {
-							if (isDefenderPlayer) {
-								battle.playerSlots[defenderSlotIndex as 0 | 1] = null;
-							} else {
-								battle.opponentSlots[defenderSlotIndex as 0 | 1] = null;
-							}
-						}
+						executeForcedRandomSwitch(battle, defenderSlot, messageLog);
 					}
 				}
 			}
@@ -565,9 +621,7 @@ export function calculateDamage(
 		return { damage: 0, message: ` <i style="color: #6c757d;">But it had no effect!</i>`, effectiveness: 1, isCritical: false, sheerForceActive };
 	}
 
-	// ==========================================================================================
-	// STEP 5 FIX: Tera Blast Category Check (Uses stats with stages)
-	// ==========================================================================================
+	// Tera Blast Category Check (Step 5 Fix)
 	if (move.id === 'terablast' && attackerSlot.terastallized) {
 		const atk = attacker.atk * getStatMultiplier(attackerSlot.statStages.atk);
 		const spa = attacker.spa * getStatMultiplier(attackerSlot.statStages.spa);
@@ -578,7 +632,6 @@ export function calculateDamage(
 			move.basePower = 100;
 		}
 	}
-	// ==========================================================================================
 
 	let basePower = RPGMoves.getDamageBasePower(move, attacker, defender, attackerSlot, defenderSlot, battle);
 	if (basePower === -1) {
@@ -623,9 +676,7 @@ export function calculateDamage(
 		attackStage = 0;
 	}
 
-	// ==========================================================================================
-	// STEP 5 FIX: Stat Application & Rounding
-	// ==========================================================================================
+	// Stat Rounding (Step 5 Fix)
 	const attackStat = Math.floor(attackStatRaw * getStatMultiplier(attackStage));
 	let defenseStat = Math.floor(defenseStatRaw * getStatMultiplier(defenseStage));
 
@@ -640,46 +691,17 @@ export function calculateDamage(
 	defenseStat = Math.max(1, defenseStat);
 	finalAttackStat = Math.max(1, finalAttackStat);
 
-	// ==========================================================================================
-	// STEP 5 FIX: Strict Damage Formula Order
-	// Formula: ((((2 * Level) / 5 + 2) * Power * A / D) / 50) + 2
-	// ==========================================================================================
+	// Strict Damage Formula Order (Step 5 Fix)
 	let levelFactor = Math.floor((2 * attacker.level) / 5 + 2);
 	let baseDamage = Math.floor((levelFactor * basePower * finalAttackStat) / defenseStat);
 	baseDamage = Math.floor(baseDamage / 50);
 	baseDamage += 2;
-	// ==========================================================================================
-
-	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
-	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
-	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
-	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
-	const defenderTypes = getPokemonTypes(defender, defenderSlot);
-
-	let effectiveness: number;
-	if (moveId === 'struggle') {
-		effectiveness = 1;
-	} else {
-		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker, move.id);
-	}
-
-	abilityContext.effectiveness = effectiveness;
-
-	let berryConsumed: string | undefined = undefined;
-	let effectivenessMultiplier = effectiveness;
-	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
-		const resistedType = TYPE_RESIST_BERRIES[defender.item];
-		if (moveType === resistedType && effectiveness > 1) {
-			effectivenessMultiplier = effectiveness / 2;
-			berryConsumed = defender.item;
-		}
-	}
 
 	// Metronome Logic
 	if (battle.magicRoomTurns === 0 && attacker.item === 'metronome') {
 		const count = attackerSlot.consecutiveMoveCount || 0;
 		const multiplier = 1 + (Math.min(5, count) * 0.2);
-		baseDamage = Math.floor(baseDamage * multiplier); // Using floor to be safe, could be round
+		baseDamage = Math.floor(baseDamage * multiplier);
 	}
 
 	let damage = applyFinalDamageModifiers(
@@ -692,20 +714,17 @@ export function calculateDamage(
 	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
 		const gemType = attacker.item.replace('gem', '');
 		if (gemType.toLowerCase() === moveType.toLowerCase()) {
-			damage = Math.floor(damage * 1.3);
+			damage = Math.floor(damage * 1.3); // Modern gen boost
 			gemConsumed = attacker.item;
 		}
 	}
 
-	// ==========================================================================================
-	// STEP 5 FIX: Strict Rounding on Modifiers
-	// ==========================================================================================
+	// Strict Modifiers Rounding (Step 5 Fix)
 	damage = pokeRound(damage * stabMultiplier);
 	damage = Math.floor(damage * effectivenessMultiplier);
 	damage = pokeRound(damage * criticalMultiplier);
 	damage = Math.floor(damage * randomMultiplier);
 	damage = pokeRound(damage * spreadMultiplier);
-	// ==========================================================================================
 
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
@@ -1208,19 +1227,23 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
+	// Red Card Logic (Soft Lock Fix)
 	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
-		const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
-		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
+		// Check if attacker can be switched
+		const isAttackerPlayer = battle.playerSlots.includes(attackerSlot);
+		const party = isAttackerPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+		const slots = isAttackerPlayer ? battle.playerSlots : battle.opponentSlots;
 
-		if (attackerSlotIndex !== -1) {
-			messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
+		const hasReplacements = party.some(p => p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id));
+		const cardAttackerAbility = RPGAbilities.getActiveAbility(attacker, defender);
+
+		if (hasReplacements && cardAttackerAbility !== 'suctioncups' && !attackerSlot.isIngrained) {
+			messageLog.push(`${defender.species}'s Red Card activated!`);
+			messageLog.push(`${attacker.species} was sent home!`);
 			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 
-			if (isPlayerDefending) {
-				battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
-			} else {
-				battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
-			}
+			// Fix: Execute switch immediately
+			executeForcedRandomSwitch(battle, attackerSlot, messageLog);
 		}
 	}
 }
@@ -1235,12 +1258,6 @@ export function handleOnHitAbilityResponses(
 	isCritical: boolean
 ) {
 	const defender = defenderSlot.pokemon;
-	// These abilities are usually triggered by damage and are not blocked by Mold Breaker (except maybe Weak Armor)
-	// But to be safe, we use getActiveAbility where appropriate.
-	// Justified, Rattled, Stamina, Anger Point, Berserk, Thermal Exchange, Cotton Down, Anger Shell, etc.
-	// Most of these are self-buffs, so Mold Breaker doesn't stop them.
-	// Weak Armor affects the defender (lowers def, raises speed), so it is not blocked by attacker's Mold Breaker.
-
 	const defenderAbility = toID(defender.ability || '');
 	const attacker = attackerSlot.pokemon;
 
@@ -1445,8 +1462,8 @@ export function applyRecoilAndSelfEffects(
 		}
 	} else if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 		const attackerAbility = toID(attacker.ability || '');
-		const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
-		if (!sheerForceActive && RPGAbilities.takesIndirectDamage(attacker)) {
+		const sfActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
+		if (!sfActive && RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 			messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
 			tookRecoil = true;
