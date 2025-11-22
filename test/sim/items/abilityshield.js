@@ -166,7 +166,7 @@ describe('Ability Shield', () => {
 
 	// original: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
 	// patched: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10780426
-	it(`should trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
+	it(`should trigger abilities if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'intimidate', moves: ['splash'] },
 		], [
@@ -175,6 +175,18 @@ describe('Ability Shield', () => {
 
 		battle.makeChoices();
 		assert.statStage(battle.p2.active[0], 'atk', -1);
+	});
+
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10783229
+	it(`should not trigger "End" events of abilities if Ability Shield is lost, while Neutralizing Gas is in effect`, () => {
+		battle = common.createBattle([[
+			{ species: 'wynaut', ability: 'desolateland', item: 'abilityshield', moves: ['splash'] },
+		], [
+			{ species: 'weezinggalar', ability: 'neutralizinggas',moves: ['trick'] },
+		]]);
+
+		battle.makeChoices();
+		assert.statStage(battle.field.weather, 'desolateland');
 	});
 
 	it.skip(`should not re-trigger abilities if Ability Shields are tricked, while Neutralizing Gas is in effect`, () => {
@@ -233,11 +245,4 @@ describe('Ability Shield', () => {
 		battle.makeChoices('move sleeptalk terastallize', 'auto');
 		assert.equal(battle.p1.active[0].ability, 'embodyaspectteal', `Ogerpon's ability should change to Embody Aspect`);
 	});
-
-	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
-	//
-	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
-	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once"
-	//      moves/abilities triggered before the loss would not automatically trigger unless
-	//      used again.
 });

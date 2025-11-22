@@ -24,7 +24,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.abilityState.gluttony = false;
 			}
 		},
-		// onEnd(pokemon) {}, needs testing
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
 		num: 1881,
 		gen: 9,
