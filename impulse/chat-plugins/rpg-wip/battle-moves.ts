@@ -761,7 +761,7 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${attacker.species} foresaw an attack!`);
 		return true;
 	}
-
+	
 	case 'protect':
 	case 'detect':
 		const successCounter = attackerSlot.protectSuccessCounter;
@@ -772,6 +772,8 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${attacker.species} protected itself!`);
 		} else {
 			messageLog.push(`But it failed!`);
+			// FIX: Reset counter on failure so the next Protect has 100% chance
+			attackerSlot.protectSuccessCounter = 0; 
 		}
 		return true;
 
