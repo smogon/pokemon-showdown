@@ -13,7 +13,7 @@ import {
 } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
-import { getStatMultiplier, getPokemonTypes } from './battle-core';
+import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness } from './battle-core';
 // Import the helper from battle-core to prevent soft locks
 import { executeForcedRandomSwitch } from './battle-core';
 import { getPlayerData } from './core';
@@ -291,6 +291,220 @@ export function handleDamagingMovePreamble(
 ): boolean {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
+
+	// Sucker Punch Logic
+	if (move.id === 'suckerpunch') {
+		if (defenderSlot.hasActedThisTurn) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// Check opponent's pending action
+		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
+		const defenderIndex = isPlayerDefender ? battle.playerSlots.indexOf(defenderSlot) : battle.opponentSlots.indexOf(defenderSlot) + 2;
+		const action = battle.pendingActions[defenderIndex];
+
+		if (!action || action.actionType !== 'move') {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const defMove = getMove(action.moveId!);
+		if (defMove.category === 'Status') {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+	}
+
+	// Fake Out and First Impression Logic
+	if (move.id === 'fakeout' || move.id === 'firstimpression') {
+		if (attackerSlot.activeTurns !== 1) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+	}
+
+	// Last Resort
+	if (move.id === 'lastresort') {
+		const hasUsedOtherMoves = attacker.moves.every(m => {
+			if (m.id === 'lastresort') return true;
+			// Simplified check: In a real engine we check if used this switch-in.
+			// For this engine, we assume it fails if they have unused moves.
+			return true; // Placeholder logic as we don't track individual move usage history perfectly per switch yet
+		});
+		// Keeping strictly to implementation: If we can't track it perfectly, we often let it pass or fail.
+		// Allowing it for now to avoid breaking, but noting it needs move usage history in ActivePokemonSlot.
+	}
+
+	// Poltergeist
+	if (move.id === 'poltergeist') {
+		if (!defender.item || battle.magicRoomTurns > 0) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
+		messageLog.push(`${defender.species} is being attacked by its ${itemName}!`);
+	}
+
+	// Synchronoise
+	if (move.id === 'synchronoise') {
+		const attackerTypes = getPokemonTypes(attacker, attackerSlot);
+		const defenderTypes = getPokemonTypes(defender, defenderSlot);
+		const sharesType = attackerTypes.some(t => defenderTypes.includes(t));
+		if (!sharesType) {
+			messageLog.push(`It doesn't affect ${defender.species}...`);
+			return true;
+		}
+	}
+
+	// Belch
+	if (move.id === 'belch') {
+		// Requires ateBerry flag which we added to logic context in previous step
+		// For now, if not tracked, it fails.
+		// Implementation note: we need to track `ateBerry` in slot.
+		if (!attackerSlot.consumedBerry) { // consumedBerry tracks *last*, implies eating.
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+	}
+
+	// Burn Up / Double Shock
+	if (move.id === 'burnup' || move.id === 'doubleshock') {
+		const typeToCheck = move.id === 'burnup' ? 'Fire' : 'Electric';
+		const attackerTypes = getPokemonTypes(attacker, attackerSlot);
+		if (!attackerTypes.includes(typeToCheck)) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		// Remove type logic would go here, but we don't have a way to mutate base types persistently easily
+		// without complex volatile flags. For now, we allow the move but don't remove type.
+	}
+
+	// Brick Break / Psychic Fangs (Screen Breaking)
+	if (move.id === 'brickbreak' || move.id === 'psychicfangs' || move.id === 'ragingbull') {
+		const isPlayerAttacker = battle.playerSlots.includes(attackerSlot);
+		if (isPlayerAttacker) {
+			if (battle.opponentReflectTurns > 0 || battle.opponentLightScreenTurns > 0 || battle.opponentAuroraVeilTurns > 0) {
+				battle.opponentReflectTurns = 0;
+				battle.opponentLightScreenTurns = 0;
+				battle.opponentAuroraVeilTurns = 0;
+				messageLog.push(`It shattered the barriers!`);
+			}
+		} else {
+			if (battle.playerReflectTurns > 0 || battle.playerLightScreenTurns > 0 || battle.playerAuroraVeilTurns > 0) {
+				battle.playerReflectTurns = 0;
+				battle.playerLightScreenTurns = 0;
+				battle.playerAuroraVeilTurns = 0;
+				messageLog.push(`It shattered the barriers!`);
+			}
+		}
+		// Returns false so damage continues
+		return false;
+	}
+
+	// Final Gambit
+	if (move.id === 'finalgambit') {
+		const damage = attacker.hp;
+		attacker.hp = 0;
+		defender.hp = Math.max(0, defender.hp - damage);
+		messageLog.push(`${defender.species} took ${damage} damage!`);
+		messageLog.push(`${attacker.species} fainted!`);
+		handleHPDropEffects(defenderSlot, battle, messageLog);
+		return true; // Stop standard calc
+	}
+
+	// Endeavor
+	if (move.id === 'endeavor') {
+		if (attacker.hp >= defender.hp) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const damage = defender.hp - attacker.hp;
+		defender.hp = attacker.hp;
+		messageLog.push(`${defender.species} took ${damage} damage!`);
+		handleHPDropEffects(defenderSlot, battle, messageLog);
+		return true;
+	}
+
+	// Spit Up (Moved from Status handler)
+	if (move.id === 'spitup') {
+		if (attackerSlot.stockpileCount === 0) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const power = 100 * attackerSlot.stockpileCount;
+		// Clear stockpiles
+		attackerSlot.stockpileCount = 0;
+		attackerSlot.statStages.def = Math.max(-6, attackerSlot.statStages.def - attackerSlot.stockpileCount);
+		attackerSlot.statStages.spd = Math.max(-6, attackerSlot.statStages.spd - attackerSlot.stockpileCount);
+
+		// Calculate damage manually since we are bypassing standard flow
+		// We need to access getDamageDefense/Offense which are in battle-core...
+		// Since we can't import circular, we use a simplified calc or assume standard flow if we hadn't cleared stock.
+		// BUT, getting power 0 from cleared stock breaks standard flow.
+		// Strategy: Return FALSE here, but modify the move object passed by reference? No, move is copy.
+		// Strategy: We handled power in `getDamageBasePower`. We just need to clear the stock *after* damage?
+		// No, we must clear it.
+		// Let's use a simplified fixed damage for now to ensure functionality, or rely on the fact that we flagged it.
+		// Actually, we can just return FALSE. `getDamageBasePower` reads the count.
+		// We need to clear the count *after* the move hits.
+		// Since we don't have a "post-move" hook easily available for specific moves in this architecture without modifying `executeMove`,
+		// we will implement the damage dealing here.
+		
+		// Simplified Damage for Spit Up to avoid circular imports of `calculateDamage`
+		const level = attacker.level;
+		const atk = attacker.spa * getStatMultiplier(attackerSlot.statStages.spa);
+		const def = defender.spd * getStatMultiplier(defenderSlot.statStages.spd);
+		let damage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * power * atk / def) / 50) + 2;
+		
+		// Apply STAB
+		const types = getPokemonTypes(attacker, attackerSlot);
+		if (types.includes('Normal')) damage = Math.floor(damage * 1.5);
+		
+		// Apply Type Matchup
+		const eff = getCustomEffectiveness('Normal', getPokemonTypes(defender, defenderSlot), defender, battle, attacker);
+		damage = Math.floor(damage * eff);
+
+		defender.hp = Math.max(0, defender.hp - damage);
+		messageLog.push(`${defender.species} took ${damage} damage!`);
+		if (eff > 1) messageLog.push("It's super effective!");
+		else if (eff < 1 && eff > 0) messageLog.push("It's not very effective...");
+		
+		handleHPDropEffects(defenderSlot, battle, messageLog);
+		return true;
+	}
+
+	// Future Sight / Doom Desire
+	if (move.id === 'futuresight' || move.id === 'doomdesire') {
+		const isPlayerAttacker = battle.playerSlots.includes(attackerSlot);
+		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
+		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSlots : battle.playerSlots).indexOf(defenderSlot);
+		
+		if (targetSlotLocalIndex === -1) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+		
+		// Check if slot already targeted
+		const existing = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
+		if (existing) {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+
+		const futureAttackerSlotIndex = isPlayerAttacker ? battle.playerSlots.indexOf(attackerSlot) : battle.opponentSlots.indexOf(attackerSlot) + 2;
+		
+		futureMoveArray.push({
+			slotIndex: targetSlotLocalIndex,
+			moveId: move.id as any,
+			turnsLeft: 3, // Ends at end of 2nd turn after this one, so 3 decrements? End of turn logic decrements. Usually hits 2 turns later.
+			attackerSlotIndex: futureAttackerSlotIndex,
+			attackerStats: {
+				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
+				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
+			},
+		});
+		messageLog.push(`${attacker.species} foresaw an attack!`);
+		return true;
+	}
 
 	if (move.id === 'steelroller') {
 		if (!battle.terrain) {
@@ -672,17 +886,6 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 
-	case 'spitup':
-		if (attackerSlot.stockpileCount === 0) {
-			messageLog.push(`But it failed! (No stockpiles)`);
-			return true;
-		}
-		attackerSlot.statStages.def -= attackerSlot.stockpileCount;
-		attackerSlot.statStages.spd -= attackerSlot.stockpileCount;
-		attackerSlot.stockpileCount = 0;
-		messageLog.push(`${attacker.species} released its stockpiled power!`);
-		return false;
-
 	case 'swallow':
 		if (attackerSlot.stockpileCount === 0) {
 			messageLog.push(`But it failed! (No stockpiles)`);
@@ -736,34 +939,6 @@ export function handleSpecificStatusMove(
 			}
 		}
 		return true;
-
-	case 'futuresight':
-	case 'doomdesire': {
-		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
-		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSlots : battle.playerSlots).indexOf(defenderSlot);
-		if (targetSlotLocalIndex === -1) {
-			messageLog.push('But it failed!');
-			return true;
-		}
-		const existingFutureMove = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
-		if (existingFutureMove) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const futureAttackerSlotIndex = (isPlayerAttacker ? battle.playerSlots : battle.opponentSlots).indexOf(attackerSlot);
-		futureMoveArray.push({
-			slotIndex: targetSlotLocalIndex,
-			moveId: move.id,
-			turnsLeft: 2,
-			attackerSlotIndex: futureAttackerSlotIndex,
-			attackerStats: {
-				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
-				spa: attacker.spa * getStatMultiplier(attackerSlot.statStages.spa),
-			},
-		});
-		messageLog.push(`${attacker.species} foresaw an attack!`);
-		return true;
-	}
 
 	case 'protect':
 	case 'detect':
@@ -1023,20 +1198,6 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-	case 'endeavor':
-		if (!defender) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		if (attacker.hp >= defender.hp) {
-			messageLog.push(`But it failed!`);
-			return true;
-		}
-		const endeavorDamage = defender.hp - attacker.hp;
-		defender.hp = attacker.hp;
-		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
-		return true;
-
 	case 'block':
 	case 'meanlook':
 	case 'spiderweb':
@@ -1056,16 +1217,6 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${defender.species} can no longer escape!`);
 		}
 		return true;
-
-	case 'fakeout':
-		if (attackerSlot.activeTurns !== 1) {
-			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
-			return true;
-		}
-		if (defenderSlot) {
-			defenderSlot.willFlinch = true;
-		}
-		return false;
 	}
 
 	return false;
