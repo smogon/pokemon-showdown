@@ -448,17 +448,17 @@ export function handleDamagingMovePreamble(
 		// We need to clear the count *after* the move hits.
 		// Since we don't have a "post-move" hook easily available for specific moves in this architecture without modifying `executeMove`,
 		// we will implement the damage dealing here.
-		
+
 		// Simplified Damage for Spit Up to avoid circular imports of `calculateDamage`
 		const level = attacker.level;
 		const atk = attacker.spa * getStatMultiplier(attackerSlot.statStages.spa);
 		const def = defender.spd * getStatMultiplier(defenderSlot.statStages.spd);
 		let damage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * power * atk / def) / 50) + 2;
-		
+
 		// Apply STAB
 		const types = getPokemonTypes(attacker, attackerSlot);
 		if (types.includes('Normal')) damage = Math.floor(damage * 1.5);
-		
+
 		// Apply Type Matchup
 		const eff = getCustomEffectiveness('Normal', getPokemonTypes(defender, defenderSlot), defender, battle, attacker);
 		damage = Math.floor(damage * eff);
@@ -467,7 +467,7 @@ export function handleDamagingMovePreamble(
 		messageLog.push(`${defender.species} took ${damage} damage!`);
 		if (eff > 1) messageLog.push("It's super effective!");
 		else if (eff < 1 && eff > 0) messageLog.push("It's not very effective...");
-		
+
 		handleHPDropEffects(defenderSlot, battle, messageLog);
 		return true;
 	}
@@ -477,12 +477,12 @@ export function handleDamagingMovePreamble(
 		const isPlayerAttacker = battle.playerSlots.includes(attackerSlot);
 		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
 		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSlots : battle.playerSlots).indexOf(defenderSlot);
-		
+
 		if (targetSlotLocalIndex === -1) {
 			messageLog.push('But it failed!');
 			return true;
 		}
-		
+
 		// Check if slot already targeted
 		const existing = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
 		if (existing) {
@@ -491,7 +491,7 @@ export function handleDamagingMovePreamble(
 		}
 
 		const futureAttackerSlotIndex = isPlayerAttacker ? battle.playerSlots.indexOf(attackerSlot) : battle.opponentSlots.indexOf(attackerSlot) + 2;
-		
+
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
 			moveId: move.id as any,
