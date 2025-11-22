@@ -794,7 +794,7 @@ export function handleSwitchAction(
 	player: PlayerData,
 	messageLog: string[]
 ) {
-	// 1. Check for Trapping Effects
+	// Check for trapping effects / Shed Shell / Ingrain
 	if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'shedshell') {
 		if (attackerSlot.isIngrained) {
 			messageLog.push(`${attackerSlot.pokemon.species} is rooted in place by Ingrain and can't switch out!`);
@@ -822,9 +822,7 @@ export function handleSwitchAction(
 
 	const outgoingPokemon = attackerSlot.pokemon;
 
-	// ==========================================================================================
-	// STEP 4 FIX: Save Volatile State (Tera, Sleep, Toxic)
-	// ==========================================================================================
+	// --- SAVE STATE (Step 4) ---
 	if (!battle.persistentPokemonState) battle.persistentPokemonState = {};
 
 	battle.persistentPokemonState[outgoingPokemon.id] = {
@@ -832,9 +830,9 @@ export function handleSwitchAction(
 		sleepCounter: attackerSlot.sleepCounter,
 		toxicCounter: attackerSlot.toxicCounter
 	};
-	// ==========================================================================================
+	// ---------------------------
 
-	// Handle Switch-Out Abilities (Regenerator, Natural Cure, etc.)
+	// Handle Switch-Out Abilities
 	const outgoingAbility = toID(outgoingPokemon.ability || '');
 	if (outgoingAbility === 'regenerator' && outgoingPokemon.hp > 0 && outgoingPokemon.hp < outgoingPokemon.maxHp) {
 		const healAmount = Math.floor(outgoingPokemon.maxHp / 3);
@@ -859,12 +857,10 @@ export function handleSwitchAction(
 			return;
 		}
 
-		// ==========================================================================================
-		// STEP 4 FIX: Load Saved State for Incoming Pokemon
-		// ==========================================================================================
+		// --- LOAD STATE (Player) ---
 		const savedState = battle.persistentPokemonState[incomingPokemon.id];
 		const newSlot = createActivePokemonSlot(incomingPokemon, savedState);
-		// ==========================================================================================
+		// ---------------------------
 
 		if ((incomingPokemon as any).hasSwitchedOut) (newSlot as any).hasSwitchedOut = true;
 		battle.playerSlots[attackerSlotIndex as 0 | 1] = newSlot;
@@ -881,12 +877,10 @@ export function handleSwitchAction(
 		if (replacement) {
 			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
 			
-			// ==========================================================================================
-			// STEP 4 FIX: Load Saved State for AI Replacement
-			// ==========================================================================================
+			// --- LOAD STATE (AI) ---
 			const savedState = battle.persistentPokemonState[replacement.id];
 			const newSlot = createActivePokemonSlot(replacement, savedState);
-			// ==========================================================================================
+			// -----------------------
 
 			if ((replacement as any).hasSwitchedOut) (newSlot as any).hasSwitchedOut = true;
 			battle.opponentSlots[attackerSlotIndex as 0 | 1] = newSlot;
