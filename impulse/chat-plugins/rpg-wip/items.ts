@@ -21,12 +21,10 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'babiriberry', 'roseliberry', 'chilanberry', 'chartiberry', 'cobaberry',
 	'payapaberry', 'habanberry', 'tangaberry', 'kebiaberry',
 	'lightball', 'thickclub', 'deepseatooth', 'deepseascale', 'metalpowder',
-	// Added viable new items
 	'widelens', 'scopelens', 'razorclaw', 'zoomlens', 'lightclay',
 	'kingsrock', 'razorfang', 'metronome', 'safetygoggles', 'protectivepads',
-	'adrenalineorb', 'utilityumbrella',
-	// Step 1 Additions
-	'brightpowder', 'laxincense', 'terrainextender',
+	'adrenalineorb', 'utilityumbrella', 'brightpowder',
+	'laxincense', 'terrainextender',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
