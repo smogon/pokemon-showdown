@@ -293,7 +293,7 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 // ITEM LOGIC FUNCTIONS
 // ==========================================
 
-export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'>> | null {
+export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	const id = toID(itemId);
 	if (CUSTOM_ITEMS_DATABASE[id]) {
 		return CUSTOM_ITEMS_DATABASE[id];
