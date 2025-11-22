@@ -1,5 +1,5 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getActiveSlots, applyStatChange } from './utils';
+import { getActiveSlots, applyStatChange, activateUnburden } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
 export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
@@ -51,6 +51,7 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 
 	'levitate': ctx => {
 		if (ctx.move.type === 'Ground' && ctx.battle.gravityTurns === 0) {
+			if (ctx.defender.item === 'ironball') return null;
 			return {
 				immune: true,
 				message: `${ctx.defender.species}'s Levitate makes it immune to Ground moves!`,
@@ -471,6 +472,14 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 		if (faintedCount > 0) {
 			const multiplier = 1 + (faintedCount * 0.1);
 			return Math.floor(basePower * multiplier);
+		}
+		return basePower;
+	},
+
+	'solarpower': (ctx, basePower) => {
+		if (ctx.attacker.item === 'utilityumbrella') return basePower;
+		if (isWeatherActive(ctx.battle) && (ctx.battle.weather?.type === 'sun' || ctx.battle.weather?.type === 'harsh-sun')) {
+			return Math.floor(basePower * 1.5);
 		}
 		return basePower;
 	},
@@ -1681,10 +1690,12 @@ export function isGrounded(slotOrPokemon: ActivePokemonSlot | RPGPokemon, battle
 	}
 
 	if (ability === 'levitate') {
+		if (pokemon.item === 'ironball') return true;
 		return false;
 	}
 
 	if (species.types.includes('Flying')) {
+		if (pokemon.item === 'ironball') return true;
 		return false;
 	}
 
@@ -1718,6 +1729,13 @@ export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
 	const ability = toID(ctx.defender.ability || '');
+
+	if (ctx.move.flags.powder && ctx.defender.item === 'safetygoggles') {
+		return {
+			immune: true,
+			message: `${ctx.defender.species}'s Safety Goggles protects it from the powder!`,
+		};
+	}
 
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, ability)) {
 		return null;
@@ -1923,6 +1941,8 @@ export function getEvasionMultiplier(defenderSlot: ActivePokemonSlot, battle: Ba
 export function applyAbilitySpeedModifier(pokemon: RPGPokemon, battle: BattleState, speed: number): number {
 	const ability = toID(pokemon.ability || '');
 
+	if (pokemon.item === 'utilityumbrella') return speed;
+
 	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) ||
 		battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
 	const status = slot ? slot.status : pokemon.status;
@@ -1969,7 +1989,9 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 
 	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
 		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 1.25);
+			if (ctx.defender.item !== 'utilityumbrella') {
+				damage = Math.floor(damage * 1.25);
+			}
 		}
 	}
 
@@ -2360,6 +2382,14 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 					continue; 
 				}
 
+				// Handle Adrenaline Orb
+				if (opponentSlot.pokemon.item === 'adrenalineorb' && opponentSlot.statStages.spe < 6) {
+					applyStatChange(opponentSlot, 'spe', 1, battle, messageLog, slot);
+					opponentSlot.pokemon.item = undefined; // Consume
+					messageLog.push(`${opponentSlot.pokemon.species}'s Adrenaline Orb raised its Speed!`);
+					activateUnburden(opponentSlot, messageLog);
+				}
+
                 // FIX: Use applyStatChange so it triggers Mirror Armor, Mist, Clear Amulet, etc.
 				applyStatChange(opponentSlot, 'atk', -1, battle, messageLog, slot);
 			}
@@ -2520,6 +2550,9 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 }
 
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
+	// Protective Pads check
+	if (ctx.attacker.item === 'protectivepads') return;
+
 	const defenderAbility = toID(ctx.defender.ability || '');
 
 	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
