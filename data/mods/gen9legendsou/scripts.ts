@@ -4,12 +4,12 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		const legalItems = [
 			'assaultvest', 'bigroot', 'blackbelt', 'blackglasses', 'charcoal', 'dragonfang', 'eviolite', 'expertbelt', 'fairyfeather',
-			'focusband', 'focussash', 'hardstone', 'kingsrock', 'leftovers', 'lifeorb', 'magnet', 'metalcoat', 'miracleseed', 'muscleband',
-			'mysticwater', 'nevermeltice', 'normalgem', 'poisonbarb', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer', 'powerlens',
-			'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder', 'softsand',
-			'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone', 'duskstone',
-			'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone', 'sunstone',
-			'thunderstone', 'waterstone', 'whippeddream', 'bignugget',
+			'focusband', 'focussash', 'hardstone', 'kingsrock', 'leftovers', 'lifeorb', 'lightball', 'magnet', 'metalcoat', 'miracleseed',
+			'muscleband', 'mysticwater', 'nevermeltice', 'normalgem', 'poisonbarb', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer',
+			'powerlens', 'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder',
+			'softsand', 'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone',
+			'duskstone', 'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone',
+			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget',
 		];
 		const legalBerries = [
 			'aspearberry', 'babiriberry', 'chartiberry', 'cheriberry', 'chestoberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry',
@@ -17,11 +17,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			'payapaberry', 'pechaberry', 'persimberry', 'pomegberry', 'qualotberry', 'rawstberry', 'rindoberry', 'roseliberry', 'shucaberry',
 			'sitrusberry', 'tamatoberry', 'tangaberry', 'wacanberry', 'yacheberry',
 		];
+		const votedLegalitems = [
+			'heavydutyboots', 'choiceband', 'choicescarf', 'choicespecs',
+		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
-			if (legalItems.includes(i) || this.data.Items[i].megaStone || legalBerries.includes(i)) {
-				if (['mewtwonitex', 'mewtwonitey', 'diancite',
-					'delphoxite', 'chesnaughtite'].includes(i)) continue;
+			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) || this.data.Items[i].megaStone) {
+				if (['blazikenite', 'swampertite', 'sceptilite'].includes(i)) continue;
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
@@ -32,10 +34,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.modData('Moves', i).isNonstandard = null;
 		}
 	},
-	actions: {
-		canTerastallize(pokemon) {
-			return null;
+	pokemon: {
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			const item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
+			if (this.hasAbility(['levitate', 'ionbattery']) && !this.battle.suppressingAbility(this)) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			return item !== 'airballoon';
 		},
+	},
+	actions: {
 		canMegaEvo(pokemon) {
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
@@ -44,7 +58,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
 				this.battle.ruleTable.has('+pokemontag:future')) &&
 				altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
 			if (item.megaEvolves === species.name) {
@@ -106,7 +120,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			} else if (move.multihitType === 'brassbond' as 'parentalbond' && move.hit > 1) {
 				// Brass Bond modifier
-				const bondModifier = 0.1;
+				const bondModifier = 0.15;
 				this.battle.debug(`Brass Bond modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			}

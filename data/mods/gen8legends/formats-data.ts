@@ -1412,9 +1412,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	arceuswater: {
 		isNonstandard: null,
 	},
-	arceuslegend: {
-		isNonstandard: null,
-	},
 	victini: {
 		isNonstandard: "Past",
 	},
