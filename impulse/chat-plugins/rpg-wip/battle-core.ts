@@ -23,7 +23,7 @@ import {
 	handleLeppaBerry,
 	setItem,
 	getAccuracyEvasionMultiplier,
-	createActivePokemonSlot
+	createActivePokemonSlot,
 } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
@@ -76,7 +76,7 @@ export function executeForcedRandomSwitch(
 	battle.persistentPokemonState[slot.pokemon.id] = {
 		terastallized: slot.terastallized,
 		sleepCounter: slot.sleepCounter,
-		toxicCounter: slot.toxicCounter
+		toxicCounter: slot.toxicCounter,
 	};
 
 	// Load State for incoming
@@ -353,15 +353,27 @@ export function handleDamagingMove(
 				}
 
 				if (slotIndex !== -1) {
-					setItem(defenderSlot, undefined, undefined, battle, messageLog);
-					messageLog.push(`${defenderSlot.pokemon.species} is being switched out by its Eject Button!`);
+					// Check if there are available replacements before setting up pivot
+					const defenderParty = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+					const defenderSlots = isPlayer ? battle.playerSlots : battle.opponentSlots;
 
-					if (isPlayer) {
-						battle.pendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
-						battle.playerSlots[slotIndex as 0 | 1] = null;
+					const availableReplacements = defenderParty.filter(p =>
+						p.hp > 0 && !defenderSlots.some(s => s?.pokemon.id === p.id)
+					);
+
+					if (availableReplacements.length === 0) {
+						messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 					} else {
-						battle.aiPendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
-						battle.opponentSlots[slotIndex as 0 | 1] = null;
+						setItem(defenderSlot, undefined, undefined, battle, messageLog);
+						messageLog.push(`${defenderSlot.pokemon.species} is being switched out by its Eject Button!`);
+
+						if (isPlayer) {
+							battle.pendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
+							battle.playerSlots[slotIndex as 0 | 1] = null;
+						} else {
+							battle.aiPendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
+							battle.opponentSlots[slotIndex as 0 | 1] = null;
+						}
 					}
 				}
 			}
@@ -396,7 +408,7 @@ export function handleDamagingMove(
 					const itemName = ITEMS_DATABASE[targetItem]?.name || targetItem;
 					messageLog.push(`${attacker.species} ate ${defenderSlot.pokemon.species}'s ${itemName}!`);
 					consumeBerry(defenderSlot, targetItem, messageLog);
-					
+
 					// Apply berry effect to attacker
 					const berryData = ITEMS_DATABASE[targetItem];
 					if (berryData?.effects) {
@@ -753,7 +765,7 @@ export function calculateDamage(
 	finalAttackStat = Math.max(1, finalAttackStat);
 
 	// Strict Damage Formula Order (Step 5 Fix)
-	let levelFactor = Math.floor((2 * attacker.level) / 5 + 2);
+	const levelFactor = Math.floor((2 * attacker.level) / 5 + 2);
 	let baseDamage = Math.floor((levelFactor * basePower * finalAttackStat) / defenseStat);
 	baseDamage = Math.floor(baseDamage / 50);
 	baseDamage += 2;
@@ -803,7 +815,7 @@ export function calculateDamage(
 			// Step 5 requirement was "Strict Rounding", so we apply it here.
 			// Actually, gems boost power, but we'll keep the damage boost logic from your original code to minimize drift,
 			// just applying it to the damage accumulator.
-			baseDamage = Math.floor(baseDamage * 1.3); 
+			baseDamage = Math.floor(baseDamage * 1.3);
 			gemConsumed = attacker.item;
 		}
 	}
@@ -1328,13 +1340,21 @@ export function applyPostDamageContactEffects(
 		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
 
 		if (attackerSlotIndex !== -1) {
-			messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
-			setItem(defenderSlot, undefined, undefined, battle, messageLog);
+			// Check if there are available replacements before forcing switch
+			const isAttackerPlayer = !isPlayerDefending;
+			const attackerParty = isAttackerPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
+			const attackerSlots = isAttackerPlayer ? battle.playerSlots : battle.opponentSlots;
 
-			if (isPlayerDefending) {
-				battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+			const availableReplacements = attackerParty.filter(p =>
+				p.hp > 0 && !attackerSlots.some(s => s?.pokemon.id === p.id)
+			);
+
+			if (availableReplacements.length === 0) {
+				messageLog.push(`But it failed! (No Pokémon to switch to!)`);
 			} else {
-				battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+				messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
+				setItem(defenderSlot, undefined, undefined, battle, messageLog);
+				executeForcedRandomSwitch(battle, attackerSlot, messageLog);
 			}
 		}
 	}

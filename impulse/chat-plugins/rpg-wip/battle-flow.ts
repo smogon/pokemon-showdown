@@ -244,7 +244,7 @@ function compareActions(
 		if (slotA.pokemon.item === 'quickpowder' && slotA.pokemon.species === 'Ditto') speedA = Math.floor(speedA * 2);
 	}
 	speedA = RPGAbilities.applyAbilitySpeedModifier(slotA.pokemon, battle, speedA);
-	
+
 	// Apply Tailwind for A
 	const isPlayerA = battle.playerSlots.includes(slotA);
 	if (isPlayerA && battle.playerTailwindTurns > 0) speedA *= 2;
@@ -842,7 +842,7 @@ export function handleSwitchAction(
 	battle.persistentPokemonState[outgoingPokemon.id] = {
 		terastallized: attackerSlot.terastallized,
 		sleepCounter: attackerSlot.sleepCounter,
-		toxicCounter: attackerSlot.toxicCounter
+		toxicCounter: attackerSlot.toxicCounter,
 	};
 	// ==========================================================================================
 
@@ -892,7 +892,7 @@ export function handleSwitchAction(
 		const replacement = battle.opponentParty.find(p => p.id === pokemonToSwitchInId);
 		if (replacement) {
 			messageLog.push(`<b>${battle.opponentName} withdrew ${outgoingPokemon.species} and sent out ${replacement.species}!</b>`);
-			
+
 			// ==========================================================================================
 			// STEP 4 FIX: Load Saved State for AI Replacement
 			// ==========================================================================================
