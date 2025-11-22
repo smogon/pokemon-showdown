@@ -133,7 +133,6 @@ export function applyStatChange(
 		// Mist protection
 		if (!isSelf) {
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			// Casting battle to any to access potential mist properties not yet in interface
 			const sideMist = isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
 			
 			if (sideMist > 0) {
@@ -358,6 +357,9 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
+	// Handle status items immediately in case damage triggered them (e.g. recoil/life orb didn't, but good practice)
+	checkStatusHealBerries(slot, battle, messageLog);
+
 	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
@@ -469,6 +471,100 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	}
 }
 
+export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (!slot.pokemon.item || battle.magicRoomTurns > 0) return;
+	
+	const pokemon = slot.pokemon;
+	const item = pokemon.item;
+	
+	// Check Unnerve
+	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
+		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
+	
+	if (hasUnnerve && item.toLowerCase().includes('berry')) return;
+
+	let itemConsumed = false;
+	const itemName = ITEMS_DATABASE[item]?.name || item;
+
+	if (slot.status) {
+		if (item === 'cheriberry' && slot.status === 'par') {
+			slot.status = null;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and was cured of paralysis!`);
+			itemConsumed = true;
+		} else if (item === 'chestoberry' && slot.status === 'slp') {
+			slot.status = null;
+			slot.sleepCounter = 0;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and woke up!`);
+			itemConsumed = true;
+		} else if (item === 'pechaberry' && (slot.status === 'psn' || slot.status === 'tox')) {
+			slot.status = null;
+			slot.toxicCounter = undefined;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and was cured of poison!`);
+			itemConsumed = true;
+		} else if (item === 'rawstberry' && slot.status === 'brn') {
+			slot.status = null;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and healed its burn!`);
+			itemConsumed = true;
+		} else if (item === 'aspearberry' && slot.status === 'frz') {
+			slot.status = null;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and thawed out!`);
+			itemConsumed = true;
+		} else if (item === 'lumberry') {
+			const statusMap: Record<string, string> = {
+				par: 'paralysis', slp: 'sleep', psn: 'poison', tox: 'poison', brn: 'burn', frz: 'freeze'
+			};
+			messageLog.push(`${pokemon.species} ate its ${itemName} and was cured of ${statusMap[slot.status] || 'status'}!`);
+			slot.status = null;
+			slot.sleepCounter = 0;
+			slot.toxicCounter = undefined;
+			itemConsumed = true;
+		}
+	}
+
+	if (slot.isConfused && !itemConsumed) {
+		if (item === 'persimberry' || item === 'lumberry') {
+			slot.isConfused = false;
+			slot.confusionCounter = 0;
+			messageLog.push(`${pokemon.species} ate its ${itemName} and snapped out of confusion!`);
+			itemConsumed = true;
+		}
+	}
+
+	if (itemConsumed) {
+		consumeBerry(slot, item, messageLog);
+	}
+}
+
+export function handleLeppaBerry(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
+	if (!slot.pokemon.item || slot.pokemon.item !== 'leppaberry' || battle.magicRoomTurns > 0) return;
+
+	// Check Unnerve
+	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
+	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
+		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
+	if (hasUnnerve) return;
+
+	const moves = slot.pokemon.moves;
+	let moveRestored: string | null = null;
+
+	for (const move of moves) {
+		if (move.pp === 0) {
+			move.pp = 10;
+			const moveData = getMove(move.id);
+			moveRestored = moveData.name;
+			break; // Restore only the first 0 PP move found
+		}
+	}
+
+	if (moveRestored) {
+		messageLog.push(`${slot.pokemon.species} ate its Leppa Berry and restored PP to ${moveRestored}!`);
+		consumeBerry(slot, 'leppaberry', messageLog);
+	}
+}
+
 export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]): void {
 	const ability = toID(slot.pokemon.ability || '');
 	if (ability === 'unburden' && !slot.unburdenActive) {
@@ -532,6 +628,7 @@ export function applySynchronize(
 						sourceSlot.toxicCounter = 1;
 					}
 					messageLog.push(`${targetPokemon.species}'s Synchronize afflicted ${sourceSlot.pokemon.species} with ${statusToInflict}!`);
+					checkStatusHealBerries(sourceSlot, battle, messageLog);
 				}
 			}
 		}
@@ -985,6 +1082,8 @@ export const RPGUtils = {
 	checkEvolution,
 	NATURES,
 	NATURE_LIST,
+	checkStatusHealBerries,
+	handleLeppaBerry,
 };
 
 export default RPGUtils;
