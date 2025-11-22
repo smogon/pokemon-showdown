@@ -203,6 +203,7 @@ function initializeAndStartBattle(
 		playerFutureMoves: [],
 		opponentFutureMoves: [],
 		battleLog: [],
+		persistentPokemonState: {},
 		floor: 0,
 		overridePlayerParty: null,
 	};
