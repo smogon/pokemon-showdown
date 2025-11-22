@@ -106,7 +106,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 			battle.battleLog.push(...messageLog);
 			return;
 		}
-		
+
 		// If forceEnd was triggered (e.g. by a run away or admin command)
 		if (battle.forceEnd) {
 			messageLog.push(`<hr><div style="text-align: center;"><strong>Turn ${battle.turn}</strong></div><hr>`);
@@ -188,7 +188,7 @@ export function buildActionQueue(battle: BattleState): NonNullable<BattleState['
 		}
 
 		if (lastMoveAction) {
-			const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction!.pokemonId);
+			const lastMoverSlot = allActiveSlots.find(s => s.pokemon.id === lastMoveAction.pokemonId);
 			if (lastMoverSlot && toID(lastMoverSlot.pokemon.ability || '') === 'analytic') {
 				lastMoverSlot.analyticBoost = true;
 			}
@@ -209,8 +209,8 @@ function compareActions(
 	messageLog: string[]
 ): number {
 	const allActiveSlots = [...battle.playerSlots, ...battle.opponentSlots];
-	const slotA = allActiveSlots.find(s => s && s.pokemon.id === a.pokemonId) as ActivePokemonSlot;
-	const slotB = allActiveSlots.find(s => s && s.pokemon.id === b.pokemonId) as ActivePokemonSlot;
+	const slotA = allActiveSlots.find(s => s && s.pokemon.id === a.pokemonId)!;
+	const slotB = allActiveSlots.find(s => s && s.pokemon.id === b.pokemonId)!;
 
 	// If a pokemon is gone/fainted, push it to the end (or remove it conceptually)
 	if (!slotA) return 1;
@@ -222,7 +222,7 @@ function compareActions(
 	const moveB = getMove(b.moveId || 'struggle');
 
 	// 1. Priority Bracket
-	// Switching is usually priority 6 (approx), Mega Evo is separate step. 
+	// Switching is usually priority 6 (approx), Mega Evo is separate step.
 	// Standard moves are 0.
 	let priorityA = isSwitchA ? 6 : (moveA.priority || 0);
 	let priorityB = isSwitchB ? 6 : (moveB.priority || 0);
@@ -258,10 +258,9 @@ function compareActions(
 	if (slotB.status === 'par' && abilityB !== 'quickfeet') speedB = Math.floor(speedB / 2);
 	if (slotB.pokemon.item === 'machobrace' || slotB.pokemon.item?.includes('power')) speedB = Math.floor(speedB / 2);
 
-
 	// 3. Quick Claw / Custap Berry / Lagging Tail / Full Incense / Stall
 	// These modify "bracket" within the priority, effectively.
-	
+
 	// Quick Claw Check
 	// Note: Calculating RNG inside sort is unstable if called multiple times per turn.
 	// Ideally, we'd roll this once per turn. For this implementation, we roll it dynamically.
@@ -274,10 +273,10 @@ function compareActions(
 
 	// If one activates Quick Claw and the other doesn't
 	if (quickClawA && !quickClawB) {
-		// We push a message if it hasn't been pushed this turn? 
-		// Since we re-sort, this might spam. 
+		// We push a message if it hasn't been pushed this turn?
+		// Since we re-sort, this might spam.
 		// Ideally, log logic should be separate. For now, we skip logging inside sort to prevent spam during re-sorts.
-		return -1; 
+		return -1;
 	}
 	if (quickClawB && !quickClawA) {
 		return 1;
@@ -672,7 +671,7 @@ export function executeMove(
 	moveObject: { id: string, pp: number },
 	battle: BattleState,
 	messageLog: string[],
-	isReflected: boolean = false
+	isReflected = false
 ): void {
 	attackerSlot.lastMoveUsed = move.id;
 	if (!['protect', 'detect'].includes(move.id)) attackerSlot.protectSuccessCounter = 0;
@@ -701,7 +700,7 @@ export function executeMove(
 			const defenderAbility = RPGAbilities.getActiveAbility(defenderSlot.pokemon, attackerSlot.pokemon);
 			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
 			const hasMoldBreaker = ['moldbreaker', 'teravolt', 'turboblaze'].includes(attackerAbility);
-			
+
 			if (defenderAbility === 'magicbounce' && !hasMoldBreaker) {
 				messageLog.push(`${defenderSlot.pokemon.species} bounced the ${move.name} back with Magic Bounce!`);
 				// Recursive call with swapped roles

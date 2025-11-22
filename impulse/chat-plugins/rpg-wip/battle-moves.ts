@@ -351,10 +351,10 @@ export function handleDamagingMovePreamble(
 		const damage = flingPowers[attacker.item] || 30;
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		
+
 		// Use setItem to remove item and trigger Unburden
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
-		
+
 		return true;
 	}
 
@@ -366,10 +366,10 @@ export function handleDamagingMovePreamble(
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		
+
 		// Use setItem to remove item and trigger Unburden
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
-		
+
 		return true;
 	}
 
@@ -393,7 +393,7 @@ export function handleDamagingMovePreamble(
 		}
 		const defenderSpecies = Dex.species.get(defender.species);
 		const defenderTypes = getPokemonTypes(defender, defenderSlot);
-		
+
 		if (move.ohko === 'Normal' && defenderTypes.includes('Ghost')) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
 			return true;
@@ -549,11 +549,11 @@ export function handleSpecificStatusMove(
 		}
 		const attackerItem = attacker.item;
 		const defenderItem = defender.item;
-		
+
 		// Use setItem for item swapping logic with Unburden support
 		setItem(attackerSlot, defenderItem, defenderSlot, battle, messageLog);
 		setItem(defenderSlot, attackerItem, attackerSlot, battle, messageLog);
-		
+
 		messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
@@ -579,11 +579,11 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 		const givenItem = attacker.item;
-		
+
 		// Use setItem logic
 		setItem(defenderSlot, givenItem, attackerSlot, battle, messageLog);
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
-		
+
 		messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem]?.name || givenItem} to ${defender.species}!`);
 		return true;
 
@@ -978,7 +978,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-		case 'painsplit':
+	case 'painsplit':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -995,7 +995,7 @@ export function handleSpecificStatusMove(
 		else if (defenderChange < 0) messageLog.push(`${defender.species} lost ${-defenderChange} HP!`);
 		return true;
 
-		case 'memento':
+	case 'memento':
 		if (!defenderSlot) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -1018,7 +1018,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-		case 'endeavor':
+	case 'endeavor':
 		if (!defender) {
 			messageLog.push(`But it failed!`);
 			return true;
@@ -1032,7 +1032,7 @@ export function handleSpecificStatusMove(
 		messageLog.push(`${defender.species} took ${endeavorDamage} damage!`);
 		return true;
 
-		case 'block':
+	case 'block':
 	case 'meanlook':
 	case 'spiderweb':
 		if (!defenderSlot) {
@@ -1052,7 +1052,7 @@ export function handleSpecificStatusMove(
 		}
 		return true;
 
-		case 'fakeout':
+	case 'fakeout':
 		if (attackerSlot.activeTurns !== 1) {
 			messageLog.push(`But it failed! (Fake Out only works on first turn)`);
 			return true;
@@ -1124,7 +1124,7 @@ export function handleGenericBoostMove(
 					messageLog.push(`${targetName}'s Clear Amulet prevents its stats from being lowered!`);
 					continue;
 				}
-				
+
 				const targetAbility = RPGAbilities.getActiveAbility(targetSlot.pokemon, attackerSlot.pokemon);
 				const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
 				if (blockAbilities.includes(targetAbility)) {
@@ -1184,15 +1184,15 @@ export function handleGenericStatusInflictMove(
 	if (move.id === 'toxic') statusToInflict = 'tox';
 
 	const canInflict = RPGAbilities.canInflictStatus(
-		defenderSlot, 
-		statusToInflict as any, 
-		battle, 
-		attackerSlot, 
+		defenderSlot,
+		statusToInflict,
+		battle,
+		attackerSlot,
 		move
 	);
 
 	if (canInflict.success) {
-		defenderSlot.status = statusToInflict as any;
+		defenderSlot.status = statusToInflict;
 		if (statusToInflict === 'tox') {
 			defenderSlot.toxicCounter = 1;
 		}
@@ -1203,7 +1203,7 @@ export function handleGenericStatusInflictMove(
 
 		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
 		if (defenderAbility === 'synchronize') {
-			applySynchronize(statusToInflict as any, defenderSlot, attackerSlot, battle, messageLog);
+			applySynchronize(statusToInflict, defenderSlot, attackerSlot, battle, messageLog);
 		}
 	} else {
 		messageLog.push(canInflict.message || `But it failed!`);
@@ -1234,7 +1234,7 @@ export function handleGenericVolatileMove(
 		return true;
 	}
 
-	// If the move is targeting opponent, we use getActiveAbility. 
+	// If the move is targeting opponent, we use getActiveAbility.
 	// If it targets self, we use simple ability check (Mold Breaker doesn't break own abilities usually).
 	const isSelfTarget = move.target === 'self';
 	const targetAbility = isSelfTarget ? toID(target.ability || '') : RPGAbilities.getActiveAbility(target, attackerSlot.pokemon);
@@ -1280,7 +1280,7 @@ export function handleGenericVolatileMove(
 			// Check if status CAN be inflicted later (e.g. Immunity to Sleep via Electric Terrain)
 			// Using canInflictStatus with 'slp'
 			const sleepCheck = RPGAbilities.canInflictStatus(targetSlot, 'slp', battle, attackerSlot, move);
-			
+
 			if (sleepCheck.success) {
 				targetSlot.yawnCounter = 2;
 				messageLog.push(`${target.species} grew drowsy!`);
@@ -1519,7 +1519,7 @@ export function handleGenericFieldMove(
 		} else {
 			battle.trickRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push(`${attacker.species} twisted the dimensions!`);
-			
+
 			// Room Service Logic
 			getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
 				if (slot.pokemon.hp > 0 && slot.pokemon.item === 'roomservice') {

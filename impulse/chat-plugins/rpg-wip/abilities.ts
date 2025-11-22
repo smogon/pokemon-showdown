@@ -23,7 +23,7 @@ export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): s
 			'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown',
 			'stancechange', 'zenmode', 'magicbounce', 'magiccoat',
 			'deltastream', 'desolateland', 'primordialsea',
-			'fullmetalbody', 'shadowshield', 'prismarmor'
+			'fullmetalbody', 'shadowshield', 'prismarmor',
 		];
 
 		if (!ignoredAbilities.includes(defenderAbility)) {
@@ -49,10 +49,10 @@ export function canInflictStatus(
 	battle: BattleState,
 	sourceSlot?: ActivePokemonSlot,
 	fromMove?: Move,
-	isSecondaryEffect: boolean = false
+	isSecondaryEffect = false
 ): { success: boolean, message?: string } {
 	const target = targetSlot.pokemon;
-	
+
 	// 1. Check if already has status
 	if (targetSlot.status) {
 		return { success: false, message: `But ${target.species} is already ${targetSlot.status === 'slp' ? 'asleep' : 'afflicted'}!` };
@@ -75,7 +75,7 @@ export function canInflictStatus(
 
 	// 4. Check Safeguard
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === target.id);
-	// Safeguard is a side condition, but we store it as a generic move check in standard engines. 
+	// Safeguard is a side condition, but we store it as a generic move check in standard engines.
 	// In this custom engine, we assume standard side conditions exist in the array or object.
 	// Currently side conditions are simple strings in playerHazards, but Safeguard is a volatile side effect.
 	// Assuming we implement Safeguard later fully, here is placeholder logic or check generic side effect flags if implemented.
@@ -92,7 +92,7 @@ export function canInflictStatus(
 	// 6. Check Type Immunities
 	const targetSpecies = Dex.species.get(target.species);
 	const targetTypes = targetSlot.terastallized ? [targetSlot.terastallized] : targetSpecies.types;
-	
+
 	let corrosionActive = false;
 	if (sourceSlot && status === 'psn' || status === 'tox') {
 		if (toID(sourceSlot.pokemon.ability || '') === 'corrosion') {
@@ -117,7 +117,7 @@ export function canInflictStatus(
 
 	// 7. Check Ability Immunities
 	const attacker = sourceSlot?.pokemon;
-	
+
 	// Prevents Status is internal logic for simple ability checks
 	if (preventsStatus(target, status, battle, attacker)) {
 		const ability = getActiveAbility(target, attacker);
@@ -2690,7 +2690,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	}
 
 	if (handler.effects && !attackerSlot.status && attacker.hp > 0 && Math.random() < handler.onContactChance) {
-		const possibleStatuses = (handler.effects as Status[]).filter(s => 
+		const possibleStatuses = (handler.effects as Status[]).filter(s =>
 			canInflictStatus(attackerSlot, s, ctx.battle, ctx.defenderSlot).success
 		);
 
