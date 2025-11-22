@@ -41,7 +41,10 @@ export function getActiveParty(battle: BattleState, player: PlayerData): RPGPoke
 	return battle.overridePlayerParty || player.party;
 }
 
-export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot {
+export function createActivePokemonSlot(
+	pokemon: RPGPokemon,
+	savedState?: { terastallized?: string, sleepCounter?: number, toxicCounter?: number }
+): ActivePokemonSlot {
 	const ability = toID(pokemon.ability || '');
 	return {
 		pokemon,
