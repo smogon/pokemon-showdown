@@ -1118,6 +1118,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		gen8: {
 			desc: "While this Pokemon is active, Abilities have no effect. This Ability activates before hazards and other Abilities take effect. Does not affect the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
 		},
+
+		start: "  Neutralizing gas filled the area!",
+		end: "  The effects of the neutralizing gas wore off!",
 	},
 	noguard: {
 		name: "No Guard",
