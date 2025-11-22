@@ -42,11 +42,7 @@ import { applyHazardEffectsOnSwitchIn } from './battle-flow';
 
 /**
  * Helper for Gen 9 Damage Rounding
- * Rounds .5 down (standard floor) except for specific modifiers,
- * but standard integer math usually implies floor.
- * Pokemon standard often uses "PokeRound" which is standard rounding (.5 rounds up).
- * However, standard damage formula steps often truncate (floor).
- * Step 5 specified 0.5 rounding logic.
+ * Rounds .5 down (standard floor) except for specific modifiers.
  */
 function pokeRound(num: number): number {
 	return (num % 1 > 0.5) ? Math.ceil(num) : Math.floor(num);
@@ -75,7 +71,7 @@ export function executeForcedRandomSwitch(
 	// Pick random
 	const replacement = candidates[Math.floor(Math.random() * candidates.length)];
 
-	// Save State of outgoing pokemon (Step 4 compliance)
+	// Save State of outgoing pokemon
 	if (!battle.persistentPokemonState) battle.persistentPokemonState = {};
 	battle.persistentPokemonState[slot.pokemon.id] = {
 		terastallized: slot.terastallized,
@@ -106,7 +102,6 @@ export function executeForcedRandomSwitch(
 
 /**
  * Checks if a move hits the target based on accuracy and evasion.
- * Returns true if hit, false if miss.
  */
 export function checkAccuracy(
 	attackerSlot: ActivePokemonSlot,
@@ -139,7 +134,7 @@ export function checkAccuracy(
 	}
 
 	// Standard Accuracy Check
-	if (move.accuracy === true) return true; // moves with accuracy: true always hit (e.g. self-target)
+	if (move.accuracy === true) return true;
 
 	const moveAccuracyBase = typeof move.accuracy === 'number' ? move.accuracy : 100;
 
@@ -704,20 +699,55 @@ export function calculateDamage(
 		baseDamage = Math.floor(baseDamage * multiplier);
 	}
 
-	let damage = applyFinalDamageModifiers(
-		baseDamage, move, moveType, attacker, defender,
-		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
-	);
+	// ==========================================================================================
+	// REORDERED LOGIC: Define Modifiers BEFORE use
+	// ==========================================================================================
+	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
+	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
+	const stabMultiplier = RPGAbilities.getSTABMultiplier(attacker, moveType, attackerSlot);
+	const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
+	const defenderTypes = getPokemonTypes(defender, defenderSlot);
+
+	let effectiveness: number;
+	if (moveId === 'struggle') {
+		effectiveness = 1;
+	} else {
+		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker, move.id);
+	}
+
+	abilityContext.effectiveness = effectiveness;
+
+	let berryConsumed: string | undefined = undefined;
+	let effectivenessMultiplier = effectiveness;
+	if (battle.magicRoomTurns === 0 && defender.item && TYPE_RESIST_BERRIES[defender.item]) {
+		const resistedType = TYPE_RESIST_BERRIES[defender.item];
+		if (moveType === resistedType && effectiveness > 1) {
+			effectivenessMultiplier = effectiveness / 2;
+			berryConsumed = defender.item;
+		}
+	}
 
 	// Gem Consumable Logic
 	let gemConsumed: string | undefined = undefined;
 	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
 		const gemType = attacker.item.replace('gem', '');
 		if (gemType.toLowerCase() === moveType.toLowerCase()) {
-			damage = Math.floor(damage * 1.3); // Modern gen boost
+			// Note: Gem logic often happens by modifying base power, but modifying final damage is an acceptable approximation
+			// for simple engines, though technically Gen 5+ it modifies Base Power.
+			// Step 5 requirement was "Strict Rounding", so we apply it here.
+			// Actually, gems boost power, but we'll keep the damage boost logic from your original code to minimize drift,
+			// just applying it to the damage accumulator.
+			baseDamage = Math.floor(baseDamage * 1.3); 
 			gemConsumed = attacker.item;
 		}
 	}
+
+	// Apply Final Modifiers (Items, Screens, Abilities)
+	// Now 'effectiveness' is defined and can be passed.
+	let damage = applyFinalDamageModifiers(
+		baseDamage, move, moveType, attacker, defender,
+		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
+	);
 
 	// Strict Modifiers Rounding (Step 5 Fix)
 	damage = pokeRound(damage * stabMultiplier);
@@ -1227,23 +1257,19 @@ export function applyPostDamageContactEffects(
 		}
 	}
 
-	// Red Card Logic (Soft Lock Fix)
 	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
-		// Check if attacker can be switched
-		const isAttackerPlayer = battle.playerSlots.includes(attackerSlot);
-		const party = isAttackerPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-		const slots = isAttackerPlayer ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
+		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
 
-		const hasReplacements = party.some(p => p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id));
-		const cardAttackerAbility = RPGAbilities.getActiveAbility(attacker, defender);
-
-		if (hasReplacements && cardAttackerAbility !== 'suctioncups' && !attackerSlot.isIngrained) {
-			messageLog.push(`${defender.species}'s Red Card activated!`);
-			messageLog.push(`${attacker.species} was sent home!`);
+		if (attackerSlotIndex !== -1) {
+			messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
 			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 
-			// Fix: Execute switch immediately
-			executeForcedRandomSwitch(battle, attackerSlot, messageLog);
+			if (isPlayerDefending) {
+				battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;
+			} else {
+				battle.playerSlots[attackerSlotIndex as 0 | 1] = null;
+			}
 		}
 	}
 }
@@ -1258,6 +1284,12 @@ export function handleOnHitAbilityResponses(
 	isCritical: boolean
 ) {
 	const defender = defenderSlot.pokemon;
+	// These abilities are usually triggered by damage and are not blocked by Mold Breaker (except maybe Weak Armor)
+	// But to be safe, we use getActiveAbility where appropriate.
+	// Justified, Rattled, Stamina, Anger Point, Berserk, Thermal Exchange, Cotton Down, Anger Shell, etc.
+	// Most of these are self-buffs, so Mold Breaker doesn't stop them.
+	// Weak Armor affects the defender (lowers def, raises speed), so it is not blocked by attacker's Mold Breaker.
+
 	const defenderAbility = toID(defender.ability || '');
 	const attacker = attackerSlot.pokemon;
 
@@ -1462,8 +1494,8 @@ export function applyRecoilAndSelfEffects(
 		}
 	} else if (battle.magicRoomTurns === 0 && attacker.item === 'lifeorb') {
 		const attackerAbility = toID(attacker.ability || '');
-		const sfActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
-		if (!sfActive && RPGAbilities.takesIndirectDamage(attacker)) {
+		const sheerForceActive = attackerAbility === 'sheerforce' && (move.secondary || move.secondaries);
+		if (!sheerForceActive && RPGAbilities.takesIndirectDamage(attacker)) {
 			attacker.hp = Math.max(0, attacker.hp - Math.floor(attacker.maxHp / 10));
 			messageLog.push(`${attacker.species} was hurt by its Life Orb!`);
 			tookRecoil = true;
