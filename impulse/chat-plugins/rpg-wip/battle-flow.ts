@@ -48,7 +48,8 @@ import {
 	saveBattleStatus,
 	getPokemonTypes,
 	getMoveType,
-	checkAccuracy, // Imported from battle-core
+	checkAccuracy,
+	checkSubstituteBypass,
 } from './battle-core';
 
 import { processEndOfTurn } from './battle-eot';
@@ -592,7 +593,8 @@ export function executeMove(
 	move: Move,
 	moveObject: { id: string, pp: number },
 	battle: BattleState,
-	messageLog: string[]
+	messageLog: string[],
+	isReflected: boolean = false
 ): void {
 	attackerSlot.lastMoveUsed = move.id;
 	if (!['protect', 'detect'].includes(move.id)) attackerSlot.protectSuccessCounter = 0;
@@ -615,6 +617,24 @@ export function executeMove(
 	for (const defenderSlot of targetSlots) {
 		if (attackerSlot.pokemon.hp <= 0) break;
 		if (defenderSlot.pokemon.hp <= 0) continue;
+
+		// Step 5: Reflection Check (Magic Bounce / Magic Coat)
+		if (!isReflected && move.flags.reflectable && !move.flags.futuremove) {
+			const defenderAbility = RPGAbilities.getActiveAbility(defenderSlot.pokemon, attackerSlot.pokemon);
+			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+			const hasMoldBreaker = ['moldbreaker', 'teravolt', 'turboblaze'].includes(attackerAbility);
+			
+			// Magic Coat not fully implemented as volatile check in interface yet, 
+			// but if we had it: if (defenderSlot.volatiles['magiccoat']) ...
+
+			if (defenderAbility === 'magicbounce' && !hasMoldBreaker) {
+				messageLog.push(`${defenderSlot.pokemon.species} bounced the ${move.name} back with Magic Bounce!`);
+				// Recursive call with swapped roles.
+				// Note: We pass isReflected=true to prevent infinite bouncing
+				executeMove(defenderSlot, [attackerSlot], move, { id: move.id, pp: 0 }, battle, messageLog, true);
+				continue;
+			}
+		}
 
 		const truePriority = move.priority + RPGAbilities.applyPriorityModifier(move, attackerSlot.pokemon);
 
@@ -903,7 +923,7 @@ export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: Ba
 	if (hazards.includes('stealthrock')) {
 		if (hasAirBalloon) {
 			messageLog.push(`${pokemon.species}'s Air Balloon popped from the pointed stones!`);
-			setItem(slot, undefined, undefined, battle, messageLog);
+			pokemon.item = undefined;
 		}
 		const effectiveness = getCustomEffectiveness('Rock', species.types, pokemon, battle);
 		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
@@ -934,16 +954,11 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 		if (slot && slot.pokemon.hp <= 0) {
 			messageLog.push(`<b>Your ${slot.pokemon.species} fainted!</b>`);
 
-			// Check for Aftermath
-			// We need to find who killed it (if any)
-			const killerId = slot.lastDamageTaken?.from;
-			const opponentSlots = getActiveSlots(battle.opponentSlots);
-			const attackerSlot = opponentSlots.find(p => p.pokemon.id === killerId);
-
-			const faintedAbility = attackerSlot ? RPGAbilities.getActiveAbility(slot.pokemon, attackerSlot.pokemon) : toID(slot.pokemon.ability || '');
-			
+			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+				const opponentSlots = getActiveSlots(battle.opponentSlots);
+				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
 					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
@@ -983,15 +998,10 @@ export function handleOpponentFaint(
 			faintedThisCheck = true;
 			messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
 
-			// Check for Aftermath
-			const killerId = slot.lastDamageTaken?.from;
-			const attackerSlot = playerParticipants.find(p => p.pokemon.id === killerId);
-			
-			// Use getActiveAbility to allow Mold Breaker to ignore Aftermath
-			const faintedAbility = attackerSlot ? RPGAbilities.getActiveAbility(slot.pokemon, attackerSlot.pokemon) : toID(slot.pokemon.ability || '');
-			
+			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
+				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
 					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
