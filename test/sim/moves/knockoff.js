@@ -72,29 +72,43 @@ describe('Knock Off [Gen 4]', () => {
 		battle.destroy();
 	});
 
-	it('should only make the held item unusable, not actually remove it', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Wynaut', moves: ['knockoff'] },
-		], [
-			{ species: 'Aggron', item: 'leftovers', moves: ['sleeptalk'] },
-		]]);
-		battle.makeChoices();
-		assert.holdsItem(battle.p2.active[0]);
-		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by Leftovers.');
-	});
-
 	it('should make the target unable to gain a new item', () => {
 		battle = common.gen(4).createBattle([[
 			{ species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick'] },
 		], [
 			{ species: 'Blissey', item: 'leftovers', moves: ['sleeptalk', 'thief'] },
 		]]);
+		const wynaut = battle.p1.active[0];
+		const blissey = battle.p2.active[0];
+
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].item, 'pokeball');
-		assert.equal(battle.p2.active[0].item, 'leftovers');
+		assert.equal(wynaut.item, 'pokeball');
+		assert.equal(blissey.item, '');
 		battle.makeChoices('move trick', 'move thief');
-		assert.equal(battle.p1.active[0].item, 'pokeball');
-		assert.equal(battle.p2.active[0].item, 'leftovers');
+		assert.equal(wynaut.item, 'pokeball');
+		assert.equal(blissey.item, '');
+	});
+
+	it('should be able to recycle an item that was used before having a new item knocked off', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'Munchlax', item: 'sitrusberry', moves: ['bellydrum', 'recycle', 'sleeptalk'], evs: { hp: 4 } },
+		], [
+			{ species: 'Sableye', ability: 'stall', item: 'leftovers', moves: ['trick', 'knockoff'] },
+		]]);
+		const munchlax = battle.p1.active[0];
+		const sableye = battle.p2.active[0];
+
+		battle.makeChoices('move bellydrum', 'move trick');
+		// Munchlax eats its Sitrus Berry and gets tricked Leftovers
+		assert.equal(munchlax.item, 'leftovers');
+		assert.equal(sableye.item, '');
+		battle.makeChoices('move sleeptalk', 'move knockoff');
+		// Munchlax has its Leftovers knocked off
+		assert.equal(munchlax.item, '');
+		battle.makeChoices('move recycle', 'move trick');
+		// Munchlax recycles its Sitrus Berry and Trick fails because Munchlax is still considered to be knocked off
+		assert.equal(munchlax.item, 'sitrusberry');
+		assert.equal(sableye.item, '');
 	});
 
 	it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, () => {
@@ -103,9 +117,11 @@ describe('Knock Off [Gen 4]', () => {
 		], [
 			{ species: 'Aggron', ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] },
 		]]);
+		const aggron = battle.p2.active[0];
+
 		battle.makeChoices();
-		assert.holdsItem(battle.p2.active[0]);
-		assert.fullHP(battle.p2.active[0], 'Aggron should have been healed by Leftovers.');
+		assert.holdsItem(aggron);
+		assert.fullHP(aggron, 'Aggron should have been healed by Leftovers.');
 
 		battle.destroy();
 		battle = common.gen(4).createBattle([[
@@ -113,8 +129,10 @@ describe('Knock Off [Gen 4]', () => {
 		], [
 			{ species: 'Arceus', ability: 'multitype', item: 'leftovers', moves: ['sleeptalk'] },
 		]]);
+		const arceus = battle.p2.active[0];
+
 		battle.makeChoices();
-		assert.holdsItem(battle.p2.active[0]);
-		assert.fullHP(battle.p2.active[0], 'Arceus should have been healed by Leftovers.');
+		assert.holdsItem(arceus);
+		assert.fullHP(arceus, 'Arceus should have been healed by Leftovers.');
 	});
 });

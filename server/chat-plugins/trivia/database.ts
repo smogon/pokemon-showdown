@@ -70,6 +70,7 @@ export interface TriviaDatabase {
 	deleteQuestion(questionText: string): Promise<void> | void;
 	deleteLeaderboardEntry(userid: ID, leaderboard: Leaderboard): Promise<void> | void;
 	deleteSubmissions(submissions: string[]): Promise<void> | void;
+	start(): void;
 }
 
 export class TriviaSQLiteDatabase implements TriviaDatabase {
@@ -152,6 +153,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.deleteQuestionQuery = null;
 		this.leaderboardDeletionQuery = null;
 
+		this.readyPromise = null;
+	}
+
+	start() {
 		this.readyPromise = this.prepareStatements().then(() => {
 			void this.convertLegacyJSON();
 			this.readyPromise = null;

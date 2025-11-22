@@ -311,6 +311,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
+		// Enforce Stealth Rock if the team doesn't already have it
+		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
 		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
@@ -587,7 +593,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (species.id === 'honchkrow') return 'Life Orb';
 		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
-		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
+		if (ability === 'Poison Heal' || (moves.has('facade') && species.id !== 'stoutland')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
