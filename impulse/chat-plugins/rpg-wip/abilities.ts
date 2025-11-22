@@ -2,15 +2,37 @@ import { Dex, toID } from '../../../sim/dex';
 import { getActiveSlots, applyStatChange, activateUnburden } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
-export function isAbilityIgnored(attacker: RPGPokemon, defender: RPGPokemon, defenderAbilityId: string): boolean {
+/**
+ * Safely gets the defender's ability, returning 'noability' if the attacker
+ * has an ability that ignores it (Mold Breaker, Teravolt, Turboblaze).
+ */
+export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): string {
+	const defenderAbility = toID(defender.ability || '');
+
+	if (!attacker) return defenderAbility;
+
 	const attackerAbility = toID(attacker.ability || '');
-	if (['moldbreaker', 'turboblaze', 'teravolt'].includes(attackerAbility)) {
-		if (['disguise', 'stancechange', 'schooling', 'comatose'].includes(defenderAbilityId)) {
-			return false;
+	const breakerAbilities = ['moldbreaker', 'turboblaze', 'teravolt'];
+
+	// Specific override for Moongeist Beam / Sunsteel Strike / Photon Geyser would go here
+	// For now, we focus on the abilities
+
+	if (breakerAbilities.includes(attackerAbility)) {
+		// List of abilities that cannot be ignored by Mold Breaker
+		const ignoredAbilities = [
+			'asomeone', 'battlebond', 'comatose', 'disguise', 'multitype',
+			'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown',
+			'stancechange', 'zenmode', 'magicbounce', 'magiccoat',
+			'deltastream', 'desolateland', 'primordialsea',
+			'fullmetalbody', 'shadowshield', 'prismarmor'
+		];
+
+		if (!ignoredAbilities.includes(defenderAbility)) {
+			return 'noability';
 		}
-		return true;
 	}
-	return false;
+
+	return defenderAbility;
 }
 
 export function isPersistent(pokemon: RPGPokemon): boolean {
@@ -1458,11 +1480,11 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 		},
 	},
 	'mirrorarmor': {
-    handler: (slot, battle, messageLog, sourceSlot) => {
-        // This handler is actually tricky to use for reflection because
-        // reflection needs to happen INSTEAD of the drop, not AFTER.
-        // It is cleaner to handle this directly in applyStatChange
-    },
+		handler: (slot, battle, messageLog, sourceSlot) => {
+			// This handler is actually tricky to use for reflection because
+			// reflection needs to happen INSTEAD of the drop, not AFTER.
+			// It is cleaner to handle this directly in applyStatChange
+		},
 	},
 };
 
@@ -1728,17 +1750,13 @@ export function applySereneGrace(ctx: AbilityContext, chance: number): number {
 }
 
 export function checkAbilityImmunity(ctx: AbilityContext): { immune: boolean, message?: string } | null {
-	const ability = toID(ctx.defender.ability || '');
+	const ability = getActiveAbility(ctx.defender, ctx.attacker);
 
 	if (ctx.move.flags.powder && ctx.defender.item === 'safetygoggles') {
 		return {
 			immune: true,
 			message: `${ctx.defender.species}'s Safety Goggles protects it from the powder!`,
 		};
-	}
-
-	if (isAbilityIgnored(ctx.attacker, ctx.defender, ability)) {
-		return null;
 	}
 
 	const handler = IMMUNITY_ABILITIES[ability];
@@ -1834,7 +1852,7 @@ export function preventsFlinch(pokemon: RPGPokemon): boolean {
 }
 
 export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: BattleState, attacker?: RPGPokemon): boolean {
-	const ability = toID(pokemon.ability || '');
+	const ability = getActiveAbility(pokemon, attacker);
 
 	if (attacker && toID(attacker.ability || '') === 'corrosion' && (status === 'psn' || status === 'tox')) {
 		if (ability === 'immunity' || ability === 'purifyingsalt') {
@@ -1984,14 +2002,12 @@ export function applyAbilitySpeedModifier(pokemon: RPGPokemon, battle: BattleSta
 
 export function applyDamageModifier(ctx: AbilityContext, damage: number): number {
 	const attackerAbility = toID(ctx.attacker.ability || '');
-	const defenderAbility = toID(ctx.defender.ability || '');
+	const defenderAbility = getActiveAbility(ctx.defender, ctx.attacker);
 	const effectiveness = ctx.effectiveness || 1;
 
 	if (defenderAbility === 'dryskin' && ctx.move.type === 'Fire') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			if (ctx.defender.item !== 'utilityumbrella') {
-				damage = Math.floor(damage * 1.25);
-			}
+		if (ctx.defender.item !== 'utilityumbrella') {
+			damage = Math.floor(damage * 1.25);
 		}
 	}
 
@@ -2000,63 +2016,45 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	}
 
 	if ((defenderAbility === 'solidrock' || defenderAbility === 'filter') && effectiveness > 1) {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.75);
-		}
+		damage = Math.floor(damage * 0.75);
 	}
 
 	if ((defenderAbility === 'multiscale' || defenderAbility === 'shadowshield') &&
 		ctx.defender.hp === ctx.defender.maxHp) {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'purifyingsalt' && ctx.move.type === 'Ghost') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'furcoat' && ctx.move.category === 'Physical') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'thickfat' && (ctx.move.type === 'Fire' || ctx.move.type === 'Ice')) {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'heatproof' && ctx.move.type === 'Fire') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'fluffy') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			if (ctx.move.flags.contact) {
-				damage = Math.floor(damage * 0.5);
-			}
-			if (ctx.move.type === 'Fire') {
-				damage = Math.floor(damage * 2);
-			}
+		if (ctx.move.flags.contact) {
+			damage = Math.floor(damage * 0.5);
+		}
+		if (ctx.move.type === 'Fire') {
+			damage = Math.floor(damage * 2);
 		}
 	}
 
 	if (defenderAbility === 'icescales' && ctx.move.category === 'Special') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	if (defenderAbility === 'prismarmor' && effectiveness > 1) {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.75);
-		}
+		damage = Math.floor(damage * 0.75);
 	}
 
 	if (attackerAbility === 'neuroforce' && effectiveness > 1) {
@@ -2067,9 +2065,7 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		damage = Math.floor(damage * 1.3);
 	}
 	if (defenderAbility === 'punkrock' && ctx.move.flags.sound) {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
@@ -2082,9 +2078,7 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 	}
 
 	if (defenderAbility === 'terashell' && ctx.defender.hp === ctx.defender.maxHp && ctx.move.category !== 'Status') {
-		if (!isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-			damage = Math.floor(damage * 0.5);
-		}
+		damage = Math.floor(damage * 0.5);
 	}
 
 	return damage;
@@ -2220,7 +2214,7 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 }
 
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
-	const defenderAbility = toID(ctx.defender.ability || '');
+	const defenderAbility = getActiveAbility(ctx.defender, ctx.attacker);
 
 	const allSlots = [...ctx.battle.playerSlots, ...ctx.battle.opponentSlots];
 	const hasDamp = allSlots.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'damp');
@@ -2243,10 +2237,6 @@ export function preventMove(ctx: AbilityContext): { prevented: boolean, message?
 			prevented: true,
 			message: `The heavy rain extinguished the Fire-type move!`,
 		};
-	}
-
-	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-		return null;
 	}
 
 	if ((defenderAbility === 'dazzling' || defenderAbility === 'queenlymajesty' || defenderAbility === 'armortail') &&
@@ -2294,7 +2284,7 @@ export function applyEndOfTurnAbilities(slot: ActivePokemonSlot, battle: BattleS
 }
 
 export function applyStatDropResponse(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot): void {
-	const ability = toID(slot.pokemon.ability || '');
+	const ability = getActiveAbility(slot.pokemon, sourceSlot?.pokemon);
 	const handler = STAT_DROP_RESPONSE_ABILITIES[ability];
 	if (handler) {
 		handler.handler(slot, battle, messageLog, sourceSlot);
@@ -2373,21 +2363,23 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	if (ability === 'intimidate') {
 		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
 		messageLog.push(`${pokemon.species}'s Intimidate cuts the opposing Pokémon's Attack!`);
-		
+
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
-				const oppAbility = toID(opponentSlot.pokemon.ability || '');
-				
-				// Special case for Guard Dog (prevents drop and raises Attack)
+				// Intimidate is unique: it is an ability activating on an opponent.
+				// Mold Breaker on the Intimidator ignores abilities that prevent Intimidate (like Inner Focus, Oblivious, Own Tempo, Scrappy?? No).
+				// Abilities that prevent stat drops: Clear Body, White Smoke, Hyper Cutter.
+				// Guard Dog has special interaction.
+				const oppAbility = getActiveAbility(opponentSlot.pokemon, slot.pokemon); // slot is the intimidator (attacker equivalent)
+
 				if (oppAbility === 'guarddog') {
 					if (opponentSlot.statStages.atk < 6) {
 						opponentSlot.statStages.atk++;
 						messageLog.push(`${opponentSlot.pokemon.species}'s Guard Dog raised its Attack!`);
 					}
-					continue; 
+					continue;
 				}
 
-				// Handle Adrenaline Orb
 				if (opponentSlot.pokemon.item === 'adrenalineorb' && opponentSlot.statStages.spe < 6) {
 					applyStatChange(opponentSlot, 'spe', 1, battle, messageLog, slot);
 					opponentSlot.pokemon.item = undefined; // Consume
@@ -2395,7 +2387,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 					activateUnburden(opponentSlot, messageLog);
 				}
 
-                // FIX: Use applyStatChange so it triggers Mirror Armor, Mist, Clear Amulet, etc.
 				applyStatChange(opponentSlot, 'atk', -1, battle, messageLog, slot);
 			}
 		}
@@ -2558,11 +2549,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 	// Protective Pads check
 	if (ctx.attacker.item === 'protectivepads') return;
 
-	const defenderAbility = toID(ctx.defender.ability || '');
-
-	if (isAbilityIgnored(ctx.attacker, ctx.defender, defenderAbility)) {
-		return;
-	}
+	const defenderAbility = getActiveAbility(ctx.defender, ctx.attacker);
 
 	const handler = CONTACT_ABILITIES[defenderAbility];
 
@@ -2601,7 +2588,7 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			canBeAfflicted = false;
 		}
 
-		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle)) {
+		if (canBeAfflicted && preventsStatus(attacker, statusToInflict, ctx.battle, ctx.defender)) {
 			canBeAfflicted = false;
 			ctx.messageLog.push(`${attacker.species}'s ${attacker.ability} prevents ${statusToInflict}!`);
 		}
@@ -2624,13 +2611,13 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 
 		const attackerTypes = ctx.attackerSlot.terastallized ? [ctx.attackerSlot.terastallized] : attackerSpecies.types;
 
-		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle)) {
+		if (!attackerTypes.includes('Poison') && !attackerTypes.includes('Steel') && !preventsStatus(attacker, 'psn', ctx.battle, ctx.defender)) {
 			possibleStatuses.push('psn');
 		}
-		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle)) {
+		if (!attackerTypes.includes('Electric') && !preventsStatus(attacker, 'par', ctx.battle, ctx.defender)) {
 			possibleStatuses.push('par');
 		}
-		if (!preventsStatus(attacker, 'slp', ctx.battle)) {
+		if (!preventsStatus(attacker, 'slp', ctx.battle, ctx.defender)) {
 			possibleStatuses.push('slp');
 		}
 
@@ -2661,6 +2648,9 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode'];
 
 		if (!unchangeableAbilities.includes(attackerAbility)) {
+			// We don't really change the ability permanently in this engine implementation yet,
+			// but we can simulate it by logging. For a full implementation we'd need a 'volatileAbility' field.
+			// For now, just log.
 			const oldAbility = attacker.ability;
 			attacker.ability = handler.changeAbility;
 			ctx.messageLog.push(`${attacker.species}'s ability changed to ${handler.changeAbility} from ${ctx.defender.species}'s ${defenderAbility}!`);
@@ -2735,8 +2725,8 @@ export const RPGAbilities = {
 	handleHydration,
 	getModifiedWeight,
 
-	isAbilityIgnored,
 	isPersistent,
+	getActiveAbility,
 
 	IMMUNITY_ABILITIES,
 	POWER_MODIFIER_ABILITIES,

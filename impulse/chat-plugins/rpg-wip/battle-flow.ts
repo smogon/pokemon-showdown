@@ -989,11 +989,16 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 		if (slot && slot.pokemon.hp <= 0) {
 			messageLog.push(`<b>Your ${slot.pokemon.species} fainted!</b>`);
 
-			const faintedAbility = toID(slot.pokemon.ability || '');
+			// Check for Aftermath
+			// We need to find who killed it (if any)
+			const killerId = slot.lastDamageTaken?.from;
+			const opponentSlots = getActiveSlots(battle.opponentSlots);
+			const attackerSlot = opponentSlots.find(p => p.pokemon.id === killerId);
+
+			const faintedAbility = attackerSlot ? RPGAbilities.getActiveAbility(slot.pokemon, attackerSlot.pokemon) : toID(slot.pokemon.ability || '');
+			
 			const lastMove = slot.lastMoveThatHitMe;
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-				const opponentSlots = getActiveSlots(battle.opponentSlots);
-				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
 					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
@@ -1033,10 +1038,15 @@ export function handleOpponentFaint(
 			faintedThisCheck = true;
 			messageLog.push(`<b>The opposing ${slot.pokemon.species} fainted!</b>`);
 
-			const faintedAbility = toID(slot.pokemon.ability || '');
+			// Check for Aftermath
+			const killerId = slot.lastDamageTaken?.from;
+			const attackerSlot = playerParticipants.find(p => p.pokemon.id === killerId);
+			
+			// Use getActiveAbility to allow Mold Breaker to ignore Aftermath
+			const faintedAbility = attackerSlot ? RPGAbilities.getActiveAbility(slot.pokemon, attackerSlot.pokemon) : toID(slot.pokemon.ability || '');
+			
 			const lastMove = slot.lastMoveThatHitMe;
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
-				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {
 					const damage = Math.floor(attackerSlot.pokemon.maxHp / 4);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);

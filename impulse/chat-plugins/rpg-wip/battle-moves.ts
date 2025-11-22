@@ -14,13 +14,14 @@ import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 import { getStatMultiplier } from './battle-core';
 
-function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState): boolean {
+function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
 	const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
 
 	return allies.some(slot => {
 		if (!slot || slot.pokemon.hp <= 0) return false;
-		const ability = toID(slot.pokemon.ability || '');
+		// Aroma Veil can be bypassed by Mold Breaker
+		const ability = RPGAbilities.getActiveAbility(slot.pokemon, attacker);
 		return ability === 'aromaveil';
 	});
 }
@@ -313,6 +314,12 @@ export function handleDamagingMovePreamble(
 			) {
 				isImmune = false;
 			}
+			// No Guard (attacker or defender) bypasses this
+			const attackerAbility = toID(attacker.ability || '');
+			const defenderAbility = toID(defender.ability || '');
+			if (attackerAbility === 'noguard' || defenderAbility === 'noguard') {
+				isImmune = false;
+			}
 		}
 		if (isImmune) {
 			messageLog.push(`But it failed! ${defender.species} avoided the attack!`);
@@ -371,7 +378,7 @@ export function handleDamagingMovePreamble(
 	}
 
 	if (move.ohko) {
-		const defenderAbility = toID(defender.ability || '');
+		const defenderAbility = RPGAbilities.getActiveAbility(defender, attacker);
 		if (defenderAbility === 'sturdy') {
 			messageLog.push(`But it failed! (${defender.species}'s Sturdy)`);
 			return true;
@@ -381,11 +388,13 @@ export function handleDamagingMovePreamble(
 			return true;
 		}
 		const defenderSpecies = Dex.species.get(defender.species);
-		if (move.ohko === 'Normal' && defenderSpecies.types.includes('Ghost')) {
+		const defenderTypes = RPGAbilities.getPokemonTypes(defender, defenderSlot);
+		
+		if (move.ohko === 'Normal' && defenderTypes.includes('Ghost')) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
 			return true;
 		}
-		if (move.ohko === 'Ice' && defenderSpecies.types.includes('Ice')) {
+		if (move.ohko === 'Ice' && defenderTypes.includes('Ice')) {
 			messageLog.push(`But it failed!`);
 			return true;
 		}
@@ -422,7 +431,7 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 
-		const defenderAbility = toID(defenderSlot.pokemon.ability || '');
+		const defenderAbility = RPGAbilities.getActiveAbility(defender, attacker);
 		if (defenderAbility === 'suctioncups') {
 			messageLog.push(`${defenderSlot.pokemon.species}'s ${defenderSlot.pokemon.ability} anchors it in place!`);
 			return true;
@@ -775,8 +784,21 @@ export function handleSpecificStatusMove(
 	case 'perishsong':
 		let affectedCount = 0;
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
-			const slotAbility = toID(slot.pokemon.ability || '');
-			if (slotAbility !== 'soundproof' && !slot.perishSongCounter) {
+			// Perish Song hits everyone, but Soundproof blocks it.
+			// Note: In real games, the soundproof check happens on a per-target basis.
+			// Here we iterate everyone.
+			// Attacker itself is also affected unless soundproof.
+			// Since this affects self and allies, "attacker" context for Mold Breaker is... tricky.
+			// Mold Breaker allows hitting opponents. It doesn't usually affect self/allies negatively differently.
+			// But for opponents, Soundproof IS ignored by Mold Breaker Perish Song.
+			
+			// Determine who is "attacker" for the purpose of this check. The move user.
+			// If slot is opponent, use getActiveAbility. If slot is ally/self, direct check is usually fine (friendly fire MB doesn't apply typically).
+			
+			const isOpponent = (isPlayerAttacker && battle.opponentSlots.includes(slot)) || (!isPlayerAttacker && battle.playerSlots.includes(slot));
+			const ability = isOpponent ? RPGAbilities.getActiveAbility(slot.pokemon, attacker) : toID(slot.pokemon.ability || '');
+
+			if (ability !== 'soundproof' && !slot.perishSongCounter) {
 				slot.perishSongCounter = 3;
 				affectedCount++;
 			}
@@ -877,9 +899,16 @@ export function handleSpecificStatusMove(
 		let healedCount = 0;
 		teamSlots.forEach(slot => {
 			if (slot?.status) {
-				slot.status = null;
-				slot.sleepCounter = 0;
-				healedCount++;
+				// Soundproof blocks Heal Bell but not Aromatherapy.
+				// If it's Heal Bell, check Soundproof.
+				const ability = toID(slot.pokemon.ability || '');
+				if (move.id === 'healbell' && ability === 'soundproof') {
+					// Blocks healing
+				} else {
+					slot.status = null;
+					slot.sleepCounter = 0;
+					healedCount++;
+				}
 			}
 		});
 		if (healedCount > 0) {
@@ -1102,7 +1131,8 @@ export function handleGenericBoostMove(
 					messageLog.push(`${targetName}'s Clear Amulet prevents its stats from being lowered!`);
 					continue;
 				}
-				const targetAbility = toID(targetSlot.pokemon.ability || '');
+				
+				const targetAbility = RPGAbilities.getActiveAbility(targetSlot.pokemon, attackerSlot.pokemon);
 				const blockAbilities = ['clearbody', 'whitesmoke', 'fullmetalbody'];
 				if (blockAbilities.includes(targetAbility)) {
 					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its stats from being lowered!`);
@@ -1110,6 +1140,14 @@ export function handleGenericBoostMove(
 				}
 				if (stat === 'atk' && ['hypercutter', 'flowerveil'].includes(targetAbility)) {
 					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its Attack from being lowered!`);
+					continue;
+				}
+				if (stat === 'def' && targetAbility === 'bigpecks') {
+					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its Defense from being lowered!`);
+					continue;
+				}
+				if (stat === 'accuracy' && targetAbility === 'keeneye') {
+					messageLog.push(`${targetName}'s ${targetSlot.pokemon.ability} prevents its accuracy from being lowered!`);
 					continue;
 				}
 			}
@@ -1165,16 +1203,25 @@ export function handleGenericStatusInflictMove(
 		canBeAfflicted = false;
 		messageLog.push('But the uproar kept it awake!');
 	}
+	
+	// RPGAbilities.preventsStatus calls getActiveAbility internally? No, we must call it with attacker.
+	// Wait, the signature of preventsStatus in abilities.ts is (pokemon, status, battle, attacker).
+	// So we just pass the attacker here.
 	if (canBeAfflicted && RPGAbilities.preventsStatus(defender, move.status, battle, attackerSlot.pokemon)) {
 		canBeAfflicted = false;
 		messageLog.push(`${defender.species}'s ${defender.ability} prevents ${move.status}!`);
 	}
 	if (canBeAfflicted) {
-		if ((move.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
-			(move.status === 'par' && defenderSpecies.types.includes('Electric')) ||
-			(move.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) ||
-			(move.status === 'frz' && defenderSpecies.types.includes('Ice'))) {
-			canBeAfflicted = false;
+		const attackerAbility = toID(attackerSlot.pokemon.ability || '');
+		const isCorrosion = attackerAbility === 'corrosion';
+
+		if (!isCorrosion) {
+			if ((move.status === 'brn' && defenderSpecies.types.includes('Fire')) ||
+				(move.status === 'par' && defenderSpecies.types.includes('Electric')) ||
+				(move.status === 'psn' && (defenderSpecies.types.includes('Poison') || defenderSpecies.types.includes('Steel'))) ||
+				(move.status === 'frz' && defenderSpecies.types.includes('Ice'))) {
+				canBeAfflicted = false;
+			}
 		}
 	}
 
@@ -1226,10 +1273,14 @@ export function handleGenericVolatileMove(
 		return true;
 	}
 
+	// If the move is targeting opponent, we use getActiveAbility. 
+	// If it targets self, we use simple ability check (Mold Breaker doesn't break own abilities usually).
+	const isSelfTarget = move.target === 'self';
+	const targetAbility = isSelfTarget ? toID(target.ability || '') : RPGAbilities.getActiveAbility(target, attackerSlot.pokemon);
+
 	switch (move.volatileStatus) {
 	case 'confusion':
 		if (!targetSlot.isConfused) {
-			const targetAbility = toID(target.ability || '');
 			if (targetAbility === 'owntempo') {
 				messageLog.push(`${target.species}'s Own Tempo prevents confusion!`);
 				hadEffect = false;
@@ -1243,7 +1294,9 @@ export function handleGenericVolatileMove(
 		break;
 	case 'taunt':
 		if (targetSlot.tauntTurns <= 0) {
-			if (hasAromaVeilProtection(targetSlot, battle)) {
+			// Aroma Veil protects against Taunt.
+			// Aroma Veil protects allies. Mold Breaker bypasses it.
+			if (hasAromaVeilProtection(targetSlot, battle, attackerSlot.pokemon)) {
 				messageLog.push(`${target.species} is protected by Aroma Veil!`);
 				hadEffect = false;
 			} else {
@@ -1265,7 +1318,9 @@ export function handleGenericVolatileMove(
 		if (!targetSlot.status && !targetSlot.yawnCounter) {
 			const isTerrainImmune = battle.terrain?.type === 'electric' && RPGAbilities.isGrounded(target, battle);
 			const sleepPreventingAbilities = ['insomnia', 'vitalspirit', 'comatose', 'sweetveil'];
-			const isAbilityImmune = sleepPreventingAbilities.includes(toID(target.ability || ''));
+			// Sweet Veil protects allies. We should check that separately properly or rely on preventing status fn.
+			// For now, check self immunity.
+			const isAbilityImmune = sleepPreventingAbilities.includes(targetAbility);
 			if (!isTerrainImmune && !isAbilityImmune) {
 				targetSlot.yawnCounter = 2;
 				messageLog.push(`${target.species} grew drowsy!`);
@@ -1275,7 +1330,7 @@ export function handleGenericVolatileMove(
 		break;
 	case 'disable':
 		if (targetSlot.lastMoveUsed && !targetSlot.disabledMove) {
-			if (hasAromaVeilProtection(targetSlot, battle)) {
+			if (hasAromaVeilProtection(targetSlot, battle, attackerSlot.pokemon)) {
 				messageLog.push(`${target.species} is protected by Aroma Veil!`);
 				hadEffect = false;
 			} else {
@@ -1288,7 +1343,7 @@ export function handleGenericVolatileMove(
 		break;
 	case 'encore':
 		if (targetSlot.lastMoveUsed && !targetSlot.encoreMove) {
-			if (hasAromaVeilProtection(targetSlot, battle)) {
+			if (hasAromaVeilProtection(targetSlot, battle, attackerSlot.pokemon)) {
 				messageLog.push(`${target.species} is protected by Aroma Veil!`);
 				hadEffect = false;
 			} else {
@@ -1353,7 +1408,7 @@ export function handleGenericVolatileMove(
 		break;
 	case 'torment':
 		if (!targetSlot.tormentActive) {
-			if (hasAromaVeilProtection(targetSlot, battle)) {
+			if (hasAromaVeilProtection(targetSlot, battle, attackerSlot.pokemon)) {
 				messageLog.push(`${target.species} is protected by Aroma Veil!`);
 				hadEffect = false;
 			} else {
