@@ -13,7 +13,7 @@ import {
 } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
-import { getStatMultiplier } from './battle-core';
+import { getStatMultiplier, getPokemonTypes } from './battle-core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {
 	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
@@ -392,7 +392,7 @@ export function handleDamagingMovePreamble(
 			return true;
 		}
 		const defenderSpecies = Dex.species.get(defender.species);
-		const defenderTypes = RPGAbilities.getPokemonTypes(defender, defenderSlot);
+		const defenderTypes = getPokemonTypes(defender, defenderSlot);
 		
 		if (move.ohko === 'Normal' && defenderTypes.includes('Ghost')) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
