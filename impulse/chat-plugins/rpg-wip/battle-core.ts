@@ -522,6 +522,16 @@ export function getDamageOffense(
 		if (attacker.item === 'choicespecs' && isSpecial) {
 			attackStatRaw = Math.floor(attackStatRaw * 1.5);
 		}
+		// Species specific items
+		if (attacker.item === 'lightball' && attacker.species.includes('Pikachu')) {
+			attackStatRaw = Math.floor(attackStatRaw * 2);
+		}
+		if (attacker.item === 'thickclub' && (attacker.species.includes('Cubone') || attacker.species.includes('Marowak')) && !isSpecial) {
+			attackStatRaw = Math.floor(attackStatRaw * 2);
+		}
+		if (attacker.item === 'deepseatooth' && attacker.species.includes('Clamperl') && isSpecial) {
+			attackStatRaw = Math.floor(attackStatRaw * 2);
+		}
 	}
 
 	if (isSpecial && RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
@@ -571,6 +581,14 @@ export function getDamageDefense(
 					defenseStatRaw = Math.floor(spdWithAbility * 1.5);
 				}
 			}
+		}
+
+		// Species specific defense items
+		if (defender.item === 'deepseascale' && defender.species.includes('Clamperl') && isSpecial) {
+			defenseStatRaw = Math.floor(defenseStatRaw * 2);
+		}
+		if (defender.item === 'metalpowder' && defender.species.includes('Ditto') && !isSpecial) {
+			defenseStatRaw = Math.floor(defenseStatRaw * 2);
 		}
 	}
 
@@ -706,6 +724,24 @@ export function applyFinalDamageModifiers(
 		if (attacker.item === 'expertbelt' && effectiveness > 1) {
 			damage = Math.floor(damage * 1.2);
 		}
+		// Type Enhancers
+		if (attacker.item === 'charcoal' && moveType === 'Fire') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'mysticwater' && moveType === 'Water') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'miracleseed' && moveType === 'Grass') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'magnet' && moveType === 'Electric') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'nevermeltice' && moveType === 'Ice') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'blackbelt' && moveType === 'Fighting') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'poisonbarb' && moveType === 'Poison') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'softsand' && moveType === 'Ground') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'sharpbeak' && moveType === 'Flying') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'twistedspoon' && moveType === 'Psychic') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'silverpowder' && moveType === 'Bug') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'hardstone' && moveType === 'Rock') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'spelltag' && moveType === 'Ghost') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'dragonfang' && moveType === 'Dragon') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'blackglasses' && moveType === 'Dark') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'metalcoat' && moveType === 'Steel') damage = Math.floor(damage * 1.2);
+		if (attacker.item === 'fairymemory' && moveType === 'Fairy') damage = Math.floor(damage * 1.2);
 	}
 
 	return damage;

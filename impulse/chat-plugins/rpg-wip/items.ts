@@ -18,7 +18,9 @@ export const VIABLE_HELD_ITEMS: string[] = [
 	'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry', 'apicotberry',
 	'starfberry', 'chopleberry', 'yacheberry', 'shucaberry', 'occaberry',
 	'passhoberry', 'wacanberry', 'rindoberry', 'kasibberry', 'colburberry',
-	'babiriberry',
+	'babiriberry', 'roseliberry', 'chilanberry', 'chartiberry', 'cobaberry',
+	'payapaberry', 'habanberry', 'tangaberry', 'kebiaberry',
+	'lightball', 'thickclub', 'deepseatooth', 'deepseascale', 'metalpowder',
 ];
 
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
@@ -46,6 +48,7 @@ export const TYPE_RESIST_BERRIES: Record<string, string> = {
 // ==========================================
 
 export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
+	// Medicine
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'Restores 20 HP.', price: 300, effects: { healAmount: 20 } },
 	'superpotion': { id: 'superpotion', name: 'Super Potion', category: 'medicine', description: 'Restores 60 HP.', price: 700, effects: { healAmount: 60 } },
 	'hyperpotion': { id: 'hyperpotion', name: 'Hyper Potion', category: 'medicine', description: 'Restores 120 HP.', price: 1200, effects: { healAmount: 120 } },
@@ -85,8 +88,8 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'xspdef': { id: 'xspdef', name: 'X Sp. Def', category: 'medicine', description: 'Sharply raises Sp. Def in battle.', price: 350, effects: { battleStatBoost: { stat: 'spd', stages: 2 } } },
 	'xspeed': { id: 'xspeed', name: 'X Speed', category: 'medicine', description: 'Sharply raises Speed in battle.', price: 350, effects: { battleStatBoost: { stat: 'spe', stages: 2 } } },
 	'xaccuracy': { id: 'xaccuracy', name: 'X Accuracy', category: 'medicine', description: 'Sharply raises Accuracy in battle.', price: 950, effects: { battleStatBoost: { stat: 'accuracy', stages: 2 } } },
-	'direhit': { id: 'direhit', name: 'Dire Hit', category: 'medicine', description: 'Greatly raises critical-hit ratio.', price: 650, effects: {} }, // Handled separately via focusEnergy
-	'guardspec': { id: 'guardspec', name: 'Guard Spec.', category: 'medicine', description: 'Prevents stat reduction in battle.', price: 700, effects: {} }, // TODO: Implement stat drop protection
+	'direhit': { id: 'direhit', name: 'Dire Hit', category: 'medicine', description: 'Greatly raises critical-hit ratio.', price: 650, effects: {} },
+	'guardspec': { id: 'guardspec', name: 'Guard Spec.', category: 'medicine', description: 'Prevents stat reduction in battle for 5 turns.', price: 700, effects: {} },
 
 	'hpup': { id: 'hpup', name: 'HP Up', category: 'medicine', description: 'Raises HP EV.', price: 9800, effects: { evBoost: { stat: 'hp', amount: 10 } } },
 	'protein': { id: 'protein', name: 'Protein', category: 'medicine', description: 'Raises Attack EV.', price: 9800, effects: { evBoost: { stat: 'atk', amount: 10 } } },
@@ -134,7 +137,61 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'sportball': { id: 'sportball', name: 'Sport Ball', category: 'pokeball', description: 'A special Ball used in the Bug-Catching Contest.', price: 0 },
 	'strangeball': { id: 'strangeball', name: 'Strange Ball', category: 'pokeball', description: 'A mysterious Ball with unknown properties.', price: 0 },
 
-	// Status Healing Berries
+	// Competitive Held Items (The "Ghost" Items)
+	'leftovers': { id: 'leftovers', name: 'Leftovers', category: 'held', description: 'At the end of every turn, holder restores 1/16 of its max HP.', price: 4000 },
+	'blacksludge': { id: 'blacksludge', name: 'Black Sludge', category: 'held', description: 'Each turn, if holder is a Poison type, restores 1/16 max HP; otherwise, loses 1/8.', price: 4000 },
+	'choiceband': { id: 'choiceband', name: 'Choice Band', category: 'held', description: 'Holder\'s Attack is 1.5x, but it can only select the first move it uses.', price: 4000 },
+	'choicespecs': { id: 'choicespecs', name: 'Choice Specs', category: 'held', description: 'Holder\'s Sp. Atk is 1.5x, but it can only select the first move it uses.', price: 4000 },
+	'choicescarf': { id: 'choicescarf', name: 'Choice Scarf', category: 'held', description: 'Holder\'s Speed is 1.5x, but it can only select the first move it uses.', price: 4000 },
+	'lifeorb': { id: 'lifeorb', name: 'Life Orb', category: 'held', description: 'Holder\'s attacks do 1.3x damage, but it loses 1/10 max HP after attacking.', price: 4000 },
+	'toxicorb': { id: 'toxicorb', name: 'Toxic Orb', category: 'held', description: 'At the end of every turn, this item attempts to badly poison the holder.', price: 4000 },
+	'flameorb': { id: 'flameorb', name: 'Flame Orb', category: 'held', description: 'At the end of every turn, this item attempts to burn the holder.', price: 4000 },
+	'rockyhelmet': { id: 'rockyhelmet', name: 'Rocky Helmet', category: 'held', description: 'If holder is hit by a contact move, the attacker loses 1/6 of its max HP.', price: 4000 },
+	'stickybarb': { id: 'stickybarb', name: 'Sticky Barb', category: 'held', description: 'Holder loses 1/8 max HP each turn. Transfers to contact attacker.', price: 4000 },
+	'focussash': { id: 'focussash', name: 'Focus Sash', category: 'held', description: 'If holder\'s HP is full, will survive an attack that would KO it with 1 HP.', price: 4000 },
+	'airballoon': { id: 'airballoon', name: 'Air Balloon', category: 'held', description: 'Holder is immune to Ground-type attacks. Pops when holder is hit.', price: 4000 },
+	'redcard': { id: 'redcard', name: 'Red Card', category: 'held', description: 'If holder survives a hit, attacker is forced to switch.', price: 4000 },
+	'expertbelt': { id: 'expertbelt', name: 'Expert Belt', category: 'held', description: 'Holder\'s attacks that are super effective against the target do 1.2x damage.', price: 4000 },
+	'weaknesspolicy': { id: 'weaknesspolicy', name: 'Weakness Policy', category: 'held', description: 'If holder is hit super effectively, raises Attack and Sp. Atk by 2 stages.', price: 4000 },
+	'assaultvest': { id: 'assaultvest', name: 'Assault Vest', category: 'held', description: 'Holder\'s Sp. Def is 1.5x, but it can only use damaging moves.', price: 4000 },
+	'eviolite': { id: 'eviolite', name: 'Eviolite', category: 'held', description: 'If holder\'s species can evolve, its Defense and Sp. Def are 1.5x.', price: 4000 },
+	'shedshell': { id: 'shedshell', name: 'Shed Shell', category: 'held', description: 'Holder may switch out even when trapped by another Pokémon, or by Ingrain.', price: 4000 },
+	'heavydutyboots': { id: 'heavydutyboots', name: 'Heavy-Duty Boots', category: 'held', description: 'Holder is immune to the effects of Stealth Rock, Spikes, Toxic Spikes, etc.', price: 4000 },
+	'clearamulet': { id: 'clearamulet', name: 'Clear Amulet', category: 'held', description: 'Prevents other Pokémon from lowering the holder\'s stats.', price: 4000 },
+	'mirrorherb': { id: 'mirrorherb', name: 'Mirror Herb', category: 'held', description: 'Copies opponent\'s stat boosts once.', price: 4000 },
+	'mentalherb': { id: 'mentalherb', name: 'Mental Herb', category: 'held', description: 'Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment.', price: 4000 },
+	'whiteherb': { id: 'whiteherb', name: 'White Herb', category: 'held', description: 'Restores all lowered stat stages to 0 when one is less than 0.', price: 4000 },
+	'powerherb': { id: 'powerherb', name: 'Power Herb', category: 'held', description: 'Holder\'s two-turn moves complete in one turn.', price: 4000 },
+	'shellbell': { id: 'shellbell', name: 'Shell Bell', category: 'held', description: 'Holder heals 1/8 of damage dealt.', price: 4000 },
+	'quickclaw': { id: 'quickclaw', name: 'Quick Claw', category: 'held', description: 'Holder has a 20% chance to move first.', price: 4000 },
+
+	// Species Specific
+	'lightball': { id: 'lightball', name: 'Light Ball', category: 'held', description: 'If held by a Pikachu, its Attack and Sp. Atk are doubled.', price: 4000 },
+	'thickclub': { id: 'thickclub', name: 'Thick Club', category: 'held', description: 'If held by a Cubone or a Marowak, its Attack is doubled.', price: 4000 },
+	'deepseatooth': { id: 'deepseatooth', name: 'Deep Sea Tooth', category: 'held', description: 'If held by a Clamperl, its Sp. Atk is doubled.', price: 4000 },
+	'deepseascale': { id: 'deepseascale', name: 'Deep Sea Scale', category: 'held', description: 'If held by a Clamperl, its Sp. Def is doubled.', price: 4000 },
+	'metalpowder': { id: 'metalpowder', name: 'Metal Powder', category: 'held', description: 'If held by a Ditto, its Defense is doubled.', price: 4000 },
+
+	// Type Enhancers
+	'charcoal': { id: 'charcoal', name: 'Charcoal', category: 'held', description: 'Powers up Fire-type moves.', price: 3000 },
+	'mysticwater': { id: 'mysticwater', name: 'Mystic Water', category: 'held', description: 'Powers up Water-type moves.', price: 3000 },
+	'miracleseed': { id: 'miracleseed', name: 'Miracle Seed', category: 'held', description: 'Powers up Grass-type moves.', price: 3000 },
+	'magnet': { id: 'magnet', name: 'Magnet', category: 'held', description: 'Powers up Electric-type moves.', price: 3000 },
+	'nevermeltice': { id: 'nevermeltice', name: 'Never-Melt Ice', category: 'held', description: 'Powers up Ice-type moves.', price: 3000 },
+	'blackbelt': { id: 'blackbelt', name: 'Black Belt', category: 'held', description: 'Powers up Fighting-type moves.', price: 3000 },
+	'poisonbarb': { id: 'poisonbarb', name: 'Poison Barb', category: 'held', description: 'Powers up Poison-type moves.', price: 3000 },
+	'softsand': { id: 'softsand', name: 'Soft Sand', category: 'held', description: 'Powers up Ground-type moves.', price: 3000 },
+	'sharpbeak': { id: 'sharpbeak', name: 'Sharp Beak', category: 'held', description: 'Powers up Flying-type moves.', price: 3000 },
+	'twistedspoon': { id: 'twistedspoon', name: 'Twisted Spoon', category: 'held', description: 'Powers up Psychic-type moves.', price: 3000 },
+	'silverpowder': { id: 'silverpowder', name: 'Silver Powder', category: 'held', description: 'Powers up Bug-type moves.', price: 3000 },
+	'hardstone': { id: 'hardstone', name: 'Hard Stone', category: 'held', description: 'Powers up Rock-type moves.', price: 3000 },
+	'spelltag': { id: 'spelltag', name: 'Spell Tag', category: 'held', description: 'Powers up Ghost-type moves.', price: 3000 },
+	'dragonfang': { id: 'dragonfang', name: 'Dragon Fang', category: 'held', description: 'Powers up Dragon-type moves.', price: 3000 },
+	'blackglasses': { id: 'blackglasses', name: 'Black Glasses', category: 'held', description: 'Powers up Dark-type moves.', price: 3000 },
+	'metalcoat': { id: 'metalcoat', name: 'Metal Coat', category: 'held', description: 'Powers up Steel-type moves.', price: 3000, effects: { evolutionItem: true } },
+	'fairymemory': { id: 'fairymemory', name: 'Fairy Memory', category: 'held', description: 'Powers up Fairy-type moves.', price: 3000 },
+
+	// Berries
 	'cheriberry': { id: 'cheriberry', name: 'Cheri Berry', category: 'berry', description: 'Cures paralysis.', price: 200, effects: { statusCure: 'par' } },
 	'chestoberry': { id: 'chestoberry', name: 'Chesto Berry', category: 'berry', description: 'Cures sleep.', price: 200, effects: { statusCure: 'slp' } },
 	'pechaberry': { id: 'pechaberry', name: 'Pecha Berry', category: 'berry', description: 'Cures poison.', price: 200, effects: { statusCure: 'psn' } },
@@ -143,6 +200,41 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'leppaberry': { id: 'leppaberry', name: 'Leppa Berry', category: 'berry', description: 'Restores 10 PP to a move.', price: 300, effects: { ppRestore: 10 } },
 	'persimberry': { id: 'persimberry', name: 'Persim Berry', category: 'berry', description: 'Cures confusion.', price: 200 },
 	'oranberry': { id: 'oranberry', name: 'Oran Berry', category: 'berry', description: 'Heals 10 HP.', price: 200 },
+	'sitrusberry': { id: 'sitrusberry', name: 'Sitrus Berry', category: 'berry', description: 'Restores 1/4 max HP when at 1/2 HP or less.', price: 300 },
+	'lumberry': { id: 'lumberry', name: 'Lum Berry', category: 'berry', description: 'Cures any status condition.', price: 400 },
+	
+	// Pinch Berries
+	'figyberry': { id: 'figyberry', name: 'Figy Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
+	'wikiberry': { id: 'wikiberry', name: 'Wiki Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
+	'magoberry': { id: 'magoberry', name: 'Mago Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
+	'aguavberry': { id: 'aguavberry', name: 'Aguav Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
+	'iapapaberry': { id: 'iapapaberry', name: 'Iapapa Berry', category: 'berry', description: 'Restores HP at 1/4 max HP or less. May confuse.', price: 300 },
+	'liechiberry': { id: 'liechiberry', name: 'Liechi Berry', category: 'berry', description: 'Raises Attack at 1/4 max HP or less.', price: 300 },
+	'ganlonberry': { id: 'ganlonberry', name: 'Ganlon Berry', category: 'berry', description: 'Raises Defense at 1/4 max HP or less.', price: 300 },
+	'salacberry': { id: 'salacberry', name: 'Salac Berry', category: 'berry', description: 'Raises Speed at 1/4 max HP or less.', price: 300 },
+	'petayaberry': { id: 'petayaberry', name: 'Petaya Berry', category: 'berry', description: 'Raises Sp. Atk at 1/4 max HP or less.', price: 300 },
+	'apicotberry': { id: 'apicotberry', name: 'Apicot Berry', category: 'berry', description: 'Raises Sp. Def at 1/4 max HP or less.', price: 300 },
+	'starfberry': { id: 'starfberry', name: 'Starf Berry', category: 'berry', description: 'Sharply raises a random stat at 1/4 max HP or less.', price: 500 },
+
+	// Type Resist Berries
+	'occaberry': { id: 'occaberry', name: 'Occa Berry', category: 'berry', description: 'Weakens a supereffective Fire-type attack.', price: 300 },
+	'passhoberry': { id: 'passhoberry', name: 'Passho Berry', category: 'berry', description: 'Weakens a supereffective Water-type attack.', price: 300 },
+	'wacanberry': { id: 'wacanberry', name: 'Wacan Berry', category: 'berry', description: 'Weakens a supereffective Electric-type attack.', price: 300 },
+	'rindoberry': { id: 'rindoberry', name: 'Rindo Berry', category: 'berry', description: 'Weakens a supereffective Grass-type attack.', price: 300 },
+	'yacheberry': { id: 'yacheberry', name: 'Yache Berry', category: 'berry', description: 'Weakens a supereffective Ice-type attack.', price: 300 },
+	'chopleberry': { id: 'chopleberry', name: 'Chople Berry', category: 'berry', description: 'Weakens a supereffective Fighting-type attack.', price: 300 },
+	'kebiaberry': { id: 'kebiaberry', name: 'Kebia Berry', category: 'berry', description: 'Weakens a supereffective Poison-type attack.', price: 300 },
+	'shucaberry': { id: 'shucaberry', name: 'Shuca Berry', category: 'berry', description: 'Weakens a supereffective Ground-type attack.', price: 300 },
+	'cobaberry': { id: 'cobaberry', name: 'Coba Berry', category: 'berry', description: 'Weakens a supereffective Flying-type attack.', price: 300 },
+	'payapaberry': { id: 'payapaberry', name: 'Payapa Berry', category: 'berry', description: 'Weakens a supereffective Psychic-type attack.', price: 300 },
+	'tangaberry': { id: 'tangaberry', name: 'Tanga Berry', category: 'berry', description: 'Weakens a supereffective Bug-type attack.', price: 300 },
+	'chartiberry': { id: 'chartiberry', name: 'Charti Berry', category: 'berry', description: 'Weakens a supereffective Rock-type attack.', price: 300 },
+	'kasibberry': { id: 'kasibberry', name: 'Kasib Berry', category: 'berry', description: 'Weakens a supereffective Ghost-type attack.', price: 300 },
+	'habanberry': { id: 'habanberry', name: 'Haban Berry', category: 'berry', description: 'Weakens a supereffective Dragon-type attack.', price: 300 },
+	'colburberry': { id: 'colburberry', name: 'Colbur Berry', category: 'berry', description: 'Weakens a supereffective Dark-type attack.', price: 300 },
+	'babiriberry': { id: 'babiriberry', name: 'Babiri Berry', category: 'berry', description: 'Weakens a supereffective Steel-type attack.', price: 300 },
+	'chilanberry': { id: 'chilanberry', name: 'Chilan Berry', category: 'berry', description: 'Weakens a Normal-type attack.', price: 300 },
+	'roseliberry': { id: 'roseliberry', name: 'Roseli Berry', category: 'berry', description: 'Weakens a supereffective Fairy-type attack.', price: 300 },
 
 	// Evolution Stones
 	'firestone': { id: 'firestone', name: 'Fire Stone', category: 'stone', description: 'Evolves certain Fire-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
@@ -155,14 +247,8 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'duskstone': { id: 'duskstone', name: 'Dusk Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
 	'dawnstone': { id: 'dawnstone', name: 'Dawn Stone', category: 'stone', description: 'Evolves certain Pokémon.', price: 2100, effects: { evolutionItem: true } },
 	'icestone': { id: 'icestone', name: 'Ice Stone', category: 'stone', description: 'Evolves certain Ice-type Pokémon.', price: 2100, effects: { evolutionItem: true } },
-	'metalcoat': { id: 'metalcoat', name: 'Metal Coat', category: 'stone', description: 'Evolves certain Steel-type Pokémon. Also boosts Steel moves.', price: 2100, effects: { evolutionItem: true } },
 	'dragonscale': { id: 'dragonscale', name: 'Dragon Scale', category: 'stone', description: 'Evolves Seadra.', price: 2100, effects: { evolutionItem: true } },
 	'upgrade': { id: 'upgrade', name: 'Up-Grade', category: 'stone', description: 'Evolves Porygon.', price: 2100, effects: { evolutionItem: true } },
-
-	// Type Enhancing Items (Phase 1 initial 3)
-	'charcoal': { id: 'charcoal', name: 'Charcoal', category: 'held', description: 'Powers up Fire-type moves.', price: 3000 },
-	'mysticwater': { id: 'mysticwater', name: 'Mystic Water', category: 'held', description: 'Powers up Water-type moves.', price: 3000 },
-	'miracleseed': { id: 'miracleseed', name: 'Miracle Seed', category: 'held', description: 'Powers up Grass-type moves.', price: 3000 },
 };
 
 // ==========================================
@@ -562,7 +648,7 @@ export function canUseItemInBattle(itemId: string): boolean {
 
 	// Special items that can be used in battle
 	if (id === 'direhit') return true;
-	// Guard Spec not yet implemented: if (id === 'guardspec') return true;
+	if (id === 'guardspec') return true;
 
 	const itemData = ITEMS_DATABASE[id];
 	if (!itemData) return false;
