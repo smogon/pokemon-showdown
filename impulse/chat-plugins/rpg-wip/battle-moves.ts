@@ -270,6 +270,11 @@ export function getDamageBasePower(
 		}
 	}
 
+	// Punching Glove Boost
+	if (move.flags.punch && battle.magicRoomTurns === 0 && attacker.item === 'punchingglove') {
+		basePower = Math.floor(basePower * 1.1);
+	}
+
 	return basePower;
 }
 
@@ -1496,6 +1501,17 @@ export function handleGenericFieldMove(
 		} else {
 			battle.trickRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push(`${attacker.species} twisted the dimensions!`);
+			
+			// Room Service Logic
+			getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+				if (slot.pokemon.hp > 0 && slot.pokemon.item === 'roomservice') {
+					if (applyStatChange(slot, 'spe', -1, battle, messageLog)) {
+						messageLog[messageLog.length - 1] += ` (from Room Service)!`;
+						slot.pokemon.item = undefined;
+						activateUnburden(slot, messageLog);
+					}
+				}
+			});
 		}
 		return true;
 	case 'magicroom':
