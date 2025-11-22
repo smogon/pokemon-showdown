@@ -12,21 +12,21 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 60, atk: 100, def: 105, spa: 130, spd: 105, spe: 120 },
 		abilities: { 0: "Pure Power" },
 	},
-	scyther: {
-		inherit: true,
-		evos: ["Scizor"],
-	},
 	dragonitemega: {
 		inherit: true,
 		abilities: { 0: "Soul-Heart" },
 	},
 	meganiummega: {
 		inherit: true,
-		abilities: { 0: "Triage" },
+		abilities: { 0: "Flower Veil" },
 	},
 	feraligatrmega: {
 		inherit: true,
 		abilities: { 0: "Dragon's Maw" },
+	},
+	ampharosmega: {
+		inherit: true,
+		abilities: { 0: "Fluffy" },
 	},
 	skarmorymega: {
 		inherit: true,
@@ -62,19 +62,19 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	scolipedemega: {
 		inherit: true,
-		abilities: { 0: "Merciless" },
+		abilities: { 0: "Tinted Lens" },
 	},
 	scraftymega: {
 		inherit: true,
-		abilities: { 0: "Moxie" },
+		abilities: { 0: "Shed Skin" },
 	},
 	eelektrossmega: {
 		inherit: true,
-		abilities: { 0: "Levitate" },
+		abilities: { 0: "Ion Battery" },
 	},
 	chandeluremega: {
 		inherit: true,
-		abilities: { 0: "Flash Fire" },
+		abilities: { 0: "Magic Guard" },
 	},
 	chesnaughtmega: {
 		inherit: true,
@@ -86,7 +86,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	greninjamega: {
 		inherit: true,
-		abilities: { 0: "Battle Bond" },
+		abilities: { 0: "Protean" },
 	},
 	pyroarmega: {
 		inherit: true,
@@ -102,11 +102,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	malamarmega: {
 		inherit: true,
-		abilities: { 0: "Contrary" },
+		abilities: { 0: "Contrarian" },
 	},
 	barbaraclemega: {
 		inherit: true,
-		abilities: { 0: "Skill Link" },
+		abilities: { 0: "Tough Claws" },
 	},
 	hawluchamega: {
 		inherit: true,

@@ -1,42 +1,26 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	ange: {
 		gen: 9,
-		desc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
-		shortDesc: "Gain 1/12 of max HP at the end of every turn. Opposing Megas lose 1/10 max HP every turn.",
+		desc: "Gain 1/16 of max HP at the end of every turn. Opposing Megas have 1/12 max HP drained every turn.",
+		shortDesc: "Gain 1/16 max HP at end of every turn. Against Megas: drain 1/12 max HP every turn.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
-		onResidual(pokemon, target) {
-			if (target?.hp && !target.fainted && target.species.isMega) {
-				this.damage(target.baseMaxhp / 10, target, pokemon);
-				this.heal(pokemon.baseMaxhp / 10);
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const megaFoes = [];
+			for (const target of pokemon.foes()) {
+				if (target.baseSpecies.isMega) megaFoes.push(target);
+			}
+			if (megaFoes.length) {
+				for (const target of megaFoes) {
+					this.damage(target.baseMaxhp / 12, target, pokemon);
+					this.heal(target.baseMaxhp / 12);
+				}
 			} else {
-				this.heal(pokemon.baseMaxhp / 12);
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		name: "Ange",
-	},
-	battlebond: {
-		inherit: true,
-		onSourceAfterFaint(length, target, source, effect) {
-			if (source.bondTriggered) return;
-			if (effect?.effectType !== 'Move') return;
-			if (source.species.baseSpecies === 'Greninja' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
-				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
-				this.add('-activate', source, 'ability: Battle Bond');
-				source.bondTriggered = true;
-			}
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Mega' &&
-				!attacker.transformed) {
-				delete move.multihit;
-			}
-		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		name: "Battle Bond",
-		desc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 75 power, hits 1x.",
-		shortDesc: "After KOing a Pokemon: +1 Atk/SpA/Spe. Water Shuriken while Mega: 75 power, hits 1x.",
 	},
 	brassbond: {
 		onPrepareHit(source, target, move) {
@@ -45,18 +29,39 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			move.multihit = 3;
 			move.multihitType = 'brassbond' as 'parentalbond';
 		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.effectType === 'Move' && effect.multihitType && effect.hit > 1 &&
+				source && target === source) {
+				let i: keyof BoostsTable;
+				for (i in boost) {
+					delete boost[i];
+				}
+			}
+		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
 		onSourceModifySecondaries(secondaries, target, source, move) {
-			if (move.multihitType && move.id === 'secretpower' && move.hit < 2) {
-				// hack to prevent accidentally suppressing King's Rock/Razor Fang
-				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			if (move.multihitType && move.hit > 1) {
+				return [];
 			}
 		},
 		flags: {},
 		name: "Brass Bond",
 		gen: 9,
-		desc: "This Pokemon's damaging moves hit 3x. The second and third hits do 1/10 of the original damage.",
-		shortDesc: "This Pokemon's damaging moves hit 3x. The second and third hits do 1/10 of the original damage.",
+		desc: "This Pokemon's damaging moves hit 3x. Successive hits do 15% damage without added effects.",
+		shortDesc: "This Pokemon's damaging moves hit 3x. Successive hits do 15% damage without added effects.",
+	},
+	contrarian: {
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= -2;
+			}
+		},
+		name: "Contrarian",
+		desc: "This Pokemon has its stat changes inverted and doubled.",
+		shortDesc: "This Pokemon has its stat changes inverted and doubled.",
+		gen: 9,
 	},
 	corrosion: {
 		inherit: true,
@@ -67,7 +72,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.ignoreImmunity['Poison'] = true;
 			}
 		},
-		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit it with Poison moves.",
+		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit them with Poison moves.",
+	},
+	ionbattery: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			return this.chainModify(1.5);
+		},
+		flags: { breakable: 1 },
+		name: "Ion Battery",
+		desc: "This Pokemon floats and has 1.5x Sp. Atk.",
+		shortDesc: "This Pokemon floats and has 1.5x Sp. Atk.",
 	},
 	luchadorspride: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -99,5 +114,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: { breakable: 1 },
+	},
+	minus: {
+		inherit: true,
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			for (const allyActive of pokemon.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus', 'ionbattery'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
+	},
+	plus: {
+		inherit: true,
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			for (const allyActive of pokemon.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus', 'ionbattery'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 	},
 };
