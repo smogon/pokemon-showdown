@@ -47,7 +47,7 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 		pokemon,
 		statStages: { ...INITIAL_STAT_STAGES },
 		status: pokemon.status,
-		sleepCounter: 0,
+		sleepCounter: savedState?.sleepCounter || 0,
 		isConfused: false,
 		confusionCounter: 0,
 		isProtected: false,
@@ -89,8 +89,8 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 		volatileTypes: undefined,
 		isDisguised: ability === 'disguise' && pokemon.species.includes('Mimikyu'),
 		lastMoveThatHitMe: undefined,
-		terastallized: undefined,
-		toxicCounter: pokemon.status === 'tox' ? 1 : undefined,
+		terastallized: savedState?.terastallized || undefined,
+		toxicCounter: savedState?.toxicCounter || (pokemon.status === 'tox' ? 1 : undefined),
 	};
 }
 
