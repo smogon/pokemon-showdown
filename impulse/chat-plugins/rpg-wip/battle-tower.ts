@@ -455,6 +455,7 @@ export function startBattleTowerFloor(
 			playerFutureMoves: [],
 			opponentFutureMoves: [],
 			battleLog: [],
+			persistentPokemonState: {},
 		};
 
 		if (playerSlots[0]) {
