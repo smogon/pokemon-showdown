@@ -72,7 +72,7 @@ export function checkAccuracy(
 	}
 
 	// Standard Accuracy Check
-	if (move.accuracy === true) return true;
+	if (move.accuracy === true) return true; // moves with accuracy: true always hit (e.g. self-target)
 
 	const moveAccuracyBase = typeof move.accuracy === 'number' ? move.accuracy : 100;
 	
@@ -437,8 +437,6 @@ export function handleDamagingMove(
 	if (moveWasSuccessful && defenderSlot.pokemon.hp > 0) {
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
 		// Pass sheerForceActive
-		// Note: 'sheerForceActive' needs to be derived from at least one hit's calculation if multihit, 
-		// but it's consistent across hits. We can calculate it once or use the result from the last loop.
 		const appliesSecondaries = RPGAbilities.shouldApplySecondaryEffects(attacker, move);
 		const sheerForceActive = !appliesSecondaries;
 		applySecondaryEffects(attackerSlot, defenderSlot, move, battle, messageLog, abilityContext, sheerForceActive);
@@ -471,7 +469,7 @@ export function handleStatusMove(
 	}
 
 	if (defender && defenderSpecies && move.target !== 'self' && !move.flags.heal) {
-		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle, attackerSlot.pokemon);
+		const effectiveness = getCustomEffectiveness(move.type, defenderSpecies.types, defender, battle, attackerSlot.pokemon, move.id);
 		if (effectiveness === 0) {
 			messageLog.push(`It doesn't affect ${defender.species}...`);
 			return;
@@ -640,7 +638,7 @@ export function calculateDamage(
 	if (moveId === 'struggle') {
 		effectiveness = 1;
 	} else {
-		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker);
+		effectiveness = getCustomEffectiveness(moveType, defenderTypes, defender, battle, attacker, move.id);
 	}
 
 	abilityContext.effectiveness = effectiveness;
@@ -1603,8 +1601,39 @@ export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): 
 	return species.types;
 }
 
-export function getCustomEffectiveness(moveType: string, defenderTypes: string[], defender: RPGPokemon, battle: BattleState, attacker?: RPGPokemon): number {
+export function getCustomEffectiveness(
+	moveType: string,
+	defenderTypes: string[],
+	defender: RPGPokemon,
+	battle: BattleState,
+	attacker?: RPGPokemon,
+	moveId?: string
+): number {
 	let effectiveness = 1;
+
+	// Special handling for Flying Press (Fighting + Flying)
+	if (moveId === 'flyingpress') {
+		let fightingEff = 1;
+		let flyingEff = 1;
+		
+		const fightingChart = TYPE_CHART['Fighting'];
+		const flyingChart = TYPE_CHART['Flying'];
+
+		for (const type of defenderTypes) {
+			// Fighting part
+			if (fightingChart.superEffective.includes(type)) fightingEff *= 2;
+			else if (fightingChart.notVeryEffective.includes(type)) fightingEff *= 0.5;
+			else if (fightingChart.noEffect.includes(type)) fightingEff *= 0;
+
+			// Flying part
+			if (flyingChart.superEffective.includes(type)) flyingEff *= 2;
+			else if (flyingChart.notVeryEffective.includes(type)) flyingEff *= 0.5;
+			else if (flyingChart.noEffect.includes(type)) flyingEff *= 0;
+		}
+
+		return fightingEff * flyingEff;
+	}
+
 	const chartEntry = TYPE_CHART[moveType];
 	if (!chartEntry) return 1;
 
@@ -1616,6 +1645,18 @@ export function getCustomEffectiveness(moveType: string, defenderTypes: string[]
 	const hasScrappy = attackerAbility === 'scrappy';
 
 	for (const defenderType of defenderTypes) {
+		// Freeze-Dry check
+		if (moveId === 'freezedry' && defenderType === 'Water') {
+			effectiveness *= 2; // Super Effective on Water
+			continue;
+		}
+
+		// Thousand Arrows check (grounding logic is usually elsewhere, but for effectiveness)
+		// If it hits flying, it should be neutral unless other types interact. 
+		// Standard chart says Ground vs Flying is 0. 
+		// If grounding logic happens before this, defenderTypes won't have Flying or isGrounded returns true.
+		// Assuming standard chart lookup:
+
 		if (chartEntry.superEffective.includes(defenderType)) {
 			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
 				['Rock', 'Electric', 'Ice'].includes(moveType)) {
@@ -1905,18 +1946,3 @@ export function saveBattleStatus(battle: BattleState) {
 		}
 	}
 }
-
-export const RPGMoves = {
-	getDamageBasePower,
-	handleDamagingMovePreamble,
-	handleSpecificStatusMove,
-	handleGenericBoostMove,
-	handleGenericStatusInflictMove,
-	handleGenericVolatileMove,
-	handleGenericHealMove,
-	handleGenericFieldMove,
-	handleGenericSideMove,
-	handleChargingMove,
-};
-
-export default RPGMoves;
