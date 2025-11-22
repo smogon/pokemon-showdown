@@ -1,6 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
 import { RPGAbilities } from './abilities';
-import { getMove, getActiveSlots, activateUnburden, applyStatChange, consumeBerry } from './utils';
+import { getMove, getActiveSlots, activateUnburden, applyStatChange, consumeBerry, checkStatusHealBerries } from './utils';
 import type { ActivePokemonSlot, BattleState } from './interface';
 
 import {
@@ -146,7 +146,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		'sun': 'The sunlight is harsh.',
 		'rain': 'Rain continues to fall.',
 		'sand': 'The sandstorm rages.',
-		'hail': 'The snow is falling.', // Changed from "The hail crashes down."
+		'hail': 'The snow is falling.',
 		'harsh-sun': 'The sunlight is extremely harsh!',
 		'heavy-rain': 'The downpour continues!',
 		'strong-winds': 'Strong winds continue to blow!',
@@ -180,14 +180,11 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 		let takeDamage = false;
 		let damageAmount = Math.floor(pokemon.maxHp / 16);
 
-		// Snow (formerly Hail) no longer deals damage in Gen 9
 		if (battle.weather!.type === 'sand' && !species.types.includes('Rock') && !species.types.includes('Ground') && !species.types.includes('Steel')) {
-			// Sandstorm Logic
 			if (ability !== 'sandforce' && ability !== 'sandrush' && ability !== 'sandveil' && ability !== 'magicguard' && ability !== 'overcoat' && !pokemon.item?.includes('goggles')) {
 				takeDamage = true;
 			}
 		} else if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
-			// Sun Logic
 			if (ability === 'dryskin') {
 				takeDamage = true;
 				damageAmount = Math.floor(pokemon.maxHp / 8);
@@ -214,7 +211,7 @@ export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[]
 			'sun': 'The sunlight faded.',
 			'rain': 'The rain stopped.',
 			'sand': 'The sandstorm subsided.',
-			'hail': 'The snow stopped.', // Changed from "The hail stopped."
+			'hail': 'The snow stopped.',
 			'harsh-sun': 'The extremely harsh sunlight faded.',
 			'heavy-rain': 'The heavy rain stopped.',
 			'strong-winds': 'The strong winds subsided.',
@@ -266,7 +263,6 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		}
 	}
 
-	// Screen Management
 	if (battle.playerReflectTurns > 0) {
 		battle.playerReflectTurns--;
 		if (battle.playerReflectTurns === 0) messageLog.push(`Your team's Reflect wore off!`);
@@ -292,7 +288,6 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		if (battle.opponentAuroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
 	}
 
-	// Mist Management (Added)
 	if ((battle as any).playerMistTurns > 0) {
 		(battle as any).playerMistTurns--;
 		if ((battle as any).playerMistTurns === 0) messageLog.push(`Your team's Mist wore off!`);
@@ -427,11 +422,11 @@ export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: B
 		}
 	}
 
-	if (slot.status && pokemon.item === 'lumberry') {
-		slot.status = null;
-		messageLog.push(`<span style="color: #28a745;"><strong>${pokemon.species}</strong> ate its <strong>Lum Berry</strong> and cured its status condition!</span>`);
-		consumeBerry(slot, 'lumberry', messageLog);
-		return true;
+	// Check for all Status healing berries (Lum, Cheri, Chesto, etc.)
+	const hadStatus = !!slot.status;
+	checkStatusHealBerries(slot, battle, messageLog);
+	if (hadStatus && !slot.status) {
+		return true; // Status was cured
 	}
 
 	if (pokemon.item === 'blacksludge') {
