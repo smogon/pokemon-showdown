@@ -15,6 +15,7 @@ import {
 	getMoveTargets,
 	getAccuracyEvasionMultiplier,
 	handleMirrorHerb,
+	handleLeppaBerry,
 } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, Move } from './interface';
 import { ITEMS_DATABASE } from './items';
@@ -488,6 +489,7 @@ export function executeAction(
 
 		if (moveObject.id !== 'struggle' && moveObject.pp > 0 && !move.flags.charge) {
 			moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+			handleLeppaBerry(attackerSlot, battle, messageLog);
 		}
 
 		if (resolvedTargets.length === 0) {
@@ -649,7 +651,7 @@ export function executeMove(
 
 		if (['aerialace', 'struggle'].includes(move.id) || hasNoGuard) {
 		} else if (move.accuracy !== true) {
-			const accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
+			let accuracyMultiplier = getAccuracyEvasionMultiplier(attackerSlot.statStages.accuracy);
 			const ignoresEvasion = attackerAbility === 'mindseye';
 			const evasionMultiplier = ignoresEvasion ? 1 : getAccuracyEvasionMultiplier(defenderSlot.statStages.evasion);
 			let moveAccuracy = RPGAbilities.applyAccuracyModifier(move.accuracy, attackerSlot.pokemon, move);
@@ -666,6 +668,19 @@ export function executeMove(
 				if (battle.weather!.type === 'hail' && move.id === 'blizzard') moveAccuracy = 100;
 			}
 			if (battle.gravityTurns > 0) moveAccuracy = Math.floor(moveAccuracy * (5 / 3));
+
+			if (battle.magicRoomTurns === 0) {
+				if (attackerSlot.pokemon.item === 'widelens') {
+					moveAccuracy = Math.floor(moveAccuracy * 1.1);
+				}
+				if (attackerSlot.pokemon.item === 'zoomlens') {
+					const attSpeed = attackerSlot.pokemon.spe * getStatMultiplier(attackerSlot.statStages.spe);
+					const defSpeed = defenderSlot.pokemon.spe * getStatMultiplier(defenderSlot.statStages.spe);
+					if (attSpeed < defSpeed) {
+						moveAccuracy = Math.floor(moveAccuracy * 1.2);
+					}
+				}
+			}
 
 			const finalAccuracy = moveAccuracy * (accuracyMultiplier / finalEvasionMultiplier);
 			if ((Math.random() * 100) > finalAccuracy) {
