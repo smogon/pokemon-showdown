@@ -445,8 +445,10 @@ export function startBattleTowerFloor(
 			opponentLightScreenTurns: 0,
 			playerAuroraVeilTurns: 0,
 			opponentAuroraVeilTurns: 0,
-			playerMistTurns: 0, // Added
-			opponentMistTurns: 0, // Added
+			playerMistTurns: 0,
+			opponentMistTurns: 0,
+			playerTailwindTurns: 0,
+			opponentTailwindTurns: 0,
 			gravityTurns: 0,
 			mudSportTurns: 0,
 			waterSportTurns: 0,
