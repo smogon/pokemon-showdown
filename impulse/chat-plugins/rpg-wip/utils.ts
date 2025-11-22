@@ -94,6 +94,52 @@ export function createActivePokemonSlot(pokemon: RPGPokemon): ActivePokemonSlot 
 	};
 }
 
+/**
+ * Centralized function to set or remove an item.
+ * Handles Unburden, Sticky Hold, and Symbiosis triggers automatically.
+ */
+export function setItem(
+	slot: ActivePokemonSlot,
+	newItem: string | undefined,
+	sourceSlot?: ActivePokemonSlot,
+	battle?: BattleState,
+	messageLog?: string[]
+): boolean {
+	const pokemon = slot.pokemon;
+	const oldItem = pokemon.item;
+	const ability = toID(pokemon.ability || '');
+
+	// Check Sticky Hold (Prevention)
+	// Only applies if an item is being removed or swapped by another pokemon
+	if (oldItem && newItem !== oldItem && sourceSlot && sourceSlot.pokemon.id !== pokemon.id) {
+		// Mold Breaker can ignore Sticky Hold
+		const effectiveAbility = RPGAbilities.getActiveAbility(pokemon, sourceSlot.pokemon);
+		if (effectiveAbility === 'stickyhold') {
+			if (messageLog) messageLog.push(`${pokemon.species}'s Sticky Hold prevents item theft!`);
+			return false;
+		}
+	}
+
+	// Apply the item change
+	pokemon.item = newItem;
+
+	// Trigger Unburden
+	// Condition: Had an item, now doesn't, and ability is Unburden
+	if (oldItem && !newItem && ability === 'unburden' && !slot.unburdenActive) {
+		slot.unburdenActive = true;
+		if (messageLog) messageLog.push(`${pokemon.species}'s Unburden activated!`);
+	}
+
+	// Reset Unburden if gaining an item
+	if (!oldItem && newItem && slot.unburdenActive) {
+		slot.unburdenActive = false;
+	}
+
+	// TODO: Add Symbiosis check here later (checks ally slot for item pass)
+
+	return true;
+}
+
 export function applyStatChange(
 	slot: ActivePokemonSlot,
 	stat: keyof ActivePokemonSlot['statStages'],
@@ -135,7 +181,7 @@ export function applyStatChange(
 		if (!isSelf) {
 			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const sideMist = isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
-			
+
 			if (sideMist > 0) {
 				messageLog.push(`${pokemon.species} is protected by the mist!`);
 				return false;
@@ -167,16 +213,7 @@ export function applyStatChange(
 		if (species.types.includes('Grass')) {
 			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
 			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
-			// Aroma Veil/Flower Veil check for allies
-			// This check should strictly use the ally's ability, NOT subject to Mold Breaker from the attacker 
-			// (usually Mold Breaker affects the target's ability to block the move, but Flower Veil is an ally aura).
-			// However, if the ATTACKER has Mold Breaker, they ignore the Flower Veil protection on the target.
-			// So we check the ally's ability, but we should pass it through getActiveAbility logic if we want strict mechanics.
-			// For simplicity in this complex nested check, we will assume direct check unless specific interaction required.
 			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
-				// Check if the attacker (source) breaks this.
-				// If source exists, we should check if their Mold Breaker ignores the ally's Flower Veil.
-				// This is complex. For now, standard implementation:
 				const ignoresFlowerVeil = source && ['moldbreaker', 'teravolt', 'turboblaze'].includes(toID(source.pokemon.ability || ''));
 				if (!ignoresFlowerVeil) {
 					messageLog.push(`Flower Veil protects ${pokemon.species} from stat drops!`);
@@ -214,9 +251,8 @@ export function applyStatChange(
 			}
 
 			if (slotIndex !== -1) {
-				pokemon.item = undefined;
 				messageLog.push(`${pokemon.species} is being sent back due to its Eject Pack!`);
-				activateUnburden(slot, messageLog);
+				setItem(slot, undefined, undefined, battle, messageLog);
 
 				if (isPlayer) {
 					battle.pendingPivot = { slotIndex, slot, isBatonPass: false };
@@ -240,8 +276,7 @@ export function applyStatChange(
 			}
 			if (restored) {
 				messageLog.push(`${pokemon.species} returned its status to normal using its White Herb!`);
-				pokemon.item = undefined;
-				activateUnburden(slot, messageLog);
+				setItem(slot, undefined, undefined, battle, messageLog);
 			}
 		}
 
@@ -629,11 +664,6 @@ export function activateUnburden(slot: ActivePokemonSlot, messageLog: string[]):
 }
 
 export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLog: string[]): void {
-	// This calls setItem implicitly by removing the item, but does extra berry logic
-	// Since setItem handles Unburden/StickyHold, we can use setItem here.
-	// However, Berry consumption usually bypasses Sticky Hold (it's natural use).
-	// So we manually set undefined here to bypass Sticky Hold check if we implemented one in setItem.
-	
 	const ability = toID(slot.pokemon.ability || '');
 
 	slot.consumedBerry = berryId;
@@ -643,7 +673,7 @@ export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLo
 		slot.cudChewBerry = berryId;
 	}
 
-	// Use setItem to handle Unburden logic consistently
+	// Use setItem to remove the berry and trigger Unburden
 	setItem(slot, undefined, undefined, undefined, messageLog);
 
 	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
@@ -651,52 +681,6 @@ export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLo
 		slot.pokemon.hp = Math.min(slot.pokemon.maxHp, slot.pokemon.hp + healAmount);
 		messageLog.push(`${slot.pokemon.species}'s Cheek Pouch restored its HP!`);
 	}
-}
-
-/**
- * Centralized function to set or remove an item.
- * Handles Unburden, Sticky Hold, and Symbiosis triggers automatically.
- */
-export function setItem(
-    slot: ActivePokemonSlot, 
-    newItem: string | undefined, 
-    sourceSlot?: ActivePokemonSlot,
-    battle?: BattleState,
-    messageLog?: string[]
-): boolean {
-    const pokemon = slot.pokemon;
-    const oldItem = pokemon.item;
-    const ability = toID(pokemon.ability || '');
-
-    // Check Sticky Hold (Prevention)
-    if (oldItem && !newItem && sourceSlot && sourceSlot.pokemon.id !== pokemon.id) {
-		// Mold Breaker can ignore Sticky Hold
-		const effectiveAbility = RPGAbilities.getActiveAbility(pokemon, sourceSlot.pokemon);
-        if (effectiveAbility === 'stickyhold') {
-            // If this is a removal attempt by an opponent
-            if (messageLog) messageLog.push(`${pokemon.species}'s Sticky Hold prevents item theft!`);
-            return false; 
-        }
-    }
-
-    // Apply the item change
-    pokemon.item = newItem;
-
-    // Trigger Unburden
-    // Condition: Had an item, now doesn't, and ability is Unburden
-    if (oldItem && !newItem && ability === 'unburden' && !slot.unburdenActive) {
-        slot.unburdenActive = true;
-        if (messageLog) messageLog.push(`${pokemon.species}'s Unburden activated!`);
-    }
-
-    // Reset Unburden if gaining an item
-    if (!oldItem && newItem && slot.unburdenActive) {
-        slot.unburdenActive = false;
-    }
-
-    // TODO: Add Symbiosis check here later (checks ally slot for item pass)
-
-    return true;
 }
 
 export function applySynchronize(
@@ -759,7 +743,6 @@ export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, me
 
 		messageLog.push(`${slot.pokemon.species}'s Mental Herb snapped it out of its confusion!`);
 		
-		// Use setItem
 		setItem(slot, undefined, undefined, battle, messageLog);
 		
 		return true;
@@ -1190,7 +1173,7 @@ export const RPGUtils = {
 	NATURE_LIST,
 	checkStatusHealBerries,
 	handleLeppaBerry,
-    setItem,
+	setItem,
 };
 
 export default RPGUtils;

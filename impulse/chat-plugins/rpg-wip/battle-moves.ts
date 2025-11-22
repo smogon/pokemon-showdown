@@ -9,6 +9,7 @@ import {
 	applySynchronize,
 	applyStatChange,
 	INITIAL_STAT_STAGES,
+	setItem,
 } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
@@ -20,7 +21,6 @@ function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleSta
 
 	return allies.some(slot => {
 		if (!slot || slot.pokemon.hp <= 0) return false;
-		// Aroma Veil can be bypassed by Mold Breaker
 		const ability = RPGAbilities.getActiveAbility(slot.pokemon, attacker);
 		return ability === 'aromaveil';
 	});
@@ -351,8 +351,10 @@ export function handleDamagingMovePreamble(
 		const damage = flingPowers[attacker.item] || 30;
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
+		
+		// Use setItem to remove item and trigger Unburden
+		setItem(attackerSlot, undefined, undefined, battle, messageLog);
+		
 		return true;
 	}
 
@@ -364,8 +366,10 @@ export function handleDamagingMovePreamble(
 		const damage = 80;
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
+		
+		// Use setItem to remove item and trigger Unburden
+		setItem(attackerSlot, undefined, undefined, battle, messageLog);
+		
 		return true;
 	}
 
@@ -545,14 +549,15 @@ export function handleSpecificStatusMove(
 		}
 		const attackerItem = attacker.item;
 		const defenderItem = defender.item;
-		attacker.item = defenderItem;
-		defender.item = attackerItem;
+		
+		// Use setItem for item swapping logic with Unburden support
+		setItem(attackerSlot, defenderItem, defenderSlot, battle, messageLog);
+		setItem(defenderSlot, attackerItem, attackerSlot, battle, messageLog);
+		
 		messageLog.push(`${attacker.species} swapped items with ${defender.species}!`);
 		if (attacker.item) messageLog.push(`${attacker.species} obtained a ${ITEMS_DATABASE[attacker.item]?.name || attacker.item}!`);
 		if (defender.item) messageLog.push(`${defender.species} obtained a ${ITEMS_DATABASE[defender.item]?.name || defender.item}!`);
 
-		if (attackerItem !== attacker.item) activateUnburden(attackerSlot, messageLog);
-		if (defenderItem !== defender.item) activateUnburden(defenderSlot, messageLog);
 		return true;
 
 	case 'nightmare':
@@ -574,9 +579,11 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 		const givenItem = attacker.item;
-		defender.item = givenItem;
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
+		
+		// Use setItem logic
+		setItem(defenderSlot, givenItem, attackerSlot, battle, messageLog);
+		setItem(attackerSlot, undefined, undefined, battle, messageLog);
+		
 		messageLog.push(`${attacker.species} gave ${ITEMS_DATABASE[givenItem]?.name || givenItem} to ${defender.species}!`);
 		return true;
 
@@ -784,17 +791,6 @@ export function handleSpecificStatusMove(
 	case 'perishsong':
 		let affectedCount = 0;
 		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
-			// Perish Song hits everyone, but Soundproof blocks it.
-			// Note: In real games, the soundproof check happens on a per-target basis.
-			// Here we iterate everyone.
-			// Attacker itself is also affected unless soundproof.
-			// Since this affects self and allies, "attacker" context for Mold Breaker is... tricky.
-			// Mold Breaker allows hitting opponents. It doesn't usually affect self/allies negatively differently.
-			// But for opponents, Soundproof IS ignored by Mold Breaker Perish Song.
-			
-			// Determine who is "attacker" for the purpose of this check. The move user.
-			// If slot is opponent, use getActiveAbility. If slot is ally/self, direct check is usually fine (friendly fire MB doesn't apply typically).
-			
 			const isOpponent = (isPlayerAttacker && battle.opponentSlots.includes(slot)) || (!isPlayerAttacker && battle.playerSlots.includes(slot));
 			const ability = isOpponent ? RPGAbilities.getActiveAbility(slot.pokemon, attacker) : toID(slot.pokemon.ability || '');
 
@@ -881,8 +877,7 @@ export function handleSpecificStatusMove(
 				const itemData = ITEMS_DATABASE[slot.pokemon.item];
 				if (itemData?.category === 'berry' || slot.pokemon.item?.endsWith('berry')) {
 					messageLog.push(`${slot.pokemon.species} consumed its ${itemData?.name || slot.pokemon.item}!`);
-					slot.pokemon.item = undefined;
-					activateUnburden(slot, messageLog);
+					setItem(slot, undefined, undefined, battle, messageLog);
 					teatimeAffected++;
 				}
 			}
@@ -899,8 +894,6 @@ export function handleSpecificStatusMove(
 		let healedCount = 0;
 		teamSlots.forEach(slot => {
 			if (slot?.status) {
-				// Soundproof blocks Heal Bell but not Aromatherapy.
-				// If it's Heal Bell, check Soundproof.
 				const ability = toID(slot.pokemon.ability || '');
 				if (move.id === 'healbell' && ability === 'soundproof') {
 					// Blocks healing
@@ -1562,8 +1555,7 @@ export function handleGenericFieldMove(
 				if (slot.pokemon.hp > 0 && slot.pokemon.item === 'roomservice') {
 					if (applyStatChange(slot, 'spe', -1, battle, messageLog)) {
 						messageLog[messageLog.length - 1] += ` (from Room Service)!`;
-						slot.pokemon.item = undefined;
-						activateUnburden(slot, messageLog);
+						setItem(slot, undefined, undefined, battle, messageLog);
 					}
 				}
 			});
@@ -1769,8 +1761,7 @@ export function handleChargingMove(
 	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
 		const attacker = attackerSlot.pokemon;
 		messageLog.push(`${attacker.species} consumed its Power Herb!`);
-		attacker.item = undefined;
-		activateUnburden(attackerSlot, messageLog);
+		setItem(attackerSlot, undefined, undefined, battle, messageLog);
 		return false;
 	}
 

@@ -21,6 +21,7 @@ import {
 	consumeBerry,
 	handleMirrorHerb,
 	handleLeppaBerry,
+	setItem,
 } from './utils';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState, Stats, Move, AbilityContext } from './interface';
 import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DATABASE, ITEM_PRICES } from './items';
@@ -89,7 +90,7 @@ export function handleDamagingMove(
 		if (attackResult.gemConsumed) {
 			const itemName = ITEMS_DATABASE[attackResult.gemConsumed]?.name || attackResult.gemConsumed;
 			messageLog.push(`The ${itemName} strengthened ${attacker.species}'s power!`);
-			attacker.item = undefined; // Consume Gem
+			setItem(attackerSlot, undefined, undefined, battle, messageLog); // Consume Gem
 		}
 
 		const abilityContext = { attacker, defender: defenderSlot.pokemon, attackerSlot, defenderSlot, move, battle, messageLog };
@@ -114,8 +115,7 @@ export function handleDamagingMove(
 		if (battle.magicRoomTurns === 0 && defenderSlot.pokemon.hp > 0 && defenderSlot.pokemon.item === 'airballoon' &&
 			damageDealt > 0 && move.category !== 'Status') {
 			messageLog.push(`${defenderSlot.pokemon.species}'s Air Balloon popped!`);
-			defenderSlot.pokemon.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 		}
 
 		if (attackResult.effectiveness > 0 && damageDealt > 0) {
@@ -170,9 +170,8 @@ export function handleDamagingMove(
 				}
 
 				if (slotIndex !== -1) {
-					defenderSlot.pokemon.item = undefined;
+					setItem(defenderSlot, undefined, undefined, battle, messageLog);
 					messageLog.push(`${defenderSlot.pokemon.species} is being switched out by its Eject Button!`);
-					activateUnburden(defenderSlot, messageLog);
 
 					if (isPlayer) {
 						battle.pendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
@@ -191,14 +190,14 @@ export function handleDamagingMove(
 			const defender = defenderSlot.pokemon;
 			if (defenderSlot.substitute) {
 				messageLog.push(`But ${defender.species}'s Substitute blocked the item removal!`);
-			} else if (RPGAbilities.checkItemRemovalPrevention(defender)) {
-				messageLog.push(`${defender.species}'s ${defender.ability} prevents its item from being removed!`);
 			} else {
+				// Sticky Hold check is handled inside setItem
 				const itemName = ITEMS_DATABASE[defender.item]?.name || defender.item;
-				messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
-				defender.item = undefined;
-
-				activateUnburden(defenderSlot, messageLog);
+				if (setItem(defenderSlot, undefined, attackerSlot, battle, messageLog)) {
+					messageLog.push(`${attacker.species} knocked off ${defender.species}'s ${itemName}!`);
+				} else {
+					messageLog.push(`${attacker.species} couldn't knock off ${defender.species}'s item!`);
+				}
 			}
 		}
 
@@ -320,8 +319,7 @@ export function handleDamagingMove(
 	if (moveWasSuccessful && move.flags.sound && battle.magicRoomTurns === 0 && attacker.item === 'throatspray') {
 		if (applyStatChange(attackerSlot, 'spa', 1, battle, messageLog, attackerSlot)) {
 			messageLog[messageLog.length - 1] += ` (from Throat Spray)!`;
-			attacker.item = undefined;
-			activateUnburden(attackerSlot, messageLog);
+			setItem(attackerSlot, undefined, undefined, battle, messageLog);
 		}
 	}
 }
@@ -948,8 +946,7 @@ export function applyDamageAndEnduranceEffects(
 		if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && isFullHP) {
 			damageDealt = defender.hp - 1;
 			messageLog.push(`${defender.species} held on using its Focus Sash!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 		} else if (defenderAbility === 'sturdy' && isFullHP && move.ohko !== true) {
 			damageDealt = defender.hp - 1;
 			messageLog.push(`${defender.species} held on using its Sturdy!`);
@@ -1046,8 +1043,7 @@ export function applyPostDamageContactEffects(
 
 		if (activated) {
 			messageLog.push(`${defender.species}'s Weakness Policy was activated!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 		}
 	}
 
@@ -1057,8 +1053,7 @@ export function applyPostDamageContactEffects(
 
 		if (attackerSlotIndex !== -1) {
 			messageLog.push(`${defender.species}'s Red Card forced ${attacker.species} to switch out!`);
-			defender.item = undefined;
-			activateUnburden(defenderSlot, messageLog);
+			setItem(defenderSlot, undefined, undefined, battle, messageLog);
 
 			if (isPlayerDefending) {
 				battle.opponentSlots[attackerSlotIndex as 0 | 1] = null;

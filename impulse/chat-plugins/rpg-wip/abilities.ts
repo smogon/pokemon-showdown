@@ -1,5 +1,5 @@
 import { Dex, toID } from '../../../sim/dex';
-import { getActiveSlots, applyStatChange, activateUnburden } from './utils';
+import { getActiveSlots, applyStatChange, activateUnburden, setItem } from './utils';
 import type { RPGPokemon, ActivePokemonSlot, BattleState, Move, AbilityContext, AbilityImmunityHandler, AbilityPowerModifierHandler, AbilityDamageModifierHandler, AbilityStatModifierHandler, AbilityTypeModifierHandler, AbilityOnSwitchInHandler, AbilityOnDamageHandler, AbilityOnMoveHandler, AbilityOnKOHandler, AbilityEndOfTurnHandler, AbilityStatDropResponseHandler, AbilityStatChangeModifierHandler } from './interface';
 
 /**
@@ -15,7 +15,6 @@ export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): s
 	const breakerAbilities = ['moldbreaker', 'turboblaze', 'teravolt'];
 
 	// Specific override for Moongeist Beam / Sunsteel Strike / Photon Geyser would go here
-	// For now, we focus on the abilities
 
 	if (breakerAbilities.includes(attackerAbility)) {
 		// List of abilities that cannot be ignored by Mold Breaker
@@ -1404,7 +1403,8 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 			const chance = inSunlight ? 1.0 : 0.5;
 
 			if (Math.random() < chance) {
-				slot.pokemon.item = slot.consumedBerry;
+				// Use setItem to handle item gain properly (unburden reset etc)
+				setItem(slot, slot.consumedBerry, undefined, battle, messageLog);
 				messageLog.push(`${slot.pokemon.species}'s Harvest restored its ${slot.consumedBerry}!`);
 				slot.harvestUsedThisTurn = true;
 			}
@@ -1429,7 +1429,8 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 	'cudchew': {
 		handler: (slot, battle, messageLog) => {
 			if (slot.cudChewBerry && !slot.pokemon.item) {
-				slot.pokemon.item = slot.cudChewBerry;
+				// Use setItem to restore the berry (Unburden resets)
+				setItem(slot, slot.cudChewBerry, undefined, battle, messageLog);
 				messageLog.push(`${slot.pokemon.species} is chewing its ${slot.cudChewBerry} again!`);
 
 				slot.cudChewBerry = undefined;
@@ -2366,11 +2367,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 		for (const opponentSlot of opponentSlots) {
 			if (opponentSlot && opponentSlot.pokemon.hp > 0) {
-				// Intimidate is unique: it is an ability activating on an opponent.
-				// Mold Breaker on the Intimidator ignores abilities that prevent Intimidate (like Inner Focus, Oblivious, Own Tempo, Scrappy?? No).
-				// Abilities that prevent stat drops: Clear Body, White Smoke, Hyper Cutter.
-				// Guard Dog has special interaction.
-				const oppAbility = getActiveAbility(opponentSlot.pokemon, slot.pokemon); // slot is the intimidator (attacker equivalent)
+				const oppAbility = getActiveAbility(opponentSlot.pokemon, slot.pokemon);
 
 				if (oppAbility === 'guarddog') {
 					if (opponentSlot.statStages.atk < 6) {
@@ -2382,9 +2379,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 				if (opponentSlot.pokemon.item === 'adrenalineorb' && opponentSlot.statStages.spe < 6) {
 					applyStatChange(opponentSlot, 'spe', 1, battle, messageLog, slot);
-					opponentSlot.pokemon.item = undefined; // Consume
+					setItem(opponentSlot, undefined, undefined, battle, messageLog); // Consume Adrenaline Orb
 					messageLog.push(`${opponentSlot.pokemon.species}'s Adrenaline Orb raised its Speed!`);
-					activateUnburden(opponentSlot, messageLog);
 				}
 
 				applyStatChange(opponentSlot, 'atk', -1, battle, messageLog, slot);
@@ -2538,7 +2534,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const hasTerrainBuff = ability === 'quarkdrive' && battle.terrain?.type === 'electric';
 
 		if (!hasWeatherBuff && !hasTerrainBuff && !(slot as any).boosterEnergyActive) {
-			pokemon.item = undefined;
+			setItem(slot, undefined, undefined, battle, messageLog); // Consume Booster Energy
 			(slot as any).boosterEnergyActive = true;
 			messageLog.push(`${pokemon.species} consumed its Booster Energy to activate ${pokemon.ability}!`);
 		}
@@ -2635,8 +2631,9 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const attackerAbility = toID(attacker.ability || '');
 
 		if (attackerAbility !== 'stickyhold') {
-			ctx.defender.item = attacker.item;
-			attacker.item = undefined;
+			// Use setItem to handle item transfer
+			setItem(ctx.defenderSlot, attacker.item, ctx.attackerSlot, ctx.battle, ctx.messageLog);
+			setItem(ctx.attackerSlot, undefined, undefined, ctx.battle, ctx.messageLog);
 			ctx.messageLog.push(`${ctx.defender.species} stole ${attacker.species}'s ${ctx.defender.item}!`);
 		}
 	}
@@ -2648,9 +2645,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 			'powerconstruct', 'disguise', 'rkssystem', 'comatose', 'zenmode'];
 
 		if (!unchangeableAbilities.includes(attackerAbility)) {
-			// We don't really change the ability permanently in this engine implementation yet,
-			// but we can simulate it by logging. For a full implementation we'd need a 'volatileAbility' field.
-			// For now, just log.
 			const oldAbility = attacker.ability;
 			attacker.ability = handler.changeAbility;
 			ctx.messageLog.push(`${attacker.species}'s ability changed to ${handler.changeAbility} from ${ctx.defender.species}'s ${defenderAbility}!`);
