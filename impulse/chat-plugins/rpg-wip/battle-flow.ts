@@ -686,6 +686,14 @@ export function executeMove(
 			if ((Math.random() * 100) > finalAccuracy) {
 				messageLog.push(`<span style="color: #dc3545;">${attackerSlot.pokemon.species}'s ${move.name} missed ${defenderSlot.pokemon.species}!</span>`);
 				moveHit = false;
+
+				if (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'blunderpolicy') {
+					messageLog.push(`${attackerSlot.pokemon.species}'s Blunder Policy was activated!`);
+					attackerSlot.pokemon.item = undefined; // Consume
+					activateUnburden(attackerSlot, messageLog);
+					applyStatChange(attackerSlot, 'spe', 2, battle, messageLog, attackerSlot);
+				}
+
 				if (['highjumpkick', 'jumpkick'].includes(move.id)) {
 					const crashDamage = Math.floor(attackerSlot.pokemon.maxHp / 2);
 					attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - crashDamage);
