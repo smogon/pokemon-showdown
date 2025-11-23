@@ -67,6 +67,7 @@ export interface BadgeInfo {
 	badgeName: string;
 	order: number;
 	description?: string;
+	setFlag?: any;
 }
 
 export const BADGES: BadgeInfo[] = [
@@ -74,6 +75,7 @@ export const BADGES: BadgeInfo[] = [
 		gymLeaderId: 'youngsterjoey',
 		badgeName: 'Rat Badge',
 		order: 1,
+		setFlag: 'rat_badge',
 		description: 'Awarded for defeating the Top Percentage Rattata.',
 	},
 ];
