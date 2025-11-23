@@ -1046,8 +1046,7 @@ export const commands: ChatCommands = {
 					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 					triggeredEvents.push(event);
 
-					// Removed: 'moralchoice', 'raidbattle'
-					const interactiveTypes = ['choice', 'quiz', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'];
+					const interactiveTypes = ['choice', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour'];
 					if (event.triggerOnce && !interactiveTypes.includes(event.type)) player.storyFlags.add(eventFlagId);
 					if (event.setFlag && !interactiveTypes.includes(event.type)) player.storyFlags.add(event.setFlag);
 				}
@@ -1065,7 +1064,7 @@ export const commands: ChatCommands = {
 						}
 						if (firstEvent.pokemon.shiny) newPokemon.shiny = true;
 						player.pc.set(`scripted_wild_${firstEvent.id}`, newPokemon);
-						result.message = firstEvent.dialogue || `A wild ${newPokemon.species} appeared!`;
+						result.message = `A wild ${newPokemon.species} appeared!`;
 					} else if (firstEvent.type === 'bossbattle') {
 						const r = ScriptedEvents.handleBossBattle(player, firstEvent);
 						result.message = r.message;
@@ -1080,7 +1079,7 @@ export const commands: ChatCommands = {
 						result.message = r.message;
 						if (r.opponent) firstEvent.nextOpponent = r.opponent;
 					} else {
-						result.message = firstEvent.dialogue || 'Event occurred.';
+						result.message = 'Event occurred.';
 					}
 				}
 
@@ -1117,7 +1116,6 @@ export const commands: ChatCommands = {
 			let result = { success: false, message: "Invalid choice." };
 
 			if (activeEvent.type === 'choice') result = ScriptedEvents.handleChoice(player, activeEvent, index);
-			else if (activeEvent.type === 'quiz') result = ScriptedEvents.handleQuiz(player, activeEvent, index);
 			else if (activeEvent.type === 'branching') result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
 
 			if (result.success) {
@@ -1137,10 +1135,7 @@ export const commands: ChatCommands = {
 			const event = location?.scriptedEvents?.find(e => e.id === eventId);
 
 			if (event && eventId) {
-				if (event.type === 'tournament') ScriptedEvents.advanceTournamentRound(player, eventId);
-				else if (event.type === 'gauntletbattle') ScriptedEvents.advanceGauntletEvent(player, eventId);
-				else player.storyFlags.add(`scripted_${eventId}`);
-
+				player.storyFlags.add(`scripted_${eventId}`);
 				activeScriptedEvents.delete(user.id);
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "Battle Won!")}`);
 			}
@@ -2024,14 +2019,11 @@ export const commands: ChatCommands = {
 				return this.parse(`/rpg starterchoice ${npcId}`);
 
 			case 'heal': result = NPCActions.handleHeal(player); break;
-			case 'fossilrevival': result = NPCActions.handleFossilRevival(player, action, toID(param1)); break;
 			case 'battlerequest':
 				const br = NPCActions.handleBattleRequest(player, action, npcId);
 				result = { success: br.success, message: br.message, canBattle: br.canBattle };
 				break;
 			case 'questchain': result = NPCActions.handleQuestChain(player, action, npcId); break;
-			case 'itemcraft': result = NPCActions.handleItemCraft(player, action, parseInt(param1)); break;
-			case 'berryplant': result = NPCActions.handleBerryPlant(player, action, npcId, toID(param1)); break;
 
 			default:
 				const handlerName = `handle${action.type.charAt(0).toUpperCase() + action.type.slice(1)}`;

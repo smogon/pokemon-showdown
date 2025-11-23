@@ -322,9 +322,8 @@ export interface AbilityContext {
 
 export interface NPCAction {
 	type: 'heal' | 'giveitem' | 'givepokemon' | 'takeitem' | 'exchangeitems' | 'choosestarter' |
-	'battlerequest' | 'fossilrevival' | 'itemcraft' | 'berryplant' | 'questchain' | 'delivery' |
-	'conditionaldialogue' | 'escort' | 'achievement' | 'battlegauntlet' | 'trainingbattle' |
-	'apricorncrafter' | 'rivalbattle' | 'gymrematch' | 'bikeshop' | 'fishing' | 'moverelearner';
+	'battlerequest' | 'questchain' | 'delivery' | 'conditionaldialogue' | 'escort' |
+	'rivalbattle' | 'moverelearner';
 
 	// Generic / Shared properties
 	onceOnly?: boolean;
@@ -341,33 +340,15 @@ export interface NPCAction {
 	battleCooldown?: number; // hours
 	questId?: string;
 	questStages?: any[];
-	recipes?: { inputs: { itemId: string, quantity: number }[], output: { itemId: string, quantity: number } }[];
-	fossils?: string[];
-	revivalCost?: number;
-	berryId?: string;
-	growthTime?: number; // hours
-	yieldQuantity?: number;
 	starterLevel?: number;
 	relearnerCost?: number;
-	fishingRodType?: string;
-	fishingRodCost?: number;
-	bikeType?: string;
-	bikeCost?: number;
-	apricornRecipes?: { apricorn: string, resultBall: string }[];
-	craftingCost?: number;
 	rivalTeam?: any[];
 	rivalDialogue?: any;
-	rematchAvailable?: boolean;
-	rematchTeam?: any[];
 	targetNpcId?: string;
 	deliveryItem?: { itemId: string, quantity: number };
-	availableHours?: number[];
 	defaultDialogue?: string;
 	dialogueConditions?: { dialogue: string, minBadges?: number, maxBadges?: number, requiredFlag?: string, preventIfFlag?: string }[];
 	escortDestination?: string;
-	achievements?: Record<string, { name: string, reward?: any, requiredFlag?: string }>;
-	gauntletTrainers?: string[];
-	maxAttempts?: number;
 }
 
 export interface NPCData {
@@ -401,21 +382,10 @@ export interface ScriptedEvent {
 	exclusivePaths?: boolean;
 	bossTrainerId?: string;
 	bossPhases?: number;
-	tournamentOpponents?: string[];
-	gauntletOpponents?: string[];
 	weatherDuration?: number;
 	newWeather?: string;
 	itemBallContents?: { itemId: string, quantity: number };
-	hiddenItemLocation?: string;
 	pokemon?: { species: string, level?: number, moves?: string[], shiny?: boolean };
-	swarmSpecies?: string;
-	swarmDuration?: number;
-	roamingPokemon?: any;
-	roamingLocations?: string[];
-	fishingEncounters?: any[];
-	surfingEncounters?: any[];
-	divingEncounters?: any[];
-	divingDepth?: number;
 	warpDestination?: string;
 	warpType?: string;
 	gymLeaderId?: string;
@@ -429,8 +399,6 @@ export interface ScriptedEvent {
 	isNightmare?: boolean;
 	loreTitle?: string;
 	loreText?: string;
-	collectibleId?: string;
-	collectibleCategory?: string;
 	epilogueText?: string;
 	epilogueCharacters?: string[];
 	chapterNumber?: number;
