@@ -302,7 +302,8 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		html += `<hr /><strong>Buildings:</strong><br><p class="rpg-text-center">`;
 		for (const building of location.buildings) {
 			if (building.accessible === false) continue;
-			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) continue;
+
+			const isLocked = building.requiredFlag && !player.storyFlags.has(building.requiredFlag);
 
 			let icon = '🏠';
 			if (building.type === 'pokecenter') icon = '🏥';
@@ -312,7 +313,11 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			else if (building.type === 'department') icon = '🏬';
 			else if (building.type === 'gameCorner') icon = '🎰';
 
-			html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
+			if (isLocked) {
+				html += `<button class="button disabled" style="${btnStyle}" disabled>🔒 ${building.name}</button>`;
+			} else {
+				html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
+			}
 		}
 		html += `</p>`;
 	}
