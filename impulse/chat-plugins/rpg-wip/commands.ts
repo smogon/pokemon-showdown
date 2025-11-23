@@ -1202,6 +1202,13 @@ export const commands: ChatCommands = {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (!zone) return this.errorReply("This is not a valid area to explore.");
 
+			// Security check: Ensure the player is actually in the location that contains this zone
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+			if (!currentLocation || !currentLocation.encounterZones?.includes(zoneId)) {
+				return this.errorReply("You cannot find this wild Pokémon zone in your current location.");
+			}
+
 			const zoneBattleType = zone.battleType || 'single';
 			let finalBattleType: BattleState['battleType'] = 'wild';
 			const battleMessages: string[] = [];
@@ -1935,6 +1942,22 @@ export const commands: ChatCommands = {
 			if (!npc) return this.errorReply("That NPC doesn't exist.");
 			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) return this.errorReply("Cannot talk to this NPC yet.");
 
+			// Security check: Ensure player is in the same location as the NPC
+			const playerLocId = toID(player.location);
+			const npcLocId = toID(npc.location);
+			const currentLocation = LOCATIONS[playerLocId];
+
+			let isNearby = false;
+			if (npcLocId === playerLocId) {
+				isNearby = true;
+			} else if (currentLocation?.buildings) {
+				// Check if NPC is in a building within the current location
+				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
+				if (building) isNearby = true;
+			}
+
+			if (!isNearby) return this.errorReply("You are not near this NPC.");
+
 			let npcToRender = npc;
 			if (npc.action?.onceOnly && player.completedNPCActions.has(npcId)) {
 				npcToRender = { ...npc, action: null, dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(Request completed.)</em>' };
@@ -1953,6 +1976,21 @@ export const commands: ChatCommands = {
 
 			const npc = NPC_DATABASE[npcId];
 			if (!npc?.action) return this.errorReply("Invalid NPC action.");
+
+			// Security check: Ensure player is in the same location as the NPC
+			const playerLocId = toID(player.location);
+			const npcLocId = toID(npc.location);
+			const currentLocation = LOCATIONS[playerLocId];
+
+			let isNearby = false;
+			if (npcLocId === playerLocId) {
+				isNearby = true;
+			} else if (currentLocation?.buildings) {
+				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
+				if (building) isNearby = true;
+			}
+
+			if (!isNearby) return this.errorReply("You are not near this NPC.");
 
 			const action = npc.action;
 			if (action.onceOnly && player.completedNPCActions.has(npcId)) return this.errorReply("Already completed.");
