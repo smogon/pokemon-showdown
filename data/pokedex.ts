@@ -23986,7 +23986,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	megumuiizunamaru: {
 		num: -2118,
-		name: "Megumu Iinzumaru",
+		name: "Megumu Iizunamaru",
 		types: ["Flying", "Psychic"],
 		gender: "F",
 		baseStats: {hp: 110, atk: 90, def: 55, spa: 100, spd: 85, spe: 110},
