@@ -312,6 +312,29 @@ export function handleDamagingMovePreamble(
 		}
 	}
 
+	// Upper Hand Logic
+	if (move.id === 'upperhand') {
+		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
+		const defenderIndex = isPlayerDefender ? battle.playerSlots.indexOf(defenderSlot) : battle.opponentSlots.indexOf(defenderSlot) + 2;
+		const action = battle.pendingActions[defenderIndex];
+
+		// Fails if target is not using a damaging move or priority is not > 0
+		if (!action || action.actionType !== 'move') {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+		const defMove = getMove(action.moveId!);
+		// Priority check: must be greater than 0
+		// Note: Prankster/Gale Wings increases priority, but Upper Hand checks the move's inherent or modified priority.
+		// RPGAbilities.applyPriorityModifier helps check modified priority.
+		const defPriority = defMove.priority + RPGAbilities.applyPriorityModifier(defMove, defender);
+		
+		if (defPriority <= 0 || defMove.category === 'Status') {
+			messageLog.push(`But it failed!`);
+			return true;
+		}
+	}
+
 	// Fake Out and First Impression Logic
 	if (move.id === 'fakeout' || move.id === 'firstimpression') {
 		if (attackerSlot.activeTurns !== 1) {
@@ -433,19 +456,6 @@ export function handleDamagingMovePreamble(
 		attackerSlot.stockpileCount = 0;
 		attackerSlot.statStages.def = Math.max(-6, attackerSlot.statStages.def - attackerSlot.stockpileCount);
 		attackerSlot.statStages.spd = Math.max(-6, attackerSlot.statStages.spd - attackerSlot.stockpileCount);
-
-		// Calculate damage manually since we are bypassing standard flow
-		// We need to access getDamageDefense/Offense which are in battle-core...
-		// Since we can't import circular, we use a simplified calc or assume standard flow if we hadn't cleared stock.
-		// BUT, getting power 0 from cleared stock breaks standard flow.
-		// Strategy: Return FALSE here, but modify the move object passed by reference? No, move is copy.
-		// Strategy: We handled power in `getDamageBasePower`. We just need to clear the stock *after* damage?
-		// No, we must clear it.
-		// Let's use a simplified fixed damage for now to ensure functionality, or rely on the fact that we flagged it.
-		// Actually, we can just return FALSE. `getDamageBasePower` reads the count.
-		// We need to clear the count *after* the move hits.
-		// Since we don't have a "post-move" hook easily available for specific moves in this architecture without modifying `executeMove`,
-		// we will implement the damage dealing here.
 
 		// Simplified Damage for Spit Up to avoid circular imports of `calculateDamage`
 		const level = attacker.level;
