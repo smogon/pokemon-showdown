@@ -153,6 +153,12 @@ export interface ActivePokemonSlot {
 	commanderBoost?: boolean;
 	hasSwitchedOut?: boolean;
 	toxicCounter?: number;
+
+	// Tier 1 move additions
+	isAttracted?: boolean;
+	destinyBondActive?: boolean;
+	grudgeActive?: boolean;
+	sleepTalkMove?: string; // For Sleep Talk implementation
 }
 
 export interface PlayerData {

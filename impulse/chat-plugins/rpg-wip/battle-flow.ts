@@ -506,6 +506,14 @@ export function handlePreTurnChecks(attackerSlot: ActivePokemonSlot, battle: Bat
 		}
 	}
 
+	// Attract/Infatuation check
+	if (attackerSlot.isAttracted) {
+		if (Math.random() < 0.5) {
+			messageLog.push(`${attacker.species} is immobilized by love!`);
+			return false;
+		}
+	}
+
 	if (attackerSlot.status === 'par') {
 		if (toID(attacker.ability || '') !== 'quickfeet' && Math.random() < 0.25) {
 			messageLog.push(`${attacker.species} is fully paralyzed!`);
@@ -859,6 +867,17 @@ export function handleSwitchAction(
 	}
 	if (outgoingAbility === 'zerotohero' && outgoingPokemon.species.includes('Palafin')) (outgoingPokemon as any).hasSwitchedOut = true;
 
+	// Clear attraction on all Pokemon that were attracted to the switching out Pokemon
+	const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
+	for (const slot of allSlots) {
+		if (slot && slot.isAttracted) {
+			// Note: Attraction is cleared when the target (the Pokemon the attracted one loves) switches
+			// In a full implementation, we'd track WHO the Pokemon is attracted to
+			// For simplicity, we'll clear it when any Pokemon switches
+			slot.isAttracted = false;
+		}
+	}
+
 	saveBattleStatus(battle);
 	const isPlayerSwitch = attackerSlotIndex <= 1;
 	const pokemonToSwitchInId = action.switchToPokemonId!;
@@ -1069,6 +1088,30 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
+			
+			// Destiny Bond - Faint the attacker
+			if (slot.destinyBondActive && slot.lastDamageTaken) {
+				const opponentSlots = getActiveSlots(battle.opponentSlots);
+				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0) {
+					attackerSlot.pokemon.hp = 0;
+					messageLog.push(`${slot.pokemon.species} took its attacker down with it!`);
+				}
+			}
+
+			// Grudge - Deplete PP of move that KO'd
+			if (slot.grudgeActive && slot.lastMoveThatHitMe) {
+				const opponentSlots = getActiveSlots(battle.opponentSlots);
+				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0) {
+					const usedMove = attackerSlot.pokemon.moves.find(m => m.id === slot.lastMoveThatHitMe!.id);
+					if (usedMove) {
+						usedMove.pp = 0;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${slot.lastMoveThatHitMe.name} lost all its PP due to Grudge!`);
+					}
+				}
+			}
+
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
 				const opponentSlots = getActiveSlots(battle.opponentSlots);
 				const attackerSlot = opponentSlots.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
@@ -1113,6 +1156,28 @@ export function handleOpponentFaint(
 
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
+			
+			// Destiny Bond - Faint the attacker
+			if (slot.destinyBondActive && slot.lastDamageTaken) {
+				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0) {
+					attackerSlot.pokemon.hp = 0;
+					messageLog.push(`${slot.pokemon.species} took its attacker down with it!`);
+				}
+			}
+
+			// Grudge - Deplete PP of move that KO'd
+			if (slot.grudgeActive && slot.lastMoveThatHitMe) {
+				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
+				if (attackerSlot && attackerSlot.pokemon.hp > 0) {
+					const usedMove = attackerSlot.pokemon.moves.find(m => m.id === slot.lastMoveThatHitMe!.id);
+					if (usedMove) {
+						usedMove.pp = 0;
+						messageLog.push(`${attackerSlot.pokemon.species}'s ${slot.lastMoveThatHitMe.name} lost all its PP due to Grudge!`);
+					}
+				}
+			}
+
 			if (faintedAbility === 'aftermath' && lastMove?.flags.contact) {
 				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);
 				if (attackerSlot && attackerSlot.pokemon.hp > 0 && RPGAbilities.takesIndirectDamage(attackerSlot.pokemon)) {

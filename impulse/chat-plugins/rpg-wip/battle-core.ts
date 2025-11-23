@@ -1230,6 +1230,11 @@ export function applyDamageAndEnduranceEffects(
 
 	const isFullHP = defender.hp === defender.maxHp;
 
+	// False Swipe - Always leaves at least 1 HP
+	if (move.id === 'falseswipe' && damageDealt >= defender.hp) {
+		damageDealt = defender.hp - 1;
+	}
+
 	if (damageDealt >= defender.hp) {
 		if (battle.magicRoomTurns === 0 && defender.item === 'focussash' && isFullHP) {
 			damageDealt = defender.hp - 1;
