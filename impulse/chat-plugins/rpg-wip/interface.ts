@@ -50,31 +50,7 @@ export interface Move {
 	category: 'Physical' | 'Special' | 'Status';
 	basePower: number;
 	flags: Record<string, boolean>;
-	priority: number;
-	accuracy: number | true;
-	target: string;
-	
-	// Expanded fields for Phase 1-4 mechanics
-	ohko?: boolean | string;
-	multiaccuracy?: boolean;
-	breaksProtect?: boolean;
-	ignoreEvasion?: boolean;
-	multihit?: number | number[];
-	selfSwitch?: string | boolean;
-	drain?: number[];
-	recoil?: number[];
 	secondary?: any;
-	secondaries?: any[];
-	self?: any;
-	sideCondition?: string;
-	weather?: string;
-	terrain?: string;
-	pseudoWeather?: string;
-	boosts?: Partial<Record<keyof Stats | 'accuracy' | 'evasion', number>>;
-	status?: Status;
-	volatileStatus?: string;
-	ignoreImmunity?: boolean;
-	
 	[key: string]: any;
 }
 
@@ -352,17 +328,3 @@ export interface ScriptedEvent {
 	type: string;
 	[key: string]: any;
 }
-
-export type AbilityImmunityHandler = (ctx: AbilityContext) => { immune: boolean, message?: string } | null;
-export type AbilityPowerModifierHandler = (ctx: AbilityContext, basePower: number) => number;
-export type AbilityDamageModifierHandler = (ctx: AbilityContext, damage: number) => number;
-export type AbilityStatModifierHandler = (pokemon: RPGPokemon, stat: string, value: number, slot?: ActivePokemonSlot, battle?: BattleState) => number;
-export type AbilityTypeModifierHandler = (ctx: AbilityContext, moveType: string) => string;
-
-export type AbilityOnSwitchInHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityOnDamageHandler = (damage: number, target: ActivePokemonSlot, source: ActivePokemonSlot, move: Move, battle: BattleState) => number;
-export type AbilityOnMoveHandler = (attacker: ActivePokemonSlot, defender: ActivePokemonSlot, move: Move, battle: BattleState) => void;
-export type AbilityOnKOHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityEndOfTurnHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) => void;
-export type AbilityStatDropResponseHandler = (slot: ActivePokemonSlot, battle: BattleState, messageLog: string[], sourceSlot?: ActivePokemonSlot) => void;
-export type AbilityStatChangeModifierHandler = (value: number, ability: string) => number;

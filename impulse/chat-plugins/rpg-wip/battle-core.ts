@@ -133,9 +133,6 @@ export function checkAccuracy(
 		return true;
 	}
 
-	// OHKO Moves have their own unique accuracy formula check later in handleDamagingMovePreamble
-	if (move.ohko) return true;
-
 	// Standard Accuracy Check
 	if (move.accuracy === true) return true;
 
@@ -255,14 +252,6 @@ export function handleDamagingMove(
 	}
 
 	for (let i = 0; i < totalHits; i++) {
-		// Multi-Accuracy Check (Population Bomb, Triple Axel, etc.)
-		// If a hit fails the accuracy check, the move ends immediately.
-		// The first hit is checked before calling handleDamagingMove, so we check i > 0
-		if (move.multiaccuracy && i > 0) {
-			const hitSuccess = checkAccuracy(attackerSlot, defenderSlot, move, battle, messageLog);
-			if (!hitSuccess) break;
-		}
-
 		let parentalBondSpreadMultiplier = spreadMultiplier;
 		if (hasParentalBond && i === 1) {
 			parentalBondSpreadMultiplier *= 0.25;
@@ -476,8 +465,7 @@ export function handleDamagingMove(
 			}
 		}
 
-		// Rapid Spin / Mortal Spin Logic
-		if ((move.id === 'rapidspin' || move.id === 'mortalspin') && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
+		if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
 			const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
 			const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
 			if (userHazards.length > 0) {
@@ -488,14 +476,7 @@ export function handleDamagingMove(
 				attackerSlot.isSeeded = false;
 				messageLog.push(`${attacker.species} shook off the Leech Seed!`);
 			}
-			if (attackerSlot.partiallyTrapped) {
-				attackerSlot.partiallyTrapped = null;
-				messageLog.push(`${attacker.species} freed itself from the trap!`);
-			}
-
-			if (move.id === 'rapidspin') {
-				applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
-			}
+			applyStatChange(attackerSlot, 'spe', 1, battle, messageLog, attackerSlot);
 		}
 
 		if (move.id === 'clearsmog' && defenderSlot.pokemon.hp > 0 && moveWasSuccessful) {
@@ -2127,241 +2108,3 @@ export function saveBattleStatus(battle: BattleState) {
 		}
 	}
 }
-
-export function executeMove(
-	attackerSlot: ActivePokemonSlot,
-	targetSlots: ActivePokemonSlot[],
-	move: Move,
-	moveObject: { id: string, pp: number },
-	battle: BattleState,
-	messageLog: string[],
-	isReflected = false
-): void {
-	attackerSlot.lastMoveUsed = move.id;
-	if (!['protect', 'detect'].includes(move.id)) attackerSlot.protectSuccessCounter = 0;
-
-	const isSpread = ['allAdjacentFoes', 'allAdjacent', 'scripted'].includes(move.target);
-	const validTargetCount = targetSlots.filter(s => s.pokemon.hp > 0).length;
-	const spreadMultiplier = (isSpread && validTargetCount > 1) ? 0.75 : 1.0;
-	let moveHitAnyTarget = false;
-
-	const isFieldEffectMove = move.category === 'Status' && (
-		move.weather || move.terrain || move.pseudoWeather ||
-		['trickroom', 'magicroom', 'wonderroom', 'gravity', 'mudsport', 'watersport', 'haze', 'perishsong', 'courtchange'].includes(move.id)
-	);
-
-	if (isFieldEffectMove) {
-		handleStatusMove(attackerSlot, null, move, battle, messageLog);
-		return;
-	}
-
-	for (const defenderSlot of targetSlots) {
-		if (attackerSlot.pokemon.hp <= 0) break;
-		if (defenderSlot.pokemon.hp <= 0) continue;
-
-		// Step 5: Reflection Check (Magic Bounce / Magic Coat)
-		if (!isReflected && move.flags.reflectable && !move.flags.futuremove) {
-			const defenderAbility = RPGAbilities.getActiveAbility(defenderSlot.pokemon, attackerSlot.pokemon);
-			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
-			const hasMoldBreaker = ['moldbreaker', 'teravolt', 'turboblaze'].includes(attackerAbility);
-
-			if (defenderAbility === 'magicbounce' && !hasMoldBreaker) {
-				messageLog.push(`${defenderSlot.pokemon.species} bounced the ${move.name} back with Magic Bounce!`);
-				// Recursive call with swapped roles
-				executeMove(defenderSlot, [attackerSlot], move, { id: move.id, pp: 0 }, battle, messageLog, true);
-				continue;
-			}
-		}
-
-		const truePriority = move.priority + RPGAbilities.applyPriorityModifier(move, attackerSlot.pokemon);
-
-		if (battle.terrain?.type === 'psychic' && truePriority > 0) {
-			const isDefenderGrounded = RPGAbilities.isGrounded(defenderSlot.pokemon, battle);
-			const isAttackerPlayer = battle.playerSlots.includes(attackerSlot);
-			const isDefenderPlayerCheck = battle.playerSlots.includes(defenderSlot);
-			if (isDefenderGrounded && isAttackerPlayer !== isDefenderPlayerCheck) {
-				messageLog.push(`${defenderSlot.pokemon.species} is protected by the Psychic Terrain!`);
-				continue;
-			}
-		}
-
-		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
-		if (isSpread) {
-			if ((isPlayerDefender && battle.playerWideGuard) || (!isPlayerDefender && battle.opponentWideGuard)) {
-				messageLog.push(`${defenderSlot.pokemon.species} was protected by Wide Guard!`);
-				continue;
-			}
-		}
-
-		if (move.id !== 'struggle') {
-			const attackerAbility = toID(attackerSlot.pokemon.ability || '');
-			const bypassesProtect = attackerAbility === 'unseenfist' && move.flags.contact;
-			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect && !bypassesProtect) {
-				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
-
-				// Protection Punishments with Contact Check
-				if (move.flags.contact) {
-					const attackerItem = attackerSlot.pokemon.item;
-					const padsOrLongReach = attackerAbility === 'longreach' || (battle.magicRoomTurns === 0 && (attackerItem === 'protectivepads' || attackerItem === 'punchingglove'));
-
-					if (!padsOrLongReach) {
-						const lastMove = defenderSlot.lastMoveUsed;
-						if (lastMove === 'kingsshield') {
-							if (attackerSlot.statStages.atk > -6) {
-								applyStatChange(attackerSlot, 'atk', -1, battle, messageLog, defenderSlot);
-								messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell due to King's Shield!`);
-							}
-						} else if (lastMove === 'spikyshield') {
-							const damage = Math.floor(attackerSlot.pokemon.maxHp / 8);
-							attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
-							messageLog.push(`${attackerSlot.pokemon.species} was hurt by Spiky Shield!`);
-							handleHPDropEffects(attackerSlot, battle, messageLog);
-						} else if (lastMove === 'banefulbunker') {
-							if (RPGAbilities.canInflictStatus(attackerSlot, 'psn', battle, defenderSlot, undefined, true).success) {
-								attackerSlot.status = 'psn';
-								messageLog.push(`${attackerSlot.pokemon.species} was poisoned by Baneful Bunker!`);
-							}
-						} else if (lastMove === 'silktrap') {
-							if (attackerSlot.statStages.spe > -6) {
-								applyStatChange(attackerSlot, 'spe', -1, battle, messageLog, defenderSlot);
-								messageLog.push(`${attackerSlot.pokemon.species}'s Speed fell due to Silk Trap!`);
-							}
-						} else if (lastMove === 'burningbulwark') {
-							if (RPGAbilities.canInflictStatus(attackerSlot, 'brn', battle, defenderSlot, undefined, true).success) {
-								attackerSlot.status = 'brn';
-								messageLog.push(`${attackerSlot.pokemon.species} was burned by Burning Bulwark!`);
-							}
-						} else if (lastMove === 'obstruct') {
-							if (attackerSlot.statStages.def > -6) {
-								applyStatChange(attackerSlot, 'def', -2, battle, messageLog, defenderSlot);
-								messageLog.push(`${attackerSlot.pokemon.species}'s Defense harshly fell due to Obstruct!`);
-							}
-						}
-					}
-				}
-				continue;
-			}
-		}
-
-		// Step 2: Generalized "Move Hit" Pipeline Usage
-		const moveHit = checkAccuracy(attackerSlot, defenderSlot, move, battle, messageLog);
-		if (!moveHit) continue;
-
-		moveHitAnyTarget = true;
-
-		if (move.id === 'struggle') handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, 1.0);
-		else if (move.category === 'Status') handleStatusMove(attackerSlot, defenderSlot, move, battle, messageLog);
-		else handleDamagingMove(attackerSlot, defenderSlot, move, battle, messageLog, spreadMultiplier);
-	}
-
-	if (attackerSlot.pokemon.hp > 0) {
-		if (move.self?.volatileStatus === 'lockedmove' && attackerSlot.lockedMoveCounter === 0) {
-			attackerSlot.lockedMoveCounter = Math.floor(Math.random() * 2) + 2;
-			attackerSlot.lockedMove = move.id;
-		}
-		if (move.self?.volatileStatus === 'mustrecharge' && moveHitAnyTarget) attackerSlot.mustRecharge = true;
-		if (move.self?.volatileStatus === 'uproar' && attackerSlot.uproarTurns === 0) {
-			attackerSlot.uproarTurns = 3;
-			attackerSlot.lockedMove = move.id;
-			[...battle.playerSlots, ...battle.opponentSlots].forEach(s => {
-				if (s && s.status === 'slp') {
-					s.status = null;
-					s.sleepCounter = 0;
-					messageLog.push(`${s.pokemon.species} woke up due to the uproar!`);
-				}
-			});
-		}
-
-		RPGAbilities.checkFormChangeAbilities(attackerSlot, battle, messageLog);
-		if (toID(attackerSlot.pokemon.ability || '') === 'gulpmissile' && (move.id === 'surf' || move.id === 'dive') && moveHitAnyTarget) {
-			const hpPercent = attackerSlot.pokemon.hp / attackerSlot.pokemon.maxHp;
-			if (hpPercent > 0.5 && !attackerSlot.pokemon.species.includes('Gulping')) {
-				attackerSlot.pokemon.species = 'Cramorant-Gulping';
-				(attackerSlot as any).gulpMissileForm = 'gulping';
-				messageLog.push(`${attackerSlot.pokemon.nickname || 'Cramorant'} caught an Arrokuda!`);
-			} else if (hpPercent <= 0.5 && !attackerSlot.pokemon.species.includes('Gorging')) {
-				attackerSlot.pokemon.species = 'Cramorant-Gorging';
-				(attackerSlot as any).gulpMissileForm = 'gorging';
-				messageLog.push(`${attackerSlot.pokemon.nickname || 'Cramorant'} caught a Pikachu!`);
-			}
-		}
-	}
-
-	targetSlots.forEach(s => { if (s && s.pokemon.hp > 0) RPGAbilities.checkFormChangeAbilities(s, battle, messageLog); });
-	if (attackerSlot.pokemon.hp > 0 && toID(attackerSlot.pokemon.ability || '') === 'truant') attackerSlot.isLoafing = true;
-}
-
-export function handleChargingMove(
-	attackerSlot: ActivePokemonSlot,
-	move: Move,
-	moveObject: { id: string, pp: number },
-	battle: BattleState,
-	messageLog: string[],
-	ppDeduction: number
-): boolean {
-	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
-		const attacker = attackerSlot.pokemon;
-		messageLog.push(`${attacker.species} consumed its Power Herb!`);
-		setItem(attackerSlot, undefined, undefined, battle, messageLog);
-		return false;
-	}
-
-	if (move.flags.charge && !attackerSlot.chargingMove) {
-		attackerSlot.chargingMove = move.id;
-		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
-
-		if (move.id === 'fly') {
-			if (battle.gravityTurns > 0) {
-				messageLog.push(`But it failed! (Gravity)`);
-				attackerSlot.chargingMove = undefined;
-				return false;
-			}
-			chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
-		} else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
-		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
-		else if (move.id === 'bounce') {
-			if (battle.gravityTurns > 0) {
-				messageLog.push(`But it failed! (Gravity)`);
-				attackerSlot.chargingMove = undefined;
-				return false;
-			}
-			chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
-		} else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
-		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
-			if (RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
-				attackerSlot.chargingMove = undefined;
-				chargeMessage = '';
-			} else {
-				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
-			}
-		} else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
-		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
-
-		if (chargeMessage) messageLog.push(chargeMessage);
-
-		if (attackerSlot.chargingMove) {
-			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
-				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
-			}
-			return true;
-		}
-	} else if (attackerSlot.chargingMove === move.id) {
-		attackerSlot.chargingMove = undefined;
-	}
-
-	return false;
-}
-
-export const RPGMoves = {
-	handleDamagingMovePreamble,
-	handleSpecificStatusMove,
-	handleGenericBoostMove,
-	handleGenericStatusInflictMove,
-	handleGenericVolatileMove,
-	handleGenericHealMove,
-	handleGenericFieldMove,
-	handleGenericSideMove,
-	handleChargingMove,
-};
-
-export default RPGMoves;
