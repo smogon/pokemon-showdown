@@ -127,7 +127,7 @@ export interface ActivePokemonSlot {
 	telekinesisCounter?: number;
 	isSmackedDown?: boolean;
 	lastMoveUsed?: string;
-	consecutiveMoveCount?: number; // Added for Metronome logic
+	consecutiveMoveCount?: number;
 	tormentActive?: boolean;
 	embargoTurns?: number;
 	healBlockTurns?: number;
@@ -158,7 +158,7 @@ export interface ActivePokemonSlot {
 	isAttracted?: boolean;
 	destinyBondActive?: boolean;
 	grudgeActive?: boolean;
-	sleepTalkMove?: string; // For Sleep Talk implementation
+	sleepTalkMove?: string;
 }
 
 export interface PlayerData {
@@ -185,6 +185,7 @@ export interface PlayerData {
 	completedNPCActions: Set<string>;
 	battleTowerFloor: number;
 	battleTowerHighestFloor?: number;
+	pokedex?: { seen: Set<string>, caught: Set<string> };
 }
 
 export interface BattleState {
@@ -223,8 +224,8 @@ export interface BattleState {
 	opponentAuroraVeilTurns: number;
 	playerMistTurns: number;
 	opponentMistTurns: number;
-	playerTailwindTurns: number; // Added Step 1
-	opponentTailwindTurns: number; // Added Step 1
+	playerTailwindTurns: number;
+	opponentTailwindTurns: number;
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;
@@ -238,6 +239,7 @@ export interface BattleState {
 	playerTerastallizeUsed: boolean;
 	opponentTerastallizeUsed: boolean;
 
+	// Simplified battle types
 	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double' | 'battletower';
 	opponentName: string;
 	opponentParty: RPGPokemon[];
@@ -318,13 +320,63 @@ export interface AbilityContext {
 	effectiveness?: number;
 }
 
+export interface NPCAction {
+	type: 'heal' | 'giveitem' | 'givepokemon' | 'takeitem' | 'exchangeitems' | 'choosestarter' |
+	'battlerequest' | 'fossilrevival' | 'itemcraft' | 'berryplant' | 'questchain' | 'delivery' |
+	'conditionaldialogue' | 'escort' | 'achievement' | 'battlegauntlet' | 'trainingbattle' |
+	'apricorncrafter' | 'rivalbattle' | 'gymrematch' | 'bikeshop' | 'fishing' | 'moverelearner';
+
+	// Generic / Shared properties
+	onceOnly?: boolean;
+	requiredFlag?: string;
+	itemId?: string;
+	quantity?: number;
+	cost?: number;
+
+	// Specific properties
+	pokemon?: { species: string, level: number };
+	requiredItem?: string;
+	requiredQuantity?: number;
+	trainerId?: string;
+	battleCooldown?: number; // hours
+	questId?: string;
+	questStages?: any[];
+	recipes?: { inputs: { itemId: string, quantity: number }[], output: { itemId: string, quantity: number } }[];
+	fossils?: string[];
+	revivalCost?: number;
+	berryId?: string;
+	growthTime?: number; // hours
+	yieldQuantity?: number;
+	starterLevel?: number;
+	relearnerCost?: number;
+	fishingRodType?: string;
+	fishingRodCost?: number;
+	bikeType?: string;
+	bikeCost?: number;
+	apricornRecipes?: { apricorn: string, resultBall: string }[];
+	craftingCost?: number;
+	rivalTeam?: any[];
+	rivalDialogue?: any;
+	rematchAvailable?: boolean;
+	rematchTeam?: any[];
+	targetNpcId?: string;
+	deliveryItem?: { itemId: string, quantity: number };
+	availableHours?: number[];
+	defaultDialogue?: string;
+	dialogueConditions?: { dialogue: string, minBadges?: number, maxBadges?: number, requiredFlag?: string, preventIfFlag?: string }[];
+	escortDestination?: string;
+	achievements?: Record<string, { name: string, reward?: any, requiredFlag?: string }>;
+	gauntletTrainers?: string[];
+	maxAttempts?: number;
+}
+
 export interface NPCData {
 	id: string;
 	name: string;
 	location: string;
 	dialogue: string;
 	flags?: string[];
-	action?: any;
+	action?: NPCAction;
 	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' | 'elitefoura' | 'champion' | 'rival';
 }
 
@@ -332,5 +384,56 @@ export interface ScriptedEvent {
 	id: string;
 	name: string;
 	type: string;
-	[key: string]: any;
+	triggerOnce?: boolean;
+	requiredFlag?: string;
+	setFlag?: string;
+	requiredBadgeCount?: number;
+	maxBadgeCount?: number;
+	preventIfFlag?: string;
+
+	// Event specific data
+	cutsceneScript?: string[];
+	choices?: { text: string, resultFlag?: string, resultDialogue?: string }[];
+	question?: string;
+	answers?: string[];
+	correctAnswer?: number;
+	pathOptions?: { name: string, pathFlag: string, description?: string }[];
+	exclusivePaths?: boolean;
+	bossTrainerId?: string;
+	bossPhases?: number;
+	tournamentOpponents?: string[];
+	gauntletOpponents?: string[];
+	weatherDuration?: number;
+	newWeather?: string;
+	itemBallContents?: { itemId: string, quantity: number };
+	hiddenItemLocation?: string;
+	pokemon?: { species: string, level?: number, moves?: string[], shiny?: boolean };
+	swarmSpecies?: string;
+	swarmDuration?: number;
+	roamingPokemon?: any;
+	roamingLocations?: string[];
+	fishingEncounters?: any[];
+	surfingEncounters?: any[];
+	divingEncounters?: any[];
+	divingDepth?: number;
+	warpDestination?: string;
+	warpType?: string;
+	gymLeaderId?: string;
+	gymTrainers?: string[];
+	eliteFourOrder?: string[];
+	championId?: string;
+	hallOfFameEntry?: boolean;
+	flashbackText?: string;
+	flashbackCharacters?: string[];
+	dreamText?: string;
+	isNightmare?: boolean;
+	loreTitle?: string;
+	loreText?: string;
+	collectibleId?: string;
+	collectibleCategory?: string;
+	epilogueText?: string;
+	epilogueCharacters?: string[];
+	chapterNumber?: number;
+	chapterTitle?: string;
+	nextOpponent?: string; // Runtime property
 }

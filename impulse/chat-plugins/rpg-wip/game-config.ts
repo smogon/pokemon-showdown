@@ -73,13 +73,3 @@ export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number
 	'jawfossil': { species: 'tyrunt', level: 20 },
 	'sailfossil': { species: 'amaura', level: 20 },
 };
-
-// ============================================================================
-// FORTUNE TELLER MESSAGES
-// ============================================================================
-
-export const FORTUNE_TELLER_MESSAGES: Record<string, string> = {
-	'luck': 'Your luck will shine today! Shiny encounter rate increased!',
-	'battle': 'Victory awaits you! Battle rewards increased!',
-	'catch': 'The Pokemon will come to you! Catch rate increased!',
-};

@@ -343,7 +343,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			if (canAccess) {
 				html += `<button name="send" value="/rpg travel ${toID(connection.id)}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
 			} else {
-				html += `<button class="button disabled" disabled style="${btnStyle}">🔒 ${connection.name}</button>`;
+				html += `<button class="button disabled" style="${btnStyle}" disabled>🔒 ${connection.name}</button>`;
 			}
 		}
 		html += `</p>`;
@@ -2183,27 +2183,19 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${ans}</button> `;
 		});
 		html += `</div>`;
-	} else if (event.type === 'moralchoice' && event.moralChoices) {
-		html += `<div class="rpg-grid-2col">`;
-		event.moralChoices.forEach((choice: any, idx: number) => {
-			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${choice.text}</button> `;
-		});
-		html += `</div>`;
 	} else if (event.type === 'branching' && event.pathOptions) {
 		html += `<div class="rpg-grid-2col">`;
 		event.pathOptions.forEach((path: any, idx: number) => {
 			html += `<button name="send" value="/rpg eventchoice ${idx}" class="button">${path.name}</button> `;
 		});
 		html += `</div>`;
-	} else if (['wildbattle', 'bossbattle', 'raidbattle'].includes(event.type)) {
+	} else if (['wildbattle', 'bossbattle'].includes(event.type)) {
 		let cmd = `/rpg scriptedbattle ${toID(event.id)}`;
 		let btnText = "⚔️ Battle!";
 
 		if (event.type === 'bossbattle' && event.bossTrainerId) {
 			cmd = `/rpg challenge ${toID(event.bossTrainerId)} ${toID(event.id)}`;
 			btnText = "⚔️ Challenge Boss";
-		} else if (event.type === 'raidbattle') {
-			btnText = "⚔️ Start Raid";
 		}
 
 		html += `<p class="rpg-text-center">`;

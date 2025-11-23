@@ -8,6 +8,7 @@ import { GameConfig } from './game-config';
 // ITEM CONSTANTS & CONFIGURATION
 // ==========================================
 
+// Kept intact for Battle Tower enemy generation
 export const VIABLE_HELD_ITEMS: string[] = [
 	'leftovers', 'sitrusberry', 'blacksludge',
 	'shellbell', 'lifeorb', 'choiceband', 'choicespecs',
@@ -141,11 +142,8 @@ export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity
 	'luxuryball': { id: 'luxuryball', name: 'Luxury Ball', category: 'pokeball', description: 'A Ball that makes caught Pokémon grow friendlier faster.', price: 1000 },
 	'premierball': { id: 'premierball', name: 'Premier Ball', category: 'pokeball', description: 'A commemorative Ball with the same performance as a Poké Ball.', price: 200 },
 	'dreamball': { id: 'dreamball', name: 'Dream Ball', category: 'pokeball', description: 'A Ball that works well on sleeping Pokémon.', price: 1000 },
-	'safariball': { id: 'safariball', name: 'Safari Ball', category: 'pokeball', description: 'A special Ball used in Safari Zones.', price: 0 },
-	'parkball': { id: 'parkball', name: 'Park Ball', category: 'pokeball', description: 'A special Ball for catching Pokémon in special areas.', price: 0 },
 	'beastball': { id: 'beastball', name: 'Beast Ball', category: 'pokeball', description: 'A Ball designed to catch Ultra Beasts.', price: 1000 },
 	'cherishball': { id: 'cherishball', name: 'Cherish Ball', category: 'pokeball', description: 'A rare Ball made for special events.', price: 0 },
-	'sportball': { id: 'sportball', name: 'Sport Ball', category: 'pokeball', description: 'A special Ball used in the Bug-Catching Contest.', price: 0 },
 	'strangeball': { id: 'strangeball', name: 'Strange Ball', category: 'pokeball', description: 'A mysterious Ball with unknown properties.', price: 0 },
 
 	// Competitive Held Items

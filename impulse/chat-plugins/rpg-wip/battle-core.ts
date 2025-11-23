@@ -1955,10 +1955,6 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 1; // Same as Poké Ball
 	case 'dreamball':
 		return opponentStatus === 'slp' ? 4 : 1;
-	case 'safariball':
-		return 1.5; // Slightly better than Poké Ball
-	case 'parkball':
-		return 255; // Always catches in special areas
 
 	// Special balls
 	case 'beastball':
@@ -1966,8 +1962,6 @@ export function getBallBonus(ballId: string, battle: BattleState, targetSlot: Ac
 		return 5; // For now, give good bonus
 	case 'cherishball':
 		return 1; // Event ball, same as Poké Ball
-	case 'sportball':
-		return 1.5; // Bug-Catching Contest ball
 	case 'strangeball':
 		return 1; // Mysterious ball
 

@@ -1046,7 +1046,8 @@ export const commands: ChatCommands = {
 					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 					triggeredEvents.push(event);
 
-					const interactiveTypes = ['choice', 'quiz', 'moralchoice', 'branching', 'wildbattle', 'bossbattle', 'raidbattle', 'trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'];
+					// Removed: 'moralchoice', 'raidbattle'
+					const interactiveTypes = ['choice', 'quiz', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'];
 					if (event.triggerOnce && !interactiveTypes.includes(event.type)) player.storyFlags.add(eventFlagId);
 					if (event.setFlag && !interactiveTypes.includes(event.type)) player.storyFlags.add(event.setFlag);
 				}
@@ -1056,7 +1057,7 @@ export const commands: ChatCommands = {
 				const firstEvent = triggeredEvents[0];
 				const result = { success: true, message: '' };
 
-				if (['wildbattle', 'bossbattle', 'raidbattle'].includes(firstEvent.type)) {
+				if (['wildbattle', 'bossbattle'].includes(firstEvent.type)) {
 					if (firstEvent.type === 'wildbattle' && firstEvent.pokemon) {
 						const newPokemon = createPokemon(firstEvent.pokemon.species, firstEvent.pokemon.level);
 						if (firstEvent.pokemon.moves) {
@@ -1065,13 +1066,6 @@ export const commands: ChatCommands = {
 						if (firstEvent.pokemon.shiny) newPokemon.shiny = true;
 						player.pc.set(`scripted_wild_${firstEvent.id}`, newPokemon);
 						result.message = firstEvent.dialogue || `A wild ${newPokemon.species} appeared!`;
-					} else if (firstEvent.type === 'raidbattle') {
-						const r = ScriptedEvents.handleRaidBattle(player, firstEvent);
-						result.message = r.message;
-						if (r.raidBoss) {
-							const raidMon = createPokemon(r.raidBoss.species, r.raidLevel ? r.raidLevel * 10 : 50);
-							player.pc.set(`scripted_wild_${firstEvent.id}`, raidMon);
-						}
 					} else if (firstEvent.type === 'bossbattle') {
 						const r = ScriptedEvents.handleBossBattle(player, firstEvent);
 						result.message = r.message;
@@ -1079,7 +1073,9 @@ export const commands: ChatCommands = {
 				} else {
 					const handlerName = `handle${firstEvent.type.charAt(0).toUpperCase() + firstEvent.type.slice(1)}`;
 
+					// @ts-expect-error - Dynamic handler access
 					if (ScriptedEvents[handlerName]) {
+						// @ts-expect-error - Dynamic handler access
 						const r = ScriptedEvents[handlerName](player, firstEvent, firstEvent.id);
 						result.message = r.message;
 						if (r.opponent) firstEvent.nextOpponent = r.opponent;
@@ -1122,7 +1118,6 @@ export const commands: ChatCommands = {
 
 			if (activeEvent.type === 'choice') result = ScriptedEvents.handleChoice(player, activeEvent, index);
 			else if (activeEvent.type === 'quiz') result = ScriptedEvents.handleQuiz(player, activeEvent, index);
-			else if (activeEvent.type === 'moralchoice') result = ScriptedEvents.handleMoralChoice(player, activeEvent, index);
 			else if (activeEvent.type === 'branching') result = ScriptedEvents.handleBranchingPath(player, activeEvent, index);
 
 			if (result.success) {
@@ -2030,7 +2025,6 @@ export const commands: ChatCommands = {
 
 			case 'heal': result = NPCActions.handleHeal(player); break;
 			case 'fossilrevival': result = NPCActions.handleFossilRevival(player, action, toID(param1)); break;
-			case 'dailyreward': result = NPCActions.handleDailyReward(player, action, npcId); break;
 			case 'battlerequest':
 				const br = NPCActions.handleBattleRequest(player, action, npcId);
 				result = { success: br.success, message: br.message, canBattle: br.canBattle };
@@ -2038,15 +2032,6 @@ export const commands: ChatCommands = {
 			case 'questchain': result = NPCActions.handleQuestChain(player, action, npcId); break;
 			case 'itemcraft': result = NPCActions.handleItemCraft(player, action, parseInt(param1)); break;
 			case 'berryplant': result = NPCActions.handleBerryPlant(player, action, npcId, toID(param1)); break;
-			case 'pokemongrooming':
-				if (player.party.length > 0) result = NPCActions.handlePokemonGrooming(player, action, player.party[0]);
-				else return this.errorReply("No Pokemon.");
-				break;
-			case 'fortuneteller': result = NPCActions.handleFortuneTeller(player, action, npcId, toID(param1) || 'luck'); break;
-			case 'pokemonbreeder':
-				if (player.party.length >= 2) result = NPCActions.handlePokemonBreeder(player, action, player.party[0], player.party[1]);
-				else return this.errorReply("Need 2 Pokemon.");
-				break;
 
 			default:
 				const handlerName = `handle${action.type.charAt(0).toUpperCase() + action.type.slice(1)}`;
