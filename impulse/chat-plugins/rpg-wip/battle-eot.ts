@@ -698,5 +698,13 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 		slot.harvestUsedThisTurn = false;
 	}
 
+	// Clear Destiny Bond and Grudge flags at end of turn
+	if (slot.destinyBondActive) {
+		slot.destinyBondActive = false;
+	}
+	if (slot.grudgeActive) {
+		slot.grudgeActive = false;
+	}
+
 	RPGAbilities.applyEndOfTurnAbilities(slot, battle, messageLog);
 }

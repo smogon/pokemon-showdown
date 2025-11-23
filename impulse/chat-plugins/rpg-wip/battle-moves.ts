@@ -1215,6 +1215,91 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${defender.species} can no longer escape!`);
 		}
 		return true;
+
+	case 'sleeptalk':
+		// Sleep Talk - Use a random move while asleep
+		if (attackerSlot.status !== 'slp') {
+			messageLog.push('But it failed!');
+			return true;
+		}
+
+		// Get all usable moves (excluding Sleep Talk itself)
+		const sleepTalkMoves = attacker.moves.filter(m => {
+			if (m.id === 'sleeptalk') return false;
+			if (m.pp === 0) return false;
+			const moveData = getMove(m.id);
+			// Sleep Talk can't call these moves
+			if (['sleeptalk', 'assist', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'sketch', 'struggle', 'switcheroo', 'trick'].includes(moveData.id)) return false;
+			return true;
+		});
+
+		if (sleepTalkMoves.length === 0) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+
+		// Select random move
+		const selectedMove = sleepTalkMoves[Math.floor(Math.random() * sleepTalkMoves.length)];
+		const moveToUse = getMove(selectedMove.id);
+		messageLog.push(`${attacker.species} used ${moveToUse.name} via Sleep Talk!`);
+
+		// Execute the move (don't deduct PP from the called move)
+		// This will be handled by the calling function
+		(attackerSlot as any).sleepTalkMove = selectedMove.id;
+		return true;
+
+	case 'attract':
+		// Attract - Infatuate the target
+		if (!defenderSlot || !defender) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+
+		// Check if already attracted
+		if (defenderSlot.isAttracted) {
+			messageLog.push(`${defender.species} is already infatuated!`);
+			return true;
+		}
+
+		// Check for same gender or genderless
+		if (attacker.gender === 'N' || defender.gender === 'N') {
+			messageLog.push('But it failed!');
+			return true;
+		}
+
+		if (attacker.gender === defender.gender) {
+			messageLog.push('But it failed!');
+			return true;
+		}
+
+		// Check Oblivious ability
+		const defenderAbilityAttract = RPGAbilities.getActiveAbility(defender, attacker);
+		if (defenderAbilityAttract === 'oblivious') {
+			messageLog.push(`${defender.species}'s Oblivious prevents infatuation!`);
+			return true;
+		}
+
+		// Check Aroma Veil protection
+		if (hasAromaVeilProtection(defenderSlot, battle, attacker)) {
+			messageLog.push(`${defender.species} is protected by Aroma Veil!`);
+			return true;
+		}
+
+		defenderSlot.isAttracted = true;
+		messageLog.push(`${defender.species} fell in love!`);
+		return true;
+
+	case 'destinybond':
+		// Destiny Bond - If user faints, faint attacker
+		attackerSlot.destinyBondActive = true;
+		messageLog.push(`${attacker.species} is trying to take its foe down with it!`);
+		return true;
+
+	case 'grudge':
+		// Grudge - If user faints, deplete PP of move that KO'd it
+		attackerSlot.grudgeActive = true;
+		messageLog.push(`${attacker.species} wants its target to bear a grudge!`);
+		return true;
 	}
 
 	return false;

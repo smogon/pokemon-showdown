@@ -94,6 +94,11 @@ export function createActivePokemonSlot(
 		lastMoveThatHitMe: undefined,
 		terastallized: savedState?.terastallized || undefined,
 		toxicCounter: savedState?.toxicCounter || (pokemon.status === 'tox' ? 1 : undefined),
+		// Tier 1 move additions
+		isAttracted: false,
+		destinyBondActive: false,
+		grudgeActive: false,
+		sleepTalkMove: undefined,
 	};
 }
 
