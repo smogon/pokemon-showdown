@@ -1052,12 +1052,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBeforeSwitchIn(pokemon) {
 			for (const ability of pokemon.m.scrambled.abilities) {
 				const effect = 'ability:' + this.toID(ability.thing);
-				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon});
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
 				pokemon.volatiles[effect].inSlot = ability.inSlot;
 			}
 			for (const item of pokemon.m.scrambled.items) {
 				const effect = 'item:' + this.toID(item.thing);
-				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon});
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
 				pokemon.volatiles[effect].inSlot = item.inSlot;
 			}
 		},
@@ -1065,28 +1065,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			for (const pokemon of this.getAllPokemon()) {
 				// for everything not in the correct slot
 				pokemon.m.scrambled = {
-					abilities: [] as Object[],
-					items: [] as Object[],
-					moves: [] as Object[],
+					abilities: [] as object[],
+					items: [] as object[],
+					moves: [] as object[],
 				};
 
 				if (Dex.items.get(pokemon.set.ability)?.exists) {
-					pokemon.m.scrambled.items.push({thing: pokemon.set.ability, inSlot: 'Ability'});
+					pokemon.m.scrambled.items.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
 				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
-					pokemon.m.scrambled.moves.push({thing: pokemon.set.ability, inSlot: 'Ability'});
+					pokemon.m.scrambled.moves.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
 				}
 
 				if (Dex.abilities.get(pokemon.set.item)?.exists) {
-					pokemon.m.scrambled.abilities.push({thing: pokemon.set.item, inSlot: 'Item'});
+					pokemon.m.scrambled.abilities.push({ thing: pokemon.set.item, inSlot: 'Item' });
 				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
-					pokemon.m.scrambled.moves.push({thing: pokemon.set.item, inSlot: 'Item'});
+					pokemon.m.scrambled.moves.push({ thing: pokemon.set.item, inSlot: 'Item' });
 				}
 
 				for (const move of pokemon.set.moves) {
 					if (Dex.abilities.get(move)?.exists) {
-						pokemon.m.scrambled.abilities.push({thing: move, inSlot: 'Move'});
+						pokemon.m.scrambled.abilities.push({ thing: move, inSlot: 'Move' });
 					} else if (Dex.items.get(move)?.exists) {
-						pokemon.m.scrambled.items.push({thing: move, inSlot: 'Move'});
+						pokemon.m.scrambled.items.push({ thing: move, inSlot: 'Move' });
 					}
 				}
 
@@ -1098,7 +1098,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
-					let move = Dex.moves.get(scrambledMove.thing);
+					const move = Dex.moves.get(scrambledMove.thing);
 					const newMove = {
 						move: move.name,
 						id: move.id,
