@@ -175,10 +175,10 @@ export function handleChooseStarter(
 	action: NPCAction,
 	selectedPokemon: string
 ): { success: boolean, message: string, pokemon?: RPGPokemon } {
-	if (player.party.length > 0) {
+	if (player.storyFlags.has('starter_chosen')) {
 		return {
 			success: false,
-			message: 'You already have a starter Pokémon!',
+			message: 'You have already chosen a starter Pokémon!',
 		};
 	}
 
@@ -186,6 +186,7 @@ export function handleChooseStarter(
 
 	const starter = createPokemon(selectedPokemon, starterLevel);
 	player.party.push(starter);
+	player.storyFlags.add('starter_chosen');
 
 	const species = Dex.species.get(selectedPokemon);
 
