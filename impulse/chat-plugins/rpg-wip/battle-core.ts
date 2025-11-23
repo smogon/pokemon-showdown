@@ -2199,38 +2199,43 @@ export function executeMove(
 			if (defenderSlot.isProtected && move.flags.protect && !move.breaksProtect && !bypassesProtect) {
 				messageLog.push(`<span style="color: #6c757d;">${defenderSlot.pokemon.species} protected itself!</span>`);
 
-				// Protection Punishments
+				// Protection Punishments with Contact Check
 				if (move.flags.contact) {
-					const lastMove = defenderSlot.lastMoveUsed;
-					if (lastMove === 'kingsshield') {
-						if (attackerSlot.statStages.atk > -6) {
-							applyStatChange(attackerSlot, 'atk', -1, battle, messageLog, defenderSlot);
-							messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell due to King's Shield!`);
-						}
-					} else if (lastMove === 'spikyshield') {
-						const damage = Math.floor(attackerSlot.pokemon.maxHp / 8);
-						attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
-						messageLog.push(`${attackerSlot.pokemon.species} was hurt by Spiky Shield!`);
-						handleHPDropEffects(attackerSlot, battle, messageLog);
-					} else if (lastMove === 'banefulbunker') {
-						if (RPGAbilities.canInflictStatus(attackerSlot, 'psn', battle, defenderSlot, undefined, true).success) {
-							attackerSlot.status = 'psn';
-							messageLog.push(`${attackerSlot.pokemon.species} was poisoned by Baneful Bunker!`);
-						}
-					} else if (lastMove === 'silktrap') {
-						if (attackerSlot.statStages.spe > -6) {
-							applyStatChange(attackerSlot, 'spe', -1, battle, messageLog, defenderSlot);
-							messageLog.push(`${attackerSlot.pokemon.species}'s Speed fell due to Silk Trap!`);
-						}
-					} else if (lastMove === 'burningbulwark') {
-						if (RPGAbilities.canInflictStatus(attackerSlot, 'brn', battle, defenderSlot, undefined, true).success) {
-							attackerSlot.status = 'brn';
-							messageLog.push(`${attackerSlot.pokemon.species} was burned by Burning Bulwark!`);
-						}
-					} else if (lastMove === 'obstruct') {
-						if (attackerSlot.statStages.def > -6) {
-							applyStatChange(attackerSlot, 'def', -2, battle, messageLog, defenderSlot);
-							messageLog.push(`${attackerSlot.pokemon.species}'s Defense harshly fell due to Obstruct!`);
+					const attackerItem = attackerSlot.pokemon.item;
+					const padsOrLongReach = attackerAbility === 'longreach' || (battle.magicRoomTurns === 0 && (attackerItem === 'protectivepads' || attackerItem === 'punchingglove'));
+
+					if (!padsOrLongReach) {
+						const lastMove = defenderSlot.lastMoveUsed;
+						if (lastMove === 'kingsshield') {
+							if (attackerSlot.statStages.atk > -6) {
+								applyStatChange(attackerSlot, 'atk', -1, battle, messageLog, defenderSlot);
+								messageLog.push(`${attackerSlot.pokemon.species}'s Attack fell due to King's Shield!`);
+							}
+						} else if (lastMove === 'spikyshield') {
+							const damage = Math.floor(attackerSlot.pokemon.maxHp / 8);
+							attackerSlot.pokemon.hp = Math.max(0, attackerSlot.pokemon.hp - damage);
+							messageLog.push(`${attackerSlot.pokemon.species} was hurt by Spiky Shield!`);
+							handleHPDropEffects(attackerSlot, battle, messageLog);
+						} else if (lastMove === 'banefulbunker') {
+							if (RPGAbilities.canInflictStatus(attackerSlot, 'psn', battle, defenderSlot, undefined, true).success) {
+								attackerSlot.status = 'psn';
+								messageLog.push(`${attackerSlot.pokemon.species} was poisoned by Baneful Bunker!`);
+							}
+						} else if (lastMove === 'silktrap') {
+							if (attackerSlot.statStages.spe > -6) {
+								applyStatChange(attackerSlot, 'spe', -1, battle, messageLog, defenderSlot);
+								messageLog.push(`${attackerSlot.pokemon.species}'s Speed fell due to Silk Trap!`);
+							}
+						} else if (lastMove === 'burningbulwark') {
+							if (RPGAbilities.canInflictStatus(attackerSlot, 'brn', battle, defenderSlot, undefined, true).success) {
+								attackerSlot.status = 'brn';
+								messageLog.push(`${attackerSlot.pokemon.species} was burned by Burning Bulwark!`);
+							}
+						} else if (lastMove === 'obstruct') {
+							if (attackerSlot.statStages.def > -6) {
+								applyStatChange(attackerSlot, 'def', -2, battle, messageLog, defenderSlot);
+								messageLog.push(`${attackerSlot.pokemon.species}'s Defense harshly fell due to Obstruct!`);
+							}
 						}
 					}
 				}
@@ -2285,3 +2290,79 @@ export function executeMove(
 	targetSlots.forEach(s => { if (s && s.pokemon.hp > 0) RPGAbilities.checkFormChangeAbilities(s, battle, messageLog); });
 	if (attackerSlot.pokemon.hp > 0 && toID(attackerSlot.pokemon.ability || '') === 'truant') attackerSlot.isLoafing = true;
 }
+
+export function handleChargingMove(
+	attackerSlot: ActivePokemonSlot,
+	move: Move,
+	moveObject: { id: string, pp: number },
+	battle: BattleState,
+	messageLog: string[],
+	ppDeduction: number
+): boolean {
+	if (move.flags.charge && battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'powerherb') {
+		const attacker = attackerSlot.pokemon;
+		messageLog.push(`${attacker.species} consumed its Power Herb!`);
+		setItem(attackerSlot, undefined, undefined, battle, messageLog);
+		return false;
+	}
+
+	if (move.flags.charge && !attackerSlot.chargingMove) {
+		attackerSlot.chargingMove = move.id;
+		let chargeMessage = `${attackerSlot.pokemon.species} is charging up!`;
+
+		if (move.id === 'fly') {
+			if (battle.gravityTurns > 0) {
+				messageLog.push(`But it failed! (Gravity)`);
+				attackerSlot.chargingMove = undefined;
+				return false;
+			}
+			chargeMessage = `${attackerSlot.pokemon.species} flew up high!`;
+		} else if (move.id === 'dig') chargeMessage = `${attackerSlot.pokemon.species} burrowed underground!`;
+		else if (move.id === 'dive') chargeMessage = `${attackerSlot.pokemon.species} hid underwater!`;
+		else if (move.id === 'bounce') {
+			if (battle.gravityTurns > 0) {
+				messageLog.push(`But it failed! (Gravity)`);
+				attackerSlot.chargingMove = undefined;
+				return false;
+			}
+			chargeMessage = `${attackerSlot.pokemon.species} sprang up!`;
+		} else if (move.id === 'shadowforce' || move.id === 'phantomforce') chargeMessage = `${attackerSlot.pokemon.species} vanished instantly!`;
+		else if (move.id === 'solarbeam' || move.id === 'solarblade') {
+			if (RPGAbilities.isWeatherActive(battle) && (battle.weather?.type === 'sun' || battle.weather?.type === 'harsh-sun')) {
+				attackerSlot.chargingMove = undefined;
+				chargeMessage = '';
+			} else {
+				chargeMessage = `${attackerSlot.pokemon.species} absorbed light!`;
+			}
+		} else if (move.id === 'skyattack') chargeMessage = `${attackerSlot.pokemon.species} became cloaked in a harsh light!`;
+		else if (move.id === 'geomancy') chargeMessage = `${attackerSlot.pokemon.species} is absorbing power!`;
+
+		if (chargeMessage) messageLog.push(chargeMessage);
+
+		if (attackerSlot.chargingMove) {
+			if (moveObject.id !== 'struggle' && moveObject.pp > 0) {
+				moveObject.pp = Math.max(0, moveObject.pp - ppDeduction);
+			}
+			return true;
+		}
+	} else if (attackerSlot.chargingMove === move.id) {
+		attackerSlot.chargingMove = undefined;
+	}
+
+	return false;
+}
+
+export const RPGMoves = {
+	getDamageBasePower,
+	handleDamagingMovePreamble,
+	handleSpecificStatusMove,
+	handleGenericBoostMove,
+	handleGenericStatusInflictMove,
+	handleGenericVolatileMove,
+	handleGenericHealMove,
+	handleGenericFieldMove,
+	handleGenericSideMove,
+	handleChargingMove,
+};
+
+export default RPGMoves;
