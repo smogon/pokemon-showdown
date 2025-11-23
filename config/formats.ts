@@ -1049,9 +1049,69 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		validateSet(set, teamHas) {
 			return null;
 		},
+		onBeforeSwitchIn(pokemon) {
+			for (const ability of pokemon.m.scrambled.abilities) {
+				const effect = 'ability:' + this.toID(ability.thing);
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon});
+				pokemon.volatiles[effect].inSlot = ability.inSlot;
+			}
+			for (const item of pokemon.m.scrambled.items) {
+				const effect = 'item:' + this.toID(item.thing);
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon});
+				pokemon.volatiles[effect].inSlot = item.inSlot;
+			}
+		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				// do something i dont know what yet
+				// for everything not in the correct slot
+				pokemon.m.scrambled = {
+					abilities: [] as Object[],
+					items: [] as Object[],
+					moves: [] as Object[],
+				};
+
+				if (Dex.items.get(pokemon.set.ability)?.exists) {
+					pokemon.m.scrambled.items.push({thing: pokemon.set.ability, inSlot: 'Ability'});
+				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
+					pokemon.m.scrambled.moves.push({thing: pokemon.set.ability, inSlot: 'Ability'});
+				}
+
+				if (Dex.abilities.get(pokemon.set.item)?.exists) {
+					pokemon.m.scrambled.abilities.push({thing: pokemon.set.item, inSlot: 'Item'});
+				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
+					pokemon.m.scrambled.moves.push({thing: pokemon.set.item, inSlot: 'Item'});
+				}
+
+				for (const move of pokemon.set.moves) {
+					if (Dex.abilities.get(move)?.exists) {
+						pokemon.m.scrambled.abilities.push({thing: move, inSlot: 'Move'});
+					} else if (Dex.items.get(move)?.exists) {
+						pokemon.m.scrambled.items.push({thing: move, inSlot: 'Move'});
+					}
+				}
+
+				for (let i = 0; i < pokemon.baseMoveSlots.length; i++) {
+					if (!Dex.moves.get(pokemon.baseMoveSlots[i].id).exists) {
+						pokemon.baseMoveSlots.splice(i, 1);
+						i--;
+					}
+				}
+
+				for (const scrambledMove of pokemon.m.scrambled.moves) {
+					let move = Dex.moves.get(scrambledMove.thing);
+					const newMove = {
+						move: move.name,
+						id: move.id,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.baseMoveSlots.push(newMove);
+				}
+
+				pokemon.moveSlots = pokemon.baseMoveSlots;
 			}
 		},
 	},
