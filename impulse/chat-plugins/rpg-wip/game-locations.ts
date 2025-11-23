@@ -26,6 +26,7 @@ export const LOCATIONS: Record<string, any> = {
 				id: 'startshop',
 				name: 'General Store',
 				type: 'pokemart',
+				requiredFlag: 'rat_badge',
 				description: 'A small supply shop.',
 				accessible: true,
 			},
