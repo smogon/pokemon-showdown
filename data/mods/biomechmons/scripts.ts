@@ -28,8 +28,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (const pokemon of this.battle.getAllActive()) {
 				// can't use hasAbility because it would lead to infinite recursion
 				if (
-					(pokemon.ability === ('neutralizinggas' as ID) || (pokemon.m.scrambled.abilities as {thing: String}[]).some(abils => toID(abils.thing as String) === 'neutralizinggas')) &&
-					!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
+					(pokemon.ability === ('neutralizinggas' as ID) ||
+						(pokemon.m.scrambled.abilities as { thing: string }[]).some(abils => toID(abils.thing) === 'neutralizinggas')) &&
+						!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
 				) {
 					neutralizinggas = true;
 					break;
@@ -40,20 +41,45 @@ export const Scripts: ModdedBattleScriptsData = {
 				(this.battle.gen >= 5 && !this.isActive) ||
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-						(this.m.scrambled.abilities as {thing: String}[]).some(abils => toID(abils.thing) === 'neutralizinggas'))
+						(this.m.scrambled.abilities as { thing: string }[]).some(abils => toID(abils.thing) === 'neutralizinggas'))
 					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
 		},
-		// TODO
-		setAbility(
-			ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
-			isFromFormeChange = false, isTransform = false,
-		) {
+		setAbility(ability, source, sourceEffect, isFromFormeChange = false, isTransform = false) {
+			let isBMMAbil = false;
+			let isOldBMMAbil = false;
 			if (!this.hp) return false;
-			if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
+			if (typeof ability !== 'string' || this.battle.dex.abilities.get(ability).exists) {
+				ability = this.battle.dex.abilities.get(ability);
+			} else {
+				ability = {
+					id: ability,
+					name: ability,
+					flags: {},
+					effectType: "Ability",
+					toString() {
+						return this.id;
+					},
+				} as Ability;
+				isBMMAbil = true;
+			}
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			const oldAbility = this.battle.dex.abilities.get(this.ability);
+			let oldAbility;
+			if (this.battle.dex.abilities.get(this.ability).exists) {
+				oldAbility = this.battle.dex.abilities.get(this.ability);
+			} else {
+				oldAbility = {
+					id: this.ability,
+					name: this.ability,
+					flags: {},
+					effectType: "Ability",
+					toString() {
+						return this.id;
+					},
+				} as Ability;
+				isOldBMMAbil = true;
+			}
 			if (!isFromFormeChange) {
 				if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
 			}
@@ -62,7 +88,21 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!setAbilityEvent) return setAbilityEvent;
 			}
 			this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
+			if (isOldBMMAbil) {
+				const isItem = (this.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+				if (isItem >= 0) {
+					this.removeVolatile('item:' + this.battle.toID(this.m.scrambled.items[isItem].thing));
+					this.m.scrambled.items.splice(isItem, 1);
+				} else {
+					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+					this.baseMoveSlots.splice(this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
+					// this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					this.m.scrambled.items.splice(isMove, 1);
+				}
+			}
 			this.ability = ability.id;
+			// ability changes are permanent in BioMechMons
+			this.baseAbility = ability.id;
 			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (sourceEffect && !isFromFormeChange && !isTransform) {
 				if (source) {
@@ -74,6 +114,27 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (ability.id && this.battle.gen > 3 &&
 				(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
+			}
+			if (isBMMAbil) {
+				if (this.battle.dex.items.get(ability.id).exists) {
+					this.m.scrambled.items.push({ thing: ability.id, inSlot: 'Ability' });
+					const effect = 'item:' + this.battle.toID(ability.id);
+					this.addVolatile(effect);
+					this.volatiles[effect].inSlot = 'Ability';
+				} else {
+					this.m.scrambled.moves.push({ thing: ability.id, inSlot: 'Ability' });
+					const move = Dex.moves.get(ability.id);
+					const newMove = {
+						move: move.name,
+						id: move.id,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					this.baseMoveSlots.push(newMove);
+				}
 			}
 			return oldAbility.id;
 		},
@@ -138,7 +199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 			}
 			return true;
-		}
+		},
 	},
 	field: {
 		suppressingWeather() {
