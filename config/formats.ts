@@ -1072,7 +1072,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				if (Dex.items.get(pokemon.set.ability)?.exists) {
 					pokemon.m.scrambled.items.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
-				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
+				} else if (Dex.moves.get(pokemon.set.ability)?.exists) {
 					pokemon.m.scrambled.moves.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
 				}
 
