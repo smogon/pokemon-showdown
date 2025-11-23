@@ -1185,6 +1185,11 @@ function generatePokemonStatusTagsHTML(
 		// Gulp Missile (Cramorant forms)
 		(slot as any).gulpMissileForm === 'gulping' ? '<span class="rpg-tag rpg-tag-gulping">Gulping</span>' : '',
 		(slot as any).gulpMissileForm === 'gorging' ? '<span class="rpg-tag rpg-tag-gorging">Gorging</span>' : '',
+
+		// --- TIER 1 MOVE TAGS ---
+		slot.isAttracted ? '<span class="rpg-tag rpg-tag-infatuated">💕 Infatuated</span>' : '',
+		slot.destinyBondActive ? '<span class="rpg-tag rpg-tag-destiny-bond">Destiny Bond</span>' : '',
+		slot.grudgeActive ? '<span class="rpg-tag rpg-tag-grudge">Grudge</span>' : '',
 	].filter(Boolean).join('');
 
 	const abilityTags = [
