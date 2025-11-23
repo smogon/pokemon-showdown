@@ -76,6 +76,7 @@ import {
 	generateGiveItemPokemonSelectionHTML,
 	generateFaintSwitchHTML,
 	generateBottomNavigation,
+	generateStarterConfirmHTML,
 	generateSummarySelectionHTML,
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
@@ -99,7 +100,6 @@ import {
 	generateBattleItemMenuHTML,
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
-	generateStarterConfirmHTML,
 } from './html';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
@@ -495,8 +495,12 @@ export const commands: ChatCommands = {
 			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot do this while in a battle.");
 			}
-			const starters = STARTER_POKEMON;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML('starters', starters)}`);
+			const type = target.trim().toLowerCase();
+			const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON];
+			if (!starters) {
+				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
+			}
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
 		},
 
 		starterchoice(target, room, user) {
@@ -511,7 +515,7 @@ export const commands: ChatCommands = {
 
 			if (pokemonId) {
 				const player = getPlayerData(user.id);
-				const allStarters = STARTER_POKEMON;
+				const allStarters = Object.values(STARTER_POKEMON).flat();
 
 				if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter.");
 
@@ -533,7 +537,7 @@ export const commands: ChatCommands = {
 					return this.errorReply(result.message);
 				}
 			} else {
-				const allStarters = STARTER_POKEMON;
+				const allStarters = Object.values(STARTER_POKEMON).flat();
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterChoiceHTML(npcId, npc.name, allStarters)}`);
 			}
 		},
@@ -544,15 +548,11 @@ export const commands: ChatCommands = {
 			}
 			const starterId = toID(target);
 			const player = getPlayerData(user.id);
-			
-			if (player.storyFlags.has('starter_chosen')) {
-				return this.errorReply("You have already chosen a starter Pokémon!");
-			}
 			if (player.party.length > 0) {
 				return this.errorReply("You already have a starter Pokémon!");
 			}
 
-			const allStarters = STARTER_POKEMON;
+			const allStarters = Object.values(STARTER_POKEMON).flat();
 			if (!allStarters.includes(starterId)) {
 				return this.errorReply("Invalid starter Pokémon.");
 			}
@@ -560,7 +560,6 @@ export const commands: ChatCommands = {
 				const starterPokemon = createPokemon(starterId, 5);
 				player.party.push(starterPokemon);
 				player.name = user.name;
-				player.storyFlags.add('starter_chosen');
 
 				const startLocId = GameConfig.startLocationId;
 				const locationData = LOCATIONS[startLocId];
