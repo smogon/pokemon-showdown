@@ -39,6 +39,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	'youngsterjoey': {
 		name: 'Youngster Joey',
 		money: 200,
+		setFlag: 'rat_badge',
 		party: [
 			{ species: 'rattata', level: 5, moves: ['tackle', 'tailwhip'] },
 		],
@@ -67,7 +68,6 @@ export interface BadgeInfo {
 	badgeName: string;
 	order: number;
 	description?: string;
-	setFlag?: any;
 }
 
 export const BADGES: BadgeInfo[] = [
@@ -75,7 +75,6 @@ export const BADGES: BadgeInfo[] = [
 		gymLeaderId: 'youngsterjoey',
 		badgeName: 'Rat Badge',
 		order: 1,
-		setFlag: 'rat_badge',
 		description: 'Awarded for defeating the Top Percentage Rattata.',
 	},
 ];
