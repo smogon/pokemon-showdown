@@ -55,21 +55,3 @@ export const STARTER_POKEMON = {
 	water: ['mudkip'],
 	grass: ['grookey'],
 };
-
-// ============================================================================
-// FOSSIL REVIVAL
-// ============================================================================
-
-export const FOSSIL_REVIVAL_MAP: Record<string, { species: string, level: number }> = {
-	'helixfossil': { species: 'omanyte', level: 20 },
-	'domefossil': { species: 'kabuto', level: 20 },
-	'oldamber': { species: 'aerodactyl', level: 20 },
-	'rootfossil': { species: 'lileep', level: 20 },
-	'clawfossil': { species: 'anorith', level: 20 },
-	'skullfossil': { species: 'cranidos', level: 20 },
-	'armorfossil': { species: 'shieldon', level: 20 },
-	'coverfossil': { species: 'tirtouga', level: 20 },
-	'plumefossil': { species: 'archen', level: 20 },
-	'jawfossil': { species: 'tyrunt', level: 20 },
-	'sailfossil': { species: 'amaura', level: 20 },
-};
