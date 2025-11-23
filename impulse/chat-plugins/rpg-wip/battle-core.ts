@@ -2353,7 +2353,6 @@ export function handleChargingMove(
 }
 
 export const RPGMoves = {
-	getDamageBasePower,
 	handleDamagingMovePreamble,
 	handleSpecificStatusMove,
 	handleGenericBoostMove,
