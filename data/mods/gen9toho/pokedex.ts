@@ -79,7 +79,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Sakuya Izayoi",
 		types: ["Steel"],
 		gender: "F",
-		baseStats: {hp: 100, atk: 90, def: 110, spa: 85, spd: 95, spe: 80},
+		baseStats: {hp: 100, atk: 95, def: 110, spa: 85, spd: 95, spe: 80},
 		abilities: {0: "Own Tempo", 1: "Insomnia", H: "Maid's Trick"},
 	},
 	remiliascarlet: {

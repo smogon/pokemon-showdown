@@ -310,7 +310,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Touhoumons",
 		desc: `2hu`,
 		mod: 'gen9toho',
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
+		ruleset: ['Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Data Mod', 'Mega Data Mod', 'Z-Move Clause', 'Data Preview'],
 		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
 		unbanlist: ['Light of Ruin'],
 		teambuilderFormat: 'National Dex',
@@ -328,9 +328,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `2hu`,
 		mod: 'gen9toho',
 		gameType: 'doubles',
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
-		banlist: [],
-		unbanlist: [],
+		ruleset: ['Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Data Mod', 'Mega Data Mod', 'Z-Move Clause', 'Data Preview'],
+		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
+		unbanlist: ['Light of Ruin'],
 		teambuilderFormat: 'National Dex',
 		/*onValidateTeam(team, format) {
 			for (const set of team) {

@@ -27,7 +27,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		pp: 10,
 		shortDesc: "Inflicts partial trapping.",
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, pokemon, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', pokemon, "Hidden Power", target);
