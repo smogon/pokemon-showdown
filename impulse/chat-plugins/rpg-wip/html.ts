@@ -2202,17 +2202,14 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 		html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">${btnText}</button><br>`;
 		html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 		html += `</p>`;
-	} else if (['trainer', 'gymchallenge', 'elitefour', 'tournament', 'gauntletbattle'].includes(event.type)) {
+	} else if (['trainer', 'gymchallenge', 'elitefour'].includes(event.type)) {
 		const trainerId = event.nextOpponent || event.trainerId || event.gymLeaderId;
 
 		if (trainerId) {
 			const cmd = `/rpg challenge ${toID(trainerId)} ${toID(event.id)}`;
 			html += `<p class="rpg-text-center">`;
 			html += `<button name="send" value="${cmd}" class="button rpg-button-large" style="margin-bottom:5px;">⚔️ Challenge!</button><br>`;
-
-			if (event.type !== 'gauntletbattle') {
-				html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
-			}
+			html += `<button name="send" value="/rpg explore" class="button">Run Away</button>`;
 			html += `</p>`;
 		} else {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Continue</button></p>`;
@@ -2239,33 +2236,14 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 	if (action) {
 		html += `<hr />`;
 
-		if (action.type === 'itemcraft' && action.recipes) {
-			html += `<p><strong>Crafting Recipes:</strong></p><div class="rpg-scrollable-grid">`;
-			action.recipes.forEach((recipe: any, index: number) => {
-				const itemName = ITEMS_DATABASE[recipe.output.itemId]?.name || recipe.output.itemId;
-				const inputs = recipe.inputs.map((i: any) => `${i.quantity}x ${ITEMS_DATABASE[i.itemId]?.name || i.itemId}`).join(', ');
-
-				html += `<div class="rpg-party-card" style="margin-bottom:5px; display:block;">`;
-				html += `<strong>${itemName}</strong> <small>(${inputs})</small>`;
-				html += `<button name="send" value="/rpg npcaction ${toID(npc.id)} ${index}" class="button rpg-button-float-right">Craft</button>`;
-				html += `</div>`;
-			});
-			html += `</div>`;
-		} else if (action.type === 'fossilrevival' && action.fossils) {
-			html += `<p><strong>Select a Fossil to Revive:</strong></p><div class="rpg-grid-2col">`;
-			action.fossils.forEach((fossilId: string) => {
-				const fossilName = ITEMS_DATABASE[fossilId]?.name || fossilId;
-
-				html += `<button name="send" value="/rpg npcaction ${toID(npc.id)} ${toID(fossilId)}" class="button">🦴 ${fossilName}</button> `;
-			});
-			html += `</div>`;
-		} else if (action.type === 'choosestarter') {
+		if (action.type === 'choosestarter') {
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${toID(npc.id)}" class="button rpg-button-large">View Starters</button></p>`;
 		} else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
 			else if (action.type === 'giveitem' || action.type === 'givepokemon') btnText = "✅ Accept Offer";
 			else if (action.type === 'battlerequest') btnText = "⚔️ Challenge";
+			else if (action.type === 'rivalbattle') btnText = "⚔️ Rival Battle";
 
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg npcaction ${toID(npc.id)}" class="button">${btnText}</button></p>`;
 		}
