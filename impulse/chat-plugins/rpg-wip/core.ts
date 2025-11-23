@@ -23,8 +23,6 @@ export function getPlayerData(userid: string): PlayerData {
 		const newPlayer: PlayerData = {
 			id: userid,
 			name: userid,
-			level: 1,
-			experience: 0,
 			badges: 0,
 			party: [],
 			location: startLocationName,
@@ -176,8 +174,6 @@ function playerDataToDocument(player: PlayerData): any {
 	return {
 		id: player.id,
 		name: player.name,
-		level: player.level,
-		experience: player.experience,
 		badges: player.badges,
 		party: player.party,
 		location: player.location,
@@ -201,8 +197,6 @@ export function serializePlayerData(player: PlayerData): any {
 	return {
 		id: player.id,
 		name: player.name,
-		level: player.level,
-		experience: player.experience,
 		badges: player.badges,
 		party: player.party,
 		location: player.location,
@@ -254,8 +248,6 @@ function documentToPlayerData(data: any): PlayerData {
 	return {
 		id: data.id,
 		name: data.name,
-		level: data.level,
-		experience: data.experience,
 		badges: data.badges,
 		party: data.party,
 		location: data.location || startLocName,
