@@ -39,7 +39,6 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	'youngsterjoey': {
 		name: 'Youngster Joey',
 		money: 200,
-		setFlag: 'rat_badge',
 		party: [
 			{ species: 'rattata', level: 5, moves: ['tackle', 'tailwhip'] },
 		],
