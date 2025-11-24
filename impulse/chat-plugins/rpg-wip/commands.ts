@@ -2190,7 +2190,8 @@ export const commands: ChatCommands = {
 				break;
 
 			case 'choosestarter':
-				return this.parse(`/rpg starterchoice ${npcId}`);
+				// This is handled directly in generateNPCInteractionHTML, should never reach here
+				return this.errorReply("Starter selection should be done through the NPC dialogue interface.");
 
 			case 'heal': result = NPCActions.handleHeal(player); break;
 			case 'battlerequest':
