@@ -2144,7 +2144,11 @@ export function generateScriptedEventHTML(event: any, message: string): string {
 	return html;
 }
 
-export function generateNPCInteractionHTML(npc: any, notification?: string): string {
+export function generateNPCInteractionHTML(
+	npc: any, 
+	notification?: string, 
+	returnCommand: string = '/rpg explore'
+): string {
 	let html = `<div class="rpg-infobox">`;
 	if (notification) {
 		html += `<div class="rpg-notification">${notification}</div>`;
@@ -2170,17 +2174,19 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 			html += `</div>`;
 		} else {
 			let btnText = "Interact";
-			if (action.type === 'heal') btnText = "💊 Heal Party";
+			if (action.type === 'heal') btnText = "Heal Party";
 			else if (action.type === 'giveitem' || action.type === 'givepokemon') btnText = "✅ Accept Offer";
-			else if (action.type === 'battlerequest') btnText = "⚔️ Challenge";
-			else if (action.type === 'rivalbattle') btnText = "⚔️ Rival Battle";
+			else if (action.type === 'battlerequest') btnText = "Challenge";
+			else if (action.type === 'rivalbattle') btnText = "Rival Battle";
 
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg npcaction ${toID(npc.id)}" class="button">${btnText}</button></p>`;
 		}
 	}
 
-	html += `<hr /><p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Say Goodbye</button></p>`;
-	html += generateBottomNavigation() + `</div>`;
+	// "Talk to Others" button has been removed to improve immersion.
+	// "Say Goodbye" now uses the dynamic returnCommand to send the player back to the specific building or location.
+	html += `<hr /><p class="rpg-text-center"><button name="send" value="${returnCommand}" class="button">Say Goodbye</button></p>`;
+	html += `</div>`;
 
 	return html;
 }
