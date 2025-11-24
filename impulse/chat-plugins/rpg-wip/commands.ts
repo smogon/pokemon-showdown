@@ -980,7 +980,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
-			// 1. Handle "No Target" - Generate the Travel Menu
+			// 1. Generate Travel Menu (No Target)
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
@@ -992,8 +992,7 @@ export const commands: ChatCommands = {
 					travelHTML += `<p>There are no paths from this location yet.</p>`;
 				} else {
 					for (const connection of currentLocation.connectedLocations) {
-						// CHANGE: Always render the button as clickable
-						// Access checks are now handled when the button is clicked
+						// Render as clickable button regardless of requirements
 						travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 					}
 				}
@@ -1002,7 +1001,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// 2. Handle Target Selection
+			// 2. Handle Travel Execution (Target Selected)
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1012,44 +1011,82 @@ export const commands: ChatCommands = {
 			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
 			if (!connection) return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
 
-			// CHANGE: Logic to check requirements and show notification instead of errorReply
+			// --- Access Checks ---
 			let isBlocked = false;
 			let blockMsg = "";
 
+			// Check Badges
 			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
 				isBlocked = true;
 				blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
-			} else if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
-				isBlocked = true;
-				blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+			} 
+			// Check Flags (String or Array)
+			else if (connection.requiredFlag) {
+				const reqFlags = Array.isArray(connection.requiredFlag) ? connection.requiredFlag : [connection.requiredFlag];
+				if (!reqFlags.every(f => player.storyFlags.has(f))) {
+					isBlocked = true;
+					blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+				}
 			}
 
 			if (isBlocked) {
-				// Refresh the explore page with the notification message
+				// refresh explore page with notification
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
-			// 3. Execute Travel (Success Case)
+			// --- Successful Travel ---
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
+			// Handle Location Entry Flags (Set/Remove)
+			if ((targetLocation as any).setFlag) {
+				const flags = Array.isArray((targetLocation as any).setFlag) ? (targetLocation as any).setFlag : [(targetLocation as any).setFlag];
+				flags.forEach((f: string) => player.storyFlags.add(f));
+			}
+			if ((targetLocation as any).removeFlag) {
+				const flags = Array.isArray((targetLocation as any).removeFlag) ? (targetLocation as any).removeFlag : [(targetLocation as any).removeFlag];
+				flags.forEach((f: string) => player.storyFlags.delete(f));
+			}
+
+			// --- Scripted Events ---
 			const triggeredEvents = [];
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
 					const eventFlagId = `scripted_${event.id}`;
+					
+					// Check Trigger Conditions
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-					if (event.requiredFlag && !player.storyFlags.has(event.requiredFlag)) continue;
+					
+					if (event.requiredFlag) {
+						const reqFlags = Array.isArray(event.requiredFlag) ? event.requiredFlag : [event.requiredFlag];
+						if (!reqFlags.every(f => player.storyFlags.has(f))) continue;
+					}
+
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
 					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
+					
 					triggeredEvents.push(event);
 
+					// Handle Event Flags (for non-interactive events that resolve immediately)
 					const interactiveTypes = ['choice', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour'];
-					if (event.triggerOnce && !interactiveTypes.includes(event.type)) player.storyFlags.add(eventFlagId);
-					if (event.setFlag && !interactiveTypes.includes(event.type)) player.storyFlags.add(event.setFlag);
+					if (!interactiveTypes.includes(event.type)) {
+						if (event.triggerOnce) player.storyFlags.add(eventFlagId);
+						
+						if (event.setFlag) {
+							const flags = Array.isArray(event.setFlag) ? event.setFlag : [event.setFlag];
+							flags.forEach(f => player.storyFlags.add(f));
+						}
+						
+						if ((event as any).removeFlag) {
+							const flags = Array.isArray((event as any).removeFlag) ? (event as any).removeFlag : [(event as any).removeFlag];
+							flags.forEach((f: string) => player.storyFlags.delete(f));
+						}
+					}
 				}
 			}
 
+			// Execute First Triggered Event
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				const result = { success: true, message: '' };
@@ -1069,7 +1106,6 @@ export const commands: ChatCommands = {
 					}
 				} else {
 					const handlerName = `handle${firstEvent.type.charAt(0).toUpperCase() + firstEvent.type.slice(1)}`;
-
 					// @ts-expect-error - Dynamic handler access
 					if (ScriptedEvents[handlerName]) {
 						// @ts-expect-error - Dynamic handler access
@@ -1085,6 +1121,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
+			// No Event - Show Explore Screen
 			const msg = `You arrived at ${targetLocation.name}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
@@ -1105,18 +1142,34 @@ export const commands: ChatCommands = {
 			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
-
-			// CHANGE: Check access and show notification if blocked
+			
+			// --- Access Checks ---
+			// Check Accessible property
 			if (building.accessible === false) {
 				const blockMsg = (building as any).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
-			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) {
-				const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+			// Check Required Flags (String or Array)
+			if (building.requiredFlag) {
+				const reqFlags = Array.isArray(building.requiredFlag) ? building.requiredFlag : [building.requiredFlag];
+				if (!reqFlags.every(f => player.storyFlags.has(f))) {
+					const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+				}
 			}
 
+			// --- Successful Entry: Handle Flags ---
+			if ((building as any).setFlag) {
+				const flags = Array.isArray((building as any).setFlag) ? (building as any).setFlag : [(building as any).setFlag];
+				flags.forEach((f: string) => player.storyFlags.add(f));
+			}
+			if ((building as any).removeFlag) {
+				const flags = Array.isArray((building as any).removeFlag) ? (building as any).removeFlag : [(building as any).removeFlag];
+				flags.forEach((f: string) => player.storyFlags.delete(f));
+			}
+
+			// --- Generate Building UI ---
 			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
 
 			if (building.npcs && building.npcs.length > 0) {
@@ -1146,7 +1199,7 @@ export const commands: ChatCommands = {
 			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
 		},
-
+		
 		eventchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 			const player = getPlayerData(user.id);
