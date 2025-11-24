@@ -38,7 +38,15 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 					'oranberry',
 				],
 			},
-            // Additional tiers can be added if badges were in use
+			{
+				requiredBadges: 1, // Expert Badge Tier
+				items: [
+					'greatball',
+					'superpotion',
+					'awakening',
+					'burnheal',
+				],
+			},
 		],
 	},
 };
