@@ -1770,8 +1770,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	serperior: {
 		inherit: true,
-		otherFormes: ["Serperior-Galar"],
-		formeOrder: ["Serperior", "Serperior-Galar"],
+		otherFormes: ["Serperior-Galar", "Serperior-Mega"],
+		formeOrder: ["Serperior", "Serperior-Galar", "Serperior-Mega"],
 	},
 	serperiorgalar: {
 		num: 497,
@@ -1789,9 +1789,30 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		evoLevel: 36,
 		eggGroups: ["Field", "Grass"],
 	},
+	serperiormega: {
+		num: 497,
+		name: "Serperior-Mega",
+		baseSpecies: "Serperior",
+		forme: "Mega",
+		types: ["Grass"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 75, atk: 105, def: 105, spa: 105, spd: 105, spe: 133 },
+		abilities: { 0: "Contrarian" },
+		heightm: 3.5,
+		weightkg: 60,
+		color: "Green",
+		eggGroups: ["Field", "Grass"],
+		requiredItem: "Serperiorite",
+		gen: 9,
+	},
 	pignite: {
 		inherit: true,
 		evos: ["Emboar", "Emboar-Galar"],
+	},
+	emboar: {
+		inherit: true,
+		otherFormes: ["Emboar-Mega", "Emboar-Galar"],
+		formeOrder: ["Emboar", "Emboar-Mega", "Emboar-Galar"],
 	},
 	emboarmega: {
 		inherit: true,
@@ -1819,9 +1840,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	samurott: {
 		inherit: true,
-		types: ["Water", "Fighting"],
-		baseStats: {hp: 75, atk: 110, def: 75, spa: 118, spd: 60, spe: 90},
-		abilities: {0: "Torrent", H: "Supreme Overlord"},
 		otherFormes: ["Samurott-Hisui", "Samurott-Galar"],
 		formeOrder: ["Samurott", "Samurott-Hisui", "Samurott-Galar"],
 	},
@@ -1840,6 +1858,22 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		prevo: "Dewott",
 		evoLevel: 36,
 		eggGroups: ["Field"],
+	},
+	samurottmega: {
+		num: 503,
+		name: "Samurott-Mega",
+		baseSpecies: "Samurott",
+		forme: "Mega",
+		types: ["Water", "Fighting"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 95, atk: 130, def: 95, spa: 138, spd: 70, spe: 100 },
+		abilities: { 0: "Supreme Overlord" },
+		heightm: 2,
+		weightkg: 94.6,
+		color: "Blue",
+		eggGroups: ["Field"],
+		requiredItem: "Samurottite",
+		gen: 9,
 	},
 	watchog: {
 		inherit: true,
@@ -2793,6 +2827,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	palossand: {
 		inherit: true,
 		abilities: {0: "Water Compaction", 1: "Arena Trap", H: "Sand Veil"},
+	},
+	silvally: {
+		inherit: true,
+		abilities: {0: "Adaptability"},
 	},
 	silvallybug: {
 		inherit: true,

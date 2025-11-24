@@ -7879,6 +7879,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: -101,
 	},
+	contrarian: {
+		onStart(source) {
+			this.add('-ability', source, 'Contrarian');
+			this.field.addPseudoWeather('contrarian');
+			this.hint("All Pokemon are under Contrary effect!");
+		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 2,
+		onEnd(pokemon) {
+			this.field.removePseudoWeather('contrarian');
+		},
+		name: "Contrarian",
+		shortDesc: "As long as this Pokémon is on the field, every Pokémon on the field is under Contrary effect.",
+		rating: 4.5,
+		num: -102,
+	},
 	// Touhou
 	hakkero: {
 		//effect in conditions.ts

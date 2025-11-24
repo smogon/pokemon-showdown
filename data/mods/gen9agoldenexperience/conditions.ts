@@ -102,4 +102,22 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-fieldend', 'none');
 		},
 	},
+	contrarian: { 
+		name: "Contrarian",
+		effectType: 'PseudoWeather',
+		duration: 0,
+		onFieldStart(field, source, effect) {
+			this.add('-pseudoweather', 'Contrarian', '[of] ' + source);
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= -1;
+			}
+		},
+		onEnd() {
+			this.add('-fieldend', 'none');
+		},
+	},
 };

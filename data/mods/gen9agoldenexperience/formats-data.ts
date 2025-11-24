@@ -2544,6 +2544,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "UU",
 		doublesTier: "DUU",
 	},
+	serperiormega: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
 	tepig: {
 		tier: "LC",
 	},
@@ -2569,7 +2573,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	samurott: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	samurotthisui: {
@@ -2577,6 +2581,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	samurottgalar: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	samurottmega: {
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -3860,7 +3868,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	silvally: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	silvallybug: {
