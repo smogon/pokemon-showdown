@@ -89,20 +89,16 @@ async function getUserProfileData(userid: string) {
 		data.customStatus = statusDoc.value.status;
 	}
 
-	// Process clan data
+	// Process clan data - fetch clan details if user is in a clan
 	if (userClanInfo.status === 'fulfilled' && userClanInfo.value?.memberOf) {
-		try {
-			const clan = await Clans.findOne({ _id: userClanInfo.value.memberOf });
-			if (clan) {
-				data.clanName = clan.name;
-				// Get the user's rank in the clan
-				const memberData = clan.members[userid];
-				if (memberData && clan.ranks[memberData.rank]) {
-					data.clanRank = clan.ranks[memberData.rank].name;
-				}
+		const clanResult = await Clans.findOne({ _id: userClanInfo.value.memberOf }).catch(() => null);
+		if (clanResult) {
+			data.clanName = clanResult.name;
+			// Get the user's rank in the clan
+			const memberData = clanResult.members[userid];
+			if (memberData && clanResult.ranks[memberData.rank]) {
+				data.clanRank = clanResult.ranks[memberData.rank].name;
 			}
-		} catch {
-			// Clan data not available
 		}
 	}
 
