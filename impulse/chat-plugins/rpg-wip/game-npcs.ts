@@ -1,9 +1,5 @@
 import type { NPCData, TrainerSpec } from './interface';
 
-/**
- * Game NPCs & Story Configuration
- */
-
 // ============================================================================
 // NPCS
 // ============================================================================
@@ -44,7 +40,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'scaredgrunt': {
 		id: 'scaredgrunt',
 		name: 'Terrified Grunt',
-		location: 'rocket_hideout_b1',
+		location: 'rockethideoutb1',
 		dialogue: "I'm not fighting! I just want to go home! The boss is on B5, just leave me alone!",
 	}
 };
@@ -66,7 +62,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Fine, you may pass.",
 			lose: "Go home and train more.",
 		},
-		setFlag: 'security_cleared', 
+		setFlag: 'securitycleared', 
 	},
 	'blackbelt': {
 		name: 'Black Belt Aaron',
@@ -92,7 +88,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Excellent! You have earned the right to visit the Hidden Grove.",
 			lose: "Disappointing.",
 		},
-		setFlag: 'master_defeated',
+		setFlag: 'masterdefeated',
 	},
 
 	// --- ROCKET HIDEOUT FLOOR 1 ---
@@ -101,14 +97,14 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		money: 400,
 		party: [{ species: 'rattata', level: 10, moves: ['tackle', 'quickattack'] }],
 		dialogue: { start: "Intruder alert!", win: "I'll alert the others...", lose: "My radio is broken!" },
-		setFlag: 'beat_rocket_b1_1', // Required for B2
+		setFlag: 'beatrocketb11', // Required for B2
 	},
 	'rocketgruntb12': {
 		name: 'Rocket Grunt (Hall)',
 		money: 400,
 		party: [{ species: 'zubat', level: 10, moves: ['leechlife', 'supersonic'] }],
 		dialogue: { start: "You can't go down there!", win: "Fine, pass.", lose: "Glory to Team Rocket!" },
-		setFlag: 'beat_rocket_b1_2', // Required for B2
+		setFlag: 'beatrocketb12', // Required for B2
 	},
 
 	// --- ROCKET HIDEOUT FLOOR 2 ---
@@ -117,14 +113,14 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		money: 500,
 		party: [{ species: 'koffing', level: 12, moves: ['smog', 'tackle'] }],
 		dialogue: { start: "This is a restricted area!", win: "Cough... cough...", lose: "Too much smog." },
-		setFlag: 'beat_rocket_b2_1', // Required for B3
+		setFlag: 'beatrocketb21', // Required for B3
 	},
 	'rocketgruntb22': {
 		name: 'Rocket Grunt (Guard)',
 		money: 500,
 		party: [{ species: 'ekans', level: 12, moves: ['wrap', 'poisonsting'] }],
 		dialogue: { start: "Ssssscram!", win: "Hiss...", lose: "Slither away!" },
-		setFlag: 'beat_rocket_b2_2', // Required for B3
+		setFlag: 'beatrocketb22', // Required for B3
 	},
 
 	// --- ROCKET HIDEOUT FLOOR 3 ---
@@ -133,7 +129,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		money: 600,
 		party: [{ species: 'raticate', level: 14, moves: ['hyperfang'] }],
 		dialogue: { start: "You're annoying!", win: "Whatever.", lose: "Go away." },
-		setFlag: 'beat_rocket_b3_1', // Required for B4
+		setFlag: 'beatrocketb31', // Required for B4
 	},
 
 	// --- ROCKET HIDEOUT FLOOR 4 ---
@@ -145,7 +141,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			{ species: 'koffing', level: 16, moves: ['sludge', 'smokescreen'] }
 		],
 		dialogue: { start: "You won't reach the boss!", win: "The boss is stronger than me.", lose: "I failed you, sir!" },
-		setFlag: 'beat_rocket_admin', // Required for B5
+		setFlag: 'beatrocketadmin', // Required for B5
 	},
 
 	// --- ROCKET HIDEOUT FLOOR 5 (BOSS) ---
@@ -162,7 +158,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "What? This cannot be! Team Rocket is blasting off again!",
 			lose: "As expected of a child.",
 		},
-		setFlag: ['beat_rocket_boss', 'rocket_hideout_cleared'],
+		setFlag: ['beatrocketboss', 'rockethideoutcleared'],
 	},
 
 	// --- HAUNTED TOWER TRAINERS ---
@@ -171,14 +167,14 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		money: 300,
 		party: [{ species: 'gastly', level: 15, moves: ['lick', 'spite'] }],
 		dialogue: { start: "Kekeke...", win: "The spirits are restless.", lose: "..." },
-		setFlag: 'beat_channeler_1', // Required for 3F
+		setFlag: 'beatchanneler1', // Required for 3F
 	},
 	'sagekoji': {
 		name: 'Sage Koji',
 		money: 300,
 		party: [{ species: 'hoothoot', level: 16, moves: ['hypnosis', 'peck'] }],
 		dialogue: { start: "Begone from this sacred place.", win: "You are strong.", lose: "Leave now." },
-		setFlag: 'beat_sage_1',
+		setFlag: 'beatsage1',
 	}
 };
 
@@ -190,7 +186,7 @@ export const TRAINER_LOCATIONS: Record<string, string[]> = {
 	// Overworld
 	'newbarktown': ['securitybob'],
 	// Dojo
-	'fightingdojo': ['blackbelt'], // Note: building IDs are used if trainers are inside a building
+	'fightingdojo': ['blackbelt'], 
 	
 	// Rocket Hideout
 	'rockethideoutb1': ['rocketgruntb11', 'rocketgruntb12'],
