@@ -47,6 +47,7 @@ export const LOCATIONS: Record<string, any> = {
 				type: 'pokecenter',
 				description: 'A place to heal your Pokémon and store them in the PC.',
 				accessible: true,
+				npcs: ['pokecenter_nurse'],
 			},
 			{
 				id: 'townshop',

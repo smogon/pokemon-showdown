@@ -658,56 +658,6 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player)}`);
 		},
 
-		healparty(target, room, user) {
-			if (isInActiveBattle(user.id)) {
-				return this.errorReply("You cannot heal during a battle.");
-			}
-			const player = getPlayerData(user.id);
-			const result = NPCActions.handleHeal(player);
-
-			// Return to the current building or location
-			const currentLocationId = toID(player.location);
-			const currentLocation = LOCATIONS[currentLocationId];
-
-			if (!currentLocation) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
-			}
-
-			// Try to find the Pokemon Center building in the current location
-			const pokeCenterBuilding = currentLocation.buildings?.find(b => b.type === 'pokecenter');
-
-			if (pokeCenterBuilding) {
-				// Generate building HTML with success message
-				let buildingHTML = `<div class="rpg-infobox">`;
-				buildingHTML += `<div class="rpg-notification rpg-text-success">${result.message}</div>`;
-				buildingHTML += `<div class="rpg-text-center"><h2><b>${pokeCenterBuilding.name}</b></h2><p><em>${pokeCenterBuilding.description}</em></p></div><hr>`;
-
-				// Show NPCs if any
-				if (pokeCenterBuilding.npcs && pokeCenterBuilding.npcs.length > 0) {
-					buildingHTML += '<p><strong>People here:</strong></p>';
-					for (const npcId of pokeCenterBuilding.npcs) {
-						const npc = NPC_DATABASE[npcId];
-						if (npc) {
-							if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-							buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
-						}
-					}
-					buildingHTML += '<hr>';
-				}
-
-				// Show actions
-				buildingHTML += '<p><strong>Actions:</strong></p>';
-				buildingHTML += `<button name="send" value="/rpg healparty" class="button">💊 Heal Party</button> `;
-				buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-
-				buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
-			}
-
-			// Fallback: just show the party screen with success message
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, result.message)}`);
-		},
-
 		swapslot(target, room, user) {
 			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot swap party slots during a battle.");
@@ -1238,7 +1188,7 @@ export const commands: ChatCommands = {
 			let actionsHTML = '';
 
 			if (building.type === 'pokecenter') {
-				actionsHTML += `<button name="send" value="/rpg healparty" class="button">💊 Heal Party</button> `;
+				actionsHTML += `<button name="send" value="/rpg npcaction pokecenter_nurse" class="button">💊 Heal Party</button> `;
 				actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
 			}
 			if (building.type === 'pokemart' || building.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
@@ -2246,7 +2196,44 @@ export const commands: ChatCommands = {
 				// This is handled directly in generateNPCInteractionHTML, should never reach here
 				return this.errorReply("Starter selection should be done through the NPC dialogue interface.");
 
-			case 'heal': result = NPCActions.handleHeal(player); break;
+			case 'heal':
+				result = NPCActions.handleHeal(player);
+				// Special case: Return to building view instead of NPC interaction
+				if (result.success) {
+					const healLocationId = toID(player.location);
+					const healLocation = LOCATIONS[healLocationId];
+					const pokeCenterBuilding = healLocation?.buildings?.find(b => b.type === 'pokecenter');
+
+					if (pokeCenterBuilding) {
+						// Generate building HTML with success message
+						let buildingHTML = `<div class="rpg-infobox">`;
+						buildingHTML += `<div class="rpg-notification rpg-text-success">${result.message}</div>`;
+						buildingHTML += `<div class="rpg-text-center"><h2><b>${pokeCenterBuilding.name}</b></h2>`;
+						buildingHTML += `<p><em>${pokeCenterBuilding.description}</em></p></div><hr>`;
+
+						// Show NPCs if any
+						if (pokeCenterBuilding.npcs && pokeCenterBuilding.npcs.length > 0) {
+							buildingHTML += '<p><strong>People here:</strong></p>';
+							for (const healNpcId of pokeCenterBuilding.npcs) {
+								const npcData = NPC_DATABASE[healNpcId];
+								if (npcData) {
+									if (npcData.flags && !npcData.flags.every(flag => player.storyFlags.has(flag))) continue;
+									buildingHTML += `<button name="send" value="/rpg talknpc ${healNpcId}" class="button">💬 ${npcData.name}</button> `;
+								}
+							}
+							buildingHTML += '<hr>';
+						}
+
+						// Show actions
+						buildingHTML += '<p><strong>Actions:</strong></p>';
+						buildingHTML += `<button name="send" value="/rpg npcaction pokecenter_nurse" class="button">💊 Heal Party</button> `;
+						buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+
+						buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
+					}
+				}
+				break;
 			case 'battlerequest':
 				const br = NPCActions.handleBattleRequest(player, action, npcId);
 				result = { success: br.success, message: br.message, canBattle: br.canBattle };
