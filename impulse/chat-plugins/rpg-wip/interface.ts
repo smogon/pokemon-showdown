@@ -227,7 +227,7 @@ export interface BattleState {
 	playerTailwindTurns: number;
 	opponentTailwindTurns: number;
 	gravityTurns: number;
-	mudSportTurns: 0;
+	mudSportTurns: number;
 	waterSportTurns: number;
 	fairyLockTurns: number;
 	ionDelugeTurns: number;
