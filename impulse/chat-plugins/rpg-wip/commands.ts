@@ -1222,15 +1222,42 @@ export const commands: ChatCommands = {
 			buildingHTML += '<p><strong>Actions:</strong></p>';
 			if (building.type === 'pokecenter') buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
 			if (building.type === 'pokemart' || building.type === 'department') buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+			
+			// --- NEW: Gym/Dojo Logic (Trainers + Leader Lock) ---
+			let allTrainersDefeated = true;
+			
+			if (building.trainers && building.trainers.length > 0) {
+				buildingHTML += '<p><strong>Trainers:</strong></p>';
+				for (const trainerId of building.trainers) {
+					const trainer = TRAINER_DATABASE[trainerId];
+					if (trainer) {
+						if (!player.defeatedTrainers.has(trainerId)) {
+							allTrainersDefeated = false;
+							buildingHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
+						} else {
+							buildingHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+						}
+					}
+				}
+				buildingHTML += '<hr>';
+			}
+
 			if (building.type === 'gym' && building.gymLeaderId) {
 				const gymLeaderId = building.gymLeaderId;
 				const gymData = TRAINER_DATABASE[gymLeaderId];
-				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
-					buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button> `;
-				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
-					buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				if (gymData) {
+					if (!player.defeatedTrainers.has(gymLeaderId)) {
+						if (allTrainersDefeated) {
+							buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
+						} else {
+							buildingHTML += `<p><em>Defeat all trainers to challenge the Leader!</em></p>`;
+						}
+					} else {
+						buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+					}
 				}
 			}
+			// ---------------------------------------------------
 
 			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);

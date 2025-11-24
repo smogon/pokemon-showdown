@@ -58,6 +58,9 @@ export const LOCATIONS: Record<string, any> = {
 				requiredFlag: 'security_cleared',
 				blockMessage: 'The Security Guard is blocking the door. Defeat him outside to enter!',
 				gymLeaderId: 'dojomaster',
+				// NEW: Gym Configuration
+				npcs: ['dojoguide'],
+				trainers: ['blackbelt'],
 			},
 		],
 		encounterZones: [],
@@ -70,7 +73,6 @@ export const LOCATIONS: Record<string, any> = {
 		connectedLocations: [
 			{ id: 'newbarktown', name: 'New Bark Town' },
 		],
-		// Added 'dangerous_cave' here for testing badge locks
 		encounterZones: ['grassland', 'dangerouscave'],
 	},
 	'hiddengrove': {
@@ -81,7 +83,6 @@ export const LOCATIONS: Record<string, any> = {
 		connectedLocations: [
 			{ id: 'newbarktown', name: 'New Bark Town' },
 		],
-		// Added 'secret_garden' here for testing flag locks
 		encounterZones: ['rarezone', 'secretgarden'],
 	},
 };
@@ -103,16 +104,16 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 		levelRange: [10, 15],
 		battleType: 'single',
 	},
-	// New Test Case: Badge Lock
+	// Badge Lock Test
 	'dangerouscave': {
 		name: 'Dangerous Cave',
 		pokemon: ['zubat', 'geodude', 'onix'],
 		levelRange: [15, 20],
 		battleType: 'single',
-		requiredBadge: 'Boulder Badge',
-		blockMessage: 'It is too dark and dangerous here! You need the Boulder Badge to enter safely.',
+		requiredBadge: 'Expert Badge',
+		blockMessage: 'It is too dark and dangerous here! You need the Experr Badge to enter safely.',
 	},
-	// New Test Case: Flag Lock
+	// Flag Lock Test
 	'secretgarden': {
 		name: 'Secret Garden',
 		pokemon: ['bulbasaur', 'chikorita', 'roselia'],

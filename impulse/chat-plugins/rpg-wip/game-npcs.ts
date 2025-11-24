@@ -26,6 +26,13 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		location: 'newbarktown',
 		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in! You should go to the Lab to get a Pokémon first.",
 	},
+	// NEW: The Gym Guide
+	'dojoguide': {
+		id: 'dojoguide',
+		name: 'Dojo Guide',
+		location: 'newbarktown', // He is physically in New Bark Town data structure, but logically inside the building
+		dialogue: "Yo! Champ in the making! The Master uses Fighting-type Pokémon. Flying and Psychic moves are your best bet!",
+	}
 };
 
 // ============================================================================
@@ -33,7 +40,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 // ============================================================================
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
-	// 1. The Gatekeeper: Defeating him unlocks the Building
+	// 1. The Gatekeeper
 	'securitybob': {
 		name: 'Security Bob',
 		money: 100,
@@ -45,11 +52,24 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Fine, you may pass.",
 			lose: "Go home and train more.",
 		},
-		// REWARD: Sets this flag on victory
 		setFlag: 'security_cleared', 
 	},
 
-	// 2. The Boss: Defeating him unlocks the Location Connection
+	// 2. The Gym Minion (NEW)
+	'blackbelt': {
+		name: 'Black Belt Aaron',
+		money: 200,
+		party: [
+			{ species: 'tyrogue', level: 7, moves: ['tackle', 'fakeout'] },
+		],
+		dialogue: {
+			start: "I'm not letting you reach the Master without a fight!",
+			win: "Oof! You're tough.",
+			lose: "Train harder!",
+		}
+	},
+
+	// 3. The Boss
 	'dojomaster': {
 		name: 'Master Ken',
 		money: 1000,
@@ -62,25 +82,8 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Excellent! You have earned the right to visit the Hidden Grove.",
 			lose: "Disappointing.",
 		},
-		// REWARD: Sets this flag on victory
 		setFlag: 'master_defeated',
 	},
-
-	// 3. The Gym Leader: Defeating him awards the Boulder Badge
-	'brock': {
-		name: 'Brock',
-		money: 1500,
-		party: [
-			{ species: 'geodude', level: 12, moves: ['tackle', 'defensecurl'] },
-			{ species: 'onix', level: 14, moves: ['tackle', 'bind', 'rockthrow'] },
-		],
-		dialogue: {
-			start: "I believe in rock hard defense and determination! Show me what you've got!",
-			win: "You have proven your worth. Take this Badge.",
-			lose: "Your attacks are still too soft.",
-		},
-		// Note: Badge logic is handled automatically via the BADGES array below
-	}
 };
 
 // ============================================================================
@@ -88,8 +91,8 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 // ============================================================================
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	// Added brock here so you can challenge him in town for testing
-	'newbarktown': ['securitybob', 'brock'], 
+	// Trainers that appear in the OVERWORLD (not inside buildings)
+	'newbarktown': ['securitybob'], 
 };
 
 // ============================================================================
@@ -103,11 +106,10 @@ export interface BadgeInfo {
 	description?: string;
 }
 
-// ADDED: Definition linking Brock to the Boulder Badge
 export const BADGES: BadgeInfo[] = [
 	{
-		gymLeaderId: 'brock',
-		badgeName: 'Boulder Badge',
+		gymLeaderId: 'dojomaster',
+		badgeName: 'Expert Badge',
 		order: 1,
 		description: 'Allows access to dark caves.',
 	}
