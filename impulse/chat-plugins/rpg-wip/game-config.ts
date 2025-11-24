@@ -11,7 +11,7 @@
 
 export const GameConfig = {
 
-	startLocationId: 'startingroom',
+	startLocationId: 'newbarktown',
 	startMoney: 3000,
 	startInventory: [
 		{ id: 'pokeball', quantity: 5 },
@@ -28,7 +28,7 @@ export const GameConfig = {
 	allowItemUsageInBattle: true, // Enable/disable using items (potions, revives, stat boosters, etc.) during battle (Poké Balls for catching are not affected)
 
 	specialIds: {
-		champion: 'final_boss',
+		champion: 'finalboss',
 		rivals: [],
 	},
 
