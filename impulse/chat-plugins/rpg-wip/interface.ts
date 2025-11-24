@@ -366,11 +366,14 @@ export interface ScriptedEvent {
 	name: string;
 	type: string;
 	triggerOnce?: boolean;
-	requiredFlag?: string;
-	setFlag?: string;
+	
+	requiredFlag?: string | string[]; // Supports single or multiple flags
+	setFlag?: string | string[]; // Supports single or multiple flags
+	removeFlag?: string | string[]; // Supports single or multiple flags
+	preventIfFlag?: string | string[]; // Supports single or multiple flags
+
 	requiredBadgeCount?: number;
 	maxBadgeCount?: number;
-	preventIfFlag?: string;
 
 	// Event specific data
 	cutsceneScript?: string[];
@@ -404,4 +407,45 @@ export interface ScriptedEvent {
 	chapterNumber?: number;
 	chapterTitle?: string;
 	nextOpponent?: string; // Runtime property
+}
+
+export interface LocationConnection {
+	id: string;
+	name: string;
+	requiredBadge?: string | string[]; // Supports single or multiple badges
+	requiredFlag?: string | string[]; // Supports single or multiple flags
+	preventIfFlag?: string | string[]; // Supports single or multiple flags
+	blockMessage?: string;
+}
+
+export interface Building {
+	id: string;
+	type: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
+	name: string;
+	description: string;
+	npcs?: string[];
+	accessible?: boolean;
+	
+	requiredFlag?: string | string[]; // Supports single or multiple flags
+	requiredBadge?: string | string[]; // Supports single or multiple badges
+	preventIfFlag?: string | string[]; // Supports single or multiple flags
+	blockMessage?: string;
+	
+	setFlag?: string | string[]; // Supports single or multiple flags
+	removeFlag?: string | string[]; // Supports single or multiple flags
+	
+	gymLeaderId?: string;
+}
+
+export interface Location {
+	id?: string;
+	name: string;
+	description?: string;
+	connectedLocations: LocationConnection[];
+	buildings?: Building[];
+	encounterZones?: string[];
+	scriptedEvents?: ScriptedEvent[];
+	
+	setFlag?: string | string[]; // Supports single or multiple flags
+	removeFlag?: string | string[]; // Supports single or multiple flags
 }
