@@ -1,308 +1,238 @@
-/**
- * Game Locations Configuration
- *
- * This file contains all location-related story data including:
- * - Locations and their connections
- * - Encounter zones with wild Pokemon
- *
- * Edit this file to create new stories and adventures.
- */
-
-import type { EncounterZone } from './interface';
+import type { NPCData, TrainerSpec } from './interface';
 
 // ============================================================================
-// LOCATIONS
+// NPCS
 // ============================================================================
 
-export const LOCATIONS: Record<string, any> = {
-	// --- MAIN TOWN ---
-	'newbarktown': {
-		id: 'newbarktown',
-		name: 'New Bark Town',
-		type: 'town',
-		description: 'The wind blows constantly in this quiet town.',
-		connectedLocations: [
-			{ id: 'route101', name: 'Route 101' },
-			{ 
-				id: 'hiddengrove', 
-				name: 'Hidden Grove',
-				requiredFlag: 'masterdefeated',
-				blockMessage: 'The path is overgrown. Only a Dojo Master could clear this way.'
-			},
-			{ id: 'rockethideoutb1', name: '🚀 Enter Rocket Hideout' },
-			{ id: 'hauntedtower1f', name: '👻 Enter Haunted Tower' },
-		],
-		buildings: [
-			{
-				id: 'elmslab',
-				name: 'Elm\'s Lab',
-				type: 'lab',
-				description: 'Pokemon Research Laboratory.',
-				accessible: true,
-				npcs: ['professorelm'],
-			},
-			{
-				id: 'townshop',
-				name: 'General Store',
-				type: 'pokemart',
-				description: 'Supplies for your journey.',
-				accessible: true,
-			},
-			{
-				id: 'fightingdojo',
-				name: 'Fighting Dojo',
-				type: 'gym',
-				description: 'A place where trainers temper their spirits.',
-				accessible: true,
-				requiredFlag: 'securitycleared',
-				blockMessage: 'The Security Guard is blocking the door. Defeat him outside to enter!',
-				gymLeaderId: 'dojomaster',
-				npcs: ['dojoguide'],
-				trainers: ['blackbelt'],
-			},
-		],
-		encounterZones: [],
+export const NPC_DATABASE: Record<string, NPCData> = {
+	'professorelm': {
+		id: 'professorelm',
+		name: 'Professor Elm',
+		location: 'newbarktown',
+		dialogue: "Welcome to the lab! To start your journey, you'll need a Pokémon partner. Please, choose one!",
+		action: {
+			type: 'choosestarter',
+			starterLevel: 5,
+			onceOnly: true,
+		},
 	},
-
-	'route101': {
-		id: 'route101',
-		name: 'Route 101',
-		type: 'route',
-		description: 'A grassy path filled with wild Pokemon.',
-		connectedLocations: [
-			{ id: 'newbarktown', name: 'New Bark Town' },
-		],
-		encounterZones: ['grassland', 'dangerouscave'],
+	'guide': {
+		id: 'guide',
+		name: 'Town Guide',
+		location: 'newbarktown',
+		dialogue: "The Rocket Hideout is to the East. It's dangerous!",
 	},
-
-	'hiddengrove': {
-		id: 'hiddengrove',
-		name: 'Hidden Grove',
-		type: 'forest',
-		description: 'A secret clearing revealed only to the strong.',
-		connectedLocations: [
-			{ id: 'newbarktown', name: 'New Bark Town' },
-		],
-		encounterZones: ['rarezone', 'secretgarden'],
+	'dojoguide': {
+		id: 'dojoguide',
+		name: 'Dojo Guide',
+		location: 'newbarktown',
+		dialogue: "The Master uses Fighting-type Pokémon. Flying and Psychic moves are your best bet!",
 	},
-
-	// ========================================================================
-	// ROCKET HIDEOUT (5 Floors)
-	// ========================================================================
-
-	'rockethideoutb1': {
-		id: 'rockethideoutb1',
-		name: 'Rocket Hideout B1F',
-		type: 'dungeon',
-		description: 'A dark basement. Two grunts are guarding the stairs.',
-		connectedLocations: [
-			{ id: 'newbarktown', name: 'Exit to Surface' },
-			{ 
-				id: 'rockethideoutb2', 
-				name: '▼ Stairs to B2F',
-				// GATING: Must defeat BOTH trainers on this floor
-				requiredFlag: ['beatrocketb11', 'beatrocketb12'],
-				blockMessage: 'The grunts are blocking the stairs! Defeat them all to proceed.'
-			}
-		],
-		encounterZones: ['hideoutencounters'],
-		buildings: [
-			{
-				id: 'b1statue',
-				name: 'Giovanni Statue',
-				type: 'misc',
-				description: 'A statue of the boss. It feels intimidating.',
-				accessible: true
-			}
-		]
+	'towerguide': {
+		id: 'towerguide',
+		name: 'Medium',
+		location: 'hauntedtower1f',
+		dialogue: "Spirits roam these halls...",
 	},
-
-	'rockethideoutb2': {
-		id: 'rockethideoutb2',
-		name: 'Rocket Hideout B2F',
-		type: 'dungeon',
-		description: 'The air is getting thick with smog.',
-		connectedLocations: [
-			{ id: 'rockethideoutb1', name: '▲ Stairs to B1F' },
-			{ 
-				id: 'rockethideoutb3', 
-				name: '▼ Stairs to B3F',
-				requiredFlag: ['beatrocketb21', 'beatrocketb22'],
-				blockMessage: 'More grunts are blocking the way!'
-			}
-		],
-		encounterZones: ['hideoutencounters'],
-	},
-
-	'rockethideoutb3': {
-		id: 'rockethideoutb3',
-		name: 'Rocket Hideout B3F',
-		type: 'dungeon',
-		description: 'A maze of spinning tiles.',
-		connectedLocations: [
-			{ id: 'rockethideoutb2', name: '▲ Stairs to B2F' },
-			{ 
-				id: 'rockethideoutb4', 
-				name: '▼ Stairs to B4F',
-				requiredFlag: ['beatrocketb31'],
-				blockMessage: 'A strong grunt refuses to let you pass.'
-			}
-		],
-		encounterZones: ['hideoutencounters'],
-	},
-
-	'rockethideoutb4': {
-		id: 'rockethideoutb4',
-		name: 'Rocket Hideout B4F',
-		type: 'dungeon',
-		description: 'The Admin\'s office is here. There is a bed in the corner.',
-		connectedLocations: [
-			{ id: 'rockethideoutb3', name: '▲ Stairs to B3F' },
-			{ 
-				id: 'rockethideoutb5', 
-				name: '▼ Stairs to Boss Room',
-				requiredFlag: ['beatrocketadmin'],
-				blockMessage: 'The Admin blocks the door to the Boss\'s office.'
-			}
-		],
-		buildings: [
-			{
-				id: 'rocketrestarea',
-				name: 'Employee Rest Area',
-				type: 'pokecenter', // Allows healing before boss
-				description: 'A comfortable bed. Looks like a good spot to rest.',
-				accessible: true
-			}
-		],
-		encounterZones: [], // No wild encounters on Admin floor
-	},
-
-	'rockethideoutb5': {
-		id: 'rockethideoutb5',
-		name: 'Rocket Hideout B5F (Boss)',
-		type: 'dungeon',
-		description: 'The deepest part of the base. The Boss is waiting.',
-		connectedLocations: [
-			{ id: 'rockethideoutb4', name: '▲ Stairs to B4F' },
-		],
-		encounterZones: [],
-	},
-
-	// ========================================================================
-	// HAUNTED TOWER (3 Floors)
-	// ========================================================================
-
-	'hauntedtower1f': {
-		id: 'hauntedtower1f',
-		name: 'Haunted Tower 1F',
-		type: 'indoor',
-		description: 'A spooky tower filled with mist.',
-		connectedLocations: [
-			{ id: 'newbarktown', name: 'Exit Tower' },
-			{ id: 'hauntedtower2f', name: '▲ Stairs to 2F' },
-		],
-		buildings: [
-			{
-				id: 'towershrine',
-				name: 'Healing Shrine',
-				type: 'pokecenter',
-				description: 'A safe spot to rest.',
-				accessible: true
-			}
-		],
-		encounterZones: ['ghostzonelow'],
-	},
-
-	'hauntedtower2f': {
-		id: 'hauntedtower2f',
-		name: 'Haunted Tower 2F',
-		type: 'indoor',
-		description: 'You hear whispers from the shadows.',
-		connectedLocations: [
-			{ id: 'hauntedtower1f', name: '▼ Stairs to 1F' },
-			{ 
-				id: 'hauntedtower3f', 
-				name: '▲ Stairs to 3F',
-				requiredFlag: 'beatchanneler1', // Single flag check
-				blockMessage: 'A spirit blocks the stairs up.'
-			},
-		],
-		encounterZones: ['ghostzonemed'],
-	},
-
-	'hauntedtower3f': {
-		id: 'hauntedtower3f',
-		name: 'Haunted Tower 3F',
-		type: 'indoor',
-		description: 'The top of the tower. The mist is thickest here.',
-		connectedLocations: [
-			{ id: 'hauntedtower2f', name: '▼ Stairs to 2F' },
-		],
-		encounterZones: ['ghostzonehigh'],
-	},
+	'scaredgrunt': {
+		id: 'scaredgrunt',
+		name: 'Terrified Grunt',
+		location: 'rockethideoutb1',
+		dialogue: "I'm not fighting! I just want to go home! The boss is on B5!",
+	}
 };
 
 // ============================================================================
-// ENCOUNTER ZONES
+// TRAINERS
 // ============================================================================
 
-export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
-	'grassland': {
-		name: 'Tall Grass',
-		pokemon: ['rattata', 'pidgey', 'sentret'],
-		levelRange: [2, 5],
-		battleType: 'single',
+export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
+	// --- TOWN / DOJO ---
+	'securitybob': {
+		name: 'Security Bob',
+		money: 100,
+		party: [{ species: 'machop', level: 5, moves: ['karatechop', 'leer'] }],
+		dialogue: { start: "Halt! Defeat me to enter!", win: "Fine, pass.", lose: "Train more." },
+		setFlag: 'securitycleared', 
 	},
-	'rarezone': {
-		name: 'Mystic Clearing',
-		pokemon: ['pikachu', 'eevee', 'ralts'],
-		levelRange: [10, 15],
-		battleType: 'single',
+	'blackbelt': {
+		name: 'Black Belt Aaron',
+		money: 200,
+		party: [{ species: 'tyrogue', level: 7, moves: ['tackle', 'fakeout'] }],
+		dialogue: { start: "Fight me!", win: "You're tough.", lose: "Train harder!" }
 	},
-	'dangerouscave': {
-		name: 'Dangerous Cave',
-		pokemon: ['zubat', 'geodude', 'onix'],
-		levelRange: [15, 20],
-		battleType: 'single',
-		requiredBadge: 'Expert Badge',
-		blockMessage: 'It is too dark and dangerous here! You need the Expert Badge to enter safely.',
+	'dojomaster': {
+		name: 'Master Ken',
+		money: 1000,
+		party: [
+			{ species: 'riolu', level: 8, moves: ['quickattack', 'forcepalm'] },
+			{ species: 'mankey', level: 9, moves: [ 'scratch', 'lowkick'] },
+		],
+		dialogue: { start: "Show me your strength!", win: "Excellent!", lose: "Disappointing." },
+		setFlag: 'masterdefeated',
 	},
-	'secretgarden': {
-		name: 'Secret Garden',
-		pokemon: ['bulbasaur', 'chikorita', 'roselia'],
-		levelRange: [12, 14],
-		battleType: 'double',
-		requiredFlag: 'gardenkeyfound',
-		blockMessage: 'The gate is locked tight. You need to find a key to enter.',
+
+	// --- ROCKET HIDEOUT ---
+	// B1
+	'rocketgruntb11': {
+		name: 'Rocket Grunt (Door)',
+		money: 400,
+		party: [{ species: 'rattata', level: 10, moves: ['tackle', 'quickattack'] }],
+		dialogue: { start: "Intruder!", win: "I'll alert the others...", lose: "Radio broken!" },
+		setFlag: 'beatrocketb11',
 	},
-	// --- Rocket Hideout Spawns ---
-	'hideoutencounters': {
-		name: 'Base Patrol',
-		pokemon: ['rattata', 'zubat', 'koffing', 'grimer'],
-		levelRange: [10, 14],
-		battleType: 'single',
+	'rocketgruntb12': {
+		name: 'Rocket Grunt (Hall)',
+		money: 400,
+		party: [{ species: 'zubat', level: 10, moves: ['leechlife', 'supersonic'] }],
+		dialogue: { start: "No entry!", win: "Pass then.", lose: "For Team Rocket!" },
+		setFlag: 'beatrocketb12',
 	},
-	// --- Haunted Tower Spawns ---
-	'ghostzonelow': {
-		name: 'Tower Mist',
-		pokemon: ['gastly', 'cubone'],
-		levelRange: [10, 13],
-		battleType: 'single',
+	// B2
+	'rocketgruntb21': {
+		name: 'Rocket Grunt (Lab)',
+		money: 500,
+		party: [{ species: 'koffing', level: 12, moves: ['smog', 'tackle'] }],
+		dialogue: { start: "Restricted area!", win: "Cough...", lose: "Too much smog." },
+		setFlag: 'beatrocketb21',
 	},
-	'ghostzonemed': {
-		name: 'Spooky Mist',
-		pokemon: ['gastly', 'haunter', 'misdreavus'],
-		levelRange: [14, 17],
-		battleType: 'single',
+	'rocketgruntb22': {
+		name: 'Rocket Grunt (Guard)',
+		money: 500,
+		party: [{ species: 'ekans', level: 12, moves: ['wrap', 'poisonsting'] }],
+		dialogue: { start: "Scram!", win: "Hiss...", lose: "Slither away!" },
+		setFlag: 'beatrocketb22',
 	},
-	'ghostzonehigh': {
-		name: 'Spirit Realm',
-		pokemon: ['haunter', 'gengar', 'duskull'],
-		levelRange: [18, 22],
-		battleType: 'single',
+	// B3
+	'rocketgruntb31': {
+		name: 'Rocket Elite',
+		money: 600,
+		party: [{ species: 'raticate', level: 14, moves: ['hyperfang'] }],
+		dialogue: { start: "You're annoying!", win: "Whatever.", lose: "Go away." },
+		setFlag: 'beatrocketb31',
 	},
+	// B4 (Admin)
+	'rocketadmin': {
+		name: 'Admin Proton',
+		money: 1500,
+		party: [
+			{ species: 'zubat', level: 16, moves: ['wingattack', 'confuseray'] },
+			{ species: 'koffing', level: 16, moves: ['sludge', 'smokescreen'] }
+		],
+		dialogue: { start: "You won't reach the boss!", win: "The boss is stronger.", lose: "I failed!" },
+		setFlag: 'beatrocketadmin',
+	},
+	// B5 (Boss)
+	'rocketboss': {
+		name: 'Boss Giovanni',
+		money: 5000,
+		party: [
+			{ species: 'onix', level: 20, moves: ['rockthrow', 'bind', 'screech'] },
+			{ species: 'rhyhorn', level: 20, moves: ['horndrill', 'stomp'] },
+			{ species: 'kangaskhan', level: 22, moves: ['megapunch', 'bite', 'tailwhip'], item: 'sitrusberry' }
+		],
+		dialogue: {
+			start: "Your journey ends here!",
+			win: "Team Rocket is blasting off again!",
+			lose: "Impossible.",
+		},
+		setFlag: ['beatrocketboss', 'rockethideoutcleared'],
+	},
+
+	// --- HAUNTED TOWER ---
+	'channelerhope': {
+		name: 'Channeler Hope',
+		money: 300,
+		party: [{ species: 'gastly', level: 15, moves: ['lick', 'spite'] }],
+		dialogue: { start: "Kekeke...", win: "Restless spirits...", lose: "..." },
+		setFlag: 'beatchanneler1',
+	},
+	'sagekoji': {
+		name: 'Sage Koji',
+		money: 300,
+		party: [{ species: 'hoothoot', level: 16, moves: ['hypnosis', 'peck'] }],
+		dialogue: { start: "Begone!", win: "You are strong.", lose: "Leave now." },
+		setFlag: 'beatsage1',
+	}
 };
 
-export function getStartingLocation() {
-	return { id: 'newbarktown', name: 'New Bark Town' };
+// ============================================================================
+// TRAINER LOCATIONS
+// ============================================================================
+
+export const TRAINER_LOCATIONS: Record<string, string[]> = {
+	'newbarktown': ['securitybob'],
+	'fightingdojo': ['blackbelt'],
+	
+	'rockethideoutb1': ['rocketgruntb11', 'rocketgruntb12'],
+	'rockethideoutb2': ['rocketgruntb21', 'rocketgruntb22'],
+	'rockethideoutb3': ['rocketgruntb31'],
+	'rockethideoutb4': ['rocketadmin'],
+	'rockethideoutb5': ['rocketboss'],
+	
+	'hauntedtower2f': ['channelerhope'],
+	'hauntedtower3f': ['sagekoji'],
+};
+
+// ============================================================================
+// BADGES
+// ============================================================================
+
+export interface BadgeInfo {
+	gymLeaderId: string;
+	badgeName: string;
+	order: number;
+	description?: string;
 }
+
+export const BADGES: BadgeInfo[] = [
+	{
+		gymLeaderId: 'dojomaster',
+		badgeName: 'Expert Badge',
+		order: 1,
+		description: 'Allows access to dangerous caves.',
+	}
+];
+
+export const TOTAL_BADGES = BADGES.length;
+
+export function getBadgeForGymLeader(gymLeaderId: string) {
+	const badge = BADGES.find(b => b.gymLeaderId === gymLeaderId);
+	return badge?.badgeName;
+}
+
+export function getGymLeaderForBadge(badgeName: string) {
+	const badge = BADGES.find(b => b.badgeName === badgeName);
+	return badge?.gymLeaderId;
+}
+
+export function getBadgeOrder(badgeName: string) {
+	const badge = BADGES.find(b => b.badgeName === badgeName);
+	return badge?.order;
+}
+
+export function getAllBadgeNames() {
+	return BADGES.map(b => b.badgeName);
+}
+
+export function isValidBadge(badgeName: string) {
+	return BADGES.some(b => b.badgeName === badgeName);
+}
+
+export const FIRST_BADGE_NAME = BADGES[0]?.badgeName;
+export const LAST_BADGE_NAME = BADGES[BADGES.length - 1]?.badgeName;
+
+export interface StoryEvent {
+	id: string;
+	name: string;
+	description: string;
+	trigger: 'location_enter' | 'trainer_defeat' | 'badge_obtain' | 'manual';
+	location?: string;
+	trainerId?: string;
+	badgeName?: string;
+	flagsRequired?: string[];
+	flagsSet?: string[];
+	dialogue?: string;
+}
+
+export const STORY_EVENTS: Record<string, StoryEvent> = {};
