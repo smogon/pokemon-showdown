@@ -1305,6 +1305,42 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot find this wild Pokémon zone in your current location.");
 			}
 
+			// --- NEW: Logic Checks for Zone Access ---
+			let isBlocked = false;
+			let blockMessage = "";
+
+			// 1. Check Badges
+			if (zone.requiredBadge) {
+				const reqBadges = Array.isArray(zone.requiredBadge) ? zone.requiredBadge : [zone.requiredBadge];
+				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
+					isBlocked = true;
+					blockMessage = zone.blockMessage || `Locked: Requires ${reqBadges.join(', ')}.`;
+				}
+			}
+
+			// 2. Check Required Flags
+			if (!isBlocked && zone.requiredFlag) {
+				const reqFlags = Array.isArray(zone.requiredFlag) ? zone.requiredFlag : [zone.requiredFlag];
+				if (!reqFlags.every(f => player.storyFlags.has(f))) {
+					isBlocked = true;
+					blockMessage = zone.blockMessage || "You cannot explore this area yet.";
+				}
+			}
+
+			// 3. Check Prevent Flags
+			if (!isBlocked && zone.preventIfFlag) {
+				const prevFlags = Array.isArray(zone.preventIfFlag) ? zone.preventIfFlag : [zone.preventIfFlag];
+				if (prevFlags.some(f => player.storyFlags.has(f))) {
+					isBlocked = true;
+					blockMessage = zone.blockMessage || "This area is currently inaccessible.";
+				}
+			}
+
+			if (isBlocked) {
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMessage)}`);
+			}
+			// -----------------------------------------
+
 			const zoneBattleType = zone.battleType || 'single';
 			let finalBattleType: BattleState['battleType'] = 'wild';
 			const battleMessages: string[] = [];

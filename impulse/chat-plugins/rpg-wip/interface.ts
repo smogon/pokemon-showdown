@@ -227,7 +227,7 @@ export interface BattleState {
 	playerTailwindTurns: number;
 	opponentTailwindTurns: number;
 	gravityTurns: number;
-	mudSportTurns: number;
+	mudSportTurns: 0;
 	waterSportTurns: number;
 	fairyLockTurns: number;
 	ionDelugeTurns: number;
@@ -458,4 +458,18 @@ export interface Location {
 	
 	setFlag?: string | string[]; // Supports single or multiple flags
 	removeFlag?: string | string[]; // Supports single or multiple flags
+}
+
+// NEW: Encounter Zone Interface
+export interface EncounterZone {
+	name: string;
+	pokemon: string[];
+	levelRange: [number, number];
+	battleType?: 'single' | 'double';
+	
+	// Access Control
+	requiredFlag?: string | string[];
+	requiredBadge?: string | string[];
+	preventIfFlag?: string | string[];
+	blockMessage?: string;
 }

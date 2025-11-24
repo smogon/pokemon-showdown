@@ -8,6 +8,8 @@
  * Edit this file to create new stories and adventures.
  */
 
+import type { EncounterZone } from './interface';
+
 // ============================================================================
 // LOCATIONS
 // ============================================================================
@@ -68,7 +70,8 @@ export const LOCATIONS: Record<string, any> = {
 		connectedLocations: [
 			{ id: 'newbarktown', name: 'New Bark Town' },
 		],
-		encounterZones: ['grassland'],
+		// Added 'dangerous_cave' here for testing badge locks
+		encounterZones: ['grassland', 'dangerouscave'],
 	},
 	'hiddengrove': {
 		id: 'hiddengrove',
@@ -78,7 +81,8 @@ export const LOCATIONS: Record<string, any> = {
 		connectedLocations: [
 			{ id: 'newbarktown', name: 'New Bark Town' },
 		],
-		encounterZones: ['rarezone'],
+		// Added 'secret_garden' here for testing flag locks
+		encounterZones: ['rarezone', 'secretgarden'],
 	},
 };
 
@@ -86,12 +90,7 @@ export const LOCATIONS: Record<string, any> = {
 // ENCOUNTER ZONES
 // ============================================================================
 
-export const ENCOUNTER_ZONES: Record<string, {
-	name: string,
-	pokemon: string[],
-	levelRange: [number, number],
-	battleType?: 'single' | 'double',
-}> = {
+export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	'grassland': {
 		name: 'Tall Grass',
 		pokemon: ['rattata', 'pidgey', 'sentret'],
@@ -103,6 +102,24 @@ export const ENCOUNTER_ZONES: Record<string, {
 		pokemon: ['pikachu', 'eevee', 'ralts'],
 		levelRange: [10, 15],
 		battleType: 'single',
+	},
+	// New Test Case: Badge Lock
+	'dangerouscave': {
+		name: 'Dangerous Cave',
+		pokemon: ['zubat', 'geodude', 'onix'],
+		levelRange: [15, 20],
+		battleType: 'single',
+		requiredBadge: 'Boulder Badge',
+		blockMessage: 'It is too dark and dangerous here! You need the Boulder Badge to enter safely.',
+	},
+	// New Test Case: Flag Lock
+	'secretgarden': {
+		name: 'Secret Garden',
+		pokemon: ['bulbasaur', 'chikorita', 'roselia'],
+		levelRange: [12, 14],
+		battleType: 'double',
+		requiredFlag: 'garden_key_found',
+		blockMessage: 'The gate is locked tight. You need to find a key to enter.',
 	}
 };
 
