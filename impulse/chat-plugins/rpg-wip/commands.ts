@@ -117,6 +117,27 @@ function isInActiveBattle(userId: string): boolean {
 	return true;
 }
 
+/**
+ * Determines the correct return command when leaving an NPC interaction.
+ * If the NPC is inside a building, returns to that building view.
+ * Otherwise, returns to the main explore/location view.
+ */
+function getNPCReturnCommand(player: PlayerData, npcId: string): string {
+	const currentLocation = LOCATIONS[toID(player.location)];
+	if (currentLocation && currentLocation.buildings) {
+		// Check all buildings in the current location
+		for (const building of currentLocation.buildings) {
+			// If this building has a list of NPCs and our NPC is in it
+			if (building.npcs && building.npcs.includes(npcId)) {
+				// Return to this specific building
+				return `/rpg building ${toID(building.id)}`;
+			}
+		}
+	}
+	// Default to the main location view
+	return '/rpg explore';
+}
+
 function initializeAndStartBattle(
 	ctx: CommandContext,
 	room: ChatRoom,
@@ -2099,7 +2120,10 @@ export const commands: ChatCommands = {
 				npcToRender = { ...npc, action: null, dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(Request completed.)</em>' };
 			}
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender)}`);
+			// CALCULATE RETURN PATH
+			const returnCommand = getNPCReturnCommand(player, npcId);
+
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, undefined, returnCommand)}`);
 		},
 
 		npcaction(target, room, user) {
@@ -2217,12 +2241,15 @@ export const commands: ChatCommands = {
 				npcToRender = { ...npc, action: null, dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(Request completed.)</em>' };
 			}
 
+			// CALCULATE RETURN PATH
+			const returnCommand = getNPCReturnCommand(player, npcId);
+
 			if (result.success) {
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, result.message)}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, result.message, returnCommand)}`);
 				if (result.canBattle && action.trainerId) return this.parse(`/rpg challenge ${action.trainerId}`);
 			} else {
 				const errorMsg = `<span class="rpg-text-error">${result.message}</span>`;
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, errorMsg)}`);
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, errorMsg, returnCommand)}`);
 			}
 		},
 
