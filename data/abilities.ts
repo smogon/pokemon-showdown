@@ -7706,6 +7706,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -96,
 	},
 	thermalswitch: {
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
 		onWeatherChange(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Draggoyle' || pokemon.transformed) return;
 			if (!pokemon.hp) return;
