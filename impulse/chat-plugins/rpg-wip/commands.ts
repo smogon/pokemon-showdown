@@ -1015,17 +1015,30 @@ export const commands: ChatCommands = {
 			let isBlocked = false;
 			let blockMsg = "";
 
-			// Check Badges
-			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
-				isBlocked = true;
-				blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
+			// Check Badges (String or Array)
+			if (connection.requiredBadge) {
+				const reqBadges = Array.isArray(connection.requiredBadge) ? connection.requiredBadge : [connection.requiredBadge];
+				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
+					isBlocked = true;
+					blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
+				}
 			} 
-			// Check Flags (String or Array)
-			else if (connection.requiredFlag) {
+			
+			// Check Required Flags (String or Array)
+			if (!isBlocked && connection.requiredFlag) {
 				const reqFlags = Array.isArray(connection.requiredFlag) ? connection.requiredFlag : [connection.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
 					isBlocked = true;
 					blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+				}
+			}
+
+			// Check Prevent Flags (String or Array) - Block if ANY exist
+			if (!isBlocked && connection.preventIfFlag) {
+				const prevFlags = Array.isArray(connection.preventIfFlag) ? connection.preventIfFlag : [connection.preventIfFlag];
+				if (prevFlags.some(f => player.storyFlags.has(f))) {
+					isBlocked = true;
+					blockMsg = (connection as any).blockMessage || `Locked: The path is currently blocked.`;
 				}
 			}
 
@@ -1062,9 +1075,13 @@ export const commands: ChatCommands = {
 						if (!reqFlags.every(f => player.storyFlags.has(f))) continue;
 					}
 
+					if (event.preventIfFlag) {
+						const prevFlags = Array.isArray(event.preventIfFlag) ? event.preventIfFlag : [event.preventIfFlag];
+						if (prevFlags.some(f => player.storyFlags.has(f))) continue;
+					}
+
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-					if (event.preventIfFlag && player.storyFlags.has(event.preventIfFlag)) continue;
 					
 					triggeredEvents.push(event);
 
@@ -1144,17 +1161,36 @@ export const commands: ChatCommands = {
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
 			
 			// --- Access Checks ---
-			// Check Accessible property
+			
+			// 1. Check Accessible property
 			if (building.accessible === false) {
 				const blockMsg = (building as any).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
-			// Check Required Flags (String or Array)
+			// 2. Check Badges (String or Array)
+			if (building.requiredBadge) {
+				const reqBadges = Array.isArray(building.requiredBadge) ? building.requiredBadge : [building.requiredBadge];
+				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
+					const blockMsg = (building as any).blockMessage || "Locked: You need more badges to enter.";
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+				}
+			}
+
+			// 3. Check Required Flags (String or Array)
 			if (building.requiredFlag) {
 				const reqFlags = Array.isArray(building.requiredFlag) ? building.requiredFlag : [building.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
 					const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
+					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+				}
+			}
+
+			// 4. Check Prevent Flags (String or Array) - Block if ANY exist
+			if (building.preventIfFlag) {
+				const prevFlags = Array.isArray(building.preventIfFlag) ? building.preventIfFlag : [building.preventIfFlag];
+				if (prevFlags.some(f => player.storyFlags.has(f))) {
+					const blockMsg = (building as any).blockMessage || "The building is currently closed.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
