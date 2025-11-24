@@ -269,7 +269,7 @@ export const commands: Chat.ChatCommands = {
 				if (profileData.tcgPoints !== undefined) {
 					let pointsStr = `${profileData.tcgPoints.toLocaleString()} Points`;
 					if (profileData.tcgPointsRank !== undefined) {
-						pointsStr += ` (Rank #${profileData.tcgPointsRank})`;
+						pointsStr += ` (#${profileData.tcgPointsRank})`;
 					}
 					parts.push(pointsStr);
 				}
@@ -277,7 +277,7 @@ export const commands: Chat.ChatCommands = {
 				if (profileData.tcgTotalCards !== undefined) {
 					let cardsStr = `${profileData.tcgTotalCards.toLocaleString()} Total Cards`;
 					if (profileData.tcgTotalCardsRank !== undefined) {
-						cardsStr += ` (Rank #${profileData.tcgTotalCardsRank})`;
+						cardsStr += ` (#${profileData.tcgTotalCardsRank})`;
 					}
 					parts.push(cardsStr);
 				}
