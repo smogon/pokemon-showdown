@@ -21,16 +21,16 @@ export const LOCATIONS: Record<string, any> = {
 		type: 'town',
 		description: 'The wind blows constantly in this quiet town.',
 		connectedLocations: [
-			{ 
-				id: 'route101', 
-				name: 'Route 101' 
+			{
+				id: 'route101',
+				name: 'Route 101',
 			},
 			{
 				id: 'hiddengrove',
 				name: 'Hidden Grove',
 				requiredFlag: 'master_defeated', // Flag required to travel
 				blockMessage: 'The path is overgrown. Only a Dojo Master could clear this way.',
-			}
+			},
 		],
 		buildings: [
 			{
@@ -40,6 +40,13 @@ export const LOCATIONS: Record<string, any> = {
 				description: 'Pokemon Research Laboratory.',
 				accessible: true,
 				npcs: ['professorelm'], // Link to the NPC defined in game-npcs.ts
+			},
+			{
+				id: 'pokemoncenter',
+				name: 'Pokémon Center',
+				type: 'pokecenter',
+				description: 'A place to heal your Pokémon and store them in the PC.',
+				accessible: true,
 			},
 			{
 				id: 'townshop',
@@ -121,7 +128,7 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 		battleType: 'double',
 		requiredFlag: 'garden_key_found',
 		blockMessage: 'The gate is locked tight. You need to find a key to enter.',
-	}
+	},
 };
 
 // ============================================================================
