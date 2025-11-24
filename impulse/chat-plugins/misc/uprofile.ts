@@ -19,15 +19,31 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
+interface UserAvatarDocument {
+	_id: string;
+	avatar: string | number;
+	lastSeen: Date;
+}
+
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
+const UserAvatarDB = ImpulseDB<UserAvatarDocument>('useravatars');
 
 /**
  * Get the avatar display for a user, including custom avatars
+ * For offline users, shows 'unknown' avatar
  */
-function getAvatarDisplay(user: User): string {
-	const avatar = user.avatar;
+function getAvatarDisplay(user: User | null, storedAvatar?: string | number): string {
+	let avatar: string | number | undefined;
 	let avatarUrl = '';
+
+	// If user is online, use their current avatar and it will be stored
+	if (user) {
+		avatar = user.avatar;
+	} else {
+		// User is offline - show 'unknown' avatar
+		avatar = 'unknown';
+	}
 
 	// Check if user has a custom avatar (file with extension)
 	if (avatar && typeof avatar === 'string' && avatar.includes('.')) {
@@ -206,6 +222,15 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(targetId);
 			const targetName = target || user.name;
 
+			// Store/update the user's avatar if they are online
+			if (targetUser) {
+				await UserAvatarDB.updateOne(
+					{ _id: targetId },
+					{ $set: { _id: targetId, avatar: targetUser.avatar, lastSeen: new Date() } },
+					{ upsert: true }
+				);
+			}
+
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
@@ -219,10 +244,8 @@ export const commands: Chat.ChatCommands = {
 			// Username in avatar section
 			buf += `<div style="text-align: center; padding-bottom: 6px;"><b class="username">${nameColor(targetName, true, true)}</b></div>`;
 
-			// Avatar image
-			if (targetUser) {
-				buf += `<div style="text-align: center;">${getAvatarDisplay(targetUser)}</div>`;
-			}
+			// Avatar image - always display (either current or 'unknown' for offline users)
+			buf += `<div style="text-align: center;">${getAvatarDisplay(targetUser)}</div>`;
 
 			buf += '</td>';
 
