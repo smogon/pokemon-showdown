@@ -430,7 +430,7 @@ export interface LocationConnection {
 
 export interface Building {
 	id: string;
-	type: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc' | 'indoor' | 'dungeon';
+	type: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
 	name: string;
 	description: string;
 	npcs?: string[];
