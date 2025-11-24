@@ -63,7 +63,6 @@ import {
 	generatePokemonInfoHTML,
 	generateBattleHTML,
 	generateWelcomeHTML,
-	generateStarterSelectionHTML,
 	generatePokemonSummaryHTML,
 	generateEggMoveSelectionHTML,
 	generateInventoryHTML,
@@ -76,7 +75,6 @@ import {
 	generateGiveItemPokemonSelectionHTML,
 	generateFaintSwitchHTML,
 	generateBottomNavigation,
-	generateStarterConfirmHTML,
 	generateSummarySelectionHTML,
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
@@ -88,7 +86,6 @@ import {
 	generateGiveItemToSpecificPokemonHTML,
 	generateTakeItemSelectionHTML,
 	generateNPCSelectionHTML,
-	generateNPCStarterChoiceHTML,
 	generateNPCStarterConfirmHTML,
 	generateDBDeleteConfirmHTML,
 	generatePartyScreenHTML,
@@ -491,18 +488,6 @@ export const commands: ChatCommands = {
 			return this.parse('/rpg explore');
 		},
 
-		choosestarter(target, room, user) {
-			if (isInActiveBattle(user.id)) {
-				return this.errorReply("You cannot do this while in a battle.");
-			}
-			const type = target.trim().toLowerCase();
-			const starters = STARTER_POKEMON[type as keyof typeof STARTER_POKEMON];
-			if (!starters) {
-				return this.errorReply("Invalid type. Choose 'fire', 'water', or 'grass'.");
-			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterSelectionHTML(type, starters)}`);
-		},
-
 		starterchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 
@@ -513,67 +498,28 @@ export const commands: ChatCommands = {
 			const npc = NPC_DATABASE[npcId];
 			if (!npc?.action || npc.action.type !== 'choosestarter') return this.errorReply("Invalid NPC.");
 
-			if (pokemonId) {
-				const player = getPlayerData(user.id);
-				const allStarters = Object.values(STARTER_POKEMON).flat();
-
-				if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter.");
-
-				const result = NPCActions.handleChooseStarter(player, npc.action, pokemonId);
-				if (result.success) {
-					if (npc.action.onceOnly) player.completedNPCActions.add(npcId);
-
-					const startLocId = GameConfig.startLocationId;
-					const locationData = LOCATIONS[startLocId];
-					if (player.location === 'Unknown Location' || !player.location) {
-						player.location = locationData?.name || 'Unknown';
-					}
-
-					const species = Dex.species.get(result.pokemon!.species);
-					const tempSlot = createActivePokemonSlot(result.pokemon!);
-
-					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterConfirmHTML(npc.name, result.message, tempSlot, species.name)}`);
-				} else {
-					return this.errorReply(result.message);
-				}
-			} else {
-				const allStarters = Object.values(STARTER_POKEMON).flat();
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterChoiceHTML(npcId, npc.name, allStarters)}`);
-			}
-		},
-
-		selectstarter(target, room, user) {
-			if (isInActiveBattle(user.id)) {
-				return this.errorReply("You cannot do this while in a battle.");
-			}
-			const starterId = toID(target);
 			const player = getPlayerData(user.id);
-			if (player.party.length > 0) {
-				return this.errorReply("You already have a starter Pokémon!");
-			}
-
 			const allStarters = Object.values(STARTER_POKEMON).flat();
-			if (!allStarters.includes(starterId)) {
-				return this.errorReply("Invalid starter Pokémon.");
-			}
-			try {
-				const starterPokemon = createPokemon(starterId, 5);
-				player.party.push(starterPokemon);
-				player.name = user.name;
+
+			if (!pokemonId) return this.errorReply("Invalid starter.");
+			if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter.");
+
+			const result = NPCActions.handleChooseStarter(player, npc.action, pokemonId);
+			if (result.success) {
+				if (npc.action.onceOnly) player.completedNPCActions.add(npcId);
 
 				const startLocId = GameConfig.startLocationId;
 				const locationData = LOCATIONS[startLocId];
-				player.location = locationData?.name || 'Unknown';
-				const species = Dex.species.get(starterId);
-
-				const tempSlot = createActivePokemonSlot(starterPokemon);
-
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateStarterConfirmHTML(tempSlot, species.name, player.location)}`);
-				if (room?.roomid !== 'lobby') {
-					room.add(`|c|~RPG Bot|${user.name} has chosen ${species.name} as their starter Pokémon!`).update();
+				if (player.location === 'Unknown Location' || !player.location) {
+					player.location = locationData?.name || 'Unknown';
 				}
-			} catch (error) {
-				this.errorReply(`Error creating starter Pokémon: ${error}`);
+
+				const species = Dex.species.get(result.pokemon!.species);
+				const tempSlot = createActivePokemonSlot(result.pokemon!);
+
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCStarterConfirmHTML(npc.name, result.message, tempSlot, species.name)}`);
+			} else {
+				return this.errorReply(result.message);
 			}
 		},
 
