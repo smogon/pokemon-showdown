@@ -1188,7 +1188,14 @@ export const commands: ChatCommands = {
 			let actionsHTML = '';
 
 			if (building.type === 'pokecenter') {
-				actionsHTML += `<button name="send" value="/rpg npcaction pokecenter_nurse" class="button">💊 Heal Party</button> `;
+				// Find the first NPC with heal action in this building
+				const healNpc = building.npcs?.find(id => {
+					const npcData = NPC_DATABASE[id];
+					return npcData?.action?.type === 'heal';
+				});
+				if (healNpc) {
+					actionsHTML += `<button name="send" value="/rpg npcaction ${healNpc}" class="button">💊 Heal Party</button> `;
+				}
 				actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
 			}
 			if (building.type === 'pokemart' || building.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
@@ -2205,6 +2212,16 @@ export const commands: ChatCommands = {
 					const pokeCenterBuilding = healLocation?.buildings?.find(b => b.type === 'pokecenter');
 
 					if (pokeCenterBuilding) {
+						// Find the first NPC with heal action in this building
+						let healNpcId = npcId; // Default to current NPC
+						if (pokeCenterBuilding.npcs) {
+							const foundHealNpc = pokeCenterBuilding.npcs.find(id => {
+								const npcData = NPC_DATABASE[id];
+								return npcData?.action?.type === 'heal';
+							});
+							if (foundHealNpc) healNpcId = foundHealNpc;
+						}
+
 						// Generate building HTML with success message
 						let buildingHTML = `<div class="rpg-infobox">`;
 						buildingHTML += `<div class="rpg-notification rpg-text-success">${result.message}</div>`;
@@ -2214,11 +2231,11 @@ export const commands: ChatCommands = {
 						// Show NPCs if any
 						if (pokeCenterBuilding.npcs && pokeCenterBuilding.npcs.length > 0) {
 							buildingHTML += '<p><strong>People here:</strong></p>';
-							for (const healNpcId of pokeCenterBuilding.npcs) {
-								const npcData = NPC_DATABASE[healNpcId];
+							for (const buildingNpcId of pokeCenterBuilding.npcs) {
+								const npcData = NPC_DATABASE[buildingNpcId];
 								if (npcData) {
 									if (npcData.flags && !npcData.flags.every(flag => player.storyFlags.has(flag))) continue;
-									buildingHTML += `<button name="send" value="/rpg talknpc ${healNpcId}" class="button">💬 ${npcData.name}</button> `;
+									buildingHTML += `<button name="send" value="/rpg talknpc ${buildingNpcId}" class="button">💬 ${npcData.name}</button> `;
 								}
 							}
 							buildingHTML += '<hr>';
@@ -2226,7 +2243,7 @@ export const commands: ChatCommands = {
 
 						// Show actions
 						buildingHTML += '<p><strong>Actions:</strong></p>';
-						buildingHTML += `<button name="send" value="/rpg npcaction pokecenter_nurse" class="button">💊 Heal Party</button> `;
+						buildingHTML += `<button name="send" value="/rpg npcaction ${healNpcId}" class="button">💊 Heal Party</button> `;
 						buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
 
 						buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
