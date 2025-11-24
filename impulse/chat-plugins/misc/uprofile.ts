@@ -33,7 +33,7 @@ const UserAvatarDB = ImpulseDB<UserAvatarDocument>('useravatars');
  * Get the avatar display for a user, including custom avatars
  * For offline users, shows 'unknown' avatar
  */
-function getAvatarDisplay(user: User | null, storedAvatar?: string | number): string {
+function getAvatarDisplay(user: User | null): string {
 	let avatar: string | number | undefined;
 	let avatarUrl = '';
 
@@ -226,7 +226,7 @@ export const commands: Chat.ChatCommands = {
 			if (targetUser) {
 				await UserAvatarDB.updateOne(
 					{ _id: targetId },
-					{ $set: { _id: targetId, avatar: targetUser.avatar, lastSeen: new Date() } },
+					{ $set: { avatar: targetUser.avatar, lastSeen: new Date() } },
 					{ upsert: true }
 				);
 			}
