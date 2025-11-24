@@ -312,7 +312,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			else if (building.type === 'department') icon = '🏬';
 			else if (building.type === 'gameCorner') icon = '🎰';
 
-			// Always render as a clickable button.
+			// Always render as a clickable button. 
 			// Validation happens in the /rpg building command handler.
 			html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
@@ -1191,14 +1191,14 @@ function generatePokemonStatusTagsHTML(
 		// --- NEW MECHANICS TAGS ---
 		// Perish Song (Visual countdown)
 		slot.perishSongCounter && slot.perishSongCounter > 0 ? `<span class="rpg-tag rpg-tag-perish">Perish (${slot.perishSongCounter})</span>` : '',
-
+		
 		// Commander (Tatsugiri / Dondozo interaction)
 		(slot as any).commanderActive ? '<span class="rpg-tag rpg-tag-commander">Commanding</span>' : '',
 		(slot as any).commanderBoost ? '<span class="rpg-tag rpg-tag-commander">Commander Boost</span>' : '',
-
+		
 		// Disguise (Mimikyu)
 		slot.isDisguised ? '<span class="rpg-tag rpg-tag-disguise">Disguised</span>' : '',
-
+		
 		// Gulp Missile (Cramorant forms)
 		(slot as any).gulpMissileForm === 'gulping' ? '<span class="rpg-tag rpg-tag-gulping">Gulping</span>' : '',
 		(slot as any).gulpMissileForm === 'gorging' ? '<span class="rpg-tag rpg-tag-gorging">Gorging</span>' : '',
@@ -1217,7 +1217,7 @@ function generatePokemonStatusTagsHTML(
 
 		// --- PARADOX ABILITIES ---
 		// Quark Drive (Future)
-		(slot as any).boosterEnergyActive && pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-quark">Quark Drive</span>' : '',
+		(slot as any).boosterEnergyActive && pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-quark">Quark Drive</span>' : '', 
 		// Protosynthesis (Ancient)
 		(slot as any).boosterEnergyActive && !pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-proto">Protosynthesis</span>' : '',
 	].filter(Boolean).join('');

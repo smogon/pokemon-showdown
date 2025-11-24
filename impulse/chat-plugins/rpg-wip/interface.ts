@@ -332,8 +332,8 @@ export interface AbilityContext {
 
 export interface NPCAction {
 	type: 'heal' | 'giveitem' | 'givepokemon' | 'takeitem' | 'exchangeitems' | 'choosestarter' |
-		'battlerequest' | 'questchain' | 'delivery' | 'conditionaldialogue' | 'escort' |
-		'rivalbattle' | 'moverelearner';
+	'battlerequest' | 'questchain' | 'delivery' | 'conditionaldialogue' | 'escort' |
+	'rivalbattle' | 'moverelearner';
 
 	// Generic / Shared properties
 	onceOnly?: boolean;
@@ -376,7 +376,7 @@ export interface ScriptedEvent {
 	name: string;
 	type: string;
 	triggerOnce?: boolean;
-
+	
 	requiredFlag?: string | string[]; // Supports single or multiple flags
 	setFlag?: string | string[]; // Supports single or multiple flags
 	removeFlag?: string | string[]; // Supports single or multiple flags
@@ -435,15 +435,15 @@ export interface Building {
 	description: string;
 	npcs?: string[];
 	accessible?: boolean;
-
+	
 	requiredFlag?: string | string[]; // Supports single or multiple flags
 	requiredBadge?: string | string[]; // Supports single or multiple badges
 	preventIfFlag?: string | string[]; // Supports single or multiple flags
 	blockMessage?: string;
-
+	
 	setFlag?: string | string[]; // Supports single or multiple flags
 	removeFlag?: string | string[]; // Supports single or multiple flags
-
+	
 	gymLeaderId?: string;
 	trainers?: string[]; // NEW: List of trainer IDs in this building
 }
@@ -456,7 +456,7 @@ export interface Location {
 	buildings?: Building[];
 	encounterZones?: string[];
 	scriptedEvents?: ScriptedEvent[];
-
+	
 	setFlag?: string | string[]; // Supports single or multiple flags
 	removeFlag?: string | string[]; // Supports single or multiple flags
 }
@@ -466,7 +466,7 @@ export interface EncounterZone {
 	pokemon: string[];
 	levelRange: [number, number];
 	battleType?: 'single' | 'double';
-
+	
 	requiredFlag?: string | string[];
 	requiredBadge?: string | string[];
 	preventIfFlag?: string | string[];
