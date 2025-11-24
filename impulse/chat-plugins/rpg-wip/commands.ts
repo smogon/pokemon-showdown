@@ -121,7 +121,7 @@ function isInActiveBattle(userId: string): boolean {
  * Helper function to find the first NPC with heal action type in a building.
  * Used to dynamically determine which NPC handles healing in Pokemon Centers.
  */
-function findHealNpcInBuilding(building: any): string | undefined {
+function findHealNpcInBuilding(building: { npcs?: string[] }): string | undefined {
 	if (!building.npcs) return undefined;
 	return building.npcs.find((id: string) => {
 		const npcData = NPC_DATABASE[id];
@@ -2222,9 +2222,7 @@ export const commands: ChatCommands = {
 
 					if (pokeCenterBuilding) {
 						// Find the first NPC with heal action in this building
-						let healNpcId = npcId; // Default to current NPC
-						const foundHealNpc = findHealNpcInBuilding(pokeCenterBuilding);
-						if (foundHealNpc) healNpcId = foundHealNpc;
+						const healNpcId = findHealNpcInBuilding(pokeCenterBuilding) || npcId;
 
 						// Generate building HTML with success message
 						let buildingHTML = `<div class="rpg-infobox">`;

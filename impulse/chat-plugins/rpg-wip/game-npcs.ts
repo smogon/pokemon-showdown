@@ -23,7 +23,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 	'pokecenter_nurse': {
 		id: 'pokecenter_nurse',
 		name: 'Nurse Joy',
-		location: 'pokemoncenter',
+		location: 'pokemoncenter', // Generic location for any Pokemon Center building
 		dialogue: "Welcome to the Pokémon Center! We can heal your Pokémon to perfect health!",
 		action: {
 			type: 'heal',
