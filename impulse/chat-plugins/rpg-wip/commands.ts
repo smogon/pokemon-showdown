@@ -117,6 +117,18 @@ function isInActiveBattle(userId: string): boolean {
 	return true;
 }
 
+/**
+ * Helper function to find the first NPC with heal action type in a building.
+ * Used to dynamically determine which NPC handles healing in Pokemon Centers.
+ */
+function findHealNpcInBuilding(building: { npcs?: string[] }): string | undefined {
+	if (!building.npcs) return undefined;
+	return building.npcs.find((id: string) => {
+		const npcData = NPC_DATABASE[id];
+		return npcData?.action?.type === 'heal';
+	});
+}
+
 function initializeAndStartBattle(
 	ctx: CommandContext,
 	room: ChatRoom,
@@ -966,16 +978,16 @@ export const commands: ChatCommands = {
 				const reqBadges = Array.isArray(connection.requiredBadge) ? connection.requiredBadge : [connection.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
+					blockMsg = (connection).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
 				}
-			} 
-			
+			}
+
 			// Check Required Flags (String or Array)
 			if (!isBlocked && connection.requiredFlag) {
 				const reqFlags = Array.isArray(connection.requiredFlag) ? connection.requiredFlag : [connection.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+					blockMsg = (connection).blockMessage || `Locked: You cannot go here yet.`;
 				}
 			}
 
@@ -984,7 +996,7 @@ export const commands: ChatCommands = {
 				const prevFlags = Array.isArray(connection.preventIfFlag) ? connection.preventIfFlag : [connection.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: The path is currently blocked.`;
+					blockMsg = (connection).blockMessage || `Locked: The path is currently blocked.`;
 				}
 			}
 
@@ -998,12 +1010,12 @@ export const commands: ChatCommands = {
 			player.visitedLocations.add(targetLocationId);
 
 			// Handle Location Entry Flags (Set/Remove)
-			if ((targetLocation as any).setFlag) {
-				const flags = Array.isArray((targetLocation as any).setFlag) ? (targetLocation as any).setFlag : [(targetLocation as any).setFlag];
+			if ((targetLocation).setFlag) {
+				const flags = Array.isArray((targetLocation).setFlag) ? (targetLocation).setFlag : [(targetLocation).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
 			}
-			if ((targetLocation as any).removeFlag) {
-				const flags = Array.isArray((targetLocation as any).removeFlag) ? (targetLocation as any).removeFlag : [(targetLocation as any).removeFlag];
+			if ((targetLocation).removeFlag) {
+				const flags = Array.isArray((targetLocation).removeFlag) ? (targetLocation).removeFlag : [(targetLocation).removeFlag];
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
@@ -1012,10 +1024,10 @@ export const commands: ChatCommands = {
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
 					const eventFlagId = `scripted_${event.id}`;
-					
+
 					// Check Trigger Conditions
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-					
+
 					if (event.requiredFlag) {
 						const reqFlags = Array.isArray(event.requiredFlag) ? event.requiredFlag : [event.requiredFlag];
 						if (!reqFlags.every(f => player.storyFlags.has(f))) continue;
@@ -1028,21 +1040,21 @@ export const commands: ChatCommands = {
 
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-					
+
 					triggeredEvents.push(event);
 
 					// Handle Event Flags (for non-interactive events that resolve immediately)
 					const interactiveTypes = ['choice', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour'];
 					if (!interactiveTypes.includes(event.type)) {
 						if (event.triggerOnce) player.storyFlags.add(eventFlagId);
-						
+
 						if (event.setFlag) {
 							const flags = Array.isArray(event.setFlag) ? event.setFlag : [event.setFlag];
 							flags.forEach(f => player.storyFlags.add(f));
 						}
-						
-						if ((event as any).removeFlag) {
-							const flags = Array.isArray((event as any).removeFlag) ? (event as any).removeFlag : [(event as any).removeFlag];
+
+						if ((event).removeFlag) {
+							const flags = Array.isArray((event).removeFlag) ? (event).removeFlag : [(event).removeFlag];
 							flags.forEach((f: string) => player.storyFlags.delete(f));
 						}
 					}
@@ -1105,12 +1117,12 @@ export const commands: ChatCommands = {
 			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
-			
+
 			// --- Access Checks ---
-			
+
 			// 1. Check Accessible property
 			if (building.accessible === false) {
-				const blockMsg = (building as any).blockMessage || "This building is locked.";
+				const blockMsg = (building).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
@@ -1118,7 +1130,7 @@ export const commands: ChatCommands = {
 			if (building.requiredBadge) {
 				const reqBadges = Array.isArray(building.requiredBadge) ? building.requiredBadge : [building.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
-					const blockMsg = (building as any).blockMessage || "Locked: You need more badges to enter.";
+					const blockMsg = (building).blockMessage || "Locked: You need more badges to enter.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
@@ -1127,7 +1139,7 @@ export const commands: ChatCommands = {
 			if (building.requiredFlag) {
 				const reqFlags = Array.isArray(building.requiredFlag) ? building.requiredFlag : [building.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
-					const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
+					const blockMsg = (building).blockMessage || "You can't access this building yet.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
@@ -1136,18 +1148,18 @@ export const commands: ChatCommands = {
 			if (building.preventIfFlag) {
 				const prevFlags = Array.isArray(building.preventIfFlag) ? building.preventIfFlag : [building.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
-					const blockMsg = (building as any).blockMessage || "The building is currently closed.";
+					const blockMsg = (building).blockMessage || "The building is currently closed.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
 
 			// --- Successful Entry: Handle Flags ---
-			if ((building as any).setFlag) {
-				const flags = Array.isArray((building as any).setFlag) ? (building as any).setFlag : [(building as any).setFlag];
+			if ((building).setFlag) {
+				const flags = Array.isArray((building).setFlag) ? (building).setFlag : [(building).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
 			}
-			if ((building as any).removeFlag) {
-				const flags = Array.isArray((building as any).removeFlag) ? (building as any).removeFlag : [(building as any).removeFlag];
+			if ((building).removeFlag) {
+				const flags = Array.isArray((building).removeFlag) ? (building).removeFlag : [(building).removeFlag];
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
@@ -1167,7 +1179,7 @@ export const commands: ChatCommands = {
 
 			// --- NEW: Handle Trainers (Separated from Actions) ---
 			let allTrainersDefeated = true;
-			
+
 			if (building.trainers && building.trainers.length > 0) {
 				buildingHTML += '<p><strong>Trainers:</strong></p>';
 				for (const trainerId of building.trainers) {
@@ -1184,12 +1196,19 @@ export const commands: ChatCommands = {
 				buildingHTML += '<hr>';
 			}
 
-			// --- NEW: Handle Actions (PC, Shop, Leader) ---
+			// --- NEW: Handle Actions (PC, Shop, Leader, Heal) ---
 			let actionsHTML = '';
 
-			if (building.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			if (building.type === 'pokecenter') {
+				// Find the first NPC with heal action in this building
+				const healNpc = findHealNpcInBuilding(building);
+				if (healNpc) {
+					actionsHTML += `<button name="send" value="/rpg npcaction ${healNpc}" class="button">💊 Heal Party</button> `;
+				}
+				actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			}
 			if (building.type === 'pokemart' || building.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
-			
+
 			if (building.type === 'gym' && building.gymLeaderId) {
 				const gymLeaderId = building.gymLeaderId;
 				const gymData = TRAINER_DATABASE[gymLeaderId];
@@ -1215,7 +1234,7 @@ export const commands: ChatCommands = {
 			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
 		},
-		
+
 		eventchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 			const player = getPlayerData(user.id);
@@ -1281,7 +1300,7 @@ export const commands: ChatCommands = {
 			// Security check: Ensure the player is actually in the location that contains this zone
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
-			if (!currentLocation || !currentLocation.encounterZones?.includes(zoneId)) {
+			if (!currentLocation?.encounterZones?.includes(zoneId)) {
 				return this.errorReply("You cannot find this wild Pokémon zone in your current location.");
 			}
 
@@ -2122,8 +2141,15 @@ export const commands: ChatCommands = {
 			if (npcLocId === playerLocId) {
 				isNearby = true;
 			} else if (currentLocation?.buildings) {
+				// Check if NPC is in a building in the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
 				if (building) isNearby = true;
+
+				// Special case: For nurse NPCs, check if player is in any Pokemon Center
+				if (!isNearby && npc.npcType === 'nurse') {
+					const inPokemonCenter = currentLocation.buildings.some(b => b.type === 'pokecenter' && b.npcs?.includes(npcId));
+					if (inPokemonCenter) isNearby = true;
+				}
 			}
 
 			if (!isNearby) return this.errorReply("You are not near this NPC.");
@@ -2193,7 +2219,47 @@ export const commands: ChatCommands = {
 				// This is handled directly in generateNPCInteractionHTML, should never reach here
 				return this.errorReply("Starter selection should be done through the NPC dialogue interface.");
 
-			case 'heal': result = NPCActions.handleHeal(player); break;
+			case 'heal':
+				result = NPCActions.handleHeal(player);
+				// Special case: Return to building view instead of NPC interaction
+				if (result.success) {
+					const healLocationId = toID(player.location);
+					const healLocation = LOCATIONS[healLocationId];
+					const pokeCenterBuilding = healLocation?.buildings?.find(b => b.type === 'pokecenter');
+
+					if (pokeCenterBuilding) {
+						// Find the first NPC with heal action in this building
+						const healNpcId = findHealNpcInBuilding(pokeCenterBuilding) || npcId;
+
+						// Generate building HTML with success message
+						let buildingHTML = `<div class="rpg-infobox">`;
+						buildingHTML += `<div class="rpg-notification rpg-text-success">${result.message}</div>`;
+						buildingHTML += `<div class="rpg-text-center"><h2><b>${pokeCenterBuilding.name}</b></h2>`;
+						buildingHTML += `<p><em>${pokeCenterBuilding.description}</em></p></div><hr>`;
+
+						// Show NPCs if any
+						if (pokeCenterBuilding.npcs && pokeCenterBuilding.npcs.length > 0) {
+							buildingHTML += '<p><strong>People here:</strong></p>';
+							for (const buildingNpcId of pokeCenterBuilding.npcs) {
+								const npcData = NPC_DATABASE[buildingNpcId];
+								if (npcData) {
+									if (npcData.flags && !npcData.flags.every(flag => player.storyFlags.has(flag))) continue;
+									buildingHTML += `<button name="send" value="/rpg talknpc ${buildingNpcId}" class="button">💬 ${npcData.name}</button> `;
+								}
+							}
+							buildingHTML += '<hr>';
+						}
+
+						// Show actions
+						buildingHTML += '<p><strong>Actions:</strong></p>';
+						buildingHTML += `<button name="send" value="/rpg npcaction ${healNpcId}" class="button">💊 Heal Party</button> `;
+						buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+
+						buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
+					}
+				}
+				break;
 			case 'battlerequest':
 				const br = NPCActions.handleBattleRequest(player, action, npcId);
 				result = { success: br.success, message: br.message, canBattle: br.canBattle };
