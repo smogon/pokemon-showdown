@@ -1775,6 +1775,28 @@ export function generateBattleHTML(
 		let actionHTML = '';
 		if (battle.battleType !== 'battletower') {
 			let continueCommand = '/rpg explore';
+
+			// New Logic: Check if the battle was against a trainer inside a building
+			if (battle.trainerId) {
+				const player = getPlayerData(battle.playerId);
+				const location = LOCATIONS[toID(player.location)];
+				
+				if (location && location.buildings) {
+					for (const building of location.buildings) {
+						// Check if the trainer is in this building's trainer list
+						if (building.trainers && building.trainers.includes(battle.trainerId)) {
+							continueCommand = `/rpg building ${toID(building.id)}`;
+							break;
+						}
+						// Also check if it's the Gym Leader for this building
+						if (building.gymLeaderId === battle.trainerId) {
+							continueCommand = `/rpg building ${toID(building.id)}`;
+							break;
+						}
+					}
+				}
+			}
+
 			if (battle.battleResult === 'victory' && scriptedEventId) {
 				continueCommand = `/rpg completeevent ${toID(scriptedEventId)}`;
 			}
@@ -2174,10 +2196,10 @@ export function generateNPCInteractionHTML(
 			html += `</div>`;
 		} else {
 			let btnText = "Interact";
-			if (action.type === 'heal') btnText = "Heal Party";
+			if (action.type === 'heal') btnText = "💊 Heal Party";
 			else if (action.type === 'giveitem' || action.type === 'givepokemon') btnText = "✅ Accept Offer";
-			else if (action.type === 'battlerequest') btnText = "Challenge";
-			else if (action.type === 'rivalbattle') btnText = "Rival Battle";
+			else if (action.type === 'battlerequest') btnText = "⚔️ Challenge";
+			else if (action.type === 'rivalbattle') btnText = "⚔️ Rival Battle";
 
 			html += `<p class="rpg-text-center"><button name="send" value="/rpg npcaction ${toID(npc.id)}" class="button">${btnText}</button></p>`;
 		}
@@ -2186,7 +2208,7 @@ export function generateNPCInteractionHTML(
 	// "Talk to Others" button has been removed to improve immersion.
 	// "Say Goodbye" now uses the dynamic returnCommand to send the player back to the specific building or location.
 	html += `<hr /><p class="rpg-text-center"><button name="send" value="${returnCommand}" class="button">Say Goodbye</button></p>`;
-	html += `</div>`;
+	html += generateBottomNavigation() + `</div>`;
 
 	return html;
 }
