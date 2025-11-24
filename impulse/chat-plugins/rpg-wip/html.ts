@@ -301,9 +301,8 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (location.buildings && location.buildings.length > 0) {
 		html += `<hr /><strong>Buildings:</strong><br><p class="rpg-text-center">`;
 		for (const building of location.buildings) {
+			// Buildings explicitly marked accessible: false are still hidden/skipped
 			if (building.accessible === false) continue;
-
-			const isLocked = building.requiredFlag && !player.storyFlags.has(building.requiredFlag);
 
 			let icon = '🏠';
 			if (building.type === 'pokecenter') icon = '🏥';
@@ -313,11 +312,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			else if (building.type === 'department') icon = '🏬';
 			else if (building.type === 'gameCorner') icon = '🎰';
 
-			if (isLocked) {
-				html += `<button class="button disabled" style="${btnStyle}" disabled>🔒 ${building.name}</button>`;
-			} else {
-				html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
-			}
+			// Always render as a clickable button. 
+			// Validation happens in the /rpg building command handler.
+			html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
 		html += `</p>`;
 	}
@@ -341,15 +338,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (location.connectedLocations && location.connectedLocations.length > 0) {
 		html += `<hr /><strong>Travel:</strong><br><p class="rpg-text-center">`;
 		for (const connection of location.connectedLocations) {
-			let canAccess = true;
-			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) canAccess = false;
-			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) canAccess = false;
-
-			if (canAccess) {
-				html += `<button name="send" value="/rpg travel ${toID(connection.id)}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
-			} else {
-				html += `<button class="button disabled" style="${btnStyle}" disabled>🔒 ${connection.name}</button>`;
-			}
+			// Always render as a clickable button.
+			// Validation happens in the /rpg travel command handler.
+			html += `<button name="send" value="/rpg travel ${toID(connection.id)}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
 		}
 		html += `</p>`;
 	}
