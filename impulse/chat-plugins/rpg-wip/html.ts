@@ -6,7 +6,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, TOTAL_BADGES } from './game-npcs';
 import { getPlayerData } from './core';
-import { GameConfig } from './game-config';
+import { GameConfig, STARTER_POKEMON } from './game-config';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
@@ -2039,32 +2039,6 @@ function generateStarterChoiceBoxHTML(speciesId: string, command: string): strin
 		`</div>`;
 }
 
-export function generateStarterSelectionHTML(type: string, starters: string[]): string {
-	const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
-	let typeDescription = '';
-	if (type === 'fire') typeDescription = "Fire-types are passionate and offensive.";
-	else if (type === 'water') typeDescription = "Water-types are versatile and adaptable.";
-	else if (type === 'grass') typeDescription = "Grass-types are strategic and resilient.";
-
-	let html = `<div class="rpg-infobox">` +
-		`<h2>Professor Oak's Lab</h2>` +
-		`<div class="rpg-memo-box">` +
-		`<p><strong>Oak:</strong> "${typeDescription}"</p>` +
-		`<p>Which ${typeTitle}-type Pokémon will you choose?</p>` +
-		`</div>` +
-		`<div class="rpg-grid-3col" style="margin-top:10px;">`;
-
-	for (const starterId of starters) {
-		const command = `/rpg selectstarter ${toID(starterId)}`;
-		html += generateStarterChoiceBoxHTML(starterId, command);
-	}
-
-	html += `</div>` +
-		`<p style="text-align:center; margin-top:15px;"><button name="send" value="/rpg storymode" class="button">← Back to Type Selection</button></p>` +
-		`</div>`;
-	return html;
-}
-
 export function generateNPCSelectionHTML(availableNPCs: [string, { name: string }][]): string {
 	let html = `<div class="rpg-infobox rpg-menu-box"><h2>Talk to NPCs</h2><p>Who would you like to talk to?</p>`;
 	for (const [id, npc] of availableNPCs) {
@@ -2073,71 +2047,6 @@ export function generateNPCSelectionHTML(availableNPCs: [string, { name: string 
 	html += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
 	html += generateBottomNavigation() + `</div>`;
 	return html;
-}
-
-export function generateNPCStarterChoiceHTML(npcId: string, npcName: string, allStarters: string[]): string {
-	let html = `<div class="rpg-infobox">` +
-		`<h2>${npcName}</h2>` +
-		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
-		`<p>"The world of Pokémon is vast and wonderful! Before you begin your journey, you'll need a Pokémon partner."</p>` +
-		`<p>"I have three Pokémon here that are perfect for beginning trainers. Choose wisely!"</p>` +
-		`</div>` +
-		`<div class="rpg-grid-3col">`;
-
-	for (const starterId of allStarters) {
-		const command = `/rpg starterchoice ${toID(npcId)} ${toID(starterId)}`;
-		html += generateStarterChoiceBoxHTML(starterId, command);
-	}
-
-	html += `</div>` +
-		`<p class="rpg-margin-top" style="text-align:center">` +
-		`<button name="send" value="/rpg npc ${toID(npcId)}" class="button">← Back</button>` +
-		`</p>` +
-		generateBottomNavigation() +
-		`</div>`;
-
-	return html;
-}
-
-export function generateStarterConfirmHTML(tempSlot: ActivePokemonSlot, speciesName: string, startingLocationName: string): string {
-	const pokemon = tempSlot.pokemon;
-	const species = Dex.species.get(pokemon.species);
-	const spriteUrl = getSpriteUrl(pokemon, 'front');
-
-	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
-
-	return `<div class="rpg-infobox">` +
-		`<h2>Congratulations!</h2>` +
-
-		`<div class="rpg-memo-box" style="margin-bottom: 15px;">` +
-		`<p><strong>Professor Oak:</strong> "Excellent choice! <strong>${speciesName}</strong> will be a great partner for you."</p>` +
-		`</div>` +
-
-		`<div class="rpg-summary-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">` +
-		`<div class="rpg-summary-sprite" style="width: 100px; height: 100px;">` +
-		`<img src="${spriteUrl}" style="width: 80px; height: 80px;" />` +
-		`</div>` +
-		`<div class="rpg-summary-info" style="flex-grow: 0; text-align: left;">` +
-		`<h3>${pokemon.nickname || speciesName} ${genderSymbol}${shinySymbol}</h3>` +
-		`<p>Level ${pokemon.level} | ${species.types.join('/')}</p>` +
-		`<p><small>Nature: ${pokemon.nature} | Ability: ${pokemon.ability}</small></p>` +
-		`</div>` +
-		`</div>` +
-
-		`<hr />` +
-
-		`<div class="rpg-memo-box" style="text-align: center; font-style: italic; margin-bottom: 15px;">` +
-		`<p>Your adventure begins now. Take good care of ${speciesName}!</p>` +
-		`<p>Head out into ${startingLocationName} and begin your journey!</p>` +
-		`</div>` +
-
-		`<p style="text-align:center">` +
-		`<button name="send" value="/rpg explore" class="button rpg-button-large">Begin Your Adventure</button>` +
-		`</p>` +
-
-		generateBottomNavigation() +
-		`</div>`;
 }
 
 export function generateNPCStarterConfirmHTML(npcName: string, message: string, tempSlot: ActivePokemonSlot, speciesName: string): string {
@@ -2254,7 +2163,15 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 		html += `<hr />`;
 
 		if (action.type === 'choosestarter') {
-			html += `<p class="rpg-text-center"><button name="send" value="/rpg starterchoice ${toID(npc.id)}" class="button rpg-button-large">View Starters</button></p>`;
+			// Show starters inline directly - streamlined flow
+			const allStarters = Object.values(STARTER_POKEMON).flat();
+			html += `<p class="rpg-text-center" style="margin-bottom: 10px;"><strong>Choose your starter Pokémon:</strong></p>`;
+			html += `<div class="rpg-grid-3col">`;
+			for (const starterId of allStarters) {
+				const command = `/rpg starterchoice ${toID(npc.id)} ${toID(starterId)}`;
+				html += generateStarterChoiceBoxHTML(starterId, command);
+			}
+			html += `</div>`;
 		} else {
 			let btnText = "Interact";
 			if (action.type === 'heal') btnText = "💊 Heal Party";
