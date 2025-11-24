@@ -8,6 +8,7 @@ import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
 import { Net } from '../../../lib';
 import { getAvatarName } from '../../avatar-names';
+import { Clans, UserClans } from '../clans/database';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
@@ -59,53 +60,63 @@ async function getUserProfileData(userid: string) {
 		ontime?: number,
 		customStatus?: string,
 		registrationDate?: string,
+		clanName?: string,
+		clanRank?: string,
 	} = {};
 
-	// Get EXP data if available
-	try {
-		const expDoc = await ImpulseDB('expdata').findOne({ _id: userid });
-		if (expDoc) {
-			data.exp = expDoc.exp;
-			data.level = expDoc.level;
-		}
-	} catch {
-		// EXP system not available
+	// Fetch all data in parallel for better performance
+	const [expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult] = await Promise.allSettled([
+		ImpulseDB('expdata').findOne({ _id: userid }),
+		ImpulseDB('ontime').findOne({ _id: userid }),
+		ProfileStatusDB.findOne({ _id: userid }),
+		UserClans.findOne({ _id: userid }),
+		Net(`https://${Config.routes.root}/users/${userid}.json`).get().catch(() => null),
+	]);
+
+	// Process EXP data
+	if (expDoc.status === 'fulfilled' && expDoc.value) {
+		data.exp = expDoc.value.exp;
+		data.level = expDoc.value.level;
 	}
 
-	// Get ontime data if available
-	try {
-		const ontimeDoc = await ImpulseDB('ontime').findOne({ _id: userid });
-		if (ontimeDoc) {
-			data.ontime = ontimeDoc.ontime;
-		}
-	} catch {
-		// Ontime system not available
+	// Process ontime data
+	if (ontimeDoc.status === 'fulfilled' && ontimeDoc.value) {
+		data.ontime = ontimeDoc.value.ontime;
 	}
 
-	// Get custom profile status if available
-	try {
-		const statusDoc = await ProfileStatusDB.findOne({ _id: userid });
-		if (statusDoc) {
-			data.customStatus = statusDoc.status;
-		}
-	} catch {
-		// Profile status not available
+	// Process custom profile status
+	if (statusDoc.status === 'fulfilled' && statusDoc.value) {
+		data.customStatus = statusDoc.value.status;
 	}
 
-	// Get registration date from login server
-	try {
-		const rawResult = await Net(`https://${Config.routes.root}/users/${userid}.json`).get();
-		const result = JSON.parse(rawResult);
-		if (result.registertime) {
-			const date = new Date(result.registertime * 1000);
-			const weekday = date.toLocaleString('en-US', { weekday: 'short' });
-			const month = date.toLocaleString('en-US', { month: 'short' });
-			const day = String(date.getDate()).padStart(2, '0');
-			const year = date.getFullYear();
-			data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
+	// Process clan data - fetch clan details if user is in a clan
+	if (userClanInfo.status === 'fulfilled' && userClanInfo.value?.memberOf) {
+		const clanResult = await Clans.findOne({ _id: userClanInfo.value.memberOf }).catch(() => null);
+		if (clanResult) {
+			data.clanName = clanResult.name;
+			// Get the user's rank in the clan
+			const memberData = clanResult.members[userid];
+			if (memberData && clanResult.ranks[memberData.rank]) {
+				data.clanRank = clanResult.ranks[memberData.rank].name;
+			}
 		}
-	} catch {
-		// Registration date not available
+	}
+
+	// Process registration date
+	if (registrationResult.status === 'fulfilled' && registrationResult.value) {
+		try {
+			const result = JSON.parse(registrationResult.value);
+			if (result.registertime) {
+				const date = new Date(result.registertime * 1000);
+				const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+				const month = date.toLocaleString('en-US', { month: 'short' });
+				const day = String(date.getDate()).padStart(2, '0');
+				const year = date.getFullYear();
+				data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
+			}
+		} catch {
+			// Registration date parsing failed
+		}
 	}
 
 	return data;
@@ -192,6 +203,15 @@ export const commands: Chat.ChatCommands = {
 
 			// Status with custom status in brackets if available
 			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
+
+			// Clan (if available)
+			if (profileData.clanName) {
+				buf += `<p style="margin: 4px 0"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
+				if (profileData.clanRank) {
+					buf += ` [ ${Chat.escapeHTML(profileData.clanRank)} ]`;
+				}
+				buf += `</span></p>`;
+			}
 
 			// Registration date
 			if (profileData.registrationDate) {
