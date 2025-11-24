@@ -2208,7 +2208,7 @@ export function generateNPCInteractionHTML(
 	// "Talk to Others" button has been removed to improve immersion.
 	// "Say Goodbye" now uses the dynamic returnCommand to send the player back to the specific building or location.
 	html += `<hr /><p class="rpg-text-center"><button name="send" value="${returnCommand}" class="button">Say Goodbye</button></p>`;
-	html += generateBottomNavigation() + `</div>`;
+	html += `</div>`;
 
 	return html;
 }
