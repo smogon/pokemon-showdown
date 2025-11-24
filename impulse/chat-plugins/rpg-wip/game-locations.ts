@@ -32,6 +32,14 @@ export const LOCATIONS: Record<string, any> = {
 		],
 		buildings: [
 			{
+				id: 'elmslab',
+				name: 'Elm\'s Lab',
+				type: 'lab',
+				description: 'Pokemon Research Laboratory.',
+				accessible: true,
+				npcs: ['professorelm'], // Link to the NPC defined in game-npcs.ts
+			},
+			{
 				id: 'townshop',
 				name: 'General Store',
 				type: 'pokemart',

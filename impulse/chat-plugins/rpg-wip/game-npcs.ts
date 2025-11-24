@@ -9,11 +9,22 @@ import type { NPCData, TrainerSpec } from './interface';
 // ============================================================================
 
 export const NPC_DATABASE: Record<string, NPCData> = {
+	'professorelm': {
+		id: 'professorelm',
+		name: 'Professor Elm',
+		location: 'newbarktown',
+		dialogue: "Welcome to the lab! To start your journey, you'll need a Pokémon partner. Please, choose one!",
+		action: {
+			type: 'choosestarter',
+			starterLevel: 5,
+			onceOnly: true,
+		},
+	},
 	'guide': {
 		id: 'guide',
 		name: 'Town Guide',
 		location: 'newbarktown',
-		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in!",
+		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in! You should go to the Lab to get a Pokémon first.",
 	},
 };
 
