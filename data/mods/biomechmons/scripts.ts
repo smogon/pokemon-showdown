@@ -50,19 +50,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			let isBMMAbil = false;
 			let isOldBMMAbil = false;
 			if (!this.hp) return false;
-			if (typeof ability !== 'string' || this.battle.dex.abilities.get(ability).exists) {
-				ability = this.battle.dex.abilities.get(ability);
-			} else {
-				ability = {
-					id: ability,
-					name: ability,
-					flags: {},
-					effectType: "Ability",
-					toString() {
-						return this.id;
-					},
-				} as Ability;
-				isBMMAbil = true;
+			if (typeof ability === 'string') {
+				if (this.battle.dex.abilities.get(ability).exists) {
+					ability = this.battle.dex.abilities.get(ability);
+				} else {
+					ability = {
+						id: ability,
+						name: ability,
+						flags: {},
+						effectType: "Ability",
+						toString() {
+							return this.id;
+						},
+					} as Ability;
+					isBMMAbil = true;
+				}
 			}
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			let oldAbility;
