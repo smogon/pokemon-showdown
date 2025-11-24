@@ -2141,8 +2141,15 @@ export const commands: ChatCommands = {
 			if (npcLocId === playerLocId) {
 				isNearby = true;
 			} else if (currentLocation?.buildings) {
+				// Check if NPC is in a building in the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
 				if (building) isNearby = true;
+
+				// Special case: For nurse NPCs, check if player is in any Pokemon Center
+				if (!isNearby && npc.npcType === 'nurse') {
+					const inPokemonCenter = currentLocation.buildings.some(b => b.type === 'pokecenter' && b.npcs?.includes(npcId));
+					if (inPokemonCenter) isNearby = true;
+				}
 			}
 
 			if (!isNearby) return this.errorReply("You are not near this NPC.");
