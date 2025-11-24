@@ -64,6 +64,22 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 		// REWARD: Sets this flag on victory
 		setFlag: 'master_defeated',
+	},
+
+	// 3. The Gym Leader: Defeating him awards the Boulder Badge
+	'brock': {
+		name: 'Brock',
+		money: 1500,
+		party: [
+			{ species: 'geodude', level: 12, moves: ['tackle', 'defensecurl'] },
+			{ species: 'onix', level: 14, moves: ['tackle', 'bind', 'rockthrow'] },
+		],
+		dialogue: {
+			start: "I believe in rock hard defense and determination! Show me what you've got!",
+			win: "You have proven your worth. Take this Badge.",
+			lose: "Your attacks are still too soft.",
+		},
+		// Note: Badge logic is handled automatically via the BADGES array below
 	}
 };
 
@@ -72,11 +88,12 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 // ============================================================================
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	'newbarktown': ['securitybob'],
+	// Added brock here so you can challenge him in town for testing
+	'newbarktown': ['securitybob', 'brock'], 
 };
 
 // ============================================================================
-// BADGES (Disabled for this demo as requested)
+// BADGES
 // ============================================================================
 
 export interface BadgeInfo {
@@ -86,7 +103,15 @@ export interface BadgeInfo {
 	description?: string;
 }
 
-export const BADGES: BadgeInfo[] = [];
+// ADDED: Definition linking Brock to the Boulder Badge
+export const BADGES: BadgeInfo[] = [
+	{
+		gymLeaderId: 'brock',
+		badgeName: 'Boulder Badge',
+		order: 1,
+		description: 'Allows access to dark caves.',
+	}
+];
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -117,8 +142,8 @@ export function isValidBadge(badgeName: string): boolean {
 	return BADGES.some(b => b.badgeName === badgeName);
 }
 
-export const FIRST_BADGE_NAME = undefined;
-export const LAST_BADGE_NAME = undefined;
+export const FIRST_BADGE_NAME = BADGES[0]?.badgeName;
+export const LAST_BADGE_NAME = BADGES[BADGES.length - 1]?.badgeName;
 
 // ============================================================================
 // STORY EVENTS
