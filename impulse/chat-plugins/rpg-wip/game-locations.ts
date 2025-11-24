@@ -90,26 +90,26 @@ export const LOCATIONS: Record<string, any> = {
 	// ROCKET HIDEOUT (5 Floors)
 	// ========================================================================
 
-	'rocket_hideout_b1': {
-		id: 'rocket_hideout_b1',
+	'rockethideoutb1': {
+		id: 'rockethideoutb1',
 		name: 'Rocket Hideout B1F',
 		type: 'dungeon',
 		description: 'A dark basement. Two grunts are guarding the stairs.',
 		connectedLocations: [
 			{ id: 'newbarktown', name: 'Exit to Surface' },
 			{ 
-				id: 'rocket_hideout_b2', 
+				id: 'rockethideoutb2', 
 				name: '▼ Stairs to B2F',
 				// GATING: Must defeat BOTH trainers on this floor
 				requiredFlag: ['beat_rocket_b1_1', 'beat_rocket_b1_2'],
 				blockMessage: 'The grunts are blocking the stairs! Defeat them all to proceed.'
 			}
 		],
-		encounterZones: ['hideout_encounters'],
+		encounterZones: ['hideoutencounters'],
 		buildings: [
 			// Just a dummy interaction for flavor
 			{
-				id: 'b1_statue',
+				id: 'b1statue',
 				name: 'Giovanni Statue',
 				type: 'misc',
 				description: 'A statue of the boss. It feels intimidating.',
@@ -118,49 +118,49 @@ export const LOCATIONS: Record<string, any> = {
 		]
 	},
 
-	'rocket_hideout_b2': {
-		id: 'rocket_hideout_b2',
+	'rockethideoutb2': {
+		id: 'rockethideoutb2',
 		name: 'Rocket Hideout B2F',
 		type: 'dungeon',
 		description: 'The air is getting thick with smog.',
 		connectedLocations: [
-			{ id: 'rocket_hideout_b1', name: '▲ Stairs to B1F' },
+			{ id: 'rockethideoutb1', name: '▲ Stairs to B1F' },
 			{ 
-				id: 'rocket_hideout_b3', 
+				id: 'rockethideoutb3', 
 				name: '▼ Stairs to B3F',
 				requiredFlag: ['beat_rocket_b2_1', 'beat_rocket_b2_2'],
 				blockMessage: 'More grunts are blocking the way!'
 			}
 		],
-		encounterZones: ['hideout_encounters'],
+		encounterZones: ['hideoutencounters'],
 	},
 
-	'rocket_hideout_b3': {
-		id: 'rocket_hideout_b3',
+	'rockethideoutb3': {
+		id: 'rockethideoutb3',
 		name: 'Rocket Hideout B3F',
 		type: 'dungeon',
 		description: 'A maze of spinning tiles.',
 		connectedLocations: [
-			{ id: 'rocket_hideout_b2', name: '▲ Stairs to B2F' },
+			{ id: 'rockethideoutb2', name: '▲ Stairs to B2F' },
 			{ 
-				id: 'rocket_hideout_b4', 
+				id: 'rockethideoutb4', 
 				name: '▼ Stairs to B4F',
 				requiredFlag: ['beat_rocket_b3_1'],
 				blockMessage: 'A strong grunt refuses to let you pass.'
 			}
 		],
-		encounterZones: ['hideout_encounters'],
+		encounterZones: ['hideoutencounters'],
 	},
 
-	'rocket_hideout_b4': {
-		id: 'rocket_hideout_b4',
+	'rockethideoutb4': {
+		id: 'rockethideoutb4',
 		name: 'Rocket Hideout B4F',
 		type: 'dungeon',
 		description: 'The Admin\'s office is here. There is a bed in the corner.',
 		connectedLocations: [
-			{ id: 'rocket_hideout_b3', name: '▲ Stairs to B3F' },
+			{ id: 'rockethideoutb3', name: '▲ Stairs to B3F' },
 			{ 
-				id: 'rocket_hideout_b5', 
+				id: 'rockethideoutb5', 
 				name: '▼ Stairs to Boss Room',
 				requiredFlag: ['beat_rocket_admin'],
 				blockMessage: 'The Admin blocks the door to the Boss\'s office.'
@@ -168,7 +168,7 @@ export const LOCATIONS: Record<string, any> = {
 		],
 		buildings: [
 			{
-				id: 'rocket_rest_area',
+				id: 'rocketrestarea',
 				name: 'Employee Rest Area',
 				type: 'pokecenter', // Allows healing before boss
 				description: 'A comfortable bed. Looks like a good spot to rest.',
@@ -178,13 +178,13 @@ export const LOCATIONS: Record<string, any> = {
 		encounterZones: [], // No wild encounters on Admin floor
 	},
 
-	'rocket_hideout_b5': {
-		id: 'rocket_hideout_b5',
+	'rockethideoutb5': {
+		id: 'rockethideoutb5',
 		name: 'Rocket Hideout B5F (Boss)',
 		type: 'dungeon',
 		description: 'The deepest part of the base. The Boss is waiting.',
 		connectedLocations: [
-			{ id: 'rocket_hideout_b4', name: '▲ Stairs to B4F' },
+			{ id: 'rockethideoutb4', name: '▲ Stairs to B4F' },
 		],
 		encounterZones: [],
 	},
