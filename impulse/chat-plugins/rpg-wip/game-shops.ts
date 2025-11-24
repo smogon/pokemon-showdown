@@ -25,8 +25,8 @@ export interface ShopInventory {
 }
 
 export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
-	'startingroom': {
-		locationId: 'startingroom',
+	'newbarktown': {
+		locationId: 'newbarktown',
 		tiers: [
 			{
 				requiredBadges: 0,
@@ -34,84 +34,11 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 					'pokeball',
 					'potion',
 					'antidote',
+					'paralyzeheal',
 					'oranberry',
-					'cheriberry',
-					'chestoberry',
-					'pechaberry',
-					'rawstberry',
-					'aspearberry',
 				],
 			},
-			{
-				requiredBadges: 1,
-				items: [
-					'greatball',
-					'superpotion',
-					'leppaberry',
-					'persimberry',
-				],
-			},
-			{
-				requiredBadges: 2,
-				items: [
-					'ultraball',
-					'hyperpotion',
-					'quickball',
-					'timerball',
-					'nestball',
-					'netball',
-				],
-			},
-			{
-				requiredBadges: 3,
-				items: [
-					'repeatball',
-					'duskball',
-					'diveball',
-					'healball',
-					'firestone',
-					'waterstone',
-					'thunderstone',
-					'leafstone',
-				],
-			},
-			{
-				requiredBadges: 4,
-				items: [
-					'moonstone',
-					'sunstone',
-					'shinystone',
-					'duskstone',
-					'dawnstone',
-					'icestone',
-				],
-			},
-			{
-				requiredBadges: 5,
-				items: [
-					'metalcoat',
-					'dragonscale',
-					'upgrade',
-					'luxuryball',
-					'premierball',
-					'fastball',
-					'levelball',
-					'heavyball',
-				],
-			},
-			{
-				requiredBadges: 6,
-				items: [
-					'loveball',
-					'lureball',
-					'moonball',
-					'friendball',
-					'dreamball',
-					'charcoal',
-					'mysticwater',
-					'miracleseed',
-				],
-			},
+            // Additional tiers can be added if badges were in use
 		],
 	},
 };
