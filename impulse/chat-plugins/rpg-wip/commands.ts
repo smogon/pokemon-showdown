@@ -501,8 +501,8 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const allStarters = Object.values(STARTER_POKEMON).flat();
 
-			if (!pokemonId) return this.errorReply("Invalid starter.");
-			if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter.");
+			if (!pokemonId) return this.errorReply("No starter Pokémon specified.");
+			if (!allStarters.includes(pokemonId)) return this.errorReply("Invalid starter Pokémon.");
 
 			const result = NPCActions.handleChooseStarter(player, npc.action, pokemonId);
 			if (result.success) {
