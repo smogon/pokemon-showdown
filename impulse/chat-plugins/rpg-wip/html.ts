@@ -2179,7 +2179,7 @@ export function generateNPCInteractionHTML(npc: any, notification?: string): str
 		}
 	}
 
-	html += `<hr /><p class="rpg-text-center"><button name="send" value="/rpg npc" class="button">Talk to Others</button> <button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
+	html += `<hr /><p class="rpg-text-center"><button name="send" value="/rpg explore" class="button">Say Goodbye</button></p>`;
 	html += generateBottomNavigation() + `</div>`;
 
 	return html;
