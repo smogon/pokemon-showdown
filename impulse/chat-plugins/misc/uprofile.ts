@@ -227,12 +227,16 @@ export const commands: Chat.ChatCommands = {
 			const targetName = target || user.name;
 
 			// Store/update the user's avatar if they are online
+			// Only update if avatar has changed to reduce database writes
 			if (targetUser) {
-				await UserAvatarDB.updateOne(
-					{ _id: targetId },
-					{ $set: { avatar: targetUser.avatar } },
-					{ upsert: true }
-				);
+				const storedAvatarDoc = await UserAvatarDB.findOne({ _id: targetId });
+				if (!storedAvatarDoc || storedAvatarDoc.avatar !== targetUser.avatar) {
+					await UserAvatarDB.updateOne(
+						{ _id: targetId },
+						{ $set: { avatar: targetUser.avatar } },
+						{ upsert: true }
+					);
+				}
 			}
 
 			// Get user profile data
