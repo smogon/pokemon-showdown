@@ -58,7 +58,7 @@ export function crashlogger(
 	console.error(`\n[${Date.now()}] CRASH: ${stack}\n`);
 	const out = fs.createWriteStream(logPath, { flags: 'a' });
 	out.on('open', () => {
-		out.write(`\n${stack}\n`);
+		out.write(`\n[${Date.now()}] ${stack}\n`);
 		out.end();
 	}).on('error', (err: Error) => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
