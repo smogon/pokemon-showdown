@@ -1925,11 +1925,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 				command = `/rpg battleaction catch ${safeBallId} 2`;
 			}
 
-			const filename = safeBallId.replace(/ball$/, '');
-			const spriteUrl = `${GameConfig.assets.itemIconUrl}${filename}.png`;
-
 			const buttonContent =
-				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${ball.name}" /></div>` +
 				`<div class="rpg-switch-info">` +
 				`<strong>${ball.name}</strong><br>` +
 				`<small>x${ball.quantity}</small>` +
@@ -2248,11 +2244,8 @@ export function generateBattleItemMenuHTML(battle: BattleState, player: PlayerDa
 	} else {
 		const itemButtons = usableItems.map(item => {
 			const command = `/rpg battleaction selectitemtarget ${toID(item.id)}`;
-			const itemIconId = toID(item.id).replace(/berry$/, '');
-			const spriteUrl = `${GameConfig.assets.itemIconUrl}${itemIconId}.png`;
 
 			const buttonContent =
-				`<div class="rpg-switch-icon"><img src="${spriteUrl}" alt="${item.name}" onerror="this.src='${GameConfig.assets.itemIconUrl}potion.png'" /></div>` +
 				`<div class="rpg-switch-info">` +
 				`<strong>${item.name}</strong><br>` +
 				`<small>x${item.quantity}</small><br>` +
