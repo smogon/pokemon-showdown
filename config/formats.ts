@@ -1040,13 +1040,87 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Bio Mech Mons",
-		desc: `Change this later tbh`,
+		desc: `Items, abilites, and moves a Pok&eacute;mon has access to can be put in any item/move/ability slot.`,
 		mod: 'biomechmons',
-		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
 		],
 		validateSet(set, teamHas) {
+			const dex = this.dex;
+			let species = dex.species.get(set.species);
+			let requiredItems: string[] = [];
+			let requiredMove = '';
+			let requiredAbility = '';
+			if (species.battleOnly) {
+				if (species.requiredItems) requiredItems = species.requiredItems;
+				if (species.requiredMove) requiredMove = species.requiredMove;
+				if (species.requiredAbility) requiredAbility = species.requiredAbility;
+				species = dex.species.get(species.battleOnly as string);
+			}
+			const effectFunctions = [dex.abilities, dex.items, dex.moves];
+			if (
+				!effectFunctions.some(f => f.get(set.ability).exists) &&
+				!(set.item && effectFunctions.some(f => f.get(set.item).exists)) &&
+				!set.moves.every(move => effectFunctions.some(f => f.get(move).exists))
+			) {
+				return this.validateSet(set, teamHas);
+			}
+			const allThings = [set.ability, set.item, ...set.moves];
+			if (
+				allThings.some(y => effectFunctions.some(x => x.get(y).isNonstandard &&
+					!this.ruleTable.has(`+pokemontag:${this.toID(x.get(y).isNonstandard)}`)))
+			) {
+				return this.validateSet(set, teamHas);
+			}
+			const moves = allThings.filter(thing => thing !== 'metronome' && dex.moves.get(thing).exists);
+			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists);
+			const items = allThings.filter(thing => dex.items.get(thing).exists);
+			const normalAbility = set.ability;
+			if (!abilities.length) {
+				set.ability = 'noability';
+			} else {
+				set.ability = this.toID(abilities[0]);
+			}
+			if (
+				!Object.values(species.abilities).map(this.toID).includes(this.toID(set.ability)) &&
+				this.ruleTable.has('obtainableabilities')
+			) {
+				return [`${set.ability} is not a valid ability for ${set.species}.`];
+			}
+			if (requiredAbility && !abilities.map(this.toID).includes(this.toID(requiredAbility))) {
+				return [`${set.species} requires ${requiredAbility} on its set.`];
+			}
+			if (!moves.length) {
+				return [`${set.species} requires at least one move.`];
+			}
+			const normalMoves = set.moves;
+			set.moves = [moves[0]];
+			if (
+				moves.some(move => this.checkCanLearn(dex.moves.get(move), species)) &&
+				this.ruleTable.has('obtainablemoves')
+			) {
+				return [`${set.species} has illegal moves.`];
+			}
+			if (requiredMove && !moves.map(this.toID).includes(this.toID(requiredMove))) {
+				return [`${set.species} requires ${requiredMove} on its set.`];
+			}
+			if (!items.length && requiredItems.length) {
+				return [`${set.species} requires ${requiredItems.join(', ')} on its set.`];
+			}
+			const normalItem = set.item;
+			if (items.length) {
+				set.item = items[0];
+			} else {
+				set.item = '';
+			}
+			if (!this.ruleTable.has('+ability:noability')) {
+				this.ruleTable.set('+ability:noability', '');
+			}
+			const problems = this.validateSet(set, teamHas);
+			if (problems?.length) return problems;
+			set.ability = normalAbility;
+			set.item = normalItem;
+			set.moves = normalMoves;
 			return null;
 		},
 		onBeforeSwitchIn(pokemon) {
