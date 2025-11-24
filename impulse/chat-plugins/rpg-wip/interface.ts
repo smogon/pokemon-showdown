@@ -307,6 +307,16 @@ export interface TrainerSpec {
 		lose: string,
 	};
 	battleType?: 'single' | 'double';
+
+	// Access Control
+	requiredFlag?: string | string[];
+	preventIfFlag?: string | string[];
+	requiredBadge?: string | string[];
+	blockMessage?: string; // NEW: Message to show if access is denied
+
+	// Rewards / State Change
+	setFlag?: string | string[];
+	removeFlag?: string | string[];
 }
 
 export interface AbilityContext {

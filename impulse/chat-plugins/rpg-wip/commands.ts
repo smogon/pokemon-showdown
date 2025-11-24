@@ -195,8 +195,8 @@ function initializeAndStartBattle(
 		opponentAuroraVeilTurns: 0,
 		playerMistTurns: 0,
 		opponentMistTurns: 0,
-		playerTailwindTurns: 0, // Added for Step 1
-		opponentTailwindTurns: 0, // Added for Step 1
+		playerTailwindTurns: 0,
+		opponentTailwindTurns: 0,
 		gravityTurns: 0,
 		mudSportTurns: 0,
 		waterSportTurns: 0,
@@ -1387,6 +1387,30 @@ export const commands: ChatCommands = {
 
 			const trainerSpec = TRAINER_DATABASE[trainerId];
 			if (!trainerSpec) return this.errorReply("That trainer could not be found.");
+
+			// --- NEW: Validation Logic ---
+			if (trainerSpec.requiredFlag) {
+				const reqFlags = Array.isArray(trainerSpec.requiredFlag) ? trainerSpec.requiredFlag : [trainerSpec.requiredFlag];
+				if (!reqFlags.every(f => player.storyFlags.has(f))) {
+					const msg = trainerSpec.blockMessage || "You cannot challenge this trainer yet.";
+					return this.errorReply(msg);
+				}
+			}
+			if (trainerSpec.preventIfFlag) {
+				const prevFlags = Array.isArray(trainerSpec.preventIfFlag) ? trainerSpec.preventIfFlag : [trainerSpec.preventIfFlag];
+				if (prevFlags.some(f => player.storyFlags.has(f))) {
+					const msg = trainerSpec.blockMessage || "This trainer is no longer available.";
+					return this.errorReply(msg);
+				}
+			}
+			if (trainerSpec.requiredBadge) {
+				const reqBadges = Array.isArray(trainerSpec.requiredBadge) ? trainerSpec.requiredBadge : [trainerSpec.requiredBadge];
+				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
+					const msg = trainerSpec.blockMessage || "You don't have the required badges.";
+					return this.errorReply(msg);
+				}
+			}
+			// -----------------------------
 
 			const trainerParty: RPGPokemon[] = [];
 			for (const spec of trainerSpec.party) {

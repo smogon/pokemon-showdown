@@ -322,7 +322,28 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	const locationId = toID(location.name);
 	const locationTrainers = TRAINER_LOCATIONS[locationId];
 	if (locationTrainers && locationTrainers.length > 0) {
-		const availableTrainers = locationTrainers.filter(tid => !player.defeatedTrainers.has(tid));
+		const availableTrainers = locationTrainers.filter(tid => {
+			if (player.defeatedTrainers.has(tid)) return false;
+
+			// Check flags for Roaming Trainers
+			const trainer = TRAINER_DATABASE[tid];
+			if (!trainer) return false;
+
+			if (trainer.requiredFlag) {
+				const req = Array.isArray(trainer.requiredFlag) ? trainer.requiredFlag : [trainer.requiredFlag];
+				if (!req.every(f => player.storyFlags.has(f))) return false;
+			}
+			if (trainer.preventIfFlag) {
+				const prev = Array.isArray(trainer.preventIfFlag) ? trainer.preventIfFlag : [trainer.preventIfFlag];
+				if (prev.some(f => player.storyFlags.has(f))) return false;
+			}
+			if (trainer.requiredBadge) {
+				const reqB = Array.isArray(trainer.requiredBadge) ? trainer.requiredBadge : [trainer.requiredBadge];
+				if (!reqB.every(b => player.obtainedBadges.includes(b))) return false;
+			}
+			return true;
+		});
+
 		if (availableTrainers.length > 0) {
 			html += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
 			for (const trainerId of availableTrainers) {

@@ -36,7 +36,7 @@ import {
 	generateFaintSwitchHTML,
 } from './html';
 import { RPGMoves } from './battle-moves';
-import { getBadgeForGymLeader, TOTAL_BADGES } from './game-npcs';
+import { getBadgeForGymLeader, TOTAL_BADGES, TRAINER_DATABASE } from './game-npcs';
 import { GameConfig } from './game-config';
 
 import {
@@ -1380,6 +1380,19 @@ export function checkForWinLoss(
 
 			if (battle.trainerId) {
 				player.defeatedTrainers.add(battle.trainerId);
+
+				// NEW: Handle Trainer Flags (Set/Remove)
+				const trainer = TRAINER_DATABASE[battle.trainerId];
+				if (trainer) {
+					if (trainer.setFlag) {
+						const flags = Array.isArray(trainer.setFlag) ? trainer.setFlag : [trainer.setFlag];
+						flags.forEach(f => player.storyFlags.add(f));
+					}
+					if (trainer.removeFlag) {
+						const flags = Array.isArray(trainer.removeFlag) ? trainer.removeFlag : [trainer.removeFlag];
+						flags.forEach(f => player.storyFlags.delete(f));
+					}
+				}
 
 				const badgeName = getBadgeForGymLeader(battle.trainerId);
 				if (badgeName && !player.obtainedBadges.includes(badgeName)) {
