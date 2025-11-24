@@ -1,11 +1,14 @@
 import type { NPCData, TrainerSpec } from './interface';
 
+/**
+ * Game NPCs & Story Configuration
+ */
+
 // ============================================================================
 // NPCS
 // ============================================================================
 
 export const NPC_DATABASE: Record<string, NPCData> = {
-	// --- New Bark Town NPCs ---
 	'professorelm': {
 		id: 'professorelm',
 		name: 'Professor Elm',
@@ -21,27 +24,14 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		id: 'guide',
 		name: 'Town Guide',
 		location: 'newbarktown',
-		dialogue: "The Rocket Hideout is to the East. It's dangerous! The Haunted Tower is to the North.",
+		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in! You should go to the Lab to get a Pokémon first.",
 	},
+	// NEW: The Gym Guide
 	'dojoguide': {
 		id: 'dojoguide',
 		name: 'Dojo Guide',
-		location: 'newbarktown',
+		location: 'newbarktown', // He is physically in New Bark Town data structure, but logically inside the building
 		dialogue: "Yo! Champ in the making! The Master uses Fighting-type Pokémon. Flying and Psychic moves are your best bet!",
-	},
-
-	// --- Haunted Tower NPCs ---
-	'towerguide': {
-		id: 'towerguide',
-		name: 'Medium',
-		location: 'hauntedtower1f',
-		dialogue: "Spirits roam these halls... Do not disturb them unless you are strong.",
-	},
-	'scaredgrunt': {
-		id: 'scaredgrunt',
-		name: 'Terrified Grunt',
-		location: 'rockethideoutb1',
-		dialogue: "I'm not fighting! I just want to go home! The boss is on B5, just leave me alone!",
 	}
 };
 
@@ -50,7 +40,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 // ============================================================================
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
-	// --- New Bark Town / Dojo Trainers ---
+	// 1. The Gatekeeper
 	'securitybob': {
 		name: 'Security Bob',
 		money: 100,
@@ -62,8 +52,10 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Fine, you may pass.",
 			lose: "Go home and train more.",
 		},
-		setFlag: 'securitycleared', 
+		setFlag: 'security_cleared', 
 	},
+
+	// 2. The Gym Minion (NEW)
 	'blackbelt': {
 		name: 'Black Belt Aaron',
 		money: 200,
@@ -76,6 +68,8 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Train harder!",
 		}
 	},
+
+	// 3. The Boss
 	'dojomaster': {
 		name: 'Master Ken',
 		money: 1000,
@@ -88,94 +82,8 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Excellent! You have earned the right to visit the Hidden Grove.",
 			lose: "Disappointing.",
 		},
-		setFlag: 'masterdefeated',
+		setFlag: 'master_defeated',
 	},
-
-	// --- ROCKET HIDEOUT FLOOR 1 ---
-	'rocketgruntb11': {
-		name: 'Rocket Grunt (Door)',
-		money: 400,
-		party: [{ species: 'rattata', level: 10, moves: ['tackle', 'quickattack'] }],
-		dialogue: { start: "Intruder alert!", win: "I'll alert the others...", lose: "My radio is broken!" },
-		setFlag: 'beatrocketb11', // Required for B2
-	},
-	'rocketgruntb12': {
-		name: 'Rocket Grunt (Hall)',
-		money: 400,
-		party: [{ species: 'zubat', level: 10, moves: ['leechlife', 'supersonic'] }],
-		dialogue: { start: "You can't go down there!", win: "Fine, pass.", lose: "Glory to Team Rocket!" },
-		setFlag: 'beatrocketb12', // Required for B2
-	},
-
-	// --- ROCKET HIDEOUT FLOOR 2 ---
-	'rocketgruntb21': {
-		name: 'Rocket Grunt (Lab)',
-		money: 500,
-		party: [{ species: 'koffing', level: 12, moves: ['smog', 'tackle'] }],
-		dialogue: { start: "This is a restricted area!", win: "Cough... cough...", lose: "Too much smog." },
-		setFlag: 'beatrocketb21', // Required for B3
-	},
-	'rocketgruntb22': {
-		name: 'Rocket Grunt (Guard)',
-		money: 500,
-		party: [{ species: 'ekans', level: 12, moves: ['wrap', 'poisonsting'] }],
-		dialogue: { start: "Ssssscram!", win: "Hiss...", lose: "Slither away!" },
-		setFlag: 'beatrocketb22', // Required for B3
-	},
-
-	// --- ROCKET HIDEOUT FLOOR 3 ---
-	'rocketgruntb31': {
-		name: 'Rocket Elite',
-		money: 600,
-		party: [{ species: 'raticate', level: 14, moves: ['hyperfang'] }],
-		dialogue: { start: "You're annoying!", win: "Whatever.", lose: "Go away." },
-		setFlag: 'beatrocketb31', // Required for B4
-	},
-
-	// --- ROCKET HIDEOUT FLOOR 4 ---
-	'rocketadmin': {
-		name: 'Admin Proton',
-		money: 1500,
-		party: [
-			{ species: 'zubat', level: 16, moves: ['wingattack', 'confuseray'] },
-			{ species: 'koffing', level: 16, moves: ['sludge', 'smokescreen'] }
-		],
-		dialogue: { start: "You won't reach the boss!", win: "The boss is stronger than me.", lose: "I failed you, sir!" },
-		setFlag: 'beatrocketadmin', // Required for B5
-	},
-
-	// --- ROCKET HIDEOUT FLOOR 5 (BOSS) ---
-	'rocketboss': {
-		name: 'Boss Giovanni',
-		money: 5000,
-		party: [
-			{ species: 'onix', level: 20, moves: ['rockthrow', 'bind', 'screech'] },
-			{ species: 'rhyhorn', level: 20, moves: ['horndrill', 'stomp'] },
-			{ species: 'kangaskhan', level: 22, moves: ['megapunch', 'bite', 'tailwhip'], item: 'sitrusberry' }
-		],
-		dialogue: {
-			start: "I am impressed you made it this far. But your journey ends here!",
-			win: "What? This cannot be! Team Rocket is blasting off again!",
-			lose: "As expected of a child.",
-		},
-		setFlag: ['beatrocketboss', 'rockethideoutcleared'],
-	},
-
-	// --- HAUNTED TOWER TRAINERS ---
-	'channelerhope': {
-		name: 'Channeler Hope',
-		money: 300,
-		party: [{ species: 'gastly', level: 15, moves: ['lick', 'spite'] }],
-		dialogue: { start: "Kekeke...", win: "The spirits are restless.", lose: "..." },
-		setFlag: 'beatchanneler1', // Required for 3F
-	},
-	'sagekoji': {
-		name: 'Sage Koji',
-		money: 300,
-		party: [{ species: 'hoothoot', level: 16, moves: ['hypnosis', 'peck'] }],
-		dialogue: { start: "Begone from this sacred place.", win: "You are strong.", lose: "Leave now." },
-		setFlag: 'beatsage1',
-	}
 };
 
 // ============================================================================
@@ -183,21 +91,8 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 // ============================================================================
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	// Overworld
-	'newbarktown': ['securitybob'],
-	// Dojo
-	'fightingdojo': ['blackbelt'], 
-	
-	// Rocket Hideout
-	'rockethideoutb1': ['rocketgruntb11', 'rocketgruntb12'],
-	'rockethideoutb2': ['rocketgruntb21', 'rocketgruntb22'],
-	'rockethideoutb3': ['rocketgruntb31'],
-	'rockethideoutb4': ['rocketadmin'],
-	'rockethideoutb5': ['rocketboss'],
-	
-	// Haunted Tower
-	'hauntedtower2f': ['channelerhope'],
-	'hauntedtower3f': ['sagekoji'],
+	// Trainers that appear in the OVERWORLD (not inside buildings)
+	'newbarktown': ['securitybob'], 
 };
 
 // ============================================================================
@@ -216,7 +111,7 @@ export const BADGES: BadgeInfo[] = [
 		gymLeaderId: 'dojomaster',
 		badgeName: 'Expert Badge',
 		order: 1,
-		description: 'Allows access to dangerous caves.',
+		description: 'Allows access to dark caves.',
 	}
 ];
 

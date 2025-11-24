@@ -2,6 +2,12 @@ import { ITEMS_DATABASE } from './items';
 
 /**
  * Game Shops Configuration
+ *
+ * This file contains all shop-related story data including:
+ * - Shop inventories by location
+ * - Item availability based on badge progress
+ *
+ * Edit this file to create new stories and adventures.
  */
 
 // ============================================================================
@@ -32,16 +38,7 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 					'oranberry',
 				],
 			},
-			{
-				requiredBadges: 1, // Expert Badge Tier
-				items: [
-					'greatball',
-					'superpotion',
-					'awakening',
-					'burnheal',
-					'escaperope',
-				],
-			},
+            // Additional tiers can be added if badges were in use
 		],
 	},
 };
