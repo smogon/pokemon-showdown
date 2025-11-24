@@ -26,7 +26,7 @@ export const LOCATIONS: Record<string, any> = {
 				id: 'startshop',
 				name: 'General Store',
 				type: 'pokemart',
-				requiredFlags: 'ps',
+				requiredFlag: 'ps',
 				blockMessage: 'Requires Prince Sky\'s Permission.',
 				description: 'A small supply shop.',
 				accessible: true,
