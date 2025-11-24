@@ -217,7 +217,7 @@ export const LOCATIONS: Record<string, any> = {
 	'hauntedtower2f': {
 		id: 'hauntedtower2f',
 		name: 'Haunted Tower 2F',
-		type: any,
+		type: 'indoor',
 		description: 'You hear whispers from the shadows.',
 		connectedLocations: [
 			{ id: 'hauntedtower1f', name: '▼ Stairs to 1F' },
@@ -234,7 +234,7 @@ export const LOCATIONS: Record<string, any> = {
 	'hauntedtower3f': {
 		id: 'hauntedtower3f',
 		name: 'Haunted Tower 3F',
-		type: any,
+		type: 'indoor',
 		description: 'The top of the tower. The mist is thickest here.',
 		connectedLocations: [
 			{ id: 'hauntedtower2f', name: '▼ Stairs to 2F' },
