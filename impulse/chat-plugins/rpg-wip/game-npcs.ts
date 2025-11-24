@@ -2,15 +2,6 @@ import type { NPCData, TrainerSpec } from './interface';
 
 /**
  * Game NPCs & Story Configuration
- *
- * This file contains all NPC and story-related data including:
- * - NPCs and their dialogues
- * - Trainers and their parties
- * - Trainer locations (where trainers can be found)
- * - Gym badges and leaders
- * - Story events and triggers
- *
- * Edit this file to create new stories and adventures.
  */
 
 // ============================================================================
@@ -20,14 +11,9 @@ import type { NPCData, TrainerSpec } from './interface';
 export const NPC_DATABASE: Record<string, NPCData> = {
 	'guide': {
 		id: 'guide',
-		name: 'Travel Guide',
-		location: 'startingroom',
-		dialogue: "Hello! Welcome to this new world. It's dangerous to go alone, take one of these!",
-		action: {
-			type: 'choosestarter',
-			starterLevel: 5,
-			onceOnly: true,
-		},
+		name: 'Town Guide',
+		location: 'newbarktown',
+		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in!",
 	},
 };
 
@@ -36,18 +22,38 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 // ============================================================================
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
-	'youngsterjoey': {
-		name: 'Youngster Joey',
-		money: 200,
+	// 1. The Gatekeeper: Defeating him unlocks the Building
+	'securitybob': {
+		name: 'Security Bob',
+		money: 100,
 		party: [
-			{ species: 'rattata', level: 5, moves: ['tackle', 'tailwhip'] },
+			{ species: 'machop', level: 5, moves: ['karatechop', 'leer'] },
 		],
 		dialogue: {
-			start: "My Rattata is in the top percentage of Rattata!",
-			win: "I'll never give up!",
-			lose: "You're tough!",
+			start: "Halt! No one enters the Dojo unless they can beat me!",
+			win: "Fine, you may pass.",
+			lose: "Go home and train more.",
 		},
+		// REWARD: Sets this flag on victory
+		setFlag: 'security_cleared', 
 	},
+
+	// 2. The Boss: Defeating him unlocks the Location Connection
+	'dojomaster': {
+		name: 'Master Ken',
+		money: 1000,
+		party: [
+			{ species: 'riolu', level: 8, moves: ['quickattack', 'forcepalm'] },
+			{ species: 'mankey', level: 9, moves: [ 'scratch', 'lowkick'] },
+		],
+		dialogue: {
+			start: "So you got past Bob? Show me your strength!",
+			win: "Excellent! You have earned the right to visit the Hidden Grove.",
+			lose: "Disappointing.",
+		},
+		// REWARD: Sets this flag on victory
+		setFlag: 'master_defeated',
+	}
 };
 
 // ============================================================================
@@ -55,11 +61,11 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 // ============================================================================
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	'grassypath': ['youngsterjoey'],
+	'newbarktown': ['securitybob'],
 };
 
 // ============================================================================
-// BADGES
+// BADGES (Disabled for this demo as requested)
 // ============================================================================
 
 export interface BadgeInfo {
@@ -69,14 +75,7 @@ export interface BadgeInfo {
 	description?: string;
 }
 
-export const BADGES: BadgeInfo[] = [
-	{
-		gymLeaderId: 'youngsterjoey',
-		badgeName: 'Rat Badge',
-		order: 1,
-		description: 'Awarded for defeating the Top Percentage Rattata.',
-	},
-];
+export const BADGES: BadgeInfo[] = [];
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -107,8 +106,8 @@ export function isValidBadge(badgeName: string): boolean {
 	return BADGES.some(b => b.badgeName === badgeName);
 }
 
-export const FIRST_BADGE_NAME = BADGES[0]?.badgeName;
-export const LAST_BADGE_NAME = BADGES[BADGES.length - 1]?.badgeName;
+export const FIRST_BADGE_NAME = undefined;
+export const LAST_BADGE_NAME = undefined;
 
 // ============================================================================
 // STORY EVENTS
@@ -127,17 +126,4 @@ export interface StoryEvent {
 	dialogue?: string;
 }
 
-export const STORY_EVENTS: Record<string, StoryEvent> = {
-	// Add your story events here
-	// Example:
-	// 'first_rival_battle': {
-	//   id: 'first_rival_battle',
-	//   name: 'First Rival Battle',
-	//   description: 'Your first battle with your rival',
-	//   trigger: 'location_enter',
-	//   location: 'route1',
-	//   flagsRequired: ['got_starter'],
-	//   flagsSet: ['rival_battle_1_complete'],
-	//   dialogue: 'Your rival challenges you to a battle!',
-	// },
-};
+export const STORY_EVENTS: Record<string, StoryEvent> = {};
