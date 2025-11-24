@@ -9,6 +9,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { Net } from '../../../lib';
 import { getAvatarName } from '../../avatar-names';
 import { Clans, UserClans } from '../clans/database';
+import type { TcgUserProfile } from '../tcg/interface';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
@@ -19,6 +20,7 @@ interface ProfileStatusDocument {
 }
 
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
+const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
 /**
  * Get the avatar display for a user, including custom avatars
@@ -62,15 +64,20 @@ async function getUserProfileData(userid: string) {
 		registrationDate?: string,
 		clanName?: string,
 		clanRank?: string,
+		tcgPoints?: number,
+		tcgPointsRank?: number,
+		tcgTotalCards?: number,
+		tcgTotalCardsRank?: number,
 	} = {};
 
 	// Fetch all data in parallel for better performance
-	const [expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult] = await Promise.allSettled([
+	const [expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
 		ImpulseDB('ontime').findOne({ _id: userid }),
 		ProfileStatusDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
 		Net(`https://${Config.routes.root}/users/${userid}.json`).get().catch(() => null),
+		TcgProfileDB.findOne({ userId: userid }),
 	]);
 
 	// Process EXP data
@@ -119,6 +126,27 @@ async function getUserProfileData(userid: string) {
 		}
 	}
 
+	// Process TCG data with rank calculation
+	if (tcgProfile.status === 'fulfilled' && tcgProfile.value) {
+		const userTcgData = tcgProfile.value;
+		data.tcgPoints = userTcgData.collectionPoints || 0;
+		data.tcgTotalCards = userTcgData.totalQuantity || 0;
+
+		// Calculate ranks by fetching counts of users with higher values
+		const [pointsRankResult, cardsRankResult] = await Promise.allSettled([
+			TcgProfileDB.countDocuments({ collectionPoints: { $gt: userTcgData.collectionPoints || 0 } }),
+			TcgProfileDB.countDocuments({ totalQuantity: { $gt: userTcgData.totalQuantity || 0 } }),
+		]);
+
+		if (pointsRankResult.status === 'fulfilled') {
+			data.tcgPointsRank = pointsRankResult.value + 1;
+		}
+
+		if (cardsRankResult.status === 'fulfilled') {
+			data.tcgTotalCardsRank = cardsRankResult.value + 1;
+		}
+	}
+
 	return data;
 }
 
@@ -160,9 +188,9 @@ function getStatusDisplay(user: User | null, customStatus?: string): string {
 		}
 	}
 
-	// Append custom status in square brackets if provided
+	// Append custom status in parentheses if provided
 	if (customStatus) {
-		statusText += ` - [${Chat.escapeHTML(customStatus)}]`;
+		statusText += ` - (${Chat.escapeHTML(customStatus)})`;
 	}
 
 	return statusText;
@@ -208,7 +236,7 @@ export const commands: Chat.ChatCommands = {
 			if (profileData.clanName) {
 				buf += `<p style="margin: 4px 0"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
 				if (profileData.clanRank) {
-					buf += ` [ ${Chat.escapeHTML(profileData.clanRank)} ]`;
+					buf += ` ( ${Chat.escapeHTML(profileData.clanRank)} )`;
 				}
 				buf += `</span></p>`;
 			}
@@ -231,6 +259,31 @@ export const commands: Chat.ChatCommands = {
 					totalOntime += Date.now() - targetUser.lastConnected;
 				}
 				buf += `<p style="margin: 4px 0"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
+			}
+
+			// TCG (if available)
+			if (profileData.tcgPoints !== undefined || profileData.tcgTotalCards !== undefined) {
+				buf += `<p style="margin: 4px 0"><u>TCG:</u> <span>`;
+				const parts: string[] = [];
+
+				if (profileData.tcgPoints !== undefined) {
+					let pointsStr = `${profileData.tcgPoints.toLocaleString()} Points`;
+					if (profileData.tcgPointsRank !== undefined) {
+						pointsStr += ` (Rank #${profileData.tcgPointsRank})`;
+					}
+					parts.push(pointsStr);
+				}
+
+				if (profileData.tcgTotalCards !== undefined) {
+					let cardsStr = `${profileData.tcgTotalCards.toLocaleString()} Total Cards`;
+					if (profileData.tcgTotalCardsRank !== undefined) {
+						cardsStr += ` (Rank #${profileData.tcgTotalCardsRank})`;
+					}
+					parts.push(cardsStr);
+				}
+
+				buf += parts.join(' | ');
+				buf += `</span></p>`;
 			}
 
 			buf += '</td>';
