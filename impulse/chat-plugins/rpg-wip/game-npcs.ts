@@ -32,6 +32,15 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		name: 'Dojo Guide',
 		location: 'newbarktown', // He is physically in New Bark Town data structure, but logically inside the building
 		dialogue: "Yo! Champ in the making! The Master uses Fighting-type Pokémon. Flying and Psychic moves are your best bet!",
+	},
+	'nursejoy': {
+		id: 'nursejoy',
+		name: 'Nurse Joy',
+		location: 'newbarktown',
+		dialogue: "Welcome to the Pokémon Center!",
+		action: {
+			type: 'heal',
+		},
 	}
 };
 

@@ -34,6 +34,14 @@ export const LOCATIONS: Record<string, any> = {
 		],
 		buildings: [
 			{
+				id: 'pokecenter',
+				name: 'Pokémon Center',
+				type: 'pokecenter',
+				description: 'Heal your Pokémon here.',
+				accessible: true,
+				npcs: ['nursejoy'],
+			},
+			{
 				id: 'elmslab',
 				name: 'Elm\'s Lab',
 				type: 'lab',
