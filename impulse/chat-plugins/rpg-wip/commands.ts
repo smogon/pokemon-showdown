@@ -980,6 +980,7 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
+			// 1. Handle "No Target" - Generate the Travel Menu
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
@@ -991,28 +992,9 @@ export const commands: ChatCommands = {
 					travelHTML += `<p>There are no paths from this location yet.</p>`;
 				} else {
 					for (const connection of currentLocation.connectedLocations) {
-						let canAccess = true;
-						let lockReason = '';
-
-						if (connection.requiredBadge) {
-							if (!player.obtainedBadges.includes(connection.requiredBadge)) {
-								canAccess = false;
-								lockReason = ` 🔒 (Requires ${connection.requiredBadge})`;
-							}
-						}
-
-						if (connection.requiredFlag) {
-							if (!player.storyFlags.has(connection.requiredFlag)) {
-								canAccess = false;
-								lockReason = ` 🔒 (Not accessible yet)`;
-							}
-						}
-
-						if (canAccess) {
-							travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
-						} else {
-							travelHTML += `<button class="button" disabled>${connection.name}${lockReason}</button> `;
-						}
+						// CHANGE: Always render the button as clickable
+						// Access checks are now handled when the button is clicked
+						travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 					}
 				}
 				travelHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">Back to Explore</button></p>`;
@@ -1020,6 +1002,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
+			// 2. Handle Target Selection
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1029,9 +1012,24 @@ export const commands: ChatCommands = {
 			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
 			if (!connection) return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
 
-			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) return this.errorReply(`Locked: Requires ${connection.requiredBadge}.`);
-			if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) return this.errorReply(`Locked.`);
+			// CHANGE: Logic to check requirements and show notification instead of errorReply
+			let isBlocked = false;
+			let blockMsg = "";
 
+			if (connection.requiredBadge && !player.obtainedBadges.includes(connection.requiredBadge)) {
+				isBlocked = true;
+				blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
+			} else if (connection.requiredFlag && !player.storyFlags.has(connection.requiredFlag)) {
+				isBlocked = true;
+				blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+			}
+
+			if (isBlocked) {
+				// Refresh the explore page with the notification message
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+			}
+
+			// 3. Execute Travel (Success Case)
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
@@ -1091,6 +1089,64 @@ export const commands: ChatCommands = {
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
 
+		building(target, room, user) {
+			if (isInActiveBattle(user.id)) {
+				return this.errorReply("You cannot enter a building during a battle.");
+			}
+
+			const player = getPlayerData(user.id);
+			const currentLocationId = toID(player.location);
+			const currentLocation = LOCATIONS[currentLocationId];
+
+			if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
+			if (!target) return this.errorReply("Please specify which building to enter.");
+
+			const buildingId = toID(target);
+			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
+
+			if (!building) return this.errorReply("That building doesn't exist in this location.");
+
+			// CHANGE: Check access and show notification if blocked
+			if (building.accessible === false) {
+				const blockMsg = (building as any).blockMessage || "This building is locked.";
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+			}
+
+			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) {
+				const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+			}
+
+			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
+
+			if (building.npcs && building.npcs.length > 0) {
+				buildingHTML += '<p><strong>People here:</strong></p>';
+				for (const npcId of building.npcs) {
+					const npc = NPC_DATABASE[npcId];
+					if (npc) {
+						if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
+						buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+					}
+				}
+			}
+
+			buildingHTML += '<p><strong>Actions:</strong></p>';
+			if (building.type === 'pokecenter') buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			if (building.type === 'pokemart' || building.type === 'department') buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+			if (building.type === 'gym' && building.gymLeaderId) {
+				const gymLeaderId = building.gymLeaderId;
+				const gymData = TRAINER_DATABASE[gymLeaderId];
+				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button> `;
+				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
+					buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+				}
+			}
+
+			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
+		},
+
 		eventchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 			const player = getPlayerData(user.id);
@@ -1140,55 +1196,6 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "Battle Won!")}`);
 			}
 			return this.parse('/rpg explore');
-		},
-
-		building(target, room, user) {
-			if (isInActiveBattle(user.id)) {
-				return this.errorReply("You cannot enter a building during a battle.");
-			}
-
-			const player = getPlayerData(user.id);
-			const currentLocationId = toID(player.location);
-			const currentLocation = LOCATIONS[currentLocationId];
-
-			if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
-			if (!target) return this.errorReply("Please specify which building to enter.");
-
-			const buildingId = toID(target);
-			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
-
-			if (!building) return this.errorReply("That building doesn't exist in this location.");
-			if (building.accessible === false) return this.errorReply("This building is currently locked.");
-			if (building.requiredFlag && !player.storyFlags.has(building.requiredFlag)) return this.errorReply("You can't access this building yet.");
-
-			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
-
-			if (building.npcs && building.npcs.length > 0) {
-				buildingHTML += '<p><strong>People here:</strong></p>';
-				for (const npcId of building.npcs) {
-					const npc = NPC_DATABASE[npcId];
-					if (npc) {
-						if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-						buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
-					}
-				}
-			}
-
-			buildingHTML += '<p><strong>Actions:</strong></p>';
-			if (building.type === 'pokecenter') buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-			if (building.type === 'pokemart' || building.type === 'department') buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
-			if (building.type === 'gym' && building.gymLeaderId) {
-				const gymLeaderId = building.gymLeaderId;
-				const gymData = TRAINER_DATABASE[gymLeaderId];
-				if (gymData && !player.defeatedTrainers.has(gymLeaderId)) {
-					buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge ${gymData.name}</button> `;
-				} else if (gymData && player.defeatedTrainers.has(gymLeaderId)) {
-					buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
-				}
-			}
-
-			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
 		},
 
 		wildpokemon(target, room, user) {
