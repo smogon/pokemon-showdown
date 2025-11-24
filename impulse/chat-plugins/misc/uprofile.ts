@@ -13,6 +13,11 @@ import type { TcgUserProfile } from '../tcg/interface';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
+/**
+ * Avatar to show for offline users
+ */
+const OFFLINE_AVATAR = 'unknown';
+
 interface ProfileStatusDocument {
 	_id: string;
 	status: string;
@@ -22,7 +27,6 @@ interface ProfileStatusDocument {
 interface UserAvatarDocument {
 	_id: string;
 	avatar: string | number;
-	lastSeen: Date;
 }
 
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
@@ -42,7 +46,7 @@ function getAvatarDisplay(user: User | null): string {
 		avatar = user.avatar;
 	} else {
 		// User is offline - show 'unknown' avatar
-		avatar = 'unknown';
+		avatar = OFFLINE_AVATAR;
 	}
 
 	// Check if user has a custom avatar (file with extension)
@@ -226,7 +230,7 @@ export const commands: Chat.ChatCommands = {
 			if (targetUser) {
 				await UserAvatarDB.updateOne(
 					{ _id: targetId },
-					{ $set: { avatar: targetUser.avatar, lastSeen: new Date() } },
+					{ $set: { avatar: targetUser.avatar } },
 					{ upsert: true }
 				);
 			}
