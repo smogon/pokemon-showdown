@@ -29,8 +29,8 @@ export const LOCATIONS: Record<string, any> = {
 				requiredFlag: 'master_defeated',
 				blockMessage: 'The path is overgrown. Only a Dojo Master could clear this way.'
 			},
-			{ id: 'rocket_hideout_b1', name: '🚀 Enter Rocket Hideout' },
-			{ id: 'haunted_tower_1f', name: '👻 Enter Haunted Tower' },
+			{ id: 'rockethideoutb1', name: '🚀 Enter Rocket Hideout' },
+			{ id: 'hauntedtower1f', name: '👻 Enter Haunted Tower' },
 		],
 		buildings: [
 			{
