@@ -1219,11 +1219,7 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			buildingHTML += '<p><strong>Actions:</strong></p>';
-			if (building.type === 'pokecenter') buildingHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-			if (building.type === 'pokemart' || building.type === 'department') buildingHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
-			
-			// --- NEW: Gym/Dojo Logic (Trainers + Leader Lock) ---
+			// --- NEW: Handle Trainers (Separated from Actions) ---
 			let allTrainersDefeated = true;
 			
 			if (building.trainers && building.trainers.length > 0) {
@@ -1242,22 +1238,33 @@ export const commands: ChatCommands = {
 				buildingHTML += '<hr>';
 			}
 
+			// --- NEW: Handle Actions (PC, Shop, Leader) ---
+			let actionsHTML = '';
+
+			if (building.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+			if (building.type === 'pokemart' || building.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+			
 			if (building.type === 'gym' && building.gymLeaderId) {
 				const gymLeaderId = building.gymLeaderId;
 				const gymData = TRAINER_DATABASE[gymLeaderId];
 				if (gymData) {
 					if (!player.defeatedTrainers.has(gymLeaderId)) {
 						if (allTrainersDefeated) {
-							buildingHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
+							actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
 						} else {
-							buildingHTML += `<p><em>Defeat all trainers to challenge the Leader!</em></p>`;
+							actionsHTML += `<p><em>Defeat all trainers to challenge the Leader!</em></p>`;
 						}
 					} else {
-						buildingHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+						actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
 					}
 				}
 			}
-			// ---------------------------------------------------
+
+			// Only append Actions block if there are actions to show
+			if (actionsHTML !== '') {
+				buildingHTML += '<p><strong>Actions:</strong></p>';
+				buildingHTML += actionsHTML;
+			}
 
 			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
