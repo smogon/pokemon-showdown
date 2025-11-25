@@ -1248,7 +1248,7 @@ export const commands: ChatCommands = {
 
 					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
-						roomHTML += `<strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
+						roomHTML += `<hr /><strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
 						for (const zoneId of roomToRender.encounterZones) {
 							const zone = ENCOUNTER_ZONES[zoneId];
 							if (zone) {
@@ -1256,12 +1256,12 @@ export const commands: ChatCommands = {
 								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
 							}
 						}
-						roomHTML += `</p><hr>`;
+						roomHTML += `</p>`;
 					}
 
 					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
-						roomHTML += `<strong>People here:</strong><br><p class="rpg-text-center">`;
+						roomHTML += `<hr /><strong>People Here:</strong><br><p class="rpg-text-center">`;
 						for (const npcId of roomToRender.npcs) {
 							const npc = NPC_DATABASE[npcId];
 							if (npc) {
@@ -1274,7 +1274,7 @@ export const commands: ChatCommands = {
 
 					// Trainers in Room
 					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
-						roomHTML += `<strong>Trainers:</strong><br><p class="rpg-text-center">`;
+						roomHTML += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
 						for (const trainerId of roomToRender.trainers) {
 							const trainer = TRAINER_DATABASE[trainerId];
 							if (trainer) {
@@ -1285,7 +1285,7 @@ export const commands: ChatCommands = {
 								}
 							}
 						}
-						roomHTML += `</p><hr>`;
+						roomHTML += `</p>`;
 					}
 
 					// --- Room Actions (PC, Shop, Gym Leader) ---
@@ -1324,14 +1324,14 @@ export const commands: ChatCommands = {
 					}
 
 					if (actionsHTML !== '') {
-						roomHTML += `<strong>Actions:</strong><br><p class="rpg-text-center">`;
+						roomHTML += `<hr /><strong>Actions:</strong><br><p class="rpg-text-center">`;
 						roomHTML += actionsHTML;
-						roomHTML += `</p><hr>`;
+						roomHTML += `</p>`;
 					}
 
 					// Navigation (Connected Rooms)
 					if (roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0) {
-						roomHTML += `<strong>Go to:</strong><br><p class="rpg-text-center">`;
+						roomHTML += `<hr /><strong>Go To:</strong><br><p class="rpg-text-center">`;
 						for (const connectedRoomId of roomToRender.connectedRooms) {
 							const connectedRoom = building.rooms?.find(r => r.id === connectedRoomId);
 							if (connectedRoom) {
@@ -1339,7 +1339,7 @@ export const commands: ChatCommands = {
 								roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button" style="${btnStyle}">➡️ ${connectedRoom.name}</button>`;
 							}
 						}
-						roomHTML += `</p><hr>`;
+						roomHTML += `</p>`;
 					}
 
 					// Exit Button
