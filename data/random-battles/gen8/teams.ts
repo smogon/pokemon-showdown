@@ -2415,7 +2415,10 @@ export class RandomGen8Teams {
 			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical' || move.id === 'bodypress';
 		});
-		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status')) && !ruleTable.has('forceofthefallenmod')) {
+		if (
+			noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status')) &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
