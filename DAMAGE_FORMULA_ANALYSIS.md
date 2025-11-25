@@ -393,6 +393,57 @@ The rpg-wip simulator is well-suited for its purpose and provides accurate battl
 | **Substitute** | 25% HP, blocks most moves | Implemented | ✅ Accurate |
 | **Accuracy** | Stage multipliers, weather effects | Same calculations | ✅ Accurate |
 
+### Terastallization
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Once per battle** | Yes - checked per side | Yes - `playerTerastallizeUsed` flag | ✅ Accurate |
+| **Type change** | Changes defensive type | Same - `slot.terastallized` | ✅ Accurate |
+| **STAB bonus** | 2.0x if Tera=Move type AND original type | Same formula in `getSTABMultiplier` | ✅ Accurate |
+| **STAB (new type)** | 1.5x if Tera=Move type (not original) | Same formula | ✅ Accurate |
+| **Adaptability + Tera** | 2.25x if matches both | Same formula | ✅ Accurate |
+| **Tera Blast** | Physical/Special based on higher stat | Implemented in `calculateDamage` | ✅ Accurate |
+| **Tera Blast type** | Changes to Tera type | Same - `moveType = slot.terastallized` | ✅ Accurate |
+| **Stellar Tera Blast** | 100 BP, -1 Atk/SpA | Implemented | ✅ Accurate |
+| **Stellar STAB** | One-time 2x (STAB) or 1.2x (non-STAB) | ⚠️ Partial - uses fixed 2x | ⚠️ Minor |
+| **Ogerpon forms** | Form changes on Tera | Not implemented (cosmetic only) | ℹ️ N/A |
+| **Terapagos** | Form change on Tera | Not implemented (specific Pokémon) | ℹ️ N/A |
+
+#### Terastallization STAB Details
+
+**Pokemon-Showdown Implementation:**
+```typescript
+// sim/battle-actions.ts:1783-1787
+if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+    stab = 2;  // Tera type = move type AND original type
+}
+// Stellar is special: one-time 2x for STAB types, 1.2x for non-STAB
+if (pokemon.terastallized === 'Stellar') {
+    stab = isSTAB ? 2 : [4915, 4096]; // 4915/4096 ≈ 1.2x
+}
+```
+
+**RPG-WIP Implementation:**
+```typescript
+// abilities.ts:1925-1938
+if (slot?.terastallized) {
+    const isTeraMatch = slot.terastallized === moveType;
+    const isOriginalMatch = species.types.includes(moveType);
+    
+    if (isTeraMatch) {
+        if (isOriginalMatch) {
+            return ability === 'adaptability' ? 2.25 : 2.0;  // ✅ Correct
+        }
+        return ability === 'adaptability' ? 2.0 : 1.5;  // ✅ Correct
+    } else if (isOriginalMatch) {
+        return 1.5;  // ✅ Correct
+    }
+    return 1;
+}
+```
+
+**Assessment:** The core Terastallize mechanics are correctly implemented. The Stellar Tera type's one-time boost tracking (`stellarBoostedTypes`) is not implemented, but this is a very niche mechanic that only affects multi-hit moves or switching.
+
 ### Battle Flow
 
 | Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
@@ -408,6 +459,7 @@ The rpg-wip simulator is well-suited for its purpose and provides accurate battl
 | **Modifier Precision** | PS uses 4096-based arithmetic; RPG-WIP uses direct multiplication | ±1-2 damage in edge cases |
 | **16-bit Truncation** | PS applies; RPG-WIP does not | Only affects damage >65535 |
 | **Complex Interactions** | Some niche ability/item combos may not be implemented | Negligible for normal play |
+| **Stellar Tera Tracking** | PS tracks boosted types per battle; RPG-WIP applies 2x always | Minor edge case |
 
 ---
 
@@ -423,5 +475,6 @@ The rpg-wip battle simulator is **highly accurate** compared to pokemon-showdown
 - ✅ **Weather/Terrain**: All 4 weather types and 4 terrains with correct modifiers
 - ✅ **Move mechanics**: Variable BP, multi-hit, Protect, Substitute all working
 - ✅ **Battle flow**: Correct turn order and priority handling
+- ✅ **Terastallization**: Core mechanics accurate (once per battle, type change, STAB bonuses, Tera Blast)
 
 **The simulator is well-suited for a single-player RPG experience and provides authentic Pokémon battle mechanics.**
