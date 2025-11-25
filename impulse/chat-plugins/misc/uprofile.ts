@@ -26,8 +26,15 @@ interface ProfileBackgroundDocument {
 	updatedAt: Date;
 }
 
+interface ProfileTextColorDocument {
+	_id: string;
+	color: string;
+	updatedAt: Date;
+}
+
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
 const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackgrounds');
+const ProfileTextColorDB = ImpulseDB<ProfileTextColorDocument>('profiletextcolors');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
 /**
@@ -159,11 +166,12 @@ async function getUserProfileData(userid: string) {
 		tcgTotalCardsRank?: number,
 		backgroundType?: 'image' | 'color',
 		backgroundValue?: string,
+		textColor?: string,
 	} = {};
 
 	// Fetch all data in parallel for better performance
 	const [
-		expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile, backgroundDoc,
+		expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile, backgroundDoc, textColorDoc,
 	] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
 		ImpulseDB('ontime').findOne({ _id: userid }),
@@ -172,6 +180,7 @@ async function getUserProfileData(userid: string) {
 		getRegistrationData(userid),
 		TcgProfileDB.findOne({ userId: userid }),
 		ProfileBackgroundDB.findOne({ _id: userid }),
+		ProfileTextColorDB.findOne({ _id: userid }),
 	]);
 
 	// Process EXP data
@@ -241,6 +250,11 @@ async function getUserProfileData(userid: string) {
 	if (backgroundDoc.status === 'fulfilled' && backgroundDoc.value) {
 		data.backgroundType = backgroundDoc.value.type;
 		data.backgroundValue = backgroundDoc.value.value;
+	}
+
+	// Process text color data
+	if (textColorDoc.status === 'fulfilled' && textColorDoc.value) {
+		data.textColor = textColorDoc.value.color;
 	}
 
 	return data;
@@ -323,8 +337,14 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			// Build text color style
+			let textColorStyle = '';
+			if (profileData.textColor && isValidHexColor(profileData.textColor)) {
+				textColorStyle = `color: ${profileData.textColor};`;
+			}
+
 			// Build the profile HTML in table format
-			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;${backgroundStyle}">`;
+			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;min-height:150px;${backgroundStyle}">`;
 			buf += '<tr>';
 
 			// Avatar section (left side)
@@ -346,7 +366,7 @@ export const commands: Chat.ChatCommands = {
 
 			// Clan (if available)
 			if (profileData.clanName) {
-				buf += `<p style="margin: 4px 0"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
 				if (profileData.clanRank) {
 					buf += ` ( ${Chat.escapeHTML(profileData.clanRank)} )`;
 				}
@@ -355,12 +375,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Registration date
 			if (profileData.registrationDate) {
-				buf += `<p style="margin: 4px 0"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
 			}
 
 			// Level (if available)
 			if (profileData.level !== undefined) {
-				buf += `<p style="margin: 4px 0"><u>Level:</u> <span>${profileData.level}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Level:</u> <span>${profileData.level}</span></p>`;
 			}
 
 			// Ontime (if available)
@@ -370,12 +390,12 @@ export const commands: Chat.ChatCommands = {
 				if (targetUser?.connected && targetUser.lastConnected) {
 					totalOntime += Date.now() - targetUser.lastConnected;
 				}
-				buf += `<p style="margin: 4px 0"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
 			}
 
 			// TCG (if available)
 			if (profileData.tcgPoints !== undefined || profileData.tcgTotalCards !== undefined) {
-				buf += `<p style="margin: 4px 0"><u>TCG:</u> <span>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>TCG:</u> <span>`;
 				const parts: string[] = [];
 
 				if (profileData.tcgPoints !== undefined) {
@@ -463,6 +483,31 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Your profile background has been cleared.");
 		},
 
+		async settextcolor(target, room, user): Promise<void> {
+			if (!target) {
+				return this.errorReply("Please provide a hex color code (e.g., /uprofile settextcolor #FF5733).");
+			}
+
+			const value = target.trim();
+
+			// Validate hex color
+			if (!isValidHexColor(value)) {
+				return this.errorReply("Invalid hex color code. Please provide a valid hex color (e.g., #FF5733 or #FFF).");
+			}
+
+			await ProfileTextColorDB.updateOne(
+				{ _id: user.id },
+				{ $set: { _id: user.id, color: value, updatedAt: new Date() } },
+				{ upsert: true }
+			);
+			this.sendReply(`Your profile text color has been set to: ${value}`);
+		},
+
+		async cleartextcolor(target, room, user): Promise<void> {
+			await ProfileTextColorDB.deleteOne({ _id: user.id });
+			this.sendReply("Your profile text color has been cleared.");
+		},
+
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
@@ -471,6 +516,11 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
 				{ cmd: "/uprofile setbg [url/color]", desc: "Set profile background to an image URL or hex color (e.g., #FF5733)." },
 				{ cmd: "/uprofile clearbg", desc: "Clear your custom profile background." },
+				{
+					cmd: "/uprofile settextcolor [color]",
+					desc: "Set profile text color to a hex color (e.g., #FF5733). Does not affect username or status.",
+				},
+				{ cmd: "/uprofile cleartextcolor", desc: "Clear your custom profile text color." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
