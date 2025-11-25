@@ -1238,6 +1238,7 @@ export const commands: ChatCommands = {
 				const renderRoom = (roomToRender: any, notification?: string) => {
 					// --- Generate Room HTML ---
 					let roomHTML = `<div class="rpg-infobox">`;
+					const btnStyle = 'margin: 3px;';
 
 					if (notification) {
 						roomHTML += `<div class="rpg-notification">${notification}</div>`;
@@ -1247,37 +1248,38 @@ export const commands: ChatCommands = {
 
 					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
-						roomHTML += '<p><strong>People here:</strong></p>';
+						roomHTML += `<strong>People here:</strong><br><p class="rpg-text-center">`;
 						for (const npcId of roomToRender.npcs) {
 							const npc = NPC_DATABASE[npcId];
 							if (npc) {
 								if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-								roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+								roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button" style="${btnStyle}">💬 ${npc.name}</button>`;
 							}
 						}
+						roomHTML += `</p>`;
 					}
 
 					// Trainers in Room
 					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
-						roomHTML += '<p><strong>Trainers:</strong></p>';
+						roomHTML += `<strong>Trainers:</strong><br><p class="rpg-text-center">`;
 						for (const trainerId of roomToRender.trainers) {
 							const trainer = TRAINER_DATABASE[trainerId];
 							if (trainer) {
 								if (!player.defeatedTrainers.has(trainerId)) {
-									roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
+									roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
 								} else {
 									roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
 								}
 							}
 						}
-						roomHTML += '<hr>';
+						roomHTML += `</p><hr>`;
 					}
 
 					// --- Room Actions (PC, Shop, Gym Leader) ---
 					let actionsHTML = '';
 
-					if (roomToRender.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-					if (roomToRender.type === 'pokemart' || roomToRender.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+					if (roomToRender.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button" style="${btnStyle}">💻 Access PC</button>`;
+					if (roomToRender.type === 'pokemart' || roomToRender.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button" style="${btnStyle}">🏪 Shop</button>`;
 
 					if (roomToRender.type === 'gym' && roomToRender.gymLeaderId) {
 						const gymLeaderId = roomToRender.gymLeaderId;
@@ -1298,7 +1300,7 @@ export const commands: ChatCommands = {
 
 							if (!player.defeatedTrainers.has(gymLeaderId)) {
 								if (allTrainersDefeated) {
-									actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
+									actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
 								} else {
 									actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
 								}
@@ -1309,43 +1311,43 @@ export const commands: ChatCommands = {
 					}
 
 					if (actionsHTML !== '') {
-						roomHTML += '<p><strong>Actions:</strong></p>';
+						roomHTML += `<strong>Actions:</strong><br><p class="rpg-text-center">`;
 						roomHTML += actionsHTML;
-						roomHTML += '<hr>';
+						roomHTML += `</p><hr>`;
 					}
 
 					// Encounter Zones in Room
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
-						roomHTML += '<p><strong>Wild Pokémon:</strong></p>';
+						roomHTML += `<strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
 						for (const zoneId of roomToRender.encounterZones) {
 							const zone = ENCOUNTER_ZONES[zoneId];
 							if (zone) {
 								const icon = zone.battleType === 'double' ? '👥' : '🌿';
-								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button"> ${icon} ${zone.name}</button> `;
+								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
 							}
 						}
-						roomHTML += '<hr>';
+						roomHTML += `</p><hr>`;
 					}
 
 					// Navigation (Connected Rooms)
 					if (roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0) {
-						roomHTML += '<p><strong>Go to:</strong></p>';
+						roomHTML += `<strong>Go to:</strong><br><p class="rpg-text-center">`;
 						for (const connectedRoomId of roomToRender.connectedRooms) {
 							const connectedRoom = building.rooms?.find(r => r.id === connectedRoomId);
 							if (connectedRoom) {
 								// PASS CURRENT ROOM ID (roomToRender.id) AS SOURCE FOR NAVIGATION
-								roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button">➡️ ${connectedRoom.name}</button> `;
+								roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button" style="${btnStyle}">➡️ ${connectedRoom.name}</button>`;
 							}
 						}
-						roomHTML += '<hr>';
+						roomHTML += `</p><hr>`;
 					}
 
 					// Exit Button
 					if (roomToRender.isEntrance) {
-						roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+						roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p></div>`;
 					} else {
 						if (!roomToRender.connectedRooms || roomToRender.connectedRooms.length === 0) {
-							roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+							roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p></div>`;
 						} else {
 							roomHTML += `</div>`;
 						}
