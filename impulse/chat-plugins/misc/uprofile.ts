@@ -19,14 +19,8 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
-interface UserAvatarDocument {
-	_id: string;
-	avatar: string | number;
-}
-
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
-const UserAvatarDB = ImpulseDB<UserAvatarDocument>('useravatars');
 
 /**
  * Get the avatar display for a user, including custom avatars
@@ -36,7 +30,7 @@ function getAvatarDisplay(user: User | null): string {
 	let avatar: string | number | undefined;
 	let avatarUrl = '';
 
-	// If user is online, use their current avatar and it will be stored
+	// If user is online, use their current avatar
 	if (user) {
 		avatar = user.avatar;
 	} else {
@@ -220,19 +214,6 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target) || user.id;
 			const targetUser = Users.get(targetId);
 			const targetName = target || user.name;
-
-			// Store/update the user's avatar if they are online
-			// Only update if avatar has changed to reduce database writes
-			if (targetUser) {
-				const storedAvatarDoc = await UserAvatarDB.findOne({ _id: targetId });
-				if (!storedAvatarDoc || storedAvatarDoc.avatar !== targetUser.avatar) {
-					await UserAvatarDB.updateOne(
-						{ _id: targetId },
-						{ $set: { avatar: targetUser.avatar } },
-						{ upsert: true }
-					);
-				}
-			}
 
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
