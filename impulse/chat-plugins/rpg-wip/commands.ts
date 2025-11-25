@@ -99,6 +99,8 @@ import {
 	generateBattleItemMenuHTML,
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
+	getBattleReturnCommand,
+	generateRunHTML,
 } from './battle-ui';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
@@ -1947,7 +1949,8 @@ export const commands: ChatCommands = {
 					else storePokemonInPC(player, caughtPokemon);
 
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball')}`);
+					const returnCommand = getBattleReturnCommand(player, battle);
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
 				} else {
 					messageLog.push(`<span class="rpg-text-error"><strong>${["Oh no! The Pokemon broke free!", "Aww! It appeared to be caught!", "Aargh! Almost had it!", "Gah! It was so close, too!"][catchResult.shakes]}</strong></span>`);
 					processTurn(this, battle, room, user, messageLog);
@@ -1972,8 +1975,10 @@ export const commands: ChatCommands = {
 				teraToggleState.delete(user.id);
 
 				const player = getPlayerData(user.id);
-				const location = LOCATIONS[toID(player.location)];
-				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "You ran away safely!")}`);
+				const returnCommand = getBattleReturnCommand(player, battle);
+				
+				// Use generateRunHTML which now supports the dynamic return command
+				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateRunHTML(battle.zoneId, returnCommand)}`);
 			},
 
 			back(target, room, user) {
