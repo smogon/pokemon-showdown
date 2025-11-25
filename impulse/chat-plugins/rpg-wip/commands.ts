@@ -1256,8 +1256,8 @@ export const commands: ChatCommands = {
 						roomHTML += `<div class="rpg-notification">${notification}</div>`;
 					}
 
-					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div><hr>`;
-
+					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
+					
 					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
 						roomHTML += `<hr /><strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
