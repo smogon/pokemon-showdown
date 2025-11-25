@@ -22062,7 +22062,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Terreptile",
 		forme: "Mega",
 		types: ["Ground", "Poison"],
-		baseStats: {hp: 70, atk: 130, def: 80, spa: 100, spd: 80, spe: 150},
+		baseStats: {hp: 70, atk: 135, def: 90, spa: 100, spd: 90, spe: 125},
 		abilities: {0: "Sharpness"},
 		heightm: 1.8,
 		weightkg: 35,	

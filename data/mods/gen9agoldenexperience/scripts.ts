@@ -2054,7 +2054,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
     // HiddenPower
     const stillLearn = ['eevee', 'eeveestarter', 'jolteon', 'flareon', 'vaporeon', 'porygon', 'mew', 'espeon', 'umbreon', 'porygon2', 'unown', 'kecleon', 'leafeon', 'glaceon', 
-      'porygonz', 'fennekin', 'braixen', 'delphox', 'sylveon', 'silvally'];
+      'porygonz', 'sylveon', 'silvally'];
     for (const id in this.dataCache.Pokedex) {
       if (this.dataCache.Learnsets[id] && this.dataCache.Learnsets[id].learnset && !stillLearn.includes(id)) {
         delete this.modData('Learnsets', this.toID(id)).learnset.hiddenpower;
