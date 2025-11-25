@@ -48,8 +48,8 @@ function isValidImageUrl(value: string): boolean {
 		if (url.protocol !== 'http:' && url.protocol !== 'https:') {
 			return false;
 		}
-		// Check for common image extensions
-		const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
+		// Check for common image extensions (excluding SVG for security reasons)
+		const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 		const pathname = url.pathname.toLowerCase();
 		return imageExtensions.some(ext => pathname.endsWith(ext));
 	} catch {
@@ -307,12 +307,20 @@ export const commands: Chat.ChatCommands = {
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
-			// Build background style
+			// Build background style with proper validation
 			let backgroundStyle = '';
 			if (profileData.backgroundType === 'image' && profileData.backgroundValue) {
-				backgroundStyle = `background-image: url('${Chat.escapeHTML(profileData.backgroundValue)}'); background-size: cover; background-position: center;`;
+				// Re-validate URL before use in CSS context
+				if (isValidImageUrl(profileData.backgroundValue)) {
+					// Escape single quotes in URL for CSS context
+					const cssUrl = profileData.backgroundValue.replace(/'/g, "\\'");
+					backgroundStyle = `background-image: url('${cssUrl}'); background-size: cover; background-position: center;`;
+				}
 			} else if (profileData.backgroundType === 'color' && profileData.backgroundValue) {
-				backgroundStyle = `background-color: ${Chat.escapeHTML(profileData.backgroundValue)};`;
+				// Re-validate hex color before use in CSS context
+				if (isValidHexColor(profileData.backgroundValue)) {
+					backgroundStyle = `background-color: ${profileData.backgroundValue};`;
+				}
 			}
 
 			// Build the profile HTML in table format
@@ -447,7 +455,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			// Invalid input
-			return this.errorReply("Invalid input. Please provide a valid hex color code (e.g., #FF5733) or an image URL ending with a valid image extension (.png, .jpg, .jpeg, .gif, .webp, .svg).");
+			return this.errorReply("Invalid input. Please provide a valid hex color code (e.g., #FF5733) or an image URL ending with a valid image extension (.png, .jpg, .jpeg, .gif, .webp).");
 		},
 
 		async clearbg(target, room, user): Promise<void> {
