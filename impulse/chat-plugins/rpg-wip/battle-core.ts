@@ -30,11 +30,13 @@ import { BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, TYPE_RESIST_BERRIES, ITEMS_DA
 import { getPlayerData, activeBattles, playerData } from './core';
 import { GameConfig } from './game-config';
 import {
-	generateBattleHTML,
 	generateMoveLearnHTML,
+} from './html';
+import {
+	generateBattleHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
-} from './html';
+} from './battle-ui';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
 // Circular dependency note: Ensure your build system handles this, or refactor hazard logic to a shared file.

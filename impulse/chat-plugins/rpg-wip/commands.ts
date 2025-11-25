@@ -61,27 +61,20 @@ import {
 	generateSellMenuHTML,
 	generateExploreHTML,
 	generatePokemonInfoHTML,
-	generateBattleHTML,
 	generateWelcomeHTML,
 	generatePokemonSummaryHTML,
 	generateEggMoveSelectionHTML,
 	generateInventoryHTML,
 	generateShopHTML,
 	generatePCHTML,
-	generateCatchMenuHTML,
-	generateCatchTargetHTML,
-	generateSwitchMenuHTML,
 	generateMoveLearnHTML,
 	generateGiveItemPokemonSelectionHTML,
-	generateFaintSwitchHTML,
 	generateBottomNavigation,
 	generateSummarySelectionHTML,
 	generateMedicinePokemonSelectionHTML,
 	generateItemUseErrorHTML,
 	generateMiscItemPokemonSelectionHTML,
 	generateEvolutionStoneErrorHTML,
-	generateMultipleOpponentsCatchErrorHTML,
-	generateCatchSuccessHTML,
 	generateGiveItemSelectionHTML,
 	generateGiveItemToSpecificPokemonHTML,
 	generateTakeItemSelectionHTML,
@@ -94,10 +87,19 @@ import {
 	generateScriptedEventHTML,
 	generateNPCInteractionHTML,
 	generatePokedexHTML,
+} from './html';
+import {
+	generateBattleHTML,
+	generateCatchMenuHTML,
+	generateCatchTargetHTML,
+	generateSwitchMenuHTML,
+	generateFaintSwitchHTML,
+	generateMultipleOpponentsCatchErrorHTML,
+	generateCatchSuccessHTML,
 	generateBattleItemMenuHTML,
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
-} from './html';
+} from './battle-ui';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';

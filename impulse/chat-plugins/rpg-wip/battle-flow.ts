@@ -30,11 +30,13 @@ import {
 import { getPlayerData, activeBattles } from './core';
 import { teraToggleState, activeScriptedEvents } from './commands';
 import {
-	generateBattleHTML,
 	generateMoveLearnHTML,
+} from './html';
+import {
+	generateBattleHTML,
 	generatePivotSwitchHTML,
 	generateFaintSwitchHTML,
-} from './html';
+} from './battle-ui';
 import { RPGMoves } from './battle-moves';
 import { getBadgeForGymLeader, TOTAL_BADGES, TRAINER_DATABASE } from './game-npcs';
 import { GameConfig } from './game-config';
