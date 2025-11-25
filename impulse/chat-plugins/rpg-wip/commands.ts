@@ -1246,6 +1246,19 @@ export const commands: ChatCommands = {
 
 					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div><hr>`;
 
+					// Encounter Zones in Room (first, like ExploreHTML)
+					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
+						roomHTML += `<strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
+						for (const zoneId of roomToRender.encounterZones) {
+							const zone = ENCOUNTER_ZONES[zoneId];
+							if (zone) {
+								const icon = zone.battleType === 'double' ? '👥' : '🌿';
+								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
+							}
+						}
+						roomHTML += `</p><hr>`;
+					}
+
 					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
 						roomHTML += `<strong>People here:</strong><br><p class="rpg-text-center">`;
@@ -1313,19 +1326,6 @@ export const commands: ChatCommands = {
 					if (actionsHTML !== '') {
 						roomHTML += `<strong>Actions:</strong><br><p class="rpg-text-center">`;
 						roomHTML += actionsHTML;
-						roomHTML += `</p><hr>`;
-					}
-
-					// Encounter Zones in Room
-					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
-						roomHTML += `<strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
-						for (const zoneId of roomToRender.encounterZones) {
-							const zone = ENCOUNTER_ZONES[zoneId];
-							if (zone) {
-								const icon = zone.battleType === 'double' ? '👥' : '🌿';
-								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button" style="${btnStyle}">${icon} ${zone.name}</button>`;
-							}
-						}
 						roomHTML += `</p><hr>`;
 					}
 
