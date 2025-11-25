@@ -91,14 +91,14 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	}
 
 	for (const slot of allSlots) {
-		if (slot.pokemon.hp > 0 && !lumCuredStatus.get(slot.pokemon.id)) {
-			applyEOTStatusDamage(slot, battle, messageLog);
+		if (slot.pokemon.hp > 0) {
+			applyEOTLeechSeedDamage(slot, battle, messageLog);
 		}
 	}
 
 	for (const slot of allSlots) {
-		if (slot.pokemon.hp > 0) {
-			applyEOTLeechSeedDamage(slot, battle, messageLog);
+		if (slot.pokemon.hp > 0 && !lumCuredStatus.get(slot.pokemon.id)) {
+			applyEOTStatusDamage(slot, battle, messageLog);
 		}
 	}
 
