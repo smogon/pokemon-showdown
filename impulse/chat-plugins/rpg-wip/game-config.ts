@@ -12,7 +12,7 @@
 export const GameConfig = {
 
 	startLocationId: 'newbarktown',
-	startMoney: 3000,
+	startMoney: 1000000, // Increased for testing should be 3000
 	startInventory: [
 		{ id: 'pokeball', quantity: 5 },
 		{ id: 'potion', quantity: 5 },
