@@ -802,6 +802,15 @@ export function executeMove(
 				messageLog.push(`${attackerSlot.pokemon.nickname || 'Cramorant'} caught a Pikachu!`);
 			}
 		}
+
+		if (move.id === 'spitup' && moveHitAnyTarget) {
+			if (attackerSlot.stockpileCount > 0) {
+				attackerSlot.statStages.def = Math.max(-6, attackerSlot.statStages.def - attackerSlot.stockpileCount);
+				attackerSlot.statStages.spd = Math.max(-6, attackerSlot.statStages.spd - attackerSlot.stockpileCount);
+				attackerSlot.stockpileCount = 0;
+				messageLog.push(`The stockpiled energy was released!`);
+			}
+		}
 	}
 
 	targetSlots.forEach(s => { if (s && s.pokemon.hp > 0) RPGAbilities.checkFormChangeAbilities(s, battle, messageLog); });

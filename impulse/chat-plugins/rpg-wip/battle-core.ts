@@ -720,6 +720,16 @@ export function calculateDamage(
 
 	basePower = RPGAbilities.applyPowerModifier(abilityContext, basePower);
 
+	// Gem Consumable Logic (Base Power Boost)
+	let gemConsumed: string | undefined = undefined;
+	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
+		const gemType = attacker.item.replace('gem', '');
+		if (gemType.toLowerCase() === moveType.toLowerCase()) {
+			basePower = Math.floor(basePower * 1.3);
+			gemConsumed = attacker.item;
+		}
+	}
+
 	const attackStatRaw = getDamageOffense(move, attacker, attackerSlot, battle, abilityContext);
 	const defenseStatRaw = getDamageDefense(move, defender, defenderSlot, battle, attacker);
 
@@ -807,20 +817,7 @@ export function calculateDamage(
 		}
 	}
 
-	// Gem Consumable Logic
-	let gemConsumed: string | undefined = undefined;
-	if (battle.magicRoomTurns === 0 && attacker.item?.endsWith('gem')) {
-		const gemType = attacker.item.replace('gem', '');
-		if (gemType.toLowerCase() === moveType.toLowerCase()) {
-			// Note: Gem logic often happens by modifying base power, but modifying final damage is an acceptable approximation
-			// for simple engines, though technically Gen 5+ it modifies Base Power.
-			// Step 5 requirement was "Strict Rounding", so we apply it here.
-			// Actually, gems boost power, but we'll keep the damage boost logic from your original code to minimize drift,
-			// just applying it to the damage accumulator.
-			baseDamage = Math.floor(baseDamage * 1.3);
-			gemConsumed = attacker.item;
-		}
-	}
+
 
 	// Apply Final Modifiers (Items, Screens, Abilities)
 	// Now 'effectiveness' is defined and can be passed.

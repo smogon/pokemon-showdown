@@ -11,16 +11,8 @@ import {
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
 
-	allSlots.forEach(slot => {
-		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
-			slot.perishSongCounter--;
-			messageLog.push(`${slot.pokemon.species}'s perish count fell to ${slot.perishSongCounter}!`);
-			if (slot.perishSongCounter === 0) {
-				slot.pokemon.hp = 0;
-				messageLog.push(`${slot.pokemon.species} fainted from Perish Song!`);
-			}
-		}
-	});
+	handleEndOfTurnWeather(battle, messageLog, allSlots);
+	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 
 	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
 		fm.turnsLeft--;
@@ -79,21 +71,14 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	});
 
 	for (const slot of allSlots) {
-		slot.willFlinch = false;
-		slot.isProtected = false;
-	}
-
-	handleEndOfTurnWeather(battle, messageLog, allSlots);
-
-	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
-			applyEOTHealingItemEffects(slot, battle, messageLog);
+			applyEOTHealingEffects(slot, battle, messageLog);
 		}
 	}
 
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
-			applyEOTHealingEffects(slot, battle, messageLog);
+			applyEOTHealingItemEffects(slot, battle, messageLog);
 		}
 	}
 
@@ -130,7 +115,21 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
+	allSlots.forEach(slot => {
+		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
+			slot.perishSongCounter--;
+			messageLog.push(`${slot.pokemon.species}'s perish count fell to ${slot.perishSongCounter}!`);
+			if (slot.perishSongCounter === 0) {
+				slot.pokemon.hp = 0;
+				messageLog.push(`${slot.pokemon.species} fainted from Perish Song!`);
+			}
+		}
+	});
+
+	for (const slot of allSlots) {
+		slot.willFlinch = false;
+		slot.isProtected = false;
+	}
 }
 
 export function handleEndOfTurnWeather(battle: BattleState, messageLog: string[], allSlots: ActivePokemonSlot[]) {
