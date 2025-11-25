@@ -19,8 +19,43 @@ interface ProfileStatusDocument {
 	updatedAt: Date;
 }
 
+interface ProfileBackgroundDocument {
+	_id: string;
+	type: 'image' | 'color';
+	value: string;
+	updatedAt: Date;
+}
+
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
+const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackgrounds');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
+
+/**
+ * Validate if a string is a valid hex color code
+ * Supports both 3-character (#RGB) and 6-character (#RRGGBB) formats
+ */
+function isValidHexColor(value: string): boolean {
+	return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+}
+
+/**
+ * Validate if a string is a valid image URL
+ * Checks for http/https protocol and common image extensions
+ */
+function isValidImageUrl(value: string): boolean {
+	try {
+		const url = new URL(value);
+		if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+			return false;
+		}
+		// Check for common image extensions (excluding SVG for security reasons)
+		const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+		const pathname = url.pathname.toLowerCase();
+		return imageExtensions.some(ext => pathname.endsWith(ext));
+	} catch {
+		return false;
+	}
+}
 
 /** Cache for registration data to avoid repeated API calls */
 interface RegistrationCacheEntry {
@@ -122,16 +157,21 @@ async function getUserProfileData(userid: string) {
 		tcgPointsRank?: number,
 		tcgTotalCards?: number,
 		tcgTotalCardsRank?: number,
+		backgroundType?: 'image' | 'color',
+		backgroundValue?: string,
 	} = {};
 
 	// Fetch all data in parallel for better performance
-	const [expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile] = await Promise.allSettled([
+	const [
+		expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile, backgroundDoc,
+	] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
 		ImpulseDB('ontime').findOne({ _id: userid }),
 		ProfileStatusDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
 		getRegistrationData(userid),
 		TcgProfileDB.findOne({ userId: userid }),
+		ProfileBackgroundDB.findOne({ _id: userid }),
 	]);
 
 	// Process EXP data
@@ -195,6 +235,12 @@ async function getUserProfileData(userid: string) {
 		if (cardsRankResult.status === 'fulfilled') {
 			data.tcgTotalCardsRank = cardsRankResult.value + 1;
 		}
+	}
+
+	// Process background data
+	if (backgroundDoc.status === 'fulfilled' && backgroundDoc.value) {
+		data.backgroundType = backgroundDoc.value.type;
+		data.backgroundValue = backgroundDoc.value.value;
 	}
 
 	return data;
@@ -261,8 +307,24 @@ export const commands: Chat.ChatCommands = {
 			// Get user profile data
 			const profileData = await getUserProfileData(targetId);
 
+			// Build background style with proper validation
+			let backgroundStyle = '';
+			if (profileData.backgroundType === 'image' && profileData.backgroundValue) {
+				// Re-validate URL before use in CSS context
+				if (isValidImageUrl(profileData.backgroundValue)) {
+					// Escape single quotes in URL for CSS context
+					const cssUrl = profileData.backgroundValue.replace(/'/g, "\\'");
+					backgroundStyle = `background-image: url('${cssUrl}'); background-size: cover; background-position: center;`;
+				}
+			} else if (profileData.backgroundType === 'color' && profileData.backgroundValue) {
+				// Re-validate hex color before use in CSS context
+				if (isValidHexColor(profileData.backgroundValue)) {
+					backgroundStyle = `background-color: ${profileData.backgroundValue};`;
+				}
+			}
+
 			// Build the profile HTML in table format
-			let buf = '<table cellspacing="0" cellpadding="3" style="min-width:100%;">';
+			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;${backgroundStyle}">`;
 			buf += '<tr>';
 
 			// Avatar section (left side)
@@ -363,12 +425,52 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("Your profile status has been cleared.");
 		},
 
+		async setbg(target, room, user): Promise<void> {
+			if (!target) {
+				return this.errorReply("Please provide an image URL or hex color code (e.g., /uprofile setbg #FF5733 or /uprofile setbg https://example.com/image.png).");
+			}
+
+			const value = target.trim();
+
+			// Check if it's a hex color code
+			if (isValidHexColor(value)) {
+				await ProfileBackgroundDB.updateOne(
+					{ _id: user.id },
+					{ $set: { _id: user.id, type: 'color', value, updatedAt: new Date() } },
+					{ upsert: true }
+				);
+				this.sendReply(`Your profile background has been set to color: ${value}`);
+				return;
+			}
+
+			// Check if it's a valid image URL
+			if (isValidImageUrl(value)) {
+				await ProfileBackgroundDB.updateOne(
+					{ _id: user.id },
+					{ $set: { _id: user.id, type: 'image', value, updatedAt: new Date() } },
+					{ upsert: true }
+				);
+				this.sendReply(`Your profile background has been set to image: ${value}`);
+				return;
+			}
+
+			// Invalid input
+			return this.errorReply("Invalid input. Please provide a valid hex color code (e.g., #FF5733) or an image URL ending with a valid image extension (.png, .jpg, .jpeg, .gif, .webp).");
+		},
+
+		async clearbg(target, room, user): Promise<void> {
+			await ProfileBackgroundDB.deleteOne({ _id: user.id });
+			this.sendReply("Your profile background has been cleared.");
+		},
+
 		help(): void {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
 				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 50 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
+				{ cmd: "/uprofile setbg [url/color]", desc: "Set profile background to an image URL or hex color (e.g., #FF5733)." },
+				{ cmd: "/uprofile clearbg", desc: "Clear your custom profile background." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
