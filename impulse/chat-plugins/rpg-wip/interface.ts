@@ -250,48 +250,9 @@ export interface BattleState {
 	turn: number;
 	zoneId: string;
 
-	// Unified side states (NEW - simplified structure)
+	// Unified side states
 	playerSide: SideState;
 	opponentSide: SideState;
-
-	// Legacy accessors for backward compatibility
-	// These are computed from playerSide/opponentSide
-	playerHazards: string[];
-	opponentHazards: string[];
-	playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
-	opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
-	playerFutureMoves: {
-		slotIndex: number,
-		moveId: 'futuresight' | 'doomdesire',
-		turnsLeft: number,
-		attackerSlotIndex: number,
-		attackerStats: { atk: number, spa: number },
-	}[];
-	opponentFutureMoves: {
-		slotIndex: number,
-		moveId: 'futuresight' | 'doomdesire',
-		turnsLeft: number,
-		attackerSlotIndex: number,
-		attackerStats: { atk: number, spa: number },
-	}[];
-	playerQuickGuard: boolean;
-	opponentQuickGuard: boolean;
-	playerWideGuard: boolean;
-	opponentWideGuard: boolean;
-	playerCraftyShield: boolean;
-	opponentCraftyShield: boolean;
-	playerReflectTurns: number;
-	opponentReflectTurns: number;
-	playerLightScreenTurns: number;
-	opponentLightScreenTurns: number;
-	playerAuroraVeilTurns: number;
-	opponentAuroraVeilTurns: number;
-	playerMistTurns: number;
-	opponentMistTurns: number;
-	playerTailwindTurns: number;
-	opponentTailwindTurns: number;
-	playerTerastallizeUsed: boolean;
-	opponentTerastallizeUsed: boolean;
 
 	weather?: {
 		type: 'sun' | 'rain' | 'sand' | 'hail' | 'harsh-sun' | 'heavy-rain' | 'strong-winds',

@@ -61,14 +61,14 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	battle.turn++;
 
 	// Reset per-turn guards
-	battle.playerQuickGuard = false;
-	battle.opponentQuickGuard = false;
-	battle.playerWideGuard = false;
-	battle.opponentWideGuard = false;
-	battle.playerCraftyShield = false;
-	battle.opponentCraftyShield = false;
+	battle.playerSide.quickGuard = false;
+	battle.opponentSide.quickGuard = false;
+	battle.playerSide.wideGuard = false;
+	battle.opponentSide.wideGuard = false;
+	battle.playerSide.craftyShield = false;
+	battle.opponentSide.craftyShield = false;
 
-	getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(s => {
+	getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(s => {
 		s.isHelped = false;
 		s.isRedirecting = false;
 		s.lastDamageTaken = undefined;
@@ -76,7 +76,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 	});
 
 	// Generate AI Actions
-	getActiveSlots(battle.opponentSlots).forEach((slot, i) => {
+	getActiveSlots(battle.opponentSide.slots).forEach((slot, i) => {
 		const slotIndex = 2 + i;
 		if (!battle.pendingActions[slotIndex]) {
 			battle.pendingActions[slotIndex] = generateAiAction(slot, slotIndex, battle);
