@@ -478,3 +478,125 @@ The rpg-wip battle simulator is **highly accurate** compared to pokemon-showdown
 - ✅ **Terastallization**: Core mechanics accurate (once per battle, type change, STAB bonuses, Tera Blast)
 
 **The simulator is well-suited for a single-player RPG experience and provides authentic Pokémon battle mechanics.**
+
+---
+
+## RPG Mechanics Accuracy Analysis (Compared to Pokémon Games)
+
+This section analyzes the RPG-specific mechanics that go beyond battle simulation, comparing them to the official Pokémon games.
+
+### Catching Mechanics
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **Catch Formula** | `a = ((3*maxHP - 2*curHP) * rate * ball) / (3*maxHP) * status` | Same formula | ✅ Accurate |
+| **Shake Calculation** | `b = 65536 / (255/a)^0.1875` | Same formula | ✅ Accurate |
+| **4 Shake Checks** | 4 random rolls vs b | Same implementation | ✅ Accurate |
+| **Status Bonuses** | Sleep/Freeze=2.5x, Other=1.5x | Same values | ✅ Accurate |
+| **Ball Bonuses** | Varies by ball type | Extensive coverage | ✅ Accurate |
+
+**Ball Types Implemented:**
+- Basic: Poké Ball (1x), Great Ball (1.5x), Ultra Ball (2x), Master Ball (255x)
+- Conditional: Quick Ball (5x turn 1), Timer Ball (1-4x), Nest Ball (level-based), Dusk Ball (3x)
+- Type: Net Ball (3.5x Bug/Water), Dive Ball (3.5x), Fast Ball (4x for 100+ speed)
+- Level: Level Ball (2-8x based on level difference)
+- Special: Heal Ball, Friend Ball, Luxury Ball
+
+### Experience Gain
+
+| Feature | Pokémon Games (Gen 5+) | RPG-WIP | Accuracy |
+|---------|------------------------|---------|----------|
+| **Scaled Exp Formula** | `((√X * X²) / (√Y * Y²)) * Z` | Same formula | ✅ Accurate |
+| **X Value** | `2 * defeatedLevel + 10` | Same | ✅ Accurate |
+| **Y Value** | `defeatedLevel + participantLevel + 10` | Same | ✅ Accurate |
+| **Z Value** | `baseExp * defeatedLevel / 5` | Same | ✅ Accurate |
+| **Exp Share** | Entire party gains exp | All party members gain exp | ✅ Accurate |
+| **Base Exp Values** | Per-species values | Manual database | ✅ Accurate |
+
+### Level Up and Stat Calculation
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **HP Formula** | `floor(((2*base + IV + EV/4) * level) / 100) + level + 10` | Same | ✅ Accurate |
+| **Other Stats** | `floor(((2*base + IV + EV/4) * level) / 100) + 5` | Same | ✅ Accurate |
+| **Nature Effect** | +10%/-10% on stats | Same (1.1x/0.9x) | ✅ Accurate |
+| **EV Limit** | 510 total, 252 per stat | Same | ✅ Accurate |
+| **IV Range** | 0-31 | Same | ✅ Accurate |
+
+### Growth Rate Formulas
+
+| Growth Rate | Pokémon Games | RPG-WIP | Accuracy |
+|-------------|---------------|---------|----------|
+| **Fast** | `4n³/5` | Same | ✅ Accurate |
+| **Medium Fast** | `n³` | Same | ✅ Accurate |
+| **Medium Slow** | `6n³/5 - 15n² + 100n - 140` | Same | ✅ Accurate |
+| **Slow** | `5n³/4` | Same | ✅ Accurate |
+| **Erratic** | Complex piecewise | Implemented | ✅ Accurate |
+| **Fluctuating** | Complex piecewise | Implemented | ✅ Accurate |
+
+### Move Learning
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **Level-up Moves** | Learn at specific levels | Same system | ✅ Accurate |
+| **4-Move Limit** | Max 4 moves | Same | ✅ Accurate |
+| **Move Replace Choice** | Player chooses which to replace | Queue system with UI | ✅ Accurate |
+| **Skip Learning** | Can refuse new move | "Give Up on New Move" option | ✅ Accurate |
+| **Auto-learn** | If <4 moves, auto-learn | Same behavior | ✅ Accurate |
+
+### Evolution
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **Level Evolution** | Evolve at specific level | Same system | ✅ Accurate |
+| **Stone Evolution** | Use evolution stone | Implemented | ✅ Accurate |
+| **Everstone** | Prevents evolution | Implemented | ✅ Accurate |
+| **Stat Recalculation** | Stats update on evolution | Implemented | ✅ Accurate |
+| **HP Preservation** | HP percentage maintained | Same behavior | ✅ Accurate |
+| **New Moves on Evo** | May learn moves | Handled via `handleLearningMoves` | ✅ Accurate |
+
+**Starters with complete evolution lines:** All 9 generations of starters (Bulbasaur→Venusaur through Sprigatito→Meowscarada)
+
+### Effort Values (EVs)
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **EV Yield** | Per-species values | Manual database | ✅ Accurate |
+| **Max Total EVs** | 510 | Same | ✅ Accurate |
+| **Max Per Stat** | 252 | Implied | ✅ Accurate |
+| **Gain on KO** | Only active participants | Same | ✅ Accurate |
+
+### Item Usage in Battle
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **Medicine Items** | Potions, Revives, Status Heals | Implemented | ✅ Accurate |
+| **Uses Turn** | Item usage takes a turn | Same | ✅ Accurate |
+| **Single Target** | Select Pokémon to use on | UI for selection | ✅ Accurate |
+| **Revive Mechanics** | Restore fainted Pokémon | Implemented | ✅ Accurate |
+
+### Nature System
+
+| Feature | Pokémon Games | RPG-WIP | Accuracy |
+|---------|---------------|---------|----------|
+| **25 Natures** | 5 neutral, 20 with effects | All 25 implemented | ✅ Accurate |
+| **Stat Modifier** | +10% one stat, -10% another | Same calculation | ✅ Accurate |
+| **Neutral Natures** | Hardy, Docile, Serious, Bashful, Quirky | All 5 neutral | ✅ Accurate |
+
+---
+
+## RPG Mechanics Summary
+
+The rpg-wip module implements authentic Pokémon RPG mechanics:
+
+- ✅ **Catching**: Gen 3+ formula with all major ball types
+- ✅ **Experience**: Gen 5+ scaled experience system
+- ✅ **Stats**: Correct IV/EV/Nature calculations
+- ✅ **Growth Rates**: All 6 curves implemented
+- ✅ **Move Learning**: Queue system with player choice
+- ✅ **Evolution**: Level-based and stone-based
+- ✅ **EVs**: Per-species yields with limits
+- ✅ **Items**: Battle items with turn consumption
+- ✅ **Natures**: Full 25-nature system
+
+**The RPG mechanics are highly accurate to the main series Pokémon games.**
