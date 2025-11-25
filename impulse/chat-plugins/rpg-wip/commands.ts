@@ -1413,7 +1413,8 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("This building is under construction (No rooms defined).");
 			}
-		
+		},
+
 		eventchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
 			const player = getPlayerData(user.id);
