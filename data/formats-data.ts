@@ -5172,7 +5172,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	zarude: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
