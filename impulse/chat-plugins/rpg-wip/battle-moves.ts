@@ -17,8 +17,8 @@ import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness, executeForc
 import { getPlayerData } from './core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {
-	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
-	const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
+	const isPlayerTarget = battle.playerSide.slots.some(s => s?.pokemon.id === targetSlot.pokemon.id);
+	const allies = isPlayerTarget ? battle.playerSide.slots : battle.opponentSide.slots;
 
 	return allies.some(slot => {
 		if (!slot || slot.pokemon.hp <= 0) return false;
@@ -297,8 +297,8 @@ export function handleDamagingMovePreamble(
 			return true;
 		}
 		// Check opponent's pending action
-		const isPlayerDefender = battle.playerSlots.includes(defenderSlot);
-		const defenderIndex = isPlayerDefender ? battle.playerSlots.indexOf(defenderSlot) : battle.opponentSlots.indexOf(defenderSlot) + 2;
+		const isPlayerDefender = battle.playerSide.slots.includes(defenderSlot);
+		const defenderIndex = isPlayerDefender ? battle.playerSide.slots.indexOf(defenderSlot) : battle.opponentSide.slots.indexOf(defenderSlot) + 2;
 		const action = battle.pendingActions[defenderIndex];
 
 		if (!action || action.actionType !== 'move') {
@@ -378,19 +378,19 @@ export function handleDamagingMovePreamble(
 
 	// Brick Break / Psychic Fangs (Screen Breaking)
 	if (move.id === 'brickbreak' || move.id === 'psychicfangs' || move.id === 'ragingbull') {
-		const isPlayerAttacker = battle.playerSlots.includes(attackerSlot);
+		const isPlayerAttacker = battle.playerSide.slots.includes(attackerSlot);
 		if (isPlayerAttacker) {
-			if (battle.opponentReflectTurns > 0 || battle.opponentLightScreenTurns > 0 || battle.opponentAuroraVeilTurns > 0) {
-				battle.opponentReflectTurns = 0;
-				battle.opponentLightScreenTurns = 0;
-				battle.opponentAuroraVeilTurns = 0;
+			if (battle.opponentSide.reflectTurns > 0 || battle.opponentSide.lightScreenTurns > 0 || battle.opponentSide.auroraVeilTurns > 0) {
+				battle.opponentSide.reflectTurns = 0;
+				battle.opponentSide.lightScreenTurns = 0;
+				battle.opponentSide.auroraVeilTurns = 0;
 				messageLog.push(`It shattered the barriers!`);
 			}
 		} else {
-			if (battle.playerReflectTurns > 0 || battle.playerLightScreenTurns > 0 || battle.playerAuroraVeilTurns > 0) {
-				battle.playerReflectTurns = 0;
-				battle.playerLightScreenTurns = 0;
-				battle.playerAuroraVeilTurns = 0;
+			if (battle.playerSide.reflectTurns > 0 || battle.playerSide.lightScreenTurns > 0 || battle.playerSide.auroraVeilTurns > 0) {
+				battle.playerSide.reflectTurns = 0;
+				battle.playerSide.lightScreenTurns = 0;
+				battle.playerSide.auroraVeilTurns = 0;
 				messageLog.push(`It shattered the barriers!`);
 			}
 		}
@@ -432,9 +432,9 @@ export function handleDamagingMovePreamble(
 
 	// Future Sight / Doom Desire
 	if (move.id === 'futuresight' || move.id === 'doomdesire') {
-		const isPlayerAttacker = battle.playerSlots.includes(attackerSlot);
-		const futureMoveArray = isPlayerAttacker ? battle.opponentFutureMoves : battle.playerFutureMoves;
-		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSlots : battle.playerSlots).indexOf(defenderSlot);
+		const isPlayerAttacker = battle.playerSide.slots.includes(attackerSlot);
+		const futureMoveArray = isPlayerAttacker ? battle.opponentSide.futureMoves : battle.playerSide.futureMoves;
+		const targetSlotLocalIndex = (isPlayerAttacker ? battle.opponentSide.slots : battle.playerSide.slots).indexOf(defenderSlot);
 
 		if (targetSlotLocalIndex === -1) {
 			messageLog.push('But it failed!');
@@ -448,7 +448,7 @@ export function handleDamagingMovePreamble(
 			return true;
 		}
 
-		const futureAttackerSlotIndex = isPlayerAttacker ? battle.playerSlots.indexOf(attackerSlot) : battle.opponentSlots.indexOf(attackerSlot) + 2;
+		const futureAttackerSlotIndex = isPlayerAttacker ? battle.playerSide.slots.indexOf(attackerSlot) : battle.opponentSide.slots.indexOf(attackerSlot) + 2;
 
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
@@ -600,7 +600,7 @@ export function handleSpecificStatusMove(
 ): boolean {
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot?.pokemon;
-	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
+	const isPlayerAttacker = battle.playerSide.slots.some(s => s?.pokemon.id === attacker.id);
 
 	switch (move.id) {
 	case 'roar':
@@ -620,14 +620,14 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 		// Crafty Shield check
-		if (battle.playerSlots.includes(defenderSlot) ? battle.playerCraftyShield : battle.opponentCraftyShield) {
+		if (battle.playerSide.slots.includes(defenderSlot) ? battle.playerSide.craftyShield : battle.opponentSide.craftyShield) {
 			messageLog.push(`${defenderSlot.pokemon.species} is protected by Crafty Shield!`);
 			return true;
 		}
 
-		const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+		const isDefenderPlayer = battle.playerSide.slots.includes(defenderSlot);
 		const party = isDefenderPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-		const slots = isDefenderPlayer ? battle.playerSlots : battle.opponentSlots;
+		const slots = isDefenderPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 		// Filter for valid switch candidates (Healthy and not active)
 		const candidates = party.filter(p =>
@@ -646,20 +646,20 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'defog':
-		if (battle.playerHazards.length > 0 || battle.opponentHazards.length > 0) {
-			battle.playerHazards = [];
-			battle.opponentHazards = [];
+		if (battle.playerSide.hazards.length > 0 || battle.opponentSide.hazards.length > 0) {
+			battle.playerSide.hazards = [];
+			battle.opponentSide.hazards = [];
 			messageLog.push('The entry hazards were removed from the field!');
 		}
 		if (isPlayerAttacker) {
-			if (battle.opponentReflectTurns > 0) { battle.opponentReflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); }
-			if (battle.opponentLightScreenTurns > 0) { battle.opponentLightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); }
-			if (battle.opponentAuroraVeilTurns > 0) { battle.opponentAuroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); }
+			if (battle.opponentSide.reflectTurns > 0) { battle.opponentSide.reflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); }
+			if (battle.opponentSide.lightScreenTurns > 0) { battle.opponentSide.lightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); }
+			if (battle.opponentSide.auroraVeilTurns > 0) { battle.opponentSide.auroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); }
 			if ((battle as any).opponentMistTurns > 0) { (battle as any).opponentMistTurns = 0; messageLog.push(`The opposing team's Mist faded!`); }
 		} else {
-			if (battle.playerReflectTurns > 0) { battle.playerReflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); }
-			if (battle.playerLightScreenTurns > 0) { battle.playerLightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); }
-			if (battle.playerAuroraVeilTurns > 0) { battle.playerAuroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); }
+			if (battle.playerSide.reflectTurns > 0) { battle.playerSide.reflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); }
+			if (battle.playerSide.lightScreenTurns > 0) { battle.playerSide.lightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); }
+			if (battle.playerSide.auroraVeilTurns > 0) { battle.playerSide.auroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); }
 			if ((battle as any).playerMistTurns > 0) { (battle as any).playerMistTurns = 0; messageLog.push(`Your team's Mist faded!`); }
 		}
 		if (defenderSlot) {
@@ -920,7 +920,7 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'haze':
-		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+		getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 			slot.statStages = { ...INITIAL_STAT_STAGES };
 		});
 		messageLog.push('All stat changes were eliminated!');
@@ -928,8 +928,8 @@ export function handleSpecificStatusMove(
 
 	case 'perishsong':
 		let affectedCount = 0;
-		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
-			const isOpponent = (isPlayerAttacker && battle.opponentSlots.includes(slot)) || (!isPlayerAttacker && battle.playerSlots.includes(slot));
+		getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
+			const isOpponent = (isPlayerAttacker && battle.opponentSide.slots.includes(slot)) || (!isPlayerAttacker && battle.playerSide.slots.includes(slot));
 			const ability = isOpponent ? RPGAbilities.getActiveAbility(slot.pokemon, attacker) : toID(slot.pokemon.ability || '');
 
 			if (ability !== 'soundproof' && !slot.perishSongCounter) {
@@ -945,21 +945,21 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'courtchange':
-		const tempHazards = [...battle.playerHazards];
-		battle.playerHazards = [...battle.opponentHazards];
-		battle.opponentHazards = tempHazards;
+		const tempHazards = [...battle.playerSide.hazards];
+		battle.playerSide.hazards = [...battle.opponentSide.hazards];
+		battle.opponentSide.hazards = tempHazards;
 
-		const tempReflect = battle.playerReflectTurns;
-		battle.playerReflectTurns = battle.opponentReflectTurns;
-		battle.opponentReflectTurns = tempReflect;
+		const tempReflect = battle.playerSide.reflectTurns;
+		battle.playerSide.reflectTurns = battle.opponentSide.reflectTurns;
+		battle.opponentSide.reflectTurns = tempReflect;
 
-		const tempLightScreen = battle.playerLightScreenTurns;
-		battle.playerLightScreenTurns = battle.opponentLightScreenTurns;
-		battle.opponentLightScreenTurns = tempLightScreen;
+		const tempLightScreen = battle.playerSide.lightScreenTurns;
+		battle.playerSide.lightScreenTurns = battle.opponentSide.lightScreenTurns;
+		battle.opponentSide.lightScreenTurns = tempLightScreen;
 
-		const tempAuroraVeil = battle.playerAuroraVeilTurns;
-		battle.playerAuroraVeilTurns = battle.opponentAuroraVeilTurns;
-		battle.opponentAuroraVeilTurns = tempAuroraVeil;
+		const tempAuroraVeil = battle.playerSide.auroraVeilTurns;
+		battle.playerSide.auroraVeilTurns = battle.opponentSide.auroraVeilTurns;
+		battle.opponentSide.auroraVeilTurns = tempAuroraVeil;
 
 		const tempMist = (battle as any).playerMistTurns;
 		(battle as any).playerMistTurns = (battle as any).opponentMistTurns;
@@ -970,7 +970,7 @@ export function handleSpecificStatusMove(
 
 	case 'flowershield':
 		let flowershieldAffected = 0;
-		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+		getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 			const slotSpecies = Dex.species.get(slot.pokemon.species);
 			if (slotSpecies.types.includes('Grass') && slot.statStages.def < 6) {
 				slot.statStages.def++;
@@ -985,7 +985,7 @@ export function handleSpecificStatusMove(
 
 	case 'rototiller':
 		let rototillerAffected = 0;
-		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+		getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 			const slotSpecies = Dex.species.get(slot.pokemon.species);
 			if (slotSpecies.types.includes('Grass') && RPGAbilities.isGrounded(slot.pokemon, battle)) {
 				let boosted = false;
@@ -1010,7 +1010,7 @@ export function handleSpecificStatusMove(
 
 	case 'teatime':
 		let teatimeAffected = 0;
-		getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+		getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 			if (slot.pokemon.item) {
 				const itemData = ITEMS_DATABASE[slot.pokemon.item];
 				if (itemData?.category === 'berry' || slot.pokemon.item?.endsWith('berry')) {
@@ -1027,8 +1027,8 @@ export function handleSpecificStatusMove(
 
 	case 'healbell':
 	case 'aromatherapy': {
-		const isPlayerHealingUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-		const teamSlots = isPlayerHealingUser ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerHealingUser = battle.playerSide.slots.some(s => s?.pokemon.id === attacker.id);
+		const teamSlots = isPlayerHealingUser ? battle.playerSide.slots : battle.opponentSide.slots;
 		let healedCount = 0;
 		teamSlots.forEach(slot => {
 			if (slot?.status) {
@@ -1720,7 +1720,7 @@ export function handleGenericFieldMove(
 			messageLog.push(`${attacker.species} twisted the dimensions!`);
 
 			// Room Service Logic
-			getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]).forEach(slot => {
+			getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 				if (slot.pokemon.hp > 0 && slot.pokemon.item === 'roomservice') {
 					if (applyStatChange(slot, 'spe', -1, battle, messageLog)) {
 						messageLog[messageLog.length - 1] += ` (from Room Service)!`;
@@ -1808,7 +1808,7 @@ export function handleGenericSideMove(
 	battle: BattleState,
 	messageLog: string[]
 ): boolean {
-	const isPlayerAttacker = battle.playerSlots.some(s => s?.pokemon.id === attackerSlot.pokemon.id);
+	const isPlayerAttacker = battle.playerSide.slots.some(s => s?.pokemon.id === attackerSlot.pokemon.id);
 	let hadEffect = false;
 
 	if (move.id === 'mist') {
@@ -1831,10 +1831,10 @@ export function handleGenericSideMove(
 
 	if (move.id === 'tailwind') {
 		if (isPlayerAttacker) {
-			battle.playerTailwindTurns = 4;
+			battle.playerSide.tailwindTurns = 4;
 			messageLog.push(`The Tailwind blew from behind your team!`);
 		} else {
-			battle.opponentTailwindTurns = 4;
+			battle.opponentSide.tailwindTurns = 4;
 			messageLog.push(`The Tailwind blew from behind the opposing team!`);
 		}
 		return true;
@@ -1843,30 +1843,30 @@ export function handleGenericSideMove(
 	if (['reflect', 'lightscreen', 'auroraveil'].includes(move.id)) {
 		const duration = (battle.magicRoomTurns === 0 && attackerSlot.pokemon.item === 'lightclay') ? 8 : 5;
 		if (isPlayerAttacker) {
-			if (move.id === 'reflect' && battle.playerReflectTurns === 0) {
-				battle.playerReflectTurns = duration;
+			if (move.id === 'reflect' && battle.playerSide.reflectTurns === 0) {
+				battle.playerSide.reflectTurns = duration;
 				messageLog.push(`Reflect raised your team's Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'lightscreen' && battle.playerLightScreenTurns === 0) {
-				battle.playerLightScreenTurns = duration;
+			} else if (move.id === 'lightscreen' && battle.playerSide.lightScreenTurns === 0) {
+				battle.playerSide.lightScreenTurns = duration;
 				messageLog.push(`Light Screen raised your team's Special Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.playerAuroraVeilTurns === 0) {
-				battle.playerAuroraVeilTurns = duration;
+			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.playerSide.auroraVeilTurns === 0) {
+				battle.playerSide.auroraVeilTurns = duration;
 				messageLog.push(`Aurora Veil raised your team's defenses!`);
 				hadEffect = true;
 			}
 		} else {
-			if (move.id === 'reflect' && battle.opponentReflectTurns === 0) {
-				battle.opponentReflectTurns = duration;
+			if (move.id === 'reflect' && battle.opponentSide.reflectTurns === 0) {
+				battle.opponentSide.reflectTurns = duration;
 				messageLog.push(`Reflect raised the opposing team's Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'lightscreen' && battle.opponentLightScreenTurns === 0) {
-				battle.opponentLightScreenTurns = duration;
+			} else if (move.id === 'lightscreen' && battle.opponentSide.lightScreenTurns === 0) {
+				battle.opponentSide.lightScreenTurns = duration;
 				messageLog.push(`Light Screen raised the opposing team's Special Defense!`);
 				hadEffect = true;
-			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.opponentAuroraVeilTurns === 0) {
-				battle.opponentAuroraVeilTurns = duration;
+			} else if (move.id === 'auroraveil' && RPGAbilities.isWeatherActive(battle) && battle.weather?.type === 'hail' && battle.opponentSide.auroraVeilTurns === 0) {
+				battle.opponentSide.auroraVeilTurns = duration;
 				messageLog.push(`Aurora Veil raised the opposing team's defenses!`);
 				hadEffect = true;
 			}
@@ -1876,7 +1876,7 @@ export function handleGenericSideMove(
 	}
 
 	if (move.sideCondition) {
-		const targetHazards = isPlayerAttacker ? battle.opponentHazards : battle.playerHazards;
+		const targetHazards = isPlayerAttacker ? battle.opponentSide.hazards : battle.playerSide.hazards;
 		const hazardId = toID(move.sideCondition);
 
 		switch (hazardId) {
@@ -1915,13 +1915,13 @@ export function handleGenericSideMove(
 
 	if (['quickguard', 'wideguard', 'craftyshield'].includes(move.id)) {
 		if (isPlayerAttacker) {
-			if (move.id === 'quickguard') battle.playerQuickGuard = true;
-			if (move.id === 'wideguard') battle.playerWideGuard = true;
-			if (move.id === 'craftyshield') battle.playerCraftyShield = true;
+			if (move.id === 'quickguard') battle.playerSide.quickGuard = true;
+			if (move.id === 'wideguard') battle.playerSide.wideGuard = true;
+			if (move.id === 'craftyshield') battle.playerSide.craftyShield = true;
 		} else {
-			if (move.id === 'quickguard') battle.opponentQuickGuard = true;
-			if (move.id === 'wideguard') battle.opponentWideGuard = true;
-			if (move.id === 'craftyshield') battle.opponentCraftyShield = true;
+			if (move.id === 'quickguard') battle.opponentSide.quickGuard = true;
+			if (move.id === 'wideguard') battle.opponentSide.wideGuard = true;
+			if (move.id === 'craftyshield') battle.opponentSide.craftyShield = true;
 		}
 		messageLog.push(`${attackerSlot.pokemon.species} is protecting its side!`);
 		return true;

@@ -703,16 +703,16 @@ export function generatePokemonInfoHTML(
 
 export function generateSideEffectTags(battle: BattleState, side: 'player' | 'opponent'): string {
 	const effects: string[] = [];
-	const reflectTurns = (side === 'player') ? battle.playerReflectTurns : battle.opponentReflectTurns;
-	const lightScreenTurns = (side === 'player') ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
-	const auroraVeilTurns = (side === 'player') ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+	const reflectTurns = (side === 'player') ? battle.playerSide.reflectTurns : battle.opponentSide.reflectTurns;
+	const lightScreenTurns = (side === 'player') ? battle.playerSide.lightScreenTurns : battle.opponentSide.lightScreenTurns;
+	const auroraVeilTurns = (side === 'player') ? battle.playerSide.auroraVeilTurns : battle.opponentSide.auroraVeilTurns;
 	const mistTurns = (side === 'player') ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
-	const tailwindTurns = (side === 'player') ? battle.playerTailwindTurns : battle.opponentTailwindTurns;
+	const tailwindTurns = (side === 'player') ? battle.playerSide.tailwindTurns : battle.opponentSide.tailwindTurns;
 
-	const hazards = (side === 'player') ? battle.playerHazards : battle.opponentHazards;
-	const quickGuard = (side === 'player') ? battle.playerQuickGuard : battle.opponentQuickGuard;
-	const wideGuard = (side === 'player') ? battle.playerWideGuard : battle.opponentWideGuard;
-	const craftyShield = (side === 'player') ? battle.playerCraftyShield : battle.opponentCraftyShield;
+	const hazards = (side === 'player') ? battle.playerSide.hazards : battle.opponentSide.hazards;
+	const quickGuard = (side === 'player') ? battle.playerSide.quickGuard : battle.opponentSide.quickGuard;
+	const wideGuard = (side === 'player') ? battle.playerSide.wideGuard : battle.opponentSide.wideGuard;
+	const craftyShield = (side === 'player') ? battle.playerSide.craftyShield : battle.opponentSide.craftyShield;
 
 	if (reflectTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-reflect">Reflect</span>');
 	if (lightScreenTurns > 0) effects.push('<span class="rpg-side-effect-tag rpg-side-lightscreen">Light Screen</span>');
@@ -832,7 +832,7 @@ export function generatePokemonStatusTagsHTML(
 
 	let battleConditionTags = '';
 	if (battle) {
-		const isPlayerSide = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+		const isPlayerSide = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
 		const sideEffectTags = generateSideEffectTags(battle, isPlayerSide ? 'player' : 'opponent');
 		battleConditionTags = [sideEffectTags].filter(Boolean).join('');
 	}

@@ -59,9 +59,9 @@ export function executeForcedRandomSwitch(
 	slot: ActivePokemonSlot,
 	messageLog: string[]
 ): void {
-	const isPlayer = battle.playerSlots.includes(slot);
+	const isPlayer = battle.playerSide.slots.includes(slot);
 	const party = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-	const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
+	const slots = isPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 	// Find candidates: Healthy and not currently on field
 	const candidates = party.filter(p =>
@@ -347,17 +347,17 @@ export function handleDamagingMove(
 
 			// Eject Button Logic - Blocked by Sheer Force
 			if (!attackResult.sheerForceActive && battle.magicRoomTurns === 0 && defenderSlot.pokemon.item === 'ejectbutton' && defenderSlot.pokemon.hp > 0 && !battle.pendingPivot && !battle.aiPendingPivot) {
-				let slotIndex = battle.playerSlots.indexOf(defenderSlot);
+				let slotIndex = battle.playerSide.slots.indexOf(defenderSlot);
 				let isPlayer = true;
 				if (slotIndex === -1) {
-					slotIndex = battle.opponentSlots.indexOf(defenderSlot);
+					slotIndex = battle.opponentSide.slots.indexOf(defenderSlot);
 					isPlayer = false;
 				}
 
 				if (slotIndex !== -1) {
 					// Check if there are available replacements before setting up pivot
 					const defenderParty = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-					const defenderSlots = isPlayer ? battle.playerSlots : battle.opponentSlots;
+					const defenderSlots = isPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 					const availableReplacements = defenderParty.filter(p =>
 						p.hp > 0 && !defenderSlots.some(s => s?.pokemon.id === p.id)
@@ -371,10 +371,10 @@ export function handleDamagingMove(
 
 						if (isPlayer) {
 							battle.pendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
-							battle.playerSlots[slotIndex as 0 | 1] = null;
+							battle.playerSide.slots[slotIndex as 0 | 1] = null;
 						} else {
 							battle.aiPendingPivot = { slotIndex, slot: defenderSlot, isBatonPass: false };
-							battle.opponentSlots[slotIndex as 0 | 1] = null;
+							battle.opponentSide.slots[slotIndex as 0 | 1] = null;
 						}
 					}
 				}
@@ -468,8 +468,8 @@ export function handleDamagingMove(
 		}
 
 		if (move.id === 'rapidspin' && attackerSlot.pokemon.hp > 0 && moveWasSuccessful) {
-			const playerIsUser = battle.playerSlots.some(s => s?.pokemon.id === attacker.id);
-			const userHazards = playerIsUser ? battle.playerHazards : battle.opponentHazards;
+			const playerIsUser = battle.playerSide.slots.some(s => s?.pokemon.id === attacker.id);
+			const userHazards = playerIsUser ? battle.playerSide.hazards : battle.opponentSide.hazards;
 			if (userHazards.length > 0) {
 				userHazards.length = 0;
 				messageLog.push(`${attacker.species} blew away the hazards!`);
@@ -548,9 +548,9 @@ export function handleDamagingMove(
 				} else if (defenderSlot.isIngrained) {
 					messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
 				} else {
-					const isDefenderPlayer = battle.playerSlots.includes(defenderSlot);
+					const isDefenderPlayer = battle.playerSide.slots.includes(defenderSlot);
 					const party = isDefenderPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-					const slots = isDefenderPlayer ? battle.playerSlots : battle.opponentSlots;
+					const slots = isDefenderPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 					const availableReplacements = party.filter(p =>
 						p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
@@ -825,17 +825,17 @@ export function calculateDamage(
 	damage = pokeRound(damage * spreadMultiplier);
 
 	// 2. Apply screen modifiers (Reflect/Light Screen/Aurora Veil) - before weather
-	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
+	const isDefenderPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === defender.id);
 	if (attackerAbility !== 'infiltrator' && !isCritical) {
-		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+		const defenderVeilTurns = isDefenderPlayer ? battle.playerSide.auroraVeilTurns : battle.opponentSide.auroraVeilTurns;
 		if (defenderVeilTurns > 0) {
 			damage = Math.floor(damage * 0.5);
 		} else {
 			if (move.category === 'Physical') {
-				const defenderReflectTurns = isDefenderPlayer ? battle.playerReflectTurns : battle.opponentReflectTurns;
+				const defenderReflectTurns = isDefenderPlayer ? battle.playerSide.reflectTurns : battle.opponentSide.reflectTurns;
 				if (defenderReflectTurns > 0) damage = Math.floor(damage * 0.5);
 			} else if (move.category === 'Special') {
-				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
+				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerSide.lightScreenTurns : battle.opponentSide.lightScreenTurns;
 				if (defenderLightScreenTurns > 0) damage = Math.floor(damage * 0.5);
 			}
 		}
@@ -1388,14 +1388,14 @@ export function applyPostDamageContactEffects(
 	}
 
 	if (attacker.hp > 0 && battle.magicRoomTurns === 0 && defender.item === 'redcard') {
-		const isPlayerDefending = battle.playerSlots.includes(defenderSlot);
-		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSlots : battle.playerSlots).indexOf(attackerSlot);
+		const isPlayerDefending = battle.playerSide.slots.includes(defenderSlot);
+		const attackerSlotIndex = (isPlayerDefending ? battle.opponentSide.slots : battle.playerSide.slots).indexOf(attackerSlot);
 
 		if (attackerSlotIndex !== -1) {
 			// Check if there are available replacements before forcing switch
 			const isAttackerPlayer = !isPlayerDefending;
 			const attackerParty = isAttackerPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-			const attackerSlots = isAttackerPlayer ? battle.playerSlots : battle.opponentSlots;
+			const attackerSlots = isAttackerPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 			const availableReplacements = attackerParty.filter(p =>
 				p.hp > 0 && !attackerSlots.some(s => s?.pokemon.id === p.id)
@@ -1492,8 +1492,8 @@ export function handleOnHitAbilityResponses(
 	}
 
 	if (defenderAbility === 'cottondown' && damageDealt > 0 && move.category !== 'Status') {
-		const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-		const opponentSlots = isDefenderPlayer ? battle.opponentSlots : battle.playerSlots;
+		const isDefenderPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === defender.id);
+		const opponentSlots = isDefenderPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 
 		let affectedAny = false;
 		for (const oppSlot of opponentSlots) {
@@ -1560,8 +1560,8 @@ export function handleOnHitAbilityResponses(
 	}
 
 	if (defenderAbility === 'toxicdebris' && move.category === 'Physical' && damageDealt > 0) {
-		const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-		const opponentHazards = isDefenderPlayer ? battle.opponentHazards : battle.playerHazards;
+		const isDefenderPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === defender.id);
+		const opponentHazards = isDefenderPlayer ? battle.opponentSide.hazards : battle.playerSide.hazards;
 
 		const toxicSpikesCount = opponentHazards.filter(h => h === 'toxicspikes').length;
 		if (toxicSpikesCount < 2) {
@@ -1936,7 +1936,7 @@ export function performCatchAttempt(battle: BattleState, ballId: string, targetS
 export function getBallBonus(ballId: string, battle: BattleState, targetSlot: ActivePokemonSlot): number {
 	const opponentActivePokemon = targetSlot.pokemon;
 	const opponentStatus = targetSlot.status;
-	const playerSlot = getActiveSlots(battle.playerSlots)[0];
+	const playerSlot = getActiveSlots(battle.playerSide.slots)[0];
 	if (!playerSlot) return 1;
 	const activePokemon = playerSlot.pokemon;
 	const turn = battle.turn;
@@ -2130,7 +2130,7 @@ export function saveBattleStatus(battle: BattleState) {
 	const player = getPlayerData(battle.playerId);
 	const playerParty = getActiveParty(battle, player);
 
-	for (const slot of battle.playerSlots) {
+	for (const slot of battle.playerSide.slots) {
 		if (slot) {
 			const pokemonInParty = playerParty.find(p => p.id === slot.pokemon.id);
 			if (pokemonInParty) {
@@ -2144,7 +2144,7 @@ export function saveBattleStatus(battle: BattleState) {
 	}
 
 	if (battle.battleType === 'trainer' || battle.battleType === 'trainer_double') {
-		for (const slot of battle.opponentSlots) {
+		for (const slot of battle.opponentSide.slots) {
 			if (slot) {
 				const opponentPokemonInParty = battle.opponentParty.find(p => p.id === slot.pokemon.id);
 				if (opponentPokemonInParty) {

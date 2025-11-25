@@ -74,7 +74,7 @@ export function canInflictStatus(
 	}
 
 	// 4. Check Safeguard
-	const isPlayerTarget = battle.playerSlots.some(s => s?.pokemon.id === target.id);
+	const isPlayerTarget = battle.playerSide.slots.some(s => s?.pokemon.id === target.id);
 	// Safeguard is a side condition, but we store it as a generic move check in standard engines.
 	// In this custom engine, we assume standard side conditions exist in the array or object.
 	// Currently side conditions are simple strings in playerHazards, but Safeguard is a volatile side effect.
@@ -126,7 +126,7 @@ export function canInflictStatus(
 
 	// 8. Check Flower Veil
 	if (targetTypes.includes('Grass')) {
-		const allies = isPlayerTarget ? battle.playerSlots : battle.opponentSlots;
+		const allies = isPlayerTarget ? battle.playerSide.slots : battle.opponentSide.slots;
 		const hasFlowerVeil = allies.some(s => s && s.pokemon.hp > 0 && getActiveAbility(s.pokemon, attacker) === 'flowerveil');
 		if (hasFlowerVeil) {
 			return { success: false, message: `${target.species} is protected by Flower Veil!` };
@@ -135,7 +135,7 @@ export function canInflictStatus(
 
 	// 9. Uproar Check
 	if (status === 'slp') {
-		const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
+		const allSlots = [...battle.playerSide.slots, ...battle.opponentSide.slots];
 		const uproarUser = allSlots.find(s => s && s.pokemon.hp > 0 && s.uproarTurns && s.uproarTurns > 0);
 		if (uproarUser) {
 			return { success: false, message: `But the uproar kept it awake!` };
@@ -413,8 +413,8 @@ export const IMMUNITY_ABILITIES: Record<string, AbilityImmunityHandler> = {
 	},
 
 	'telepathy': ctx => {
-		const attackerIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
-		const defenderIsPlayer = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
+		const attackerIsPlayer = ctx.battle.playerSide.slots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const defenderIsPlayer = ctx.battle.playerSide.slots.some(s => s?.pokemon.id === ctx.defender.id);
 
 		if (attackerIsPlayer === defenderIsPlayer) {
 			return {
@@ -590,10 +590,10 @@ export const POWER_MODIFIER_ABILITIES: Record<string, AbilityPowerModifierHandle
 	},
 
 	'supremeoverlord': (ctx, basePower) => {
-		const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
+		const isPlayerAttacker = ctx.battle.playerSide.slots.some(s => s?.pokemon.id === ctx.attacker.id);
 		const party = isPlayerAttacker ?
-			ctx.battle.playerSlots.map(s => s?.pokemon).filter(p => p) :
-			ctx.battle.opponentSlots.map(s => s?.pokemon).filter(p => p);
+			ctx.battle.playerSide.slots.map(s => s?.pokemon).filter(p => p) :
+			ctx.battle.opponentSide.slots.map(s => s?.pokemon).filter(p => p);
 
 		const faintedCount = party.filter(p => p && p.hp === 0).length;
 		if (faintedCount > 0) {
@@ -773,8 +773,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'plus': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spa' && battle) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const allies = isPlayer ? battle.playerSlots : battle.opponentSlots;
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 			const hasMinusOrPlus = allies.some(s =>
 				s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0 &&
 				(toID(s.pokemon.ability || '') === 'minus' || toID(s.pokemon.ability || '') === 'plus')
@@ -865,8 +865,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'swordofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'def' && battle) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 			const hasSwordOfRuin = opponents.some(s =>
 				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'swordofruin' &&
@@ -882,8 +882,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'tabletsofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'atk' && battle) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 			const hasTabletsOfRuin = opponents.some(s =>
 				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'tabletsofruin' &&
@@ -899,8 +899,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'vesselofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spa' && battle) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 			const hasVesselOfRuin = opponents.some(s =>
 				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'vesselofruin' &&
@@ -916,8 +916,8 @@ export const STAT_MODIFIER_ABILITIES: Record<string, AbilityStatModifierHandler>
 
 	'beadsofruin': (pokemon, stat, value, slot, battle) => {
 		if (stat === 'spd' && battle) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 			const hasBeadsOfRuin = opponents.some(s =>
 				s && s.pokemon.hp > 0 &&
 				toID(s.pokemon.ability || '') === 'beadsofruin' &&
@@ -1479,8 +1479,8 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 		handler: (slot, battle, messageLog) => {
 			if (Math.random() >= 0.3) return;
 
-			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
-			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+			const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === slot.pokemon.id);
+			const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 
 			for (const allySlot of allies) {
 				if (allySlot && allySlot.pokemon.id !== slot.pokemon.id && allySlot.pokemon.hp > 0 && allySlot.status) {
@@ -1518,8 +1518,8 @@ export const END_OF_TURN_ABILITIES: Record<string, { handler: (slot: ActivePokem
 
 	'baddreams': {
 		handler: (slot, battle, messageLog) => {
-			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
-			const opponents = isPlayerPokemon ? battle.opponentSlots : battle.playerSlots;
+			const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === slot.pokemon.id);
+			const opponents = isPlayerPokemon ? battle.opponentSide.slots : battle.playerSide.slots;
 
 			for (const opponentSlot of opponents) {
 				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.status === 'slp') {
@@ -1782,7 +1782,7 @@ export function getModifiedWeight(pokemon: RPGPokemon): number {
 export function isWeatherActive(battle: BattleState): boolean {
 	if (!battle.weather) return false;
 
-	const allSlots = getActiveSlots(battle.playerSlots).concat(getActiveSlots(battle.opponentSlots));
+	const allSlots = getActiveSlots(battle.playerSide.slots).concat(getActiveSlots(battle.opponentSide.slots));
 	for (const slot of allSlots) {
 		const ability = toID(slot.pokemon.ability || '');
 		if (ability === 'cloudnine' || ability === 'airlock') {
@@ -1886,8 +1886,8 @@ export function applyAbilityPowerModifier(ctx: AbilityContext, basePower: number
 		basePower = Math.floor(basePower * 1.2);
 	}
 
-	const isPlayerAttacker = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.attacker.id);
-	const attackerAllies = isPlayerAttacker ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const isPlayerAttacker = ctx.battle.playerSide.slots.some(s => s?.pokemon.id === ctx.attacker.id);
+	const attackerAllies = isPlayerAttacker ? ctx.battle.playerSide.slots : ctx.battle.opponentSide.slots;
 	const hasBattery = attackerAllies.some(s =>
 		s && s.pokemon.id !== ctx.attacker.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'battery'
 	);
@@ -1995,8 +1995,8 @@ export function preventsStatus(pokemon: RPGPokemon, status: string, battle?: Bat
 	}
 
 	if (battle) {
-		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 
 		if ((status === 'psn' || status === 'tox') && allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'pastelveil')) {
 			return true;
@@ -2066,8 +2066,8 @@ export function applyAbilitySpeedModifier(pokemon: RPGPokemon, battle: BattleSta
 
 	if (pokemon.item === 'utilityumbrella') return speed;
 
-	const slot = battle.playerSlots.find(s => s?.pokemon.id === pokemon.id) ||
-		battle.opponentSlots.find(s => s?.pokemon.id === pokemon.id);
+	const slot = battle.playerSide.slots.find(s => s?.pokemon.id === pokemon.id) ||
+		battle.opponentSide.slots.find(s => s?.pokemon.id === pokemon.id);
 	const status = slot ? slot.status : pokemon.status;
 
 	if (ability === 'quickfeet' && status) {
@@ -2173,8 +2173,8 @@ export function applyDamageModifier(ctx: AbilityContext, damage: number): number
 		damage = Math.floor(damage * 0.5);
 	}
 
-	const isPlayerDefender = ctx.battle.playerSlots.some(s => s?.pokemon.id === ctx.defender.id);
-	const defenderAllies = isPlayerDefender ? ctx.battle.playerSlots : ctx.battle.opponentSlots;
+	const isPlayerDefender = ctx.battle.playerSide.slots.some(s => s?.pokemon.id === ctx.defender.id);
+	const defenderAllies = isPlayerDefender ? ctx.battle.playerSide.slots : ctx.battle.opponentSide.slots;
 	const hasFriendGuard = defenderAllies.some(s =>
 		s && s.pokemon.id !== ctx.defender.id && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'friendguard'
 	);
@@ -2321,7 +2321,7 @@ export function applyParentalBondModifier(damage: number, isSecondHit: boolean):
 export function preventMove(ctx: AbilityContext): { prevented: boolean, message?: string } | null {
 	const defenderAbility = getActiveAbility(ctx.defender, ctx.attacker);
 
-	const allSlots = [...ctx.battle.playerSlots, ...ctx.battle.opponentSlots];
+	const allSlots = [...ctx.battle.playerSide.slots, ...ctx.battle.opponentSide.slots];
 	const hasDamp = allSlots.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'damp');
 	if (hasDamp && ['explosion', 'selfdestruct', 'mindblown', 'mistyexplosion'].includes(ctx.move.id)) {
 		return {
@@ -2466,7 +2466,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'intimidate') {
-		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSide.slots) : getActiveSlots(battle.playerSide.slots);
 		messageLog.push(`${pokemon.species}'s Intimidate cuts the opposing Pokémon's Attack!`);
 
 		for (const opponentSlot of opponentSlots) {
@@ -2508,8 +2508,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'costar') {
-		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
 
 		if (ally) {
@@ -2519,8 +2519,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'curiousmedicine') {
-		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 
 		for (const ally of allies) {
 			if (ally && ally.pokemon.id !== pokemon.id && ally.pokemon.hp > 0) {
@@ -2542,8 +2542,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'hospitality') {
-		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 		const ally = allies.find(s => s && s.pokemon.id !== pokemon.id && s.pokemon.hp > 0);
 
 		if (ally && ally.pokemon.hp < ally.pokemon.maxHp) {
@@ -2554,7 +2554,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'supersweetsynup' || ability === 'supersweetsynip') {
-		const opponents = isPlayerSwitchIn ? getActiveSlots(battle.opponentSlots) : getActiveSlots(battle.playerSlots);
+		const opponents = isPlayerSwitchIn ? getActiveSlots(battle.opponentSide.slots) : getActiveSlots(battle.playerSide.slots);
 		for (const opponent of opponents) {
 			if (opponent && opponent.pokemon.hp > 0) {
 				applyStatChange(opponent, 'evasion', -1, battle, messageLog, slot);
@@ -2563,8 +2563,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 	}
 
 	if (ability === 'commander' && pokemon.species.includes('Tatsugiri')) {
-		const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-		const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+		const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+		const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 		const dondozo = allies.find(s => s && s.pokemon.species === 'Dondozo' && s.pokemon.hp > 0);
 
 		if (dondozo) {
@@ -2606,8 +2606,8 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 	if (ability === 'screencleaner') {
 		const sides = [
-			{ name: 'player', slots: battle.playerSlots },
-			{ name: 'opponent', slots: battle.opponentSlots },
+			{ name: 'player', slots: battle.playerSide.slots },
+			{ name: 'opponent', slots: battle.opponentSide.slots },
 		];
 		let removedScreens = false;
 

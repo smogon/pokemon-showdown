@@ -194,12 +194,65 @@ export interface PlayerData {
 	pokedex?: { seen: Set<string>, caught: Set<string> };
 }
 
+/**
+ * SideState groups all side-specific battle state (screens, guards, etc.)
+ * This unified structure reduces duplication between player and opponent sides.
+ */
+export interface SideState {
+	// Entry hazards on this side
+	hazards: string[];
+	// Active Pokemon slots for this side
+	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
+	// Pending future moves targeting this side
+	futureMoves: {
+		slotIndex: number,
+		moveId: 'futuresight' | 'doomdesire',
+		turnsLeft: number,
+		attackerSlotIndex: number,
+		attackerStats: { atk: number, spa: number },
+	}[];
+	// Per-turn protection moves (reset each turn)
+	quickGuard: boolean;
+	wideGuard: boolean;
+	craftyShield: boolean;
+	// Screen effect turn counters
+	reflectTurns: number;
+	lightScreenTurns: number;
+	auroraVeilTurns: number;
+	mistTurns: number;
+	tailwindTurns: number;
+	// Terastallize usage tracking
+	terastallizeUsed: boolean;
+}
+
+/**
+ * Default values for creating a new SideState
+ */
+export function createSideState(): SideState {
+	return {
+		hazards: [],
+		slots: [null, null],
+		futureMoves: [],
+		quickGuard: false,
+		wideGuard: false,
+		craftyShield: false,
+		reflectTurns: 0,
+		lightScreenTurns: 0,
+		auroraVeilTurns: 0,
+		mistTurns: 0,
+		tailwindTurns: 0,
+		terastallizeUsed: false,
+	};
+}
+
 export interface BattleState {
 	playerId: string;
 	turn: number;
 	zoneId: string;
-	playerHazards: string[];
-	opponentHazards: string[];
+
+	// Unified side states
+	playerSide: SideState;
+	opponentSide: SideState;
 
 	weather?: {
 		type: 'sun' | 'rain' | 'sand' | 'hail' | 'harsh-sun' | 'heavy-rain' | 'strong-winds',
@@ -216,22 +269,6 @@ export interface BattleState {
 		turns: number,
 	};
 
-	playerQuickGuard: boolean;
-	opponentQuickGuard: boolean;
-	playerWideGuard: boolean;
-	opponentWideGuard: boolean;
-	playerCraftyShield: boolean;
-	opponentCraftyShield: boolean;
-	playerReflectTurns: number;
-	opponentReflectTurns: number;
-	playerLightScreenTurns: number;
-	opponentLightScreenTurns: number;
-	playerAuroraVeilTurns: number;
-	opponentAuroraVeilTurns: number;
-	playerMistTurns: number;
-	opponentMistTurns: number;
-	playerTailwindTurns: number;
-	opponentTailwindTurns: number;
 	gravityTurns: number;
 	mudSportTurns: number;
 	waterSportTurns: number;
@@ -241,9 +278,6 @@ export interface BattleState {
 	forceEnd?: boolean;
 	battleEnded?: boolean;
 	battleResult?: 'victory' | 'defeat';
-
-	playerTerastallizeUsed: boolean;
-	opponentTerastallizeUsed: boolean;
 
 	// Simplified battle types
 	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double' | 'battletower';
@@ -256,9 +290,6 @@ export interface BattleState {
 	pendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };
 	aiPendingPivot?: { slotIndex: number, slot: ActivePokemonSlot, isBatonPass: boolean };
 
-	playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
-	opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
-
 	pendingActions: {
 		[slotIndex: number]: {
 			actionType: 'move' | 'switch',
@@ -269,21 +300,6 @@ export interface BattleState {
 			terastallize?: boolean,
 		} | null,
 	};
-
-	playerFutureMoves: {
-		slotIndex: number,
-		moveId: 'futuresight' | 'doomdesire',
-		turnsLeft: number,
-		attackerSlotIndex: number,
-		attackerStats: { atk: number, spa: number },
-	}[];
-	opponentFutureMoves: {
-		slotIndex: number,
-		moveId: 'futuresight' | 'doomdesire',
-		turnsLeft: number,
-		attackerSlotIndex: number,
-		attackerStats: { atk: number, spa: number },
-	}[];
 
 	battleLog: string[];
 
