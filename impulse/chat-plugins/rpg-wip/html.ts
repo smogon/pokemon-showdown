@@ -329,18 +329,6 @@ function generatePartyActionButtons(pokemon: RPGPokemon): string {
 		`</div>`;
 }
 
-function generatePartyActionButtons(pokemon: RPGPokemon): string {
-	const itemButton = pokemon.item ?
-		`<button name="send" value="/rpg takeitem ${pokemon.id}" class="button rpg-button-small">Take Item</button>` :
-		`<button name="send" value="/rpg giveitem ${pokemon.id}" class="button rpg-button-small">Give Item</button>`;
-
-	return `<br><div class="rpg-margin-top">` +
-		`<button name="send" value="/rpg summary ${pokemon.id}" class="button rpg-button-small">Summary</button> ` +
-		`${itemButton} ` +
-		`<button name="send" value="/rpg depositpc ${pokemon.id}" class="button rpg-button-small">Deposit</button>` +
-		`</div>`;
-}
-
 export function generateHPBar(pokemon: RPGPokemon): string {
 	const hpPercentage = Math.max(0, Math.floor((pokemon.hp / pokemon.maxHp) * 100));
 	const hpClass = hpPercentage > 50 ? 'rpg-hp-high' : hpPercentage > 25 ? 'rpg-hp-mid' : 'rpg-hp-low';
@@ -850,58 +838,6 @@ export function generatePokemonStatusTagsHTML(
 	}
 
 	return [statusTag, volatileTags, abilityTags, chargingTag, statStageTags, battleConditionTags].filter(Boolean).join('');
-}
-
-export function generatePokemonInfoHTML(
-	slot: ActivePokemonSlot,
-	isPlayerSide: boolean,
-	showActions = false,
-	slotInfo?: { index: number, partyLength: number }
-): string {
-	const pokemon = slot.pokemon;
-	const species = Dex.species.get(pokemon.species);
-
-	let expBarHTML = '';
-	if (isPlayerSide) {
-		expBarHTML = generateExpBar(pokemon);
-	} else {
-		expBarHTML = `<div class="rpg-exp-bar"></div>`;
-	}
-
-	const statusTagsHTML = generatePokemonStatusTagsHTML(slot, false);
-
-	const shinySymbol = pokemon.shiny ? '<span class="rpg-text-warning">★</span>' : '';
-	const genderSymbol = pokemon.gender === 'M' ? '<span class="rpg-text-info">♂</span>' : pokemon.gender === 'F' ? '<span class="rpg-text-error">♀</span>' : '';
-
-	let html = `<div class="rpg-pokemon-card">`;
-
-	if (slotInfo) {
-		html += generatePartySlotButtons(slotInfo);
-	}
-
-	const typeDisplay = slot.terastallized ? `Tera ${slot.terastallized}` : species.types.join('/');
-
-	html += `<strong>${pokemon.nickname || pokemon.species}</strong> ${genderSymbol} ${shinySymbol} (Level ${pokemon.level})<br>`;
-	html += `<div class="rpg-battle-status-line">${statusTagsHTML}</div>`;
-	html += `<small>Type: ${typeDisplay}</small><br>`;
-
-	html += generateHPBar(pokemon);
-	html += expBarHTML;
-
-	if (isPlayerSide) {
-		html += `Nature: ${pokemon.nature}<br>`;
-		html += `Ability: ${pokemon.ability || 'Unknown'}<br>`;
-		if (pokemon.item) {
-			html += `Held Item: ${ITEMS_DATABASE[pokemon.item]?.name || pokemon.item}<br>`;
-		}
-	}
-
-	if (showActions) {
-		html += generatePartyActionButtons(pokemon);
-	}
-
-	html += '</div>';
-	return html;
 }
 
 export function generatePartyScreenHTML(player: PlayerData, notification?: string): string {
