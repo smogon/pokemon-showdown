@@ -22,6 +22,44 @@ interface ProfileStatusDocument {
 const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
+/** Cache for registration data to avoid repeated API calls */
+interface RegistrationCacheEntry {
+	data: { registertime?: number, username?: string } | null;
+	timestamp: number;
+}
+
+const registrationCache = new Map<string, RegistrationCacheEntry>();
+const REGISTRATION_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes cache duration
+
+/**
+ * Get registration data with caching to improve reliability
+ */
+async function getRegistrationData(userid: string): Promise<{ registertime?: number, username?: string } | null> {
+	// Check cache first
+	const cached = registrationCache.get(userid);
+	if (cached && (Date.now() - cached.timestamp) < REGISTRATION_CACHE_DURATION) {
+		return cached.data;
+	}
+
+	try {
+		const response = await Net(`https://${Config.routes.root}/users/${userid}.json`).get();
+		const data = JSON.parse(response) as { registertime?: number, username?: string };
+
+		// Cache the result (even if null/invalid - to prevent repeated failed requests)
+		registrationCache.set(userid, { data, timestamp: Date.now() });
+
+		return data;
+	} catch {
+		// On error, if we have stale cache, use it rather than showing nothing
+		if (cached) {
+			return cached.data;
+		}
+		// Cache the failure to prevent immediate retries
+		registrationCache.set(userid, { data: null, timestamp: Date.now() });
+		return null;
+	}
+}
+
 /**
  * Get the avatar display for a user, including custom avatars
  * For offline users, shows 'unknown' avatar
@@ -30,8 +68,9 @@ function getAvatarDisplay(user: User | null): string {
 	let avatar: string | number | undefined;
 	let avatarUrl = '';
 
-	// If user is online, use their current avatar
-	if (user) {
+	// If user is online AND connected, use their current avatar
+	// A user object may exist but not be connected (recently went offline)
+	if (user?.connected) {
 		avatar = user.avatar;
 	} else {
 		// User is offline - show 'unknown' avatar
@@ -85,7 +124,7 @@ async function getUserProfileData(userid: string) {
 		ImpulseDB('ontime').findOne({ _id: userid }),
 		ProfileStatusDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
-		Net(`https://${Config.routes.root}/users/${userid}.json`).get().catch(() => null),
+		getRegistrationData(userid),
 		TcgProfileDB.findOne({ userId: userid }),
 	]);
 
@@ -118,20 +157,16 @@ async function getUserProfileData(userid: string) {
 		}
 	}
 
-	// Process registration date
+	// Process registration date from cached result
 	if (registrationResult.status === 'fulfilled' && registrationResult.value) {
-		try {
-			const result = JSON.parse(registrationResult.value);
-			if (result.registertime) {
-				const date = new Date(result.registertime * 1000);
-				const weekday = date.toLocaleString('en-US', { weekday: 'short' });
-				const month = date.toLocaleString('en-US', { month: 'short' });
-				const day = String(date.getDate()).padStart(2, '0');
-				const year = date.getFullYear();
-				data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
-			}
-		} catch {
-			// Registration date parsing failed
+		const result = registrationResult.value;
+		if (result.registertime) {
+			const date = new Date(result.registertime * 1000);
+			const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+			const month = date.toLocaleString('en-US', { month: 'short' });
+			const day = String(date.getDate()).padStart(2, '0');
+			const year = date.getFullYear();
+			data.registrationDate = `${weekday}, ${month} ${day}, ${year}`;
 		}
 	}
 
@@ -180,7 +215,9 @@ function formatOntime(time: number): string {
 function getStatusDisplay(user: User | null, customStatus?: string): string {
 	let statusText = '';
 
-	if (!user) {
+	// Check if user is both present AND connected
+	// A user object may exist but not be connected (recently went offline)
+	if (!user?.connected) {
 		statusText = `<b style="color: red;">●&nbsp;Offline</b>`;
 	} else {
 		const statusType = user.statusType || 'online';
@@ -302,8 +339,8 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async setstatus(target, room, user): Promise<void> {
-			if (!target || target.length > 100) {
-				return this.errorReply("Please provide a status message (max 100 characters).");
+			if (!target || target.length > 50) {
+				return this.errorReply("Please provide a status message (max 50 characters).");
 			}
 
 			await ProfileStatusDB.updateOne(
@@ -324,7 +361,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const helpList = [
 				{ cmd: "/uprofile [user]", desc: "View a user's profile with avatar, stats, and information." },
-				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 100 characters)." },
+				{ cmd: "/uprofile setstatus [message]", desc: "Set a custom status message on your profile (max 50 characters)." },
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
