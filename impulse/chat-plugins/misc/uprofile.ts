@@ -43,7 +43,13 @@ async function getRegistrationData(userid: string): Promise<{ registertime?: num
 
 	try {
 		const response = await Net(`https://${Config.routes.root}/users/${userid}.json`).get();
-		const data = JSON.parse(response) as { registertime?: number, username?: string };
+		const parsed = JSON.parse(response);
+
+		// Validate the response structure before using it
+		const data = (parsed && typeof parsed === 'object') ? {
+			registertime: typeof parsed.registertime === 'number' ? parsed.registertime : undefined,
+			username: typeof parsed.username === 'string' ? parsed.username : undefined,
+		} : null;
 
 		// Cache the result (even if null/invalid - to prevent repeated failed requests)
 		registrationCache.set(userid, { data, timestamp: Date.now() });
@@ -368,7 +374,7 @@ export const commands: Chat.ChatCommands = {
 				helpList.map(({ cmd, desc }, i) =>
 					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
 				).join('') +
-				`</ul><small>Note: Named 'uprofile' to avoid conflicts with the existing /profile command.</small>`;
+				`</ul>`;
 			this.sendReplyBox(html);
 		},
 	},
