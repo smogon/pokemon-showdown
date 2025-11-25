@@ -154,6 +154,12 @@ export interface ActivePokemonSlot {
 	hasSwitchedOut?: boolean;
 	toxicCounter?: number;
 
+	// New Mechanics / Future Proofing
+	commanderActive?: boolean;
+	commanderBoost?: boolean;
+	gulpMissileForm?: 'gulping' | 'gorging' | null;
+	boosterEnergyActive?: boolean;
+
 	// Tier 1 move additions
 	isAttracted?: boolean;
 	destinyBondActive?: boolean;
@@ -227,7 +233,7 @@ export interface BattleState {
 	playerTailwindTurns: number;
 	opponentTailwindTurns: number;
 	gravityTurns: number;
-	mudSportTurns: 0;
+	mudSportTurns: number;
 	waterSportTurns: number;
 	fairyLockTurns: number;
 	ionDelugeTurns: number;
