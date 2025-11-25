@@ -137,11 +137,6 @@ function getNPCReturnCommand(player: PlayerData, npcId: string): string {
 					}
 				}
 			}
-			// If this building has a list of NPCs and our NPC is in it (Legacy/Single Room)
-			if (building.npcs && building.npcs.includes(npcId)) {
-				// Return to this specific building
-				return `/rpg building ${toID(building.id)}`;
-			}
 		}
 	}
 	// Default to the main location view
@@ -821,7 +816,16 @@ export const commands: ChatCommands = {
 			if (isInActiveBattle(user.id)) {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(getPlayerData(user.id))}`);
+			const player = getPlayerData(user.id);
+			
+			let returnCommand = '/rpg explore';
+			const location = LOCATIONS[toID(player.location)];
+			if (location && location.buildings) {
+				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
+				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
+			}
+
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, undefined, returnCommand)}`);
 		},
 
 		depositpc(target, room, user) {
@@ -835,6 +839,13 @@ export const commands: ChatCommands = {
 
 			const [pokemon] = player.party.splice(pokemonIndex, 1);
 			storePokemonInPC(player, pokemon);
+
+			let returnCommand = '/rpg explore';
+			const location = LOCATIONS[toID(player.location)];
+			if (location && location.buildings) {
+				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
+				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
+			}
 
 			const successMsg = `Sent <strong>${pokemon.species}</strong> to the PC.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePartyScreenHTML(player, successMsg)}`);
@@ -852,8 +863,15 @@ export const commands: ChatCommands = {
 
 			player.party.push(pokemon);
 
+			let returnCommand = '/rpg explore';
+			const location = LOCATIONS[toID(player.location)];
+			if (location && location.buildings) {
+				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
+				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
+			}
+
 			const successMsg = `Withdrew <strong>${pokemon.species}</strong> to your party.`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, successMsg)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePCHTML(player, successMsg, returnCommand)}`);
 		},
 
 		shop(target, room, user) {
@@ -864,7 +882,15 @@ export const commands: ChatCommands = {
 			const category = toID(target);
 			const validCategories = ['pokeball', 'medicine', 'held', 'berry', 'tm', 'misc', 'stone'];
 			const filterCategory = validCategories.includes(category) ? category : undefined;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory)}`);
+
+			let returnCommand = '/rpg explore';
+			const location = LOCATIONS[toID(player.location)];
+			if (location && location.buildings) {
+				const shopBuilding = location.buildings.find(b => b.type === 'pokemart' || b.type === 'department');
+				if (shopBuilding) returnCommand = `/rpg building ${toID(shopBuilding.id)}`;
+			}
+
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, filterCategory, undefined, returnCommand)}`);
 		},
 
 		buy(target, room, user) {
@@ -890,8 +916,15 @@ export const commands: ChatCommands = {
 			player.money -= totalCost;
 			addItemToInventory(player, itemId, quantity);
 
+			let returnCommand = '/rpg explore';
+			const location = LOCATIONS[toID(player.location)];
+			if (location && location.buildings) {
+				const shopBuilding = location.buildings.find(b => b.type === 'pokemart' || b.type === 'department');
+				if (shopBuilding) returnCommand = `/rpg building ${toID(shopBuilding.id)}`;
+			}
+
 			const successMsg = `Purchased <strong>${quantity}x ${itemData.name}</strong> for ₽${totalCost}.`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, successMsg)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateShopHTML(player, undefined, successMsg, returnCommand)}`);
 		},
 
 		sell(target, room, user) {
@@ -1134,6 +1167,7 @@ export const commands: ChatCommands = {
 			const args = target.split(' ');
 			const buildingId = toID(args[0]);
 			const roomId = args[1] ? toID(args[1]) : null;
+			const sourceRoomId = args[2] ? toID(args[2]) : null;
 			
 			if (!buildingId) return this.errorReply("Please specify which building to enter.");
 
@@ -1200,32 +1234,168 @@ export const commands: ChatCommands = {
 
 				if (!targetRoom) return this.errorReply("Invalid room.");
 
+				// Helper to render a room (used for success and fallback)
+				const renderRoom = (roomToRender: any, notification?: string) => {
+					// --- Generate Room HTML ---
+					let roomHTML = `<div class="rpg-infobox">`;
+					
+					if (notification) {
+						roomHTML += `<div class="rpg-notification">${notification}</div>`;
+					}
+
+					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div><hr>`;
+
+					// NPCs in Room
+					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
+						roomHTML += '<p><strong>People here:</strong></p>';
+						for (const npcId of roomToRender.npcs) {
+							const npc = NPC_DATABASE[npcId];
+							if (npc) {
+								if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
+								roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+							}
+						}
+					}
+
+					// Trainers in Room
+					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
+						roomHTML += '<p><strong>Trainers:</strong></p>';
+						for (const trainerId of roomToRender.trainers) {
+							const trainer = TRAINER_DATABASE[trainerId];
+							if (trainer) {
+								if (!player.defeatedTrainers.has(trainerId)) {
+									roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
+								} else {
+									roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+								}
+							}
+						}
+						roomHTML += '<hr>';
+					}
+
+					// --- Room Actions (PC, Shop, Gym Leader) ---
+					let actionsHTML = '';
+
+					if (roomToRender.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+					if (roomToRender.type === 'pokemart' || roomToRender.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+
+					if (roomToRender.type === 'gym' && roomToRender.gymLeaderId) {
+						const gymLeaderId = roomToRender.gymLeaderId;
+						const gymData = TRAINER_DATABASE[gymLeaderId];
+						if (gymData) {
+							// Check if all trainers in the BUILDING are defeated
+							let allTrainersDefeated = true;
+							// Check room level trainers (Building level check removed as it's legacy)
+							if (building.rooms) {
+								for (const r of building.rooms) {
+									if (r.trainers) {
+										for (const tid of r.trainers) {
+											if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+										}
+									}
+								}
+							}
+
+							if (!player.defeatedTrainers.has(gymLeaderId)) {
+								if (allTrainersDefeated) {
+									actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
+								} else {
+									actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+								}
+							} else {
+								actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+							}
+						}
+					}
+
+					if (actionsHTML !== '') {
+						roomHTML += '<p><strong>Actions:</strong></p>';
+						roomHTML += actionsHTML;
+						roomHTML += '<hr>';
+					}
+
+					// Encounter Zones in Room
+					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
+						roomHTML += '<p><strong>Wild Pokémon:</strong></p>';
+						for (const zoneId of roomToRender.encounterZones) {
+							const zone = ENCOUNTER_ZONES[zoneId];
+							if (zone) {
+								const icon = zone.battleType === 'double' ? '👥' : '🌿';
+								roomHTML += `<button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button"> ${icon} ${zone.name}</button> `;
+							}
+						}
+						roomHTML += '<hr>';
+					}
+
+					// Navigation (Connected Rooms)
+					if (roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0) {
+						roomHTML += '<p><strong>Go to:</strong></p>';
+						for (const connectedRoomId of roomToRender.connectedRooms) {
+							const connectedRoom = building.rooms?.find(r => r.id === connectedRoomId);
+							if (connectedRoom) {
+								// PASS CURRENT ROOM ID (roomToRender.id) AS SOURCE FOR NAVIGATION
+								roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button">➡️ ${connectedRoom.name}</button> `;
+							}
+						}
+						roomHTML += '<hr>';
+					}
+
+					// Exit Button
+					if (roomToRender.isEntrance) {
+						roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+					} else {
+						if (!roomToRender.connectedRooms || roomToRender.connectedRooms.length === 0) {
+							roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+						} else {
+							roomHTML += `</div>`; 
+						}
+					}
+					
+					return roomHTML;
+				};
+
 				// --- Access Checks (Room Level) ---
+				let accessDenied = false;
+				let denyMessage = "";
+
 				if (targetRoom.requiredBadge) {
 					const reqBadges = Array.isArray(targetRoom.requiredBadge) ? targetRoom.requiredBadge : [targetRoom.requiredBadge];
 					if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
-						const blockMsg = targetRoom.blockMessage || "Locked: You need more badges to enter this room.";
-						// If blocked from a room, where do we go? 
-						// If we tried to enter the building, go back to explore.
-						// If we tried to move between rooms, stay in current room? (Complex to track previous)
-						// For simplicity, return to Explore with message.
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+						accessDenied = true;
+						denyMessage = targetRoom.blockMessage || "Locked: You need more badges to enter this room.";
 					}
 				}
 
-				if (targetRoom.requiredFlag) {
+				if (!accessDenied && targetRoom.requiredFlag) {
 					const reqFlags = Array.isArray(targetRoom.requiredFlag) ? targetRoom.requiredFlag : [targetRoom.requiredFlag];
 					if (!reqFlags.every(f => player.storyFlags.has(f))) {
-						const blockMsg = targetRoom.blockMessage || "You can't access this area yet.";
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+						accessDenied = true;
+						denyMessage = targetRoom.blockMessage || "You can't access this area yet.";
 					}
 				}
 
-				if (targetRoom.preventIfFlag) {
+				if (!accessDenied && targetRoom.preventIfFlag) {
 					const prevFlags = Array.isArray(targetRoom.preventIfFlag) ? targetRoom.preventIfFlag : [targetRoom.preventIfFlag];
 					if (prevFlags.some(f => player.storyFlags.has(f))) {
-						const blockMsg = targetRoom.blockMessage || "This area is blocked.";
-						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+						accessDenied = true;
+						denyMessage = targetRoom.blockMessage || "This area is blocked.";
+					}
+				}
+
+				if (accessDenied) {
+					// FALLBACK LOGIC:
+					let fallbackRoom = null;
+					if (sourceRoomId) {
+						fallbackRoom = building.rooms.find(r => r.id === sourceRoomId);
+					}
+					if (!fallbackRoom) {
+						fallbackRoom = building.rooms.find(r => r.isEntrance) || building.rooms[0];
+					}
+
+					if (fallbackRoom) {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${renderRoom(fallbackRoom, denyMessage)}`);
+					} else {
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, denyMessage)}`);
 					}
 				}
 
@@ -1239,188 +1409,10 @@ export const commands: ChatCommands = {
 					flags.forEach((f: string) => player.storyFlags.delete(f));
 				}
 
-				// --- Generate Room HTML ---
-				let roomHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name} - ${targetRoom.name}</b></h2><p><em>${targetRoom.description}</em></p></div><hr>`;
-
-				// NPCs in Room
-				if (targetRoom.npcs && targetRoom.npcs.length > 0) {
-					roomHTML += '<p><strong>People here:</strong></p>';
-					for (const npcId of targetRoom.npcs) {
-						const npc = NPC_DATABASE[npcId];
-						if (npc) {
-							if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-							roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
-						}
-					}
-				}
-
-				// Trainers in Room
-				if (targetRoom.trainers && targetRoom.trainers.length > 0) {
-					roomHTML += '<p><strong>Trainers:</strong></p>';
-					for (const trainerId of targetRoom.trainers) {
-						const trainer = TRAINER_DATABASE[trainerId];
-						if (trainer) {
-							if (!player.defeatedTrainers.has(trainerId)) {
-								roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
-							} else {
-								roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
-							}
-						}
-					}
-					roomHTML += '<hr>';
-				}
-
-				// --- Room Actions (PC, Shop, Gym Leader) ---
-				let actionsHTML = '';
-
-				if (targetRoom.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-				if (targetRoom.type === 'pokemart' || targetRoom.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
-
-				if (targetRoom.type === 'gym' && targetRoom.gymLeaderId) {
-					const gymLeaderId = targetRoom.gymLeaderId;
-					const gymData = TRAINER_DATABASE[gymLeaderId];
-					if (gymData) {
-						// Check if all trainers in the BUILDING are defeated
-						let allTrainersDefeated = true;
-						// Check building level trainers
-						if (building.trainers) {
-							for (const tid of building.trainers) {
-								if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
-							}
-						}
-						// Check room level trainers
-						if (allTrainersDefeated && building.rooms) {
-							for (const room of building.rooms) {
-								if (room.trainers) {
-									for (const tid of room.trainers) {
-										if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
-									}
-								}
-							}
-						}
-
-						if (!player.defeatedTrainers.has(gymLeaderId)) {
-							if (allTrainersDefeated) {
-								actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
-							} else {
-								actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
-							}
-						} else {
-							actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
-						}
-					}
-				}
-
-				if (actionsHTML !== '') {
-					roomHTML += '<p><strong>Actions:</strong></p>';
-					roomHTML += actionsHTML;
-					roomHTML += '<hr>';
-				}
-
-				// Navigation (Connected Rooms)
-				if (targetRoom.connectedRooms && targetRoom.connectedRooms.length > 0) {
-					roomHTML += '<p><strong>Go to:</strong></p>';
-					for (const connectedRoomId of targetRoom.connectedRooms) {
-						const connectedRoom = building.rooms.find(r => r.id === connectedRoomId);
-						if (connectedRoom) {
-							roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId}" class="button">➡️ ${connectedRoom.name}</button> `;
-						}
-					}
-					roomHTML += '<hr>';
-				}
-
-				// Exit Button
-				// If this is the entrance, show "Leave Building"
-				// If it's not the entrance but has no other connections, show "Leave Building" (fallback)
-				if (targetRoom.isEntrance) {
-					roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-				} else {
-					// Optional: Add a "Return to Entrance" button if not directly connected?
-					// For now, assume rooms are connected in a way that allows backtracking.
-					// If deep in a dungeon building, user might want to leave immediately?
-					// Let's keep it simple: if not entrance, you rely on connections.
-					// BUT, let's add a safety "Leave Building" always visible at bottom or just rely on connections.
-					// Standard RPGs usually require walking back.
-					// Let's add a "Leave Building" button ONLY if isEntrance is true.
-					// Actually, if there are NO connections, we might be stuck, so add Leave.
-					if (!targetRoom.connectedRooms || targetRoom.connectedRooms.length === 0) {
-						roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-					} else {
-						roomHTML += `</div>`; // Close div
-					}
-				}
-
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${roomHTML}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${renderRoom(targetRoom)}`);
+			} else {
+				return this.errorReply("This building is under construction (No rooms defined).");
 			}
-
-			// ============================================================
-			// LEGACY / SINGLE ROOM BUILDING LOGIC
-			// ============================================================
-
-			// --- Generate Building UI ---
-			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;
-
-			if (building.npcs && building.npcs.length > 0) {
-				buildingHTML += '<p><strong>People here:</strong></p>';
-				for (const npcId of building.npcs) {
-					const npc = NPC_DATABASE[npcId];
-					if (npc) {
-						if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-						buildingHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
-					}
-				}
-			}
-
-			// --- NEW: Handle Trainers (Separated from Actions) ---
-			let allTrainersDefeated = true;
-			
-			if (building.trainers && building.trainers.length > 0) {
-				buildingHTML += '<p><strong>Trainers:</strong></p>';
-				for (const trainerId of building.trainers) {
-					const trainer = TRAINER_DATABASE[trainerId];
-					if (trainer) {
-						if (!player.defeatedTrainers.has(trainerId)) {
-							allTrainersDefeated = false;
-							buildingHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
-						} else {
-							buildingHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
-						}
-					}
-				}
-				buildingHTML += '<hr>';
-			}
-
-			// --- NEW: Handle Actions (PC, Shop, Leader) ---
-			let actionsHTML = '';
-
-			if (building.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
-			if (building.type === 'pokemart' || building.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
-			
-			if (building.type === 'gym' && building.gymLeaderId) {
-				const gymLeaderId = building.gymLeaderId;
-				const gymData = TRAINER_DATABASE[gymLeaderId];
-				if (gymData) {
-					if (!player.defeatedTrainers.has(gymLeaderId)) {
-						if (allTrainersDefeated) {
-							actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
-						} else {
-							actionsHTML += `<p><em>Defeat all trainers to challenge the Leader!</em></p>`;
-						}
-					} else {
-						actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
-					}
-				}
-			}
-
-			// Only append Actions block if there are actions to show
-			if (actionsHTML !== '') {
-				buildingHTML += '<p><strong>Actions:</strong></p>';
-				buildingHTML += actionsHTML;
-			}
-
-			buildingHTML += `<hr /><p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${buildingHTML}`);
-		},
 		
 		eventchoice(target, room, user) {
 			if (isInActiveBattle(user.id)) return this.errorReply("Cannot do this in battle.");
@@ -1487,7 +1479,30 @@ export const commands: ChatCommands = {
 			// Security check: Ensure the player is actually in the location that contains this zone
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
-			if (!currentLocation || !currentLocation.encounterZones?.includes(zoneId)) {
+			
+			let zoneFound = false;
+			
+			// 1. Check main location zones
+			if (currentLocation && currentLocation.encounterZones?.includes(zoneId)) {
+				zoneFound = true;
+			}
+			
+			// 2. Check building room zones
+			if (!zoneFound && currentLocation && currentLocation.buildings) {
+				for (const building of currentLocation.buildings) {
+					if (building.rooms) {
+						for (const room of building.rooms) {
+							if (room.encounterZones?.includes(zoneId)) {
+								zoneFound = true;
+								break;
+							}
+						}
+					}
+					if (zoneFound) break;
+				}
+			}
+
+			if (!currentLocation || !zoneFound) {
 				return this.errorReply("You cannot find this wild Pokémon zone in your current location.");
 			}
 
@@ -2268,8 +2283,14 @@ export const commands: ChatCommands = {
 						if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
 					} else if (currentLocation?.buildings) {
 						const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
-						if (building?.npcs?.includes(id)) {
-							if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
+						if (building?.rooms) {
+							// Iterate through all rooms to find NPCs
+							for (const room of building.rooms) {
+								if (room.npcs?.includes(id)) {
+									if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
+									break; // Found the NPC in this building, no need to check other rooms
+								}
+							}
 						}
 					}
 				}
@@ -2331,8 +2352,17 @@ export const commands: ChatCommands = {
 			if (npcLocId === playerLocId) {
 				isNearby = true;
 			} else if (currentLocation?.buildings) {
+				// Check if NPC is in a building within the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
-				if (building) isNearby = true;
+				if (building && building.rooms) {
+					// Check if NPC is in ANY room of this building
+					for (const room of building.rooms) {
+						if (room.npcs?.includes(npcId)) {
+							isNearby = true;
+							break;
+						}
+					}
+				}
 			}
 
 			if (!isNearby) return this.errorReply("You are not near this NPC.");

@@ -458,6 +458,7 @@ export interface BuildingRoom {
 	// Features
 	type?: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
 	gymLeaderId?: string;
+	encounterZones?: string[];
 }
 
 export interface Building {
@@ -465,7 +466,6 @@ export interface Building {
 	type: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
 	name: string;
 	description: string;
-	npcs?: string[];
 	accessible?: boolean;
 	
 	requiredFlag?: string | string[]; // Supports single or multiple flags
@@ -476,9 +476,6 @@ export interface Building {
 	setFlag?: string | string[]; // Supports single or multiple flags
 	removeFlag?: string | string[]; // Supports single or multiple flags
 	
-	gymLeaderId?: string;
-	trainers?: string[]; // NEW: List of trainer IDs in this building
-
 	rooms?: BuildingRoom[]; // NEW: Multiple rooms support
 }
 

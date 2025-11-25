@@ -164,6 +164,9 @@ export function handleHeal(
 		}
 	}
 
+	// Set respawn point
+	player.lastPokemonCenter = player.location.toLowerCase().replace(/[^a-z0-9]/g, '');
+
 	return {
 		success: true,
 		message: "We've restored your Pokémon to full health. We hope to see you again!",

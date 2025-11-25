@@ -56,7 +56,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	// Rocket Hideout Trainers
-	'rocketgrunt_1a': {
+	'rocketgrunt1a': {
 		name: 'Rocket Grunt (Mike)',
 		money: 300,
 		party: [
@@ -70,7 +70,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 		setFlag: 'hideout_1a_clear',
 	},
-	'rocketgrunt_1b': {
+	'rocketgrunt1b': {
 		name: 'Rocket Grunt (Steve)',
 		money: 300,
 		party: [
@@ -83,7 +83,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 		setFlag: 'hideout_1b_clear',
 	},
-	'rocketgrunt_2': {
+	'rocketgrunt2': {
 		name: 'Rocket Grunt (Sarah)',
 		money: 400,
 		party: [

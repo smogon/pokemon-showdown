@@ -894,7 +894,7 @@ export function generatePartyScreenHTML(player: PlayerData, notification?: strin
 	return html;
 }
 
-export function generatePCHTML(player: PlayerData, notification?: string): string {
+export function generatePCHTML(player: PlayerData, notification?: string, returnCommand: string = '/rpg explore'): string {
 	let html = `<div class="rpg-infobox">`;
 
 	if (notification) {
@@ -934,7 +934,10 @@ export function generatePCHTML(player: PlayerData, notification?: string): strin
 	}
 
 	html += `<hr />` +
-		`<p style="text-align:center"><button name="send" value="/rpg party" class="button">View Party</button></p>` +
+		`<p style="text-align:center">` +
+		`<button name="send" value="/rpg party" class="button">View Party</button> ` +
+		`<button name="send" value="${returnCommand}" class="button">Exit PC</button>` +
+		`</p>` +
 		generateBottomNavigation() +
 		`</div>`;
 	return html;
@@ -1136,7 +1139,7 @@ export function generateInventoryHTML(player: PlayerData, category?: string): st
 	return html;
 }
 
-export function generateShopHTML(player: PlayerData, category?: string, notification?: string): string {
+export function generateShopHTML(player: PlayerData, category?: string, notification?: string, returnCommand: string = '/rpg explore'): string {
 	const locationId = toID(player.location);
 	const shopInventory = getShopInventory(locationId, player.badges);
 	const nextTier = getNextShopTier(locationId, player.badges);
@@ -1195,7 +1198,7 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 		html += `<p>No items found in this category.</p>`;
 	}
 
-	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="/rpg explore" class="button">Back to Explore</button></p></center>`;
+	html += `<hr><center><p class="rpg-margin-top"><button name="send" value="${returnCommand}" class="button">Leave Shop</button></p></center>`;
 	html += `</div>`;
 	return html;
 }
