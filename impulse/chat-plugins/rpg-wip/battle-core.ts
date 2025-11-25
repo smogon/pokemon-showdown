@@ -790,7 +790,8 @@ export function calculateDamage(
 	}
 
 	// ==========================================================================================
-	// REORDERED LOGIC: Define Modifiers BEFORE use
+	// MODIFIER ORDER: Matching pokemon-showdown (sim/battle-actions.ts modifyDamage)
+	// Order: spread -> weather -> crit -> random -> STAB -> type effectiveness -> burn -> final modifiers
 	// ==========================================================================================
 	const isCritical = Math.random() < getCriticalHitChance(attackerSlot, defenderSlot, move, battle);
 	const criticalMultiplier = isCritical ? (attackerAbility === 'sniper' ? 2.25 : 1.5) : 1;
@@ -817,21 +818,62 @@ export function calculateDamage(
 		}
 	}
 
+	// Start with base damage
+	let damage = baseDamage;
 
+	// 1. Spread modifier (doubles only) - applied first after base damage
+	damage = pokeRound(damage * spreadMultiplier);
 
-	// Apply Final Modifiers (Items, Screens, Abilities)
-	// Now 'effectiveness' is defined and can be passed.
-	let damage = applyFinalDamageModifiers(
-		baseDamage, move, moveType, attacker, defender,
+	// 2. Apply screen modifiers (Reflect/Light Screen/Aurora Veil) - before weather
+	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
+	if (attackerAbility !== 'infiltrator' && !isCritical) {
+		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
+		if (defenderVeilTurns > 0) {
+			damage = Math.floor(damage * 0.5);
+		} else {
+			if (move.category === 'Physical') {
+				const defenderReflectTurns = isDefenderPlayer ? battle.playerReflectTurns : battle.opponentReflectTurns;
+				if (defenderReflectTurns > 0) damage = Math.floor(damage * 0.5);
+			} else if (move.category === 'Special') {
+				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
+				if (defenderLightScreenTurns > 0) damage = Math.floor(damage * 0.5);
+			}
+		}
+	}
+
+	// 3. Weather modifier (matching pokemon-showdown order)
+	if (RPGAbilities.isWeatherActive(battle)) {
+		const attackerHasUmbrella = battle.magicRoomTurns === 0 && attacker.item === 'utilityumbrella';
+		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
+			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
+			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
+		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
+			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
+			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
+		}
+	}
+
+	// 4. Critical hit modifier (before random in pokemon-showdown)
+	damage = pokeRound(damage * criticalMultiplier);
+
+	// 5. Random factor (85-100%)
+	damage = Math.floor(damage * randomMultiplier);
+
+	// 6. STAB modifier
+	damage = pokeRound(damage * stabMultiplier);
+
+	// 7. Type effectiveness
+	damage = Math.floor(damage * effectivenessMultiplier);
+
+	// 8. Burn modifier (applied after type effectiveness in pokemon-showdown)
+	// Note: Burn attack reduction is already applied earlier in getDamageOffense
+	// This is the damage modifier for Facade which bypasses burn reduction
+
+	// 9. Apply terrain, ability, and item modifiers (final modifiers)
+	damage = applyFinalDamageModifiersPost(
+		damage, move, moveType, attacker, defender,
 		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
 	);
-
-	// Strict Modifiers Rounding (Step 5 Fix)
-	damage = pokeRound(damage * stabMultiplier);
-	damage = Math.floor(damage * effectivenessMultiplier);
-	damage = pokeRound(damage * criticalMultiplier);
-	damage = Math.floor(damage * randomMultiplier);
-	damage = pokeRound(damage * spreadMultiplier);
 
 	if (!isFinite(damage) || isNaN(damage) || damage < 0) {
 		damage = 1;
@@ -1011,7 +1053,11 @@ export function getMoveType(
 	return moveType;
 }
 
-export function applyFinalDamageModifiers(
+/**
+ * Applies final damage modifiers AFTER type effectiveness (matching pokemon-showdown order).
+ * These are the ModifyDamage event modifiers: terrain, abilities, items like Life Orb.
+ */
+export function applyFinalDamageModifiersPost(
 	baseDamage: number,
 	move: Move,
 	moveType: string,
@@ -1026,36 +1072,7 @@ export function applyFinalDamageModifiers(
 ): number {
 	let damage = baseDamage;
 
-	const attackerAbility = toID(attacker.ability || '');
-	const isDefenderPlayer = battle.playerSlots.some(s => s?.pokemon.id === defender.id);
-
-	if (attackerAbility !== 'infiltrator' && !isCritical) {
-		const defenderVeilTurns = isDefenderPlayer ? battle.playerAuroraVeilTurns : battle.opponentAuroraVeilTurns;
-		if (defenderVeilTurns > 0) {
-			damage = Math.floor(damage * 0.5);
-		} else {
-			if (move.category === 'Physical') {
-				const defenderReflectTurns = isDefenderPlayer ? battle.playerReflectTurns : battle.opponentReflectTurns;
-				if (defenderReflectTurns > 0) damage = Math.floor(damage * 0.5);
-			} else if (move.category === 'Special') {
-				const defenderLightScreenTurns = isDefenderPlayer ? battle.playerLightScreenTurns : battle.opponentLightScreenTurns;
-				if (defenderLightScreenTurns > 0) damage = Math.floor(damage * 0.5);
-			}
-		}
-	}
-
-	if (RPGAbilities.isWeatherActive(battle)) {
-		const attackerHasUmbrella = battle.magicRoomTurns === 0 && attacker.item === 'utilityumbrella';
-
-		if (battle.weather!.type === 'sun' || battle.weather!.type === 'harsh-sun') {
-			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
-			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
-		} else if (battle.weather!.type === 'rain' || battle.weather!.type === 'heavy-rain') {
-			if (moveType === 'Water' && !attackerHasUmbrella) damage = Math.floor(damage * 1.5);
-			if (moveType === 'Fire' && !attackerHasUmbrella) damage = Math.floor(damage * 0.5);
-		}
-	}
-
+	// Terrain modifiers
 	if (battle.terrain) {
 		const attackerIsGrounded = RPGAbilities.isGrounded(attacker, battle);
 		const defenderIsGrounded = RPGAbilities.isGrounded(defender, battle);
@@ -1075,6 +1092,7 @@ export function applyFinalDamageModifiers(
 		}
 	}
 
+	// Mud Sport / Water Sport
 	if (battle.mudSportTurns > 0 && moveType === 'Electric') {
 		damage = Math.floor(damage * 0.33);
 	}
@@ -1082,8 +1100,10 @@ export function applyFinalDamageModifiers(
 		damage = Math.floor(damage * 0.33);
 	}
 
+	// Ability damage modifiers
 	damage = RPGAbilities.applyDamageModifier(abilityContext, damage);
 
+	// Item damage modifiers (final modifiers)
 	if (battle.magicRoomTurns === 0) {
 		if (attacker.item === 'lifeorb') {
 			damage = Math.floor(damage * 1.3);
@@ -1135,6 +1155,34 @@ export function applyFinalDamageModifiers(
 	}
 
 	return damage;
+}
+
+/**
+ * @deprecated This function is kept for backwards compatibility only.
+ * The modifiers have been reorganized in calculateDamage to match pokemon-showdown's modifyDamage order.
+ * Screens and weather are now applied inline in calculateDamage before crit/random/STAB/effectiveness.
+ * Use applyFinalDamageModifiersPost for post-effectiveness modifiers (terrain, abilities, items).
+ */
+export function applyFinalDamageModifiers(
+	baseDamage: number,
+	move: Move,
+	moveType: string,
+	attacker: RPGPokemon,
+	defender: RPGPokemon,
+	attackerSlot: ActivePokemonSlot,
+	defenderSlot: ActivePokemonSlot,
+	battle: BattleState,
+	effectiveness: number,
+	isCritical: boolean,
+	abilityContext: AbilityContext
+): number {
+	// Deprecated: delegate to new function for post-effectiveness modifiers only
+	// Screens and weather are now applied inline in calculateDamage
+	console.warn('applyFinalDamageModifiers is deprecated. Use inline modifiers in calculateDamage instead.');
+	return applyFinalDamageModifiersPost(
+		baseDamage, move, moveType, attacker, defender,
+		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext
+	);
 }
 
 export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSlot: ActivePokemonSlot, move: Move, battle: BattleState): number {
