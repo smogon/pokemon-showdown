@@ -3,7 +3,8 @@ import { FS } from '../../../lib';
 import { createPokemon } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './data-exp-evs-catch-rates';
-import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState, Status } from './interface';
+import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState, Status, SideState } from './interface';
+import { createSideState } from './interface';
 import { VIABLE_HELD_ITEMS, BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
 
@@ -1195,5 +1196,102 @@ export const RPGUtils = {
 	handleLeppaBerry,
 	setItem,
 };
+
+/**
+ * Creates a new BattleState with the unified SideState structure.
+ * This function initializes both the new SideState objects and the legacy
+ * accessor properties for backward compatibility.
+ */
+export function createBattleState(config: {
+	playerId: string;
+	zoneId: string;
+	battleType: BattleState['battleType'];
+	opponentName: string;
+	opponentParty: RPGPokemon[];
+	opponentMoney: number;
+	trainerId?: string;
+	weather?: BattleState['weather'];
+	locationWeather?: BattleState['locationWeather'];
+	floor?: number;
+	overridePlayerParty?: RPGPokemon[] | null;
+	battleTowerFormat?: string;
+}): BattleState {
+	const playerSide = createSideState();
+	const opponentSide = createSideState();
+
+	return {
+		playerId: config.playerId,
+		turn: 0,
+		zoneId: config.zoneId,
+
+		// Unified side states
+		playerSide,
+		opponentSide,
+
+		// Legacy accessors - reference the same data as SideState
+		playerHazards: playerSide.hazards,
+		opponentHazards: opponentSide.hazards,
+		playerSlots: playerSide.slots,
+		opponentSlots: opponentSide.slots,
+		playerFutureMoves: playerSide.futureMoves,
+		opponentFutureMoves: opponentSide.futureMoves,
+		playerQuickGuard: playerSide.quickGuard,
+		opponentQuickGuard: opponentSide.quickGuard,
+		playerWideGuard: playerSide.wideGuard,
+		opponentWideGuard: opponentSide.wideGuard,
+		playerCraftyShield: playerSide.craftyShield,
+		opponentCraftyShield: opponentSide.craftyShield,
+		playerReflectTurns: playerSide.reflectTurns,
+		opponentReflectTurns: opponentSide.reflectTurns,
+		playerLightScreenTurns: playerSide.lightScreenTurns,
+		opponentLightScreenTurns: opponentSide.lightScreenTurns,
+		playerAuroraVeilTurns: playerSide.auroraVeilTurns,
+		opponentAuroraVeilTurns: opponentSide.auroraVeilTurns,
+		playerMistTurns: playerSide.mistTurns,
+		opponentMistTurns: opponentSide.mistTurns,
+		playerTailwindTurns: playerSide.tailwindTurns,
+		opponentTailwindTurns: opponentSide.tailwindTurns,
+		playerTerastallizeUsed: playerSide.terastallizeUsed,
+		opponentTerastallizeUsed: opponentSide.terastallizeUsed,
+
+		// Weather and field effects
+		weather: config.weather,
+		locationWeather: config.locationWeather,
+		trickRoomTurns: 0,
+		magicRoomTurns: 0,
+		wonderRoomTurns: 0,
+		terrain: undefined,
+		gravityTurns: 0,
+		mudSportTurns: 0,
+		waterSportTurns: 0,
+		fairyLockTurns: 0,
+		ionDelugeTurns: 0,
+
+		// Battle meta
+		forceEnd: false,
+		battleEnded: false,
+		battleResult: undefined,
+		battleType: config.battleType,
+		opponentName: config.opponentName,
+		opponentParty: config.opponentParty,
+		opponentMoney: config.opponentMoney,
+		trainerId: config.trainerId,
+
+		// Switches and pivots
+		playerShouldSwitch: undefined,
+		pendingPivot: undefined,
+		aiPendingPivot: undefined,
+		pendingActions: {},
+
+		// Battle log and persistent state
+		battleLog: [],
+		persistentPokemonState: {},
+
+		// Battle Tower specific
+		floor: config.floor ?? 0,
+		overridePlayerParty: config.overridePlayerParty ?? null,
+		battleTowerFormat: config.battleTowerFormat,
+	};
+}
 
 export default RPGUtils;

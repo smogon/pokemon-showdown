@@ -13,6 +13,7 @@ import {
 } from './utils';
 import { STARTER_POKEMON, GameConfig } from './game-config';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
+import { createSideState } from './interface';
 import {
 	addItemToInventory,
 	removeItemFromInventory,
@@ -178,20 +179,51 @@ function initializeAndStartBattle(
 		initialMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 	}
 
+	// Create unified side states
+	const playerSide = createSideState();
+	const opponentSide = createSideState();
+	playerSide.slots = playerSlots;
+	opponentSide.slots = opponentSlots;
+
 	const battle: BattleState = {
 		battleType: config.battleType,
 		opponentName: opponent.name,
 		opponentParty: opponent.party,
 		opponentMoney: opponent.money,
 		trainerId: opponent.trainerId,
-		playerSlots,
-		opponentSlots,
+		// Unified side states
+		playerSide,
+		opponentSide,
+		// Legacy accessors (reference the same data)
+		playerSlots: playerSide.slots,
+		opponentSlots: opponentSide.slots,
+		playerHazards: playerSide.hazards,
+		opponentHazards: opponentSide.hazards,
+		playerFutureMoves: playerSide.futureMoves,
+		opponentFutureMoves: opponentSide.futureMoves,
+		playerQuickGuard: playerSide.quickGuard,
+		opponentQuickGuard: opponentSide.quickGuard,
+		playerWideGuard: playerSide.wideGuard,
+		opponentWideGuard: opponentSide.wideGuard,
+		playerCraftyShield: playerSide.craftyShield,
+		opponentCraftyShield: opponentSide.craftyShield,
+		playerReflectTurns: playerSide.reflectTurns,
+		opponentReflectTurns: opponentSide.reflectTurns,
+		playerLightScreenTurns: playerSide.lightScreenTurns,
+		opponentLightScreenTurns: opponentSide.lightScreenTurns,
+		playerAuroraVeilTurns: playerSide.auroraVeilTurns,
+		opponentAuroraVeilTurns: opponentSide.auroraVeilTurns,
+		playerMistTurns: playerSide.mistTurns,
+		opponentMistTurns: opponentSide.mistTurns,
+		playerTailwindTurns: playerSide.tailwindTurns,
+		opponentTailwindTurns: opponentSide.tailwindTurns,
+		playerTerastallizeUsed: playerSide.terastallizeUsed,
+		opponentTerastallizeUsed: opponentSide.terastallizeUsed,
+		// Other battle state
 		pendingActions: {},
 		playerId: user.id,
 		turn: 0,
 		zoneId: config.zoneId,
-		playerHazards: [],
-		opponentHazards: [],
 		weather: locationWeatherData.weather,
 		locationWeather: locationWeatherData.locationWeather,
 		trickRoomTurns: 0,
@@ -202,31 +234,11 @@ function initializeAndStartBattle(
 		pendingPivot: undefined,
 		aiPendingPivot: undefined,
 		forceEnd: false,
-		playerTerastallizeUsed: false,
-		opponentTerastallizeUsed: false,
-		playerQuickGuard: false,
-		opponentQuickGuard: false,
-		playerWideGuard: false,
-		opponentWideGuard: false,
-		playerCraftyShield: false,
-		opponentCraftyShield: false,
-		playerReflectTurns: 0,
-		opponentReflectTurns: 0,
-		playerLightScreenTurns: 0,
-		opponentLightScreenTurns: 0,
-		playerAuroraVeilTurns: 0,
-		opponentAuroraVeilTurns: 0,
-		playerMistTurns: 0,
-		opponentMistTurns: 0,
-		playerTailwindTurns: 0,
-		opponentTailwindTurns: 0,
 		gravityTurns: 0,
 		mudSportTurns: 0,
 		waterSportTurns: 0,
 		fairyLockTurns: 0,
 		ionDelugeTurns: 0,
-		playerFutureMoves: [],
-		opponentFutureMoves: [],
 		battleLog: [],
 		persistentPokemonState: {},
 		floor: 0,
