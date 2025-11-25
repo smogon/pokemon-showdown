@@ -2,17 +2,17 @@ import { Dex, toID } from '../../../sim/dex';
 import { getMove, getActiveSlots } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { BATTLE_TOWER_FORMATS } from './battle-tower';
-import { LOCATIONS } from './game-locations';
+import { LOCATIONS, getZoneLocation } from './game-locations';
 import { getPlayerData } from './core';
 import { GameConfig } from './game-config';
 import {
-    getSpriteUrl,
-    generateHPBar,
-    generateExpBar,
-    generateBottomNavigation,
+	getSpriteUrl,
+	generateHPBar,
+	generateExpBar,
+	generateBottomNavigation,
 	generatePokemonInfoHTML,
 	generateSideEffectTags,
-	generatePokemonStatusTagsHTML
+	generatePokemonStatusTagsHTML,
 } from './html';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
@@ -506,26 +506,35 @@ export function generateBattleHTML(
 		if (battle.battleType !== 'battletower') {
 			let continueCommand = '/rpg explore';
 
-			// New Logic: Check if the battle was against a trainer inside a building
-			if (battle.trainerId) {
-				const player = getPlayerData(battle.playerId);
-				const location = LOCATIONS[toID(player.location)];
+			if (battle.battleResult === 'victory') {
+				// New Logic: Check if the battle was against a trainer inside a building
+				if (battle.trainerId) {
+					const player = getPlayerData(battle.playerId);
+					const location = LOCATIONS[toID(player.location)];
 
-				if (location && location.buildings) {
-					for (const building of location.buildings) {
-						// Check Room-level trainers and leaders
-						if (building.rooms) {
-							for (const room of building.rooms) {
-								if (room.trainers && room.trainers.includes(battle.trainerId)) {
-									continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
-									break;
-								}
-								if (room.gymLeaderId === battle.trainerId) {
-									continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
-									break;
+					if (location?.buildings) {
+						for (const building of location.buildings) {
+							// Check Room-level trainers and leaders
+							if (building.rooms) {
+								for (const room of building.rooms) {
+									if (room.trainers?.includes(battle.trainerId)) {
+										continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
+										break;
+									}
+									if (room.gymLeaderId === battle.trainerId) {
+										continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
+										break;
+									}
 								}
 							}
 						}
+					}
+				}
+
+				if (battle.zoneId) {
+					const locInfo = getZoneLocation(battle.zoneId);
+					if (locInfo?.buildingId && locInfo.roomId) {
+						continueCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
 					}
 				}
 			}
@@ -753,7 +762,8 @@ export function generateCatchSuccessHTML(
 	tempSlot: ActivePokemonSlot,
 	location: string,
 	zoneId: string,
-	wasHealed: boolean
+	wasHealed: boolean,
+	returnCommand = '/rpg explore'
 ): string {
 	let successMessage = `<h2>Gotcha!</h2><div class="rpg-memo-box" style="text-align:center; margin-bottom:10px;"><p><strong>${caughtPokemon.species}</strong> was caught!</p>`;
 	if (wasHealed) successMessage += `<p class="rpg-text-success"><small>${caughtPokemon.species} was fully healed!</small></p>`;
@@ -765,7 +775,7 @@ export function generateCatchSuccessHTML(
 		`<p style="text-align:center; margin-top:10px;">${caughtPokemon.species} has been sent to ${location}.</p>` +
 		`<hr />` +
 		`<p style="text-align:center"><button name="send" value="/rpg wildpokemon ${toID(zoneId)}" class="button">Find Another</button> ` +
-		`<button name="send" value="/rpg explore" class="button">Continue Exploring</button></p>` +
+		`<button name="send" value="${returnCommand}" class="button">Continue Exploring</button></p>` +
 		generateBottomNavigation() +
 		`</div>`;
 }

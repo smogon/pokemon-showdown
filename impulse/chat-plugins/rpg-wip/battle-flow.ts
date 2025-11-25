@@ -881,7 +881,7 @@ export function handleSwitchAction(
 	// Clear attraction on all Pokemon that were attracted to the switching out Pokemon
 	const allSlots = [...battle.playerSlots, ...battle.opponentSlots];
 	for (const slot of allSlots) {
-		if (slot && slot.isAttracted) {
+		if (slot?.isAttracted) {
 			// Note: Attraction is cleared when the target (the Pokemon the attracted one loves) switches
 			// In a full implementation, we'd track WHO the Pokemon is attracted to
 			// For simplicity, we'll clear it when any Pokemon switches
@@ -1099,7 +1099,7 @@ export function handlePlayerFaint(battle: BattleState, messageLog: string[]): bo
 
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
-			
+
 			// Destiny Bond - Faint the attacker
 			if (slot.destinyBondActive && slot.lastDamageTaken) {
 				const opponentSlots = getActiveSlots(battle.opponentSlots);
@@ -1167,7 +1167,7 @@ export function handleOpponentFaint(
 
 			const faintedAbility = toID(slot.pokemon.ability || '');
 			const lastMove = slot.lastMoveThatHitMe;
-			
+
 			// Destiny Bond - Faint the attacker
 			if (slot.destinyBondActive && slot.lastDamageTaken) {
 				const attackerSlot = playerParticipants.find(p => p.pokemon.id === slot.lastDamageTaken?.from);

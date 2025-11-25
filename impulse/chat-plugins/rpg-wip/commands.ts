@@ -100,7 +100,7 @@ import {
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
 } from './battle-ui';
-import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation } from './game-locations';
+import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import * as NPCActions from './npc-actions';
@@ -126,13 +126,13 @@ function isInActiveBattle(userId: string): boolean {
  */
 function getNPCReturnCommand(player: PlayerData, npcId: string): string {
 	const currentLocation = LOCATIONS[toID(player.location)];
-	if (currentLocation && currentLocation.buildings) {
+	if (currentLocation?.buildings) {
 		// Check all buildings in the current location
 		for (const building of currentLocation.buildings) {
 			// Check rooms first if they exist
 			if (building.rooms) {
 				for (const room of building.rooms) {
-					if (room.npcs && room.npcs.includes(npcId)) {
+					if (room.npcs?.includes(npcId)) {
 						return `/rpg building ${toID(building.id)} ${room.id}`;
 					}
 				}
@@ -817,10 +817,10 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot access the PC during a battle.");
 			}
 			const player = getPlayerData(user.id);
-			
+
 			let returnCommand = '/rpg explore';
 			const location = LOCATIONS[toID(player.location)];
-			if (location && location.buildings) {
+			if (location?.buildings) {
 				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
 				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
 			}
@@ -842,7 +842,7 @@ export const commands: ChatCommands = {
 
 			let returnCommand = '/rpg explore';
 			const location = LOCATIONS[toID(player.location)];
-			if (location && location.buildings) {
+			if (location?.buildings) {
 				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
 				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
 			}
@@ -865,7 +865,7 @@ export const commands: ChatCommands = {
 
 			let returnCommand = '/rpg explore';
 			const location = LOCATIONS[toID(player.location)];
-			if (location && location.buildings) {
+			if (location?.buildings) {
 				const pcBuilding = location.buildings.find(b => b.type === 'pokecenter');
 				if (pcBuilding) returnCommand = `/rpg building ${toID(pcBuilding.id)}`;
 			}
@@ -885,7 +885,7 @@ export const commands: ChatCommands = {
 
 			let returnCommand = '/rpg explore';
 			const location = LOCATIONS[toID(player.location)];
-			if (location && location.buildings) {
+			if (location?.buildings) {
 				const shopBuilding = location.buildings.find(b => b.type === 'pokemart' || b.type === 'department');
 				if (shopBuilding) returnCommand = `/rpg building ${toID(shopBuilding.id)}`;
 			}
@@ -918,7 +918,7 @@ export const commands: ChatCommands = {
 
 			let returnCommand = '/rpg explore';
 			const location = LOCATIONS[toID(player.location)];
-			if (location && location.buildings) {
+			if (location?.buildings) {
 				const shopBuilding = location.buildings.find(b => b.type === 'pokemart' || b.type === 'department');
 				if (shopBuilding) returnCommand = `/rpg building ${toID(shopBuilding.id)}`;
 			}
@@ -1030,16 +1030,16 @@ export const commands: ChatCommands = {
 				const reqBadges = Array.isArray(connection.requiredBadge) ? connection.requiredBadge : [connection.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
+					blockMsg = (connection).blockMessage || `Locked: Requires ${connection.requiredBadge}.`;
 				}
-			} 
-			
+			}
+
 			// Check Required Flags (String or Array)
 			if (!isBlocked && connection.requiredFlag) {
 				const reqFlags = Array.isArray(connection.requiredFlag) ? connection.requiredFlag : [connection.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: You cannot go here yet.`;
+					blockMsg = (connection).blockMessage || `Locked: You cannot go here yet.`;
 				}
 			}
 
@@ -1048,7 +1048,7 @@ export const commands: ChatCommands = {
 				const prevFlags = Array.isArray(connection.preventIfFlag) ? connection.preventIfFlag : [connection.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
 					isBlocked = true;
-					blockMsg = (connection as any).blockMessage || `Locked: The path is currently blocked.`;
+					blockMsg = (connection).blockMessage || `Locked: The path is currently blocked.`;
 				}
 			}
 
@@ -1062,12 +1062,12 @@ export const commands: ChatCommands = {
 			player.visitedLocations.add(targetLocationId);
 
 			// Handle Location Entry Flags (Set/Remove)
-			if ((targetLocation as any).setFlag) {
-				const flags = Array.isArray((targetLocation as any).setFlag) ? (targetLocation as any).setFlag : [(targetLocation as any).setFlag];
+			if ((targetLocation).setFlag) {
+				const flags = Array.isArray((targetLocation).setFlag) ? (targetLocation).setFlag : [(targetLocation).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
 			}
-			if ((targetLocation as any).removeFlag) {
-				const flags = Array.isArray((targetLocation as any).removeFlag) ? (targetLocation as any).removeFlag : [(targetLocation as any).removeFlag];
+			if ((targetLocation).removeFlag) {
+				const flags = Array.isArray((targetLocation).removeFlag) ? (targetLocation).removeFlag : [(targetLocation).removeFlag];
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
@@ -1076,10 +1076,10 @@ export const commands: ChatCommands = {
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
 					const eventFlagId = `scripted_${event.id}`;
-					
+
 					// Check Trigger Conditions
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
-					
+
 					if (event.requiredFlag) {
 						const reqFlags = Array.isArray(event.requiredFlag) ? event.requiredFlag : [event.requiredFlag];
 						if (!reqFlags.every(f => player.storyFlags.has(f))) continue;
@@ -1092,21 +1092,21 @@ export const commands: ChatCommands = {
 
 					if (event.requiredBadgeCount && player.obtainedBadges.length < event.requiredBadgeCount) continue;
 					if (event.maxBadgeCount && player.obtainedBadges.length > event.maxBadgeCount) continue;
-					
+
 					triggeredEvents.push(event);
 
 					// Handle Event Flags (for non-interactive events that resolve immediately)
 					const interactiveTypes = ['choice', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour'];
 					if (!interactiveTypes.includes(event.type)) {
 						if (event.triggerOnce) player.storyFlags.add(eventFlagId);
-						
+
 						if (event.setFlag) {
 							const flags = Array.isArray(event.setFlag) ? event.setFlag : [event.setFlag];
 							flags.forEach(f => player.storyFlags.add(f));
 						}
-						
-						if ((event as any).removeFlag) {
-							const flags = Array.isArray((event as any).removeFlag) ? (event as any).removeFlag : [(event as any).removeFlag];
+
+						if ((event).removeFlag) {
+							const flags = Array.isArray((event).removeFlag) ? (event).removeFlag : [(event).removeFlag];
 							flags.forEach((f: string) => player.storyFlags.delete(f));
 						}
 					}
@@ -1163,23 +1163,23 @@ export const commands: ChatCommands = {
 			const currentLocation = LOCATIONS[currentLocationId];
 
 			if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
-			
+
 			const args = target.split(' ');
 			const buildingId = toID(args[0]);
 			const roomId = args[1] ? toID(args[1]) : null;
 			const sourceRoomId = args[2] ? toID(args[2]) : null;
-			
+
 			if (!buildingId) return this.errorReply("Please specify which building to enter.");
 
 			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
-			
+
 			// --- Access Checks (Building Level) ---
-			
+
 			// 1. Check Accessible property
 			if (building.accessible === false) {
-				const blockMsg = (building as any).blockMessage || "This building is locked.";
+				const blockMsg = (building).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
@@ -1187,7 +1187,7 @@ export const commands: ChatCommands = {
 			if (building.requiredBadge) {
 				const reqBadges = Array.isArray(building.requiredBadge) ? building.requiredBadge : [building.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
-					const blockMsg = (building as any).blockMessage || "Locked: You need more badges to enter.";
+					const blockMsg = (building).blockMessage || "Locked: You need more badges to enter.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
@@ -1196,7 +1196,7 @@ export const commands: ChatCommands = {
 			if (building.requiredFlag) {
 				const reqFlags = Array.isArray(building.requiredFlag) ? building.requiredFlag : [building.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
-					const blockMsg = (building as any).blockMessage || "You can't access this building yet.";
+					const blockMsg = (building).blockMessage || "You can't access this building yet.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
@@ -1205,18 +1205,18 @@ export const commands: ChatCommands = {
 			if (building.preventIfFlag) {
 				const prevFlags = Array.isArray(building.preventIfFlag) ? building.preventIfFlag : [building.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
-					const blockMsg = (building as any).blockMessage || "The building is currently closed.";
+					const blockMsg = (building).blockMessage || "The building is currently closed.";
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 				}
 			}
 
 			// --- Successful Entry (Building Level): Handle Flags ---
-			if ((building as any).setFlag) {
-				const flags = Array.isArray((building as any).setFlag) ? (building as any).setFlag : [(building as any).setFlag];
+			if ((building).setFlag) {
+				const flags = Array.isArray((building).setFlag) ? (building).setFlag : [(building).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
 			}
-			if ((building as any).removeFlag) {
-				const flags = Array.isArray((building as any).removeFlag) ? (building as any).removeFlag : [(building as any).removeFlag];
+			if ((building).removeFlag) {
+				const flags = Array.isArray((building).removeFlag) ? (building).removeFlag : [(building).removeFlag];
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
@@ -1238,7 +1238,7 @@ export const commands: ChatCommands = {
 				const renderRoom = (roomToRender: any, notification?: string) => {
 					// --- Generate Room HTML ---
 					let roomHTML = `<div class="rpg-infobox">`;
-					
+
 					if (notification) {
 						roomHTML += `<div class="rpg-notification">${notification}</div>`;
 					}
@@ -1347,10 +1347,10 @@ export const commands: ChatCommands = {
 						if (!roomToRender.connectedRooms || roomToRender.connectedRooms.length === 0) {
 							roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
 						} else {
-							roomHTML += `</div>`; 
+							roomHTML += `</div>`;
 						}
 					}
-					
+
 					return roomHTML;
 				};
 
@@ -1480,16 +1480,16 @@ export const commands: ChatCommands = {
 			// Security check: Ensure the player is actually in the location that contains this zone
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
-			
+
 			let zoneFound = false;
-			
+
 			// 1. Check main location zones
-			if (currentLocation && currentLocation.encounterZones?.includes(zoneId)) {
+			if (currentLocation?.encounterZones?.includes(zoneId)) {
 				zoneFound = true;
 			}
-			
+
 			// 2. Check building room zones
-			if (!zoneFound && currentLocation && currentLocation.buildings) {
+			if (!zoneFound && currentLocation?.buildings) {
 				for (const building of currentLocation.buildings) {
 					if (building.rooms) {
 						for (const room of building.rooms) {
@@ -1947,7 +1947,14 @@ export const commands: ChatCommands = {
 					else storePokemonInPC(player, caughtPokemon);
 
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
-					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball')}`);
+
+					const locInfo = getZoneLocation(zoneId);
+					let returnCommand = '/rpg explore';
+					if (locInfo?.buildingId && locInfo.roomId) {
+						returnCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
+					}
+
+					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
 				} else {
 					messageLog.push(`<span class="rpg-text-error"><strong>${["Oh no! The Pokemon broke free!", "Aww! It appeared to be caught!", "Aargh! Almost had it!", "Gah! It was so close, too!"][catchResult.shakes]}</strong></span>`);
 					processTurn(this, battle, room, user, messageLog);
@@ -1967,9 +1974,15 @@ export const commands: ChatCommands = {
 					if (slot.isTrapped || slot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`You can't escape!`])}`);
 				}
 
+				const zoneId = battle.zoneId;
 				saveBattleStatus(battle);
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
+
+				const locInfo = getZoneLocation(zoneId);
+				if (locInfo?.buildingId && locInfo.roomId) {
+					return this.parse(`/rpg building ${locInfo.buildingId} ${locInfo.roomId}`);
+				}
 
 				const player = getPlayerData(user.id);
 				const location = LOCATIONS[toID(player.location)];
@@ -2355,7 +2368,7 @@ export const commands: ChatCommands = {
 			} else if (currentLocation?.buildings) {
 				// Check if NPC is in a building within the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
-				if (building && building.rooms) {
+				if (building?.rooms) {
 					// Check if NPC is in ANY room of this building
 					for (const room of building.rooms) {
 						if (room.npcs?.includes(npcId)) {
